@@ -93,7 +93,6 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
-import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.swing.CollectionConnectorListModel;
 import org.jspresso.framework.binding.swing.CollectionConnectorTableModel;
 import org.jspresso.framework.binding.swing.ConnectorHierarchyTreeModel;
@@ -121,7 +120,6 @@ import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
@@ -150,7 +148,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
-import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
@@ -163,14 +160,12 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
-import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -179,9 +174,6 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
 import org.jspresso.framework.view.descriptor.ViewConstraints;
-import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.TokenMarker;
 
@@ -218,114 +210,73 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
-  public IView<JComponent> createView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<JComponent> view = null;
-    if (viewDescriptor instanceof IComponentViewDescriptor) {
-      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof INestingViewDescriptor) {
-      view = createNestingView((INestingViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IImageViewDescriptor) {
-      view = createImageView((IImageViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
-      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
-      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICardViewDescriptor) {
-      view = createCardView((ICardViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
-      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
+  @Override
+  protected void configureFontColorsAndDescription(
+      IViewDescriptor viewDescriptor, Locale locale, IView<JComponent> view) {
+    if (viewDescriptor.getForeground() != null) {
+      view.getPeer().setForeground(
+          createColor(viewDescriptor.getForeground()));
     }
-    if (view != null) {
-      try {
-        if (actionHandler != null) {
-          actionHandler.checkAccess(viewDescriptor);
-        }
-        if (viewDescriptor.getForeground() != null) {
-          view.getPeer().setForeground(
-              createColor(viewDescriptor.getForeground()));
-        }
-        if (viewDescriptor.getBackground() != null) {
-          view.getPeer().setBackground(
-              createColor(viewDescriptor.getBackground()));
-        }
-        if (viewDescriptor.getFont() != null) {
-          view.getPeer().setFont(createFont(viewDescriptor.getFont()));
-        }
-        if (viewDescriptor.isReadOnly()) {
-          view.getConnector().setLocallyWritable(false);
-        }
-        if (viewDescriptor.getReadabilityGates() != null) {
-          for (IGate gate : viewDescriptor.getReadabilityGates()) {
-            view.getConnector().addReadabilityGate(gate.clone());
+    if (viewDescriptor.getBackground() != null) {
+      view.getPeer().setBackground(
+          createColor(viewDescriptor.getBackground()));
+    }
+    if (viewDescriptor.getFont() != null) {
+      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+    }
+    if (viewDescriptor.getDescription() != null) {
+      view.getPeer().setToolTipText(
+          viewDescriptor.getI18nDescription(getTranslationProvider(),
+              locale)
+              + TOOLTIP_ELLIPSIS);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithActions(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale, IView<JComponent> view) {
+    if (viewDescriptor.getActionMap() != null) {
+      JToolBar toolBar = createJToolBar();
+      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
+          .getActionLists().iterator(); iter.hasNext();) {
+        ActionList nextActionList = iter.next();
+        for (IDisplayableAction action : nextActionList.getActions()) {
+          Action swingAction = getActionFactory().createAction(action,
+              actionHandler, view, locale);
+          JButton actionButton = createJButton();
+          actionButton.setAction(swingAction);
+          if (action.getAcceleratorAsString() != null) {
+            KeyStroke ks = KeyStroke.getKeyStroke(action
+                .getAcceleratorAsString());
+            view.getPeer().getActionMap().put(
+                swingAction.getValue(Action.NAME), swingAction);
+            view.getPeer().getInputMap(
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                swingAction.getValue(Action.NAME));
+            String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                .getModifiers())
+                + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+            actionButton.setToolTipText("<HTML>"
+                + actionButton.getToolTipText()
+                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                + acceleratorString + "</FONT></HTML>");
           }
+          actionButton.setText("");
+          toolBar.add(actionButton);
         }
-        if (viewDescriptor.getWritabilityGates() != null) {
-          for (IGate gate : viewDescriptor.getWritabilityGates()) {
-            view.getConnector().addWritabilityGate(gate.clone());
-          }
+        if (iter.hasNext()) {
+          toolBar.addSeparator();
         }
-        if (viewDescriptor.getDescription() != null) {
-          view.getPeer().setToolTipText(
-              viewDescriptor.getI18nDescription(getTranslationProvider(),
-                  locale)
-                  + TOOLTIP_ELLIPSIS);
-        }
-        if (viewDescriptor.getActionMap() != null) {
-          JToolBar toolBar = createJToolBar();
-          for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
-              .getActionLists().iterator(); iter.hasNext();) {
-            ActionList nextActionList = iter.next();
-            for (IDisplayableAction action : nextActionList.getActions()) {
-              Action swingAction = getActionFactory().createAction(action,
-                  actionHandler, view, locale);
-              JButton actionButton = createJButton();
-              actionButton.setAction(swingAction);
-              if (action.getAcceleratorAsString() != null) {
-                KeyStroke ks = KeyStroke.getKeyStroke(action
-                    .getAcceleratorAsString());
-                view.getPeer().getActionMap().put(
-                    swingAction.getValue(Action.NAME), swingAction);
-                view.getPeer().getInputMap(
-                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                    swingAction.getValue(Action.NAME));
-                String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                    .getModifiers())
-                    + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-                actionButton.setToolTipText("<HTML>"
-                    + actionButton.getToolTipText()
-                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                    + acceleratorString + "</FONT></HTML>");
-              }
-              actionButton.setText("");
-              toolBar.add(actionButton);
-            }
-            if (iter.hasNext()) {
-              toolBar.addSeparator();
-            }
-          }
-          JPanel viewPanel = createJPanel();
-          viewPanel.setLayout(new BorderLayout());
-          viewPanel.add(toolBar, BorderLayout.NORTH);
-          viewPanel.add(view.getPeer(), BorderLayout.CENTER);
-          view.setPeer(viewPanel);
-        }
-        decorateWithBorder(view, locale);
-      } catch (SecurityException ex) {
-        view.setPeer(createSecurityPanel());
       }
+      JPanel viewPanel = createJPanel();
+      viewPanel.setLayout(new BorderLayout());
+      viewPanel.add(toolBar, BorderLayout.NORTH);
+      viewPanel.add(view.getPeer(), BorderLayout.CENTER);
+      view.setPeer(viewPanel);
     }
-    return view;
   }
 
   private void decorateWithTitle(IView<JComponent> view, Locale locale) {
@@ -658,6 +609,7 @@ public class DefaultSwingViewFactory extends
    * 
    * @return the created security panel.
    */
+  @Override
   protected JPanel createSecurityPanel() {
     JPanel panel = createJPanel();
     panel.setLayout(new BorderLayout());
@@ -677,6 +629,7 @@ public class DefaultSwingViewFactory extends
    * @param locale
    *          the locale to use.
    */
+  @Override
   protected void decorateWithBorder(IView<JComponent> view, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
       case SIMPLE:
@@ -707,10 +660,6 @@ public class DefaultSwingViewFactory extends
     component.setMaximumSize(size);
   }
 
-  private String computeEnumerationKey(String keyPrefix, Object value) {
-    return keyPrefix + "." + value;
-  }
-
   private int computePixelWidth(Component component, int characterLength) {
     int charLength = maxCharacterLength + 2;
     if (characterLength > 0 && characterLength < maxCharacterLength) {
@@ -719,30 +668,11 @@ public class DefaultSwingViewFactory extends
     return component.getFont().getSize() * charLength / 2;
   }
 
-  private BasicCompositeView<JComponent> constructCompositeView(
-      JComponent viewComponent, IViewDescriptor descriptor) {
-    BasicCompositeView<JComponent> view = new BasicCompositeView<JComponent>(
-        viewComponent);
-    view.setDescriptor(descriptor);
-    return view;
-  }
-
-  private BasicMapView<JComponent> constructMapView(JComponent viewComponent,
-      IViewDescriptor descriptor) {
-    BasicMapView<JComponent> view = new BasicMapView<JComponent>(viewComponent);
-    view.setDescriptor(descriptor);
-    return view;
-  }
-
-  private IView<JComponent> constructView(JComponent viewComponent,
-      IViewDescriptor descriptor, IValueConnector connector) {
-    BasicView<JComponent> view = new BasicView<JComponent>(viewComponent);
-    view.setConnector(connector);
-    view.setDescriptor(descriptor);
-    return view;
-  }
-
-  private IView<JComponent> createBinaryPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createBinaryPropertyView(
       IBinaryPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JActionField viewComponent = createJActionField(false);
@@ -755,7 +685,11 @@ public class DefaultSwingViewFactory extends
     return constructView(viewComponent, null, connector);
   }
 
-  private IView<JComponent> createBooleanPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JCheckBox viewComponent = createJCheckBox();
@@ -820,7 +754,11 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private IMapView<JComponent> createCardView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IMapView<JComponent> createCardView(
       ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JPanel viewComponent = createJPanel();
@@ -845,58 +783,17 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private IView<JComponent> createCollectionPropertyView(
-      ICollectionPropertyDescriptor<?> propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-
-    IView<JComponent> view;
-    if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
-      BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
-      viewDescriptor.setModelDescriptor(propertyDescriptor);
-      List<ISubViewDescriptor> columnViewDescriptors = new ArrayList<ISubViewDescriptor>();
-      for (String renderedProperty : renderedChildProperties) {
-        BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
-        columnDescriptor.setName(renderedProperty);
-        columnViewDescriptors.add(columnDescriptor);
-      }
-      viewDescriptor.setColumnViewDescriptors(columnViewDescriptors);
-      viewDescriptor.setName(propertyDescriptor.getName());
-      view = createTableView(viewDescriptor, actionHandler, locale);
-    } else {
-      BasicListViewDescriptor viewDescriptor = new BasicListViewDescriptor();
-      viewDescriptor.setModelDescriptor(propertyDescriptor);
-      if (renderedChildProperties != null
-          && renderedChildProperties.size() == 1) {
-        viewDescriptor.setRenderedProperty(renderedChildProperties.get(0));
-      }
-      viewDescriptor.setName(propertyDescriptor.getName());
-      view = createListView(viewDescriptor, actionHandler, locale);
-    }
-    return view;
-  }
-
   private TableCellRenderer createCollectionTableCellRenderer(
       @SuppressWarnings("unused") ICollectionPropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
     return null;
   }
 
-  private IView<JComponent> createCollectionView(
-      ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    IView<JComponent> view = null;
-    if (viewDescriptor instanceof IListViewDescriptor) {
-      view = createListView((IListViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITableViewDescriptor) {
-      view = createTableView((ITableViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    }
-    return view;
-  }
-
-  private IView<JComponent> createColorPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createColorPropertyView(
       IColorPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JColorPicker viewComponent = createJColorPicker();
@@ -918,7 +815,11 @@ public class DefaultSwingViewFactory extends
     return new ColorTableCellRenderer();
   }
 
-  private IView<JComponent> createComponentView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICompositeValueConnector connector = getConnectorFactory()
@@ -1122,7 +1023,11 @@ public class DefaultSwingViewFactory extends
     return createFormatter(createDateFormat(propertyDescriptor, locale));
   }
 
-  private IView<JComponent> createDatePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createDatePropertyView(
       IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JDateField viewComponent = createJDateField(locale);
@@ -1162,7 +1067,11 @@ public class DefaultSwingViewFactory extends
     return new FormatAdapter(createDecimalFormat(propertyDescriptor, locale));
   }
 
-  private IView<JComponent> createDecimalPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createDecimalPropertyView(
       IDecimalPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
@@ -1196,7 +1105,11 @@ public class DefaultSwingViewFactory extends
     return new DurationFormatter(locale);
   }
 
-  private IView<JComponent> createDurationPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createDurationPropertyView(
       IDurationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JTextField viewComponent = createJTextField();
@@ -1215,7 +1128,11 @@ public class DefaultSwingViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private IView<JComponent> createEnumerationPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JComboBox viewComponent = createJComboBox();
@@ -1351,7 +1268,11 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private IView<JComponent> createImageView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     JLabel imageLabel = createJLabel();
@@ -1381,7 +1302,11 @@ public class DefaultSwingViewFactory extends
     return new FormatAdapter(createIntegerFormat(propertyDescriptor, locale));
   }
 
-  private IView<JComponent> createIntegerPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createIntegerPropertyView(
       IIntegerPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JTextField viewComponent = createJTextField();
@@ -1432,7 +1357,11 @@ public class DefaultSwingViewFactory extends
     return popupMenu;
   }
 
-  private IView<JComponent> createListView(IListViewDescriptor viewDescriptor,
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createListView(IListViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
@@ -1462,7 +1391,11 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private IView<JComponent> createNestingView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createNestingView(
       INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
@@ -1484,22 +1417,6 @@ public class DefaultSwingViewFactory extends
 
     viewComponent.add(nestedView.getPeer(), BorderLayout.CENTER);
 
-    return view;
-  }
-
-  private IView<JComponent> createNumberPropertyView(
-      INumberPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<JComponent> view = null;
-    if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      view = createIntegerPropertyView(
-          (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      view = createDecimalPropertyView(
-          (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    }
     return view;
   }
 
@@ -1578,65 +1495,26 @@ public class DefaultSwingViewFactory extends
     return propertyLabel;
   }
 
-  private IView<JComponent> createPropertyView(
-      IPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-    IView<JComponent> view = null;
-    if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
-      view = createBooleanPropertyView(
-          (IBooleanPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
-      view = createDatePropertyView(
-          (IDatePropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      view = createTimePropertyView(
-          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      view = createDurationPropertyView(
-          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-      view = createEnumerationPropertyView(
-          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
-      view = createNumberPropertyView(
-          (INumberPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-      view = createRelationshipEndPropertyView(
-          (IRelationshipEndPropertyDescriptor) propertyDescriptor,
-          renderedChildProperties, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
-      view = createStringPropertyView(
-          (IStringPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-      view = createBinaryPropertyView(
-          (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
-      view = createColorPropertyView(
-          (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithDescription(
+      IPropertyDescriptor propertyDescriptor, Locale locale,
+      IView<JComponent> view) {
     if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
           propertyDescriptor.getI18nDescription(getTranslationProvider(),
               locale)
               + TOOLTIP_ELLIPSIS);
     }
-    return view;
   }
 
-  private IView<JComponent> createPropertyView(
-      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    IView<JComponent> view = createPropertyView(
-        (IPropertyDescriptor) viewDescriptor.getModelDescriptor(),
-        viewDescriptor.getRenderedChildProperties(), actionHandler, locale);
-    return constructView(view.getPeer(), viewDescriptor, view.getConnector());
-  }
-
-  private IView<JComponent> createReferencePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createReferencePropertyView(
       IReferencePropertyDescriptor<?> propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JActionField viewComponent = createJActionField(true);
@@ -1671,24 +1549,6 @@ public class DefaultSwingViewFactory extends
       @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
     return null;
-  }
-
-  private IView<JComponent> createRelationshipEndPropertyView(
-      IRelationshipEndPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-    IView<JComponent> view = null;
-
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      view = createReferencePropertyView(
-          (IReferencePropertyDescriptor<?>) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      view = createCollectionPropertyView(
-          (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-          renderedChildProperties, actionHandler, locale);
-    }
-    return view;
   }
 
   private TableCellRenderer createRelationshipEndTableCellRenderer(
@@ -1756,7 +1616,11 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private IView<JComponent> createStringPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
@@ -1843,7 +1707,11 @@ public class DefaultSwingViewFactory extends
     return cellRenderer;
   }
 
-  private IView<JComponent> createTableView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
@@ -2056,7 +1924,11 @@ public class DefaultSwingViewFactory extends
     return createFormatter(createTimeFormat(propertyDescriptor, locale));
   }
 
-  private IView<JComponent> createTimePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createTimePropertyView(
       ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JTextField viewComponent = createJTextField();
@@ -2075,7 +1947,11 @@ public class DefaultSwingViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private IView<JComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
 
     ICompositeValueConnector connector = createTreeViewConnector(
@@ -2118,14 +1994,6 @@ public class DefaultSwingViewFactory extends
       fontStyle = Font.PLAIN;
     }
     return new Font(font.getName(), fontStyle, font.getSize());
-  }
-
-  private String getConnectorIdForComponentView(
-      IComponentViewDescriptor viewDescriptor) {
-    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
-      return ModelRefPropertyConnector.THIS_PROPERTY;
-    }
-    return viewDescriptor.getModelDescriptor().getName();
   }
 
   private Object getDateTemplateValue(

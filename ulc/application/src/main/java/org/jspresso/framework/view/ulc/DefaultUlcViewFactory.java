@@ -39,7 +39,6 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
-import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.ulc.CollectionConnectorListModel;
 import org.jspresso.framework.binding.ulc.CollectionConnectorTableModel;
 import org.jspresso.framework.binding.ulc.ConnectorHierarchyTreeModel;
@@ -76,7 +75,6 @@ import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
@@ -104,7 +102,6 @@ import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
-import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
@@ -117,14 +114,12 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
-import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -133,9 +128,6 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
 import org.jspresso.framework.view.descriptor.ViewConstraints;
-import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 
 import com.ulcjava.base.application.BorderFactory;
 import com.ulcjava.base.application.ClientContext;
@@ -206,117 +198,83 @@ import com.ulcjava.base.shared.IUlcEventConstants;
 public class DefaultUlcViewFactory extends
     AbstractViewFactory<ULCComponent, ULCIcon, IAction> {
 
-  private static final Dimension        TREE_PREFERRED_SIZE         = new Dimension(
-                                                                        128,
-                                                                        128);
-  private ULCDurationDataTypeFactory    durationDataTypeFactory     = new ULCDurationDataTypeFactory();
+  private static final Dimension        TREE_PREFERRED_SIZE        = new Dimension(
+                                                                       128, 128);
+  private ULCDurationDataTypeFactory    durationDataTypeFactory    = new ULCDurationDataTypeFactory();
   private IListSelectionModelBinder     listSelectionModelBinder;
 
-  private int                           maxCharacterLength          = 32;
-  private int                           maxColumnCharacterLength    = 32;
-  private ULCTranslationDataTypeFactory translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
+  private int                           maxCharacterLength         = 32;
+  private int                           maxColumnCharacterLength   = 32;
+  private ULCTranslationDataTypeFactory translationDataTypeFactory = new ULCTranslationDataTypeFactory();
 
   private ITreeSelectionModelBinder     treeSelectionModelBinder;
 
   /**
    * {@inheritDoc}
    */
-  public IView<ULCComponent> createView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<ULCComponent> view = null;
-    if (viewDescriptor instanceof IComponentViewDescriptor) {
-      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof INestingViewDescriptor) {
-      view = createNestingView((INestingViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IImageViewDescriptor) {
-      view = createImageView((IImageViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
-      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
-      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICardViewDescriptor) {
-      view = createCardView((ICardViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
-      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
+  @Override
+  protected void configureFontColorsAndDescription(
+      IViewDescriptor viewDescriptor, Locale locale, IView<ULCComponent> view) {
+    if (viewDescriptor.getForeground() != null) {
+      view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
     }
-    if (view != null) {
-      if (viewDescriptor.getDescription() != null) {
-        view.getPeer().setToolTipText(
-            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-                + TOOLTIP_ELLIPSIS);
-      }
-      try {
-        if (actionHandler != null) {
-          actionHandler.checkAccess(viewDescriptor);
-        }
-        if (viewDescriptor.getForeground() != null) {
-          view.getPeer().setForeground(
-              createColor(viewDescriptor.getForeground()));
-        }
-        if (viewDescriptor.getBackground() != null) {
-          view.getPeer().setBackground(
-              createColor(viewDescriptor.getBackground()));
-        }
-        if (viewDescriptor.getFont() != null) {
-          view.getPeer().setFont(createFont(viewDescriptor.getFont()));
-        }
-        if (viewDescriptor.isReadOnly()) {
-          view.getConnector().setLocallyWritable(false);
-        }
-        if (viewDescriptor.getActionMap() != null) {
-          ULCToolBar toolBar = createULCToolBar();
-          for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
-              .getActionLists().iterator(); iter.hasNext();) {
-            ActionList nextActionList = iter.next();
-            for (IDisplayableAction action : nextActionList.getActions()) {
-              IAction ulcAction = getActionFactory().createAction(action,
-                  actionHandler, view, locale);
-              ULCButton actionButton = createULCButton();
-              actionButton.setAction(ulcAction);
+    if (viewDescriptor.getBackground() != null) {
+      view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
+    }
+    if (viewDescriptor.getFont() != null) {
+      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+    }
+    if (viewDescriptor.getDescription() != null) {
+      view.getPeer().setToolTipText(
+          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+              + TOOLTIP_ELLIPSIS);
+    }
+  }
 
-              if (action.getAcceleratorAsString() != null) {
-                KeyStroke ks = KeyStroke.getKeyStroke(action
-                    .getAcceleratorAsString());
-                view.getPeer().registerKeyboardAction(ulcAction, ks,
-                    ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-                String acceleratorString = java.awt.event.KeyEvent
-                    .getKeyModifiersText(ks.getModifiers())
-                    + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
-                actionButton.setToolTipText("<HTML>"
-                    + actionButton.getToolTipText()
-                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                    + acceleratorString + "</FONT></HTML>");
-              }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithActions(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale, IView<ULCComponent> view) {
+    if (viewDescriptor.getActionMap() != null) {
+      ULCToolBar toolBar = createULCToolBar();
+      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
+          .getActionLists().iterator(); iter.hasNext();) {
+        ActionList nextActionList = iter.next();
+        for (IDisplayableAction action : nextActionList.getActions()) {
+          IAction ulcAction = getActionFactory().createAction(action,
+              actionHandler, view, locale);
+          ULCButton actionButton = createULCButton();
+          actionButton.setAction(ulcAction);
 
-              actionButton.setText("");
-              toolBar.add(actionButton);
-            }
-            if (iter.hasNext()) {
-              toolBar.addSeparator();
-            }
+          if (action.getAcceleratorAsString() != null) {
+            KeyStroke ks = KeyStroke.getKeyStroke(action
+                .getAcceleratorAsString());
+            view.getPeer().registerKeyboardAction(ulcAction, ks,
+                ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+            String acceleratorString = java.awt.event.KeyEvent
+                .getKeyModifiersText(ks.getModifiers())
+                + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
+            actionButton.setToolTipText("<HTML>"
+                + actionButton.getToolTipText()
+                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                + "</FONT></HTML>");
           }
 
-          ULCBorderLayoutPane viewPanel = createBorderLayoutPane();
-          viewPanel.add(toolBar, ULCBorderLayoutPane.NORTH);
-          viewPanel.add(view.getPeer(), ULCBorderLayoutPane.CENTER);
-          view.setPeer(viewPanel);
+          actionButton.setText("");
+          toolBar.add(actionButton);
         }
-        decorateWithBorder(view, locale);
-      } catch (SecurityException ex) {
-        view.setPeer(createSecurityPanel());
+        if (iter.hasNext()) {
+          toolBar.addSeparator();
+        }
       }
+
+      ULCBorderLayoutPane viewPanel = createBorderLayoutPane();
+      viewPanel.add(toolBar, ULCBorderLayoutPane.NORTH);
+      viewPanel.add(view.getPeer(), ULCBorderLayoutPane.CENTER);
+      view.setPeer(viewPanel);
     }
-    return view;
   }
 
   private void decorateWithTitle(IView<ULCComponent> view, Locale locale) {
@@ -409,10 +367,9 @@ public class DefaultUlcViewFactory extends
   }
 
   /**
-   * Creates a security pane.
-   * 
-   * @return the created security pane.
+   * {@inheritDoc}
    */
+  @Override
   protected ULCBorderLayoutPane createSecurityPanel() {
     ULCBorderLayoutPane panel = new ULCBorderLayoutPane();
     // ULCLabel label = createULCLabel();
@@ -666,13 +623,9 @@ public class DefaultUlcViewFactory extends
   }
 
   /**
-   * Decorates the created view with the apropriate border.
-   * 
-   * @param view
-   *          the view to descorate.
-   * @param locale
-   *          the locale to use.
+   * {@inheritDoc}
    */
+  @Override
   protected void decorateWithBorder(IView<ULCComponent> view, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
       case SIMPLE:
@@ -703,10 +656,6 @@ public class DefaultUlcViewFactory extends
     component.setMaximumSize(size);
   }
 
-  private String computeEnumerationKey(String keyPrefix, Object value) {
-    return keyPrefix + "." + value;
-  }
-
   private int computePixelWidth(ULCComponent component, int characterLength) {
     int charLength = maxCharacterLength + 2;
     if (characterLength > 0 && characterLength < maxCharacterLength) {
@@ -727,31 +676,11 @@ public class DefaultUlcViewFactory extends
     return translationMapping;
   }
 
-  private BasicCompositeView<ULCComponent> constructCompositeView(
-      ULCComponent viewComponent, IViewDescriptor descriptor) {
-    BasicCompositeView<ULCComponent> view = new BasicCompositeView<ULCComponent>(
-        viewComponent);
-    view.setDescriptor(descriptor);
-    return view;
-  }
-
-  private BasicMapView<ULCComponent> constructMapView(
-      ULCComponent viewComponent, IViewDescriptor descriptor) {
-    BasicMapView<ULCComponent> view = new BasicMapView<ULCComponent>(
-        viewComponent);
-    view.setDescriptor(descriptor);
-    return view;
-  }
-
-  private IView<ULCComponent> constructView(ULCComponent viewComponent,
-      IViewDescriptor descriptor, IValueConnector connector) {
-    BasicView<ULCComponent> view = new BasicView<ULCComponent>(viewComponent);
-    view.setConnector(connector);
-    view.setDescriptor(descriptor);
-    return view;
-  }
-
-  private IView<ULCComponent> createBinaryPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createBinaryPropertyView(
       IBinaryPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCActionField viewComponent = createULCActionField(false);
@@ -764,7 +693,11 @@ public class DefaultUlcViewFactory extends
     return constructView(viewComponent, null, connector);
   }
 
-  private IView<ULCComponent> createBooleanPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     ULCCheckBox viewComponent = createULCCheckBox();
@@ -826,7 +759,11 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  private IMapView<ULCComponent> createCardView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IMapView<ULCComponent> createCardView(
       ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ULCCardPane viewComponent = createCardPane();
@@ -850,58 +787,17 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  private IView<ULCComponent> createCollectionPropertyView(
-      ICollectionPropertyDescriptor<?> propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-
-    IView<ULCComponent> view;
-    if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
-      BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
-      viewDescriptor.setModelDescriptor(propertyDescriptor);
-      List<ISubViewDescriptor> columnViewDescriptors = new ArrayList<ISubViewDescriptor>();
-      for (String renderedProperty : renderedChildProperties) {
-        BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
-        columnDescriptor.setName(renderedProperty);
-        columnViewDescriptors.add(columnDescriptor);
-      }
-      viewDescriptor.setColumnViewDescriptors(columnViewDescriptors);
-      viewDescriptor.setName(propertyDescriptor.getName());
-      view = createTableView(viewDescriptor, actionHandler, locale);
-    } else {
-      BasicListViewDescriptor viewDescriptor = new BasicListViewDescriptor();
-      viewDescriptor.setModelDescriptor(propertyDescriptor);
-      if (renderedChildProperties != null
-          && renderedChildProperties.size() == 1) {
-        viewDescriptor.setRenderedProperty(renderedChildProperties.get(0));
-      }
-      viewDescriptor.setName(propertyDescriptor.getName());
-      view = createListView(viewDescriptor, actionHandler, locale);
-    }
-    return view;
-  }
-
   private ITableCellRenderer createCollectionTableCellRenderer(
       @SuppressWarnings("unused") ICollectionPropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
     return null;
   }
 
-  private IView<ULCComponent> createCollectionView(
-      ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    IView<ULCComponent> view = null;
-    if (viewDescriptor instanceof IListViewDescriptor) {
-      view = createListView((IListViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITableViewDescriptor) {
-      view = createTableView((ITableViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    }
-    return view;
-  }
-
-  private IView<ULCComponent> createColorPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createColorPropertyView(
       IColorPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     ULCColorPicker viewComponent = createULCColorPicker();
@@ -923,7 +819,11 @@ public class DefaultUlcViewFactory extends
     return new ColorTableCellRenderer();
   }
 
-  private IView<ULCComponent> createComponentView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICompositeValueConnector connector = getConnectorFactory()
@@ -1127,7 +1027,11 @@ public class DefaultUlcViewFactory extends
     return createFormatter(createDateFormat(propertyDescriptor, locale));
   }
 
-  private IView<ULCComponent> createDatePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createDatePropertyView(
       IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
@@ -1182,7 +1086,11 @@ public class DefaultUlcViewFactory extends
     return createFormatter(createDecimalFormat(propertyDescriptor, locale));
   }
 
-  private IView<ULCComponent> createDecimalPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createDecimalPropertyView(
       IDecimalPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
@@ -1229,7 +1137,11 @@ public class DefaultUlcViewFactory extends
     return new DurationFormatter(locale);
   }
 
-  private IView<ULCComponent> createDurationPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createDurationPropertyView(
       IDurationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
@@ -1252,7 +1164,11 @@ public class DefaultUlcViewFactory extends
             locale)));
   }
 
-  private IView<ULCComponent> createEnumerationPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCComboBox viewComponent = createULCComboBox();
@@ -1386,7 +1302,11 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  private IView<ULCComponent> createImageView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     ULCLabel imageLabel = createULCLabel();
@@ -1427,7 +1347,11 @@ public class DefaultUlcViewFactory extends
     return createFormatter(createIntegerFormat(propertyDescriptor, locale));
   }
 
-  private IView<ULCComponent> createIntegerPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createIntegerPropertyView(
       IIntegerPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
@@ -1451,7 +1375,11 @@ public class DefaultUlcViewFactory extends
             locale)));
   }
 
-  private IView<ULCComponent> createListView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createListView(
       IListViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
@@ -1485,7 +1413,11 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  private IView<ULCComponent> createNestingView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createNestingView(
       INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
@@ -1499,22 +1431,6 @@ public class DefaultUlcViewFactory extends
         .getNestedViewDescriptor(), actionHandler, locale);
     connector.addChildConnector(nestedView.getConnector());
     viewComponent.add(nestedView.getPeer(), ULCBorderLayoutPane.CENTER);
-    return view;
-  }
-
-  private IView<ULCComponent> createNumberPropertyView(
-      INumberPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<ULCComponent> view = null;
-    if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      view = createIntegerPropertyView(
-          (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      view = createDecimalPropertyView(
-          (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    }
     return view;
   }
 
@@ -1617,65 +1533,26 @@ public class DefaultUlcViewFactory extends
     return propertyLabel;
   }
 
-  private IView<ULCComponent> createPropertyView(
-      IPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-    IView<ULCComponent> view = null;
-    if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
-      view = createBooleanPropertyView(
-          (IBooleanPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
-      view = createDatePropertyView(
-          (IDatePropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      view = createTimePropertyView(
-          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      view = createDurationPropertyView(
-          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-      view = createEnumerationPropertyView(
-          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
-      view = createNumberPropertyView(
-          (INumberPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-      view = createRelationshipEndPropertyView(
-          (IRelationshipEndPropertyDescriptor) propertyDescriptor,
-          renderedChildProperties, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
-      view = createStringPropertyView(
-          (IStringPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-      view = createBinaryPropertyView(
-          (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
-      view = createColorPropertyView(
-          (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithDescription(
+      IPropertyDescriptor propertyDescriptor, Locale locale,
+      IView<ULCComponent> view) {
     if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
           propertyDescriptor.getI18nDescription(getTranslationProvider(),
               locale)
               + TOOLTIP_ELLIPSIS);
     }
-    return view;
   }
 
-  private IView<ULCComponent> createPropertyView(
-      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    IView<ULCComponent> view = createPropertyView(
-        (IPropertyDescriptor) viewDescriptor.getModelDescriptor(),
-        viewDescriptor.getRenderedChildProperties(), actionHandler, locale);
-    return constructView(view.getPeer(), viewDescriptor, view.getConnector());
-  }
-
-  private IView<ULCComponent> createReferencePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createReferencePropertyView(
       IReferencePropertyDescriptor<?> propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCActionField viewComponent = createULCActionField(true);
@@ -1710,24 +1587,6 @@ public class DefaultUlcViewFactory extends
       @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
     return null;
-  }
-
-  private IView<ULCComponent> createRelationshipEndPropertyView(
-      IRelationshipEndPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-    IView<ULCComponent> view = null;
-
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      view = createReferencePropertyView(
-          (IReferencePropertyDescriptor<?>) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      view = createCollectionPropertyView(
-          (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-          renderedChildProperties, actionHandler, locale);
-    }
-    return view;
   }
 
   private ITableCellRenderer createRelationshipEndTableCellRenderer(
@@ -1795,7 +1654,11 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  private IView<ULCComponent> createStringPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
@@ -1859,7 +1722,11 @@ public class DefaultUlcViewFactory extends
     return cellRenderer;
   }
 
-  private IView<ULCComponent> createTableView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
@@ -1876,9 +1743,9 @@ public class DefaultUlcViewFactory extends
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
     ULCLabel iconLabel = createULCLabel();
-    iconLabel.setIcon(getIconFactory().getIcon(modelDescriptor
-        .getCollectionDescriptor().getElementDescriptor().getIconImageURL(),
-        IIconFactory.TINY_ICON_SIZE));
+    iconLabel.setIcon(getIconFactory().getIcon(
+        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
+            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ULCScrollPane.UPPER_RIGHT_CORNER, iconLabel);
     IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
@@ -2053,8 +1920,8 @@ public class DefaultUlcViewFactory extends
         .getChildViewDescriptors()) {
       IView<ULCComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
-      ULCIcon childIcon = getIconFactory().getIcon(childViewDescriptor
-          .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
+      ULCIcon childIcon = getIconFactory().getIcon(
+          childViewDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, childView.getPeer(),
@@ -2104,7 +1971,11 @@ public class DefaultUlcViewFactory extends
     return createFormatter(createTimeFormat(propertyDescriptor, locale));
   }
 
-  private IView<ULCComponent> createTimePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createTimePropertyView(
       ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ULCTextField viewComponent = createULCTextField();
@@ -2128,7 +1999,11 @@ public class DefaultUlcViewFactory extends
         createTimeFormat(propertyDescriptor, locale)));
   }
 
-  private IView<ULCComponent> createTreeView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createTreeView(
       ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
@@ -2196,8 +2071,8 @@ public class DefaultUlcViewFactory extends
     ULCLabel titleLabel = createULCLabel();
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
         locale));
-    titleLabel.setIcon(getIconFactory().getIcon(viewDescriptor.getIconImageURL(),
-        IIconFactory.TINY_ICON_SIZE));
+    titleLabel.setIcon(getIconFactory().getIcon(
+        viewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     titleLabel.setHorizontalAlignment(IDefaults.CENTER);
     popupMenu.add(titleLabel);
     popupMenu.addSeparator();
@@ -2285,14 +2160,6 @@ public class DefaultUlcViewFactory extends
 
     return createULCPopupMenu(tree, actionMap, modelDescriptor, viewDescriptor,
         viewConnector, actionHandler, locale);
-  }
-
-  private String getConnectorIdForComponentView(
-      IComponentViewDescriptor viewDescriptor) {
-    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
-      return ModelRefPropertyConnector.THIS_PROPERTY;
-    }
-    return viewDescriptor.getModelDescriptor().getName();
   }
 
   private Object getDateTemplateValue(
@@ -2527,8 +2394,9 @@ public class DefaultUlcViewFactory extends
             propertyDescriptor.getEnumerationName(), locale,
             computeTranslationMapping(propertyDescriptor, locale)));
       }
-      setIcon(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(String
-          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
+      setIcon(getIconFactory().getIcon(
+          propertyDescriptor.getIconImageURL(String.valueOf(value)),
+          IIconFactory.TINY_ICON_SIZE));
       return super.getComboBoxCellRendererComponent(comboBox, value,
           isSelected, index);
     }
@@ -2573,8 +2441,9 @@ public class DefaultUlcViewFactory extends
             propertyDescriptor.getEnumerationName(), locale,
             computeTranslationMapping(propertyDescriptor, locale)));
       }
-      setIcon(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(String
-          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
+      setIcon(getIconFactory().getIcon(
+          propertyDescriptor.getIconImageURL(String.valueOf(value)),
+          IIconFactory.TINY_ICON_SIZE));
       UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row);

@@ -40,24 +40,49 @@ import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.descriptor.EDuration;
+import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
+import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
+import org.jspresso.framework.view.descriptor.IListViewDescriptor;
+import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
+import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 
 /**
  * Abstract base class factory for views.
@@ -140,6 +165,233 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private IDisplayableAction            openFileAsBinaryPropertyAction;
   private IDisplayableAction            resetPropertyAction;
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
+
+  /**
+   * {@inheritDoc}
+   */
+  public IView<E> createView(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<E> view = null;
+    if (viewDescriptor instanceof IComponentViewDescriptor) {
+      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof INestingViewDescriptor) {
+      view = createNestingView((INestingViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IImageViewDescriptor) {
+      view = createImageView((IImageViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
+      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
+      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
+      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICardViewDescriptor) {
+      view = createCardView((ICardViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
+      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    }
+    if (view != null) {
+      try {
+        if (actionHandler != null) {
+          actionHandler.checkAccess(viewDescriptor);
+        }
+        if (viewDescriptor.isReadOnly()) {
+          view.getConnector().setLocallyWritable(false);
+        }
+        if (viewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : viewDescriptor.getReadabilityGates()) {
+            view.getConnector().addReadabilityGate(gate.clone());
+          }
+        }
+        if (viewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : viewDescriptor.getWritabilityGates()) {
+            view.getConnector().addWritabilityGate(gate.clone());
+          }
+        }
+        configureFontColorsAndDescription(viewDescriptor, locale, view);
+        decorateWithActions(viewDescriptor, actionHandler, locale, view);
+        decorateWithBorder(view, locale);
+      } catch (SecurityException ex) {
+        view.setPeer(createSecurityPanel());
+      }
+    }
+    return view;
+  }
+
+  /**
+   * Creates a panel to be substituted with any view when the user is not
+   * granted access.
+   * 
+   * @return the security panel.
+   */
+  protected abstract E createSecurityPanel();
+
+  /**
+   * Creates a tree view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created tree view.
+   */
+  protected abstract IView<E> createTreeView(
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a tree view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created tree view.
+   */
+  protected abstract IView<E> createCardView(
+      ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a collection view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created collection view.
+   */
+  private IView<E> createCollectionView(
+      ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    IView<E> view = null;
+    if (viewDescriptor instanceof IListViewDescriptor) {
+      view = createListView((IListViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ITableViewDescriptor) {
+      view = createTableView((ITableViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    }
+    return view;
+  }
+
+  /**
+   * Creates a table view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created table view.
+   */
+  protected abstract IView<E> createTableView(
+      ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a list view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created list view.
+   */
+  protected abstract IView<E> createListView(
+      IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a property view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected IView<E> createPropertyView(
+      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    IView<E> view = createPropertyView(
+        (IPropertyDescriptor) viewDescriptor.getModelDescriptor(),
+        viewDescriptor.getRenderedChildProperties(), actionHandler, locale);
+    return constructView(view.getPeer(), viewDescriptor, view.getConnector());
+  }
+
+  /**
+   * Creates a image view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created image view.
+   */
+  protected abstract IView<E> createImageView(
+      IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a nesting view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created nesting view.
+   */
+  protected abstract IView<E> createNestingView(
+      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a component view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created component view.
+   */
+  protected abstract IView<E> createComponentView(
+      IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Decorates a view with a border.
+   * 
+   * @param view
+   *          the view to decorate.
+   * @param locale
+   *          the locale to be used for a titled border.
+   */
+  protected abstract void decorateWithBorder(IView<E> view, Locale locale);
 
   /**
    * Creates the connector for a tree view.
@@ -639,7 +891,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
     this.modelCascadingBinder = modelCascadingBinder;
   }
 
-  
   /**
    * Gets the modelCascadingBinder.
    * 
@@ -652,9 +903,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a composite view.
    * 
-   * @param viewDescriptor the view descriptor.
-   * @param actionHandler the action handler
-   * @param locale the locale.
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler
+   * @param locale
+   *          the locale.
    * @return the composite view.
    */
   protected ICompositeView<E> createCompositeView(
@@ -697,7 +951,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
           } else {
             detailConnector = detailView.getConnector();
           }
-          getModelCascadingBinder().bind(masterView.getConnector(), detailConnector);
+          getModelCascadingBinder().bind(masterView.getConnector(),
+              detailConnector);
           masterView = detailView;
         }
       } else {
@@ -722,20 +977,27 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a tab view.
    * 
-   * @param viewDescriptor the view descriptor.
-   * @param actionHandler the action handler
-   * @param locale the locale.
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler
+   * @param locale
+   *          the locale.
    * @return the tab view.
    */
-  protected abstract ICompositeView<E> createTabView(ITabViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale);
+  protected abstract ICompositeView<E> createTabView(
+      ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
 
   /**
    * Creates a split view.
    * 
-   * @param viewDescriptor the view descriptor.
-   * @param actionHandler the action handler
-   * @param locale the locale.
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler
+   * @param locale
+   *          the locale.
    * @return the split view.
    */
   protected abstract ICompositeView<E> createSplitView(
@@ -745,23 +1007,461 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a grid view.
    * 
-   * @param viewDescriptor the view descriptor.
-   * @param actionHandler the action handler
-   * @param locale the locale.
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler
+   * @param locale
+   *          the locale.
    * @return the grid view.
    */
-  protected abstract ICompositeView<E> createGridView(IGridViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale);
+  protected abstract ICompositeView<E> createGridView(
+      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
 
   /**
    * Creates a border view.
    * 
-   * @param viewDescriptor the view descriptor.
-   * @param actionHandler the action handler
-   * @param locale the locale.
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler
+   * @param locale
+   *          the locale.
    * @return the border view.
    */
   protected abstract ICompositeView<E> createBorderView(
       IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale);
+
+  /**
+   * Decorates a view with the actions registered in the view descriptor.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @param view
+   *          the raw view.
+   */
+  protected abstract void decorateWithActions(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale, IView<E> view);
+
+  /**
+   * Applies the font and color configuration to a view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param locale
+   *          the locale.
+   * @param view
+   *          the raw view.
+   */
+  protected abstract void configureFontColorsAndDescription(
+      IViewDescriptor viewDescriptor, Locale locale, IView<E> view);
+
+  /**
+   * Constructs a map view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @return the created map view.
+   */
+  protected BasicMapView<E> constructMapView(E viewComponent,
+      IViewDescriptor descriptor) {
+    BasicMapView<E> view = new BasicMapView<E>(viewComponent);
+    view.setDescriptor(descriptor);
+    return view;
+  }
+
+  /**
+   * Constructs a view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @param connector
+   *          the view connector.
+   * @return the created view.
+   */
+  protected IView<E> constructView(E viewComponent, IViewDescriptor descriptor,
+      IValueConnector connector) {
+    BasicView<E> view = new BasicView<E>(viewComponent);
+    view.setConnector(connector);
+    view.setDescriptor(descriptor);
+    return view;
+  }
+
+  /**
+   * Constructs a composite view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @return the created composite view.
+   */
+  protected BasicCompositeView<E> constructCompositeView(E viewComponent,
+      IViewDescriptor descriptor) {
+    BasicCompositeView<E> view = new BasicCompositeView<E>(viewComponent);
+    view.setDescriptor(descriptor);
+    return view;
+  }
+
+  /**
+   * Computes an enumeration key.
+   * 
+   * @param keyPrefix
+   *          the prefix to use.
+   * @param value
+   *          the enumeration value.
+   * @return the enumeration key.
+   */
+  protected String computeEnumerationKey(String keyPrefix, Object value) {
+    return keyPrefix + "." + value;
+  }
+
+  /**
+   * Creates a number property view.
+   * 
+   * @param propertyDescriptor
+   *          the number property descriptor
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected IView<E> createNumberPropertyView(
+      INumberPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<E> view = null;
+    if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
+      view = createIntegerPropertyView(
+          (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+      view = createDecimalPropertyView(
+          (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    }
+    return view;
+  }
+
+  /**
+   * Creates a decimal property view.
+   * 
+   * @param propertyDescriptor
+   *          the number property descriptor
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createDecimalPropertyView(
+      IDecimalPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates an integer property view.
+   * 
+   * @param propertyDescriptor
+   *          the number property descriptor
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createIntegerPropertyView(
+      IIntegerPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a single property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param renderedChildProperties
+   *          the rendered children properties if the property is a reference
+   *          property.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected IView<E> createPropertyView(IPropertyDescriptor propertyDescriptor,
+      List<String> renderedChildProperties, IActionHandler actionHandler,
+      Locale locale) {
+    IView<E> view = null;
+    if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
+      view = createBooleanPropertyView(
+          (IBooleanPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
+      view = createDatePropertyView(
+          (IDatePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      view = createTimePropertyView(
+          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
+      view = createDurationPropertyView(
+          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+      view = createEnumerationPropertyView(
+          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
+      view = createNumberPropertyView(
+          (INumberPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+      view = createRelationshipEndPropertyView(
+          (IRelationshipEndPropertyDescriptor) propertyDescriptor,
+          renderedChildProperties, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
+      view = createStringPropertyView(
+          (IStringPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+      view = createBinaryPropertyView(
+          (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
+      view = createColorPropertyView(
+          (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    }
+    decorateWithDescription(propertyDescriptor, locale, view);
+    return view;
+  }
+
+  /**
+   * Decorates a property view with its description.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param locale
+   *          the locale.
+   * @param view
+   *          the property view.
+   */
+  protected abstract void decorateWithDescription(
+      IPropertyDescriptor propertyDescriptor, Locale locale, IView<E> view);
+
+  /**
+   * Creates a color property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createColorPropertyView(
+      IColorPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a binary property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createBinaryPropertyView(
+      IBinaryPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a string property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createStringPropertyView(
+      IStringPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a relationship end property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param renderedChildProperties
+   *          the rendered child properties.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected IView<E> createRelationshipEndPropertyView(
+      IRelationshipEndPropertyDescriptor propertyDescriptor,
+      List<String> renderedChildProperties, IActionHandler actionHandler,
+      Locale locale) {
+    IView<E> view = null;
+
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      view = createReferencePropertyView(
+          (IReferencePropertyDescriptor<?>) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      view = createCollectionPropertyView(
+          (ICollectionPropertyDescriptor<?>) propertyDescriptor,
+          renderedChildProperties, actionHandler, locale);
+    }
+    return view;
+  }
+
+  /**
+   * Creates a reference property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createReferencePropertyView(
+      IReferencePropertyDescriptor<?> propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  private IView<E> createCollectionPropertyView(
+      ICollectionPropertyDescriptor<?> propertyDescriptor,
+      List<String> renderedChildProperties, IActionHandler actionHandler,
+      Locale locale) {
+
+    IView<E> view;
+    if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
+      BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
+      viewDescriptor.setModelDescriptor(propertyDescriptor);
+      List<ISubViewDescriptor> columnViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      for (String renderedProperty : renderedChildProperties) {
+        BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
+        columnDescriptor.setName(renderedProperty);
+        columnViewDescriptors.add(columnDescriptor);
+      }
+      viewDescriptor.setColumnViewDescriptors(columnViewDescriptors);
+      viewDescriptor.setName(propertyDescriptor.getName());
+      view = createTableView(viewDescriptor, actionHandler, locale);
+    } else {
+      BasicListViewDescriptor viewDescriptor = new BasicListViewDescriptor();
+      viewDescriptor.setModelDescriptor(propertyDescriptor);
+      if (renderedChildProperties != null
+          && renderedChildProperties.size() == 1) {
+        viewDescriptor.setRenderedProperty(renderedChildProperties.get(0));
+      }
+      viewDescriptor.setName(propertyDescriptor.getName());
+      view = createListView(viewDescriptor, actionHandler, locale);
+    }
+    return view;
+  }
+
+  /**
+   * Creates an enumeration property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createEnumerationPropertyView(
+      IEnumerationPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a duration property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createDurationPropertyView(
+      IDurationPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a time property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createTimePropertyView(
+      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a date property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createDatePropertyView(
+      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a boolean property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createBooleanPropertyView(
+      IBooleanPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Computes the connector id for component view.
+   * 
+   * @param viewDescriptor
+   *          the component view descriptor.
+   * @return the computed connector id.
+   */
+  protected String getConnectorIdForComponentView(
+      IComponentViewDescriptor viewDescriptor) {
+    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
+      return ModelRefPropertyConnector.THIS_PROPERTY;
+    }
+    return viewDescriptor.getModelDescriptor().getName();
+  }
 }

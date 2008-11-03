@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,44 +32,45 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
-import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
+import org.jspresso.framework.view.action.ActionList;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
+import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
-import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
+import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 
 /**
  * Factory for remote views.
@@ -95,85 +97,58 @@ public class DefaultRemoteViewFactory extends
   /**
    * {@inheritDoc}
    */
-  public IView<RComponent> createView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<RComponent> view = null;
-    if (viewDescriptor instanceof IComponentViewDescriptor) {
-      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof INestingViewDescriptor) {
-      view = createNestingView((INestingViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IImageViewDescriptor) {
-      view = createImageView((IImageViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
-      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
-      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICardViewDescriptor) {
-      view = createCardView((ICardViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
-      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    }
-    return view;
-  }
-
-  private IView<RComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
+  @Override
+  protected IView<RComponent> createTreeView(
+      ITreeViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") IActionHandler actionHandler, Locale locale) {
     ICompositeValueConnector connector = createTreeViewConnector(
         viewDescriptor, locale);
 
     RComponent viewComponent = createRComponent();
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
-        viewDescriptor, connector);
+        viewDescriptor);
+    view.setConnector(connector);
     return view;
   }
 
-  private IView<RComponent> createCardView(ICardViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  private IView<RComponent> createCollectionView(
-      ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createCardView(
+      ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  private IView<RComponent> createPropertyView(
-      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    IView<RComponent> view = createPropertyView(
-        (IPropertyDescriptor) viewDescriptor.getModelDescriptor(),
-        viewDescriptor.getRenderedChildProperties(), actionHandler, locale);
-    return constructView(view.getPeer(), viewDescriptor, view.getConnector());
-  }
-
-  private IView<RComponent> createImageView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  private IView<RComponent> createNestingView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createNestingView(
       INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  private IView<RComponent> createComponentView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICompositeValueConnector connector = getConnectorFactory()
@@ -200,7 +175,7 @@ public class DefaultRemoteViewFactory extends
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
-        propertyView.setPeer(createSecurityComponent());
+        propertyView.setPeer(createSecurityPanel());
       }
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
@@ -220,73 +195,8 @@ public class DefaultRemoteViewFactory extends
     return view;
   }
 
-  private RComponent createSecurityComponent() {
-    return new RComponent();
-  }
-
-  private String getConnectorIdForComponentView(
-      IComponentViewDescriptor viewDescriptor) {
-    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
-      return ModelRefPropertyConnector.THIS_PROPERTY;
-    }
-    return viewDescriptor.getModelDescriptor().getName();
-  }
-
   private RComponent createRComponent() {
     return new RComponent();
-  }
-
-  private IView<RComponent> constructView(RComponent viewComponent,
-      IViewDescriptor descriptor, IValueConnector connector) {
-    BasicView<RComponent> view = new BasicView<RComponent>(viewComponent);
-    view.setConnector(connector);
-    view.setDescriptor(descriptor);
-    return view;
-  }
-
-  private BasicCompositeView<RComponent> constructCompositeView(
-      RComponent viewComponent, IViewDescriptor descriptor,
-      IValueConnector connector) {
-    BasicCompositeView<RComponent> view = new BasicCompositeView<RComponent>(
-        viewComponent);
-    view.setConnector(connector);
-    view.setDescriptor(descriptor);
-    return view;
-  }
-
-  private IView<RComponent> createPropertyView(
-      IPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-    IView<RComponent> view = null;
-    if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-      view = createEnumerationPropertyView(
-          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-      view = createRelationshipEndPropertyView(
-          (IRelationshipEndPropertyDescriptor) propertyDescriptor,
-          renderedChildProperties, actionHandler, locale);
-    } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-      view = createBinaryPropertyView(
-          (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    } else {
-      view = createRComponentPropertyView(propertyDescriptor, actionHandler,
-          locale);
-    }
-    if (view != null) {
-      if (propertyDescriptor.getName() != null) {
-        view.getPeer().setName(
-            propertyDescriptor.getI18nName(getTranslationProvider(), locale));
-      }
-      if (propertyDescriptor.getDescription() != null) {
-        view.getPeer().setDescription(
-            propertyDescriptor.getI18nDescription(getTranslationProvider(),
-                locale)
-                + TOOLTIP_ELLIPSIS);
-      }
-    }
-    return view;
   }
 
   private IView<RComponent> createRComponentPropertyView(
@@ -299,7 +209,11 @@ public class DefaultRemoteViewFactory extends
     return constructView(viewComponent, null, connector);
   }
 
-  private IView<RComponent> createBinaryPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createBinaryPropertyView(
       IBinaryPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> view = createRComponentPropertyView(propertyDescriptor,
@@ -310,56 +224,12 @@ public class DefaultRemoteViewFactory extends
     return view;
   }
 
-  private IView<RComponent> createRelationshipEndPropertyView(
-      IRelationshipEndPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-    IView<RComponent> view = null;
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      view = createReferencePropertyView(
-          (IReferencePropertyDescriptor<?>) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      view = createCollectionPropertyView(
-          (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-          renderedChildProperties, actionHandler, locale);
-    }
-    return view;
-  }
-
-  private IView<RComponent> createCollectionPropertyView(
-      ICollectionPropertyDescriptor<?> propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
-    IView<RComponent> view;
-    if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
-      BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
-      viewDescriptor.setModelDescriptor(propertyDescriptor);
-      List<ISubViewDescriptor> columnViewDescriptors = new ArrayList<ISubViewDescriptor>();
-      for (String renderedProperty : renderedChildProperties) {
-        BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
-        columnDescriptor.setName(renderedProperty);
-        columnViewDescriptors.add(columnDescriptor);
-      }
-      viewDescriptor.setColumnViewDescriptors(columnViewDescriptors);
-      viewDescriptor.setName(propertyDescriptor.getName());
-      view = createTableView(viewDescriptor, actionHandler, locale);
-    } else {
-      BasicListViewDescriptor viewDescriptor = new BasicListViewDescriptor();
-      viewDescriptor.setModelDescriptor(propertyDescriptor);
-      if (renderedChildProperties != null
-          && renderedChildProperties.size() == 1) {
-        viewDescriptor.setRenderedProperty(renderedChildProperties.get(0));
-      }
-      viewDescriptor.setName(propertyDescriptor.getName());
-      view = createListView(viewDescriptor, actionHandler, locale);
-    }
-    return view;
-  }
-
-  private IView<RComponent> createListView(
-      BasicListViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createListView(
+      IListViewDescriptor viewDescriptor, @SuppressWarnings("unused") IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
@@ -382,8 +252,12 @@ public class DefaultRemoteViewFactory extends
     return view;
   }
 
-  private IView<RComponent> createTableView(
-      BasicTableViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createTableView(
+      ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
@@ -396,11 +270,12 @@ public class DefaultRemoteViewFactory extends
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     RComponent viewComponent = createRComponent();
-    viewComponent.setIcon(getIconFactory().getIcon(modelDescriptor
-        .getCollectionDescriptor().getElementDescriptor().getIconImageURL(),
-        IIconFactory.TINY_ICON_SIZE));
+    viewComponent.setIcon(getIconFactory().getIcon(
+        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
+            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
-        viewDescriptor, connector);
+        viewDescriptor);
+    view.setConnector(connector);
 
     Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
     List<String> columnConnectorKeys = new ArrayList<String>();
@@ -451,7 +326,11 @@ public class DefaultRemoteViewFactory extends
     return view;
   }
 
-  private IView<RComponent> createReferencePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createReferencePropertyView(
       IReferencePropertyDescriptor<?> propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> view = createRComponentPropertyView(propertyDescriptor,
@@ -468,15 +347,19 @@ public class DefaultRemoteViewFactory extends
             getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      lovAction.setIcon(getIconFactory().getIcon(propertyDescriptor
-          .getReferencedDescriptor().getIconImageURL(),
+      lovAction.setIcon(getIconFactory().getIcon(
+          propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
     view.getPeer().setActions(Collections.singletonList(lovAction));
     return view;
   }
 
-  private IView<RComponent> createEnumerationPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> view = createRComponentPropertyView(propertyDescriptor,
@@ -488,16 +371,13 @@ public class DefaultRemoteViewFactory extends
         translations.put(value, getTranslationProvider().getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                 value), locale));
-        icons.put(value, getIconFactory().getIcon(propertyDescriptor
-            .getIconImageURL(value), IIconFactory.TINY_ICON_SIZE));
+        icons.put(value, getIconFactory().getIcon(
+            propertyDescriptor.getIconImageURL(value),
+            IIconFactory.TINY_ICON_SIZE));
       }
     }
     view.getPeer().setRenderingTranslations(translations);
     return view;
-  }
-
-  private String computeEnumerationKey(String keyPrefix, String value) {
-    return keyPrefix + "." + value;
   }
 
   /**
@@ -550,5 +430,149 @@ public class DefaultRemoteViewFactory extends
       Locale locale) {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithActions(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale, IView<RComponent> view) {
+    if (viewDescriptor.getActionMap() != null) {
+      List<RAction> viewActions = new ArrayList<RAction>();
+      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
+          .getActionLists().iterator(); iter.hasNext();) {
+        ActionList nextActionList = iter.next();
+        for (IDisplayableAction action : nextActionList.getActions()) {
+          RAction rAction = getActionFactory().createAction(action,
+              actionHandler, view, locale);
+          viewActions.add(rAction);
+        }
+      }
+      view.getPeer().setActions(viewActions);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void configureFontColorsAndDescription(
+      @SuppressWarnings("unused") IViewDescriptor viewDescriptor,
+      @SuppressWarnings("unused") Locale locale,
+      @SuppressWarnings("unused") IView<RComponent> view) {
+    // This is not to be configured on server-side
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected RComponent createSecurityPanel() {
+    // TODO construct a special component ?
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithBorder(IView<RComponent> view, Locale locale) {
+    //TODO set name ?
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createDecimalPropertyView(
+      IDecimalPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createIntegerPropertyView(
+      IIntegerPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createBooleanPropertyView(
+      IBooleanPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createColorPropertyView(
+      IColorPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createDatePropertyView(
+      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createDurationPropertyView(
+      IDurationPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createStringPropertyView(
+      IStringPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createTimePropertyView(
+      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithDescription(
+      IPropertyDescriptor propertyDescriptor, Locale locale,
+      IView<RComponent> view) {
+    if (view != null && propertyDescriptor.getDescription() != null) {
+      view.getPeer().setDescription(
+          propertyDescriptor.getI18nDescription(getTranslationProvider(),
+              locale)
+              + TOOLTIP_ELLIPSIS);
+    }
   }
 }
