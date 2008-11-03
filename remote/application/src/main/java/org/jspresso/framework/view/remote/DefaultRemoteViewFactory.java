@@ -30,13 +30,7 @@ import java.util.Set;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
-import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
-import org.jspresso.framework.binding.IConfigurableConnectorFactory;
-import org.jspresso.framework.binding.IConnectorSelector;
-import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.gui.remote.RAction;
@@ -52,26 +46,22 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
-import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
@@ -97,11 +87,9 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * @version $LastChangedRevision: 1463 $
  * @author Vincent Vandenschrick
  */
-public class DefaultRemoteViewFactory implements
-    IViewFactory<RComponent, RIcon, RAction> {
+public class DefaultRemoteViewFactory extends
+    AbstractViewFactory<RComponent, RIcon, RAction> {
 
-  private IConfigurableConnectorFactory       connectorFactory;
-  private ITranslationProvider                translationProvider;
   private IActionFactory<RAction, RComponent> actionFactory;
   private IIconFactory<RIcon>                 iconFactory;
   private IDisplayableAction                  binaryPropertyInfoAction;
@@ -109,7 +97,6 @@ public class DefaultRemoteViewFactory implements
   private IDisplayableAction                  openFileAsBinaryPropertyAction;
   private IDisplayableAction                  resetPropertyAction;
   private IDisplayableAction                  saveBinaryPropertyAsFileAction;
-  private IMvcBinder                          mvcBinder;
 
   /**
    * {@inheritDoc}
@@ -147,119 +134,13 @@ public class DefaultRemoteViewFactory implements
 
   private IView<RComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    ITreeLevelDescriptor rootDescriptor = viewDescriptor
-        .getRootSubtreeDescriptor();
+    ICompositeValueConnector connector = createTreeViewConnector(
+        viewDescriptor, locale);
+
     RComponent viewComponent = createRComponent();
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
-        viewDescriptor, null);
-//    viewComponent.setCellRenderer(new ConnectorTreeCellRenderer(viewDescriptor,
-//        locale));
-    ICompositeValueConnector connector = null;
-    if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
-          .createConfigurableCollectionConnectorListProvider(
-              ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ICompositeTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
-      List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
-      if (((ICompositeTreeLevelDescriptor) rootDescriptor)
-          .getChildrenDescriptors() != null) {
-        for (ITreeLevelDescriptor subtreeViewDescriptor : ((ICompositeTreeLevelDescriptor) rootDescriptor)
-            .getChildrenDescriptors()) {
-          ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-              viewDescriptor, subtreeViewDescriptor, 1);
-          compositeConnector.addChildConnector(subtreeConnector);
-          subtreeConnectors.add(subtreeConnector);
-        }
-      }
-      compositeConnector.setCollectionConnectorProviders(subtreeConnectors);
-      connector = compositeConnector;
-    } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
-          .createConfigurableCollectionConnectorProvider(
-              ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
-      if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
-        ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-            viewDescriptor, ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                .getChildDescriptor(), 1);
-        simpleConnector.addChildConnector(subtreeConnector);
-        simpleConnector.setCollectionConnectorProvider(subtreeConnector);
-      }
-      connector = simpleConnector;
-    }
-    if (connector instanceof IConnectorSelector) {
-      ((IConnectorSelector) connector).setTracksChildrenSelection(true);
-    }
-    view.setConnector(connector);
+        viewDescriptor, connector);
     return view;
-  }
-
-  private ICollectionConnectorProvider createNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor,
-      ITreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    if (subtreeViewDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      return createCompositeNodeGroupConnector(viewDescriptor,
-          (ICompositeTreeLevelDescriptor) subtreeViewDescriptor, depth);
-    } else if (subtreeViewDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      return createSimpleNodeGroupConnector(viewDescriptor,
-          (ISimpleTreeLevelDescriptor) subtreeViewDescriptor, depth);
-    }
-    return null;
-  }
-
-  private ICollectionConnectorProvider createCompositeNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor,
-      ICompositeTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionDescriptorProvider<?> nodeGroupModelDescriptor = ((ICollectionDescriptorProvider<?>) subtreeViewDescriptor
-        .getNodeGroupDescriptor().getModelDescriptor());
-    IConfigurableCollectionConnectorListProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorListProvider(
-            nodeGroupModelDescriptor.getName() + "Element",
-            subtreeViewDescriptor.getNodeGroupDescriptor()
-                .getRenderedProperty());
-    List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
-    if (subtreeViewDescriptor.getChildrenDescriptors() != null
-        && depth < viewDescriptor.getMaxDepth()) {
-      for (ITreeLevelDescriptor childDescriptor : subtreeViewDescriptor
-          .getChildrenDescriptors()) {
-        ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-            viewDescriptor, childDescriptor, depth + 1);
-        nodeGroupPrototypeConnector.addChildConnector(childConnector);
-        subtreeConnectors.add(childConnector);
-      }
-    }
-    nodeGroupPrototypeConnector
-        .setCollectionConnectorProviders(subtreeConnectors);
-    ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
-    return nodeGroupCollectionConnector;
-  }
-
-  private ICollectionConnectorProvider createSimpleNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor,
-      ISimpleTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionPropertyDescriptor<?> nodeGroupModelDescriptor = (ICollectionPropertyDescriptor<?>) subtreeViewDescriptor
-        .getNodeGroupDescriptor().getModelDescriptor();
-    IConfigurableCollectionConnectorProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorProvider(nodeGroupModelDescriptor
-            .getName()
-            + "Element", subtreeViewDescriptor.getNodeGroupDescriptor()
-            .getRenderedProperty());
-    if (subtreeViewDescriptor.getChildDescriptor() != null
-        && depth < viewDescriptor.getMaxDepth()) {
-      ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-          viewDescriptor, subtreeViewDescriptor.getChildDescriptor(), depth + 1);
-      nodeGroupPrototypeConnector.addChildConnector(childConnector);
-      nodeGroupPrototypeConnector
-          .setCollectionConnectorProvider(childConnector);
-    }
-    ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
-    return nodeGroupCollectionConnector;
   }
 
   private IView<RComponent> createCardView(ICardViewDescriptor viewDescriptor,
@@ -308,7 +189,7 @@ public class DefaultRemoteViewFactory implements
   private IView<RComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ICompositeValueConnector connector = connectorFactory
+    ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForComponentView(viewDescriptor), null);
     RComponent viewComponent = createRComponent();
@@ -425,7 +306,7 @@ public class DefaultRemoteViewFactory implements
       IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     RComponent viewComponent = createRComponent();
-    IValueConnector connector = connectorFactory
+    IValueConnector connector = getConnectorFactory()
         .createValueConnector(propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
@@ -507,11 +388,11 @@ public class DefaultRemoteViewFactory implements
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    ICompositeValueConnector rowConnectorPrototype = connectorFactory
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             viewDescriptor.getRenderedProperty());
-    ICollectionConnector connector = connectorFactory
-        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     RComponent viewComponent = createRComponent();
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
@@ -526,33 +407,17 @@ public class DefaultRemoteViewFactory implements
     return view;
   }
 
-  private IValueConnector createColumnConnector(String columnId,
-      IComponentDescriptor<?> descriptor) {
-    IPropertyDescriptor propertyDescriptor = descriptor
-        .getPropertyDescriptor(columnId);
-    if (propertyDescriptor == null) {
-      throw new ViewException("No property " + columnId + " defined for "
-          + descriptor.getComponentContract());
-    }
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return connectorFactory.createCompositeValueConnector(columnId,
-          ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getToStringProperty());
-    }
-    return connectorFactory.createValueConnector(propertyDescriptor.getName());
-  }
-
   private IView<RComponent> createTableView(
       BasicTableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    ICompositeValueConnector rowConnectorPrototype = connectorFactory
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             modelDescriptor.getCollectionDescriptor().getElementDescriptor()
                 .getToStringProperty());
-    ICollectionConnector connector = connectorFactory
-        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     RComponent viewComponent = createRComponent();
     viewComponent.setIcon(iconFactory.getIcon(modelDescriptor
@@ -620,11 +485,11 @@ public class DefaultRemoteViewFactory implements
     fieldAction.setName(getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            translationProvider, locale)}, locale));
+            getTranslationProvider(), locale)}, locale));
     fieldAction.setDescription(getTranslationProvider().getTranslation(
         "lov.element.description",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            translationProvider, locale)}, locale)
+            getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       fieldAction.setIcon(iconFactory.getIcon(propertyDescriptor
@@ -644,7 +509,7 @@ public class DefaultRemoteViewFactory implements
     Map<String, RIcon> icons = new HashMap<String, RIcon>();
     for (String value : propertyDescriptor.getEnumerationValues()) {
       if (value != null && propertyDescriptor.isTranslated()) {
-        translations.put(value, translationProvider.getTranslation(
+        translations.put(value, getTranslationProvider().getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                 value), locale));
         icons.put(value, iconFactory.getIcon(propertyDescriptor
@@ -657,15 +522,6 @@ public class DefaultRemoteViewFactory implements
 
   private String computeEnumerationKey(String keyPrefix, String value) {
     return keyPrefix + "." + value;
-  }
-
-  /**
-   * Gets the translationProvider.
-   * 
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
   }
 
   /**

@@ -44,17 +44,11 @@ import javax.swing.KeyStroke;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
-import org.jspresso.framework.binding.IConfigurableConnectorFactory;
-import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
-import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
@@ -112,7 +106,7 @@ import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.FontHelper;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
@@ -121,7 +115,6 @@ import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -129,7 +122,6 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
@@ -138,12 +130,10 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
-import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.ViewConstraints;
@@ -215,8 +205,8 @@ import org.wingx.XCalendar;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultWingsViewFactory implements
-    IViewFactory<SComponent, SIcon, Action> {
+public class DefaultWingsViewFactory extends
+    AbstractViewFactory<SComponent, SIcon, Action> {
 
   private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                DEF_DISP_MAX_VALUE          = 1000;
@@ -239,7 +229,6 @@ public class DefaultWingsViewFactory implements
                                                                              3661000);
   private IActionFactory<Action, SComponent> actionFactory;
   private IDisplayableAction                 binaryPropertyInfoAction;
-  private IConfigurableConnectorFactory      connectorFactory;
   private IIconFactory<SIcon>                iconFactory;
   private IListSelectionModelBinder          listSelectionModelBinder;
   private IDisplayableAction                 lovAction;
@@ -247,11 +236,9 @@ public class DefaultWingsViewFactory implements
   private int                                maxCharacterLength          = 48;
 
   private int                                maxColumnCharacterLength    = 32;
-  private IMvcBinder                         mvcBinder;
   private IDisplayableAction                 openFileAsBinaryPropertyAction;
   private IDisplayableAction                 resetPropertyAction;
   private IDisplayableAction                 saveBinaryPropertyAsFileAction;
-  private ITranslationProvider               translationProvider;
   private ITreeSelectionModelBinder          treeSelectionModelBinder;
 
   /**
@@ -401,10 +388,6 @@ public class DefaultWingsViewFactory implements
     view.setPeer(titledPanel);
   }
 
-  // ///////////////// //
-  // Composite Section //
-  // ///////////////// //
-
   /**
    * Gets the actionFactory.
    * 
@@ -442,16 +425,6 @@ public class DefaultWingsViewFactory implements
   public void setBinaryPropertyInfoAction(
       IDisplayableAction binaryPropertyInfoAction) {
     this.binaryPropertyInfoAction = binaryPropertyInfoAction;
-  }
-
-  /**
-   * Sets the connectorFactory.
-   * 
-   * @param connectorFactory
-   *          the connectorFactory to set.
-   */
-  public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
-    this.connectorFactory = connectorFactory;
   }
 
   /**
@@ -506,16 +479,6 @@ public class DefaultWingsViewFactory implements
   }
 
   /**
-   * Sets the mvcBinder.
-   * 
-   * @param mvcBinder
-   *          the mvcBinder to set.
-   */
-  public void setMvcBinder(IMvcBinder mvcBinder) {
-    this.mvcBinder = mvcBinder;
-  }
-
-  /**
    * Sets the openFileAsBinaryPropertyAction.
    * 
    * @param openFileAsBinaryPropertyAction
@@ -548,16 +511,6 @@ public class DefaultWingsViewFactory implements
   }
 
   /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
-  }
-
-  /**
    * Sets the treeSelectionModelBinder.
    * 
    * @param treeSelectionModelBinder
@@ -567,10 +520,6 @@ public class DefaultWingsViewFactory implements
       ITreeSelectionModelBinder treeSelectionModelBinder) {
     this.treeSelectionModelBinder = treeSelectionModelBinder;
   }
-
-  // ////////////////// //
-  // Collection Section //
-  // ////////////////// //
 
   /**
    * Creates a date field.
@@ -902,23 +851,10 @@ public class DefaultWingsViewFactory implements
     }
   }
 
-  /**
-   * Gets the translationProvider.
-   * 
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
-  }
-
   private void adjustSizes(SComponent component, IFormatter formatter,
       Object templateValue) {
     adjustSizes(component, formatter, templateValue, 32);
   }
-
-  // ///////////// //
-  // Image Section //
-  // ///////////// //
 
   private void adjustSizes(SComponent component, IFormatter formatter,
       Object templateValue, int extraWidth) {
@@ -929,17 +865,9 @@ public class DefaultWingsViewFactory implements
     component.setPreferredSize(size);
   }
 
-  // /////////////// //
-  // Nesting Section //
-  // /////////////// //
-
   private String computeEnumerationKey(String keyPrefix, Object value) {
     return keyPrefix + "." + value;
   }
-
-  // ///////////////// //
-  // SComponent Section //
-  // ///////////////// //
 
   private int computePixelWidth(SComponent component, int characterLength) {
     int charLength = maxCharacterLength + 2;
@@ -1085,7 +1013,7 @@ public class DefaultWingsViewFactory implements
 
   private IValueConnector createCardViewConnector(
       final IMapView<SComponent> cardView, final IActionHandler actionHandler) {
-    IValueConnector cardViewConnector = connectorFactory
+    IValueConnector cardViewConnector = getConnectorFactory()
         .createValueConnector(cardView.getDescriptor().getName());
     cardViewConnector
         .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
@@ -1124,8 +1052,8 @@ public class DefaultWingsViewFactory implements
                           .setModelDescriptor(childCardView.getDescriptor()
                               .getModelDescriptor());
                     }
-                    mvcBinder.bind(childCardConnector, cardView.getConnector()
-                        .getModelConnector());
+                    getMvcBinder().bind(childCardConnector,
+                        cardView.getConnector().getModelConnector());
                   }
                 } else {
                   ((SCardLayout) cardPanel.getLayout()).show(cardPanel,
@@ -1217,26 +1145,10 @@ public class DefaultWingsViewFactory implements
     return new ColorTableCellRenderer();
   }
 
-  private IValueConnector createColumnConnector(String columnId,
-      IComponentDescriptor<?> descriptor) {
-    IPropertyDescriptor propertyDescriptor = descriptor
-        .getPropertyDescriptor(columnId);
-    if (propertyDescriptor == null) {
-      throw new ViewException("No property " + columnId + " defined for "
-          + descriptor.getComponentContract());
-    }
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return connectorFactory.createCompositeValueConnector(columnId,
-          ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getToStringProperty());
-    }
-    return connectorFactory.createValueConnector(propertyDescriptor.getName());
-  }
-
   private IView<SComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ICompositeValueConnector connector = connectorFactory
+    ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForComponentView(viewDescriptor), null);
     SPanel viewComponent = createSPanel(new SGridBagLayout());
@@ -1410,48 +1322,6 @@ public class DefaultWingsViewFactory implements
     viewComponent.add(filler, constraints);
   }
 
-  private ICollectionConnectorProvider createCompositeNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ICompositeTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionDescriptorProvider<?> nodeGroupModelDescriptor = ((ICollectionDescriptorProvider<?>) subtreeViewDescriptor
-        .getNodeGroupDescriptor().getModelDescriptor());
-    IConfigurableCollectionConnectorListProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorListProvider(
-            nodeGroupModelDescriptor.getName() + "Element",
-            subtreeViewDescriptor.getNodeGroupDescriptor()
-                .getRenderedProperty());
-    List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
-    if (subtreeViewDescriptor.getChildrenDescriptors() != null
-        && depth < viewDescriptor.getMaxDepth()) {
-      for (ITreeLevelDescriptor childDescriptor : subtreeViewDescriptor
-          .getChildrenDescriptors()) {
-        ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-            viewDescriptor, locale, childDescriptor, depth + 1);
-        nodeGroupPrototypeConnector.addChildConnector(childConnector);
-        subtreeConnectors.add(childConnector);
-      }
-    }
-    if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-    nodeGroupPrototypeConnector
-        .setCollectionConnectorProviders(subtreeConnectors);
-    ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
-    return nodeGroupCollectionConnector;
-  }
-
   private ICompositeView<SComponent> createCompositeView(
       ICompositeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
@@ -1479,7 +1349,7 @@ public class DefaultWingsViewFactory implements
 
           IValueConnector detailConnector = null;
           if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
-            IConfigurableCollectionConnectorProvider wrapper = connectorFactory
+            IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
                 .createConfigurableCollectionConnectorProvider(
                     ModelRefPropertyConnector.THIS_PROPERTY, null);
             wrapper.addChildConnector(detailView.getConnector());
@@ -1502,7 +1372,7 @@ public class DefaultWingsViewFactory implements
         } else {
           connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
         }
-        ICompositeValueConnector connector = connectorFactory
+        ICompositeValueConnector connector = getConnectorFactory()
             .createCompositeValueConnector(connectorId, null);
         view.setConnector(connector);
         for (IView<SComponent> childView : view.getChildren()) {
@@ -1619,10 +1489,6 @@ public class DefaultWingsViewFactory implements
     return new FormattedTableCellRenderer(createDecimalFormatter(
         propertyDescriptor, locale));
   }
-
-  // /////////////// //
-  // Helpers Section //
-  // /////////////// //
 
   private IFormatter createDurationFormatter(
       @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
@@ -1831,11 +1697,11 @@ public class DefaultWingsViewFactory implements
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    ICompositeValueConnector rowConnectorPrototype = connectorFactory
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             viewDescriptor.getRenderedProperty());
-    ICollectionConnector connector = connectorFactory
-        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     SList viewComponent = createSList();
 
@@ -1861,9 +1727,9 @@ public class DefaultWingsViewFactory implements
       INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
-    ICompositeValueConnector connector = connectorFactory
-        .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
-            .getName(), null);
+    ICompositeValueConnector connector = getConnectorFactory()
+        .createCompositeValueConnector(
+            viewDescriptor.getModelDescriptor().getName(), null);
 
     SPanel viewComponent = createSPanel(new SBorderLayout());
 
@@ -1878,33 +1744,6 @@ public class DefaultWingsViewFactory implements
     viewComponent.add(nestedView.getPeer(), SBorderLayout.CENTER);
 
     return view;
-  }
-
-  private ICollectionConnectorProvider createNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ITreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionConnectorProvider connector = null;
-    if (subtreeViewDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      connector = createCompositeNodeGroupConnector(viewDescriptor, locale,
-          (ICompositeTreeLevelDescriptor) subtreeViewDescriptor, depth);
-    } else if (subtreeViewDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      connector = createSimpleNodeGroupConnector(viewDescriptor, locale,
-          (ISimpleTreeLevelDescriptor) subtreeViewDescriptor, depth);
-    }
-    if (connector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) connector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-    return connector;
   }
 
   private IView<SComponent> createNumberPropertyView(
@@ -2069,12 +1908,12 @@ public class DefaultWingsViewFactory implements
     fieldAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            translationProvider, locale)}, locale));
+            getTranslationProvider(), locale)}, locale));
     fieldAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale)
+                .getI18nName(getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       fieldAction.putValue(Action.SMALL_ICON, iconFactory.getIcon(
@@ -2122,44 +1961,6 @@ public class DefaultWingsViewFactory implements
           (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }
     return cellRenderer;
-  }
-
-  private ICollectionConnectorProvider createSimpleNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ISimpleTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionPropertyDescriptor<?> nodeGroupModelDescriptor = (ICollectionPropertyDescriptor<?>) subtreeViewDescriptor
-        .getNodeGroupDescriptor().getModelDescriptor();
-    IConfigurableCollectionConnectorProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorProvider(nodeGroupModelDescriptor
-            .getName()
-            + "Element", subtreeViewDescriptor.getNodeGroupDescriptor()
-            .getRenderedProperty());
-    if (subtreeViewDescriptor.getChildDescriptor() != null
-        && depth < viewDescriptor.getMaxDepth()) {
-      ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-          viewDescriptor, locale, subtreeViewDescriptor.getChildDescriptor(),
-          depth + 1);
-      nodeGroupPrototypeConnector.addChildConnector(childConnector);
-      nodeGroupPrototypeConnector
-          .setCollectionConnectorProvider(childConnector);
-    }
-    if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-    ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
-    return nodeGroupCollectionConnector;
   }
 
   private IView<SComponent> createSourceCodePropertyView(
@@ -2347,12 +2148,13 @@ public class DefaultWingsViewFactory implements
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    ICompositeValueConnector rowConnectorPrototype = connectorFactory
-        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
+        .createCompositeValueConnector(
+            modelDescriptor.getName() + "Element",
             modelDescriptor.getCollectionDescriptor().getElementDescriptor()
                 .getToStringProperty());
-    ICollectionConnector connector = connectorFactory
-        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     STable viewComponent = createSTable();
     viewComponent.setBorder(new SLineBorder(Color.LIGHT_GRAY));
@@ -2548,66 +2350,10 @@ public class DefaultWingsViewFactory implements
         propertyDescriptor, locale));
   }
 
-  // //////////// //
-  // Tree Section //
-  // //////////// //
   private IView<SComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") IActionHandler actionHandler, Locale locale) {
 
-    ITreeLevelDescriptor rootDescriptor = viewDescriptor
-        .getRootSubtreeDescriptor();
-    ICompositeValueConnector connector = null;
-    if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
-          .createConfigurableCollectionConnectorListProvider(
-              ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ICompositeTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
-      List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
-      if (((ICompositeTreeLevelDescriptor) rootDescriptor)
-          .getChildrenDescriptors() != null) {
-        for (ITreeLevelDescriptor subtreeViewDescriptor : ((ICompositeTreeLevelDescriptor) rootDescriptor)
-            .getChildrenDescriptors()) {
-          ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-              viewDescriptor, locale, subtreeViewDescriptor, 1);
-          compositeConnector.addChildConnector(subtreeConnector);
-          subtreeConnectors.add(subtreeConnector);
-        }
-      }
-      compositeConnector.setCollectionConnectorProviders(subtreeConnectors);
-      connector = compositeConnector;
-    } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
-          .createConfigurableCollectionConnectorProvider(
-              ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
-      if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
-        ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-            viewDescriptor, locale, ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                .getChildDescriptor(), 1);
-        simpleConnector.addChildConnector(subtreeConnector);
-        simpleConnector.setCollectionConnectorProvider(subtreeConnector);
-      }
-      connector = simpleConnector;
-    }
-
-    if (connector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayValue(viewDescriptor.getI18nName(translationProvider,
-              locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayDescription(viewDescriptor.getI18nDescription(
-              translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
-      ((AbstractCompositeValueConnector) connector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-
-    if (connector instanceof IConnectorSelector) {
-      ((IConnectorSelector) connector).setTracksChildrenSelection(true);
-    }
+    ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, locale);
 
     STree viewComponent = createSTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
@@ -2648,10 +2394,6 @@ public class DefaultWingsViewFactory implements
     return new SFont(font.getName(), fontStyle, font.getSize());
   }
 
-  // ///////////////////// //
-  // Configuration Section //
-  // ///////////////////// //
-
   private String getConnectorIdForComponentView(
       IComponentViewDescriptor viewDescriptor) {
     if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
@@ -2691,9 +2433,9 @@ public class DefaultWingsViewFactory implements
   private String getEnumerationTemplateValue(
       IEnumerationPropertyDescriptor descriptor, Locale locale) {
     int maxTranslationLength = -1;
-    if (translationProvider != null && descriptor.isTranslated()) {
+    if (getTranslationProvider() != null && descriptor.isTranslated()) {
       for (Object enumerationValue : descriptor.getEnumerationValues()) {
-        String translation = translationProvider.getTranslation(
+        String translation = getTranslationProvider().getTranslation(
             computeEnumerationKey(descriptor.getEnumerationName(),
                 enumerationValue), locale);
         if (translation.length() > maxTranslationLength) {
@@ -2829,8 +2571,8 @@ public class DefaultWingsViewFactory implements
     public SComponent getTreeCellRendererComponent(STree tree, Object value,
         boolean sel, boolean expanded, boolean leaf, int row,
         boolean nodeHasFocus) {
-      SLabel renderer = (SLabel) super.getTreeCellRendererComponent(tree, value,
-          sel, expanded, leaf, row, nodeHasFocus);
+      SLabel renderer = (SLabel) super.getTreeCellRendererComponent(tree,
+          value, sel, expanded, leaf, row, nodeHasFocus);
       if (value instanceof IValueConnector) {
         if (value instanceof IRenderableCompositeValueConnector) {
           renderer.setText(((IRenderableCompositeValueConnector) value)
@@ -2840,10 +2582,11 @@ public class DefaultWingsViewFactory implements
                   .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
           if (((IRenderableCompositeValueConnector) value)
               .getDisplayDescription() != null) {
-            //SToolTipManager.sharedInstance().registerComponent(tree);
-            renderer.setToolTipText(((IRenderableCompositeValueConnector) value)
-                .getDisplayDescription()
-                + TOOLTIP_ELLIPSIS);
+            // SToolTipManager.sharedInstance().registerComponent(tree);
+            renderer
+                .setToolTipText(((IRenderableCompositeValueConnector) value)
+                    .getDisplayDescription()
+                    + TOOLTIP_ELLIPSIS);
           }
         } else {
           renderer.setText(value.toString());
@@ -2889,7 +2632,7 @@ public class DefaultWingsViewFactory implements
               .getIconImageURL(String.valueOf(value)),
               IIconFactory.TINY_ICON_SIZE));
       if (value != null && propertyDescriptor.isTranslated()) {
-        setText(translationProvider.getTranslation(computeEnumerationKey(
+        setText(getTranslationProvider().getTranslation(computeEnumerationKey(
             propertyDescriptor.getEnumerationName(), value), locale));
       } else {
         setText(String.valueOf(value));
@@ -2938,7 +2681,7 @@ public class DefaultWingsViewFactory implements
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null && propertyDescriptor.isTranslated()) {
-          renderer.setText(translationProvider.getTranslation(
+          renderer.setText(getTranslationProvider().getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   connectorValue), locale));
         } else {
@@ -2946,7 +2689,7 @@ public class DefaultWingsViewFactory implements
         }
       } else {
         if (value != null && propertyDescriptor.isTranslated()) {
-          renderer.setText(translationProvider.getTranslation(
+          renderer.setText(getTranslationProvider().getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {

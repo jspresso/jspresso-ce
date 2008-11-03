@@ -35,17 +35,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
-import org.jspresso.framework.binding.IConfigurableConnectorFactory;
-import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
-import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
@@ -114,8 +109,8 @@ import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.FontHelper;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.ulc.UlcUtil;
+import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
@@ -124,7 +119,6 @@ import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
@@ -133,7 +127,6 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
@@ -142,12 +135,10 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
-import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
@@ -222,8 +213,8 @@ import com.ulcjava.base.shared.IUlcEventConstants;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultUlcViewFactory implements
-    IViewFactory<ULCComponent, ULCIcon, IAction> {
+public class DefaultUlcViewFactory extends
+    AbstractViewFactory<ULCComponent, ULCIcon, IAction> {
 
   private static final int                      DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                   DEF_DISP_MAX_VALUE          = 1000;
@@ -249,7 +240,6 @@ public class DefaultUlcViewFactory implements
                                                                                 128);
   private IActionFactory<IAction, ULCComponent> actionFactory;
   private IDisplayableAction                    binaryPropertyInfoAction;
-  private IConfigurableConnectorFactory         connectorFactory;
   private ULCDurationDataTypeFactory            durationDataTypeFactory     = new ULCDurationDataTypeFactory();
   private IIconFactory<ULCIcon>                 iconFactory;
   private IListSelectionModelBinder             listSelectionModelBinder;
@@ -258,13 +248,11 @@ public class DefaultUlcViewFactory implements
   private IModelCascadingBinder                 modelCascadingBinder;
   private int                                   maxCharacterLength          = 32;
   private int                                   maxColumnCharacterLength    = 32;
-  private IMvcBinder                            mvcBinder;
   private IDisplayableAction                    openFileAsBinaryPropertyAction;
   private IDisplayableAction                    resetPropertyAction;
   private IDisplayableAction                    saveBinaryPropertyAsFileAction;
   private ULCTranslationDataTypeFactory         translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
 
-  private ITranslationProvider                  translationProvider;
   private ITreeSelectionModelBinder             treeSelectionModelBinder;
 
   /**
@@ -401,10 +389,6 @@ public class DefaultUlcViewFactory implements
     return iconFactory;
   }
 
-  // ///////////////// //
-  // Composite Section //
-  // ///////////////// //
-
   /**
    * Sets the actionFactory.
    * 
@@ -425,16 +409,6 @@ public class DefaultUlcViewFactory implements
   public void setBinaryPropertyInfoAction(
       IDisplayableAction binaryPropertyInfoAction) {
     this.binaryPropertyInfoAction = binaryPropertyInfoAction;
-  }
-
-  /**
-   * Sets the connectorFactory.
-   * 
-   * @param connectorFactory
-   *          the connectorFactory to set.
-   */
-  public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
-    this.connectorFactory = connectorFactory;
   }
 
   /**
@@ -489,16 +463,6 @@ public class DefaultUlcViewFactory implements
   }
 
   /**
-   * Sets the mvcBinder.
-   * 
-   * @param mvcBinder
-   *          the mvcBinder to set.
-   */
-  public void setMvcBinder(IMvcBinder mvcBinder) {
-    this.mvcBinder = mvcBinder;
-  }
-
-  /**
    * Sets the openFileAsBinaryPropertyAction.
    * 
    * @param openFileAsBinaryPropertyAction
@@ -531,16 +495,6 @@ public class DefaultUlcViewFactory implements
   }
 
   /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
-  }
-
-  /**
    * Sets the treeSelectionModelBinder.
    * 
    * @param treeSelectionModelBinder
@@ -570,10 +524,6 @@ public class DefaultUlcViewFactory implements
     ULCCardPane pane = new ULCCardPane();
     return pane;
   }
-
-  // ////////////////// //
-  // Collection Section //
-  // ////////////////// //
 
   /**
    * Creates a gridbaglayout pane.
@@ -829,10 +779,6 @@ public class DefaultUlcViewFactory implements
     return textField;
   }
 
-  // ///////////// //
-  // Image Section //
-  // ///////////// //
-
   /**
    * Creates a tool bar.
    * 
@@ -844,10 +790,6 @@ public class DefaultUlcViewFactory implements
     toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
     return toolBar;
   }
-
-  // /////////////// //
-  // Nesting Section //
-  // /////////////// //
 
   /**
    * Creates a tree.
@@ -879,19 +821,6 @@ public class DefaultUlcViewFactory implements
       default:
         break;
     }
-  }
-
-  // ///////////////// //
-  // Component Section //
-  // ///////////////// //
-
-  /**
-   * Gets the translationProvider.
-   * 
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
   }
 
   private void adjustSizes(ULCComponent component, IFormatter formatter,
@@ -927,7 +856,7 @@ public class DefaultUlcViewFactory implements
       IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
     Map<String, String> translationMapping = new HashMap<String, String>();
     for (String enumerationValue : propertyDescriptor.getEnumerationValues()) {
-      translationMapping.put(enumerationValue, translationProvider
+      translationMapping.put(enumerationValue, getTranslationProvider()
           .getTranslation(computeEnumerationKey(propertyDescriptor
               .getEnumerationName(), enumerationValue), locale));
     }
@@ -1065,7 +994,7 @@ public class DefaultUlcViewFactory implements
 
   private IValueConnector createCardViewConnector(
       final IMapView<ULCComponent> cardView, final IActionHandler actionHandler) {
-    IValueConnector cardViewConnector = connectorFactory
+    IValueConnector cardViewConnector = getConnectorFactory()
         .createValueConnector(cardView.getDescriptor().getName());
     cardViewConnector
         .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
@@ -1103,7 +1032,7 @@ public class DefaultUlcViewFactory implements
                           .setModelDescriptor(childCardView.getDescriptor()
                               .getModelDescriptor());
                     }
-                    mvcBinder.bind(childCardConnector, cardView.getConnector()
+                    getMvcBinder().bind(childCardConnector, cardView.getConnector()
                         .getModelConnector());
                   }
                 } else {
@@ -1193,26 +1122,10 @@ public class DefaultUlcViewFactory implements
     return new ColorTableCellRenderer();
   }
 
-  private IValueConnector createColumnConnector(String columnId,
-      IComponentDescriptor<?> descriptor) {
-    IPropertyDescriptor propertyDescriptor = descriptor
-        .getPropertyDescriptor(columnId);
-    if (propertyDescriptor == null) {
-      throw new ViewException("No property " + columnId + " defined for "
-          + descriptor.getComponentContract());
-    }
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return connectorFactory.createCompositeValueConnector(columnId,
-          ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getToStringProperty());
-    }
-    return connectorFactory.createValueConnector(propertyDescriptor.getName());
-  }
-
   private IView<ULCComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ICompositeValueConnector connector = connectorFactory
+    ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForComponentView(viewDescriptor), null);
     ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
@@ -1369,48 +1282,6 @@ public class DefaultUlcViewFactory implements
     return view;
   }
 
-  private ICollectionConnectorProvider createCompositeNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ICompositeTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionDescriptorProvider<?> nodeGroupModelDescriptor = ((ICollectionDescriptorProvider<?>) subtreeViewDescriptor
-        .getNodeGroupDescriptor().getModelDescriptor());
-    IConfigurableCollectionConnectorListProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorListProvider(
-            nodeGroupModelDescriptor.getName() + "Element",
-            subtreeViewDescriptor.getNodeGroupDescriptor()
-                .getRenderedProperty());
-    List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
-    if (subtreeViewDescriptor.getChildrenDescriptors() != null
-        && depth < viewDescriptor.getMaxDepth()) {
-      for (ITreeLevelDescriptor childDescriptor : subtreeViewDescriptor
-          .getChildrenDescriptors()) {
-        ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-            viewDescriptor, locale, childDescriptor, depth + 1);
-        nodeGroupPrototypeConnector.addChildConnector(childConnector);
-        subtreeConnectors.add(childConnector);
-      }
-    }
-    if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-    nodeGroupPrototypeConnector
-        .setCollectionConnectorProviders(subtreeConnectors);
-    ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
-    return nodeGroupCollectionConnector;
-  }
-
   private ICompositeView<ULCComponent> createCompositeView(
       ICompositeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
@@ -1437,7 +1308,7 @@ public class DefaultUlcViewFactory implements
           detailView.setParent(view);
           IValueConnector detailConnector = null;
           if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
-            IConfigurableCollectionConnectorProvider wrapper = connectorFactory
+            IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
                 .createConfigurableCollectionConnectorProvider(
                     ModelRefPropertyConnector.THIS_PROPERTY, null);
             wrapper.addChildConnector(detailView.getConnector());
@@ -1460,7 +1331,7 @@ public class DefaultUlcViewFactory implements
         } else {
           connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
         }
-        ICompositeValueConnector connector = connectorFactory
+        ICompositeValueConnector connector = getConnectorFactory()
             .createCompositeValueConnector(connectorId, null);
         view.setConnector(connector);
         for (IView<ULCComponent> childView : view.getChildren()) {
@@ -1593,10 +1464,6 @@ public class DefaultUlcViewFactory implements
     return constructView(viewComponent, null, connector);
   }
 
-  // ////////////////// //
-  // Popup menu Section //
-  // ////////////////// //
-
   private ITableCellRenderer createDecimalTableCellRenderer(int column,
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
@@ -1644,10 +1511,6 @@ public class DefaultUlcViewFactory implements
         propertyDescriptor, locale, createDurationFormatter(propertyDescriptor,
             locale)));
   }
-
-  // /////////////// //
-  // Helpers Section //
-  // /////////////// //
 
   private IView<ULCComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
@@ -1850,11 +1713,11 @@ public class DefaultUlcViewFactory implements
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = (ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor();
-    ICompositeValueConnector rowConnectorPrototype = connectorFactory
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             viewDescriptor.getRenderedProperty());
-    ICollectionConnector connector = connectorFactory
-        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     ULCList viewComponent = createULCList();
     ULCScrollPane scrollPane = createULCScrollPane();
@@ -1882,7 +1745,7 @@ public class DefaultUlcViewFactory implements
       INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
-    ICompositeValueConnector connector = connectorFactory
+    ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
             .getName(), null);
     ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
@@ -1895,32 +1758,6 @@ public class DefaultUlcViewFactory implements
     return view;
   }
 
-  private ICollectionConnectorProvider createNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ITreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionConnectorProvider connector = null;
-    if (subtreeViewDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      connector = createCompositeNodeGroupConnector(viewDescriptor, locale,
-          (ICompositeTreeLevelDescriptor) subtreeViewDescriptor, depth);
-    } else if (subtreeViewDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      connector = createSimpleNodeGroupConnector(viewDescriptor, locale,
-          (ISimpleTreeLevelDescriptor) subtreeViewDescriptor, depth);
-    }
-    if (connector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) connector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-    return connector;
-  }
 
   private IView<ULCComponent> createNumberPropertyView(
       INumberPropertyDescriptor propertyDescriptor,
@@ -2109,12 +1946,12 @@ public class DefaultUlcViewFactory implements
     fieldAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            translationProvider, locale)}, locale));
+            getTranslationProvider(), locale)}, locale));
     fieldAction.putValue(IAction.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale)
+                .getI18nName(getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       fieldAction.putValue(IAction.SMALL_ICON, iconFactory.getIcon(
@@ -2162,43 +1999,6 @@ public class DefaultUlcViewFactory implements
           (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }
     return cellRenderer;
-  }
-
-  private ICollectionConnectorProvider createSimpleNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ISimpleTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionPropertyDescriptor<?> nodeGroupModelDescriptor = (ICollectionPropertyDescriptor<?>) subtreeViewDescriptor
-        .getNodeGroupDescriptor().getModelDescriptor();
-    IConfigurableCollectionConnectorProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorProvider(nodeGroupModelDescriptor
-            .getName()
-            + "Element", subtreeViewDescriptor.getNodeGroupDescriptor()
-            .getRenderedProperty());
-    if (subtreeViewDescriptor.getChildDescriptor() != null
-        && depth < viewDescriptor.getMaxDepth()) {
-      ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-          viewDescriptor, locale, subtreeViewDescriptor.getChildDescriptor(), depth + 1);
-      nodeGroupPrototypeConnector.addChildConnector(childConnector);
-      nodeGroupPrototypeConnector
-          .setCollectionConnectorProvider(childConnector);
-    }
-    if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-    ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
-    return nodeGroupCollectionConnector;
   }
 
   private IView<ULCComponent> createSourceCodePropertyView(
@@ -2317,12 +2117,12 @@ public class DefaultUlcViewFactory implements
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    ICompositeValueConnector rowConnectorPrototype = connectorFactory
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             modelDescriptor.getCollectionDescriptor().getElementDescriptor()
                 .getToStringProperty());
-    ICollectionConnector connector = connectorFactory
-        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     ULCExtendedTable viewComponent = createULCTable();
     ULCScrollPane scrollPane = createULCScrollPane();
@@ -2576,67 +2376,11 @@ public class DefaultUlcViewFactory implements
         createTimeFormat(propertyDescriptor, locale)));
   }
 
-  // //////////// //
-  // Tree Section //
-  // //////////// //
   private IView<ULCComponent> createTreeView(
       ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
-    ITreeLevelDescriptor rootDescriptor = viewDescriptor
-        .getRootSubtreeDescriptor();
-    ICompositeValueConnector connector = null;
-    if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
-          .createConfigurableCollectionConnectorListProvider(
-              ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ICompositeTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
-      List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
-      if (((ICompositeTreeLevelDescriptor) rootDescriptor)
-          .getChildrenDescriptors() != null) {
-        for (ITreeLevelDescriptor subtreeViewDescriptor : ((ICompositeTreeLevelDescriptor) rootDescriptor)
-            .getChildrenDescriptors()) {
-          ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-              viewDescriptor, locale, subtreeViewDescriptor, 0);
-          compositeConnector.addChildConnector(subtreeConnector);
-          subtreeConnectors.add(subtreeConnector);
-        }
-      }
-      compositeConnector.setCollectionConnectorProviders(subtreeConnectors);
-      connector = compositeConnector;
-    } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
-          .createConfigurableCollectionConnectorProvider(
-              ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
-      if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
-        ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-            viewDescriptor, locale, ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                .getChildDescriptor(), 0);
-        simpleConnector.addChildConnector(subtreeConnector);
-        simpleConnector.setCollectionConnectorProvider(subtreeConnector);
-      }
-      connector = simpleConnector;
-    }
-
-    if (connector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayValue(viewDescriptor.getI18nName(translationProvider,
-              locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayDescription(viewDescriptor.getI18nDescription(
-              translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
-      ((AbstractCompositeValueConnector) connector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-
-    if (connector instanceof IConnectorSelector) {
-      ((IConnectorSelector) connector).setTracksChildrenSelection(true);
-    }
+    ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, locale);
 
     ULCExtendedTree viewComponent = createULCTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
@@ -2676,7 +2420,8 @@ public class DefaultUlcViewFactory implements
   }
 
   private Font createFont(String fontString) {
-    org.jspresso.framework.util.gui.Font font = FontHelper.fromString(fontString);
+    org.jspresso.framework.util.gui.Font font = FontHelper
+        .fromString(fontString);
     int fontStyle;
     if (font.isBold() && font.isItalic()) {
       fontStyle = Font.BOLD | Font.ITALIC;
@@ -2796,10 +2541,6 @@ public class DefaultUlcViewFactory implements
     return viewDescriptor.getModelDescriptor().getName();
   }
 
-  // ///////////////////// //
-  // Configuration Section //
-  // ///////////////////// //
-
   private Object getDateTemplateValue(
       @SuppressWarnings("unused") IDatePropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DATE;
@@ -2845,9 +2586,9 @@ public class DefaultUlcViewFactory implements
   private String getEnumerationTemplateValue(
       IEnumerationPropertyDescriptor descriptor, Locale locale) {
     int maxTranslationLength = -1;
-    if (translationProvider != null && descriptor.isTranslated()) {
+    if (getTranslationProvider() != null && descriptor.isTranslated()) {
       for (Object enumerationValue : descriptor.getEnumerationValues()) {
-        String translation = translationProvider.getTranslation(
+        String translation = getTranslationProvider().getTranslation(
             computeEnumerationKey(descriptor.getEnumerationName(),
                 enumerationValue), locale);
         if (translation.length() > maxTranslationLength) {
@@ -2974,7 +2715,7 @@ public class DefaultUlcViewFactory implements
 
   private final class ConnectorTreeCellRenderer extends DefaultTreeCellRenderer {
 
-    private static final long   serialVersionUID = -5153268751092971328L;
+    private static final long serialVersionUID = -5153268751092971328L;
 
     /**
      * {@inheritDoc}

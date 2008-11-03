@@ -89,17 +89,12 @@ import net.sf.nachocalendar.components.DefaultDayRenderer;
 import net.sf.nachocalendar.components.DefaultHeaderRenderer;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
-import org.jspresso.framework.binding.IConfigurableConnectorFactory;
-import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
-import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
@@ -160,8 +155,8 @@ import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.FontHelper;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.swing.SwingUtil;
+import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
@@ -170,7 +165,6 @@ import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
@@ -179,7 +173,6 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
@@ -188,12 +181,10 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
-import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
@@ -223,8 +214,8 @@ import org.syntax.jedit.tokenmarker.TokenMarker;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultSwingViewFactory implements
-    IViewFactory<JComponent, Icon, Action> {
+public class DefaultSwingViewFactory extends
+    AbstractViewFactory<JComponent, Icon, Action> {
 
   private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                DEF_DISP_MAX_VALUE          = 1000;
@@ -250,7 +241,6 @@ public class DefaultSwingViewFactory implements
                                                                              128);
   private IActionFactory<Action, JComponent> actionFactory;
   private IDisplayableAction                 binaryPropertyInfoAction;
-  private IConfigurableConnectorFactory      connectorFactory;
   private IIconFactory<Icon>                 iconFactory;
   private IListSelectionModelBinder          listSelectionModelBinder;
   private IDisplayableAction                 lovAction;
@@ -258,11 +248,9 @@ public class DefaultSwingViewFactory implements
 
   private int                                maxCharacterLength          = 32;
   private int                                maxColumnCharacterLength    = 32;
-  private IMvcBinder                         mvcBinder;
   private IDisplayableAction                 openFileAsBinaryPropertyAction;
   private IDisplayableAction                 resetPropertyAction;
   private IDisplayableAction                 saveBinaryPropertyAsFileAction;
-  private ITranslationProvider               translationProvider;
   private ITreeSelectionModelBinder          treeSelectionModelBinder;
 
   /**
@@ -394,10 +382,6 @@ public class DefaultSwingViewFactory implements
     // view.setPeer(iFrame);
   }
 
-  // ///////////////// //
-  // Composite Section //
-  // ///////////////// //
-
   /**
    * Gets the actionFactory.
    * 
@@ -435,16 +419,6 @@ public class DefaultSwingViewFactory implements
   public void setBinaryPropertyInfoAction(
       IDisplayableAction binaryPropertyInfoAction) {
     this.binaryPropertyInfoAction = binaryPropertyInfoAction;
-  }
-
-  /**
-   * Sets the connectorFactory.
-   * 
-   * @param connectorFactory
-   *          the connectorFactory to set.
-   */
-  public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
-    this.connectorFactory = connectorFactory;
   }
 
   /**
@@ -499,16 +473,6 @@ public class DefaultSwingViewFactory implements
   }
 
   /**
-   * Sets the mvcBinder.
-   * 
-   * @param mvcBinder
-   *          the mvcBinder to set.
-   */
-  public void setMvcBinder(IMvcBinder mvcBinder) {
-    this.mvcBinder = mvcBinder;
-  }
-
-  /**
    * Sets the openFileAsBinaryPropertyAction.
    * 
    * @param openFileAsBinaryPropertyAction
@@ -541,16 +505,6 @@ public class DefaultSwingViewFactory implements
   }
 
   /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
-  }
-
-  /**
    * Sets the treeSelectionModelBinder.
    * 
    * @param treeSelectionModelBinder
@@ -560,10 +514,6 @@ public class DefaultSwingViewFactory implements
       ITreeSelectionModelBinder treeSelectionModelBinder) {
     this.treeSelectionModelBinder = treeSelectionModelBinder;
   }
-
-  // ////////////////// //
-  // Collection Section //
-  // ////////////////// //
 
   /**
    * Creates an action field.
@@ -879,31 +829,10 @@ public class DefaultSwingViewFactory implements
     }
   }
 
-  // ///////////// //
-  // Image Section //
-  // ///////////// //
-
-  /**
-   * Gets the translationProvider.
-   * 
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
-  }
-
-  // /////////////// //
-  // Nesting Section //
-  // /////////////// //
-
   private void adjustSizes(Component component, IFormatter formatter,
       Object templateValue) {
     adjustSizes(component, formatter, templateValue, 32);
   }
-
-  // ///////////////// //
-  // Component Section //
-  // ///////////////// //
 
   private void adjustSizes(Component component, IFormatter formatter,
       Object templateValue, int extraWidth) {
@@ -1063,7 +992,7 @@ public class DefaultSwingViewFactory implements
 
   private IValueConnector createCardViewConnector(
       final IMapView<JComponent> cardView, final IActionHandler actionHandler) {
-    IValueConnector cardViewConnector = connectorFactory
+    IValueConnector cardViewConnector = getConnectorFactory()
         .createValueConnector(cardView.getDescriptor().getName());
     cardViewConnector
         .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
@@ -1102,7 +1031,7 @@ public class DefaultSwingViewFactory implements
                           .setModelDescriptor(childCardView.getDescriptor()
                               .getModelDescriptor());
                     }
-                    mvcBinder.bind(childCardConnector, cardView.getConnector()
+                    getMvcBinder().bind(childCardConnector, cardView.getConnector()
                         .getModelConnector());
                   }
                 } else {
@@ -1195,26 +1124,10 @@ public class DefaultSwingViewFactory implements
     return new ColorTableCellRenderer();
   }
 
-  private IValueConnector createColumnConnector(String columnId,
-      IComponentDescriptor<?> descriptor) {
-    IPropertyDescriptor propertyDescriptor = descriptor
-        .getPropertyDescriptor(columnId);
-    if (propertyDescriptor == null) {
-      throw new ViewException("No property " + columnId + " defined for "
-          + descriptor.getComponentContract());
-    }
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return connectorFactory.createCompositeValueConnector(columnId,
-          ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getToStringProperty());
-    }
-    return connectorFactory.createValueConnector(propertyDescriptor.getName());
-  }
-
   private IView<JComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ICompositeValueConnector connector = connectorFactory
+    ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForComponentView(viewDescriptor), null);
     JPanel viewComponent = createJPanel();
@@ -1372,49 +1285,6 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  private ICollectionConnectorProvider createCompositeNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ICompositeTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionDescriptorProvider<?> nodeGroupModelDescriptor = ((ICollectionDescriptorProvider<?>) subtreeViewDescriptor
-        .getNodeGroupDescriptor().getModelDescriptor());
-    IConfigurableCollectionConnectorListProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorListProvider(
-            nodeGroupModelDescriptor.getName() + "Element",
-            subtreeViewDescriptor.getNodeGroupDescriptor()
-                .getRenderedProperty());
-    List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
-    if (subtreeViewDescriptor.getChildrenDescriptors() != null
-        && depth < viewDescriptor.getMaxDepth()) {
-      for (ITreeLevelDescriptor childDescriptor : subtreeViewDescriptor
-          .getChildrenDescriptors()) {
-        ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-            viewDescriptor, locale, childDescriptor, depth + 1);
-        nodeGroupPrototypeConnector.addChildConnector(childConnector);
-        subtreeConnectors.add(childConnector);
-      }
-    }
-    nodeGroupPrototypeConnector
-        .setCollectionConnectorProviders(subtreeConnectors);
-    if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-
-    ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
-    return nodeGroupCollectionConnector;
-  }
-
   private ICompositeView<JComponent> createCompositeView(
       ICompositeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
@@ -1442,7 +1312,7 @@ public class DefaultSwingViewFactory implements
 
           IValueConnector detailConnector = null;
           if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
-            IConfigurableCollectionConnectorProvider wrapper = connectorFactory
+            IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
                 .createConfigurableCollectionConnectorProvider(
                     ModelRefPropertyConnector.THIS_PROPERTY, null);
             wrapper.addChildConnector(detailView.getConnector());
@@ -1465,7 +1335,7 @@ public class DefaultSwingViewFactory implements
         } else {
           connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
         }
-        ICompositeValueConnector connector = connectorFactory
+        ICompositeValueConnector connector = getConnectorFactory()
             .createCompositeValueConnector(connectorId, null);
         view.setConnector(connector);
         for (IView<JComponent> childView : view.getChildren()) {
@@ -1560,10 +1430,6 @@ public class DefaultSwingViewFactory implements
     return new FormatAdapter(createDecimalFormat(propertyDescriptor, locale));
   }
 
-  // ////////////////// //
-  // Popup menu Section //
-  // ////////////////// //
-
   private IView<JComponent> createDecimalPropertyView(
       IDecimalPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1616,10 +1482,6 @@ public class DefaultSwingViewFactory implements
     return new FormattedTableCellRenderer(createDurationFormatter(
         propertyDescriptor, locale));
   }
-
-  // /////////////// //
-  // Helpers Section //
-  // /////////////// //
 
   private IView<JComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
@@ -1838,11 +1700,11 @@ public class DefaultSwingViewFactory implements
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    ICompositeValueConnector rowConnectorPrototype = connectorFactory
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             viewDescriptor.getRenderedProperty());
-    ICollectionConnector connector = connectorFactory
-        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     JList viewComponent = createJList();
     JScrollPane scrollPane = createJScrollPane();
@@ -1867,7 +1729,7 @@ public class DefaultSwingViewFactory implements
       INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
-    ICompositeValueConnector connector = connectorFactory
+    ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
             .getName(), null);
 
@@ -1886,33 +1748,6 @@ public class DefaultSwingViewFactory implements
     viewComponent.add(nestedView.getPeer(), BorderLayout.CENTER);
 
     return view;
-  }
-
-  private ICollectionConnectorProvider createNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ITreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionConnectorProvider connector = null;
-    if (subtreeViewDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      connector = createCompositeNodeGroupConnector(viewDescriptor, locale,
-          (ICompositeTreeLevelDescriptor) subtreeViewDescriptor, depth);
-    } else if (subtreeViewDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      connector = createSimpleNodeGroupConnector(viewDescriptor, locale,
-          (ISimpleTreeLevelDescriptor) subtreeViewDescriptor, depth);
-    }
-    if (connector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) connector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-    return connector;
   }
 
   private IView<JComponent> createNumberPropertyView(
@@ -2078,12 +1913,12 @@ public class DefaultSwingViewFactory implements
     fieldAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            translationProvider, locale)}, locale));
+            getTranslationProvider(), locale)}, locale));
     fieldAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale)
+                .getI18nName(getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       fieldAction.putValue(Action.SMALL_ICON, iconFactory.getIcon(
@@ -2131,44 +1966,6 @@ public class DefaultSwingViewFactory implements
           (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }
     return cellRenderer;
-  }
-
-  private ICollectionConnectorProvider createSimpleNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ISimpleTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionPropertyDescriptor<?> nodeGroupModelDescriptor = (ICollectionPropertyDescriptor<?>) subtreeViewDescriptor
-        .getNodeGroupDescriptor().getModelDescriptor();
-    IConfigurableCollectionConnectorProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorProvider(nodeGroupModelDescriptor
-            .getName()
-            + "Element", subtreeViewDescriptor.getNodeGroupDescriptor()
-            .getRenderedProperty());
-    if (subtreeViewDescriptor.getChildDescriptor() != null
-        && depth < viewDescriptor.getMaxDepth()) {
-      ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-          viewDescriptor, locale, subtreeViewDescriptor.getChildDescriptor(),
-          depth + 1);
-      nodeGroupPrototypeConnector.addChildConnector(childConnector);
-      nodeGroupPrototypeConnector
-          .setCollectionConnectorProvider(childConnector);
-    }
-    if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayValue(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nName(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayDescription(subtreeViewDescriptor.getNodeGroupDescriptor()
-              .getI18nDescription(translationProvider, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setDisplayIconImageUrl(subtreeViewDescriptor
-              .getNodeGroupDescriptor().getIconImageURL());
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-    ICollectionConnector nodeGroupCollectionConnector = connectorFactory
-        .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
-    return nodeGroupCollectionConnector;
   }
 
   private IView<JComponent> createSourceCodePropertyView(
@@ -2310,12 +2107,12 @@ public class DefaultSwingViewFactory implements
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    ICompositeValueConnector rowConnectorPrototype = connectorFactory
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             modelDescriptor.getCollectionDescriptor().getElementDescriptor()
                 .getToStringProperty());
-    ICollectionConnector connector = connectorFactory
-        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     JTable viewComponent = createJTable();
     JScrollPane scrollPane = createJScrollPane();
@@ -2532,67 +2329,10 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor, locale));
   }
 
-  // //////////// //
-  // Tree Section //
-  // //////////// //
   private IView<JComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
 
-    ITreeLevelDescriptor rootDescriptor = viewDescriptor
-        .getRootSubtreeDescriptor();
-    ICompositeValueConnector connector = null;
-    if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
-          .createConfigurableCollectionConnectorListProvider(
-              ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ICompositeTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
-      List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
-      if (((ICompositeTreeLevelDescriptor) rootDescriptor)
-          .getChildrenDescriptors() != null) {
-        for (ITreeLevelDescriptor subtreeViewDescriptor : ((ICompositeTreeLevelDescriptor) rootDescriptor)
-            .getChildrenDescriptors()) {
-          ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-              viewDescriptor, locale, subtreeViewDescriptor, 1);
-          compositeConnector.addChildConnector(subtreeConnector);
-          subtreeConnectors.add(subtreeConnector);
-        }
-      }
-      compositeConnector.setCollectionConnectorProviders(subtreeConnectors);
-      connector = compositeConnector;
-    } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
-          .createConfigurableCollectionConnectorProvider(
-              ModelRefPropertyConnector.THIS_PROPERTY,
-              ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
-      if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
-        ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-            viewDescriptor, locale,
-            ((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor(),
-            1);
-        simpleConnector.addChildConnector(subtreeConnector);
-        simpleConnector.setCollectionConnectorProvider(subtreeConnector);
-      }
-      connector = simpleConnector;
-    }
-
-    if (connector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayValue(viewDescriptor.getI18nName(translationProvider,
-              locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayDescription(viewDescriptor.getI18nDescription(
-              translationProvider, locale));
-      ((AbstractCompositeValueConnector) connector)
-          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
-      ((AbstractCompositeValueConnector) connector)
-          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    }
-
-    if (connector instanceof IConnectorSelector) {
-      ((IConnectorSelector) connector).setTracksChildrenSelection(true);
-    }
+    ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, locale);
 
     JTree viewComponent = createJTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
@@ -2678,10 +2418,6 @@ public class DefaultSwingViewFactory implements
     return descriptorPath;
   }
 
-  // ///////////////////// //
-  // Configuration Section //
-  // ///////////////////// //
-
   private Object getDurationTemplateValue(
       @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DURATION;
@@ -2690,9 +2426,9 @@ public class DefaultSwingViewFactory implements
   private String getEnumerationTemplateValue(
       IEnumerationPropertyDescriptor descriptor, Locale locale) {
     int maxTranslationLength = -1;
-    if (translationProvider != null && descriptor.isTranslated()) {
+    if (getTranslationProvider() != null && descriptor.isTranslated()) {
       for (Object enumerationValue : descriptor.getEnumerationValues()) {
-        String translation = translationProvider.getTranslation(
+        String translation = getTranslationProvider().getTranslation(
             computeEnumerationKey(descriptor.getEnumerationName(),
                 enumerationValue), locale);
         if (translation.length() > maxTranslationLength) {
@@ -2916,21 +2652,22 @@ public class DefaultSwingViewFactory implements
     public Component getTreeCellRendererComponent(JTree tree, Object value,
         boolean sel, boolean expanded, boolean leaf, int row,
         boolean nodeHasFocus) {
-      JLabel renderer = (JLabel) super.getTreeCellRendererComponent(tree, value, sel,
-          expanded, leaf, row, nodeHasFocus);
+      JLabel renderer = (JLabel) super.getTreeCellRendererComponent(tree,
+          value, sel, expanded, leaf, row, nodeHasFocus);
       if (value instanceof IValueConnector) {
         if (value instanceof IRenderableCompositeValueConnector) {
           renderer.setText(((IRenderableCompositeValueConnector) value)
               .getDisplayValue());
           renderer.setIcon(iconFactory.getIcon(
               ((IRenderableCompositeValueConnector) value)
-              .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
+                  .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
           if (((IRenderableCompositeValueConnector) value)
               .getDisplayDescription() != null) {
             ToolTipManager.sharedInstance().registerComponent(tree);
-            renderer.setToolTipText(((IRenderableCompositeValueConnector) value)
-                .getDisplayDescription()
-                + TOOLTIP_ELLIPSIS);
+            renderer
+                .setToolTipText(((IRenderableCompositeValueConnector) value)
+                    .getDisplayDescription()
+                    + TOOLTIP_ELLIPSIS);
           }
         } else {
           renderer.setText(value.toString());
@@ -3022,7 +2759,7 @@ public class DefaultSwingViewFactory implements
               .getIconImageURL(String.valueOf(value)),
               IIconFactory.TINY_ICON_SIZE));
       if (value != null && propertyDescriptor.isTranslated()) {
-        label.setText(translationProvider.getTranslation(computeEnumerationKey(
+        label.setText(getTranslationProvider().getTranslation(computeEnumerationKey(
             propertyDescriptor.getEnumerationName(), value), locale));
       } else {
         if (value == null) {
@@ -3080,7 +2817,7 @@ public class DefaultSwingViewFactory implements
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null && propertyDescriptor.isTranslated()) {
-          super.setValue(translationProvider.getTranslation(
+          super.setValue(getTranslationProvider().getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   connectorValue), locale));
         } else {
@@ -3092,7 +2829,7 @@ public class DefaultSwingViewFactory implements
         }
       } else {
         if (value != null && propertyDescriptor.isTranslated()) {
-          super.setValue(translationProvider.getTranslation(
+          super.setValue(getTranslationProvider().getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {
