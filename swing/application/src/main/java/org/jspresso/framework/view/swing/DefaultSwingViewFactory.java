@@ -90,7 +90,6 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
@@ -772,7 +771,11 @@ public class DefaultSwingViewFactory extends
     return new BooleanTableCellRenderer();
   }
 
-  private ICompositeView<JComponent> createBorderView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<JComponent> createBorderView(
       IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JPanel viewComponent = createJPanel();
@@ -1076,69 +1079,6 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private ICompositeView<JComponent> createCompositeView(
-      ICompositeViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ICompositeView<JComponent> view = null;
-    if (viewDescriptor instanceof IBorderViewDescriptor) {
-      view = createBorderView((IBorderViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IGridViewDescriptor) {
-      view = createGridView((IGridViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ISplitViewDescriptor) {
-      view = createSplitView((ISplitViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITabViewDescriptor) {
-      view = createTabView((ITabViewDescriptor) viewDescriptor, actionHandler,
-          locale);
-    }
-    if (view != null) {
-      if (viewDescriptor.isCascadingModels()) {
-        IView<JComponent> masterView = view.getChildren().get(0);
-        view.setConnector(masterView.getConnector());
-        for (int i = 1; i < view.getChildren().size(); i++) {
-          IView<JComponent> detailView = view.getChildren().get(i);
-          detailView.setParent(view);
-
-          IValueConnector detailConnector = null;
-          if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
-            IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
-                .createConfigurableCollectionConnectorProvider(
-                    ModelRefPropertyConnector.THIS_PROPERTY, null);
-            wrapper.addChildConnector(detailView.getConnector());
-            if (detailView.getConnector() instanceof ICollectionConnector) {
-              wrapper
-                  .setCollectionConnectorProvider((ICollectionConnector) detailView
-                      .getConnector());
-            }
-            detailConnector = wrapper;
-          } else {
-            detailConnector = detailView.getConnector();
-          }
-          getModelCascadingBinder().bind(masterView.getConnector(),
-              detailConnector);
-          masterView = detailView;
-        }
-      } else {
-        String connectorId;
-        if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
-          connectorId = viewDescriptor.getModelDescriptor().getName();
-        } else {
-          connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
-        }
-        ICompositeValueConnector connector = getConnectorFactory()
-            .createCompositeValueConnector(connectorId, null);
-        view.setConnector(connector);
-        for (IView<JComponent> childView : view.getChildren()) {
-          childView.setParent(view);
-          connector.addChildConnector(childView.getConnector());
-        }
-      }
-    }
-    return view;
-  }
-
   private ICompositeView<JComponent> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1392,7 +1332,11 @@ public class DefaultSwingViewFactory extends
     return constraints;
   }
 
-  private ICompositeView<JComponent> createGridView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<JComponent> createGridView(
       IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICompositeView<JComponent> view = null;
@@ -1772,7 +1716,11 @@ public class DefaultSwingViewFactory extends
     return constructView(viewComponent, null, connector);
   }
 
-  private ICompositeView<JComponent> createSplitView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<JComponent> createSplitView(
       ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JSplitPane viewComponent = createJSplitPane();
@@ -2047,7 +1995,11 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private ICompositeView<JComponent> createTabView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<JComponent> createTabView(
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JTabbedPane viewComponent = createJTabbedPane();

@@ -48,17 +48,22 @@ import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicView;
+import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
+import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
+import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
+import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
@@ -134,13 +139,6 @@ public class DefaultRemoteViewFactory extends
 
   private IView<RComponent> createCardView(ICardViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  private IView<RComponent> createCompositeView(
-      ICompositeViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -508,5 +506,49 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected void showCardInPanel(RComponent cardsPeer, String cardName) {
     // TODO see how it should be implemented.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createBorderView(
+      IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createGridView(
+      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createSplitView(
+      ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createTabView(
+      ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

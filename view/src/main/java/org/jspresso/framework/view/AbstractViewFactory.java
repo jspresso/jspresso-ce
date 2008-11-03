@@ -48,9 +48,14 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
+import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
+import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
+import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
+import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 
@@ -643,4 +648,120 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected IModelCascadingBinder getModelCascadingBinder() {
     return modelCascadingBinder;
   }
+
+  /**
+   * Creates a composite view.
+   * 
+   * @param viewDescriptor the view descriptor.
+   * @param actionHandler the action handler
+   * @param locale the locale.
+   * @return the composite view.
+   */
+  protected ICompositeView<E> createCompositeView(
+      ICompositeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ICompositeView<E> view = null;
+    if (viewDescriptor instanceof IBorderViewDescriptor) {
+      view = createBorderView((IBorderViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IGridViewDescriptor) {
+      view = createGridView((IGridViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ISplitViewDescriptor) {
+      view = createSplitView((ISplitViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ITabViewDescriptor) {
+      view = createTabView((ITabViewDescriptor) viewDescriptor, actionHandler,
+          locale);
+    }
+    if (view != null) {
+      if (viewDescriptor.isCascadingModels()) {
+        IView<E> masterView = view.getChildren().get(0);
+        view.setConnector(masterView.getConnector());
+        for (int i = 1; i < view.getChildren().size(); i++) {
+          IView<E> detailView = view.getChildren().get(i);
+          detailView.setParent(view);
+
+          IValueConnector detailConnector = null;
+          if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
+            IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
+                .createConfigurableCollectionConnectorProvider(
+                    ModelRefPropertyConnector.THIS_PROPERTY, null);
+            wrapper.addChildConnector(detailView.getConnector());
+            if (detailView.getConnector() instanceof ICollectionConnector) {
+              wrapper
+                  .setCollectionConnectorProvider((ICollectionConnector) detailView
+                      .getConnector());
+            }
+            detailConnector = wrapper;
+          } else {
+            detailConnector = detailView.getConnector();
+          }
+          getModelCascadingBinder().bind(masterView.getConnector(), detailConnector);
+          masterView = detailView;
+        }
+      } else {
+        String connectorId;
+        if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
+          connectorId = viewDescriptor.getModelDescriptor().getName();
+        } else {
+          connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
+        }
+        ICompositeValueConnector connector = getConnectorFactory()
+            .createCompositeValueConnector(connectorId, null);
+        view.setConnector(connector);
+        for (IView<E> childView : view.getChildren()) {
+          childView.setParent(view);
+          connector.addChildConnector(childView.getConnector());
+        }
+      }
+    }
+    return view;
+  }
+
+  /**
+   * Creates a tab view.
+   * 
+   * @param viewDescriptor the view descriptor.
+   * @param actionHandler the action handler
+   * @param locale the locale.
+   * @return the tab view.
+   */
+  protected abstract ICompositeView<E> createTabView(ITabViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a split view.
+   * 
+   * @param viewDescriptor the view descriptor.
+   * @param actionHandler the action handler
+   * @param locale the locale.
+   * @return the split view.
+   */
+  protected abstract ICompositeView<E> createSplitView(
+      ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates a grid view.
+   * 
+   * @param viewDescriptor the view descriptor.
+   * @param actionHandler the action handler
+   * @param locale the locale.
+   * @return the grid view.
+   */
+  protected abstract ICompositeView<E> createGridView(IGridViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a border view.
+   * 
+   * @param viewDescriptor the view descriptor.
+   * @param actionHandler the action handler
+   * @param locale the locale.
+   * @return the border view.
+   */
+  protected abstract ICompositeView<E> createBorderView(
+      IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
 }
