@@ -111,7 +111,6 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
@@ -404,7 +403,7 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected SPanel createSecurityPanel() {
+  protected SPanel createSecurityComponent() {
     SPanel panel = createSPanel(new SBorderLayout());
     // SLabel label = createSLabel();
     // label.setHorizontalAlignment(SConstants.CENTER);
@@ -781,7 +780,7 @@ public class DefaultWingsViewFactory extends
 
     viewComponent.add(createSPanel(new SBorderLayout()),
         ICardViewDescriptor.DEFAULT_CARD);
-    viewComponent.add(createSecurityPanel(), ICardViewDescriptor.SECURITY_CARD);
+    viewComponent.add(createSecurityComponent(), ICardViewDescriptor.SECURITY_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
         .getCardViewDescriptors().entrySet()) {
@@ -870,7 +869,7 @@ public class DefaultWingsViewFactory extends
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
         forbidden = true;
-        propertyView.setPeer(createSecurityPanel());
+        propertyView.setPeer(createSecurityComponent());
       }
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
@@ -1009,7 +1008,11 @@ public class DefaultWingsViewFactory extends
     viewComponent.add(filler, constraints);
   }
 
-  private ICompositeView<SComponent> createConstrainedGridView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<SComponent> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     SPanel viewComponent = createSPanel(new SGridBagLayout());
@@ -1182,7 +1185,11 @@ public class DefaultWingsViewFactory extends
         locale);
   }
 
-  private ICompositeView<SComponent> createEvenGridView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<SComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     SGridLayout layout = new SGridLayout();
@@ -1268,25 +1275,6 @@ public class DefaultWingsViewFactory extends
       }
     }
     return constraints;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<SComponent> createGridView(
-      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ICompositeView<SComponent> view = null;
-    if (viewDescriptor instanceof IEvenGridViewDescriptor) {
-      view = createEvenGridView((IEvenGridViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IConstrainedGridViewDescriptor) {
-      view = createConstrainedGridView(
-          (IConstrainedGridViewDescriptor) viewDescriptor, actionHandler,
-          locale);
-    }
-    return view;
   }
 
   /**

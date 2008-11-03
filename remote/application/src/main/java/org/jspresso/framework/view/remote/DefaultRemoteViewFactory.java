@@ -52,16 +52,19 @@ import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
+import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
@@ -105,9 +108,8 @@ public class DefaultRemoteViewFactory extends
         viewDescriptor, locale);
 
     RComponent viewComponent = createRComponent();
-    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
-        viewDescriptor);
-    view.setConnector(connector);
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
     return view;
   }
 
@@ -118,8 +120,20 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createCardView(
       ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
+    RComponent viewComponent = createRComponent();
+    BasicMapView<RComponent> view = constructMapView(viewComponent,
+        viewDescriptor);
+    Map<String, IView<RComponent>> childrenViews = new HashMap<String, IView<RComponent>>();
+
+    for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
+        .getCardViewDescriptors().entrySet()) {
+      IView<RComponent> childView = createView(childViewDescriptor.getValue(),
+          actionHandler, locale);
+      childrenViews.put(childViewDescriptor.getKey(), childView);
+    }
+    view.setChildrenMap(childrenViews);
+    view.setConnector(createCardViewConnector(view, actionHandler));
+    return view;
   }
 
   /**
@@ -175,7 +189,7 @@ public class DefaultRemoteViewFactory extends
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
-        propertyView.setPeer(createSecurityPanel());
+        propertyView.setPeer(createSecurityComponent());
       }
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
@@ -229,7 +243,8 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createListView(
-      IListViewDescriptor viewDescriptor, @SuppressWarnings("unused") IActionHandler actionHandler,
+      IListViewDescriptor viewDescriptor,
+      @SuppressWarnings("unused") IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
@@ -403,17 +418,6 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<RComponent> createGridView(
-      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected ICompositeView<RComponent> createSplitView(
       ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
@@ -458,17 +462,18 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void configureFontColorsAndDescription(
-      @SuppressWarnings("unused") IViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") Locale locale,
-      @SuppressWarnings("unused") IView<RComponent> view) {
-    // This is not to be configured on server-side
+      IViewDescriptor viewDescriptor, Locale locale, IView<RComponent> view) {
+    if (view != null && viewDescriptor.getDescription() != null) {
+      view.getPeer().setDescription(
+          viewDescriptor.getI18nDescription(getTranslationProvider(), locale));
+    }
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected RComponent createSecurityPanel() {
+  protected RComponent createSecurityComponent() {
     // TODO construct a special component ?
     return null;
   }
@@ -478,7 +483,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void decorateWithBorder(IView<RComponent> view, Locale locale) {
-    //TODO set name ?
+    if (view.getDescriptor().getBorderType() == EBorderType.TITLED) {
+      view.getPeer().setName(
+          view.getDescriptor().getI18nName(getTranslationProvider(), locale));
+    }
   }
 
   /**
@@ -488,7 +496,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createDecimalPropertyView(
       IDecimalPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+    return createRComponentPropertyView(propertyDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -498,7 +507,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createIntegerPropertyView(
       IIntegerPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+    return createRComponentPropertyView(propertyDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -508,7 +518,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+    return createRComponentPropertyView(propertyDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -518,7 +529,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createColorPropertyView(
       IColorPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+    return createRComponentPropertyView(propertyDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -528,7 +540,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createDatePropertyView(
       IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+    return createRComponentPropertyView(propertyDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -538,7 +551,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createDurationPropertyView(
       IDurationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+    return createRComponentPropertyView(propertyDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -548,7 +562,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+    return createRComponentPropertyView(propertyDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -558,7 +573,8 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createTimePropertyView(
       ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler, locale);
+    return createRComponentPropertyView(propertyDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -571,8 +587,54 @@ public class DefaultRemoteViewFactory extends
     if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setDescription(
           propertyDescriptor.getI18nDescription(getTranslationProvider(),
-              locale)
-              + TOOLTIP_ELLIPSIS);
+              locale));
     }
+  }
+
+  /**
+   * Override to set the property view name that will be useful on client-side.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createPropertyView(
+      IPropertyDescriptor propertyDescriptor,
+      List<String> renderedChildProperties, IActionHandler actionHandler,
+      Locale locale) {
+    IView<RComponent> view = super.createPropertyView(propertyDescriptor,
+        renderedChildProperties, actionHandler, locale);
+    if (view != null) {
+      if (propertyDescriptor.getName() != null) {
+        view.getPeer().setName(
+            propertyDescriptor.getI18nName(getTranslationProvider(), locale));
+      }
+    }
+    return view;
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createConstrainedGridView(
+      IConstrainedGridViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createEvenGridView(
+      IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

@@ -67,6 +67,8 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
+import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
@@ -219,7 +221,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         decorateWithActions(viewDescriptor, actionHandler, locale, view);
         decorateWithBorder(view, locale);
       } catch (SecurityException ex) {
-        view.setPeer(createSecurityPanel());
+        view.setPeer(createSecurityComponent());
       }
     }
     return view;
@@ -231,7 +233,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @return the security panel.
    */
-  protected abstract E createSecurityPanel();
+  protected abstract E createSecurityComponent();
 
   /**
    * Creates a tree view.
@@ -329,12 +331,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the created property view.
    */
-  protected IView<E> createPropertyView(
-      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    IView<E> view = createPropertyView(
-        (IPropertyDescriptor) viewDescriptor.getModelDescriptor(),
-        viewDescriptor.getRenderedChildProperties(), actionHandler, locale);
+  protected IView<E> createPropertyView(IPropertyViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<E> view = createPropertyView((IPropertyDescriptor) viewDescriptor
+        .getModelDescriptor(), viewDescriptor.getRenderedChildProperties(),
+        actionHandler, locale);
     return constructView(view.getPeer(), viewDescriptor, view.getConnector());
   }
 
@@ -1005,21 +1006,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       Locale locale);
 
   /**
-   * Creates a grid view.
-   * 
-   * @param viewDescriptor
-   *          the view descriptor.
-   * @param actionHandler
-   *          the action handler
-   * @param locale
-   *          the locale.
-   * @return the grid view.
-   */
-  protected abstract ICompositeView<E> createGridView(
-      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale);
-
-  /**
    * Creates a border view.
    * 
    * @param viewDescriptor
@@ -1464,4 +1450,60 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     return viewDescriptor.getModelDescriptor().getName();
   }
+
+  /**
+   * Creates a grid view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler
+   * @param locale
+   *          the locale.
+   * @return the grid view.
+   */
+  protected ICompositeView<E> createGridView(
+      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ICompositeView<E> view = null;
+    if (viewDescriptor instanceof IEvenGridViewDescriptor) {
+      view = createEvenGridView((IEvenGridViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IConstrainedGridViewDescriptor) {
+      view = createConstrainedGridView(
+          (IConstrainedGridViewDescriptor) viewDescriptor, actionHandler,
+          locale);
+    }
+    return view;
+  }
+
+  /**
+   * Creates a constrained grid view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the constrained grid view.
+   */
+  protected abstract ICompositeView<E> createConstrainedGridView(
+      IConstrainedGridViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates an evenly distributed grid view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the evenly distributed grid view.
+   */
+  protected abstract ICompositeView<E> createEvenGridView(
+      IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
 }

@@ -162,7 +162,6 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
@@ -610,7 +609,7 @@ public class DefaultSwingViewFactory extends
    * @return the created security panel.
    */
   @Override
-  protected JPanel createSecurityPanel() {
+  protected JPanel createSecurityComponent() {
     JPanel panel = createJPanel();
     panel.setLayout(new BorderLayout());
     // JLabel label = createJLabel();
@@ -769,7 +768,7 @@ public class DefaultSwingViewFactory extends
     Map<String, IView<JComponent>> childrenViews = new HashMap<String, IView<JComponent>>();
 
     viewComponent.add(createJPanel(), ICardViewDescriptor.DEFAULT_CARD);
-    viewComponent.add(createSecurityPanel(), ICardViewDescriptor.SECURITY_CARD);
+    viewComponent.add(createSecurityComponent(), ICardViewDescriptor.SECURITY_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
         .getCardViewDescriptors().entrySet()) {
@@ -856,7 +855,7 @@ public class DefaultSwingViewFactory extends
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
         forbidden = true;
-        propertyView.setPeer(createSecurityPanel());
+        propertyView.setPeer(createSecurityComponent());
       }
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
@@ -980,7 +979,11 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private ICompositeView<JComponent> createConstrainedGridView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<JComponent> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JPanel viewComponent = createJPanel();
@@ -1159,7 +1162,11 @@ public class DefaultSwingViewFactory extends
         locale);
   }
 
-  private ICompositeView<JComponent> createEvenGridView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<JComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     JPanel viewComponent = createJPanel();
@@ -1247,25 +1254,6 @@ public class DefaultSwingViewFactory extends
       }
     }
     return constraints;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<JComponent> createGridView(
-      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ICompositeView<JComponent> view = null;
-    if (viewDescriptor instanceof IEvenGridViewDescriptor) {
-      view = createEvenGridView((IEvenGridViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IConstrainedGridViewDescriptor) {
-      view = createConstrainedGridView(
-          (IConstrainedGridViewDescriptor) viewDescriptor, actionHandler,
-          locale);
-    }
-    return view;
   }
 
   /**

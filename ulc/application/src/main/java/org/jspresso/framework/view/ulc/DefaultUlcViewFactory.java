@@ -116,7 +116,6 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
@@ -370,7 +369,7 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected ULCBorderLayoutPane createSecurityPanel() {
+  protected ULCBorderLayoutPane createSecurityComponent() {
     ULCBorderLayoutPane panel = new ULCBorderLayoutPane();
     // ULCLabel label = createULCLabel();
     // label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
@@ -773,7 +772,7 @@ public class DefaultUlcViewFactory extends
 
     viewComponent.add(createBorderLayoutPane(),
         ICardViewDescriptor.DEFAULT_CARD);
-    viewComponent.add(createSecurityPanel(), ICardViewDescriptor.SECURITY_CARD);
+    viewComponent.add(createSecurityComponent(), ICardViewDescriptor.SECURITY_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
         .getCardViewDescriptors().entrySet()) {
@@ -857,7 +856,7 @@ public class DefaultUlcViewFactory extends
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
         forbidden = true;
-        propertyView.setPeer(createSecurityPanel());
+        propertyView.setPeer(createSecurityComponent());
       }
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
@@ -983,7 +982,11 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  private ICompositeView<ULCComponent> createConstrainedGridView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<ULCComponent> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
@@ -1195,7 +1198,11 @@ public class DefaultUlcViewFactory extends
         propertyDescriptor, locale);
   }
 
-  private ICompositeView<ULCComponent> createEvenGridView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<ULCComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ULCGridLayoutPane viewComponent = createGridLayoutPane();
@@ -1281,25 +1288,6 @@ public class DefaultUlcViewFactory extends
       }
     }
     return constraints;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<ULCComponent> createGridView(
-      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ICompositeView<ULCComponent> view = null;
-    if (viewDescriptor instanceof IEvenGridViewDescriptor) {
-      view = createEvenGridView((IEvenGridViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IConstrainedGridViewDescriptor) {
-      view = createConstrainedGridView(
-          (IConstrainedGridViewDescriptor) viewDescriptor, actionHandler,
-          locale);
-    }
-    return view;
   }
 
   /**
