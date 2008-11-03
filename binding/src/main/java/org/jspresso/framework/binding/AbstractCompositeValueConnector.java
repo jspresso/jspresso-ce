@@ -196,12 +196,12 @@ public abstract class AbstractCompositeValueConnector extends
       }
       return "";
     }
+    if (displayValue != null) {
+      return displayValue;
+    }
     Object value = getConnectorValue();
     if (value != null) {
       return value.toString();
-    }
-    if (displayValue != null) {
-      return displayValue;
     }
     return "";
   }
@@ -213,13 +213,15 @@ public abstract class AbstractCompositeValueConnector extends
    * {@inheritDoc}
    */
   public String getDisplayIconImageUrl() {
-    if (displayIconImageUrl != null) {
-      return displayIconImageUrl;
-    }
+    String iconImageUrl = null;
     if (iconImageURLProvider != null) {
-      return iconImageURLProvider.getIconImageURLForObject(getConnectorValue());
+      iconImageUrl = iconImageURLProvider
+          .getIconImageURLForObject(getConnectorValue());
     }
-    return null;
+    if (iconImageUrl == null) {
+      iconImageUrl = displayIconImageUrl;
+    }
+    return iconImageUrl;
   }
 
   /**
@@ -357,7 +359,8 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * Sets the displayDescription.
    * 
-   * @param displayDescription the displayDescription to set.
+   * @param displayDescription
+   *          the displayDescription to set.
    */
   public void setDisplayDescription(String displayDescription) {
     this.displayDescription = displayDescription;

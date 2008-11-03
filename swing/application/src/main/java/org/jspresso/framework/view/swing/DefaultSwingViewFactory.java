@@ -2924,7 +2924,7 @@ public class DefaultSwingViewFactory implements
               .getDisplayValue());
           renderer.setIcon(iconFactory.getIcon(
               ((IRenderableCompositeValueConnector) value)
-                  .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
+              .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
           if (((IRenderableCompositeValueConnector) value)
               .getDisplayDescription() != null) {
             ToolTipManager.sharedInstance().registerComponent(tree);
