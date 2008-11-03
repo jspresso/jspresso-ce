@@ -53,6 +53,7 @@ public abstract class AbstractCompositeValueConnector extends
   private String                    renderingChildConnectorId;
   private boolean                   trackingChildrenSelection;
   private String                    displayValue;
+  private String                    displayDescription;
   private String                    displayIconImageUrl;
   private IIconImageURLProvider     iconImageURLProvider;
 
@@ -351,6 +352,24 @@ public abstract class AbstractCompositeValueConnector extends
    */
   public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
+  }
+
+  /**
+   * Sets the displayDescription.
+   * 
+   * @param displayDescription the displayDescription to set.
+   */
+  public void setDisplayDescription(String displayDescription) {
+    this.displayDescription = displayDescription;
+  }
+
+  /**
+   * Gets the displayDescription.
+   * 
+   * @return the displayDescription.
+   */
+  public String getDisplayDescription() {
+    return displayDescription;
   }
 
 }
