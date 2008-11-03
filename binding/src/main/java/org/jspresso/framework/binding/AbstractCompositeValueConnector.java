@@ -189,9 +189,6 @@ public abstract class AbstractCompositeValueConnector extends
    * {@inheritDoc}
    */
   public String getDisplayValue() {
-    if (displayValue != null) {
-      return displayValue;
-    }
     IValueConnector renderingConnector = getRenderingConnector();
     if (renderingConnector != null) {
       if (renderingConnector.getConnectorValue() != null) {
@@ -202,6 +199,9 @@ public abstract class AbstractCompositeValueConnector extends
     Object value = getConnectorValue();
     if (value != null) {
       return value.toString();
+    }
+    if (displayValue != null) {
+      return displayValue;
     }
     return "";
   }

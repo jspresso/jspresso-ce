@@ -159,4 +159,14 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
       ITreeLevelDescriptor rootSubtreeDescriptor) {
     this.rootSubtreeDescriptor = rootSubtreeDescriptor;
   }
+
+  
+  /**
+   * Gets the iconImageURLProvider.
+   * 
+   * @return the iconImageURLProvider.
+   */
+  public IIconImageURLProvider getIconImageURLProvider() {
+    return iconImageURLProvider;
+  }
 }

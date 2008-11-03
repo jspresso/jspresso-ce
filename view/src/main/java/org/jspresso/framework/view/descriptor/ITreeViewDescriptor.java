@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.util.IIconImageURLProvider;
+
 /**
  * This public interface is implemented by any tree view descriptor.
  * <p>
@@ -45,10 +47,17 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
    * This method may return null.
    * 
    * @param userObject
-   *            the user object to render.
+   *          the user object to render.
    * @return the url of the image to use for the renderer or null.
    */
   String getIconImageURLForUserObject(Object userObject);
+
+  /**
+   * Gets the iconImageURLProvider.
+   * 
+   * @return the iconImageURLProvider.
+   */
+  IIconImageURLProvider getIconImageURLProvider();
 
   /**
    * It gets the maximum depth of the tree structure whichis mandatory in case

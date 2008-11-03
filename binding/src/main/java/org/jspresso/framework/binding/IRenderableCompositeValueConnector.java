@@ -77,4 +77,11 @@ public interface IRenderableCompositeValueConnector extends
    * @return the rendered icon image url.
    */
   String getDisplayIconImageUrl();
+
+  /**
+   * Gets the string used to display this connector description.
+   * 
+   * @return the rendered description.
+   */
+  String getDisplayDescription();
 }
