@@ -63,4 +63,18 @@ public interface IRenderableCompositeValueConnector extends
    * @return the rendering connector.
    */
   IValueConnector getRenderingConnector();
+  
+  /**
+   * Gets the string used to display this connector.
+   * 
+   * @return the rendered string value.
+   */
+  String getDisplayValue();
+  
+  /**
+   * Gets the icon used to display this connector.
+   * 
+   * @return the rendered icon image url.
+   */
+  String getDisplayIconImageUrl();
 }
