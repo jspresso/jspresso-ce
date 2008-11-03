@@ -23,9 +23,7 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,7 +40,6 @@ import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
-import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.ulc.CollectionConnectorListModel;
 import org.jspresso.framework.binding.ulc.CollectionConnectorTableModel;
@@ -75,7 +72,6 @@ import org.jspresso.framework.gui.ulc.components.server.ULCJEditTextArea;
 import org.jspresso.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
 import org.jspresso.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
 import org.jspresso.framework.model.descriptor.EDateType;
-import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -110,7 +106,6 @@ import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
-import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
@@ -212,44 +207,17 @@ import com.ulcjava.base.shared.IUlcEventConstants;
 public class DefaultUlcViewFactory extends
     AbstractViewFactory<ULCComponent, ULCIcon, IAction> {
 
-  private static final int                      DEF_DISP_MAX_FRACTION_DIGIT = 2;
-  private static final double                   DEF_DISP_MAX_VALUE          = 1000;
-  private static final double                   DEF_DISP_TEMPLATE_PERCENT   = 99;
-  private static final char                     TEMPLATE_CHAR               = 'O';
-  private static final Date                     TEMPLATE_DATE               = new Date(
-                                                                                27166271000L);
-  private static final Long                     TEMPLATE_DURATION           = new Long(
-                                                                                EDuration.ONE_SECOND
-                                                                                    .getMillis()
-                                                                                    + EDuration.ONE_MINUTE
-                                                                                        .getMillis()
-                                                                                    + EDuration.ONE_HOUR
-                                                                                        .getMillis()
-                                                                                    + EDuration.ONE_DAY
-                                                                                        .getMillis()
-                                                                                    + EDuration.ONE_WEEK
-                                                                                        .getMillis());
-  private static final Date                     TEMPLATE_TIME               = new Date(
-                                                                                366000);
-  private static final Dimension                TREE_PREFERRED_SIZE         = new Dimension(
-                                                                                128,
-                                                                                128);
-  private IActionFactory<IAction, ULCComponent> actionFactory;
-  private IDisplayableAction                    binaryPropertyInfoAction;
-  private ULCDurationDataTypeFactory            durationDataTypeFactory     = new ULCDurationDataTypeFactory();
-  private IIconFactory<ULCIcon>                 iconFactory;
-  private IListSelectionModelBinder             listSelectionModelBinder;
-  private IDisplayableAction                    lovAction;
+  private static final Dimension        TREE_PREFERRED_SIZE         = new Dimension(
+                                                                        128,
+                                                                        128);
+  private ULCDurationDataTypeFactory    durationDataTypeFactory     = new ULCDurationDataTypeFactory();
+  private IListSelectionModelBinder     listSelectionModelBinder;
 
-  private IModelCascadingBinder                 modelCascadingBinder;
-  private int                                   maxCharacterLength          = 32;
-  private int                                   maxColumnCharacterLength    = 32;
-  private IDisplayableAction                    openFileAsBinaryPropertyAction;
-  private IDisplayableAction                    resetPropertyAction;
-  private IDisplayableAction                    saveBinaryPropertyAsFileAction;
-  private ULCTranslationDataTypeFactory         translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
+  private int                           maxCharacterLength          = 32;
+  private int                           maxColumnCharacterLength    = 32;
+  private ULCTranslationDataTypeFactory translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
 
-  private ITreeSelectionModelBinder             treeSelectionModelBinder;
+  private ITreeSelectionModelBinder     treeSelectionModelBinder;
 
   /**
    * {@inheritDoc}
@@ -312,7 +280,7 @@ public class DefaultUlcViewFactory extends
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
-              IAction ulcAction = actionFactory.createAction(action,
+              IAction ulcAction = getActionFactory().createAction(action,
                   actionHandler, view, locale);
               ULCButton actionButton = createULCButton();
               actionButton.setAction(ulcAction);
@@ -370,54 +338,6 @@ public class DefaultUlcViewFactory extends
   }
 
   /**
-   * Gets the actionFactory.
-   * 
-   * @return the actionFactory.
-   */
-  public IActionFactory<IAction, ULCComponent> getActionFactory() {
-    return actionFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IIconFactory<ULCIcon> getIconFactory() {
-    return iconFactory;
-  }
-
-  /**
-   * Sets the actionFactory.
-   * 
-   * @param actionFactory
-   *          the actionFactory to set.
-   */
-  public void setActionFactory(
-      IActionFactory<IAction, ULCComponent> actionFactory) {
-    this.actionFactory = actionFactory;
-  }
-
-  /**
-   * Sets the binaryPropertyInfoAction.
-   * 
-   * @param binaryPropertyInfoAction
-   *          the binaryPropertyInfoAction to set.
-   */
-  public void setBinaryPropertyInfoAction(
-      IDisplayableAction binaryPropertyInfoAction) {
-    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<ULCIcon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
    * Sets the listSelectionModelBinder.
    * 
    * @param listSelectionModelBinder
@@ -429,26 +349,6 @@ public class DefaultUlcViewFactory extends
   }
 
   /**
-   * Sets the lovAction.
-   * 
-   * @param lovAction
-   *          the lovAction to set.
-   */
-  public void setLovAction(IDisplayableAction lovAction) {
-    this.lovAction = lovAction;
-  }
-
-  /**
-   * Sets the modelCascadingBinder.
-   * 
-   * @param modelCascadingBinder
-   *          the modelCascadingBinder to set.
-   */
-  public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
-    this.modelCascadingBinder = modelCascadingBinder;
-  }
-
-  /**
    * Sets the maxCharacterLength.
    * 
    * @param maxCharacterLength
@@ -456,38 +356,6 @@ public class DefaultUlcViewFactory extends
    */
   public void setMaxCharacterLength(int maxCharacterLength) {
     this.maxCharacterLength = maxCharacterLength;
-  }
-
-  /**
-   * Sets the openFileAsBinaryPropertyAction.
-   * 
-   * @param openFileAsBinaryPropertyAction
-   *          the openFileAsBinaryPropertyAction to set.
-   */
-  public void setOpenFileAsBinaryPropertyAction(
-      IDisplayableAction openFileAsBinaryPropertyAction) {
-    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
-  }
-
-  /**
-   * Sets the resetPropertyAction.
-   * 
-   * @param resetPropertyAction
-   *          the resetPropertyAction to set.
-   */
-  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
-    this.resetPropertyAction = resetPropertyAction;
-  }
-
-  /**
-   * Sets the saveBinaryPropertyAsFileAction.
-   * 
-   * @param saveBinaryPropertyAsFileAction
-   *          the saveBinaryPropertyAsFileAction to set.
-   */
-  public void setSaveBinaryPropertyAsFileAction(
-      IDisplayableAction saveBinaryPropertyAsFileAction) {
-    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
   }
 
   /**
@@ -891,18 +759,8 @@ public class DefaultUlcViewFactory extends
     ULCActionFieldConnector connector = new ULCActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    IAction openAction = actionFactory.createAction(
-        openFileAsBinaryPropertyAction, actionHandler, viewComponent,
-        propertyDescriptor, connector, locale);
-    IAction saveAction = actionFactory.createAction(
-        saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
-        propertyDescriptor, connector, locale);
-    IAction resetAction = actionFactory.createAction(resetPropertyAction,
-        actionHandler, viewComponent, propertyDescriptor, connector, locale);
-    IAction infoAction = actionFactory.createAction(binaryPropertyInfoAction,
-        actionHandler, viewComponent, propertyDescriptor, connector, locale);
-    viewComponent.setActions(Arrays.asList(new IAction[] {openAction,
-        saveAction, resetAction, infoAction}));
+    viewComponent.setActions(createBinaryActions(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -1261,7 +1119,7 @@ public class DefaultUlcViewFactory extends
           } else {
             detailConnector = detailView.getConnector();
           }
-          modelCascadingBinder.bind(masterView.getConnector(), detailConnector);
+          getModelCascadingBinder().bind(masterView.getConnector(), detailConnector);
           masterView = detailView;
         }
       } else {
@@ -1880,24 +1738,24 @@ public class DefaultUlcViewFactory extends
     connector.setToStringPropertyConnector(new BasicValueConnector(
         propertyDescriptor.getComponentDescriptor().getToStringProperty()));
     connector.setExceptionHandler(actionHandler);
-    IAction fieldAction = actionFactory.createAction(lovAction, actionHandler,
-        viewComponent, propertyDescriptor, connector, locale);
-    fieldAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
+    IAction lovAction = createLovAction(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale);
+    lovAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
             getTranslationProvider(), locale)}, locale));
-    fieldAction.putValue(IAction.SHORT_DESCRIPTION, getTranslationProvider()
+    lovAction.putValue(IAction.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
                 .getI18nName(getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      fieldAction.putValue(IAction.SMALL_ICON, iconFactory.getIcon(
+      lovAction.putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    viewComponent.setActions(Collections.singletonList(fieldAction));
+    viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2068,7 +1926,7 @@ public class DefaultUlcViewFactory extends
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
     ULCLabel iconLabel = createULCLabel();
-    iconLabel.setIcon(iconFactory.getIcon(modelDescriptor
+    iconLabel.setIcon(getIconFactory().getIcon(modelDescriptor
         .getCollectionDescriptor().getElementDescriptor().getIconImageURL(),
         IIconFactory.TINY_ICON_SIZE));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -2128,12 +1986,12 @@ public class DefaultUlcViewFactory extends
         .getTableHeader().getFont().getSize(), viewComponent.getTableHeader()
         .getFont().getSize());
     sorterDecorator
-        .setUpIcon(iconFactory
+        .setUpIcon(getIconFactory()
             .getIcon(
                 "classpath:org/jspresso/framework/application/images/1uparrow-48x48.png",
                 iconSize));
     sorterDecorator
-        .setDownIcon(iconFactory
+        .setDownIcon(getIconFactory()
             .getIcon(
                 "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
                 iconSize));
@@ -2241,7 +2099,7 @@ public class DefaultUlcViewFactory extends
         .getChildViewDescriptors()) {
       IView<ULCComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
-      ULCIcon childIcon = iconFactory.getIcon(childViewDescriptor
+      ULCIcon childIcon = getIconFactory().getIcon(childViewDescriptor
           .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
@@ -2384,7 +2242,7 @@ public class DefaultUlcViewFactory extends
     ULCLabel titleLabel = createULCLabel();
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
         locale));
-    titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
+    titleLabel.setIcon(getIconFactory().getIcon(viewDescriptor.getIconImageURL(),
         IIconFactory.TINY_ICON_SIZE));
     titleLabel.setHorizontalAlignment(IDefaults.CENTER);
     popupMenu.add(titleLabel);
@@ -2393,8 +2251,9 @@ public class DefaultUlcViewFactory extends
         .hasNext();) {
       ActionList nextActionList = iter.next();
       for (IDisplayableAction action : nextActionList.getActions()) {
-        IAction ulcAction = actionFactory.createAction(action, actionHandler,
-            sourceComponent, modelDescriptor, viewConnector, locale);
+        IAction ulcAction = getActionFactory().createAction(action,
+            actionHandler, sourceComponent, modelDescriptor, viewConnector,
+            locale);
         ULCMenuItem actionItem = createULCMenuItem();
         actionItem.setAction(ulcAction);
         popupMenu.add(actionItem);
@@ -2669,7 +2528,7 @@ public class DefaultUlcViewFactory extends
           value, sel, expanded, leaf, nodeHasFocus);
       if (value instanceof IValueConnector) {
         if (value instanceof IRenderableCompositeValueConnector) {
-          renderer.setIcon(iconFactory.getIcon(
+          renderer.setIcon(getIconFactory().getIcon(
               ((IRenderableCompositeValueConnector) value)
                   .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
         }
@@ -2714,7 +2573,7 @@ public class DefaultUlcViewFactory extends
             propertyDescriptor.getEnumerationName(), locale,
             computeTranslationMapping(propertyDescriptor, locale)));
       }
-      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
+      setIcon(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(String
           .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       return super.getComboBoxCellRendererComponent(comboBox, value,
           isSelected, index);
@@ -2760,7 +2619,7 @@ public class DefaultUlcViewFactory extends
             propertyDescriptor.getEnumerationName(), locale,
             computeTranslationMapping(propertyDescriptor, locale)));
       }
-      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
+      setIcon(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(String
           .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
       return super.getTableCellRendererComponent(table, value, isSelected,

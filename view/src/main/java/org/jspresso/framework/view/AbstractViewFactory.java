@@ -19,6 +19,7 @@
 package org.jspresso.framework.view;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,8 +36,10 @@ import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
+import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -44,6 +47,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
@@ -78,9 +82,59 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 public abstract class AbstractViewFactory<E, F, G> implements
     IViewFactory<E, F, G> {
 
+  /**
+   * <code>DEF_DISP_MAX_FRACTION_DIGIT</code>.
+   */
+  protected static final int            DEF_DISP_MAX_FRACTION_DIGIT = 2;
+  /**
+   * <code>DEF_DISP_MAX_VALUE</code>.
+   */
+  protected static final double         DEF_DISP_MAX_VALUE          = 1000;
+  /**
+   * <code>DEF_DISP_TEMPLATE_PERCENT</code>.
+   */
+  protected static final double         DEF_DISP_TEMPLATE_PERCENT   = 99;
+  /**
+   * <code>TEMPLATE_CHAR</code>.
+   */
+  protected static final char           TEMPLATE_CHAR               = 'O';
+  /**
+   * <code>TEMPLATE_DATE</code>.
+   */
+  protected static final Date           TEMPLATE_DATE               = new Date(
+                                                                        27166271000L);
+  /**
+   * <code>TEMPLATE_DURATION</code>.
+   */
+  protected static final Long           TEMPLATE_DURATION           = new Long(
+                                                                        EDuration.ONE_SECOND
+                                                                            .getMillis()
+                                                                            + EDuration.ONE_MINUTE
+                                                                                .getMillis()
+                                                                            + EDuration.ONE_HOUR
+                                                                                .getMillis()
+                                                                            + EDuration.ONE_DAY
+                                                                                .getMillis()
+                                                                            + EDuration.ONE_WEEK
+                                                                                .getMillis());
+  /**
+   * <code>TEMPLATE_TIME</code>.
+   */
+  protected static final Date           TEMPLATE_TIME               = new Date(
+                                                                        366000);
+
   private ITranslationProvider          translationProvider;
   private IConfigurableConnectorFactory connectorFactory;
   private IMvcBinder                    mvcBinder;
+  private IActionFactory<G, E>          actionFactory;
+  private IIconFactory<F>               iconFactory;
+  private IModelCascadingBinder         modelCascadingBinder;
+
+  private IDisplayableAction            binaryPropertyInfoAction;
+  private IDisplayableAction            lovAction;
+  private IDisplayableAction            openFileAsBinaryPropertyAction;
+  private IDisplayableAction            resetPropertyAction;
+  private IDisplayableAction            saveBinaryPropertyAsFileAction;
 
   /**
    * Creates the connector for a tree view.
@@ -289,12 +343,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a card view connector.
    * 
-   * @param cardView the card view to create the connector for.
-   * @param actionHandler the action handler.
+   * @param cardView
+   *          the card view to create the connector for.
+   * @param actionHandler
+   *          the action handler.
    * @return the card view connector.
    */
-  protected IValueConnector createCardViewConnector(
-      final IMapView<E> cardView, final IActionHandler actionHandler) {
+  protected IValueConnector createCardViewConnector(final IMapView<E> cardView,
+      final IActionHandler actionHandler) {
     IValueConnector cardViewConnector = getConnectorFactory()
         .createValueConnector(cardView.getDescriptor().getName());
     cardViewConnector
@@ -333,8 +389,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
                           .setModelDescriptor(childCardView.getDescriptor()
                               .getModelDescriptor());
                     }
-                    getMvcBinder().bind(childCardConnector, cardView.getConnector()
-                        .getModelConnector());
+                    getMvcBinder().bind(childCardConnector,
+                        cardView.getConnector().getModelConnector());
                   }
                 } else {
                   showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
@@ -349,12 +405,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
         });
     return cardViewConnector;
   }
-  
+
   /**
    * Shows a card in in card layouted panel.
    * 
-   * @param cardsPeer the component that holds the cards
-   * @param cardName the card identifier to show.
+   * @param cardsPeer
+   *          the component that holds the cards
+   * @param cardName
+   *          the card identifier to show.
    */
   protected abstract void showCardInPanel(E cardsPeer, String cardName);
 
@@ -413,5 +471,176 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
+  }
+
+  /**
+   * Gets the actionFactory.
+   * 
+   * @return the actionFactory.
+   */
+  public IActionFactory<G, E> getActionFactory() {
+    return actionFactory;
+  }
+
+  /**
+   * Sets the actionFactory.
+   * 
+   * @param actionFactory
+   *          the actionFactory to set.
+   */
+  public void setActionFactory(IActionFactory<G, E> actionFactory) {
+    this.actionFactory = actionFactory;
+  }
+
+  /**
+   * Sets the binaryPropertyInfoAction.
+   * 
+   * @param binaryPropertyInfoAction
+   *          the binaryPropertyInfoAction to set.
+   */
+  public void setBinaryPropertyInfoAction(
+      IDisplayableAction binaryPropertyInfoAction) {
+    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
+  }
+
+  /**
+   * Sets the openFileAsBinaryPropertyAction.
+   * 
+   * @param openFileAsBinaryPropertyAction
+   *          the openFileAsBinaryPropertyAction to set.
+   */
+  public void setOpenFileAsBinaryPropertyAction(
+      IDisplayableAction openFileAsBinaryPropertyAction) {
+    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
+  }
+
+  /**
+   * Sets the resetPropertyAction.
+   * 
+   * @param resetPropertyAction
+   *          the resetPropertyAction to set.
+   */
+  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
+    this.resetPropertyAction = resetPropertyAction;
+  }
+
+  /**
+   * Sets the saveBinaryPropertyAsFileAction.
+   * 
+   * @param saveBinaryPropertyAsFileAction
+   *          the saveBinaryPropertyAsFileAction to set.
+   */
+  public void setSaveBinaryPropertyAsFileAction(
+      IDisplayableAction saveBinaryPropertyAsFileAction) {
+    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
+  }
+
+  /**
+   * Creates the action list for a binary property (open from file, save as
+   * file, reset, size info).
+   * 
+   * @param viewComponent
+   *          the component these actions will be triggered from.
+   * @param connector
+   *          the connector these actions will be triggered from.
+   * @param propertyDescriptor
+   *          the binary property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the action list.
+   */
+  protected List<G> createBinaryActions(E viewComponent,
+      IValueConnector connector, IPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    G openAction = getActionFactory().createAction(
+        openFileAsBinaryPropertyAction, actionHandler, viewComponent,
+        propertyDescriptor, connector, locale);
+    G saveAction = getActionFactory().createAction(
+        saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
+        propertyDescriptor, connector, locale);
+    G resetAction = getActionFactory().createAction(resetPropertyAction,
+        actionHandler, viewComponent, propertyDescriptor, connector, locale);
+    G infoAction = getActionFactory().createAction(binaryPropertyInfoAction,
+        actionHandler, viewComponent, propertyDescriptor, connector, locale);
+    List<G> binaryActions = new ArrayList<G>();
+    binaryActions.add(openAction);
+    binaryActions.add(saveAction);
+    binaryActions.add(resetAction);
+    binaryActions.add(infoAction);
+    return binaryActions;
+  }
+
+  /**
+   * Creates the list of value action.
+   * 
+   * @param viewComponent
+   *          the component these actions will be triggered from.
+   * @param connector
+   *          the connector these actions will be triggered from.
+   * @param propertyDescriptor
+   *          the binary property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the generic list of value action.
+   */
+  protected G createLovAction(E viewComponent, IValueConnector connector,
+      IReferencePropertyDescriptor<?> propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    G action = getActionFactory().createAction(lovAction, actionHandler,
+        viewComponent, propertyDescriptor, connector, locale);
+    return action;
+  }
+
+  /**
+   * Sets the lovAction.
+   * 
+   * @param lovAction
+   *          the lovAction to set.
+   */
+  public void setLovAction(IDisplayableAction lovAction) {
+    this.lovAction = lovAction;
+  }
+
+  /**
+   * Gets the iconFactory.
+   * 
+   * @return the iconFactory.
+   */
+  public IIconFactory<F> getIconFactory() {
+    return iconFactory;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *          the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<F> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the modelCascadingBinder.
+   * 
+   * @param modelCascadingBinder
+   *          the modelCascadingBinder to set.
+   */
+  public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
+    this.modelCascadingBinder = modelCascadingBinder;
+  }
+
+  
+  /**
+   * Gets the modelCascadingBinder.
+   * 
+   * @return the modelCascadingBinder.
+   */
+  protected IModelCascadingBinder getModelCascadingBinder() {
+    return modelCascadingBinder;
   }
 }

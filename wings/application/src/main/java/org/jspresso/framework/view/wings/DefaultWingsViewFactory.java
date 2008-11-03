@@ -28,9 +28,7 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,7 +48,6 @@ import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
-import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.wings.CollectionConnectorListModel;
 import org.jspresso.framework.binding.wings.CollectionConnectorTableModel;
@@ -72,7 +69,6 @@ import org.jspresso.framework.binding.wings.XCalendarConnector;
 import org.jspresso.framework.gui.wings.components.SActionField;
 import org.jspresso.framework.gui.wings.components.SColorPicker;
 import org.jspresso.framework.model.descriptor.EDateType;
-import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -106,7 +102,6 @@ import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
-import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
@@ -205,38 +200,11 @@ import org.wingx.XCalendar;
 public class DefaultWingsViewFactory extends
     AbstractViewFactory<SComponent, SIcon, Action> {
 
-  private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
-  private static final double                DEF_DISP_MAX_VALUE          = 1000;
-  private static final double                DEF_DISP_TEMPLATE_PERCENT   = 99;
-  private static final char                  TEMPLATE_CHAR               = 'O';
-  private static final Date                  TEMPLATE_DATE               = new Date(
-                                                                             27166271000L);
-  private static final Long                  TEMPLATE_DURATION           = new Long(
-                                                                             EDuration.ONE_SECOND
-                                                                                 .getMillis()
-                                                                                 + EDuration.ONE_MINUTE
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_HOUR
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_DAY
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_WEEK
-                                                                                     .getMillis());
-  private static final Date                  TEMPLATE_TIME               = new Date(
-                                                                             3661000);
-  private IActionFactory<Action, SComponent> actionFactory;
-  private IDisplayableAction                 binaryPropertyInfoAction;
-  private IIconFactory<SIcon>                iconFactory;
-  private IListSelectionModelBinder          listSelectionModelBinder;
-  private IDisplayableAction                 lovAction;
-  private IModelCascadingBinder              modelCascadingBinder;
-  private int                                maxCharacterLength          = 48;
+  private IListSelectionModelBinder listSelectionModelBinder;
+  private int                       maxCharacterLength          = 48;
 
-  private int                                maxColumnCharacterLength    = 32;
-  private IDisplayableAction                 openFileAsBinaryPropertyAction;
-  private IDisplayableAction                 resetPropertyAction;
-  private IDisplayableAction                 saveBinaryPropertyAsFileAction;
-  private ITreeSelectionModelBinder          treeSelectionModelBinder;
+  private int                       maxColumnCharacterLength    = 32;
+  private ITreeSelectionModelBinder treeSelectionModelBinder;
 
   /**
    * {@inheritDoc}
@@ -310,7 +278,7 @@ public class DefaultWingsViewFactory extends
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
-              Action wingsAction = actionFactory.createAction(action,
+              Action wingsAction = getActionFactory().createAction(action,
                   actionHandler, view, locale);
               SButton actionButton = createSButton();
               actionButton.setShowAsFormComponent(false);
@@ -372,7 +340,7 @@ public class DefaultWingsViewFactory extends
 
     SPanel titledPanel = createSPanel(new SBorderLayout());
     SLabel titleLabel = createSLabel();
-    titleLabel.setIcon(iconFactory.getIcon(view.getDescriptor()
+    titleLabel.setIcon(getIconFactory().getIcon(view.getDescriptor()
         .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     titleLabel.setText(view.getDescriptor().getI18nName(
         getTranslationProvider(), locale));
@@ -383,55 +351,6 @@ public class DefaultWingsViewFactory extends
     titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(0, 0,
         2, 2)));
     view.setPeer(titledPanel);
-  }
-
-  /**
-   * Gets the actionFactory.
-   * 
-   * @return the actionFactory.
-   */
-  public IActionFactory<Action, SComponent> getActionFactory() {
-    return actionFactory;
-  }
-
-  /**
-   * Gets the iconFactory.
-   * 
-   * @return the iconFactory.
-   */
-  public IIconFactory<SIcon> getIconFactory() {
-    return iconFactory;
-  }
-
-  /**
-   * Sets the actionFactory.
-   * 
-   * @param actionFactory
-   *          the actionFactory to set.
-   */
-  public void setActionFactory(IActionFactory<Action, SComponent> actionFactory) {
-    this.actionFactory = actionFactory;
-  }
-
-  /**
-   * Sets the binaryPropertyInfoAction.
-   * 
-   * @param binaryPropertyInfoAction
-   *          the binaryPropertyInfoAction to set.
-   */
-  public void setBinaryPropertyInfoAction(
-      IDisplayableAction binaryPropertyInfoAction) {
-    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<SIcon> iconFactory) {
-    this.iconFactory = iconFactory;
   }
 
   /**
@@ -446,26 +365,6 @@ public class DefaultWingsViewFactory extends
   }
 
   /**
-   * Sets the lovAction.
-   * 
-   * @param lovAction
-   *          the lovAction to set.
-   */
-  public void setLovAction(IDisplayableAction lovAction) {
-    this.lovAction = lovAction;
-  }
-
-  /**
-   * Sets the modelCascadingBinder.
-   * 
-   * @param modelCascadingBinder
-   *          the modelCascadingBinder to set.
-   */
-  public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
-    this.modelCascadingBinder = modelCascadingBinder;
-  }
-
-  /**
    * Sets the maxCharacterLength.
    * 
    * @param maxCharacterLength
@@ -473,38 +372,6 @@ public class DefaultWingsViewFactory extends
    */
   public void setMaxCharacterLength(int maxCharacterLength) {
     this.maxCharacterLength = maxCharacterLength;
-  }
-
-  /**
-   * Sets the openFileAsBinaryPropertyAction.
-   * 
-   * @param openFileAsBinaryPropertyAction
-   *          the openFileAsBinaryPropertyAction to set.
-   */
-  public void setOpenFileAsBinaryPropertyAction(
-      IDisplayableAction openFileAsBinaryPropertyAction) {
-    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
-  }
-
-  /**
-   * Sets the resetPropertyAction.
-   * 
-   * @param resetPropertyAction
-   *          the resetPropertyAction to set.
-   */
-  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
-    this.resetPropertyAction = resetPropertyAction;
-  }
-
-  /**
-   * Sets the saveBinaryPropertyAsFileAction.
-   * 
-   * @param saveBinaryPropertyAsFileAction
-   *          the saveBinaryPropertyAsFileAction to set.
-   */
-  public void setSaveBinaryPropertyAsFileAction(
-      IDisplayableAction saveBinaryPropertyAsFileAction) {
-    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
   }
 
   /**
@@ -908,18 +775,8 @@ public class DefaultWingsViewFactory extends
     SActionFieldConnector connector = new SActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    Action openAction = actionFactory.createAction(
-        openFileAsBinaryPropertyAction, actionHandler, viewComponent,
-        propertyDescriptor, connector, locale);
-    Action saveAction = actionFactory.createAction(
-        saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
-        propertyDescriptor, connector, locale);
-    Action resetAction = actionFactory.createAction(resetPropertyAction,
-        actionHandler, viewComponent, propertyDescriptor, connector, locale);
-    Action infoAction = actionFactory.createAction(binaryPropertyInfoAction,
-        actionHandler, viewComponent, propertyDescriptor, connector, locale);
-    viewComponent.setActions(Arrays.asList(new Action[] {openAction,
-        saveAction, resetAction, infoAction}));
+    viewComponent.setActions(createBinaryActions(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -1298,7 +1155,7 @@ public class DefaultWingsViewFactory extends
           } else {
             detailConnector = detailView.getConnector();
           }
-          modelCascadingBinder.bind(masterView.getConnector(), detailConnector);
+          getModelCascadingBinder().bind(masterView.getConnector(), detailConnector);
           masterView = detailView;
         }
       } else {
@@ -1839,24 +1696,24 @@ public class DefaultWingsViewFactory extends
     connector.setToStringPropertyConnector(new BasicValueConnector(
         propertyDescriptor.getComponentDescriptor().getToStringProperty()));
     connector.setExceptionHandler(actionHandler);
-    Action fieldAction = actionFactory.createAction(lovAction, actionHandler,
-        viewComponent, propertyDescriptor, connector, locale);
-    fieldAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
+    Action lovAction = createLovAction(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale);
+    lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
             getTranslationProvider(), locale)}, locale));
-    fieldAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
+    lovAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
                 .getI18nName(getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      fieldAction.putValue(Action.SMALL_ICON, iconFactory.getIcon(
+      lovAction.putValue(Action.SMALL_ICON, getIconFactory().getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    viewComponent.setActions(Collections.singletonList(fieldAction));
+    viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2222,7 +2079,7 @@ public class DefaultWingsViewFactory extends
         .getChildViewDescriptors()) {
       IView<SComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
-      SIcon childIcon = iconFactory.getIcon(childViewDescriptor
+      SIcon childIcon = getIconFactory().getIcon(childViewDescriptor
           .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
       SComponent tabView = childView.getPeer();
       if (childViewDescriptor.getDescription() != null) {
@@ -2514,7 +2371,7 @@ public class DefaultWingsViewFactory extends
         if (value instanceof IRenderableCompositeValueConnector) {
           renderer.setText(((IRenderableCompositeValueConnector) value)
               .getDisplayValue());
-          renderer.setIcon(iconFactory.getIcon(
+          renderer.setIcon(getIconFactory().getIcon(
               ((IRenderableCompositeValueConnector) value)
                   .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
           if (((IRenderableCompositeValueConnector) value)
@@ -2565,7 +2422,7 @@ public class DefaultWingsViewFactory extends
       SLabel label = (SLabel) super.getListCellRendererComponent(list, value,
           isSelected, index);
       label
-          .setIcon(iconFactory.getIcon(propertyDescriptor
+          .setIcon(getIconFactory().getIcon(propertyDescriptor
               .getIconImageURL(String.valueOf(value)),
               IIconFactory.TINY_ICON_SIZE));
       if (value != null && propertyDescriptor.isTranslated()) {
@@ -2613,7 +2470,7 @@ public class DefaultWingsViewFactory extends
       SLabel renderer = (SLabel) super.getTableCellRendererComponent(table,
           value, isSelected, row, column);
       renderer
-          .setIcon(iconFactory.getIcon(propertyDescriptor
+          .setIcon(getIconFactory().getIcon(propertyDescriptor
               .getIconImageURL(String.valueOf(value)),
               IIconFactory.TINY_ICON_SIZE));
       if (value instanceof IValueConnector) {

@@ -19,7 +19,6 @@
 package org.jspresso.framework.view.remote;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,11 +48,9 @@ import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicView;
-import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
-import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
@@ -89,14 +86,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
  */
 public class DefaultRemoteViewFactory extends
     AbstractViewFactory<RComponent, RIcon, RAction> {
-
-  private IActionFactory<RAction, RComponent> actionFactory;
-  private IIconFactory<RIcon>                 iconFactory;
-  private IDisplayableAction                  binaryPropertyInfoAction;
-  private IDisplayableAction                  lovAction;
-  private IDisplayableAction                  openFileAsBinaryPropertyAction;
-  private IDisplayableAction                  resetPropertyAction;
-  private IDisplayableAction                  saveBinaryPropertyAsFileAction;
 
   /**
    * {@inheritDoc}
@@ -317,21 +306,9 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> view = createRComponentPropertyView(propertyDescriptor,
         actionHandler, locale);
-    RAction openAction = actionFactory.createAction(
-        openFileAsBinaryPropertyAction, actionHandler, view.getPeer(),
-        propertyDescriptor, view.getConnector(), locale);
-    RAction saveAction = actionFactory.createAction(
-        saveBinaryPropertyAsFileAction, actionHandler, view.getPeer(),
-        propertyDescriptor, view.getConnector(), locale);
-    RAction resetAction = actionFactory.createAction(resetPropertyAction,
-        actionHandler, view.getPeer(), propertyDescriptor, view.getConnector(),
-        locale);
-    RAction infoAction = actionFactory.createAction(binaryPropertyInfoAction,
-        actionHandler, view.getPeer(), propertyDescriptor, view.getConnector(),
-        locale);
     view.getPeer().setActions(
-        Arrays.asList(new RAction[] {openAction, saveAction, resetAction,
-            infoAction}));
+        createBinaryActions(view.getPeer(), view.getConnector(),
+            propertyDescriptor, actionHandler, locale));
     return view;
   }
 
@@ -421,7 +398,7 @@ public class DefaultRemoteViewFactory extends
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     RComponent viewComponent = createRComponent();
-    viewComponent.setIcon(iconFactory.getIcon(modelDescriptor
+    viewComponent.setIcon(getIconFactory().getIcon(modelDescriptor
         .getCollectionDescriptor().getElementDescriptor().getIconImageURL(),
         IIconFactory.TINY_ICON_SIZE));
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
@@ -481,23 +458,23 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> view = createRComponentPropertyView(propertyDescriptor,
         actionHandler, locale);
-    RAction fieldAction = actionFactory.createAction(lovAction, actionHandler,
-        view.getPeer(), propertyDescriptor, view.getConnector(), locale);
-    fieldAction.setName(getTranslationProvider().getTranslation(
+    RAction lovAction = createLovAction(view.getPeer(), view.getConnector(),
+        propertyDescriptor, actionHandler, locale);
+    lovAction.setName(getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
             getTranslationProvider(), locale)}, locale));
-    fieldAction.setDescription(getTranslationProvider().getTranslation(
+    lovAction.setDescription(getTranslationProvider().getTranslation(
         "lov.element.description",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
             getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      fieldAction.setIcon(iconFactory.getIcon(propertyDescriptor
+      lovAction.setIcon(getIconFactory().getIcon(propertyDescriptor
           .getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    view.getPeer().setActions(Collections.singletonList(fieldAction));
+    view.getPeer().setActions(Collections.singletonList(lovAction));
     return view;
   }
 
@@ -513,7 +490,7 @@ public class DefaultRemoteViewFactory extends
         translations.put(value, getTranslationProvider().getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                 value), locale));
-        icons.put(value, iconFactory.getIcon(propertyDescriptor
+        icons.put(value, getIconFactory().getIcon(propertyDescriptor
             .getIconImageURL(value), IIconFactory.TINY_ICON_SIZE));
       }
     }
@@ -528,22 +505,8 @@ public class DefaultRemoteViewFactory extends
   /**
    * {@inheritDoc}
    */
-  public IActionFactory<RAction, RComponent> getActionFactory() {
-    return actionFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IIconFactory<RIcon> getIconFactory() {
-    return iconFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected void showCardInPanel(RComponent cardsPeer, String cardName) {
-    //TODO see how it should be implemented.
+    // TODO see how it should be implemented.
   }
 }

@@ -37,9 +37,7 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -96,7 +94,6 @@ import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
-import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.swing.CollectionConnectorListModel;
 import org.jspresso.framework.binding.swing.CollectionConnectorTableModel;
@@ -120,7 +117,6 @@ import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JColorPicker;
 import org.jspresso.framework.gui.swing.components.JDateField;
 import org.jspresso.framework.model.descriptor.EDateType;
-import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -156,7 +152,6 @@ import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
-import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
@@ -213,41 +208,13 @@ import org.syntax.jedit.tokenmarker.TokenMarker;
 public class DefaultSwingViewFactory extends
     AbstractViewFactory<JComponent, Icon, Action> {
 
-  private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
-  private static final double                DEF_DISP_MAX_VALUE          = 1000;
-  private static final double                DEF_DISP_TEMPLATE_PERCENT   = 99;
-  private static final char                  TEMPLATE_CHAR               = 'O';
-  private static final Date                  TEMPLATE_DATE               = new Date(
-                                                                             27166271000L);
-  private static final Long                  TEMPLATE_DURATION           = new Long(
-                                                                             EDuration.ONE_SECOND
-                                                                                 .getMillis()
-                                                                                 + EDuration.ONE_MINUTE
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_HOUR
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_DAY
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_WEEK
-                                                                                     .getMillis());
-  private static final Date                  TEMPLATE_TIME               = new Date(
-                                                                             366000);
-  private static final Dimension             TREE_PREFERRED_SIZE         = new Dimension(
-                                                                             128,
-                                                                             128);
-  private IActionFactory<Action, JComponent> actionFactory;
-  private IDisplayableAction                 binaryPropertyInfoAction;
-  private IIconFactory<Icon>                 iconFactory;
-  private IListSelectionModelBinder          listSelectionModelBinder;
-  private IDisplayableAction                 lovAction;
-  private IModelCascadingBinder              modelCascadingBinder;
+  private static final Dimension    TREE_PREFERRED_SIZE      = new Dimension(
+                                                                 128, 128);
+  private IListSelectionModelBinder listSelectionModelBinder;
 
-  private int                                maxCharacterLength          = 32;
-  private int                                maxColumnCharacterLength    = 32;
-  private IDisplayableAction                 openFileAsBinaryPropertyAction;
-  private IDisplayableAction                 resetPropertyAction;
-  private IDisplayableAction                 saveBinaryPropertyAsFileAction;
-  private ITreeSelectionModelBinder          treeSelectionModelBinder;
+  private int                       maxCharacterLength       = 32;
+  private int                       maxColumnCharacterLength = 32;
+  private ITreeSelectionModelBinder treeSelectionModelBinder;
 
   /**
    * {@inheritDoc}
@@ -321,7 +288,7 @@ public class DefaultSwingViewFactory extends
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
-              Action swingAction = actionFactory.createAction(action,
+              Action swingAction = getActionFactory().createAction(action,
                   actionHandler, view, locale);
               JButton actionButton = createJButton();
               actionButton.setAction(swingAction);
@@ -379,55 +346,6 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
-   * Gets the actionFactory.
-   * 
-   * @return the actionFactory.
-   */
-  public IActionFactory<Action, JComponent> getActionFactory() {
-    return actionFactory;
-  }
-
-  /**
-   * Gets the iconFactory.
-   * 
-   * @return the iconFactory.
-   */
-  public IIconFactory<Icon> getIconFactory() {
-    return iconFactory;
-  }
-
-  /**
-   * Sets the actionFactory.
-   * 
-   * @param actionFactory
-   *          the actionFactory to set.
-   */
-  public void setActionFactory(IActionFactory<Action, JComponent> actionFactory) {
-    this.actionFactory = actionFactory;
-  }
-
-  /**
-   * Sets the binaryPropertyInfoAction.
-   * 
-   * @param binaryPropertyInfoAction
-   *          the binaryPropertyInfoAction to set.
-   */
-  public void setBinaryPropertyInfoAction(
-      IDisplayableAction binaryPropertyInfoAction) {
-    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<Icon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
    * Sets the listSelectionModelBinder.
    * 
    * @param listSelectionModelBinder
@@ -439,26 +357,6 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
-   * Sets the lovAction.
-   * 
-   * @param lovAction
-   *          the lovAction to set.
-   */
-  public void setLovAction(IDisplayableAction lovAction) {
-    this.lovAction = lovAction;
-  }
-
-  /**
-   * Sets the modelCascadingBinder.
-   * 
-   * @param modelCascadingBinder
-   *          the modelCascadingBinder to set.
-   */
-  public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
-    this.modelCascadingBinder = modelCascadingBinder;
-  }
-
-  /**
    * Sets the maxCharacterLength.
    * 
    * @param maxCharacterLength
@@ -466,38 +364,6 @@ public class DefaultSwingViewFactory extends
    */
   public void setMaxCharacterLength(int maxCharacterLength) {
     this.maxCharacterLength = maxCharacterLength;
-  }
-
-  /**
-   * Sets the openFileAsBinaryPropertyAction.
-   * 
-   * @param openFileAsBinaryPropertyAction
-   *          the openFileAsBinaryPropertyAction to set.
-   */
-  public void setOpenFileAsBinaryPropertyAction(
-      IDisplayableAction openFileAsBinaryPropertyAction) {
-    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
-  }
-
-  /**
-   * Sets the resetPropertyAction.
-   * 
-   * @param resetPropertyAction
-   *          the resetPropertyAction to set.
-   */
-  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
-    this.resetPropertyAction = resetPropertyAction;
-  }
-
-  /**
-   * Sets the saveBinaryPropertyAsFileAction.
-   * 
-   * @param saveBinaryPropertyAsFileAction
-   *          the saveBinaryPropertyAsFileAction to set.
-   */
-  public void setSaveBinaryPropertyAsFileAction(
-      IDisplayableAction saveBinaryPropertyAsFileAction) {
-    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
   }
 
   /**
@@ -884,18 +750,8 @@ public class DefaultSwingViewFactory extends
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    Action openAction = actionFactory.createAction(
-        openFileAsBinaryPropertyAction, actionHandler, viewComponent,
-        propertyDescriptor, connector, locale);
-    Action saveAction = actionFactory.createAction(
-        saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
-        propertyDescriptor, connector, locale);
-    Action resetAction = actionFactory.createAction(resetPropertyAction,
-        actionHandler, viewComponent, propertyDescriptor, connector, locale);
-    Action infoAction = actionFactory.createAction(binaryPropertyInfoAction,
-        actionHandler, viewComponent, propertyDescriptor, connector, locale);
-    viewComponent.setActions(Arrays.asList(new Action[] {openAction,
-        saveAction, resetAction, infoAction}));
+    viewComponent.setActions(createBinaryActions(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -1260,7 +1116,8 @@ public class DefaultSwingViewFactory extends
           } else {
             detailConnector = detailView.getConnector();
           }
-          modelCascadingBinder.bind(masterView.getConnector(), detailConnector);
+          getModelCascadingBinder().bind(masterView.getConnector(),
+              detailConnector);
           masterView = detailView;
         }
       } else {
@@ -1607,8 +1464,8 @@ public class DefaultSwingViewFactory extends
     JLabel titleLabel = createJLabel();
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
         locale));
-    titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-        IIconFactory.TINY_ICON_SIZE));
+    titleLabel.setIcon(getIconFactory().getIcon(
+        viewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     popupMenu.add(titleLabel);
@@ -1617,8 +1474,9 @@ public class DefaultSwingViewFactory extends
         .hasNext();) {
       ActionList nextActionSet = iter.next();
       for (IDisplayableAction action : nextActionSet.getActions()) {
-        Action swingAction = actionFactory.createAction(action, actionHandler,
-            sourceComponent, modelDescriptor, viewConnector, locale);
+        Action swingAction = getActionFactory().createAction(action,
+            actionHandler, sourceComponent, modelDescriptor, viewConnector,
+            locale);
         JMenuItem actionItem = createJMenuItem();
         actionItem.setAction(swingAction);
         popupMenu.add(actionItem);
@@ -1665,8 +1523,8 @@ public class DefaultSwingViewFactory extends
       Locale locale) {
 
     ICompositeValueConnector connector = getConnectorFactory()
-        .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
-            .getName(), null);
+        .createCompositeValueConnector(
+            viewDescriptor.getModelDescriptor().getName(), null);
 
     JPanel viewComponent = createJPanel();
     BorderLayout layout = new BorderLayout();
@@ -1843,24 +1701,24 @@ public class DefaultSwingViewFactory extends
     connector.setToStringPropertyConnector(new BasicValueConnector(
         propertyDescriptor.getComponentDescriptor().getToStringProperty()));
     connector.setExceptionHandler(actionHandler);
-    Action fieldAction = actionFactory.createAction(lovAction, actionHandler,
-        viewComponent, propertyDescriptor, connector, locale);
-    fieldAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
+    Action lovAction = createLovAction(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale);
+    lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
             getTranslationProvider(), locale)}, locale));
-    fieldAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
+    lovAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
                 .getI18nName(getTranslationProvider(), locale)}, locale)
         + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      fieldAction.putValue(Action.SMALL_ICON, iconFactory.getIcon(
+      lovAction.putValue(Action.SMALL_ICON, getIconFactory().getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    viewComponent.setActions(Collections.singletonList(fieldAction));
+    viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2043,7 +1901,8 @@ public class DefaultSwingViewFactory extends
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+        .createCompositeValueConnector(
+            modelDescriptor.getName() + "Element",
             modelDescriptor.getCollectionDescriptor().getElementDescriptor()
                 .getToStringProperty());
     ICollectionConnector connector = getConnectorFactory()
@@ -2053,9 +1912,9 @@ public class DefaultSwingViewFactory extends
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     JLabel iconLabel = createJLabel();
-    iconLabel.setIcon(iconFactory.getIcon(modelDescriptor
-        .getCollectionDescriptor().getElementDescriptor().getIconImageURL(),
-        IIconFactory.TINY_ICON_SIZE));
+    iconLabel.setIcon(getIconFactory().getIcon(
+        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
+            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
@@ -2102,12 +1961,12 @@ public class DefaultSwingViewFactory extends
     Dimension iconSize = new Dimension(viewComponent.getTableHeader().getFont()
         .getSize(), viewComponent.getTableHeader().getFont().getSize());
     sorterDecorator
-        .setUpIcon(iconFactory
+        .setUpIcon(getIconFactory()
             .getIcon(
                 "classpath:org/jspresso/framework/application/images/1uparrow-48x48.png",
                 iconSize));
     sorterDecorator
-        .setDownIcon(iconFactory
+        .setDownIcon(getIconFactory()
             .getIcon(
                 "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
                 iconSize));
@@ -2200,8 +2059,8 @@ public class DefaultSwingViewFactory extends
         .getChildViewDescriptors()) {
       IView<JComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
-      Icon childIcon = iconFactory.getIcon(childViewDescriptor
-          .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
+      Icon childIcon = getIconFactory().getIcon(
+          childViewDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, childView.getPeer(),
@@ -2267,7 +2126,8 @@ public class DefaultSwingViewFactory extends
   private IView<JComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
 
-    ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, locale);
+    ICompositeValueConnector connector = createTreeViewConnector(
+        viewDescriptor, locale);
 
     JTree viewComponent = createJTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
@@ -2593,7 +2453,7 @@ public class DefaultSwingViewFactory extends
         if (value instanceof IRenderableCompositeValueConnector) {
           renderer.setText(((IRenderableCompositeValueConnector) value)
               .getDisplayValue());
-          renderer.setIcon(iconFactory.getIcon(
+          renderer.setIcon(getIconFactory().getIcon(
               ((IRenderableCompositeValueConnector) value)
                   .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
           if (((IRenderableCompositeValueConnector) value)
@@ -2689,13 +2549,13 @@ public class DefaultSwingViewFactory extends
         int index, boolean isSelected, boolean cellHasFocus) {
       JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
           index, isSelected, cellHasFocus);
-      label
-          .setIcon(iconFactory.getIcon(propertyDescriptor
-              .getIconImageURL(String.valueOf(value)),
-              IIconFactory.TINY_ICON_SIZE));
+      label.setIcon(getIconFactory().getIcon(
+          propertyDescriptor.getIconImageURL(String.valueOf(value)),
+          IIconFactory.TINY_ICON_SIZE));
       if (value != null && propertyDescriptor.isTranslated()) {
-        label.setText(getTranslationProvider().getTranslation(computeEnumerationKey(
-            propertyDescriptor.getEnumerationName(), value), locale));
+        label.setText(getTranslationProvider().getTranslation(
+            computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                value), locale));
       } else {
         if (value == null) {
           label.setText(" ");
@@ -2738,8 +2598,9 @@ public class DefaultSwingViewFactory extends
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
         boolean isSelected, boolean hasFocus, int row, int column) {
-      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
-          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
+      setIcon(getIconFactory().getIcon(
+          propertyDescriptor.getIconImageURL(String.valueOf(value)),
+          IIconFactory.TINY_ICON_SIZE));
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row, column);
     }
@@ -2783,7 +2644,6 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected void showCardInPanel(JComponent cardsPeer, String cardName) {
-    ((CardLayout) cardsPeer.getLayout())
-    .show(cardsPeer, cardName);
+    ((CardLayout) cardsPeer.getLayout()).show(cardsPeer, cardName);
   }
 }
