@@ -89,17 +89,14 @@ import net.sf.nachocalendar.components.DefaultDayRenderer;
 import net.sf.nachocalendar.components.DefaultHeaderRenderer;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
-import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.swing.CollectionConnectorListModel;
 import org.jspresso.framework.binding.swing.CollectionConnectorTableModel;
@@ -147,7 +144,6 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
-import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.format.DurationFormatter;
 import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
@@ -988,67 +984,6 @@ public class DefaultSwingViewFactory extends
     view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
-  }
-
-  private IValueConnector createCardViewConnector(
-      final IMapView<JComponent> cardView, final IActionHandler actionHandler) {
-    IValueConnector cardViewConnector = getConnectorFactory()
-        .createValueConnector(cardView.getDescriptor().getName());
-    cardViewConnector
-        .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-          public void connectorValueChange(ConnectorValueChangeEvent evt) {
-            Object cardModel = evt.getNewValue();
-            boolean accessGranted = true;
-            if (cardModel instanceof ISecurable && actionHandler != null) {
-              try {
-                actionHandler.checkAccess((ISecurable) cardModel);
-              } catch (SecurityException se) {
-                accessGranted = false;
-              }
-            }
-            JPanel cardPanel = (JPanel) cardView.getPeer();
-            if (accessGranted) {
-              String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
-                  .getCardNameForModel(cardModel);
-              if (cardName != null) {
-                IView<JComponent> childCardView = cardView.getChild(cardName);
-                if (childCardView != null) {
-                  ((CardLayout) cardPanel.getLayout())
-                      .show(cardPanel, cardName);
-                  IValueConnector childCardConnector = childCardView
-                      .getConnector();
-                  if (childCardConnector != null) {
-                    // To handle polymorphism, especially for modules, we refine
-                    // the model descriptor.
-                    if (((IModelValueConnector) cardView.getConnector()
-                        .getModelConnector()).getModelDescriptor().getClass()
-                        .isAssignableFrom(
-                            childCardView.getDescriptor().getModelDescriptor()
-                                .getClass())) {
-                      ((IModelValueConnector) cardView.getConnector()
-                          .getModelConnector())
-                          .setModelDescriptor(childCardView.getDescriptor()
-                              .getModelDescriptor());
-                    }
-                    getMvcBinder().bind(childCardConnector, cardView.getConnector()
-                        .getModelConnector());
-                  }
-                } else {
-                  ((CardLayout) cardPanel.getLayout()).show(cardPanel,
-                      ICardViewDescriptor.DEFAULT_CARD);
-                }
-              } else {
-                ((CardLayout) cardPanel.getLayout()).show(cardPanel,
-                    ICardViewDescriptor.DEFAULT_CARD);
-              }
-            } else {
-              ((CardLayout) cardPanel.getLayout()).show(cardPanel,
-                  ICardViewDescriptor.SECURITY_CARD);
-            }
-          }
-        });
-    return cardViewConnector;
   }
 
   private IView<JComponent> createCollectionPropertyView(
@@ -2841,5 +2776,14 @@ public class DefaultSwingViewFactory extends
         }
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void showCardInPanel(JComponent cardsPeer, String cardName) {
+    ((CardLayout) cardsPeer.getLayout())
+    .show(cardsPeer, cardName);
   }
 }

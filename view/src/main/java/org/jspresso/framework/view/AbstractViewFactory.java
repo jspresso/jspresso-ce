@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -30,15 +32,19 @@ import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvid
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IConnectorSelector;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
@@ -279,6 +285,78 @@ public abstract class AbstractViewFactory<E, F, G> implements
     return getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
   }
+
+  /**
+   * Creates a card view connector.
+   * 
+   * @param cardView the card view to create the connector for.
+   * @param actionHandler the action handler.
+   * @return the card view connector.
+   */
+  protected IValueConnector createCardViewConnector(
+      final IMapView<E> cardView, final IActionHandler actionHandler) {
+    IValueConnector cardViewConnector = getConnectorFactory()
+        .createValueConnector(cardView.getDescriptor().getName());
+    cardViewConnector
+        .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+          public void connectorValueChange(ConnectorValueChangeEvent evt) {
+            Object cardModel = evt.getNewValue();
+            boolean accessGranted = true;
+            if (cardModel instanceof ISecurable && actionHandler != null) {
+              try {
+                actionHandler.checkAccess((ISecurable) cardModel);
+              } catch (SecurityException se) {
+                accessGranted = false;
+              }
+            }
+            E cardsPeer = cardView.getPeer();
+            if (accessGranted) {
+              String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
+                  .getCardNameForModel(cardModel);
+              if (cardName != null) {
+                IView<E> childCardView = cardView.getChild(cardName);
+                if (childCardView != null) {
+                  showCardInPanel(cardsPeer, cardName);
+                  IValueConnector childCardConnector = childCardView
+                      .getConnector();
+                  if (childCardConnector != null) {
+                    // To handle polymorphism, especially for modules, we refine
+                    // the model descriptor.
+                    if (((IModelValueConnector) cardView.getConnector()
+                        .getModelConnector()).getModelDescriptor().getClass()
+                        .isAssignableFrom(
+                            childCardView.getDescriptor().getModelDescriptor()
+                                .getClass())) {
+                      ((IModelValueConnector) cardView.getConnector()
+                          .getModelConnector())
+                          .setModelDescriptor(childCardView.getDescriptor()
+                              .getModelDescriptor());
+                    }
+                    getMvcBinder().bind(childCardConnector, cardView.getConnector()
+                        .getModelConnector());
+                  }
+                } else {
+                  showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
+                }
+              } else {
+                showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
+              }
+            } else {
+              showCardInPanel(cardsPeer, ICardViewDescriptor.SECURITY_CARD);
+            }
+          }
+        });
+    return cardViewConnector;
+  }
+  
+  /**
+   * Shows a card in in card layouted panel.
+   * 
+   * @param cardsPeer the component that holds the cards
+   * @param cardName the card identifier to show.
+   */
+  protected abstract void showCardInPanel(E cardsPeer, String cardName);
 
   /**
    * Gets the translationProvider.

@@ -133,7 +133,7 @@ public class DefaultRemoteViewFactory extends
   }
 
   private IView<RComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+      @SuppressWarnings("unused") IActionHandler actionHandler, Locale locale) {
     ICompositeValueConnector connector = createTreeViewConnector(
         viewDescriptor, locale);
 
@@ -306,8 +306,8 @@ public class DefaultRemoteViewFactory extends
       IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     RComponent viewComponent = createRComponent();
-    IValueConnector connector = getConnectorFactory()
-        .createValueConnector(propertyDescriptor.getName());
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
@@ -413,7 +413,8 @@ public class DefaultRemoteViewFactory extends
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+        .createCompositeValueConnector(
+            modelDescriptor.getName() + "Element",
             modelDescriptor.getCollectionDescriptor().getElementDescriptor()
                 .getToStringProperty());
     ICollectionConnector connector = getConnectorFactory()
@@ -536,5 +537,13 @@ public class DefaultRemoteViewFactory extends
    */
   public IIconFactory<RIcon> getIconFactory() {
     return iconFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void showCardInPanel(RComponent cardsPeer, String cardName) {
+    //TODO see how it should be implemented.
   }
 }

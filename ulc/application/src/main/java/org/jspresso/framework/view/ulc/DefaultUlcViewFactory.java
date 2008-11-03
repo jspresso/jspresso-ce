@@ -35,17 +35,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
-import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.ulc.CollectionConnectorListModel;
 import org.jspresso.framework.binding.ulc.CollectionConnectorTableModel;
@@ -102,7 +99,6 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
-import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.format.DurationFormatter;
 import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
@@ -857,8 +853,9 @@ public class DefaultUlcViewFactory extends
     Map<String, String> translationMapping = new HashMap<String, String>();
     for (String enumerationValue : propertyDescriptor.getEnumerationValues()) {
       translationMapping.put(enumerationValue, getTranslationProvider()
-          .getTranslation(computeEnumerationKey(propertyDescriptor
-              .getEnumerationName(), enumerationValue), locale));
+          .getTranslation(
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  enumerationValue), locale));
     }
     return translationMapping;
   }
@@ -990,63 +987,6 @@ public class DefaultUlcViewFactory extends
     view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
-  }
-
-  private IValueConnector createCardViewConnector(
-      final IMapView<ULCComponent> cardView, final IActionHandler actionHandler) {
-    IValueConnector cardViewConnector = getConnectorFactory()
-        .createValueConnector(cardView.getDescriptor().getName());
-    cardViewConnector
-        .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-          public void connectorValueChange(ConnectorValueChangeEvent evt) {
-            Object cardModel = evt.getNewValue();
-            boolean accessGranted = true;
-            if (cardModel instanceof ISecurable && actionHandler != null) {
-              try {
-                actionHandler.checkAccess((ISecurable) cardModel);
-              } catch (SecurityException se) {
-                accessGranted = false;
-              }
-            }
-            ULCCardPane cardPanel = (ULCCardPane) cardView.getPeer();
-            if (accessGranted) {
-              String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
-                  .getCardNameForModel(cardModel);
-              if (cardName != null) {
-                IView<ULCComponent> childCardView = cardView.getChild(cardName);
-                if (childCardView != null) {
-                  cardPanel.setSelectedName(cardName);
-                  IValueConnector childCardConnector = childCardView
-                      .getConnector();
-                  if (childCardConnector != null) {
-                    // To handle polymorphism, especially for modules, we refine
-                    // the model descriptor.
-                    if (((IModelValueConnector) cardView.getConnector()
-                        .getModelConnector()).getModelDescriptor().getClass()
-                        .isAssignableFrom(
-                            childCardView.getDescriptor().getModelDescriptor()
-                                .getClass())) {
-                      ((IModelValueConnector) cardView.getConnector()
-                          .getModelConnector())
-                          .setModelDescriptor(childCardView.getDescriptor()
-                              .getModelDescriptor());
-                    }
-                    getMvcBinder().bind(childCardConnector, cardView.getConnector()
-                        .getModelConnector());
-                  }
-                } else {
-                  cardPanel.setSelectedName(ICardViewDescriptor.DEFAULT_CARD);
-                }
-              } else {
-                cardPanel.setSelectedName(ICardViewDescriptor.DEFAULT_CARD);
-              }
-            } else {
-              cardPanel.setSelectedName(ICardViewDescriptor.SECURITY_CARD);
-            }
-          }
-        });
-    return cardViewConnector;
   }
 
   private IView<ULCComponent> createCollectionPropertyView(
@@ -1746,8 +1686,8 @@ public class DefaultUlcViewFactory extends
       Locale locale) {
 
     ICompositeValueConnector connector = getConnectorFactory()
-        .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
-            .getName(), null);
+        .createCompositeValueConnector(
+            viewDescriptor.getModelDescriptor().getName(), null);
     ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
     IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -1757,7 +1697,6 @@ public class DefaultUlcViewFactory extends
     viewComponent.add(nestedView.getPeer(), ULCBorderLayoutPane.CENTER);
     return view;
   }
-
 
   private IView<ULCComponent> createNumberPropertyView(
       INumberPropertyDescriptor propertyDescriptor,
@@ -2118,7 +2057,8 @@ public class DefaultUlcViewFactory extends
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+        .createCompositeValueConnector(
+            modelDescriptor.getName() + "Element",
             modelDescriptor.getCollectionDescriptor().getElementDescriptor()
                 .getToStringProperty());
     ICollectionConnector connector = getConnectorFactory()
@@ -2380,7 +2320,8 @@ public class DefaultUlcViewFactory extends
       ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
 
-    ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, locale);
+    ICompositeValueConnector connector = createTreeViewConnector(
+        viewDescriptor, locale);
 
     ULCExtendedTree viewComponent = createULCTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
@@ -2856,5 +2797,13 @@ public class DefaultUlcViewFactory extends
     public ULCPopupMenu createPopupForTreepath(TreePath path) {
       return createULCTreePopupMenu(tree, view, path, actionHandler, locale);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void showCardInPanel(ULCComponent cardsPeer, String cardName) {
+    ((ULCCardPane) cardsPeer).setSelectedName(cardName);
   }
 }

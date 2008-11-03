@@ -44,16 +44,13 @@ import javax.swing.KeyStroke;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
-import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.wings.CollectionConnectorListModel;
 import org.jspresso.framework.binding.wings.CollectionConnectorTableModel;
@@ -98,7 +95,6 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
-import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.format.DurationFormatter;
 import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
@@ -149,6 +145,7 @@ import org.wings.SCheckBox;
 import org.wings.SComboBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
+import org.wings.SContainer;
 import org.wings.SDefaultListCellRenderer;
 import org.wings.SDimension;
 import org.wings.SFont;
@@ -1009,67 +1006,6 @@ public class DefaultWingsViewFactory extends
     view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
-  }
-
-  private IValueConnector createCardViewConnector(
-      final IMapView<SComponent> cardView, final IActionHandler actionHandler) {
-    IValueConnector cardViewConnector = getConnectorFactory()
-        .createValueConnector(cardView.getDescriptor().getName());
-    cardViewConnector
-        .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-          public void connectorValueChange(ConnectorValueChangeEvent evt) {
-            Object cardModel = evt.getNewValue();
-            boolean accessGranted = true;
-            if (cardModel instanceof ISecurable && actionHandler != null) {
-              try {
-                actionHandler.checkAccess((ISecurable) cardModel);
-              } catch (SecurityException se) {
-                accessGranted = false;
-              }
-            }
-            SPanel cardPanel = (SPanel) cardView.getPeer();
-            if (accessGranted) {
-              String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
-                  .getCardNameForModel(cardModel);
-              if (cardName != null) {
-                IView<SComponent> childCardView = cardView.getChild(cardName);
-                if (childCardView != null) {
-                  ((SCardLayout) cardPanel.getLayout()).show(cardPanel,
-                      cardName);
-                  IValueConnector childCardConnector = childCardView
-                      .getConnector();
-                  if (childCardConnector != null) {
-                    // To handle polymorphism, especially for modules, we refine
-                    // the model descriptor.
-                    if (((IModelValueConnector) cardView.getConnector()
-                        .getModelConnector()).getModelDescriptor().getClass()
-                        .isAssignableFrom(
-                            childCardView.getDescriptor().getModelDescriptor()
-                                .getClass())) {
-                      ((IModelValueConnector) cardView.getConnector()
-                          .getModelConnector())
-                          .setModelDescriptor(childCardView.getDescriptor()
-                              .getModelDescriptor());
-                    }
-                    getMvcBinder().bind(childCardConnector,
-                        cardView.getConnector().getModelConnector());
-                  }
-                } else {
-                  ((SCardLayout) cardPanel.getLayout()).show(cardPanel,
-                      ICardViewDescriptor.DEFAULT_CARD);
-                }
-              } else {
-                ((SCardLayout) cardPanel.getLayout()).show(cardPanel,
-                    ICardViewDescriptor.DEFAULT_CARD);
-              }
-            } else {
-              ((SCardLayout) cardPanel.getLayout()).show(cardPanel,
-                  ICardViewDescriptor.SECURITY_CARD);
-            }
-          }
-        });
-    return cardViewConnector;
   }
 
   private IView<SComponent> createCollectionPropertyView(
@@ -2353,7 +2289,8 @@ public class DefaultWingsViewFactory extends
   private IView<SComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") IActionHandler actionHandler, Locale locale) {
 
-    ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, locale);
+    ICompositeValueConnector connector = createTreeViewConnector(
+        viewDescriptor, locale);
 
     STree viewComponent = createSTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
@@ -2632,8 +2569,9 @@ public class DefaultWingsViewFactory extends
               .getIconImageURL(String.valueOf(value)),
               IIconFactory.TINY_ICON_SIZE));
       if (value != null && propertyDescriptor.isTranslated()) {
-        setText(getTranslationProvider().getTranslation(computeEnumerationKey(
-            propertyDescriptor.getEnumerationName(), value), locale));
+        setText(getTranslationProvider().getTranslation(
+            computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                value), locale));
       } else {
         setText(String.valueOf(value));
       }
@@ -2702,5 +2640,14 @@ public class DefaultWingsViewFactory extends
       }
       return renderer;
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void showCardInPanel(SComponent cardsPeer, String cardName) {
+    ((SCardLayout) ((SContainer) cardsPeer).getLayout()).show(
+        (SContainer) cardsPeer, cardName);
   }
 }
