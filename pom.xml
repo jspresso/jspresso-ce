@@ -108,6 +108,7 @@
     <module>hibernate</module>
     <module>swing</module>
     <module>wings</module>
+    <module>remote</module>
     <module>jasper</module>
     <module>app-launch</module>
     <module>app-template</module>

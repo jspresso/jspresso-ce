@@ -55,6 +55,8 @@
 	<classpathentry kind="src" output="jasper/ulc/target/classes" path="jasper/ulc/src/main/resources"/>
 	<classpathentry kind="src" output="jasper/wings/target/classes" path="jasper/wings/src/main/java"/>
 	<classpathentry kind="src" output="jasper/wings/target/classes" path="jasper/wings/src/main/resources"/>
+	<classpathentry kind="src" output="jasper/remote/target/classes" path="jasper/remote/src/main/java"/>
+	<classpathentry kind="src" output="jasper/remote/target/classes" path="jasper/remote/src/main/resources"/>
 	<classpathentry kind="src" output="app-template/core/target/classes" path="app-template/core/src/main/java"/>
 	<classpathentry kind="src" output="app-template/core/target/classes" path="app-template/core/src/main/resources"/>
 	<classpathentry kind="src" output="app-template/swing/target/classes" path="app-template/swing/src/main/java"/>
@@ -63,6 +65,8 @@
 	<classpathentry kind="src" output="app-template/ulc/target/classes" path="app-template/ulc/src/main/resources"/>
 	<classpathentry kind="src" output="app-template/wings/target/classes" path="app-template/wings/src/main/java"/>
 	<classpathentry kind="src" output="app-template/wings/target/classes" path="app-template/wings/src/main/resources"/>
+	<classpathentry kind="src" output="app-template/remote/target/classes" path="app-template/remote/src/main/java"/>
+	<classpathentry kind="src" output="app-template/remote/target/classes" path="app-template/remote/src/main/resources"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/bsf/bsf/2.3.0/bsf-2.3.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-collections/commons-collections/3.1/commons-collections-3.1.jar"/>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+  default-lazy-init="true">
+
+  <!--
+    Remote root application context for the Jspresso framework.
+  -->
+
+  <!--
+    Root action beans.
+  -->
+  <bean
+    id="lovOkFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.lov.OkLovAction"
+    scope="prototype">
+    <property
+      name="nextAction"
+      ref="sourceViewConnectorSetAction" />
+  </bean>
+
+  <bean
+    id="printOkFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.lov.OkChooseComponentAction">
+    <property
+      name="nextAction"
+      ref="editReportParametersAction" />
+  </bean>
+
+  <bean
+    id="doPrintAction"
+    parent="abstractDoPrintAction"
+    class="org.jspresso.framework.application.frontend.action.remote.std.OkAction" />
+
+  <bean
+    id="chooseActionOkFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.lov.OkChooseComponentAction">
+    <property name="nextAction">
+      <bean
+        class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
+    </property>
+  </bean>
+
+  <bean
+    id="cancelDialogFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.std.CancelAction" />
+
+  <bean
+    id="okDialogFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.std.OkAction" />
+
+  <!--
+    Action beans
+  -->
+  <bean
+    id="removeEntityCollectionFromMasterFrontAction"
+    parent="abstractRemoveCollectionFromMasterFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.flow.StaticYesNoAction" />
+
+  <bean
+    id="removeAnyCollectionFromMasterFrontAction"
+    parent="abstractRemoveAnyCollectionFromMasterFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.flow.StaticYesNoAction" />
+
+  <bean
+    id="infoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.flow.InfoAction">
+    <property
+      name="iconImageURL"
+      value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
+  </bean>
+
+  <bean
+    id="staticInfoFrontAction"
+    abstract="true"
+    parent="infoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.flow.StaticInfoAction">
+  </bean>
+
+  <bean
+    id="yesNoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.flow.YesNoAction" />
+
+  <bean
+    id="staticYesNoFrontAction"
+    abstract="true"
+    parent="yesNoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.flow.StaticYesNoAction" />
+
+  <!--
+    The implementation used as view factory.
+  -->
+  <bean
+    id="iconFactory"
+    parent="abstractIconFactory"
+    class="org.jspresso.framework.view.remote.RemoteIconFactory"
+    scope="prototype" />
+
+  <bean
+    id="actionFactory"
+    parent="abstractActionFactory"
+    class="org.jspresso.framework.view.remote.RemoteActionFactory"
+    scope="prototype" />
+
+  <bean
+    id="abstractModalDialogAction"
+    abstract="true"
+    class="org.jspresso.framework.application.frontend.action.remote.std.ModalDialogAction" />
+
+  <bean
+    id="lovAction"
+    parent="abstractLovAction"
+    class="org.jspresso.framework.application.frontend.action.remote.lov.LovAction"
+    scope="prototype" />
+
+  <bean
+    id="openFileAction"
+    parent="abstractOpenFileAction"
+    class="org.jspresso.framework.application.frontend.action.remote.file.OpenFileAction" />
+
+  <bean
+    id="openFileAsBinaryPropertyAction"
+    parent="abstractOpenFileAction"
+    class="org.jspresso.framework.application.frontend.action.remote.file.OpenFileAsBinaryPropertyAction" />
+
+  <bean
+    id="saveFileAction"
+    parent="abstractSaveFileAction"
+    class="org.jspresso.framework.application.frontend.action.remote.file.SaveFileAction" />
+
+  <bean
+    id="saveBinaryPropertyAsFileAction"
+    parent="saveFileAction"
+    class="org.jspresso.framework.application.frontend.action.remote.file.SaveBinaryPropertyAsFileAction" />
+
+  <bean
+    id="binaryPropertyInfoAction"
+    parent="abstractBinaryPropertyInfoAction"
+    class="org.jspresso.framework.application.frontend.action.remote.file.BinaryPropertyInfoAction" />
+
+  <bean
+    id="chooseComponentAction"
+    parent="abstractChooseComponentAction"
+    class="org.jspresso.framework.application.frontend.action.remote.lov.ChooseComponentAction" />
+
+  <bean
+    id="editReportParametersAction"
+    parent="abstractEditReportParametersAction"
+    class="org.jspresso.framework.application.printing.frontend.action.remote.EditReportParametersAction" />
+
+  <bean
+    id="displayReportAction"
+    class="org.jspresso.framework.application.printing.frontend.action.remote.DisplayJasperReportAction" />
+
+  <bean
+    id="editComponentAction"
+    parent="abstractEditComponentAction"
+    class="org.jspresso.framework.application.frontend.action.remote.std.EditComponentAction" />
+
+  <bean
+    id="changePasswordAction"
+    parent="abstractChangePasswordAction"
+    class="org.jspresso.framework.application.frontend.action.remote.security.ChangePasswordAction" />
+
+  <bean
+    id="displayUrlFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.std.DisplayUrlAction" />
+
+  <bean
+    id="staticDisplayUrlFrontAction"
+    abstract="true"
+    parent="displayUrlFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.std.DisplayStaticUrlAction" />
+
+  <bean
+    id="wizardAction"
+    parent="abstractWizardAction"
+    class="org.jspresso.framework.application.frontend.action.remote.wizard.WizardAction" />
+
+  <bean
+    id="viewFactory"
+    class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
+    parent="abstractViewFactory"
+    scope="prototype">
+  </bean>
+
+  <!--
+    The controllers.
+  -->
+  <bean
+    id="frontController"
+    abstract="true"
+    parent="abstractFrontController"
+    class="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController">
+    <property
+      name="viewFactory"
+      ref="viewFactory" />
+  </bean>
+</beans>
+

@@ -27,12 +27,6 @@
     Root action beans.
   -->
   <bean
-    id="lovFindFrontAction"
-    parent="abstractLovFindFrontAction"
-    class="org.jspresso.framework.application.frontend.action.std.FindAction"
-    scope="prototype" />
-
-  <bean
     id="lovOkFrontAction"
     class="org.jspresso.framework.application.frontend.action.wings.lov.OkLovAction"
     scope="prototype">
@@ -57,7 +51,8 @@
   <bean
     id="chooseActionOkFrontAction"
     class="org.jspresso.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
-    <property name="nextAction">
+    <property
+      name="nextAction">
       <bean
         class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
     </property>
@@ -209,7 +204,14 @@
     id="viewFactory"
     parent="abstractViewFactory"
     class="org.jspresso.framework.view.wings.DefaultWingsViewFactory"
-    scope="prototype" />
+    scope="prototype">
+    <property
+      name="listSelectionModelBinder"
+      ref="listSelectionModelBinder" />
+    <property
+      name="treeSelectionModelBinder"
+      ref="treeSelectionModelBinder" />
+  </bean>
 
   <!--
     The controllers.

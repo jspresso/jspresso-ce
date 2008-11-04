@@ -167,6 +167,21 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-remote</artifactId>
+        <version>2.3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-remote-application</artifactId>
+        <version>2.3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-remote-components</artifactId>
+        <version>2.3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
         <artifactId>jspresso-app-template-core</artifactId>
         <version>2.3-SNAPSHOT</version>
       </dependency>
@@ -187,6 +202,11 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-app-template-remote</artifactId>
+        <version>2.3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
         <artifactId>jspresso-jasper-core</artifactId>
         <version>2.3-SNAPSHOT</version>
       </dependency>
@@ -203,6 +223,11 @@
       <dependency>
         <groupId>org.jspresso</groupId>
         <artifactId>jspresso-jasper-wings</artifactId>
+        <version>2.3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-jasper-remote</artifactId>
         <version>2.3-SNAPSHOT</version>
       </dependency>
       <dependency>

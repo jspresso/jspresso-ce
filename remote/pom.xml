@@ -10,5 +10,6 @@
 	<name>Remote</name>
 	<modules>
 		<module>application</module>
+    <module>components</module>
 	</modules>
 </project>

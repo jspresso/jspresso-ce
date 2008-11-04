@@ -27,12 +27,6 @@
     Root action beans.
   -->
   <bean
-    id="lovFindFrontAction"
-    parent="abstractLovFindFrontAction"
-    class="org.jspresso.framework.application.frontend.action.std.FindAction"
-    scope="prototype" />
-
-  <bean
     id="lovOkFrontAction"
     class="org.jspresso.framework.application.frontend.action.swing.lov.OkLovAction"
     scope="prototype">
@@ -204,6 +198,12 @@
     class="org.jspresso.framework.view.swing.DefaultSwingViewFactory"
     parent="abstractViewFactory"
     scope="prototype">
+    <property
+      name="listSelectionModelBinder"
+      ref="listSelectionModelBinder" />
+    <property
+      name="treeSelectionModelBinder"
+      ref="treeSelectionModelBinder" />
   </bean>
 
   <!--

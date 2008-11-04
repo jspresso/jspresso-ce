@@ -9,6 +9,10 @@
 	<packaging>jar</packaging>
 	<name>Remote - Application</name>
 	<dependencies>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-remote-components</artifactId>
+    </dependency>
 		<dependency>
 			<groupId>org.jspresso</groupId>
 			<artifactId>jspresso-binding</artifactId>

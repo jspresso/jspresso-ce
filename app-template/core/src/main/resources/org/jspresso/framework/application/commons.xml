@@ -225,6 +225,7 @@
   -->
   <bean
     id="abstractViewFactory"
+    class="org.jspresso.framework.view.AbstractViewFactory"
     abstract="true">
     <property
       name="connectorFactory"
@@ -238,12 +239,6 @@
     <property
       name="modelCascadingBinder"
       ref="modelCascadingBinder" />
-    <property
-      name="listSelectionModelBinder"
-      ref="listSelectionModelBinder" />
-    <property
-      name="treeSelectionModelBinder"
-      ref="treeSelectionModelBinder" />
     <property
       name="iconFactory"
       ref="iconFactory" />

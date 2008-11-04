@@ -54,8 +54,9 @@
   </bean>
 
   <bean
-    id="abstractLovFindFrontAction"
-    abstract="true">
+    id="lovFindFrontAction"
+    class="org.jspresso.framework.application.frontend.action.std.FindAction"
+    scope="prototype">
     <property
       name="wrappedAction"
       ref="queryEntitiesBackAction" />
@@ -138,8 +139,10 @@
     <property
       name="reportFactory"
       ref="reportFactory" />
-    <property name="nextAction">
-      <bean parent="chooseComponentAction">
+    <property
+      name="nextAction">
+      <bean
+        parent="chooseComponentAction">
         <property
           name="okAction"
           ref="printOkFrontAction" />
@@ -154,8 +157,10 @@
     <property
       name="modelConnectorFactory"
       ref="modelConnectorFactory" />
-    <property name="nextAction">
-      <bean parent="chooseComponentAction">
+    <property
+      name="nextAction">
+      <bean
+        parent="chooseComponentAction">
         <property
           name="okAction"
           ref="chooseActionOkFrontAction" />
@@ -238,8 +243,10 @@
     <property
       name="modelConnectorFactory"
       ref="modelConnectorFactory" />
-    <property name="okAction">
-      <bean parent="okDialogFrontAction">
+    <property
+      name="okAction">
+      <bean
+        parent="okDialogFrontAction">
         <property
           name="wrappedAction"
           ref="changePasswordBackAction" />
@@ -275,7 +282,8 @@
   <bean
     id="queryModuleFilterAction"
     class="org.jspresso.framework.application.frontend.action.WrappingAction">
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
         <property
@@ -309,7 +317,8 @@
     <property
       name="description"
       value="add.description" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.AddEntityCollectionToMasterAction" />
     </property>
@@ -335,7 +344,8 @@
   <bean
     id="addMapToMasterFrontAction"
     parent="addToMasterFrontAction">
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.AddMapToMasterAction" />
     </property>
@@ -356,7 +366,8 @@
     <property
       name="acceleratorAsString"
       value="alt C" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.CloneEntityCollectionAction">
         <property
@@ -384,7 +395,8 @@
     <property
       name="acceleratorAsString"
       value="alt C" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.CloneMapCollectionAction" />
     </property>
@@ -408,7 +420,8 @@
     <property
       name="acceleratorAsString"
       value="ctrl C" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property
@@ -433,7 +446,8 @@
     <property
       name="acceleratorAsString"
       value="ctrl X" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property
@@ -475,7 +489,8 @@
   <bean
     id="addToModuleObjectFrontAction"
     parent="addToMasterFrontAction">
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.module.AddToModuleObjectsAction" />
     </property>
@@ -511,7 +526,8 @@
     id="abstractRemoveAnyCollectionFromMasterFrontAction"
     abstract="true"
     parent="abstractRemoveCollectionFromMasterFrontAction">
-    <property name="yesAction">
+    <property
+      name="yesAction">
       <bean
         class="org.jspresso.framework.application.backend.action.RemoveCollectionFromMasterAction" />
     </property>
@@ -528,7 +544,8 @@
   <bean
     id="cloneModuleObjectFrontAction"
     parent="cloneEntityCollectionFrontAction">
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.module.CloneModuleObjectsAction">
         <property
@@ -553,7 +570,8 @@
     <property
       name="description"
       value="installInTree.description" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction" />
     </property>
@@ -588,7 +606,8 @@
     <property
       name="description"
       value="moveUp.description" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property
@@ -613,7 +632,8 @@
     <property
       name="description"
       value="moveDown.description" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property
@@ -638,7 +658,8 @@
     <property
       name="description"
       value="reset.description" />
-    <property name="wrappedAction">
+    <property
+      name="wrappedAction">
       <bean
         class="org.jspresso.framework.application.backend.action.ResetConnectorValueAction" />
     </property>
@@ -662,8 +683,10 @@
     <property
       name="wrappedAction"
       ref="saveModuleObjectBackAction" />
-    <property name="nextAction">
-      <bean parent="staticInfoFrontAction">
+    <property
+      name="nextAction">
+      <bean
+        parent="staticInfoFrontAction">
         <property
           name="messageCode"
           value="save.successful" />
@@ -694,29 +717,40 @@
   <bean
     id="masterDetailActionMap"
     class="org.jspresso.framework.view.action.ActionMap">
-    <property name="actionLists">
+    <property
+      name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="ACTION" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="addToMasterFrontAction" />
-              <ref bean="removeEntityCollectionFromMasterFrontAction" />
-              <ref local="cloneEntityCollectionFrontAction" />
+              <ref
+                local="addToMasterFrontAction" />
+              <ref
+                bean="removeEntityCollectionFromMasterFrontAction" />
+              <ref
+                local="cloneEntityCollectionFrontAction" />
             </list>
           </property>
         </bean>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="EDIT" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="copyCollectionFrontAction" />
-              <ref bean="cutCollectionFrontAction" />
-              <ref local="pasteCollectionFrontAction" />
+              <ref
+                local="copyCollectionFrontAction" />
+              <ref
+                bean="cutCollectionFrontAction" />
+              <ref
+                local="pasteCollectionFrontAction" />
             </list>
           </property>
         </bean>
@@ -727,27 +761,36 @@
   <bean
     id="readonlyBeanCollectionModuleActionMap"
     class="org.jspresso.framework.view.action.ActionMap">
-    <property name="actionLists">
+    <property
+      name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="restartModuleFrontAction" />
-              <ref local="saveModuleObjectFrontAction" />
-              <ref local="reloadModuleObjectFrontAction" />
+              <ref
+                local="restartModuleFrontAction" />
+              <ref
+                local="saveModuleObjectFrontAction" />
+              <ref
+                local="reloadModuleObjectFrontAction" />
             </list>
           </property>
         </bean>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="SERVICE" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="addAsChildModuleFrontAction" />
+              <ref
+                local="addAsChildModuleFrontAction" />
             </list>
           </property>
         </bean>
@@ -758,20 +801,26 @@
   <bean
     id="filterableReadonlyBeanCollectionModuleActionMap"
     class="org.jspresso.framework.view.action.ActionMap">
-    <property name="parentActionMaps">
+    <property
+      name="parentActionMaps">
       <list>
-        <ref bean="readonlyBeanCollectionModuleActionMap" />
+        <ref
+          bean="readonlyBeanCollectionModuleActionMap" />
       </list>
     </property>
-    <property name="actionLists">
+    <property
+      name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="queryModuleFilterAction" />
+              <ref
+                local="queryModuleFilterAction" />
             </list>
           </property>
         </bean>
@@ -782,22 +831,30 @@
   <bean
     id="beanCollectionModuleActionMap"
     class="org.jspresso.framework.view.action.ActionMap">
-    <property name="parentActionMaps">
+    <property
+      name="parentActionMaps">
       <list>
-        <ref bean="readonlyBeanCollectionModuleActionMap" />
+        <ref
+          bean="readonlyBeanCollectionModuleActionMap" />
       </list>
     </property>
-    <property name="actionLists">
+    <property
+      name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="ACTION" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="addToModuleObjectFrontAction" />
-              <ref local="cloneModuleObjectFrontAction" />
-              <ref local="removeFromModuleObjectFrontAction" />
+              <ref
+                local="addToModuleObjectFrontAction" />
+              <ref
+                local="cloneModuleObjectFrontAction" />
+              <ref
+                local="removeFromModuleObjectFrontAction" />
             </list>
           </property>
         </bean>
@@ -808,20 +865,26 @@
   <bean
     id="filterableBeanCollectionModuleActionMap"
     class="org.jspresso.framework.view.action.ActionMap">
-    <property name="parentActionMaps">
+    <property
+      name="parentActionMaps">
       <list>
-        <ref bean="beanCollectionModuleActionMap" />
+        <ref
+          bean="beanCollectionModuleActionMap" />
       </list>
     </property>
-    <property name="actionLists">
+    <property
+      name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="queryModuleFilterAction" />
+              <ref
+                local="queryModuleFilterAction" />
             </list>
           </property>
         </bean>
@@ -832,16 +895,21 @@
   <bean
     id="beanModuleActionMap"
     class="org.jspresso.framework.view.action.ActionMap">
-    <property name="actionLists">
+    <property
+      name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="saveModuleObjectFrontAction" />
-              <ref local="reloadModuleObjectFrontAction" />
+              <ref
+                local="saveModuleObjectFrontAction" />
+              <ref
+                local="reloadModuleObjectFrontAction" />
             </list>
           </property>
         </bean>
@@ -852,18 +920,25 @@
   <bean
     id="binaryPropertyActionMap"
     class="org.jspresso.framework.view.action.ActionMap">
-    <property name="actionLists">
+    <property
+      name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref bean="openFileAsBinaryPropertyAction" />
-              <ref bean="saveBinaryPropertyAsFileAction" />
-              <ref bean="resetPropertyFrontAction" />
-              <ref bean="binaryPropertyInfoAction" />
+              <ref
+                bean="openFileAsBinaryPropertyAction" />
+              <ref
+                bean="saveBinaryPropertyAsFileAction" />
+              <ref
+                bean="resetPropertyFrontAction" />
+              <ref
+                bean="binaryPropertyInfoAction" />
             </list>
           </property>
         </bean>
@@ -874,17 +949,23 @@
   <bean
     id="mapMasterDetailActionMap"
     class="org.jspresso.framework.view.action.ActionMap">
-    <property name="actionLists">
+    <property
+      name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
+        <bean
+          class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="ACTION" />
-          <property name="actions">
+          <property
+            name="actions">
             <list>
-              <ref local="addMapToMasterFrontAction" />
-              <ref bean="removeAnyCollectionFromMasterFrontAction" />
-              <ref local="cloneMapCollectionFrontAction" />
+              <ref
+                local="addMapToMasterFrontAction" />
+              <ref
+                bean="removeAnyCollectionFromMasterFrontAction" />
+              <ref
+                local="cloneMapCollectionFrontAction" />
             </list>
           </property>
         </bean>
