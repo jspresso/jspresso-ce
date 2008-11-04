@@ -18,10 +18,11 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
+import java.util.Map;
+
 
 /**
- * This class is the generic server peer of a client GUI component.
+ * A container. Its children are indexed by their view names.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,86 +40,25 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RComponent {
-
-  private String        label;
-  private String        tooltip;
-  private RIcon         icon;
-  private List<RAction> actions;
+public class RContainer extends RComponent {
+  
+  private Map<String, RComponent> children;
 
   /**
-   * Sets the label.
+   * Sets the children.
    * 
-   * @param label
-   *          the label to set.
+   * @param children the children to set.
    */
-  public void setLabel(String label) {
-    this.label = label;
+  public void setChildren(Map<String, RComponent> children) {
+    this.children = children;
   }
 
   /**
-   * Gets the name.
+   * Gets the children.
    * 
-   * @return the name.
+   * @return the children.
    */
-  public String getLabel() {
-    return label;
-  }
-
-  /**
-   * Sets the tooltip.
-   * 
-   * @param tooltip
-   *          the tooltip to set.
-   */
-  public void setTooltip(String tooltip) {
-    this.tooltip = tooltip;
-  }
-
-  /**
-   * Gets the description.
-   * 
-   * @return the description.
-   */
-  public String getTooltip() {
-    return tooltip;
-  }
-
-  /**
-   * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(List<RAction> actions) {
-    this.actions = actions;
-  }
-
-  /**
-   * Gets the actions.
-   * 
-   * @return the actions.
-   */
-  public List<RAction> getActions() {
-    return actions;
-  }
-
-  /**
-   * Sets the icon.
-   * 
-   * @param icon
-   *          the icon to set.
-   */
-  public void setIcon(RIcon icon) {
-    this.icon = icon;
-  }
-
-  /**
-   * Gets the icon.
-   * 
-   * @return the icon.
-   */
-  public RIcon getIcon() {
-    return icon;
+  public Map<String, RComponent> getChildren() {
+    return children;
   }
 }

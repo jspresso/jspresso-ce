@@ -18,10 +18,11 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
+import java.util.Map;
+
 
 /**
- * This class is the generic server peer of a client GUI component.
+ * A component containing enumerated values.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,86 +40,47 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RComponent {
+public class REnumComponent extends RComponent {
 
-  private String        label;
-  private String        tooltip;
-  private RIcon         icon;
-  private List<RAction> actions;
+  private Map<String, String> renderingTranslations;
+  private Map<String, RIcon> renderingIcons;
 
   /**
-   * Sets the label.
+   * Sets the renderingTranslations.
    * 
-   * @param label
-   *          the label to set.
+   * @param renderingTranslations
+   *          the renderingTranslations to set.
    */
-  public void setLabel(String label) {
-    this.label = label;
+  public void setRenderingTranslations(Map<String, String> renderingTranslations) {
+    this.renderingTranslations = renderingTranslations;
   }
 
   /**
-   * Gets the name.
+   * Gets the renderingTranslations.
    * 
-   * @return the name.
+   * @return the renderingTranslations.
    */
-  public String getLabel() {
-    return label;
+  public Map<String, String> getRenderingTranslations() {
+    return renderingTranslations;
   }
 
   /**
-   * Sets the tooltip.
+   * Sets the renderingIcons.
    * 
-   * @param tooltip
-   *          the tooltip to set.
+   * @param renderingIcons
+   *          the renderingIcons to set.
    */
-  public void setTooltip(String tooltip) {
-    this.tooltip = tooltip;
+  public void setRenderingIcons(Map<String, RIcon> renderingIcons) {
+    this.renderingIcons = renderingIcons;
   }
 
   /**
-   * Gets the description.
+   * Gets the renderingIcons.
    * 
-   * @return the description.
+   * @return the renderingIcons.
    */
-  public String getTooltip() {
-    return tooltip;
+  public Map<String, RIcon> getRenderingIcons() {
+    return renderingIcons;
   }
 
-  /**
-   * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(List<RAction> actions) {
-    this.actions = actions;
-  }
-
-  /**
-   * Gets the actions.
-   * 
-   * @return the actions.
-   */
-  public List<RAction> getActions() {
-    return actions;
-  }
-
-  /**
-   * Sets the icon.
-   * 
-   * @param icon
-   *          the icon to set.
-   */
-  public void setIcon(RIcon icon) {
-    this.icon = icon;
-  }
-
-  /**
-   * Gets the icon.
-   * 
-   * @return the icon.
-   */
-  public RIcon getIcon() {
-    return icon;
-  }
 }

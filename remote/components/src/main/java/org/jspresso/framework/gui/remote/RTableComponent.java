@@ -21,7 +21,7 @@ package org.jspresso.framework.gui.remote;
 import java.util.List;
 
 /**
- * This class is the generic server peer of a client GUI component.
+ * A tabular component.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,86 +39,25 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RComponent {
+public class RTableComponent extends RComponent {
 
-  private String        label;
-  private String        tooltip;
-  private RIcon         icon;
-  private List<RAction> actions;
+  private List<RComponent> columns;
 
   /**
-   * Sets the label.
+   * Sets the columns.
    * 
-   * @param label
-   *          the label to set.
+   * @param columns the columns to set.
    */
-  public void setLabel(String label) {
-    this.label = label;
+  public void setColumns(List<RComponent> columns) {
+    this.columns = columns;
   }
 
   /**
-   * Gets the name.
+   * Gets the columns.
    * 
-   * @return the name.
+   * @return the columns.
    */
-  public String getLabel() {
-    return label;
-  }
-
-  /**
-   * Sets the tooltip.
-   * 
-   * @param tooltip
-   *          the tooltip to set.
-   */
-  public void setTooltip(String tooltip) {
-    this.tooltip = tooltip;
-  }
-
-  /**
-   * Gets the description.
-   * 
-   * @return the description.
-   */
-  public String getTooltip() {
-    return tooltip;
-  }
-
-  /**
-   * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(List<RAction> actions) {
-    this.actions = actions;
-  }
-
-  /**
-   * Gets the actions.
-   * 
-   * @return the actions.
-   */
-  public List<RAction> getActions() {
-    return actions;
-  }
-
-  /**
-   * Sets the icon.
-   * 
-   * @param icon
-   *          the icon to set.
-   */
-  public void setIcon(RIcon icon) {
-    this.icon = icon;
-  }
-
-  /**
-   * Gets the icon.
-   * 
-   * @return the icon.
-   */
-  public RIcon getIcon() {
-    return icon;
+  public List<RComponent> getColumns() {
+    return columns;
   }
 }
