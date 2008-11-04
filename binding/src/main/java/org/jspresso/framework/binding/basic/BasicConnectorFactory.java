@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.binding.basic;
 
+import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
@@ -96,7 +97,7 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   }
 
   private void createAndAddRenderingChildConnector(
-      BasicCompositeConnector compositeValueConnector,
+      AbstractCompositeValueConnector compositeValueConnector,
       String renderingConnectorId) {
     if (renderingConnectorId != null) {
       compositeValueConnector

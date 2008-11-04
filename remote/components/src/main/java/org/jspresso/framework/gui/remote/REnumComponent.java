@@ -48,6 +48,15 @@ public class REnumComponent extends RComponent {
   private Map<String, RIcon> renderingIcons;
 
   /**
+   * Constructs a new <code>REnumComponent</code> instance.
+   * 
+   * @param uid the uid
+   */
+  public REnumComponent(String uid) {
+    super(uid);
+  }
+
+  /**
    * Sets the renderingTranslations.
    * 
    * @param renderingTranslations

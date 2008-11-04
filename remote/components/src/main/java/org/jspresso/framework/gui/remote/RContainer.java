@@ -47,6 +47,15 @@ public class RContainer extends RComponent {
   private Map<String, RComponent> children;
 
   /**
+   * Constructs a new <code>RContainer</code> instance.
+   * 
+   * @param uid the uid
+   */
+  public RContainer(String uid) {
+    super(uid);
+  }
+
+  /**
    * Sets the children.
    * 
    * @param children the children to set.

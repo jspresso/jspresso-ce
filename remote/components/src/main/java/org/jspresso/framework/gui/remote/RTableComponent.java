@@ -46,6 +46,15 @@ public class RTableComponent extends RComponent {
   private List<RComponent> columns;
 
   /**
+   * Constructs a new <code>RTableComponent</code> instance.
+   * 
+   * @param uid the uid
+   */
+  public RTableComponent(String uid) {
+    super(uid);
+  }
+
+  /**
    * Sets the columns.
    * 
    * @param columns the columns to set.

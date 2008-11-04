@@ -51,6 +51,15 @@ public class RComponent extends RemoteServerPeer {
   private List<RAction> actions;
 
   /**
+   * Constructs a new <code>RComponent</code> instance.
+   * 
+   * @param uid the uid.
+   */
+  public RComponent(String uid) {
+    super(uid);
+  }
+
+  /**
    * Sets the label.
    * 
    * @param label

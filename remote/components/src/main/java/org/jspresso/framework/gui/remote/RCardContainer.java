@@ -47,6 +47,15 @@ public class RCardContainer extends RContainer {
   private String              selectedCard;
 
   /**
+   * Constructs a new <code>RCardContainer</code> instance.
+   * 
+   * @param uid the uid
+   */
+  public RCardContainer(String uid) {
+    super(uid);
+  }
+
+  /**
    * Sets the selectedCard.
    * 
    * @param selectedCard

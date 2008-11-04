@@ -21,6 +21,7 @@ package org.jspresso.framework.view.remote;
 import java.awt.Dimension;
 
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractIconFactory;
 
 /**
@@ -44,18 +45,30 @@ import org.jspresso.framework.view.AbstractIconFactory;
  */
 public class RemoteIconFactory extends AbstractIconFactory<RIcon> {
 
+  private IGUIDGenerator       uidGenerator;
+
   /**
    * {@inheritDoc}
    */
   @Override
   protected RIcon createIcon(String urlSpec, Dimension iconSize) {
     if (urlSpec != null) {
-      RIcon imageIcon = new RIcon();
+      RIcon imageIcon = new RIcon(uidGenerator.generateGUID());
       imageIcon.setImageUrlSpec(urlSpec);
       imageIcon.setWidth((int) iconSize.getWidth());
       imageIcon.setHeight((int) iconSize.getHeight());
       return imageIcon;
     }
     return null;
+  }
+
+  
+  /**
+   * Sets the uidGenerator.
+   * 
+   * @param uidGenerator the uidGenerator to set.
+   */
+  public void setUidGenerator(IGUIDGenerator uidGenerator) {
+    this.uidGenerator = uidGenerator;
   }
 }

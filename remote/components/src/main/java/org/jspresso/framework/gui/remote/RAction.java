@@ -43,11 +43,21 @@ public class RAction extends RemoteServerPeer {
 
   private static final long serialVersionUID = -7894714395388180980L;
 
-  private String  name;
-  private String  description;
-  private RIcon   icon;
-  private String  mnemonicAsString;
-  private boolean enabled;
+  private String            name;
+  private String            description;
+  private RIcon             icon;
+  private String            mnemonicAsString;
+  private boolean           enabled;
+
+  /**
+   * Constructs a new <code>RAction</code> instance.
+   * 
+   * @param uid
+   *          the uid.
+   */
+  public RAction(String uid) {
+    super(uid);
+  }
 
   /**
    * Gets the name.
@@ -128,7 +138,8 @@ public class RAction extends RemoteServerPeer {
   /**
    * Sets the enabled.
    * 
-   * @param enabled the enabled to set.
+   * @param enabled
+   *          the enabled to set.
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

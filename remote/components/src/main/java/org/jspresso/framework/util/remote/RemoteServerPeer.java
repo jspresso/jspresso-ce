@@ -20,8 +20,6 @@ package org.jspresso.framework.util.remote;
 
 import java.io.Serializable;
 
-import org.jspresso.framework.util.uid.RandomGUID;
-
 /**
  * An object remote server peer.
  * <p>
@@ -49,9 +47,10 @@ public abstract class RemoteServerPeer implements Serializable, IRemoteServerPee
   /**
    * Constructs a new <code>RemoteServerPeer</code> instance generating its UID.
    * 
+   * @param uid the uid.
    */
-  protected RemoteServerPeer() {
-    uid = new RandomGUID().toString();
+  protected RemoteServerPeer(String uid) {
+    this.uid = uid;
   }
 
   /**

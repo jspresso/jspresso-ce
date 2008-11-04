@@ -44,6 +44,7 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
@@ -72,6 +73,7 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
 
   private IIconFactory<RIcon>  iconFactory;
   private ITranslationProvider translationProvider;
+  private IGUIDGenerator       uidGenerator;
 
   /**
    * {@inheritDoc}
@@ -154,7 +156,7 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
       @SuppressWarnings("unused") RComponent sourceComponent,
       @SuppressWarnings("unused") IModelDescriptor modelDescriptor,
       @SuppressWarnings("unused") IValueConnector viewConnector, Locale locale) {
-    RAction remoteAction = new RAction();
+    RAction remoteAction = new RAction(uidGenerator.generateGUID());
     remoteAction.setName(action.getI18nName(translationProvider, locale));
     String i18nDescription = action.getI18nDescription(translationProvider,
         locale);
@@ -217,5 +219,14 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
         @SuppressWarnings("unused") PropertyChangeEvent evt) {
       action.setEnabled(GateHelper.areGatesOpen(gates));
     }
+  }
+
+  /**
+   * Sets the uidGenerator.
+   * 
+   * @param uidGenerator the uidGenerator to set.
+   */
+  public void setUidGenerator(IGUIDGenerator uidGenerator) {
+    this.uidGenerator = uidGenerator;
   }
 }

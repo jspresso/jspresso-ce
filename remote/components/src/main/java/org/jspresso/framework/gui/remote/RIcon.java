@@ -48,6 +48,15 @@ public class RIcon extends RemoteServerPeer {
   private int height;
   
   /**
+   * Constructs a new <code>RIcon</code> instance.
+   * 
+   * @param uid the uid
+   */
+  public RIcon(String uid) {
+    super(uid);
+  }
+
+  /**
    * Gets the width.
    * 
    * @return the width.

@@ -54,6 +54,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
@@ -100,6 +101,8 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class DefaultRemoteViewFactory extends
     AbstractViewFactory<RComponent, RIcon, RAction> {
+
+  private IGUIDGenerator       uidGenerator;
 
   /**
    * {@inheritDoc}
@@ -246,23 +249,23 @@ public class DefaultRemoteViewFactory extends
   }
 
   private RComponent createRComponent() {
-    return new RComponent();
+    return new RComponent(uidGenerator.generateGUID());
   }
 
   private REnumComponent createREnumComponent() {
-    return new REnumComponent();
+    return new REnumComponent(uidGenerator.generateGUID());
   }
 
   private RTableComponent createRTableComponent() {
-    return new RTableComponent();
+    return new RTableComponent(uidGenerator.generateGUID());
   }
 
   private RContainer createRContainer() {
-    return new RContainer();
+    return new RContainer(uidGenerator.generateGUID());
   }
 
   private RCardContainer createRCardContainer() {
-    return new RCardContainer();
+    return new RCardContainer(uidGenerator.generateGUID());
   }
 
   private IView<RComponent> createRComponentPropertyView(
@@ -790,5 +793,14 @@ public class DefaultRemoteViewFactory extends
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     return createGenericGridView(viewDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * Sets the uidGenerator.
+   * 
+   * @param uidGenerator the uidGenerator to set.
+   */
+  public void setUidGenerator(IGUIDGenerator uidGenerator) {
+    this.uidGenerator = uidGenerator;
   }
 }
