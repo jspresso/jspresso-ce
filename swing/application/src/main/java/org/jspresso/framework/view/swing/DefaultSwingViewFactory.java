@@ -210,7 +210,7 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void configureFontColorsAndDescription(
+  protected void finishComponentConfiguration(
       IViewDescriptor viewDescriptor, Locale locale, IView<JComponent> view) {
     if (viewDescriptor.getForeground() != null) {
       view.getPeer().setForeground(

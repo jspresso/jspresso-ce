@@ -200,7 +200,7 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void configureFontColorsAndDescription(
+  protected void finishComponentConfiguration(
       IViewDescriptor viewDescriptor, Locale locale, IView<SComponent> view) {
     if (viewDescriptor.getForeground() != null) {
       view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));

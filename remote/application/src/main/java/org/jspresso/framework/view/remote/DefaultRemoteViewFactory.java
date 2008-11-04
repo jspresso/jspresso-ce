@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view.remote;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,17 +28,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RContainer;
 import org.jspresso.framework.gui.remote.REnumComponent;
@@ -70,12 +63,12 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
@@ -131,7 +124,12 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createCardView(
       ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    RComponent viewComponent = createRComponent();
+    RCardContainer viewComponent = createRCardContainer();
+    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
+    viewComponent.setChildren(childComponents);
+    Map<String, String> cardMap = new HashMap<String, String>();
+    viewComponent.setCardMap(cardMap);
+
     BasicMapView<RComponent> view = constructMapView(viewComponent,
         viewDescriptor);
     Map<String, IView<RComponent>> childrenViews = new HashMap<String, IView<RComponent>>();
@@ -141,6 +139,10 @@ public class DefaultRemoteViewFactory extends
       IView<RComponent> childView = createView(childViewDescriptor.getValue(),
           actionHandler, locale);
       childrenViews.put(childViewDescriptor.getKey(), childView);
+      childComponents.put(childView.getDescriptor().getName(), childView
+          .getPeer());
+      cardMap.put(childViewDescriptor.getKey(), childView.getDescriptor()
+          .getName());
     }
     view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
@@ -153,9 +155,14 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
+      @SuppressWarnings("unused") Locale locale) {
+    RComponent viewComponent = createRComponent();
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        viewDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    return view;
   }
 
   /**
@@ -165,8 +172,26 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createNestingView(
       INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
+    ICompositeValueConnector connector = getConnectorFactory()
+        .createCompositeValueConnector(
+            viewDescriptor.getModelDescriptor().getName(), null);
+
+    RContainer viewComponent = createRContainer();
+    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
+    viewComponent.setChildren(childComponents);
+
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+
+    IView<RComponent> nestedView = createView(viewDescriptor
+        .getNestedViewDescriptor(), actionHandler, locale);
+
+    connector.addChildConnector(nestedView.getConnector());
+
+    childComponents.put(nestedView.getDescriptor().getName(), nestedView
+        .getPeer());
+
+    return view;
   }
 
   /**
@@ -234,6 +259,10 @@ public class DefaultRemoteViewFactory extends
 
   private RContainer createRContainer() {
     return new RContainer();
+  }
+
+  private RCardContainer createRCardContainer() {
+    return new RCardContainer();
   }
 
   private IView<RComponent> createRComponentPropertyView(
@@ -314,9 +343,6 @@ public class DefaultRemoteViewFactory extends
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
     RTableComponent viewComponent = createRTableComponent();
-    viewComponent.setIcon(getIconFactory().getIcon(
-        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -428,7 +454,7 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void showCardInPanel(RComponent cardsPeer, String cardName) {
-    // TODO see how it should be implemented.
+    ((RCardContainer) cardsPeer).setSelectedCard(cardName);
   }
 
   /**
@@ -567,11 +593,18 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void configureFontColorsAndDescription(
-      IViewDescriptor viewDescriptor, Locale locale, IView<RComponent> view) {
-    if (view != null && viewDescriptor.getDescription() != null) {
+  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
+      Locale locale, IView<RComponent> view) {
+    view.getPeer().setLabel(
+        view.getDescriptor().getI18nName(getTranslationProvider(), locale));
+    if (viewDescriptor.getDescription() != null) {
       view.getPeer().setTooltip(
           viewDescriptor.getI18nDescription(getTranslationProvider(), locale));
+    }
+    if (viewDescriptor.getIconImageURL() != null) {
+      view.getPeer().setIcon(
+          getIconFactory().getIcon(viewDescriptor.getIconImageURL(),
+              IIconFactory.SMALL_ICON_SIZE));
     }
   }
 
@@ -580,7 +613,8 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected RComponent createSecurityComponent() {
-    // TODO construct a special component ?
+    // construct a special component ? Not needed. We will test if the component
+    // in the view is null.
     return null;
   }
 
@@ -588,9 +622,10 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithBorder(IView<RComponent> view, Locale locale) {
-    view.getPeer().setLabel(
-        view.getDescriptor().getI18nName(getTranslationProvider(), locale));
+  protected void decorateWithBorder(
+      @SuppressWarnings("unused") IView<RComponent> view,
+      @SuppressWarnings("unused") Locale locale) {
+    // nothing to do on server-side
   }
 
   /**
@@ -717,28 +752,43 @@ public class DefaultRemoteViewFactory extends
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   @Override
   protected ICompositeView<RComponent> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
+    return createGenericGridView(viewDescriptor, actionHandler, locale);
+  }
+
+  private ICompositeView<RComponent> createGenericGridView(
+      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    RContainer viewComponent = createRContainer();
+    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
+    viewComponent.setChildren(childComponents);
+    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
+        viewDescriptor);
+    List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
+
+    for (IViewDescriptor childViewDescriptor : viewDescriptor
+        .getChildViewDescriptors()) {
+      IView<RComponent> childView = createView(childViewDescriptor,
+          actionHandler, locale);
+      childComponents.put(childViewDescriptor.getName(), childView.getPeer());
+      childrenViews.add(childView);
+    }
+    view.setChildren(childrenViews);
+    return view;
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   @Override
   protected ICompositeView<RComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
+    return createGenericGridView(viewDescriptor, actionHandler, locale);
   }
 }

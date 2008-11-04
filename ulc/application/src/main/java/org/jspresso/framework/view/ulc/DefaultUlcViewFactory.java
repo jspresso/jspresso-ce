@@ -212,7 +212,7 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void configureFontColorsAndDescription(
+  protected void finishComponentConfiguration(
       IViewDescriptor viewDescriptor, Locale locale, IView<ULCComponent> view) {
     if (viewDescriptor.getForeground() != null) {
       view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));

@@ -217,7 +217,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
             view.getConnector().addWritabilityGate(gate.clone());
           }
         }
-        configureFontColorsAndDescription(viewDescriptor, locale, view);
+        finishComponentConfiguration(viewDescriptor, locale, view);
         decorateWithActions(viewDescriptor, actionHandler, locale, view);
         decorateWithBorder(view, locale);
       } catch (SecurityException ex) {
@@ -1045,7 +1045,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param view
    *          the raw view.
    */
-  protected abstract void configureFontColorsAndDescription(
+  protected abstract void finishComponentConfiguration(
       IViewDescriptor viewDescriptor, Locale locale, IView<E> view);
 
   /**
