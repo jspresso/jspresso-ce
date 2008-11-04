@@ -1,52 +1,83 @@
 <?xml version="1.0"?>
 
-<project name="jspresso-framework-as3">
+<project
+  name="jspresso-framework-as3">
 
-  <path id="project.classpath">
-    <dirset dir="${basedir}">
-      <include name="**/target/classes" />
+  <path
+    id="project.classpath">
+    <dirset
+      dir="${basedir}">
+      <include
+        name="**/target/classes" />
     </dirset>
   </path>
 
-  <target name="clean">
+  <target
+    name="clean">
     <delete>
-      <fileset dir="src/main/as3">
-        <include name="**/*.as"/> 
-        <exclude name="**/DefaultFlexViewFactory.as"/>
-        <exclude name="**/binding/remote/*.as"/>
+      <fileset
+        dir="src/main/as3">
+        <include
+          name="**/*.as" />
+        <exclude
+          name="**/binding/remote/*.as" />
       </fileset>
     </delete>
   </target>
 
-  <target name="generate.as3" depends="clean">
-    <gas3 outputdir="src/main/as3">
-      <classpath refid="project.classpath" />
-      <fileset dir="remote/components/target/classes">
-        <include name="**/*.class" />
+  <target
+    name="generate.as3"
+    depends="clean">
+    <gas3
+      outputdir="src/main/as3"
+      interfacetemplate="class:org/granite/generator/template/jspressoInterface.gsp"
+      beantemplate="class:org/granite/generator/template/jspressoBean.gsp">
+      <classpath
+        refid="project.classpath" />
+      <fileset
+        dir="remote/components/target/classes">
+        <include
+          name="**/*.class" />
       </fileset>
-      <fileset dir="util/target/classes">
-        <include name="org/jspresso/framework/util/IIconImageURLProvider.class" />
-        <include name="org/jspresso/framework/util/descriptor/*.class" />
+      <fileset
+        dir="util/target/classes">
+        <include
+          name="org/jspresso/framework/util/IIconImageURLProvider.class" />
+        <include
+          name="org/jspresso/framework/util/descriptor/*.class" />
       </fileset>
-      <fileset dir="model/target/classes">
-        <include name="org/jspresso/framework/model/descriptor/**/*Descriptor.class" />
-        <include name="org/jspresso/framework/model/descriptor/EDateType.class" />
+      <fileset
+        dir="model/target/classes">
+        <include
+          name="org/jspresso/framework/model/descriptor/**/*Descriptor.class" />
+        <include
+          name="org/jspresso/framework/model/descriptor/EDateType.class" />
       </fileset>
-      <fileset dir="view/target/classes">
-        <include name="**/*.class" />
-        <exclude name="**/*Helper.class" />
-        <exclude name="**/*Exception.class" />
-        <exclude name="**/AbstractViewFactory.class" />
-        <exclude name="**/AbstractIconFactory.class" />
-        <exclude name="**/*$*.class" />
+      <fileset
+        dir="view/target/classes">
+        <include
+          name="**/*.class" />
+        <exclude
+          name="**/*Helper.class" />
+        <exclude
+          name="**/*Exception.class" />
+        <exclude
+          name="**/AbstractViewFactory.class" />
+        <exclude
+          name="**/AbstractIconFactory.class" />
+        <exclude
+          name="**/*$*.class" />
       </fileset>
-      <fileset dir="binding/target/classes">
-        <include name="**/I*Connector.class" />
-        <exclude name="**/model/**/*.class" />
+      <fileset
+        dir="binding/target/classes">
+        <include
+          name="**/I*Connector.class" />
+        <exclude
+          name="**/model/**/*.class" />
       </fileset>
-      <!--<fileset dir="remote/application/target/classes">
-        <include name="**/binding/remote/*.class" />
-      </fileset>-->
+      <!--
+        <fileset dir="remote/application/target/classes"> <include name="**/binding/remote/*.class" /> </fileset>
+      -->
     </gas3>
   </target>
 </project>
