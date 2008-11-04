@@ -18,12 +18,9 @@
  */
 package org.jspresso.framework.util.remote;
 
-import java.io.Serializable;
-
-import org.jspresso.framework.util.uid.RandomGUID;
 
 /**
- * An object remote server peer.
+ * Interface for remote server peers.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,23 +38,13 @@ import org.jspresso.framework.util.uid.RandomGUID;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RemoteServerPeer implements Serializable, IRemoteServerPeer {
+public interface IRemoteServerPeer {
 
-  private static final long serialVersionUID = 8820089350994062310L;
-  private String            uid;
-  
   /**
-   * Constructs a new <code>RemoteServerPeer</code> instance generating its UID.
+   * Gets the uid.
    * 
+   * @return the uid.
    */
-  protected RemoteServerPeer() {
-    uid = new RandomGUID().toString();
-  }
+  String getUid();
 
-  /**
-   * {@inheritDoc}
-   */
-  public String getUid() {
-    return uid;
-  }
 }
