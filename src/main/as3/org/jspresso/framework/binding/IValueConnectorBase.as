@@ -7,16 +7,12 @@
 
 package org.jspresso.framework.binding {
 
-//    import org.jspresso.framework.util.exception.IExceptionHandler;
-
     public interface IValueConnectorBase extends IConnector {
 
         function get connectorPath():String;
 
         function set connectorValue(value:Object):void;
         function get connectorValue():Object;
-
-//        function set exceptionHandler(value:IExceptionHandler):void;
 
         function set locallyReadable(value:Boolean):void;
 

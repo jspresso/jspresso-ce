@@ -16,12 +16,14 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.gui.remote;
+package org.jspresso.framework.util.remote;
 
-import java.util.Map;
+import java.io.Serializable;
+
+import org.jspresso.framework.util.uid.RandomGUID;
 
 /**
- * A container with stacked children views.
+ * An object remote server peer.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,48 +41,35 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RCardContainer extends RContainer {
+public abstract class RemoteServerPeer implements Serializable {
 
-  private static final long serialVersionUID = 9088840116329588429L;
-
-  private Map<String, String> cardMap;
-  private String              selectedCard;
-
+  private static final long serialVersionUID = 8820089350994062310L;
+  private String            uid;
+  
   /**
-   * Sets the selectedCard.
+   * Constructs a new <code>RemoteServerPeer</code> instance generating its UID.
    * 
-   * @param selectedCard
-   *          the selectedCard to set.
    */
-  public void setSelectedCard(String selectedCard) {
-    this.selectedCard = selectedCard;
+  protected RemoteServerPeer() {
+    uid = new RandomGUID().toString();
   }
 
   /**
-   * Gets the selectedCard.
+   * Sets the uid.
    * 
-   * @return the selectedCard.
+   * @param uid
+   *          the uid to set.
    */
-  public String getSelectedCard() {
-    return selectedCard;
+  public void setUid(String uid) {
+    this.uid = uid;
   }
 
   /**
-   * Sets the cardMap.
+   * Gets the uid.
    * 
-   * @param cardMap the cardMap to set.
+   * @return the uid.
    */
-  public void setCardMap(Map<String, String> cardMap) {
-    this.cardMap = cardMap;
+  public String getUid() {
+    return uid;
   }
-
-  /**
-   * Gets the cardMap.
-   * 
-   * @return the cardMap.
-   */
-  public Map<String, String> getCardMap() {
-    return cardMap;
-  }
-
 }

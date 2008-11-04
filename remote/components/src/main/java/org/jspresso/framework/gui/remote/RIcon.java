@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import org.jspresso.framework.util.remote.RemoteServerPeer;
 
 /**
  * This class is the generic server peer of a client GUI icon.
@@ -38,7 +39,66 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RIcon {
+public class RIcon extends RemoteServerPeer {
 
-  // Empty as of now.
+  private static final long serialVersionUID = -6387488983512746220L;
+
+  private String imageUrlSpec;
+  private int width;
+  private int height;
+  
+  /**
+   * Gets the width.
+   * 
+   * @return the width.
+   */
+  public int getWidth() {
+    return width;
+  }
+  
+  /**
+   * Sets the width.
+   * 
+   * @param width the width to set.
+   */
+  public void setWidth(int width) {
+    this.width = width;
+  }
+  
+  /**
+   * Gets the height.
+   * 
+   * @return the height.
+   */
+  public int getHeight() {
+    return height;
+  }
+  
+  /**
+   * Sets the height.
+   * 
+   * @param height the height to set.
+   */
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  /**
+   * Sets the imageUrlSpec.
+   * 
+   * @param imageUrlSpec the imageUrlSpec to set.
+   */
+  public void setImageUrlSpec(String imageUrlSpec) {
+    this.imageUrlSpec = imageUrlSpec;
+  }
+
+  /**
+   * Gets the imageUrlSpec.
+   * 
+   * @return the imageUrlSpec.
+   */
+  public String getImageUrlSpec() {
+    return imageUrlSpec;
+  }
+  
 }

@@ -16,12 +16,15 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.gui.remote;
+package org.jspresso.framework.view.remote;
 
-import java.util.Map;
+import java.awt.Dimension;
+
+import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.view.AbstractIconFactory;
 
 /**
- * A container with stacked children views.
+ * A factory to create (and cache) remote icons.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,48 +42,20 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RCardContainer extends RContainer {
-
-  private static final long serialVersionUID = 9088840116329588429L;
-
-  private Map<String, String> cardMap;
-  private String              selectedCard;
+public class RemoteIconFactory extends AbstractIconFactory<RIcon> {
 
   /**
-   * Sets the selectedCard.
-   * 
-   * @param selectedCard
-   *          the selectedCard to set.
+   * {@inheritDoc}
    */
-  public void setSelectedCard(String selectedCard) {
-    this.selectedCard = selectedCard;
+  @Override
+  protected RIcon createIcon(String urlSpec, Dimension iconSize) {
+    if (urlSpec != null) {
+      RIcon imageIcon = new RIcon();
+      imageIcon.setImageUrlSpec(urlSpec);
+      imageIcon.setWidth((int) iconSize.getWidth());
+      imageIcon.setHeight((int) iconSize.getHeight());
+      return imageIcon;
+    }
+    return null;
   }
-
-  /**
-   * Gets the selectedCard.
-   * 
-   * @return the selectedCard.
-   */
-  public String getSelectedCard() {
-    return selectedCard;
-  }
-
-  /**
-   * Sets the cardMap.
-   * 
-   * @param cardMap the cardMap to set.
-   */
-  public void setCardMap(Map<String, String> cardMap) {
-    this.cardMap = cardMap;
-  }
-
-  /**
-   * Gets the cardMap.
-   * 
-   * @return the cardMap.
-   */
-  public Map<String, String> getCardMap() {
-    return cardMap;
-  }
-
 }

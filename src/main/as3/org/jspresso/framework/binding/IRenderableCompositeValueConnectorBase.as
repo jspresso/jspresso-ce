@@ -9,6 +9,12 @@ package org.jspresso.framework.binding {
 
     public interface IRenderableCompositeValueConnectorBase extends ICompositeValueConnector {
 
+        function get displayDescription():String;
+
+        function get displayIconImageUrl():String;
+
+        function get displayValue():String;
+
         function get renderingConnector():IValueConnector;
     }
 }

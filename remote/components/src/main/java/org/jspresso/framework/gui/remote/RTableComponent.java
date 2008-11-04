@@ -41,6 +41,8 @@ import java.util.List;
  */
 public class RTableComponent extends RComponent {
 
+  private static final long serialVersionUID = -3435499030289622895L;
+
   private List<RComponent> columns;
 
   /**

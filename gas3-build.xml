@@ -20,6 +20,9 @@
   <target name="generate.as3" depends="clean">
     <gas3 outputdir="src/main/as3">
       <classpath refid="project.classpath" />
+      <fileset dir="remote/components/target/classes">
+        <include name="**/*.class" />
+      </fileset>
       <fileset dir="util/target/classes">
         <include name="org/jspresso/framework/util/IIconImageURLProvider.class" />
         <include name="org/jspresso/framework/util/descriptor/*.class" />

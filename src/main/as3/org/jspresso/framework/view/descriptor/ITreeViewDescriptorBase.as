@@ -7,7 +7,11 @@
 
 package org.jspresso.framework.view.descriptor {
 
+    import org.jspresso.framework.util.IIconImageURLProvider;
+
     public interface ITreeViewDescriptorBase extends IViewDescriptor {
+
+        function get iconImageURLProvider():IIconImageURLProvider;
 
         function get maxDepth():int;
 

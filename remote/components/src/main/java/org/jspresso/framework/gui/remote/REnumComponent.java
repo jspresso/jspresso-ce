@@ -42,6 +42,8 @@ import java.util.Map;
  */
 public class REnumComponent extends RComponent {
 
+  private static final long serialVersionUID = 4314490166693887426L;
+
   private Map<String, String> renderingTranslations;
   private Map<String, RIcon> renderingIcons;
 

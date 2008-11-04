@@ -20,6 +20,8 @@ package org.jspresso.framework.gui.remote;
 
 import java.util.List;
 
+import org.jspresso.framework.util.remote.RemoteServerPeer;
+
 /**
  * This class is the generic server peer of a client GUI component.
  * <p>
@@ -39,7 +41,9 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RComponent {
+public class RComponent extends RemoteServerPeer {
+
+  private static final long serialVersionUID = -2002874890761059387L;
 
   private String        label;
   private String        tooltip;

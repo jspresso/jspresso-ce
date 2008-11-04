@@ -42,6 +42,8 @@ import java.util.Map;
  */
 public class RContainer extends RComponent {
   
+  private static final long serialVersionUID = -3420270353783898032L;
+
   private Map<String, RComponent> children;
 
   /**

@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import org.jspresso.framework.util.remote.RemoteServerPeer;
+
 /**
  * This class is the generic server peer of a client GUI action.
  * <p>
@@ -37,11 +39,15 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RAction {
+public class RAction extends RemoteServerPeer {
 
-  private String name;
-  private String description;
-  private RIcon  icon;
+  private static final long serialVersionUID = -7894714395388180980L;
+
+  private String  name;
+  private String  description;
+  private RIcon   icon;
+  private String  mnemonicAsString;
+  private boolean enabled;
 
   /**
    * Gets the name.
@@ -98,6 +104,43 @@ public class RAction {
    */
   public void setIcon(RIcon icon) {
     this.icon = icon;
+  }
+
+  /**
+   * Sets the mnemonicAsString.
+   * 
+   * @param mnemonicAsString
+   *          the mnemonicAsString to set.
+   */
+  public void setMnemonicAsString(String mnemonicAsString) {
+    this.mnemonicAsString = mnemonicAsString;
+  }
+
+  /**
+   * Gets the mnemonicAsString.
+   * 
+   * @return the mnemonicAsString.
+   */
+  public String getMnemonicAsString() {
+    return mnemonicAsString;
+  }
+
+  /**
+   * Sets the enabled.
+   * 
+   * @param enabled the enabled to set.
+   */
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  /**
+   * Gets the enabled.
+   * 
+   * @return the enabled.
+   */
+  public boolean isEnabled() {
+    return enabled;
   }
 
 }

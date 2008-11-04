@@ -29,6 +29,9 @@ package org.jspresso.framework.view.descriptor.basic {
         public function set iconImageURLProvider(value:IIconImageURLProvider):void {
             _iconImageURLProvider = value;
         }
+        public function get iconImageURLProvider():IIconImageURLProvider {
+            return _iconImageURLProvider;
+        }
 
         public function set maxDepth(value:int):void {
             _maxDepth = value;
