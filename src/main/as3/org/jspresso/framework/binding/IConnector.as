@@ -19,7 +19,7 @@ package org.jspresso.framework.binding {
         function set id(value:String):void;
         function get id():String;
 
-        function set uid(value:String):void;
-        function get uid():String;
+        function set guid(value:String):void;
+        function get guid():String;
     }
 }

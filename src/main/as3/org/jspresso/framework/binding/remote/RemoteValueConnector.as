@@ -21,7 +21,7 @@ package org.jspresso.framework.binding.remote {
         private var _connectorValue:Object;
         private var _id:String;
         private var _readable:Boolean;
-        private var _uid:String;
+        private var _guid:String;
         private var _writable:Boolean;
 
         public function set connectorValue(value:Object):void {
@@ -45,11 +45,11 @@ package org.jspresso.framework.binding.remote {
             return _readable;
         }
 
-        public function set uid(value:String):void {
-            _uid = value;
+        public function set guid(value:String):void {
+            _guid = value;
         }
-        public function get uid():String {
-            return _uid;
+        public function get guid():String {
+            return _guid;
         }
 
         public function set writable(value:Boolean):void {
@@ -63,7 +63,7 @@ package org.jspresso.framework.binding.remote {
             _connectorValue = input.readObject() as Object;
             _id = input.readObject() as String;
             _readable = input.readObject() as Boolean;
-            _uid = input.readObject() as String;
+            _guid = input.readObject() as String;
             _writable = input.readObject() as Boolean;
         }
 
@@ -71,7 +71,7 @@ package org.jspresso.framework.binding.remote {
             output.writeObject(_connectorValue);
             output.writeObject(_id);
             output.writeObject(_readable);
-            output.writeObject(_uid);
+            output.writeObject(_guid);
             output.writeObject(_writable);
         }
     }

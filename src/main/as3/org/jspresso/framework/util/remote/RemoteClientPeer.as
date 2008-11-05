@@ -23,18 +23,18 @@ package org.jspresso.framework.util.remote {
     [RemoteClass(alias="org.jspresso.framework.util.remote.RemoteServerPeer")]
     public class RemoteClientPeer implements IExternalizable, IRemoteClientPeer {
 
-        private var _uid:String;
+        private var _guid:String;
 
-        public function get uid():String {
-            return _uid;
+        public function get guid():String {
+            return _guid;
         }
 
         public function readExternal(input:IDataInput):void {
-            _uid = input.readObject() as String;
+            _guid = input.readObject() as String;
         }
 
         public function writeExternal(output:IDataOutput):void {
-            output.writeObject(_uid);
+            output.writeObject(_guid);
         }
     }
 }
