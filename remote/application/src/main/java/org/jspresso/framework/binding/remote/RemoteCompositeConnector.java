@@ -51,8 +51,9 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteCompositeConnector extends BasicCompositeConnector implements
     IRemotePeer, IRemoteStateOwner {
 
-  private IGUIDGenerator guidGenerator;
-  private String         guid;
+  private IGUIDGenerator            guidGenerator;
+  private String                    guid;
+  private RemoteCompositeValueState state;
 
   /**
    * Constructs a new <code>RemoteCompositeConnector</code> instance.
@@ -101,7 +102,9 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    */
   @Override
   public RemoteCompositeValueState getState() {
-    RemoteCompositeValueState state = new RemoteCompositeValueState(getGuid());
+    if (state == null) {
+      state = new RemoteCompositeValueState(getGuid());
+    }
     state.setValue(getDisplayValue());
     state.setReadable(isReadable());
     state.setWritable(isWritable());

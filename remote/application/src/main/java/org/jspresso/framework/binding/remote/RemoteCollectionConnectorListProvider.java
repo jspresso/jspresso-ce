@@ -52,8 +52,9 @@ public class RemoteCollectionConnectorListProvider extends
     BasicCollectionConnectorListProvider implements IRemotePeer,
     IRemoteStateOwner {
 
-  private IGUIDGenerator guidGenerator;
-  private String         guid;
+  private IGUIDGenerator            guidGenerator;
+  private String                    guid;
+  private RemoteCompositeValueState state;
 
   /**
    * Constructs a new <code>RemoteCollectionConnectorListProvider</code>
@@ -104,7 +105,9 @@ public class RemoteCollectionConnectorListProvider extends
    */
   @Override
   public RemoteCompositeValueState getState() {
-    RemoteCompositeValueState state = new RemoteCompositeValueState(getGuid());
+    if (state == null) {
+      state = new RemoteCompositeValueState(getGuid());
+    }
     state.setValue(getDisplayValue());
     state.setReadable(isReadable());
     state.setWritable(isWritable());
