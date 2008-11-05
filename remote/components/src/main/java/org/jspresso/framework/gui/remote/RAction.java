@@ -41,8 +41,6 @@ import org.jspresso.framework.util.remote.RemoteServerPeer;
  */
 public class RAction extends RemoteServerPeer {
 
-  private static final long serialVersionUID = -7894714395388180980L;
-
   private String            name;
   private String            description;
   private RIcon             icon;

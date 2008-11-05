@@ -43,8 +43,6 @@ import org.jspresso.framework.util.remote.RemoteServerPeer;
  */
 public class RComponent extends RemoteServerPeer {
 
-  private static final long serialVersionUID = -2002874890761059387L;
-
   private String        label;
   private String        tooltip;
   private RIcon         icon;

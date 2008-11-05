@@ -41,8 +41,6 @@ import java.util.Map;
  */
 public class RCardContainer extends RContainer {
 
-  private static final long serialVersionUID = 9088840116329588429L;
-
   private Map<String, String> cardMap;
   private String              selectedCard;
 

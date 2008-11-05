@@ -41,8 +41,6 @@ import org.jspresso.framework.util.remote.RemoteServerPeer;
  */
 public class RIcon extends RemoteServerPeer {
 
-  private static final long serialVersionUID = -6387488983512746220L;
-
   private String imageUrlSpec;
   private int width;
   private int height;

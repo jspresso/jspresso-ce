@@ -41,14 +41,13 @@ import java.util.List;
  */
 public class RTableComponent extends RComponent {
 
-  private static final long serialVersionUID = -3435499030289622895L;
-
   private List<RComponent> columns;
 
   /**
    * Constructs a new <code>RTableComponent</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
   public RTableComponent(String guid) {
     super(guid);
@@ -57,7 +56,8 @@ public class RTableComponent extends RComponent {
   /**
    * Sets the columns.
    * 
-   * @param columns the columns to set.
+   * @param columns
+   *          the columns to set.
    */
   public void setColumns(List<RComponent> columns) {
     this.columns = columns;

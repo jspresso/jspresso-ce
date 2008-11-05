@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.util.remote;
 
-import java.io.Serializable;
 
 /**
  * An object remote server peer.
@@ -39,9 +38,8 @@ import java.io.Serializable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RemoteServerPeer implements Serializable, IRemoteServerPeer {
+public abstract class RemoteServerPeer implements IRemoteServerPeer {
 
-  private static final long serialVersionUID = 8820089350994062310L;
   private String            guid;
   
   /**
