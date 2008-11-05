@@ -19,8 +19,6 @@
         dir="src/main/as3">
         <include
           name="**/*.as" />
-        <exclude
-          name="**/binding/remote/*.as" />
       </fileset>
     </delete>
   </target>
@@ -75,9 +73,6 @@
         <exclude
           name="**/model/**/*.class" />
       </fileset>
-      <!--
-        <fileset dir="remote/application/target/classes"> <include name="**/binding/remote/*.class" /> </fileset>
-      -->
     </gas3>
   </target>
 </project>

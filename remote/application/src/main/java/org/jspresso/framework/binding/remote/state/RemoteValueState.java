@@ -51,7 +51,7 @@ public class RemoteValueState extends RemotePeer {
    * @param guid
    *          the state guid.
    */
-  protected RemoteValueState(String guid) {
+  public RemoteValueState(String guid) {
     super(guid);
   }
 

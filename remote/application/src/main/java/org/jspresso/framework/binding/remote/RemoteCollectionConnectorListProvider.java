@@ -18,7 +18,15 @@
  */
 package org.jspresso.framework.binding.remote;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnectorListProvider;
+import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
+import org.jspresso.framework.binding.remote.state.RemoteCompositeValueState;
+import org.jspresso.framework.binding.remote.state.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
@@ -42,10 +50,11 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @author Vincent Vandenschrick
  */
 public class RemoteCollectionConnectorListProvider extends
-    BasicCollectionConnectorListProvider implements IRemotePeer {
+    BasicCollectionConnectorListProvider implements IRemotePeer,
+    IRemoteStateOwner {
 
   private IGUIDGenerator guidGenerator;
-  private String                     guid;
+  private String         guid;
 
   /**
    * Constructs a new <code>RemoteCollectionConnectorListProvider</code>
@@ -56,7 +65,8 @@ public class RemoteCollectionConnectorListProvider extends
    * @param guidGenerator
    *          the guid generator.
    */
-  public RemoteCollectionConnectorListProvider(String id, IGUIDGenerator guidGenerator) {
+  public RemoteCollectionConnectorListProvider(String id,
+      IGUIDGenerator guidGenerator) {
     super(id);
     this.guid = guidGenerator.generateGUID();
     this.guidGenerator = guidGenerator;
@@ -88,5 +98,26 @@ public class RemoteCollectionConnectorListProvider extends
         .clone(newConnectorId);
     clonedConnector.guid = guidGenerator.generateGUID();
     return clonedConnector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteCompositeValueState getState() {
+    RemoteCompositeValueState state = new RemoteCompositeValueState(getGuid());
+    state.setValue(getDisplayValue());
+    state.setReadable(isReadable());
+    state.setWritable(isWritable());
+    state.setDescription(getDisplayDescription());
+    state.setIconImageUrl(getDisplayIconImageUrl());
+    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+    for (ICollectionConnector childConnector : getCollectionConnectors()) {
+      if (childConnector instanceof IRemoteStateOwner) {
+        children.add(((IRemoteStateOwner) childConnector).getState());
+      }
+    }
+    state.setChildren(children);
+    return state;
   }
 }

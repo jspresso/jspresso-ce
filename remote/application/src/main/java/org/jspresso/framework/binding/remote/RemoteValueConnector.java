@@ -19,6 +19,8 @@
 package org.jspresso.framework.binding.remote;
 
 import org.jspresso.framework.binding.basic.BasicValueConnector;
+import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
+import org.jspresso.framework.binding.remote.state.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
@@ -42,10 +44,10 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @author Vincent Vandenschrick
  */
 public class RemoteValueConnector extends BasicValueConnector implements
-    IRemotePeer {
+    IRemotePeer, IRemoteStateOwner {
 
   private IGUIDGenerator guidGenerator;
-  private String  guid;
+  private String         guid;
 
   /**
    * Constructs a new <code>RemoteValueConnector</code> instance.
@@ -87,5 +89,17 @@ public class RemoteValueConnector extends BasicValueConnector implements
         .clone(newConnectorId);
     clonedConnector.guid = guidGenerator.generateGUID();
     return clonedConnector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteValueState getState() {
+    RemoteValueState state = new RemoteValueState(getGuid());
+    state.setValue(getConnectorValue());
+    state.setReadable(isReadable());
+    state.setWritable(isWritable());
+    return state;
   }
 }

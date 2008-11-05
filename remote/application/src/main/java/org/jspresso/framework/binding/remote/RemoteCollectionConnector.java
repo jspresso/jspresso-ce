@@ -18,9 +18,16 @@
  */
 package org.jspresso.framework.binding.remote;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnector;
+import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
+import org.jspresso.framework.binding.remote.state.RemoteCompositeValueState;
+import org.jspresso.framework.binding.remote.state.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
@@ -44,7 +51,7 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @author Vincent Vandenschrick
  */
 public class RemoteCollectionConnector extends BasicCollectionConnector
-    implements IRemotePeer {
+    implements IRemotePeer, IRemoteStateOwner {
 
   private IGUIDGenerator guidGenerator;
   private String         guid;
@@ -95,5 +102,27 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
         .clone(newConnectorId);
     clonedConnector.guid = guidGenerator.generateGUID();
     return clonedConnector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteCompositeValueState getState() {
+    RemoteCompositeValueState state = new RemoteCompositeValueState(getGuid());
+    state.setValue(getDisplayValue());
+    state.setReadable(isReadable());
+    state.setWritable(isWritable());
+    state.setDescription(getDisplayDescription());
+    state.setIconImageUrl(getDisplayIconImageUrl());
+    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+    for (int i = 0; i < getChildConnectorCount(); i++) {
+      IValueConnector childConnector = getChildConnector(i);
+      if (childConnector instanceof IRemoteStateOwner) {
+        children.add(((IRemoteStateOwner) childConnector).getState());
+      }
+    }
+    state.setChildren(children);
+    return state;
   }
 }

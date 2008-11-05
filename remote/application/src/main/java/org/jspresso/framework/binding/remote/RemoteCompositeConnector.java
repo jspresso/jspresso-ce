@@ -18,7 +18,14 @@
  */
 package org.jspresso.framework.binding.remote;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCompositeConnector;
+import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
+import org.jspresso.framework.binding.remote.state.RemoteCompositeValueState;
+import org.jspresso.framework.binding.remote.state.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
@@ -42,10 +49,10 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @author Vincent Vandenschrick
  */
 public class RemoteCompositeConnector extends BasicCompositeConnector implements
-    IRemotePeer {
-  
+    IRemotePeer, IRemoteStateOwner {
+
   private IGUIDGenerator guidGenerator;
-  private String guid;
+  private String         guid;
 
   /**
    * Constructs a new <code>RemoteCompositeConnector</code> instance.
@@ -61,7 +68,6 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
     this.guidGenerator = guidGenerator;
   }
 
-  
   /**
    * Gets the guid.
    * 
@@ -88,5 +94,27 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
         .clone(newConnectorId);
     clonedConnector.guid = guidGenerator.generateGUID();
     return clonedConnector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteCompositeValueState getState() {
+    RemoteCompositeValueState state = new RemoteCompositeValueState(getGuid());
+    state.setValue(getDisplayValue());
+    state.setReadable(isReadable());
+    state.setWritable(isWritable());
+    state.setDescription(getDisplayDescription());
+    state.setIconImageUrl(getDisplayIconImageUrl());
+    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+    for (String connectorKey : getChildConnectorKeys()) {
+      IValueConnector childConnector = getChildConnector(connectorKey);
+      if (childConnector instanceof IRemoteStateOwner) {
+        children.add(((IRemoteStateOwner) childConnector).getState());
+      }
+    }
+    state.setChildren(children);
+    return state;
   }
 }

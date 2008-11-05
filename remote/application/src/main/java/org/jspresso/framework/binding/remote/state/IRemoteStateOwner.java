@@ -18,10 +18,9 @@
  */
 package org.jspresso.framework.binding.remote.state;
 
-import java.util.List;
 
 /**
- * The state of a composite remote value.
+ * Implemented by classes that are remote value state aware.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,79 +38,12 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteCompositeValueState extends RemoteValueState {
-
-  private List<RemoteValueState> children;
-  private String description;
-  private String iconImageUrl;
-
-  /**
-   * Constructs a new <code>RemoteCompositeValueState</code> instance.
-   * 
-   * @param guid
-   *          the state guid.
-   */
-  public RemoteCompositeValueState(String guid) {
-    super(guid);
-  }
-
+public interface IRemoteStateOwner {
   
   /**
-   * Gets the children.
+   * Extracts the state from the state owner.
    * 
-   * @return the children.
+   * @return the state value object.
    */
-  public List<RemoteValueState> getChildren() {
-    return children;
-  }
-
-  
-  /**
-   * Sets the children.
-   * 
-   * @param children the children to set.
-   */
-  public void setChildren(List<RemoteValueState> children) {
-    this.children = children;
-  }
-
-
-  /**
-   * Gets the description.
-   * 
-   * @return the description.
-   */
-  public String getDescription() {
-    return description;
-  }
-
-
-  /**
-   * Sets the description.
-   * 
-   * @param description the description to set.
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-
-  /**
-   * Gets the iconImageUrl.
-   * 
-   * @return the iconImageUrl.
-   */
-  public String getIconImageUrl() {
-    return iconImageUrl;
-  }
-
-
-  /**
-   * Sets the iconImageUrl.
-   * 
-   * @param iconImageUrl the iconImageUrl to set.
-   */
-  public void setIconImageUrl(String iconImageUrl) {
-    this.iconImageUrl = iconImageUrl;
-  }
+  RemoteValueState getState();
 }
