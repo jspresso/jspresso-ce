@@ -10,15 +10,16 @@ package org.jspresso.framework.binding.remote {
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
     import flash.utils.IExternalizable;
+    
     import org.jspresso.framework.binding.ICollectionConnector;
+    import org.jspresso.framework.binding.ICollectionConnectorProvider;
     import org.jspresso.framework.util.remote.IRemoteServerPeer;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.binding.remote.RemoteCollectionConnectorProvider")]
-    public class RemoteCollectionConnectorProvider implements IExternalizable, IRemoteServerPeer {
+    public class RemoteCollectionConnectorProvider extends RemoteCompositeConnector implements ICollectionConnectorProvider, IExternalizable, IRemoteServerPeer {
 
         private var _collectionConnector:ICollectionConnector;
-        private var _uid:String;
 
         public function set collectionConnector(value:ICollectionConnector):void {
             _collectionConnector = value;
@@ -27,21 +28,12 @@ package org.jspresso.framework.binding.remote {
             return _collectionConnector;
         }
 
-        public function set uid(value:String):void {
-            _uid = value;
-        }
-        public function get uid():String {
-            return _uid;
-        }
-
-        public function readExternal(input:IDataInput):void {
+        override public function readExternal(input:IDataInput):void {
             _collectionConnector = input.readObject() as ICollectionConnector;
-            _uid = input.readObject() as String;
         }
 
-        public function writeExternal(output:IDataOutput):void {
+        override public function writeExternal(output:IDataOutput):void {
             output.writeObject(_collectionConnector);
-            output.writeObject(_uid);
         }
     }
 }

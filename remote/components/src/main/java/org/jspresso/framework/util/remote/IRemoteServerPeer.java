@@ -41,10 +41,10 @@ package org.jspresso.framework.util.remote;
 public interface IRemoteServerPeer {
 
   /**
-   * Gets the uid.
+   * Gets the guid.
    * 
-   * @return the uid.
+   * @return the guid.
    */
-  String getUid();
+  String getGuid();
 
 }

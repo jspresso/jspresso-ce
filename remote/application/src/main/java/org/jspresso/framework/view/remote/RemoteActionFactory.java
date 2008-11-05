@@ -73,7 +73,7 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
 
   private IIconFactory<RIcon>  iconFactory;
   private ITranslationProvider translationProvider;
-  private IGUIDGenerator       uidGenerator;
+  private IGUIDGenerator       guidGenerator;
 
   /**
    * {@inheritDoc}
@@ -156,7 +156,7 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
       @SuppressWarnings("unused") RComponent sourceComponent,
       @SuppressWarnings("unused") IModelDescriptor modelDescriptor,
       @SuppressWarnings("unused") IValueConnector viewConnector, Locale locale) {
-    RAction remoteAction = new RAction(uidGenerator.generateGUID());
+    RAction remoteAction = new RAction(guidGenerator.generateGUID());
     remoteAction.setName(action.getI18nName(translationProvider, locale));
     String i18nDescription = action.getI18nDescription(translationProvider,
         locale);
@@ -222,11 +222,11 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
   }
 
   /**
-   * Sets the uidGenerator.
+   * Sets the guidGenerator.
    * 
-   * @param uidGenerator the uidGenerator to set.
+   * @param guidGenerator the guidGenerator to set.
    */
-  public void setUidGenerator(IGUIDGenerator uidGenerator) {
-    this.uidGenerator = uidGenerator;
+  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+    this.guidGenerator = guidGenerator;
   }
 }

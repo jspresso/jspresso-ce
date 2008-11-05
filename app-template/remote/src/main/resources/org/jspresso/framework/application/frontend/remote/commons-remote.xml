@@ -37,7 +37,8 @@
   <bean
     id="chooseActionOkFrontAction"
     class="org.jspresso.framework.application.frontend.action.remote.lov.OkChooseComponentAction">
-    <property name="nextAction">
+    <property
+      name="nextAction">
       <bean
         class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
     </property>
@@ -96,13 +97,21 @@
     id="iconFactory"
     parent="abstractIconFactory"
     class="org.jspresso.framework.view.remote.RemoteIconFactory"
-    scope="prototype" />
+    scope="prototype">
+    <property
+      name="guidGenerator"
+      ref="guidGenerator" />
+  </bean>
 
   <bean
     id="actionFactory"
     parent="abstractActionFactory"
     class="org.jspresso.framework.view.remote.RemoteActionFactory"
-    scope="prototype" />
+    scope="prototype">
+    <property
+      name="guidGenerator"
+      ref="guidGenerator" />
+  </bean>
 
   <bean
     id="abstractModalDialogAction"
@@ -184,6 +193,9 @@
     class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
     parent="abstractViewFactory"
     scope="prototype">
+    <property
+      name="guidGenerator"
+      ref="guidGenerator" />
   </bean>
 
   <!--

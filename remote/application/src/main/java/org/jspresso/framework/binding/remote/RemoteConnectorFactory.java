@@ -50,14 +50,14 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  */
 public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   
-  private IGUIDGenerator uidGenerator;
+  private IGUIDGenerator guidGenerator;
 
   /**
    * {@inheritDoc}
    */
   public ICollectionConnector createCollectionConnector(String id,
       IMvcBinder binder, ICompositeValueConnector childConnectorPrototype) {
-    return new RemoteCollectionConnector(id, binder, childConnectorPrototype, uidGenerator);
+    return new RemoteCollectionConnector(id, binder, childConnectorPrototype, guidGenerator);
   }
 
   /**
@@ -65,7 +65,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
    */
   public IRenderableCompositeValueConnector createCompositeValueConnector(
       String id, String renderingConnectorId) {
-    RemoteCompositeConnector connector = new RemoteCompositeConnector(id, uidGenerator);
+    RemoteCompositeConnector connector = new RemoteCompositeConnector(id, guidGenerator);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     return connector;
   }
@@ -76,7 +76,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   public IConfigurableCollectionConnectorListProvider createConfigurableCollectionConnectorListProvider(
       String id, String renderingConnectorId) {
     RemoteCollectionConnectorListProvider connector = new RemoteCollectionConnectorListProvider(
-        id, uidGenerator);
+        id, guidGenerator);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     return connector;
   }
@@ -87,7 +87,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   public IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
       String id, String renderingConnectorId) {
     RemoteCollectionConnectorProvider connector = new RemoteCollectionConnectorProvider(
-        id, uidGenerator);
+        id, guidGenerator);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     return connector;
   }
@@ -96,7 +96,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
    * {@inheritDoc}
    */
   public IValueConnector createValueConnector(String id) {
-    return new RemoteValueConnector(id, uidGenerator);
+    return new RemoteValueConnector(id, guidGenerator);
   }
 
   private void createAndAddRenderingChildConnector(
@@ -112,11 +112,11 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
 
   
   /**
-   * Sets the uidGenerator.
+   * Sets the guidGenerator.
    * 
-   * @param uidGenerator the uidGenerator to set.
+   * @param guidGenerator the guidGenerator to set.
    */
-  public void setUidGenerator(IGUIDGenerator uidGenerator) {
-    this.uidGenerator = uidGenerator;
+  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+    this.guidGenerator = guidGenerator;
   }
 }

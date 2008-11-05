@@ -50,10 +50,10 @@ public class REnumComponent extends RComponent {
   /**
    * Constructs a new <code>REnumComponent</code> instance.
    * 
-   * @param uid the uid
+   * @param guid the guid
    */
-  public REnumComponent(String uid) {
-    super(uid);
+  public REnumComponent(String guid) {
+    super(guid);
   }
 
   /**

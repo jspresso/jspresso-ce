@@ -46,8 +46,8 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteCollectionConnector extends BasicCollectionConnector
     implements IRemoteServerPeer {
 
-  private IGUIDGenerator uidGenerator;
-  private String         uid;
+  private IGUIDGenerator guidGenerator;
+  private String         guid;
 
   /**
    * Constructs a new <code>RemoteCollectionConnector</code> instance.
@@ -58,24 +58,24 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    *          the MVC binder.
    * @param childConnectorPrototype
    *          the prototype of connector children.
-   * @param uidGenerator
-   *          the uid generator.
+   * @param guidGenerator
+   *          the guid generator.
    */
   public RemoteCollectionConnector(String id, IMvcBinder binder,
       ICompositeValueConnector childConnectorPrototype,
-      IGUIDGenerator uidGenerator) {
+      IGUIDGenerator guidGenerator) {
     super(id, binder, childConnectorPrototype);
-    this.uid = uidGenerator.generateGUID();
-    this.uidGenerator = uidGenerator;
+    this.guid = guidGenerator.generateGUID();
+    this.guidGenerator = guidGenerator;
   }
 
   /**
-   * Gets the uid.
+   * Gets the guid.
    * 
-   * @return the uid.
+   * @return the guid.
    */
-  public String getUid() {
-    return uid;
+  public String getGuid() {
+    return guid;
   }
 
   /**
@@ -93,7 +93,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   public RemoteCollectionConnector clone(String newConnectorId) {
     RemoteCollectionConnector clonedConnector = (RemoteCollectionConnector) super
         .clone(newConnectorId);
-    clonedConnector.uid = uidGenerator.generateGUID();
+    clonedConnector.guid = guidGenerator.generateGUID();
     return clonedConnector;
   }
 }

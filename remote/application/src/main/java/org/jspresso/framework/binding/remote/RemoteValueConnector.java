@@ -44,30 +44,30 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteValueConnector extends BasicValueConnector implements
     IRemoteServerPeer {
 
-  private IGUIDGenerator uidGenerator;
-  private String  uid;
+  private IGUIDGenerator guidGenerator;
+  private String  guid;
 
   /**
    * Constructs a new <code>RemoteValueConnector</code> instance.
    * 
    * @param id
    *          the connector id.
-   * @param uidGenerator
-   *          the uid generator.
+   * @param guidGenerator
+   *          the guid generator.
    */
-  public RemoteValueConnector(String id, IGUIDGenerator uidGenerator) {
+  public RemoteValueConnector(String id, IGUIDGenerator guidGenerator) {
     super(id);
-    this.uid = uidGenerator.generateGUID();
-    this.uidGenerator = uidGenerator;
+    this.guid = guidGenerator.generateGUID();
+    this.guidGenerator = guidGenerator;
   }
 
   /**
-   * Gets the uid.
+   * Gets the guid.
    * 
-   * @return the uid.
+   * @return the guid.
    */
-  public String getUid() {
-    return uid;
+  public String getGuid() {
+    return guid;
   }
 
   /**
@@ -85,7 +85,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
   public RemoteValueConnector clone(String newConnectorId) {
     RemoteValueConnector clonedConnector = (RemoteValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.uid = uidGenerator.generateGUID();
+    clonedConnector.guid = guidGenerator.generateGUID();
     return clonedConnector;
   }
 }

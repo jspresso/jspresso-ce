@@ -13,13 +13,12 @@
  */
 
 package org.jspresso.framework.binding {
+  import mx.collections.ListCollectionView;
+  
 
-    import mx.collections.ListCollectionView;
+    public interface ICollectionConnectorListProvider extends ICompositeValueConnector {
 
-    public interface ICompositeValueConnector extends IValueConnector {
+      function get collectionConnectors():ListCollectionView;
 
-        //function get childConnectorCount():int;
-
-        //function get childConnectorKeys():ListCollectionView;
     }
 }

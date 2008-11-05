@@ -102,7 +102,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class DefaultRemoteViewFactory extends
     AbstractViewFactory<RComponent, RIcon, RAction> {
 
-  private IGUIDGenerator       uidGenerator;
+  private IGUIDGenerator       guidGenerator;
 
   /**
    * {@inheritDoc}
@@ -207,7 +207,9 @@ public class DefaultRemoteViewFactory extends
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForComponentView(viewDescriptor), null);
-    RComponent viewComponent = createRComponent();
+    RContainer viewComponent = createRContainer();
+    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
+    viewComponent.setChildren(childComponents);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -225,6 +227,7 @@ public class DefaultRemoteViewFactory extends
       IView<RComponent> propertyView = createPropertyView(propertyDescriptor,
           viewDescriptor.getRenderedChildProperties(propertyName),
           actionHandler, locale);
+      childComponents.put(propertyDescriptor.getName(), propertyView.getPeer());
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
@@ -249,23 +252,23 @@ public class DefaultRemoteViewFactory extends
   }
 
   private RComponent createRComponent() {
-    return new RComponent(uidGenerator.generateGUID());
+    return new RComponent(guidGenerator.generateGUID());
   }
 
   private REnumComponent createREnumComponent() {
-    return new REnumComponent(uidGenerator.generateGUID());
+    return new REnumComponent(guidGenerator.generateGUID());
   }
 
   private RTableComponent createRTableComponent() {
-    return new RTableComponent(uidGenerator.generateGUID());
+    return new RTableComponent(guidGenerator.generateGUID());
   }
 
   private RContainer createRContainer() {
-    return new RContainer(uidGenerator.generateGUID());
+    return new RContainer(guidGenerator.generateGUID());
   }
 
   private RCardContainer createRCardContainer() {
-    return new RCardContainer(uidGenerator.generateGUID());
+    return new RCardContainer(guidGenerator.generateGUID());
   }
 
   private IView<RComponent> createRComponentPropertyView(
@@ -796,11 +799,11 @@ public class DefaultRemoteViewFactory extends
   }
 
   /**
-   * Sets the uidGenerator.
+   * Sets the guidGenerator.
    * 
-   * @param uidGenerator the uidGenerator to set.
+   * @param guidGenerator the guidGenerator to set.
    */
-  public void setUidGenerator(IGUIDGenerator uidGenerator) {
-    this.uidGenerator = uidGenerator;
+  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+    this.guidGenerator = guidGenerator;
   }
 }

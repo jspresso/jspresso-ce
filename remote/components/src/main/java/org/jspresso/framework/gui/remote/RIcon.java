@@ -50,10 +50,10 @@ public class RIcon extends RemoteServerPeer {
   /**
    * Constructs a new <code>RIcon</code> instance.
    * 
-   * @param uid the uid
+   * @param guid the guid
    */
-  public RIcon(String uid) {
-    super(uid);
+  public RIcon(String guid) {
+    super(guid);
   }
 
   /**

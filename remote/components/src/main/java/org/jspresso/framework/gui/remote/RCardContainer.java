@@ -49,10 +49,10 @@ public class RCardContainer extends RContainer {
   /**
    * Constructs a new <code>RCardContainer</code> instance.
    * 
-   * @param uid the uid
+   * @param guid the guid
    */
-  public RCardContainer(String uid) {
-    super(uid);
+  public RCardContainer(String guid) {
+    super(guid);
   }
 
   /**

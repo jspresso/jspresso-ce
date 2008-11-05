@@ -14,27 +14,9 @@
 
 package org.jspresso.framework.binding {
 
-    public interface IValueConnector extends IConnector {
+    public interface ICollectionConnectorProvider extends ICompositeValueConnector {
+      
+      function get collectionConnector():ICollectionConnector;
 
-//        function get connectorPath():String;
-
-        function set connectorValue(value:Object):void;
-        function get connectorValue():Object;
-
-//        function set locallyReadable(value:Boolean):void;
-
-//        function set locallyWritable(value:Boolean):void;
-
-//        function set modelConnector(value:IValueConnector):void;
-//        function get modelConnector():IValueConnector;
-
-//        function set parentConnector(value:ICompositeValueConnector):void;
-//        function get parentConnector():ICompositeValueConnector;
-
-        function get readable():Boolean;
-        function set readable(value:Boolean):void;
-
-        function get writable():Boolean;
-        function set writable(value:Boolean):void;
     }
 }

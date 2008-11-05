@@ -107,6 +107,10 @@
     id="entityGUIDGenerator"
     class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
 
+  <bean
+    id="guidGenerator"
+    class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
+
   <!--
     The root abstract implementation used as Application Session.
   -->

@@ -48,10 +48,10 @@ public class RTableComponent extends RComponent {
   /**
    * Constructs a new <code>RTableComponent</code> instance.
    * 
-   * @param uid the uid
+   * @param guid the guid
    */
-  public RTableComponent(String uid) {
-    super(uid);
+  public RTableComponent(String guid) {
+    super(guid);
   }
 
   /**

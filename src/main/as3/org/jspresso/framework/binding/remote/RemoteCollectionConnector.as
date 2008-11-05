@@ -10,14 +10,15 @@ package org.jspresso.framework.binding.remote {
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
     import flash.utils.IExternalizable;
+    
+    import org.jspresso.framework.binding.ICollectionConnector;
     import org.jspresso.framework.util.remote.IRemoteServerPeer;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.binding.remote.RemoteCollectionConnector")]
-    public class RemoteCollectionConnector implements IExternalizable, IRemoteServerPeer {
+    public class RemoteCollectionConnector extends RemoteCompositeConnector implements ICollectionConnector, IExternalizable, IRemoteServerPeer {
 
         private var _selectedIndices:Array;
-        private var _uid:String;
 
         public function set selectedIndices(value:Array):void {
             _selectedIndices = value;
@@ -26,21 +27,12 @@ package org.jspresso.framework.binding.remote {
             return _selectedIndices;
         }
 
-        public function set uid(value:String):void {
-            _uid = value;
-        }
-        public function get uid():String {
-            return _uid;
-        }
-
-        public function readExternal(input:IDataInput):void {
+        override public function readExternal(input:IDataInput):void {
             _selectedIndices = input.readObject() as Array;
-            _uid = input.readObject() as String;
         }
 
-        public function writeExternal(output:IDataOutput):void {
+        override public function writeExternal(output:IDataOutput):void {
             output.writeObject(_selectedIndices);
-            output.writeObject(_uid);
         }
     }
 }

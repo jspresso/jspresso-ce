@@ -53,10 +53,10 @@ public class RComponent extends RemoteServerPeer {
   /**
    * Constructs a new <code>RComponent</code> instance.
    * 
-   * @param uid the uid.
+   * @param guid the guid.
    */
-  public RComponent(String uid) {
-    super(uid);
+  public RComponent(String guid) {
+    super(guid);
   }
 
   /**

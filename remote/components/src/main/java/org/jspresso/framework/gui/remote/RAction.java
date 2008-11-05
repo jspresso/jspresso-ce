@@ -52,11 +52,11 @@ public class RAction extends RemoteServerPeer {
   /**
    * Constructs a new <code>RAction</code> instance.
    * 
-   * @param uid
-   *          the uid.
+   * @param guid
+   *          the guid.
    */
-  public RAction(String uid) {
-    super(uid);
+  public RAction(String guid) {
+    super(guid);
   }
 
   /**

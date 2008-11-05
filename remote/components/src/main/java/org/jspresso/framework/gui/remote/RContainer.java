@@ -49,10 +49,10 @@ public class RContainer extends RComponent {
   /**
    * Constructs a new <code>RContainer</code> instance.
    * 
-   * @param uid the uid
+   * @param guid the guid
    */
-  public RContainer(String uid) {
-    super(uid);
+  public RContainer(String guid) {
+    super(guid);
   }
 
   /**

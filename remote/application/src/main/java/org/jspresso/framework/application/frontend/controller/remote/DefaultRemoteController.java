@@ -24,6 +24,7 @@ import org.jspresso.framework.application.frontend.controller.AbstractFrontendCo
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.security.ISecurable;
 
 /**
  * Default implementation of a remote frontend controller. This implementation
@@ -63,6 +64,14 @@ public class DefaultRemoteController extends
   protected void displayWorkspace(
       @SuppressWarnings("unused") String workspaceName) {
     // NO-OP as of now
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void checkAccess(@SuppressWarnings("unused") ISecurable securable) {
+    // Empty implementation for testing.
   }
 
 }

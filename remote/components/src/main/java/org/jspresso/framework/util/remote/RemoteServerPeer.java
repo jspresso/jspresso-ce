@@ -42,21 +42,21 @@ import java.io.Serializable;
 public abstract class RemoteServerPeer implements Serializable, IRemoteServerPeer {
 
   private static final long serialVersionUID = 8820089350994062310L;
-  private String            uid;
+  private String            guid;
   
   /**
    * Constructs a new <code>RemoteServerPeer</code> instance generating its UID.
    * 
-   * @param uid the uid.
+   * @param guid the guid.
    */
-  protected RemoteServerPeer(String uid) {
-    this.uid = uid;
+  protected RemoteServerPeer(String guid) {
+    this.guid = guid;
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getUid() {
-    return uid;
+  public String getGuid() {
+    return guid;
   }
 }

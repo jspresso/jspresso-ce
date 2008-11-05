@@ -45,31 +45,31 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteCollectionConnectorProvider extends
     BasicCollectionConnectorProvider implements IRemoteServerPeer {
   
-  private IGUIDGenerator uidGenerator;
-  private String uid;
+  private IGUIDGenerator guidGenerator;
+  private String guid;
 
   /**
    * Constructs a new <code>RemoteCollectionConnectorProvider</code> instance.
    * 
    * @param id
    *          the connector id.
-   * @param uidGenerator
-   *          the uid generator.
+   * @param guidGenerator
+   *          the guid generator.
    */
-  public RemoteCollectionConnectorProvider(String id, IGUIDGenerator uidGenerator) {
+  public RemoteCollectionConnectorProvider(String id, IGUIDGenerator guidGenerator) {
     super(id);
-    this.uid = uidGenerator.generateGUID();
-    this.uidGenerator = uidGenerator;
+    this.guid = guidGenerator.generateGUID();
+    this.guidGenerator = guidGenerator;
   }
 
   
   /**
-   * Gets the uid.
+   * Gets the guid.
    * 
-   * @return the uid.
+   * @return the guid.
    */
-  public String getUid() {
-    return uid;
+  public String getGuid() {
+    return guid;
   }
 
   /**
@@ -87,7 +87,7 @@ public class RemoteCollectionConnectorProvider extends
   public RemoteCollectionConnectorProvider clone(String newConnectorId) {
     RemoteCollectionConnectorProvider clonedConnector = (RemoteCollectionConnectorProvider) super
         .clone(newConnectorId);
-    clonedConnector.uid = uidGenerator.generateGUID();
+    clonedConnector.guid = guidGenerator.generateGUID();
     return clonedConnector;
   }
 }
