@@ -189,6 +189,14 @@
     class="org.jspresso.framework.application.frontend.action.remote.wizard.WizardAction" />
 
   <bean
+    id="remoteConnectorFactory"
+    class="org.jspresso.framework.binding.remote.RemoteConnectorFactory">
+    <property
+      name="guidGenerator"
+      ref="guidGenerator" />
+  </bean>
+
+  <bean
     id="viewFactory"
     class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
     parent="abstractViewFactory"
@@ -196,6 +204,9 @@
     <property
       name="guidGenerator"
       ref="guidGenerator" />
+    <property
+      name="connectorFactory"
+      ref="remoteConnectorFactory"/>
   </bean>
 
   <!--
