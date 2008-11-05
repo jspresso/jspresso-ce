@@ -66,13 +66,6 @@
         <exclude
           name="**/*$*.class" />
       </fileset>
-      <fileset
-        dir="binding/target/classes">
-        <include
-          name="**/I*Connector.class" />
-        <exclude
-          name="**/model/**/*.class" />
-      </fileset>
     </gas3>
   </target>
 </project>

@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnectorListProvider;
 import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
 import org.jspresso.framework.binding.remote.state.RemoteCompositeValueState;
