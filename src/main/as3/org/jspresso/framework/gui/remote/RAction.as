@@ -17,11 +17,11 @@ package org.jspresso.framework.gui.remote {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.jspresso.framework.util.remote.RemoteServerPeer;
+    import org.jspresso.framework.util.remote.RemoteClientPeer;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RAction")]
-    public class RAction extends RemoteServerPeer {
+    public class RAction extends RemoteClientPeer {
 
         private var _description:String;
         private var _enabled:Boolean;

@@ -17,11 +17,11 @@ package org.jspresso.framework.gui.remote {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.jspresso.framework.util.remote.RemoteServerPeer;
+    import org.jspresso.framework.util.remote.RemoteClientPeer;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RIcon")]
-    public class RIcon extends RemoteServerPeer {
+    public class RIcon extends RemoteClientPeer {
 
         private var _height:int;
         private var _imageUrlSpec:String;

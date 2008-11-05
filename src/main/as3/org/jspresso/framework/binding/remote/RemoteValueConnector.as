@@ -12,11 +12,11 @@ package org.jspresso.framework.binding.remote {
     import flash.utils.IExternalizable;
     
     import org.jspresso.framework.binding.IValueConnector;
-    import org.jspresso.framework.util.remote.IRemoteServerPeer;
+    import org.jspresso.framework.util.remote.IRemoteClientPeer;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.binding.remote.RemoteValueConnector")]
-    public class RemoteValueConnector implements IValueConnector, IExternalizable, IRemoteServerPeer {
+    public class RemoteValueConnector implements IValueConnector, IExternalizable, IRemoteClientPeer {
 
         private var _connectorValue:Object;
         private var _id:String;

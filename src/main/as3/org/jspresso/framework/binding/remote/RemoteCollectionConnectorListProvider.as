@@ -14,11 +14,11 @@ package org.jspresso.framework.binding.remote {
     import mx.collections.ListCollectionView;
     
     import org.jspresso.framework.binding.ICollectionConnectorListProvider;
-    import org.jspresso.framework.util.remote.IRemoteServerPeer;
+    import org.jspresso.framework.util.remote.IRemoteClientPeer;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.binding.remote.RemoteCollectionConnectorListProvider")]
-    public class RemoteCollectionConnectorListProvider extends RemoteCompositeConnector implements ICollectionConnectorListProvider, IExternalizable, IRemoteServerPeer {
+    public class RemoteCollectionConnectorListProvider extends RemoteCompositeConnector implements ICollectionConnectorListProvider, IExternalizable, IRemoteClientPeer {
 
         private var _collectionConnectors:ListCollectionView;
 

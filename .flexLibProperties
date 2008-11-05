@@ -82,8 +82,8 @@
     <classEntry path="org.jspresso.framework.util.descriptor.DefaultIconDescriptor"/>
     <classEntry path="org.jspresso.framework.util.descriptor.IDescriptor"/>
     <classEntry path="org.jspresso.framework.util.descriptor.IIconDescriptor"/>
-    <classEntry path="org.jspresso.framework.util.remote.IRemoteServerPeer"/>
-    <classEntry path="org.jspresso.framework.util.remote.RemoteServerPeer"/>
+    <classEntry path="org.jspresso.framework.util.remote.IRemoteClientPeer"/>
+    <classEntry path="org.jspresso.framework.util.remote.RemoteClientPeer"/>
     <classEntry path="org.jspresso.framework.view.BasicCompositeView"/>
     <classEntry path="org.jspresso.framework.view.BasicMapView"/>
     <classEntry path="org.jspresso.framework.view.BasicView"/>

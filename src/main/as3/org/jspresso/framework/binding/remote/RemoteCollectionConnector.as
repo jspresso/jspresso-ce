@@ -12,11 +12,11 @@ package org.jspresso.framework.binding.remote {
     import flash.utils.IExternalizable;
     
     import org.jspresso.framework.binding.ICollectionConnector;
-    import org.jspresso.framework.util.remote.IRemoteServerPeer;
+    import org.jspresso.framework.util.remote.IRemoteClientPeer;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.binding.remote.RemoteCollectionConnector")]
-    public class RemoteCollectionConnector extends RemoteCompositeConnector implements ICollectionConnector, IExternalizable, IRemoteServerPeer {
+    public class RemoteCollectionConnector extends RemoteCompositeConnector implements ICollectionConnector, IExternalizable, IRemoteClientPeer {
 
         private var _selectedIndices:Array;
 
