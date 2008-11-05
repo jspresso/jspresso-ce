@@ -16,14 +16,12 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding.remote;
+package org.jspresso.framework.view.remote;
 
-import org.jspresso.framework.binding.basic.BasicCollectionConnectorListProvider;
-import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.uid.IGUIDGenerator;
+import java.util.List;
 
 /**
- * The server peer of a remote collection connector list provider.
+ * A composite view state that can be sent to the client.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,52 +39,27 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteCollectionConnectorListProvider extends
-    BasicCollectionConnectorListProvider implements IRemotePeer {
+public class RemoteCompositeViewState extends RemoteViewState {
 
-  private IGUIDGenerator guidGenerator;
-  private String                     guid;
+  private List<RemoteViewState> children;
 
+  
   /**
-   * Constructs a new <code>RemoteCollectionConnectorListProvider</code>
-   * instance.
+   * Gets the children.
    * 
-   * @param id
-   *          the connector id.
-   * @param guidGenerator
-   *          the guid generator.
+   * @return the children.
    */
-  public RemoteCollectionConnectorListProvider(String id, IGUIDGenerator guidGenerator) {
-    super(id);
-    this.guid = guidGenerator.generateGUID();
-    this.guidGenerator = guidGenerator;
+  public List<RemoteViewState> getChildren() {
+    return children;
   }
 
+  
   /**
-   * Gets the guid.
+   * Sets the children.
    * 
-   * @return the guid.
+   * @param children the children to set.
    */
-  public String getGuid() {
-    return guid;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public RemoteCollectionConnectorListProvider clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public RemoteCollectionConnectorListProvider clone(String newConnectorId) {
-    RemoteCollectionConnectorListProvider clonedConnector = (RemoteCollectionConnectorListProvider) super
-        .clone(newConnectorId);
-    clonedConnector.guid = guidGenerator.generateGUID();
-    return clonedConnector;
+  public void setChildren(List<RemoteViewState> children) {
+    this.children = children;
   }
 }

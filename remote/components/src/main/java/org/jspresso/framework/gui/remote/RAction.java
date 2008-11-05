@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import org.jspresso.framework.util.remote.RemoteServerPeer;
+import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
  * This class is the generic server peer of a client GUI action.
@@ -39,7 +39,7 @@ import org.jspresso.framework.util.remote.RemoteServerPeer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RAction extends RemoteServerPeer {
+public class RAction extends RemotePeer {
 
   private String            name;
   private String            description;

@@ -857,7 +857,6 @@ public class DefaultSwingViewFactory extends
         forbidden = true;
         propertyView.setPeer(createSecurityComponent());
       }
-      propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
       if (propertyViewDescriptor.getReadabilityGates() != null) {
         for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {

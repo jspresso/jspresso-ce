@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import org.jspresso.framework.util.remote.RemoteServerPeer;
+import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
  * This class is the generic server peer of a client GUI icon.
@@ -39,7 +39,7 @@ import org.jspresso.framework.util.remote.RemoteServerPeer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RIcon extends RemoteServerPeer {
+public class RIcon extends RemotePeer {
 
   private String imageUrlSpec;
   private int width;

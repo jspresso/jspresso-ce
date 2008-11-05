@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 import java.util.List;
 
-import org.jspresso.framework.util.remote.RemoteServerPeer;
+import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
  * This class is the generic server peer of a client GUI component.
@@ -41,7 +41,7 @@ import org.jspresso.framework.util.remote.RemoteServerPeer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RComponent extends RemoteServerPeer {
+public class RComponent extends RemotePeer {
 
   private String        label;
   private String        tooltip;

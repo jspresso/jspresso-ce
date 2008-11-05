@@ -19,7 +19,7 @@
 package org.jspresso.framework.binding.remote;
 
 import org.jspresso.framework.binding.basic.BasicValueConnector;
-import org.jspresso.framework.util.remote.IRemoteServerPeer;
+import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
@@ -42,7 +42,7 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @author Vincent Vandenschrick
  */
 public class RemoteValueConnector extends BasicValueConnector implements
-    IRemoteServerPeer {
+    IRemotePeer {
 
   private IGUIDGenerator guidGenerator;
   private String  guid;

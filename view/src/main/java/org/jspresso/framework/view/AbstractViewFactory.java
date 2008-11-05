@@ -935,7 +935,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
         view.setConnector(masterView.getConnector());
         for (int i = 1; i < view.getChildren().size(); i++) {
           IView<E> detailView = view.getChildren().get(i);
-          detailView.setParent(view);
 
           IValueConnector detailConnector = null;
           if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
@@ -967,7 +966,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
             .createCompositeValueConnector(connectorId, null);
         view.setConnector(connector);
         for (IView<E> childView : view.getChildren()) {
-          childView.setParent(view);
           connector.addChildConnector(childView.getConnector());
         }
       }

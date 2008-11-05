@@ -233,7 +233,6 @@ public class DefaultRemoteViewFactory extends
       } catch (SecurityException ex) {
         propertyView.setPeer(createSecurityComponent());
       }
-      propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
       if (propertyViewDescriptor.getReadabilityGates() != null) {
         for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {

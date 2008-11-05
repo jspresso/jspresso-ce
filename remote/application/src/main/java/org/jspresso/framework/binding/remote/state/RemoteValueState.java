@@ -16,11 +16,12 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.util.remote;
+package org.jspresso.framework.binding.remote.state;
 
+import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
- * An object remote server peer.
+ * The state of a remote value.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -38,23 +39,77 @@ package org.jspresso.framework.util.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RemoteServerPeer implements IRemoteServerPeer {
+public class RemoteValueState extends RemotePeer {
 
-  private String            guid;
-  
+  private Object  value;
+  private boolean writable;
+  private boolean readable;
+
   /**
-   * Constructs a new <code>RemoteServerPeer</code> instance generating its UID.
+   * Constructs a new <code>RemoteValueState</code> instance.
    * 
-   * @param guid the guid.
+   * @param guid
+   *          the state guid.
    */
-  protected RemoteServerPeer(String guid) {
-    this.guid = guid;
+  protected RemoteValueState(String guid) {
+    super(guid);
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the writable.
+   * 
+   * @return the writable.
    */
-  public String getGuid() {
-    return guid;
+  public boolean isWritable() {
+    return writable;
   }
+
+  /**
+   * Sets the writable.
+   * 
+   * @param writable
+   *          the writable to set.
+   */
+  public void setWritable(boolean writable) {
+    this.writable = writable;
+  }
+
+  /**
+   * Gets the value.
+   * 
+   * @return the value.
+   */
+  public Object getValue() {
+    return value;
+  }
+
+  /**
+   * Sets the value.
+   * 
+   * @param value
+   *          the value to set.
+   */
+  public void setValue(Object value) {
+    this.value = value;
+  }
+
+  /**
+   * Gets the readable.
+   * 
+   * @return the readable.
+   */
+  public boolean isReadable() {
+    return readable;
+  }
+
+  /**
+   * Sets the readable.
+   * 
+   * @param readable
+   *          the readable to set.
+   */
+  public void setReadable(boolean readable) {
+    this.readable = readable;
+  }
+
 }

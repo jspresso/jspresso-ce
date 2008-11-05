@@ -16,11 +16,13 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.util.remote;
+package org.jspresso.framework.view.remote;
+
+import java.util.Map;
 
 
 /**
- * Interface for remote server peers.
+ * A map view state that can be sent to the client.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -38,13 +40,28 @@ package org.jspresso.framework.util.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IRemoteServerPeer {
+public class RemoteMapViewState extends RemoteViewState {
 
+  private Map<String, RemoteViewState> childrenMap;
+
+  
   /**
-   * Gets the guid.
+   * Gets the childrenMap.
    * 
-   * @return the guid.
+   * @return the childrenMap.
    */
-  String getGuid();
+  public Map<String, RemoteViewState> getChildrenMap() {
+    return childrenMap;
+  }
+
+  
+  /**
+   * Sets the childrenMap.
+   * 
+   * @param childrenMap the childrenMap to set.
+   */
+  public void setChildrenMap(Map<String, RemoteViewState> childrenMap) {
+    this.childrenMap = childrenMap;
+  }
 
 }

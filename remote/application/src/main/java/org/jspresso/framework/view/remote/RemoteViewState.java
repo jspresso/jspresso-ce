@@ -16,14 +16,14 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding.remote;
+package org.jspresso.framework.view.remote;
 
-import org.jspresso.framework.binding.basic.BasicCollectionConnectorListProvider;
-import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.uid.IGUIDGenerator;
+import org.jspresso.framework.binding.remote.state.RemoteValueState;
+import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * The server peer of a remote collection connector list provider.
+ * A view state that can be sent to the client.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,52 +41,64 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteCollectionConnectorListProvider extends
-    BasicCollectionConnectorListProvider implements IRemotePeer {
+public class RemoteViewState {
 
-  private IGUIDGenerator guidGenerator;
-  private String                     guid;
-
+  private RemoteValueState valueState;
+  private IViewDescriptor  descriptor;
+  private RComponent       peer;
+  
   /**
-   * Constructs a new <code>RemoteCollectionConnectorListProvider</code>
-   * instance.
+   * Gets the valueState.
    * 
-   * @param id
-   *          the connector id.
-   * @param guidGenerator
-   *          the guid generator.
+   * @return the valueState.
    */
-  public RemoteCollectionConnectorListProvider(String id, IGUIDGenerator guidGenerator) {
-    super(id);
-    this.guid = guidGenerator.generateGUID();
-    this.guidGenerator = guidGenerator;
+  public RemoteValueState getValueState() {
+    return valueState;
   }
-
+  
   /**
-   * Gets the guid.
+   * Sets the valueState.
    * 
-   * @return the guid.
+   * @param valueState the valueState to set.
    */
-  public String getGuid() {
-    return guid;
+  public void setValueState(RemoteValueState valueState) {
+    this.valueState = valueState;
+  }
+  
+  /**
+   * Gets the descriptor.
+   * 
+   * @return the descriptor.
+   */
+  public IViewDescriptor getDescriptor() {
+    return descriptor;
+  }
+  
+  /**
+   * Sets the descriptor.
+   * 
+   * @param descriptor the descriptor to set.
+   */
+  public void setDescriptor(IViewDescriptor descriptor) {
+    this.descriptor = descriptor;
+  }
+  
+  /**
+   * Gets the peer.
+   * 
+   * @return the peer.
+   */
+  public RComponent getPeer() {
+    return peer;
+  }
+  
+  /**
+   * Sets the peer.
+   * 
+   * @param peer the peer to set.
+   */
+  public void setPeer(RComponent peer) {
+    this.peer = peer;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public RemoteCollectionConnectorListProvider clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public RemoteCollectionConnectorListProvider clone(String newConnectorId) {
-    RemoteCollectionConnectorListProvider clonedConnector = (RemoteCollectionConnectorListProvider) super
-        .clone(newConnectorId);
-    clonedConnector.guid = guidGenerator.generateGUID();
-    return clonedConnector;
-  }
 }

@@ -62,13 +62,6 @@ public interface IView<E> extends IViewProvider<E> {
   IViewDescriptor getDescriptor();
 
   /**
-   * Gets the parent view if any or null.
-   * 
-   * @return the parent view.
-   */
-  IView<E> getParent();
-
-  /**
    * Gets the view peer of this view.
    * 
    * @return the view peer.
@@ -83,14 +76,6 @@ public interface IView<E> extends IViewProvider<E> {
    *            the view connector.
    */
   void setConnector(IValueConnector connector);
-
-  /**
-   * Sets the parent view if any or null.
-   * 
-   * @param parent
-   *            the parent view.
-   */
-  void setParent(IView<E> parent);
 
   /**
    * Sets the view peer of this view.

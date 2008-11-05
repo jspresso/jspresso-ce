@@ -47,7 +47,6 @@ public class BasicView<E> implements IView<E> {
 
   private IValueConnector connector;
   private IViewDescriptor descriptor;
-  private IView<E>        parent;
   private E               peer;
 
   /**
@@ -76,15 +75,6 @@ public class BasicView<E> implements IView<E> {
    */
   public IViewDescriptor getDescriptor() {
     return descriptor;
-  }
-
-  /**
-   * Gets the parent.
-   * 
-   * @return the parent.
-   */
-  public IView<E> getParent() {
-    return parent;
   }
 
   /**
@@ -123,16 +113,6 @@ public class BasicView<E> implements IView<E> {
    */
   public void setDescriptor(IViewDescriptor descriptor) {
     this.descriptor = descriptor;
-  }
-
-  /**
-   * Sets the parent.
-   * 
-   * @param parent
-   *            the parent to set.
-   */
-  public void setParent(IView<E> parent) {
-    this.parent = parent;
   }
 
   /**

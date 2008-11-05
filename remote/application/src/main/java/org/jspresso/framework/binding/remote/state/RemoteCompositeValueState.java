@@ -16,14 +16,12 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding.remote;
+package org.jspresso.framework.binding.remote.state;
 
-import org.jspresso.framework.binding.basic.BasicCollectionConnectorListProvider;
-import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.uid.IGUIDGenerator;
+import java.util.List;
 
 /**
- * The server peer of a remote collection connector list provider.
+ * The state of a composite remote value.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,52 +39,79 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteCollectionConnectorListProvider extends
-    BasicCollectionConnectorListProvider implements IRemotePeer {
+public class RemoteCompositeValueState extends RemoteValueState {
 
-  private IGUIDGenerator guidGenerator;
-  private String                     guid;
+  private List<RemoteValueState> children;
+  private String description;
+  private String iconImageUrl;
 
   /**
-   * Constructs a new <code>RemoteCollectionConnectorListProvider</code>
-   * instance.
+   * Constructs a new <code>RemoteCompositeValueState</code> instance.
    * 
-   * @param id
-   *          the connector id.
-   * @param guidGenerator
-   *          the guid generator.
+   * @param guid
+   *          the state guid.
    */
-  public RemoteCollectionConnectorListProvider(String id, IGUIDGenerator guidGenerator) {
-    super(id);
-    this.guid = guidGenerator.generateGUID();
-    this.guidGenerator = guidGenerator;
+  protected RemoteCompositeValueState(String guid) {
+    super(guid);
   }
 
+  
   /**
-   * Gets the guid.
+   * Gets the children.
    * 
-   * @return the guid.
+   * @return the children.
    */
-  public String getGuid() {
-    return guid;
+  public List<RemoteValueState> getChildren() {
+    return children;
   }
 
+  
   /**
-   * {@inheritDoc}
+   * Sets the children.
+   * 
+   * @param children the children to set.
    */
-  @Override
-  public RemoteCollectionConnectorListProvider clone() {
-    return clone(getId());
+  public void setChildren(List<RemoteValueState> children) {
+    this.children = children;
   }
 
+
   /**
-   * {@inheritDoc}
+   * Gets the description.
+   * 
+   * @return the description.
    */
-  @Override
-  public RemoteCollectionConnectorListProvider clone(String newConnectorId) {
-    RemoteCollectionConnectorListProvider clonedConnector = (RemoteCollectionConnectorListProvider) super
-        .clone(newConnectorId);
-    clonedConnector.guid = guidGenerator.generateGUID();
-    return clonedConnector;
+  public String getDescription() {
+    return description;
+  }
+
+
+  /**
+   * Sets the description.
+   * 
+   * @param description the description to set.
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+
+  /**
+   * Gets the iconImageUrl.
+   * 
+   * @return the iconImageUrl.
+   */
+  public String getIconImageUrl() {
+    return iconImageUrl;
+  }
+
+
+  /**
+   * Sets the iconImageUrl.
+   * 
+   * @param iconImageUrl the iconImageUrl to set.
+   */
+  public void setIconImageUrl(String iconImageUrl) {
+    this.iconImageUrl = iconImageUrl;
   }
 }
