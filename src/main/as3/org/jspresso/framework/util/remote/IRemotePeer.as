@@ -12,29 +12,10 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jspresso.framework.util.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
-    import flash.utils.IExternalizable;
+    public interface IRemotePeer {
 
-    [Bindable]
-    [RemoteClass(alias="org.jspresso.framework.util.remote.RemoteServerPeer")]
-    public class RemoteClientPeer implements IExternalizable, IRemoteClientPeer {
-
-        private var _guid:String;
-
-        public function get guid():String {
-            return _guid;
-        }
-
-        public function readExternal(input:IDataInput):void {
-            _guid = input.readObject() as String;
-        }
-
-        public function writeExternal(output:IDataOutput):void {
-            output.writeObject(_guid);
-        }
+        function get guid():String;
     }
 }
