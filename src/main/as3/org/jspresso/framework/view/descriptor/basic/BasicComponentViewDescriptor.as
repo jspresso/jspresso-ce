@@ -18,7 +18,6 @@ package org.jspresso.framework.view.descriptor.basic {
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
     import mx.collections.ListCollectionView;
-    import org.granite.collections.IMap;
     import org.granite.util.Enum;
     import org.jspresso.framework.view.descriptor.ELabelPosition;
     import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
@@ -30,8 +29,8 @@ package org.jspresso.framework.view.descriptor.basic {
         private var _columnCount:int;
         private var _labelsPosition:ELabelPosition;
         private var _propertyViewDescriptors:ListCollectionView;
-        private var _propertyWidths:IMap;
-        private var _renderedChildProperties:IMap;
+        private var _propertyWidths:Object;
+        private var _renderedChildProperties:Object;
 
         public function set columnCount(value:int):void {
             _columnCount = value;
@@ -54,11 +53,11 @@ package org.jspresso.framework.view.descriptor.basic {
             return _propertyViewDescriptors;
         }
 
-        public function set propertyWidths(value:IMap):void {
+        public function set propertyWidths(value:Object):void {
             _propertyWidths = value;
         }
 
-        public function set renderedChildProperties(value:IMap):void {
+        public function set renderedChildProperties(value:Object):void {
             _renderedChildProperties = value;
         }
 
@@ -67,8 +66,8 @@ package org.jspresso.framework.view.descriptor.basic {
             _columnCount = input.readObject() as int;
             _labelsPosition = Enum.readEnum(input) as ELabelPosition;
             _propertyViewDescriptors = input.readObject() as ListCollectionView;
-            _propertyWidths = input.readObject() as IMap;
-            _renderedChildProperties = input.readObject() as IMap;
+            _propertyWidths = input.readObject() as Object;
+            _renderedChildProperties = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {

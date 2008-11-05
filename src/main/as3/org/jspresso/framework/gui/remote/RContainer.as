@@ -17,24 +17,23 @@ package org.jspresso.framework.gui.remote {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RContainer")]
     public class RContainer extends RComponent {
 
-        private var _children:IMap;
+        private var _children:Object;
 
-        public function set children(value:IMap):void {
+        public function set children(value:Object):void {
             _children = value;
         }
-        public function get children():IMap {
+        public function get children():Object {
             return _children;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _children = input.readObject() as IMap;
+            _children = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {

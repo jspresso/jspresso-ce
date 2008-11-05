@@ -17,24 +17,23 @@ package org.jspresso.framework.view.remote {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.view.remote.RemoteMapViewState")]
     public class RemoteMapViewState extends RemoteViewState {
 
-        private var _childrenMap:IMap;
+        private var _childrenMap:Object;
 
-        public function set childrenMap(value:IMap):void {
+        public function set childrenMap(value:Object):void {
             _childrenMap = value;
         }
-        public function get childrenMap():IMap {
+        public function get childrenMap():Object {
             return _childrenMap;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _childrenMap = input.readObject() as IMap;
+            _childrenMap = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {

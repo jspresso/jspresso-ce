@@ -17,25 +17,24 @@ package org.jspresso.framework.model.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
     import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.model.descriptor.basic.BasicTextPropertyDescriptor")]
     public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor implements ITextPropertyDescriptor {
 
-        private var _fileFilter:IMap;
+        private var _fileFilter:Object;
 
-        public function set fileFilter(value:IMap):void {
+        public function set fileFilter(value:Object):void {
             _fileFilter = value;
         }
-        public function get fileFilter():IMap {
+        public function get fileFilter():Object {
             return _fileFilter;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _fileFilter = input.readObject() as IMap;
+            _fileFilter = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {

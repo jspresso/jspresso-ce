@@ -14,10 +14,9 @@
 
 package org.jspresso.framework.view.descriptor {
 
-    import org.granite.collections.IMap;
 
     public interface ICardViewDescriptor extends IViewDescriptor {
 
-        function get cardViewDescriptors():IMap;
+        function get cardViewDescriptors():Object;
     }
 }

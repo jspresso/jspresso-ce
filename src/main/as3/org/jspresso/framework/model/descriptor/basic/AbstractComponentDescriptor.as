@@ -18,7 +18,6 @@ package org.jspresso.framework.model.descriptor.basic {
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
     import mx.collections.ListCollectionView;
-    import org.granite.collections.IMap;
     import org.jspresso.framework.model.descriptor.IComponentDescriptor;
     import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 
@@ -30,13 +29,13 @@ package org.jspresso.framework.model.descriptor.basic {
         private var _componentContract:Class;
         private var _grantedRoles:ListCollectionView;
         private var _lifecycleInterceptors:ListCollectionView;
-        private var _nestedPropertyDescriptors:IMap;
+        private var _nestedPropertyDescriptors:Object;
         private var _orderingProperties:ListCollectionView;
-        private var _propertyDescriptorsMap:IMap;
+        private var _propertyDescriptorsMap:Object;
         private var _queryableProperties:ListCollectionView;
         private var _renderedProperties:ListCollectionView;
         private var _serviceContracts:ListCollectionView;
-        private var _serviceDelegates:IMap;
+        private var _serviceDelegates:Object;
         private var _tempPropertyBuffer:ListCollectionView;
         private var _toStringProperty:String;
         private var _unclonedProperties:ListCollectionView;
@@ -91,7 +90,7 @@ package org.jspresso.framework.model.descriptor.basic {
             return _serviceContracts;
         }
 
-        public function set serviceDelegates(value:IMap):void {
+        public function set serviceDelegates(value:Object):void {
             _serviceDelegates = value;
         }
 
@@ -143,13 +142,13 @@ package org.jspresso.framework.model.descriptor.basic {
             _componentContract = input.readObject() as Class;
             _grantedRoles = input.readObject() as ListCollectionView;
             _lifecycleInterceptors = input.readObject() as ListCollectionView;
-            _nestedPropertyDescriptors = input.readObject() as IMap;
+            _nestedPropertyDescriptors = input.readObject() as Object;
             _orderingProperties = input.readObject() as ListCollectionView;
-            _propertyDescriptorsMap = input.readObject() as IMap;
+            _propertyDescriptorsMap = input.readObject() as Object;
             _queryableProperties = input.readObject() as ListCollectionView;
             _renderedProperties = input.readObject() as ListCollectionView;
             _serviceContracts = input.readObject() as ListCollectionView;
-            _serviceDelegates = input.readObject() as IMap;
+            _serviceDelegates = input.readObject() as Object;
             _tempPropertyBuffer = input.readObject() as ListCollectionView;
             _toStringProperty = input.readObject() as String;
             _unclonedProperties = input.readObject() as ListCollectionView;

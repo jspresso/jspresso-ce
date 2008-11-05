@@ -17,22 +17,21 @@ package org.jspresso.framework.view.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
     import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.view.descriptor.basic.BasicConstrainedGridViewDescriptor")]
     public class BasicConstrainedGridViewDescriptor extends BasicCompositeViewDescriptor implements IConstrainedGridViewDescriptor {
 
-        private var _constrainedViews:IMap;
+        private var _constrainedViews:Object;
 
-        public function set constrainedViews(value:IMap):void {
+        public function set constrainedViews(value:Object):void {
             _constrainedViews = value;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _constrainedViews = input.readObject() as IMap;
+            _constrainedViews = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {

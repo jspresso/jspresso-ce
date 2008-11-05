@@ -17,33 +17,32 @@ package org.jspresso.framework.gui.remote {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.REnumComponent")]
     public class REnumComponent extends RComponent {
 
-        private var _renderingIcons:IMap;
-        private var _renderingTranslations:IMap;
+        private var _renderingIcons:Object;
+        private var _renderingTranslations:Object;
 
-        public function set renderingIcons(value:IMap):void {
+        public function set renderingIcons(value:Object):void {
             _renderingIcons = value;
         }
-        public function get renderingIcons():IMap {
+        public function get renderingIcons():Object {
             return _renderingIcons;
         }
 
-        public function set renderingTranslations(value:IMap):void {
+        public function set renderingTranslations(value:Object):void {
             _renderingTranslations = value;
         }
-        public function get renderingTranslations():IMap {
+        public function get renderingTranslations():Object {
             return _renderingTranslations;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _renderingIcons = input.readObject() as IMap;
-            _renderingTranslations = input.readObject() as IMap;
+            _renderingIcons = input.readObject() as Object;
+            _renderingTranslations = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {

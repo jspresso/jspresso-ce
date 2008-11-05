@@ -17,7 +17,6 @@ package org.jspresso.framework.model.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
     import org.jspresso.framework.model.descriptor.IComponentDescriptor;
     import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 
@@ -25,13 +24,13 @@ package org.jspresso.framework.model.descriptor.basic {
     [RemoteClass(alias="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor")]
     public class BasicReferencePropertyDescriptor extends BasicRelationshipEndPropertyDescriptor implements IReferencePropertyDescriptor {
 
-        private var _initializationMapping:IMap;
+        private var _initializationMapping:Object;
         private var _referencedDescriptor:IComponentDescriptor;
 
-        public function set initializationMapping(value:IMap):void {
+        public function set initializationMapping(value:Object):void {
             _initializationMapping = value;
         }
-        public function get initializationMapping():IMap {
+        public function get initializationMapping():Object {
             return _initializationMapping;
         }
 
@@ -44,7 +43,7 @@ package org.jspresso.framework.model.descriptor.basic {
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _initializationMapping = input.readObject() as IMap;
+            _initializationMapping = input.readObject() as Object;
             _referencedDescriptor = input.readObject() as IComponentDescriptor;
         }
 

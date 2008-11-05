@@ -17,15 +17,16 @@ package org.jspresso.framework.view.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
+    
     import mx.collections.ListCollectionView;
-    import org.granite.collections.IMap;
+    
     import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.view.descriptor.basic.BasicCompositeTreeLevelDescriptor")]
     public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor implements ICompositeTreeLevelDescriptor {
 
-        private var _childrenDescriptorsMap:IMap;
+        private var _childrenDescriptorsMap:Object;
 
         public function get childrenDescriptors():ListCollectionView {
             return null;
@@ -33,7 +34,7 @@ package org.jspresso.framework.view.descriptor.basic {
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _childrenDescriptorsMap = input.readObject() as IMap;
+            _childrenDescriptorsMap = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {

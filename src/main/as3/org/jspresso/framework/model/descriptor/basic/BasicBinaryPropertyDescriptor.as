@@ -17,20 +17,19 @@ package org.jspresso.framework.model.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
     import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.model.descriptor.basic.BasicBinaryPropertyDescriptor")]
     public class BasicBinaryPropertyDescriptor extends BasicScalarPropertyDescriptor implements IBinaryPropertyDescriptor {
 
-        private var _fileFilter:IMap;
+        private var _fileFilter:Object;
         private var _maxLength:Number;
 
-        public function set fileFilter(value:IMap):void {
+        public function set fileFilter(value:Object):void {
             _fileFilter = value;
         }
-        public function get fileFilter():IMap {
+        public function get fileFilter():Object {
             return _fileFilter;
         }
 
@@ -43,7 +42,7 @@ package org.jspresso.framework.model.descriptor.basic {
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _fileFilter = input.readObject() as IMap;
+            _fileFilter = input.readObject() as Object;
             _maxLength = function(o:*):Number { return (o is Number ? o as Number : Number.NaN) } (input.readObject());
         }
 

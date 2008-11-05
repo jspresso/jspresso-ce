@@ -14,11 +14,10 @@
 
 package org.jspresso.framework.model.descriptor {
 
-    import org.granite.collections.IMap;
 
     public interface IReferencePropertyDescriptor extends IRelationshipEndPropertyDescriptor {
 
-        function get initializationMapping():IMap;
+        function get initializationMapping():Object;
 
         function get referencedDescriptor():IComponentDescriptor;
     }

@@ -17,19 +17,18 @@ package org.jspresso.framework.gui.remote {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RCardContainer")]
     public class RCardContainer extends RContainer {
 
-        private var _cardMap:IMap;
+        private var _cardMap:Object;
         private var _selectedCard:String;
 
-        public function set cardMap(value:IMap):void {
+        public function set cardMap(value:Object):void {
             _cardMap = value;
         }
-        public function get cardMap():IMap {
+        public function get cardMap():Object {
             return _cardMap;
         }
 
@@ -42,7 +41,7 @@ package org.jspresso.framework.gui.remote {
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _cardMap = input.readObject() as IMap;
+            _cardMap = input.readObject() as Object;
             _selectedCard = input.readObject() as String;
         }
 

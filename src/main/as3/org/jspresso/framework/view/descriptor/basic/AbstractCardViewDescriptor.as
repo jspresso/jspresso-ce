@@ -17,22 +17,21 @@ package org.jspresso.framework.view.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
     import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor")]
     public class AbstractCardViewDescriptor extends BasicViewDescriptor implements ICardViewDescriptor {
 
-        private var _cardViewDescriptors:IMap;
+        private var _cardViewDescriptors:Object;
 
-        public function get cardViewDescriptors():IMap {
+        public function get cardViewDescriptors():Object {
             return _cardViewDescriptors;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _cardViewDescriptors = input.readObject() as IMap;
+            _cardViewDescriptors = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {

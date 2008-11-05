@@ -17,21 +17,20 @@ package org.jspresso.framework.model.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.collections.IMap;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor")]
     public class BasicEnumerationPropertyDescriptor extends AbstractEnumerationPropertyDescriptor {
 
-        private var _valuesAndIconImageUrls:IMap;
+        private var _valuesAndIconImageUrls:Object;
 
-        public function set valuesAndIconImageUrls(value:IMap):void {
+        public function set valuesAndIconImageUrls(value:Object):void {
             _valuesAndIconImageUrls = value;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _valuesAndIconImageUrls = input.readObject() as IMap;
+            _valuesAndIconImageUrls = input.readObject() as Object;
         }
 
         override public function writeExternal(output:IDataOutput):void {
