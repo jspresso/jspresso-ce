@@ -13,21 +13,26 @@
  */
 
 
-package org.jspresso.framework.gui.remote {
+package org.jspresso.framework.binding.remote.state {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.jspresso.framework.util.remote.RemotePeer;
+    import mx.collections.ListCollectionView;
 
     [Bindable]
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RAction")]
-    public class RAction extends RemotePeer {
+    [RemoteClass(alias="org.jspresso.framework.binding.remote.state.RemoteCompositeValueState")]
+    public class RemoteCompositeValueState extends RemoteValueState {
 
+        private var _children:ListCollectionView;
         private var _description:String;
-        private var _enabled:Boolean;
-        private var _icon:RIcon;
-        private var _mnemonicAsString:String;
-        private var _name:String;
+        private var _iconImageUrl:String;
+
+        public function set children(value:ListCollectionView):void {
+            _children = value;
+        }
+        public function get children():ListCollectionView {
+            return _children;
+        }
 
         public function set description(value:String):void {
             _description = value;
@@ -36,50 +41,25 @@ package org.jspresso.framework.gui.remote {
             return _description;
         }
 
-        public function set enabled(value:Boolean):void {
-            _enabled = value;
+        public function set iconImageUrl(value:String):void {
+            _iconImageUrl = value;
         }
-        public function get enabled():Boolean {
-            return _enabled;
-        }
-
-        public function set icon(value:RIcon):void {
-            _icon = value;
-        }
-        public function get icon():RIcon {
-            return _icon;
-        }
-
-        public function set mnemonicAsString(value:String):void {
-            _mnemonicAsString = value;
-        }
-        public function get mnemonicAsString():String {
-            return _mnemonicAsString;
-        }
-
-        public function set name(value:String):void {
-            _name = value;
-        }
-        public function get name():String {
-            return _name;
+        public function get iconImageUrl():String {
+            return _iconImageUrl;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
+            _children = input.readObject() as ListCollectionView;
             _description = input.readObject() as String;
-            _enabled = input.readObject() as Boolean;
-            _icon = input.readObject() as RIcon;
-            _mnemonicAsString = input.readObject() as String;
-            _name = input.readObject() as String;
+            _iconImageUrl = input.readObject() as String;
         }
 
         override public function writeExternal(output:IDataOutput):void {
             super.writeExternal(output);
+            output.writeObject(_children);
             output.writeObject(_description);
-            output.writeObject(_enabled);
-            output.writeObject(_icon);
-            output.writeObject(_mnemonicAsString);
-            output.writeObject(_name);
+            output.writeObject(_iconImageUrl);
         }
     }
 }

@@ -13,53 +13,33 @@
  */
 
 
-package org.jspresso.framework.gui.remote {
+package org.jspresso.framework.view.remote {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.jspresso.framework.util.remote.RemotePeer;
+    import org.granite.collections.IMap;
 
     [Bindable]
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RIcon")]
-    public class RIcon extends RemotePeer {
+    [RemoteClass(alias="org.jspresso.framework.view.remote.RemoteMapViewState")]
+    public class RemoteMapViewState extends RemoteViewState {
 
-        private var _height:int;
-        private var _imageUrlSpec:String;
-        private var _width:int;
+        private var _childrenMap:IMap;
 
-        public function set height(value:int):void {
-            _height = value;
+        public function set childrenMap(value:IMap):void {
+            _childrenMap = value;
         }
-        public function get height():int {
-            return _height;
-        }
-
-        public function set imageUrlSpec(value:String):void {
-            _imageUrlSpec = value;
-        }
-        public function get imageUrlSpec():String {
-            return _imageUrlSpec;
-        }
-
-        public function set width(value:int):void {
-            _width = value;
-        }
-        public function get width():int {
-            return _width;
+        public function get childrenMap():IMap {
+            return _childrenMap;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _height = input.readObject() as int;
-            _imageUrlSpec = input.readObject() as String;
-            _width = input.readObject() as int;
+            _childrenMap = input.readObject() as IMap;
         }
 
         override public function writeExternal(output:IDataOutput):void {
             super.writeExternal(output);
-            output.writeObject(_height);
-            output.writeObject(_imageUrlSpec);
-            output.writeObject(_width);
+            output.writeObject(_childrenMap);
         }
     }
 }

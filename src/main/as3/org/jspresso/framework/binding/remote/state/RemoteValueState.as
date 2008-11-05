@@ -13,53 +13,53 @@
  */
 
 
-package org.jspresso.framework.gui.remote {
+package org.jspresso.framework.binding.remote.state {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
     import org.jspresso.framework.util.remote.RemotePeer;
 
     [Bindable]
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RIcon")]
-    public class RIcon extends RemotePeer {
+    [RemoteClass(alias="org.jspresso.framework.binding.remote.state.RemoteValueState")]
+    public class RemoteValueState extends RemotePeer {
 
-        private var _height:int;
-        private var _imageUrlSpec:String;
-        private var _width:int;
+        private var _readable:Boolean;
+        private var _value:Object;
+        private var _writable:Boolean;
 
-        public function set height(value:int):void {
-            _height = value;
+        public function set readable(value:Boolean):void {
+            _readable = value;
         }
-        public function get height():int {
-            return _height;
-        }
-
-        public function set imageUrlSpec(value:String):void {
-            _imageUrlSpec = value;
-        }
-        public function get imageUrlSpec():String {
-            return _imageUrlSpec;
+        public function get readable():Boolean {
+            return _readable;
         }
 
-        public function set width(value:int):void {
-            _width = value;
+        public function set value(value:Object):void {
+            _value = value;
         }
-        public function get width():int {
-            return _width;
+        public function get value():Object {
+            return _value;
+        }
+
+        public function set writable(value:Boolean):void {
+            _writable = value;
+        }
+        public function get writable():Boolean {
+            return _writable;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _height = input.readObject() as int;
-            _imageUrlSpec = input.readObject() as String;
-            _width = input.readObject() as int;
+            _readable = input.readObject() as Boolean;
+            _value = input.readObject() as Object;
+            _writable = input.readObject() as Boolean;
         }
 
         override public function writeExternal(output:IDataOutput):void {
             super.writeExternal(output);
-            output.writeObject(_height);
-            output.writeObject(_imageUrlSpec);
-            output.writeObject(_width);
+            output.writeObject(_readable);
+            output.writeObject(_value);
+            output.writeObject(_writable);
         }
     }
 }

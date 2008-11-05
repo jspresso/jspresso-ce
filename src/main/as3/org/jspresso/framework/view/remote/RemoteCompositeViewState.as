@@ -13,53 +13,33 @@
  */
 
 
-package org.jspresso.framework.gui.remote {
+package org.jspresso.framework.view.remote {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.jspresso.framework.util.remote.RemotePeer;
+    import mx.collections.ListCollectionView;
 
     [Bindable]
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RIcon")]
-    public class RIcon extends RemotePeer {
+    [RemoteClass(alias="org.jspresso.framework.view.remote.RemoteCompositeViewState")]
+    public class RemoteCompositeViewState extends RemoteViewState {
 
-        private var _height:int;
-        private var _imageUrlSpec:String;
-        private var _width:int;
+        private var _children:ListCollectionView;
 
-        public function set height(value:int):void {
-            _height = value;
+        public function set children(value:ListCollectionView):void {
+            _children = value;
         }
-        public function get height():int {
-            return _height;
-        }
-
-        public function set imageUrlSpec(value:String):void {
-            _imageUrlSpec = value;
-        }
-        public function get imageUrlSpec():String {
-            return _imageUrlSpec;
-        }
-
-        public function set width(value:int):void {
-            _width = value;
-        }
-        public function get width():int {
-            return _width;
+        public function get children():ListCollectionView {
+            return _children;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _height = input.readObject() as int;
-            _imageUrlSpec = input.readObject() as String;
-            _width = input.readObject() as int;
+            _children = input.readObject() as ListCollectionView;
         }
 
         override public function writeExternal(output:IDataOutput):void {
             super.writeExternal(output);
-            output.writeObject(_height);
-            output.writeObject(_imageUrlSpec);
-            output.writeObject(_width);
+            output.writeObject(_children);
         }
     }
 }

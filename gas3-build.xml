@@ -24,8 +24,7 @@
   </target>
 
   <target
-    name="generate.as3"
-    depends="clean">
+    name="generate.as3">
     <gas3
       outputdir="src/main/as3"
       interfacetemplate="class:org/granite/generator/template/jspressoInterface.gsp"
@@ -36,6 +35,11 @@
         dir="remote/components/target/classes">
         <include
           name="**/*.class" />
+      </fileset>
+      <fileset
+        dir="remote/application/target/classes">
+        <include
+          name="**/*State.class" />
       </fileset>
       <fileset
         dir="util/target/classes">
@@ -54,17 +58,9 @@
       <fileset
         dir="view/target/classes">
         <include
-          name="**/*.class" />
-        <exclude
-          name="**/*Helper.class" />
-        <exclude
-          name="**/*Exception.class" />
-        <exclude
-          name="**/AbstractViewFactory.class" />
-        <exclude
-          name="**/AbstractIconFactory.class" />
-        <exclude
-          name="**/*$*.class" />
+          name="**/action/*.class" />
+        <include
+          name="**/descriptor/**/*.class" />
       </fileset>
     </gas3>
   </target>

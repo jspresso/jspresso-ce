@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
   <includeClasses>
+    <classEntry path="org.jspresso.framework.binding.remote.state.RemoteCompositeValueState"/>
+    <classEntry path="org.jspresso.framework.binding.remote.state.RemoteValueState"/>
     <classEntry path="org.jspresso.framework.gui.remote.RAction"/>
     <classEntry path="org.jspresso.framework.gui.remote.RCardContainer"/>
     <classEntry path="org.jspresso.framework.gui.remote.RComponent"/>
@@ -72,10 +74,8 @@
     <classEntry path="org.jspresso.framework.util.descriptor.DefaultIconDescriptor"/>
     <classEntry path="org.jspresso.framework.util.descriptor.IDescriptor"/>
     <classEntry path="org.jspresso.framework.util.descriptor.IIconDescriptor"/>
-    <classEntry path="org.jspresso.framework.util.remote.IRemoteClientPeer"/>
-    <classEntry path="org.jspresso.framework.util.remote.RemoteClientPeer"/>
-    <classEntry path="org.jspresso.framework.view.IActionFactory"/>
-    <classEntry path="org.jspresso.framework.view.IIconFactory"/>
+    <classEntry path="org.jspresso.framework.util.remote.IRemotePeer"/>
+    <classEntry path="org.jspresso.framework.util.remote.RemotePeer"/>
     <classEntry path="org.jspresso.framework.view.action.ActionList"/>
     <classEntry path="org.jspresso.framework.view.action.ActionMap"/>
     <classEntry path="org.jspresso.framework.view.action.IActionable"/>
@@ -107,6 +107,7 @@
     <classEntry path="org.jspresso.framework.view.descriptor.ITreeLevelDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.ITreeViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.IViewDescriptor"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.TreeDescriptorHelper"/>
     <classEntry path="org.jspresso.framework.view.descriptor.ViewConstraints"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor"/>
@@ -131,6 +132,9 @@
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicTreeViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.EntityCardViewDescriptor"/>
+    <classEntry path="org.jspresso.framework.view.remote.RemoteCompositeViewState"/>
+    <classEntry path="org.jspresso.framework.view.remote.RemoteMapViewState"/>
+    <classEntry path="org.jspresso.framework.view.remote.RemoteViewState"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

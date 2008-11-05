@@ -18,11 +18,11 @@ package org.jspresso.framework.gui.remote {
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
     import mx.collections.ListCollectionView;
-    import org.jspresso.framework.util.remote.RemoteClientPeer;
+    import org.jspresso.framework.util.remote.RemotePeer;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RComponent")]
-    public class RComponent extends RemoteClientPeer {
+    public class RComponent extends RemotePeer {
 
         private var _actions:ListCollectionView;
         private var _icon:RIcon;

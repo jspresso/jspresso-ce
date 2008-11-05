@@ -12,8 +12,22 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jspresso.framework.view {
 
-    public interface IIconFactory {
+package org.jspresso.framework.view.descriptor {
+
+    import flash.utils.IDataInput;
+    import flash.utils.IDataOutput;
+    import flash.utils.IExternalizable;
+
+    [Bindable]
+    [RemoteClass(alias="org.jspresso.framework.view.descriptor.TreeDescriptorHelper")]
+    public class TreeDescriptorHelper implements IExternalizable {
+
+
+        public function readExternal(input:IDataInput):void {
+        }
+
+        public function writeExternal(output:IDataOutput):void {
+        }
     }
 }
