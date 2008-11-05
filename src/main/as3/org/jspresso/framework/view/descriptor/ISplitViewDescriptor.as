@@ -18,7 +18,7 @@ package org.jspresso.framework.view.descriptor {
 
         function get leftTopViewDescriptor():IViewDescriptor;
 
-        function get orientation():EOrientation;
+        function get orientation():String;
 
         function get rightBottomViewDescriptor():IViewDescriptor;
     }

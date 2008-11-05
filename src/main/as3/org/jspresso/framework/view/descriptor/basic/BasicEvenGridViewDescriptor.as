@@ -17,9 +17,9 @@ package org.jspresso.framework.view.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
+    
     import mx.collections.ListCollectionView;
-    import org.granite.util.Enum;
-    import org.jspresso.framework.view.descriptor.EAxis;
+    
     import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 
     [Bindable]
@@ -27,7 +27,7 @@ package org.jspresso.framework.view.descriptor.basic {
     public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor implements IEvenGridViewDescriptor {
 
         private var _childViewDescriptors:ListCollectionView;
-        private var _drivingDimension:EAxis;
+        private var _drivingDimension:String;
         private var _drivingDimensionCellCount:int;
 
         public function set childViewDescriptors(value:ListCollectionView):void {
@@ -37,10 +37,10 @@ package org.jspresso.framework.view.descriptor.basic {
             return _childViewDescriptors;
         }
 
-        public function set drivingDimension(value:EAxis):void {
+        public function set drivingDimension(value:String):void {
             _drivingDimension = value;
         }
-        public function get drivingDimension():EAxis {
+        public function get drivingDimension():String {
             return _drivingDimension;
         }
 
@@ -54,7 +54,7 @@ package org.jspresso.framework.view.descriptor.basic {
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
             _childViewDescriptors = input.readObject() as ListCollectionView;
-            _drivingDimension = Enum.readEnum(input) as EAxis;
+            _drivingDimension = input.readObject() as String;
             _drivingDimensionCellCount = input.readObject() as int;
         }
 

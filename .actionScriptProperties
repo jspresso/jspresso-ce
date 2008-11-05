@@ -4,11 +4,8 @@
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
-      <libraryPathEntry kind="3" linkType="1" path="C:/envdev/graniteds/build/granite.swc" sourcepath="C:/envdev/graniteds/as3/core" useDefaultLinkType="false"/>
     </libraryPath>
-    <sourceAttachmentPath>
-      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/envdev/graniteds/build/granite.swc" sourcepath="C:/envdev/graniteds/as3/core" useDefaultLinkType="false"/>
-    </sourceAttachmentPath>
+    <sourceAttachmentPath/>
   </compiler>
   <applications>
     <application path="JspressoAsTest.as"/>

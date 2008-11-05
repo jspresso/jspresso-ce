@@ -17,26 +17,24 @@ package org.jspresso.framework.model.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.util.Enum;
-    import org.jspresso.framework.model.descriptor.EDateType;
     import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor")]
     public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor implements IDatePropertyDescriptor {
 
-        private var _type:EDateType;
+        private var _type:String;
 
-        public function set type(value:EDateType):void {
+        public function set type(value:String):void {
             _type = value;
         }
-        public function get type():EDateType {
+        public function get type():String {
             return _type;
         }
 
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
-            _type = Enum.readEnum(input) as EDateType;
+            _type = input.readObject() as String;
         }
 
         override public function writeExternal(output:IDataOutput):void {

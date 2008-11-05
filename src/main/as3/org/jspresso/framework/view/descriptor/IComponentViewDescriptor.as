@@ -20,7 +20,7 @@ package org.jspresso.framework.view.descriptor {
 
         function get columnCount():int;
 
-        function get labelsPosition():ELabelPosition;
+        function get labelsPosition():String;
 
         function get propertyViewDescriptors():ListCollectionView;
     }

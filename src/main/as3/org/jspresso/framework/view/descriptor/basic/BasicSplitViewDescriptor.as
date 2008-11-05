@@ -17,8 +17,6 @@ package org.jspresso.framework.view.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.util.Enum;
-    import org.jspresso.framework.view.descriptor.EOrientation;
     import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
     import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -27,7 +25,7 @@ package org.jspresso.framework.view.descriptor.basic {
     public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor implements ISplitViewDescriptor {
 
         private var _leftTopViewDescriptor:IViewDescriptor;
-        private var _orientation:EOrientation;
+        private var _orientation:String;
         private var _rightBottomViewDescriptor:IViewDescriptor;
 
         public function set leftTopViewDescriptor(value:IViewDescriptor):void {
@@ -37,10 +35,10 @@ package org.jspresso.framework.view.descriptor.basic {
             return _leftTopViewDescriptor;
         }
 
-        public function set orientation(value:EOrientation):void {
+        public function set orientation(value:String):void {
             _orientation = value;
         }
-        public function get orientation():EOrientation {
+        public function get orientation():String {
             return _orientation;
         }
 
@@ -54,7 +52,7 @@ package org.jspresso.framework.view.descriptor.basic {
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
             _leftTopViewDescriptor = input.readObject() as IViewDescriptor;
-            _orientation = Enum.readEnum(input) as EOrientation;
+            _orientation = input.readObject() as String;
             _rightBottomViewDescriptor = input.readObject() as IViewDescriptor;
         }
 

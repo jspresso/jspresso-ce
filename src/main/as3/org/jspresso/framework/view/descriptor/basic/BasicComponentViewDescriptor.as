@@ -18,8 +18,6 @@ package org.jspresso.framework.view.descriptor.basic {
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
     import mx.collections.ListCollectionView;
-    import org.granite.util.Enum;
-    import org.jspresso.framework.view.descriptor.ELabelPosition;
     import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 
     [Bindable]
@@ -27,7 +25,7 @@ package org.jspresso.framework.view.descriptor.basic {
     public class BasicComponentViewDescriptor extends BasicViewDescriptor implements IComponentViewDescriptor {
 
         private var _columnCount:int;
-        private var _labelsPosition:ELabelPosition;
+        private var _labelsPosition:String;
         private var _propertyViewDescriptors:ListCollectionView;
         private var _propertyWidths:Object;
         private var _renderedChildProperties:Object;
@@ -39,10 +37,10 @@ package org.jspresso.framework.view.descriptor.basic {
             return _columnCount;
         }
 
-        public function set labelsPosition(value:ELabelPosition):void {
+        public function set labelsPosition(value:String):void {
             _labelsPosition = value;
         }
-        public function get labelsPosition():ELabelPosition {
+        public function get labelsPosition():String {
             return _labelsPosition;
         }
 
@@ -64,7 +62,7 @@ package org.jspresso.framework.view.descriptor.basic {
         override public function readExternal(input:IDataInput):void {
             super.readExternal(input);
             _columnCount = input.readObject() as int;
-            _labelsPosition = Enum.readEnum(input) as ELabelPosition;
+            _labelsPosition = input.readObject() as String;
             _propertyViewDescriptors = input.readObject() as ListCollectionView;
             _propertyWidths = input.readObject() as Object;
             _renderedChildProperties = input.readObject() as Object;

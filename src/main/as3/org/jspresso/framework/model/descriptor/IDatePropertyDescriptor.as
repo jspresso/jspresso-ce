@@ -16,6 +16,6 @@ package org.jspresso.framework.model.descriptor {
 
     public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor {
 
-        function get type():EDateType;
+        function get type():String;
     }
 }

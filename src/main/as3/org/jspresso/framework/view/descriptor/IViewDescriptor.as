@@ -20,7 +20,7 @@ package org.jspresso.framework.view.descriptor {
 
         function get background():String;
 
-        function get borderType():EBorderType;
+        function get borderType():String;
 
         function get font():String;
 

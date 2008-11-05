@@ -17,9 +17,7 @@ package org.jspresso.framework.view.descriptor.basic {
 
     import flash.utils.IDataInput;
     import flash.utils.IDataOutput;
-    import org.granite.util.Enum;
     import org.jspresso.framework.view.action.ActionMap;
-    import org.jspresso.framework.view.descriptor.EBorderType;
     import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
     [Bindable]
@@ -28,7 +26,7 @@ package org.jspresso.framework.view.descriptor.basic {
 
         private var _actionMap:ActionMap;
         private var _background:String;
-        private var _borderType:EBorderType;
+        private var _borderType:String;
         private var _font:String;
         private var _foreground:String;
 
@@ -46,10 +44,10 @@ package org.jspresso.framework.view.descriptor.basic {
             return _background;
         }
 
-        public function set borderType(value:EBorderType):void {
+        public function set borderType(value:String):void {
             _borderType = value;
         }
-        public function get borderType():EBorderType {
+        public function get borderType():String {
             return _borderType;
         }
 
@@ -71,7 +69,7 @@ package org.jspresso.framework.view.descriptor.basic {
             super.readExternal(input);
             _actionMap = input.readObject() as ActionMap;
             _background = input.readObject() as String;
-            _borderType = Enum.readEnum(input) as EBorderType;
+            _borderType = input.readObject() as String;
             _font = input.readObject() as String;
             _foreground = input.readObject() as String;
         }

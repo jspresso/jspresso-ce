@@ -16,7 +16,7 @@ package org.jspresso.framework.view.descriptor {
 
     public interface IEvenGridViewDescriptor extends IGridViewDescriptor {
 
-        function get drivingDimension():EAxis;
+        function get drivingDimension():String;
 
         function get drivingDimensionCellCount():int;
     }
