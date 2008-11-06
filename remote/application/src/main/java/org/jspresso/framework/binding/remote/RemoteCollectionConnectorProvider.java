@@ -102,7 +102,6 @@ public class RemoteCollectionConnectorProvider extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public RemoteCompositeValueState getState() {
     if (state == null) {
       state = new RemoteCompositeValueState(getGuid());

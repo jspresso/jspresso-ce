@@ -100,7 +100,6 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public RemoteCompositeValueState getState() {
     if (state == null) {
       state = new RemoteCompositeValueState(getGuid());

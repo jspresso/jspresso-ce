@@ -95,7 +95,6 @@ public class RemoteValueConnector extends BasicValueConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public RemoteValueState getState() {
     if (state == null) {
       state = new RemoteValueState(getGuid());

@@ -108,7 +108,6 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   /**
    * {@inheritDoc}
    */
-  @Override
   public RemoteCompositeValueState getState() {
     if (state == null) {
       state = new RemoteCompositeValueState(getGuid());
