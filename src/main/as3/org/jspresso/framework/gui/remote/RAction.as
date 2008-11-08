@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
     import org.jspresso.framework.util.remote.RemotePeer;
 
     [Bindable]
@@ -62,24 +60,6 @@ package org.jspresso.framework.gui.remote {
         }
         public function get name():String {
             return _name;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _description = input.readObject() as String;
-            _enabled = input.readObject() as Boolean;
-            _icon = input.readObject() as RIcon;
-            _mnemonicAsString = input.readObject() as String;
-            _name = input.readObject() as String;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_description);
-            output.writeObject(_enabled);
-            output.writeObject(_icon);
-            output.writeObject(_mnemonicAsString);
-            output.writeObject(_name);
         }
     }
 }

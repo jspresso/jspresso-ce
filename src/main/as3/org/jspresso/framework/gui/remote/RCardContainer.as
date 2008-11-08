@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RCardContainer")]
@@ -37,18 +35,6 @@ package org.jspresso.framework.gui.remote {
         }
         public function get selectedCard():String {
             return _selectedCard;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _cardMap = input.readObject() as Object;
-            _selectedCard = input.readObject() as String;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_cardMap);
-            output.writeObject(_selectedCard);
         }
     }
 }

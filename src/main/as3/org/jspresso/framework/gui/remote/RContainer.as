@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RContainer")]
@@ -29,16 +27,6 @@ package org.jspresso.framework.gui.remote {
         }
         public function get children():Object {
             return _children;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _children = input.readObject() as Object;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_children);
         }
     }
 }

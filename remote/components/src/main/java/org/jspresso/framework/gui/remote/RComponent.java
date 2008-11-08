@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 import java.util.List;
 
+import org.jspresso.framework.binding.remote.state.RemoteValueState;
 import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
@@ -43,15 +44,17 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RComponent extends RemotePeer {
 
-  private String        label;
-  private String        tooltip;
-  private RIcon         icon;
-  private List<RAction> actions;
+  private String           label;
+  private String           tooltip;
+  private RIcon            icon;
+  private List<RAction>    actions;
+  private RemoteValueState state;
 
   /**
    * Constructs a new <code>RComponent</code> instance.
    * 
-   * @param guid the guid.
+   * @param guid
+   *          the guid.
    */
   public RComponent(String guid) {
     super(guid);
@@ -131,5 +134,25 @@ public class RComponent extends RemotePeer {
    */
   public RIcon getIcon() {
     return icon;
+  }
+
+  
+  /**
+   * Gets the state.
+   * 
+   * @return the state.
+   */
+  public RemoteValueState getState() {
+    return state;
+  }
+
+  
+  /**
+   * Sets the state.
+   * 
+   * @param state the state to set.
+   */
+  public void setState(RemoteValueState state) {
+    this.state = state;
   }
 }

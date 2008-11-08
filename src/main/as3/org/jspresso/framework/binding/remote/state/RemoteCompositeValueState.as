@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.binding.remote.state {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
     import mx.collections.ListCollectionView;
 
     [Bindable]
@@ -46,20 +44,6 @@ package org.jspresso.framework.binding.remote.state {
         }
         public function get iconImageUrl():String {
             return _iconImageUrl;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _children = input.readObject() as ListCollectionView;
-            _description = input.readObject() as String;
-            _iconImageUrl = input.readObject() as String;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_children);
-            output.writeObject(_description);
-            output.writeObject(_iconImageUrl);
         }
     }
 }

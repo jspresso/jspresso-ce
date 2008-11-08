@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
     import mx.collections.ListCollectionView;
     import org.jspresso.framework.util.remote.RemotePeer;
 
@@ -55,22 +53,6 @@ package org.jspresso.framework.gui.remote {
         }
         public function get tooltip():String {
             return _tooltip;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _actions = input.readObject() as ListCollectionView;
-            _icon = input.readObject() as RIcon;
-            _label = input.readObject() as String;
-            _tooltip = input.readObject() as String;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_actions);
-            output.writeObject(_icon);
-            output.writeObject(_label);
-            output.writeObject(_tooltip);
         }
     }
 }

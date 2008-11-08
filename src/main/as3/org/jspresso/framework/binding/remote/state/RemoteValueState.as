@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.binding.remote.state {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
     import org.jspresso.framework.util.remote.RemotePeer;
 
     [Bindable]
@@ -46,20 +44,6 @@ package org.jspresso.framework.binding.remote.state {
         }
         public function get writable():Boolean {
             return _writable;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _readable = input.readObject() as Boolean;
-            _value = input.readObject() as Object;
-            _writable = input.readObject() as Boolean;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_readable);
-            output.writeObject(_value);
-            output.writeObject(_writable);
         }
     }
 }

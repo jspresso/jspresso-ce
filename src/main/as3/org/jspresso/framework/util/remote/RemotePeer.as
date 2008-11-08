@@ -15,26 +15,16 @@
 
 package org.jspresso.framework.util.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
     import flash.utils.IExternalizable;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.util.remote.RemotePeer")]
-    public class RemotePeer implements IExternalizable, IRemotePeer {
+    public class RemotePeer implements IRemotePeer {
 
         private var _guid:String;
 
         public function get guid():String {
             return _guid;
-        }
-
-        public function readExternal(input:IDataInput):void {
-            _guid = input.readObject() as String;
-        }
-
-        public function writeExternal(output:IDataOutput):void {
-            output.writeObject(_guid);
         }
     }
 }

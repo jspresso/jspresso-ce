@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
     import mx.collections.ListCollectionView;
 
     [Bindable]
@@ -30,16 +28,6 @@ package org.jspresso.framework.gui.remote {
         }
         public function get columns():ListCollectionView {
             return _columns;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _columns = input.readObject() as ListCollectionView;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_columns);
         }
     }
 }

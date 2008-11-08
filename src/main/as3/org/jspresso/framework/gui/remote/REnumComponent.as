@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
 
     [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.REnumComponent")]
@@ -37,18 +35,6 @@ package org.jspresso.framework.gui.remote {
         }
         public function get renderingTranslations():Object {
             return _renderingTranslations;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _renderingIcons = input.readObject() as Object;
-            _renderingTranslations = input.readObject() as Object;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_renderingIcons);
-            output.writeObject(_renderingTranslations);
         }
     }
 }

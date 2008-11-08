@@ -15,8 +15,6 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import flash.utils.IDataInput;
-    import flash.utils.IDataOutput;
     import org.jspresso.framework.util.remote.RemotePeer;
 
     [Bindable]
@@ -46,20 +44,6 @@ package org.jspresso.framework.gui.remote {
         }
         public function get width():int {
             return _width;
-        }
-
-        override public function readExternal(input:IDataInput):void {
-            super.readExternal(input);
-            _height = input.readObject() as int;
-            _imageUrlSpec = input.readObject() as String;
-            _width = input.readObject() as int;
-        }
-
-        override public function writeExternal(output:IDataOutput):void {
-            super.writeExternal(output);
-            output.writeObject(_height);
-            output.writeObject(_imageUrlSpec);
-            output.writeObject(_width);
         }
     }
 }

@@ -36,9 +36,9 @@ import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RContainer;
-import org.jspresso.framework.gui.remote.REnumComponent;
+import org.jspresso.framework.gui.remote.RComboBox;
 import org.jspresso.framework.gui.remote.RIcon;
-import org.jspresso.framework.gui.remote.RTableComponent;
+import org.jspresso.framework.gui.remote.RTable;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -254,12 +254,12 @@ public class DefaultRemoteViewFactory extends
     return new RComponent(guidGenerator.generateGUID());
   }
 
-  private REnumComponent createREnumComponent() {
-    return new REnumComponent(guidGenerator.generateGUID());
+  private RComboBox createREnumComponent() {
+    return new RComboBox(guidGenerator.generateGUID());
   }
 
-  private RTableComponent createRTableComponent() {
-    return new RTableComponent(guidGenerator.generateGUID());
+  private RTable createRTableComponent() {
+    return new RTable(guidGenerator.generateGUID());
   }
 
   private RContainer createRContainer() {
@@ -347,7 +347,7 @@ public class DefaultRemoteViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    RTableComponent viewComponent = createRTableComponent();
+    RTable viewComponent = createRTableComponent();
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -435,7 +435,7 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    REnumComponent enumComponent = createREnumComponent();
+    RComboBox enumComponent = createREnumComponent();
     IView<RComponent> view = createRComponentPropertyView(enumComponent,
         propertyDescriptor, actionHandler, locale);
     Map<String, String> translations = new HashMap<String, String>();
