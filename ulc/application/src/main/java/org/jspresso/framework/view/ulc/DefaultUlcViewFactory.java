@@ -1434,7 +1434,11 @@ public class DefaultUlcViewFactory extends
     return cellRenderer;
   }
 
-  private IView<ULCComponent> createPasswordPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createPasswordPropertyView(
       IPasswordPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     ULCPasswordField viewComponent = createULCPasswordField();
@@ -1590,7 +1594,11 @@ public class DefaultUlcViewFactory extends
     return cellRenderer;
   }
 
-  private IView<ULCComponent> createSourceCodePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     ULCJEditTextArea viewComponent = createULCJEditTextArea(propertyDescriptor
@@ -1647,20 +1655,7 @@ public class DefaultUlcViewFactory extends
   @Override
   protected IView<ULCComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
-      return createPasswordPropertyView(
-          (IPasswordPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    }
-    if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
-      return createSourceCodePropertyView(
-          (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
-      return createTextPropertyView(
-          (ITextPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    }
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     ULCTextField viewComponent = createULCTextField();
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -1925,7 +1920,11 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  private IView<ULCComponent> createTextPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     ULCTextArea viewComponent = createULCTextArea();

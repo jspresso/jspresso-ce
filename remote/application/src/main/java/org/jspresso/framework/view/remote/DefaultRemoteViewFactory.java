@@ -32,13 +32,28 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionField;
 import org.jspresso.framework.gui.remote.RCardContainer;
+import org.jspresso.framework.gui.remote.RCheckBox;
+import org.jspresso.framework.gui.remote.RColorField;
+import org.jspresso.framework.gui.remote.RComboBox;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RContainer;
-import org.jspresso.framework.gui.remote.RComboBox;
+import org.jspresso.framework.gui.remote.RDateField;
+import org.jspresso.framework.gui.remote.RDecimalField;
+import org.jspresso.framework.gui.remote.RDurationField;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.gui.remote.RImageComponent;
+import org.jspresso.framework.gui.remote.RIntegerField;
+import org.jspresso.framework.gui.remote.RList;
+import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RTable;
+import org.jspresso.framework.gui.remote.RTextArea;
+import org.jspresso.framework.gui.remote.RTextField;
+import org.jspresso.framework.gui.remote.RTimeField;
+import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -49,9 +64,12 @@ import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
@@ -102,7 +120,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class DefaultRemoteViewFactory extends
     AbstractViewFactory<RComponent, RIcon, RAction> {
 
-  private IGUIDGenerator       guidGenerator;
+  private IGUIDGenerator guidGenerator;
 
   /**
    * {@inheritDoc}
@@ -114,7 +132,7 @@ public class DefaultRemoteViewFactory extends
     ICompositeValueConnector connector = createTreeViewConnector(
         viewDescriptor, locale);
 
-    RComponent viewComponent = createRComponent();
+    RTree viewComponent = createRTree(connector);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     return view;
@@ -159,10 +177,10 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
-    RComponent viewComponent = createRComponent();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         viewDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
+    RImageComponent viewComponent = createRImageComponent(connector);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     return view;
@@ -250,16 +268,53 @@ public class DefaultRemoteViewFactory extends
     return view;
   }
 
-  private RComponent createRComponent() {
-    return new RComponent(guidGenerator.generateGUID());
+  private RComboBox createRComboBox(IValueConnector connector) {
+    RComboBox component = new RComboBox(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
-  private RComboBox createREnumComponent() {
-    return new RComboBox(guidGenerator.generateGUID());
+  private RTable createRTable(IValueConnector connector) {
+    RTable component = new RTable(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
-  private RTable createRTableComponent() {
-    return new RTable(guidGenerator.generateGUID());
+  private RTree createRTree(IValueConnector connector) {
+    RTree component = new RTree(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  private RList createRList(ICollectionConnector connector) {
+    RList component = new RList(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  private RActionField createRActionField(IValueConnector connector) {
+    RActionField component = new RActionField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  private RImageComponent createRImageComponent(IValueConnector connector) {
+    RImageComponent component = new RImageComponent(guidGenerator
+        .generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
   private RContainer createRContainer() {
@@ -270,22 +325,6 @@ public class DefaultRemoteViewFactory extends
     return new RCardContainer(guidGenerator.generateGUID());
   }
 
-  private IView<RComponent> createRComponentPropertyView(
-      IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    return createRComponentPropertyView(createRComponent(), propertyDescriptor,
-        actionHandler, locale);
-  }
-
-  private IView<RComponent> createRComponentPropertyView(
-      RComponent viewComponent, IPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
-    connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -293,11 +332,13 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createBinaryPropertyView(
       IBinaryPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IView<RComponent> view = createRComponentPropertyView(propertyDescriptor,
-        actionHandler, locale);
-    view.getPeer().setActions(
-        createBinaryActions(view.getPeer(), view.getConnector(),
-            propertyDescriptor, actionHandler, locale));
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RActionField viewComponent = createRActionField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    viewComponent.setActions(createBinaryActions(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale));
     return view;
   }
 
@@ -317,7 +358,7 @@ public class DefaultRemoteViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    RComponent viewComponent = createRComponent();
+    RList viewComponent = createRList(connector);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -347,7 +388,7 @@ public class DefaultRemoteViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    RTable viewComponent = createRTableComponent();
+    RTable viewComponent = createRTable(connector);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -406,8 +447,11 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createReferencePropertyView(
       IReferencePropertyDescriptor<?> propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IView<RComponent> view = createRComponentPropertyView(propertyDescriptor,
-        actionHandler, locale);
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RActionField viewComponent = createRActionField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
     RAction lovAction = createLovAction(view.getPeer(), view.getConnector(),
         propertyDescriptor, actionHandler, locale);
     lovAction.setName(getTranslationProvider().getTranslation(
@@ -417,14 +461,13 @@ public class DefaultRemoteViewFactory extends
     lovAction.setDescription(getTranslationProvider().getTranslation(
         "lov.element.description",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            getTranslationProvider(), locale)}, locale)
-        + TOOLTIP_ELLIPSIS);
+            getTranslationProvider(), locale)}, locale));
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.setIcon(getIconFactory().getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    view.getPeer().setActions(Collections.singletonList(lovAction));
+    viewComponent.setActions(Collections.singletonList(lovAction));
     return view;
   }
 
@@ -435,9 +478,11 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    RComboBox enumComponent = createREnumComponent();
-    IView<RComponent> view = createRComponentPropertyView(enumComponent,
-        propertyDescriptor, actionHandler, locale);
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RComboBox viewComponent = createRComboBox(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
     Map<String, String> translations = new HashMap<String, String>();
     Map<String, RIcon> icons = new HashMap<String, RIcon>();
     for (String value : propertyDescriptor.getEnumerationValues()) {
@@ -450,7 +495,7 @@ public class DefaultRemoteViewFactory extends
             IIconFactory.TINY_ICON_SIZE));
       }
     }
-    enumComponent.setRenderingTranslations(translations);
+    viewComponent.setRenderingTranslations(translations);
     return view;
   }
 
@@ -639,9 +684,21 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createDecimalPropertyView(
       IDecimalPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler,
-        locale);
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RDecimalField viewComponent = createRDecimalField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RDecimalField createRDecimalField(IValueConnector connector) {
+    RDecimalField component = new RDecimalField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
   /**
@@ -650,9 +707,21 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createIntegerPropertyView(
       IIntegerPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler,
-        locale);
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RIntegerField viewComponent = createRIntegerField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RIntegerField createRIntegerField(IValueConnector connector) {
+    RIntegerField component = new RIntegerField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
   /**
@@ -661,9 +730,21 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler,
-        locale);
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RCheckBox viewComponent = createRCheckBox(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RCheckBox createRCheckBox(IValueConnector connector) {
+    RCheckBox component = new RCheckBox(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
   /**
@@ -672,9 +753,21 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createColorPropertyView(
       IColorPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler,
-        locale);
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RColorField viewComponent = createRColorField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RColorField createRColorField(IValueConnector connector) {
+    RColorField component = new RColorField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
   /**
@@ -683,9 +776,21 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createDatePropertyView(
       IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler,
-        locale);
+      @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RDateField viewComponent = createRDateField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RDateField createRDateField(IValueConnector connector) {
+    RDateField component = new RDateField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
   /**
@@ -694,20 +799,21 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createDurationPropertyView(
       IDurationPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler,
-        locale);
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RDurationField viewComponent = createRDurationField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<RComponent> createStringPropertyView(
-      IStringPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler,
-        locale);
+  private RDurationField createRDurationField(IValueConnector connector) {
+    RDurationField component = new RDurationField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
   /**
@@ -716,9 +822,21 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createTimePropertyView(
       ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    return createRComponentPropertyView(propertyDescriptor, actionHandler,
-        locale);
+      @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RTimeField viewComponent = createRTimeField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RTimeField createRTimeField(IValueConnector connector) {
+    RTimeField component = new RTimeField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 
   /**
@@ -800,9 +918,90 @@ public class DefaultRemoteViewFactory extends
   /**
    * Sets the guidGenerator.
    * 
-   * @param guidGenerator the guidGenerator to set.
+   * @param guidGenerator
+   *          the guidGenerator to set.
    */
   public void setGuidGenerator(IGUIDGenerator guidGenerator) {
     this.guidGenerator = guidGenerator;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createPasswordPropertyView(
+      IPasswordPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RPasswordField viewComponent = createRPasswordField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RPasswordField createRPasswordField(IValueConnector connector) {
+    RPasswordField component = new RPasswordField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createSourceCodePropertyView(
+      ISourceCodePropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return createTextPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createStringPropertyView(
+      IStringPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RTextField viewComponent = createRTextField(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RTextField createRTextField(IValueConnector connector) {
+    RTextField component = new RTextField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createTextPropertyView(
+      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      @SuppressWarnings("unused") Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RTextArea viewComponent = createRTextArea(connector);
+    IView<RComponent> view = constructView(viewComponent, null, connector);
+    return view;
+  }
+
+  private RTextArea createRTextArea(IValueConnector connector) {
+    RTextArea component = new RTextArea(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
   }
 }

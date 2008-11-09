@@ -210,23 +210,20 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(
-      IViewDescriptor viewDescriptor, Locale locale, IView<JComponent> view) {
+  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
+      Locale locale, IView<JComponent> view) {
     if (viewDescriptor.getForeground() != null) {
-      view.getPeer().setForeground(
-          createColor(viewDescriptor.getForeground()));
+      view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
     }
     if (viewDescriptor.getBackground() != null) {
-      view.getPeer().setBackground(
-          createColor(viewDescriptor.getBackground()));
+      view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
     }
     if (viewDescriptor.getFont() != null) {
       view.getPeer().setFont(createFont(viewDescriptor.getFont()));
     }
     if (viewDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
-          viewDescriptor.getI18nDescription(getTranslationProvider(),
-              locale)
+          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
               + TOOLTIP_ELLIPSIS);
     }
   }
@@ -260,8 +257,8 @@ public class DefaultSwingViewFactory extends
                 + "-" + KeyEvent.getKeyText(ks.getKeyCode());
             actionButton.setToolTipText("<HTML>"
                 + actionButton.getToolTipText()
-                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                + acceleratorString + "</FONT></HTML>");
+                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                + "</FONT></HTML>");
           }
           actionButton.setText("");
           toolBar.add(actionButton);
@@ -768,7 +765,8 @@ public class DefaultSwingViewFactory extends
     Map<String, IView<JComponent>> childrenViews = new HashMap<String, IView<JComponent>>();
 
     viewComponent.add(createJPanel(), ICardViewDescriptor.DEFAULT_CARD);
-    viewComponent.add(createSecurityComponent(), ICardViewDescriptor.SECURITY_CARD);
+    viewComponent.add(createSecurityComponent(),
+        ICardViewDescriptor.SECURITY_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
         .getCardViewDescriptors().entrySet()) {
@@ -1348,7 +1346,8 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createListView(IListViewDescriptor viewDescriptor,
+  protected IView<JComponent> createListView(
+      IListViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
@@ -1420,7 +1419,11 @@ public class DefaultSwingViewFactory extends
     return cellRenderer;
   }
 
-  private IView<JComponent> createPasswordPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createPasswordPropertyView(
       IPasswordPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JPasswordField viewComponent = createJPasswordField();
@@ -1552,7 +1555,11 @@ public class DefaultSwingViewFactory extends
     return cellRenderer;
   }
 
-  private IView<JComponent> createSourceCodePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JEditTextArea viewComponent = createJEditTextArea(propertyDescriptor
@@ -1609,19 +1616,7 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
-      return createPasswordPropertyView(
-          (IPasswordPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
-      return createSourceCodePropertyView(
-          (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
-      return createTextPropertyView(
-          (ITextPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    }
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JTextField viewComponent = createJTextField();
     JTextFieldConnector connector = new JTextFieldConnector(propertyDescriptor
         .getName(), viewComponent);
@@ -1884,7 +1879,11 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  private IView<JComponent> createTextPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     JTextArea viewComponent = createJTextArea();
@@ -1938,8 +1937,9 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+  protected IView<JComponent> createTreeView(
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
 
     ICompositeValueConnector connector = createTreeViewConnector(
         viewDescriptor, locale);

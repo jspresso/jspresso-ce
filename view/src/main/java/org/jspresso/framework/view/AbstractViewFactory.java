@@ -52,10 +52,13 @@ import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.gate.IGate;
@@ -1211,7 +1214,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           (IRelationshipEndPropertyDescriptor) propertyDescriptor,
           renderedChildProperties, actionHandler, locale);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
-      view = createStringPropertyView(
+      view = createTextualPropertyView(
           (IStringPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
       view = createBinaryPropertyView(
@@ -1222,6 +1225,35 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     decorateWithDescription(propertyDescriptor, locale, view);
     return view;
+  }
+
+  /**
+   * Creates a textual property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected IView<E> createTextualPropertyView(
+      IStringPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
+      return createPasswordPropertyView(
+          (IPasswordPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
+      return createSourceCodePropertyView(
+          (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
+      return createTextPropertyView(
+          (ITextPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    }
+    return createStringPropertyView(propertyDescriptor, actionHandler, locale);
   }
 
   /**
@@ -1265,6 +1297,51 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected abstract IView<E> createBinaryPropertyView(
       IBinaryPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a password property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createPasswordPropertyView(
+      IPasswordPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a text property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createTextPropertyView(
+      ITextPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a source code property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createSourceCodePropertyView(
+      ISourceCodePropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**

@@ -1407,7 +1407,11 @@ public class DefaultWingsViewFactory extends
     return cellRenderer;
   }
 
-  private IView<SComponent> createPasswordPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<SComponent> createPasswordPropertyView(
       IPasswordPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     SPasswordField viewComponent = createSPasswordField();
@@ -1538,7 +1542,11 @@ public class DefaultWingsViewFactory extends
     return cellRenderer;
   }
 
-  private IView<SComponent> createSourceCodePropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<SComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
 
       IActionHandler actionHandler, Locale locale) {
@@ -1659,19 +1667,7 @@ public class DefaultWingsViewFactory extends
   @Override
   protected IView<SComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
-      return createPasswordPropertyView(
-          (IPasswordPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
-      return createSourceCodePropertyView(
-          (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
-      return createTextPropertyView(
-          (ITextPropertyDescriptor) propertyDescriptor, actionHandler, locale);
-    }
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     STextField viewComponent = createSTextField();
     STextFieldConnector connector = new STextFieldConnector(propertyDescriptor
         .getName(), viewComponent);
@@ -1896,7 +1892,11 @@ public class DefaultWingsViewFactory extends
     return view;
   }
 
-  private IView<SComponent> createTextPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<SComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     STextArea viewComponent = createSTextArea();
