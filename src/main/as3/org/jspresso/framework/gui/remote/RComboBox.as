@@ -13,19 +13,27 @@
  */
 
 
-package org.jspresso.framework.util.remote {
+package org.jspresso.framework.gui.remote {
 
 
-    [RemoteClass(alias="org.jspresso.framework.util.remote.RemotePeer")]
-    public class RemotePeer implements IRemotePeer {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RComboBox")]
+    public class RComboBox extends RComponent {
 
-        private var _guid:String;
+        private var _renderingIcons:Object;
+        private var _renderingTranslations:Object;
 
-        public function set guid(value:String):void {
-            _guid = value;
+        public function set renderingIcons(value:Object):void {
+            _renderingIcons = value;
         }
-        public function get guid():String {
-            return _guid;
+        public function get renderingIcons():Object {
+            return _renderingIcons;
+        }
+
+        public function set renderingTranslations(value:Object):void {
+            _renderingTranslations = value;
+        }
+        public function get renderingTranslations():Object {
+            return _renderingTranslations;
         }
     }
 }

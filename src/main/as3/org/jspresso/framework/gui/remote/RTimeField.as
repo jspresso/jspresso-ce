@@ -13,19 +13,11 @@
  */
 
 
-package org.jspresso.framework.util.remote {
+package org.jspresso.framework.gui.remote {
 
 
-    [RemoteClass(alias="org.jspresso.framework.util.remote.RemotePeer")]
-    public class RemotePeer implements IRemotePeer {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTimeField")]
+    public class RTimeField extends RComponent {
 
-        private var _guid:String;
-
-        public function set guid(value:String):void {
-            _guid = value;
-        }
-        public function get guid():String {
-            return _guid;
-        }
     }
 }

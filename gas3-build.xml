@@ -41,27 +41,13 @@
         <include
           name="**/*State.class" />
       </fileset>
-      <fileset
-        dir="util/target/classes">
-        <include
-          name="org/jspresso/framework/util/IIconImageURLProvider.class" />
-        <include
-          name="org/jspresso/framework/util/descriptor/*.class" />
-      </fileset>
-      <fileset
-        dir="model/target/classes">
-        <include
-          name="org/jspresso/framework/model/descriptor/**/*Descriptor.class" />
-        <include
-          name="org/jspresso/framework/model/descriptor/EDateType.class" />
-      </fileset>
-      <fileset
-        dir="view/target/classes">
-        <include
-          name="**/action/*.class" />
-        <include
-          name="**/descriptor/**/*.class" />
-      </fileset>
     </gas3>
+    <delete>
+      <fileset
+        dir="src/main/as3">
+        <include
+          name="**/*Base.as" />
+      </fileset>
+    </delete>
   </target>
 </project>

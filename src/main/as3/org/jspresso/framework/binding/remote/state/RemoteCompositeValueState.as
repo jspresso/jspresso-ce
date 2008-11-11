@@ -17,7 +17,6 @@ package org.jspresso.framework.binding.remote.state {
 
     import mx.collections.ListCollectionView;
 
-    [Bindable]
     [RemoteClass(alias="org.jspresso.framework.binding.remote.state.RemoteCompositeValueState")]
     public class RemoteCompositeValueState extends RemoteValueState {
 

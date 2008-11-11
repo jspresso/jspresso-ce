@@ -16,7 +16,6 @@
 package org.jspresso.framework.gui.remote {
 
 
-    [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RCardContainer")]
     public class RCardContainer extends RContainer {
 

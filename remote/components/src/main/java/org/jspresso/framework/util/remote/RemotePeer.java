@@ -57,4 +57,15 @@ public abstract class RemotePeer implements IRemotePeer {
   public String getGuid() {
     return guid;
   }
+
+  
+  /**
+   * Sets the guid.
+   * 
+   * @param guid the guid to set.
+   */
+  public void setGuid(String guid) {
+    this.guid = guid;
+  }
+
 }

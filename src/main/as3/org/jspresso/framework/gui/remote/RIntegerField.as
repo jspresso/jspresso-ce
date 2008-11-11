@@ -15,19 +15,9 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import mx.collections.ListCollectionView;
 
-    [Bindable]
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTableComponent")]
-    public class RTableComponent extends RComponent {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RIntegerField")]
+    public class RIntegerField extends RComponent {
 
-        private var _columns:ListCollectionView;
-
-        public function set columns(value:ListCollectionView):void {
-            _columns = value;
-        }
-        public function get columns():ListCollectionView {
-            return _columns;
-        }
     }
 }

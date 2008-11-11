@@ -16,25 +16,8 @@
 package org.jspresso.framework.gui.remote {
 
 
-    [Bindable]
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.REnumComponent")]
-    public class REnumComponent extends RComponent {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RSplitContainer")]
+    public class RSplitContainer extends RContainer {
 
-        private var _renderingIcons:Object;
-        private var _renderingTranslations:Object;
-
-        public function set renderingIcons(value:Object):void {
-            _renderingIcons = value;
-        }
-        public function get renderingIcons():Object {
-            return _renderingIcons;
-        }
-
-        public function set renderingTranslations(value:Object):void {
-            _renderingTranslations = value;
-        }
-        public function get renderingTranslations():Object {
-            return _renderingTranslations;
-        }
     }
 }

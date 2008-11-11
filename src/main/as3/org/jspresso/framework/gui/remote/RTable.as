@@ -13,19 +13,20 @@
  */
 
 
-package org.jspresso.framework.util.remote {
+package org.jspresso.framework.gui.remote {
 
+    import mx.collections.ListCollectionView;
 
-    [RemoteClass(alias="org.jspresso.framework.util.remote.RemotePeer")]
-    public class RemotePeer implements IRemotePeer {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTable")]
+    public class RTable extends RComponent {
 
-        private var _guid:String;
+        private var _columns:ListCollectionView;
 
-        public function set guid(value:String):void {
-            _guid = value;
+        public function set columns(value:ListCollectionView):void {
+            _columns = value;
         }
-        public function get guid():String {
-            return _guid;
+        public function get columns():ListCollectionView {
+            return _columns;
         }
     }
 }
