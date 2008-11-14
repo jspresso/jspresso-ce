@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * A container with stacked children views.
@@ -41,8 +41,8 @@ import java.util.Map;
  */
 public class RCardContainer extends RContainer {
 
-  private Map<String, RComponent> cardMap;
-  private String                  selectedCard;
+  private List<String> cardNames;
+  private List<RComponent> cards;
 
   /**
    * Constructs a new <code>RCardContainer</code> instance.
@@ -54,41 +54,43 @@ public class RCardContainer extends RContainer {
     super(guid);
   }
 
+  
   /**
-   * Sets the selectedCard.
+   * Gets the cardNames.
    * 
-   * @param selectedCard
-   *          the selectedCard to set.
+   * @return the cardNames.
    */
-  public void setSelectedCard(String selectedCard) {
-    this.selectedCard = selectedCard;
+  public List<String> getCardNames() {
+    return cardNames;
   }
 
+  
   /**
-   * Gets the selectedCard.
+   * Sets the cardNames.
    * 
-   * @return the selectedCard.
+   * @param cardNames the cardNames to set.
    */
-  public String getSelectedCard() {
-    return selectedCard;
+  public void setCardNames(List<String> cardNames) {
+    this.cardNames = cardNames;
   }
 
+  
   /**
-   * Sets the cardMap.
+   * Gets the cards.
    * 
-   * @param cardMap the cardMap to set.
+   * @return the cards.
    */
-  public void setCardMap(Map<String, RComponent> cardMap) {
-    this.cardMap = cardMap;
+  public List<RComponent> getCards() {
+    return cards;
   }
 
+  
   /**
-   * Gets the cardMap.
+   * Sets the cards.
    * 
-   * @return the cardMap.
+   * @param cards the cards to set.
    */
-  public Map<String, RComponent> getCardMap() {
-    return cardMap;
+  public void setCards(List<RComponent> cards) {
+    this.cards = cards;
   }
-
 }

@@ -33,6 +33,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
+import org.jspresso.framework.binding.remote.state.RemoteValueState;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionField;
 import org.jspresso.framework.gui.remote.RBorderContainer;
@@ -158,10 +159,14 @@ public class DefaultRemoteViewFactory extends
       ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     RCardContainer viewComponent = createRCardContainer();
-    Map<String, RComponent> cardMap = new HashMap<String, RComponent>();
-    viewComponent.setCardMap(cardMap);
-    cardMap.put(ICardViewDescriptor.DEFAULT_CARD, createRBorderContainer());
-    cardMap.put(ICardViewDescriptor.SECURITY_CARD, createSecurityComponent());
+    List<String> cardNames = new ArrayList<String>();
+    viewComponent.setCardNames(cardNames);
+    List<RComponent> cards = new ArrayList<RComponent>();
+    viewComponent.setCards(cards);
+    cardNames.add(ICardViewDescriptor.DEFAULT_CARD);
+    cards.add(createRBorderContainer());
+    cardNames.add(ICardViewDescriptor.SECURITY_CARD);
+    cards.add(createSecurityComponent());
 
     BasicMapView<RComponent> view = constructMapView(viewComponent,
         viewDescriptor);
@@ -172,7 +177,8 @@ public class DefaultRemoteViewFactory extends
       IView<RComponent> childView = createView(childViewDescriptor.getValue(),
           actionHandler, locale);
       childrenViews.put(childViewDescriptor.getKey(), childView);
-      cardMap.put(childViewDescriptor.getKey(), childView.getPeer());
+      cardNames.add(childViewDescriptor.getKey());
+      cards.add(childView.getPeer());
     }
     view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
@@ -337,7 +343,10 @@ public class DefaultRemoteViewFactory extends
   }
 
   private RCardContainer createRCardContainer() {
-    return new RCardContainer(guidGenerator.generateGUID());
+    RCardContainer cardContainer = new RCardContainer(guidGenerator
+        .generateGUID());
+    cardContainer.setState(new RemoteValueState(guidGenerator.generateGUID()));
+    return cardContainer;
   }
 
   private RBorderContainer createRBorderContainer() {
@@ -543,7 +552,7 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void showCardInPanel(RComponent cardsPeer, String cardName) {
-    ((RCardContainer) cardsPeer).setSelectedCard(cardName);
+    ((RCardContainer) cardsPeer).getState().setValue(cardName);
   }
 
   /**
