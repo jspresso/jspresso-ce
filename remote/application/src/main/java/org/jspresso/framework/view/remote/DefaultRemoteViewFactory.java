@@ -46,7 +46,6 @@ import org.jspresso.framework.gui.remote.RDateField;
 import org.jspresso.framework.gui.remote.RDecimalComponent;
 import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
-import org.jspresso.framework.gui.remote.REmptyComponent;
 import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RIcon;
@@ -161,7 +160,7 @@ public class DefaultRemoteViewFactory extends
     RCardContainer viewComponent = createRCardContainer();
     Map<String, RComponent> cardMap = new HashMap<String, RComponent>();
     viewComponent.setCardMap(cardMap);
-    cardMap.put(ICardViewDescriptor.DEFAULT_CARD, createREmptyComponent());
+    cardMap.put(ICardViewDescriptor.DEFAULT_CARD, createRBorderContainer());
     cardMap.put(ICardViewDescriptor.SECURITY_CARD, createSecurityComponent());
 
     BasicMapView<RComponent> view = constructMapView(viewComponent,
@@ -703,10 +702,6 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected RComponent createSecurityComponent() {
     return new RSecurityComponent(guidGenerator.generateGUID());
-  }
-
-  private RComponent createREmptyComponent() {
-    return new REmptyComponent(guidGenerator.generateGUID());
   }
 
   /**
