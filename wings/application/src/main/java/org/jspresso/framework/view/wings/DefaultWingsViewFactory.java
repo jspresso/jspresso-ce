@@ -1440,7 +1440,11 @@ public class DefaultWingsViewFactory extends
     return new FormatAdapter(createPercentFormat(propertyDescriptor, locale));
   }
 
-  private IView<SComponent> createPercentPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<SComponent> createPercentPropertyView(
       IPercentPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     STextField viewComponent = createSTextField();

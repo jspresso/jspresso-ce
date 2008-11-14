@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * A splitted container.
  * <p>
@@ -40,12 +39,76 @@ package org.jspresso.framework.gui.remote;
  */
 public class RSplitContainer extends RContainer {
 
+  private RComponent leftTop;
+  private RComponent rightBottom;
+  private String     orientation;
+
   /**
    * Constructs a new <code>RSplitContainer</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
   public RSplitContainer(String guid) {
     super(guid);
+  }
+
+  /**
+   * Sets the orientation.
+   * 
+   * @param orientation
+   *          the orientation to set.
+   */
+  public void setOrientation(String orientation) {
+    this.orientation = orientation;
+  }
+
+  /**
+   * Gets the orientation.
+   * 
+   * @return the orientation.
+   */
+  public String getOrientation() {
+    return orientation;
+  }
+
+  
+  /**
+   * Gets the leftTop.
+   * 
+   * @return the leftTop.
+   */
+  public RComponent getLeftTop() {
+    return leftTop;
+  }
+
+  
+  /**
+   * Sets the leftTop.
+   * 
+   * @param leftTop the leftTop to set.
+   */
+  public void setLeftTop(RComponent leftTop) {
+    this.leftTop = leftTop;
+  }
+
+  
+  /**
+   * Gets the rightBottom.
+   * 
+   * @return the rightBottom.
+   */
+  public RComponent getRightBottom() {
+    return rightBottom;
+  }
+
+  
+  /**
+   * Sets the rightBottom.
+   * 
+   * @param rightBottom the rightBottom to set.
+   */
+  public void setRightBottom(RComponent rightBottom) {
+    this.rightBottom = rightBottom;
   }
 }

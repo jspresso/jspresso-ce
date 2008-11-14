@@ -20,9 +20,8 @@ package org.jspresso.framework.gui.remote;
 
 import java.util.List;
 
-
 /**
- * A container with tabbed children views.
+ * An evenly distributed grid container.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -40,34 +39,79 @@ import java.util.List;
  * @version $LastChangedRevision: 1486 $
  * @author Vincent Vandenschrick
  */
-public class RTabContainer extends RContainer {
-  
-  private List<RComponent> tabs;
+public class REvenGridContainer extends RContainer {
+
+  private String           drivingDimension;
+  private int              drivingDimensionCellCount;
+  private List<RComponent> cells;
 
   /**
-   * Constructs a new <code>RTabContainer</code> instance.
+   * Constructs a new <code>REvenGridContainer</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
-  public RTabContainer(String guid) {
+  public REvenGridContainer(String guid) {
     super(guid);
   }
 
+  
   /**
-   * Sets the tabs.
+   * Gets the drivingDimension.
    * 
-   * @param tabs the tabs to set.
+   * @return the drivingDimension.
    */
-  public void setTabs(List<RComponent> tabs) {
-    this.tabs = tabs;
+  public String getDrivingDimension() {
+    return drivingDimension;
   }
 
+  
   /**
-   * Gets the tabs.
+   * Sets the drivingDimension.
    * 
-   * @return the tabs.
+   * @param drivingDimension the drivingDimension to set.
    */
-  public List<RComponent> getTabs() {
-    return tabs;
+  public void setDrivingDimension(String drivingDimension) {
+    this.drivingDimension = drivingDimension;
+  }
+
+  
+  /**
+   * Gets the drivingDimensionCellCount.
+   * 
+   * @return the drivingDimensionCellCount.
+   */
+  public int getDrivingDimensionCellCount() {
+    return drivingDimensionCellCount;
+  }
+
+  
+  /**
+   * Sets the drivingDimensionCellCount.
+   * 
+   * @param drivingDimensionCellCount the drivingDimensionCellCount to set.
+   */
+  public void setDrivingDimensionCellCount(int drivingDimensionCellCount) {
+    this.drivingDimensionCellCount = drivingDimensionCellCount;
+  }
+
+  
+  /**
+   * Gets the cells.
+   * 
+   * @return the cells.
+   */
+  public List<RComponent> getCells() {
+    return cells;
+  }
+
+  
+  /**
+   * Sets the cells.
+   * 
+   * @param cells the cells to set.
+   */
+  public void setCells(List<RComponent> cells) {
+    this.cells = cells;
   }
 }

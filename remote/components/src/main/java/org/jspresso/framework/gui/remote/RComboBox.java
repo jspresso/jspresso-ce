@@ -18,8 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.Map;
-
+import java.util.List;
 
 /**
  * A component containing enumerated values.
@@ -42,54 +41,74 @@ import java.util.Map;
  */
 public class RComboBox extends RComponent {
 
-  private Map<String, String> renderingTranslations;
-  private Map<String, RIcon> renderingIcons;
+  private List<String> values;
+  private List<String> translations;
+  private List<RIcon>  icons;
 
   /**
    * Constructs a new <code>RComboBox</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
   public RComboBox(String guid) {
     super(guid);
   }
 
   /**
-   * Sets the renderingTranslations.
+   * Gets the translations.
    * 
-   * @param renderingTranslations
-   *          the renderingTranslations to set.
+   * @return the translations.
    */
-  public void setRenderingTranslations(Map<String, String> renderingTranslations) {
-    this.renderingTranslations = renderingTranslations;
+  public List<String> getTranslations() {
+    return translations;
   }
 
   /**
-   * Gets the renderingTranslations.
+   * Sets the translations.
    * 
-   * @return the renderingTranslations.
+   * @param translations
+   *          the translations to set.
    */
-  public Map<String, String> getRenderingTranslations() {
-    return renderingTranslations;
+  public void setTranslations(List<String> translations) {
+    this.translations = translations;
   }
 
   /**
-   * Sets the renderingIcons.
+   * Sets the values.
    * 
-   * @param renderingIcons
-   *          the renderingIcons to set.
+   * @param values
+   *          the values to set.
    */
-  public void setRenderingIcons(Map<String, RIcon> renderingIcons) {
-    this.renderingIcons = renderingIcons;
+  public void setValues(List<String> values) {
+    this.values = values;
   }
 
   /**
-   * Gets the renderingIcons.
+   * Gets the values.
    * 
-   * @return the renderingIcons.
+   * @return the values.
    */
-  public Map<String, RIcon> getRenderingIcons() {
-    return renderingIcons;
+  public List<String> getValues() {
+    return values;
+  }
+
+  /**
+   * Sets the icons.
+   * 
+   * @param icons the icons to set.
+   */
+  public void setIcons(List<RIcon> icons) {
+    this.icons = icons;
+  }
+
+  /**
+   * Gets the icons.
+   * 
+   * @return the icons.
+   */
+  public List<RIcon> getIcons() {
+    return icons;
   }
 
 }

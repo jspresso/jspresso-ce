@@ -35,22 +35,31 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionField;
+import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RCheckBox;
 import org.jspresso.framework.gui.remote.RColorField;
 import org.jspresso.framework.gui.remote.RComboBox;
 import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.gui.remote.RContainer;
+import org.jspresso.framework.gui.remote.RConstrainedGridContainer;
 import org.jspresso.framework.gui.remote.RDateField;
+import org.jspresso.framework.gui.remote.RDecimalComponent;
 import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
+import org.jspresso.framework.gui.remote.REvenGridContainer;
+import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RIntegerField;
 import org.jspresso.framework.gui.remote.RList;
+import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
+import org.jspresso.framework.gui.remote.RPercentField;
+import org.jspresso.framework.gui.remote.RSplitContainer;
+import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTable;
 import org.jspresso.framework.gui.remote.RTextArea;
+import org.jspresso.framework.gui.remote.RTextComponent;
 import org.jspresso.framework.gui.remote.RTextField;
 import org.jspresso.framework.gui.remote.RTimeField;
 import org.jspresso.framework.gui.remote.RTree;
@@ -64,7 +73,9 @@ import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
@@ -87,7 +98,6 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
@@ -97,6 +107,7 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.ViewConstraints;
 
 /**
  * Factory for remote views.
@@ -146,9 +157,7 @@ public class DefaultRemoteViewFactory extends
       ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     RCardContainer viewComponent = createRCardContainer();
-    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
-    viewComponent.setChildren(childComponents);
-    Map<String, String> cardMap = new HashMap<String, String>();
+    Map<String, RComponent> cardMap = new HashMap<String, RComponent>();
     viewComponent.setCardMap(cardMap);
 
     BasicMapView<RComponent> view = constructMapView(viewComponent,
@@ -160,10 +169,7 @@ public class DefaultRemoteViewFactory extends
       IView<RComponent> childView = createView(childViewDescriptor.getValue(),
           actionHandler, locale);
       childrenViews.put(childViewDescriptor.getKey(), childView);
-      childComponents.put(childView.getDescriptor().getName(), childView
-          .getPeer());
-      cardMap.put(childViewDescriptor.getKey(), childView.getDescriptor()
-          .getName());
+      cardMap.put(childViewDescriptor.getKey(), childView.getPeer());
     }
     view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
@@ -197,9 +203,7 @@ public class DefaultRemoteViewFactory extends
         .createCompositeValueConnector(
             viewDescriptor.getModelDescriptor().getName(), null);
 
-    RContainer viewComponent = createRContainer();
-    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
-    viewComponent.setChildren(childComponents);
+    RBorderContainer viewComponent = createRBorderContainer();
 
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -209,8 +213,7 @@ public class DefaultRemoteViewFactory extends
 
     connector.addChildConnector(nestedView.getConnector());
 
-    childComponents.put(nestedView.getDescriptor().getName(), nestedView
-        .getPeer());
+    viewComponent.setCenter(nestedView.getPeer());
 
     return view;
   }
@@ -225,9 +228,16 @@ public class DefaultRemoteViewFactory extends
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
             getConnectorIdForComponentView(viewDescriptor), null);
-    RContainer viewComponent = createRContainer();
-    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
-    viewComponent.setChildren(childComponents);
+    RForm viewComponent = createRForm();
+    viewComponent.setColumnCount(viewDescriptor.getColumnCount());
+    viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition()
+        .toString());
+
+    List<Integer> elementWidths = new ArrayList<Integer>();
+    viewComponent.setElementWidths(elementWidths);
+    List<RComponent> elements = new ArrayList<RComponent>();
+    viewComponent.setElements(elements);
+
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -245,12 +255,14 @@ public class DefaultRemoteViewFactory extends
       IView<RComponent> propertyView = createPropertyView(propertyDescriptor,
           viewDescriptor.getRenderedChildProperties(propertyName),
           actionHandler, locale);
-      childComponents.put(propertyDescriptor.getName(), propertyView.getPeer());
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
         propertyView.setPeer(createSecurityComponent());
       }
+      elements.add(propertyView.getPeer());
+      elementWidths.add(new Integer(viewDescriptor
+          .getPropertyWidth(propertyName)));
       connector.addChildConnector(propertyView.getConnector());
       if (propertyViewDescriptor.getReadabilityGates() != null) {
         for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
@@ -317,12 +329,32 @@ public class DefaultRemoteViewFactory extends
     return component;
   }
 
-  private RContainer createRContainer() {
-    return new RContainer(guidGenerator.generateGUID());
+  private RForm createRForm() {
+    return new RForm(guidGenerator.generateGUID());
   }
 
   private RCardContainer createRCardContainer() {
     return new RCardContainer(guidGenerator.generateGUID());
+  }
+
+  private RBorderContainer createRBorderContainer() {
+    return new RBorderContainer(guidGenerator.generateGUID());
+  }
+
+  private RSplitContainer createRSplitContainer() {
+    return new RSplitContainer(guidGenerator.generateGUID());
+  }
+
+  private RTabContainer createRTabContainer() {
+    return new RTabContainer(guidGenerator.generateGUID());
+  }
+
+  private REvenGridContainer createREvenGridContainer() {
+    return new REvenGridContainer(guidGenerator.generateGUID());
+  }
+
+  private RConstrainedGridContainer createRConstrainedGridContainer() {
+    return new RConstrainedGridContainer(guidGenerator.generateGUID());
   }
 
   /**
@@ -482,20 +514,24 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RComboBox viewComponent = createRComboBox(connector);
+    List<String> values = new ArrayList<String>();
+    viewComponent.setValues(values);
+    List<String> translations = new ArrayList<String>();
+    viewComponent.setTranslations(translations);
+    List<RIcon> icons = new ArrayList<RIcon>();
+    viewComponent.setIcons(icons);
     IView<RComponent> view = constructView(viewComponent, null, connector);
-    Map<String, String> translations = new HashMap<String, String>();
-    Map<String, RIcon> icons = new HashMap<String, RIcon>();
     for (String value : propertyDescriptor.getEnumerationValues()) {
       if (value != null && propertyDescriptor.isTranslated()) {
-        translations.put(value, getTranslationProvider().getTranslation(
+        values.add(value);
+        translations.add(getTranslationProvider().getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                 value), locale));
-        icons.put(value, getIconFactory().getIcon(
+        icons.add(getIconFactory().getIcon(
             propertyDescriptor.getIconImageURL(value),
             IIconFactory.TINY_ICON_SIZE));
       }
     }
-    viewComponent.setRenderingTranslations(translations);
     return view;
   }
 
@@ -514,9 +550,7 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createBorderView(
       IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    RContainer viewComponent = createRContainer();
-    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
-    viewComponent.setChildren(childComponents);
+    RBorderContainer viewComponent = createRBorderContainer();
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
@@ -524,36 +558,31 @@ public class DefaultRemoteViewFactory extends
     if (viewDescriptor.getEastViewDescriptor() != null) {
       IView<RComponent> eastView = createView(viewDescriptor
           .getEastViewDescriptor(), actionHandler, locale);
-      childComponents.put(eastView.getDescriptor().getName(), eastView
-          .getPeer());
+      viewComponent.setEast(eastView.getPeer());
       childrenViews.add(eastView);
     }
     if (viewDescriptor.getNorthViewDescriptor() != null) {
       IView<RComponent> northView = createView(viewDescriptor
           .getNorthViewDescriptor(), actionHandler, locale);
-      childComponents.put(northView.getDescriptor().getName(), northView
-          .getPeer());
+      viewComponent.setNorth(northView.getPeer());
       childrenViews.add(northView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
       IView<RComponent> centerView = createView(viewDescriptor
           .getCenterViewDescriptor(), actionHandler, locale);
-      childComponents.put(centerView.getDescriptor().getName(), centerView
-          .getPeer());
+      viewComponent.setCenter(centerView.getPeer());
       childrenViews.add(centerView);
     }
     if (viewDescriptor.getWestViewDescriptor() != null) {
       IView<RComponent> westView = createView(viewDescriptor
           .getWestViewDescriptor(), actionHandler, locale);
-      childComponents.put(westView.getDescriptor().getName(), westView
-          .getPeer());
+      viewComponent.setWest(westView.getPeer());
       childrenViews.add(westView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
       IView<RComponent> southView = createView(viewDescriptor
           .getSouthViewDescriptor(), actionHandler, locale);
-      childComponents.put(southView.getDescriptor().getName(), southView
-          .getPeer());
+      viewComponent.setSouth(southView.getPeer());
       childrenViews.add(southView);
     }
     view.setChildren(childrenViews);
@@ -567,25 +596,22 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createSplitView(
       ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    RContainer viewComponent = createRContainer();
+    RSplitContainer viewComponent = createRSplitContainer();
+    viewComponent.setOrientation(viewDescriptor.getOrientation().toString());
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
-    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
-    viewComponent.setChildren(childComponents);
 
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
       IView<RComponent> leftTopView = createView(viewDescriptor
           .getLeftTopViewDescriptor(), actionHandler, locale);
-      childComponents.put(leftTopView.getDescriptor().getName(), leftTopView
-          .getPeer());
+      viewComponent.setLeftTop(leftTopView.getPeer());
       childrenViews.add(leftTopView);
     }
     if (viewDescriptor.getRightBottomViewDescriptor() != null) {
       IView<RComponent> rightBottomView = createView(viewDescriptor
           .getRightBottomViewDescriptor(), actionHandler, locale);
-      childComponents.put(rightBottomView.getDescriptor().getName(),
-          rightBottomView.getPeer());
+      viewComponent.setRightBottom(rightBottomView.getPeer());
       childrenViews.add(rightBottomView);
     }
     view.setChildren(childrenViews);
@@ -599,19 +625,18 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createTabView(
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    RContainer viewComponent = createRContainer();
+    RTabContainer viewComponent = createRTabContainer();
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
-    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
-    viewComponent.setChildren(childComponents);
+    List<RComponent> tabs = new ArrayList<RComponent>();
+    viewComponent.setTabs(tabs);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
       IView<RComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
-      childComponents.put(childView.getDescriptor().getName(), childView
-          .getPeer());
+      tabs.add(childView.getPeer());
       childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
@@ -632,6 +657,7 @@ public class DefaultRemoteViewFactory extends
         for (IDisplayableAction action : nextActionList.getActions()) {
           RAction rAction = getActionFactory().createAction(action,
               actionHandler, view, locale);
+          rAction.setAcceleratorAsString(action.getAcceleratorAsString());
           viewActions.add(rAction);
         }
       }
@@ -650,6 +676,15 @@ public class DefaultRemoteViewFactory extends
     if (viewDescriptor.getDescription() != null) {
       view.getPeer().setTooltip(
           viewDescriptor.getI18nDescription(getTranslationProvider(), locale));
+    }
+    if (viewDescriptor.getForeground() != null) {
+      view.getPeer().setForeground(viewDescriptor.getForeground());
+    }
+    if (viewDescriptor.getBackground() != null) {
+      view.getPeer().setBackground(viewDescriptor.getBackground());
+    }
+    if (viewDescriptor.getFont() != null) {
+      view.getPeer().setFont(viewDescriptor.getFont());
     }
     if (viewDescriptor.getIconImageURL() != null) {
       view.getPeer().setIcon(
@@ -672,10 +707,10 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithBorder(
-      @SuppressWarnings("unused") IView<RComponent> view,
+  protected void decorateWithBorder(IView<RComponent> view,
       @SuppressWarnings("unused") Locale locale) {
-    // nothing to do on server-side
+    view.getPeer().setBorderType(
+        view.getDescriptor().getBorderType().toString());
   }
 
   /**
@@ -684,11 +719,40 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createDecimalPropertyView(
       IDecimalPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<RComponent> view;
+    if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
+      view = createPercentPropertyView(
+          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else {
+      IValueConnector connector = getConnectorFactory().createValueConnector(
+          propertyDescriptor.getName());
+      connector.setExceptionHandler(actionHandler);
+      RDecimalField viewComponent = createRDecimalField(connector);
+      view = constructView(viewComponent, null, connector);
+    }
+    if (propertyDescriptor.getMaxFractionDigit() != null) {
+      ((RDecimalComponent) view.getPeer())
+          .setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit()
+              .intValue());
+    } else {
+      ((RDecimalComponent) view.getPeer()).setMaxFractionDigit(2);
+    }
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createPercentPropertyView(
+      IPercentPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RDecimalField viewComponent = createRDecimalField(connector);
+    RPercentField viewComponent = createRPercentField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
     return view;
   }
@@ -699,6 +763,30 @@ public class DefaultRemoteViewFactory extends
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
+  }
+
+  private RPercentField createRPercentField(IValueConnector connector) {
+    RPercentField component = new RPercentField(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createNumberPropertyView(
+      INumberPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<RComponent> view = super.createNumberPropertyView(propertyDescriptor,
+        actionHandler, locale);
+    ((RNumericComponent) view.getPeer()).setMaxValue(propertyDescriptor
+        .getMaxValue());
+    ((RNumericComponent) view.getPeer()).setMinValue(propertyDescriptor
+        .getMinValue());
+    return view;
   }
 
   /**
@@ -758,6 +846,8 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RColorField viewComponent = createRColorField(connector);
+    viewComponent
+        .setDefaultColor((String) propertyDescriptor.getDefaultValue());
     IView<RComponent> view = constructView(viewComponent, null, connector);
     return view;
   }
@@ -781,6 +871,7 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RDateField viewComponent = createRDateField(connector);
+    viewComponent.setType(propertyDescriptor.getType().toString());
     IView<RComponent> view = constructView(viewComponent, null, connector);
     return view;
   }
@@ -804,6 +895,11 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RDurationField viewComponent = createRDurationField(connector);
+    if (propertyDescriptor.getMaxMillis() != null) {
+      viewComponent.setMaxMillis(propertyDescriptor.getMaxMillis().longValue());
+    } else {
+      viewComponent.setMaxMillis(-1);
+    }
     IView<RComponent> view = constructView(viewComponent, null, connector);
     return view;
   }
@@ -881,15 +977,11 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    return createGenericGridView(viewDescriptor, actionHandler, locale);
-  }
-
-  private ICompositeView<RComponent> createGenericGridView(
-      IGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    RContainer viewComponent = createRContainer();
-    Map<String, RComponent> childComponents = new HashMap<String, RComponent>();
-    viewComponent.setChildren(childComponents);
+    RConstrainedGridContainer viewComponent = createRConstrainedGridContainer();
+    List<RComponent> cells = new ArrayList<RComponent>();
+    viewComponent.setCells(cells);
+    List<ViewConstraints> cellConstraints = new ArrayList<ViewConstraints>();
+    viewComponent.setCellConstraints(cellConstraints);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
@@ -898,7 +990,8 @@ public class DefaultRemoteViewFactory extends
         .getChildViewDescriptors()) {
       IView<RComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
-      childComponents.put(childViewDescriptor.getName(), childView.getPeer());
+      viewDescriptor.getViewConstraints(childViewDescriptor);
+      cells.add(childView.getPeer());
       childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
@@ -912,7 +1005,26 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    return createGenericGridView(viewDescriptor, actionHandler, locale);
+    REvenGridContainer viewComponent = createREvenGridContainer();
+    viewComponent.setDrivingDimension(viewDescriptor.getDrivingDimension()
+        .toString());
+    viewComponent.setDrivingDimensionCellCount(viewDescriptor
+        .getDrivingDimensionCellCount());
+    List<RComponent> cells = new ArrayList<RComponent>();
+    viewComponent.setCells(cells);
+    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
+        viewDescriptor);
+    List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
+
+    for (IViewDescriptor childViewDescriptor : viewDescriptor
+        .getChildViewDescriptors()) {
+      IView<RComponent> childView = createView(childViewDescriptor,
+          actionHandler, locale);
+      cells.add(childView.getPeer());
+      childrenViews.add(childView);
+    }
+    view.setChildren(childrenViews);
+    return view;
   }
 
   /**
@@ -981,7 +1093,6 @@ public class DefaultRemoteViewFactory extends
     return component;
   }
 
-
   /**
    * {@inheritDoc}
    */
@@ -997,11 +1108,44 @@ public class DefaultRemoteViewFactory extends
     return view;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createTextualPropertyView(
+      IStringPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<RComponent> view = super.createTextualPropertyView(
+        propertyDescriptor, actionHandler, locale);
+    if (propertyDescriptor.getMaxLength() != null) {
+      ((RTextComponent) view.getPeer()).setMaxLength(propertyDescriptor
+          .getMaxLength().intValue());
+    } else {
+      ((RTextComponent) view.getPeer()).setMaxLength(-1);
+    }
+    return view;
+  }
+
   private RTextArea createRTextArea(IValueConnector connector) {
     RTextArea component = new RTextArea(guidGenerator.generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
+  }
+
+  /**
+   * Computes the component state based on its bound connectorr.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IView<RComponent> createView(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<RComponent> view = super.createView(viewDescriptor, actionHandler,
+        locale);
+    view.getPeer().setState(
+        ((IRemoteStateOwner) view.getConnector()).getState());
+    return view;
   }
 }

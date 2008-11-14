@@ -37,7 +37,7 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RTextArea extends RComponent {
+public class RTextArea extends RTextComponent {
 
   /**
    * Constructs a new <code>RTextArea</code> instance.

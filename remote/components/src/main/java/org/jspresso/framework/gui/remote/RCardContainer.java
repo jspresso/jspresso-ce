@@ -41,13 +41,14 @@ import java.util.Map;
  */
 public class RCardContainer extends RContainer {
 
-  private Map<String, String> cardMap;
-  private String              selectedCard;
+  private Map<String, RComponent> cardMap;
+  private String                  selectedCard;
 
   /**
    * Constructs a new <code>RCardContainer</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
   public RCardContainer(String guid) {
     super(guid);
@@ -77,7 +78,7 @@ public class RCardContainer extends RContainer {
    * 
    * @param cardMap the cardMap to set.
    */
-  public void setCardMap(Map<String, String> cardMap) {
+  public void setCardMap(Map<String, RComponent> cardMap) {
     this.cardMap = cardMap;
   }
 
@@ -86,7 +87,7 @@ public class RCardContainer extends RContainer {
    * 
    * @return the cardMap.
    */
-  public Map<String, String> getCardMap() {
+  public Map<String, RComponent> getCardMap() {
     return cardMap;
   }
 

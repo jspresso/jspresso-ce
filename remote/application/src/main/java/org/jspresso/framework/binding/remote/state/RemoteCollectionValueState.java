@@ -16,11 +16,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.gui.remote;
+package org.jspresso.framework.binding.remote.state;
 
 
 /**
- * A grid container.
+ * The state of a collection remote value.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -35,17 +35,38 @@ package org.jspresso.framework.gui.remote;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision: 1486 $
+ * @version $LastChangedRevision: 1491 $
  * @author Vincent Vandenschrick
  */
-public class RGridContainer extends RContainer {
+public class RemoteCollectionValueState extends RemoteCompositeValueState {
+
+  private int[] selectedIndices;
 
   /**
-   * Constructs a new <code>RGridContainer</code> instance.
+   * Constructs a new <code>RemoteCollectionValueState</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the state guid.
    */
-  public RGridContainer(String guid) {
+  public RemoteCollectionValueState(String guid) {
     super(guid);
+  }
+
+  /**
+   * Sets the selectedIndices.
+   * 
+   * @param selectedIndices the selectedIndices to set.
+   */
+  public void setSelectedIndices(int[] selectedIndices) {
+    this.selectedIndices = selectedIndices;
+  }
+
+  /**
+   * Gets the selectedIndices.
+   * 
+   * @return the selectedIndices.
+   */
+  public int[] getSelectedIndices() {
+    return selectedIndices;
   }
 }

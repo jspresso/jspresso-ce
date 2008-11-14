@@ -39,9 +39,13 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RForm extends RComponent {
+public class RForm extends RContainer {
 
-  private List<RComponent> elements;
+  private int                columnCount;
+  private String             labelsPosition;
+  private List<Integer>      elementWidths;
+
+  private List<RComponent>   elements;
 
   /**
    * Constructs a new <code>RForm</code> instance.
@@ -56,7 +60,8 @@ public class RForm extends RComponent {
   /**
    * Sets the elements.
    * 
-   * @param elements the elements to set.
+   * @param elements
+   *          the elements to set.
    */
   public void setElements(List<RComponent> elements) {
     this.elements = elements;
@@ -70,4 +75,65 @@ public class RForm extends RComponent {
   public List<RComponent> getElements() {
     return elements;
   }
+
+  
+  /**
+   * Gets the columnCount.
+   * 
+   * @return the columnCount.
+   */
+  public int getColumnCount() {
+    return columnCount;
+  }
+
+  
+  /**
+   * Sets the columnCount.
+   * 
+   * @param columnCount the columnCount to set.
+   */
+  public void setColumnCount(int columnCount) {
+    this.columnCount = columnCount;
+  }
+
+  
+  /**
+   * Gets the labelsPosition.
+   * 
+   * @return the labelsPosition.
+   */
+  public String getLabelsPosition() {
+    return labelsPosition;
+  }
+
+  
+  /**
+   * Sets the labelsPosition.
+   * 
+   * @param labelsPosition the labelsPosition to set.
+   */
+  public void setLabelsPosition(String labelsPosition) {
+    this.labelsPosition = labelsPosition;
+  }
+
+  
+  /**
+   * Gets the elementWidths.
+   * 
+   * @return the elementWidths.
+   */
+  public List<Integer> getElementWidths() {
+    return elementWidths;
+  }
+
+  
+  /**
+   * Sets the elementWidths.
+   * 
+   * @param elementWidths the elementWidths to set.
+   */
+  public void setElementWidths(List<Integer> elementWidths) {
+    this.elementWidths = elementWidths;
+  }
+
 }

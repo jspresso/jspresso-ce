@@ -19,7 +19,7 @@
 package org.jspresso.framework.gui.remote;
 
 /**
- * A remote decimal field component.
+ * A remote number field component.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,15 +37,36 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RDecimalField extends RDecimalComponent {
+public abstract class RDecimalComponent extends RComponent {
+  
+  private int maxFractionDigit;
 
   /**
-   * Constructs a new <code>RDecimalField</code> instance.
+   * Constructs a new <code>RIntegerField</code> instance.
    * 
    * @param guid
    *          the guid.
    */
-  public RDecimalField(String guid) {
+  public RDecimalComponent(String guid) {
     super(guid);
   }
+
+  /**
+   * Sets the maxFractionDigit.
+   * 
+   * @param maxFractionDigit the maxFractionDigit to set.
+   */
+  public void setMaxFractionDigit(int maxFractionDigit) {
+    this.maxFractionDigit = maxFractionDigit;
+  }
+
+  /**
+   * Gets the maxFractionDigit.
+   * 
+   * @return the maxFractionDigit.
+   */
+  public int getMaxFractionDigit() {
+    return maxFractionDigit;
+  }
+
 }

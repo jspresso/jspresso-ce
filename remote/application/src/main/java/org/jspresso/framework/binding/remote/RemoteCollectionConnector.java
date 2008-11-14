@@ -26,6 +26,7 @@ import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnector;
 import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
+import org.jspresso.framework.binding.remote.state.RemoteCollectionValueState;
 import org.jspresso.framework.binding.remote.state.RemoteCompositeValueState;
 import org.jspresso.framework.binding.remote.state.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
@@ -53,9 +54,9 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteCollectionConnector extends BasicCollectionConnector
     implements IRemotePeer, IRemoteStateOwner {
 
-  private IGUIDGenerator            guidGenerator;
-  private String                    guid;
-  private RemoteCompositeValueState state;
+  private IGUIDGenerator             guidGenerator;
+  private String                     guid;
+  private RemoteCollectionValueState state;
 
   /**
    * Constructs a new <code>RemoteCollectionConnector</code> instance.
@@ -110,13 +111,14 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    */
   public RemoteCompositeValueState getState() {
     if (state == null) {
-      state = new RemoteCompositeValueState(getGuid());
+      state = new RemoteCollectionValueState(getGuid());
     }
     state.setValue(getDisplayValue());
     state.setReadable(isReadable());
     state.setWritable(isWritable());
     state.setDescription(getDisplayDescription());
     state.setIconImageUrl(getDisplayIconImageUrl());
+    state.setSelectedIndices(getSelectedIndices());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (int i = 0; i < getChildConnectorCount(); i++) {
       IValueConnector childConnector = getChildConnector(i);

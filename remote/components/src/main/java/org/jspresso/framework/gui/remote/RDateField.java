@@ -39,6 +39,8 @@ package org.jspresso.framework.gui.remote;
  */
 public class RDateField extends RComponent {
 
+  private String type;
+
   /**
    * Constructs a new <code>RDateField</code> instance.
    * 
@@ -47,5 +49,23 @@ public class RDateField extends RComponent {
    */
   public RDateField(String guid) {
     super(guid);
+  }
+
+  /**
+   * Sets the type.
+   * 
+   * @param type the type to set.
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  /**
+   * Gets the type.
+   * 
+   * @return the type.
+   */
+  public String getType() {
+    return type;
   }
 }

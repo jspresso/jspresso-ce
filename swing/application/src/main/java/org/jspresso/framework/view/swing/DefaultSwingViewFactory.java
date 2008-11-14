@@ -1452,7 +1452,11 @@ public class DefaultSwingViewFactory extends
     return new FormatAdapter(createPercentFormat(propertyDescriptor, locale));
   }
 
-  private IView<JComponent> createPercentPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createPercentPropertyView(
       IPercentPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JTextField viewComponent = createJTextField();

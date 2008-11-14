@@ -37,7 +37,7 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RTextField extends RComponent {
+public class RTextField extends RTextComponent {
 
   /**
    * Constructs a new <code>RTextField</code> instance.

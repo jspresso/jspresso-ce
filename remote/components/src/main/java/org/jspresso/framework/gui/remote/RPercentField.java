@@ -37,7 +37,7 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RPercentField extends RComponent {
+public class RPercentField extends RDecimalComponent {
 
   /**
    * Constructs a new <code>RPercentField</code> instance.

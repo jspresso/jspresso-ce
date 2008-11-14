@@ -42,10 +42,14 @@ import org.jspresso.framework.util.remote.RemotePeer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RComponent extends RemotePeer {
+public abstract class RComponent extends RemotePeer {
 
   private String           label;
   private String           tooltip;
+  private String           background;
+  private String           borderType;
+  private String           font;
+  private String           foreground;
   private RIcon            icon;
   private List<RAction>    actions;
   private RemoteValueState state;
@@ -136,7 +140,6 @@ public class RComponent extends RemotePeer {
     return icon;
   }
 
-  
   /**
    * Gets the state.
    * 
@@ -146,13 +149,93 @@ public class RComponent extends RemotePeer {
     return state;
   }
 
-  
   /**
    * Sets the state.
    * 
-   * @param state the state to set.
+   * @param state
+   *          the state to set.
    */
   public void setState(RemoteValueState state) {
     this.state = state;
+  }
+
+  
+  /**
+   * Gets the background.
+   * 
+   * @return the background.
+   */
+  public String getBackground() {
+    return background;
+  }
+
+  
+  /**
+   * Sets the background.
+   * 
+   * @param background the background to set.
+   */
+  public void setBackground(String background) {
+    this.background = background;
+  }
+
+  
+  /**
+   * Gets the borderType.
+   * 
+   * @return the borderType.
+   */
+  public String getBorderType() {
+    return borderType;
+  }
+
+  
+  /**
+   * Sets the borderType.
+   * 
+   * @param borderType the borderType to set.
+   */
+  public void setBorderType(String borderType) {
+    this.borderType = borderType;
+  }
+
+  
+  /**
+   * Gets the font.
+   * 
+   * @return the font.
+   */
+  public String getFont() {
+    return font;
+  }
+
+  
+  /**
+   * Sets the font.
+   * 
+   * @param font the font to set.
+   */
+  public void setFont(String font) {
+    this.font = font;
+  }
+
+  
+  /**
+   * Gets the foreground.
+   * 
+   * @return the foreground.
+   */
+  public String getForeground() {
+    return foreground;
+  }
+
+  
+  /**
+   * Sets the foreground.
+   * 
+   * @param foreground the foreground to set.
+   */
+  public void setForeground(String foreground) {
+    this.foreground = foreground;
   }
 }

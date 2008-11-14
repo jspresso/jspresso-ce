@@ -19,7 +19,7 @@
 package org.jspresso.framework.gui.remote;
 
 /**
- * A remote decimal field component.
+ * A remote number field component.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,15 +37,58 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RDecimalField extends RDecimalComponent {
+public abstract class RNumericComponent extends RComponent {
+  
+  private Double maxValue;
+  private Double minValue;
 
   /**
-   * Constructs a new <code>RDecimalField</code> instance.
+   * Constructs a new <code>RIntegerField</code> instance.
    * 
    * @param guid
    *          the guid.
    */
-  public RDecimalField(String guid) {
+  public RNumericComponent(String guid) {
     super(guid);
+  }
+
+  
+  /**
+   * Gets the maxValue.
+   * 
+   * @return the maxValue.
+   */
+  public Double getMaxValue() {
+    return maxValue;
+  }
+
+  
+  /**
+   * Sets the maxValue.
+   * 
+   * @param maxValue the maxValue to set.
+   */
+  public void setMaxValue(Double maxValue) {
+    this.maxValue = maxValue;
+  }
+
+  
+  /**
+   * Gets the minValue.
+   * 
+   * @return the minValue.
+   */
+  public Double getMinValue() {
+    return minValue;
+  }
+
+  
+  /**
+   * Sets the minValue.
+   * 
+   * @param minValue the minValue to set.
+   */
+  public void setMinValue(Double minValue) {
+    this.minValue = minValue;
   }
 }

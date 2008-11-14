@@ -19,7 +19,7 @@
 package org.jspresso.framework.gui.remote;
 
 /**
- * A remote decimal field component.
+ * A remote text component.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,15 +37,35 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RDecimalField extends RDecimalComponent {
+public abstract class RTextComponent extends RComponent {
+  
+  private int maxLength;
 
   /**
-   * Constructs a new <code>RDecimalField</code> instance.
+   * Constructs a new <code>RTextField</code> instance.
    * 
    * @param guid
    *          the guid.
    */
-  public RDecimalField(String guid) {
+  public RTextComponent(String guid) {
     super(guid);
+  }
+
+  /**
+   * Sets the maxLength.
+   * 
+   * @param maxLength the maxLength to set.
+   */
+  public void setMaxLength(int maxLength) {
+    this.maxLength = maxLength;
+  }
+
+  /**
+   * Gets the maxLength.
+   * 
+   * @return the maxLength.
+   */
+  public int getMaxLength() {
+    return maxLength;
   }
 }

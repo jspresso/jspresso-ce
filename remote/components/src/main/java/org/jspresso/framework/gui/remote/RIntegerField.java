@@ -37,7 +37,7 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RIntegerField extends RComponent {
+public class RIntegerField extends RNumericComponent {
 
   /**
    * Constructs a new <code>RIntegerField</code> instance.

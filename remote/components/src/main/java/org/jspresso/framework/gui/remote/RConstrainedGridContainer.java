@@ -20,9 +20,10 @@ package org.jspresso.framework.gui.remote;
 
 import java.util.List;
 
+import org.jspresso.framework.view.descriptor.ViewConstraints;
 
 /**
- * A container with tabbed children views.
+ * A constraint distribution grid container.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -40,34 +41,58 @@ import java.util.List;
  * @version $LastChangedRevision: 1486 $
  * @author Vincent Vandenschrick
  */
-public class RTabContainer extends RContainer {
-  
-  private List<RComponent> tabs;
+public class RConstrainedGridContainer extends RContainer {
+
+  private List<ViewConstraints> cellConstraints;
+  private List<RComponent>      cells;
 
   /**
-   * Constructs a new <code>RTabContainer</code> instance.
+   * Constructs a new <code>RGridContainer</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
-  public RTabContainer(String guid) {
+  public RConstrainedGridContainer(String guid) {
     super(guid);
   }
 
+  
   /**
-   * Sets the tabs.
+   * Gets the cellConstraints.
    * 
-   * @param tabs the tabs to set.
+   * @return the cellConstraints.
    */
-  public void setTabs(List<RComponent> tabs) {
-    this.tabs = tabs;
+  public List<ViewConstraints> getCellConstraints() {
+    return cellConstraints;
   }
 
+  
   /**
-   * Gets the tabs.
+   * Sets the cellConstraints.
    * 
-   * @return the tabs.
+   * @param cellConstraints the cellConstraints to set.
    */
-  public List<RComponent> getTabs() {
-    return tabs;
+  public void setCellConstraints(List<ViewConstraints> cellConstraints) {
+    this.cellConstraints = cellConstraints;
+  }
+
+  
+  /**
+   * Gets the cells.
+   * 
+   * @return the cells.
+   */
+  public List<RComponent> getCells() {
+    return cells;
+  }
+
+  
+  /**
+   * Sets the cells.
+   * 
+   * @param cells the cells to set.
+   */
+  public void setCells(List<RComponent> cells) {
+    this.cells = cells;
   }
 }

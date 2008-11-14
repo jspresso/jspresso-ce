@@ -1478,7 +1478,11 @@ public class DefaultUlcViewFactory extends
     return createFormatter(createPercentFormat(propertyDescriptor, locale));
   }
 
-  private IView<ULCComponent> createPercentPropertyView(
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createPercentPropertyView(
       IPercentPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();

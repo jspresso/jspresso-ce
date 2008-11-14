@@ -53,6 +53,7 @@ import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
@@ -1581,4 +1582,19 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected abstract ICompositeView<E> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale);
+
+  /**
+   * Creates a percent property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the evenly distributed grid view.
+   */
+  protected abstract IView<E> createPercentPropertyView(
+      IPercentPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale);
 }

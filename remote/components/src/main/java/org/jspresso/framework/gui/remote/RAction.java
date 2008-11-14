@@ -41,11 +41,12 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RAction extends RemotePeer {
 
-  private String            name;
-  private String            description;
-  private RIcon             icon;
-  private String            mnemonicAsString;
-  private boolean           enabled;
+  private String  name;
+  private String  description;
+  private RIcon   icon;
+  private String  mnemonicAsString;
+  private String  acceleratorAsString;
+  private boolean enabled;
 
   /**
    * Constructs a new <code>RAction</code> instance.
@@ -150,6 +151,24 @@ public class RAction extends RemotePeer {
    */
   public boolean isEnabled() {
     return enabled;
+  }
+
+  /**
+   * Sets the acceleratorAsString.
+   * 
+   * @param acceleratorAsString the acceleratorAsString to set.
+   */
+  public void setAcceleratorAsString(String acceleratorAsString) {
+    this.acceleratorAsString = acceleratorAsString;
+  }
+
+  /**
+   * Gets the acceleratorAsString.
+   * 
+   * @return the acceleratorAsString.
+   */
+  public String getAcceleratorAsString() {
+    return acceleratorAsString;
   }
 
 }

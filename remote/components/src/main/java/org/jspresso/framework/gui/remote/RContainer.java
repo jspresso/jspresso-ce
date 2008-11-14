@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.Map;
 
 
 /**
@@ -40,10 +39,8 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RContainer extends RComponent {
+public abstract class RContainer extends RComponent {
   
-  private Map<String, RComponent> children;
-
   /**
    * Constructs a new <code>RContainer</code> instance.
    * 
@@ -53,21 +50,4 @@ public class RContainer extends RComponent {
     super(guid);
   }
 
-  /**
-   * Sets the children.
-   * 
-   * @param children the children to set.
-   */
-  public void setChildren(Map<String, RComponent> children) {
-    this.children = children;
-  }
-
-  /**
-   * Gets the children.
-   * 
-   * @return the children.
-   */
-  public Map<String, RComponent> getChildren() {
-    return children;
-  }
 }
