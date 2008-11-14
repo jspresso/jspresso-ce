@@ -46,6 +46,7 @@ import org.jspresso.framework.gui.remote.RDateField;
 import org.jspresso.framework.gui.remote.RDecimalComponent;
 import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
+import org.jspresso.framework.gui.remote.REmptyComponent;
 import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RIcon;
@@ -55,6 +56,7 @@ import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
+import org.jspresso.framework.gui.remote.RSecurityComponent;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTable;
@@ -159,6 +161,8 @@ public class DefaultRemoteViewFactory extends
     RCardContainer viewComponent = createRCardContainer();
     Map<String, RComponent> cardMap = new HashMap<String, RComponent>();
     viewComponent.setCardMap(cardMap);
+    cardMap.put(ICardViewDescriptor.DEFAULT_CARD, createREmptyComponent());
+    cardMap.put(ICardViewDescriptor.SECURITY_CARD, createSecurityComponent());
 
     BasicMapView<RComponent> view = constructMapView(viewComponent,
         viewDescriptor);
@@ -698,9 +702,11 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected RComponent createSecurityComponent() {
-    // construct a special component ? Not needed. We will test if the component
-    // in the view is null.
-    return null;
+    return new RSecurityComponent(guidGenerator.generateGUID());
+  }
+
+  private RComponent createREmptyComponent() {
+    return new REmptyComponent(guidGenerator.generateGUID());
   }
 
   /**
