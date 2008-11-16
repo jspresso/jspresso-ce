@@ -93,6 +93,7 @@ import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.view.AbstractViewFactory;
@@ -120,7 +121,6 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.ViewConstraints;
 import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
@@ -1025,7 +1025,7 @@ public class DefaultWingsViewFactory extends
           actionHandler, locale);
       viewComponent.add(childView.getPeer(),
           createGridBagConstraints(viewDescriptor
-              .getViewConstraints(childViewDescriptor)));
+              .getCellConstraints(childViewDescriptor)));
       childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
@@ -1251,7 +1251,7 @@ public class DefaultWingsViewFactory extends
   }
 
   private GridBagConstraints createGridBagConstraints(
-      ViewConstraints viewConstraints) {
+      CellConstraints viewConstraints) {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = viewConstraints.getColumn();
     constraints.gridy = viewConstraints.getRow();

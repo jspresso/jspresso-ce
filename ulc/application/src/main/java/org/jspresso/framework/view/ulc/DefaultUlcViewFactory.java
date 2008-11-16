@@ -96,6 +96,7 @@ import org.jspresso.framework.util.format.DurationFormatter;
 import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.ulc.UlcUtil;
@@ -126,7 +127,6 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
-import org.jspresso.framework.view.descriptor.ViewConstraints;
 
 import com.ulcjava.base.application.BorderFactory;
 import com.ulcjava.base.application.ClientContext;
@@ -999,7 +999,7 @@ public class DefaultUlcViewFactory extends
           actionHandler, locale);
       viewComponent.add(childView.getPeer(),
           createGridBagConstraints(viewDescriptor
-              .getViewConstraints(childViewDescriptor)));
+              .getCellConstraints(childViewDescriptor)));
       childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
@@ -1264,7 +1264,7 @@ public class DefaultUlcViewFactory extends
   }
 
   private GridBagConstraints createGridBagConstraints(
-      ViewConstraints viewConstraints) {
+      CellConstraints viewConstraints) {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.setGridX(viewConstraints.getColumn());
     constraints.setGridY(viewConstraints.getRow());

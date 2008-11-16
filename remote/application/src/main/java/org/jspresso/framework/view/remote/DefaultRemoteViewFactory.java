@@ -85,6 +85,7 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -109,7 +110,6 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.ViewConstraints;
 
 /**
  * Factory for remote views.
@@ -990,7 +990,7 @@ public class DefaultRemoteViewFactory extends
     RConstrainedGridContainer viewComponent = createRConstrainedGridContainer();
     List<RComponent> cells = new ArrayList<RComponent>();
     viewComponent.setCells(cells);
-    List<ViewConstraints> cellConstraints = new ArrayList<ViewConstraints>();
+    List<CellConstraints> cellConstraints = new ArrayList<CellConstraints>();
     viewComponent.setCellConstraints(cellConstraints);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
@@ -1000,7 +1000,7 @@ public class DefaultRemoteViewFactory extends
         .getChildViewDescriptors()) {
       IView<RComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
-      viewDescriptor.getViewConstraints(childViewDescriptor);
+      viewDescriptor.getCellConstraints(childViewDescriptor);
       cells.add(childView.getPeer());
       childrenViews.add(childView);
     }

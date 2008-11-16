@@ -16,10 +16,10 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.util.gui;
 
 /**
- * Simple holder of view constraints.
+ * Simple holder of cell constraints.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,7 +37,7 @@ package org.jspresso.framework.view.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ViewConstraints {
+public class CellConstraints {
 
   private int     column;
   private int     height;
@@ -47,9 +47,9 @@ public class ViewConstraints {
   private boolean widthResizable;
 
   /**
-   * Constructs a new <code>ViewConstraints</code> instance.
+   * Constructs a new <code>CellConstraints</code> instance.
    */
-  public ViewConstraints() {
+  public CellConstraints() {
     width = 1;
     height = 1;
     widthResizable = true;
@@ -57,7 +57,7 @@ public class ViewConstraints {
   }
 
   /**
-   * Constructs a new <code>ViewConstraints</code> instance.
+   * Constructs a new <code>CellConstraints</code> instance.
    * 
    * @param row
    *            the row.
@@ -72,7 +72,7 @@ public class ViewConstraints {
    * @param heightResizable
    *            is resizable in height ?
    */
-  public ViewConstraints(int row, int column, int width, int height,
+  public CellConstraints(int row, int column, int width, int height,
       boolean widthResizable, boolean heightResizable) {
     super();
     this.row = row;

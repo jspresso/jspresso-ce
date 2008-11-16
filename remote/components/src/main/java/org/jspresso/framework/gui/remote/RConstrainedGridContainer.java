@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 import java.util.List;
 
-import org.jspresso.framework.view.descriptor.ViewConstraints;
+import org.jspresso.framework.util.gui.CellConstraints;
 
 /**
  * A constraint distribution grid container.
@@ -43,7 +43,7 @@ import org.jspresso.framework.view.descriptor.ViewConstraints;
  */
 public class RConstrainedGridContainer extends RContainer {
 
-  private List<ViewConstraints> cellConstraints;
+  private List<CellConstraints> cellConstraints;
   private List<RComponent>      cells;
 
   /**
@@ -62,7 +62,7 @@ public class RConstrainedGridContainer extends RContainer {
    * 
    * @return the cellConstraints.
    */
-  public List<ViewConstraints> getCellConstraints() {
+  public List<CellConstraints> getCellConstraints() {
     return cellConstraints;
   }
 
@@ -72,7 +72,7 @@ public class RConstrainedGridContainer extends RContainer {
    * 
    * @param cellConstraints the cellConstraints to set.
    */
-  public void setCellConstraints(List<ViewConstraints> cellConstraints) {
+  public void setCellConstraints(List<CellConstraints> cellConstraints) {
     this.cellConstraints = cellConstraints;
   }
 

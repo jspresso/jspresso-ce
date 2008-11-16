@@ -32,6 +32,11 @@
       <classpath
         refid="project.classpath" />
       <fileset
+        dir="util/target/classes">
+        <include
+          name="**/CellConstraints.class" />
+      </fileset>
+      <fileset
         dir="remote/components/target/classes">
         <include
           name="**/*.class" />
