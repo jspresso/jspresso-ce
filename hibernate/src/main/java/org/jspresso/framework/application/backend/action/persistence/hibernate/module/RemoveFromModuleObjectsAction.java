@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend.action.persistence.hibernate.module;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 import org.hibernate.Session;
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
@@ -36,7 +38,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
-
 
 /**
  * This action removes the selected objects from the projected collection.
@@ -63,8 +64,7 @@ public class RemoveFromModuleObjectsAction extends
   private static void removeFromSubModules(Module parentModule,
       Object removedObject) {
     if (parentModule.getSubModules() != null) {
-      for (Module module : new ArrayList<Module>(parentModule
-          .getSubModules())) {
+      for (Module module : new ArrayList<Module>(parentModule.getSubModules())) {
         if (module instanceof BeanModule
             && removedObject.equals(((BeanModule) module).getModuleObject())) {
           parentModule.removeSubModule(module);
@@ -79,7 +79,8 @@ public class RemoveFromModuleObjectsAction extends
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      final Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
 
@@ -106,8 +107,8 @@ public class RemoveFromModuleObjectsAction extends
     }
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
-      public Object doInTransaction(@SuppressWarnings("unused")
-      TransactionStatus status) {
+      public Object doInTransaction(
+          @SuppressWarnings("unused") TransactionStatus status) {
         getHibernateTemplate(context).execute(new HibernateCallback() {
 
           public Object doInHibernate(Session session) {
@@ -115,7 +116,15 @@ public class RemoveFromModuleObjectsAction extends
                 moduleObjectsToRemove, session, context);
             for (IEntity entityToRemove : mergedCollection) {
               if (entityToRemove.isPersistent()) {
-                deleteEntity(entityToRemove, session, context);
+                try {
+                  deleteEntity(entityToRemove, session, context);
+                } catch (IllegalAccessException ex) {
+                  throw new ActionException(ex);
+                } catch (InvocationTargetException ex) {
+                  throw new ActionException(ex);
+                } catch (NoSuchMethodException ex) {
+                  throw new ActionException(ex);
+                }
               }
             }
             return null;
@@ -138,14 +147,22 @@ public class RemoveFromModuleObjectsAction extends
    * Deletes the entity from the persistent store.
    * 
    * @param entity
-   *            the entity to remove
+   *          the entity to remove
    * @param session
-   *            the session to use.
+   *          the session to use.
    * @param context
-   *            the action context.
+   *          the action context.
+   * @throws NoSuchMethodException
+   *           whenever this exception occurs.
+   * @throws InvocationTargetException
+   *           whenever this exception occurs.
+   * @throws IllegalAccessException
+   *           whenever this exception occurs.
    */
   protected void deleteEntity(IEntity entity, Session session,
-      Map<String, Object> context) {
-    session.delete(entity);
+      Map<String, Object> context) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
+    cleanRelationshipsOnDeletion(entity, context);
+    getApplicationSession(context).performPendingOperations();
   }
 }

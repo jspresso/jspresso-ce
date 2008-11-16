@@ -43,7 +43,6 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
-
 /**
  * This the root abstract class of all hibernate related persistence actions.
  * <p>
@@ -69,45 +68,51 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * Performs necessary cleanings when an entity is deleted.
    * 
    * @param entity
-   *            the deleted entity.
+   *          the deleted entity.
    * @param context
-   *            The action context.
+   *          The action context.
    * @throws IllegalAccessException
-   *             whenever this kind of exception occurs.
+   *           whenever this kind of exception occurs.
    * @throws InvocationTargetException
-   *             whenever this kind of exception occurs.
+   *           whenever this kind of exception occurs.
    * @throws NoSuchMethodException
-   *             whenever this kind of exception occurs.
+   *           whenever this kind of exception occurs.
    */
   @SuppressWarnings("unchecked")
   protected void cleanRelationshipsOnDeletion(IEntity entity,
       Map<String, Object> context) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException {
-    IComponentDescriptor entityDescriptor = getEntityFactory(context)
-        .getComponentDescriptor(entity.getContract());
-    for (Map.Entry<String, Object> property : entity.straightGetProperties()
-        .entrySet()) {
-      if (property.getValue() != null) {
-        IPropertyDescriptor propertyDescriptor = entityDescriptor
-            .getPropertyDescriptor(property.getKey());
-        if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-          getAccessorFactory(context).createPropertyAccessor(property.getKey(),
-              entity.getContract()).setValue(entity, null);
-        } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-          if (((ICollectionPropertyDescriptor) propertyDescriptor)
-              .isComposition()) {
-            getApplicationSession(context).initializePropertyIfNeeded(entity,
-                propertyDescriptor);
-            for (IEntity composedEntity : new ArrayList<IEntity>(
-                (Collection<IEntity>) property.getValue())) {
-              cleanRelationshipsOnDeletion(composedEntity, context);
-            }
-          } else if (propertyDescriptor.isModifiable()) {
+    try {
+      entity.setPropertyProcessorsEnabled(false);
+      IComponentDescriptor entityDescriptor = getEntityFactory(context)
+          .getComponentDescriptor(entity.getContract());
+      for (Map.Entry<String, Object> property : entity.straightGetProperties()
+          .entrySet()) {
+        if (property.getValue() != null) {
+          IPropertyDescriptor propertyDescriptor = entityDescriptor
+              .getPropertyDescriptor(property.getKey());
+          if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
             getAccessorFactory(context).createPropertyAccessor(
                 property.getKey(), entity.getContract()).setValue(entity, null);
+          } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+            if (((ICollectionPropertyDescriptor) propertyDescriptor)
+                .isComposition()) {
+              getApplicationSession(context).initializePropertyIfNeeded(entity,
+                  propertyDescriptor);
+              for (IEntity composedEntity : new ArrayList<IEntity>(
+                  (Collection<IEntity>) property.getValue())) {
+                cleanRelationshipsOnDeletion(composedEntity, context);
+              }
+            } else if (propertyDescriptor.isModifiable()) {
+              getAccessorFactory(context).createPropertyAccessor(
+                  property.getKey(), entity.getContract()).setValue(entity,
+                  null);
+            }
           }
         }
       }
+    } finally {
+      entity.setPropertyProcessorsEnabled(true);
     }
     getApplicationSession(context).deleteEntity(entity);
   }
@@ -124,7 +129,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * Gets the hibernateTemplate.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the hibernateTemplate.
    */
   protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
@@ -135,7 +140,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * Gets the transactionTemplate.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the transactionTemplate.
    */
   protected TransactionTemplate getTransactionTemplate(
@@ -148,11 +153,11 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * the current hibernate session.
    * 
    * @param entity
-   *            the entity to merge.
+   *          the entity to merge.
    * @param hibernateSession
-   *            the hibernate session
+   *          the hibernate session
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the merged entity.
    */
   protected IEntity mergeInHibernate(IEntity entity, Session hibernateSession,
@@ -166,11 +171,11 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * the current hibernate session.
    * 
    * @param entities
-   *            the entities to merge.
+   *          the entities to merge.
    * @param hibernateSession
-   *            the hibernate session
+   *          the hibernate session
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the merged entity.
    */
   protected List<IEntity> mergeInHibernate(List<IEntity> entities,
@@ -188,9 +193,9 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * Reloads an entity in hibernate.
    * 
    * @param entity
-   *            the entity to save.
+   *          the entity to save.
    * @param context
-   *            the action context.
+   *          the action context.
    */
   protected void reloadEntity(IEntity entity, Map<String, Object> context) {
     if (entity.isPersistent()) {
@@ -205,9 +210,9 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * Saves an entity in hibernate.
    * 
    * @param entity
-   *            the entity to save.
+   *          the entity to save.
    * @param context
-   *            the action context.
+   *          the action context.
    */
   protected void saveEntity(final IEntity entity,
       final Map<String, Object> context) {
@@ -215,7 +220,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
       public Object doInHibernate(Session session) {
         session.clear(); // important to avoid duplicates in session when
-                          // looping on saves.
+        // looping on saves.
 
         if (!getApplicationSession(context).isUpdatedInUnitOfWork(entity)) {
           IEntity mergedEntity = mergeInHibernate(entity, session, context);

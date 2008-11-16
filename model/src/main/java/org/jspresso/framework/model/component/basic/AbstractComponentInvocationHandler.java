@@ -61,7 +61,6 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 import org.jspresso.framework.util.collection.CollectionHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
-
 /**
  * This is the core implementation of all components in the application.
  * Instances of this class serve as handlers for proxies representing the
@@ -95,6 +94,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;
   private IComponentExtensionFactory                                                   extensionFactory;
   private IComponentFactory                                                            inlineComponentFactory;
+  private boolean                                                                      propertyProcessorsEnabled;
 
   private Set<String>                                                                  modifierMonitors;
 
@@ -102,17 +102,17 @@ public abstract class AbstractComponentInvocationHandler implements
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
    * 
    * @param componentDescriptor
-   *            The descriptor of the proxy component.
+   *          The descriptor of the proxy component.
    * @param inlineComponentFactory
-   *            the factory used to create inline components.
+   *          the factory used to create inline components.
    * @param collectionFactory
-   *            The factory used to create empty component collections from
-   *            collection getters.
+   *          The factory used to create empty component collections from
+   *          collection getters.
    * @param accessorFactory
-   *            The factory used to access proxy properties.
+   *          The factory used to access proxy properties.
    * @param extensionFactory
-   *            The factory used to create component extensions based on their
-   *            classes.
+   *          The factory used to create component extensions based on their
+   *          classes.
    */
   protected AbstractComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor,
@@ -125,6 +125,7 @@ public abstract class AbstractComponentInvocationHandler implements
     this.collectionFactory = collectionFactory;
     this.accessorFactory = accessorFactory;
     this.extensionFactory = extensionFactory;
+    this.propertyProcessorsEnabled = true;
   }
 
   /**
@@ -137,10 +138,9 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
-   * Handles methods invocations on the component proxy. Either :
-   * <li>delegates to one of its extension if the accessed property is
-   * registered as being part of an extension
-   * <li>handles property access internally
+   * Handles methods invocations on the component proxy. Either : <li>delegates
+   * to one of its extension if the accessed property is registered as being
+   * part of an extension <li>handles property access internally
    * <p>
    * {@inheritDoc}
    */
@@ -185,6 +185,9 @@ public abstract class AbstractComponentInvocationHandler implements
       return null;
     } else if ("straightGetProperties".equals(methodName)) {
       return straightGetProperties();
+    } else if ("setPropertyProcessorsEnabled".equals(methodName)) {
+      propertyProcessorsEnabled = ((Boolean) args[0]).booleanValue();
+      return null;
     } else {
       boolean isLifecycleMethod = false;
       try {
@@ -268,7 +271,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * Sets the collectionFactory.
    * 
    * @param collectionFactory
-   *            the collectionFactory to set.
+   *          the collectionFactory to set.
    */
   public void setCollectionFactory(
       IComponentCollectionFactory<IComponent> collectionFactory) {
@@ -279,9 +282,9 @@ public abstract class AbstractComponentInvocationHandler implements
    * Delegate method to compute object equality.
    * 
    * @param proxy
-   *            the target component to compute equality of.
+   *          the target component to compute equality of.
    * @param another
-   *            the object to compute equality against.
+   *          the object to compute equality against.
    * @return the computed equality.
    */
   protected abstract boolean computeEquals(IComponent proxy, Object another);
@@ -298,9 +301,9 @@ public abstract class AbstractComponentInvocationHandler implements
    * returning it when fetching association ends.
    * 
    * @param referent
-   *            the component reference to decorate.
+   *          the component reference to decorate.
    * @param referentDescriptor
-   *            the component descriptor of the referent.
+   *          the component descriptor of the referent.
    * @return the decorated component.
    */
   protected abstract IComponent decorateReferent(IComponent referent,
@@ -319,9 +322,9 @@ public abstract class AbstractComponentInvocationHandler implements
    * Gets a collection property value.
    * 
    * @param proxy
-   *            the proxy to get the property of.
+   *          the proxy to get the property of.
    * @param propertyDescriptor
-   *            the property descriptor to get the value for.
+   *          the property descriptor to get the value for.
    * @return the property value.
    */
   @SuppressWarnings("unchecked")
@@ -362,9 +365,9 @@ public abstract class AbstractComponentInvocationHandler implements
    * Gets a property value.
    * 
    * @param proxy
-   *            the proxy to get the property of.
+   *          the proxy to get the property of.
    * @param propertyDescriptor
-   *            the property descriptor to get the value for.
+   *          the property descriptor to get the value for.
    * @return the property value.
    */
   @SuppressWarnings("unchecked")
@@ -386,9 +389,9 @@ public abstract class AbstractComponentInvocationHandler implements
    * Gets a reference property value.
    * 
    * @param proxy
-   *            the proxy to get the property of.
+   *          the proxy to get the property of.
    * @param propertyDescriptor
-   *            the property descriptor to get the value for.
+   *          the property descriptor to get the value for.
    * @return the property value.
    */
   protected Object getReferenceProperty(Object proxy,
@@ -409,14 +412,14 @@ public abstract class AbstractComponentInvocationHandler implements
    * Invokes a service method on the component.
    * 
    * @param proxy
-   *            the component to invoke the service on.
+   *          the component to invoke the service on.
    * @param method
-   *            the method implemented by the component.
+   *          the method implemented by the component.
    * @param args
-   *            the arguments of the method implemented by the component.
+   *          the arguments of the method implemented by the component.
    * @return the value returned by the method execution if any.
    * @throws NoSuchMethodException
-   *             if no mean could be found to service the method.
+   *           if no mean could be found to service the method.
    */
   protected Object invokeServiceMethod(Object proxy, Method method,
       Object[] args) throws NoSuchMethodException {
@@ -451,7 +454,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * Wether the object is fully initialized.
    * 
    * @param objectOrProxy
-   *            the object to test.
+   *          the object to test.
    * @return true if the object is fully initialized.
    */
   protected boolean isInitialized(Object objectOrProxy) {
@@ -462,7 +465,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * Gets wether this reference descriptor points to an inline component.
    * 
    * @param propertyDescriptor
-   *            the reference descriptor to test.
+   *          the reference descriptor to test.
    * @return true if this reference descriptor points to an inline component.
    */
   protected boolean isInlineComponentReference(
@@ -477,7 +480,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * with caution only in subclasses.
    * 
    * @param propertyName
-   *            the property name.
+   *          the property name.
    * @return the property value.
    */
   protected abstract Object retrievePropertyValue(String propertyName);
@@ -487,9 +490,9 @@ public abstract class AbstractComponentInvocationHandler implements
    * storing them.
    * 
    * @param propertyDescriptor
-   *            the reference property descriptor.
+   *          the reference property descriptor.
    * @param propertyValue
-   *            the reference property value.
+   *          the reference property value.
    */
   protected void storeReferenceProperty(
       IReferencePropertyDescriptor<?> propertyDescriptor, Object propertyValue) {
@@ -506,9 +509,9 @@ public abstract class AbstractComponentInvocationHandler implements
    * with caution only in subclasses.
    * 
    * @param propertyName
-   *            the property name.
+   *          the property name.
    * @param propertyValue
-   *            the property value.
+   *          the property value.
    */
   protected abstract void storeProperty(String propertyName,
       Object propertyValue);
@@ -518,7 +521,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * operation.
    * 
    * @param propertyName
-   *            the name of the property.
+   *          the name of the property.
    * @return the property value or null.
    */
   protected Object straightGetProperty(String propertyName) {
@@ -560,7 +563,9 @@ public abstract class AbstractComponentInvocationHandler implements
       Collection collectionProperty = (Collection) accessorFactory
           .createPropertyAccessor(propertyName,
               componentDescriptor.getComponentContract()).getValue(proxy);
-      propertyDescriptor.preprocessAdder(proxy, collectionProperty, value);
+      if (propertyProcessorsEnabled) {
+        propertyDescriptor.preprocessAdder(proxy, collectionProperty, value);
+      }
       IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
           .getReverseRelationEnd();
       if (reversePropertyDescriptor != null) {
@@ -598,7 +603,9 @@ public abstract class AbstractComponentInvocationHandler implements
       if (inserted) {
         firePropertyChange(propertyName, oldCollectionSnapshot,
             collectionProperty);
-        propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
+        if (propertyProcessorsEnabled) {
+          propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
+        }
       }
     } catch (IllegalAccessException ex) {
       // This cannot happen but throw anyway.
@@ -619,10 +626,12 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   private void checkIntegrity(Object proxy) {
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
-      propertyDescriptor.preprocessSetter(proxy,
-          straightGetProperty(propertyDescriptor.getName()));
+    if (propertyProcessorsEnabled) {
+      for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+          .getPropertyDescriptors()) {
+        propertyDescriptor.preprocessSetter(proxy,
+            straightGetProperty(propertyDescriptor.getName()));
+      }
     }
   }
 
@@ -740,7 +749,9 @@ public abstract class AbstractComponentInvocationHandler implements
       Collection<?> collectionProperty = (Collection<?>) accessorFactory
           .createPropertyAccessor(propertyName,
               componentDescriptor.getComponentContract()).getValue(proxy);
-      propertyDescriptor.preprocessRemover(proxy, collectionProperty, value);
+      if (propertyProcessorsEnabled) {
+        propertyDescriptor.preprocessRemover(proxy, collectionProperty, value);
+      }
       if (collectionProperty.contains(value)) {
         IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
             .getReverseRelationEnd();
@@ -772,8 +783,10 @@ public abstract class AbstractComponentInvocationHandler implements
         if (collectionProperty.remove(value)) {
           firePropertyChange(propertyName, oldCollectionSnapshot,
               collectionProperty);
-          propertyDescriptor.postprocessRemover(proxy, collectionProperty,
-              value);
+          if (propertyProcessorsEnabled) {
+            propertyDescriptor.postprocessRemover(proxy, collectionProperty,
+                value);
+          }
         }
       }
     } catch (IllegalAccessException ex) {
@@ -820,13 +833,19 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
-    Object actualNewProperty = propertyDescriptor.interceptSetter(proxy,
-        newProperty);
-
+    Object actualNewProperty;
+    if (propertyProcessorsEnabled) {
+      actualNewProperty = propertyDescriptor
+          .interceptSetter(proxy, newProperty);
+    } else {
+      actualNewProperty = newProperty;
+    }
     if (ObjectUtils.equals(oldProperty, actualNewProperty)) {
       return;
     }
-    propertyDescriptor.preprocessSetter(proxy, actualNewProperty);
+    if (propertyProcessorsEnabled) {
+      propertyDescriptor.preprocessSetter(proxy, actualNewProperty);
+    }
     if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       // It's a relation end
       IRelationshipEndPropertyDescriptor reversePropertyDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
@@ -926,7 +945,10 @@ public abstract class AbstractComponentInvocationHandler implements
       storeProperty(propertyName, actualNewProperty);
     }
     firePropertyChange(propertyName, oldProperty, actualNewProperty);
-    propertyDescriptor.postprocessSetter(proxy, oldProperty, actualNewProperty);
+    if (propertyProcessorsEnabled) {
+      propertyDescriptor.postprocessSetter(proxy, oldProperty,
+          actualNewProperty);
+    }
   }
 
   private Map<String, Object> straightGetProperties() {
@@ -1003,8 +1025,8 @@ public abstract class AbstractComponentInvocationHandler implements
      * <p>
      * {@inheritDoc}
      */
-    public Object invoke(@SuppressWarnings("unused")
-    Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(@SuppressWarnings("unused") Object proxy,
+        Method method, Object[] args) throws Throwable {
       if (method.getName().equals("equals") && args.length == 1) {
         return new Boolean(false);
       }
@@ -1020,7 +1042,7 @@ public abstract class AbstractComponentInvocationHandler implements
      * Constructs a new <code>InnerComponentTracker</code> instance.
      * 
      * @param componentName
-     *            the name of the component to track the properties.
+     *          the name of the component to track the properties.
      */
     public InlinedComponentTracker(String componentName) {
       this.componentName = componentName;

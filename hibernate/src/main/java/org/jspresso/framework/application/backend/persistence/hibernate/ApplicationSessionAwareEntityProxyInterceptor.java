@@ -33,7 +33,6 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.jspresso.framework.security.UserPrincipal;
 
-
 /**
  * Hibernate session interceptor aware of an application session to deal with
  * uniqueness of entity instances across the JVM.
@@ -105,6 +104,14 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
       if (dirtyProperties == null) {
         return null;
       } else if (dirtyProperties.isEmpty()) {
+        return new int[0];
+      }
+      if (dirtyProperties.containsKey(IEntity.ID)) {
+        // whenever an entity has just been saved, its state is in the dirty
+        // store.
+        // hibernate might ask to check dirtyness especially for collection
+        // members.
+        // Those just saved entities must not be considered dirty.
         return new int[0];
       }
       // the entity is dirty and is going to be flushed.
@@ -193,7 +200,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    * Sets the applicationSession.
    * 
    * @param applicationSession
-   *            the applicationSession to set.
+   *          the applicationSession to set.
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
     this.applicationSession = applicationSession;

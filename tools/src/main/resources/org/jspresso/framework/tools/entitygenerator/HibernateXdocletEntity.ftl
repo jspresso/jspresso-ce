@@ -233,6 +233,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#local bidirectional=true/>
     <#local reversePropertyName=propertyDescriptor.reverseRelationEnd.name/>
+    <#local reverseMandatory=propertyDescriptor.reverseRelationEnd.mandatory/>
     <#if manyToMany>
       <#local inverse=(compareStrings(elementName, componentName) > 0)/>
     <#else>
@@ -310,6 +311,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      <#else>
    * @hibernate.key
    *           column = "${generateSQLName(reversePropertyName)}_ID"
+       <#if reverseMandatory>
+   *           not-null = "true"
+       </#if>
    <#if !isEntity>
    *           foreign-key = "none"
    </#if>
