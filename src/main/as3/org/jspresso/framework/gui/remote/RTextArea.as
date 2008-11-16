@@ -17,7 +17,7 @@ package org.jspresso.framework.gui.remote {
 
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RTextArea")]
-    public class RTextArea extends RComponent {
+    public class RTextArea extends RTextComponent {
 
     }
 }

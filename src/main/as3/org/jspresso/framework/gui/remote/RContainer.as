@@ -19,13 +19,5 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RContainer")]
     public class RContainer extends RComponent {
 
-        private var _children:Object;
-
-        public function set children(value:Object):void {
-            _children = value;
-        }
-        public function get children():Object {
-            return _children;
-        }
     }
 }

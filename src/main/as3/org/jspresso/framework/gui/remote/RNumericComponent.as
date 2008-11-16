@@ -16,8 +16,24 @@
 package org.jspresso.framework.gui.remote {
 
 
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalField")]
-    public class RDecimalField extends RDecimalComponent {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RNumericComponent")]
+    public class RNumericComponent extends RComponent {
 
+        private var _maxValue:Number;
+        private var _minValue:Number;
+
+        public function set maxValue(value:Number):void {
+            _maxValue = value;
+        }
+        public function get maxValue():Number {
+            return _maxValue;
+        }
+
+        public function set minValue(value:Number):void {
+            _minValue = value;
+        }
+        public function get minValue():Number {
+            return _minValue;
+        }
     }
 }

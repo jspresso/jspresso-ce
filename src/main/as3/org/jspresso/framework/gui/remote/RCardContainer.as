@@ -15,25 +15,26 @@
 
 package org.jspresso.framework.gui.remote {
 
+    import mx.collections.ListCollectionView;
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RCardContainer")]
     public class RCardContainer extends RContainer {
 
-        private var _cardMap:Object;
-        private var _selectedCard:String;
+        private var _cardNames:ListCollectionView;
+        private var _cards:ListCollectionView;
 
-        public function set cardMap(value:Object):void {
-            _cardMap = value;
+        public function set cardNames(value:ListCollectionView):void {
+            _cardNames = value;
         }
-        public function get cardMap():Object {
-            return _cardMap;
+        public function get cardNames():ListCollectionView {
+            return _cardNames;
         }
 
-        public function set selectedCard(value:String):void {
-            _selectedCard = value;
+        public function set cards(value:ListCollectionView):void {
+            _cards = value;
         }
-        public function get selectedCard():String {
-            return _selectedCard;
+        public function get cards():ListCollectionView {
+            return _cards;
         }
     }
 }

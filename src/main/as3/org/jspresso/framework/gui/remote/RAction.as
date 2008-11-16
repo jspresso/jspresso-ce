@@ -20,11 +20,19 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RAction")]
     public class RAction extends RemotePeer {
 
+        private var _acceleratorAsString:String;
         private var _description:String;
         private var _enabled:Boolean;
         private var _icon:RIcon;
         private var _mnemonicAsString:String;
         private var _name:String;
+
+        public function set acceleratorAsString(value:String):void {
+            _acceleratorAsString = value;
+        }
+        public function get acceleratorAsString():String {
+            return _acceleratorAsString;
+        }
 
         public function set description(value:String):void {
             _description = value;

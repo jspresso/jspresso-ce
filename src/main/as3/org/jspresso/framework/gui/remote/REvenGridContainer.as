@@ -17,32 +17,32 @@ package org.jspresso.framework.gui.remote {
 
     import mx.collections.ListCollectionView;
 
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RComboBox")]
-    public class RComboBox extends RComponent {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.REvenGridContainer")]
+    public class REvenGridContainer extends RContainer {
 
-        private var _icons:ListCollectionView;
-        private var _translations:ListCollectionView;
-        private var _values:ListCollectionView;
+        private var _cells:ListCollectionView;
+        private var _drivingDimension:String;
+        private var _drivingDimensionCellCount:int;
 
-        public function set icons(value:ListCollectionView):void {
-            _icons = value;
+        public function set cells(value:ListCollectionView):void {
+            _cells = value;
         }
-        public function get icons():ListCollectionView {
-            return _icons;
-        }
-
-        public function set translations(value:ListCollectionView):void {
-            _translations = value;
-        }
-        public function get translations():ListCollectionView {
-            return _translations;
+        public function get cells():ListCollectionView {
+            return _cells;
         }
 
-        public function set values(value:ListCollectionView):void {
-            _values = value;
+        public function set drivingDimension(value:String):void {
+            _drivingDimension = value;
         }
-        public function get values():ListCollectionView {
-            return _values;
+        public function get drivingDimension():String {
+            return _drivingDimension;
+        }
+
+        public function set drivingDimensionCellCount(value:int):void {
+            _drivingDimensionCellCount = value;
+        }
+        public function get drivingDimensionCellCount():int {
+            return _drivingDimensionCellCount;
         }
     }
 }

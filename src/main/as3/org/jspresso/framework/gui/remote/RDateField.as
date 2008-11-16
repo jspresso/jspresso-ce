@@ -19,5 +19,13 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RDateField")]
     public class RDateField extends RComponent {
 
+        private var _type:String;
+
+        public function set type(value:String):void {
+            _type = value;
+        }
+        public function get type():String {
+            return _type;
+        }
     }
 }

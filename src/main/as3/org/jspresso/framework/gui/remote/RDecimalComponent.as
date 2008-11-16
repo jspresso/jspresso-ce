@@ -16,8 +16,16 @@
 package org.jspresso.framework.gui.remote {
 
 
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RGridContainer")]
-    public class RGridContainer extends RContainer {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalComponent")]
+    public class RDecimalComponent extends RComponent {
 
+        private var _maxFractionDigit:int;
+
+        public function set maxFractionDigit(value:int):void {
+            _maxFractionDigit = value;
+        }
+        public function get maxFractionDigit():int {
+            return _maxFractionDigit;
+        }
     }
 }

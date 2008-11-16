@@ -23,6 +23,10 @@ package org.jspresso.framework.gui.remote {
     public class RComponent extends RemotePeer {
 
         private var _actions:ListCollectionView;
+        private var _background:String;
+        private var _borderType:String;
+        private var _font:String;
+        private var _foreground:String;
         private var _icon:RIcon;
         private var _label:String;
         private var _state:RemoteValueState;
@@ -33,6 +37,34 @@ package org.jspresso.framework.gui.remote {
         }
         public function get actions():ListCollectionView {
             return _actions;
+        }
+
+        public function set background(value:String):void {
+            _background = value;
+        }
+        public function get background():String {
+            return _background;
+        }
+
+        public function set borderType(value:String):void {
+            _borderType = value;
+        }
+        public function get borderType():String {
+            return _borderType;
+        }
+
+        public function set font(value:String):void {
+            _font = value;
+        }
+        public function get font():String {
+            return _font;
+        }
+
+        public function set foreground(value:String):void {
+            _foreground = value;
+        }
+        public function get foreground():String {
+            return _foreground;
         }
 
         public function set icon(value:RIcon):void {

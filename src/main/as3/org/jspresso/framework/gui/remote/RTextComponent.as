@@ -16,8 +16,16 @@
 package org.jspresso.framework.gui.remote {
 
 
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalField")]
-    public class RDecimalField extends RDecimalComponent {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTextComponent")]
+    public class RTextComponent extends RComponent {
 
+        private var _maxLength:int;
+
+        public function set maxLength(value:int):void {
+            _maxLength = value;
+        }
+        public function get maxLength():int {
+            return _maxLength;
+        }
     }
 }

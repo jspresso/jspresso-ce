@@ -15,9 +15,26 @@
 
 package org.jspresso.framework.gui.remote {
 
+    import mx.collections.ListCollectionView;
 
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalField")]
-    public class RDecimalField extends RDecimalComponent {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RConstrainedGridContainer")]
+    public class RConstrainedGridContainer extends RContainer {
 
+        private var _cellConstraints:ListCollectionView;
+        private var _cells:ListCollectionView;
+
+        public function set cellConstraints(value:ListCollectionView):void {
+            _cellConstraints = value;
+        }
+        public function get cellConstraints():ListCollectionView {
+            return _cellConstraints;
+        }
+
+        public function set cells(value:ListCollectionView):void {
+            _cells = value;
+        }
+        public function get cells():ListCollectionView {
+            return _cells;
+        }
     }
 }

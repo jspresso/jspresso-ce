@@ -19,5 +19,13 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RColorField")]
     public class RColorField extends RComponent {
 
+        private var _defaultColor:String;
+
+        public function set defaultColor(value:String):void {
+            _defaultColor = value;
+        }
+        public function get defaultColor():String {
+            return _defaultColor;
+        }
     }
 }

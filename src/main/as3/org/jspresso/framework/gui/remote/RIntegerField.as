@@ -17,7 +17,7 @@ package org.jspresso.framework.gui.remote {
 
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RIntegerField")]
-    public class RIntegerField extends RComponent {
+    public class RIntegerField extends RNumericComponent {
 
     }
 }

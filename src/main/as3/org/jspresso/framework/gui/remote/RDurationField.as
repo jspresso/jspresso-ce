@@ -19,5 +19,13 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RDurationField")]
     public class RDurationField extends RComponent {
 
+        private var _maxMillis:Number;
+
+        public function set maxMillis(value:Number):void {
+            _maxMillis = value;
+        }
+        public function get maxMillis():Number {
+            return _maxMillis;
+        }
     }
 }

@@ -13,11 +13,19 @@
  */
 
 
-package org.jspresso.framework.gui.remote {
+package org.jspresso.framework.binding.remote.state {
 
 
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalField")]
-    public class RDecimalField extends RDecimalComponent {
+    [RemoteClass(alias="org.jspresso.framework.binding.remote.state.RemoteCollectionValueState")]
+    public class RemoteCollectionValueState extends RemoteCompositeValueState {
 
+        private var _selectedIndices:Array;
+
+        public function set selectedIndices(value:Array):void {
+            _selectedIndices = value;
+        }
+        public function get selectedIndices():Array {
+            return _selectedIndices;
+        }
     }
 }
