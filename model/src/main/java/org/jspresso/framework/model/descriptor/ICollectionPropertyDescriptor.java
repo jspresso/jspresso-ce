@@ -40,7 +40,7 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete collection component element type.
+ *          the concrete collection component element type.
  */
 public interface ICollectionPropertyDescriptor<E> extends
     IRelationshipEndPropertyDescriptor, ICollectionDescriptorProvider<E> {
@@ -70,11 +70,11 @@ public interface ICollectionPropertyDescriptor<E> extends
    * Triggers all adder postprocessors.
    * 
    * @param component
-   *            the component targetted by the adder.
+   *          the component targetted by the adder.
    * @param collection
-   *            the collection value.
+   *          the collection value.
    * @param addedValue
-   *            the property added value.
+   *          the property added value.
    */
   void postprocessAdder(Object component, Collection<?> collection,
       Object addedValue);
@@ -83,11 +83,11 @@ public interface ICollectionPropertyDescriptor<E> extends
    * Triggers all remer postprocessors.
    * 
    * @param component
-   *            the component targetted by the remer.
+   *          the component targetted by the remer.
    * @param collection
-   *            the collection value.
+   *          the collection value.
    * @param removedValue
-   *            the property removed value.
+   *          the property removed value.
    */
   void postprocessRemover(Object component, Collection<?> collection,
       Object removedValue);
@@ -96,11 +96,11 @@ public interface ICollectionPropertyDescriptor<E> extends
    * Triggers all adder preprocessors.
    * 
    * @param component
-   *            the component targetted by the adder.
+   *          the component targetted by the adder.
    * @param collection
-   *            the collection value.
+   *          the collection value.
    * @param addedValue
-   *            the property added value.
+   *          the property added value.
    */
   void preprocessAdder(Object component, Collection<?> collection,
       Object addedValue);
@@ -109,11 +109,11 @@ public interface ICollectionPropertyDescriptor<E> extends
    * Triggers all remer preprocessors.
    * 
    * @param component
-   *            the component targetted by the remer.
+   *          the component targetted by the remer.
    * @param collection
-   *            the collection value.
+   *          the collection value.
    * @param removedValue
-   *            the property removed value.
+   *          the property removed value.
    */
   void preprocessRemover(Object component, Collection<?> collection,
       Object removedValue);

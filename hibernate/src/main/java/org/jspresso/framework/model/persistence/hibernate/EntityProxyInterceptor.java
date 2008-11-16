@@ -30,7 +30,6 @@ import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.security.UserPrincipal;
 
-
 /**
  * This hibernate interceptor enables hibernate to handle entities which are
  * implemented by proxies. Its main goal is to provide hibernate with new
@@ -146,7 +145,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * Sets the entityFactory.
    * 
    * @param entityFactory
-   *            the entityFactory to set.
+   *          the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
@@ -183,9 +182,16 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       Object[] state) {
     for (int i = 0; i < propertyNames.length; i++) {
       String propertyName = propertyNames[i];
-      Object property = entity.straightGetProperty(propertyName);
-      if (!(property instanceof Collection<?>)) {
-        state[i] = property;
+      // Hibernate uses "extra" properties to cope with relationships
+      // e.g. _[collectionName]BackRef
+      // e.g. _[collectionName]IndexBackRef
+      // Those properties are not known by the entity and thus cannot be
+      // extracted.
+      if (!propertyName.startsWith("_")) {
+        Object property = entity.straightGetProperty(propertyName);
+        if (!(property instanceof Collection<?>)) {
+          state[i] = property;
+        }
       }
     }
   }

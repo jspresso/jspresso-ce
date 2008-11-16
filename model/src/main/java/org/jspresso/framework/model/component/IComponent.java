@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
-
 /**
  * This interface must be implemented by all model components in the application
  * domain. It establishes the minimal contract of a model component.
@@ -50,11 +49,11 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
    * change.
    * 
    * @param property
-   *            The property which changed.
+   *          The property which changed.
    * @param oldValue
-   *            The old value of the property.
+   *          The old value of the property.
    * @param newValue
-   *            The new value of the property or <code>UNKNOWN</code>.
+   *          The new value of the property or <code>UNKNOWN</code>.
    */
   void firePropertyChange(String property, Object oldValue, Object newValue);
 
@@ -78,7 +77,7 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
    * other behaviour.
    * 
    * @param propertyName
-   *            the name of the property to get.
+   *          the name of the property to get.
    * @return the current value of the property.
    */
   Object straightGetProperty(String propertyName);
@@ -88,7 +87,7 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
    * any other behaviour except a <code>PropertyChangeEvent</code>.
    * 
    * @param properties
-   *            the properties to set.
+   *          the properties to set.
    */
   void straightSetProperties(Map<String, Object> properties);
 
@@ -97,9 +96,21 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
    * other behaviour except a <code>PropertyChangeEvent</code>.
    * 
    * @param propertyName
-   *            the name of the property to set.
+   *          the name of the property to set.
    * @param backendPropertyValue
-   *            the value to set the property with.
+   *          the value to set the property with.
    */
   void straightSetProperty(String propertyName, Object backendPropertyValue);
+
+  /**
+   * Allows for temporary enabling/disabling property processors for internal
+   * operations. This is useful for instance when cleaning relationships before
+   * removing an entity. Calls to this method are typically enclosed in a
+   * try/finally block to make sure that whatever the output is, the property
+   * processors are re-enabled.
+   * 
+   * @param enabled
+   *          true if property processors should be enabled.
+   */
+  void setPropertyProcessorsEnabled(boolean enabled);
 }
