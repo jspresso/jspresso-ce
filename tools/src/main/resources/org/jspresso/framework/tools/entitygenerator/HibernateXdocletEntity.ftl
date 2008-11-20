@@ -387,6 +387,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.many-to-one
         <#if oneToOne>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+   *           unique = "true"
         <#elseif bidirectional>
    *           cascade = "persist,merge,save-update"
           <#if !managesPersistence>
@@ -402,9 +403,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}_ID"
-        <#if oneToOne>
-   *           unique = "true"
-        </#if>
         <#if propertyDescriptor.mandatory>
    *           not-null = "true"
         </#if>
@@ -422,9 +420,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           name = "${generateSQLName(propertyName)}_NAME"
    * @hibernate.any-column
    *           name = "${generateSQLName(propertyName)}_ID"
-      <#if oneToOne>
-   *           unique = "true"
-      </#if>
       <#if propertyDescriptor.mandatory>
    *           not-null = "true"
       </#if>

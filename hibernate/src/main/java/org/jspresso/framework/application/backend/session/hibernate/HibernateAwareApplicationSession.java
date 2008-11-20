@@ -129,36 +129,43 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   @Override
   public void initializePropertyIfNeeded(final IComponent componentOrEntity,
       IPropertyDescriptor propertyDescriptor) {
-    final String propertyName = propertyDescriptor.getName();
-    if (Hibernate.isInitialized(componentOrEntity
-        .straightGetProperty(propertyName))) {
-      return;
-    }
     boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
     try {
       getDirtRecorder().setEnabled(false);
+      final String propertyName = propertyDescriptor.getName();
+      final Object initializedProperty = componentOrEntity
+          .straightGetProperty(propertyName);
+      if (!Hibernate.isInitialized(initializedProperty)) {
 
-      hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
-      Object propertyValue = hibernateTemplate.execute(new HibernateCallback() {
+        hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
+        hibernateTemplate.execute(new HibernateCallback() {
 
-        /**
-         * {@inheritDoc}
-         */
-        public Object doInHibernate(Session session) {
-          HibernateAwareApplicationSession
-              .cleanPersistentCollectionDirtyState(componentOrEntity);
-          Object initializedProperty = componentOrEntity
-              .straightGetProperty(propertyName);
-          if (componentOrEntity instanceof IEntity) {
-            if (((IEntity) componentOrEntity).isPersistent()) {
-              try {
-                session.lock(componentOrEntity, LockMode.NONE);
-              } catch (Exception ex) {
-                session.evict(session.get(componentOrEntity.getContract(),
-                    ((IEntity) componentOrEntity).getId()));
-                session.lock(componentOrEntity, LockMode.NONE);
+          /**
+           * {@inheritDoc}
+           */
+          public Object doInHibernate(Session session) {
+            HibernateAwareApplicationSession
+                .cleanPersistentCollectionDirtyState(componentOrEntity);
+            if (componentOrEntity instanceof IEntity) {
+              if (((IEntity) componentOrEntity).isPersistent()) {
+                try {
+                  session.lock(componentOrEntity, LockMode.NONE);
+                } catch (Exception ex) {
+                  session.evict(session.get(componentOrEntity.getContract(),
+                      ((IEntity) componentOrEntity).getId()));
+                  session.lock(componentOrEntity, LockMode.NONE);
+                }
+              } else if (initializedProperty instanceof IEntity) {
+                try {
+                  session.lock(initializedProperty, LockMode.NONE);
+                } catch (Exception ex) {
+                  session.evict(session.get(((IEntity) initializedProperty)
+                      .getContract(), ((IEntity) initializedProperty).getId()));
+                  session.lock(initializedProperty, LockMode.NONE);
+                }
               }
             } else if (initializedProperty instanceof IEntity) {
+              // to handle initialization of component properties.
               try {
                 session.lock(initializedProperty, LockMode.NONE);
               } catch (Exception ex) {
@@ -167,31 +174,30 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
                 session.lock(initializedProperty, LockMode.NONE);
               }
             }
-          } else if (initializedProperty instanceof IEntity) {
-            // to handle initialization of component properties.
-            try {
-              session.lock(initializedProperty, LockMode.NONE);
-            } catch (Exception ex) {
-              session.evict(session.get(((IEntity) initializedProperty)
-                  .getContract(), ((IEntity) initializedProperty).getId()));
-              session.lock(initializedProperty, LockMode.NONE);
-            }
-          }
 
-          Hibernate.initialize(initializedProperty);
-          return initializedProperty;
-        }
-      });
-      super.initializePropertyIfNeeded(componentOrEntity, propertyDescriptor);
-      if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        if (propertyValue instanceof PersistentCollection) {
-          ((PersistentCollection) propertyValue).clearDirty();
+            Hibernate.initialize(initializedProperty);
+            return null;
+          }
+        });
+        super.initializePropertyIfNeeded(componentOrEntity, propertyDescriptor);
+        if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+          if (initializedProperty instanceof PersistentCollection) {
+            ((PersistentCollection) initializedProperty).clearDirty();
+          }
         }
       }
     } finally {
       getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
     }
   }
+
+//  private Object unwrapProxyIfNeeded(Object maybeProxy) {
+//    if (maybeProxy instanceof HibernateProxy) {
+//      return ((HibernateProxy) maybeProxy).getHibernateLazyInitializer()
+//          .getImplementation();
+//    }
+//    return maybeProxy;
+//  }
 
   /**
    * {@inheritDoc}
@@ -373,7 +379,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         try {
           hibernateSession.lock(entity, LockMode.NONE);
         } catch (Exception ex) {
-          ex.printStackTrace();
+          // ex.printStackTrace();
           hibernateSession.evict(hibernateSession.get(entity.getContract(),
               entity.getId()));
           hibernateSession.lock(entity, LockMode.NONE);

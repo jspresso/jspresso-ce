@@ -23,7 +23,6 @@ import java.util.Map;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 
-
 /**
  * Default implementation of a reference descriptor.
  * <p>
@@ -43,7 +42,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete component type.
+ *          the concrete component type.
  */
 public class BasicReferencePropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
@@ -121,7 +120,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * Sets the initializationMapping.
    * 
    * @param initializationMapping
-   *            the initializationMapping to set.
+   *          the initializationMapping to set.
    */
   public void setInitializationMapping(Map<String, String> initializationMapping) {
     this.initializationMapping = initializationMapping;
@@ -131,7 +130,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * Sets the referencedDescriptor property.
    * 
    * @param referencedDescriptor
-   *            the referencedDescriptor to set.
+   *          the referencedDescriptor to set.
    */
   public void setReferencedDescriptor(
       IComponentDescriptor<E> referencedDescriptor) {
@@ -139,16 +138,16 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * return true for a 1-1 relationship and false for a 1-N relationship.
+   * return false.
    * <p>
    * {@inheritDoc}
    */
   @Override
   protected boolean getDefaultComposition() {
-    if (getReverseRelationEnd() == null
-        || getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>) {
-      return true;
-    }
+    // if (getReverseRelationEnd() == null
+    // || getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>) {
+    // return true;
+    // }
     return false;
   }
 }

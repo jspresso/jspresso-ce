@@ -110,8 +110,7 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   public boolean isUpdatedInUnitOfWork(IEntity entity) {
     if (!unitOfWork.isActive()) {
-      throw new ApplicationSessionException(
-          "Cannot access unit of work.");
+      throw new ApplicationSessionException("Cannot access unit of work.");
     }
     return unitOfWork.isUpdated(entity);
   }
@@ -138,8 +137,10 @@ public class BasicApplicationSession implements IApplicationSession {
     }
     try {
       Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
-      for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
-        merge(entityToMergeBack, EMergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
+      if (unitOfWork.getUpdatedEntities() != null) {
+        for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
+          merge(entityToMergeBack, EMergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
+        }
       }
     } finally {
       unitOfWork.commit();
@@ -787,7 +788,7 @@ public class BasicApplicationSession implements IApplicationSession {
     }
     return varRegisteredComponent;
   }
-  
+
   /**
    * Gets the entities that are registered for deletion.
    * 
