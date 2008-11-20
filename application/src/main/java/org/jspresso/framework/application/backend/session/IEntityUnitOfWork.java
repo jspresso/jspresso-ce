@@ -18,10 +18,12 @@
  */
 package org.jspresso.framework.application.backend.session;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityDirtAware;
+import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 
 
 /**
@@ -47,7 +49,7 @@ import org.jspresso.framework.model.entity.IEntityDirtAware;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntityUnitOfWork extends IEntityDirtAware {
+public interface IEntityUnitOfWork extends IEntityDirtAware, IEntityLifecycleHandler {
 
   /**
    * Begins a new unit of work.
@@ -92,4 +94,43 @@ public interface IEntityUnitOfWork extends IEntityDirtAware {
    * work.
    */
   void rollback();
+
+  /**
+   * Is the passed entity already updated in the current unit of work and waits
+   * for commit ?
+   * 
+   * @param entity
+   *            the entity to test.
+   * @return true if the passed entity already updated in the current unit of
+   *         work and waits for commit.
+   */
+  boolean isUpdated(IEntity entity);
+  
+  /**
+   * Gets the entitiesRegisteredForDeletion.
+   * 
+   * @return the entitiesRegisteredForDeletion.
+   */
+  Collection<IEntity> getEntitiesRegisteredForDeletion();
+  
+  /**
+   * Gets the entitiesRegisteredForUpdate.
+   * 
+   * @return the entitiesRegisteredForUpdate.
+   */
+  Collection<IEntity> getEntitiesRegisteredForUpdate();
+  
+  /**
+   * Gets the entitiesToMergeBack.
+   * 
+   * @return the entitiesToMergeBack.
+   */
+  Collection<IEntity> getUpdatedEntities();
+  
+  /**
+   * Registers an entity as being updated.
+   * 
+   * @param entity the entity to register.
+   */
+  void addUpdatedEntity(IEntity entity);
 }

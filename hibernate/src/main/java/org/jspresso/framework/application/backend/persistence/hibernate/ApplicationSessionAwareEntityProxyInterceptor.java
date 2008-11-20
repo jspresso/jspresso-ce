@@ -87,6 +87,24 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   }
 
   /**
+   * registers Enitities to be merged back from the uow to the session on
+   * commmit.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public void postFlush(Iterator entities) {
+    while (entities.hasNext()) {
+      Object entity = entities.next();
+      if (entity instanceof IEntity) {
+        applicationSession.recordAsSynchronized((IEntity) entity);
+      }
+    }
+    super.postFlush(entities);
+  }
+
+  /**
    * Uses the application session to retrieve the dirty properties of the
    * entity.
    * <p>
@@ -176,24 +194,6 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
       }
     }
     return super.onLoad(entity, id, state, propertyNames, types);
-  }
-
-  /**
-   * Notifies the application session of the entity flush.
-   * <p>
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void postFlush(Iterator entities) {
-    applicationSession.performPendingOperations();
-    while (entities.hasNext()) {
-      Object entity = entities.next();
-      if (entity instanceof IEntity) {
-        applicationSession.recordAsSynchronized((IEntity) entity);
-      }
-    }
-    super.postFlush(entities);
   }
 
   /**

@@ -18,12 +18,15 @@
  */
 package org.jspresso.framework.application.backend.session.basic;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
-
 
 /**
  * An implementation helps an application session in managing unit of works. It
@@ -51,6 +54,10 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
 
   private BeanPropertyChangeRecorder dirtRecorder;
 
+  private Set<IEntity>               entitiesRegisteredForDeletion;
+  private List<IEntity>              entitiesRegisteredForUpdate;
+  private Set<IEntity>               updatedEntities;
+
   /**
    * {@inheritDoc}
    */
@@ -69,6 +76,10 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   public void commit() {
+    // We must get rid of the pending operations only in the case of a
+    // successful commit.
+    entitiesRegisteredForUpdate = null;
+    entitiesRegisteredForDeletion = null;
     cleanup();
   }
 
@@ -118,7 +129,94 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     cleanup();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public void addUpdatedEntity(IEntity entity) {
+    if (updatedEntities == null) {
+      updatedEntities = new LinkedHashSet<IEntity>();
+    }
+    updatedEntities.add(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isUpdated(IEntity entity) {
+    return updatedEntities != null && updatedEntities.contains(entity);
+  }
+
   private void cleanup() {
     dirtRecorder = null;
+    updatedEntities = null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void registerForDeletion(IEntity entity) {
+    if (entity.isPersistent()) {
+      if (entitiesRegisteredForDeletion == null) {
+        entitiesRegisteredForDeletion = new LinkedHashSet<IEntity>();
+      }
+      entitiesRegisteredForDeletion.add(entity);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Set<IEntity> getUpdatedEntities() {
+    return updatedEntities;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Set<IEntity> getEntitiesRegisteredForDeletion() {
+    return entitiesRegisteredForDeletion;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IEntity> getEntitiesRegisteredForUpdate() {
+    return entitiesRegisteredForUpdate;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEntityRegisteredForDeletion(IEntity entity) {
+    return entitiesRegisteredForDeletion != null
+        && entitiesRegisteredForDeletion.contains(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEntityRegisteredForUpdate(IEntity entity) {
+    return entitiesRegisteredForUpdate != null
+        && entitiesRegisteredForUpdate.contains(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void registerForUpdate(IEntity entity) {
+    if (entitiesRegisteredForUpdate == null) {
+      entitiesRegisteredForUpdate = new ArrayList<IEntity>();
+    }
+    entitiesRegisteredForUpdate.add(entity);
+  }
+
+  /**
+   * Clears the pending operations.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void clearPendingOperations() {
+    entitiesRegisteredForUpdate = null;
+    entitiesRegisteredForDeletion = null;
   }
 }

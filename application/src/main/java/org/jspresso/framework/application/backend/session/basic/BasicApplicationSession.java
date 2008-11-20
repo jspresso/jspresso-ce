@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -33,9 +32,9 @@ import java.util.Set;
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.application.backend.session.ApplicationSessionException;
+import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
-import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -49,7 +48,6 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanComparator;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
-
 
 /**
  * Basic implementation of an application session.
@@ -76,9 +74,6 @@ public class BasicApplicationSession implements IApplicationSession {
   private IEntityCloneFactory                  carbonEntityCloneFactory;
   private IComponentCollectionFactory<IEntity> collectionFactory;
   private BeanPropertyChangeRecorder           dirtRecorder;
-  private Set<IEntity>                         entitiesRegisteredForDeletion;
-  private List<IEntity>                        entitiesRegisteredForUpdate;
-  private Set<IEntity>                         entitiesToMergeBack;
   private IEntityFactory                       entityFactory;
   private IEntityRegistry                      entityRegistry;
   private Locale                               locale;
@@ -101,15 +96,6 @@ public class BasicApplicationSession implements IApplicationSession {
           "Cannot begin a new unit of work. Another one is already active.");
     }
     unitOfWork.begin();
-    entitiesToMergeBack = new LinkedHashSet<IEntity>();
-  }
-
-  /**
-   * Clears the pending operations.
-   */
-  public void clearPendingOperations() {
-    entitiesRegisteredForUpdate = null;
-    entitiesRegisteredForDeletion = null;
   }
 
   /**
@@ -123,7 +109,11 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public boolean isUpdatedInUnitOfWork(IEntity entity) {
-    return entitiesToMergeBack != null && entitiesToMergeBack.contains(entity);
+    if (!unitOfWork.isActive()) {
+      throw new ApplicationSessionException(
+          "Cannot access unit of work.");
+    }
+    return unitOfWork.isUpdated(entity);
   }
 
   /**
@@ -148,26 +138,28 @@ public class BasicApplicationSession implements IApplicationSession {
     }
     try {
       Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
-      for (IEntity entityToMergeBack : entitiesToMergeBack) {
+      for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
         merge(entityToMergeBack, EMergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
       }
     } finally {
       unitOfWork.commit();
-      entitiesToMergeBack = null;
-      clearPendingOperations();
     }
   }
 
   /**
    * {@inheritDoc}
    */
-  public void deleteEntity(IEntity entity) {
-    if (entity.isPersistent()) {
-      if (entitiesRegisteredForDeletion == null) {
-        entitiesRegisteredForDeletion = new LinkedHashSet<IEntity>();
-      }
-      entitiesRegisteredForDeletion.add(entity);
-    }
+  public void registerForDeletion(IEntity entity) {
+    unitOfWork.registerForDeletion(entity);
+  }
+
+  /**
+   * Clears the pending operations.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void clearPendingOperations() {
+    unitOfWork.clearPendingOperations();
   }
 
   /**
@@ -264,23 +256,20 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public boolean isEntityRegisteredForDeletion(IEntity entity) {
-    return entitiesRegisteredForDeletion != null
-        && entitiesRegisteredForDeletion.contains(entity);
+    return unitOfWork.isEntityRegisteredForDeletion(entity);
   }
 
   /**
    * {@inheritDoc}
    */
   public boolean isEntityRegisteredForUpdate(IEntity entity) {
-    return entitiesRegisteredForUpdate != null
-        && entitiesRegisteredForUpdate.contains(entity);
+    return unitOfWork.isEntityRegisteredForUpdate(entity);
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean isInitialized(@SuppressWarnings("unused")
-  Object objectOrProxy) {
+  public boolean isInitialized(@SuppressWarnings("unused") Object objectOrProxy) {
     return true;
   }
 
@@ -314,7 +303,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public void performPendingOperations() {
-    clearPendingOperations();
+    // NO-OP.
   }
 
   /**
@@ -323,7 +312,7 @@ public class BasicApplicationSession implements IApplicationSession {
   public void recordAsSynchronized(IEntity flushedEntity) {
     if (unitOfWork.isActive()) {
       unitOfWork.clearDirtyState(flushedEntity);
-      entitiesToMergeBack.add(flushedEntity);
+      unitOfWork.addUpdatedEntity(flushedEntity);
     }
   }
 
@@ -358,14 +347,13 @@ public class BasicApplicationSession implements IApplicationSession {
           "Cannot rollback a unit of work that has not begun.");
     }
     unitOfWork.rollback();
-    entitiesToMergeBack = null;
   }
 
   /**
    * Sets the accessorFactory.
    * 
    * @param accessorFactory
-   *            the accessorFactory to set.
+   *          the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -375,7 +363,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Sets the carbonEntityCloneFactory.
    * 
    * @param carbonEntityCloneFactory
-   *            the carbonEntityCloneFactory to set.
+   *          the carbonEntityCloneFactory to set.
    */
   public void setCarbonEntityCloneFactory(
       IEntityCloneFactory carbonEntityCloneFactory) {
@@ -386,7 +374,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Sets the collectionFactory.
    * 
    * @param collectionFactory
-   *            the collectionFactory to set.
+   *          the collectionFactory to set.
    */
   public void setCollectionFactory(
       IComponentCollectionFactory<IEntity> collectionFactory) {
@@ -397,7 +385,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Sets the entityFactory.
    * 
    * @param entityFactory
-   *            the entityFactory to set.
+   *          the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
@@ -407,7 +395,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Sets the entityRegistry.
    * 
    * @param entityRegistry
-   *            the entityRegistry to set.
+   *          the entityRegistry to set.
    */
   public void setEntityRegistry(IEntityRegistry entityRegistry) {
     this.entityRegistry = entityRegistry;
@@ -417,7 +405,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Sets the locale.
    * 
    * @param locale
-   *            the locale to set.
+   *          the locale to set.
    */
   public void setLocale(Locale locale) {
     this.locale = locale;
@@ -427,7 +415,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Sets the owner.
    * 
    * @param subject
-   *            the owner to set.
+   *          the owner to set.
    */
   public void setSubject(Subject subject) {
     this.subject = subject;
@@ -437,7 +425,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Sets the unitOfWork.
    * 
    * @param unitOfWork
-   *            the unitOfWork to set.
+   *          the unitOfWork to set.
    */
   public void setUnitOfWork(IEntityUnitOfWork unitOfWork) {
     this.unitOfWork = unitOfWork;
@@ -446,13 +434,8 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public void updateEntity(IEntity entity) {
-    if (entity.isPersistent()) {
-      if (entitiesRegisteredForUpdate == null) {
-        entitiesRegisteredForUpdate = new ArrayList<IEntity>();
-      }
-      entitiesRegisteredForUpdate.add(entity);
-    }
+  public void registerForUpdate(IEntity entity) {
+    unitOfWork.registerForUpdate(entity);
   }
 
   /**
@@ -460,7 +443,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * collection passed as parameter.
    * 
    * @param collection
-   *            the collection to take the type from (List, Set, ...)
+   *          the collection to take the type from (List, Set, ...)
    * @return a transient collection instance with the same interface type as the
    *         parameter.
    */
@@ -486,39 +469,12 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
-   * Gets the entitiesRegisteredForDeletion.
-   * 
-   * @return the entitiesRegisteredForDeletion.
-   */
-  protected Set<IEntity> getEntitiesRegisteredForDeletion() {
-    return entitiesRegisteredForDeletion;
-  }
-
-  /**
-   * Gets the entitiesRegisteredForUpdate.
-   * 
-   * @return the entitiesRegisteredForUpdate.
-   */
-  protected List<IEntity> getEntitiesRegisteredForUpdate() {
-    return entitiesRegisteredForUpdate;
-  }
-
-  /**
-   * Gets the entitiesToMergeBack.
-   * 
-   * @return the entitiesToMergeBack.
-   */
-  protected Set<IEntity> getEntitiesToMergeBack() {
-    return entitiesToMergeBack;
-  }
-
-  /**
    * Sorts an entity collection property.
    * 
    * @param component
-   *            the component to sort the collection property of.
+   *          the component to sort the collection property of.
    * @param propertyName
-   *            the name of the collection property to sort.
+   *          the name of the collection property to sort.
    */
   @SuppressWarnings("unchecked")
   protected void sortCollectionProperty(IComponent component,
@@ -559,14 +515,14 @@ public class BasicApplicationSession implements IApplicationSession {
    * the unit of work.
    * 
    * @param entity
-   *            the entity the collection belongs to.
+   *          the entity the collection belongs to.
    * @param transientCollection
-   *            the transient collection to make part of the unit of work.
+   *          the transient collection to make part of the unit of work.
    * @param snapshotCollection
-   *            the original collection state as reported by the dirt recorder.
+   *          the original collection state as reported by the dirt recorder.
    * @param role
-   *            the name of the property represented by the collection in its
-   *            owner.
+   *          the name of the property represented by the collection in its
+   *          owner.
    * @return the wrapped collection if any (it may be the collection itself as
    *         in this implementation).
    */
@@ -830,5 +786,23 @@ public class BasicApplicationSession implements IApplicationSession {
       varRegisteredComponent.straightSetProperties(mergedProperties);
     }
     return varRegisteredComponent;
+  }
+  
+  /**
+   * Gets the entities that are registered for deletion.
+   * 
+   * @return the entities that are registered for deletion.
+   */
+  protected Collection<IEntity> getEntitiesRegisteredForDeletion() {
+    return unitOfWork.getEntitiesRegisteredForDeletion();
+  }
+
+  /**
+   * Gets the entities that are registered for update.
+   * 
+   * @return the entities that are registered for update.
+   */
+  protected Collection<IEntity> getEntitiesRegisteredForUpdate() {
+    return unitOfWork.getEntitiesRegisteredForUpdate();
   }
 }

@@ -70,7 +70,8 @@ public class RemoveCollectionFromMasterAction extends
         IEntity nextDetailToRemove = (IEntity) collectionConnector
             .getChildConnector(selectedIndex).getConnectorValue();
         try {
-          cleanRelationshipsOnDeletion(nextDetailToRemove, context);
+          cleanRelationshipsOnDeletion(nextDetailToRemove, context, true);
+          cleanRelationshipsOnDeletion(nextDetailToRemove, context, false);
         } catch (IllegalAccessException ex) {
           throw new ActionException(ex);
         } catch (InvocationTargetException ex) {
@@ -78,6 +79,7 @@ public class RemoveCollectionFromMasterAction extends
         } catch (NoSuchMethodException ex) {
           throw new ActionException(ex);
         }
+        getApplicationSession(context).registerForDeletion(nextDetailToRemove);
       }
     }
     return super.execute(actionHandler, context);

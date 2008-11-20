@@ -311,8 +311,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      <#else>
    * @hibernate.key
    *           column = "${generateSQLName(reversePropertyName)}_ID"
-       <#if reverseMandatory>
+       <#if bidirectional>
+         <#if reverseMandatory>
    *           not-null = "true"
+         </#if>
        </#if>
    <#if !isEntity>
    *           foreign-key = "none"

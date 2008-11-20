@@ -33,7 +33,6 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
-
 /**
  * Performs a copy of the entity. It may be used in application actions to
  * smartly duplicate an entity.
@@ -102,6 +101,18 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
               }
             } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
               if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
+                // We must force initialization of the collection. So do a get.
+                try {
+                  accessorFactory.createPropertyAccessor(
+                      propertyEntry.getKey(), entityToClone.getContract())
+                      .getValue(entityToClone);
+                } catch (IllegalAccessException ex) {
+                  throw new EntityException(ex);
+                } catch (InvocationTargetException ex) {
+                  throw new EntityException(ex);
+                } catch (NoSuchMethodException ex) {
+                  throw new EntityException(ex);
+                }
                 for (Object reverseCollectionElement : (Collection) propertyEntry
                     .getValue()) {
                   if (isInitialized(reverseCollectionElement)) {
@@ -156,7 +167,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
    * Sets the accessorFactory.
    * 
    * @param accessorFactory
-   *            the accessorFactory to set.
+   *          the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -166,11 +177,10 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
    * Wether the object is fully initialized.
    * 
    * @param objectOrProxy
-   *            the object to test.
+   *          the object to test.
    * @return true if the object is fully initialized.
    */
   protected boolean isInitialized(Object objectOrProxy) {
     return true;
   }
-
 }

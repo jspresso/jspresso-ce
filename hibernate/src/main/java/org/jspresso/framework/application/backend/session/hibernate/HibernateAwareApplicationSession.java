@@ -22,6 +22,8 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +43,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
 import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
-
 
 /**
  * Basic implementation of an application session aware of hibernate when
@@ -74,7 +75,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * "dirty" detached collection.
    * 
    * @param componentOrEntity
-   *            the entity to clean the collections dirty state of.
+   *          the entity to clean the collections dirty state of.
    */
   public static void cleanPersistentCollectionDirtyState(
       IComponent componentOrEntity) {
@@ -120,40 +121,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
       }
     }
     return entityContract;
-  }
-
-  /**
-   * Does the unit of work back merge in the scope of an hibernate session.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void commitUnitOfWork() {
-    try {
-      hibernateTemplate.execute(new HibernateCallback() {
-
-        /**
-         * {@inheritDoc}
-         */
-        public Object doInHibernate(Session session) {
-          for (IEntity entityToMergeBack : getEntitiesToMergeBack()) {
-            if (entityToMergeBack.isPersistent()) {
-              try {
-                session.lock(entityToMergeBack, LockMode.NONE);
-              } catch (Exception ex) {
-                session.evict(session.get(entityToMergeBack.getContract(),
-                    entityToMergeBack.getId()));
-                session.lock(entityToMergeBack, LockMode.NONE);
-              }
-            }
-          }
-          performActualUnitOfWorkCommit();
-          return null;
-        }
-      });
-    } finally {
-      traversedPendingOperations = false;
-    }
   }
 
   /**
@@ -248,17 +215,23 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
          */
         public Object doInHibernate(Session session) {
           boolean flushIsNecessary = false;
-          List<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
+          Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
+          Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
+          List<IEntity> entitiesToClone = new ArrayList<IEntity>();
+          if (entitiesToUpdate != null) {
+            entitiesToClone.addAll(entitiesToUpdate);
+          }
+          if (entitiesToDelete != null) {
+            entitiesToClone.addAll(entitiesToDelete);
+          }
+          List<IEntity> sessionEntities = cloneInUnitOfWork(entitiesToClone);
+          Map<IEntity, IEntity> entityMap = new HashMap<IEntity, IEntity>();
+          for (int i = 0; i < entitiesToClone.size(); i++) {
+            entityMap.put(entitiesToClone.get(i), sessionEntities.get(i));
+          }
           if (entitiesToUpdate != null) {
             for (IEntity entityToUpdate : entitiesToUpdate) {
-              IEntity sessionEntity;
-              try {
-                sessionEntity = cloneInUnitOfWork(entityToUpdate);
-                session.lock(sessionEntity, LockMode.NONE);
-              } catch (Exception ex) {
-                sessionEntity = (IEntity) session.get(entityToUpdate
-                    .getContract(), entityToUpdate.getId());
-              }
+              IEntity sessionEntity = entityMap.get(entityToUpdate);
               session.saveOrUpdate(sessionEntity);
               flushIsNecessary = true;
             }
@@ -266,17 +239,10 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           if (flushIsNecessary) {
             session.flush();
           }
-          Set<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
+          flushIsNecessary = false;
           if (entitiesToDelete != null) {
             for (IEntity entityToDelete : entitiesToDelete) {
-              IEntity sessionEntity;
-              try {
-                sessionEntity = cloneInUnitOfWork(entityToDelete);
-                session.lock(sessionEntity, LockMode.NONE);
-              } catch (Exception ex) {
-                sessionEntity = (IEntity) session.get(entityToDelete
-                    .getContract(), entityToDelete.getId());
-              }
+              IEntity sessionEntity = entityMap.get(entityToDelete);
               session.delete(sessionEntity);
               flushIsNecessary = true;
             }
@@ -287,6 +253,18 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           return null;
         }
       });
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void commitUnitOfWork() {
+    try {
+      super.commitUnitOfWork();
+    } finally {
+      traversedPendingOperations = false;
     }
   }
 
@@ -306,7 +284,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * Sets the hibernateTemplate.
    * 
    * @param hibernateTemplate
-   *            the hibernateTemplate to set.
+   *          the hibernateTemplate to set.
    */
   public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
     this.hibernateTemplate = hibernateTemplate;
@@ -367,8 +345,54 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         varSnapshotCollection, role);
   }
 
-  private void performActualUnitOfWorkCommit() {
-    super.commitUnitOfWork();
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
+    final List<IEntity> uowEntities = super.cloneInUnitOfWork(entities);
+    hibernateTemplate.execute(new HibernateCallback() {
+
+      public Object doInHibernate(Session session) {
+        Set<IEntity> alreadyLocked = new HashSet<IEntity>();
+        for (IEntity mergedEntity : uowEntities) {
+          lockInHibernate(mergedEntity, session, alreadyLocked);
+        }
+        return null;
+      }
+
+    });
+    return uowEntities;
   }
 
+  @SuppressWarnings("unchecked")
+  private void lockInHibernate(IEntity entity, Session hibernateSession,
+      Set<IEntity> alreadyLocked) {
+    if (alreadyLocked.add(entity)) {
+      if (entity.isPersistent()) {
+        try {
+          hibernateSession.lock(entity, LockMode.NONE);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          hibernateSession.evict(hibernateSession.get(entity.getContract(),
+              entity.getId()));
+          hibernateSession.lock(entity, LockMode.NONE);
+        }
+        Map<String, Object> entityProperties = entity.straightGetProperties();
+        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+          if (Hibernate.isInitialized(property.getValue())) {
+            if (property.getValue() instanceof IEntity) {
+              lockInHibernate((IEntity) property.getValue(), hibernateSession,
+                  alreadyLocked);
+            } else if (property.getValue() instanceof Collection) {
+              for (Iterator<IEntity> ite = ((Collection<IEntity>) property
+                  .getValue()).iterator(); ite.hasNext();) {
+                lockInHibernate(ite.next(), hibernateSession, alreadyLocked);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

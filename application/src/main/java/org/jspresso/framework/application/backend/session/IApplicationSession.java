@@ -62,11 +62,6 @@ public interface IApplicationSession extends IEntityDirtAware,
   void beginUnitOfWork();
 
   /**
-   * Clears the pending operations.
-   */
-  void clearPendingOperations();
-
-  /**
    * Registers an entity (actually a clone of it) and all its graph as taking
    * part in the unit of work.
    * 
