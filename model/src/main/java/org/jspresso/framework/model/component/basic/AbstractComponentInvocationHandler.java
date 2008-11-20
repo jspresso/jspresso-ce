@@ -985,7 +985,8 @@ public abstract class AbstractComponentInvocationHandler implements
             .getContextClassLoader(),
             new Class[] {((ICollectionPropertyDescriptor) propertyDescriptor)
                 .getReferencedDescriptor().getCollectionInterface()},
-            new NeverEqualsInvocationHandler(currentPropertyValue));
+            new NeverEqualsInvocationHandler(CollectionHelper
+                .cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);

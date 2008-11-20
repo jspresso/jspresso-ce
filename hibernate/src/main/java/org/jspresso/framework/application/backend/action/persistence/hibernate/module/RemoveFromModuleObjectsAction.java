@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Session;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
@@ -35,7 +34,6 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.model.entity.IEntity;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
@@ -109,27 +107,20 @@ public class RemoveFromModuleObjectsAction extends
 
       public Object doInTransaction(
           @SuppressWarnings("unused") TransactionStatus status) {
-        getHibernateTemplate(context).execute(new HibernateCallback() {
-
-          public Object doInHibernate(Session session) {
-            List<IEntity> mergedCollection = mergeInHibernate(
-                moduleObjectsToRemove, session, context);
-            for (IEntity entityToRemove : mergedCollection) {
-              if (entityToRemove.isPersistent()) {
-                try {
-                  deleteEntity(entityToRemove, session, context);
-                } catch (IllegalAccessException ex) {
-                  throw new ActionException(ex);
-                } catch (InvocationTargetException ex) {
-                  throw new ActionException(ex);
-                } catch (NoSuchMethodException ex) {
-                  throw new ActionException(ex);
-                }
-              }
+        for (IEntity entityToRemove : moduleObjectsToRemove) {
+          if (entityToRemove.isPersistent()) {
+            try {
+              deleteEntity(entityToRemove, context);
+            } catch (IllegalAccessException ex) {
+              throw new ActionException(ex);
+            } catch (InvocationTargetException ex) {
+              throw new ActionException(ex);
+            } catch (NoSuchMethodException ex) {
+              throw new ActionException(ex);
             }
-            return null;
           }
-        });
+        }
+        getApplicationSession(context).performPendingOperations();
         return null;
       }
     });
@@ -148,8 +139,6 @@ public class RemoveFromModuleObjectsAction extends
    * 
    * @param entity
    *          the entity to remove
-   * @param session
-   *          the session to use.
    * @param context
    *          the action context.
    * @throws NoSuchMethodException
@@ -159,10 +148,11 @@ public class RemoveFromModuleObjectsAction extends
    * @throws IllegalAccessException
    *           whenever this exception occurs.
    */
-  protected void deleteEntity(IEntity entity, Session session,
-      Map<String, Object> context) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException {
-    cleanRelationshipsOnDeletion(entity, context);
-    getApplicationSession(context).performPendingOperations();
+  protected void deleteEntity(IEntity entity, Map<String, Object> context)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    cleanRelationshipsOnDeletion(entity, context, true);
+    cleanRelationshipsOnDeletion(entity, context, false);
+    getApplicationSession(context).registerForDeletion(entity);
   }
 }

@@ -27,7 +27,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
-
 /**
  * Saves the object(s) provided by the action context.
  * <p>
@@ -55,15 +54,17 @@ public class SaveAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      final Map<String, Object> context) {
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
-      public Object doInTransaction(@SuppressWarnings("unused")
-      TransactionStatus status) {
+      public Object doInTransaction(
+          @SuppressWarnings("unused") TransactionStatus status) {
         List<IEntity> entitiesToSave = getEntitiesToSave(context);
-        for (IEntity entity : entitiesToSave) {
-          saveEntity(entity, context);
+        for (IEntity entityToSave : entitiesToSave) {
+          getApplicationSession(context).registerForUpdate(entityToSave);
         }
+        getApplicationSession(context).performPendingOperations();
         return null;
       }
     });
@@ -74,7 +75,7 @@ public class SaveAction extends AbstractHibernateAction {
    * Gets the list of entities to save.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the list of entities to save.
    */
   @SuppressWarnings("unchecked")

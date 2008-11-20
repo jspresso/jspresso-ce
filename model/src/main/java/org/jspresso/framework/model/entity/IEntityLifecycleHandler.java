@@ -45,7 +45,7 @@ public interface IEntityLifecycleHandler {
    * @param entity
    *            the entity to register.
    */
-  void deleteEntity(IEntity entity);
+  void registerForDeletion(IEntity entity);
 
   /**
    * Tests wether an entity has been registered for deletion.
@@ -71,5 +71,10 @@ public interface IEntityLifecycleHandler {
    * @param entity
    *            the entity to register.
    */
-  void updateEntity(IEntity entity);
+  void registerForUpdate(IEntity entity);
+
+  /**
+   * Clears the pending operations.
+   */
+  void clearPendingOperations();
 }

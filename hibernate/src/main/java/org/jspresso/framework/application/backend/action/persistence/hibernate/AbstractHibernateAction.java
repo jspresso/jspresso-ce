@@ -21,25 +21,21 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
-import org.hibernate.Session;
+import org.hibernate.proxy.HibernateProxy;
 import org.jspresso.framework.application.backend.action.AbstractBackendAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import org.jspresso.framework.application.backend.session.MergeMode;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -71,6 +67,8 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    *          the deleted entity.
    * @param context
    *          The action context.
+   * @param dryRun
+   *          set to true to simulate before actually doing it.
    * @throws IllegalAccessException
    *           whenever this kind of exception occurs.
    * @throws InvocationTargetException
@@ -78,35 +76,133 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * @throws NoSuchMethodException
    *           whenever this kind of exception occurs.
    */
-  @SuppressWarnings("unchecked")
   protected void cleanRelationshipsOnDeletion(IEntity entity,
-      Map<String, Object> context) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException {
+      Map<String, Object> context, boolean dryRun)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    cleanRelationshipsOnDeletion(entity, context, dryRun,
+        new HashSet<IEntity>());
+  }
+
+  @SuppressWarnings("unchecked")
+  private void cleanRelationshipsOnDeletion(IEntity entityOrProxy,
+      Map<String, Object> context, boolean dryRun, Set<IEntity> clearedEntities)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    IEntity entity;
+    if (entityOrProxy instanceof HibernateProxy) {
+      // we must unwrap the proxy to avoid class cast exceptions.
+      // see
+      // http://forum.hibernate.org/viewtopic.php?p=2323464&sid=cb4ba3a4418276e5d2fbdd6c906ba734
+      entity = (IEntity) ((HibernateProxy) entityOrProxy)
+          .getHibernateLazyInitializer().getImplementation();
+    } else {
+      entity = entityOrProxy;
+    }
+    if (clearedEntities.contains(entity)) {
+      return;
+    }
+    clearedEntities.add(entity);
     try {
       entity.setPropertyProcessorsEnabled(false);
-      IComponentDescriptor entityDescriptor = getEntityFactory(context)
+      IComponentDescriptor<?> entityDescriptor = getEntityFactory(context)
           .getComponentDescriptor(entity.getContract());
       for (Map.Entry<String, Object> property : entity.straightGetProperties()
           .entrySet()) {
         if (property.getValue() != null) {
           IPropertyDescriptor propertyDescriptor = entityDescriptor
               .getPropertyDescriptor(property.getKey());
-          if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+          if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+            // force initialization of relationship property.
             getAccessorFactory(context).createPropertyAccessor(
-                property.getKey(), entity.getContract()).setValue(entity, null);
-          } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-            if (((ICollectionPropertyDescriptor) propertyDescriptor)
-                .isComposition()) {
-              getApplicationSession(context).initializePropertyIfNeeded(entity,
-                  propertyDescriptor);
-              for (IEntity composedEntity : new ArrayList<IEntity>(
-                  (Collection<IEntity>) property.getValue())) {
-                cleanRelationshipsOnDeletion(composedEntity, context);
+                property.getKey(), entity.getContract()).getValue(entity);
+            if (propertyDescriptor instanceof IReferencePropertyDescriptor
+                && property.getValue() instanceof IEntity) {
+              if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                  .isComposition()) {
+                cleanRelationshipsOnDeletion((IEntity) property.getValue(),
+                    context, dryRun, clearedEntities);
+              } else {
+                if (dryRun) {
+                  // manually trigger reverse relations preprocessors.
+                  if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                      .getReverseRelationEnd() != null
+                      && !((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                          .isComposition()) {
+                    IPropertyDescriptor reversePropertyDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+                        .getReverseRelationEnd();
+                    if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+                      reversePropertyDescriptor.preprocessSetter(property
+                          .getValue(), null);
+                    } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+                      Collection<?> reverseCollection = (Collection<?>) getAccessorFactory(
+                          context).createPropertyAccessor(
+                          reversePropertyDescriptor.getName(),
+                          ((IComponent) property.getValue()).getContract())
+                          .getValue(property.getValue());
+                      ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
+                          .preprocessRemover(property.getValue(),
+                              reverseCollection, entity);
+                    }
+                  }
+                } else {
+                  // test to see if we already traversed the reverse
+                  // relationship that is a composition.
+                  if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                      .getReverseRelationEnd() == null
+                      || !(((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                          .getReverseRelationEnd().isComposition() && clearedEntities
+                          .contains(property.getValue()))) {
+                    // set to null to clean reverse relation ends
+                    getAccessorFactory(context).createPropertyAccessor(
+                        property.getKey(), entity.getContract()).setValue(
+                        entity, null);
+                    // but technically reset to original value to avoid
+                    // Hibernate
+                    // not-null checks
+                    entity.straightSetProperty(property.getKey(), property
+                        .getValue());
+                  }
+                }
               }
-            } else if (propertyDescriptor.isModifiable()) {
-              getAccessorFactory(context).createPropertyAccessor(
-                  property.getKey(), entity.getContract()).setValue(entity,
-                  null);
+            } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+              if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                  .isComposition()) {
+                for (IEntity composedEntity : new ArrayList<IEntity>(
+                    (Collection<IEntity>) property.getValue())) {
+                  cleanRelationshipsOnDeletion(composedEntity, context, dryRun,
+                      clearedEntities);
+                }
+              } else if (propertyDescriptor.isModifiable()) {
+                if (dryRun) {
+                  // manually trigger reverse relations preprocessors.
+                  if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                      .getReverseRelationEnd() != null) {
+                    IPropertyDescriptor reversePropertyDescriptor = ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                        .getReverseRelationEnd();
+                    if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+                      reversePropertyDescriptor.preprocessSetter(property
+                          .getValue(), null);
+                    } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+                      for (Object collectionElement : (Collection<?>) property
+                          .getValue()) {
+                        Collection<?> reverseCollection = (Collection<?>) getAccessorFactory(
+                            context).createPropertyAccessor(
+                            reversePropertyDescriptor.getName(),
+                            ((IComponent) collectionElement).getContract())
+                            .getValue(collectionElement);
+                        ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
+                            .preprocessRemover(collectionElement,
+                                reverseCollection, entity);
+                      }
+                    }
+                  }
+                } else {
+                  getAccessorFactory(context).createPropertyAccessor(
+                      property.getKey(), entity.getContract()).setValue(entity,
+                      null);
+                }
+              }
             }
           }
         }
@@ -114,7 +210,6 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
     } finally {
       entity.setPropertyProcessorsEnabled(true);
     }
-    getApplicationSession(context).deleteEntity(entity);
   }
 
   /**
@@ -149,51 +244,10 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
   }
 
   /**
-   * This method must be called to (re)attach application session entities to
-   * the current hibernate session.
-   * 
-   * @param entity
-   *          the entity to merge.
-   * @param hibernateSession
-   *          the hibernate session
-   * @param context
-   *          the action context.
-   * @return the merged entity.
-   */
-  protected IEntity mergeInHibernate(IEntity entity, Session hibernateSession,
-      Map<String, Object> context) {
-    return mergeInHibernate(Collections.singletonList(entity),
-        hibernateSession, context).get(0);
-  }
-
-  /**
-   * This method must be called to (re)attach application session entities to
-   * the current hibernate session.
-   * 
-   * @param entities
-   *          the entities to merge.
-   * @param hibernateSession
-   *          the hibernate session
-   * @param context
-   *          the action context.
-   * @return the merged entity.
-   */
-  protected List<IEntity> mergeInHibernate(List<IEntity> entities,
-      Session hibernateSession, Map<String, Object> context) {
-    List<IEntity> mergedEntities = getApplicationSession(context)
-        .cloneInUnitOfWork(entities);
-    Set<IEntity> alreadyLocked = new HashSet<IEntity>();
-    for (IEntity mergedEntity : mergedEntities) {
-      lockInHibernate(mergedEntity, hibernateSession, alreadyLocked, context);
-    }
-    return mergedEntities;
-  }
-
-  /**
    * Reloads an entity in hibernate.
    * 
    * @param entity
-   *          the entity to save.
+   *          the entity to reload.
    * @param context
    *          the action context.
    */
@@ -203,64 +257,6 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
       getApplicationSession(context).merge(
           (IEntity) hibernateTemplate.load(entity.getContract().getName(),
               entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
-    }
-  }
-
-  /**
-   * Saves an entity in hibernate.
-   * 
-   * @param entity
-   *          the entity to save.
-   * @param context
-   *          the action context.
-   */
-  protected void saveEntity(final IEntity entity,
-      final Map<String, Object> context) {
-    getHibernateTemplate(context).execute(new HibernateCallback() {
-
-      public Object doInHibernate(Session session) {
-        session.clear(); // important to avoid duplicates in session when
-        // looping on saves.
-
-        if (!getApplicationSession(context).isUpdatedInUnitOfWork(entity)) {
-          IEntity mergedEntity = mergeInHibernate(entity, session, context);
-          session.saveOrUpdate(mergedEntity);
-          session.flush();
-        }
-        return null;
-      }
-    });
-  }
-
-  @SuppressWarnings("unchecked")
-  private void lockInHibernate(IEntity entity, Session hibernateSession,
-      Set<IEntity> alreadyLocked, Map<String, Object> context) {
-    if (alreadyLocked.add(entity)) {
-      if (entity.isPersistent()) {
-        try {
-          hibernateSession.lock(entity, LockMode.NONE);
-        } catch (Exception ex) {
-          ex.printStackTrace();
-          hibernateSession.evict(hibernateSession.get(entity.getContract(),
-              entity.getId()));
-          hibernateSession.lock(entity, LockMode.NONE);
-        }
-        Map<String, Object> entityProperties = entity.straightGetProperties();
-        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
-          if (Hibernate.isInitialized(property.getValue())) {
-            if (property.getValue() instanceof IEntity) {
-              lockInHibernate((IEntity) property.getValue(), hibernateSession,
-                  alreadyLocked, context);
-            } else if (property.getValue() instanceof Collection) {
-              for (Iterator<IEntity> ite = ((Collection<IEntity>) property
-                  .getValue()).iterator(); ite.hasNext();) {
-                lockInHibernate(ite.next(), hibernateSession, alreadyLocked,
-                    context);
-              }
-            }
-          }
-        }
-      }
     }
   }
 }

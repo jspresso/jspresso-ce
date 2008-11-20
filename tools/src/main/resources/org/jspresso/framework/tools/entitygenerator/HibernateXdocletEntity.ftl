@@ -311,8 +311,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      <#else>
    * @hibernate.key
    *           column = "${generateSQLName(reversePropertyName)}_ID"
-       <#if reverseMandatory>
+       <#if bidirectional>
+         <#if reverseMandatory>
    *           not-null = "true"
+         </#if>
        </#if>
    <#if !isEntity>
    *           foreign-key = "none"
@@ -385,6 +387,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.many-to-one
         <#if oneToOne>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+   *           unique = "true"
         <#elseif bidirectional>
    *           cascade = "persist,merge,save-update"
           <#if !managesPersistence>
@@ -400,9 +403,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}_ID"
-        <#if oneToOne>
-   *           unique = "true"
-        </#if>
         <#if propertyDescriptor.mandatory>
    *           not-null = "true"
         </#if>
@@ -420,9 +420,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           name = "${generateSQLName(propertyName)}_NAME"
    * @hibernate.any-column
    *           name = "${generateSQLName(propertyName)}_ID"
-      <#if oneToOne>
-   *           unique = "true"
-      </#if>
       <#if propertyDescriptor.mandatory>
    *           not-null = "true"
       </#if>
