@@ -2,20 +2,33 @@
 ===
 Bugs fixed
 ----------
-[ 2201522 ] abstractFilterableBeanCollectionModule is broken 
 
 New features
 ------------
-[ 2172464 ] Remove all references to java.awt in view descriptors
-[ 2172455 ] Refactor all interface constants in typesafe enums
+2172464    Remove all references to java.awt in view descriptors
 
+
+2.2.2
+=====
+Bugs fixed
+----------
+2319842  	 Bidi one to many associations with mandatory manyToOne
+2319846  	 Entity generator: bidi one to many associations with list
+2319847  	 Standard remove action: integrity violations
+2319849  	 Standard duplicate action: initialization exceptions
+
+New features
+------------
+2319851  	 Unit of Work and tx management refactoring
+2319923  	 Change static constants to typesafe enums
 
 2.2.1
 =====
 Bugs fixed
 ----------
-[ 2157885 ] Entities registered for update are not correctly processsed
-[ 2181095 ] Build fails on linux for generated projects
+2157885  	 Entities registered for update are not correctly processsed
+2181095  	 Build fails on linux for generated projects
+2201522  	 abstractFilterableBeanCollectionModule is broken
 
 New features
 ------------
@@ -26,19 +39,19 @@ Reference documentation has been updated to reflect the HR sample application ne
 
 Bugs fixed
 ----------
-[ 2014954 ] Application fails to start
-[ 2020304 ] Clicking an editable table cell in Wings does not select row
-[ 2033594 ] Scroll panes do not appear correctly in Firefox3
-[ 2033834 ] Date patterns are wrongly computed based on user locale
+2014954  	 Application fails to start
+2020304  	 Clicking an editable table cell in Wings does not select row
+2033594  	 Scroll panes do not appear correctly in Firefox3
+2033834  	 Date patterns are wrongly computed based on user locale
 
 New features
 ------------
-[ 2014966 ] Force startup locale
-[ 2115852 ] Split artifacts dependent on all GUI technologies
-[ 2025633 ] Set-up a maven2 repository
-[ 2019540 ] Create maven2 archetypes to speed-up project setup
-[ 2115852 ] Split artifacts dependent on all GUI technologies
-[ 2015009 ] Make the build portable
+2014966  	 Force startup locale
+2115852  	 Split artifacts dependent on all GUI technologies
+2025633  	 Set-up a maven2 repository
+2019540  	 Create maven2 archetypes to speed-up project setup
+2115852  	 Split artifacts dependent on all GUI technologies
+2015009  	 Make the build portable
 
 Migrate to jboss libraries 4.2.2.GA
 Migrate to log4j 1.2.14

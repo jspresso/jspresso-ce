@@ -16,12 +16,12 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding.remote.state;
+package org.jspresso.framework.state.remote;
 
-import org.jspresso.framework.util.remote.RemotePeer;
+import java.util.List;
 
 /**
- * The state of a remote value.
+ * The state of a composite remote value.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,77 +39,79 @@ import org.jspresso.framework.util.remote.RemotePeer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteValueState extends RemotePeer {
+public class RemoteCompositeValueState extends RemoteValueState {
 
-  private Object  value;
-  private boolean writable;
-  private boolean readable;
+  private List<RemoteValueState> children;
+  private String description;
+  private String iconImageUrl;
 
   /**
-   * Constructs a new <code>RemoteValueState</code> instance.
+   * Constructs a new <code>RemoteCompositeValueState</code> instance.
    * 
    * @param guid
    *          the state guid.
    */
-  public RemoteValueState(String guid) {
+  public RemoteCompositeValueState(String guid) {
     super(guid);
   }
 
+  
   /**
-   * Gets the writable.
+   * Gets the children.
    * 
-   * @return the writable.
+   * @return the children.
    */
-  public boolean isWritable() {
-    return writable;
+  public List<RemoteValueState> getChildren() {
+    return children;
   }
 
+  
   /**
-   * Sets the writable.
+   * Sets the children.
    * 
-   * @param writable
-   *          the writable to set.
+   * @param children the children to set.
    */
-  public void setWritable(boolean writable) {
-    this.writable = writable;
+  public void setChildren(List<RemoteValueState> children) {
+    this.children = children;
   }
 
-  /**
-   * Gets the value.
-   * 
-   * @return the value.
-   */
-  public Object getValue() {
-    return value;
-  }
 
   /**
-   * Sets the value.
+   * Gets the description.
    * 
-   * @param value
-   *          the value to set.
+   * @return the description.
    */
-  public void setValue(Object value) {
-    this.value = value;
+  public String getDescription() {
+    return description;
   }
+
 
   /**
-   * Gets the readable.
+   * Sets the description.
    * 
-   * @return the readable.
+   * @param description the description to set.
    */
-  public boolean isReadable() {
-    return readable;
+  public void setDescription(String description) {
+    this.description = description;
   }
+
 
   /**
-   * Sets the readable.
+   * Gets the iconImageUrl.
    * 
-   * @param readable
-   *          the readable to set.
+   * @return the iconImageUrl.
    */
-  public void setReadable(boolean readable) {
-    this.readable = readable;
+  public String getIconImageUrl() {
+    return iconImageUrl;
   }
 
+
+  /**
+   * Sets the iconImageUrl.
+   * 
+   * @param iconImageUrl the iconImageUrl to set.
+   */
+  public void setIconImageUrl(String iconImageUrl) {
+    this.iconImageUrl = iconImageUrl;
+  }
 }

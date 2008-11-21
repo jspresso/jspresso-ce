@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding.remote.state;
+package org.jspresso.framework.state.remote;
 
 
 /**
@@ -35,7 +35,7 @@ package org.jspresso.framework.binding.remote.state;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision: 1491 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteCollectionValueState extends RemoteCompositeValueState {

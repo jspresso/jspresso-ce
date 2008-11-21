@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 import java.util.List;
 
-import org.jspresso.framework.binding.remote.state.RemoteValueState;
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.RemotePeer;
 
 /**

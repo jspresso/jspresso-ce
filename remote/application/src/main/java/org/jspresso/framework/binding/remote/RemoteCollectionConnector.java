@@ -25,10 +25,10 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnector;
-import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
-import org.jspresso.framework.binding.remote.state.RemoteCollectionValueState;
-import org.jspresso.framework.binding.remote.state.RemoteCompositeValueState;
-import org.jspresso.framework.binding.remote.state.RemoteValueState;
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.RemoteCollectionValueState;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 

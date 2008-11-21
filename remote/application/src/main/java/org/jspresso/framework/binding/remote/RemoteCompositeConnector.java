@@ -23,9 +23,9 @@ import java.util.List;
 
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCompositeConnector;
-import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
-import org.jspresso.framework.binding.remote.state.RemoteCompositeValueState;
-import org.jspresso.framework.binding.remote.state.RemoteValueState;
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 

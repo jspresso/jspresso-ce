@@ -19,8 +19,8 @@
 package org.jspresso.framework.binding.remote;
 
 import org.jspresso.framework.binding.basic.BasicValueConnector;
-import org.jspresso.framework.binding.remote.state.IRemoteStateOwner;
-import org.jspresso.framework.binding.remote.state.RemoteValueState;
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
