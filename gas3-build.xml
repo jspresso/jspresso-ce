@@ -16,7 +16,7 @@
     name="clean">
     <delete>
       <fileset
-        dir="src/main/as3">
+        dir="src/main/as3/generated">
         <include
           name="**/*.as" />
       </fileset>
@@ -26,7 +26,7 @@
   <target
     name="generate.as3">
     <gas3
-      outputdir="src/main/as3"
+      outputdir="src/main/as3/generated"
       interfacetemplate="class:org/granite/generator/template/jspressoInterface.gsp"
       beantemplate="class:org/granite/generator/template/jspressoBean.gsp">
       <classpath
@@ -49,7 +49,7 @@
     </gas3>
     <delete>
       <fileset
-        dir="src/main/as3">
+        dir="src/main/as3/generated">
         <include
           name="**/*Base.as" />
       </fileset>
