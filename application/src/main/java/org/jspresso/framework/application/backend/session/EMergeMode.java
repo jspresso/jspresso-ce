@@ -37,7 +37,7 @@ package org.jspresso.framework.application.backend.session;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public enum MergeMode {
+public enum EMergeMode {
 
   /**
    * <code>MERGE_CLEAN_EAGER</code> means that the whole object graph will be

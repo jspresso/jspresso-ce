@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.ViewConstraints;
 
 
 /**
@@ -49,7 +49,7 @@ import org.jspresso.framework.view.descriptor.ViewConstraints;
 public class BasicConstrainedGridViewDescriptor extends
     BasicCompositeViewDescriptor implements IConstrainedGridViewDescriptor {
 
-  private Map<IViewDescriptor, ViewConstraints> constrainedViews;
+  private Map<IViewDescriptor, CellConstraints> constrainedViews;
 
   /**
    * {@inheritDoc}
@@ -61,7 +61,7 @@ public class BasicConstrainedGridViewDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public ViewConstraints getViewConstraints(IViewDescriptor viewDescriptor) {
+  public CellConstraints getViewConstraints(IViewDescriptor viewDescriptor) {
     if (constrainedViews != null) {
       return constrainedViews.get(viewDescriptor);
     }
@@ -75,7 +75,7 @@ public class BasicConstrainedGridViewDescriptor extends
    *            the constrainedViews to set.
    */
   public void setConstrainedViews(
-      Map<IViewDescriptor, ViewConstraints> constrainedViews) {
+      Map<IViewDescriptor, CellConstraints> constrainedViews) {
     this.constrainedViews = constrainedViews;
   }
 }

@@ -32,7 +32,7 @@ import java.util.Set;
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.application.backend.session.ApplicationSessionException;
-import org.jspresso.framework.application.backend.session.MergeMode;
+import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
 import org.jspresso.framework.model.component.IComponent;
@@ -139,7 +139,7 @@ public class BasicApplicationSession implements IApplicationSession {
       Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
       if (unitOfWork.getUpdatedEntities() != null) {
         for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
-          merge(entityToMergeBack, MergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
+          merge(entityToMergeBack, EMergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
         }
       }
     } finally {
@@ -284,14 +284,14 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public IEntity merge(IEntity entity, MergeMode mergeMode) {
+  public IEntity merge(IEntity entity, EMergeMode mergeMode) {
     return merge(entity, mergeMode, new HashMap<IEntity, IEntity>());
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
+  public List<IEntity> merge(List<IEntity> entities, EMergeMode mergeMode) {
     Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
     List<IEntity> mergedList = new ArrayList<IEntity>();
     for (IEntity entity : entities) {
@@ -628,7 +628,7 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   @SuppressWarnings("unchecked")
-  private IEntity merge(IEntity entity, MergeMode mergeMode,
+  private IEntity merge(IEntity entity, EMergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
     if (entity == null) {
       return null;
@@ -648,7 +648,7 @@ public class BasicApplicationSession implements IApplicationSession {
         entityRegistry.register(registeredEntity);
         dirtRecorder.register(registeredEntity, null);
         newlyRegistered = true;
-      } else if (mergeMode == MergeMode.MERGE_KEEP) {
+      } else if (mergeMode == EMergeMode.MERGE_KEEP) {
         alreadyMerged.put(entity, registeredEntity);
         return registeredEntity;
       }
@@ -657,11 +657,11 @@ public class BasicApplicationSession implements IApplicationSession {
           .getChangedProperties(registeredEntity);
       boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
           .isEmpty()));
-      if (mergeMode != MergeMode.MERGE_CLEAN_LAZY
+      if (mergeMode != EMergeMode.MERGE_CLEAN_LAZY
           || (dirtyInSession || (!registeredEntity.getVersion().equals(
               entity.getVersion()))) || newlyRegistered) {
-        if (mergeMode == MergeMode.MERGE_CLEAN_EAGER
-            || mergeMode == MergeMode.MERGE_CLEAN_LAZY) {
+        if (mergeMode == EMergeMode.MERGE_CLEAN_EAGER
+            || mergeMode == EMergeMode.MERGE_CLEAN_LAZY) {
           cleanDirtyProperties(registeredEntity);
         }
         Map<String, Object> entityProperties = entity.straightGetProperties();
@@ -670,7 +670,7 @@ public class BasicApplicationSession implements IApplicationSession {
         Map<String, Object> mergedProperties = new HashMap<String, Object>();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (property.getValue() instanceof IEntity) {
-            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
+            if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
                 && !isInitialized(property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
@@ -684,7 +684,7 @@ public class BasicApplicationSession implements IApplicationSession {
               }
             }
           } else if (property.getValue() instanceof Collection) {
-            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
+            if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
                 && !isInitialized(property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
@@ -740,7 +740,7 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   private IComponent mergeComponent(IComponent componentToMerge,
-      IComponent registeredComponent, MergeMode mergeMode,
+      IComponent registeredComponent, EMergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
     IComponent varRegisteredComponent = registeredComponent;
     if (componentToMerge == null) {
@@ -749,10 +749,10 @@ public class BasicApplicationSession implements IApplicationSession {
     if (varRegisteredComponent == null) {
       varRegisteredComponent = carbonEntityCloneFactory.cloneComponent(
           componentToMerge, entityFactory);
-    } else if (mergeMode == MergeMode.MERGE_KEEP) {
+    } else if (mergeMode == EMergeMode.MERGE_KEEP) {
       return varRegisteredComponent;
     }
-    if (mergeMode != MergeMode.MERGE_CLEAN_LAZY) {
+    if (mergeMode != EMergeMode.MERGE_CLEAN_LAZY) {
       Map<String, Object> componentPropertiesToMerge = componentToMerge
           .straightGetProperties();
       Map<String, Object> registeredComponentProperties = varRegisteredComponent
@@ -761,7 +761,7 @@ public class BasicApplicationSession implements IApplicationSession {
       for (Map.Entry<String, Object> property : componentPropertiesToMerge
           .entrySet()) {
         if (property.getValue() instanceof IEntity) {
-          if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
+          if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
               && !isInitialized(property.getValue())) {
             if (registeredComponentProperties.get(property.getKey()) == null) {
               mergedProperties.put(property.getKey(), property.getValue());

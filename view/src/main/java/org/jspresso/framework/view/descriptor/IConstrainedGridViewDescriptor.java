@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.util.gui.CellConstraints;
+
 /**
  * A grid view descriptor which organises its components in constrained cells.
  * This kind of described container view might typically be implemented by a
@@ -48,5 +50,5 @@ public interface IConstrainedGridViewDescriptor extends IGridViewDescriptor {
    *            the contained view descriptor.
    * @return the constraints applied to the contained view or null if none.
    */
-  ViewConstraints getViewConstraints(IViewDescriptor viewDescriptor);
+  CellConstraints getViewConstraints(IViewDescriptor viewDescriptor);
 }
