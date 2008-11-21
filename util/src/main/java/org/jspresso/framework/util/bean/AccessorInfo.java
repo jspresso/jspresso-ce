@@ -42,19 +42,9 @@ import java.lang.reflect.Method;
 public class AccessorInfo {
 
   /**
-   * This type of method is an adder ("addToXXX").
-   */
-  public static final int    ADDER          = 3;
-
-  /**
    * "addTo" prefix.
    */
   public static final String ADDER_PREFIX   = "addTo";
-
-  /**
-   * This type of method is a getter (either "getXXX" or "isXXX").
-   */
-  public static final int    GETTER         = 1;
 
   /**
    * "get" prefix.
@@ -67,24 +57,9 @@ public class AccessorInfo {
   public static final String IS_PREFIX      = "is";
 
   /**
-   * This type of method is not an accessor.
-   */
-  public static final int    NONE           = 0;
-
-  /**
-   * This type of method is a remover ("removeFromXXX").
-   */
-  public static final int    REMOVER        = 4;
-
-  /**
    * "removeFrom" prefix.
    */
   public static final String REMOVER_PREFIX = "removeFrom";
-
-  /**
-   * This type of method is a setter ("setXXX").
-   */
-  public static final int    SETTER         = 2;
 
   /**
    * "set" prefix.
@@ -92,7 +67,7 @@ public class AccessorInfo {
   public static final String SETTER_PREFIX  = "set";
 
   private String             accessedPropertyName;
-  private int                accessorType;
+  private EAccessorType      accessorType;
 
   /**
    * Constructs a new <code>AccessorInfo</code> instance. If the method passed
@@ -100,7 +75,7 @@ public class AccessorInfo {
    * will return <code>NONE</code>.
    * 
    * @param method
-   *            the method supposed to be an accessor.
+   *          the method supposed to be an accessor.
    */
   public AccessorInfo(Method method) {
     String methodName = method.getName();
@@ -108,26 +83,26 @@ public class AccessorInfo {
     if (methodArguments.length == 0) {
       if (methodName.startsWith(GETTER_PREFIX)) {
         accessedPropertyName = computePropertyName(methodName, GETTER_PREFIX);
-        accessorType = GETTER;
+        accessorType = EAccessorType.GETTER;
       } else if (methodName.startsWith(IS_PREFIX)) {
         accessedPropertyName = computePropertyName(methodName, IS_PREFIX);
-        accessorType = GETTER;
+        accessorType = EAccessorType.GETTER;
       }
     } else if (methodArguments.length == 1) {
       if (methodName.startsWith(SETTER_PREFIX)) {
         accessedPropertyName = computePropertyName(methodName, SETTER_PREFIX);
-        accessorType = SETTER;
+        accessorType = EAccessorType.SETTER;
       } else if (methodName.startsWith(ADDER_PREFIX)) {
         accessedPropertyName = computePropertyName(methodName, ADDER_PREFIX);
-        accessorType = ADDER;
+        accessorType = EAccessorType.ADDER;
       } else if (methodName.startsWith(REMOVER_PREFIX)) {
         accessedPropertyName = computePropertyName(methodName, REMOVER_PREFIX);
-        accessorType = REMOVER;
+        accessorType = EAccessorType.REMOVER;
       }
     } else if (methodArguments.length == 2) {
       if (methodName.startsWith(ADDER_PREFIX)) {
         accessedPropertyName = computePropertyName(methodName, ADDER_PREFIX);
-        accessorType = ADDER;
+        accessorType = EAccessorType.ADDER;
       }
     }
   }
@@ -153,7 +128,7 @@ public class AccessorInfo {
    * 
    * @return the accessorType.
    */
-  public int getAccessorType() {
+  public EAccessorType getAccessorType() {
     return accessorType;
   }
 

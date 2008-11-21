@@ -37,7 +37,7 @@ package org.jspresso.framework.model.datatransfer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public enum TransferMode {
+public enum ETransferMode {
 
   /**
    * <code>COPY</code> means that the original object is kept as is.

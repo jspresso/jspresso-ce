@@ -42,25 +42,15 @@ package org.jspresso.framework.view.descriptor;
 public interface IEvenGridViewDescriptor extends IGridViewDescriptor {
 
   /**
-   * <code>COLUMN</code> dimension constant.
-   */
-  int COLUMN = 2;
-
-  /**
-   * <code>ROW</code> dimension constant.
-   */
-  int ROW    = 1;
-
-  /**
    * Gets the dimension identifier driving the distribution of the contained
-   * components. If <code>LINE</code>, the grid has an unlimited number of
+   * components. If <code>ROW</code>, the grid has an unlimited number of
    * lines but lines have a maximum number of cells. If <code>COLUMN</code>,
    * the grid has an unlimited number of columns but columns have a maximum
    * number of cells.
    * 
    * @return the driving dimension constant.
    */
-  int getDrivingDimension();
+  EAxis getDrivingDimension();
 
   /**
    * Gets the number of cells contained in a line of the driving dimension. This

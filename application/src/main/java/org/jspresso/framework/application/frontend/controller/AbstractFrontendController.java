@@ -54,7 +54,7 @@ import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
-import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
+import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor;
 
@@ -436,7 +436,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected IView<E> createWorkspaceView(final String workspaceName,
       IViewDescriptor workspaceViewDescriptor, Workspace workspace) {
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
-    splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
+    splitViewDescriptor.setOrientation(EOrientation.HORIZONTAL);
     splitViewDescriptor.setName(workspaceViewDescriptor.getName());
     //splitViewDescriptor.setDescription(workspaceViewDescriptor.getDescription(
     // ));

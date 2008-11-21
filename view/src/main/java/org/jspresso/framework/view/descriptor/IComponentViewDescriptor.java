@@ -45,16 +45,6 @@ import java.util.List;
 public interface IComponentViewDescriptor extends IViewDescriptor {
 
   /**
-   * <code>ABOVE</code> location constant.
-   */
-  int ABOVE = 1;
-
-  /**
-   * <code>ASIDE</code> location constant.
-   */
-  int ASIDE = 2;
-
-  /**
    * Gets the number of properties displayed in a row. This is actually a
    * maximum value since a property might span multiple columns.
    * 
@@ -68,7 +58,7 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
    * @return the relative position of the labels (<code>ABOVE</code> or
    *         <code>ASIDE</code>).
    */
-  int getLabelsPosition();
+  ELabelPosition getLabelsPosition();
 
   /**
    * Gets the property view descriptors.
@@ -81,7 +71,7 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
    * Gets the number of columns a property spans when displayed.
    * 
    * @param propertyName
-   *            the name of the property.
+   *          the name of the property.
    * @return the spanned column count.
    */
   int getPropertyWidth(String propertyName);
@@ -90,7 +80,7 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
    * Gets the child properties to display in case of a complex property.
    * 
    * @param propertyName
-   *            the name of the property.
+   *          the name of the property.
    * @return The list of displayed properties in the case of a complex property.
    */
   List<String> getRenderedChildProperties(String propertyName);

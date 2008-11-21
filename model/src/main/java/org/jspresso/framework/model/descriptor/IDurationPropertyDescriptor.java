@@ -40,31 +40,6 @@ package org.jspresso.framework.model.descriptor;
 public interface IDurationPropertyDescriptor extends IScalarPropertyDescriptor {
 
   /**
-   * One Day constant.
-   */
-  int ONE_DAY    = 24 * 60 * 60 * 1000;
-
-  /**
-   * One hour constant.
-   */
-  int ONE_HOUR   = 60 * 60 * 1000;
-
-  /**
-   * One minute constant.
-   */
-  int ONE_MINUTE = 60 * 1000;
-
-  /**
-   * One second constant.
-   */
-  int ONE_SECOND = 1000;
-
-  /**
-   * One week constant.
-   */
-  int ONE_WEEK   = 7 * 24 * 60 * 60 * 1000;
-
-  /**
    * Gets the upper bound of this duration property in milliseconds. The method
    * should use the constants defined above.
    * 

@@ -45,21 +45,6 @@ import org.jspresso.framework.view.action.IActionable;
 public interface IViewDescriptor extends ISubViewDescriptor, IActionable {
 
   /**
-   * <code>NONE</code> border constant.
-   */
-  int NONE   = -1;
-
-  /**
-   * <code>SIMPLE</code> border constant.
-   */
-  int SIMPLE = 1;
-
-  /**
-   * <code>TITLED</code> border constant.
-   */
-  int TITLED = 2;
-
-  /**
    * Gets the background color of this view.
    * 
    * @return this view's foreground color.
@@ -75,7 +60,7 @@ public interface IViewDescriptor extends ISubViewDescriptor, IActionable {
    *         <li> <code>TITLED</code> means a titled border. The title will be
    *         the name of the view.
    */
-  int getBorderType();
+  EBorderType getBorderType();
 
   /**
    * Gets the font of this view.

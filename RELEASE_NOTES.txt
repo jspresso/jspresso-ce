@@ -1,0 +1,17 @@
+2.2.2
+=====
+- The 2.2.2 release introduces typesafe enums in place of interface constants.
+This implies a light change in the spring definition files.
+For instance instead of referring to static beans definitions like :
+
+	<property
+	  name="orientation"
+	  ref="HORIZONTAL" />
+
+You will now use direct enum injection :
+	
+	<property
+	  name="orientation"
+	  value="HORIZONTAL" />
+	  
+see http://sourceforge.net/tracker2/index.php?func=detail&aid=2319923&group_id=231671&atid=1083851

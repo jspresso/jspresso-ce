@@ -394,24 +394,6 @@
     Utility beans for model.
   -->
   <bean
-    id="DATE"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.model.descriptor.IDatePropertyDescriptor.DATE_TYPE
-      </value>
-    </property>
-  </bean>
-  <bean
-    id="DATE_TIME"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.model.descriptor.IDatePropertyDescriptor.DATE_TIME_TYPE
-      </value>
-    </property>
-  </bean>
-  <bean
     id="BasicReportDescriptor.INSTANCE"
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
@@ -421,83 +403,12 @@
     </property>
   </bean>
 
-  <!--
-    Utility beans for views.
-  -->
-  <bean
-    id="ASIDE"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.view.descriptor.IComponentViewDescriptor.ASIDE
-      </value>
-    </property>
-  </bean>
-  <bean
-    id="ABOVE"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.view.descriptor.IComponentViewDescriptor.ABOVE
-      </value>
-    </property>
-  </bean>
-  <bean
-    id="ROW"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor.ROW
-      </value>
-    </property>
-  </bean>
-  <bean
-    id="COLUMN"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor.COLUMN
-      </value>
-    </property>
-  </bean>
-  <bean
-    id="HORIZONTAL"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.view.descriptor.ISplitViewDescriptor.HORIZONTAL
-      </value>
-    </property>
-  </bean>
-  <bean
-    id="VERTICAL"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>
-        org.jspresso.framework.view.descriptor.ISplitViewDescriptor.VERTICAL
-      </value>
-    </property>
-  </bean>
-  <bean
-    id="SIMPLE_BORDER"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>org.jspresso.framework.view.descriptor.IViewDescriptor.SIMPLE</value>
-    </property>
-  </bean>
-  <bean
-    id="TITLED_BORDER"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>org.jspresso.framework.view.descriptor.IViewDescriptor.TITLED</value>
-    </property>
-  </bean>
   <bean
     id="decoratedView"
     abstract="true">
     <property
       name="borderType"
-      ref="TITLED_BORDER" />
+      value="TITLED" />
   </bean>
 
   <!--

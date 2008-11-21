@@ -25,6 +25,7 @@ import java.util.Locale;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.ActionMap;
+import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -49,11 +50,11 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
     implements IViewDescriptor {
 
-  private ActionMap actionMap;
-  private Color     background;
-  private int       borderType = NONE;
-  private Font      font;
-  private Color     foreground;
+  private ActionMap   actionMap;
+  private Color       background;
+  private EBorderType borderType = EBorderType.NONE;
+  private Font        font;
+  private Color       foreground;
 
   /**
    * Gets the actionMap.
@@ -74,7 +75,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   /**
    * {@inheritDoc}
    */
-  public int getBorderType() {
+  public EBorderType getBorderType() {
     return borderType;
   }
 
@@ -162,7 +163,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * @param borderType
    *          the borderType to set.
    */
-  public void setBorderType(int borderType) {
+  public void setBorderType(EBorderType borderType) {
     this.borderType = borderType;
   }
 
