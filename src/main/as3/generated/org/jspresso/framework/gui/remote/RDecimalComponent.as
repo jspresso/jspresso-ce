@@ -17,7 +17,7 @@ package org.jspresso.framework.gui.remote {
 
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalComponent")]
-    public class RDecimalComponent extends RComponent {
+    public class RDecimalComponent extends RNumericComponent {
 
         private var _maxFractionDigit:int;
 
