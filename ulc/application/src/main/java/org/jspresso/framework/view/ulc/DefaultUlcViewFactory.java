@@ -2011,7 +2011,21 @@ public class DefaultUlcViewFactory implements
     return propertyLabel;
   }
 
-  private IView<ULCComponent> createPropertyView(
+  /**
+   * Creates a single property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param renderedChildProperties
+   *          the rendered children properties if the property is a reference
+   *          property.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected IView<ULCComponent> createPropertyView(
       IPropertyDescriptor propertyDescriptor,
       List<String> renderedChildProperties, IActionHandler actionHandler,
       Locale locale) {
@@ -2239,7 +2253,18 @@ public class DefaultUlcViewFactory implements
     return new FormattedTableCellRenderer(column, null);
   }
 
-  private ITableCellRenderer createTableCellRenderer(int column,
+  /**
+   * Creates a table cell renderer for a given property descriptor.
+   * 
+   * @param column
+   *          the table column index.
+   * @param propertyDescriptor
+   *          the property descriptor to create the renderer for.
+   * @param locale
+   *          the locale.
+   * @return the created table cell renderer.
+   */
+  protected ITableCellRenderer createTableCellRenderer(int column,
       IPropertyDescriptor propertyDescriptor, Locale locale) {
     ITableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {

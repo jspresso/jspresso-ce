@@ -1973,7 +1973,21 @@ public class DefaultWingsViewFactory implements
     return propertyLabel;
   }
 
-  private IView<SComponent> createPropertyView(
+  /**
+   * Creates a single property view.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param renderedChildProperties
+   *          the rendered children properties if the property is a reference
+   *          property.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected IView<SComponent> createPropertyView(
       IPropertyDescriptor propertyDescriptor,
       List<String> renderedChildProperties, IActionHandler actionHandler,
       Locale locale) {
@@ -2270,7 +2284,16 @@ public class DefaultWingsViewFactory implements
     return editor;
   }
 
-  private STableCellRenderer createTableCellRenderer(
+  /**
+   * Creates a table cell renderer for a given property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor to create the renderer for.
+   * @param locale
+   *          the locale.
+   * @return the created table cell renderer.
+   */
+  protected STableCellRenderer createTableCellRenderer(
       IPropertyDescriptor propertyDescriptor, Locale locale) {
     STableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
