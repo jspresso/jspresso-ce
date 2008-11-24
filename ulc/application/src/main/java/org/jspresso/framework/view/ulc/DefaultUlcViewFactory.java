@@ -212,8 +212,8 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(
-      IViewDescriptor viewDescriptor, Locale locale, IView<ULCComponent> view) {
+  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
+      Locale locale, IView<ULCComponent> view) {
     if (viewDescriptor.getForeground() != null) {
       view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
     }
@@ -772,7 +772,8 @@ public class DefaultUlcViewFactory extends
 
     viewComponent.add(createBorderLayoutPane(),
         ICardViewDescriptor.DEFAULT_CARD);
-    viewComponent.add(createSecurityComponent(), ICardViewDescriptor.SECURITY_CARD);
+    viewComponent.add(createSecurityComponent(),
+        ICardViewDescriptor.SECURITY_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
         .getCardViewDescriptors().entrySet()) {
@@ -1674,7 +1675,18 @@ public class DefaultUlcViewFactory extends
     return new FormattedTableCellRenderer(column, null);
   }
 
-  private ITableCellRenderer createTableCellRenderer(int column,
+  /**
+   * Creates a table cell renderer for a given property descriptor.
+   * 
+   * @param column
+   *          the table column index.
+   * @param propertyDescriptor
+   *          the property descriptor to create the renderer for.
+   * @param locale
+   *          the locale.
+   * @return the created table cell renderer.
+   */
+  protected ITableCellRenderer createTableCellRenderer(int column,
       IPropertyDescriptor propertyDescriptor, Locale locale) {
     ITableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {

@@ -1692,7 +1692,16 @@ public class DefaultWingsViewFactory extends
     return editor;
   }
 
-  private STableCellRenderer createTableCellRenderer(
+  /**
+   * Creates a table cell renderer for a given property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor to create the renderer for.
+   * @param locale
+   *          the locale.
+   * @return the created table cell renderer.
+   */
+  protected STableCellRenderer createTableCellRenderer(
       IPropertyDescriptor propertyDescriptor, Locale locale) {
     STableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {

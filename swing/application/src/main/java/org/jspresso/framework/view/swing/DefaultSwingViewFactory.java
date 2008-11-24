@@ -1659,7 +1659,16 @@ public class DefaultSwingViewFactory extends
     return editor;
   }
 
-  private TableCellRenderer createTableCellRenderer(
+  /**
+   * Creates a table cell renderer for a given property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor to create the renderer for.
+   * @param locale
+   *          the locale.
+   * @return the created table cell renderer.
+   */
+  protected TableCellRenderer createTableCellRenderer(
       IPropertyDescriptor propertyDescriptor, Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
