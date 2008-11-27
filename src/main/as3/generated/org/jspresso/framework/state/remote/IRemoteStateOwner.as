@@ -12,20 +12,10 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
+package org.jspresso.framework.state.remote {
 
-package org.jspresso.framework.binding.remote.state {
+    public interface IRemoteStateOwner {
 
-
-    [RemoteClass(alias="org.jspresso.framework.binding.remote.state.RemoteCollectionValueState")]
-    public class RemoteCollectionValueState extends RemoteCompositeValueState {
-
-        private var _selectedIndices:Array;
-
-        public function set selectedIndices(value:Array):void {
-            _selectedIndices = value;
-        }
-        public function get selectedIndices():Array {
-            return _selectedIndices;
-        }
+        function get state():RemoteValueState;
     }
 }

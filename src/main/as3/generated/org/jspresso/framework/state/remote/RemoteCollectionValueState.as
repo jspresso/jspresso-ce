@@ -13,27 +13,19 @@
  */
 
 
-package org.jspresso.framework.gui.remote {
+package org.jspresso.framework.state.remote {
 
 
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RConstrainedGridContainer")]
-    public class RConstrainedGridContainer extends RContainer {
+    [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteCollectionValueState")]
+    public class RemoteCollectionValueState extends RemoteCompositeValueState {
 
-        private var _cellConstraints:Array;
-        private var _cells:Array;
+        private var _selectedIndices:Array;
 
-        public function set cellConstraints(value:Array):void {
-            _cellConstraints = value;
+        public function set selectedIndices(value:Array):void {
+            _selectedIndices = value;
         }
-        public function get cellConstraints():Array {
-            return _cellConstraints;
-        }
-
-        public function set cells(value:Array):void {
-            _cells = value;
-        }
-        public function get cells():Array {
-            return _cells;
+        public function get selectedIndices():Array {
+            return _selectedIndices;
         }
     }
 }

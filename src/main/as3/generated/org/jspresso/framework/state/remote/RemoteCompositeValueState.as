@@ -13,11 +13,11 @@
  */
 
 
-package org.jspresso.framework.binding.remote.state {
+package org.jspresso.framework.state.remote {
 
     import mx.collections.ListCollectionView;
 
-    [RemoteClass(alias="org.jspresso.framework.binding.remote.state.RemoteCompositeValueState")]
+    [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteCompositeValueState")]
     public class RemoteCompositeValueState extends RemoteValueState {
 
         private var _children:ListCollectionView;

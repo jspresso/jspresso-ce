@@ -15,17 +15,16 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import mx.collections.ListCollectionView;
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RTable")]
     public class RTable extends RComponent {
 
-        private var _columns:ListCollectionView;
+        private var _columns:Array;
 
-        public function set columns(value:ListCollectionView):void {
+        public function set columns(value:Array):void {
             _columns = value;
         }
-        public function get columns():ListCollectionView {
+        public function get columns():Array {
             return _columns;
         }
     }

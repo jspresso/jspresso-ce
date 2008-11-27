@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
-
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.RemotePeer;
 
@@ -51,7 +49,7 @@ public abstract class RComponent extends RemotePeer {
   private String           font;
   private String           foreground;
   private RIcon            icon;
-  private List<RAction>    actions;
+  private RAction[]    actions;
   private RemoteValueState state;
 
   /**
@@ -108,7 +106,7 @@ public abstract class RComponent extends RemotePeer {
    * @param actions
    *          the actions to set.
    */
-  public void setActions(List<RAction> actions) {
+  public void setActions(RAction[] actions) {
     this.actions = actions;
   }
 
@@ -117,7 +115,7 @@ public abstract class RComponent extends RemotePeer {
    * 
    * @return the actions.
    */
-  public List<RAction> getActions() {
+  public RAction[] getActions() {
     return actions;
   }
 

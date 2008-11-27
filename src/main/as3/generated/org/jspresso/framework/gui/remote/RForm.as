@@ -15,14 +15,13 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import mx.collections.ListCollectionView;
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RForm")]
     public class RForm extends RContainer {
 
         private var _columnCount:int;
-        private var _elementWidths:ListCollectionView;
-        private var _elements:ListCollectionView;
+        private var _elementWidths:Array;
+        private var _elements:Array;
         private var _labelsPosition:String;
 
         public function set columnCount(value:int):void {
@@ -32,17 +31,17 @@ package org.jspresso.framework.gui.remote {
             return _columnCount;
         }
 
-        public function set elementWidths(value:ListCollectionView):void {
+        public function set elementWidths(value:Array):void {
             _elementWidths = value;
         }
-        public function get elementWidths():ListCollectionView {
+        public function get elementWidths():Array {
             return _elementWidths;
         }
 
-        public function set elements(value:ListCollectionView):void {
+        public function set elements(value:Array):void {
             _elements = value;
         }
-        public function get elements():ListCollectionView {
+        public function get elements():Array {
             return _elements;
         }
 

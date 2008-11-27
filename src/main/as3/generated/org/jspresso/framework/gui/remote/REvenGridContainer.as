@@ -15,19 +15,18 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import mx.collections.ListCollectionView;
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.REvenGridContainer")]
     public class REvenGridContainer extends RContainer {
 
-        private var _cells:ListCollectionView;
+        private var _cells:Array;
         private var _drivingDimension:String;
         private var _drivingDimensionCellCount:int;
 
-        public function set cells(value:ListCollectionView):void {
+        public function set cells(value:Array):void {
             _cells = value;
         }
-        public function get cells():ListCollectionView {
+        public function get cells():Array {
             return _cells;
         }
 

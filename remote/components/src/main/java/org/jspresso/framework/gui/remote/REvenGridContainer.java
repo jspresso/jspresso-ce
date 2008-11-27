@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
 
 /**
  * An evenly distributed grid container.
@@ -43,7 +42,7 @@ public class REvenGridContainer extends RContainer {
 
   private String           drivingDimension;
   private int              drivingDimensionCellCount;
-  private List<RComponent> cells;
+  private RComponent[] cells;
 
   /**
    * Constructs a new <code>REvenGridContainer</code> instance.
@@ -101,7 +100,7 @@ public class REvenGridContainer extends RContainer {
    * 
    * @return the cells.
    */
-  public List<RComponent> getCells() {
+  public RComponent[] getCells() {
     return cells;
   }
 
@@ -111,7 +110,7 @@ public class REvenGridContainer extends RContainer {
    * 
    * @param cells the cells to set.
    */
-  public void setCells(List<RComponent> cells) {
+  public void setCells(RComponent[] cells) {
     this.cells = cells;
   }
 }

@@ -15,17 +15,16 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import mx.collections.ListCollectionView;
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RTabContainer")]
     public class RTabContainer extends RContainer {
 
-        private var _tabs:ListCollectionView;
+        private var _tabs:Array;
 
-        public function set tabs(value:ListCollectionView):void {
+        public function set tabs(value:Array):void {
             _tabs = value;
         }
-        public function get tabs():ListCollectionView {
+        public function get tabs():Array {
             return _tabs;
         }
     }

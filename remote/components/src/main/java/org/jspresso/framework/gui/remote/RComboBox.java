@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
 
 /**
  * A component containing enumerated values.
@@ -41,9 +40,9 @@ import java.util.List;
  */
 public class RComboBox extends RComponent {
 
-  private List<String> values;
-  private List<String> translations;
-  private List<RIcon>  icons;
+  private String[] values;
+  private String[] translations;
+  private RIcon[]  icons;
 
   /**
    * Constructs a new <code>RComboBox</code> instance.
@@ -60,7 +59,7 @@ public class RComboBox extends RComponent {
    * 
    * @return the translations.
    */
-  public List<String> getTranslations() {
+  public String[] getTranslations() {
     return translations;
   }
 
@@ -70,7 +69,7 @@ public class RComboBox extends RComponent {
    * @param translations
    *          the translations to set.
    */
-  public void setTranslations(List<String> translations) {
+  public void setTranslations(String[] translations) {
     this.translations = translations;
   }
 
@@ -80,7 +79,7 @@ public class RComboBox extends RComponent {
    * @param values
    *          the values to set.
    */
-  public void setValues(List<String> values) {
+  public void setValues(String[] values) {
     this.values = values;
   }
 
@@ -89,7 +88,7 @@ public class RComboBox extends RComponent {
    * 
    * @return the values.
    */
-  public List<String> getValues() {
+  public String[] getValues() {
     return values;
   }
 
@@ -98,7 +97,7 @@ public class RComboBox extends RComponent {
    * 
    * @param icons the icons to set.
    */
-  public void setIcons(List<RIcon> icons) {
+  public void setIcons(RIcon[] icons) {
     this.icons = icons;
   }
 
@@ -107,7 +106,7 @@ public class RComboBox extends RComponent {
    * 
    * @return the icons.
    */
-  public List<RIcon> getIcons() {
+  public RIcon[] getIcons() {
     return icons;
   }
 

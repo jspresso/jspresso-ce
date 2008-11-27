@@ -160,9 +160,7 @@ public class DefaultRemoteViewFactory extends
       Locale locale) {
     RCardContainer viewComponent = createRCardContainer();
     List<String> cardNames = new ArrayList<String>();
-    viewComponent.setCardNames(cardNames);
     List<RComponent> cards = new ArrayList<RComponent>();
-    viewComponent.setCards(cards);
     cardNames.add(ICardViewDescriptor.DEFAULT_CARD);
     cards.add(createRBorderContainer());
     cardNames.add(ICardViewDescriptor.SECURITY_CARD);
@@ -180,6 +178,8 @@ public class DefaultRemoteViewFactory extends
       cardNames.add(childViewDescriptor.getKey());
       cards.add(childView.getPeer());
     }
+    viewComponent.setCardNames(cardNames.toArray(new String[0]));
+    viewComponent.setCards(cards.toArray(new RComponent[0]));
     view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
@@ -243,9 +243,7 @@ public class DefaultRemoteViewFactory extends
         .toString());
 
     List<Integer> elementWidths = new ArrayList<Integer>();
-    viewComponent.setElementWidths(elementWidths);
     List<RComponent> elements = new ArrayList<RComponent>();
-    viewComponent.setElements(elements);
 
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -286,6 +284,8 @@ public class DefaultRemoteViewFactory extends
       propertyView.getConnector().setLocallyWritable(
           !propertyViewDescriptor.isReadOnly());
     }
+    viewComponent.setElementWidths(elementWidths.toArray(new Integer[0]));
+    viewComponent.setElements(elements.toArray(new RComponent[0]));
     return view;
   }
 
@@ -382,7 +382,7 @@ public class DefaultRemoteViewFactory extends
     RActionField viewComponent = createRActionField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
     viewComponent.setActions(createBinaryActions(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale));
+        propertyDescriptor, actionHandler, locale).toArray(new RAction[0]));
     return view;
   }
 
@@ -468,7 +468,6 @@ public class DefaultRemoteViewFactory extends
       }
     }
     List<RComponent> columns = new ArrayList<RComponent>();
-    viewComponent.setColumns(columns);
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String propertyName = columnViewDescriptor.getName();
@@ -481,6 +480,7 @@ public class DefaultRemoteViewFactory extends
         columns.add(column.getPeer());
       }
     }
+    viewComponent.setColumns(columns.toArray(new RComponent[0]));
     return view;
   }
 
@@ -511,7 +511,7 @@ public class DefaultRemoteViewFactory extends
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    viewComponent.setActions(Collections.singletonList(lovAction));
+    viewComponent.setActions(Collections.singletonList(lovAction).toArray(new RAction[0]));
     return view;
   }
 
@@ -527,11 +527,8 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     RComboBox viewComponent = createRComboBox(connector);
     List<String> values = new ArrayList<String>();
-    viewComponent.setValues(values);
     List<String> translations = new ArrayList<String>();
-    viewComponent.setTranslations(translations);
     List<RIcon> icons = new ArrayList<RIcon>();
-    viewComponent.setIcons(icons);
     IView<RComponent> view = constructView(viewComponent, null, connector);
     for (String value : propertyDescriptor.getEnumerationValues()) {
       if (value != null && propertyDescriptor.isTranslated()) {
@@ -544,6 +541,9 @@ public class DefaultRemoteViewFactory extends
             IIconFactory.TINY_ICON_SIZE));
       }
     }
+    viewComponent.setValues(values.toArray(new String[0]));
+    viewComponent.setTranslations(translations.toArray(new String[0]));
+    viewComponent.setIcons(icons.toArray(new RIcon[0]));
     return view;
   }
 
@@ -641,7 +641,6 @@ public class DefaultRemoteViewFactory extends
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<RComponent> tabs = new ArrayList<RComponent>();
-    viewComponent.setTabs(tabs);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
@@ -651,6 +650,7 @@ public class DefaultRemoteViewFactory extends
       tabs.add(childView.getPeer());
       childrenViews.add(childView);
     }
+    viewComponent.setTabs(tabs.toArray(new RComponent[0]));
     view.setChildren(childrenViews);
     return view;
   }
@@ -673,7 +673,7 @@ public class DefaultRemoteViewFactory extends
           viewActions.add(rAction);
         }
       }
-      view.getPeer().setActions(viewActions);
+      view.getPeer().setActions(viewActions.toArray(new RAction[0]));
     }
   }
 
@@ -989,9 +989,7 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     RConstrainedGridContainer viewComponent = createRConstrainedGridContainer();
     List<RComponent> cells = new ArrayList<RComponent>();
-    viewComponent.setCells(cells);
     List<CellConstraints> cellConstraints = new ArrayList<CellConstraints>();
-    viewComponent.setCellConstraints(cellConstraints);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
@@ -1004,6 +1002,8 @@ public class DefaultRemoteViewFactory extends
       cells.add(childView.getPeer());
       childrenViews.add(childView);
     }
+    viewComponent.setCells(cells.toArray(new RComponent[0]));
+    viewComponent.setCellConstraints(cellConstraints.toArray(new CellConstraints[0]));
     view.setChildren(childrenViews);
     return view;
   }
@@ -1021,7 +1021,6 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setDrivingDimensionCellCount(viewDescriptor
         .getDrivingDimensionCellCount());
     List<RComponent> cells = new ArrayList<RComponent>();
-    viewComponent.setCells(cells);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
@@ -1033,6 +1032,7 @@ public class DefaultRemoteViewFactory extends
       cells.add(childView.getPeer());
       childrenViews.add(childView);
     }
+    viewComponent.setCells(cells.toArray(new RComponent[0]));
     view.setChildren(childrenViews);
     return view;
   }

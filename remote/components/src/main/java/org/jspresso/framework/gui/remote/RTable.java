@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
 
 /**
  * A tabular component.
@@ -41,7 +40,7 @@ import java.util.List;
  */
 public class RTable extends RComponent {
 
-  private List<RComponent> columns;
+  private RComponent[] columns;
 
   /**
    * Constructs a new <code>RTable</code> instance.
@@ -59,7 +58,7 @@ public class RTable extends RComponent {
    * @param columns
    *          the columns to set.
    */
-  public void setColumns(List<RComponent> columns) {
+  public void setColumns(RComponent[] columns) {
     this.columns = columns;
   }
 
@@ -68,7 +67,7 @@ public class RTable extends RComponent {
    * 
    * @return the columns.
    */
-  public List<RComponent> getColumns() {
+  public RComponent[] getColumns() {
     return columns;
   }
 }

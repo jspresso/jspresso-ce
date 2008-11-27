@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
 
 /**
  * A form component.
@@ -43,9 +42,9 @@ public class RForm extends RContainer {
 
   private int                columnCount;
   private String             labelsPosition;
-  private List<Integer>      elementWidths;
+  private Integer[]      elementWidths;
 
-  private List<RComponent>   elements;
+  private RComponent[]   elements;
 
   /**
    * Constructs a new <code>RForm</code> instance.
@@ -63,7 +62,7 @@ public class RForm extends RContainer {
    * @param elements
    *          the elements to set.
    */
-  public void setElements(List<RComponent> elements) {
+  public void setElements(RComponent[] elements) {
     this.elements = elements;
   }
 
@@ -72,7 +71,7 @@ public class RForm extends RContainer {
    * 
    * @return the elements.
    */
-  public List<RComponent> getElements() {
+  public RComponent[] getElements() {
     return elements;
   }
 
@@ -122,7 +121,7 @@ public class RForm extends RContainer {
    * 
    * @return the elementWidths.
    */
-  public List<Integer> getElementWidths() {
+  public Integer[] getElementWidths() {
     return elementWidths;
   }
 
@@ -132,7 +131,7 @@ public class RForm extends RContainer {
    * 
    * @param elementWidths the elementWidths to set.
    */
-  public void setElementWidths(List<Integer> elementWidths) {
+  public void setElementWidths(Integer[] elementWidths) {
     this.elementWidths = elementWidths;
   }
 

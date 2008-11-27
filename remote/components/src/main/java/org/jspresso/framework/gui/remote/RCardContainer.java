@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
 
 /**
  * A container with stacked children views.
@@ -41,8 +40,8 @@ import java.util.List;
  */
 public class RCardContainer extends RContainer {
 
-  private List<String> cardNames;
-  private List<RComponent> cards;
+  private String[]     cardNames;
+  private RComponent[] cards;
 
   /**
    * Constructs a new <code>RCardContainer</code> instance.
@@ -54,43 +53,41 @@ public class RCardContainer extends RContainer {
     super(guid);
   }
 
-  
   /**
    * Gets the cardNames.
    * 
    * @return the cardNames.
    */
-  public List<String> getCardNames() {
+  public String[] getCardNames() {
     return cardNames;
   }
 
-  
   /**
    * Sets the cardNames.
    * 
-   * @param cardNames the cardNames to set.
+   * @param cardNames
+   *          the cardNames to set.
    */
-  public void setCardNames(List<String> cardNames) {
+  public void setCardNames(String[] cardNames) {
     this.cardNames = cardNames;
   }
 
-  
   /**
    * Gets the cards.
    * 
    * @return the cards.
    */
-  public List<RComponent> getCards() {
+  public RComponent[] getCards() {
     return cards;
   }
 
-  
   /**
    * Sets the cards.
    * 
-   * @param cards the cards to set.
+   * @param cards
+   *          the cards to set.
    */
-  public void setCards(List<RComponent> cards) {
+  public void setCards(RComponent[] cards) {
     this.cards = cards;
   }
 }

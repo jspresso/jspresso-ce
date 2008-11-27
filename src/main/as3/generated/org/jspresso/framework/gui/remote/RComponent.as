@@ -15,14 +15,13 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import mx.collections.ListCollectionView;
-    import org.jspresso.framework.binding.remote.state.RemoteValueState;
+    import org.jspresso.framework.state.remote.RemoteValueState;
     import org.jspresso.framework.util.remote.RemotePeer;
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RComponent")]
     public class RComponent extends RemotePeer {
 
-        private var _actions:ListCollectionView;
+        private var _actions:Array;
         private var _background:String;
         private var _borderType:String;
         private var _font:String;
@@ -32,10 +31,10 @@ package org.jspresso.framework.gui.remote {
         private var _state:RemoteValueState;
         private var _tooltip:String;
 
-        public function set actions(value:ListCollectionView):void {
+        public function set actions(value:Array):void {
             _actions = value;
         }
-        public function get actions():ListCollectionView {
+        public function get actions():Array {
             return _actions;
         }
 

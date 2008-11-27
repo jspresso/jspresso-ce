@@ -13,11 +13,11 @@
  */
 
 
-package org.jspresso.framework.binding.remote.state {
+package org.jspresso.framework.state.remote {
 
     import org.jspresso.framework.util.remote.RemotePeer;
 
-    [RemoteClass(alias="org.jspresso.framework.binding.remote.state.RemoteValueState")]
+    [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteValueState")]
     public class RemoteValueState extends RemotePeer {
 
         private var _readable:Boolean;

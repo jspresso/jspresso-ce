@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
 
 
 /**
@@ -42,7 +41,7 @@ import java.util.List;
  */
 public class RTabContainer extends RContainer {
   
-  private List<RComponent> tabs;
+  private RComponent[] tabs;
 
   /**
    * Constructs a new <code>RTabContainer</code> instance.
@@ -58,7 +57,7 @@ public class RTabContainer extends RContainer {
    * 
    * @param tabs the tabs to set.
    */
-  public void setTabs(List<RComponent> tabs) {
+  public void setTabs(RComponent[] tabs) {
     this.tabs = tabs;
   }
 
@@ -67,7 +66,7 @@ public class RTabContainer extends RContainer {
    * 
    * @return the tabs.
    */
-  public List<RComponent> getTabs() {
+  public RComponent[] getTabs() {
     return tabs;
   }
 }

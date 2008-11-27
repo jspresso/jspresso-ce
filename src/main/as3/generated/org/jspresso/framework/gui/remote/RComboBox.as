@@ -15,33 +15,32 @@
 
 package org.jspresso.framework.gui.remote {
 
-    import mx.collections.ListCollectionView;
 
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RComboBox")]
     public class RComboBox extends RComponent {
 
-        private var _icons:ListCollectionView;
-        private var _translations:ListCollectionView;
-        private var _values:ListCollectionView;
+        private var _icons:Array;
+        private var _translations:Array;
+        private var _values:Array;
 
-        public function set icons(value:ListCollectionView):void {
+        public function set icons(value:Array):void {
             _icons = value;
         }
-        public function get icons():ListCollectionView {
+        public function get icons():Array {
             return _icons;
         }
 
-        public function set translations(value:ListCollectionView):void {
+        public function set translations(value:Array):void {
             _translations = value;
         }
-        public function get translations():ListCollectionView {
+        public function get translations():Array {
             return _translations;
         }
 
-        public function set values(value:ListCollectionView):void {
+        public function set values(value:Array):void {
             _values = value;
         }
-        public function get values():ListCollectionView {
+        public function get values():Array {
             return _values;
         }
     }

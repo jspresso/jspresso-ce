@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.List;
-
 import org.jspresso.framework.util.gui.CellConstraints;
 
 /**
@@ -43,8 +41,8 @@ import org.jspresso.framework.util.gui.CellConstraints;
  */
 public class RConstrainedGridContainer extends RContainer {
 
-  private List<CellConstraints> cellConstraints;
-  private List<RComponent>      cells;
+  private CellConstraints[] cellConstraints;
+  private RComponent[]      cells;
 
   /**
    * Constructs a new <code>RGridContainer</code> instance.
@@ -62,7 +60,7 @@ public class RConstrainedGridContainer extends RContainer {
    * 
    * @return the cellConstraints.
    */
-  public List<CellConstraints> getCellConstraints() {
+  public CellConstraints[] getCellConstraints() {
     return cellConstraints;
   }
 
@@ -72,7 +70,7 @@ public class RConstrainedGridContainer extends RContainer {
    * 
    * @param cellConstraints the cellConstraints to set.
    */
-  public void setCellConstraints(List<CellConstraints> cellConstraints) {
+  public void setCellConstraints(CellConstraints[] cellConstraints) {
     this.cellConstraints = cellConstraints;
   }
 
@@ -82,7 +80,7 @@ public class RConstrainedGridContainer extends RContainer {
    * 
    * @return the cells.
    */
-  public List<RComponent> getCells() {
+  public RComponent[] getCells() {
     return cells;
   }
 
@@ -92,7 +90,7 @@ public class RConstrainedGridContainer extends RContainer {
    * 
    * @param cells the cells to set.
    */
-  public void setCells(List<RComponent> cells) {
+  public void setCells(RComponent[] cells) {
     this.cells = cells;
   }
 }
