@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.resources.IResource;
-
+import org.jspresso.framework.util.url.UrlHelper;
 
 /**
  * This servlet class returns the web resource which matches the specified id
@@ -62,15 +62,20 @@ public class ResourceProviderServlet extends HttpServlet {
    */
   public static final String ID_PARAMETER                 = "id";
 
+  /**
+   * localUrl.
+   */
+  public static final String LOCAL_URL_PARAMETER          = "localUrl";
+
   private static final long  serialVersionUID             = 5253634459280974738L;
 
   /**
    * Computes the url where the resource is available for download. .
    * 
    * @param request
-   *            the incomming HTTP request.
+   *          the incomming HTTP request.
    * @param id
-   *            the resource id.
+   *          the resource id.
    * @return the rsource url.
    */
   public static String computeUrl(HttpServletRequest request, String id) {
@@ -86,29 +91,36 @@ public class ResourceProviderServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
+    String localUrl = request.getParameter(LOCAL_URL_PARAMETER);
     String id = request.getParameter(ID_PARAMETER);
 
-    if (id == null) {
+    if (id == null && localUrl == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST,
           "No resource id specified.");
       return;
     }
 
-    IResource resource = ResourceManager.getInstance().getRegistered(id);
-    if (resource == null) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-          "Could not find specified resource id.");
-      return;
+    BufferedInputStream inputStream;
+    if (id != null) {
+      IResource resource = ResourceManager.getInstance().getRegistered(id);
+      if (resource == null) {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+            "Could not find specified resource id.");
+        return;
+      }
+
+      response.setContentType(resource.getMimeType());
+      int resourceLength = resource.getLength();
+      if (resourceLength > 0) {
+        response.setContentLength(resourceLength);
+      }
+
+      inputStream = new BufferedInputStream(resource.getContent());
+    } else {
+      inputStream = new BufferedInputStream(UrlHelper.createURL(localUrl)
+          .openStream());
     }
 
-    response.setContentType(resource.getMimeType());
-    int resourceLength = resource.getLength();
-    if (resourceLength > 0) {
-      response.setContentLength(resourceLength);
-    }
-
-    BufferedInputStream inputStream = new BufferedInputStream(resource
-        .getContent());
     BufferedOutputStream outputStream = new BufferedOutputStream(response
         .getOutputStream());
 

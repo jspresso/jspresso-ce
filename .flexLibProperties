@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
   <includeClasses>
+    <classEntry path="com.benstucki.utilities.IconUtility"/>
     <classEntry path="org.jspresso.framework.view.DefaultFlexViewFactory"/>
     <classEntry path="org.jspresso.framework.gui.remote.RAction"/>
     <classEntry path="org.jspresso.framework.gui.remote.RActionField"/>

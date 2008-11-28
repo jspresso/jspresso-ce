@@ -21,7 +21,7 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RComponent")]
     public class RComponent extends RemotePeer {
 
-        private var _actions:Array;
+        private var _actionLists:Array;
         private var _background:String;
         private var _borderType:String;
         private var _font:String;
@@ -31,11 +31,11 @@ package org.jspresso.framework.gui.remote {
         private var _state:RemoteValueState;
         private var _tooltip:String;
 
-        public function set actions(value:Array):void {
-            _actions = value;
+        public function set actionLists(value:Array):void {
+            _actionLists = value;
         }
-        public function get actions():Array {
-            return _actions;
+        public function get actionLists():Array {
+            return _actionLists;
         }
 
         public function set background(value:String):void {

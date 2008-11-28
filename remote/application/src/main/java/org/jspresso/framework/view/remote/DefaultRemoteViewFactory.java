@@ -19,7 +19,6 @@
 package org.jspresso.framework.view.remote;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,6 +33,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionField;
+import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RCheckBox;
@@ -381,8 +381,10 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
-    viewComponent.setActions(createBinaryActions(viewComponent, connector,
+    RActionList actionList = new RActionList(guidGenerator.generateGUID());
+    actionList.setActions(createBinaryActions(viewComponent, connector,
         propertyDescriptor, actionHandler, locale).toArray(new RAction[0]));
+    viewComponent.setActionLists(new RActionList[] {actionList});
     return view;
   }
 
@@ -511,7 +513,9 @@ public class DefaultRemoteViewFactory extends
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    viewComponent.setActions(Collections.singletonList(lovAction).toArray(new RAction[0]));
+    RActionList actionList = new RActionList(guidGenerator.generateGUID());
+    actionList.setActions(new RAction[] {lovAction});
+    viewComponent.setActionLists(new RActionList[] {actionList});
     return view;
   }
 
@@ -662,18 +666,27 @@ public class DefaultRemoteViewFactory extends
   protected void decorateWithActions(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale, IView<RComponent> view) {
     if (viewDescriptor.getActionMap() != null) {
-      List<RAction> viewActions = new ArrayList<RAction>();
+      List<RActionList> viewActionLists = new ArrayList<RActionList>();
       for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
           .getActionLists().iterator(); iter.hasNext();) {
         ActionList nextActionList = iter.next();
+        RActionList actionList = new RActionList(guidGenerator.generateGUID());
+        actionList.setName(nextActionList.getName());
+        actionList.setDescription(nextActionList.getDescription());
+        actionList.setIcon(getIconFactory().getIcon(
+            nextActionList.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+        viewActionLists.add(actionList);
+        List<RAction> actions = new ArrayList<RAction>();
         for (IDisplayableAction action : nextActionList.getActions()) {
           RAction rAction = getActionFactory().createAction(action,
               actionHandler, view, locale);
           rAction.setAcceleratorAsString(action.getAcceleratorAsString());
-          viewActions.add(rAction);
+          actions.add(rAction);
         }
+        actionList.setActions(actions.toArray(new RAction[0]));
       }
-      view.getPeer().setActions(viewActions.toArray(new RAction[0]));
+      view.getPeer()
+          .setActionLists(viewActionLists.toArray(new RActionList[0]));
     }
   }
 
@@ -1003,7 +1016,8 @@ public class DefaultRemoteViewFactory extends
       childrenViews.add(childView);
     }
     viewComponent.setCells(cells.toArray(new RComponent[0]));
-    viewComponent.setCellConstraints(cellConstraints.toArray(new CellConstraints[0]));
+    viewComponent.setCellConstraints(cellConstraints
+        .toArray(new CellConstraints[0]));
     view.setChildren(childrenViews);
     return view;
   }

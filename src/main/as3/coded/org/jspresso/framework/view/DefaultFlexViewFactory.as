@@ -1,4 +1,7 @@
 package org.jspresso.framework.view {
+  import com.benstucki.utilities.IconUtility;
+  
+  import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
   import mx.containers.DividedBox;
@@ -6,8 +9,11 @@ package org.jspresso.framework.view {
   import mx.containers.GridItem;
   import mx.containers.GridRow;
   import mx.containers.HBox;
+  import mx.containers.Panel;
   import mx.containers.TabNavigator;
+  import mx.containers.VBox;
   import mx.containers.ViewStack;
+  import mx.controls.Button;
   import mx.controls.CheckBox;
   import mx.controls.ComboBox;
   import mx.controls.DataGrid;
@@ -18,11 +24,16 @@ package org.jspresso.framework.view {
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
+  import mx.controls.VRule;
   import mx.controls.dataGridClasses.DataGridColumn;
+  import mx.core.Application;
   import mx.core.Container;
   import mx.core.UIComponent;
+  import mx.events.FlexEvent;
   
+  import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionField;
+  import org.jspresso.framework.gui.remote.RActionList;
   import org.jspresso.framework.gui.remote.RBorderContainer;
   import org.jspresso.framework.gui.remote.RCardContainer;
   import org.jspresso.framework.gui.remote.RCheckBox;
@@ -37,6 +48,7 @@ package org.jspresso.framework.view {
   import org.jspresso.framework.gui.remote.RDurationField;
   import org.jspresso.framework.gui.remote.REvenGridContainer;
   import org.jspresso.framework.gui.remote.RForm;
+  import org.jspresso.framework.gui.remote.RIcon;
   import org.jspresso.framework.gui.remote.RImageComponent;
   import org.jspresso.framework.gui.remote.RIntegerField;
   import org.jspresso.framework.gui.remote.RList;
@@ -55,6 +67,8 @@ package org.jspresso.framework.view {
   import org.jspresso.framework.util.gui.CellConstraints;
   
   public class DefaultFlexViewFactory {
+
+    private static const TOOLTIP_ELLIPSIS:String = "...";
 
     public function DefaultFlexViewFactory() {
     }
@@ -95,6 +109,52 @@ package org.jspresso.framework.view {
         component = createTree(remoteComponent as RTree);
       }
       component.id = remoteComponent.guid;
+      if(remoteComponent is RTable) {
+        var scrollCanvas:Canvas = new Canvas();
+        scrollCanvas.addChild(component);
+        component = scrollCanvas;
+      }
+      if(!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
+        var toolBar:ApplicationControlBar = new ApplicationControlBar();
+        toolBar.percentWidth = 100.0;
+        toolBar.setStyle("fillAlphas",[0.5,0.5]);
+        toolBar.setStyle("fillColors",[0xBBBBBB,0x666666]);
+        for(var i:int = 0; i < remoteComponent.actionLists.length; i++) {
+          var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
+          if(actionList.actions != null) {
+            for(var j:int = 0; j < actionList.actions.length; j++) {
+              toolBar.addChild(createButton(actionList.actions[j]));
+            }
+            if(i < remoteComponent.actionLists.length - 1) {
+              var separator:VRule = new VRule();
+              separator.height = 20;
+              separator.maxHeight = 20;
+              toolBar.addChild(separator);
+            }
+          }
+        }
+        var surroundingBox:VBox = new VBox();
+        component.percentWidth = 100.0;
+        component.percentHeight = 100.0;
+        surroundingBox.addChild(toolBar);
+        surroundingBox.addChild(component);
+        component = surroundingBox;
+      }
+      if(remoteComponent.borderType == "TITLED") {
+        var decorator:Panel = new Panel();
+        component.percentWidth = 100.0;
+        component.percentHeight = 100.0;
+        decorator.addChild(component);
+        decorator.title = remoteComponent.label;
+        decorator.titleIcon = getIconForComponent(decorator, remoteComponent.icon);
+        decorator.setStyle("borderAlpha",1);
+        decorator.setStyle("borderThicknessLeft", 3);
+        decorator.setStyle("borderThicknessRight", 3);
+        component = decorator;
+      } else if(remoteComponent.borderType == "SIMPLE") {
+        component.setStyle("borderStyle","solid");
+        component.setStyle("borderThickness", 3);
+      }
       return component;
     }
     
@@ -160,6 +220,16 @@ package org.jspresso.framework.view {
     
     private function createActionField(remoteActionField:RActionField):HBox {
       var actionField:HBox = new HBox();
+      var textField:TextInput = new TextInput();
+      actionField.percentWidth = 100.0;
+      textField.percentWidth = 100.0;
+      actionField.addChild(textField);
+      for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
+        var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
+        for(var j:int = 0; j < actionList.actions.length; j++) {
+          actionField.addChild(createButton(actionList.actions[i]));
+        }
+      }
       return actionField;
     }
     
@@ -523,11 +593,26 @@ package org.jspresso.framework.view {
         tabCanvas.label = rTab.label;
         tabContainer.addChild(tabCanvas);
         
-        var tab:UIComponent = createComponent(rTab);
-        tab.percentWidth = 100.0;
-        tab.percentHeight = 100.0;
-        tabCanvas.addChild(tab);
+        if(rTab.tooltip != null) {
+    		  tabCanvas.toolTip = rTab.tooltip + TOOLTIP_ELLIPSIS;
+        }
+
+        var tabContent:UIComponent = createComponent(rTab);
+        tabContent.percentWidth = 100.0;
+        tabContent.percentHeight = 100.0;
+        tabCanvas.addChild(tabContent);
       }
+      var creationComplete:Function = function creationComplete(event:FlexEvent):void {
+        if(event.target is TabNavigator) {
+          var tabContainer:TabNavigator = event.target as TabNavigator;
+          for(var tabIndex:int = 0; tabIndex < tabContainer.getChildren().length; tabIndex ++) {
+            var tabButton:Button = tabContainer.getTabAt(tabIndex);
+      		  tabButton.setStyle("icon", getIconForComponent(tabButton, (remoteTabContainer.tabs[tabIndex] as RComponent).icon));
+      		}
+      		tabContainer.removeEventListener(FlexEvent.CREATION_COMPLETE, creationComplete);
+        }  
+      };
+      tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, creationComplete);
       return tabContainer;
     }
 
@@ -580,6 +665,7 @@ package org.jspresso.framework.view {
         var rColumn:RComponent = remoteTable.columns[i] as RComponent;
         var column:DataGridColumn = new DataGridColumn();
         column.headerText = rColumn.label;
+        column.width = 100.0;
         columns.push(column);
       }
       table.columns = columns;
@@ -599,6 +685,25 @@ package org.jspresso.framework.view {
     private function createTimeField(remoteTimeField:RTimeField):TextInput {
       var timeField:TextInput = new TextInput();
       return timeField;
+    }
+    
+    private function createButton(remoteAction:RAction):Button {
+      var button:Button = new Button();
+	    button.setStyle("icon", getIconForComponent(button, remoteAction.icon));
+		  button.toolTip=remoteAction.description + TOOLTIP_ELLIPSIS;
+      return button;
+    }
+    
+    private function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
+      if(rIcon != null) {
+        return IconUtility.getClass(component, getContextRoot()+"/download?localUrl="+rIcon.imageUrlSpec
+                                    , rIcon.width, rIcon.height);
+      }
+      return null;
+    }
+    
+    private function getContextRoot():String {
+      return Application.application.url.substring(0,Application.application.url.lastIndexOf("/"));
     }
   }
 }

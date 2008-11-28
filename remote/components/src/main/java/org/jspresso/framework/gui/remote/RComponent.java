@@ -49,7 +49,7 @@ public abstract class RComponent extends RemotePeer {
   private String           font;
   private String           foreground;
   private RIcon            icon;
-  private RAction[]    actions;
+  private RActionList[]    actionLists;
   private RemoteValueState state;
 
   /**
@@ -101,25 +101,6 @@ public abstract class RComponent extends RemotePeer {
   }
 
   /**
-   * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(RAction[] actions) {
-    this.actions = actions;
-  }
-
-  /**
-   * Gets the actions.
-   * 
-   * @return the actions.
-   */
-  public RAction[] getActions() {
-    return actions;
-  }
-
-  /**
    * Sets the icon.
    * 
    * @param icon
@@ -157,7 +138,6 @@ public abstract class RComponent extends RemotePeer {
     this.state = state;
   }
 
-  
   /**
    * Gets the background.
    * 
@@ -167,17 +147,16 @@ public abstract class RComponent extends RemotePeer {
     return background;
   }
 
-  
   /**
    * Sets the background.
    * 
-   * @param background the background to set.
+   * @param background
+   *          the background to set.
    */
   public void setBackground(String background) {
     this.background = background;
   }
 
-  
   /**
    * Gets the borderType.
    * 
@@ -187,17 +166,16 @@ public abstract class RComponent extends RemotePeer {
     return borderType;
   }
 
-  
   /**
    * Sets the borderType.
    * 
-   * @param borderType the borderType to set.
+   * @param borderType
+   *          the borderType to set.
    */
   public void setBorderType(String borderType) {
     this.borderType = borderType;
   }
 
-  
   /**
    * Gets the font.
    * 
@@ -207,17 +185,16 @@ public abstract class RComponent extends RemotePeer {
     return font;
   }
 
-  
   /**
    * Sets the font.
    * 
-   * @param font the font to set.
+   * @param font
+   *          the font to set.
    */
   public void setFont(String font) {
     this.font = font;
   }
 
-  
   /**
    * Gets the foreground.
    * 
@@ -227,13 +204,33 @@ public abstract class RComponent extends RemotePeer {
     return foreground;
   }
 
-  
   /**
    * Sets the foreground.
    * 
-   * @param foreground the foreground to set.
+   * @param foreground
+   *          the foreground to set.
    */
   public void setForeground(String foreground) {
     this.foreground = foreground;
+  }
+
+  
+  /**
+   * Gets the actionLists.
+   * 
+   * @return the actionLists.
+   */
+  public RActionList[] getActionLists() {
+    return actionLists;
+  }
+
+  
+  /**
+   * Sets the actionLists.
+   * 
+   * @param actionLists the actionLists to set.
+   */
+  public void setActionLists(RActionList[] actionLists) {
+    this.actionLists = actionLists;
   }
 }
