@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view.ulc;
 
-import java.text.DateFormat;
-import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,7 +67,6 @@ import org.jspresso.framework.gui.ulc.components.server.ULCExtendedTree;
 import org.jspresso.framework.gui.ulc.components.server.ULCJEditTextArea;
 import org.jspresso.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
 import org.jspresso.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
-import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -92,8 +89,6 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
-import org.jspresso.framework.util.format.DurationFormatter;
-import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.CellConstraints;
@@ -202,8 +197,6 @@ public class DefaultUlcViewFactory extends
   private ULCDurationDataTypeFactory    durationDataTypeFactory    = new ULCDurationDataTypeFactory();
   private IListSelectionModelBinder     listSelectionModelBinder;
 
-  private int                           maxCharacterLength         = 32;
-  private int                           maxColumnCharacterLength   = 32;
   private ULCTranslationDataTypeFactory translationDataTypeFactory = new ULCTranslationDataTypeFactory();
 
   private ITreeSelectionModelBinder     treeSelectionModelBinder;
@@ -302,16 +295,6 @@ public class DefaultUlcViewFactory extends
   public void setListSelectionModelBinder(
       IListSelectionModelBinder listSelectionModelBinder) {
     this.listSelectionModelBinder = listSelectionModelBinder;
-  }
-
-  /**
-   * Sets the maxCharacterLength.
-   * 
-   * @param maxCharacterLength
-   *          the maxCharacterLength to set.
-   */
-  public void setMaxCharacterLength(int maxCharacterLength) {
-    this.maxCharacterLength = maxCharacterLength;
   }
 
   /**
@@ -638,12 +621,11 @@ public class DefaultUlcViewFactory extends
     }
   }
 
-  private void adjustSizes(ULCComponent component, IFormatter formatter,
-      Object templateValue) {
-    adjustSizes(component, formatter, templateValue, 32);
-  }
-
-  private void adjustSizes(ULCComponent component, IFormatter formatter,
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void adjustSizes(ULCComponent component, IFormatter formatter,
       Object templateValue, int extraWidth) {
     int preferredWidth = computePixelWidth(component, getFormatLength(
         formatter, templateValue))
@@ -655,9 +637,13 @@ public class DefaultUlcViewFactory extends
     component.setMaximumSize(size);
   }
 
-  private int computePixelWidth(ULCComponent component, int characterLength) {
-    int charLength = maxCharacterLength + 2;
-    if (characterLength > 0 && characterLength < maxCharacterLength) {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected int computePixelWidth(ULCComponent component, int characterLength) {
+    int charLength = getMaxCharacterLength() + 2;
+    if (characterLength > 0 && characterLength < getMaxCharacterLength()) {
       charLength = characterLength + 2;
     }
     return component.getFont().getSize() * charLength / 2;
@@ -1013,23 +999,6 @@ public class DefaultUlcViewFactory extends
     return new ULCDateDataType(format.toPattern());
   }
 
-  private SimpleDateFormat createDateFormat(
-      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
-    DateFormat format;
-    if (propertyDescriptor.getType() == EDateType.DATE) {
-      format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-    } else {
-      format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-          DateFormat.SHORT, locale);
-    }
-    return (SimpleDateFormat) format;
-  }
-
-  private IFormatter createDateFormatter(
-      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
-    return createFormatter(createDateFormat(propertyDescriptor, locale));
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -1071,24 +1040,6 @@ public class DefaultUlcViewFactory extends
     return numberDataType;
   }
 
-  private NumberFormat createDecimalFormat(
-      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
-    NumberFormat format = NumberFormat.getNumberInstance(locale);
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
-          .intValue());
-    } else {
-      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
-    }
-    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
-    return format;
-  }
-
-  private IFormatter createDecimalFormatter(
-      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
-    return createFormatter(createDecimalFormat(propertyDescriptor, locale));
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -1128,16 +1079,10 @@ public class DefaultUlcViewFactory extends
 
   private ULCDurationDataType createDurationDataType(
       @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
-      Locale locale, @SuppressWarnings("unused") DurationFormatter formatter) {
+      Locale locale, @SuppressWarnings("unused") IFormatter formatter) {
     ULCDurationDataType durationDataType = durationDataTypeFactory
         .getTranslationDataType(locale);
     return durationDataType;
-  }
-
-  private DurationFormatter createDurationFormatter(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
-      Locale locale) {
-    return new DurationFormatter(locale);
   }
 
   /**
@@ -1148,8 +1093,7 @@ public class DefaultUlcViewFactory extends
       IDurationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
-    DurationFormatter formatter = createDurationFormatter(propertyDescriptor,
-        locale);
+    IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
     viewComponent.setDataType(createDurationDataType(propertyDescriptor,
         locale, formatter));
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
@@ -1236,34 +1180,6 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  private IFormatter createFormatter(Format format) {
-    return new FormatAdapter(format);
-  }
-
-  private IFormatter createFormatter(IPropertyDescriptor propertyDescriptor,
-      Locale locale) {
-    if (propertyDescriptor instanceof IDatePropertyDescriptor) {
-      return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
-          locale);
-    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
-          locale);
-    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      return createDurationFormatter(
-          (IDurationPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      return createDecimalFormatter(
-          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentFormatter(
-          (IPercentPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      return createIntegerFormatter(
-          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
-    }
-    return null;
-  }
-
   private GridBagConstraints createGridBagConstraints(
       CellConstraints viewConstraints) {
     GridBagConstraints constraints = new GridBagConstraints();
@@ -1322,17 +1238,6 @@ public class DefaultUlcViewFactory extends
     numberDataType.setMinFractionDigits(0);
     numberDataType.setGroupingUsed(format.isGroupingUsed());
     return numberDataType;
-  }
-
-  private NumberFormat createIntegerFormat(
-      @SuppressWarnings("unused") IIntegerPropertyDescriptor propertyDescriptor,
-      Locale locale) {
-    return NumberFormat.getIntegerInstance(locale);
-  }
-
-  private IFormatter createIntegerFormatter(
-      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
-    return createFormatter(createIntegerFormat(propertyDescriptor, locale));
   }
 
   /**
@@ -1459,24 +1364,6 @@ public class DefaultUlcViewFactory extends
           .getMaxFractionDigit().intValue());
     }
     return percentDataType;
-  }
-
-  private NumberFormat createPercentFormat(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
-    NumberFormat format = NumberFormat.getPercentInstance(locale);
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
-          .intValue());
-    } else {
-      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
-    }
-    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
-    return format;
-  }
-
-  private IFormatter createPercentFormatter(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
-    return createFormatter(createPercentFormat(propertyDescriptor, locale));
   }
 
   /**
@@ -1819,7 +1706,7 @@ public class DefaultUlcViewFactory extends
         .getSelectionModel(), sorterDecorator);
 
     int maxColumnSize = computePixelWidth(viewComponent,
-        maxColumnCharacterLength);
+        getMaxColumnCharacterLength());
 
     int columnIndex = 0;
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
@@ -1959,18 +1846,6 @@ public class DefaultUlcViewFactory extends
       @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale, SimpleDateFormat format) {
     return new ULCDateDataType(format.toPattern());
-  }
-
-  private SimpleDateFormat createTimeFormat(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor,
-      Locale locale) {
-    DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
-    return (SimpleDateFormat) format;
-  }
-
-  private IFormatter createTimeFormatter(
-      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
-    return createFormatter(createTimeFormat(propertyDescriptor, locale));
   }
 
   /**
@@ -2164,29 +2039,6 @@ public class DefaultUlcViewFactory extends
         viewConnector, actionHandler, locale);
   }
 
-  private Object getDateTemplateValue(
-      @SuppressWarnings("unused") IDatePropertyDescriptor propertyDescriptor) {
-    return TEMPLATE_DATE;
-  }
-
-  private Object getDecimalTemplateValue(
-      IDecimalPropertyDescriptor propertyDescriptor) {
-    double templateValue = DEF_DISP_MAX_VALUE;
-    if (propertyDescriptor.getMaxValue() != null) {
-      templateValue = propertyDescriptor.getMaxValue().doubleValue();
-    }
-    int maxFractionDigit = DEF_DISP_MAX_FRACTION_DIGIT;
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
-    }
-    double decimalPart = 0;
-    for (int i = 0; i < maxFractionDigit; i++) {
-      decimalPart += Math.pow(10.0D, -i);
-    }
-    templateValue += decimalPart;
-    return new Double(templateValue);
-  }
-
   private List<String> getDescriptorPathFromConnectorTreePath(
       TreePath connectorTreePath) {
     List<String> descriptorPath = new ArrayList<String>();
@@ -2199,119 +2051,6 @@ public class DefaultUlcViewFactory extends
       }
     }
     return descriptorPath;
-  }
-
-  private Object getDurationTemplateValue(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor) {
-    return TEMPLATE_DURATION;
-  }
-
-  private String getEnumerationTemplateValue(
-      IEnumerationPropertyDescriptor descriptor, Locale locale) {
-    int maxTranslationLength = -1;
-    if (getTranslationProvider() != null && descriptor.isTranslated()) {
-      for (Object enumerationValue : descriptor.getEnumerationValues()) {
-        String translation = getTranslationProvider().getTranslation(
-            computeEnumerationKey(descriptor.getEnumerationName(),
-                enumerationValue), locale);
-        if (translation.length() > maxTranslationLength) {
-          maxTranslationLength = translation.length();
-        }
-      }
-    } else {
-      maxTranslationLength = descriptor.getMaxLength().intValue();
-    }
-    if (maxTranslationLength == -1 || maxTranslationLength > maxCharacterLength) {
-      maxTranslationLength = maxCharacterLength;
-    }
-    return getStringTemplateValue(new Integer(maxTranslationLength));
-  }
-
-  private int getFormatLength(IFormatter formatter, Object templateValue) {
-    int formatLength;
-    if (formatter != null) {
-      formatLength = formatter.format(templateValue).length();
-    } else {
-      if (templateValue != null) {
-        formatLength = templateValue.toString().length();
-      } else {
-        formatLength = maxCharacterLength;
-      }
-    }
-    return formatLength;
-  }
-
-  private Object getIntegerTemplateValue(
-      IIntegerPropertyDescriptor propertyDescriptor) {
-    double templateValue = DEF_DISP_MAX_VALUE;
-    if (propertyDescriptor.getMaxValue() != null) {
-      templateValue = propertyDescriptor.getMaxValue().doubleValue();
-    }
-    return new Integer((int) templateValue);
-  }
-
-  private Object getPercentTemplateValue(
-      IPercentPropertyDescriptor propertyDescriptor) {
-    double templateValue = DEF_DISP_TEMPLATE_PERCENT;
-    if (propertyDescriptor.getMaxValue() != null) {
-      templateValue = propertyDescriptor.getMaxValue().doubleValue();
-    }
-    int maxFractionDigit = DEF_DISP_MAX_FRACTION_DIGIT;
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
-    }
-    double decimalPart = 0;
-    for (int i = 0; i < maxFractionDigit; i++) {
-      decimalPart += Math.pow(10.0D, -i);
-    }
-    templateValue += decimalPart;
-    return new Double(templateValue / 100.0D);
-  }
-
-  private String getStringTemplateValue(Integer maxLength) {
-    StringBuffer templateValue = new StringBuffer();
-    int fieldLength = maxCharacterLength;
-    if (maxLength != null) {
-      fieldLength = maxLength.intValue();
-    }
-    for (int i = 0; i < fieldLength; i++) {
-      templateValue.append(TEMPLATE_CHAR);
-    }
-    return templateValue.toString();
-  }
-
-  private String getStringTemplateValue(
-      IStringPropertyDescriptor propertyDescriptor) {
-    return getStringTemplateValue(propertyDescriptor.getMaxLength());
-  }
-
-  private Object getTemplateValue(IPropertyDescriptor propertyDescriptor) {
-    if (propertyDescriptor instanceof IDatePropertyDescriptor) {
-      return getDateTemplateValue((IDatePropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      return getTimeTemplateValue((ITimePropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      return getDurationTemplateValue((IDurationPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
-      return getStringTemplateValue((IStringPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      return getDecimalTemplateValue((IDecimalPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return getPercentTemplateValue((IPercentPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      return getIntegerTemplateValue((IIntegerPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return getTemplateValue(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor().getPropertyDescriptor(
-              ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-                  .getReferencedDescriptor().getToStringProperty()));
-    }
-    return null;
-  }
-
-  private Object getTimeTemplateValue(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor) {
-    return TEMPLATE_TIME;
   }
 
   private final class ColorTableCellRenderer extends DefaultTableCellRenderer {

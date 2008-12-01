@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.view;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +43,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
+import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
@@ -62,6 +67,10 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.format.DurationFormatter;
+import org.jspresso.framework.util.format.FormatAdapter;
+import org.jspresso.framework.util.format.IFormatter;
+import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -171,6 +180,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private IDisplayableAction            openFileAsBinaryPropertyAction;
   private IDisplayableAction            resetPropertyAction;
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
+
+  private int                           maxCharacterLength          = 32;
+  private int                           maxColumnCharacterLength    = 32;
 
   /**
    * {@inheritDoc}
@@ -1327,8 +1339,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createTextPropertyView(
-      ITextPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale);
+      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale);
 
   /**
    * Creates a source code property view.
@@ -1597,4 +1609,529 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected abstract IView<E> createPercentPropertyView(
       IPercentPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a formatter based on a property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the formatter.
+   */
+  protected IFormatter createFormatter(IPropertyDescriptor propertyDescriptor,
+      Locale locale) {
+    if (propertyDescriptor instanceof IDatePropertyDescriptor) {
+      return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
+          locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
+          locale);
+    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
+      return createDurationFormatter(
+          (IDurationPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+      return createDecimalFormatter(
+          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
+      return createPercentFormatter(
+          (IPercentPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
+      return createIntegerFormatter(
+          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
+    }
+    return null;
+  }
+
+  /**
+   * Creates a date format based on a date property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the date property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the date format.
+   */
+  protected SimpleDateFormat createDateFormat(
+      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
+    SimpleDateFormat format;
+    if (propertyDescriptor.getType() == EDateType.DATE) {
+      format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
+          .getDateInstance(DateFormat.SHORT, locale)).toPattern(), locale);
+    } else {
+      format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
+          .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale))
+          .toPattern(), locale);
+    }
+    return format;
+  }
+
+  /**
+   * Creates a date formatter based on a date property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the date property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the date formatter.
+   */
+  protected IFormatter createDateFormatter(
+      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
+    return createFormatter(createDateFormat(propertyDescriptor, locale));
+  }
+
+  /**
+   * Creates a percent format based on a percent property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the percent property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the percent format.
+   */
+  protected NumberFormat createPercentFormat(
+      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+    NumberFormat format = NumberFormat.getPercentInstance(locale);
+    if (propertyDescriptor.getMaxFractionDigit() != null) {
+      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
+          .intValue());
+    } else {
+      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
+    }
+    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
+    return format;
+  }
+
+  /**
+   * Creates a percent formatter based on a percent property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the percent property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the percent formatter.
+   */
+  protected IFormatter createPercentFormatter(
+      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormatAdapter(createPercentFormat(propertyDescriptor, locale));
+  }
+
+  /**
+   * Creates a decimal format based on a decimal property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the decimal property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the decimal format.
+   */
+  protected NumberFormat createDecimalFormat(
+      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+    NumberFormat format = NumberFormat.getNumberInstance(locale);
+    if (propertyDescriptor.getMaxFractionDigit() != null) {
+      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
+          .intValue());
+    } else {
+      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
+    }
+    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
+    return format;
+  }
+
+  /**
+   * Creates a decimal formatter based on a decimal property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the decimal property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the decimal formatter.
+   */
+  protected IFormatter createDecimalFormatter(
+      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormatAdapter(createDecimalFormat(propertyDescriptor, locale));
+  }
+
+  /**
+   * Creates a duration formatter based on a duration property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the duration property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the duration formatter.
+   */
+  protected IFormatter createDurationFormatter(
+      IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new DurationFormatter(locale);
+  }
+
+  /**
+   * Creates an integer format based on an integer property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the integer property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the integer format.
+   */
+  protected NumberFormat createIntegerFormat(
+      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+    return NumberFormat.getIntegerInstance(locale);
+  }
+
+  /**
+   * Creates an integer formatter based on an integer property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the integer property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the integer formatter.
+   */
+  protected IFormatter createIntegerFormatter(
+      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormatAdapter(createIntegerFormat(propertyDescriptor, locale));
+  }
+
+  /**
+   * Creates a time format based on a time property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the time property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the time format.
+   */
+  protected SimpleDateFormat createTimeFormat(
+      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    SimpleDateFormat format = (SimpleDateFormat) DateFormat.getTimeInstance(
+        DateFormat.SHORT, locale);
+    return format;
+  }
+
+  /**
+   * Creates a time formatter based on an time property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the time property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the time formatter.
+   */
+  protected IFormatter createTimeFormatter(
+      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    return createFormatter(createTimeFormat(propertyDescriptor, locale));
+  }
+
+  /**
+   * Wraps a format in a formatter.
+   * 
+   * @param format
+   *          the format to wrap.
+   * @return the resulting formatter.
+   */
+  protected IFormatter createFormatter(Format format) {
+    return new FormatAdapter(format);
+  }
+
+  /**
+   * Gets a template value matching a property descriptor. This is useful for
+   * computing preferred width on components.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return a field template value.
+   */
+  protected Object getTemplateValue(IPropertyDescriptor propertyDescriptor) {
+    if (propertyDescriptor instanceof IDatePropertyDescriptor) {
+      return getDateTemplateValue((IDatePropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      return getTimeTemplateValue((ITimePropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
+      return getDurationTemplateValue((IDurationPropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
+      return getStringTemplateValue((IStringPropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+      return getDecimalTemplateValue((IDecimalPropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
+      return getPercentTemplateValue((IPercentPropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
+      return getIntegerTemplateValue((IIntegerPropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      return getTemplateValue(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+          .getReferencedDescriptor().getPropertyDescriptor(
+              ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+                  .getReferencedDescriptor().getToStringProperty()));
+    }
+    return null;
+  }
+
+  /**
+   * Gets an integer template value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the integer template value.
+   */
+  protected Integer getIntegerTemplateValue(
+      IIntegerPropertyDescriptor propertyDescriptor) {
+    double templateValue = DEF_DISP_MAX_VALUE;
+    if (propertyDescriptor.getMaxValue() != null) {
+      templateValue = propertyDescriptor.getMaxValue().doubleValue();
+    }
+    return new Integer((int) templateValue);
+  }
+
+  /**
+   * Gets a decimal template value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the decimal template value.
+   */
+  protected Double getDecimalTemplateValue(
+      IDecimalPropertyDescriptor propertyDescriptor) {
+    double templateValue = DEF_DISP_MAX_VALUE;
+    if (propertyDescriptor.getMaxValue() != null) {
+      templateValue = propertyDescriptor.getMaxValue().doubleValue();
+    }
+    int maxFractionDigit = DEF_DISP_MAX_FRACTION_DIGIT;
+    if (propertyDescriptor.getMaxFractionDigit() != null) {
+      maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
+    }
+    double decimalPart = 0;
+    for (int i = 1; i <= maxFractionDigit; i++) {
+      decimalPart += Math.pow(10.0D, -i);
+    }
+    templateValue += decimalPart;
+    return new Double(templateValue);
+  }
+
+  /**
+   * Gets a time template value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the time template value.
+   */
+  protected Date getTimeTemplateValue(ITimePropertyDescriptor propertyDescriptor) {
+    return TEMPLATE_TIME;
+  }
+
+  /**
+   * Gets a duration template value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the duration template value.
+   */
+  protected Long getDurationTemplateValue(
+      IDurationPropertyDescriptor propertyDescriptor) {
+    return TEMPLATE_DURATION;
+  }
+
+  /**
+   * Gets an enumeration template value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the enumeration template value.
+   */
+  protected String getEnumerationTemplateValue(
+      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+    int maxTranslationLength = -1;
+    if (getTranslationProvider() != null && propertyDescriptor.isTranslated()) {
+      for (Object enumerationValue : propertyDescriptor.getEnumerationValues()) {
+        String translation = getTranslationProvider().getTranslation(
+            computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                enumerationValue), locale);
+        if (translation.length() > maxTranslationLength) {
+          maxTranslationLength = translation.length();
+        }
+      }
+    } else {
+      maxTranslationLength = propertyDescriptor.getMaxLength().intValue();
+    }
+    if (maxTranslationLength == -1
+        || maxTranslationLength > getMaxCharacterLength()) {
+      maxTranslationLength = getMaxCharacterLength();
+    }
+    return getStringTemplateValue(new Integer(maxTranslationLength));
+  }
+
+  /**
+   * Gets an percent template value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the percent template value.
+   */
+  protected Double getPercentTemplateValue(
+      IPercentPropertyDescriptor propertyDescriptor) {
+    double templateValue = DEF_DISP_TEMPLATE_PERCENT;
+    if (propertyDescriptor.getMaxValue() != null) {
+      templateValue = propertyDescriptor.getMaxValue().doubleValue();
+    }
+    int maxFractionDigit = DEF_DISP_MAX_FRACTION_DIGIT;
+    if (propertyDescriptor.getMaxFractionDigit() != null) {
+      maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
+    }
+    double decimalPart = 0;
+    for (int i = 1; i <= maxFractionDigit; i++) {
+      decimalPart += Math.pow(10.0D, -i);
+    }
+    templateValue += decimalPart;
+    return new Double(templateValue / 100.0D);
+  }
+
+  /**
+   * Gets an string template value.
+   * 
+   * @param maxLength
+   *          the attribute max length.
+   * @return the string template value.
+   */
+  protected String getStringTemplateValue(Integer maxLength) {
+    StringBuffer templateValue = new StringBuffer();
+    int fieldLength = getMaxCharacterLength();
+    if (maxLength != null) {
+      fieldLength = maxLength.intValue();
+    }
+    for (int i = 0; i < fieldLength; i++) {
+      templateValue.append(TEMPLATE_CHAR);
+    }
+    return templateValue.toString();
+  }
+
+  /**
+   * Gets an string template value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the string template value.
+   */
+  protected String getStringTemplateValue(
+      IStringPropertyDescriptor propertyDescriptor) {
+    return getStringTemplateValue(propertyDescriptor.getMaxLength());
+  }
+
+  /**
+   * Gets a date template value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @return the date template value.
+   */
+  protected Date getDateTemplateValue(IDatePropertyDescriptor propertyDescriptor) {
+    return TEMPLATE_DATE;
+  }
+
+  /**
+   * Sets the maxCharacterLength.
+   * 
+   * @param maxCharacterLength
+   *          the maxCharacterLength to set.
+   */
+  public void setMaxCharacterLength(int maxCharacterLength) {
+    this.maxCharacterLength = maxCharacterLength;
+  }
+
+  /**
+   * Gets the maxColumnCharacterLength.
+   * 
+   * @return the maxColumnCharacterLength.
+   */
+  protected int getMaxColumnCharacterLength() {
+    return maxColumnCharacterLength;
+  }
+
+  /**
+   * Sets the maxColumnCharacterLength.
+   * 
+   * @param maxColumnCharacterLength
+   *          the maxColumnCharacterLength to set.
+   */
+  public void setMaxColumnCharacterLength(int maxColumnCharacterLength) {
+    this.maxColumnCharacterLength = maxColumnCharacterLength;
+  }
+
+  /**
+   * Gets the maxCharacterLength.
+   * 
+   * @return the maxCharacterLength.
+   */
+  protected int getMaxCharacterLength() {
+    return maxCharacterLength;
+  }
+
+  /**
+   * Computes the number of characters used to represent a template value based
+   * on a formatter.
+   * 
+   * @param formatter
+   *          the formatter.
+   * @param templateValue
+   *          the template value.
+   * @return the number of characters used to represent the template value.
+   */
+  protected int getFormatLength(IFormatter formatter, Object templateValue) {
+    int formatLength;
+    if (formatter != null) {
+      formatLength = formatter.format(templateValue).length();
+    } else {
+      if (templateValue != null) {
+        formatLength = templateValue.toString().length();
+      } else {
+        formatLength = getMaxCharacterLength();
+      }
+    }
+    return formatLength;
+  }
+
+  /**
+   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
+   * formatter and a template value.
+   * 
+   * @param component
+   *          the component to adjust the sizes for.
+   * @param formatter
+   *          the formatter used if any.
+   * @param templateValue
+   *          the template value used.
+   */
+  protected void adjustSizes(E component, IFormatter formatter,
+      Object templateValue) {
+    adjustSizes(component, formatter, templateValue, 32);
+  }
+
+  /**
+   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
+   * formatter and a template value.
+   * 
+   * @param component
+   *          the component to adjust the sizes for.
+   * @param formatter
+   *          the formatter used if any.
+   * @param templateValue
+   *          the template value used.
+   * @param extraWidth
+   *          the extra size to be added.
+   */
+  protected abstract void adjustSizes(E component, IFormatter formatter,
+      Object templateValue, int extraWidth);
+
+  /**
+   * Computes a size in pixels based on a number of characters and a component.
+   * It should use component font do do so.
+   * 
+   * @param component
+   *          the component.
+   * @param characterLength
+   *          the number of characters.
+   * @return the ize in pixels.
+   */
+  protected abstract int computePixelWidth(E component, int characterLength);
 }

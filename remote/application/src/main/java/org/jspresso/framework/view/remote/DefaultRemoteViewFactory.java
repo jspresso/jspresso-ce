@@ -84,6 +84,7 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
@@ -1171,5 +1172,27 @@ public class DefaultRemoteViewFactory extends
     view.getPeer().setState(
         ((IRemoteStateOwner) view.getConnector()).getState());
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void adjustSizes(@SuppressWarnings("unused") RComponent component,
+      @SuppressWarnings("unused") IFormatter formatter,
+      @SuppressWarnings("unused") Object templateValue,
+      @SuppressWarnings("unused") int extraWidth) {
+    // Empty as of now.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected int computePixelWidth(
+      @SuppressWarnings("unused") RComponent component,
+      @SuppressWarnings("unused") int characterLength) {
+    // Empty as of now.
+    return 0;
   }
 }

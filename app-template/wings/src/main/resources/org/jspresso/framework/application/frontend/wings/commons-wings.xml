@@ -109,7 +109,8 @@
   -->
 
   <!--
-    This icon factory is defined as non-singleton since it implements a per wings session cache.
+    This icon factory is defined as non-singleton since it implements a per
+    wings session cache.
   -->
   <bean
     id="iconFactory"
@@ -205,6 +206,9 @@
     parent="abstractViewFactory"
     class="org.jspresso.framework.view.wings.DefaultWingsViewFactory"
     scope="prototype">
+    <property
+      name="maxCharacterLength"
+      value="48" />
     <property
       name="listSelectionModelBinder"
       ref="listSelectionModelBinder" />
