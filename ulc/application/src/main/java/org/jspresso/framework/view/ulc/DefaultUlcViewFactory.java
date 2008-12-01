@@ -895,12 +895,36 @@ public class DefaultUlcViewFactory implements
     return translationProvider;
   }
 
-  private void adjustSizes(ULCComponent component, IFormatter formatter,
+  /**
+   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
+   * formatter and a template value.
+   * 
+   * @param component
+   *          the component to adjust the sizes for.
+   * @param formatter
+   *          the formatter used if any.
+   * @param templateValue
+   *          the template value used.
+   */
+  protected void adjustSizes(ULCComponent component, IFormatter formatter,
       Object templateValue) {
     adjustSizes(component, formatter, templateValue, 32);
   }
 
-  private void adjustSizes(ULCComponent component, IFormatter formatter,
+  /**
+   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
+   * formatter and a template value.
+   * 
+   * @param component
+   *          the component to adjust the sizes for.
+   * @param formatter
+   *          the formatter used if any.
+   * @param templateValue
+   *          the template value used.
+   * @param extraWidth
+   *          the extra size to be added.
+   */
+  protected void adjustSizes(ULCComponent component, IFormatter formatter,
       Object templateValue, int extraWidth) {
     int preferredWidth = computePixelWidth(component, getFormatLength(
         formatter, templateValue))
@@ -935,7 +959,16 @@ public class DefaultUlcViewFactory implements
     return translationMapping;
   }
 
-  private BasicCompositeView<ULCComponent> constructCompositeView(
+  /**
+   * Constructs a composite view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @return the created composite view.
+   */
+  protected BasicCompositeView<ULCComponent> constructCompositeView(
       ULCComponent viewComponent, IViewDescriptor descriptor) {
     BasicCompositeView<ULCComponent> view = new BasicCompositeView<ULCComponent>(
         viewComponent);
@@ -943,7 +976,16 @@ public class DefaultUlcViewFactory implements
     return view;
   }
 
-  private BasicMapView<ULCComponent> constructMapView(
+  /**
+   * Constructs a map view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @return the created map view.
+   */
+  protected BasicMapView<ULCComponent> constructMapView(
       ULCComponent viewComponent, IViewDescriptor descriptor) {
     BasicMapView<ULCComponent> view = new BasicMapView<ULCComponent>(
         viewComponent);
@@ -951,7 +993,18 @@ public class DefaultUlcViewFactory implements
     return view;
   }
 
-  private IView<ULCComponent> constructView(ULCComponent viewComponent,
+  /**
+   * Constructs a view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @param connector
+   *          the view connector.
+   * @return the created view.
+   */
+  protected IView<ULCComponent> constructView(ULCComponent viewComponent,
       IViewDescriptor descriptor, IValueConnector connector) {
     BasicView<ULCComponent> view = new BasicView<ULCComponent>(viewComponent);
     view.setConnector(connector);
@@ -1487,7 +1540,16 @@ public class DefaultUlcViewFactory implements
     return new ULCDateDataType(format.toPattern());
   }
 
-  private SimpleDateFormat createDateFormat(
+  /**
+   * Creates a date format based on a date property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the date property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the date format.
+   */
+  protected SimpleDateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
     if (EDateType.DATE == propertyDescriptor.getType()) {
@@ -1499,7 +1561,16 @@ public class DefaultUlcViewFactory implements
     return (SimpleDateFormat) format;
   }
 
-  private IFormatter createDateFormatter(
+  /**
+   * Creates a date formatter based on a date property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the date property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the date formatter.
+   */
+  protected IFormatter createDateFormatter(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createDateFormat(propertyDescriptor, locale));
   }
@@ -1541,7 +1612,16 @@ public class DefaultUlcViewFactory implements
     return numberDataType;
   }
 
-  private NumberFormat createDecimalFormat(
+  /**
+   * Creates a decimal format based on a decimal property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the decimal property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the decimal format.
+   */
+  protected NumberFormat createDecimalFormat(
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getNumberInstance(locale);
     if (propertyDescriptor.getMaxFractionDigit() != null) {
@@ -1554,7 +1634,16 @@ public class DefaultUlcViewFactory implements
     return format;
   }
 
-  private IFormatter createDecimalFormatter(
+  /**
+   * Creates a decimal formatter based on a decimal property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the decimal property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the decimal formatter.
+   */
+  protected IFormatter createDecimalFormatter(
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createDecimalFormat(propertyDescriptor, locale));
   }
@@ -1604,8 +1693,17 @@ public class DefaultUlcViewFactory implements
     return durationDataType;
   }
 
-  private DurationFormatter createDurationFormatter(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
+  /**
+   * Creates a duration formatter based on a duration property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the duration property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the duration formatter.
+   */
+  protected DurationFormatter createDurationFormatter(
+      IDurationPropertyDescriptor propertyDescriptor,
       Locale locale) {
     return new DurationFormatter(locale);
   }
@@ -1698,11 +1796,27 @@ public class DefaultUlcViewFactory implements
     return view;
   }
 
-  private IFormatter createFormatter(Format format) {
+  /**
+   * Wraps a format in a formatter.
+   * 
+   * @param format
+   *          the format to wrap.
+   * @return the resulting formatter.
+   */
+  protected IFormatter createFormatter(Format format) {
     return new FormatAdapter(format);
   }
 
-  private IFormatter createFormatter(IPropertyDescriptor propertyDescriptor,
+  /**
+   * Creates a formatter based on a property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the formatter.
+   */
+  protected IFormatter createFormatter(IPropertyDescriptor propertyDescriptor,
       Locale locale) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
@@ -1797,13 +1911,31 @@ public class DefaultUlcViewFactory implements
     return numberDataType;
   }
 
-  private NumberFormat createIntegerFormat(
-      @SuppressWarnings("unused") IIntegerPropertyDescriptor propertyDescriptor,
+  /**
+   * Creates an integer format based on an integer property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the integer property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the integer format.
+   */
+  protected NumberFormat createIntegerFormat(
+      IIntegerPropertyDescriptor propertyDescriptor,
       Locale locale) {
     return NumberFormat.getIntegerInstance(locale);
   }
 
-  private IFormatter createIntegerFormatter(
+  /**
+   * Creates an integer formatter based on an integer property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the integer property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the integer formatter.
+   */
+  protected IFormatter createIntegerFormatter(
       IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createIntegerFormat(propertyDescriptor, locale));
   }
@@ -1947,7 +2079,16 @@ public class DefaultUlcViewFactory implements
     return percentDataType;
   }
 
-  private NumberFormat createPercentFormat(
+  /**
+   * Creates a percent format based on a percent property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the percent property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the percent format.
+   */
+  protected NumberFormat createPercentFormat(
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getPercentInstance(locale);
     if (propertyDescriptor.getMaxFractionDigit() != null) {
@@ -1960,7 +2101,16 @@ public class DefaultUlcViewFactory implements
     return format;
   }
 
-  private IFormatter createPercentFormatter(
+  /**
+   * Creates a percent formatter based on a percent property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the percent property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the percent formatter.
+   */
+  protected IFormatter createPercentFormatter(
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createPercentFormat(propertyDescriptor, locale));
   }
@@ -2526,14 +2676,32 @@ public class DefaultUlcViewFactory implements
     return new ULCDateDataType(format.toPattern());
   }
 
-  private SimpleDateFormat createTimeFormat(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor,
+  /**
+   * Creates a time format based on a time property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the time property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the time format.
+   */
+  protected SimpleDateFormat createTimeFormat(
+      ITimePropertyDescriptor propertyDescriptor,
       Locale locale) {
     DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
     return (SimpleDateFormat) format;
   }
 
-  private IFormatter createTimeFormatter(
+  /**
+   * Creates a time formatter based on an time property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the time property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the time formatter.
+   */
+  protected IFormatter createTimeFormatter(
       ITimePropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createTimeFormat(propertyDescriptor, locale));
   }

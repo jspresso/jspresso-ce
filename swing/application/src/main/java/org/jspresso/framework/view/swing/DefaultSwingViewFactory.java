@@ -894,7 +894,18 @@ public class DefaultSwingViewFactory implements
   // Nesting Section //
   // /////////////// //
 
-  private void adjustSizes(Component component, IFormatter formatter,
+  /**
+   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
+   * formatter and a template value.
+   * 
+   * @param component
+   *          the component to adjust the sizes for.
+   * @param formatter
+   *          the formatter used if any.
+   * @param templateValue
+   *          the template value used.
+   */
+  protected void adjustSizes(Component component, IFormatter formatter,
       Object templateValue) {
     adjustSizes(component, formatter, templateValue, 32);
   }
@@ -903,7 +914,20 @@ public class DefaultSwingViewFactory implements
   // Component Section //
   // ///////////////// //
 
-  private void adjustSizes(Component component, IFormatter formatter,
+  /**
+   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
+   * formatter and a template value.
+   * 
+   * @param component
+   *          the component to adjust the sizes for.
+   * @param formatter
+   *          the formatter used if any.
+   * @param templateValue
+   *          the template value used.
+   * @param extraWidth
+   *          the extra size to be added.
+   */
+  protected void adjustSizes(Component component, IFormatter formatter,
       Object templateValue, int extraWidth) {
     int preferredWidth = computePixelWidth(component, getFormatLength(
         formatter, templateValue))
@@ -927,7 +951,16 @@ public class DefaultSwingViewFactory implements
     return component.getFont().getSize() * charLength / 2;
   }
 
-  private BasicCompositeView<JComponent> constructCompositeView(
+  /**
+   * Constructs a composite view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @return the created composite view.
+   */
+  protected BasicCompositeView<JComponent> constructCompositeView(
       JComponent viewComponent, IViewDescriptor descriptor) {
     BasicCompositeView<JComponent> view = new BasicCompositeView<JComponent>(
         viewComponent);
@@ -935,14 +968,34 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  private BasicMapView<JComponent> constructMapView(JComponent viewComponent,
+  /**
+   * Constructs a map view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @return the created map view.
+   */
+  protected BasicMapView<JComponent> constructMapView(JComponent viewComponent,
       IViewDescriptor descriptor) {
     BasicMapView<JComponent> view = new BasicMapView<JComponent>(viewComponent);
     view.setDescriptor(descriptor);
     return view;
   }
 
-  private IView<JComponent> constructView(JComponent viewComponent,
+  /**
+   * Constructs a view.
+   * 
+   * @param viewComponent
+   *          the peer view component
+   * @param descriptor
+   *          the view descriptor
+   * @param connector
+   *          the view connector.
+   * @return the created view.
+   */
+  protected IView<JComponent> constructView(JComponent viewComponent,
       IViewDescriptor descriptor, IValueConnector connector) {
     BasicView<JComponent> view = new BasicView<JComponent>(viewComponent);
     view.setConnector(connector);
@@ -1485,7 +1538,16 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  private DateFormat createDateFormat(
+  /**
+   * Creates a date format based on a date property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the date property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the date format.
+   */
+  protected DateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
     if (EDateType.DATE == propertyDescriptor.getType()) {
@@ -1499,7 +1561,16 @@ public class DefaultSwingViewFactory implements
     return format;
   }
 
-  private IFormatter createDateFormatter(
+  /**
+   * Creates a date formatter based on a date property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the date property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the date formatter.
+   */
+  protected IFormatter createDateFormatter(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createDateFormat(propertyDescriptor, locale));
   }
@@ -1526,7 +1597,16 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor, locale));
   }
 
-  private NumberFormat createDecimalFormat(
+  /**
+   * Creates a decimal format based on a decimal property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the decimal property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the decimal format.
+   */
+  protected NumberFormat createDecimalFormat(
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getNumberInstance(locale);
     if (propertyDescriptor.getMaxFractionDigit() != null) {
@@ -1539,7 +1619,16 @@ public class DefaultSwingViewFactory implements
     return format;
   }
 
-  private IFormatter createDecimalFormatter(
+  /**
+   * Creates a decimal formatter based on a decimal property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the decimal property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the decimal formatter.
+   */
+  protected IFormatter createDecimalFormatter(
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormatAdapter(createDecimalFormat(propertyDescriptor, locale));
   }
@@ -1576,8 +1665,17 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor, locale));
   }
 
-  private IFormatter createDurationFormatter(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
+  /**
+   * Creates a duration formatter based on a duration property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the duration property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the duration formatter.
+   */
+  protected IFormatter createDurationFormatter(
+      IDurationPropertyDescriptor propertyDescriptor,
       Locale locale) {
     return new DurationFormatter(locale);
   }
@@ -1668,11 +1766,27 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  private IFormatter createFormatter(Format format) {
+  /**
+   * Wraps a format in a formatter.
+   * 
+   * @param format
+   *          the format to wrap.
+   * @return the resulting formatter.
+   */
+  protected IFormatter createFormatter(Format format) {
     return new FormatAdapter(format);
   }
 
-  private IFormatter createFormatter(IPropertyDescriptor propertyDescriptor,
+  /**
+   * Creates a formatter based on a property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the formatter.
+   */
+  protected IFormatter createFormatter(IPropertyDescriptor propertyDescriptor,
       Locale locale) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
@@ -1756,13 +1870,31 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  private NumberFormat createIntegerFormat(
-      @SuppressWarnings("unused") IIntegerPropertyDescriptor propertyDescriptor,
+  /**
+   * Creates an integer format based on an integer property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the integer property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the integer format.
+   */
+  protected NumberFormat createIntegerFormat(
+      IIntegerPropertyDescriptor propertyDescriptor,
       Locale locale) {
     return NumberFormat.getIntegerInstance(locale);
   }
 
-  private IFormatter createIntegerFormatter(
+  /**
+   * Creates an integer formatter based on an integer property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the integer property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the integer formatter.
+   */
+  protected IFormatter createIntegerFormatter(
       IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormatAdapter(createIntegerFormat(propertyDescriptor, locale));
   }
@@ -1925,7 +2057,16 @@ public class DefaultSwingViewFactory implements
     return constructView(viewComponent, null, connector);
   }
 
-  private NumberFormat createPercentFormat(
+  /**
+   * Creates a percent format based on a percent property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the percent property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the percent format.
+   */
+  protected NumberFormat createPercentFormat(
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getPercentInstance(locale);
     if (propertyDescriptor.getMaxFractionDigit() != null) {
@@ -1938,7 +2079,16 @@ public class DefaultSwingViewFactory implements
     return format;
   }
 
-  private IFormatter createPercentFormatter(
+  /**
+   * Creates a percent formatter based on a percent property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the percent property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the percent formatter.
+   */
+  protected IFormatter createPercentFormatter(
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormatAdapter(createPercentFormat(propertyDescriptor, locale));
   }
@@ -2481,14 +2631,32 @@ public class DefaultSwingViewFactory implements
     return constructView(scrollPane, null, connector);
   }
 
-  private DateFormat createTimeFormat(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor,
+  /**
+   * Creates a time format based on a time property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the time property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the time format.
+   */
+  protected DateFormat createTimeFormat(
+      ITimePropertyDescriptor propertyDescriptor,
       Locale locale) {
     DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
     return format;
   }
 
-  private IFormatter createTimeFormatter(
+  /**
+   * Creates a time formatter based on an time property descriptor.
+   * 
+   * @param propertyDescriptor
+   *          the time property descriptor.
+   * @param locale
+   *          the locale.
+   * @return the time formatter.
+   */
+  protected IFormatter createTimeFormatter(
       ITimePropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createTimeFormat(propertyDescriptor, locale));
   }
