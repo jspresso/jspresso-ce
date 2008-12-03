@@ -750,8 +750,9 @@ public class DefaultRemoteViewFactory extends
           (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
     } else {
-      IValueConnector connector = getConnectorFactory().createValueConnector(
-          propertyDescriptor.getName());
+      IValueConnector connector = getConnectorFactory()
+          .createFormattedValueConnector(propertyDescriptor.getName(),
+              createDecimalFormatter(propertyDescriptor, locale));
       connector.setExceptionHandler(actionHandler);
       RDecimalField viewComponent = createRDecimalField(connector);
       view = constructView(viewComponent, null, connector);
@@ -772,9 +773,10 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createPercentPropertyView(
       IPercentPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+      IActionHandler actionHandler, Locale locale) {
+    IValueConnector connector = getConnectorFactory()
+        .createFormattedValueConnector(propertyDescriptor.getName(),
+            createPercentFormatter(propertyDescriptor, locale));
     connector.setExceptionHandler(actionHandler);
     RPercentField viewComponent = createRPercentField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
@@ -819,9 +821,10 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createIntegerPropertyView(
       IIntegerPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+      IActionHandler actionHandler, Locale locale) {
+    IValueConnector connector = getConnectorFactory()
+        .createFormattedValueConnector(propertyDescriptor.getName(),
+            createIntegerFormatter(propertyDescriptor, locale));
     connector.setExceptionHandler(actionHandler);
     RIntegerField viewComponent = createRIntegerField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
@@ -890,9 +893,10 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createDatePropertyView(
       IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+      Locale locale) {
+    IValueConnector connector = getConnectorFactory()
+        .createFormattedValueConnector(propertyDescriptor.getName(),
+            createDateFormatter(propertyDescriptor, locale));
     connector.setExceptionHandler(actionHandler);
     RDateField viewComponent = createRDateField(connector);
     viewComponent.setType(propertyDescriptor.getType().toString());
@@ -914,9 +918,10 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createDurationPropertyView(
       IDurationPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+      IActionHandler actionHandler, Locale locale) {
+    IValueConnector connector = getConnectorFactory()
+        .createFormattedValueConnector(propertyDescriptor.getName(),
+            createDurationFormatter(propertyDescriptor, locale));
     connector.setExceptionHandler(actionHandler);
     RDurationField viewComponent = createRDurationField(connector);
     if (propertyDescriptor.getMaxMillis() != null) {
@@ -942,9 +947,10 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected IView<RComponent> createTimePropertyView(
       ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+      Locale locale) {
+    IValueConnector connector = getConnectorFactory()
+        .createFormattedValueConnector(propertyDescriptor.getName(),
+            createTimeFormatter(propertyDescriptor, locale));
     connector.setExceptionHandler(actionHandler);
     RTimeField viewComponent = createRTimeField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
