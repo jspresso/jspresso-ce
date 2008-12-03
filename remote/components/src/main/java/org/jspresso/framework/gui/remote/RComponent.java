@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.RemotePeer;
 
@@ -40,7 +41,8 @@ import org.jspresso.framework.util.remote.RemotePeer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RComponent extends RemotePeer {
+public abstract class RComponent extends RemotePeer implements
+    IRemoteStateOwner {
 
   private String           label;
   private String           tooltip;
@@ -214,7 +216,6 @@ public abstract class RComponent extends RemotePeer {
     this.foreground = foreground;
   }
 
-  
   /**
    * Gets the actionLists.
    * 
@@ -224,11 +225,11 @@ public abstract class RComponent extends RemotePeer {
     return actionLists;
   }
 
-  
   /**
    * Sets the actionLists.
    * 
-   * @param actionLists the actionLists to set.
+   * @param actionLists
+   *          the actionLists to set.
    */
   public void setActionLists(RActionList[] actionLists) {
     this.actionLists = actionLists;

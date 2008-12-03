@@ -24,9 +24,11 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
+import org.jspresso.framework.binding.IFormattedValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.format.IFormatter;
 
 /**
  * This connector factory implementation creates basic connectors.
@@ -105,5 +107,13 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
       compositeValueConnector
           .setRenderingChildConnectorId(renderingConnectorId);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IFormattedValueConnector createFormattedValueConnector(String id,
+      IFormatter formatter) {
+    return new BasicFormattedValueConnector(id, formatter);
   }
 }

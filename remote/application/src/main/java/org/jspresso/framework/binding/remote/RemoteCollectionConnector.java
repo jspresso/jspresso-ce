@@ -111,14 +111,24 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    */
   public RemoteCompositeValueState getState() {
     if (state == null) {
-      state = new RemoteCollectionValueState(getGuid());
+      createState();
     }
-    state.setValue(getDisplayValue());
-    state.setReadable(isReadable());
-    state.setWritable(isWritable());
-    state.setDescription(getDisplayDescription());
-    state.setIconImageUrl(getDisplayIconImageUrl());
-    state.setSelectedIndices(getSelectedIndices());
+    return state;
+  }
+  
+  /**
+   * Creates a new state instance rerpesenting this connector.
+   * 
+   * @return the newly created state.
+   */
+  protected RemoteCompositeValueState createState() {
+    RemoteCollectionValueState createdState = new RemoteCollectionValueState(getGuid());
+    createdState.setValue(getDisplayValue());
+    createdState.setReadable(isReadable());
+    createdState.setWritable(isWritable());
+    createdState.setDescription(getDisplayDescription());
+    createdState.setIconImageUrl(getDisplayIconImageUrl());
+    createdState.setSelectedIndices(getSelectedIndices());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (int i = 0; i < getChildConnectorCount(); i++) {
       IValueConnector childConnector = getChildConnector(i);
@@ -126,7 +136,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
         children.add(((IRemoteStateOwner) childConnector).getState());
       }
     }
-    state.setChildren(children);
-    return state;
+    createdState.setChildren(children);
+    return createdState;
   }
 }

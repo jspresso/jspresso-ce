@@ -24,9 +24,11 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
+import org.jspresso.framework.binding.IFormattedValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
@@ -49,7 +51,7 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @author Vincent Vandenschrick
  */
 public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
-  
+
   private IGUIDGenerator guidGenerator;
 
   /**
@@ -57,7 +59,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
    */
   public ICollectionConnector createCollectionConnector(String id,
       IMvcBinder binder, ICompositeValueConnector childConnectorPrototype) {
-    return new RemoteCollectionConnector(id, binder, childConnectorPrototype, guidGenerator);
+    return new RemoteCollectionConnector(id, binder, childConnectorPrototype,
+        guidGenerator);
   }
 
   /**
@@ -65,7 +68,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
    */
   public IRenderableCompositeValueConnector createCompositeValueConnector(
       String id, String renderingConnectorId) {
-    RemoteCompositeConnector connector = new RemoteCompositeConnector(id, guidGenerator);
+    RemoteCompositeConnector connector = new RemoteCompositeConnector(id,
+        guidGenerator);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     return connector;
   }
@@ -110,13 +114,21 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
     }
   }
 
-  
   /**
    * Sets the guidGenerator.
    * 
-   * @param guidGenerator the guidGenerator to set.
+   * @param guidGenerator
+   *          the guidGenerator to set.
    */
   public void setGuidGenerator(IGUIDGenerator guidGenerator) {
     this.guidGenerator = guidGenerator;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IFormattedValueConnector createFormattedValueConnector(String id,
+      IFormatter formatter) {
+    return new RemoteFormattedValueConnector(id, guidGenerator, formatter);
   }
 }

@@ -18,11 +18,11 @@
  */
 package org.jspresso.framework.binding.remote;
 
-import java.text.ParseException;
-
-import org.jspresso.framework.binding.ConnectorBindingException;
+import org.jspresso.framework.binding.basic.BasicFormattedValueConnector;
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
+import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
@@ -45,9 +45,12 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteFormattedValueConnector extends RemoteValueConnector {
+public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
+    implements IRemotePeer, IRemoteStateOwner {
 
-  private IFormatter formatter;
+  private IGUIDGenerator            guidGenerator;
+  private String                    guid;
+  private RemoteValueState state;
 
   /**
    * Constructs a new <code>RemoteFormattedValueConnector</code> instance.
@@ -61,8 +64,18 @@ public class RemoteFormattedValueConnector extends RemoteValueConnector {
    */
   public RemoteFormattedValueConnector(String id, IGUIDGenerator guidGenerator,
       IFormatter formatter) {
-    super(id, guidGenerator);
-    this.formatter = formatter;
+    super(id, formatter);
+    this.guid = guidGenerator.generateGUID();
+    this.guidGenerator = guidGenerator;
+  }
+
+  /**
+   * Gets the guid.
+   * 
+   * @return the guid.
+   */
+  public String getGuid() {
+    return guid;
   }
 
   /**
@@ -80,48 +93,30 @@ public class RemoteFormattedValueConnector extends RemoteValueConnector {
   public RemoteFormattedValueConnector clone(String newConnectorId) {
     RemoteFormattedValueConnector clonedConnector = (RemoteFormattedValueConnector) super
         .clone(newConnectorId);
+    clonedConnector.guid = guidGenerator.generateGUID();
     return clonedConnector;
   }
 
   /**
    * {@inheritDoc}
    */
-  @Override
   public RemoteValueState getState() {
-    RemoteValueState state = super.getState();
-    state.setValue(getConnectorValueAsString());
+    if (state == null) {
+      state = createState();
+    }
     return state;
   }
 
   /**
-   * Sets the connector value as a string representation.
+   * Creates a new state instance rerpesenting this connector.
    * 
-   * @param valueAsString
-   *          the connector value as a string representation.
+   * @return the newly created state.
    */
-  public void setConnectorValueAsString(String valueAsString) {
-    try {
-      setConnectorValue(getFormatter().parse(valueAsString));
-    } catch (ParseException ex) {
-      throw new ConnectorBindingException(ex);
-    }
-  }
-
-  /**
-   * Gets the connector value as a string representation.
-   * 
-   * @return the connector value as a string representation.
-   */
-  public String getConnectorValueAsString() {
-    return getFormatter().format(getConnectorValue());
-  }
-
-  /**
-   * Gets the formatter.
-   * 
-   * @return the formatter.
-   */
-  private IFormatter getFormatter() {
-    return formatter;
+  protected RemoteValueState createState() {
+    RemoteValueState createdState = new RemoteValueState(getGuid());
+    createdState.setValue(getConnectorValueAsString());
+    createdState.setReadable(isReadable());
+    createdState.setWritable(isWritable());
+    return createdState;
   }
 }

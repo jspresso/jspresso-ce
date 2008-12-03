@@ -24,6 +24,7 @@ import java.util.List;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnectorListProvider;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.RemoteCollectionValueState;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
@@ -105,20 +106,30 @@ public class RemoteCollectionConnectorListProvider extends
    */
   public RemoteCompositeValueState getState() {
     if (state == null) {
-      state = new RemoteCompositeValueState(getGuid());
+      state = createState();
     }
-    state.setValue(getDisplayValue());
-    state.setReadable(isReadable());
-    state.setWritable(isWritable());
-    state.setDescription(getDisplayDescription());
-    state.setIconImageUrl(getDisplayIconImageUrl());
+    return state;
+  }
+
+  /**
+   * Creates a new state instance rerpesenting this connector.
+   * 
+   * @return the newly created state.
+   */
+  protected RemoteCompositeValueState createState() {
+    RemoteCollectionValueState createdState = new RemoteCollectionValueState(getGuid());
+    createdState.setValue(getDisplayValue());
+    createdState.setReadable(isReadable());
+    createdState.setWritable(isWritable());
+    createdState.setDescription(getDisplayDescription());
+    createdState.setIconImageUrl(getDisplayIconImageUrl());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (ICollectionConnector childConnector : getCollectionConnectors()) {
       if (childConnector instanceof IRemoteStateOwner) {
         children.add(((IRemoteStateOwner) childConnector).getState());
       }
     }
-    state.setChildren(children);
-    return state;
+    createdState.setChildren(children);
+    return createdState;
   }
 }
