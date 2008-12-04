@@ -22,7 +22,6 @@ import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
  * The server peer of a remote value connector.
@@ -46,22 +45,22 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteValueConnector extends BasicValueConnector implements
     IRemotePeer, IRemoteStateOwner {
 
-  private IGUIDGenerator   guidGenerator;
-  private String           guid;
-  private RemoteValueState state;
+  private String                 guid;
+  private RemoteValueState       state;
+  private RemoteConnectorFactory connectorFactory;
 
   /**
    * Constructs a new <code>RemoteValueConnector</code> instance.
    * 
    * @param id
    *          the connector id.
-   * @param guidGenerator
-   *          the guid generator.
+   * @param connectorFactory
+   *          the remote connector factory.
    */
-  public RemoteValueConnector(String id, IGUIDGenerator guidGenerator) {
+  public RemoteValueConnector(String id, RemoteConnectorFactory     connectorFactory) {
     super(id);
-    this.guid = guidGenerator.generateGUID();
-    this.guidGenerator = guidGenerator;
+    this.guid = connectorFactory.generateGUID();
+    this.connectorFactory = connectorFactory;
   }
 
   /**
@@ -88,7 +87,9 @@ public class RemoteValueConnector extends BasicValueConnector implements
   public RemoteValueConnector clone(String newConnectorId) {
     RemoteValueConnector clonedConnector = (RemoteValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.guid = guidGenerator.generateGUID();
+    clonedConnector.guid = connectorFactory.generateGUID();
+    clonedConnector.state = null;
+    connectorFactory.attachListeners(clonedConnector);
     return clonedConnector;
   }
 

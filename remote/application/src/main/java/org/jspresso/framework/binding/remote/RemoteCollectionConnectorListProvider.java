@@ -27,7 +27,6 @@ import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
  * The server peer of a remote collection connector list provider.
@@ -52,9 +51,9 @@ public class RemoteCollectionConnectorListProvider extends
     BasicCollectionConnectorListProvider implements IRemotePeer,
     IRemoteStateOwner {
 
-  private IGUIDGenerator            guidGenerator;
   private String                    guid;
   private RemoteCompositeValueState state;
+  private RemoteConnectorFactory    connectorFactory;
 
   /**
    * Constructs a new <code>RemoteCollectionConnectorListProvider</code>
@@ -62,14 +61,14 @@ public class RemoteCollectionConnectorListProvider extends
    * 
    * @param id
    *          the connector id.
-   * @param guidGenerator
-   *          the guid generator.
+   * @param connectorFactory
+   *          the remote connector factory.
    */
   public RemoteCollectionConnectorListProvider(String id,
-      IGUIDGenerator guidGenerator) {
+      RemoteConnectorFactory     connectorFactory) {
     super(id);
-    this.guid = guidGenerator.generateGUID();
-    this.guidGenerator = guidGenerator;
+    this.guid = connectorFactory.generateGUID();
+    this.connectorFactory = connectorFactory;
   }
 
   /**
@@ -96,7 +95,9 @@ public class RemoteCollectionConnectorListProvider extends
   public RemoteCollectionConnectorListProvider clone(String newConnectorId) {
     RemoteCollectionConnectorListProvider clonedConnector = (RemoteCollectionConnectorListProvider) super
         .clone(newConnectorId);
-    clonedConnector.guid = guidGenerator.generateGUID();
+    clonedConnector.guid = connectorFactory.generateGUID();
+    clonedConnector.state = null;
+    connectorFactory.attachListeners(clonedConnector);
     return clonedConnector;
   }
 
@@ -116,7 +117,8 @@ public class RemoteCollectionConnectorListProvider extends
    * @return the newly created state.
    */
   protected RemoteCompositeValueState createState() {
-    RemoteCompositeValueState createdState = new RemoteCompositeValueState(getGuid());
+    RemoteCompositeValueState createdState = new RemoteCompositeValueState(
+        getGuid());
     createdState.setValue(getDisplayValue());
     createdState.setReadable(isReadable());
     createdState.setWritable(isWritable());

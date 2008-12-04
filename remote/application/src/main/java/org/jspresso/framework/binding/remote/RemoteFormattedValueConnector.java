@@ -23,7 +23,6 @@ import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
  * The server peer of a remote value connector that formats its value back and
@@ -48,25 +47,25 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     implements IRemotePeer, IRemoteStateOwner {
 
-  private IGUIDGenerator            guidGenerator;
-  private String                    guid;
+  private String           guid;
   private RemoteValueState state;
+  private RemoteConnectorFactory     connectorFactory;
 
   /**
    * Constructs a new <code>RemoteFormattedValueConnector</code> instance.
    * 
    * @param id
    *          the connector id.
-   * @param guidGenerator
-   *          the guid generator.
+   * @param connectorFactory
+   *          the remote connector factory.
    * @param formatter
    *          the format used to parse and format connector value object.
    */
-  public RemoteFormattedValueConnector(String id, IGUIDGenerator guidGenerator,
+  public RemoteFormattedValueConnector(String id, RemoteConnectorFactory     connectorFactory,
       IFormatter formatter) {
     super(id, formatter);
-    this.guid = guidGenerator.generateGUID();
-    this.guidGenerator = guidGenerator;
+    this.guid = connectorFactory.generateGUID();
+    this.connectorFactory = connectorFactory;
   }
 
   /**
@@ -93,7 +92,9 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   public RemoteFormattedValueConnector clone(String newConnectorId) {
     RemoteFormattedValueConnector clonedConnector = (RemoteFormattedValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.guid = guidGenerator.generateGUID();
+    clonedConnector.guid = connectorFactory.generateGUID();
+    clonedConnector.state = null;
+    connectorFactory.attachListeners(clonedConnector);
     return clonedConnector;
   }
 

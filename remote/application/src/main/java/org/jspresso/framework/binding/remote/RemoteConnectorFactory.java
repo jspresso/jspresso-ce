@@ -159,11 +159,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   public ICollectionConnector createCollectionConnector(String id,
       IMvcBinder binder, ICompositeValueConnector childConnectorPrototype) {
     RemoteCollectionConnector connector = new RemoteCollectionConnector(id,
-        binder, childConnectorPrototype, guidGenerator);
-    attachAccessibilityListeners(connector);
-    connector
-        .addConnectorValueChangeListener(collectionConnectorValueChangeListener);
-    connector.addSelectionChangeListener(selectionChangeListener);
+        binder, childConnectorPrototype, this);
+    attachListeners(connector);
     return connector;
   }
 
@@ -173,9 +170,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   public IRenderableCompositeValueConnector createCompositeValueConnector(
       String id, String renderingConnectorId) {
     RemoteCompositeConnector connector = new RemoteCompositeConnector(id,
-        guidGenerator);
+        this);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
-    attachAccessibilityListeners(connector);
+    attachListeners(connector);
     return connector;
   }
 
@@ -185,9 +182,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   public IConfigurableCollectionConnectorListProvider createConfigurableCollectionConnectorListProvider(
       String id, String renderingConnectorId) {
     RemoteCollectionConnectorListProvider connector = new RemoteCollectionConnectorListProvider(
-        id, guidGenerator);
+        id, this);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
-    attachAccessibilityListeners(connector);
+    attachListeners(connector);
     return connector;
   }
 
@@ -197,9 +194,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   public IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
       String id, String renderingConnectorId) {
     RemoteCollectionConnectorProvider connector = new RemoteCollectionConnectorProvider(
-        id, guidGenerator);
+        id, this);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
-    attachAccessibilityListeners(connector);
+    attachListeners(connector);
     return connector;
   }
 
@@ -207,9 +204,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
    * {@inheritDoc}
    */
   public IValueConnector createValueConnector(String id) {
-    RemoteValueConnector connector = new RemoteValueConnector(id, guidGenerator);
-    attachAccessibilityListeners(connector);
-    connector.addConnectorValueChangeListener(connectorValueChangeListener);
+    RemoteValueConnector connector = new RemoteValueConnector(id, this);
+    attachListeners(connector);
     return connector;
   }
 
@@ -219,10 +215,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   public IFormattedValueConnector createFormattedValueConnector(String id,
       IFormatter formatter) {
     RemoteFormattedValueConnector connector = new RemoteFormattedValueConnector(
-        id, guidGenerator, formatter);
-    attachAccessibilityListeners(connector);
-    connector
-        .addConnectorValueChangeListener(formattedConnectorValueChangeListener);
+        id, this, formatter);
+    attachListeners(connector);
     return connector;
   }
 
@@ -235,8 +229,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
       compositeValueConnector
           .setRenderingChildConnectorId(renderingConnectorId);
     }
-    compositeValueConnector.getRenderingConnector()
-        .addConnectorValueChangeListener(renderingConnectorValueChangeListener);
   }
 
   /**
@@ -249,10 +241,30 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
     this.guidGenerator = guidGenerator;
   }
 
-  private void attachAccessibilityListeners(IValueConnector connector) {
+  void attachListeners(IValueConnector connector) {
     connector.addPropertyChangeListener(IValueConnector.READABLE_PROPERTY,
         readabilityListener);
     connector.addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY,
         writabilityListener);
+    if (connector instanceof ICollectionConnector) {
+      connector
+          .addConnectorValueChangeListener(collectionConnectorValueChangeListener);
+      ((ICollectionConnector) connector)
+          .addSelectionChangeListener(selectionChangeListener);
+    } else if (connector instanceof IRenderableCompositeValueConnector) {
+      ((IRenderableCompositeValueConnector) connector).getRenderingConnector()
+          .addConnectorValueChangeListener(
+              renderingConnectorValueChangeListener);
+    } else if (connector instanceof IFormattedValueConnector) {
+      connector
+          .addConnectorValueChangeListener(formattedConnectorValueChangeListener);
+    } else {
+      connector.addConnectorValueChangeListener(connectorValueChangeListener);
+    }
   }
+  
+  String generateGUID() {
+    return guidGenerator.generateGUID();
+  }
+
 }

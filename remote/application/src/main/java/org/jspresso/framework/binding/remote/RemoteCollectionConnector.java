@@ -29,7 +29,6 @@ import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCollectionValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
  * The server peer of a remote collection connector.
@@ -53,9 +52,9 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteCollectionConnector extends BasicCollectionConnector
     implements IRemotePeer, IRemoteStateOwner {
 
-  private IGUIDGenerator             guidGenerator;
   private String                     guid;
   private RemoteCollectionValueState state;
+  private RemoteConnectorFactory     connectorFactory;
 
   /**
    * Constructs a new <code>RemoteCollectionConnector</code> instance.
@@ -66,15 +65,15 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    *          the MVC binder.
    * @param childConnectorPrototype
    *          the prototype of connector children.
-   * @param guidGenerator
-   *          the guid generator.
+   * @param connectorFactory
+   *          the remote connector factory.
    */
   public RemoteCollectionConnector(String id, IMvcBinder binder,
       ICompositeValueConnector childConnectorPrototype,
-      IGUIDGenerator guidGenerator) {
+      RemoteConnectorFactory     connectorFactory) {
     super(id, binder, childConnectorPrototype);
-    this.guid = guidGenerator.generateGUID();
-    this.guidGenerator = guidGenerator;
+    this.guid = connectorFactory.generateGUID();
+    this.connectorFactory = connectorFactory;
   }
 
   /**
@@ -101,7 +100,9 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   public RemoteCollectionConnector clone(String newConnectorId) {
     RemoteCollectionConnector clonedConnector = (RemoteCollectionConnector) super
         .clone(newConnectorId);
-    clonedConnector.guid = guidGenerator.generateGUID();
+    clonedConnector.guid = connectorFactory.generateGUID();
+    clonedConnector.state = null;
+    connectorFactory.attachListeners(clonedConnector);
     return clonedConnector;
   }
 
@@ -114,14 +115,15 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     }
     return state;
   }
-  
+
   /**
    * Creates a new state instance rerpesenting this connector.
    * 
    * @return the newly created state.
    */
   protected RemoteCollectionValueState createState() {
-    RemoteCollectionValueState createdState = new RemoteCollectionValueState(getGuid());
+    RemoteCollectionValueState createdState = new RemoteCollectionValueState(
+        getGuid());
     createdState.setValue(getDisplayValue());
     createdState.setReadable(isReadable());
     createdState.setWritable(isWritable());

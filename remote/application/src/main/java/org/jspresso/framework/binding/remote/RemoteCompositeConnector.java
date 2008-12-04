@@ -27,7 +27,6 @@ import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
  * The server peer of a remote composite connector.
@@ -51,22 +50,22 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteCompositeConnector extends BasicCompositeConnector implements
     IRemotePeer, IRemoteStateOwner {
 
-  private IGUIDGenerator            guidGenerator;
   private String                    guid;
   private RemoteCompositeValueState state;
+  private RemoteConnectorFactory     connectorFactory;
 
   /**
    * Constructs a new <code>RemoteCompositeConnector</code> instance.
    * 
    * @param id
    *          the connector id.
-   * @param guidGenerator
-   *          the guid generator.
+   * @param connectorFactory
+   *          the remote connector factory.
    */
-  public RemoteCompositeConnector(String id, IGUIDGenerator guidGenerator) {
+  public RemoteCompositeConnector(String id, RemoteConnectorFactory     connectorFactory) {
     super(id);
-    this.guid = guidGenerator.generateGUID();
-    this.guidGenerator = guidGenerator;
+    this.guid = connectorFactory.generateGUID();
+    this.connectorFactory = connectorFactory;
   }
 
   /**
@@ -93,7 +92,9 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   public RemoteCompositeConnector clone(String newConnectorId) {
     RemoteCompositeConnector clonedConnector = (RemoteCompositeConnector) super
         .clone(newConnectorId);
-    clonedConnector.guid = guidGenerator.generateGUID();
+    clonedConnector.guid = connectorFactory.generateGUID();
+    clonedConnector.state = null;
+    connectorFactory.attachListeners(clonedConnector);
     return clonedConnector;
   }
 
