@@ -18,15 +18,10 @@
  */
 package org.jspresso.framework.binding.remote;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnectorProvider;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
@@ -53,7 +48,7 @@ public class RemoteCollectionConnectorProvider extends
 
   private String                    guid;
   private RemoteCompositeValueState state;
-  private RemoteConnectorFactory     connectorFactory;
+  private RemoteConnectorFactory    connectorFactory;
 
   /**
    * Constructs a new <code>RemoteCollectionConnectorProvider</code> instance.
@@ -64,7 +59,7 @@ public class RemoteCollectionConnectorProvider extends
    *          the remote connector factory.
    */
   public RemoteCollectionConnectorProvider(String id,
-      RemoteConnectorFactory     connectorFactory) {
+      RemoteConnectorFactory connectorFactory) {
     super(id);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
@@ -124,17 +119,13 @@ public class RemoteCollectionConnectorProvider extends
     createdState.setDescription(getDisplayDescription());
     createdState.setIconImageUrl(getDisplayIconImageUrl());
     ICollectionConnector collectionConnector = getCollectionConnector();
-    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
-    if (collectionConnector != null) {
-      for (int i = 0; i < collectionConnector.getChildConnectorCount(); i++) {
-        IValueConnector childConnector = collectionConnector
-            .getChildConnector(i);
-        if (childConnector instanceof IRemoteStateOwner) {
-          children.add(((IRemoteStateOwner) childConnector).getState());
-        }
-      }
+    if (collectionConnector instanceof RemoteCollectionConnector) {
+      // we directly link to the same children collection so that one update
+      // updates all.
+      createdState
+          .setChildren(((RemoteCollectionConnector) collectionConnector)
+              .getState().getChildren());
     }
-    createdState.setChildren(children);
     return createdState;
   }
 }
