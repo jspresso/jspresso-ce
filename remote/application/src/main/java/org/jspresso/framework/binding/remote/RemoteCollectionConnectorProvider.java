@@ -25,7 +25,6 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnectorProvider;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
-import org.jspresso.framework.state.remote.RemoteCollectionValueState;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
@@ -116,7 +115,7 @@ public class RemoteCollectionConnectorProvider extends
    * @return the newly created state.
    */
   protected RemoteCompositeValueState createState() {
-    RemoteCollectionValueState createdState = new RemoteCollectionValueState(getGuid());
+    RemoteCompositeValueState createdState = new RemoteCompositeValueState(getGuid());
     createdState.setValue(getDisplayValue());
     createdState.setReadable(isReadable());
     createdState.setWritable(isWritable());
