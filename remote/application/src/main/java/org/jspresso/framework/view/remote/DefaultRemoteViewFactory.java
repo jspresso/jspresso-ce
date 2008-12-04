@@ -494,8 +494,9 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createReferencePropertyView(
       IReferencePropertyDescriptor<?> propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+    IValueConnector connector = getConnectorFactory()
+        .createCompositeValueConnector(propertyDescriptor.getName(),
+            propertyDescriptor.getReferencedDescriptor().getToStringProperty());
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);

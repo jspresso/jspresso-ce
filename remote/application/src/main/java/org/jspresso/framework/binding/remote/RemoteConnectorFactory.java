@@ -70,6 +70,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   private PropertyChangeListener        writabilityListener;
   private IConnectorValueChangeListener connectorValueChangeListener;
   private IConnectorValueChangeListener formattedConnectorValueChangeListener;
+  private IConnectorValueChangeListener renderingConnectorValueChangeListener;
   private IConnectorValueChangeListener collectionConnectorValueChangeListener;
   private ISelectionChangeListener      selectionChangeListener;
 
@@ -108,6 +109,19 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
         ((IRemoteStateOwner) evt.getSource()).getState().setValue(
             ((IFormattedValueConnector) evt.getSource())
                 .getConnectorValueAsString());
+      }
+    };
+    renderingConnectorValueChangeListener = new IConnectorValueChangeListener() {
+
+      @Override
+      public void connectorValueChange(ConnectorValueChangeEvent evt) {
+        IRenderableCompositeValueConnector connector = (IRenderableCompositeValueConnector) evt
+            .getSource().getParentConnector();
+        RemoteCompositeValueState state = (RemoteCompositeValueState) ((IRemoteStateOwner) connector)
+            .getState();
+        state.setValue(connector.getDisplayValue());
+        state.setDescription(connector.getDisplayDescription());
+        state.setIconImageUrl(connector.getDisplayIconImageUrl());
       }
     };
     collectionConnectorValueChangeListener = new IConnectorValueChangeListener() {
@@ -174,7 +188,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
         id, guidGenerator);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     attachAccessibilityListeners(connector);
-    attachRenderingListener(connector);
     return connector;
   }
 
@@ -187,7 +200,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
         id, guidGenerator);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     attachAccessibilityListeners(connector);
-    attachRenderingListener(connector);
     return connector;
   }
 
@@ -223,6 +235,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
       compositeValueConnector
           .setRenderingChildConnectorId(renderingConnectorId);
     }
+    compositeValueConnector.getRenderingConnector()
+        .addConnectorValueChangeListener(renderingConnectorValueChangeListener);
   }
 
   /**
@@ -240,25 +254,5 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
         readabilityListener);
     connector.addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY,
         writabilityListener);
-  }
-
-  private void attachRenderingListener(
-      final IRenderableCompositeValueConnector connector) {
-    IValueConnector renderingConnector = connector.getRenderingConnector();
-    if (renderingConnector != null) {
-      renderingConnector
-          .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-            @Override
-            public void connectorValueChange(
-                @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
-              RemoteCompositeValueState state = (RemoteCompositeValueState) ((IRemoteStateOwner) connector)
-                  .getState();
-              state.setValue(connector.getDisplayValue());
-              state.setDescription(connector.getDisplayDescription());
-              state.setIconImageUrl(connector.getDisplayIconImageUrl());
-            }
-          });
-    }
   }
 }

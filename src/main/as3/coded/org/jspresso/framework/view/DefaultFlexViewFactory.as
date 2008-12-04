@@ -210,6 +210,7 @@ package org.jspresso.framework.view {
 
     private function createTree(remoteTree:RTree):Tree {
       var tree:Tree = new Tree();
+      tree.dataProvider = remoteTree.state;
       return tree;
     }
 
