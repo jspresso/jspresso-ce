@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.state.remote;
 
-
 /**
  * The state of a collection remote value.
  * <p>
@@ -41,6 +40,7 @@ package org.jspresso.framework.state.remote;
 public class RemoteCollectionValueState extends RemoteCompositeValueState {
 
   private int[] selectedIndices;
+  private int   leadingIndex;
 
   /**
    * Constructs a new <code>RemoteCollectionValueState</code> instance.
@@ -55,7 +55,8 @@ public class RemoteCollectionValueState extends RemoteCompositeValueState {
   /**
    * Sets the selectedIndices.
    * 
-   * @param selectedIndices the selectedIndices to set.
+   * @param selectedIndices
+   *          the selectedIndices to set.
    */
   public void setSelectedIndices(int[] selectedIndices) {
     this.selectedIndices = selectedIndices;
@@ -68,5 +69,25 @@ public class RemoteCollectionValueState extends RemoteCompositeValueState {
    */
   public int[] getSelectedIndices() {
     return selectedIndices;
+  }
+
+  
+  /**
+   * Gets the leadingIndex.
+   * 
+   * @return the leadingIndex.
+   */
+  public int getLeadingIndex() {
+    return leadingIndex;
+  }
+
+  
+  /**
+   * Sets the leadingIndex.
+   * 
+   * @param leadingIndex the leadingIndex to set.
+   */
+  public void setLeadingIndex(int leadingIndex) {
+    this.leadingIndex = leadingIndex;
   }
 }

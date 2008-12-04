@@ -19,7 +19,15 @@ package org.jspresso.framework.state.remote {
     [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteCollectionValueState")]
     public class RemoteCollectionValueState extends RemoteCompositeValueState {
 
+        private var _leadingIndex:int;
         private var _selectedIndices:Array;
+
+        public function set leadingIndex(value:int):void {
+            _leadingIndex = value;
+        }
+        public function get leadingIndex():int {
+            return _leadingIndex;
+        }
 
         public function set selectedIndices(value:Array):void {
             _selectedIndices = value;

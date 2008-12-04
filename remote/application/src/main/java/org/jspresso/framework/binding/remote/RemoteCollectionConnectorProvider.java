@@ -115,18 +115,22 @@ public class RemoteCollectionConnectorProvider extends
    * @return the newly created state.
    */
   protected RemoteCompositeValueState createState() {
-    RemoteCompositeValueState createdState = new RemoteCompositeValueState(getGuid());
+    RemoteCompositeValueState createdState = new RemoteCompositeValueState(
+        getGuid());
     createdState.setValue(getDisplayValue());
     createdState.setReadable(isReadable());
     createdState.setWritable(isWritable());
     createdState.setDescription(getDisplayDescription());
     createdState.setIconImageUrl(getDisplayIconImageUrl());
-    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     ICollectionConnector collectionConnector = getCollectionConnector();
-    for (int i = 0; i < collectionConnector.getChildConnectorCount(); i++) {
-      IValueConnector childConnector = collectionConnector.getChildConnector(i);
-      if (childConnector instanceof IRemoteStateOwner) {
-        children.add(((IRemoteStateOwner) childConnector).getState());
+    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+    if (collectionConnector != null) {
+      for (int i = 0; i < collectionConnector.getChildConnectorCount(); i++) {
+        IValueConnector childConnector = collectionConnector
+            .getChildConnector(i);
+        if (childConnector instanceof IRemoteStateOwner) {
+          children.add(((IRemoteStateOwner) childConnector).getState());
+        }
       }
     }
     createdState.setChildren(children);
