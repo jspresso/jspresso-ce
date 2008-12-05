@@ -700,13 +700,17 @@ package org.jspresso.framework.view {
     
     private function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
       if(rIcon != null) {
-        return IconUtility.getClass(component, getContextRoot()+"/download?localUrl="+rIcon.imageUrlSpec
+        return IconUtility.getClass(component, computeUrl(rIcon.imageUrlSpec) 
                                     , rIcon.width, rIcon.height);
       }
       return null;
     }
     
-    private function getContextRoot():String {
+    internal static function computeUrl(imageUrlSpec:String):String {
+      return getContextRoot() + "/download?localUrl=" + imageUrlSpec;
+    }
+    
+    internal static function getContextRoot():String {
       return Application.application.url.substring(0,Application.application.url.lastIndexOf("/"));
     }
   }
