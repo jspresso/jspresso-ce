@@ -42,8 +42,10 @@ import java.util.List;
 public class RemoteCompositeValueState extends RemoteValueState {
 
   private List<RemoteValueState> children;
-  private String description;
-  private String iconImageUrl;
+  private String                 description;
+  private String                 iconImageUrl;
+  private int[]                  selectedIndices;
+  private int                    leadingIndex;
 
   /**
    * Constructs a new <code>RemoteCompositeValueState</code> instance.
@@ -55,7 +57,6 @@ public class RemoteCompositeValueState extends RemoteValueState {
     super(guid);
   }
 
-  
   /**
    * Gets the children.
    * 
@@ -65,16 +66,15 @@ public class RemoteCompositeValueState extends RemoteValueState {
     return children;
   }
 
-  
   /**
    * Sets the children.
    * 
-   * @param children the children to set.
+   * @param children
+   *          the children to set.
    */
   public void setChildren(List<RemoteValueState> children) {
     this.children = children;
   }
-
 
   /**
    * Gets the description.
@@ -85,16 +85,15 @@ public class RemoteCompositeValueState extends RemoteValueState {
     return description;
   }
 
-
   /**
    * Sets the description.
    * 
-   * @param description the description to set.
+   * @param description
+   *          the description to set.
    */
   public void setDescription(String description) {
     this.description = description;
   }
-
 
   /**
    * Gets the iconImageUrl.
@@ -105,13 +104,52 @@ public class RemoteCompositeValueState extends RemoteValueState {
     return iconImageUrl;
   }
 
-
   /**
    * Sets the iconImageUrl.
    * 
-   * @param iconImageUrl the iconImageUrl to set.
+   * @param iconImageUrl
+   *          the iconImageUrl to set.
    */
   public void setIconImageUrl(String iconImageUrl) {
     this.iconImageUrl = iconImageUrl;
+  }
+
+  /**
+   * Sets the selectedIndices.
+   * 
+   * @param selectedIndices
+   *          the selectedIndices to set.
+   */
+  public void setSelectedIndices(int[] selectedIndices) {
+    this.selectedIndices = selectedIndices;
+  }
+
+  /**
+   * Gets the selectedIndices.
+   * 
+   * @return the selectedIndices.
+   */
+  public int[] getSelectedIndices() {
+    return selectedIndices;
+  }
+
+  
+  /**
+   * Gets the leadingIndex.
+   * 
+   * @return the leadingIndex.
+   */
+  public int getLeadingIndex() {
+    return leadingIndex;
+  }
+
+  
+  /**
+   * Sets the leadingIndex.
+   * 
+   * @param leadingIndex the leadingIndex to set.
+   */
+  public void setLeadingIndex(int leadingIndex) {
+    this.leadingIndex = leadingIndex;
   }
 }

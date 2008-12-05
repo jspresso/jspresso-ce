@@ -18,10 +18,13 @@
  */
 package org.jspresso.framework.binding.remote;
 
+import java.util.ArrayList;
+
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnectorProvider;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
@@ -120,11 +123,9 @@ public class RemoteCollectionConnectorProvider extends
     createdState.setIconImageUrl(getDisplayIconImageUrl());
     ICollectionConnector collectionConnector = getCollectionConnector();
     if (collectionConnector instanceof RemoteCollectionConnector) {
-      // we directly link to the same children collection so that one update
-      // updates all.
       createdState
-          .setChildren(((RemoteCollectionConnector) collectionConnector)
-              .getState().getChildren());
+          .setChildren(new ArrayList<RemoteValueState>(((RemoteCollectionConnector) collectionConnector)
+              .getState().getChildren()));
     }
     return createdState;
   }

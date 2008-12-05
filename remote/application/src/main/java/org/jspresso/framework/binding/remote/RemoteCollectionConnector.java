@@ -26,7 +26,7 @@ import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
-import org.jspresso.framework.state.remote.RemoteCollectionValueState;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
@@ -52,9 +52,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 public class RemoteCollectionConnector extends BasicCollectionConnector
     implements IRemotePeer, IRemoteStateOwner {
 
-  private String                     guid;
-  private RemoteCollectionValueState state;
-  private RemoteConnectorFactory     connectorFactory;
+  private String                    guid;
+  private RemoteCompositeValueState state;
+  private RemoteConnectorFactory    connectorFactory;
 
   /**
    * Constructs a new <code>RemoteCollectionConnector</code> instance.
@@ -70,7 +70,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    */
   public RemoteCollectionConnector(String id, IMvcBinder binder,
       ICompositeValueConnector childConnectorPrototype,
-      RemoteConnectorFactory     connectorFactory) {
+      RemoteConnectorFactory connectorFactory) {
     super(id, binder, childConnectorPrototype);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
@@ -109,7 +109,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   /**
    * {@inheritDoc}
    */
-  public RemoteCollectionValueState getState() {
+  public RemoteCompositeValueState getState() {
     if (state == null) {
       state = createState();
     }
@@ -121,8 +121,8 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    * 
    * @return the newly created state.
    */
-  protected RemoteCollectionValueState createState() {
-    RemoteCollectionValueState createdState = new RemoteCollectionValueState(
+  protected RemoteCompositeValueState createState() {
+    RemoteCompositeValueState createdState = new RemoteCompositeValueState(
         getGuid());
     createdState.setValue(getDisplayValue());
     createdState.setReadable(isReadable());

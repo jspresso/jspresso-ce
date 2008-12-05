@@ -26,6 +26,7 @@ import java.util.List;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
@@ -36,7 +37,6 @@ import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
-import org.jspresso.framework.state.remote.RemoteCollectionValueState;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
@@ -128,23 +128,23 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
 
       @Override
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
-        RemoteCollectionValueState collectionValueState = ((RemoteCollectionValueState) ((IRemoteStateOwner) evt
+        RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) evt
             .getSource()).getState());
         ICollectionConnector connector = (ICollectionConnector) evt.getSource();
-        List<RemoteValueState> children;
-        if (collectionValueState.getChildren() != null) {
-          // do not break reference
-          children = collectionValueState.getChildren();
-          children.clear();
-        } else {
-          children = new ArrayList<RemoteValueState>();
-          collectionValueState.setChildren(children);
-        }
+        List<RemoteValueState> children = new ArrayList<RemoteValueState>();
         for (int i = 0; i < connector.getChildConnectorCount(); i++) {
           IValueConnector childConnector = connector.getChildConnector(i);
           if (childConnector instanceof IRemoteStateOwner) {
             children.add(((IRemoteStateOwner) childConnector).getState());
           }
+        }
+        compositeValueState.setChildren(children);
+        if (connector.getParentConnector() instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) connector.getParentConnector())
+                .getCollectionConnector() == connector) {
+          RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector
+              .getParentConnector()).getState());
+          parentState.setChildren(new ArrayList<RemoteValueState>(children));
         }
       }
     };
@@ -152,10 +152,19 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
 
       @Override
       public void selectionChange(SelectionChangeEvent evt) {
-        RemoteCollectionValueState collectionValueState = ((RemoteCollectionValueState) ((IRemoteStateOwner) evt
-            .getSource()).getState());
-        collectionValueState.setSelectedIndices(evt.getNewSelection());
-        collectionValueState.setLeadingIndex(evt.getLeadingIndex());
+        IValueConnector connector = (IValueConnector) evt.getSource();
+        RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)
+            .getState());
+        compositeValueState.setSelectedIndices(evt.getNewSelection());
+        compositeValueState.setLeadingIndex(evt.getLeadingIndex());
+        if (connector.getParentConnector() instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) connector.getParentConnector())
+                .getCollectionConnector() == connector) {
+          RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector
+              .getParentConnector()).getState());
+          parentState.setSelectedIndices(evt.getNewSelection());
+          parentState.setLeadingIndex(evt.getLeadingIndex());
+        }
       }
     };
   }

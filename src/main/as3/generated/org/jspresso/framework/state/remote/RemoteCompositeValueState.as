@@ -24,6 +24,8 @@ package org.jspresso.framework.state.remote {
         private var _children:ListCollectionView;
         private var _description:String;
         private var _iconImageUrl:String;
+        private var _leadingIndex:int;
+        private var _selectedIndices:Array;
 
         public function set children(value:ListCollectionView):void {
             _children = value;
@@ -44,6 +46,20 @@ package org.jspresso.framework.state.remote {
         }
         public function get iconImageUrl():String {
             return _iconImageUrl;
+        }
+
+        public function set leadingIndex(value:int):void {
+            _leadingIndex = value;
+        }
+        public function get leadingIndex():int {
+            return _leadingIndex;
+        }
+
+        public function set selectedIndices(value:Array):void {
+            _selectedIndices = value;
+        }
+        public function get selectedIndices():Array {
+            return _selectedIndices;
         }
     }
 }
