@@ -72,6 +72,7 @@ package org.jspresso.framework.view {
   import org.jspresso.framework.gui.remote.RTextField;
   import org.jspresso.framework.gui.remote.RTimeField;
   import org.jspresso.framework.gui.remote.RTree;
+  import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.gui.CellConstraints;
   
@@ -219,7 +220,9 @@ package org.jspresso.framework.view {
 
     private function createTree(remoteTree:RTree):Tree {
       var tree:Tree = new Tree();
+      bindTree(tree, remoteTree.state); 
       tree.labelField = "value";
+      tree.dataTipField = "description";
       tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
       tree.dataProvider = remoteTree.state;
       return tree;
@@ -731,35 +734,41 @@ package org.jspresso.framework.view {
     private function bindTextInput(textInput:TextInput, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(textInput, "text", remoteState, "value");
       var updateModel:Function = function (event:Event):void {
-          remoteState.value = (event.currentTarget as TextInput).text;
-        };
-        textInput.addEventListener(FlexEvent.ENTER,updateModel);
-        textInput.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
+        remoteState.value = (event.currentTarget as TextInput).text;
+      };
+      textInput.addEventListener(FlexEvent.ENTER,updateModel);
+      textInput.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
     }
     
     private function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(textArea, "text", remoteState, "value");
       var updateModel:Function = function (event:Event):void {
-          remoteState.value = (event.currentTarget as TextArea).text;
-        };
+        remoteState.value = (event.currentTarget as TextArea).text;
+      };
       textArea.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
     }
 
     private function bindColorPicker(colorPicker:ColorPicker, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(colorPicker, "selectedColor", remoteState, "value");
       var updateModel:Function = function (event:Event):void {
-          var currentAlpha:String;
-          if(remoteState.value != null) {
-            currentAlpha = (remoteState.value as String).substr(2,2);
-          } else {
-            currentAlpha = "00";
-          }
-          remoteState.value = "0x" + currentAlpha
-                              + (event.currentTarget as ColorPicker).selectedColor.toString(16);
-        };
+        var currentAlpha:String;
+        if(remoteState.value != null) {
+          currentAlpha = (remoteState.value as String).substr(2,2);
+        } else {
+          currentAlpha = "00";
+        }
+        remoteState.value = "0x" + currentAlpha
+                            + (event.currentTarget as ColorPicker).selectedColor.toString(16);
+      };
       colorPicker.addEventListener(ColorPickerEvent.CHANGE,updateModel);
     }
 
+    private function bindTree(tree:Tree, remoteState:RemoteValueState):void {
+      var updateModel:Function = function (selectedIndices:Array):void {
+      };
+      BindingUtils.bindSetter(updateModel, tree, "selectedIndices");
+    }
+    
     private function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
       if(rIcon != null) {
         return IconUtility.getClass(component, computeUrl(rIcon.imageUrlSpec) 
