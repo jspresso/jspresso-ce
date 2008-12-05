@@ -15,11 +15,12 @@
 
 package org.jspresso.framework.gui.remote {
 
+    import org.jspresso.framework.state.remote.IRemoteStateOwner;
     import org.jspresso.framework.state.remote.RemoteValueState;
     import org.jspresso.framework.util.remote.RemotePeer;
-
+		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RComponent")]
-    public class RComponent extends RemotePeer {
+    public class RComponent extends RemotePeer implements IRemoteStateOwner {
 
         private var _actionLists:Array;
         private var _background:String;

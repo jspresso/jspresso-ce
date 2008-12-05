@@ -15,7 +15,7 @@
 
 package org.jspresso.framework.util.remote {
 
-
+		
     [RemoteClass(alias="org.jspresso.framework.util.remote.RemotePeer")]
     public class RemotePeer implements IRemotePeer {
 

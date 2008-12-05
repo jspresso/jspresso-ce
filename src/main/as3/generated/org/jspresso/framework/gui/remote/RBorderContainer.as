@@ -15,7 +15,7 @@
 
 package org.jspresso.framework.gui.remote {
 
-
+		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RBorderContainer")]
     public class RBorderContainer extends RContainer {
 

@@ -27,6 +27,7 @@ package org.jspresso.framework.view {
   import mx.controls.VRule;
   import mx.controls.dataGridClasses.DataGridColumn;
   import mx.core.Application;
+  import mx.core.ClassFactory;
   import mx.core.Container;
   import mx.core.UIComponent;
   import mx.events.FlexEvent;
@@ -210,6 +211,8 @@ package org.jspresso.framework.view {
 
     private function createTree(remoteTree:RTree):Tree {
       var tree:Tree = new Tree();
+      tree.labelField = "value";
+      tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
       tree.dataProvider = remoteTree.state;
       return tree;
     }

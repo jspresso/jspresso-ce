@@ -15,7 +15,7 @@
 
 package org.jspresso.framework.util.gui {
 
-
+		
     [RemoteClass(alias="org.jspresso.framework.util.gui.CellConstraints")]
     public class CellConstraints {
 

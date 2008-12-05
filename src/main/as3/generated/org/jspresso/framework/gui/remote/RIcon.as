@@ -16,7 +16,7 @@
 package org.jspresso.framework.gui.remote {
 
     import org.jspresso.framework.util.remote.RemotePeer;
-
+		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RIcon")]
     public class RIcon extends RemotePeer {
 

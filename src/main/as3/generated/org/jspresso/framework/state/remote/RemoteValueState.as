@@ -16,7 +16,8 @@
 package org.jspresso.framework.state.remote {
 
     import org.jspresso.framework.util.remote.RemotePeer;
-
+		
+		[Bindable]
     [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteValueState")]
     public class RemoteValueState extends RemotePeer {
 

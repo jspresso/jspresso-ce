@@ -15,7 +15,7 @@
 
 package org.jspresso.framework.gui.remote {
 
-
+		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RColorField")]
     public class RColorField extends RComponent {
 
