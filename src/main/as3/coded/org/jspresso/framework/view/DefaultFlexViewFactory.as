@@ -1,6 +1,11 @@
 package org.jspresso.framework.view {
   import com.benstucki.utilities.IconUtility;
   
+  import flash.events.Event;
+  import flash.events.FocusEvent;
+  import flash.events.MouseEvent;
+  
+  import mx.binding.utils.BindingUtils;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -15,6 +20,7 @@ package org.jspresso.framework.view {
   import mx.containers.ViewStack;
   import mx.controls.Button;
   import mx.controls.CheckBox;
+  import mx.controls.ColorPicker;
   import mx.controls.ComboBox;
   import mx.controls.DataGrid;
   import mx.controls.DateField;
@@ -30,6 +36,7 @@ package org.jspresso.framework.view {
   import mx.core.ClassFactory;
   import mx.core.Container;
   import mx.core.UIComponent;
+  import mx.events.ColorPickerEvent;
   import mx.events.FlexEvent;
   
   import org.jspresso.framework.gui.remote.RAction;
@@ -65,6 +72,7 @@ package org.jspresso.framework.view {
   import org.jspresso.framework.gui.remote.RTextField;
   import org.jspresso.framework.gui.remote.RTimeField;
   import org.jspresso.framework.gui.remote.RTree;
+  import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.gui.CellConstraints;
   
   public class DefaultFlexViewFactory {
@@ -225,6 +233,7 @@ package org.jspresso.framework.view {
     private function createActionField(remoteActionField:RActionField):HBox {
       var actionField:HBox = new HBox();
       var textField:TextInput = new TextInput();
+      bindTextInput(textField, remoteActionField.state);
       actionField.percentWidth = 100.0;
       textField.percentWidth = 100.0;
       actionField.addChild(textField);
@@ -239,9 +248,22 @@ package org.jspresso.framework.view {
     
     private function createColorField(remoteColorField:RColorField):HBox {
       var colorField:HBox = new HBox();
+      var colorPicker:ColorPicker = new ColorPicker();
+      bindColorPicker(colorPicker, remoteColorField.state);
+      colorField.addChild(colorPicker);
+      var resetButton:Button = new Button();
+	    resetButton.setStyle("icon", IconUtility.getClass(resetButton
+	                               , computeUrl("classpath:org/jspresso/framework/application/images/reset-48x48.png") 
+                                 , 16, 16));
+      colorField.addChild(resetButton);
+      resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+        remoteColorField.state.value = remoteColorField.defaultColor;
+      });
+//      colorField.setStyle("borderStyle","solid");
+//      colorField.setStyle("borderThickness", 1);
       return colorField;
     }
-
+    
     private function createCheckBox(remoteCheckBox:RCheckBox):CheckBox {
       var checkBox:CheckBox = new CheckBox();
       return checkBox;
@@ -606,7 +628,7 @@ package org.jspresso.framework.view {
         tabContent.percentHeight = 100.0;
         tabCanvas.addChild(tabContent);
       }
-      var creationComplete:Function = function creationComplete(event:FlexEvent):void {
+      var creationComplete:Function = function (event:FlexEvent):void {
         if(event.target is TabNavigator) {
           var tabContainer:TabNavigator = event.target as TabNavigator;
           for(var tabIndex:int = 0; tabIndex < tabContainer.getChildren().length; tabIndex ++) {
@@ -614,7 +636,7 @@ package org.jspresso.framework.view {
       		  tabButton.setStyle("icon", getIconForComponent(tabButton, (remoteTabContainer.tabs[tabIndex] as RComponent).icon));
       		}
       		tabContainer.removeEventListener(FlexEvent.CREATION_COMPLETE, creationComplete);
-        }  
+        }
       };
       tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, creationComplete);
       return tabContainer;
@@ -627,21 +649,25 @@ package org.jspresso.framework.view {
 
     private function createDecimalField(remoteDecimalField:RDecimalField):TextInput {
       var decimalField:TextInput = new TextInput();
+      bindTextInput(decimalField, remoteDecimalField.state);
       return decimalField;
     }
 
     private function createIntegerField(remoteIntegerField:RIntegerField):TextInput {
       var integerField:TextInput = new TextInput();
+      bindTextInput(integerField, remoteIntegerField.state);
       return integerField;
     }
 
     private function createPercentField(remotePercentField:RPercentField):TextInput {
       var percentField:TextInput = new TextInput();
+      bindTextInput(percentField, remotePercentField.state);
       return percentField;
     }
     
     private function createDurationField(remoteDurationField:RDurationField):TextInput {
       var durationField:TextInput = new TextInput();
+      bindTextInput(durationField, remoteDurationField.state);
       return durationField;
     }
 
@@ -652,6 +678,7 @@ package org.jspresso.framework.view {
 
     private function createPasswordField(remotePasswordField:RPasswordField):TextInput {
       var passwordField:TextInput = new TextInput();
+      bindTextInput(passwordField, remotePasswordField.state);
       passwordField.displayAsPassword = true;
       return passwordField;
     }
@@ -678,16 +705,19 @@ package org.jspresso.framework.view {
 
     private function createTextArea(remoteTextArea:RTextArea):TextArea {
       var textArea:TextArea = new TextArea();
+      bindTextArea(textArea, remoteTextArea.state);
       return textArea;
     }
 
     private function createTextField(remoteTextField:RTextField):TextInput {
       var textField:TextInput = new TextInput();
+      bindTextInput(textField, remoteTextField.state);
       return textField;
     }
 
     private function createTimeField(remoteTimeField:RTimeField):TextInput {
       var timeField:TextInput = new TextInput();
+      bindTextInput(timeField, remoteTimeField.state);
       return timeField;
     }
     
@@ -698,6 +728,38 @@ package org.jspresso.framework.view {
       return button;
     }
     
+    private function bindTextInput(textInput:TextInput, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(textInput, "text", remoteState, "value");
+      var updateModel:Function = function (event:Event):void {
+          remoteState.value = (event.currentTarget as TextInput).text;
+        };
+        textInput.addEventListener(FlexEvent.ENTER,updateModel);
+        textInput.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
+    }
+    
+    private function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(textArea, "text", remoteState, "value");
+      var updateModel:Function = function (event:Event):void {
+          remoteState.value = (event.currentTarget as TextArea).text;
+        };
+      textArea.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
+    }
+
+    private function bindColorPicker(colorPicker:ColorPicker, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(colorPicker, "selectedColor", remoteState, "value");
+      var updateModel:Function = function (event:Event):void {
+          var currentAlpha:String;
+          if(remoteState.value != null) {
+            currentAlpha = (remoteState.value as String).substr(2,2);
+          } else {
+            currentAlpha = "00";
+          }
+          remoteState.value = "0x" + currentAlpha
+                              + (event.currentTarget as ColorPicker).selectedColor.toString(16);
+        };
+      colorPicker.addEventListener(ColorPickerEvent.CHANGE,updateModel);
+    }
+
     private function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
       if(rIcon != null) {
         return IconUtility.getClass(component, computeUrl(rIcon.imageUrlSpec) 
