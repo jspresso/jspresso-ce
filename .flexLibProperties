@@ -16,7 +16,6 @@
     <classEntry path="org.jspresso.framework.gui.remote.RNumericComponent"/>
     <classEntry path="org.jspresso.framework.view.RemoteValueTreeItemRenderer"/>
     <classEntry path="org.jspresso.framework.gui.remote.RTable"/>
-    <classEntry path="org.jspresso.framework.view.IndexedDataGridColumn"/>
     <classEntry path="org.jspresso.framework.gui.remote.RDateField"/>
     <classEntry path="org.jspresso.framework.gui.remote.REvenGridContainer"/>
     <classEntry path="org.jspresso.framework.gui.remote.RList"/>
@@ -32,6 +31,7 @@
     <classEntry path="org.jspresso.framework.state.remote.RemoteCompositeValueState"/>
     <classEntry path="org.jspresso.framework.gui.remote.RCheckBox"/>
     <classEntry path="org.jspresso.framework.view.RemoteValueDgItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.RemoteValueSorter"/>
     <classEntry path="org.jspresso.framework.gui.remote.RBorderContainer"/>
     <classEntry path="org.jspresso.framework.gui.remote.RIcon"/>
     <classEntry path="org.jspresso.framework.gui.remote.RTextComponent"/>

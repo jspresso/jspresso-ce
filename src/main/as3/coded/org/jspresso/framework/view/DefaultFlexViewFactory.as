@@ -37,6 +37,7 @@ package org.jspresso.framework.view {
   import mx.core.Container;
   import mx.core.UIComponent;
   import mx.events.ColorPickerEvent;
+  import mx.events.DataGridEvent;
   import mx.events.FlexEvent;
   
   import org.jspresso.framework.gui.remote.RAction;
@@ -80,7 +81,10 @@ package org.jspresso.framework.view {
 
     private static const TOOLTIP_ELLIPSIS:String = "...";
 
+    private var _remoteValueSorter:RemoteValueSorter;
+
     public function DefaultFlexViewFactory() {
+      _remoteValueSorter= new RemoteValueSorter();
     }
     
     public function createComponent(remoteComponent:RComponent):UIComponent {
@@ -730,10 +734,14 @@ package org.jspresso.framework.view {
         column.headerText = rColumn.label;
         column.width = 100.0;
         column.itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
+        column.sortCompareFunction = _remoteValueSorter.compareStrings;
         columns.push(column);
       }
       table.columns = columns;
       table.dataProvider = (remoteTable.state as RemoteCompositeValueState).children;
+      table.addEventListener(DataGridEvent.HEADER_RELEASE, function (event:DataGridEvent):void {
+        _remoteValueSorter.sortColumnIndex = event.columnIndex;
+      });
       return table;
     }
 
