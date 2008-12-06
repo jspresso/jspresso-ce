@@ -20,12 +20,10 @@ package org.jspresso.framework.view.remote;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -439,9 +437,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
-    Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
-    List<String> columnConnectorKeys = new ArrayList<String>();
-    Set<String> forbiddenColumns = new HashSet<String>();
+    List<RComponent> columns = new ArrayList<RComponent>();
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
@@ -450,10 +446,6 @@ public class DefaultRemoteViewFactory extends
         IValueConnector columnConnector = createColumnConnector(columnId,
             modelDescriptor.getCollectionDescriptor().getElementDescriptor());
         rowConnectorPrototype.addChildConnector(columnConnector);
-        columnClassesByIds.put(columnId, modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getPropertyDescriptor(columnId).getModelType());
-        columnConnectorKeys.add(columnId);
         if (columnViewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
             columnConnector.addReadabilityGate(gate.clone());
@@ -465,22 +457,14 @@ public class DefaultRemoteViewFactory extends
           }
         }
         columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
-      } catch (SecurityException ex) {
-        // The column simply won't be added.
-        forbiddenColumns.add(columnId);
-      }
-    }
-    List<RComponent> columns = new ArrayList<RComponent>();
-    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
-        .getColumnViewDescriptors()) {
-      String propertyName = columnViewDescriptor.getName();
-      if (!forbiddenColumns.contains(propertyName)) {
         IPropertyDescriptor propertyDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getPropertyDescriptor(propertyName);
+        .getCollectionDescriptor().getElementDescriptor()
+        .getPropertyDescriptor(columnId);
         IView<RComponent> column = createPropertyView(propertyDescriptor, null,
             actionHandler, locale);
         columns.add(column.getPeer());
+      } catch (SecurityException ex) {
+        // The column simply won't be added.
       }
     }
     viewComponent.setColumns(columns.toArray(new RComponent[0]));

@@ -31,7 +31,6 @@ package org.jspresso.framework.view {
   import mx.controls.TextInput;
   import mx.controls.Tree;
   import mx.controls.VRule;
-  import mx.controls.dataGridClasses.DataGridColumn;
   import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
@@ -220,12 +219,41 @@ package org.jspresso.framework.view {
 
     private function createTree(remoteTree:RTree):Tree {
       var tree:Tree = new Tree();
-      bindTree(tree, remoteTree.state); 
+      bindTree(tree, remoteTree.state as RemoteCompositeValueState); 
       tree.labelField = "value";
       tree.dataTipField = "description";
       tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
       tree.dataProvider = remoteTree.state;
       return tree;
+    }
+
+    private function bindTree(tree:Tree, rootState:RemoteCompositeValueState):void {
+      var updateModel:Function = function (selectedItems:Array):void {
+        clearStateSelection(rootState);
+        for(var i:int=0; i < selectedItems.length; i++) {
+          var node:RemoteValueState = selectedItems[i] as RemoteValueState;
+          var parentNode:RemoteCompositeValueState = tree.getParentItem(node);
+          if(parentNode.selectedIndices == null) {
+            parentNode.selectedIndices = new Array();
+          }
+          var childIndex:int = parentNode.children.getItemIndex(node);
+          parentNode.selectedIndices.push(childIndex);
+          parentNode.leadingIndex = childIndex;
+        }
+      };
+      BindingUtils.bindSetter(updateModel, tree, "selectedItems");
+    }
+    
+    private function clearStateSelection(remoteState:RemoteCompositeValueState):void {
+      remoteState.selectedIndices = null
+      remoteState.leadingIndex = -1;
+      if(remoteState.children != null) {
+        for(var i:int = 0; i < remoteState.children.length; i++) {
+          if(remoteState.children[i] is RemoteCompositeValueState) {
+            clearStateSelection(remoteState.children[i] as RemoteCompositeValueState);
+          }
+        }
+      }
     }
 
     private function createImageComponent(remoteImageComponent:RImageComponent):Image {
@@ -695,14 +723,25 @@ package org.jspresso.framework.view {
       var table:DataGrid = new DataGrid();
       var columns:Array = new Array();
       
+//      var columnModelFunction:Function = function(item:Object, column:DataGridColumn):Object {
+//        // We must add 1 to the index since the first child state is the rendering state.
+//        var cell:RemoteValueState = (item as RemoteCompositeValueState)
+//                                         .children[(column as IndexedDataGridColumn).modelIndex + 1]
+//                                         as RemoteValueState;
+//        return cell;
+//      };
       for(var i:int=0; i < remoteTable.columns.length; i++) {
         var rColumn:RComponent = remoteTable.columns[i] as RComponent;
-        var column:DataGridColumn = new DataGridColumn();
+        var column:IndexedDataGridColumn = new IndexedDataGridColumn();
+        column.modelIndex = i;
+//        column.labelFunction = columnModelFunction;
+        //column.itemRenderer = new ClassFactory(RemoteValueDataGridRenderer);
         column.headerText = rColumn.label;
         column.width = 100.0;
         columns.push(column);
       }
       table.columns = columns;
+      table.dataProvider = (remoteTable.state as RemoteCompositeValueState).children;
       return table;
     }
 
@@ -763,12 +802,6 @@ package org.jspresso.framework.view {
       colorPicker.addEventListener(ColorPickerEvent.CHANGE,updateModel);
     }
 
-    private function bindTree(tree:Tree, remoteState:RemoteValueState):void {
-      var updateModel:Function = function (selectedIndices:Array):void {
-      };
-      BindingUtils.bindSetter(updateModel, tree, "selectedIndices");
-    }
-    
     private function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
       if(rIcon != null) {
         return IconUtility.getClass(component, computeUrl(rIcon.imageUrlSpec) 

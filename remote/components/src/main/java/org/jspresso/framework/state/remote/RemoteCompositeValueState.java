@@ -55,6 +55,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
    */
   public RemoteCompositeValueState(String guid) {
     super(guid);
+    leadingIndex = -1;
   }
 
   /**
