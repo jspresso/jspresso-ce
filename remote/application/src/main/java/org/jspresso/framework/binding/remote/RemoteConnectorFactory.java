@@ -80,7 +80,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   public RemoteConnectorFactory() {
     readabilityListener = new PropertyChangeListener() {
 
-      @Override
       public void propertyChange(PropertyChangeEvent evt) {
         ((IRemoteStateOwner) evt.getSource()).getState().setReadable(
             ((Boolean) evt.getNewValue()).booleanValue());
@@ -88,7 +87,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
     };
     writabilityListener = new PropertyChangeListener() {
 
-      @Override
       public void propertyChange(PropertyChangeEvent evt) {
         ((IRemoteStateOwner) evt.getSource()).getState().setWritable(
             ((Boolean) evt.getNewValue()).booleanValue());
@@ -96,7 +94,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
     };
     connectorValueChangeListener = new IConnectorValueChangeListener() {
 
-      @Override
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
         ((IRemoteStateOwner) evt.getSource()).getState().setValue(
             evt.getNewValue());
@@ -104,7 +101,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
     };
     formattedConnectorValueChangeListener = new IConnectorValueChangeListener() {
 
-      @Override
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
         ((IRemoteStateOwner) evt.getSource()).getState().setValue(
             ((IFormattedValueConnector) evt.getSource())
@@ -113,7 +109,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
     };
     renderingConnectorValueChangeListener = new IConnectorValueChangeListener() {
 
-      @Override
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
         IRenderableCompositeValueConnector connector = (IRenderableCompositeValueConnector) evt
             .getSource().getParentConnector();
@@ -126,7 +121,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
     };
     collectionConnectorValueChangeListener = new IConnectorValueChangeListener() {
 
-      @Override
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
         RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) evt
             .getSource()).getState());
@@ -150,7 +144,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
     };
     selectionChangeListener = new ISelectionChangeListener() {
 
-      @Override
       public void selectionChange(SelectionChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
         RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)

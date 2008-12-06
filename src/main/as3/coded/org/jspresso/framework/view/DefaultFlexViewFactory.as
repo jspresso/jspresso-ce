@@ -31,6 +31,7 @@ package org.jspresso.framework.view {
   import mx.controls.TextInput;
   import mx.controls.Tree;
   import mx.controls.VRule;
+  import mx.controls.dataGridClasses.DataGridColumn;
   import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
@@ -723,21 +724,12 @@ package org.jspresso.framework.view {
       var table:DataGrid = new DataGrid();
       var columns:Array = new Array();
       
-//      var columnModelFunction:Function = function(item:Object, column:DataGridColumn):Object {
-//        // We must add 1 to the index since the first child state is the rendering state.
-//        var cell:RemoteValueState = (item as RemoteCompositeValueState)
-//                                         .children[(column as IndexedDataGridColumn).modelIndex + 1]
-//                                         as RemoteValueState;
-//        return cell;
-//      };
       for(var i:int=0; i < remoteTable.columns.length; i++) {
         var rColumn:RComponent = remoteTable.columns[i] as RComponent;
-        var column:IndexedDataGridColumn = new IndexedDataGridColumn();
-        column.modelIndex = i;
-//        column.labelFunction = columnModelFunction;
-        //column.itemRenderer = new ClassFactory(RemoteValueDataGridRenderer);
+        var column:DataGridColumn = new DataGridColumn();
         column.headerText = rColumn.label;
         column.width = 100.0;
+        column.itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
         columns.push(column);
       }
       table.columns = columns;
