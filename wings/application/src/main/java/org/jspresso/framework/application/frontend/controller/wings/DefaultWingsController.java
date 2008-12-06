@@ -169,6 +169,7 @@ public class DefaultWingsController extends
       loginSuccess((Subject) SessionManager.getSession().getServletRequest()
           .getSession().getAttribute("SUBJECT"));
       displayControllerFrame();
+      execute(getStartupAction(), getInitialActionContext());
       return true;
     }
     return false;

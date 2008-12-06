@@ -16,6 +16,7 @@ Bugs fixed
 2319846  	 Entity generator: bidi one to many associations with list
 2319847  	 Standard remove action: integrity violations
 2319849  	 Standard duplicate action: initialization exceptions
+        	 Startup action is not trigerred for wings controller
 
 New features
 ------------
