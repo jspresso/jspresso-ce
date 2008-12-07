@@ -16,10 +16,16 @@ package org.jspresso.framework.view {
     }
     
     public function compareStrings(obj1:Object, obj2:Object):int {
-      var cell1:String = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex +1] as RemoteValueState)
+      var cell1:String= null;
+      var cell2:String= null;
+      if(obj1 != null) {
+        cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex +1] as RemoteValueState)
                             .value as String;
-      var cell2:String = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex +1] as RemoteValueState)
+      }
+      if(obj2 != null) {
+        cell2 = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex +1] as RemoteValueState)
                             .value as String;
+      }
       return ObjectUtil.stringCompare(cell1, cell2, true);
     }
   }

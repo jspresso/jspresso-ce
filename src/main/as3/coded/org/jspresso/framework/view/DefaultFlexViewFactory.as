@@ -6,7 +6,7 @@ package org.jspresso.framework.view {
   import flash.events.MouseEvent;
   
   import mx.binding.utils.BindingUtils;
-  import mx.collections.ListCollectionView;
+  import mx.collections.ArrayCollection;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -727,7 +727,7 @@ package org.jspresso.framework.view {
       return securityComponent;
     }
 
-    private function createTable(remoteTable:RTable):DataGrid {
+    private function createTable(remoteTable:RTable):/*DataGrid*/UIComponent {
       var table:DataGrid = new DataGrid();
       var columns:Array = new Array();
       
@@ -742,25 +742,60 @@ package org.jspresso.framework.view {
       }
       
       table.columns = columns;
-      table.dataProvider = (remoteTable.state as RemoteCompositeValueState).children;
+      // Clone array collection to avoid re-ordering items in original collection when sorting.
+      var tableModel:ArrayCollection = new ArrayCollection((remoteTable.state as RemoteCompositeValueState).children.toArray());
+      table.dataProvider = tableModel;
+      (remoteTable.state as RemoteCompositeValueState).children.addEventListener(CollectionEvent.COLLECTION_CHANGE, function(event:CollectionEvent):void {
+        var item:Object;
+        if(event.kind == CollectionEventKind.ADD) {
+          for each (item in event.items) {
+            tableModel.addItem(item);
+          }
+        } else if(event.kind == CollectionEventKind.REMOVE) {
+          for each (item in event.items) {
+            tableModel.removeItemAt(tableModel.getItemIndex(item));
+          }
+        } else {
+          // could be finer.
+          tableModel.removeAll();
+          for each (item in (event.currentTarget as ArrayCollection).source) {
+            tableModel.addItem(item);
+          }
+        }
+      });
       table.addEventListener(DataGridEvent.HEADER_RELEASE, function (event:DataGridEvent):void {
         _remoteValueSorter.sortColumnIndex = event.columnIndex;
       });
-      return table;
-//      var test:HBox = new HBox();
-//      test.addChild(table);
-//      var testB:Button = new Button();
-//      testB.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-//        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[1] as RemoteValueState);
-//        if(cellState.value == "titi") {
-//          cellState.value = "toto";
-//        } else {
-//          cellState.value = "titi" ;
-//        }
-//      });
-//      testB.label = "test";
-//      test.addChild(testB);
-//      return test;
+//      return table;
+
+      var test:HBox = new HBox();
+      test.addChild(table);
+      var testB:Button = new Button();
+      testB.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[1] as RemoteValueState);
+        if(cellState.value == "titi") {
+          cellState.value = "toto";
+        } else {
+          cellState.value = "titi" ;
+        }
+      });
+      testB.label = "test";
+      var testB2:Button = new Button();
+      testB2.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+        var row:RemoteCompositeValueState = (remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState;
+        var newRow:RemoteCompositeValueState = new RemoteCompositeValueState();
+        newRow.children = new ArrayCollection();
+        for(var c:int = 0; c < row.children.length; c++) {
+          var newCell:RemoteValueState = new RemoteValueState()
+          newCell.value = "test " + c
+          newRow.children.addItem(newCell);
+        }
+        (remoteTable.state as RemoteCompositeValueState).children.addItem(newRow);
+      });
+      testB2.label = "test2";
+      test.addChild(testB);
+      test.addChild(testB2);
+      return test;
     }
 
     private function createTextArea(remoteTextArea:RTextArea):TextArea {
