@@ -6,6 +6,7 @@ package org.jspresso.framework.view {
   import flash.events.MouseEvent;
   
   import mx.binding.utils.BindingUtils;
+  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -36,6 +37,8 @@ package org.jspresso.framework.view {
   import mx.core.ClassFactory;
   import mx.core.Container;
   import mx.core.UIComponent;
+  import mx.events.CollectionEvent;
+  import mx.events.CollectionEventKind;
   import mx.events.ColorPickerEvent;
   import mx.events.DataGridEvent;
   import mx.events.FlexEvent;
@@ -724,7 +727,7 @@ package org.jspresso.framework.view {
       return securityComponent;
     }
 
-    private function createTable(remoteTable:RTable):/*DataGrid*/UIComponent {
+    private function createTable(remoteTable:RTable):DataGrid {
       var table:DataGrid = new DataGrid();
       var columns:Array = new Array();
       
@@ -737,27 +740,27 @@ package org.jspresso.framework.view {
         column.sortCompareFunction = _remoteValueSorter.compareStrings;
         columns.push(column);
       }
+      
       table.columns = columns;
       table.dataProvider = (remoteTable.state as RemoteCompositeValueState).children;
       table.addEventListener(DataGridEvent.HEADER_RELEASE, function (event:DataGridEvent):void {
         _remoteValueSorter.sortColumnIndex = event.columnIndex;
       });
-      //return table;
-      var test:HBox = new HBox();
-      test.addChild(table);
-      var testB:Button = new Button();
-      testB.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[1] as RemoteValueState);
-        if(cellState.value == "titi") {
-          cellState.value = "toto";
-        } else {
-          cellState.value = "titi" ;
-        }
-        (remoteTable.state as RemoteCompositeValueState).children.itemUpdated((remoteTable.state as RemoteCompositeValueState).children[0]);
-      });
-      testB.label = "test";
-      test.addChild(testB);
-      return test;
+      return table;
+//      var test:HBox = new HBox();
+//      test.addChild(table);
+//      var testB:Button = new Button();
+//      testB.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+//        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[1] as RemoteValueState);
+//        if(cellState.value == "titi") {
+//          cellState.value = "toto";
+//        } else {
+//          cellState.value = "titi" ;
+//        }
+//      });
+//      testB.label = "test";
+//      test.addChild(testB);
+//      return test;
     }
 
     private function createTextArea(remoteTextArea:RTextArea):TextArea {
