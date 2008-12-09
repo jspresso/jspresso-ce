@@ -41,6 +41,7 @@ package org.jspresso.framework.view {
   import mx.events.CollectionEventKind;
   import mx.events.ColorPickerEvent;
   import mx.events.DataGridEvent;
+  import mx.events.DataGridEventReason;
   import mx.events.FlexEvent;
   
   import org.jspresso.framework.gui.remote.RAction;
@@ -96,12 +97,12 @@ package org.jspresso.framework.view {
         component = createActionField(remoteComponent as RActionField);
       } else if(remoteComponent is RCheckBox) {
         component = createCheckBox(remoteComponent as RCheckBox);
+      } else if(remoteComponent is RComboBox) {
+        component = createComboBox(remoteComponent as RComboBox);
       } else if(remoteComponent is RColorField) {
         component = createColorField(remoteComponent as RColorField);
       } else if(remoteComponent is RContainer) {
         component = createContainer(remoteComponent as RContainer);
-      } else if(remoteComponent is RDateField) {
-        component = createDateField(remoteComponent as RDateField);
       } else if(remoteComponent is RDateField) {
         component = createDateField(remoteComponent as RDateField);
       } else if(remoteComponent is RDurationField) {
@@ -727,21 +728,33 @@ package org.jspresso.framework.view {
       return securityComponent;
     }
 
-    private function createTable(remoteTable:RTable):/*DataGrid*/UIComponent {
+    private function createTable(remoteTable:RTable):DataGrid/*UIComponent*/ {
       var table:DataGrid = new DataGrid();
       var columns:Array = new Array();
       
       for(var i:int=0; i < remoteTable.columns.length; i++) {
         var rColumn:RComponent = remoteTable.columns[i] as RComponent;
+        if(rColumn.state == null) {
+          rColumn.state = new RemoteValueState();
+        }
         var column:DataGridColumn = new DataGridColumn();
         column.headerText = rColumn.label;
         column.width = 100.0;
         column.itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
+        
+        var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
+        itemEditor.properties = {editor:createComponent(rColumn), state:rColumn.state, index:i+1};
+        column.itemEditor = itemEditor;
+        column.editorDataField = "state";
+        
         column.sortCompareFunction = _remoteValueSorter.compareStrings;
         columns.push(column);
       }
       
       table.columns = columns;
+      table.allowMultipleSelection = true;
+      table.editable = true;
+      
       // Clone array collection to avoid re-ordering items in original collection when sorting.
       var tableModel:ArrayCollection = new ArrayCollection((remoteTable.state as RemoteCompositeValueState).children.toArray());
       table.dataProvider = tableModel;
@@ -763,39 +776,74 @@ package org.jspresso.framework.view {
           }
         }
       });
-      table.addEventListener(DataGridEvent.HEADER_RELEASE, function (event:DataGridEvent):void {
+      bindTable(table, remoteTable.state as RemoteCompositeValueState);
+      return table;
+
+//      var test:HBox = new HBox();
+//      test.addChild(table);
+//      var testB:Button = new Button();
+//      testB.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+//        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[1] as RemoteValueState);
+//        if(cellState.value == "titi") {
+//          cellState.value = "toto";
+//        } else {
+//          cellState.value = "titi" ;
+//        }
+//      });
+//      testB.label = "test";
+//      var testB2:Button = new Button();
+//      testB2.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+//        var row:RemoteCompositeValueState = (remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState;
+//        var newRow:RemoteCompositeValueState = new RemoteCompositeValueState();
+//        newRow.children = new ArrayCollection();
+//        for(var c:int = 0; c < row.children.length; c++) {
+//          var newCell:RemoteValueState = new RemoteValueState()
+//          newCell.value = "test " + c
+//          newRow.children.addItem(newCell);
+//        }
+//        (remoteTable.state as RemoteCompositeValueState).children.addItem(newRow);
+//      });
+//      testB2.label = "test2";
+//      test.addChild(testB);
+//      test.addChild(testB2);
+//      return test;
+    }
+    
+    private function bindTable(table:DataGrid, state:RemoteCompositeValueState):void {
+      table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
         _remoteValueSorter.sortColumnIndex = event.columnIndex;
       });
-//      return table;
-
-      var test:HBox = new HBox();
-      test.addChild(table);
-      var testB:Button = new Button();
-      testB.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[1] as RemoteValueState);
-        if(cellState.value == "titi") {
-          cellState.value = "toto";
+      BindingUtils.bindSetter(function(selectedItems:Array):void {
+        if(selectedItems != null) {
+          // work on items to translate indices independently of table sorting state.
+          var translatedSelectedIndices:Array = new Array(selectedItems.length);
+          for(var i:int = 0; i < selectedItems.length; i++) {
+            translatedSelectedIndices[i] = state.children.getItemIndex(selectedItems[i]);
+          }
+          if(translatedSelectedIndices.length > 0) {
+            state.leadingIndex = translatedSelectedIndices[0];
+          } else {
+            state.leadingIndex = -1;
+          }
+          translatedSelectedIndices.sort(Array.NUMERIC);
+          state.selectedIndices = translatedSelectedIndices;
         } else {
-          cellState.value = "titi" ;
+          state.selectedIndices = null;
+          state.leadingIndex = -1;
+        }
+      }, table, "selectedItems", true);
+      table.addEventListener(DataGridEvent.ITEM_EDIT_END, function(event:DataGridEvent):void {
+        if (event.reason != DataGridEventReason.CANCELLED) {
+          var table:DataGrid = event.currentTarget as DataGrid;
+          var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
+          currentEditor.setFocus();
+          var state:RemoteValueState = currentEditor.state;
+          var row:RemoteCompositeValueState = (table.dataProvider as ArrayCollection)[event.rowIndex] as RemoteCompositeValueState; 
+          var cell:RemoteValueState = row.children[event.columnIndex +1] as RemoteValueState;
+          
+          cell.value = state.value;
         }
       });
-      testB.label = "test";
-      var testB2:Button = new Button();
-      testB2.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-        var row:RemoteCompositeValueState = (remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState;
-        var newRow:RemoteCompositeValueState = new RemoteCompositeValueState();
-        newRow.children = new ArrayCollection();
-        for(var c:int = 0; c < row.children.length; c++) {
-          var newCell:RemoteValueState = new RemoteValueState()
-          newCell.value = "test " + c
-          newRow.children.addItem(newCell);
-        }
-        (remoteTable.state as RemoteCompositeValueState).children.addItem(newRow);
-      });
-      testB2.label = "test2";
-      test.addChild(testB);
-      test.addChild(testB2);
-      return test;
     }
 
     private function createTextArea(remoteTextArea:RTextArea):TextArea {
