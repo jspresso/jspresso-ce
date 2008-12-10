@@ -317,7 +317,7 @@ package org.jspresso.framework.view {
       comboBox.dataProvider = remoteComboBox.values;
       bindComboBox(comboBox, remoteComboBox);
 
-      var itemRenderer:ClassFactory = new ClassFactory(RemoteValueCbItemRenderer);
+      var itemRenderer:ClassFactory = new ClassFactory(ImageListItemRenderer);
       itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate};
       comboBox.itemRenderer = itemRenderer;
       
