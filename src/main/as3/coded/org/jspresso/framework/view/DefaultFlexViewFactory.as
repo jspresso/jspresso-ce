@@ -83,7 +83,10 @@ package org.jspresso.framework.view {
   
   public class DefaultFlexViewFactory {
 
-    private static const TOOLTIP_ELLIPSIS:String = "...";
+   [Embed(source="mx/controls/Image.png")]
+   private var _iconTemplate:Class;
+
+   private static const TOOLTIP_ELLIPSIS:String = "...";
 
     private var _remoteValueSorter:RemoteValueSorter;
 
@@ -310,8 +313,29 @@ package org.jspresso.framework.view {
     }
 
     private function createComboBox(remoteComboBox:RComboBox):ComboBox {
-      var comboBox:ComboBox = new ComboBox();
+      var comboBox:RIconComboBox = new RIconComboBox();
+      comboBox.dataProvider = remoteComboBox.values;
+      bindComboBox(comboBox, remoteComboBox);
+
+      var itemRenderer:ClassFactory = new ClassFactory(RemoteValueCbItemRenderer);
+      itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate};
+      comboBox.itemRenderer = itemRenderer;
+      
       return comboBox;
+    }
+
+    private function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
+      BindingUtils.bindProperty(comboBox, "selectedItem", remoteComboBox.state, "value");
+      BindingUtils.bindProperty(remoteComboBox.state, "value", comboBox, "selectedItem");
+      
+      BindingUtils.bindSetter(function(selectedIndex:int):void {
+        if(selectedIndex != -1) {
+          comboBox.rIcon = remoteComboBox.icons[selectedIndex];
+          if(comboBox.text != remoteComboBox.translations[selectedIndex]) {
+            comboBox.text = remoteComboBox.translations[selectedIndex];
+          }
+        }
+      }, comboBox, "selectedIndex");
     }
 
     private function createBorderContainer(remoteBorderContainer:RBorderContainer):Grid {
