@@ -7,7 +7,7 @@ package org.jspresso.framework.view
   
   import org.jspresso.framework.gui.remote.RIcon;
 
-  public class ImageListItemRenderer extends ListItemRenderer  {
+  public class RIconListItemRenderer extends ListItemRenderer  {
 
 		private var _image:Image;
 		
@@ -15,7 +15,7 @@ package org.jspresso.framework.view
 		private var _icons:Array;
 		private var _iconTemplate:Class;
 
-		public function ImageListItemRenderer() {
+		public function RIconListItemRenderer() {
 		  _image = new Image();
 			addChild(_image);
 		}

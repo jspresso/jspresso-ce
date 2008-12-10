@@ -29,35 +29,45 @@ package org.jspresso.framework.view {
   	  }
   	  _listData = value;
   	}
+  	
+  	protected function set listDataIcon(value:Class):void {
+  	  if(super.listData != null) {
+  	    (super.listData as ListData).icon = value;
+  	  }
+  	}
 
   	override public function get listData():BaseListData {
   	  return _listData;
   	}
 
   	override public function set data(value:Object):void	{
-  	  updateLabel(value, _listData);
-  	  super.listData.label = _listData.label;
+  	  updateLabel(value, listData);
+  	  super.listData.label = listData.label;
   	  super.data = value;
   	}
 
   	private function updateLabel(rendererData:Object, rendererListData:BaseListData):void {
   	  if(rendererData && rendererListData) {
-  	    var cellLabel:String;
   	    var cellValueState:RemoteValueState = ((rendererData as RemoteCompositeValueState).children[rendererListData.columnIndex +1] as RemoteValueState);
   	    if(valueChangeListener != null) {
   	      valueChangeListener.unwatch();
   	    }
   	    valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value");
-  	    if(cellValueState.value != null) {
-    	    cellLabel = cellValueState.value.toString();
-    	  } else {
-    	    cellLabel = null;
-    	  }
-    	  rendererListData.label = cellLabel;
+    	  rendererListData.label = computeLabel(cellValueState);
   	  }
   	}
   	
-  	private function refresh(cellLabel:Object):void {
+  	protected function computeLabel(cellValueState:RemoteValueState):String {
+ 	    var cellLabel:String;
+	    if(cellValueState.value != null) {
+  	    cellLabel = cellValueState.value.toString();
+  	  } else {
+  	    cellLabel = null;
+  	  }
+      return cellLabel
+  	}
+  	
+  	protected function refresh(cellLabel:Object):void {
       listData.label = cellLabel as String;
       validateProperties();
   	}

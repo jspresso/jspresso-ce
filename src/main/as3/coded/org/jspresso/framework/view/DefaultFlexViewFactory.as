@@ -315,9 +315,11 @@ package org.jspresso.framework.view {
     private function createComboBox(remoteComboBox:RComboBox):ComboBox {
       var comboBox:RIconComboBox = new RIconComboBox();
       comboBox.dataProvider = remoteComboBox.values;
+      comboBox.labels = remoteComboBox.translations;
+      comboBox.icons = remoteComboBox.icons;
       bindComboBox(comboBox, remoteComboBox);
 
-      var itemRenderer:ClassFactory = new ClassFactory(ImageListItemRenderer);
+      var itemRenderer:ClassFactory = new ClassFactory(RIconListItemRenderer);
       itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate};
       comboBox.itemRenderer = itemRenderer;
       
@@ -327,15 +329,6 @@ package org.jspresso.framework.view {
     private function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
       BindingUtils.bindProperty(comboBox, "selectedItem", remoteComboBox.state, "value");
       BindingUtils.bindProperty(remoteComboBox.state, "value", comboBox, "selectedItem");
-      
-      BindingUtils.bindSetter(function(selectedIndex:int):void {
-        if(selectedIndex != -1) {
-          comboBox.rIcon = remoteComboBox.icons[selectedIndex];
-          if(comboBox.text != remoteComboBox.translations[selectedIndex]) {
-            comboBox.text = remoteComboBox.translations[selectedIndex];
-          }
-        }
-      }, comboBox, "selectedIndex");
     }
 
     private function createBorderContainer(remoteBorderContainer:RBorderContainer):Grid {
@@ -764,7 +757,17 @@ package org.jspresso.framework.view {
         var column:DataGridColumn = new DataGridColumn();
         column.headerText = rColumn.label;
         column.width = 100.0;
-        column.itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
+        var itemRenderer:ClassFactory;
+        if(rColumn is RComboBox) {
+          itemRenderer = new ClassFactory(EnumerationDgItemRenderer);
+          itemRenderer.properties = {values:(rColumn as RComboBox).values,
+                                     labels:(rColumn as RComboBox).translations,
+                                     icons :(rColumn as RComboBox).icons,
+                                     iconTemplate:_iconTemplate};
+        } else {
+          itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
+        }
+          column.itemRenderer = itemRenderer
         
         var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
         itemEditor.properties = {editor:createComponent(rColumn), state:rColumn.state, index:i+1};
