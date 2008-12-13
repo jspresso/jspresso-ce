@@ -746,7 +746,7 @@ package org.jspresso.framework.view {
     }
 
     private function createTable(remoteTable:RTable):DataGrid/*UIComponent*/ {
-      var table:DataGrid = new DataGrid();
+      var table:DataGrid = new DoubleClickDataGrid();
       var columns:Array = new Array();
       
       for(var i:int=0; i < remoteTable.columns.length; i++) {
