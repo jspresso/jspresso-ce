@@ -443,8 +443,15 @@ public class DefaultRemoteViewFactory extends
       String columnId = columnViewDescriptor.getName();
       try {
         actionHandler.checkAccess(columnViewDescriptor);
-        IValueConnector columnConnector = createColumnConnector(columnId,
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor());
+        IPropertyDescriptor propertyDescriptor = modelDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getPropertyDescriptor(columnId);
+        IView<RComponent> column = createPropertyView(propertyDescriptor, null,
+            actionHandler, locale);
+        // Do not use standard createColumnConnector method to preserve formatted value connectors.
+        // IValueConnector columnConnector = createColumnConnector(columnId,
+        // modelDescriptor.getCollectionDescriptor().getElementDescriptor());
+        IValueConnector columnConnector = column.getConnector();
         rowConnectorPrototype.addChildConnector(columnConnector);
         if (columnViewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
@@ -457,11 +464,6 @@ public class DefaultRemoteViewFactory extends
           }
         }
         columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
-        IPropertyDescriptor propertyDescriptor = modelDescriptor
-        .getCollectionDescriptor().getElementDescriptor()
-        .getPropertyDescriptor(columnId);
-        IView<RComponent> column = createPropertyView(propertyDescriptor, null,
-            actionHandler, locale);
         columns.add(column.getPeer());
       } catch (SecurityException ex) {
         // The column simply won't be added.
