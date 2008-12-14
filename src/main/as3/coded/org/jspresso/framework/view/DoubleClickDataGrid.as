@@ -5,7 +5,6 @@ package org.jspresso.framework.view {
   import mx.controls.listClasses.IDropInListItemRenderer;
   import mx.controls.listClasses.IListItemRenderer;
   import mx.events.DataGridEvent;
-  import mx.events.ListEvent;
   
   
   /** 
@@ -24,26 +23,35 @@ package org.jspresso.framework.view {
   		preventEditing = false;
   		lastClickedRow = -1;
   		lastClickedColumn = -1;
-  		addEventListener(ListEvent.ITEM_DOUBLE_CLICK, itemDoubleClicked);
-  		addEventListener(ListEvent.ITEM_CLICK, itemClicked);
   		addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, itemEditBeginning);
   	}
   
-    private function itemDoubleClicked(event:ListEvent):void {
+    override protected function mouseDoubleClickHandler(event:MouseEvent):void {
       preventEditing = false;
+      super.mouseDoubleClickHandler(event);
     }
   
-  	private function itemClicked(event:ListEvent):void	{
-			if(   event.rowIndex != lastClickedRow
-			   || event.columnIndex != lastClickedColumn) {
-			  preventEditing = true; 
-			} else {
-			  preventEditing = false;
-			}
-			lastClickedRow = event.rowIndex;
-			lastClickedColumn = event.columnIndex;
+  	override protected function mouseUpHandler(event:MouseEvent):void	{
+      var r:IListItemRenderer;
+      
+      r = mouseEventToItemRenderer(event);
+      
+  		if (r && r is IDropInListItemRenderer) {
+  			var dilr:IDropInListItemRenderer = r as IDropInListItemRenderer;
+  			if(   dilr.listData.rowIndex != lastClickedRow
+  			   || dilr.listData.columnIndex != lastClickedColumn) {
+  			  preventEditing = true; 
+  			} else {
+  			  preventEditing = false;
+  			}
+  			lastClickedRow = dilr.listData.rowIndex;
+  			lastClickedColumn = dilr.listData.columnIndex;
+  		} else {
+  		  preventEditing = false;
+  		}
+  		super.mouseUpHandler(event);
   	}
-
+  	
   	public function itemEditBeginning(event:DataGridEvent):void {
   	  if(preventEditing) {
   	    event.preventDefault();

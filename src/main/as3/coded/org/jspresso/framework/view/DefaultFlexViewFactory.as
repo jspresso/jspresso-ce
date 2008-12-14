@@ -279,6 +279,7 @@ package org.jspresso.framework.view {
       bindTextInput(textField, remoteActionField.state);
       actionField.percentWidth = 100.0;
       textField.percentWidth = 100.0;
+      textField.name = "tf";
       actionField.addChild(textField);
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
@@ -286,6 +287,12 @@ package org.jspresso.framework.view {
           actionField.addChild(createButton(actionList.actions[i]));
         }
       }
+      var focusIn:Function = function(event:FocusEvent):void {
+        var tf:UIComponent = (event.currentTarget as Container).getChildByName("tf") as UIComponent;
+        tf.setFocus();
+      };
+      actionField.addEventListener(FocusEvent.FOCUS_IN, focusIn);
+      //actionField.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, focusIn);
       return actionField;
     }
     
@@ -302,8 +309,6 @@ package org.jspresso.framework.view {
       resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
         remoteColorField.state.value = remoteColorField.defaultColor;
       });
-//      colorField.setStyle("borderStyle","solid");
-//      colorField.setStyle("borderThickness", 1);
       return colorField;
     }
     
@@ -767,7 +772,7 @@ package org.jspresso.framework.view {
         } else {
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
         }
-          column.itemRenderer = itemRenderer
+        column.itemRenderer = itemRenderer
         
         var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
         itemEditor.properties = {editor:createComponent(rColumn), state:rColumn.state, index:i+1};
@@ -871,6 +876,13 @@ package org.jspresso.framework.view {
           cell.value = state.value;
         }
       });
+      table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function itemEditBeginning(event:DataGridEvent):void {
+        var rowCollection:ArrayCollection = (event.currentTarget as DataGrid).dataProvider as ArrayCollection;
+        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState; 
+        if(!cellValueState.writable) {
+    	    event.preventDefault();
+    	  }
+    	});
     }
 
     private function createTextArea(remoteTextArea:RTextArea):TextArea {
