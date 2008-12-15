@@ -313,6 +313,17 @@
   </bean>
 
   <bean
+    id="abstractCollectionAction"
+    abstract="true"
+    class="org.jspresso.framework.application.frontend.action.WrappingAction">
+    <property
+      name="wrappedAction">
+      <bean
+        class="org.jspresso.framework.application.backend.action.SetActionParamFromSelectedComponentsAction" />
+    </property>
+  </bean>
+
+  <bean
     id="abstractAddToMasterFrontAction"
     abstract="true"
     class="org.jspresso.framework.application.frontend.action.std.AddCollectionToMasterAction">
