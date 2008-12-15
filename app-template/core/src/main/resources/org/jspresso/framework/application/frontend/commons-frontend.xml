@@ -34,8 +34,9 @@
     Action beans.
   -->
   <bean
-    id="abstractLovAction"
-    abstract="true">
+    id="lovAction"
+    class="org.jspresso.framework.application.frontend.action.lov.LovAction"
+    scope="prototype">
     <property
       name="lovViewDescriptorFactory"
       ref="lovViewDescriptorFactory" />
@@ -51,6 +52,9 @@
     <property
       name="findAction"
       ref="lovFindFrontAction" />
+    <property
+      name="nextAction"
+      ref="modalDialogAction" />
   </bean>
 
   <bean
@@ -63,11 +67,14 @@
   </bean>
 
   <bean
-    id="abstractChooseComponentAction"
-    abstract="true">
+    id="chooseComponentAction"
+    class="org.jspresso.framework.application.frontend.action.lov.ChooseComponentAction">
     <property
       name="cancelAction"
       ref="cancelDialogFrontAction" />
+    <property
+      name="nextAction"
+      ref="modalDialogAction" />
   </bean>
 
   <bean
@@ -206,34 +213,32 @@
   </bean>
 
   <bean
-    id="abstractEditReportParametersAction"
-    abstract="true">
+    id="editComponentAction"
+    class="org.jspresso.framework.application.frontend.action.std.EditComponentAction">
     <property
       name="modelConnectorFactory"
       ref="modelConnectorFactory" />
+    <property
+      name="cancelAction"
+      ref="cancelDialogFrontAction" />
+    <property
+      name="nextAction"
+      ref="modalDialogAction" />
+  </bean>
+
+  <bean
+    id="editReportParametersAction"
+    parent="editComponentAction"
+    class="org.jspresso.framework.application.printing.frontend.action.EditReportParametersAction">
     <property
       name="okAction"
       ref="doPrintAction" />
-    <property
-      name="cancelAction"
-      ref="cancelDialogFrontAction" />
   </bean>
 
   <bean
-    id="abstractEditComponentAction"
-    abstract="true">
-    <property
-      name="modelConnectorFactory"
-      ref="modelConnectorFactory" />
-    <property
-      name="cancelAction"
-      ref="cancelDialogFrontAction" />
-  </bean>
-
-  <bean
-    id="abstractChangePasswordAction"
-    abstract="true"
-    parent="abstractEditComponentAction">
+    id="changePasswordAction"
+    parent="editComponentAction"
+    class="org.jspresso.framework.application.frontend.action.security.ChangePasswordAction">
     <property
       name="name"
       value="password.change" />

@@ -18,13 +18,10 @@
  */
 package org.jspresso.framework.application.backend.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ICollectionConnector;
 
 /**
  * A trivial backend action that updates the action context by setting the
@@ -47,7 +44,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SetActionParamFromSelectedIndicesAction extends
+public class SetActionParamFromSelectedComponentsAction extends
     AbstractCollectionAction {
 
   /**
@@ -59,19 +56,7 @@ public class SetActionParamFromSelectedIndicesAction extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    int[] selectedIndices = getSelectedIndices(context);
-    ICollectionConnector collectionConnector = getModelConnector(context);
-    if (selectedIndices == null || selectedIndices.length == 0
-        || collectionConnector == null) {
-      return true;
-    }
-    Collection<Object> selectedComponents = new ArrayList<Object>();
-    for (int i = 0; i < selectedIndices.length; i++) {
-      Object element = collectionConnector
-          .getChildConnector(selectedIndices[i]).getConnectorValue();
-      selectedComponents.add(element);
-    }
-    context.put(ActionContextConstants.ACTION_PARAM, selectedComponents);
+    context.put(ActionContextConstants.ACTION_PARAM, getSelectedObjects(context));
     return super.execute(actionHandler, context);
   }
 }

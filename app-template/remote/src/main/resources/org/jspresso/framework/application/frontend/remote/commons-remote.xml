@@ -114,17 +114,6 @@
   </bean>
 
   <bean
-    id="abstractModalDialogAction"
-    abstract="true"
-    class="org.jspresso.framework.application.frontend.action.remote.std.ModalDialogAction" />
-
-  <bean
-    id="lovAction"
-    parent="abstractLovAction"
-    class="org.jspresso.framework.application.frontend.action.remote.lov.LovAction"
-    scope="prototype" />
-
-  <bean
     id="openFileAction"
     parent="abstractOpenFileAction"
     class="org.jspresso.framework.application.frontend.action.remote.file.OpenFileAction" />
@@ -150,28 +139,8 @@
     class="org.jspresso.framework.application.frontend.action.remote.file.BinaryPropertyInfoAction" />
 
   <bean
-    id="chooseComponentAction"
-    parent="abstractChooseComponentAction"
-    class="org.jspresso.framework.application.frontend.action.remote.lov.ChooseComponentAction" />
-
-  <bean
-    id="editReportParametersAction"
-    parent="abstractEditReportParametersAction"
-    class="org.jspresso.framework.application.printing.frontend.action.remote.EditReportParametersAction" />
-
-  <bean
     id="displayReportAction"
     class="org.jspresso.framework.application.printing.frontend.action.remote.DisplayJasperReportAction" />
-
-  <bean
-    id="editComponentAction"
-    parent="abstractEditComponentAction"
-    class="org.jspresso.framework.application.frontend.action.remote.std.EditComponentAction" />
-
-  <bean
-    id="changePasswordAction"
-    parent="abstractChangePasswordAction"
-    class="org.jspresso.framework.application.frontend.action.remote.security.ChangePasswordAction" />
 
   <bean
     id="displayUrlFrontAction"
@@ -187,6 +156,10 @@
     id="wizardAction"
     parent="abstractWizardAction"
     class="org.jspresso.framework.application.frontend.action.remote.wizard.WizardAction" />
+
+  <bean
+    id="modalDialogAction"
+    class="org.jspresso.framework.application.frontend.action.remote.std.ModalDialogAction" />
 
   <bean
     id="remoteConnectorFactory"

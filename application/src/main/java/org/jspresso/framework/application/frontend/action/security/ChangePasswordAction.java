@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package org.jspresso.framework.application.frontend.action.wings.security;
+package org.jspresso.framework.application.frontend.action.security;
 
 import java.util.HashMap;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.backend.action.security.AbstractChangePasswordAction;
-import org.jspresso.framework.application.frontend.action.wings.std.EditComponentAction;
+import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 
 
@@ -19,8 +19,14 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class ChangePasswordAction extends EditComponentAction {
+public class ChangePasswordAction<E, F, G> extends EditComponentAction<E, F, G> {
 
   /**
    * Constructs a new <code>ChangePasswordAction</code> instance.

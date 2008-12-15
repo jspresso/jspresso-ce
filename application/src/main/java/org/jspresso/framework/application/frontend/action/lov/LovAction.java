@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.remote.lov;
+package org.jspresso.framework.application.frontend.action.lov;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,8 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
-import org.jspresso.framework.application.frontend.action.remote.std.ModalDialogAction;
+import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -61,8 +60,14 @@ import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class LovAction extends ModalDialogAction {
+public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
   private boolean                               autoquery;
   private IDisplayableAction                    cancelAction;
@@ -148,7 +153,7 @@ public class LovAction extends ModalDialogAction {
     actions.add(cancelAction);
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
     IReferencePropertyDescriptor<IEntity> erqDescriptor = getEntityRefQueryDescriptor(context);
-    IView<RComponent> lovView = getViewFactory(context).createView(
+    IView<E> lovView = getViewFactory(context).createView(
         lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor),
         actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, lovView);
