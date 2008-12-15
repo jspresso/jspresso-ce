@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -74,13 +75,18 @@ public class EditComponentAction<E, F, G> extends
       Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
 
-    Object component = context.get(ActionContextConstants.ACTION_PARAM);
+    Object component = getModel(context);
 
-    okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
-        getViewConnector(context));
-    okAction.putInitialContext(ActionContextConstants.ACTION_PARAM, component);
-    actions.add(okAction);
-    actions.add(cancelAction);
+    if (okAction != null) {
+      okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
+          getViewConnector(context));
+      okAction
+          .putInitialContext(ActionContextConstants.ACTION_PARAM, component);
+      actions.add(okAction);
+    }
+    if (cancelAction != null) {
+      actions.add(cancelAction);
+    }
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
 
     IView<E> componentView = getViewFactory(context).createView(
@@ -90,12 +96,12 @@ public class EditComponentAction<E, F, G> extends
     IValueConnector componentConnector = modelConnectorFactory
         .createModelConnector(ACTION_MODEL_NAME, getViewDescriptor(context)
             .getModelDescriptor());
-    componentConnector.setConnectorValue(getModel(context));
+    componentConnector.setConnectorValue(component);
 
     getMvcBinder(context)
         .bind(componentView.getConnector(), componentConnector);
 
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**
@@ -147,7 +153,14 @@ public class EditComponentAction<E, F, G> extends
    * @return the model.
    */
   protected Object getModel(Map<String, Object> context) {
-    return context.get(ActionContextConstants.ACTION_PARAM);
+    Object model = context.get(ActionContextConstants.ACTION_PARAM);
+    if (model instanceof Collection<?>) {
+      if (((Collection<?>) model).isEmpty()) {
+        return null;
+      }
+      return ((Collection<?>) model).iterator().next();
+    }
+    return model;
   }
 
   /**
