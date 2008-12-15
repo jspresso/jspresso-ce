@@ -16,16 +16,15 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.printing.frontend.action.wings;
+package org.jspresso.framework.application.printing.frontend.action;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.application.frontend.action.wings.std.EditComponentAction;
+import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
-
 
 /**
  * A simple action to edit input parameters in a form view.
@@ -45,8 +44,15 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class EditReportParametersAction extends EditComponentAction {
+public class EditReportParametersAction<E, F, G> extends
+    EditComponentAction<E, F, G> {
 
   /**
    * {@inheritDoc}

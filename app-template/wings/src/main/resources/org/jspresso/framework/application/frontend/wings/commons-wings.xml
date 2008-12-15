@@ -129,17 +129,6 @@
     scope="prototype" />
 
   <bean
-    id="abstractModalDialogAction"
-    abstract="true"
-    class="org.jspresso.framework.application.frontend.action.wings.std.ModalDialogAction" />
-
-  <bean
-    id="lovAction"
-    parent="abstractLovAction"
-    class="org.jspresso.framework.application.frontend.action.wings.lov.LovAction"
-    scope="prototype" />
-
-  <bean
     id="openFileAction"
     parent="abstractOpenFileAction"
     class="org.jspresso.framework.application.frontend.action.wings.file.OpenFileAction" />
@@ -165,29 +154,8 @@
     class="org.jspresso.framework.application.frontend.action.wings.file.BinaryPropertyInfoAction" />
 
   <bean
-    id="chooseComponentAction"
-    abstract="true"
-    parent="abstractChooseComponentAction"
-    class="org.jspresso.framework.application.frontend.action.wings.lov.ChooseComponentAction" />
-
-  <bean
-    id="editReportParametersAction"
-    parent="abstractEditReportParametersAction"
-    class="org.jspresso.framework.application.printing.frontend.action.wings.EditReportParametersAction" />
-
-  <bean
     id="displayReportAction"
     class="org.jspresso.framework.application.printing.frontend.action.wings.DisplayJasperReportAction" />
-
-  <bean
-    id="editComponentAction"
-    parent="abstractEditComponentAction"
-    class="org.jspresso.framework.application.frontend.action.wings.std.EditComponentAction" />
-
-  <bean
-    id="changePasswordAction"
-    parent="abstractChangePasswordAction"
-    class="org.jspresso.framework.application.frontend.action.wings.security.ChangePasswordAction" />
 
   <bean
     id="displayUrlFrontAction"
@@ -204,6 +172,10 @@
     id="wizardAction"
     parent="abstractWizardAction"
     class="org.jspresso.framework.application.frontend.action.wings.wizard.WizardAction" />
+
+  <bean
+    id="modalDialogAction"
+    class="org.jspresso.framework.application.frontend.action.wings.std.ModalDialogAction" />
 
   <bean
     id="viewFactory"

@@ -16,24 +16,26 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.wings.std;
+package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.wings.SComponent;
-
 
 /**
- * A simple action to edit a component in a form view.
+ * A simple action to edit a component in a form view. This action must be
+ * followed by a view technology dependent action that will take care of
+ * displaying the view in a dialog.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -50,8 +52,15 @@ import org.wings.SComponent;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class EditComponentAction extends ModalDialogAction {
+public class EditComponentAction<E, F, G> extends
+    AbstractChainedAction<E, F, G> {
 
   private IDisplayableAction     cancelAction;
   private IModelConnectorFactory modelConnectorFactory;
@@ -66,23 +75,28 @@ public class EditComponentAction extends ModalDialogAction {
       Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
 
-    Object component = context.get(ActionContextConstants.ACTION_PARAM);
+    Object component = getModel(context);
 
-    okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
-        getViewConnector(context));
-    okAction.putInitialContext(ActionContextConstants.ACTION_PARAM, component);
-    actions.add(okAction);
-    actions.add(cancelAction);
+    if (okAction != null) {
+      okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
+          getViewConnector(context));
+      okAction
+          .putInitialContext(ActionContextConstants.ACTION_PARAM, component);
+      actions.add(okAction);
+    }
+    if (cancelAction != null) {
+      actions.add(cancelAction);
+    }
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
 
-    IView<SComponent> componentView = getViewFactory(context).createView(
+    IView<E> componentView = getViewFactory(context).createView(
         getViewDescriptor(context), actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, componentView);
 
     IValueConnector componentConnector = modelConnectorFactory
         .createModelConnector(ACTION_MODEL_NAME, getViewDescriptor(context)
             .getModelDescriptor());
-    componentConnector.setConnectorValue(getModel(context));
+    componentConnector.setConnectorValue(component);
 
     getMvcBinder(context)
         .bind(componentView.getConnector(), componentConnector);
@@ -94,7 +108,7 @@ public class EditComponentAction extends ModalDialogAction {
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *            the cancelAction to set.
+   *          the cancelAction to set.
    */
   public void setCancelAction(IDisplayableAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -104,7 +118,7 @@ public class EditComponentAction extends ModalDialogAction {
    * Sets the modelConnectorFactory.
    * 
    * @param modelConnectorFactory
-   *            the modelConnectorFactory to set.
+   *          the modelConnectorFactory to set.
    */
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
@@ -115,7 +129,7 @@ public class EditComponentAction extends ModalDialogAction {
    * Sets the okAction.
    * 
    * @param okAction
-   *            the okAction to set.
+   *          the okAction to set.
    */
   public void setOkAction(IDisplayableAction okAction) {
     this.okAction = okAction;
@@ -125,7 +139,7 @@ public class EditComponentAction extends ModalDialogAction {
    * Sets the viewDescriptor.
    * 
    * @param viewDescriptor
-   *            the viewDescriptor to set.
+   *          the viewDescriptor to set.
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
@@ -135,18 +149,25 @@ public class EditComponentAction extends ModalDialogAction {
    * Gets the model.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the model.
    */
   protected Object getModel(Map<String, Object> context) {
-    return context.get(ActionContextConstants.ACTION_PARAM);
+    Object model = context.get(ActionContextConstants.ACTION_PARAM);
+    if (model instanceof Collection<?>) {
+      if (((Collection<?>) model).isEmpty()) {
+        return null;
+      }
+      return ((Collection<?>) model).iterator().next();
+    }
+    return model;
   }
 
   /**
    * Gets the viewDescriptor.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the viewDescriptor.
    */
   protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {

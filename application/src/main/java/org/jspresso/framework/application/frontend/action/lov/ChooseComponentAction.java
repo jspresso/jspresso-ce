@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.wings.lov;
+package org.jspresso.framework.application.frontend.action.lov;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +24,11 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.wings.std.ModalDialogAction;
+import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
 import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
-import org.wings.SComponent;
 
 
 /**
@@ -51,8 +50,14 @@ import org.wings.SComponent;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class ChooseComponentAction extends ModalDialogAction {
+public class ChooseComponentAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
   private IDisplayableAction cancelAction;
   private IDisplayableAction okAction;
@@ -77,7 +82,7 @@ public class ChooseComponentAction extends ModalDialogAction {
     tableViewDescriptor.setModelDescriptor(componentsModelConnector
         .getModelDescriptor());
 
-    IView<SComponent> collectionView = getViewFactory(context).createView(
+    IView<E> collectionView = getViewFactory(context).createView(
         tableViewDescriptor, actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, collectionView);
 
