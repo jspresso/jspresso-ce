@@ -10,49 +10,6 @@
   -->
 
   <!--
-    Root action beans.
-  -->
-  <bean
-    id="lovOkFrontAction"
-    class="org.jspresso.framework.application.frontend.action.remote.lov.OkLovAction"
-    scope="prototype">
-    <property
-      name="nextAction"
-      ref="sourceViewConnectorSetAction" />
-  </bean>
-
-  <bean
-    id="printOkFrontAction"
-    class="org.jspresso.framework.application.frontend.action.remote.lov.OkChooseComponentAction">
-    <property
-      name="nextAction"
-      ref="editReportParametersAction" />
-  </bean>
-
-  <bean
-    id="doPrintAction"
-    parent="abstractDoPrintAction"
-    class="org.jspresso.framework.application.frontend.action.remote.std.OkAction" />
-
-  <bean
-    id="chooseActionOkFrontAction"
-    class="org.jspresso.framework.application.frontend.action.remote.lov.OkChooseComponentAction">
-    <property
-      name="nextAction">
-      <bean
-        class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
-    </property>
-  </bean>
-
-  <bean
-    id="cancelDialogFrontAction"
-    class="org.jspresso.framework.application.frontend.action.remote.std.CancelAction" />
-
-  <bean
-    id="okDialogFrontAction"
-    class="org.jspresso.framework.application.frontend.action.remote.std.OkAction" />
-
-  <!--
     Action beans
   -->
   <bean
@@ -160,6 +117,10 @@
   <bean
     id="modalDialogAction"
     class="org.jspresso.framework.application.frontend.action.remote.std.ModalDialogAction" />
+
+  <bean
+    id="closeDialogAction"
+    class="org.jspresso.framework.application.frontend.action.remote.std.CloseDialogAction" />
 
   <bean
     id="remoteConnectorFactory"

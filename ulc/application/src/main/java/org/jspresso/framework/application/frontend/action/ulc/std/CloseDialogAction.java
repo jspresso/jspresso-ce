@@ -16,20 +16,17 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.wings.lov;
+package org.jspresso.framework.application.frontend.action.ulc.std;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.wings.std.OkAction;
-import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
+import org.jspresso.framework.application.frontend.action.ulc.AbstractUlcAction;
 
 
 /**
- * Sets the selected component as the value of the source view connector (which
- * will propagate to the backend).
+ * A standard close dialog action. Since it is a chained action, it can be chained with
+ * another action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -44,10 +41,10 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public class OkChooseComponentAction extends OkAction {
+public class CloseDialogAction extends AbstractUlcAction {
 
   /**
    * {@inheritDoc}
@@ -55,14 +52,7 @@ public class OkChooseComponentAction extends OkAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector resultConnector = ((ICollectionConnectorProvider) getViewConnector(context))
-        .getCollectionConnector();
-    int[] resultSelectedIndices = resultConnector.getSelectedIndices();
-    if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
-      Object selectedComponent = resultConnector.getChildConnector(
-          resultSelectedIndices[0]).getConnectorValue();
-      context.put(ActionContextConstants.ACTION_PARAM, selectedComponent);
-    }
+    closeDialog(context);
     return super.execute(actionHandler, context);
   }
 }

@@ -33,6 +33,43 @@
   <!--
     Action beans.
   -->
+
+  <bean
+    id="okDialogFrontAction"
+    parent="closeDialogAction">
+    <property
+      name="name"
+      value="ok" />
+    <property
+      name="iconImageURL"
+      value="classpath:org/jspresso/framework/application/images/ok-48x48.png" />
+  </bean>
+
+  <bean
+    id="cancelDialogFrontAction"
+    parent="closeDialogAction">
+    <property
+      name="name"
+      value="cancel" />
+    <property
+      name="iconImageURL"
+      value="classpath:org/jspresso/framework/application/images/cancel-48x48.png" />
+  </bean>
+
+  <bean
+    id="lovOkFrontAction"
+    parent="okDialogFrontAction"
+    scope="prototype">
+    <property
+      name="wrappedAction">
+      <bean
+        class="org.jspresso.framework.application.frontend.action.lov.OkLovAction" />
+    </property>
+    <property
+      name="nextAction"
+      ref="sourceViewConnectorSetAction" />
+  </bean>
+
   <bean
     id="lovAction"
     class="org.jspresso.framework.application.frontend.action.lov.LovAction"
@@ -64,6 +101,34 @@
     <property
       name="wrappedAction"
       ref="queryEntitiesBackAction" />
+  </bean>
+
+  <bean
+    id="printOkFrontAction"
+    parent="okDialogFrontAction">
+    <property
+      name="wrappedAction">
+      <bean
+        class="org.jspresso.framework.application.frontend.action.lov.OkChooseComponentAction" />
+    </property>
+    <property
+      name="nextAction"
+      ref="editReportParametersAction" />
+  </bean>
+
+  <bean
+    id="chooseActionOkFrontAction"
+    parent="okDialogFrontAction">
+    <property
+      name="wrappedAction">
+      <bean
+        class="org.jspresso.framework.application.frontend.action.lov.OkChooseComponentAction" />
+    </property>
+    <property
+      name="nextAction">
+      <bean
+        class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
+    </property>
   </bean>
 
   <bean
@@ -196,11 +261,8 @@
   </bean>
 
   <bean
-    id="abstractDoPrintAction"
-    abstract="true">
-    <property
-      name="name"
-      value="ok" />
+    id="doPrintAction"
+    parent="okDialogFrontAction">
     <property
       name="iconImageURL"
       value="classpath:org/jspresso/framework/application/images/print-48x48.png" />

@@ -16,17 +16,22 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.wings.std;
+package org.jspresso.framework.application.frontend.action.lov;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction;
-
+import org.jspresso.framework.application.backend.session.EMergeMode;
+import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * A standard cancel action. Since it is a chained action, it can be chained
- * with another action.
+ * Sets the selected entity as the value of the source view connector (which
+ * will propagate to the backend).
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,18 +46,16 @@ import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAct
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1442 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class CancelAction extends AbstractWingsAction {
-
-  /**
-   * Constructs a new <code>CancelAction</code> instance.
-   */
-  public CancelAction() {
-    setName("cancel");
-    setIconImageURL("classpath:org/jspresso/framework/application/images/cancel-48x48.png");
-  }
+public class OkLovAction<E, F, G> extends WrappingAction<E, F, G> {
 
   /**
    * {@inheritDoc}
@@ -60,7 +63,18 @@ public class CancelAction extends AbstractWingsAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    closeDialog(context);
+    ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) getViewConnector(context))
+        .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+    int[] resultSelectedIndices = resultConnector.getSelectedIndices();
+    if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
+      IEntity selectedEntity = (IEntity) resultConnector.getChildConnector(
+          resultSelectedIndices[0]).getConnectorValue();
+      if (selectedEntity != null) {
+        selectedEntity = getController(context).getApplicationSession().merge(
+            selectedEntity, EMergeMode.MERGE_KEEP);
+      }
+      context.put(ActionContextConstants.ACTION_PARAM, selectedEntity);
+    }
     return super.execute(actionHandler, context);
   }
 }

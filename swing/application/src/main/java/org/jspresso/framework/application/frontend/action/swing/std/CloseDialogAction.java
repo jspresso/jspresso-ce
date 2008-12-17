@@ -16,23 +16,17 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.remote.lov;
+package org.jspresso.framework.application.frontend.action.swing.std;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.session.EMergeMode;
-import org.jspresso.framework.application.frontend.action.remote.std.OkAction;
-import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
 
 
 /**
- * Sets the selected entity as the value of the source view connector (which
- * will propagate to the backend).
+ * A standard close dialog action. Since it is a chained action, it can be chained with
+ * another action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -47,10 +41,10 @@ import org.jspresso.framework.model.entity.IEntity;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public class OkLovAction extends OkAction {
+public class CloseDialogAction extends AbstractSwingAction {
 
   /**
    * {@inheritDoc}
@@ -58,18 +52,7 @@ public class OkLovAction extends OkAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) getViewConnector(context))
-        .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
-    int[] resultSelectedIndices = resultConnector.getSelectedIndices();
-    if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
-      IEntity selectedEntity = (IEntity) resultConnector.getChildConnector(
-          resultSelectedIndices[0]).getConnectorValue();
-      if (selectedEntity != null) {
-        selectedEntity = getController(context).getApplicationSession().merge(
-            selectedEntity, EMergeMode.MERGE_KEEP);
-      }
-      context.put(ActionContextConstants.ACTION_PARAM, selectedEntity);
-    }
+    closeDialog(context);
     return super.execute(actionHandler, context);
   }
 }
