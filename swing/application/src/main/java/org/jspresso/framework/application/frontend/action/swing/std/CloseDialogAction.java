@@ -16,16 +16,16 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.wings.std;
+package org.jspresso.framework.application.frontend.action.swing.std;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction;
+import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
 
 
 /**
- * A standard ok action. Since it is a chained action, it can be chained with
+ * A standard close dialog action. Since it is a chained action, it can be chained with
  * another action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
@@ -41,18 +41,10 @@ import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAct
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public class OkAction extends AbstractWingsAction {
-
-  /**
-   * Constructs a new <code>OkAction</code> instance.
-   */
-  public OkAction() {
-    setName("ok");
-    setIconImageURL("classpath:org/jspresso/framework/application/images/ok-48x48.png");
-  }
+public class CloseDialogAction extends AbstractSwingAction {
 
   /**
    * {@inheritDoc}

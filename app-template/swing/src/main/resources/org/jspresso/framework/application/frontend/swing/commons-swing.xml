@@ -24,54 +24,6 @@
     class="org.jspresso.framework.binding.swing.DefaultTreeSelectionModelBinder" />
 
   <!--
-    Root action beans.
-  -->
-  <bean
-    id="lovFindFrontAction"
-    parent="abstractLovFindFrontAction"
-    class="org.jspresso.framework.application.frontend.action.std.FindAction"
-    scope="prototype" />
-
-  <bean
-    id="lovOkFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.lov.OkLovAction"
-    scope="prototype">
-    <property
-      name="nextAction"
-      ref="sourceViewConnectorSetAction" />
-  </bean>
-
-  <bean
-    id="printOkFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.lov.OkChooseComponentAction">
-    <property
-      name="nextAction"
-      ref="editReportParametersAction" />
-  </bean>
-
-  <bean
-    id="doPrintAction"
-    parent="abstractDoPrintAction"
-    class="org.jspresso.framework.application.frontend.action.swing.std.OkAction" />
-
-  <bean
-    id="chooseActionOkFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.lov.OkChooseComponentAction">
-    <property name="nextAction">
-      <bean
-        class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
-    </property>
-  </bean>
-
-  <bean
-    id="cancelDialogFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.std.CancelAction" />
-
-  <bean
-    id="okDialogFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.std.OkAction" />
-
-  <!--
     Action beans
   -->
   <bean
@@ -171,6 +123,10 @@
   <bean
     id="modalDialogAction"
     class="org.jspresso.framework.application.frontend.action.swing.std.ModalDialogAction" />
+
+  <bean
+    id="closeDialogAction"
+    class="org.jspresso.framework.application.frontend.action.swing.std.CloseDialogAction" />
 
   <bean
     id="viewFactory"

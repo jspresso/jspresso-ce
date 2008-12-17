@@ -16,17 +16,17 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.ulc.std;
+package org.jspresso.framework.application.frontend.action.wings.std;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.ulc.AbstractUlcAction;
+import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction;
 
 
 /**
- * A standard cancel action. Since it is a chained action, it can be chained
- * with another action.
+ * A standard close dialog action. Since it is a chained action, it can be chained with
+ * another action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,18 +41,10 @@ import org.jspresso.framework.application.frontend.action.ulc.AbstractUlcAction;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public class CancelAction extends AbstractUlcAction {
-
-  /**
-   * Constructs a new <code>CancelAction</code> instance.
-   */
-  public CancelAction() {
-    setName("cancel");
-    setIconImageURL("classpath:org/jspresso/framework/application/images/cancel-48x48.png");
-  }
+public class CloseDialogAction extends AbstractWingsAction {
 
   /**
    * {@inheritDoc}
