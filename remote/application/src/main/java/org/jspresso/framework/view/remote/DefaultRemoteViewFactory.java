@@ -413,6 +413,8 @@ public class DefaultRemoteViewFactory extends
           .getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
     }
+    viewComponent
+        .setSelectionMode(viewDescriptor.getSelectionMode().toString());
     return view;
   }
 
@@ -448,7 +450,8 @@ public class DefaultRemoteViewFactory extends
             .getPropertyDescriptor(columnId);
         IView<RComponent> column = createPropertyView(propertyDescriptor, null,
             actionHandler, locale);
-        // Do not use standard createColumnConnector method to preserve formatted value connectors.
+        // Do not use standard createColumnConnector method to preserve
+        // formatted value connectors.
         // IValueConnector columnConnector = createColumnConnector(columnId,
         // modelDescriptor.getCollectionDescriptor().getElementDescriptor());
         IValueConnector columnConnector = column.getConnector();
@@ -470,6 +473,8 @@ public class DefaultRemoteViewFactory extends
       }
     }
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
+    viewComponent
+        .setSelectionMode(viewDescriptor.getSelectionMode().toString());
     return view;
   }
 

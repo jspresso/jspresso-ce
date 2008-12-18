@@ -66,6 +66,7 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -191,8 +192,8 @@ import org.syntax.jedit.tokenmarker.TokenMarker;
 public class DefaultSwingViewFactory extends
     AbstractViewFactory<JComponent, Icon, Action> {
 
-  private static final Dimension    TREE_PREFERRED_SIZE      = new Dimension(
-                                                                 128, 128);
+  private static final Dimension    TREE_PREFERRED_SIZE = new Dimension(128,
+                                                            128);
   private IListSelectionModelBinder listSelectionModelBinder;
 
   private ITreeSelectionModelBinder treeSelectionModelBinder;
@@ -1274,6 +1275,7 @@ public class DefaultSwingViewFactory extends
     }
     viewComponent.setCellRenderer(new EvenOddListCellRenderer());
     viewComponent.setModel(new CollectionConnectorListModel(connector));
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
     return view;
@@ -1668,6 +1670,7 @@ public class DefaultSwingViewFactory extends
     sorterDecorator.setColumnComparator(String.class,
         String.CASE_INSENSITIVE_ORDER);
     viewComponent.setModel(sorterDecorator);
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), sorterDecorator);
     int maxColumnSize = computePixelWidth(viewComponent,
@@ -1740,6 +1743,22 @@ public class DefaultSwingViewFactory extends
         .getRowHeight()
         * 6 + viewComponent.getTableHeader().getPreferredSize().height));
     return view;
+  }
+
+  private int getSelectionMode(ICollectionViewDescriptor viewDescriptor) {
+    int selectionMode;
+    switch (viewDescriptor.getSelectionMode()) {
+      case SINGLE_SELECTION:
+        selectionMode = ListSelectionModel.SINGLE_SELECTION;
+        break;
+      case SINGLE_INTERVAL_SELECTION:
+        selectionMode = ListSelectionModel.SINGLE_INTERVAL_SELECTION;
+        break;
+      default:
+        selectionMode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+        break;
+    }
+    return selectionMode;
   }
 
   /**

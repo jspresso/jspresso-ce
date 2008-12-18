@@ -18,8 +18,9 @@
  */
 package org.jspresso.framework.gui.remote;
 
+
 /**
- * A remote list component.
+ * A collection component.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,15 +38,38 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RList extends RCollectionComponent {
+public class RCollectionComponent extends RComponent {
 
+  private String selectionMode;
+
+  
   /**
-   * Constructs a new <code>RList</code> instance.
+   * Constructs a new <code>RCollectionComponent</code> instance.
    * 
    * @param guid
-   *          the guid.
+   *          the guid
    */
-  public RList(String guid) {
+  public RCollectionComponent(String guid) {
     super(guid);
   }
+
+  /**
+   * Gets the selectionMode.
+   * 
+   * @return the selectionMode.
+   */
+  public String getSelectionMode() {
+    return selectionMode;
+  }
+
+  
+  /**
+   * Sets the selectionMode.
+   * 
+   * @param selectionMode the selectionMode to set.
+   */
+  public void setSelectionMode(String selectionMode) {
+    this.selectionMode = selectionMode;
+  }
 }
+

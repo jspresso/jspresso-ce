@@ -5,8 +5,8 @@ Bugs fixed
 
 New features
 ------------
+2444628  	 Allow selection mode on collection view descriptors
 2172464    Remove all references to java.awt in view descriptors
-
 
 2.2.2
 =====

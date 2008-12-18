@@ -16,10 +16,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.gui.remote;
+package org.jspresso.framework.view.descriptor;
+
 
 /**
- * A remote list component.
+ * Selection mode constants.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,15 +38,19 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RList extends RCollectionComponent {
-
+public enum ESelectionMode {
   /**
-   * Constructs a new <code>RList</code> instance.
-   * 
-   * @param guid
-   *          the guid.
+   * <code>SINGLE_SELECTION</code>.
    */
-  public RList(String guid) {
-    super(guid);
-  }
+  SINGLE_SELECTION,
+  
+  /**
+   * <code>SINGLE_INTERVAL_SELECTION</code>.
+   */
+  SINGLE_INTERVAL_SELECTION,
+  
+  /**
+   * <code>MULTIPLE_INTERVAL_SELECTION</code>.
+   */
+  MULTIPLE_INTERVAL_SELECTION
 }

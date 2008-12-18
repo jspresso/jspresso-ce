@@ -38,7 +38,7 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RTable extends RComponent {
+public class RTable extends RCollectionComponent {
 
   private RComponent[] columns;
 

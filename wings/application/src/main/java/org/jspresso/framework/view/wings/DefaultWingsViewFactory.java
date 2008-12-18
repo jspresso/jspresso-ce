@@ -36,6 +36,7 @@ import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jspresso.framework.action.IActionHandler;
@@ -190,8 +191,8 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(
-      IViewDescriptor viewDescriptor, Locale locale, IView<SComponent> view) {
+  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
+      Locale locale, IView<SComponent> view) {
     if (viewDescriptor.getForeground() != null) {
       view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
     }
@@ -763,7 +764,8 @@ public class DefaultWingsViewFactory extends
 
     viewComponent.add(createSPanel(new SBorderLayout()),
         ICardViewDescriptor.DEFAULT_CARD);
-    viewComponent.add(createSecurityComponent(), ICardViewDescriptor.SECURITY_CARD);
+    viewComponent.add(createSecurityComponent(),
+        ICardViewDescriptor.SECURITY_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
         .getCardViewDescriptors().entrySet()) {
@@ -1237,7 +1239,8 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<SComponent> createListView(IListViewDescriptor viewDescriptor,
+  protected IView<SComponent> createListView(
+      IListViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
@@ -1263,6 +1266,7 @@ public class DefaultWingsViewFactory extends
     }
     viewComponent.setCellRenderer(new EvenOddListCellRenderer());
     viewComponent.setModel(new CollectionConnectorListModel(connector));
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
     return view;
@@ -1677,8 +1681,12 @@ public class DefaultWingsViewFactory extends
     tableModel.setExceptionHandler(actionHandler);
     tableModel.setColumnClassesByIds(columnClassesByIds);
     viewComponent.setModel(tableModel);
+
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
+
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
+
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());
     int columnIndex = 0;
@@ -1751,6 +1759,22 @@ public class DefaultWingsViewFactory extends
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;
+  }
+
+  private int getSelectionMode(ICollectionViewDescriptor viewDescriptor) {
+    int selectionMode;
+    switch (viewDescriptor.getSelectionMode()) {
+      case SINGLE_SELECTION:
+        selectionMode = ListSelectionModel.SINGLE_SELECTION;
+        break;
+      case SINGLE_INTERVAL_SELECTION:
+        selectionMode = ListSelectionModel.SINGLE_INTERVAL_SELECTION;
+        break;
+      default:
+        selectionMode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+        break;
+    }
+    return selectionMode;
   }
 
   /**
@@ -1833,7 +1857,8 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<SComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
+  protected IView<SComponent> createTreeView(
+      ITreeViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") IActionHandler actionHandler, Locale locale) {
 
     ICompositeValueConnector connector = createTreeViewConnector(
