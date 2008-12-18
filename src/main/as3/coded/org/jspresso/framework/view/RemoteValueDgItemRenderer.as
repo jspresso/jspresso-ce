@@ -46,7 +46,7 @@ package org.jspresso.framework.view {
   	  super.data = value;
   	}
 
-  	private function updateLabel(rendererData:Object, rendererListData:BaseListData):void {
+  	protected function updateLabel(rendererData:Object, rendererListData:BaseListData):void {
   	  if(rendererData && rendererListData) {
   	    var cellValueState:RemoteValueState = ((rendererData as RemoteCompositeValueState).children[rendererListData.columnIndex +1] as RemoteValueState);
   	    if(valueChangeListener != null) {

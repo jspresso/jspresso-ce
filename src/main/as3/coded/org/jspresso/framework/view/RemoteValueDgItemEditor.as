@@ -3,6 +3,7 @@ package org.jspresso.framework.view
   import flash.events.FocusEvent;
   
   import mx.containers.Canvas;
+  import mx.controls.CheckBox;
   import mx.core.UIComponent;
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
@@ -13,7 +14,7 @@ package org.jspresso.framework.view
     private var _editor:UIComponent;
     private var _state:RemoteValueState;
     private var _index:int;
-    
+
     public function RemoteValueDgItemEditor() {
       _index = -1;
     }
@@ -42,8 +43,13 @@ package org.jspresso.framework.view
 
     private function setupChildren():void {
       removeAllChildren();
-      _editor.percentWidth = 100.0;
-      _editor.percentHeight = 100.0;
+      if(_editor is CheckBox) {
+        _editor.setStyle("horizontalCenter", 0);
+        _editor.setStyle("verticalCenter", 0);
+      } else {
+        _editor.percentWidth = 100.0;
+        _editor.percentHeight = 100.0;
+      }
       addChild(_editor);
     }
 
@@ -54,7 +60,17 @@ package org.jspresso.framework.view
       } else if(value is RemoteValueState) {
         _state.value = (value as RemoteValueState).value;
       }
-      editor.setFocus();
+    }
+    
+    override public function setFocus():void {
+      _editor.setFocus();
+    }
+    
+    override public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void {
+      // prevent bogus DataGrid to install its bogus focus out listener...
+      if(type != FocusEvent.FOCUS_OUT) {
+        super.addEventListener(type, listener, useCapture, priority, useWeakReference);
+      }
     }
   }
 }

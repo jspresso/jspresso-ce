@@ -299,6 +299,7 @@ package org.jspresso.framework.view {
     private function createColorField(remoteColorField:RColorField):HBox {
       var colorField:HBox = new HBox();
       var colorPicker:ColorPicker = new ColorPicker();
+      colorPicker.name = "cc";
       bindColorPicker(colorPicker, remoteColorField.state);
       colorField.addChild(colorPicker);
       var resetButton:Button = new Button();
@@ -309,12 +310,24 @@ package org.jspresso.framework.view {
       resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
         remoteColorField.state.value = remoteColorField.defaultColor;
       });
+      var focusIn:Function = function(event:FocusEvent):void {
+        var cc:UIComponent = (event.currentTarget as Container).getChildByName("cc") as UIComponent;
+        cc.setFocus();
+      };
+      colorField.addEventListener(FocusEvent.FOCUS_IN, focusIn);
+      colorPicker.editable = true;
       return colorField;
     }
     
     private function createCheckBox(remoteCheckBox:RCheckBox):CheckBox {
       var checkBox:CheckBox = new CheckBox();
+      bindCheckBox(checkBox, remoteCheckBox)
       return checkBox;
+    }
+
+    private function bindCheckBox(checkBox:CheckBox, remoteCheckBox:RCheckBox):void {
+      BindingUtils.bindProperty(checkBox, "selected", remoteCheckBox.state, "value");
+      BindingUtils.bindProperty(remoteCheckBox.state, "value", checkBox, "selected");
     }
 
     private function createComboBox(remoteComboBox:RComboBox):ComboBox {
@@ -769,14 +782,24 @@ package org.jspresso.framework.view {
                                      labels:(rColumn as RComboBox).translations,
                                      icons :(rColumn as RComboBox).icons,
                                      iconTemplate:_iconTemplate};
+        } else if(rColumn is RCheckBox) {
+          itemRenderer = new ClassFactory(UIComponentDgItemRenderer);
+          itemRenderer.properties = {viewFactory:this,
+                                     remoteComponent:rColumn,
+                                     index:i+1};
+          column.rendererIsEditor = true;              
         } else {
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
         }
         column.itemRenderer = itemRenderer
         
-        var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
-        itemEditor.properties = {editor:createComponent(rColumn), state:rColumn.state, index:i+1};
-        column.itemEditor = itemEditor;
+        if(!(rColumn is RCheckBox)) {
+          var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
+          itemEditor.properties = {editor:createComponent(rColumn),
+                                   state:rColumn.state,
+                                   index:i+1};
+          column.itemEditor = itemEditor;
+        }
         column.editorDataField = "state";
         
         column.sortCompareFunction = _remoteValueSorter.compareStrings;
@@ -784,7 +807,11 @@ package org.jspresso.framework.view {
       }
       
       table.columns = columns;
-      table.allowMultipleSelection = true;
+      if(remoteTable.selectionMode == "SINGLE_SELECTION") {
+        table.allowMultipleSelection = false;
+      } else {
+        table.allowMultipleSelection = true;
+      }
       table.editable = true;
       
       // Clone array collection to avoid re-ordering items in original collection when sorting.
@@ -867,22 +894,26 @@ package org.jspresso.framework.view {
       table.addEventListener(DataGridEvent.ITEM_EDIT_END, function(event:DataGridEvent):void {
         if (event.reason != DataGridEventReason.CANCELLED) {
           var table:DataGrid = event.currentTarget as DataGrid;
-          var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
-          currentEditor.setFocus();
-          var state:RemoteValueState = currentEditor.state;
-          var row:RemoteCompositeValueState = (table.dataProvider as ArrayCollection)[event.rowIndex] as RemoteCompositeValueState; 
-          var cell:RemoteValueState = row.children[event.columnIndex +1] as RemoteValueState;
-          
-          cell.value = state.value;
+          if(table.itemEditorInstance is RemoteValueDgItemEditor) {
+            var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
+            var state:RemoteValueState = currentEditor.state;
+            var row:RemoteCompositeValueState = (table.dataProvider as ArrayCollection)[event.rowIndex] as RemoteCompositeValueState; 
+            var cell:RemoteValueState = row.children[event.columnIndex +1] as RemoteValueState;
+            
+            cell.value = state.value;
+          }
         }
       });
-      table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function itemEditBeginning(event:DataGridEvent):void {
+      table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function(event:DataGridEvent):void {
         var rowCollection:ArrayCollection = (event.currentTarget as DataGrid).dataProvider as ArrayCollection;
         var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState; 
         if(!cellValueState.writable) {
     	    event.preventDefault();
     	  }
     	});
+      table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
+        ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();
+      });
     }
 
     private function createTextArea(remoteTextArea:RTextArea):TextArea {
