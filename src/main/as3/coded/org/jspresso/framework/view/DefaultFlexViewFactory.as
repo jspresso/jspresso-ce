@@ -36,6 +36,7 @@ package org.jspresso.framework.view {
   import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
+  import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
   import mx.events.CollectionEvent;
   import mx.events.CollectionEventKind;
@@ -130,11 +131,6 @@ package org.jspresso.framework.view {
         component = createTree(remoteComponent as RTree);
       }
       component.id = remoteComponent.guid;
-      if(remoteComponent is RTable) {
-        var scrollCanvas:Canvas = new Canvas();
-        scrollCanvas.addChild(component);
-        component = scrollCanvas;
-      }
       if(!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
         var toolBar:ApplicationControlBar = new ApplicationControlBar();
         toolBar.percentWidth = 100.0;
@@ -159,6 +155,8 @@ package org.jspresso.framework.view {
         component.percentHeight = 100.0;
         surroundingBox.addChild(toolBar);
         surroundingBox.addChild(component);
+        surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
+        surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;
         component = surroundingBox;
       }
       if(remoteComponent.borderType == "TITLED") {
@@ -171,6 +169,8 @@ package org.jspresso.framework.view {
         decorator.setStyle("borderAlpha",1);
         decorator.setStyle("borderThicknessLeft", 3);
         decorator.setStyle("borderThicknessRight", 3);
+        decorator.horizontalScrollPolicy = ScrollPolicy.OFF;
+        decorator.verticalScrollPolicy = ScrollPolicy.OFF;
         component = decorator;
       } else if(remoteComponent.borderType == "SIMPLE") {
         component.setStyle("borderStyle","solid");
@@ -692,6 +692,8 @@ package org.jspresso.framework.view {
         tabCanvas.percentWidth = 100.0;
         tabCanvas.percentHeight = 100.0;
         tabCanvas.label = rTab.label;
+        tabCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
+        tabCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
         tabContainer.addChild(tabCanvas);
         
         if(rTab.tooltip != null) {
@@ -813,6 +815,8 @@ package org.jspresso.framework.view {
         table.allowMultipleSelection = true;
       }
       table.editable = true;
+      table.horizontalScrollPolicy = ScrollPolicy.AUTO;
+      table.verticalScrollPolicy = ScrollPolicy.AUTO;
       
       // Clone array collection to avoid re-ordering items in original collection when sorting.
       var tableModel:ArrayCollection = new ArrayCollection((remoteTable.state as RemoteCompositeValueState).children.toArray());
@@ -842,12 +846,8 @@ package org.jspresso.framework.view {
 //      test.addChild(table);
 //      var testB:Button = new Button();
 //      testB.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-//        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[1] as RemoteValueState);
-//        if(cellState.value == "titi") {
-//          cellState.value = "toto";
-//        } else {
-//          cellState.value = "titi" ;
-//        }
+//        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[11] as RemoteValueState);
+//        cellState.value = !cellState.value;
 //      });
 //      testB.label = "test";
 //      var testB2:Button = new Button();
