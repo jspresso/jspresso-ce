@@ -17,7 +17,7 @@ package org.jspresso.framework.gui.remote {
 
 		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RTable")]
-    public class RTable extends RComponent {
+    public class RTable extends RCollectionComponent {
 
         private var _columns:Array;
 

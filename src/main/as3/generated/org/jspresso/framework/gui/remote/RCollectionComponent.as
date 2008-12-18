@@ -16,8 +16,16 @@
 package org.jspresso.framework.gui.remote {
 
 		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RList")]
-    public class RList extends RCollectionComponent {
+    [RemoteClass(alias="org.jspresso.framework.gui.remote.RCollectionComponent")]
+    public class RCollectionComponent extends RComponent {
 
+        private var _selectionMode:String;
+
+        public function set selectionMode(value:String):void {
+            _selectionMode = value;
+        }
+        public function get selectionMode():String {
+            return _selectionMode;
+        }
     }
 }
