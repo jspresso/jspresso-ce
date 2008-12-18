@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 
 
@@ -43,6 +44,28 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
  */
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     implements ICollectionViewDescriptor {
+  
+  private ESelectionMode selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+
+  
+  /**
+   * Gets the selectionMode.
+   * 
+   * @return the selectionMode.
+   */
+  public ESelectionMode getSelectionMode() {
+    return selectionMode;
+  }
+
+  
+  /**
+   * Sets the selectionMode.
+   * 
+   * @param selectionMode the selectionMode to set.
+   */
+  public void setSelectionMode(ESelectionMode selectionMode) {
+    this.selectionMode = selectionMode;
+  }
 
   /**
    * {@inheritDoc}
@@ -57,4 +80,5 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     }
     return iconImageURL;
   }
+
 }

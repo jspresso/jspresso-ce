@@ -172,6 +172,7 @@ import com.ulcjava.base.application.ULCGridBagLayoutPane;
 import com.ulcjava.base.application.ULCGridLayoutPane;
 import com.ulcjava.base.application.ULCLabel;
 import com.ulcjava.base.application.ULCList;
+import com.ulcjava.base.application.ULCListSelectionModel;
 import com.ulcjava.base.application.ULCMenuItem;
 import com.ulcjava.base.application.ULCPasswordField;
 import com.ulcjava.base.application.ULCPopupMenu;
@@ -1993,6 +1994,7 @@ public class DefaultUlcViewFactory implements
     CollectionConnectorListModel listModel = new CollectionConnectorListModel(
         connector);
     viewComponent.setModel(listModel);
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
     return view;
@@ -2538,6 +2540,7 @@ public class DefaultUlcViewFactory implements
     ClientContext.setModelUpdateMode(sorterDecorator,
         IUlcEventConstants.ASYNCHRONOUS_MODE);
     viewComponent.setModel(sorterDecorator);
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), sorterDecorator);
 
@@ -2623,6 +2626,22 @@ public class DefaultUlcViewFactory implements
     scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
         .getRowHeight() * 7));
     return view;
+  }
+
+  private int getSelectionMode(ICollectionViewDescriptor viewDescriptor) {
+    int selectionMode;
+    switch (viewDescriptor.getSelectionMode()) {
+      case SINGLE_SELECTION:
+        selectionMode = ULCListSelectionModel.SINGLE_SELECTION;
+        break;
+      case SINGLE_INTERVAL_SELECTION:
+        selectionMode = ULCListSelectionModel.SINGLE_INTERVAL_SELECTION;
+        break;
+      default:
+        selectionMode = ULCListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+        break;
+    }
+    return selectionMode;
   }
 
   private ICompositeView<ULCComponent> createTabView(

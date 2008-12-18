@@ -41,6 +41,7 @@ import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -1974,6 +1975,7 @@ public class DefaultWingsViewFactory implements
     }
     viewComponent.setCellRenderer(new EvenOddListCellRenderer());
     viewComponent.setModel(new CollectionConnectorListModel(connector));
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
     return view;
@@ -2531,6 +2533,7 @@ public class DefaultWingsViewFactory implements
     tableModel.setExceptionHandler(actionHandler);
     tableModel.setColumnClassesByIds(columnClassesByIds);
     viewComponent.setModel(tableModel);
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
     int maxColumnSize = computePixelWidth(viewComponent,
@@ -2605,6 +2608,22 @@ public class DefaultWingsViewFactory implements
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;
+  }
+
+  private int getSelectionMode(ICollectionViewDescriptor viewDescriptor) {
+    int selectionMode;
+    switch (viewDescriptor.getSelectionMode()) {
+      case SINGLE_SELECTION:
+        selectionMode = ListSelectionModel.SINGLE_SELECTION;
+        break;
+      case SINGLE_INTERVAL_SELECTION:
+        selectionMode = ListSelectionModel.SINGLE_INTERVAL_SELECTION;
+        break;
+      default:
+        selectionMode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+        break;
+    }
+    return selectionMode;
   }
 
   private ICompositeView<SComponent> createTabView(

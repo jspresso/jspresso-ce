@@ -39,5 +39,11 @@ package org.jspresso.framework.view.descriptor;
  * @author Vincent Vandenschrick
  */
 public interface ICollectionViewDescriptor extends IViewDescriptor {
-  // Empty as of now.
+
+  /**
+   * Gets the type of selection allowed on the collection view.
+   * 
+   * @return the type of selection allowed on the collection view.
+   */
+  ESelectionMode getSelectionMode();
 }
