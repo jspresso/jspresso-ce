@@ -1,3 +1,6 @@
-#Thu Apr 17 13:21:18 CEST 2008
+#Fri Dec 19 14:18:03 CET 2008
 eclipse.preferences.version=1
+encoding//src/main/resources/locale/fr_FR/SharedResources.properties=UTF-8
+encoding//src/main/resources/locale/fr_FR/controls.properties=UTF-8
+encoding//src/main/resources/locale/fr_FR/formatters.properties=UTF-8
 encoding//util/src/main/resources/org/jspresso/framework/util/i18n/Messages_en.properties=8859_1

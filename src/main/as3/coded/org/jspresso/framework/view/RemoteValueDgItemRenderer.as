@@ -5,6 +5,7 @@ package org.jspresso.framework.view {
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.ListData;
   import mx.controls.listClasses.ListItemRenderer;
+  import mx.formatters.Formatter;
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
@@ -13,6 +14,7 @@ package org.jspresso.framework.view {
     
     private var valueChangeListener:ChangeWatcher;
     private var _listData:BaseListData;
+    private var _formatter:Formatter;
     
   	override public function set listData(value:BaseListData):void {
    	  updateLabel(data, value);
@@ -40,6 +42,10 @@ package org.jspresso.framework.view {
   	  return _listData;
   	}
 
+  	public function set formatter(value:Formatter):void {
+  	  _formatter = value;
+  	}
+
   	override public function set data(value:Object):void	{
   	  updateLabel(value, listData);
   	  super.listData.label = listData.label;
@@ -60,7 +66,11 @@ package org.jspresso.framework.view {
   	protected function computeLabel(cellValueState:RemoteValueState):String {
  	    var cellLabel:String;
 	    if(cellValueState.value != null) {
-  	    cellLabel = cellValueState.value.toString();
+	      if(_formatter != null) {
+	        cellLabel = _formatter.format(cellValueState.value);
+	      } else {
+  	      cellLabel = cellValueState.value.toString();
+  	    }
   	  } else {
   	    cellLabel = null;
   	  }

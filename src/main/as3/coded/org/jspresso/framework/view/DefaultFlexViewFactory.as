@@ -44,6 +44,8 @@ package org.jspresso.framework.view {
   import mx.events.DataGridEvent;
   import mx.events.DataGridEventReason;
   import mx.events.FlexEvent;
+  import mx.formatters.DateFormatter;
+  import mx.formatters.Formatter;
   
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionField;
@@ -321,13 +323,13 @@ package org.jspresso.framework.view {
     
     private function createCheckBox(remoteCheckBox:RCheckBox):CheckBox {
       var checkBox:CheckBox = new CheckBox();
-      bindCheckBox(checkBox, remoteCheckBox)
+      bindCheckBox(checkBox, remoteCheckBox.state);
       return checkBox;
     }
 
-    private function bindCheckBox(checkBox:CheckBox, remoteCheckBox:RCheckBox):void {
-      BindingUtils.bindProperty(checkBox, "selected", remoteCheckBox.state, "value");
-      BindingUtils.bindProperty(remoteCheckBox.state, "value", checkBox, "selected");
+    private function bindCheckBox(checkBox:CheckBox, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(checkBox, "selected", remoteState, "value");
+      BindingUtils.bindProperty(remoteState, "value", checkBox, "selected");
     }
 
     private function createComboBox(remoteComboBox:RComboBox):ComboBox {
@@ -721,7 +723,14 @@ package org.jspresso.framework.view {
 
     private function createDateField(remoteDateField:RDateField):DateField {
       var dateField:DateField = new DateField();
+      dateField.editable = true;
+      bindDateField(dateField, remoteDateField.state);
       return dateField;
+    }
+
+    private function bindDateField(dateField:DateField, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(dateField, "selectedDate", remoteState, "value");
+      BindingUtils.bindProperty(remoteState, "value", dateField, "selectedDate");
     }
 
     private function createDecimalField(remoteDecimalField:RDecimalField):TextInput {
@@ -792,6 +801,7 @@ package org.jspresso.framework.view {
           column.rendererIsEditor = true;              
         } else {
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
+          itemRenderer.properties = {formatter:createFormatter(rColumn)};
         }
         column.itemRenderer = itemRenderer
         
@@ -987,6 +997,13 @@ package org.jspresso.framework.view {
     
     internal static function getContextRoot():String {
       return Application.application.url.substring(0,Application.application.url.lastIndexOf("/"));
+    }
+
+    private function createFormatter(remoteComponent:RComponent):Formatter {
+      if(remoteComponent is RDateField) {
+        return new DateFormatter();
+      }
+      return null;
     }
   }
 }

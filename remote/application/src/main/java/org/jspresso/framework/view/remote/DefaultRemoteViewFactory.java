@@ -134,6 +134,20 @@ public class DefaultRemoteViewFactory extends
 
   private IGUIDGenerator guidGenerator;
 
+  private boolean        durationServerParse;
+  private boolean        dateServerParse;
+  private boolean        numberServerParse;
+
+
+  /**
+   * Constructs a new <code>DefaultRemoteViewFactory</code> instance.
+   */
+  public DefaultRemoteViewFactory() {
+    durationServerParse = false;
+    dateServerParse = false;
+    numberServerParse = false;
+  }
+  
   /**
    * {@inheritDoc}
    */
@@ -742,9 +756,15 @@ public class DefaultRemoteViewFactory extends
           (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
     } else {
-      IValueConnector connector = getConnectorFactory()
-          .createFormattedValueConnector(propertyDescriptor.getName(),
-              createDecimalFormatter(propertyDescriptor, locale));
+      IValueConnector connector;
+      if (isNumberServerParse()) {
+        connector = getConnectorFactory().createFormattedValueConnector(
+            propertyDescriptor.getName(),
+            createDecimalFormatter(propertyDescriptor, locale));
+      } else {
+        connector = getConnectorFactory().createValueConnector(
+            propertyDescriptor.getName());
+      }
       connector.setExceptionHandler(actionHandler);
       RDecimalField viewComponent = createRDecimalField(connector);
       view = constructView(viewComponent, null, connector);
@@ -766,9 +786,15 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createPercentPropertyView(
       IPercentPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IValueConnector connector = getConnectorFactory()
-        .createFormattedValueConnector(propertyDescriptor.getName(),
-            createPercentFormatter(propertyDescriptor, locale));
+    IValueConnector connector;
+    if (isNumberServerParse()) {
+      connector = getConnectorFactory().createFormattedValueConnector(
+          propertyDescriptor.getName(),
+          createPercentFormatter(propertyDescriptor, locale));
+    } else {
+      connector = getConnectorFactory().createValueConnector(
+          propertyDescriptor.getName());
+    }
     connector.setExceptionHandler(actionHandler);
     RPercentField viewComponent = createRPercentField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
@@ -814,9 +840,15 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createIntegerPropertyView(
       IIntegerPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IValueConnector connector = getConnectorFactory()
-        .createFormattedValueConnector(propertyDescriptor.getName(),
-            createIntegerFormatter(propertyDescriptor, locale));
+    IValueConnector connector;
+    if (isNumberServerParse()) {
+      connector = getConnectorFactory().createFormattedValueConnector(
+          propertyDescriptor.getName(),
+          createIntegerFormatter(propertyDescriptor, locale));
+    } else {
+      connector = getConnectorFactory().createValueConnector(
+          propertyDescriptor.getName());
+    }
     connector.setExceptionHandler(actionHandler);
     RIntegerField viewComponent = createRIntegerField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
@@ -886,9 +918,15 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createDatePropertyView(
       IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    IValueConnector connector = getConnectorFactory()
-        .createFormattedValueConnector(propertyDescriptor.getName(),
-            createDateFormatter(propertyDescriptor, locale));
+    IValueConnector connector;
+    if (isDateServerParse()) {
+      connector = getConnectorFactory().createFormattedValueConnector(
+          propertyDescriptor.getName(),
+          createDateFormatter(propertyDescriptor, locale));
+    } else {
+      connector = getConnectorFactory().createValueConnector(
+          propertyDescriptor.getName());
+    }
     connector.setExceptionHandler(actionHandler);
     RDateField viewComponent = createRDateField(connector);
     viewComponent.setType(propertyDescriptor.getType().toString());
@@ -911,9 +949,15 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createDurationPropertyView(
       IDurationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IValueConnector connector = getConnectorFactory()
-        .createFormattedValueConnector(propertyDescriptor.getName(),
-            createDurationFormatter(propertyDescriptor, locale));
+    IValueConnector connector;
+    if (isDurationServerParse()) {
+      connector = getConnectorFactory().createFormattedValueConnector(
+          propertyDescriptor.getName(),
+          createDurationFormatter(propertyDescriptor, locale));
+    } else {
+      connector = getConnectorFactory().createValueConnector(
+          propertyDescriptor.getName());
+    }
     connector.setExceptionHandler(actionHandler);
     RDurationField viewComponent = createRDurationField(connector);
     if (propertyDescriptor.getMaxMillis() != null) {
@@ -940,9 +984,15 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createTimePropertyView(
       ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    IValueConnector connector = getConnectorFactory()
-        .createFormattedValueConnector(propertyDescriptor.getName(),
-            createTimeFormatter(propertyDescriptor, locale));
+    IValueConnector connector;
+    if (isDateServerParse()) {
+      connector = getConnectorFactory().createFormattedValueConnector(
+          propertyDescriptor.getName(),
+          createTimeFormatter(propertyDescriptor, locale));
+    } else {
+      connector = getConnectorFactory().createValueConnector(
+          propertyDescriptor.getName());
+    }
     connector.setExceptionHandler(actionHandler);
     RTimeField viewComponent = createRTimeField(connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
@@ -1192,5 +1242,62 @@ public class DefaultRemoteViewFactory extends
       @SuppressWarnings("unused") int characterLength) {
     // Empty as of now.
     return 0;
+  }
+
+  /**
+   * Gets the durationServerParse.
+   * 
+   * @return the durationServerParse.
+   */
+  protected boolean isDurationServerParse() {
+    return durationServerParse;
+  }
+
+  /**
+   * Sets the durationServerParse.
+   * 
+   * @param durationServerParse
+   *          the durationServerParse to set.
+   */
+  public void setDurationServerParse(boolean durationServerParse) {
+    this.durationServerParse = durationServerParse;
+  }
+
+  /**
+   * Gets the dateServerParse.
+   * 
+   * @return the dateServerParse.
+   */
+  protected boolean isDateServerParse() {
+    return dateServerParse;
+  }
+
+  /**
+   * Sets the dateServerParse.
+   * 
+   * @param dateServerParse
+   *          the dateServerParse to set.
+   */
+  public void setDateServerParse(boolean dateServerParse) {
+    this.dateServerParse = dateServerParse;
+  }
+
+  /**
+   * Gets the numberServerParse.
+   * 
+   * @return the numberServerParse.
+   */
+  protected boolean isNumberServerParse() {
+    return numberServerParse;
+  }
+
+  /**
+   * Sets the numberServerParse.
+   * 
+   * @param numberServerParse
+   *          the numberServerParse to set.
+   */
+  public void setNumberServerParse(boolean numberServerParse) {
+    this.numberServerParse = numberServerParse;
   }
 }
