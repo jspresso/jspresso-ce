@@ -4,6 +4,7 @@ package org.jspresso.framework.view
   
   import mx.containers.Canvas;
   import mx.controls.CheckBox;
+  import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
@@ -17,6 +18,8 @@ package org.jspresso.framework.view
 
     public function RemoteValueDgItemEditor() {
       _index = -1;
+      horizontalScrollPolicy = ScrollPolicy.OFF;
+      verticalScrollPolicy = ScrollPolicy.OFF;
     }
     
     public function set editor(value:UIComponent):void {

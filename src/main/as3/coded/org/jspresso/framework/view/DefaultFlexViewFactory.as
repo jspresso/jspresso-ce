@@ -1,4 +1,6 @@
 package org.jspresso.framework.view {
+  import actionscriptdatetimelibrary.DateTimeField;
+  
   import com.benstucki.utilities.IconUtility;
   
   import flash.events.Event;
@@ -22,7 +24,6 @@ package org.jspresso.framework.view {
   import mx.controls.Button;
   import mx.controls.CheckBox;
   import mx.controls.ColorPicker;
-  import mx.controls.ComboBox;
   import mx.controls.DataGrid;
   import mx.controls.DateField;
   import mx.controls.Image;
@@ -110,7 +111,7 @@ package org.jspresso.framework.view {
       } else if(remoteComponent is RContainer) {
         component = createContainer(remoteComponent as RContainer);
       } else if(remoteComponent is RDateField) {
-        component = createDateField(remoteComponent as RDateField);
+        component = createDateComponent(remoteComponent as RDateField);
       } else if(remoteComponent is RDurationField) {
         component = createDurationField(remoteComponent as RDurationField);
       } else if(remoteComponent is RImageComponent) {
@@ -133,6 +134,9 @@ package org.jspresso.framework.view {
         component = createTree(remoteComponent as RTree);
       }
       component.id = remoteComponent.guid;
+      if(remoteComponent.tooltip != null) {
+        component.toolTip = remoteComponent.tooltip;
+      }
       if(!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
         var toolBar:ApplicationControlBar = new ApplicationControlBar();
         toolBar.percentWidth = 100.0;
@@ -181,8 +185,8 @@ package org.jspresso.framework.view {
       return component;
     }
     
-    private function createContainer(remoteContainer:RContainer):Container {
-      var container:Container;
+    private function createContainer(remoteContainer:RContainer):UIComponent {
+      var container:UIComponent;
       if(remoteContainer is RBorderContainer) {
         container = createBorderContainer(remoteContainer as RBorderContainer);
       } else if(remoteContainer is RCardContainer) {
@@ -231,7 +235,7 @@ package org.jspresso.framework.view {
       return textComponent;
     }
 
-    private function createTree(remoteTree:RTree):Tree {
+    private function createTree(remoteTree:RTree):UIComponent {
       var tree:Tree = new Tree();
       bindTree(tree, remoteTree.state as RemoteCompositeValueState); 
       tree.labelField = "value";
@@ -270,7 +274,7 @@ package org.jspresso.framework.view {
       }
     }
 
-    private function createImageComponent(remoteImageComponent:RImageComponent):Image {
+    private function createImageComponent(remoteImageComponent:RImageComponent):UIComponent {
       var imageComponent:Image = new Image();
       return imageComponent;
     }
@@ -298,7 +302,7 @@ package org.jspresso.framework.view {
       return actionField;
     }
     
-    private function createColorField(remoteColorField:RColorField):HBox {
+    private function createColorField(remoteColorField:RColorField):UIComponent {
       var colorField:HBox = new HBox();
       var colorPicker:ColorPicker = new ColorPicker();
       colorPicker.name = "cc";
@@ -321,7 +325,7 @@ package org.jspresso.framework.view {
       return colorField;
     }
     
-    private function createCheckBox(remoteCheckBox:RCheckBox):CheckBox {
+    private function createCheckBox(remoteCheckBox:RCheckBox):UIComponent {
       var checkBox:CheckBox = new CheckBox();
       bindCheckBox(checkBox, remoteCheckBox.state);
       return checkBox;
@@ -332,7 +336,7 @@ package org.jspresso.framework.view {
       BindingUtils.bindProperty(remoteState, "value", checkBox, "selected");
     }
 
-    private function createComboBox(remoteComboBox:RComboBox):ComboBox {
+    private function createComboBox(remoteComboBox:RComboBox):UIComponent {
       var comboBox:RIconComboBox = new RIconComboBox();
       comboBox.dataProvider = remoteComboBox.values;
       comboBox.labels = remoteComboBox.translations;
@@ -351,7 +355,7 @@ package org.jspresso.framework.view {
       BindingUtils.bindProperty(remoteComboBox.state, "value", comboBox, "selectedItem");
     }
 
-    private function createBorderContainer(remoteBorderContainer:RBorderContainer):Grid {
+    private function createBorderContainer(remoteBorderContainer:RBorderContainer):UIComponent {
       var borderContainer:Grid = new Grid();
       var row:GridRow;
       var cell:GridItem;
@@ -440,7 +444,7 @@ package org.jspresso.framework.view {
       return borderContainer;
     }
 
-    private function createCardContainer(remoteCardContainer:RCardContainer):ViewStack {
+    private function createCardContainer(remoteCardContainer:RCardContainer):UIComponent {
       var cardContainer:ViewStack = new ViewStack();
       cardContainer.resizeToContent = true;
       
@@ -459,7 +463,7 @@ package org.jspresso.framework.view {
       return cardContainer;
     }
 
-    private function createConstrainedGridContainer(remoteConstrainedGridContainer:RConstrainedGridContainer):Grid {
+    private function createConstrainedGridContainer(remoteConstrainedGridContainer:RConstrainedGridContainer):UIComponent {
       var constrainedGridContainer:Grid = new Grid();
       
       var i:int;
@@ -528,7 +532,7 @@ package org.jspresso.framework.view {
       return constrainedGridContainer;
     }
 
-    private function createEvenGridContainer(remoteEvenGridContainer:REvenGridContainer):Grid {
+    private function createEvenGridContainer(remoteEvenGridContainer:REvenGridContainer):UIComponent {
       var evenGridContainer:Grid = new Grid();
       
       var nbRows:int;
@@ -662,7 +666,7 @@ package org.jspresso.framework.view {
       return form;
     }
 
-    private function createSplitContainer(remoteSplitContainer:RSplitContainer):DividedBox {
+    private function createSplitContainer(remoteSplitContainer:RSplitContainer):UIComponent {
       var splitContainer:DividedBox = new DividedBox();
       var component:UIComponent;
       if(remoteSplitContainer.orientation == "VERTICAL") {
@@ -685,7 +689,7 @@ package org.jspresso.framework.view {
       return splitContainer;
     }
 
-    private function createTabContainer(remoteTabContainer:RTabContainer):TabNavigator {
+    private function createTabContainer(remoteTabContainer:RTabContainer):UIComponent {
       var tabContainer:TabNavigator = new TabNavigator();
       for(var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
         var rTab:RComponent = remoteTabContainer.tabs[i] as RComponent;
@@ -720,8 +724,18 @@ package org.jspresso.framework.view {
       tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, creationComplete);
       return tabContainer;
     }
+    
+    private function createDateComponent(remoteDateField:RDateField):UIComponent {
+      var dateComponent:UIComponent; 
+      if(remoteDateField.type == "DATE_TIME") {
+        dateComponent = createDateTimeField(remoteDateField);
+      } else {
+        dateComponent = createDateField(remoteDateField);
+      }
+      return dateComponent;
+    }
 
-    private function createDateField(remoteDateField:RDateField):DateField {
+    private function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new DateField();
       dateField.editable = true;
       bindDateField(dateField, remoteDateField.state);
@@ -733,25 +747,38 @@ package org.jspresso.framework.view {
       BindingUtils.bindProperty(remoteState, "value", dateField, "selectedDate");
     }
 
-    private function createDecimalField(remoteDecimalField:RDecimalField):TextInput {
+    private function createDateTimeField(remoteDateField:RDateField):UIComponent {
+      var dateTimeField:DateTimeField = new DateTimeField();
+      dateTimeField.editable = true;
+      dateTimeField.showTime = true;
+      bindDateTimeField(dateTimeField, remoteDateField.state);
+      return dateTimeField;
+    }
+
+    private function bindDateTimeField(dateTimeField:DateTimeField, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(dateTimeField, "selectedDateTime", remoteState, "value");
+      BindingUtils.bindProperty(remoteState, "value", dateTimeField, "selectedDateTime");
+    }
+
+    private function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
       var decimalField:TextInput = new TextInput();
       bindTextInput(decimalField, remoteDecimalField.state);
       return decimalField;
     }
 
-    private function createIntegerField(remoteIntegerField:RIntegerField):TextInput {
+    private function createIntegerField(remoteIntegerField:RIntegerField):UIComponent {
       var integerField:TextInput = new TextInput();
       bindTextInput(integerField, remoteIntegerField.state);
       return integerField;
     }
 
-    private function createPercentField(remotePercentField:RPercentField):TextInput {
+    private function createPercentField(remotePercentField:RPercentField):UIComponent {
       var percentField:TextInput = new TextInput();
       bindTextInput(percentField, remotePercentField.state);
       return percentField;
     }
     
-    private function createDurationField(remoteDurationField:RDurationField):TextInput {
+    private function createDurationField(remoteDurationField:RDurationField):UIComponent {
       var durationField:TextInput = new TextInput();
       bindTextInput(durationField, remoteDurationField.state);
       return durationField;
@@ -762,19 +789,19 @@ package org.jspresso.framework.view {
       return list;
     }
 
-    private function createPasswordField(remotePasswordField:RPasswordField):TextInput {
+    private function createPasswordField(remotePasswordField:RPasswordField):UIComponent {
       var passwordField:TextInput = new TextInput();
       bindTextInput(passwordField, remotePasswordField.state);
       passwordField.displayAsPassword = true;
       return passwordField;
     }
 
-    private function createSecurityComponent(remoteSecurityComponent:RSecurityComponent):Canvas {
+    private function createSecurityComponent(remoteSecurityComponent:RSecurityComponent):UIComponent {
       var securityComponent:Canvas = new Canvas();
       return securityComponent;
     }
 
-    private function createTable(remoteTable:RTable):DataGrid/*UIComponent*/ {
+    private function createTable(remoteTable:RTable):UIComponent {
       var table:DataGrid = new DoubleClickDataGrid();
       var columns:Array = new Array();
       
@@ -917,34 +944,34 @@ package org.jspresso.framework.view {
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function(event:DataGridEvent):void {
         var rowCollection:ArrayCollection = (event.currentTarget as DataGrid).dataProvider as ArrayCollection;
         var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState; 
-        if(!cellValueState.writable) {
-    	    event.preventDefault();
-    	  }
+//        if(!cellValueState.writable) {
+//    	    event.preventDefault();
+//    	  }
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();
       });
     }
 
-    private function createTextArea(remoteTextArea:RTextArea):TextArea {
+    private function createTextArea(remoteTextArea:RTextArea):UIComponent {
       var textArea:TextArea = new TextArea();
       bindTextArea(textArea, remoteTextArea.state);
       return textArea;
     }
 
-    private function createTextField(remoteTextField:RTextField):TextInput {
+    private function createTextField(remoteTextField:RTextField):UIComponent {
       var textField:TextInput = new TextInput();
       bindTextInput(textField, remoteTextField.state);
       return textField;
     }
 
-    private function createTimeField(remoteTimeField:RTimeField):TextInput {
+    private function createTimeField(remoteTimeField:RTimeField):UIComponent {
       var timeField:TextInput = new TextInput();
       bindTextInput(timeField, remoteTimeField.state);
       return timeField;
     }
     
-    private function createButton(remoteAction:RAction):Button {
+    private function createButton(remoteAction:RAction):UIComponent {
       var button:Button = new Button();
 	    button.setStyle("icon", getIconForComponent(button, remoteAction.icon));
 		  button.toolTip=remoteAction.description + TOOLTIP_ELLIPSIS;
@@ -1001,7 +1028,11 @@ package org.jspresso.framework.view {
 
     private function createFormatter(remoteComponent:RComponent):Formatter {
       if(remoteComponent is RDateField) {
-        return new DateFormatter();
+        var dateFormatter:DateFormatter = new DateFormatter();        
+        if((remoteComponent as RDateField).type == "DATE_TIME") {
+          dateFormatter.formatString = dateFormatter.formatString + " JJ:NN:SS"; 
+        }
+        return dateFormatter;
       }
       return null;
     }

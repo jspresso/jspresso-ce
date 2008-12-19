@@ -2,7 +2,6 @@
 <flexLibProperties version="1">
   <includeClasses>
     <classEntry path="com.benstucki.utilities.IconUtility"/>
-    <classEntry path="org.jspresso.framework.util.SimpleDateFormatter"/>
     <classEntry path="org.jspresso.framework.view.DefaultFlexViewFactory"/>
     <classEntry path="org.jspresso.framework.view.DoubleClickDataGrid"/>
     <classEntry path="org.jspresso.framework.view.EnumerationDgItemRenderer"/>
