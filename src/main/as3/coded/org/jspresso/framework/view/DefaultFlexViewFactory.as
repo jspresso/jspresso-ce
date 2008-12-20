@@ -1,5 +1,6 @@
 package org.jspresso.framework.view {
   import actionscriptdatetimelibrary.DateTimeField;
+  import actionscriptdatetimelibrary.TimeStepper;
   
   import com.benstucki.utilities.IconUtility;
   
@@ -93,9 +94,12 @@ package org.jspresso.framework.view {
    private static const TOOLTIP_ELLIPSIS:String = "...";
 
     private var _remoteValueSorter:RemoteValueSorter;
+    private var _timeFormatter:DateFormatter;
 
     public function DefaultFlexViewFactory() {
       _remoteValueSorter= new RemoteValueSorter();
+      _timeFormatter = new DateFormatter();
+      _timeFormatter.formatString = "JJ:NN:SS"
     }
     
     public function createComponent(remoteComponent:RComponent):UIComponent {
@@ -760,6 +764,21 @@ package org.jspresso.framework.view {
       BindingUtils.bindProperty(remoteState, "value", dateTimeField, "selectedDateTime");
     }
 
+    private function createTimeField(remoteTimeField:RTimeField):UIComponent {
+      var timeStepper:TimeStepper = new TimeStepper();
+      bindTimeStepper(timeStepper, remoteTimeField.state);
+      return timeStepper;
+    }
+    
+    private function bindTimeStepper(timeStepper:TimeStepper, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(timeStepper, "timeValue", remoteState, "value");
+      var updateModel:Function = function(event:Event):void {
+        remoteState.value = timeStepper.timeValue;
+      };
+      timeStepper.addEventListener(FlexEvent.ENTER,updateModel);
+      timeStepper.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
+    }
+
     private function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
       var decimalField:TextInput = new TextInput();
       bindTextInput(decimalField, remoteDecimalField.state);
@@ -937,13 +956,15 @@ package org.jspresso.framework.view {
             var row:RemoteCompositeValueState = (table.dataProvider as ArrayCollection)[event.rowIndex] as RemoteCompositeValueState; 
             var cell:RemoteValueState = row.children[event.columnIndex +1] as RemoteValueState;
             
+            currentEditor.setFocus(); // Allows for committing editted value in remote value state.
             cell.value = state.value;
           }
         }
       });
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function(event:DataGridEvent):void {
         var rowCollection:ArrayCollection = (event.currentTarget as DataGrid).dataProvider as ArrayCollection;
-        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState; 
+        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState;
+        //FIXME TEST 
 //        if(!cellValueState.writable) {
 //    	    event.preventDefault();
 //    	  }
@@ -965,12 +986,6 @@ package org.jspresso.framework.view {
       return textField;
     }
 
-    private function createTimeField(remoteTimeField:RTimeField):UIComponent {
-      var timeField:TextInput = new TextInput();
-      bindTextInput(timeField, remoteTimeField.state);
-      return timeField;
-    }
-    
     private function createButton(remoteAction:RAction):UIComponent {
       var button:Button = new Button();
 	    button.setStyle("icon", getIconForComponent(button, remoteAction.icon));
@@ -1030,9 +1045,11 @@ package org.jspresso.framework.view {
       if(remoteComponent is RDateField) {
         var dateFormatter:DateFormatter = new DateFormatter();        
         if((remoteComponent as RDateField).type == "DATE_TIME") {
-          dateFormatter.formatString = dateFormatter.formatString + " JJ:NN:SS"; 
+          dateFormatter.formatString = dateFormatter.formatString + " " + _timeFormatter.formatString; 
         }
         return dateFormatter;
+      } else if(remoteComponent is RTimeField) {
+        return _timeFormatter;
       }
       return null;
     }
