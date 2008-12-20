@@ -4,6 +4,7 @@ package org.jspresso.framework.view {
   
   import com.benstucki.utilities.IconUtility;
   
+  import flash.display.DisplayObject;
   import flash.events.Event;
   import flash.events.FocusEvent;
   import flash.events.MouseEvent;
@@ -748,7 +749,19 @@ package org.jspresso.framework.view {
 
     private function bindDateField(dateField:DateField, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(dateField, "selectedDate", remoteState, "value");
-      BindingUtils.bindProperty(remoteState, "value", dateField, "selectedDate");
+      var updateModel:Function = function (event:Event):void {
+        if(event is FocusEvent) {
+          var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
+          var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
+          
+          if(currentTarget == dateField && !dateField.contains(relatedObject)) {
+            remoteState.value = dateField.selectedDate;
+          }
+        }
+      };
+      dateField.addEventListener(FlexEvent.ENTER,updateModel);
+      dateField.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
+      dateField.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
     }
 
     private function createDateTimeField(remoteDateField:RDateField):UIComponent {
@@ -761,7 +774,19 @@ package org.jspresso.framework.view {
 
     private function bindDateTimeField(dateTimeField:DateTimeField, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(dateTimeField, "selectedDateTime", remoteState, "value");
-      BindingUtils.bindProperty(remoteState, "value", dateTimeField, "selectedDateTime");
+      var updateModel:Function = function (event:Event):void {
+        if(event is FocusEvent) {
+          var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
+          var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
+          
+          if(currentTarget == dateTimeField && !dateTimeField.contains(relatedObject)) {
+            remoteState.value = dateTimeField.selectedDateTime;
+          }
+        }
+      };
+      dateTimeField.addEventListener(FlexEvent.ENTER,updateModel);
+      dateTimeField.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
+      dateTimeField.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
     }
 
     private function createTimeField(remoteTimeField:RTimeField):UIComponent {
@@ -773,10 +798,18 @@ package org.jspresso.framework.view {
     private function bindTimeStepper(timeStepper:TimeStepper, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(timeStepper, "timeValue", remoteState, "value");
       var updateModel:Function = function(event:Event):void {
-        remoteState.value = timeStepper.timeValue;
+        if(event is FocusEvent) {
+          var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
+          var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
+          
+          if(currentTarget == timeStepper && !timeStepper.contains(relatedObject)) {
+            remoteState.value = timeStepper.timeValue;
+          }
+        }
       };
       timeStepper.addEventListener(FlexEvent.ENTER,updateModel);
-      timeStepper.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
+      timeStepper.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
+      timeStepper.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
     }
 
     private function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
@@ -955,8 +988,7 @@ package org.jspresso.framework.view {
             var state:RemoteValueState = currentEditor.state;
             var row:RemoteCompositeValueState = (table.dataProvider as ArrayCollection)[event.rowIndex] as RemoteCompositeValueState; 
             var cell:RemoteValueState = row.children[event.columnIndex +1] as RemoteValueState;
-            
-            currentEditor.setFocus(); // Allows for committing editted value in remote value state.
+
             cell.value = state.value;
           }
         }
@@ -964,10 +996,9 @@ package org.jspresso.framework.view {
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function(event:DataGridEvent):void {
         var rowCollection:ArrayCollection = (event.currentTarget as DataGrid).dataProvider as ArrayCollection;
         var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState;
-        //FIXME TEST 
-//        if(!cellValueState.writable) {
-//    	    event.preventDefault();
-//    	  }
+        if(!cellValueState.writable) {
+    	    event.preventDefault();
+    	  }
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();
@@ -999,7 +1030,8 @@ package org.jspresso.framework.view {
         remoteState.value = (event.currentTarget as TextInput).text;
       };
       textInput.addEventListener(FlexEvent.ENTER,updateModel);
-      textInput.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
+      textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
+      textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
     }
     
     private function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
@@ -1007,7 +1039,8 @@ package org.jspresso.framework.view {
       var updateModel:Function = function (event:Event):void {
         remoteState.value = (event.currentTarget as TextArea).text;
       };
-      textArea.addEventListener(FocusEvent.FOCUS_OUT,updateModel);
+      textArea.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
+      textArea.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
     }
 
     private function bindColorPicker(colorPicker:ColorPicker, remoteState:RemoteValueState):void {
