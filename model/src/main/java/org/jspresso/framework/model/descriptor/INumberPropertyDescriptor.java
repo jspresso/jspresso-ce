@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.descriptor;
 
+import java.math.BigDecimal;
+
 /**
  * This interface is the super-interface of all number property descriptors.
  * <p>
@@ -44,13 +46,13 @@ public interface INumberPropertyDescriptor extends IScalarPropertyDescriptor {
    * 
    * @return the maximum admissible value
    */
-  Number getMaxValue();
+  BigDecimal getMaxValue();
 
   /**
    * Gets the minimum value this property can have.
    * 
    * @return the minimum admissible value.
    */
-  Number getMinValue();
+  BigDecimal getMinValue();
 
 }

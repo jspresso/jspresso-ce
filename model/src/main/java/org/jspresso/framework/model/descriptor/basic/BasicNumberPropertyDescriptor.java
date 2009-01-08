@@ -18,13 +18,13 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
-
 
 /**
  * Default implementation of a number descriptor.
@@ -48,9 +48,9 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public abstract class BasicNumberPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements INumberPropertyDescriptor {
 
-  private Number maxValue;
-  private Number minValue;
-  
+  private BigDecimal maxValue;
+  private BigDecimal minValue;
+
   /**
    * {@inheritDoc}
    */
@@ -58,10 +58,9 @@ public abstract class BasicNumberPropertyDescriptor extends
   public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);
     if (newValue != null) {
-      if ((getMinValue() != null && ((Number) newValue).doubleValue() < getMinValue()
-          .doubleValue())
-          || (getMaxValue() != null && ((Number) newValue).doubleValue() > getMaxValue()
-              .doubleValue())) {
+      if ((getMinValue() != null && compare(((Number) newValue), getMinValue()) < 0)
+          || (getMaxValue() != null && compare(((Number) newValue),
+              getMaxValue()) > 0)) {
         IntegrityException ie = new IntegrityException("[" + getName()
             + "] value is out of bounds on [" + component + "].") {
 
@@ -79,8 +78,8 @@ public abstract class BasicNumberPropertyDescriptor extends
               boundsSpec.append(" &lt= ").append(getMaxValue());
             }
             String messageKey = null;
-            if ((getMinValue() != null && ((Number) newValue)
-                .doubleValue() < getMinValue().doubleValue())) {
+            if (getMinValue() != null
+                && compare(((Number) newValue), getMinValue()) < 0) {
               messageKey = "integrity.property.toosmall";
             } else {
               messageKey = "integrity.property.toobig";
@@ -94,6 +93,13 @@ public abstract class BasicNumberPropertyDescriptor extends
         throw ie;
       }
     }
+  }
+
+  private int compare(Number value, BigDecimal bound) {
+    if (value instanceof BigDecimal) {
+      return ((BigDecimal) value).compareTo(bound);
+    }
+    return new BigDecimal(value.doubleValue()).compareTo(bound);
   }
 
   /**
@@ -110,7 +116,7 @@ public abstract class BasicNumberPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Number getMaxValue() {
+  public BigDecimal getMaxValue() {
     if (maxValue != null) {
       return maxValue;
     }
@@ -123,7 +129,7 @@ public abstract class BasicNumberPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Number getMinValue() {
+  public BigDecimal getMinValue() {
     if (minValue != null) {
       return minValue;
     }
@@ -137,9 +143,9 @@ public abstract class BasicNumberPropertyDescriptor extends
    * Sets the maxValue property.
    * 
    * @param maxValue
-   *            the maxValue to set.
+   *          the maxValue to set.
    */
-  public void setMaxValue(Number maxValue) {
+  public void setMaxValue(BigDecimal maxValue) {
     this.maxValue = maxValue;
   }
 
@@ -147,9 +153,9 @@ public abstract class BasicNumberPropertyDescriptor extends
    * Sets the minValue property.
    * 
    * @param minValue
-   *            the minValue to set.
+   *          the minValue to set.
    */
-  public void setMinValue(Number minValue) {
+  public void setMinValue(BigDecimal minValue) {
     this.minValue = minValue;
   }
 

@@ -22,6 +22,7 @@ New features
 2444628  	 Allow selection mode on collection view descriptors
 2319851  	 Unit of Work and tx management refactoring
 2319923  	 Change static constants to typesafe enums
+           Support for BigDecimal on decimal property descriptors
 
 2.2.1
 =====
