@@ -78,6 +78,9 @@ public class FormatAdapter implements IFormatter {
    * {@inheritDoc}
    */
   public Object parse(String source) throws ParseException {
+    if (source == null || source.length() == 0) {
+      return null;
+    }
     return format.parseObject(source);
   }
 

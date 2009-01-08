@@ -44,13 +44,13 @@ public interface INumberPropertyDescriptor extends IScalarPropertyDescriptor {
    * 
    * @return the maximum admissible value
    */
-  Double getMaxValue();
+  Number getMaxValue();
 
   /**
    * Gets the minimum value this property can have.
    * 
    * @return the minimum admissible value.
    */
-  Double getMinValue();
+  Number getMinValue();
 
 }

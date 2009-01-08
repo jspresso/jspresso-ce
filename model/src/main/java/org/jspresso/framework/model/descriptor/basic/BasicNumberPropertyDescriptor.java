@@ -48,8 +48,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public abstract class BasicNumberPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements INumberPropertyDescriptor {
 
-  private Double maxValue;
-  private Double minValue;
+  private Number maxValue;
+  private Number minValue;
   
   /**
    * {@inheritDoc}
@@ -110,7 +110,7 @@ public abstract class BasicNumberPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Double getMaxValue() {
+  public Number getMaxValue() {
     if (maxValue != null) {
       return maxValue;
     }
@@ -123,7 +123,7 @@ public abstract class BasicNumberPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Double getMinValue() {
+  public Number getMinValue() {
     if (minValue != null) {
       return minValue;
     }
@@ -139,7 +139,7 @@ public abstract class BasicNumberPropertyDescriptor extends
    * @param maxValue
    *            the maxValue to set.
    */
-  public void setMaxValue(Double maxValue) {
+  public void setMaxValue(Number maxValue) {
     this.maxValue = maxValue;
   }
 
@@ -149,7 +149,7 @@ public abstract class BasicNumberPropertyDescriptor extends
    * @param minValue
    *            the minValue to set.
    */
-  public void setMinValue(Double minValue) {
+  public void setMinValue(Number minValue) {
     this.minValue = minValue;
   }
 

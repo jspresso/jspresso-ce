@@ -39,8 +39,8 @@ package org.jspresso.framework.gui.remote;
  */
 public abstract class RNumericComponent extends RComponent {
   
-  private Double maxValue;
-  private Double minValue;
+  private Number maxValue;
+  private Number minValue;
 
   /**
    * Constructs a new <code>RIntegerField</code> instance.
@@ -58,7 +58,7 @@ public abstract class RNumericComponent extends RComponent {
    * 
    * @return the maxValue.
    */
-  public Double getMaxValue() {
+  public Number getMaxValue() {
     return maxValue;
   }
 
@@ -68,7 +68,7 @@ public abstract class RNumericComponent extends RComponent {
    * 
    * @param maxValue the maxValue to set.
    */
-  public void setMaxValue(Double maxValue) {
+  public void setMaxValue(Number maxValue) {
     this.maxValue = maxValue;
   }
 
@@ -78,7 +78,7 @@ public abstract class RNumericComponent extends RComponent {
    * 
    * @return the minValue.
    */
-  public Double getMinValue() {
+  public Number getMinValue() {
     return minValue;
   }
 
@@ -88,7 +88,7 @@ public abstract class RNumericComponent extends RComponent {
    * 
    * @param minValue the minValue to set.
    */
-  public void setMinValue(Double minValue) {
+  public void setMinValue(Number minValue) {
     this.minValue = minValue;
   }
 }

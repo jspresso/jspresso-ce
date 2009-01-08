@@ -19,6 +19,7 @@
 package org.jspresso.framework.view;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -1698,6 +1699,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else {
       format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
     }
+    if (propertyDescriptor.isUsingBigDecimal()
+        && (format instanceof DecimalFormat)) {
+      ((DecimalFormat) format).setParseBigDecimal(true);
+    }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;
   }
@@ -1733,6 +1738,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .intValue());
     } else {
       format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
+    }
+    if (propertyDescriptor.isUsingBigDecimal()
+        && (format instanceof DecimalFormat)) {
+      ((DecimalFormat) format).setParseBigDecimal(true);
     }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;

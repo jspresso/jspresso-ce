@@ -49,7 +49,6 @@ import org.jspresso.framework.binding.ulc.ULCDateFieldConnector;
 import org.jspresso.framework.binding.ulc.ULCImageConnector;
 import org.jspresso.framework.binding.ulc.ULCJEditTextAreaConnector;
 import org.jspresso.framework.binding.ulc.ULCPasswordFieldConnector;
-import org.jspresso.framework.binding.ulc.ULCPercentFieldConnector;
 import org.jspresso.framework.binding.ulc.ULCReferenceFieldConnector;
 import org.jspresso.framework.binding.ulc.ULCTextAreaConnector;
 import org.jspresso.framework.binding.ulc.ULCTextFieldConnector;
@@ -1054,15 +1053,13 @@ public class DefaultUlcViewFactory extends
           locale);
     }
     ULCTextField viewComponent = createULCTextField();
-    NumberFormat format = createDecimalFormat(propertyDescriptor, locale);
 
-    viewComponent.setDataType(createDecimalDataType(propertyDescriptor, locale,
-        format));
-
+    IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, createFormatter(format),
+    adjustSizes(viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
@@ -1095,10 +1092,10 @@ public class DefaultUlcViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
-    viewComponent.setDataType(createDurationDataType(propertyDescriptor,
-        locale, formatter));
+
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
@@ -1249,15 +1246,13 @@ public class DefaultUlcViewFactory extends
       IIntegerPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
-    NumberFormat format = createIntegerFormat(propertyDescriptor, locale);
 
-    viewComponent.setDataType(createIntegerDataType(propertyDescriptor, locale,
-        format));
-
+    IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, createFormatter(format),
+    adjustSizes(viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
@@ -1376,14 +1371,13 @@ public class DefaultUlcViewFactory extends
       IPercentPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
-    NumberFormat format = createPercentFormat(propertyDescriptor, locale);
 
-    viewComponent
-        .setDataType(createPercentDataType(propertyDescriptor, locale));
-    ULCPercentFieldConnector connector = new ULCPercentFieldConnector(
+    IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
+    ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, createFormatter(format),
+    adjustSizes(viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
@@ -1641,6 +1635,7 @@ public class DefaultUlcViewFactory extends
         .setAutoResizeMode(com.ulcjava.base.application.ULCTable.AUTO_RESIZE_OFF);
 
     Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
+    Map<String, IFormatter> columnFormattersByIds = new HashMap<String, IFormatter>();
     List<String> columnConnectorKeys = new ArrayList<String>();
     Set<String> forbiddenColumns = new HashSet<String>();
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
@@ -1659,8 +1654,16 @@ public class DefaultUlcViewFactory extends
         } else if (columnModelDescriptor instanceof IBooleanPropertyDescriptor) {
           columnClassesByIds.put(columnId, Boolean.class);
         } else {
-          columnClassesByIds
-              .put(columnId, columnModelDescriptor.getModelType());
+          if (columnModelDescriptor instanceof IDecimalPropertyDescriptor
+              && ((IDecimalPropertyDescriptor) columnModelDescriptor)
+                  .isUsingBigDecimal()) {
+            columnClassesByIds.put(columnId, String.class);
+            columnFormattersByIds.put(columnId, createFormatter(
+                columnModelDescriptor, locale));
+          } else {
+            columnClassesByIds.put(columnId, columnModelDescriptor
+                .getModelType());
+          }
         }
         columnConnectorKeys.add(columnId);
         if (columnViewDescriptor.getReadabilityGates() != null) {
@@ -1683,6 +1686,7 @@ public class DefaultUlcViewFactory extends
         connector, columnConnectorKeys);
     tableModel.setExceptionHandler(actionHandler);
     tableModel.setColumnClassesByIds(columnClassesByIds);
+    tableModel.setColumnFormattersByIds(columnFormattersByIds);
 
     TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent
         .getTableHeader());
@@ -1807,7 +1811,6 @@ public class DefaultUlcViewFactory extends
     return selectionMode;
   }
 
-
   /**
    * {@inheritDoc}
    */
@@ -1875,15 +1878,13 @@ public class DefaultUlcViewFactory extends
       ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ULCTextField viewComponent = createULCTextField();
-    SimpleDateFormat format = createTimeFormat(propertyDescriptor, locale);
 
-    viewComponent.setDataType(createTimeDataType(propertyDescriptor, locale,
-        format));
-
+    IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, createFormatter(format),
+    adjustSizes(viewComponent, formatter,
         getTimeTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }

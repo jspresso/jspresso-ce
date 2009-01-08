@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.binding.ulc;
 
+import java.text.ParseException;
+
+import org.jspresso.framework.util.format.IFormatter;
+
 import com.ulcjava.base.application.ULCTextField;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
@@ -46,13 +50,15 @@ import com.ulcjava.base.application.event.serializable.IActionListener;
 public class ULCTextFieldConnector extends
     ULCTextComponentConnector<ULCTextField> {
 
+  private IFormatter formatter;
+
   /**
    * Constructs a new <code>ULCTextFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param textField
-   *            the connected ULCTextField.
+   *          the connected ULCTextField.
    */
   public ULCTextFieldConnector(String id, ULCTextField textField) {
     super(id, textField);
@@ -71,8 +77,7 @@ public class ULCTextFieldConnector extends
       /**
        * {@inheritDoc}
        */
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         fireConnectorValueChange();
       }
     });
@@ -86,10 +91,20 @@ public class ULCTextFieldConnector extends
    */
   @Override
   protected Object getConnecteeValue() {
-    if (getConnectedULCComponent().getDataType() != null) {
-      return getConnectedULCComponent().getValue();
+    Object value;
+    if (formatter != null) {
+      try {
+        value = formatter.parse(getConnectedULCComponent().getText());
+      } catch (ParseException pe) {
+        // value could not be parsed and thus is invalid.
+        // restore old value.
+        value = getOldConnectorValue();
+      }
+      setConnecteeValue(value);
+    } else {
+      value = super.getConnecteeValue(); 
     }
-    return super.getConnecteeValue();
+    return value;
   }
 
   /**
@@ -100,10 +115,20 @@ public class ULCTextFieldConnector extends
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
-    if (getConnectedULCComponent().getDataType() != null) {
-      getConnectedULCComponent().setValue(aValue);
+    if (formatter != null) {
+      getConnectedULCComponent().setText(formatter.format(aValue));
     } else {
       super.setConnecteeValue(aValue);
     }
+  }
+
+  /**
+   * Sets the formatter.
+   * 
+   * @param formatter
+   *          the formatter to set.
+   */
+  public void setFormatter(IFormatter formatter) {
+    this.formatter = formatter;
   }
 }

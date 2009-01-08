@@ -47,4 +47,13 @@ public interface IDecimalPropertyDescriptor extends INumberPropertyDescriptor {
    */
   Integer getMaxFractionDigit();
 
+  /**
+   * Returns true if this property is based on java.math.BigDecimal instead of
+   * java.lang.Double.
+   * 
+   * @return true if this property is based on java.math.BigDecimal instead of
+   *         java.lang.Double.
+   */
+  boolean isUsingBigDecimal();
+
 }
