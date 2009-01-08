@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -1616,6 +1617,10 @@ public class DefaultSwingViewFactory implements
     } else {
       format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
     }
+    if (propertyDescriptor.isUsingBigDecimal()
+        && (format instanceof DecimalFormat)) {
+      ((DecimalFormat) format).setParseBigDecimal(true);
+    }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;
   }
@@ -2076,6 +2081,10 @@ public class DefaultSwingViewFactory implements
           .intValue());
     } else {
       format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
+    }
+    if (propertyDescriptor.isUsingBigDecimal()
+        && (format instanceof DecimalFormat)) {
+      ((DecimalFormat) format).setParseBigDecimal(true);
     }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;

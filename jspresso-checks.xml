@@ -42,7 +42,7 @@ Jspresso checks
             <property name="tabWidth" value="2"/>
         </module>
         <module name="MethodLength">
-            <property name="max" value="175"/>
+            <property name="max" value="200"/>
         </module>
         <module name="ParameterNumber">
             <property name="severity" value="ignore"/>

@@ -24,6 +24,7 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -1654,6 +1655,10 @@ public class DefaultWingsViewFactory implements
     } else {
       format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
     }
+    if (propertyDescriptor.isUsingBigDecimal()
+        && (format instanceof DecimalFormat)) {
+      ((DecimalFormat) format).setParseBigDecimal(true);
+    }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;
   }
@@ -2074,6 +2079,10 @@ public class DefaultWingsViewFactory implements
           .intValue());
     } else {
       format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
+    }
+    if (propertyDescriptor.isUsingBigDecimal()
+        && (format instanceof DecimalFormat)) {
+      ((DecimalFormat) format).setParseBigDecimal(true);
     }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;

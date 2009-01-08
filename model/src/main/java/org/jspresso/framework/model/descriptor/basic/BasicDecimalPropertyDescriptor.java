@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.math.BigDecimal;
+
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 
 /**
@@ -43,6 +45,7 @@ public class BasicDecimalPropertyDescriptor extends
     BasicNumberPropertyDescriptor implements IDecimalPropertyDescriptor {
 
   private Integer maxFractionDigit;
+  private Boolean usingBigDecimal;
 
   /**
    * {@inheritDoc}
@@ -73,6 +76,9 @@ public class BasicDecimalPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Class<?> getModelType() {
+    if (isUsingBigDecimal()) {
+      return BigDecimal.class;
+    }
     return Double.class;
   }
 
@@ -80,9 +86,35 @@ public class BasicDecimalPropertyDescriptor extends
    * Sets the maxFractionDigit property.
    * 
    * @param maxFractionDigit
-   *            the maxFractionDigit to set.
+   *          the maxFractionDigit to set.
    */
   public void setMaxFractionDigit(Integer maxFractionDigit) {
     this.maxFractionDigit = maxFractionDigit;
+  }
+
+  /**
+   * Returns false by default.
+   * <p>
+   * {@inheritDoc}
+   */
+  public boolean isUsingBigDecimal() {
+    if (usingBigDecimal != null) {
+      return usingBigDecimal.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return ((IDecimalPropertyDescriptor) getParentDescriptor())
+          .isUsingBigDecimal();
+    }
+    return false;
+  }
+
+  /**
+   * Sets the usingBigDecimal.
+   * 
+   * @param usingBigDecimal
+   *          the usingBigDecimal to set.
+   */
+  public void setUsingBigDecimal(boolean usingBigDecimal) {
+    this.usingBigDecimal = new Boolean(usingBigDecimal);
   }
 }

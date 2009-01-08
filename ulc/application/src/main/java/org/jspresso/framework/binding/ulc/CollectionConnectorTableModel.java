@@ -20,6 +20,7 @@ package org.jspresso.framework.binding.ulc;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.Coordinates;
 import org.jspresso.framework.util.exception.IExceptionHandler;
+import org.jspresso.framework.util.format.IFormatter;
 
 import com.ulcjava.base.application.table.AbstractTableModel;
 
@@ -69,6 +71,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   private ICollectionConnector                        collectionConnector;
   private Map<String, Class<?>>                       columnClassesByIds;
+  private Map<String, IFormatter>                     columnFormattersByIds;
   private List<String>                                columnConnectorKeys;
 
   private IExceptionHandler                           exceptionHandler;
@@ -77,9 +80,9 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
    * 
    * @param collectionConnector
-   *            the collection connector holding the values of this table model.
+   *          the collection connector holding the values of this table model.
    * @param columnConnectorKeys
-   *            the list of column connector ids.
+   *          the list of column connector ids.
    */
   public CollectionConnectorTableModel(
       ICollectionConnector collectionConnector, List<String> columnConnectorKeys) {
@@ -130,6 +133,10 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
       return cellConnector.toString();
     }
     Object connectorValue = cellConnector.getConnectorValue();
+    IFormatter formatter = getColumnFormatter(columnIndex);
+    if (formatter != null) {
+      connectorValue = formatter.format(connectorValue);
+    }
     if (connectorValue instanceof byte[]) {
       return null;
     }
@@ -150,7 +157,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * Sets the columnClassesByIds.
    * 
    * @param columnClassesByIds
-   *            the columnClassesByIds to set.
+   *          the columnClassesByIds to set.
    */
   public void setColumnClassesByIds(Map<String, Class<?>> columnClassesByIds) {
     this.columnClassesByIds = columnClassesByIds;
@@ -160,7 +167,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * Sets the exceptionHandler.
    * 
    * @param exceptionHandler
-   *            the exceptionHandler to set.
+   *          the exceptionHandler to set.
    */
   public void setExceptionHandler(IExceptionHandler exceptionHandler) {
     this.exceptionHandler = exceptionHandler;
@@ -184,10 +191,20 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
           cellConnector.setConnectorValue(cellValue);
         }
       } else {
-        if ("".equals(cellValue)) {
-          cellConnector.setConnectorValue(null);
+        if (cellValue instanceof String
+            && getColumnFormatter(columnIndex) != null) {
+          try {
+            cellConnector.setConnectorValue(getColumnFormatter(columnIndex)
+                .parse((String) cellValue));
+          } catch (ParseException ex) {
+            fireTableCellUpdated(rowIndex, columnIndex);
+          }
         } else {
-          cellConnector.setConnectorValue(cellValue);
+          if ("".equals(cellValue)) {
+            cellConnector.setConnectorValue(null);
+          } else {
+            cellConnector.setConnectorValue(cellValue);
+          }
         }
       }
     } catch (RuntimeException ex) {
@@ -198,6 +215,13 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         throw ex;
       }
     }
+  }
+
+  private IFormatter getColumnFormatter(int columnIndex) {
+    if (columnFormattersByIds != null) {
+      return columnFormattersByIds.get(columnConnectorKeys.get(columnIndex));
+    }
+    return null;
   }
 
   private void bindChildRowConnector(int row) {
@@ -277,16 +301,16 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
+    public void connectorValueChange(
+        @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
       updateCell();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
+    public void propertyChange(
+        @SuppressWarnings("unused") PropertyChangeEvent evt) {
       updateCell();
     }
 
@@ -309,8 +333,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
+    public void connectorValueChange(
+        @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
       if (row < getRowCount()) {
         fireTableRowsUpdated(row, row);
       }
@@ -354,5 +378,16 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         collectionConnector.setSelectedIndices(new int[] {0});
       }
     }
+  }
+
+  /**
+   * Sets the columnFormattersByIds.
+   * 
+   * @param columnFormattersByIds
+   *          the columnFormattersByIds to set.
+   */
+  public void setColumnFormattersByIds(
+      Map<String, IFormatter> columnFormattersByIds) {
+    this.columnFormattersByIds = columnFormattersByIds;
   }
 }
