@@ -49,6 +49,9 @@ package org.jspresso.framework.view {
   import mx.events.FlexEvent;
   import mx.formatters.DateFormatter;
   import mx.formatters.Formatter;
+  import mx.formatters.NumberBase;
+  import mx.formatters.NumberBaseRoundType;
+  import mx.formatters.NumberFormatter;
   
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionField;
@@ -814,25 +817,29 @@ package org.jspresso.framework.view {
 
     private function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
       var decimalField:TextInput = new TextInput();
-      bindTextInput(decimalField, remoteDecimalField.state);
+      bindTextInput(decimalField, remoteDecimalField.state,
+                    createFormatter(remoteDecimalField), createParser(remoteDecimalField));
       return decimalField;
     }
 
     private function createIntegerField(remoteIntegerField:RIntegerField):UIComponent {
       var integerField:TextInput = new TextInput();
-      bindTextInput(integerField, remoteIntegerField.state);
+      bindTextInput(integerField, remoteIntegerField.state,
+                    createFormatter(remoteIntegerField), createParser(remoteIntegerField));
       return integerField;
     }
 
     private function createPercentField(remotePercentField:RPercentField):UIComponent {
       var percentField:TextInput = new TextInput();
-      bindTextInput(percentField, remotePercentField.state);
+      bindTextInput(percentField, remotePercentField.state,
+                    createFormatter(remotePercentField), createParser(remotePercentField));
       return percentField;
     }
     
     private function createDurationField(remoteDurationField:RDurationField):UIComponent {
       var durationField:TextInput = new TextInput();
-      bindTextInput(durationField, remoteDurationField.state);
+      bindTextInput(durationField, remoteDurationField.state,
+                    createFormatter(remoteDurationField), createParser(remoteDurationField));
       return durationField;
     }
 
@@ -1024,10 +1031,33 @@ package org.jspresso.framework.view {
       return button;
     }
     
-    private function bindTextInput(textInput:TextInput, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(textInput, "text", remoteState, "value");
+    private function bindTextInput(textInput:TextInput, remoteState:RemoteValueState,
+                                   formatter:Formatter = null, parser:Parser = null):void {
+      
+      var updateView:Function = function (value:Object):void {
+        if(value == null) {
+          textInput.text = null;
+        } else {
+          if(formatter != null) {
+            textInput.text = formatter.format(value);
+          } else {
+            textInput.text = value.toString();
+          }
+        }
+      };
+      BindingUtils.bindSetter(updateView, remoteState, "value");
+
       var updateModel:Function = function (event:Event):void {
-        remoteState.value = (event.currentTarget as TextInput).text;
+        var inputText:String = (event.currentTarget as TextInput).text;
+        if(inputText == null || inputText.length == 0) {
+          remoteState.value = null;
+        } else {
+          if(parser != null) {
+            remoteState.value = parser.parse(inputText);
+          } else {
+            remoteState.value = inputText;
+          }
+        }
       };
       textInput.addEventListener(FlexEvent.ENTER,updateModel);
       textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
@@ -1083,6 +1113,40 @@ package org.jspresso.framework.view {
         return dateFormatter;
       } else if(remoteComponent is RTimeField) {
         return _timeFormatter;
+      } else if(remoteComponent is RNumericComponent) {
+        var numberFormatter:NumberFormatter
+        if(remoteComponent is RDecimalField) {
+          numberFormatter = new PercentFormatter();
+        } else {
+          numberFormatter = new NumberFormatter();
+        }
+        numberFormatter.rounding = NumberBaseRoundType.NEAREST;
+        if(remoteComponent is RDecimalComponent) {
+          numberFormatter.precision = (remoteComponent as RDecimalComponent).maxFractionDigit;
+        } else if(remoteComponent is RIntegerField) {
+          numberFormatter.precision = 0;
+        }
+        return numberFormatter;
+      }
+      return null;
+    }
+
+    private function createParser(remoteComponent:RComponent):Parser {
+      if(remoteComponent is RNumericComponent) {
+        var numberParser:NumberParser;
+        if(remoteComponent is RDecimalField) {
+          numberParser = new PercentParser();
+        } else {
+          numberParser = new NumberParser();
+        }
+        var formatter:NumberFormatter = createFormatter(remoteComponent) as NumberFormatter;
+        var numberBase:NumberBase = new NumberBase(formatter.decimalSeparatorTo,
+                                                   formatter.thousandsSeparatorTo,
+                                                   formatter.decimalSeparatorFrom,
+                                                   formatter.decimalSeparatorFrom);
+        numberParser.numberBase = numberBase;
+        numberParser.precision = formatter.precision as uint;
+        return numberParser;
       }
       return null;
     }

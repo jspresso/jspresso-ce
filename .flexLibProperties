@@ -5,6 +5,10 @@
     <classEntry path="org.jspresso.framework.view.DefaultFlexViewFactory"/>
     <classEntry path="org.jspresso.framework.view.DoubleClickDataGrid"/>
     <classEntry path="org.jspresso.framework.view.EnumerationDgItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.NumberParser"/>
+    <classEntry path="org.jspresso.framework.view.Parser"/>
+    <classEntry path="org.jspresso.framework.view.PercentFormatter"/>
+    <classEntry path="org.jspresso.framework.view.PercentParser"/>
     <classEntry path="org.jspresso.framework.view.RIconComboBox"/>
     <classEntry path="org.jspresso.framework.view.RIconListItemRenderer"/>
     <classEntry path="org.jspresso.framework.view.RemoteValueDgItemEditor"/>
