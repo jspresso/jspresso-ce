@@ -1,4 +1,4 @@
-package org.jspresso.framework.view {
+package org.jspresso.framework.view.flex {
   import mx.utils.ObjectUtil;
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;

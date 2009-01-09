@@ -1,4 +1,4 @@
-package org.jspresso.framework.view {
+package org.jspresso.framework.view.flex {
   import mx.formatters.NumberBase;
   import mx.formatters.NumberFormatter;
   

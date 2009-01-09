@@ -1,5 +1,4 @@
-package org.jspresso.framework.view
-{
+package org.jspresso.framework.view.flex {
   import mx.collections.ArrayCollection;
   import mx.controls.ComboBox;
   import mx.controls.Image;

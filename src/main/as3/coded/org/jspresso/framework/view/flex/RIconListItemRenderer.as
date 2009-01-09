@@ -1,5 +1,4 @@
-package org.jspresso.framework.view
-{
+package org.jspresso.framework.view.flex {
   import mx.controls.Image;
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.ListData;
