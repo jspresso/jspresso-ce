@@ -88,8 +88,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
 
-    public function execute(action:RAction):void {
-      trace(">>> Execute <<< " + action.name);
+    public function execute(action:RAction, param:String=null):void {
+      trace(">>> Execute <<< " + action.name + " param = " + param);
     }
 
     public function getRegistered(guid:String):IRemotePeer {

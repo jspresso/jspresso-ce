@@ -333,8 +333,9 @@ public class DefaultRemoteViewFactory extends
     return component;
   }
 
-  private RActionField createRActionField(IValueConnector connector) {
+  private RActionField createRActionField(boolean showTextField, IValueConnector connector) {
     RActionField component = new RActionField(guidGenerator.generateGUID());
+    component.setShowTextField(showTextField);
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
@@ -392,7 +393,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RActionField viewComponent = createRActionField(connector);
+    RActionField viewComponent = createRActionField(false, connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
     RActionList actionList = new RActionList(guidGenerator.generateGUID());
     actionList.setActions(createBinaryActions(viewComponent, connector,
@@ -503,7 +504,7 @@ public class DefaultRemoteViewFactory extends
         .createCompositeValueConnector(propertyDescriptor.getName(),
             propertyDescriptor.getReferencedDescriptor().getToStringProperty());
     connector.setExceptionHandler(actionHandler);
-    RActionField viewComponent = createRActionField(connector);
+    RActionField viewComponent = createRActionField(true, connector);
     IView<RComponent> view = constructView(viewComponent, null, connector);
     RAction lovAction = createLovAction(view.getPeer(), view.getConnector(),
         propertyDescriptor, actionHandler, locale);

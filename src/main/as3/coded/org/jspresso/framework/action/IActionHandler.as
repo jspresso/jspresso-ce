@@ -4,7 +4,7 @@ package org.jspresso.framework.action {
   
   public interface IActionHandler {
     
-    function execute(action:RAction):void;
+    function execute(action:RAction, param:String=null):void;
     
   }
 }

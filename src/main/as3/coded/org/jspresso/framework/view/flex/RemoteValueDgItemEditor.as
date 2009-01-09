@@ -4,6 +4,7 @@ package org.jspresso.framework.view.flex
   
   import mx.containers.Canvas;
   import mx.controls.CheckBox;
+  import mx.core.Container;
   import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
   
@@ -66,7 +67,15 @@ package org.jspresso.framework.view.flex
     }
     
     override public function setFocus():void {
-      _editor.setFocus();
+      var tf:UIComponent;
+      if(_editor is Container) {
+        tf = (_editor as Container).getChildByName("tf") as UIComponent;
+      }
+      if(tf != null) {
+        tf.setFocus();
+      } else {
+        _editor.setFocus();
+      }
     }
     
     override public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void {

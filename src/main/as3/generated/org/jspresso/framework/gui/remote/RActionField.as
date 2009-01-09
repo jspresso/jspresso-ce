@@ -19,5 +19,14 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RActionField")]
     public class RActionField extends RComponent {
 
+        private var _showTextField:Boolean;
+
+        public function set showTextField(value:Boolean):void {
+            _showTextField = value;
+        }
+        public function get showTextField():Boolean {
+            return _showTextField;
+        }
+
     }
 }

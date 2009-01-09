@@ -320,25 +320,45 @@ package org.jspresso.framework.view.flex {
     
     private function createActionField(remoteActionField:RActionField):HBox {
       var actionField:HBox = new HBox();
-      var textField:TextInput = new TextInput();
-      bindTextInput(textField, remoteActionField.state);
-      actionField.percentWidth = 100.0;
-      textField.percentWidth = 100.0;
-      textField.name = "tf";
-      actionField.addChild(textField);
+      if(remoteActionField.showTextField) {
+        var textField:TextInput = new TextInput();
+        actionField.percentWidth = 100.0;
+        textField.percentWidth = 100.0;
+        textField.name = "tf";
+        actionField.addChild(textField);
+
+        bindActionField(textField, remoteActionField.state, (remoteActionField.actionLists[0] as RActionList).actions[0]);
+      }
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
           actionField.addChild(createAction(actionList.actions[i]));
         }
       }
-      var focusIn:Function = function(event:FocusEvent):void {
-        var tf:UIComponent = (event.currentTarget as Container).getChildByName("tf") as UIComponent;
-        tf.setFocus();
-      };
-      actionField.addEventListener(FocusEvent.FOCUS_IN, focusIn);
-      //actionField.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, focusIn);
       return actionField;
+    }
+    
+    private function bindActionField(textInput:TextInput, remoteState:RemoteValueState,
+                                   action:RAction):void {
+      
+      var updateView:Function = function (value:Object):void {
+        if(value == null) {
+          textInput.text = null;
+        } else {
+          textInput.text = value.toString();
+        }
+      };
+      BindingUtils.bindSetter(updateView, remoteState, "value", true);
+
+      var triggerAction:Function = function (event:Event):void {
+        var inputText:String = (event.currentTarget as TextInput).text;
+        if(inputText != remoteState.value) {
+          _actionHandler.execute(action, inputText);
+        }
+      };
+      textInput.addEventListener(FlexEvent.ENTER,triggerAction);
+      textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,triggerAction);
+      textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,triggerAction);
     }
     
     private function createColorField(remoteColorField:RColorField):UIComponent {
