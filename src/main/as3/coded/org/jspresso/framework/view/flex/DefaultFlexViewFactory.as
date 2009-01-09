@@ -11,7 +11,6 @@ package org.jspresso.framework.view.flex {
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
-  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -89,6 +88,10 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RTree;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
+  import org.jspresso.framework.util.format.NumberParser;
+  import org.jspresso.framework.util.format.Parser;
+  import org.jspresso.framework.util.format.PercentFormatter;
+  import org.jspresso.framework.util.format.PercentParser;
   import org.jspresso.framework.util.gui.CellConstraints;
   
   public class DefaultFlexViewFactory {

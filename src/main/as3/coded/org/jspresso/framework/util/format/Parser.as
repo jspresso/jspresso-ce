@@ -1,4 +1,4 @@
-package org.jspresso.framework.view.flex {
+package org.jspresso.framework.util.format {
 
   public class Parser {
 
