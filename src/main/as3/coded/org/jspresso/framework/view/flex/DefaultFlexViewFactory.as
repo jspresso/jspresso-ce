@@ -93,6 +93,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.format.PercentFormatter;
   import org.jspresso.framework.util.format.PercentParser;
   import org.jspresso.framework.util.gui.CellConstraints;
+  import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
   
   public class DefaultFlexViewFactory {
 
@@ -101,11 +102,13 @@ package org.jspresso.framework.view.flex {
 
    private static const TOOLTIP_ELLIPSIS:String = "...";
 
+    private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _remoteValueSorter:RemoteValueSorter;
     private var _timeFormatter:DateFormatter;
 
-    public function DefaultFlexViewFactory() {
-      _remoteValueSorter= new RemoteValueSorter();
+    public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry) {
+      _remotePeerRegistry = remotePeerRegistry;
+      _remoteValueSorter = new RemoteValueSorter();
       _timeFormatter = new DateFormatter();
       _timeFormatter.formatString = "JJ:NN:SS"
     }
@@ -158,7 +161,7 @@ package org.jspresso.framework.view.flex {
           var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
           if(actionList.actions != null) {
             for(var j:int = 0; j < actionList.actions.length; j++) {
-              toolBar.addChild(createButton(actionList.actions[j]));
+              toolBar.addChild(createAction(actionList.actions[j]));
             }
             if(i < remoteComponent.actionLists.length - 1) {
               var separator:VRule = new VRule();
@@ -194,6 +197,7 @@ package org.jspresso.framework.view.flex {
         component.setStyle("borderStyle","solid");
         component.setStyle("borderThickness", 3);
       }
+      _remotePeerRegistry.register(remoteComponent.state);
       return component;
     }
     
@@ -302,7 +306,7 @@ package org.jspresso.framework.view.flex {
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
-          actionField.addChild(createButton(actionList.actions[i]));
+          actionField.addChild(createAction(actionList.actions[i]));
         }
       }
       var focusIn:Function = function(event:FocusEvent):void {
@@ -1063,10 +1067,12 @@ package org.jspresso.framework.view.flex {
       return textField;
     }
 
-    private function createButton(remoteAction:RAction):UIComponent {
+    private function createAction(remoteAction:RAction):UIComponent {
       var button:Button = new Button();
 	    button.setStyle("icon", getIconForComponent(button, remoteAction.icon));
-		  button.toolTip=remoteAction.description + TOOLTIP_ELLIPSIS;
+		  button.toolTip = remoteAction.description + TOOLTIP_ELLIPSIS;
+		  BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled");
+		  _remotePeerRegistry.register(remoteAction);
       return button;
     }
     

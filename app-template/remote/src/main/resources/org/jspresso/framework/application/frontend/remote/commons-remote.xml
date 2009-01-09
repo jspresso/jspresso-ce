@@ -10,6 +10,13 @@
   -->
 
   <!--
+    Remote peer registry
+  -->
+  <bean
+    id="remotePeerRegistry"
+    class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry" />
+
+  <!--
     Action beans
   -->
   <bean
@@ -68,6 +75,9 @@
     <property
       name="guidGenerator"
       ref="guidGenerator" />
+    <property
+      name="remotePeerRegistry"
+      ref="remotePeerRegistry" />
   </bean>
 
   <bean
@@ -128,6 +138,9 @@
     <property
       name="guidGenerator"
       ref="guidGenerator" />
+    <property
+      name="remotePeerRegistry"
+      ref="remotePeerRegistry" />
   </bean>
 
   <bean
@@ -140,7 +153,7 @@
       ref="guidGenerator" />
     <property
       name="connectorFactory"
-      ref="remoteConnectorFactory"/>
+      ref="remoteConnectorFactory" />
   </bean>
 
   <!--

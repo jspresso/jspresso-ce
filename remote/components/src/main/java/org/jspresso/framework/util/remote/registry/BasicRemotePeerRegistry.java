@@ -16,10 +16,17 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.util.remote;
+package org.jspresso.framework.util.remote.registry;
+
+import java.util.Map;
+
+import org.apache.commons.collections.map.AbstractReferenceMap;
+import org.apache.commons.collections.map.ReferenceMap;
+import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
- * This interface is implemented by remote peer registries.
+ * The basic implementation of a remote peer registry. It is stored by a
+ * reference map so that it is memory neutral.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,31 +44,41 @@ package org.jspresso.framework.util.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IRemotePeerRegistry {
+public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
+
+  private Map<String, IRemotePeer> backingStore;
 
   /**
-   * Registers a remote peer.
-   * 
-   * @param remotePeer
-   *          the remote peer to register.
+   * Constructs a new <code>BasicRemotePeerRegistry</code> instance.
    */
-  void register(IRemotePeer remotePeer);
+  @SuppressWarnings("unchecked")
+  public BasicRemotePeerRegistry() {
+    backingStore = new ReferenceMap(AbstractReferenceMap.HARD,
+        AbstractReferenceMap.WEAK, true);
+  }
 
   /**
-   * Retrieves a registered remote peer.
-   * 
-   * @param guid
-   *          the remote peer guid.
-   * @return the registered remote peer or null if no remote peer with the given
-   *         guid is registered.
+   * {@inheritDoc}
    */
-  IRemotePeer get(String guid);
+  @Override
+  public IRemotePeer getRegistered(String guid) {
+    return backingStore.get(guid);
+  }
 
   /**
-   * Unregisters a remote peer.
-   * 
-   * @param guid
-   *          the remote peer guid.
+   * {@inheritDoc}
    */
-  void unregister(String guid);
+  @Override
+  public void register(IRemotePeer remotePeer) {
+    backingStore.put(remotePeer.getGuid(), remotePeer);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void unregister(String guid) {
+    backingStore.remove(guid);
+  }
+
 }

@@ -43,7 +43,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
-import org.jspresso.framework.util.remote.IRemotePeerRegistry;
+import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**

@@ -82,7 +82,6 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
-import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.CellConstraints;

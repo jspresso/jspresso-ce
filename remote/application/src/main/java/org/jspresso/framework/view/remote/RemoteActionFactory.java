@@ -44,6 +44,7 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
@@ -74,6 +75,7 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
   private IIconFactory<RIcon>  iconFactory;
   private ITranslationProvider translationProvider;
   private IGUIDGenerator       guidGenerator;
+  private IRemotePeerRegistry  remotePeerRegistry;
 
   /**
    * {@inheritDoc}
@@ -168,6 +170,7 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
     if (action.getMnemonicAsString() != null) {
       remoteAction.setMnemonicAsString(action.getMnemonicAsString());
     }
+    remotePeerRegistry.register(remoteAction);
     return remoteAction;
   }
 
@@ -228,5 +231,15 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
    */
   public void setGuidGenerator(IGUIDGenerator guidGenerator) {
     this.guidGenerator = guidGenerator;
+  }
+
+  
+  /**
+   * Sets the remotePeerRegistry.
+   * 
+   * @param remotePeerRegistry the remotePeerRegistry to set.
+   */
+  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
+    this.remotePeerRegistry = remotePeerRegistry;
   }
 }

@@ -38,6 +38,10 @@
       </fileset>
       <fileset
         dir="remote/components/target/classes">
+        <exclude
+          name="**/*Factory.class" />
+        <exclude
+          name="**/*Registry.class" />
         <include
           name="**/*.class" />
       </fileset>
