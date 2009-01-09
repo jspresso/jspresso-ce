@@ -44,13 +44,27 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     private function bindRemoteValueState(remoteValueState:RemoteValueState):void {
-      var valueListener:Function = function(value:Object):void {
-        valueUpdated(remoteValueState);
-      }
       var wasEnabled:Boolean = _changeNotificationsEnabled;
       try {
         _changeNotificationsEnabled = false;
+
+        var valueListener:Function = function(value:Object):void {
+          valueUpdated(remoteValueState);
+        }
         BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
+
+        if(remoteValueState is RemoteCompositeValueState) {
+          var selectedIndicesListener:Function = function(selectedIndices:Array):void {
+            selectedIndicesUpdated(remoteValueState as RemoteCompositeValueState);
+          }
+          BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
+
+          var leadingIndexListener:Function = function(leadingIndex:int):void {
+            leadingIndexUpdated(remoteValueState as RemoteCompositeValueState);
+          }
+          BindingUtils.bindSetter(leadingIndexListener, remoteValueState, "leadingIndex", true);
+        }
+
       } finally {
         _changeNotificationsEnabled = wasEnabled;
       }
@@ -58,12 +72,24 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     public function valueUpdated(remoteValueState:RemoteValueState):void {
       if(_changeNotificationsEnabled) {
-        trace(">>> Value update <<< " + remoteValueState.value + " on " + remoteValueState);
+        trace(">>> Value update <<< " + remoteValueState.value);
       }
     }
     
+    public function selectedIndicesUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
+      if(_changeNotificationsEnabled) {
+        trace(">>> Selected indices update <<< " + remoteCompositeValueState.selectedIndices + " on " + remoteCompositeValueState.value);
+      }
+    }
+
+    public function leadingIndexUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
+      if(_changeNotificationsEnabled) {
+        trace(">>> Leading index update <<< " + remoteCompositeValueState.leadingIndex + " on " + remoteCompositeValueState.value);
+      }
+    }
+
     public function execute(action:RAction):void {
-      trace(">>> Execute <<< " + action);
+      trace(">>> Execute <<< " + action.name);
     }
 
     public function getRegistered(guid:String):IRemotePeer {

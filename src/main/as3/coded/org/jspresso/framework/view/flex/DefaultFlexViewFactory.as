@@ -269,28 +269,45 @@ package org.jspresso.framework.view.flex {
 
     private function bindTree(tree:Tree, rootState:RemoteCompositeValueState):void {
       var updateModel:Function = function (selectedItems:Array):void {
-        clearStateSelection(rootState);
-        for(var i:int=0; i < selectedItems.length; i++) {
-          var node:RemoteValueState = selectedItems[i] as RemoteValueState;
-          var parentNode:RemoteCompositeValueState = tree.getParentItem(node);
-          if(parentNode.selectedIndices == null) {
-            parentNode.selectedIndices = new Array();
+        var parentsOfSelectedNodes:Array = new Array();
+        var i:int;
+        var node:Object;
+        var parentNode:RemoteCompositeValueState;
+        for(i=0; i < selectedItems.length; i++) {
+          node = selectedItems[i];
+          parentNode = tree.getParentItem(node);
+          if(parentNode != null && parentsOfSelectedNodes.indexOf(parentNode) == -1) {
+            parentsOfSelectedNodes.push(parentNode);
           }
-          var childIndex:int = parentNode.children.getItemIndex(node);
-          parentNode.selectedIndices.push(childIndex);
-          parentNode.leadingIndex = childIndex;
+        }
+        clearStateSelection(rootState, parentsOfSelectedNodes);
+        for(i=0; i < selectedItems.length; i++) {
+          node = selectedItems[i];
+          parentNode = tree.getParentItem(node);
+          if(parentNode != null) {
+            var selectedIndices:Array = new Array();
+            if(parentNode.selectedIndices != null) {
+              selectedIndices.concat(parentNode.selectedIndices);
+            }
+            var childIndex:int = parentNode.children.getItemIndex(node);
+            selectedIndices.push(childIndex);
+            parentNode.selectedIndices = selectedIndices;
+            parentNode.leadingIndex = childIndex;
+          }
         }
       };
       BindingUtils.bindSetter(updateModel, tree, "selectedItems", true);
     }
     
-    private function clearStateSelection(remoteState:RemoteCompositeValueState):void {
-      remoteState.selectedIndices = null
-      remoteState.leadingIndex = -1;
+    private function clearStateSelection(remoteState:RemoteCompositeValueState, excludedNodes:Array):void {
+      if(excludedNodes.indexOf(remoteState) == -1) {
+        remoteState.selectedIndices = null
+        remoteState.leadingIndex = -1;
+      }
       if(remoteState.children != null) {
         for(var i:int = 0; i < remoteState.children.length; i++) {
           if(remoteState.children[i] is RemoteCompositeValueState) {
-            clearStateSelection(remoteState.children[i] as RemoteCompositeValueState);
+            clearStateSelection(remoteState.children[i] as RemoteCompositeValueState, excludedNodes);
           }
         }
       }
@@ -866,6 +883,11 @@ package org.jspresso.framework.view.flex {
       var list:List = new List();
       list.horizontalScrollPolicy = ScrollPolicy.AUTO;
       list.verticalScrollPolicy = ScrollPolicy.AUTO;
+      if(remoteList.selectionMode == "SINGLE_SELECTION") {
+        list.allowMultipleSelection = false;
+      } else {
+        list.allowMultipleSelection = true;
+      }
       
       var itemRenderer:ClassFactory = new ClassFactory(RemoteValueDgItemRenderer);
       list.itemRenderer = itemRenderer;
