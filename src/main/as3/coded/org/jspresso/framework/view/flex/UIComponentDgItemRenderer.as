@@ -34,7 +34,7 @@ package org.jspresso.framework.view.flex {
         if(state == null || editor == null) {
           state = new RemoteValueState();
           remoteComponent.state = state;
-          editor = viewFactory.createComponent(remoteComponent);
+          editor = viewFactory.createComponent(remoteComponent, false);
         }
       }
     }
@@ -50,7 +50,7 @@ package org.jspresso.framework.view.flex {
 	    if(valueChangeListener != null) {
 	      valueChangeListener.unwatch();
 	    }
-	    valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value");
+	    valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
     }
     
   	protected function refresh(value:Object):void {

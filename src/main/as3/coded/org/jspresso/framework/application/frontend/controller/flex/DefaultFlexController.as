@@ -17,10 +17,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remotePeerRegistry:IRemotePeerRegistry;
+    private var _changeNotificationsEnabled:Boolean;
     
     public function DefaultFlexController() {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _viewFactory = new DefaultFlexViewFactory(this, this);
+      _changeNotificationsEnabled = true;
     }
     
     public function createComponent(remoteComponent:RComponent):UIComponent {
@@ -45,11 +47,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var valueListener:Function = function(value:Object):void {
         valueUpdated(remoteValueState);
       }
-      BindingUtils.bindSetter(valueListener, remoteValueState, "value");
+      var wasEnabled:Boolean = _changeNotificationsEnabled;
+      try {
+        _changeNotificationsEnabled = false;
+        BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
+      } finally {
+        _changeNotificationsEnabled = wasEnabled;
+      }
     }
     
     public function valueUpdated(remoteValueState:RemoteValueState):void {
-      trace(">>> Value update <<< " + remoteValueState.value + " on " + remoteValueState);
+      if(_changeNotificationsEnabled) {
+        trace(">>> Value update <<< " + remoteValueState.value + " on " + remoteValueState);
+      }
     }
     
     public function execute(action:RAction):void {

@@ -117,7 +117,7 @@ package org.jspresso.framework.view.flex {
       _timeFormatter.formatString = "JJ:NN:SS"
     }
     
-    public function createComponent(remoteComponent:RComponent):UIComponent {
+    public function createComponent(remoteComponent:RComponent, registerState:Boolean=true):UIComponent {
       var component:UIComponent;
       if(remoteComponent is RActionField) {
         component = createActionField(remoteComponent as RActionField);
@@ -201,7 +201,9 @@ package org.jspresso.framework.view.flex {
         component.setStyle("borderStyle","solid");
         component.setStyle("borderThickness", 3);
       }
-      _remotePeerRegistry.register(remoteComponent.state);
+      if(registerState) {
+        _remotePeerRegistry.register(remoteComponent.state);
+      }
       return component;
     }
     
@@ -279,7 +281,7 @@ package org.jspresso.framework.view.flex {
           parentNode.leadingIndex = childIndex;
         }
       };
-      BindingUtils.bindSetter(updateModel, tree, "selectedItems");
+      BindingUtils.bindSetter(updateModel, tree, "selectedItems", true);
     }
     
     private function clearStateSelection(remoteState:RemoteCompositeValueState):void {
@@ -352,8 +354,8 @@ package org.jspresso.framework.view.flex {
     }
 
     private function bindCheckBox(checkBox:CheckBox, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(checkBox, "selected", remoteState, "value");
-      BindingUtils.bindProperty(remoteState, "value", checkBox, "selected");
+      BindingUtils.bindProperty(checkBox, "selected", remoteState, "value", true);
+      BindingUtils.bindProperty(remoteState, "value", checkBox, "selected", true);
     }
 
     private function createComboBox(remoteComboBox:RComboBox):UIComponent {
@@ -371,8 +373,8 @@ package org.jspresso.framework.view.flex {
     }
 
     private function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
-      BindingUtils.bindProperty(comboBox, "selectedItem", remoteComboBox.state, "value");
-      BindingUtils.bindProperty(remoteComboBox.state, "value", comboBox, "selectedItem");
+      BindingUtils.bindProperty(comboBox, "selectedItem", remoteComboBox.state, "value", true);
+      BindingUtils.bindProperty(remoteComboBox.state, "value", comboBox, "selectedItem", true);
     }
 
     private function createBorderContainer(remoteBorderContainer:RBorderContainer):UIComponent {
@@ -763,7 +765,7 @@ package org.jspresso.framework.view.flex {
     }
 
     private function bindDateField(dateField:DateField, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(dateField, "selectedDate", remoteState, "value");
+      BindingUtils.bindProperty(dateField, "selectedDate", remoteState, "value", true);
       var updateModel:Function = function (event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
@@ -788,7 +790,7 @@ package org.jspresso.framework.view.flex {
     }
 
     private function bindDateTimeField(dateTimeField:DateTimeField, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(dateTimeField, "selectedDateTime", remoteState, "value");
+      BindingUtils.bindProperty(dateTimeField, "selectedDateTime", remoteState, "value", true);
       var updateModel:Function = function (event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
@@ -811,7 +813,7 @@ package org.jspresso.framework.view.flex {
     }
     
     private function bindTimeStepper(timeStepper:TimeStepper, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(timeStepper, "timeValue", remoteState, "value");
+      BindingUtils.bindProperty(timeStepper, "timeValue", remoteState, "value", true);
       var updateModel:Function = function(event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
@@ -940,7 +942,7 @@ package org.jspresso.framework.view.flex {
         
         if(!(rColumn is RCheckBox)) {
           var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
-          itemEditor.properties = {editor:createComponent(rColumn),
+          itemEditor.properties = {editor:createComponent(rColumn, false),
                                    state:rColumn.state,
                                    index:i+1};
           column.itemEditor = itemEditor;
@@ -1075,7 +1077,7 @@ package org.jspresso.framework.view.flex {
       var button:Button = new Button();
 	    button.setStyle("icon", getIconForComponent(button, remoteAction.icon));
 		  button.toolTip = remoteAction.description + TOOLTIP_ELLIPSIS;
-		  BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled");
+		  BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
 		  _remotePeerRegistry.register(remoteAction);
 		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
 		    _actionHandler.execute(remoteAction);
@@ -1097,7 +1099,7 @@ package org.jspresso.framework.view.flex {
           }
         }
       };
-      BindingUtils.bindSetter(updateView, remoteState, "value");
+      BindingUtils.bindSetter(updateView, remoteState, "value", true);
 
       var updateModel:Function = function (event:Event):void {
         var inputText:String = (event.currentTarget as TextInput).text;
@@ -1117,7 +1119,7 @@ package org.jspresso.framework.view.flex {
     }
     
     private function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(textArea, "text", remoteState, "value");
+      BindingUtils.bindProperty(textArea, "text", remoteState, "value", true);
       var updateModel:Function = function (event:Event):void {
         remoteState.value = (event.currentTarget as TextArea).text;
       };
@@ -1126,7 +1128,7 @@ package org.jspresso.framework.view.flex {
     }
 
     private function bindColorPicker(colorPicker:ColorPicker, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(colorPicker, "selectedColor", remoteState, "value");
+      BindingUtils.bindProperty(colorPicker, "selectedColor", remoteState, "value", true);
       var updateModel:Function = function (event:Event):void {
         var currentAlpha:String;
         if(remoteState.value != null) {
