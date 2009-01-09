@@ -69,7 +69,7 @@
 	<classpathentry kind="src" output="app-template/remote/target/classes" path="app-template/remote/src/main/resources"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/bsf/bsf/2.3.0/bsf-2.3.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/commons-collections/commons-collections/3.1/commons-collections-3.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-collections/commons-collections/3.1/commons-collections-3.1.jar" sourcepath="/ENVDEV/commons-collections-3.1/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-dbcp/commons-dbcp/1.2.1/commons-dbcp-1.2.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-pool/commons-pool/1.2/commons-pool-1.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/javax/transaction/jta/1.0.1B/jta-1.0.1B.jar"/>

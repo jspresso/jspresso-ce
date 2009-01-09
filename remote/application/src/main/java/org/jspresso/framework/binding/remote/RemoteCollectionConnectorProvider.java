@@ -114,8 +114,8 @@ public class RemoteCollectionConnectorProvider extends
    * @return the newly created state.
    */
   protected RemoteCompositeValueState createState() {
-    RemoteCompositeValueState createdState = new RemoteCompositeValueState(
-        getGuid());
+    RemoteCompositeValueState createdState = connectorFactory
+    .createRemoteCompositeValueState(getGuid());
     createdState.setValue(getDisplayValue());
     createdState.setReadable(isReadable());
     createdState.setWritable(isWritable());

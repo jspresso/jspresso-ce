@@ -109,7 +109,8 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * @return the newly created state.
    */
   protected RemoteValueState createState() {
-    RemoteValueState createdState = new RemoteValueState(getGuid());
+    RemoteValueState createdState = connectorFactory
+    .createRemoteValueState(getGuid());
     createdState.setValue(getConnectorValue());
     createdState.setReadable(isReadable());
     createdState.setWritable(isWritable());

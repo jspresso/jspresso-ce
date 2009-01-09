@@ -81,6 +81,7 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
@@ -138,7 +139,6 @@ public class DefaultRemoteViewFactory extends
   private boolean        dateServerParse;
   private boolean        numberServerParse;
 
-
   /**
    * Constructs a new <code>DefaultRemoteViewFactory</code> instance.
    */
@@ -147,7 +147,7 @@ public class DefaultRemoteViewFactory extends
     dateServerParse = false;
     numberServerParse = false;
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -358,7 +358,8 @@ public class DefaultRemoteViewFactory extends
   private RCardContainer createRCardContainer() {
     RCardContainer cardContainer = new RCardContainer(guidGenerator
         .generateGUID());
-    cardContainer.setState(new RemoteValueState(guidGenerator.generateGUID()));
+    cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory())
+        .createRemoteValueState(guidGenerator.generateGUID()));
     return cardContainer;
   }
 

@@ -37,11 +37,13 @@ import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
+import org.jspresso.framework.util.remote.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
@@ -63,7 +65,8 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
+public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
+    IRemoteValueStateFactory {
 
   private IGUIDGenerator                guidGenerator;
   private PropertyChangeListener        readabilityListener;
@@ -73,6 +76,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
   private IConnectorValueChangeListener renderingConnectorValueChangeListener;
   private IConnectorValueChangeListener collectionConnectorValueChangeListener;
   private ISelectionChangeListener      selectionChangeListener;
+  private IRemotePeerRegistry           remotePeerRegistry;
 
   /**
    * Constructs a new <code>RemoteConnectorFactory</code> instance.
@@ -276,6 +280,36 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory {
 
   String generateGUID() {
     return guidGenerator.generateGUID();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteCompositeValueState createRemoteCompositeValueState(String guid) {
+    RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
+    remotePeerRegistry.register(state);
+    return state;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteValueState createRemoteValueState(String guid) {
+    RemoteValueState state = new RemoteValueState(guid);
+    remotePeerRegistry.register(state);
+    return state;
+  }
+
+  
+  /**
+   * Sets the remotePeerRegistry.
+   * 
+   * @param remotePeerRegistry the remotePeerRegistry to set.
+   */
+  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
+    this.remotePeerRegistry = remotePeerRegistry;
   }
 
 }
