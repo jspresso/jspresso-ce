@@ -53,6 +53,7 @@ package org.jspresso.framework.view.flex {
   import mx.formatters.NumberBaseRoundType;
   import mx.formatters.NumberFormatter;
   
+  import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionField;
   import org.jspresso.framework.gui.remote.RActionList;
@@ -103,11 +104,14 @@ package org.jspresso.framework.view.flex {
    private static const TOOLTIP_ELLIPSIS:String = "...";
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
+    private var _actionHandler:IActionHandler;
     private var _remoteValueSorter:RemoteValueSorter;
     private var _timeFormatter:DateFormatter;
 
-    public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry) {
+    public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry,
+                                           actionHandler:IActionHandler) {
       _remotePeerRegistry = remotePeerRegistry;
+      _actionHandler = actionHandler;
       _remoteValueSorter = new RemoteValueSorter();
       _timeFormatter = new DateFormatter();
       _timeFormatter.formatString = "JJ:NN:SS"
@@ -1073,6 +1077,9 @@ package org.jspresso.framework.view.flex {
 		  button.toolTip = remoteAction.description + TOOLTIP_ELLIPSIS;
 		  BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled");
 		  _remotePeerRegistry.register(remoteAction);
+		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+		    _actionHandler.execute(remoteAction);
+		  });
       return button;
     }
     

@@ -81,4 +81,12 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     backingStore.remove(guid);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isRegistered(String guid) {
+    return backingStore.containsKey(guid);
+  }
+
 }

@@ -56,6 +56,7 @@ public class RAction extends RemotePeer {
    */
   public RAction(String guid) {
     super(guid);
+    enabled = true;
   }
 
   /**

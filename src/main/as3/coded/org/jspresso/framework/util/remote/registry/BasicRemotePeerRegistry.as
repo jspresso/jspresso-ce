@@ -21,5 +21,9 @@ package org.jspresso.framework.util.remote.registry {
     public function unregister(guid:String):void {
       delete _backingStore[guid];
     }
+
+    public function isRegistered(guid:String):Boolean {
+      return _backingStore.hasOwnProperty(guid);
+    }
   }
 }

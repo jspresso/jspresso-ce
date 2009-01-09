@@ -9,5 +9,7 @@ package org.jspresso.framework.util.remote.registry {
     function getRegistered(guid:String):IRemotePeer;
 
     function unregister(guid:String):void;
+    
+    function isRegistered(guid:String):Boolean;
   }
 }

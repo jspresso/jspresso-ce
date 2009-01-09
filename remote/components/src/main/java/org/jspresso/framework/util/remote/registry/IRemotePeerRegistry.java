@@ -66,4 +66,13 @@ public interface IRemotePeerRegistry {
    *          the remote peer guid.
    */
   void unregister(String guid);
+
+  /**
+   * Tests wether a remote peer is already registered.
+   * 
+   * @param guid
+   *          the remote peer guid.
+   * @return true if the remote peer is already registered.
+   */
+  boolean isRegistered(String guid);
 }
