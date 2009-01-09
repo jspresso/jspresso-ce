@@ -11,6 +11,7 @@ package org.jspresso.framework.view {
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
+  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -817,8 +818,10 @@ package org.jspresso.framework.view {
 
     private function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
       var decimalField:TextInput = new TextInput();
+      var decimalFormatter:NumberFormatter = createFormatter(remoteDecimalField) as NumberFormatter; 
       bindTextInput(decimalField, remoteDecimalField.state,
-                    createFormatter(remoteDecimalField), createParser(remoteDecimalField));
+                    decimalFormatter, createParser(remoteDecimalField));
+      decimalField.restrict = "0-9" + decimalFormatter.decimalSeparatorTo;
       return decimalField;
     }
 
@@ -826,13 +829,16 @@ package org.jspresso.framework.view {
       var integerField:TextInput = new TextInput();
       bindTextInput(integerField, remoteIntegerField.state,
                     createFormatter(remoteIntegerField), createParser(remoteIntegerField));
+      integerField.restrict = "0-9";
       return integerField;
     }
 
     private function createPercentField(remotePercentField:RPercentField):UIComponent {
       var percentField:TextInput = new TextInput();
+      var percentFormatter:NumberFormatter = createFormatter(remotePercentField) as NumberFormatter; 
       bindTextInput(percentField, remotePercentField.state,
-                    createFormatter(remotePercentField), createParser(remotePercentField));
+                    percentFormatter, createParser(remotePercentField));
+      percentField.restrict = "0-9" + percentFormatter.decimalSeparatorTo + PercentFormatter.PERCENT_SUFFIX;
       return percentField;
     }
     
@@ -845,7 +851,37 @@ package org.jspresso.framework.view {
 
     private function createList(remoteList:RList):List {
       var list:List = new List();
+      list.horizontalScrollPolicy = ScrollPolicy.AUTO;
+      list.verticalScrollPolicy = ScrollPolicy.AUTO;
+      
+      var itemRenderer:ClassFactory = new ClassFactory(RemoteValueDgItemRenderer);
+      list.itemRenderer = itemRenderer;
+
+      list.dataProvider = (remoteList.state as RemoteCompositeValueState).children;
+      bindList(list, remoteList.state as RemoteCompositeValueState);
       return list;
+    }
+
+    private function bindList(list:List, state:RemoteCompositeValueState):void {
+      BindingUtils.bindSetter(function(selectedItems:Array):void {
+        if(selectedItems != null) {
+          // work on items to translate indices independently of table sorting state.
+          var translatedSelectedIndices:Array = new Array(selectedItems.length);
+          for(var i:int = 0; i < selectedItems.length; i++) {
+            translatedSelectedIndices[i] = state.children.getItemIndex(selectedItems[i]);
+          }
+          if(translatedSelectedIndices.length > 0) {
+            state.leadingIndex = translatedSelectedIndices[0];
+          } else {
+            state.leadingIndex = -1;
+          }
+          translatedSelectedIndices.sort(Array.NUMERIC);
+          state.selectedIndices = translatedSelectedIndices;
+        } else {
+          state.selectedIndices = null;
+          state.leadingIndex = -1;
+        }
+      }, list, "selectedItems", true);
     }
 
     private function createPasswordField(remotePasswordField:RPasswordField):UIComponent {
@@ -1115,7 +1151,7 @@ package org.jspresso.framework.view {
         return _timeFormatter;
       } else if(remoteComponent is RNumericComponent) {
         var numberFormatter:NumberFormatter
-        if(remoteComponent is RDecimalField) {
+        if(remoteComponent is RPercentField) {
           numberFormatter = new PercentFormatter();
         } else {
           numberFormatter = new NumberFormatter();
@@ -1134,7 +1170,7 @@ package org.jspresso.framework.view {
     private function createParser(remoteComponent:RComponent):Parser {
       if(remoteComponent is RNumericComponent) {
         var numberParser:NumberParser;
-        if(remoteComponent is RDecimalField) {
+        if(remoteComponent is RPercentField) {
           numberParser = new PercentParser();
         } else {
           numberParser = new NumberParser();

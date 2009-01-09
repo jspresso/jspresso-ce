@@ -2,6 +2,7 @@ package org.jspresso.framework.view {
 
   import mx.binding.utils.BindingUtils;
   import mx.binding.utils.ChangeWatcher;
+  import mx.controls.DataGrid;
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.ListData;
   import mx.controls.listClasses.ListItemRenderer;
@@ -54,7 +55,12 @@ package org.jspresso.framework.view {
 
   	protected function updateLabel(rendererData:Object, rendererListData:BaseListData):void {
   	  if(rendererData && rendererListData) {
-  	    var cellValueState:RemoteValueState = ((rendererData as RemoteCompositeValueState).children[rendererListData.columnIndex +1] as RemoteValueState);
+  	    var cellValueState:RemoteValueState;
+  	    if(rendererListData.owner is DataGrid) {
+  	      cellValueState = ((rendererData as RemoteCompositeValueState).children[rendererListData.columnIndex +1] as RemoteValueState); 
+  	    } else {
+  	      cellValueState = rendererData as RemoteValueState;
+  	    }
   	    if(valueChangeListener != null) {
   	      valueChangeListener.unwatch();
   	    }

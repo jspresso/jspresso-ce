@@ -4,7 +4,7 @@ package org.jspresso.framework.view {
 
   public class PercentFormatter extends NumberFormatter {
     
-    public const PERCENT_SUFFIX:String = " %";
+    public static const PERCENT_SUFFIX:String = " %";
     
     override public function format(value:Object):String {
       if(value == null) {
