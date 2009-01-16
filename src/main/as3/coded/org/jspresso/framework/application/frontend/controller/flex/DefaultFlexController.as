@@ -151,6 +151,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
       if(targetPeer == null) {
         handleError("Target remote peer could not be retrieved");
+        return;
       }
       if(command is RemoteValueCommand) {
         (targetPeer as RemoteValueState).value =
