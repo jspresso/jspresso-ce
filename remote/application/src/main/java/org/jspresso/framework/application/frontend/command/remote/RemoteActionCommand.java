@@ -38,5 +38,26 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteActionCommand extends RemoteCommand {
-  // This command is empty since the action GUID is sufficient.
+  
+  private String parameter;
+
+  
+  /**
+   * Gets the parameter.
+   * 
+   * @return the parameter.
+   */
+  public String getParameter() {
+    return parameter;
+  }
+
+  
+  /**
+   * Sets the parameter.
+   * 
+   * @param parameter the parameter to set.
+   */
+  public void setParameter(String parameter) {
+    this.parameter = parameter;
+  }
 }

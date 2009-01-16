@@ -2,7 +2,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
   import mx.collections.ListCollectionView;
   import mx.core.UIComponent;
-  import mx.rpc.remoting.RemoteObject;
+  import mx.rpc.events.FaultEvent;
+  import mx.rpc.events.ResultEvent;
+  import mx.rpc.remoting.mxml.Operation;
+  import mx.rpc.remoting.mxml.RemoteObject;
   
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
@@ -28,6 +31,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _viewFactory = new DefaultFlexViewFactory(this, this);
       _changeNotificationsEnabled = true;
       _remoteController = remoteController;
+      initRemoteController();
     }
     
     public function createComponent(remoteComponent:RComponent):UIComponent {
@@ -110,6 +114,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
 
+    protected function handleError(message:String):void {
+      trace("Recieved error : " + message);
+    }
+
     public function getRegistered(guid:String):IRemotePeer {
       return _remotePeerRegistry.getRegistered(guid);
     }
@@ -120,6 +128,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     public function isRegistered(guid:String):Boolean {
       return _remotePeerRegistry.isRegistered(guid);
+    }
+    
+    private function initRemoteController():void {
+      var operation:Operation;
+      
+      operation = new Operation(_remoteController, "handleCommands");
+      operation.addEventListener(ResultEvent.RESULT, function(resultEvent:ResultEvent):void {
+        handleCommands(resultEvent.result as ListCollectionView);
+      });
+      operation.addEventListener(FaultEvent.FAULT, function(faultEvent:FaultEvent):void {
+        handleError(faultEvent.fault.message);
+      });
+      _remoteController.operations[operation.name] = operation;
     }
   }
 }

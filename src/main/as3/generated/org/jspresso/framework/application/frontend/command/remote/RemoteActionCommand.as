@@ -19,5 +19,13 @@ package org.jspresso.framework.application.frontend.command.remote {
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand")]
     public class RemoteActionCommand extends RemoteCommand {
 
+        private var _parameter:String;
+
+        public function set parameter(value:String):void {
+            _parameter = value;
+        }
+        public function get parameter():String {
+            return _parameter;
+        }
     }
 }
