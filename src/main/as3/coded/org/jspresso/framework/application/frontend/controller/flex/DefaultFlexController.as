@@ -1,5 +1,7 @@
 package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
+  import mx.collections.ArrayCollection;
+  import mx.collections.IList;
   import mx.collections.ListCollectionView;
   import mx.core.UIComponent;
   import mx.rpc.events.FaultEvent;
@@ -8,7 +10,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.rpc.remoting.mxml.RemoteObject;
   
   import org.jspresso.framework.action.IActionHandler;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteAccessibilityCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RComponent;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
@@ -21,16 +29,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
   
   public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler {
     
+    private static const HANDLE_COMMANDS_METHOD:String = "handleCommands";
     private var _remoteController:RemoteObject;
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _changeNotificationsEnabled:Boolean;
+    private var _commandsQueue:IList;
     
     public function DefaultFlexController(remoteController:RemoteObject) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _viewFactory = new DefaultFlexViewFactory(this, this);
       _changeNotificationsEnabled = true;
       _remoteController = remoteController;
+      _commandsQueue = new ArrayCollection(new Array());
       initRemoteController();
     }
     
@@ -81,36 +92,101 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     public function valueUpdated(remoteValueState:RemoteValueState):void {
       if(_changeNotificationsEnabled) {
-        trace(">>> Value update <<< " + remoteValueState.value);
+        //trace(">>> Value update <<< " + remoteValueState.value);
+        var command:RemoteValueCommand = new RemoteValueCommand();
+        command.targetPeerGuid = remoteValueState.guid;
+        command.value = remoteValueState.value;
+        registerCommand(command);
       }
     }
     
     public function selectedIndicesUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
       if(_changeNotificationsEnabled) {
-        trace(">>> Selected indices update <<< " + remoteCompositeValueState.selectedIndices + " on " + remoteCompositeValueState.value);
+        //trace(">>> Selected indices update <<< " + remoteCompositeValueState.selectedIndices + " on " + remoteCompositeValueState.value);
+        var command:RemoteSelectionCommand = new RemoteSelectionCommand();
+        command.targetPeerGuid = remoteCompositeValueState.guid;
+        command.selectedIndices = remoteCompositeValueState.selectedIndices;
+        command.leadingIndex = remoteCompositeValueState.leadingIndex;
+        registerCommand(command);
       }
     }
 
     public function leadingIndexUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
       if(_changeNotificationsEnabled) {
-        trace(">>> Leading index update <<< " + remoteCompositeValueState.leadingIndex + " on " + remoteCompositeValueState.value);
+        //trace(">>> Leading index update <<< " + remoteCompositeValueState.leadingIndex + " on " + remoteCompositeValueState.value);
+        var command:RemoteSelectionCommand = new RemoteSelectionCommand();
+        command.targetPeerGuid = remoteCompositeValueState.guid;
+        command.selectedIndices = remoteCompositeValueState.selectedIndices;
+        command.leadingIndex = remoteCompositeValueState.leadingIndex;
+        registerCommand(command);
       }
     }
 
     public function execute(action:RAction, param:String=null):void {
-      trace(">>> Execute <<< " + action.name + " param = " + param);
+      //trace(">>> Execute <<< " + action.name + " param = " + param);
+      var command:RemoteActionCommand = new RemoteActionCommand();
+      command.targetPeerGuid = action.guid;
+      command.parameter = param;
+      registerCommand(command);
     }
     
     protected function registerCommand(command:RemoteCommand):void {
-      trace("Command registered for next round trip : " + command);
+      //trace("Command registered for next round trip : " + command);
+      _commandsQueue.addItem(command);
+      dispatchCommands();
+      _commandsQueue.removeAll();
     }
 
     protected function handleCommands(commands:ListCollectionView):void {
-      trace("Recieved commands :");
+      //trace("Recieved commands :");
       if (commands != null) {
         for each(var command:RemoteCommand in commands) {
-          trace("  -> " + command);
+          //trace("  -> " + command);
+          handleCommand(command);
         }
+      }
+    }
+
+    protected function handleCommand(command:RemoteCommand):void {
+      var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
+      if(targetPeer == null) {
+        handleError("Target remote peer could not be retrieved");
+      }
+      if(command is RemoteValueCommand) {
+        (targetPeer as RemoteValueState).value =
+          (command as RemoteValueCommand).value;
+        if(targetPeer is RemoteCompositeValueState) {
+         (targetPeer as RemoteCompositeValueState).description =
+           (command as RemoteValueCommand).description;
+         (targetPeer as RemoteCompositeValueState).iconImageUrl =
+           (command as RemoteValueCommand).iconImageUrl;
+        }
+      } else if(command is RemoteAccessibilityCommand) {
+        (targetPeer as RemoteValueState).readable =
+          (command as RemoteAccessibilityCommand).readable;
+        (targetPeer as RemoteValueState).writable =
+          (command as RemoteAccessibilityCommand).writable;
+      } else if(command is RemoteSelectionCommand) {
+        (targetPeer as RemoteCompositeValueState).selectedIndices =
+          (command as RemoteSelectionCommand).selectedIndices;
+        (targetPeer as RemoteCompositeValueState).leadingIndex =
+          (command as RemoteSelectionCommand).leadingIndex;
+      } else if(command is RemoteEnablementCommand) {
+        (targetPeer as RAction).enabled =
+          (command as RemoteEnablementCommand).enabled;
+      } else if(command is RemoteChildrenCommand) {
+        var newChildren:ListCollectionView = new ArrayCollection(new Array());
+        if((command as RemoteChildrenCommand).children != null) {
+          for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
+            if(isRegistered(child.guid)) {
+              child = getRegistered(child.guid) as RemoteValueState;
+            } else {
+              register(child);
+            }
+            newChildren.addItem(child);
+          }
+        }
+        (targetPeer as RemoteCompositeValueState).children = newChildren;
       }
     }
 
@@ -130,17 +206,23 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return _remotePeerRegistry.isRegistered(guid);
     }
     
+    protected function dispatchCommands():void {
+      var operation:Operation = _remoteController.operations[HANDLE_COMMANDS_METHOD] as Operation;
+      operation.send(_commandsQueue);
+      _commandsQueue.removeAll();
+    }
+    
     private function initRemoteController():void {
-      var operation:Operation;
+      _remoteController.showBusyCursor = true;
       
-      operation = new Operation(_remoteController, "handleCommands");
+      var operation:Operation;
+      operation = _remoteController.operations[HANDLE_COMMANDS_METHOD];
       operation.addEventListener(ResultEvent.RESULT, function(resultEvent:ResultEvent):void {
         handleCommands(resultEvent.result as ListCollectionView);
       });
       operation.addEventListener(FaultEvent.FAULT, function(faultEvent:FaultEvent):void {
         handleError(faultEvent.fault.message);
       });
-      _remoteController.operations[operation.name] = operation;
     }
   }
 }
