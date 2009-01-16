@@ -69,6 +69,7 @@ public class RemoteCollectionConnectorListProvider extends
     super(id);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
+    connectorFactory.register(this);
   }
 
   /**
@@ -98,6 +99,7 @@ public class RemoteCollectionConnectorListProvider extends
     clonedConnector.guid = connectorFactory.generateGUID();
     clonedConnector.state = null;
     connectorFactory.attachListeners(clonedConnector);
+    connectorFactory.register(this);
     return clonedConnector;
   }
 

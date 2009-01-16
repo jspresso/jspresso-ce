@@ -705,7 +705,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @return the connectorFactory.
    */
-  protected IConfigurableConnectorFactory getConnectorFactory() {
+  public IConfigurableConnectorFactory getConnectorFactory() {
     return connectorFactory;
   }
 

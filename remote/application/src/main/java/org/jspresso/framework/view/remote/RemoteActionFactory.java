@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.Locale;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -72,10 +74,11 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  */
 public class RemoteActionFactory implements IActionFactory<RAction, RComponent> {
 
-  private IIconFactory<RIcon>  iconFactory;
-  private ITranslationProvider translationProvider;
-  private IGUIDGenerator       guidGenerator;
-  private IRemotePeerRegistry  remotePeerRegistry;
+  private IIconFactory<RIcon>   iconFactory;
+  private ITranslationProvider  translationProvider;
+  private IGUIDGenerator        guidGenerator;
+  private IRemotePeerRegistry   remotePeerRegistry;
+  private IRemoteCommandHandler remoteCommandHandler;
 
   /**
    * {@inheritDoc}
@@ -221,25 +224,41 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
     public void propertyChange(
         @SuppressWarnings("unused") PropertyChangeEvent evt) {
       action.setEnabled(GateHelper.areGatesOpen(gates));
+
+      RemoteEnablementCommand command = new RemoteEnablementCommand();
+      command.setTargetPeerGuid(action.getGuid());
+      command.setEnabled(action.isEnabled());
+      remoteCommandHandler.registerCommand(command);
     }
   }
 
   /**
    * Sets the guidGenerator.
    * 
-   * @param guidGenerator the guidGenerator to set.
+   * @param guidGenerator
+   *          the guidGenerator to set.
    */
   public void setGuidGenerator(IGUIDGenerator guidGenerator) {
     this.guidGenerator = guidGenerator;
   }
 
-  
   /**
    * Sets the remotePeerRegistry.
    * 
-   * @param remotePeerRegistry the remotePeerRegistry to set.
+   * @param remotePeerRegistry
+   *          the remotePeerRegistry to set.
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
     this.remotePeerRegistry = remotePeerRegistry;
+  }
+
+  
+  /**
+   * Sets the remoteCommandHandler.
+   * 
+   * @param remoteCommandHandler the remoteCommandHandler to set.
+   */
+  public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
+    this.remoteCommandHandler = remoteCommandHandler;
   }
 }

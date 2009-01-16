@@ -10,6 +10,13 @@
   -->
 
   <!--
+    The implementation used as ConnectorFactory.
+  -->
+  <bean
+    id="connectorFactory"
+    class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
+
+  <!--
     The implementation used as ListSelectionModelBinder.
   -->
   <bean

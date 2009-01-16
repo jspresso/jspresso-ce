@@ -21,6 +21,7 @@ package org.jspresso.framework.view;
 import java.util.Locale;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 
@@ -78,6 +79,13 @@ public interface IViewFactory<E, F, G> {
    * @return the action factory.
    */
   IActionFactory<G, E> getActionFactory();
+
+  /**
+   * Gets the view connector factory.
+   * 
+   * @return the view connector factory.
+   */
+  IConfigurableConnectorFactory getConnectorFactory();
 
   /**
    * Gets the icon factory.

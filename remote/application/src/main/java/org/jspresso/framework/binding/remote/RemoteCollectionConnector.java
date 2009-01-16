@@ -74,6 +74,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     super(id, binder, childConnectorPrototype);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
+    connectorFactory.register(this);
   }
 
   /**
@@ -103,6 +104,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     clonedConnector.guid = connectorFactory.generateGUID();
     clonedConnector.state = null;
     connectorFactory.attachListeners(clonedConnector);
+    connectorFactory.register(this);
     return clonedConnector;
   }
 

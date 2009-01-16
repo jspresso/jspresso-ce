@@ -10,6 +10,13 @@
   -->
 
   <!--
+    The implementation used as ConnectorFactory.
+  -->
+  <bean
+    id="connectorFactory"
+    class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
+
+  <!--
     The implementation used as ListSelectionModelBinder.
   -->
   <bean
@@ -149,9 +156,6 @@
     abstract="true"
     parent="abstractFrontController"
     class="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController">
-    <property
-      name="viewFactory"
-      ref="viewFactory" />
   </bean>
 </beans>
 

@@ -66,6 +66,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     super(id, formatter);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
+    connectorFactory.register(this);
   }
 
   /**
@@ -95,6 +96,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     clonedConnector.guid = connectorFactory.generateGUID();
     clonedConnector.state = null;
     connectorFactory.attachListeners(clonedConnector);
+    connectorFactory.register(this);
     return clonedConnector;
   }
 

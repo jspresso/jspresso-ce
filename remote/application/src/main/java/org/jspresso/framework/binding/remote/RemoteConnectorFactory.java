@@ -23,6 +23,11 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteAccessibilityCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -43,6 +48,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
+import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
@@ -66,7 +72,7 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @author Vincent Vandenschrick
  */
 public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
-    IRemoteValueStateFactory {
+    IRemoteValueStateFactory, IRemotePeerRegistry {
 
   private IGUIDGenerator                guidGenerator;
   private PropertyChangeListener        readabilityListener;
@@ -77,6 +83,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   private IConnectorValueChangeListener collectionConnectorValueChangeListener;
   private ISelectionChangeListener      selectionChangeListener;
   private IRemotePeerRegistry           remotePeerRegistry;
+  private IRemoteCommandHandler         remoteCommandHandler;
 
   /**
    * Constructs a new <code>RemoteConnectorFactory</code> instance.
@@ -85,30 +92,54 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     readabilityListener = new PropertyChangeListener() {
 
       public void propertyChange(PropertyChangeEvent evt) {
-        ((IRemoteStateOwner) evt.getSource()).getState().setReadable(
-            ((Boolean) evt.getNewValue()).booleanValue());
+        RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
+            .getState();
+        state.setReadable(((Boolean) evt.getNewValue()).booleanValue());
+
+        RemoteAccessibilityCommand command = new RemoteAccessibilityCommand();
+        command.setTargetPeerGuid(state.getGuid());
+        command.setReadable(state.isReadable());
+        remoteCommandHandler.registerCommand(command);
       }
     };
     writabilityListener = new PropertyChangeListener() {
 
       public void propertyChange(PropertyChangeEvent evt) {
-        ((IRemoteStateOwner) evt.getSource()).getState().setWritable(
-            ((Boolean) evt.getNewValue()).booleanValue());
+        RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
+            .getState();
+        state.setWritable(((Boolean) evt.getNewValue()).booleanValue());
+
+        RemoteAccessibilityCommand command = new RemoteAccessibilityCommand();
+        command.setTargetPeerGuid(state.getGuid());
+        command.setWritable(state.isWritable());
+        remoteCommandHandler.registerCommand(command);
       }
     };
     connectorValueChangeListener = new IConnectorValueChangeListener() {
 
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
-        ((IRemoteStateOwner) evt.getSource()).getState().setValue(
-            evt.getNewValue());
+        RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
+            .getState();
+        state.setValue(evt.getNewValue());
+
+        RemoteValueCommand command = new RemoteValueCommand();
+        command.setTargetPeerGuid(state.getGuid());
+        command.setValue(state.getValue());
+        remoteCommandHandler.registerCommand(command);
       }
     };
     formattedConnectorValueChangeListener = new IConnectorValueChangeListener() {
 
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
-        ((IRemoteStateOwner) evt.getSource()).getState().setValue(
-            ((IFormattedValueConnector) evt.getSource())
-                .getConnectorValueAsString());
+        RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
+            .getState();
+        state.setValue(((IFormattedValueConnector) evt.getSource())
+            .getConnectorValueAsString());
+
+        RemoteValueCommand command = new RemoteValueCommand();
+        command.setTargetPeerGuid(state.getGuid());
+        command.setValue(state.getValue());
+        remoteCommandHandler.registerCommand(command);
       }
     };
     renderingConnectorValueChangeListener = new IConnectorValueChangeListener() {
@@ -121,6 +152,13 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         state.setValue(connector.getDisplayValue());
         state.setDescription(connector.getDisplayDescription());
         state.setIconImageUrl(connector.getDisplayIconImageUrl());
+
+        RemoteValueCommand command = new RemoteValueCommand();
+        command.setTargetPeerGuid(state.getGuid());
+        command.setValue(state.getValue());
+        command.setDescription(state.getDescription());
+        command.setIconImageUrl(state.getIconImageUrl());
+        remoteCommandHandler.registerCommand(command);
       }
     };
     collectionConnectorValueChangeListener = new IConnectorValueChangeListener() {
@@ -137,12 +175,23 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           }
         }
         compositeValueState.setChildren(children);
+
+        RemoteChildrenCommand command = new RemoteChildrenCommand();
+        command.setTargetPeerGuid(compositeValueState.getGuid());
+        command.setChildren(compositeValueState.getChildren());
+        remoteCommandHandler.registerCommand(command);
+
         if (connector.getParentConnector() instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) connector.getParentConnector())
                 .getCollectionConnector() == connector) {
           RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector
               .getParentConnector()).getState());
           parentState.setChildren(new ArrayList<RemoteValueState>(children));
+
+          RemoteChildrenCommand parentCommand = new RemoteChildrenCommand();
+          parentCommand.setTargetPeerGuid(parentState.getGuid());
+          parentCommand.setChildren(parentState.getChildren());
+          remoteCommandHandler.registerCommand(parentCommand);
         }
       }
     };
@@ -154,6 +203,13 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             .getState());
         compositeValueState.setSelectedIndices(evt.getNewSelection());
         compositeValueState.setLeadingIndex(evt.getLeadingIndex());
+
+        RemoteSelectionCommand command = new RemoteSelectionCommand();
+        command.setTargetPeerGuid(compositeValueState.getGuid());
+        command.setLeadingIndex(compositeValueState.getLeadingIndex());
+        command.setSelectedIndices(compositeValueState.getSelectedIndices());
+        remoteCommandHandler.registerCommand(command);
+
         if (connector.getParentConnector() instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) connector.getParentConnector())
                 .getCollectionConnector() == connector) {
@@ -161,6 +217,12 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
               .getParentConnector()).getState());
           parentState.setSelectedIndices(evt.getNewSelection());
           parentState.setLeadingIndex(evt.getLeadingIndex());
+
+          RemoteSelectionCommand parentCommand = new RemoteSelectionCommand();
+          parentCommand.setTargetPeerGuid(parentState.getGuid());
+          parentCommand.setLeadingIndex(parentState.getLeadingIndex());
+          parentCommand.setSelectedIndices(parentState.getSelectedIndices());
+          remoteCommandHandler.registerCommand(parentCommand);
         }
       }
     };
@@ -288,7 +350,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   @Override
   public RemoteCompositeValueState createRemoteCompositeValueState(String guid) {
     RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
-    remotePeerRegistry.register(state);
+    // connectors are registered with the same guid as their state.
+    // remotePeerRegistry.register(state);
     return state;
   }
 
@@ -298,18 +361,57 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   @Override
   public RemoteValueState createRemoteValueState(String guid) {
     RemoteValueState state = new RemoteValueState(guid);
-    remotePeerRegistry.register(state);
+    // connectors are registered with the same guid as their state.
+    // remotePeerRegistry.register(state);
     return state;
   }
 
-  
   /**
    * Sets the remotePeerRegistry.
    * 
-   * @param remotePeerRegistry the remotePeerRegistry to set.
+   * @param remotePeerRegistry
+   *          the remotePeerRegistry to set.
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
     this.remotePeerRegistry = remotePeerRegistry;
+  }
+
+  /**
+   * Sets the remoteCommandHandler.
+   * 
+   * @param remoteCommandHandler
+   *          the remoteCommandHandler to set.
+   */
+  public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
+    this.remoteCommandHandler = remoteCommandHandler;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IRemotePeer getRegistered(String guid) {
+    return remotePeerRegistry.getRegistered(guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isRegistered(String guid) {
+    return remotePeerRegistry.isRegistered(guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void register(IRemotePeer remotePeer) {
+    remotePeerRegistry.register(remotePeer);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void unregister(String guid) {
+    remotePeerRegistry.unregister(guid);
   }
 
 }

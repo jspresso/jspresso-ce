@@ -1,8 +1,11 @@
 package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
+  import mx.collections.ListCollectionView;
   import mx.core.UIComponent;
+  import mx.rpc.remoting.RemoteObject;
   
   import org.jspresso.framework.action.IActionHandler;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RComponent;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
@@ -15,14 +18,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
   
   public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler {
     
+    private var _remoteController:RemoteObject;
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _changeNotificationsEnabled:Boolean;
     
-    public function DefaultFlexController() {
+    public function DefaultFlexController(remoteController:RemoteObject) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _viewFactory = new DefaultFlexViewFactory(this, this);
       _changeNotificationsEnabled = true;
+      _remoteController = remoteController;
     }
     
     public function createComponent(remoteComponent:RComponent):UIComponent {
@@ -90,6 +95,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     public function execute(action:RAction, param:String=null):void {
       trace(">>> Execute <<< " + action.name + " param = " + param);
+    }
+    
+    protected function registerCommand(command:RemoteCommand):void {
+      trace("Command registered for next round trip : " + command);
+    }
+
+    protected function handleCommands(commands:ListCollectionView):void {
+      trace("Recieved commands :");
+      if (commands != null) {
+        for each(var command:RemoteCommand in commands) {
+          trace("  -> " + command);
+        }
+      }
     }
 
     public function getRegistered(guid:String):IRemotePeer {

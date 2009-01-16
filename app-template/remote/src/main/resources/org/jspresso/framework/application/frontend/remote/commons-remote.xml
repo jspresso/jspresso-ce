@@ -10,11 +10,24 @@
   -->
 
   <!--
+    The implementation used as ConnectorFactory.
+  -->
+  <bean
+    id="connectorFactory"
+    class="org.jspresso.framework.binding.remote.RemoteConnectorFactory"
+    scope="prototype">
+    <property
+      name="guidGenerator"
+      ref="guidGenerator" />
+  </bean>
+
+  <!--
     Remote peer registry
   -->
   <bean
     id="remotePeerRegistry"
-    class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry" />
+    class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry"
+    scope="prototype" />
 
   <!--
     Action beans
@@ -75,9 +88,6 @@
     <property
       name="guidGenerator"
       ref="guidGenerator" />
-    <property
-      name="remotePeerRegistry"
-      ref="remotePeerRegistry" />
   </bean>
 
   <bean
@@ -133,17 +143,6 @@
     class="org.jspresso.framework.application.frontend.action.remote.std.CloseDialogAction" />
 
   <bean
-    id="remoteConnectorFactory"
-    class="org.jspresso.framework.binding.remote.RemoteConnectorFactory">
-    <property
-      name="guidGenerator"
-      ref="guidGenerator" />
-    <property
-      name="remotePeerRegistry"
-      ref="remotePeerRegistry" />
-  </bean>
-
-  <bean
     id="viewFactory"
     class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
     parent="abstractViewFactory"
@@ -151,9 +150,6 @@
     <property
       name="guidGenerator"
       ref="guidGenerator" />
-    <property
-      name="connectorFactory"
-      ref="remoteConnectorFactory" />
   </bean>
 
   <!--
@@ -165,8 +161,9 @@
     parent="abstractFrontController"
     class="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController">
     <property
-      name="viewFactory"
-      ref="viewFactory" />
+      name="remotePeerRegistry"
+      ref="remotePeerRegistry" />
   </bean>
+
 </beans>
 

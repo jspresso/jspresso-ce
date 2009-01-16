@@ -59,13 +59,6 @@
     class="org.jspresso.framework.application.printing.model.basic.BasicReportFactory" />
 
   <!--
-    The implementation used as ConnectorFactory.
-  -->
-  <bean
-    id="connectorFactory"
-    class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
-
-  <!--
     The implementation used as ComponentCollectionFactory.
   -->
   <bean
