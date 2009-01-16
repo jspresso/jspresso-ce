@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.startup.development;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
@@ -78,6 +79,19 @@ public abstract class AbstractTestDataPersister {
    */
   protected <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
     return entityFactory.createEntityInstance(entityContract);
+  }
+
+  /**
+   * Creates a component instance.
+   * 
+   * @param <T>
+   *            the actual component type.
+   * @param componentContract
+   *            the component contract.
+   * @return the created component.
+   */
+  protected <T extends IComponent> T createComponentInstance(Class<T> componentContract) {
+    return entityFactory.createComponentInstance(componentContract);
   }
 
   /**

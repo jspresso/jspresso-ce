@@ -49,6 +49,8 @@
         dir="remote/application/target/classes">
         <include
           name="**/*State.class" />
+        <include
+          name="**/*Command.class" />
       </fileset>
     </gas3>
     <delete>
