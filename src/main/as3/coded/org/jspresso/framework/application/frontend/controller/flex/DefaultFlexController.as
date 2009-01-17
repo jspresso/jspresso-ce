@@ -35,6 +35,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _changeNotificationsEnabled:Boolean;
     private var _commandsQueue:IList;
+    private var _commandRegistrationEnabled;
     
     public function DefaultFlexController(remoteController:RemoteObject) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -42,6 +43,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _changeNotificationsEnabled = true;
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
+      _commandRegistrationEnabled = true;
       initRemoteController();
     }
     
@@ -79,10 +81,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
           BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
 
-          var leadingIndexListener:Function = function(leadingIndex:int):void {
-            leadingIndexUpdated(remoteValueState as RemoteCompositeValueState);
-          }
-          BindingUtils.bindSetter(leadingIndexListener, remoteValueState, "leadingIndex", true);
+// Forget leading index update since it will be propagated automatically.
+//          var leadingIndexListener:Function = function(leadingIndex:int):void {
+//            leadingIndexUpdated(remoteValueState as RemoteCompositeValueState);
+//          }
+//          BindingUtils.bindSetter(leadingIndexListener, remoteValueState, "leadingIndex", true);
+
         }
 
       } finally {
@@ -131,19 +135,26 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function registerCommand(command:RemoteCommand):void {
-      //trace("Command registered for next round trip : " + command);
-      _commandsQueue.addItem(command);
-      dispatchCommands();
-      _commandsQueue.removeAll();
+      if(_commandRegistrationEnabled) {
+        //trace("Command registered for next round trip : " + command);
+        _commandsQueue.addItem(command);
+        dispatchCommands();
+        _commandsQueue.removeAll();
+      }
     }
 
     protected function handleCommands(commands:ListCollectionView):void {
       //trace("Recieved commands :");
-      if (commands != null) {
-        for each(var command:RemoteCommand in commands) {
-          //trace("  -> " + command);
-          handleCommand(command);
+      try {
+        _commandRegistrationEnabled = false;
+        if (commands != null) {
+          for each(var command:RemoteCommand in commands) {
+            //trace("  -> " + command);
+            handleCommand(command);
+          }
         }
+      } finally {
+        _commandRegistrationEnabled = true;
       }
     }
 
@@ -176,7 +187,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
         (targetPeer as RAction).enabled =
           (command as RemoteEnablementCommand).enabled;
       } else if(command is RemoteChildrenCommand) {
-        var newChildren:ListCollectionView = new ArrayCollection(new Array());
+        var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children; 
+        //children.disableAutoUpdate();
+        children.removeAll();
         if((command as RemoteChildrenCommand).children != null) {
           for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
             if(isRegistered(child.guid)) {
@@ -184,10 +197,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
             } else {
               register(child);
             }
-            newChildren.addItem(child);
+            children.addItem(child);
           }
         }
-        (targetPeer as RemoteCompositeValueState).children = newChildren;
+        children.enableAutoUpdate();
       }
     }
 

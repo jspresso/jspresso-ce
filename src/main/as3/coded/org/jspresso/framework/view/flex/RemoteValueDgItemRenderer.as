@@ -19,16 +19,20 @@ package org.jspresso.framework.view.flex {
     
   	override public function set listData(value:BaseListData):void {
    	  updateLabel(data, value);
-   	  if(value is ListData) {
-   	    super.listData = value;
+   	  if(value) {
+     	  if(value is ListData) {
+     	    super.listData = value;
+     	  } else {
+    	    super.listData = new ListData(value.label,
+    	     null,
+           null,
+           value.uid,
+           value.owner,
+           value.rowIndex,
+           value.columnIndex);
+    	  }
    	  } else {
-  	    super.listData = new ListData(value.label,
-  	     null,
-         null,
-         value.uid,
-         value.owner,
-         value.rowIndex,
-         value.columnIndex);
+   	    super.listData = value;
   	  }
   	  _listData = value;
   	}
@@ -49,7 +53,9 @@ package org.jspresso.framework.view.flex {
 
   	override public function set data(value:Object):void	{
   	  updateLabel(value, listData);
-  	  super.listData.label = listData.label;
+  	  if(listData && super.listData) {
+  	    super.listData.label = listData.label;
+  	  }
   	  super.data = value;
   	}
 

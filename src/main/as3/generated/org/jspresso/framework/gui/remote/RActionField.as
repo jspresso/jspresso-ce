@@ -27,6 +27,5 @@ package org.jspresso.framework.gui.remote {
         public function get showTextField():Boolean {
             return _showTextField;
         }
-
     }
 }
