@@ -35,7 +35,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _changeNotificationsEnabled:Boolean;
     private var _commandsQueue:IList;
-    private var _commandRegistrationEnabled;
+    private var _commandRegistrationEnabled:Boolean;
     
     public function DefaultFlexController(remoteController:RemoteObject) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
