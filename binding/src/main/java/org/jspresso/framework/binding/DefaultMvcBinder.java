@@ -43,9 +43,9 @@ public class DefaultMvcBinder implements IMvcBinder {
    * Binds two connectors altogether.
    * 
    * @param viewConnector
-   *            The connector for the view
+   *          The connector for the view
    * @param modelConnector
-   *            The connector for the model
+   *          The connector for the model
    */
   public void bind(IValueConnector viewConnector, IValueConnector modelConnector) {
     if (viewConnector.getModelConnector() == modelConnector) {
@@ -57,6 +57,9 @@ public class DefaultMvcBinder implements IMvcBinder {
           (ICompositeValueConnector) modelConnector);
     }
     viewConnector.boundAsView();
+    if (modelConnector != null) {
+      modelConnector.boundAsModel();
+    }
   }
 
   private void bindChildren(ICompositeValueConnector viewConnector,

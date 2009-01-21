@@ -101,8 +101,8 @@ public class JToggleButtonConnector extends JComponentConnector<JToggleButton> {
    * {@inheritDoc}
    */
   @Override
-  protected void protectedUpdateState() {
-    super.protectedUpdateState();
+  protected void protectedWritabilityChange() {
+    super.protectedWritabilityChange();
     getConnectedJComponent().setEnabled(isWritable());
   }
 

@@ -97,8 +97,8 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox> {
    * {@inheritDoc}
    */
   @Override
-  protected void protectedUpdateState() {
-    super.protectedUpdateState();
+  protected void protectedWritabilityChange() {
+    super.protectedWritabilityChange();
     getConnectedJComponent().setEnabled(isWritable());
   }
 }

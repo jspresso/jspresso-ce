@@ -76,8 +76,8 @@ public class ULCJEditTextAreaConnector extends
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedULCComponent().setEditable(isWritable());
   }
 

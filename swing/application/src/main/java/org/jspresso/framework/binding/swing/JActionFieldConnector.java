@@ -126,8 +126,8 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
    * {@inheritDoc}
    */
   @Override
-  protected void protectedUpdateState() {
-    super.protectedUpdateState();
+  protected void protectedWritabilityChange() {
+    super.protectedWritabilityChange();
     getConnectedJComponent().setEditable(isWritable());
   }
 }

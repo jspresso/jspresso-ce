@@ -26,13 +26,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.ObjectUtils;
-
 
 /**
  * This abstract class holds some default implementation for a value connector.
@@ -62,24 +59,27 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 public abstract class AbstractValueConnector extends AbstractConnector
     implements IValueConnector {
 
-  private IExceptionHandler                    exceptionHandler;
-  private PropertyChangeListener               gatesListener;
-  private boolean                              locallyReadable;
+  private IExceptionHandler           exceptionHandler;
+  private PropertyChangeListener      readabilityGatesListener;
+  private PropertyChangeListener      writabilityGatesListener;
 
-  private boolean                              locallyWritable;
+  private boolean                     locallyReadable;
+  private boolean                     locallyWritable;
+  private boolean                     oldReadability;
+  private boolean                     oldWritability;
 
-  private IValueConnector                      modelConnector;
-  private Object                               oldConnectorValue;
+  private IValueConnector             modelConnector;
+  private Object                      oldConnectorValue;
 
-  private ICompositeValueConnector             parentConnector;
-  private Collection<IGate>                    readabilityGates;
+  private ICompositeValueConnector    parentConnector;
+  private Collection<IGate>           readabilityGates;
 
-  private ModelConnectorPropertyChangeListener readableListener;
-  private ConnectorValueChangeSupport          valueChangeSupport;
+  private PropertyChangeListener      modelReadabilityListener;
+  private ConnectorValueChangeSupport valueChangeSupport;
 
-  private Collection<IGate>                    writabilityGates;
+  private Collection<IGate>           writabilityGates;
 
-  private ModelConnectorPropertyChangeListener writableListener;
+  private PropertyChangeListener      modelWritabilityListener;
 
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
@@ -87,13 +87,15 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * connects.
    * 
    * @param id
-   *            The connector identifier.
+   *          The connector identifier.
    */
   public AbstractValueConnector(String id) {
     super(id);
     valueChangeSupport = new ConnectorValueChangeSupport(this);
     locallyReadable = true;
     locallyWritable = true;
+    oldReadability = isReadable();
+    oldWritability = isWritable();
   }
 
   /**
@@ -114,8 +116,18 @@ public abstract class AbstractValueConnector extends AbstractConnector
       readabilityGates = new HashSet<IGate>(4);
     }
     readabilityGates.add(gate);
-    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, getGatesListener());
-    updateState();
+    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
+        getReadabilityGatesListener());
+    readabilityChange();
+  }
+
+  /**
+   * Called whenever readability may have changed.
+   */
+  protected void readabilityChange() {
+    boolean readable = isReadable();
+    firePropertyChange(READABLE_PROPERTY, oldReadability, readable);
+    oldReadability = readable;
   }
 
   /**
@@ -126,27 +138,31 @@ public abstract class AbstractValueConnector extends AbstractConnector
       writabilityGates = new HashSet<IGate>(4);
     }
     writabilityGates.add(gate);
-    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, getGatesListener());
-    updateState();
+    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
+        getWritabilityGatesListener());
+    writabilityChange();
   }
 
   /**
+   * Called whenever writability may have changed.
+   */
+  protected void writabilityChange() {
+    boolean writable = isWritable();
+    firePropertyChange(WRITABLE_PROPERTY, oldWritability, writable);
+    oldWritability = writable;
+  }
+
+  /**
+   * Empty implementation.
+   * <p>
    * {@inheritDoc}
    */
-  public void boundAsModel(
-      IConnectorValueChangeListener modelConnectorListener,
-      PropertyChangeListener readChangeListener,
-      PropertyChangeListener writeChangeListener) {
-    modelConnectorListener.connectorValueChange(new ConnectorValueChangeEvent(
-        this, new Object(), getConnectorValue()));
-    readChangeListener.propertyChange(new PropertyChangeEvent(this,
-        READABLE_PROPERTY, null, new Boolean(isReadable())));
-    writeChangeListener.propertyChange(new PropertyChangeEvent(this,
-        WRITABLE_PROPERTY, null, new Boolean(isWritable())));
+  public void boundAsModel() {
+    // Empty implementation
   }
 
   /**
-   * {@inheritDoc}
+   * Empty implementation. {@inheritDoc}
    */
   public void boundAsView() {
     // Empty implementation
@@ -276,21 +292,39 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Gets the gatesListener.
+   * Gets the readability gates listener.
    * 
-   * @return the gatesListener.
+   * @return the readability gates listener.
    */
-  public PropertyChangeListener getGatesListener() {
-    if (gatesListener == null) {
-      gatesListener = new PropertyChangeListener() {
+  public PropertyChangeListener getReadabilityGatesListener() {
+    if (readabilityGatesListener == null) {
+      readabilityGatesListener = new PropertyChangeListener() {
 
-        public void propertyChange(@SuppressWarnings("unused")
-        PropertyChangeEvent evt) {
-          updateState();
+        public void propertyChange(
+            @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          readabilityChange();
         }
       };
     }
-    return gatesListener;
+    return readabilityGatesListener;
+  }
+
+  /**
+   * Gets the writability gates listener.
+   * 
+   * @return the writability gates listener.
+   */
+  public PropertyChangeListener getWritabilityGatesListener() {
+    if (writabilityGatesListener == null) {
+      writabilityGatesListener = new PropertyChangeListener() {
+
+        public void propertyChange(
+            @SuppressWarnings("unused") PropertyChangeEvent evt) {
+          writabilityChange();
+        }
+      };
+    }
+    return writabilityGatesListener;
   }
 
   /**
@@ -361,8 +395,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return;
     }
     readabilityGates.remove(gate);
-    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY, getGatesListener());
-    updateState();
+    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY,
+        getReadabilityGatesListener());
+    readabilityChange();
   }
 
   /**
@@ -373,8 +408,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return;
     }
     writabilityGates.remove(gate);
-    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY, getGatesListener());
-    updateState();
+    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY,
+        getWritabilityGatesListener());
+    writabilityChange();
   }
 
   /**
@@ -401,7 +437,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     boolean oldReadable = isReadable();
     this.locallyReadable = locallyReadable;
     firePropertyChange(READABLE_PROPERTY, oldReadable, isReadable());
-    updateState();
+    readabilityChange();
   }
 
   /**
@@ -413,72 +449,74 @@ public abstract class AbstractValueConnector extends AbstractConnector
     boolean oldWritable = isWritable();
     this.locallyWritable = locallyWritable;
     firePropertyChange(WRITABLE_PROPERTY, oldWritable, isWritable());
-    updateState();
+    writabilityChange();
   }
 
   /**
    * Sets the modelConnector.
    * 
    * @param modelConnector
-   *            the modelConnector to set.
+   *          the modelConnector to set.
    */
   public void setModelConnector(IValueConnector modelConnector) {
     if (getModelConnector() != null) {
       getModelConnector().removeConnectorValueChangeListener(this);
       removeConnectorValueChangeListener(getModelConnector());
-      if (readableListener != null) {
+      if (modelReadabilityListener != null) {
         getModelConnector().removePropertyChangeListener(
-            IValueConnector.READABLE_PROPERTY, readableListener);
+            IValueConnector.READABLE_PROPERTY, modelReadabilityListener);
       }
-      if (writableListener != null) {
+      if (modelWritabilityListener != null) {
         getModelConnector().removePropertyChangeListener(
-            IValueConnector.WRITABLE_PROPERTY, writableListener);
+            IValueConnector.WRITABLE_PROPERTY, modelWritabilityListener);
       }
     }
-    IValueConnector oldModelConnector = this.modelConnector;
     this.modelConnector = modelConnector;
     if (getModelConnector() != null) {
+      // manually triggers a connector value change event
+      connectorValueChange(new ConnectorValueChangeEvent(getModelConnector(),
+          getConnectorValue(), getModelConnector().getConnectorValue()));
       getModelConnector().addConnectorValueChangeListener(this);
       addConnectorValueChangeListener(getModelConnector());
-      if (readableListener == null) {
-        readableListener = new ModelConnectorPropertyChangeListener(this);
+      if (modelReadabilityListener == null) {
+        modelReadabilityListener = new PropertyChangeListener() {
+
+          @Override
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+            readabilityChange();
+          }
+        };
       }
-      if (writableListener == null) {
-        writableListener = new ModelConnectorPropertyChangeListener(this);
+      if (modelWritabilityListener == null) {
+        modelWritabilityListener = new PropertyChangeListener() {
+
+          @Override
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+            writabilityChange();
+          }
+        };
       }
       getModelConnector().addPropertyChangeListener(
-          IValueConnector.READABLE_PROPERTY, readableListener);
+          IValueConnector.READABLE_PROPERTY, modelReadabilityListener);
       getModelConnector().addPropertyChangeListener(
-          IValueConnector.WRITABLE_PROPERTY, writableListener);
-      getModelConnector()
-          .boundAsModel(this, readableListener, writableListener);
+          IValueConnector.WRITABLE_PROPERTY, modelWritabilityListener);
     } else {
       setConnectorValue(null);
     }
-    connectorModelChange(oldModelConnector, getModelConnector());
+    readabilityChange();
+    writabilityChange();
   }
 
   /**
    * Sets the parentConnector.
    * 
    * @param parentConnector
-   *            the parentConnector to set.
+   *          the parentConnector to set.
    */
   public void setParentConnector(ICompositeValueConnector parentConnector) {
     this.parentConnector = parentConnector;
-  }
-
-  /**
-   * Default implementation does nothing.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    boolean readable = isReadable();
-    firePropertyChange(READABLE_PROPERTY, !readable, readable);
-    boolean writable = isWritable();
-    firePropertyChange(WRITABLE_PROPERTY, !writable, writable);
   }
 
   /**
@@ -492,7 +530,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * track of the collection content change.
    * 
    * @param connectorValue
-   *            the value to take a snapshot of.
+   *          the value to take a snapshot of.
    * @return the value to keep a reference on as the
    *         <code>oldConnectorValue</code>.
    */
@@ -501,26 +539,13 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Gives a chance to the connector to react on a model connector change.
-   * 
-   * @param oldModelConnector
-   *            the old model connector.
-   * @param newModelConnector
-   *            the new model connector.
-   */
-  protected void connectorModelChange(IValueConnector oldModelConnector,
-      IValueConnector newModelConnector) {
-    updateState();
-  }
-
-  /**
    * Gives a chance to the connector to create a specific subclass of connector
    * value change event.
    * 
    * @param oldValue
-   *            the old connector value.
+   *          the old connector value.
    * @param newValue
-   *            the new connector value.
+   *          the new connector value.
    * @return the created change event.
    */
   protected ConnectorValueChangeEvent createChangeEvent(Object oldValue,
@@ -592,56 +617,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Sets the value to the peer connectee.
    * 
    * @param connecteeValue
-   *            the connectee value to set
+   *          the connectee value to set
    */
   protected abstract void setConnecteeValue(Object connecteeValue);
-
-  private class ModelConnectorPropertyChangeListener implements
-      PropertyChangeListener {
-
-    private IValueConnector viewConnector;
-
-    /**
-     * Constructs a new <code>ConnectorReadabilityChangeListener</code>
-     * instance.
-     * 
-     * @param viewConnector
-     *            the view connector
-     */
-    public ModelConnectorPropertyChangeListener(IValueConnector viewConnector) {
-      this.viewConnector = viewConnector;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(Object obj) {
-      if (!(obj instanceof ModelConnectorPropertyChangeListener)) {
-        return false;
-      }
-      if (this == obj) {
-        return true;
-      }
-      ModelConnectorPropertyChangeListener rhs = (ModelConnectorPropertyChangeListener) obj;
-      return new EqualsBuilder().append(viewConnector, rhs.viewConnector)
-          .isEquals();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-      return new HashCodeBuilder(17, 13).append(viewConnector).toHashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
-      viewConnector.updateState();
-    }
-  }
 }

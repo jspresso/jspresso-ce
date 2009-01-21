@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.binding;
 
-import java.beans.PropertyChangeListener;
-
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.IGate;
 
@@ -90,19 +88,9 @@ public interface IValueConnector extends IConnector,
   void addWritabilityGate(IGate gate);
 
   /**
-   * Forces the different events to be fired towards the listeners passed as
-   * parameter.
-   * 
-   * @param modelConnectorListener
-   *            the connector value change listener.
-   * @param readChangeListener
-   *            the read change listener.
-   * @param writeChangeListener
-   *            the write change listener.
+   * This method is called whenever this model connector has been bound to a view connector.
    */
-  void boundAsModel(IConnectorValueChangeListener modelConnectorListener,
-      PropertyChangeListener readChangeListener,
-      PropertyChangeListener writeChangeListener);
+  void boundAsModel();
 
   /**
    * This method is called whenever this view connector binding has changed.

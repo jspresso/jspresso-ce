@@ -63,8 +63,8 @@ public class ULCColorPickerConnector extends
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedULCComponent().setEnabled(isWritable());
   }
 

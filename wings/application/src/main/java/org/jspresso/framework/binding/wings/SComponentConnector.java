@@ -67,7 +67,8 @@ public abstract class SComponentConnector<E extends SComponent> extends
     super(id);
     this.connectedSComponent = connectedSComponent;
     bindSComponent();
-    updateState();
+    readabilityChange();
+    writabilityChange();
   }
 
   /**
@@ -84,7 +85,8 @@ public abstract class SComponentConnector<E extends SComponent> extends
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
+  protected void readabilityChange() {
+    super.readabilityChange();
     if (isReadable()) {
       if (savedForeground != null) {
         getConnectedSComponent().setForeground(savedForeground);

@@ -59,8 +59,8 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedULCComponent().setEnabled(isWritable());
   }
 

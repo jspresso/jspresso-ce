@@ -70,8 +70,8 @@ public abstract class STextComponentConnector<E extends STextComponent> extends
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void readabilityChange() {
+    super.readabilityChange();
     if (isReadable()) {
       if (savedSelectedTextColor != null) {
         getConnectedSComponent().setForeground(savedSelectedTextColor);
@@ -82,6 +82,14 @@ public abstract class STextComponentConnector<E extends STextComponent> extends
       getConnectedSComponent().setForeground(
           getConnectedSComponent().getForeground());
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedSComponent().setEditable(isWritable());
   }
 

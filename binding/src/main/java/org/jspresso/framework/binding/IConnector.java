@@ -78,10 +78,4 @@ public interface IConnector extends IPropertyChangeCapable, Cloneable {
    *            The connector identifier.
    */
   void setId(String id);
-
-  /**
-   * Tells this connector to fully update its state (readability, writability,
-   * actionability ...).
-   */
-  void updateState();
 }

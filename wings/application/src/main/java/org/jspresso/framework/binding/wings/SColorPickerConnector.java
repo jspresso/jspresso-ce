@@ -64,8 +64,8 @@ public class SColorPickerConnector extends SComponentConnector<SColorPicker> {
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedSComponent().setEnabled(isWritable());
   }
 

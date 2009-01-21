@@ -60,8 +60,8 @@ public class SCheckBoxConnector extends SComponentConnector<SCheckBox> {
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedSComponent().setEnabled(isWritable());
   }
 

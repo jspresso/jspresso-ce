@@ -19,7 +19,6 @@
 package org.jspresso.framework.binding.model;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +29,6 @@ import org.jspresso.framework.binding.ConnectorMap;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IConnectorMap;
 import org.jspresso.framework.binding.IConnectorMapProvider;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.ModelChangeEvent;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -128,13 +126,8 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * {@inheritDoc}
    */
   @Override
-  public void boundAsModel(
-      IConnectorValueChangeListener modelConnectorListener,
-      PropertyChangeListener readChangeListener,
-      PropertyChangeListener writeChangeListener) {
+  public void boundAsModel() {
     needsChildrenUpdate = true;
-    super.boundAsModel(modelConnectorListener, readChangeListener,
-        writeChangeListener);
   }
 
   /**

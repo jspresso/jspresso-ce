@@ -91,13 +91,4 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
   public void setId(String id) {
     this.id = id;
   }
-
-  /**
-   * Default implementation does nothing.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void updateState() {
-    // Default empty implementation.
-  }
 }
