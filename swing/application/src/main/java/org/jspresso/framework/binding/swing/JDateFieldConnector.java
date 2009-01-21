@@ -118,8 +118,8 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
    * {@inheritDoc}
    */
   @Override
-  protected void protectedUpdateState() {
-    super.protectedUpdateState();
+  protected void protectedReadabilityChange() {
+    super.protectedReadabilityChange();
     if (isReadable()) {
       if (savedSelectedTextColor != null) {
         getConnectedJComponent().getFormattedTextField().setSelectedTextColor(
@@ -132,6 +132,13 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
       getConnectedJComponent().getFormattedTextField().setSelectedTextColor(
           getConnectedJComponent().getFormattedTextField().getSelectionColor());
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void protectedWritabilityChange() {
     getConnectedJComponent().setEditable(isWritable());
   }
 }

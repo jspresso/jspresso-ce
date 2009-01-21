@@ -161,7 +161,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function handleCommand(command:RemoteCommand):void {
       var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
       if(targetPeer == null) {
-        handleError("Target remote peer could not be retrieved");
+        handleError("Target remote peer could not be retrieved for command: guid=" + command.targetPeerGuid + ", command=" + command);
         return;
       }
       if(command is RemoteValueCommand) {

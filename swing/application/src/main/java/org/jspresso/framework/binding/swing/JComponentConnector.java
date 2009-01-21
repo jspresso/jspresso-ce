@@ -25,12 +25,11 @@ import javax.swing.JComponent;
 import org.jspresso.framework.binding.AbstractValueConnector;
 import org.jspresso.framework.util.swing.SwingUtil;
 
-
 /**
  * This abstract class serves as the base class for all JComponent connectors.
  * Subclasses can access the JComponent using the parametrized method
- * <code>getConnectedJComponent()</code> which returns the parametrized type
- * of the class.
+ * <code>getConnectedJComponent()</code> which returns the parametrized type of
+ * the class.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -48,7 +47,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The actual class of the subclass of <code>JComponent</code>.
+ *          The actual class of the subclass of <code>JComponent</code>.
  */
 public abstract class JComponentConnector<E extends JComponent> extends
     AbstractValueConnector {
@@ -61,15 +60,16 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * Constructs a new <code>JComponentConnector</code> instance.
    * 
    * @param id
-   *            the connector identifier.
+   *          the connector identifier.
    * @param connectedJComponent
-   *            the connected JComponent.
+   *          the connected JComponent.
    */
   public JComponentConnector(String id, E connectedJComponent) {
     super(id);
     this.connectedJComponent = connectedJComponent;
     bindJComponent();
-    updateState();
+    readabilityChange();
+    writabilityChange();
   }
 
   /**
@@ -85,21 +85,43 @@ public abstract class JComponentConnector<E extends JComponent> extends
   /**
    * This implementation takes care of having the peer component modifications
    * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedUpdateState</code> method.
+   * modification to the <code>protectedReadabilityChange</code> method.
    * 
-   * @see #protectedUpdateState()
-   *      <p>
+   * @see #protectedReadabilityChange() <p>
    *      {@inheritDoc}
    */
   @Override
-  public final void updateState() {
+  protected final void readabilityChange() {
+    super.readabilityChange();
     SwingUtil.updateSwingGui(new Runnable() {
 
       /**
        * {@inheritDoc}
        */
       public void run() {
-        protectedUpdateState();
+        protectedReadabilityChange();
+      }
+    });
+  }
+
+  /**
+   * This implementation takes care of having the peer component modifications
+   * ran on the Swing event dispatch thread. It actually delegates the connectee
+   * modification to the <code>protectedWritabilityChange</code> method.
+   * 
+   * @see #protectedWritabilityChange() <p>
+   *      {@inheritDoc}
+   */
+  @Override
+  protected final void writabilityChange() {
+    super.writabilityChange();
+    SwingUtil.updateSwingGui(new Runnable() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void run() {
+        protectedWritabilityChange();
       }
     });
   }
@@ -144,21 +166,21 @@ public abstract class JComponentConnector<E extends JComponent> extends
 
   /**
    * Implementation of connectee modifications which normally would have been
-   * coded in the <code>setConnecteeValue</code> should go here to preserve
-   * the connector modification to be handled in the event dispatch thread.
+   * coded in the <code>setConnecteeValue</code> should go here to preserve the
+   * connector modification to be handled in the event dispatch thread.
    * 
    * @param aValue
-   *            the connectee value to set.
+   *          the connectee value to set.
    */
   protected abstract void protectedSetConnecteeValue(Object aValue);
 
   /**
-   * Implementation of connectee state modifications which normally would have
-   * been coded in the <code>updateState</code> method should go here to
-   * preserve the connector modification to be handled in the event dispatch
-   * thread.
+   * Implementation of connectee readability state modifications which normally
+   * would have been coded in the <code>readabilityChange</code> method should
+   * go here to preserve the connector modification to be handled in the event
+   * dispatch thread.
    */
-  protected void protectedUpdateState() {
+  protected void protectedReadabilityChange() {
     if (isReadable()) {
       if (savedForeground != null) {
         getConnectedJComponent().setForeground(savedForeground);
@@ -169,6 +191,16 @@ public abstract class JComponentConnector<E extends JComponent> extends
       getConnectedJComponent().setForeground(
           getConnectedJComponent().getBackground());
     }
+  }
+
+  /**
+   * Implementation of connectee writability state modifications which normally
+   * would have been coded in the <code>writabilityChange</code> method should
+   * go here to preserve the connector modification to be handled in the event
+   * dispatch thread.
+   */
+  protected void protectedWritabilityChange() {
+    // Empty implementation.
   }
 
   /**

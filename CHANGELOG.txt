@@ -16,6 +16,7 @@ Bugs fixed
 2319847  	 Standard remove action: integrity violations
 2319849  	 Standard duplicate action: initialization exceptions
         	 Startup action is not trigerred for wings controller
+        	 Refactored accessibility connector chain to prevent extra notifications.
 
 New features
 ------------

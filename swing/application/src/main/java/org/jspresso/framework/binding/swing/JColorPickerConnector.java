@@ -109,8 +109,8 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
    * {@inheritDoc}
    */
   @Override
-  protected void protectedUpdateState() {
-    super.protectedUpdateState();
+  protected void protectedWritabilityChange() {
+    super.protectedWritabilityChange();
     getConnectedJComponent().setEnabled(isWritable());
   }
 }

@@ -118,8 +118,8 @@ public abstract class JTextComponentConnector<E extends JTextComponent> extends
    * {@inheritDoc}
    */
   @Override
-  protected void protectedUpdateState() {
-    super.protectedUpdateState();
+  protected void protectedReadabilityChange() {
+    super.protectedReadabilityChange();
     if (isReadable()) {
       if (savedSelectedTextColor != null) {
         getConnectedJComponent().setSelectedTextColor(savedSelectedTextColor);
@@ -130,6 +130,14 @@ public abstract class JTextComponentConnector<E extends JTextComponent> extends
       getConnectedJComponent().setSelectedTextColor(
           getConnectedJComponent().getSelectionColor());
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void protectedWritabilityChange() {
+    super.protectedWritabilityChange();
     getConnectedJComponent().setEditable(isWritable());
   }
 }

@@ -104,8 +104,8 @@ public class JEditTextAreaConnector extends JComponentConnector<JEditTextArea> {
    * {@inheritDoc}
    */
   @Override
-  protected void protectedUpdateState() {
-    super.protectedUpdateState();
+  protected void protectedWritabilityChange() {
+    super.protectedWritabilityChange();
     getConnectedJComponent().setEditable(isWritable());
   }
 }

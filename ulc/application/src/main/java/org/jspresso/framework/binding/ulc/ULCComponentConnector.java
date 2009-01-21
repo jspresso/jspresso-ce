@@ -66,7 +66,8 @@ public abstract class ULCComponentConnector<E extends ULCComponent> extends
     super(id);
     this.connectedULCComponent = connectedULCComponent;
     bindULCComponent();
-    updateState();
+    readabilityChange();
+    writabilityChange();
   }
 
   /**
@@ -83,7 +84,8 @@ public abstract class ULCComponentConnector<E extends ULCComponent> extends
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
+  public void readabilityChange() {
+    super.readabilityChange();
     if (isReadable()) {
       if (savedForeground != null) {
         getConnectedULCComponent().setForeground(savedForeground);

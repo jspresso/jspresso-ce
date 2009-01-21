@@ -70,8 +70,8 @@ public abstract class ULCTextComponentConnector<E extends ULCTextComponent>
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void readabilityChange() {
+    super.readabilityChange();
     if (isReadable()) {
       if (savedSelectedTextColor != null) {
         getConnectedULCComponent().setSelectedTextColor(savedSelectedTextColor);
@@ -83,6 +83,14 @@ public abstract class ULCTextComponentConnector<E extends ULCTextComponent>
       getConnectedULCComponent().setSelectedTextColor(
           getConnectedULCComponent().getSelectionColor());
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedULCComponent().setEditable(isWritable());
   }
 

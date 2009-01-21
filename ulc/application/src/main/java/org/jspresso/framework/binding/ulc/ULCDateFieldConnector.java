@@ -62,8 +62,8 @@ public class ULCDateFieldConnector extends ULCComponentConnector<ULCDateField> {
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedULCComponent().setEditable(isWritable());
   }
 

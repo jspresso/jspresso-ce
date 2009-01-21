@@ -89,8 +89,8 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
    * {@inheritDoc}
    */
   @Override
-  public void updateState() {
-    super.updateState();
+  public void writabilityChange() {
+    super.writabilityChange();
     getConnectedSComponent().setEditable(isWritable());
   }
 
