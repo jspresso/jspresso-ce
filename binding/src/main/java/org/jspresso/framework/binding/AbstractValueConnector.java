@@ -564,7 +564,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
     } catch (RuntimeException ex) {
       propagatedCorrectly = false;
       try {
+        Object badValue = getConnectorValue();
         setConnecteeValue(oldConnectorValue);
+        // propagate the reverse change...
+        valueChangeSupport.fireConnectorValueChange(createChangeEvent(
+            badValue, getConnecteeValue()));
       } catch (Exception ex2) {
         // ignore. Nothing can be done about it.
       }
