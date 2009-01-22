@@ -71,17 +71,17 @@ package org.jspresso.framework.view.flex {
   	      valueChangeListener.unwatch();
   	    }
   	    valueChangeListener = BindingUtils.bindSetter(refresh, cellValueState, "value", true);
-    	  rendererListData.label = computeLabel(cellValueState);
+    	  rendererListData.label = computeLabel(cellValueState.value);
   	  }
   	}
   	
-  	protected function computeLabel(cellValueState:RemoteValueState):String {
+  	protected function computeLabel(cellValue:Object):String {
  	    var cellLabel:String;
-	    if(cellValueState.value != null) {
+	    if(cellValue != null) {
 	      if(_formatter != null) {
-	        cellLabel = _formatter.format(cellValueState.value);
+	        cellLabel = _formatter.format(cellValue);
 	      } else {
-  	      cellLabel = cellValueState.value.toString();
+  	      cellLabel = cellValue.toString();
   	    }
   	  } else {
   	    cellLabel = null;
@@ -89,9 +89,12 @@ package org.jspresso.framework.view.flex {
       return cellLabel
   	}
   	
-  	protected function refresh(cellLabel:Object):void {
-      listData.label = cellLabel as String;
-      validateProperties();
+  	protected function refresh(cellValue:Object):void {
+      listData.label = computeLabel(cellValue);
+  	  if(listData && super.listData) {
+  	    super.listData.label = listData.label;
+  	  }
+      invalidateProperties();
   	}
   }
 }

@@ -41,11 +41,11 @@ package org.jspresso.framework.view.flex {
   	  listDataIcon = _iconTemplate;
   	}
 
-  	override protected function computeLabel(cellValueState:RemoteValueState):String {
-	    if(cellValueState.value != null) {
-  	    return _labels[_values.indexOf(cellValueState.value)];
+  	override protected function computeLabel(cellValue:Object):String {
+	    if(cellValue != null) {
+  	    return _labels[_values.indexOf(cellValue)];
   	  } else {
-        return super.computeLabel(cellValueState);
+        return super.computeLabel(cellValue);
       }
   	}
 

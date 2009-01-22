@@ -96,7 +96,7 @@ public class RemoteCollectionConnectorProvider extends
     clonedConnector.guid = connectorFactory.generateGUID();
     clonedConnector.state = null;
     connectorFactory.attachListeners(clonedConnector);
-    connectorFactory.register(this);
+    connectorFactory.register(clonedConnector);
     return clonedConnector;
   }
 

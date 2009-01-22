@@ -161,7 +161,18 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function handleCommand(command:RemoteCommand):void {
       var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
       if(targetPeer == null) {
-        handleError("Target remote peer could not be retrieved for command: guid=" + command.targetPeerGuid + ", command=" + command);
+        handleError("Target remote peer could not be retrieved :");
+        handleError("  guid    = " + command.targetPeerGuid);
+        handleError("  command = " + command);
+        if(command is RemoteValueCommand) {
+          handleError("  value   = " + (command as RemoteValueCommand).value);
+        } else if(command is RemoteChildrenCommand) {
+          for each (var childState:RemoteValueState in (command as RemoteChildrenCommand).children) {
+            handleError("  child = " + childState);
+            handleError("    guid  = " + childState.guid);
+            handleError("    value = " + childState.value);
+          }
+        }
         return;
       }
       if(command is RemoteValueCommand) {
@@ -200,7 +211,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
             children.addItem(child);
           }
         }
-        children.enableAutoUpdate();
+        //children.enableAutoUpdate();
       }
     }
 

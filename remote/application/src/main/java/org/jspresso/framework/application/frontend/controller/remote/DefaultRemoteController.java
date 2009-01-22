@@ -25,10 +25,13 @@ import javax.security.auth.callback.CallbackHandler;
 
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
+import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.remote.RemoteConnectorFactory;
@@ -70,12 +73,14 @@ public class DefaultRemoteController extends
   private IRemotePeerRegistry remotePeerRegistry;
   private List<RemoteCommand> commandQueue;
   private boolean             commandRegistrationEnabled;
+  private int                 hpIndex;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
    */
   public DefaultRemoteController() {
     commandQueue = new ArrayList<RemoteCommand>();
+    hpIndex = 0;
     commandRegistrationEnabled = false;
   }
 
@@ -112,6 +117,7 @@ public class DefaultRemoteController extends
     try {
       commandRegistrationEnabled = true;
       commandQueue.clear();
+      hpIndex = 0;
       if (commands != null) {
         for (RemoteCommand command : commands) {
           handleCommand(command);
@@ -138,9 +144,16 @@ public class DefaultRemoteController extends
       ((IValueConnector) targetPeer)
           .setConnectorValue(((RemoteValueCommand) command).getValue());
     } else if (command instanceof RemoteSelectionCommand) {
-      ((ISelectable) targetPeer).setSelectedIndices(
-          ((RemoteSelectionCommand) command).getSelectedIndices(),
-          ((RemoteSelectionCommand) command).getLeadingIndex());
+      ISelectable selectable;
+      if (targetPeer instanceof ICollectionConnectorProvider) {
+        selectable = ((ICollectionConnectorProvider) targetPeer)
+            .getCollectionConnector();
+      } else {
+        selectable = (ISelectable) targetPeer;
+      }
+      selectable.setSelectedIndices(((RemoteSelectionCommand) command)
+          .getSelectedIndices(), ((RemoteSelectionCommand) command)
+          .getLeadingIndex());
     } else {
       throw new CommandException("Unsupported command type : "
           + command.getClass().getSimpleName());
@@ -153,7 +166,14 @@ public class DefaultRemoteController extends
   @Override
   public void registerCommand(RemoteCommand command) {
     if (commandRegistrationEnabled) {
-      commandQueue.add(command);
+      if (command instanceof RemoteChildrenCommand) {
+        // The remote children commands, that may create and register
+        // remote server peers on client side must be handled first.
+        commandQueue.add(hpIndex, command);
+        hpIndex++;
+      } else {
+        commandQueue.add(command);
+      }
     }
   }
 
@@ -176,13 +196,29 @@ public class DefaultRemoteController extends
    */
   public void register(IRemotePeer remotePeer) {
     remotePeerRegistry.register(remotePeer);
+    if (remotePeer instanceof ICompositeValueConnector) {
+      for (String childKey : ((ICompositeValueConnector) remotePeer)
+          .getChildConnectorKeys()) {
+        IValueConnector childConnector = ((ICompositeValueConnector) remotePeer)
+        .getChildConnector(childKey);
+        register((IRemotePeer) childConnector);
+      }
+    }
   }
 
   /**
    * {@inheritDoc}
    */
   public void unregister(String guid) {
+    IRemotePeer remotePeer = getRegistered(guid);
     remotePeerRegistry.unregister(guid);
+    if (remotePeer instanceof ICompositeValueConnector) {
+      for (String childKey : ((ICompositeValueConnector) remotePeer)
+          .getChildConnectorKeys()) {
+        unregister(((IRemotePeer) ((ICompositeValueConnector) remotePeer)
+            .getChildConnector(childKey)).getGuid());
+      }
+    }
   }
 
   /**
