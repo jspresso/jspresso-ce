@@ -16,24 +16,16 @@
 package org.jspresso.framework.application.frontend.command.remote {
 
 		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteAccessibilityCommand")]
-    public class RemoteAccessibilityCommand extends RemoteCommand {
+    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand")]
+    public class RemoteReadabilityCommand extends RemoteCommand {
 
         private var _readable:Boolean;
-        private var _writable:Boolean;
 
         public function set readable(value:Boolean):void {
             _readable = value;
         }
         public function get readable():Boolean {
             return _readable;
-        }
-
-        public function set writable(value:Boolean):void {
-            _writable = value;
-        }
-        public function get writable():Boolean {
-            return _writable;
         }
     }
 }

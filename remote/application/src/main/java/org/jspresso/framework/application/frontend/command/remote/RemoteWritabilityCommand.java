@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 
 /**
- * A command to update readability and writability of a remote peer.
+ * A command to update writability of a remote peer.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -38,28 +38,9 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteAccessibilityCommand extends RemoteCommand {
+public class RemoteWritabilityCommand extends RemoteCommand {
   
-  private boolean readable;
   private boolean writable;
-  
-  /**
-   * Gets the readable.
-   * 
-   * @return the readable.
-   */
-  public boolean isReadable() {
-    return readable;
-  }
-  
-  /**
-   * Sets the readable.
-   * 
-   * @param readable the readable to set.
-   */
-  public void setReadable(boolean readable) {
-    this.readable = readable;
-  }
   
   /**
    * Gets the writable.

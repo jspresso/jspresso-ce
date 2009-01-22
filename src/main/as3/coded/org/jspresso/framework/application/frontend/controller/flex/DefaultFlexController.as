@@ -10,13 +10,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.rpc.remoting.mxml.RemoteObject;
   
   import org.jspresso.framework.action.IActionHandler;
-  import org.jspresso.framework.application.frontend.command.remote.RemoteAccessibilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RComponent;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
@@ -184,11 +185,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
          (targetPeer as RemoteCompositeValueState).iconImageUrl =
            (command as RemoteValueCommand).iconImageUrl;
         }
-      } else if(command is RemoteAccessibilityCommand) {
+      } else if(command is RemoteReadabilityCommand) {
         (targetPeer as RemoteValueState).readable =
-          (command as RemoteAccessibilityCommand).readable;
+          (command as RemoteReadabilityCommand).readable;
+      } else if(command is RemoteWritabilityCommand) {
         (targetPeer as RemoteValueState).writable =
-          (command as RemoteAccessibilityCommand).writable;
+          (command as RemoteWritabilityCommand).writable;
       } else if(command is RemoteSelectionCommand) {
         (targetPeer as RemoteCompositeValueState).selectedIndices =
           (command as RemoteSelectionCommand).selectedIndices;

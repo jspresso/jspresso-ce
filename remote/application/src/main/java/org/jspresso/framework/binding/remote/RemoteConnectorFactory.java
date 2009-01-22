@@ -24,10 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
-import org.jspresso.framework.application.frontend.command.remote.RemoteAccessibilityCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -96,7 +97,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             .getState();
         state.setReadable(((Boolean) evt.getNewValue()).booleanValue());
 
-        RemoteAccessibilityCommand command = new RemoteAccessibilityCommand();
+        RemoteReadabilityCommand command = new RemoteReadabilityCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setReadable(state.isReadable());
         remoteCommandHandler.registerCommand(command);
@@ -109,7 +110,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             .getState();
         state.setWritable(((Boolean) evt.getNewValue()).booleanValue());
 
-        RemoteAccessibilityCommand command = new RemoteAccessibilityCommand();
+        RemoteWritabilityCommand command = new RemoteWritabilityCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setWritable(state.isWritable());
         remoteCommandHandler.registerCommand(command);
