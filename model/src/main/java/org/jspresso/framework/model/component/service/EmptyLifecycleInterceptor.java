@@ -61,6 +61,14 @@ public abstract class EmptyLifecycleInterceptor<E> implements
    * {@inheritDoc}
    */
   @SuppressWarnings("unused")
+  public void onLoad(E component) {
+    //Emty implementation.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
   public boolean onDelete(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     return false;

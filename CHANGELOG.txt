@@ -24,6 +24,7 @@ New features
 2319851  	 Unit of Work and tx management refactoring
 2319923  	 Change static constants to typesafe enums
            Support for BigDecimal on decimal property descriptors
+           Implemented onLoad lifecycle hook
 
 2.2.1
 =====
