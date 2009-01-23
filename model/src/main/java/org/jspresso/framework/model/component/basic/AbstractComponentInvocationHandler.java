@@ -702,10 +702,13 @@ public abstract class AbstractComponentInvocationHandler implements
         parameters[i] = args[i - 1];
       }
       try {
-        interceptorResults = interceptorResults
-            || ((Boolean) MethodUtils.invokeMethod(lifecycleInterceptor,
-                lifecycleMethod.getName(), parameters, parameterTypes))
-                .booleanValue();
+        Object interceptorResult = MethodUtils.invokeMethod(
+            lifecycleInterceptor, lifecycleMethod.getName(), parameters,
+            parameterTypes);
+        if (interceptorResult instanceof Boolean) {
+          interceptorResults = interceptorResults
+              || ((Boolean) interceptorResult).booleanValue();
+        }
       } catch (IllegalAccessException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
@@ -722,10 +725,13 @@ public abstract class AbstractComponentInvocationHandler implements
         Object inlineComponent = getProperty(proxy, propertyDescriptor);
         if (inlineComponent != null) {
           try {
-            interceptorResults = interceptorResults
-                || ((Boolean) MethodUtils.invokeMethod(inlineComponent,
-                    lifecycleMethod.getName(), args, lifecycleMethod
-                        .getParameterTypes())).booleanValue();
+            Object interceptorResult = MethodUtils.invokeMethod(
+                inlineComponent, lifecycleMethod.getName(), args,
+                lifecycleMethod.getParameterTypes());
+            if (interceptorResult instanceof Boolean) {
+              interceptorResults = interceptorResults
+                  || ((Boolean) interceptorResult).booleanValue();
+            }
           } catch (NoSuchMethodException ex) {
             throw new ComponentException(ex);
           } catch (IllegalAccessException ex) {

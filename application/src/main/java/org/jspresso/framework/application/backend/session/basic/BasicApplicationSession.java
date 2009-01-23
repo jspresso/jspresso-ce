@@ -601,6 +601,7 @@ public class BasicApplicationSession implements IApplicationSession {
     }
     unitOfWork
         .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
+    uowEntity.onLoad();
     return uowEntity;
   }
 
@@ -733,6 +734,7 @@ public class BasicApplicationSession implements IApplicationSession {
         }
         registeredEntity.straightSetProperties(mergedProperties);
       }
+      registeredEntity.onLoad();
       return registeredEntity;
     } finally {
       dirtRecorder.setEnabled(dirtRecorderWasEnabled);
