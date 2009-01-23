@@ -42,6 +42,7 @@ import org.jspresso.framework.binding.IFormattedValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
@@ -165,9 +166,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     collectionConnectorValueChangeListener = new IConnectorValueChangeListener() {
 
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
-        RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) evt
-            .getSource()).getState());
         ICollectionConnector connector = (ICollectionConnector) evt.getSource();
+        IValueConnector parentConnector = connector.getParentConnector();
+
         List<RemoteValueState> children = new ArrayList<RemoteValueState>();
         for (int i = 0; i < connector.getChildConnectorCount(); i++) {
           IValueConnector childConnector = connector.getChildConnector(i);
@@ -175,47 +176,51 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             children.add(((IRemoteStateOwner) childConnector).getState());
           }
         }
-        compositeValueState.setChildren(children);
 
-        RemoteChildrenCommand command = new RemoteChildrenCommand();
-        command.setTargetPeerGuid(compositeValueState.getGuid());
-        command.setChildren(compositeValueState.getChildren());
-        remoteCommandHandler.registerCommand(command);
-
-        if (connector.getParentConnector() instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) connector.getParentConnector())
-                .getCollectionConnector() == connector) {
-          RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector
-              .getParentConnector()).getState());
+        if (parentConnector instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) parentConnector)
+                .getCollectionConnector() == connector
+            // The next condition is to prevent commands on master-detail
+            // connector wrappers.
+            && !isCascadingModelWrapperConnector(parentConnector)) {
+          RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
+              .getState());
           parentState.setChildren(new ArrayList<RemoteValueState>(children));
 
           RemoteChildrenCommand parentCommand = new RemoteChildrenCommand();
           parentCommand.setTargetPeerGuid(parentState.getGuid());
           parentCommand.setChildren(parentState.getChildren());
           remoteCommandHandler.registerCommand(parentCommand);
+        } else {
+          RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)
+              .getState());
+
+          compositeValueState.setChildren(children);
+
+          RemoteChildrenCommand command = new RemoteChildrenCommand();
+          command.setTargetPeerGuid(compositeValueState.getGuid());
+          command.setChildren(compositeValueState.getChildren());
+          remoteCommandHandler.registerCommand(command);
         }
+
+        // reset selection to force details refresh if any.
+        connector.setSelectedIndices(null, -1);
       }
     };
     selectionChangeListener = new ISelectionChangeListener() {
 
       public void selectionChange(SelectionChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
-        RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)
-            .getState());
-        compositeValueState.setSelectedIndices(evt.getNewSelection());
-        compositeValueState.setLeadingIndex(evt.getLeadingIndex());
+        IValueConnector parentConnector = connector.getParentConnector();
 
-        RemoteSelectionCommand command = new RemoteSelectionCommand();
-        command.setTargetPeerGuid(compositeValueState.getGuid());
-        command.setLeadingIndex(compositeValueState.getLeadingIndex());
-        command.setSelectedIndices(compositeValueState.getSelectedIndices());
-        remoteCommandHandler.registerCommand(command);
-
-        if (connector.getParentConnector() instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) connector.getParentConnector())
-                .getCollectionConnector() == connector) {
-          RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector
-              .getParentConnector()).getState());
+        if (parentConnector instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) parentConnector)
+                .getCollectionConnector() == connector
+            // The next condition is to prevent commands on master-detail
+            // connector wrappers.
+            && !isCascadingModelWrapperConnector(parentConnector)) {
+          RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
+              .getState());
           parentState.setSelectedIndices(evt.getNewSelection());
           parentState.setLeadingIndex(evt.getLeadingIndex());
 
@@ -224,9 +229,25 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           parentCommand.setLeadingIndex(parentState.getLeadingIndex());
           parentCommand.setSelectedIndices(parentState.getSelectedIndices());
           remoteCommandHandler.registerCommand(parentCommand);
+        } else {
+          RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)
+              .getState());
+          compositeValueState.setSelectedIndices(evt.getNewSelection());
+          compositeValueState.setLeadingIndex(evt.getLeadingIndex());
+
+          RemoteSelectionCommand command = new RemoteSelectionCommand();
+          command.setTargetPeerGuid(compositeValueState.getGuid());
+          command.setLeadingIndex(compositeValueState.getLeadingIndex());
+          command.setSelectedIndices(compositeValueState.getSelectedIndices());
+          remoteCommandHandler.registerCommand(command);
         }
       }
     };
+  }
+
+  private boolean isCascadingModelWrapperConnector(IValueConnector connector) {
+    return ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
+        && connector.getParentConnector() == null;
   }
 
   /**

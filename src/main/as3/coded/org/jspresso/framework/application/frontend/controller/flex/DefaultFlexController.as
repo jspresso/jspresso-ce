@@ -81,13 +81,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
             selectedIndicesUpdated(remoteValueState as RemoteCompositeValueState);
           }
           BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
-
-// Forget leading index update since it will be propagated automatically.
-//          var leadingIndexListener:Function = function(leadingIndex:int):void {
-//            leadingIndexUpdated(remoteValueState as RemoteCompositeValueState);
-//          }
-//          BindingUtils.bindSetter(leadingIndexListener, remoteValueState, "leadingIndex", true);
-
         }
 
       } finally {

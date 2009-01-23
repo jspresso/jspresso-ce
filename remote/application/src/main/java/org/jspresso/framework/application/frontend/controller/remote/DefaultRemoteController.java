@@ -79,7 +79,6 @@ public class DefaultRemoteController extends
    * Constructs a new <code>DefaultRemoteController</code> instance.
    */
   public DefaultRemoteController() {
-    commandQueue = new ArrayList<RemoteCommand>();
     hpIndex = 0;
     commandRegistrationEnabled = false;
   }
@@ -116,7 +115,7 @@ public class DefaultRemoteController extends
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
     try {
       commandRegistrationEnabled = true;
-      commandQueue.clear();
+      commandQueue = new ArrayList<RemoteCommand>();
       hpIndex = 0;
       if (commands != null) {
         for (RemoteCommand command : commands) {
