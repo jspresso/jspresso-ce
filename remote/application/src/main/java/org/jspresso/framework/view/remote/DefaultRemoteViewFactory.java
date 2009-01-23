@@ -26,6 +26,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
@@ -82,6 +84,7 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.CellConstraints;
@@ -132,11 +135,13 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class DefaultRemoteViewFactory extends
     AbstractViewFactory<RComponent, RIcon, RAction> {
 
-  private IGUIDGenerator guidGenerator;
+  private IGUIDGenerator        guidGenerator;
 
-  private boolean        durationServerParse;
-  private boolean        dateServerParse;
-  private boolean        numberServerParse;
+  private boolean               durationServerParse;
+  private boolean               dateServerParse;
+  private boolean               numberServerParse;
+
+  private IRemoteCommandHandler remoteCommandHandler;
 
   /**
    * Constructs a new <code>DefaultRemoteViewFactory</code> instance.
@@ -333,7 +338,8 @@ public class DefaultRemoteViewFactory extends
     return component;
   }
 
-  private RActionField createRActionField(boolean showTextField, IValueConnector connector) {
+  private RActionField createRActionField(boolean showTextField,
+      IValueConnector connector) {
     RActionField component = new RActionField(guidGenerator.generateGUID());
     component.setShowTextField(showTextField);
     if (connector instanceof IRemoteStateOwner) {
@@ -564,7 +570,13 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected void showCardInPanel(RComponent cardsPeer, String cardName) {
-    ((RCardContainer) cardsPeer).getState().setValue(cardName);
+    RemoteValueState cardState = ((RCardContainer) cardsPeer).getState();
+    cardState.setValue(cardName);
+
+    RemoteValueCommand command = new RemoteValueCommand();
+    command.setTargetPeerGuid(cardState.getGuid());
+    command.setValue(cardState.getValue());
+    remoteCommandHandler.registerCommand(command);
   }
 
   /**
@@ -1300,5 +1312,15 @@ public class DefaultRemoteViewFactory extends
    */
   public void setNumberServerParse(boolean numberServerParse) {
     this.numberServerParse = numberServerParse;
+  }
+
+  
+  /**
+   * Sets the remoteCommandHandler.
+   * 
+   * @param remoteCommandHandler the remoteCommandHandler to set.
+   */
+  public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
+    this.remoteCommandHandler = remoteCommandHandler;
   }
 }

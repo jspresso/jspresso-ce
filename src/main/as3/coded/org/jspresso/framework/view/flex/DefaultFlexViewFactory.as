@@ -1184,7 +1184,7 @@ package org.jspresso.framework.view.flex {
       colorPicker.addEventListener(ColorPickerEvent.CHANGE,updateModel);
     }
 
-    private function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
+    public function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
       if(rIcon != null) {
         return IconUtility.getClass(component, computeUrl(rIcon.imageUrlSpec) 
                                     , rIcon.width, rIcon.height);

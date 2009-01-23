@@ -1,8 +1,12 @@
 package org.jspresso.framework.application.frontend.controller.flex {
+  import flash.display.DisplayObject;
+  
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
   import mx.collections.ListCollectionView;
+  import mx.controls.Alert;
+  import mx.controls.Button;
   import mx.core.UIComponent;
   import mx.rpc.events.FaultEvent;
   import mx.rpc.events.ResultEvent;
@@ -14,6 +18,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
@@ -153,60 +158,90 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
 
     protected function handleCommand(command:RemoteCommand):void {
-      var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
-      if(targetPeer == null) {
-        handleError("Target remote peer could not be retrieved :");
-        handleError("  guid    = " + command.targetPeerGuid);
-        handleError("  command = " + command);
-        if(command is RemoteValueCommand) {
-          handleError("  value   = " + (command as RemoteValueCommand).value);
-        } else if(command is RemoteChildrenCommand) {
-          for each (var childState:RemoteValueState in (command as RemoteChildrenCommand).children) {
-            handleError("  child = " + childState);
-            handleError("    guid  = " + childState.guid);
-            handleError("    value = " + childState.value);
-          }
-        }
-        return;
-      }
-      if(command is RemoteValueCommand) {
-        (targetPeer as RemoteValueState).value =
-          (command as RemoteValueCommand).value;
-        if(targetPeer is RemoteCompositeValueState) {
-         (targetPeer as RemoteCompositeValueState).description =
-           (command as RemoteValueCommand).description;
-         (targetPeer as RemoteCompositeValueState).iconImageUrl =
-           (command as RemoteValueCommand).iconImageUrl;
-        }
-      } else if(command is RemoteReadabilityCommand) {
-        (targetPeer as RemoteValueState).readable =
-          (command as RemoteReadabilityCommand).readable;
-      } else if(command is RemoteWritabilityCommand) {
-        (targetPeer as RemoteValueState).writable =
-          (command as RemoteWritabilityCommand).writable;
-      } else if(command is RemoteSelectionCommand) {
-        (targetPeer as RemoteCompositeValueState).selectedIndices =
-          (command as RemoteSelectionCommand).selectedIndices;
-        (targetPeer as RemoteCompositeValueState).leadingIndex =
-          (command as RemoteSelectionCommand).leadingIndex;
-      } else if(command is RemoteEnablementCommand) {
-        (targetPeer as RAction).enabled =
-          (command as RemoteEnablementCommand).enabled;
-      } else if(command is RemoteChildrenCommand) {
-        var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children; 
-        //children.disableAutoUpdate();
-        children.removeAll();
-        if((command as RemoteChildrenCommand).children != null) {
-          for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
-            if(isRegistered(child.guid)) {
-              child = getRegistered(child.guid) as RemoteValueState;
-            } else {
-              register(child);
+      if(command is RemoteMessageCommand) {
+        var messageCommand:RemoteMessageCommand = command as RemoteMessageCommand;
+        var alert:Alert = Alert.show(messageCommand.message,
+                   messageCommand.title,
+                   Alert.OK,
+                   null,
+                   null,
+                   null,
+                   Alert.OK);
+
+        if(messageCommand.messageIcon) {
+          var alertForm:UIComponent =  alert.getChildAt(0) as UIComponent;
+          var messageIcon:Class = _viewFactory.getIconForComponent(alertForm, messageCommand.messageIcon);
+          alert.iconClass = messageIcon;
+          alert.removeChild(alertForm);
+          for(var childIndex:int = alertForm.numChildren - 1; childIndex>=0; childIndex--) {
+            var childComp:DisplayObject = alertForm.getChildAt(childIndex);
+            if(childComp is Button) {
+              alertForm.removeChildAt(childIndex);
             }
-            children.addItem(child);
           }
+          alert.addChild(alertForm);
         }
-        //children.enableAutoUpdate();
+
+        if(messageCommand.titleIcon) {
+          var titleIcon:Class = _viewFactory.getIconForComponent(alert, messageCommand.titleIcon);
+          alert.titleIcon = titleIcon;
+        }
+      } else {
+        var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
+        if(targetPeer == null) {
+          handleError("Target remote peer could not be retrieved :");
+          handleError("  guid    = " + command.targetPeerGuid);
+          handleError("  command = " + command);
+          if(command is RemoteValueCommand) {
+            handleError("  value   = " + (command as RemoteValueCommand).value);
+          } else if(command is RemoteChildrenCommand) {
+            for each (var childState:RemoteValueState in (command as RemoteChildrenCommand).children) {
+              handleError("  child = " + childState);
+              handleError("    guid  = " + childState.guid);
+              handleError("    value = " + childState.value);
+            }
+          }
+          return;
+        }
+        if(command is RemoteValueCommand) {
+          (targetPeer as RemoteValueState).value =
+            (command as RemoteValueCommand).value;
+          if(targetPeer is RemoteCompositeValueState) {
+           (targetPeer as RemoteCompositeValueState).description =
+             (command as RemoteValueCommand).description;
+           (targetPeer as RemoteCompositeValueState).iconImageUrl =
+             (command as RemoteValueCommand).iconImageUrl;
+          }
+        } else if(command is RemoteReadabilityCommand) {
+          (targetPeer as RemoteValueState).readable =
+            (command as RemoteReadabilityCommand).readable;
+        } else if(command is RemoteWritabilityCommand) {
+          (targetPeer as RemoteValueState).writable =
+            (command as RemoteWritabilityCommand).writable;
+        } else if(command is RemoteSelectionCommand) {
+          (targetPeer as RemoteCompositeValueState).selectedIndices =
+            (command as RemoteSelectionCommand).selectedIndices;
+          (targetPeer as RemoteCompositeValueState).leadingIndex =
+            (command as RemoteSelectionCommand).leadingIndex;
+        } else if(command is RemoteEnablementCommand) {
+          (targetPeer as RAction).enabled =
+            (command as RemoteEnablementCommand).enabled;
+        } else if(command is RemoteChildrenCommand) {
+          var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children; 
+          //children.disableAutoUpdate();
+          children.removeAll();
+          if((command as RemoteChildrenCommand).children != null) {
+            for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
+              if(isRegistered(child.guid)) {
+                child = getRegistered(child.guid) as RemoteValueState;
+              } else {
+                register(child);
+              }
+              children.addItem(child);
+            }
+          }
+          //children.enableAutoUpdate();
+        }
       }
     }
 

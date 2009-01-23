@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.controller.remote;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.security.auth.callback.CallbackHandler;
 
@@ -27,6 +28,7 @@ import org.jspresso.framework.application.frontend.command.remote.CommandExcepti
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
@@ -40,11 +42,15 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.event.ISelectable;
+import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.view.IActionFactory;
+import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IViewFactory;
+import org.jspresso.framework.view.remote.DefaultRemoteViewFactory;
 import org.jspresso.framework.view.remote.RemoteActionFactory;
+import org.springframework.dao.ConcurrencyFailureException;
 
 /**
  * Default implementation of a remote frontend controller. This implementation
@@ -106,6 +112,36 @@ public class DefaultRemoteController extends
   @Override
   public void checkAccess(@SuppressWarnings("unused") ISecurable securable) {
     // Empty implementation for testing.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean handleException(Throwable ex, Map<String, Object> context) {
+    if (super.handleException(ex, context)) {
+      return true;
+    }
+    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
+    messageCommand.setTitle(getTranslationProvider().getTranslation("error",
+        getLocale()));
+    messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
+        IIconFactory.TINY_ICON_SIZE));
+    messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
+        IIconFactory.LARGE_ICON_SIZE));
+    if (ex instanceof SecurityException) {
+      messageCommand.setMessage(ex.getMessage());
+    } else if (ex instanceof BusinessException) {
+      messageCommand.setMessage(((BusinessException) ex)
+          .getI18nMessage(getTranslationProvider(), getLocale()));
+    } else if (ex instanceof ConcurrencyFailureException) {
+      messageCommand.setMessage(getTranslationProvider()
+          .getTranslation("concurrency.error.description", getLocale()));
+    } else {
+      messageCommand.setMessage(ex.getLocalizedMessage());
+    }
+    registerCommand(messageCommand);
+    return true;
   }
 
   /**
@@ -199,7 +235,7 @@ public class DefaultRemoteController extends
       for (String childKey : ((ICompositeValueConnector) remotePeer)
           .getChildConnectorKeys()) {
         IValueConnector childConnector = ((ICompositeValueConnector) remotePeer)
-        .getChildConnector(childKey);
+            .getChildConnector(childKey);
         register((IRemotePeer) childConnector);
       }
     }
@@ -238,6 +274,9 @@ public class DefaultRemoteController extends
   @Override
   public void setViewFactory(
       IViewFactory<RComponent, RIcon, RAction> viewFactory) {
+    if (viewFactory instanceof DefaultRemoteViewFactory) {
+      ((DefaultRemoteViewFactory) viewFactory).setRemoteCommandHandler(this);
+    }
     IActionFactory<RAction, RComponent> actionFactory = viewFactory
         .getActionFactory();
     if (actionFactory instanceof RemoteActionFactory) {

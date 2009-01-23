@@ -22,9 +22,12 @@ package com.benstucki.utilities
 	import flash.utils.Dictionary;
 	
 	import mx.containers.Panel;
+	import mx.controls.Alert;
 	import mx.core.BitmapAsset;
 	import mx.core.UIComponent;
-	
+
+  import mx.controls.alertClasses.AlertForm;
+  	
 	/**
 	 * Provides a workaround for using run-time loaded graphics in styles and properties which require a Class reference
 	 */
@@ -71,7 +74,9 @@ package com.benstucki.utilities
 //					var tab:Tab = parent as Tab;
 //					getData(tab.data);
 //				} else {
-       if(parent.parent is Panel) {
+       if(parent is AlertForm) {
+         getData(parent);
+       } else if(parent.parent is Panel) {
          getData(parent.parent);
        } else {
          getData(parent);
