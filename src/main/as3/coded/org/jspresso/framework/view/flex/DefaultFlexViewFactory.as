@@ -98,10 +98,13 @@ package org.jspresso.framework.view.flex {
   
   public class DefaultFlexViewFactory {
 
-   [Embed(source="mx/controls/Image.png")]
-   private var _iconTemplate:Class;
+    [Embed(source="mx/controls/Image.png")]
+    private var _iconTemplate:Class;
 
-   private static const TOOLTIP_ELLIPSIS:String = "...";
+    private static const TOOLTIP_ELLIPSIS:String = "...";
+    private static const TEMPLATE_CHAR:String = "O";
+    private static const FIELD_MAX_CHAR_COUNT:int = 32;
+    private static const COLUMN_MAX_CHAR_COUNT:int = 12;
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
@@ -234,6 +237,10 @@ package org.jspresso.framework.view.flex {
       } else if(remoteNumericComponent is RIntegerField) {
         numericComponent = createIntegerField(remoteNumericComponent as RIntegerField);
       }
+      if(remoteNumericComponent.maxValue) {
+        sizeMaxComponentWidth(numericComponent,
+          createFormatter(remoteNumericComponent).format(remoteNumericComponent.maxValue).length);
+      }
       return numericComponent;
     }
 
@@ -326,13 +333,15 @@ package org.jspresso.framework.view.flex {
         textField.percentWidth = 100.0;
         textField.name = "tf";
         actionField.addChild(textField);
-
+        sizeMaxComponentWidth(textField);
         bindActionField(textField, remoteActionField.state, (remoteActionField.actionLists[0] as RActionList).actions[0]);
       }
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
-          actionField.addChild(createAction(actionList.actions[i]));
+          var actionComponent:UIComponent = createAction(actionList.actions[i])
+          actionField.addChild(actionComponent);
+          BindingUtils.bindProperty(actionComponent, "enabled", remoteActionField.state, "writable");
         }
       }
       return actionField;
@@ -341,6 +350,7 @@ package org.jspresso.framework.view.flex {
     private function bindActionField(textInput:TextInput, remoteState:RemoteValueState,
                                    action:RAction):void {
       
+      BindingUtils.bindProperty(textInput, "enabled", remoteState, "writable");
       var updateView:Function = function (value:Object):void {
         if(value == null) {
           textInput.text = null;
@@ -393,6 +403,7 @@ package org.jspresso.framework.view.flex {
     private function bindCheckBox(checkBox:CheckBox, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(checkBox, "selected", remoteState, "value", true);
       BindingUtils.bindProperty(remoteState, "value", checkBox, "selected", true);
+      BindingUtils.bindProperty(checkBox, "enabled", remoteState, "writable");
     }
 
     private function createComboBox(remoteComboBox:RComboBox):UIComponent {
@@ -412,6 +423,7 @@ package org.jspresso.framework.view.flex {
     private function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
       BindingUtils.bindProperty(comboBox, "selectedItem", remoteComboBox.state, "value", true);
       BindingUtils.bindProperty(remoteComboBox.state, "value", comboBox, "selectedItem", true);
+      BindingUtils.bindProperty(comboBox, "enabled", remoteComboBox.state, "writable");
     }
 
     private function createBorderContainer(remoteBorderContainer:RBorderContainer):UIComponent {
@@ -797,12 +809,14 @@ package org.jspresso.framework.view.flex {
     private function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new DateField();
       dateField.editable = true;
+      sizeMaxComponentWidth(dateField);
       bindDateField(dateField, remoteDateField.state);
       return dateField;
     }
 
     private function bindDateField(dateField:DateField, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(dateField, "selectedDate", remoteState, "value", true);
+      BindingUtils.bindProperty(dateField, "enabled", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
@@ -822,12 +836,14 @@ package org.jspresso.framework.view.flex {
       var dateTimeField:DateTimeField = new DateTimeField();
       dateTimeField.editable = true;
       dateTimeField.showTime = true;
+      sizeMaxComponentWidth(dateTimeField);
       bindDateTimeField(dateTimeField, remoteDateField.state);
       return dateTimeField;
     }
 
     private function bindDateTimeField(dateTimeField:DateTimeField, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(dateTimeField, "selectedDateTime", remoteState, "value", true);
+      BindingUtils.bindProperty(dateTimeField, "enabled", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
@@ -851,6 +867,7 @@ package org.jspresso.framework.view.flex {
     
     private function bindTimeStepper(timeStepper:TimeStepper, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(timeStepper, "timeValue", remoteState, "value", true);
+      BindingUtils.bindProperty(timeStepper, "enabled", remoteState, "writable");
       var updateModel:Function = function(event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
@@ -868,7 +885,7 @@ package org.jspresso.framework.view.flex {
 
     private function createDecimalField(remoteDecimalField:RDecimalField):UIComponent {
       var decimalField:TextInput = new TextInput();
-      var decimalFormatter:NumberFormatter = createFormatter(remoteDecimalField) as NumberFormatter; 
+      var decimalFormatter:NumberFormatter = createFormatter(remoteDecimalField) as NumberFormatter;
       bindTextInput(decimalField, remoteDecimalField.state,
                     decimalFormatter, createParser(remoteDecimalField));
       decimalField.restrict = "0-9" + decimalFormatter.decimalSeparatorTo;
@@ -877,8 +894,9 @@ package org.jspresso.framework.view.flex {
 
     private function createIntegerField(remoteIntegerField:RIntegerField):UIComponent {
       var integerField:TextInput = new TextInput();
+      var integerFormatter:NumberFormatter = createFormatter(remoteIntegerField) as NumberFormatter;
       bindTextInput(integerField, remoteIntegerField.state,
-                    createFormatter(remoteIntegerField), createParser(remoteIntegerField));
+                    integerFormatter, createParser(remoteIntegerField));
       integerField.restrict = "0-9";
       return integerField;
     }
@@ -943,6 +961,7 @@ package org.jspresso.framework.view.flex {
       var passwordField:TextInput = new TextInput();
       bindTextInput(passwordField, remotePasswordField.state);
       passwordField.displayAsPassword = true;
+      sizeMaxComponentWidth(passwordField);
       return passwordField;
     }
 
@@ -955,6 +974,7 @@ package org.jspresso.framework.view.flex {
       var table:DataGrid = new DoubleClickDataGrid();
       var columns:Array = new Array();
       
+      table.regenerateStyleCache(false);
       for(var i:int=0; i < remoteTable.columns.length; i++) {
         var rColumn:RComponent = remoteTable.columns[i] as RComponent;
         if(rColumn.state == null) {
@@ -962,7 +982,6 @@ package org.jspresso.framework.view.flex {
         }
         var column:DataGridColumn = new DataGridColumn();
         column.headerText = rColumn.label;
-        column.width = 100.0;
         var itemRenderer:ClassFactory;
         if(rColumn is RComboBox) {
           itemRenderer = new ClassFactory(EnumerationDgItemRenderer);
@@ -975,19 +994,27 @@ package org.jspresso.framework.view.flex {
           itemRenderer.properties = {viewFactory:this,
                                      remoteComponent:rColumn,
                                      index:i+1};
-          column.rendererIsEditor = true;              
+          column.rendererIsEditor = true;
         } else {
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
           itemRenderer.properties = {formatter:createFormatter(rColumn)};
         }
         column.itemRenderer = itemRenderer
         
-        if(!(rColumn is RCheckBox)) {
+        if(rColumn is RCheckBox) {
+          column.width = table.measureText(column.headerText).width + 16;
+        } else {
           var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
-          itemEditor.properties = {editor:createComponent(rColumn, false),
+          var editorComponent:UIComponent = createComponent(rColumn, false);
+          itemEditor.properties = {editor:editorComponent,
                                    state:rColumn.state,
                                    index:i+1};
           column.itemEditor = itemEditor;
+          column.width = Math.max(
+                           Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT,
+                                    editorComponent.maxWidth),
+                           table.measureText(column.headerText).width + 16
+                         );
         }
         column.editorDataField = "state";
         
@@ -1105,12 +1132,19 @@ package org.jspresso.framework.view.flex {
 
     private function createTextArea(remoteTextArea:RTextArea):UIComponent {
       var textArea:TextArea = new TextArea();
+      if(remoteTextArea.maxLength > 0) {
+        textArea.maxChars = remoteTextArea.maxLength;
+      }
       bindTextArea(textArea, remoteTextArea.state);
       return textArea;
     }
 
     private function createTextField(remoteTextField:RTextField):UIComponent {
       var textField:TextInput = new TextInput();
+      if(remoteTextField.maxLength > 0) {
+        textField.maxChars = remoteTextField.maxLength;
+        sizeMaxComponentWidth(textField, remoteTextField.maxLength);
+      }
       bindTextInput(textField, remoteTextField.state);
       return textField;
     }
@@ -1130,6 +1164,8 @@ package org.jspresso.framework.view.flex {
     private function bindTextInput(textInput:TextInput, remoteState:RemoteValueState,
                                    formatter:Formatter = null, parser:Parser = null):void {
       
+      BindingUtils.bindProperty(textInput, "editable", remoteState, "writable");
+
       var updateView:Function = function (value:Object):void {
         if(value == null) {
           textInput.text = null;
@@ -1162,6 +1198,7 @@ package org.jspresso.framework.view.flex {
     
     private function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(textArea, "text", remoteState, "value", true);
+      BindingUtils.bindProperty(textArea, "editable", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
         remoteState.value = (event.currentTarget as TextArea).text;
       };
@@ -1171,6 +1208,7 @@ package org.jspresso.framework.view.flex {
 
     private function bindColorPicker(colorPicker:ColorPicker, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(colorPicker, "selectedColor", remoteState, "value", true);
+      BindingUtils.bindProperty(colorPicker, "enabled", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
         var currentAlpha:String;
         if(remoteState.value != null) {
@@ -1245,6 +1283,15 @@ package org.jspresso.framework.view.flex {
         return numberParser;
       }
       return null;
+    }
+    
+    private function sizeMaxComponentWidth(component:UIComponent, expectedCharCount:int=FIELD_MAX_CHAR_COUNT, maxCharCount:int=FIELD_MAX_CHAR_COUNT):void {
+      component.regenerateStyleCache(false);
+      var charCount:int = maxCharCount;
+      if(expectedCharCount < charCount) {
+        charCount = expectedCharCount;
+      }
+      component.maxWidth = component.measureText(TEMPLATE_CHAR).width * charCount;
     }
   }
 }
