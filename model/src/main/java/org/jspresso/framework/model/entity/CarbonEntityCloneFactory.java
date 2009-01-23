@@ -72,7 +72,6 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
         .straightGetProperty(IEntity.ID));
 
     carbonCopyComponent(entityToClone, clonedEntity, entityFactory);
-    clonedEntity.onLoad();
     return clonedEntity;
   }
 
