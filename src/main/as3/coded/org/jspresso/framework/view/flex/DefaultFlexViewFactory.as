@@ -105,6 +105,8 @@ package org.jspresso.framework.view.flex {
     private static const TEMPLATE_CHAR:String = "O";
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
     private static const COLUMN_MAX_CHAR_COUNT:int = 12;
+    private static const DATE_CHAR_COUNT:int = 12;
+    private static const TIME_CHAR_COUNT:int = 6;
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
@@ -325,50 +327,52 @@ package org.jspresso.framework.view.flex {
       return imageComponent;
     }
     
-    private function createActionField(remoteActionField:RActionField):HBox {
+    private function createActionField(remoteActionField:RActionField):UIComponent {
       var actionField:HBox = new HBox();
+      var textField:TextInput;
       if(remoteActionField.showTextField) {
-        var textField:TextInput = new TextInput();
+        textField = new TextInput();
         actionField.percentWidth = 100.0;
         textField.percentWidth = 100.0;
         textField.name = "tf";
         actionField.addChild(textField);
         sizeMaxComponentWidth(textField);
-        bindActionField(textField, remoteActionField.state, (remoteActionField.actionLists[0] as RActionList).actions[0]);
       }
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
           var actionComponent:UIComponent = createAction(actionList.actions[i])
           actionField.addChild(actionComponent);
-          BindingUtils.bindProperty(actionComponent, "enabled", remoteActionField.state, "writable");
         }
       }
+      bindActionField(actionField, textField, remoteActionField.state, (remoteActionField.actionLists[0] as RActionList).actions[0]);
       return actionField;
     }
     
-    private function bindActionField(textInput:TextInput, remoteState:RemoteValueState,
-                                   action:RAction):void {
+    private function bindActionField(actionField:UIComponent, textInput:TextInput
+                                     , remoteState:RemoteValueState, action:RAction):void {
       
-      BindingUtils.bindProperty(textInput, "enabled", remoteState, "writable");
-      var updateView:Function = function (value:Object):void {
-        if(value == null) {
-          textInput.text = null;
-        } else {
-          textInput.text = value.toString();
-        }
-      };
-      BindingUtils.bindSetter(updateView, remoteState, "value", true);
-
-      var triggerAction:Function = function (event:Event):void {
-        var inputText:String = (event.currentTarget as TextInput).text;
-        if(inputText != remoteState.value) {
-          _actionHandler.execute(action, inputText);
-        }
-      };
-      textInput.addEventListener(FlexEvent.ENTER,triggerAction);
-      textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,triggerAction);
-      textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,triggerAction);
+      BindingUtils.bindProperty(actionField, "enabled", remoteState, "writable");
+      if(textInput) {
+        var updateView:Function = function (value:Object):void {
+          if(value == null) {
+            textInput.text = null;
+          } else {
+            textInput.text = value.toString();
+          }
+        };
+        BindingUtils.bindSetter(updateView, remoteState, "value", true);
+  
+        var triggerAction:Function = function (event:Event):void {
+          var inputText:String = (event.currentTarget as TextInput).text;
+          if(inputText != remoteState.value) {
+            _actionHandler.execute(action, inputText);
+          }
+        };
+        textInput.addEventListener(FlexEvent.ENTER,triggerAction);
+        textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,triggerAction);
+        textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,triggerAction);
+      }
     }
     
     private function createColorField(remoteColorField:RColorField):UIComponent {
@@ -809,7 +813,7 @@ package org.jspresso.framework.view.flex {
     private function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new DateField();
       dateField.editable = true;
-      sizeMaxComponentWidth(dateField);
+      sizeMaxComponentWidth(dateField, DATE_CHAR_COUNT);
       bindDateField(dateField, remoteDateField.state);
       return dateField;
     }
@@ -836,7 +840,7 @@ package org.jspresso.framework.view.flex {
       var dateTimeField:DateTimeField = new DateTimeField();
       dateTimeField.editable = true;
       dateTimeField.showTime = true;
-      sizeMaxComponentWidth(dateTimeField);
+      sizeMaxComponentWidth(dateTimeField, DATE_CHAR_COUNT + TIME_CHAR_COUNT);
       bindDateTimeField(dateTimeField, remoteDateField.state);
       return dateTimeField;
     }
@@ -868,6 +872,7 @@ package org.jspresso.framework.view.flex {
     private function bindTimeStepper(timeStepper:TimeStepper, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(timeStepper, "timeValue", remoteState, "value", true);
       BindingUtils.bindProperty(timeStepper, "enabled", remoteState, "writable");
+      sizeMaxComponentWidth(timeStepper, TIME_CHAR_COUNT);
       var updateModel:Function = function(event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
