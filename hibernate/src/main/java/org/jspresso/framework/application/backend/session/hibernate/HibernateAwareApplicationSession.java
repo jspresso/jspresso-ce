@@ -31,6 +31,7 @@ import java.util.Set;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
+import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.collection.PersistentCollection;
 import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
@@ -136,6 +137,19 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
       final Object initializedProperty = componentOrEntity
           .straightGetProperty(propertyName);
       if (!Hibernate.isInitialized(initializedProperty)) {
+        if (initializedProperty instanceof AbstractPersistentCollection) {
+          if (((AbstractPersistentCollection) initializedProperty).getSession() != null
+              && ((AbstractPersistentCollection) initializedProperty)
+                  .getSession().isOpen()) {
+            try {
+              Hibernate.initialize(initializedProperty);
+              return;
+            } catch (Exception ex) {
+              // ignore the exception since we are going to re-associate the
+              // entity.
+            }
+          }
+        }
 
         hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
         hibernateTemplate.execute(new HibernateCallback() {
@@ -191,13 +205,13 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     }
   }
 
-//  private Object unwrapProxyIfNeeded(Object maybeProxy) {
-//    if (maybeProxy instanceof HibernateProxy) {
-//      return ((HibernateProxy) maybeProxy).getHibernateLazyInitializer()
-//          .getImplementation();
-//    }
-//    return maybeProxy;
-//  }
+  // private Object unwrapProxyIfNeeded(Object maybeProxy) {
+  // if (maybeProxy instanceof HibernateProxy) {
+  // return ((HibernateProxy) maybeProxy).getHibernateLazyInitializer()
+  // .getImplementation();
+  // }
+  // return maybeProxy;
+  // }
 
   /**
    * {@inheritDoc}
