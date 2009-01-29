@@ -163,6 +163,9 @@
     <property
       name="remotePeerRegistry"
       ref="remotePeerRegistry" />
+    <property
+      name="guidGenerator"
+      ref="guidGenerator" />
   </bean>
 
 </beans>

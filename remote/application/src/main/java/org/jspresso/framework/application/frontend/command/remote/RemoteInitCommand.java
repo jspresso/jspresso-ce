@@ -39,29 +39,30 @@ import org.jspresso.framework.gui.remote.RActionList;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteApplicationFrameCommand extends RemoteCommand {
+public class RemoteInitCommand extends RemoteCommand {
 
-  private RActionList   workspaceSelectionActions;
+  private RActionList[] workspaceActions;
   private RActionList[] actions;
   private RActionList[] helpActions;
 
+  
   /**
-   * Gets the workspaceSelectionActions.
+   * Gets the workspaceActions.
    * 
-   * @return the workspaceSelectionActions.
+   * @return the workspaceActions.
    */
-  public RActionList getWorkspaceSelectionActions() {
-    return workspaceSelectionActions;
+  public RActionList[] getWorkspaceActions() {
+    return workspaceActions;
   }
 
+  
   /**
-   * Sets the workspaceSelectionActions.
+   * Sets the workspaceActions.
    * 
-   * @param workspaceSelectionActions
-   *          the workspaceSelectionActions to set.
+   * @param workspaceActions the workspaceActions to set.
    */
-  public void setWorkspaceSelectionActions(RActionList workspaceSelectionActions) {
-    this.workspaceSelectionActions = workspaceSelectionActions;
+  public void setWorkspaceActions(RActionList[] workspaceActions) {
+    this.workspaceActions = workspaceActions;
   }
 
   /**

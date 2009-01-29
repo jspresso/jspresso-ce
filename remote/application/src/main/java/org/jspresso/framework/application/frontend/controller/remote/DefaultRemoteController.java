@@ -28,6 +28,7 @@ import org.jspresso.framework.application.frontend.command.remote.CommandExcepti
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
@@ -38,6 +39,7 @@ import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.remote.RemoteConnectorFactory;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.security.ISecurable;
@@ -45,9 +47,13 @@ import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IViewFactory;
+import org.jspresso.framework.view.action.ActionList;
+import org.jspresso.framework.view.action.ActionMap;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.remote.DefaultRemoteViewFactory;
 import org.jspresso.framework.view.remote.RemoteActionFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -80,6 +86,7 @@ public class DefaultRemoteController extends
   private List<RemoteCommand> commandQueue;
   private boolean             commandRegistrationEnabled;
   private int                 hpIndex;
+  private IGUIDGenerator      guidGenerator;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
@@ -123,11 +130,11 @@ public class DefaultRemoteController extends
     if (ex instanceof SecurityException) {
       messageCommand.setMessage(ex.getMessage());
     } else if (ex instanceof BusinessException) {
-      messageCommand.setMessage(((BusinessException) ex)
-          .getI18nMessage(getTranslationProvider(), getLocale()));
+      messageCommand.setMessage(((BusinessException) ex).getI18nMessage(
+          getTranslationProvider(), getLocale()));
     } else if (ex instanceof ConcurrencyFailureException) {
-      messageCommand.setMessage(getTranslationProvider()
-          .getTranslation("concurrency.error.description", getLocale()));
+      messageCommand.setMessage(getTranslationProvider().getTranslation(
+          "concurrency.error.description", getLocale()));
     } else {
       messageCommand.setMessage(ex.getLocalizedMessage());
     }
@@ -283,4 +290,57 @@ public class DefaultRemoteController extends
     super.setViewFactory(viewFactory);
   }
 
+  /**
+   * Creates the init commands to be sent to the remote peer.
+   * 
+   * @return the init commands to be sent to the remote peer.
+   */
+  protected List<RemoteCommand> createInitCommands() {
+    List<RemoteCommand> initCommands = new ArrayList<RemoteCommand>();
+    RemoteInitCommand initCommand = new RemoteInitCommand();
+    initCommand
+        .setWorkspaceActions(createRActionLists(createWorkspaceActionMap()));
+    initCommand.setActions(createRActionLists(getActionMap()));
+    initCommand.setHelpActions(createRActionLists(getHelpActions()));
+    initCommands.add(initCommand);
+    return initCommands;
+  }
+
+  private RActionList[] createRActionLists(ActionMap actionMap) {
+    List<RActionList> actionLists = new ArrayList<RActionList>();
+    if (actionMap != null) {
+      for (ActionList actionList : actionMap.getActionLists()) {
+        actionLists.add(createRActionList(actionList));
+      }
+    }
+    return actionLists.toArray(new RActionList[0]);
+  }
+
+  private RActionList createRActionList(ActionList actionList) {
+    RActionList rActionList = new RActionList(guidGenerator.generateGUID());
+    rActionList.setName(actionList.getI18nName(getTranslationProvider(),
+        getLocale()));
+    rActionList.setDescription(actionList.getI18nDescription(
+        getTranslationProvider(), getLocale()));
+    rActionList.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        IIconFactory.TINY_ICON_SIZE));
+
+    List<RAction> actions = new ArrayList<RAction>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      actions.add(getViewFactory().getActionFactory().createAction(action,
+          this, null, null, null, getLocale()));
+    }
+    rActionList.setActions(actions.toArray(new RAction[0]));
+    return rActionList;
+  }
+
+  /**
+   * Sets the guidGenerator.
+   * 
+   * @param guidGenerator
+   *          the guidGenerator to set.
+   */
+  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+    this.guidGenerator = guidGenerator;
+  }
 }

@@ -5,9 +5,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
   import mx.collections.ListCollectionView;
+  import mx.containers.ApplicationControlBar;
   import mx.controls.Alert;
   import mx.controls.Button;
+  import mx.controls.MenuBar;
+  import mx.core.Application;
   import mx.core.UIComponent;
+  import mx.events.MenuEvent;
   import mx.rpc.events.FaultEvent;
   import mx.rpc.events.ResultEvent;
   import mx.rpc.remoting.mxml.Operation;
@@ -18,12 +22,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
   import org.jspresso.framework.gui.remote.RAction;
+  import org.jspresso.framework.gui.remote.RActionList;
   import org.jspresso.framework.gui.remote.RComponent;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
@@ -36,6 +42,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler {
     
     private static const HANDLE_COMMANDS_METHOD:String = "handleCommands";
+    private static const START_METHOD:String = "start";
     private var _remoteController:RemoteObject;
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remotePeerRegistry:IRemotePeerRegistry;
@@ -186,6 +193,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
           var titleIcon:Class = _viewFactory.getIconForComponent(alert, messageCommand.titleIcon);
           alert.titleIcon = titleIcon;
         }
+      } else if(command is RemoteInitCommand) {
+        var initCommand:RemoteInitCommand = command as RemoteInitCommand;
+        initApplicationFrame(initCommand.workspaceActions,
+                             initCommand.actions,
+                             initCommand.helpActions);
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
@@ -269,15 +281,111 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     private function initRemoteController():void {
       _remoteController.showBusyCursor = true;
-      
+      var commandsHandler:Function = function(resultEvent:ResultEvent):void {
+        handleCommands(resultEvent.result as ListCollectionView);
+      };
+      var errorHandler:Function = function(faultEvent:FaultEvent):void {
+        handleError(faultEvent.fault.message);
+      };
       var operation:Operation;
       operation = _remoteController.operations[HANDLE_COMMANDS_METHOD];
-      operation.addEventListener(ResultEvent.RESULT, function(resultEvent:ResultEvent):void {
-        handleCommands(resultEvent.result as ListCollectionView);
-      });
-      operation.addEventListener(FaultEvent.FAULT, function(faultEvent:FaultEvent):void {
-        handleError(faultEvent.fault.message);
-      });
+      operation.addEventListener(ResultEvent.RESULT, commandsHandler);
+      operation.addEventListener(FaultEvent.FAULT, errorHandler);
+      operation = _remoteController.operations[START_METHOD];
+      operation.addEventListener(ResultEvent.RESULT, commandsHandler);
+      operation.addEventListener(FaultEvent.FAULT, errorHandler);
     }
+    
+    private function initApplicationFrame(workspaceActions:Array,
+                                          actions:Array,
+                                          helpActions:Array):void {
+      var controlBar:ApplicationControlBar = new ApplicationControlBar();
+      controlBar.dock = true;
+      (Application.application as Application).addChild(controlBar);
+      controlBar.addChild(createApplicationMenuBar(workspaceActions, actions, helpActions));
+    }
+    
+    private function createApplicationMenuBar(workspaceActions:Array,
+                                              actions:Array,
+                                              helpActions:Array):MenuBar {
+      var menuBarModel:Object = new Object();
+      var menus:Array = new Array();
+      menus = menus.concat(createMenus(workspaceActions, true));
+      menus = menus.concat(createMenus(actions, false));
+      menus = menus.concat(createMenus(helpActions, true));
+      menuBarModel["children"] = menus;
+      
+      var menuBar:MenuBar = new MenuBar();
+      menuBar.percentWidth = 100.0;
+      menuBar.showRoot = false;
+      menuBar.dataProvider = menus;
+      
+      var menuHandler:Function = function(event:MenuEvent):void  {
+        if (event.item["data"] is RAction) {
+          execute(event.item["data"] as RAction, null);
+        }        
+      }
+      menuBar.addEventListener(MenuEvent.ITEM_CLICK, menuHandler);
+
+      return menuBar;                                            
+    }
+    
+    private function createMenus(actionLists:Array, useSeparator:Boolean):Array {
+      var menus:Array = new Array();
+      if(actionLists != null) {
+        var menu:Object;
+        for each (var actionList:RActionList in actionLists) {
+          if (!useSeparator || menus.length == 0) {
+            menu = createMenu(actionList);
+            menus.push(menu);
+          } else {
+            var separator:Object = new Object();
+            separator["type"] = "separator";
+            for each (var menuItem:Object in createMenuItems(actionList)) {
+              menu["children"].push(menuItem);
+            }
+          }
+        }
+      }
+      return menus;
+    }
+    
+    private function createMenu(actionList:RActionList):Object {
+      var menu:Object = new Object();
+      menu["label"] = actionList.name;
+      menu["description"] = actionList.description;
+      menu["data"] = actionList;
+      menu["rIcon"] = actionList.icon;
+      
+      var menuItems:Array = new Array();
+      for each (var menuItem:Object in createMenuItems(actionList)) {
+        menuItems.push(menuItem);
+      }
+      menu["children"] = menuItems;
+      return menu;
+    }
+  
+    private function createMenuItems(actionList:RActionList):Array {
+      var menuItems:Array = new Array();
+      for each(var action:RAction in actionList.actions) {
+        menuItems.push(createMenuItem(action));
+      }
+      return menuItems;
+    }
+  
+    private function createMenuItem(action:RAction):Object {
+      var menuItem:Object = new Object();
+      menuItem["label"] = action.name;
+      menuItem["description"] = action.description;
+      menuItem["data"] = action;
+      menuItem["rIcon"] = action.icon;
+      return menuItem;
+    }
+
+    public function start(language:String):void {
+      var operation:Operation = _remoteController.operations[START_METHOD] as Operation;
+      operation.send(language);
+    }
+    
   }
 }
