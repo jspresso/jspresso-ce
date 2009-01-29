@@ -35,6 +35,8 @@ import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.frontend.IFrontendController;
+import org.jspresso.framework.application.frontend.action.workspace.ExitAction;
+import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.application.view.descriptor.IModuleViewDescriptorFactory;
@@ -53,9 +55,11 @@ import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
+import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EOrientation;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor;
 
 /**
@@ -438,7 +442,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(EOrientation.HORIZONTAL);
     splitViewDescriptor.setName(workspaceViewDescriptor.getName());
-    //splitViewDescriptor.setDescription(workspaceViewDescriptor.getDescription(
+    // splitViewDescriptor.setDescription(workspaceViewDescriptor.getDescription(
     // ));
     splitViewDescriptor.setIconImageURL(workspaceViewDescriptor
         .getIconImageURL());
@@ -477,10 +481,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Displays a workspace.
-   * 
-   * @param workspaceName
-   *          the workspace identifier.
+   * {@inheritDoc}
    */
   public void displayWorkspace(String workspaceName) {
     getBackendController().checkWorkspaceAccess(workspaceName);
@@ -694,5 +695,48 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setForcedStartingLocale(String forcedStartingLocale) {
     this.forcedStartingLocale = forcedStartingLocale;
+  }
+
+  /**
+   * Creates the workspace action map.
+   * 
+   * @return the workspace action map.
+   */
+  protected ActionMap createWorkspaceActionMap() {
+    ActionMap workspaceActionMap = new ActionMap();
+    List<ActionList> workspaceActionLists = new ArrayList<ActionList>();
+    ActionList workspaceSelectionActionList = new ActionList();
+    workspaceSelectionActionList.setName("workspaces");
+    workspaceSelectionActionList
+        .setIconImageURL(getWorkspacesMenuIconImageUrl());
+    List<IDisplayableAction> workspaceSelectionActions = new ArrayList<IDisplayableAction>();
+    for (String workspaceName : getWorkspaceNames()) {
+      WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+          .getViewDescriptor();
+      workspaceSelectionAction.setWorkspaceName(workspaceName);
+      workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
+      workspaceSelectionAction.setDescription(workspaceViewDescriptor
+          .getDescription());
+      workspaceSelectionAction.setIconImageURL(workspaceViewDescriptor
+          .getIconImageURL());
+      workspaceSelectionActions.add(workspaceSelectionAction);
+    }
+    workspaceSelectionActionList.setActions(workspaceSelectionActions);
+
+    ActionList exitActionList = new ActionList();
+    exitActionList.setName("QUIT");
+    List<IDisplayableAction> exitActions = new ArrayList<IDisplayableAction>();
+    ExitAction<E, F, G> exitAction = new ExitAction<E, F, G>();
+    exitAction.setName("quit.name");
+    exitAction.setDescription("quit.description");
+    exitActions.add(exitAction);
+    exitActionList.setActions(exitActions);
+
+    workspaceActionLists.add(workspaceSelectionActionList);
+    workspaceActionLists.add(exitActionList);
+    workspaceActionMap.setActionLists(workspaceActionLists);
+
+    return workspaceActionMap;
   }
 }

@@ -48,14 +48,12 @@ import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
 
-import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IAction;
@@ -255,8 +253,7 @@ public class DefaultUlcController extends
     }
   }
 
-  private ULCMenu createActionMenu(ActionList actionList,
-      ULCComponent sourceComponent) {
+  private ULCMenu createMenu(ActionList actionList, ULCComponent sourceComponent) {
     ULCMenu menu = new ULCMenu(actionList.getI18nName(getTranslationProvider(),
         getLocale()));
     if (actionList.getDescription() != null) {
@@ -266,22 +263,39 @@ public class DefaultUlcController extends
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         IIconFactory.SMALL_ICON_SIZE));
-    for (IDisplayableAction action : actionList.getActions()) {
-      menu
-          .add(new ULCMenuItem(getViewFactory().getActionFactory()
-              .createAction(action, this, sourceComponent, null, null,
-                  getLocale())));
+    for (ULCMenuItem menuItem : createMenuItems(sourceComponent, actionList)) {
+      menu.add(menuItem);
     }
     return menu;
   }
 
+  private List<ULCMenuItem> createMenuItems(ULCComponent sourceComponent,
+      ActionList actionList) {
+    List<ULCMenuItem> menuItems = new ArrayList<ULCMenuItem>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      menuItems.add(createMenuItem(sourceComponent, action));
+    }
+    return menuItems;
+  }
+
+  private ULCMenuItem createMenuItem(ULCComponent sourceComponent,
+      IDisplayableAction action) {
+    return new ULCMenuItem(getViewFactory().getActionFactory().createAction(
+        action, this, sourceComponent, null, null, getLocale()));
+  }
+
   private List<ULCMenu> createActionMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, getActionMap());
+    return createMenus(sourceComponent, getActionMap(), false);
   }
 
   private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {
     ULCMenuBar applicationMenuBar = new ULCMenuBar();
-    applicationMenuBar.add(createWorkspacesMenu());
+    List<ULCMenu> workspaceMenus = createWorkspacesMenus(sourceComponent);
+    if (workspaceMenus != null) {
+      for (ULCMenu workspaceMenu : workspaceMenus) {
+        applicationMenuBar.add(workspaceMenu);
+      }
+    }
     List<ULCMenu> actionMenus = createActionMenus(sourceComponent);
     if (actionMenus != null) {
       for (ULCMenu actionMenu : actionMenus) {
@@ -317,16 +331,25 @@ public class DefaultUlcController extends
   }
 
   private List<ULCMenu> createHelpActionMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, getHelpActions());
+    return createMenus(sourceComponent, getHelpActions(), true);
   }
 
+  @SuppressWarnings("null")
   private List<ULCMenu> createMenus(ULCComponent sourceComponent,
-      ActionMap actionMap) {
+      ActionMap actionMap, boolean useSeparator) {
     List<ULCMenu> menus = new ArrayList<ULCMenu>();
     if (actionMap != null) {
+      ULCMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
-        ULCMenu menu = createActionMenu(actionList, sourceComponent);
-        menus.add(menu);
+        if (!useSeparator || menus.isEmpty()) {
+          menu = createMenu(actionList, sourceComponent);
+          menus.add(menu);
+        } else {
+          menu.addSeparator();
+          for (ULCMenuItem menuItem : createMenuItems(sourceComponent, actionList)) {
+            menu.add(menuItem);
+          }
+        }
       }
     }
     return menus;
@@ -354,21 +377,8 @@ public class DefaultUlcController extends
     return internalFrame;
   }
 
-  private ULCMenu createWorkspacesMenu() {
-    ULCMenu workspacesMenu = new ULCMenu(getTranslationProvider()
-        .getTranslation("workspaces", getLocale()));
-    workspacesMenu.setIcon(getIconFactory().getIcon(
-        getWorkspacesMenuIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
-    for (String workspaceName : getWorkspaceNames()) {
-      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-          .getViewDescriptor();
-      ULCMenuItem workspaceMenuItem = new ULCMenuItem(
-          new WorkspaceSelectionAction(workspaceName, workspaceViewDescriptor));
-      workspacesMenu.add(workspaceMenuItem);
-    }
-    workspacesMenu.addSeparator();
-    workspacesMenu.add(new ULCMenuItem(new QuitAction()));
-    return workspacesMenu;
+  private List<ULCMenu> createWorkspacesMenus(ULCComponent sourceComponent) {
+    return createMenus(sourceComponent, createWorkspaceActionMap(), true);
   }
 
   private void displayControllerFrame() {
@@ -488,31 +498,6 @@ public class DefaultUlcController extends
     }
   }
 
-  private final class QuitAction extends AbstractAction {
-
-    private static final long serialVersionUID = -1476651758085260422L;
-
-    /**
-     * Constructs a new <code>QuitAction</code> instance.
-     */
-    public QuitAction() {
-      putValue(com.ulcjava.base.application.IAction.NAME,
-          getTranslationProvider().getTranslation("quit.name", getLocale()));
-      putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
-          getTranslationProvider().getTranslation("quit.description",
-              getLocale()));
-    }
-
-    /**
-     * Quits the application.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
-      stop();
-    }
-  }
-
   private class ThreadBlockingCallbackHandler implements CallbackHandler {
 
     /**
@@ -579,45 +564,5 @@ public class DefaultUlcController extends
       displayWorkspace(workspaceName);
     }
 
-  }
-
-  private final class WorkspaceSelectionAction extends AbstractAction {
-
-    private static final long serialVersionUID = 3469745193806038352L;
-    private String            workspaceName;
-
-    /**
-     * Constructs a new <code>WorkspaceSelectionAction</code> instance.
-     * 
-     * @param workspaceName
-     * @param workspaceViewDescriptor
-     */
-    public WorkspaceSelectionAction(String workspaceName,
-        IViewDescriptor workspaceViewDescriptor) {
-      this.workspaceName = workspaceName;
-      putValue(com.ulcjava.base.application.IAction.NAME,
-          workspaceViewDescriptor.getI18nName(getTranslationProvider(),
-              getLocale()));
-      putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
-          workspaceViewDescriptor.getI18nDescription(getTranslationProvider(),
-              getLocale())
-              + IViewFactory.TOOLTIP_ELLIPSIS);
-      putValue(com.ulcjava.base.application.IAction.SMALL_ICON,
-          getIconFactory().getIcon(workspaceViewDescriptor.getIconImageURL(),
-              IIconFactory.TINY_ICON_SIZE));
-    }
-
-    /**
-     * displays the selected workspace.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
-      try {
-        displayWorkspace(workspaceName);
-      } catch (SecurityException ex) {
-        handleException(ex, null);
-      }
-    }
   }
 }

@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.controller.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
@@ -36,7 +35,6 @@ import java.util.Map;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.Icon;
@@ -73,7 +71,6 @@ import org.jspresso.framework.util.swing.WaitCursorTimer;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -332,7 +329,7 @@ public class DefaultSwingController extends
     return protectedExecuteFrontend(action, context);
   }
 
-  private JMenu createActionMenu(ActionList actionList) {
+  private JMenu createMenu(ActionList actionList) {
     JMenu menu = new JMenu(actionList.getI18nName(getTranslationProvider(),
         getLocale()));
     if (actionList.getDescription() != null) {
@@ -342,20 +339,37 @@ public class DefaultSwingController extends
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         IIconFactory.SMALL_ICON_SIZE));
-    for (IDisplayableAction action : actionList.getActions()) {
-      menu.add(new JMenuItem(getViewFactory().getActionFactory().createAction(
-          action, this, menu, null, null, getLocale())));
+    for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
+      menu.add(menuItem);
     }
     return menu;
   }
 
+  private List<JMenuItem> createMenuItems(JMenu menu, ActionList actionList) {
+    List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      menuItems.add(createMenuItem(menu, action));
+    }
+    return menuItems;
+  }
+
+  private JMenuItem createMenuItem(JMenu menu, IDisplayableAction action) {
+    return new JMenuItem(getViewFactory().getActionFactory().createAction(
+        action, this, menu, null, null, getLocale()));
+  }
+
   private List<JMenu> createActionMenus() {
-    return createMenus(getActionMap());
+    return createMenus(getActionMap(), false);
   }
 
   private JMenuBar createApplicationMenuBar() {
     JMenuBar applicationMenuBar = new JMenuBar();
-    applicationMenuBar.add(createWorkspacesMenu());
+    List<JMenu> workspaceMenus = createWorkspacesMenus();
+    if (workspaceMenus != null) {
+      for (JMenu workspaceMenu : workspaceMenus) {
+        applicationMenuBar.add(workspaceMenu);
+      }
+    }
     List<JMenu> actionMenus = createActionMenus();
     if (actionMenus != null) {
       for (JMenu actionMenu : actionMenus) {
@@ -394,7 +408,7 @@ public class DefaultSwingController extends
   }
 
   private List<JMenu> createHelpActionMenus() {
-    return createMenus(getHelpActions());
+    return createMenus(getHelpActions(), true);
   }
 
   private JComponent createHermeticGlassPane() {
@@ -431,32 +445,28 @@ public class DefaultSwingController extends
     return internalFrame;
   }
 
-  private List<JMenu> createMenus(ActionMap actionMap) {
+  @SuppressWarnings("null")
+  private List<JMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<JMenu> menus = new ArrayList<JMenu>();
     if (actionMap != null) {
+      JMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
-        JMenu menu = createActionMenu(actionList);
-        menus.add(menu);
+        if (!useSeparator || menus.isEmpty()) {
+          menu = createMenu(actionList);
+          menus.add(menu);
+        } else {
+          menu.addSeparator();
+          for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
+            menu.add(menuItem);
+          }
+        }
       }
     }
     return menus;
   }
 
-  private JMenu createWorkspacesMenu() {
-    JMenu workspacesMenu = new JMenu(getTranslationProvider().getTranslation(
-        "workspaces", getLocale()));
-    workspacesMenu.setIcon(getIconFactory().getIcon(
-        getWorkspacesMenuIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
-    for (String workspaceName : getWorkspaceNames()) {
-      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-          .getViewDescriptor();
-      JMenuItem workspaceMenuItem = new JMenuItem(new WorkspaceSelectionAction(
-          workspaceName, workspaceViewDescriptor));
-      workspacesMenu.add(workspaceMenuItem);
-    }
-    workspacesMenu.addSeparator();
-    workspacesMenu.add(new JMenuItem(new QuitAction()));
-    return workspacesMenu;
+  private List<JMenu> createWorkspacesMenus() {
+    return createMenus(createWorkspaceActionMap(), true);
   }
 
   private void displayControllerFrame() {
@@ -536,30 +546,6 @@ public class DefaultSwingController extends
     }
   }
 
-  private final class QuitAction extends AbstractAction {
-
-    private static final long serialVersionUID = -5797994634301619085L;
-
-    /**
-     * Constructs a new <code>QuitAction</code> instance.
-     */
-    public QuitAction() {
-      putValue(Action.NAME, getTranslationProvider().getTranslation(
-          "quit.name", getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
-          .getTranslation("quit.description", getLocale()));
-    }
-
-    /**
-     * Ends the application.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
-      stop();
-    }
-  }
-
   private final class WorkspaceInternalFrameListener extends
       InternalFrameAdapter {
 
@@ -620,43 +606,5 @@ public class DefaultSwingController extends
       displayWorkspace(workspaceName);
     }
 
-  }
-
-  private final class WorkspaceSelectionAction extends AbstractAction {
-
-    private static final long serialVersionUID = 3469745193806038352L;
-    private String            workspaceName;
-
-    /**
-     * Constructs a new <code>WorkspaceSelectionAction</code> instance.
-     * 
-     * @param workspaceName
-     * @param workspaceViewDescriptor
-     */
-    public WorkspaceSelectionAction(String workspaceName,
-        IViewDescriptor workspaceViewDescriptor) {
-      this.workspaceName = workspaceName;
-      putValue(Action.NAME, workspaceViewDescriptor.getI18nName(
-          getTranslationProvider(), getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, workspaceViewDescriptor
-          .getI18nDescription(getTranslationProvider(), getLocale())
-          + IViewFactory.TOOLTIP_ELLIPSIS);
-      putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          workspaceViewDescriptor.getIconImageURL(),
-          IIconFactory.TINY_ICON_SIZE));
-    }
-
-    /**
-     * displays the selected workspace.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
-      try {
-        displayWorkspace(workspaceName);
-      } catch (SecurityException ex) {
-        handleException(ex, null);
-      }
-    }
   }
 }

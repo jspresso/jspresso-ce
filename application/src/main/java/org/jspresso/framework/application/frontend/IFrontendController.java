@@ -99,4 +99,12 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale startingLocale);
+  
+  /**
+   * Displays a workspace.
+   * 
+   * @param workspaceName
+   *          the workspace identifier.
+   */
+  void displayWorkspace(String workspaceName);
 }
