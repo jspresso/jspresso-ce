@@ -66,6 +66,7 @@ import org.jspresso.framework.gui.swing.components.JErrorDialog;
 import org.jspresso.framework.security.swing.DialogCallbackHandler;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.swing.WaitCursorEventQueue;
 import org.jspresso.framework.util.swing.WaitCursorTimer;
@@ -78,7 +79,6 @@ import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
-
 
 import foxtrot.Job;
 
@@ -251,45 +251,49 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(String workspaceName) {
-    if (workspaceInternalFrames == null) {
-      workspaceInternalFrames = new HashMap<String, JInternalFrame>();
-    }
-    JInternalFrame workspaceInternalFrame = workspaceInternalFrames
-        .get(workspaceName);
-    if (workspaceInternalFrame == null) {
-      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-          .getViewDescriptor();
-      IValueConnector workspaceConnector = getBackendController()
-          .getWorkspaceConnector(workspaceName);
-      IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
-          workspaceViewDescriptor, (Workspace) workspaceConnector
-              .getConnectorValue());
-      workspaceInternalFrame = createJInternalFrame(workspaceView);
-      workspaceInternalFrame
-          .addInternalFrameListener(new WorkspaceInternalFrameListener(
-              workspaceName));
-      workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
-      controllerFrame.getContentPane().add(workspaceInternalFrame);
-      getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-      workspaceInternalFrame.pack();
-      workspaceInternalFrame.setSize(controllerFrame.getSize());
-    }
-    workspaceInternalFrame.setVisible(true);
-    if (workspaceInternalFrame.isIcon()) {
-      try {
-        workspaceInternalFrame.setIcon(false);
-      } catch (PropertyVetoException ex) {
-        throw new ControllerException(ex);
+  public void displayWorkspace(String workspaceName) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceInternalFrames == null) {
+        workspaceInternalFrames = new HashMap<String, JInternalFrame>();
       }
+      JInternalFrame workspaceInternalFrame = workspaceInternalFrames
+          .get(workspaceName);
+      if (workspaceInternalFrame == null) {
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
+            workspaceViewDescriptor, (Workspace) workspaceConnector
+                .getConnectorValue());
+        workspaceInternalFrame = createJInternalFrame(workspaceView);
+        workspaceInternalFrame
+            .addInternalFrameListener(new WorkspaceInternalFrameListener(
+                workspaceName));
+        workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
+        controllerFrame.getContentPane().add(workspaceInternalFrame);
+        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+        workspaceInternalFrame.pack();
+        workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
+            controllerFrame.getHeight() - 50);
+        try {
+          workspaceInternalFrame.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+          throw new ControllerException(ex);
+        }
+      }
+      workspaceInternalFrame.setVisible(true);
+      if (workspaceInternalFrame.isIcon()) {
+        try {
+          workspaceInternalFrame.setIcon(false);
+        } catch (PropertyVetoException ex) {
+          throw new ControllerException(ex);
+        }
+      }
+      workspaceInternalFrame.toFront();
+      updateFrameTitle();
     }
-    try {
-      workspaceInternalFrame.setMaximum(true);
-    } catch (PropertyVetoException ex) {
-      throw new ControllerException(ex);
-    }
-    setSelectedWorkspaceName(workspaceName);
-    workspaceInternalFrame.toFront();
   }
 
   /**
@@ -326,15 +330,6 @@ public class DefaultSwingController extends
   protected final boolean executeFrontend(final IAction action,
       final Map<String, Object> context) {
     return protectedExecuteFrontend(action, context);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setSelectedWorkspaceName(String workspaceName) {
-    super.setSelectedWorkspaceName(workspaceName);
-    updateFrameTitle();
   }
 
   private JMenu createActionMenu(ActionList actionList) {
@@ -391,8 +386,7 @@ public class DefaultSwingController extends
        * {@inheritDoc}
        */
       @Override
-      public void windowClosing(@SuppressWarnings("unused")
-      WindowEvent e) {
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
         stop();
       }
     });
@@ -419,7 +413,7 @@ public class DefaultSwingController extends
    * Creates a new JInternalFrame and populates it with a view.
    * 
    * @param view
-   *            the view to be set into the internal frame.
+   *          the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
   private JInternalFrame createJInternalFrame(IView<JComponent> view) {
@@ -561,8 +555,7 @@ public class DefaultSwingController extends
      * <p>
      * {@inheritDoc}
      */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
+    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
       stop();
     }
   }
@@ -576,7 +569,7 @@ public class DefaultSwingController extends
      * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.
      * 
      * @param workspaceName
-     *            the workspace identifier this listener is attached to.
+     *          the workspace identifier this listener is attached to.
      */
     public WorkspaceInternalFrameListener(String workspaceName) {
       this.workspaceName = workspaceName;
@@ -586,45 +579,45 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameActivated(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedWorkspaceName(workspaceName);
+    public void internalFrameActivated(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(workspaceName);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeactivated(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedWorkspaceName(null);
+    public void internalFrameDeactivated(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      // displayWorkspace(null);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeiconified(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedWorkspaceName(workspaceName);
+    public void internalFrameDeiconified(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(workspaceName);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameIconified(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedWorkspaceName(null);
+    public void internalFrameIconified(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      // displayWorkspace(null);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameOpened(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedWorkspaceName(workspaceName);
+    public void internalFrameOpened(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(workspaceName);
     }
 
   }
@@ -658,10 +651,8 @@ public class DefaultSwingController extends
      * <p>
      * {@inheritDoc}
      */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
+    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
       try {
-        getBackendController().checkWorkspaceAccess(workspaceName);
         displayWorkspace(workspaceName);
       } catch (SecurityException ex) {
         handleException(ex, null);

@@ -43,6 +43,7 @@ import org.jspresso.framework.security.ulc.DialogCallbackHandler;
 import org.jspresso.framework.security.ulc.ICallbackHandlerListener;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
@@ -217,46 +218,41 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(String workspaceName) {
-    if (workspaceInternalFrames == null) {
-      workspaceInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
+  public void displayWorkspace(String workspaceName) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceInternalFrames == null) {
+        workspaceInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
+      }
+      ULCExtendedInternalFrame workspaceInternalFrame = workspaceInternalFrames
+          .get(workspaceName);
+      if (workspaceInternalFrame == null) {
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<ULCComponent> workspaceView = createWorkspaceView(workspaceName,
+            workspaceViewDescriptor, (Workspace) workspaceConnector
+                .getConnectorValue());
+        workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
+        workspaceInternalFrame
+            .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
+                workspaceName));
+        workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
+        controllerFrame.getContentPane().add(workspaceInternalFrame);
+        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+        workspaceInternalFrame.pack();
+        workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
+            controllerFrame.getHeight() - 50);
+        workspaceInternalFrame.setMaximum(true);
+      }
+      workspaceInternalFrame.setVisible(true);
+      if (workspaceInternalFrame.isIcon()) {
+        workspaceInternalFrame.setIcon(false);
+      }
+      workspaceInternalFrame.moveToFront();
+      updateFrameTitle();
     }
-    ULCExtendedInternalFrame workspaceInternalFrame = workspaceInternalFrames
-        .get(workspaceName);
-    if (workspaceInternalFrame == null) {
-      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-          .getViewDescriptor();
-      IValueConnector workspaceConnector = getBackendController()
-          .getWorkspaceConnector(workspaceName);
-      IView<ULCComponent> workspaceView = createWorkspaceView(workspaceName,
-          workspaceViewDescriptor, (Workspace) workspaceConnector
-              .getConnectorValue());
-      workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
-      workspaceInternalFrame
-          .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
-              workspaceName));
-      workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
-      controllerFrame.getContentPane().add(workspaceInternalFrame);
-      getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-      workspaceInternalFrame.pack();
-      workspaceInternalFrame.setSize(controllerFrame.getSize());
-    }
-    workspaceInternalFrame.setVisible(true);
-    if (workspaceInternalFrame.isIcon()) {
-      workspaceInternalFrame.setIcon(false);
-    }
-    workspaceInternalFrame.setMaximum(true);
-    setSelectedWorkspaceName(workspaceName);
-    workspaceInternalFrame.moveToFront();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setSelectedWorkspaceName(String workspaceName) {
-    super.setSelectedWorkspaceName(workspaceName);
-    updateFrameTitle();
   }
 
   private ULCMenu createActionMenu(ActionList actionList,
@@ -313,8 +309,7 @@ public class DefaultUlcController extends
 
       private static final long serialVersionUID = -7845554617417316256L;
 
-      public void windowClosing(@SuppressWarnings("unused")
-      WindowEvent event) {
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
         stop();
       }
     });
@@ -341,7 +336,7 @@ public class DefaultUlcController extends
    * Creates a new ULCExtendedInternalFrame and populates it with a view.
    * 
    * @param view
-   *            the view to be set into the internal frame.
+   *          the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
   private ULCExtendedInternalFrame createULCExtendedInternalFrame(
@@ -397,8 +392,8 @@ public class DefaultUlcController extends
 
         private static final long serialVersionUID = 5630061795918376362L;
 
-        public void actionPerformed(@SuppressWarnings("unused")
-        ActionEvent event) {
+        public void actionPerformed(
+            @SuppressWarnings("unused") ActionEvent event) {
           if (loginCallbacks != null) {
             Callback[] loginCallbacksCopy = loginCallbacks;
             loginCallbacks = null;
@@ -513,8 +508,7 @@ public class DefaultUlcController extends
      * <p>
      * {@inheritDoc}
      */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
+    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
       stop();
     }
   }
@@ -539,7 +533,7 @@ public class DefaultUlcController extends
      * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.
      * 
      * @param workspaceName
-     *            the root workspace identifier this listener is attached to.
+     *          the root workspace identifier this listener is attached to.
      */
     public WorkspaceInternalFrameListener(String workspaceName) {
       this.workspaceName = workspaceName;
@@ -548,41 +542,41 @@ public class DefaultUlcController extends
     /**
      * {@inheritDoc}
      */
-    public void internalFrameActivated(@SuppressWarnings("unused")
-    ExtendedInternalFrameEvent e) {
-      setSelectedWorkspaceName(workspaceName);
+    public void internalFrameActivated(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent e) {
+      displayWorkspace(workspaceName);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void internalFrameDeactivated(@SuppressWarnings("unused")
-    ExtendedInternalFrameEvent e) {
-      setSelectedWorkspaceName(null);
+    public void internalFrameDeactivated(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent e) {
+      // displayWorkspace(null);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void internalFrameDeiconified(@SuppressWarnings("unused")
-    ExtendedInternalFrameEvent event) {
-      setSelectedWorkspaceName(workspaceName);
+    public void internalFrameDeiconified(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
+      displayWorkspace(workspaceName);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void internalFrameIconified(@SuppressWarnings("unused")
-    ExtendedInternalFrameEvent event) {
-      setSelectedWorkspaceName(null);
+    public void internalFrameIconified(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
+      // displayWorkspace(null);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void internalFrameOpened(@SuppressWarnings("unused")
-    ExtendedInternalFrameEvent event) {
-      setSelectedWorkspaceName(workspaceName);
+    public void internalFrameOpened(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
+      displayWorkspace(workspaceName);
     }
 
   }
@@ -618,10 +612,8 @@ public class DefaultUlcController extends
      * <p>
      * {@inheritDoc}
      */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
+    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
       try {
-        getBackendController().checkWorkspaceAccess(workspaceName);
         displayWorkspace(workspaceName);
       } catch (SecurityException ex) {
         handleException(ex, null);

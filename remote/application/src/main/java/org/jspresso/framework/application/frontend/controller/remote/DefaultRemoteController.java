@@ -101,15 +101,6 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(
-      @SuppressWarnings("unused") String workspaceName) {
-    // NO-OP as of now
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public void checkAccess(@SuppressWarnings("unused") ISecurable securable) {
     // Empty implementation for testing.
   }

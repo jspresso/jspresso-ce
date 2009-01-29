@@ -103,15 +103,6 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(@SuppressWarnings("unused")
-  String workspaceName) {
-    // Empty implementation.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected Workspace getWorkspace(@SuppressWarnings("unused")
   String workspaceName) {
     return null;

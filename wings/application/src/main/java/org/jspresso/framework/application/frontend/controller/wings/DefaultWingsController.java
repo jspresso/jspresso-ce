@@ -39,6 +39,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.wings.components.SErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
@@ -199,34 +200,28 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(String workspaceName) {
-    if (workspaceViews == null) {
-      workspaceViews = new HashSet<String>();
+  public void displayWorkspace(String workspaceName) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceViews == null) {
+        workspaceViews = new HashSet<String>();
+      }
+      if (!workspaceViews.contains(workspaceName)) {
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<SComponent> workspaceView = createWorkspaceView(workspaceName,
+            workspaceViewDescriptor, (Workspace) workspaceConnector
+                .getConnectorValue());
+        // getViewFactory().decorateWithTitle(moduleView, getLocale());
+        workspaceViews.add(workspaceName);
+        cardPanel.add(workspaceView.getPeer(), workspaceName);
+        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+      }
+      ((SCardLayout) cardPanel.getLayout()).show(workspaceName);
+      updateFrameTitle();
     }
-    if (!workspaceViews.contains(workspaceName)) {
-      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-          .getViewDescriptor();
-      IValueConnector workspaceConnector = getBackendController()
-          .getWorkspaceConnector(workspaceName);
-      IView<SComponent> workspaceView = createWorkspaceView(workspaceName,
-          workspaceViewDescriptor, (Workspace) workspaceConnector
-              .getConnectorValue());
-      // getViewFactory().decorateWithTitle(moduleView, getLocale());
-      workspaceViews.add(workspaceName);
-      cardPanel.add(workspaceView.getPeer(), workspaceName);
-      getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-    }
-    setSelectedWorkspaceName(workspaceName);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setSelectedWorkspaceName(String workspaceName) {
-    super.setSelectedWorkspaceName(workspaceName);
-    ((SCardLayout) cardPanel.getLayout()).show(workspaceName);
-    updateFrameTitle();
   }
 
   private SMenu createActionMenu(ActionList actionList) {
@@ -393,7 +388,6 @@ public class DefaultWingsController extends
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
-        getBackendController().checkWorkspaceAccess(workspaceName);
         displayWorkspace(workspaceName);
       } catch (SecurityException ex) {
         handleException(ex, null);

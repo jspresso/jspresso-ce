@@ -482,7 +482,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @param workspaceName
    *          the workspace identifier.
    */
-  protected abstract void displayWorkspace(String workspaceName);
+  public void displayWorkspace(String workspaceName) {
+    getBackendController().checkWorkspaceAccess(workspaceName);
+    this.selectedWorkspaceName = workspaceName;
+  }
 
   /**
    * Executes a backend action.
@@ -634,16 +637,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected void setBackendController(IBackendController backendController) {
     this.backendController = backendController;
-  }
-
-  /**
-   * Sets the selectedWorkspaceName.
-   * 
-   * @param selectedWorkspaceName
-   *          the selectedWorkspaceName to set.
-   */
-  protected void setSelectedWorkspaceName(String selectedWorkspaceName) {
-    this.selectedWorkspaceName = selectedWorkspaceName;
   }
 
   private void selectedModuleChanged(String workspaceName,
