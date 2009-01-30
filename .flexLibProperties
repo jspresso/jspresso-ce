@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
   <includeClasses>
-    <classEntry path="com.benstucki.utilities.IconUtility"/>
     <classEntry path="org.jspresso.framework.action.IActionHandler"/>
     <classEntry path="org.jspresso.framework.application.frontend.controller.flex.DefaultFlexController"/>
     <classEntry path="org.jspresso.framework.util.format.NumberParser"/>
@@ -13,6 +12,7 @@
     <classEntry path="org.jspresso.framework.view.flex.DefaultFlexViewFactory"/>
     <classEntry path="org.jspresso.framework.view.flex.DoubleClickDataGrid"/>
     <classEntry path="org.jspresso.framework.view.flex.EnumerationDgItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.IconFactory"/>
     <classEntry path="org.jspresso.framework.view.flex.RIconComboBox"/>
     <classEntry path="org.jspresso.framework.view.flex.RIconListItemRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.RIconMenuBarItem"/>

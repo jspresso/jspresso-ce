@@ -10,7 +10,7 @@
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  
 *********************************************************************************************************************************/
-package com.benstucki.utilities
+package org.jspresso.framework.view.flex
 {
 	import flash.display.BitmapData;
 	import flash.display.Loader;
@@ -29,7 +29,7 @@ package com.benstucki.utilities
 	/**
 	 * Provides a workaround for using run-time loaded graphics in styles and properties which require a Class reference
 	 */
-	public class IconUtility extends BitmapAsset
+	public class IconFactory extends BitmapAsset
 	{
 		
 		private static var componentToLoaderMap:Dictionary;
@@ -59,13 +59,13 @@ package com.benstucki.utilities
   			bitmapCache[source] = loader;
   	  }
 			componentToLoaderMap[target] = { source:loader, width:width, height:height };
-			return IconUtility;
+			return IconFactory;
 		}
 		
 		/**
 		 * @private
 		 */
-		public function IconUtility():void {
+		public function IconFactory():void {
 			addEventListener(Event.ADDED, addedHandler, false, 0, true)
 		}
 		
