@@ -730,6 +730,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     ExitAction<E, F, G> exitAction = new ExitAction<E, F, G>();
     exitAction.setName("quit.name");
     exitAction.setDescription("quit.description");
+    exitAction.setIconImageURL(getViewFactory().getIconFactory()
+        .getCancelIconImageURL());
     exitActions.add(exitAction);
     exitActionList.setActions(exitActions);
 

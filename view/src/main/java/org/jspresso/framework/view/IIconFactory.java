@@ -39,7 +39,7 @@ import java.awt.Dimension;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual icon class created.
+ *          the actual icon class created.
  */
 public interface IIconFactory<E> {
 
@@ -64,8 +64,8 @@ public interface IIconFactory<E> {
    * Gets the standard Back icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getBackwardIcon(Dimension iconSize);
@@ -74,8 +74,8 @@ public interface IIconFactory<E> {
    * Gets the standard cancel icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getCancelIcon(Dimension iconSize);
@@ -84,8 +84,8 @@ public interface IIconFactory<E> {
    * Gets the standard error icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getErrorIcon(Dimension iconSize);
@@ -94,8 +94,8 @@ public interface IIconFactory<E> {
    * Gets the standard forbidden icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getForbiddenIcon(Dimension iconSize);
@@ -104,8 +104,8 @@ public interface IIconFactory<E> {
    * Gets the standard Forward icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getForwardIcon(Dimension iconSize);
@@ -114,10 +114,10 @@ public interface IIconFactory<E> {
    * Creates an icon from an image url or get it from a local cache.
    * 
    * @param urlSpec
-   *            the url of the image to be used on the icon.
+   *          the url of the image to be used on the icon.
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getIcon(String urlSpec, Dimension iconSize);
@@ -126,8 +126,8 @@ public interface IIconFactory<E> {
    * Gets the standard info icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getInfoIcon(Dimension iconSize);
@@ -136,8 +136,8 @@ public interface IIconFactory<E> {
    * Gets the standard no icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getNoIcon(Dimension iconSize);
@@ -146,8 +146,8 @@ public interface IIconFactory<E> {
    * Gets the standard ok / yes icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getOkYesIcon(Dimension iconSize);
@@ -156,10 +156,72 @@ public interface IIconFactory<E> {
    * Gets the standard warning icon.
    * 
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getWarningIcon(Dimension iconSize);
 
+  /**
+   * Gets the backwardIconUrl.
+   * 
+   * @return the backwardIconUrl.
+   */
+  String getBackwardIconUrl();
+
+  /**
+   * Gets the cancelIconImageURL.
+   * 
+   * @return the cancelIconImageURL.
+   */
+  String getCancelIconImageURL();
+
+  /**
+   * Gets the errorIconImageURL.
+   * 
+   * @return the errorIconImageURL.
+   */
+  String getErrorIconImageURL();
+
+  /**
+   * Gets the forbiddenIconUrl.
+   * 
+   * @return the forbiddenIconUrl.
+   */
+  String getForbiddenIconUrl();
+
+  /**
+   * Gets the forwardIconUrl.
+   * 
+   * @return the forwardIconUrl.
+   */
+  String getForwardIconUrl();
+
+  /**
+   * Gets the infoIconImageURL.
+   * 
+   * @return the infoIconImageURL.
+   */
+  String getInfoIconImageURL();
+
+  /**
+   * Gets the noIconImageURL.
+   * 
+   * @return the noIconImageURL.
+   */
+  String getNoIconImageURL();
+
+  /**
+   * Gets the okYesIconImageURL.
+   * 
+   * @return the okYesIconImageURL.
+   */
+  String getOkYesIconImageURL();
+
+  /**
+   * Gets the warningIconImageURL.
+   * 
+   * @return the warningIconImageURL.
+   */
+  String getWarningIconImageURL();
 }

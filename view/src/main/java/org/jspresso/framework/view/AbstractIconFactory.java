@@ -248,4 +248,94 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * @return the constructed icon.
    */
   protected abstract E createIcon(String urlSpec, Dimension iconSize);
+
+  
+  /**
+   * Gets the backwardIconUrl.
+   * 
+   * @return the backwardIconUrl.
+   */
+  public String getBackwardIconUrl() {
+    return backwardIconUrl;
+  }
+
+  
+  /**
+   * Gets the cancelIconImageURL.
+   * 
+   * @return the cancelIconImageURL.
+   */
+  public String getCancelIconImageURL() {
+    return cancelIconImageURL;
+  }
+
+  
+  /**
+   * Gets the errorIconImageURL.
+   * 
+   * @return the errorIconImageURL.
+   */
+  public String getErrorIconImageURL() {
+    return errorIconImageURL;
+  }
+
+  
+  /**
+   * Gets the forbiddenIconUrl.
+   * 
+   * @return the forbiddenIconUrl.
+   */
+  public String getForbiddenIconUrl() {
+    return forbiddenIconUrl;
+  }
+
+  
+  /**
+   * Gets the forwardIconUrl.
+   * 
+   * @return the forwardIconUrl.
+   */
+  public String getForwardIconUrl() {
+    return forwardIconUrl;
+  }
+
+  
+  /**
+   * Gets the infoIconImageURL.
+   * 
+   * @return the infoIconImageURL.
+   */
+  public String getInfoIconImageURL() {
+    return infoIconImageURL;
+  }
+
+  
+  /**
+   * Gets the noIconImageURL.
+   * 
+   * @return the noIconImageURL.
+   */
+  public String getNoIconImageURL() {
+    return noIconImageURL;
+  }
+
+  
+  /**
+   * Gets the okYesIconImageURL.
+   * 
+   * @return the okYesIconImageURL.
+   */
+  public String getOkYesIconImageURL() {
+    return okYesIconImageURL;
+  }
+
+  
+  /**
+   * Gets the warningIconImageURL.
+   * 
+   * @return the warningIconImageURL.
+   */
+  public String getWarningIconImageURL() {
+    return warningIconImageURL;
+  }
 }

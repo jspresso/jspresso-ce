@@ -8,8 +8,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.containers.ApplicationControlBar;
   import mx.controls.Alert;
   import mx.controls.Button;
+  import mx.controls.Menu;
   import mx.controls.MenuBar;
   import mx.core.Application;
+  import mx.core.ClassFactory;
   import mx.core.UIComponent;
   import mx.events.MenuEvent;
   import mx.rpc.events.FaultEvent;
@@ -37,6 +39,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
   import org.jspresso.framework.view.flex.DefaultFlexViewFactory;
+  import org.jspresso.framework.view.flex.RIconMenuBarItem;
+  import org.jspresso.framework.view.flex.RIconMenuItemRenderer;
   
   
   public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler {
@@ -318,7 +322,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var menuBar:MenuBar = new MenuBar();
       menuBar.percentWidth = 100.0;
       menuBar.showRoot = false;
+      
+      menuBar.menuBarItemRenderer = new ClassFactory(RIconMenuBarItem);
+
       menuBar.dataProvider = menus;
+      
+      for(var i:int = 0; i < menus.length; i++) {
+        menuBar.getMenuAt(i).itemRenderer = new ClassFactory(RIconMenuItemRenderer);
+      }
       
       var menuHandler:Function = function(event:MenuEvent):void  {
         if (event.item["data"] is RAction) {
@@ -355,7 +366,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       menu["label"] = actionList.name;
       menu["description"] = actionList.description;
       menu["data"] = actionList;
-      menu["rIcon"] = actionList.icon;
+      if(actionList.icon) {
+        menu["icon"] = _viewFactory.iconTemplate;
+        menu["rIcon"] = actionList.icon;
+      }
       
       var menuItems:Array = new Array();
       for each (var menuItem:Object in createMenuItems(actionList)) {
@@ -378,7 +392,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       menuItem["label"] = action.name;
       menuItem["description"] = action.description;
       menuItem["data"] = action;
-      menuItem["rIcon"] = action.icon;
+      if(action.icon) {
+        menuItem["icon"] = _viewFactory.iconTemplate;
+        menuItem["rIcon"] = action.icon;
+      }
       return menuItem;
     }
 

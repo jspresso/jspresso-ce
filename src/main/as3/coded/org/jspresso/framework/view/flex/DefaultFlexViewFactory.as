@@ -1235,7 +1235,7 @@ package org.jspresso.framework.view.flex {
       return null;
     }
     
-    internal static function computeUrl(imageUrlSpec:String):String {
+    public static function computeUrl(imageUrlSpec:String):String {
       return getContextRoot() + "/download?localUrl=" + imageUrlSpec;
     }
     
@@ -1297,6 +1297,10 @@ package org.jspresso.framework.view.flex {
         charCount = expectedCharCount;
       }
       component.maxWidth = component.measureText(TEMPLATE_CHAR).width * charCount;
+    }
+    
+    public function get iconTemplate():Class  {
+      return _iconTemplate;
     }
   }
 }

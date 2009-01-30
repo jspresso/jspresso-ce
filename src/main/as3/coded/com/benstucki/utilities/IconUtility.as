@@ -22,11 +22,9 @@ package com.benstucki.utilities
 	import flash.utils.Dictionary;
 	
 	import mx.containers.Panel;
-	import mx.controls.Alert;
+	import mx.controls.alertClasses.AlertForm;
 	import mx.core.BitmapAsset;
 	import mx.core.UIComponent;
-
-  import mx.controls.alertClasses.AlertForm;
   	
 	/**
 	 * Provides a workaround for using run-time loaded graphics in styles and properties which require a Class reference
@@ -34,7 +32,8 @@ package com.benstucki.utilities
 	public class IconUtility extends BitmapAsset
 	{
 		
-		private static var dictionary:Dictionary;
+		private static var componentToLoaderMap:Dictionary;
+		private static var bitmapCache:Dictionary;
 		
 		/**
 		 * Used to associate run-time graphics with a target
@@ -46,15 +45,20 @@ package com.benstucki.utilities
 		 * @example &lt;mx:Button id="button" icon="{IconUtility.getClass(button, 'http://www.yourdomain.com/images/test.jpg')}" /&gt;
 		 */
 		public static function getClass( target:UIComponent, source:String, width:Number = NaN, height:Number = NaN ):Class {
-			if(!dictionary) {
-				dictionary = new Dictionary(false);
+			if(!componentToLoaderMap) {
+				componentToLoaderMap = new Dictionary(false);
 			}
-			//if(source is String) {
-				var loader:Loader = new Loader();
-				loader.load(new URLRequest(source as String), new LoaderContext(true));
-				//source = loader;
-			//}
-			dictionary[target] = { source:loader, width:width, height:height };
+			if(!bitmapCache) {
+				bitmapCache = new Dictionary(false);
+			}
+			
+			var loader:Loader = bitmapCache[source];
+			if(!loader) {
+  			loader = new Loader();
+  			loader.load(new URLRequest(source as String), new LoaderContext(true));
+  			bitmapCache[source] = loader;
+  	  }
+			componentToLoaderMap[target] = { source:loader, width:width, height:height };
 			return IconUtility;
 		}
 		
@@ -67,13 +71,6 @@ package com.benstucki.utilities
 		
 		private function addedHandler(event:Event):void {
 			if(parent) {
-//				if(parent is AccordionHeader) {
-//					var header:AccordionHeader = parent as AccordionHeader;
-//					getData(header.data);
-//				} else if(parent is Tab) {
-//					var tab:Tab = parent as Tab;
-//					getData(tab.data);
-//				} else {
        if(parent is AlertForm) {
          getData(parent);
        } else if(parent.parent is Panel) {
@@ -85,7 +82,7 @@ package com.benstucki.utilities
 		}
 		
 		private function getData(object:Object):void {
-			var data:Object = dictionary[object];
+			var data:Object = componentToLoaderMap[object];
 			if(data) {
 				var source:Object = data.source;
 				if(data.width > 0 && data.height > 0) {
