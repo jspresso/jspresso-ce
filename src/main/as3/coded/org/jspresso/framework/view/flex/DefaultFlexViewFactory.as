@@ -966,8 +966,24 @@ package org.jspresso.framework.view.flex {
     }
 
     private function bindList(list:List, state:RemoteCompositeValueState):void {
+      BindingUtils.bindSetter(function(selectedIndices:Array):void {
+        if(selectedIndices != null && selectedIndices.length > 0) {
+          // work on items to translate indices independently of table sorting state.
+          var selectedItems:Array = new Array(selectedIndices.length);
+          for(var i:int = 0; i < selectedIndices.length; i++) {
+            selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
+          }
+          if(!areUnorderedArraysEqual(list.selectedItems, selectedItems)) {
+            list.selectedItems = selectedItems;
+          }
+        } else {
+          list.selectedIndices = [];
+          list.selectedIndex = -1;
+        }
+      }, state, "selectedIndices", true);
+
       BindingUtils.bindSetter(function(selectedItems:Array):void {
-        if(selectedItems != null) {
+        if(selectedItems != null && selectedItems.length > 0) {
           // work on items to translate indices independently of table sorting state.
           var translatedSelectedIndices:Array = new Array(selectedItems.length);
           for(var i:int = 0; i < selectedItems.length; i++) {
@@ -1092,7 +1108,7 @@ package org.jspresso.framework.view.flex {
         _remoteValueSorter.sortColumnIndex = event.columnIndex;
       });
       BindingUtils.bindSetter(function(selectedItems:Array):void {
-        if(selectedItems != null) {
+        if(selectedItems != null && selectedItems.length > 0) {
           // work on items to translate indices independently of table sorting state.
           var translatedSelectedIndices:Array = new Array(selectedItems.length);
           for(var i:int = 0; i < selectedItems.length; i++) {
@@ -1103,13 +1119,31 @@ package org.jspresso.framework.view.flex {
           } else {
             state.leadingIndex = -1;
           }
-          translatedSelectedIndices.sort(Array.NUMERIC);
-          state.selectedIndices = translatedSelectedIndices;
+          if(!areUnorderedArraysEqual(translatedSelectedIndices, state.selectedIndices)) {
+            translatedSelectedIndices.sort(Array.NUMERIC);
+            state.selectedIndices = translatedSelectedIndices;
+          }
         } else {
           state.selectedIndices = null;
           state.leadingIndex = -1;
         }
       }, table, "selectedItems", true);
+      BindingUtils.bindSetter(function(selectedIndices:Array):void {
+        if(selectedIndices != null && selectedIndices.length > 0) {
+          // work on items to translate indices independently of table sorting state.
+          var selectedItems:Array = new Array(selectedIndices.length);
+          for(var i:int = 0; i < selectedIndices.length; i++) {
+            selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
+          }
+          if(!areUnorderedArraysEqual(table.selectedItems, selectedItems)) {
+            table.selectedItems = selectedItems;
+          }
+        } else {
+          table.selectedIndices = [];
+          table.selectedIndex = -1;
+        }
+      }, state, "selectedIndices", true);
+      
       table.addEventListener(DataGridEvent.ITEM_EDIT_END, function(event:DataGridEvent):void {
         if (event.reason != DataGridEventReason.CANCELLED) {
           var table:DataGrid = event.currentTarget as DataGrid;
@@ -1301,6 +1335,21 @@ package org.jspresso.framework.view.flex {
     
     public function get iconTemplate():Class  {
       return _iconTemplate;
+    }
+    
+    public static function areUnorderedArraysEqual(a1:Array, a2:Array):Boolean {
+      if((a1 && !a2) || (a2 && !a1)) {
+        return false;
+      } else if(a1.length != a2.length) {
+        return false;
+      } else {
+        for each (var e:Object in a1) {
+          if(a2.indexOf(e) < 0) {
+            return false;
+          }
+        }
+      }
+      return true;
     }
   }
 }
