@@ -18,14 +18,15 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
-  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
+  import mx.containers.Canvas;
+  import mx.containers.ViewStack;
   import mx.controls.Alert;
   import mx.controls.Button;
-  import mx.controls.Menu;
   import mx.controls.MenuBar;
   import mx.core.Application;
   import mx.core.ClassFactory;
+  import mx.core.Container;
   import mx.core.UIComponent;
   import mx.events.MenuEvent;
   import mx.rpc.events.FaultEvent;
@@ -43,6 +44,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionList;
@@ -67,6 +69,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _changeNotificationsEnabled:Boolean;
     private var _commandsQueue:IList;
     private var _commandRegistrationEnabled:Boolean;
+    private var _workspaceViewStack:ViewStack;
+    private var _postponedCommands:Object;
     
     public function DefaultFlexController(remoteController:RemoteObject) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -91,6 +95,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
             for each(var childState:RemoteValueState in (remotePeer as RemoteCompositeValueState).children) {
               register(childState);
             }
+          }
+        }
+        if(_postponedCommands) {
+          if(_postponedCommands[remotePeer.guid]) {
+            handleCommands(_postponedCommands[remotePeer.guid]);
+            delete _postponedCommands[remotePeer.guid];
           }
         }
       }
@@ -167,7 +177,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
 
-    protected function handleCommands(commands:ListCollectionView):void {
+    protected function handleCommands(commands:IList):void {
       //trace("Recieved commands :");
       try {
         _commandRegistrationEnabled = false;
@@ -216,21 +226,17 @@ package org.jspresso.framework.application.frontend.controller.flex {
         initApplicationFrame(initCommand.workspaceActions,
                              initCommand.actions,
                              initCommand.helpActions);
+      } else if(command is RemoteWorkspaceDisplayCommand) {
+        var workspaceDisplayCommand:RemoteWorkspaceDisplayCommand = command as RemoteWorkspaceDisplayCommand;
+        displayWorkspace(workspaceDisplayCommand.workspaceName,
+                         workspaceDisplayCommand.workspaceView);
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
-          handleError("Target remote peer could not be retrieved :");
-          handleError("  guid    = " + command.targetPeerGuid);
-          handleError("  command = " + command);
-          if(command is RemoteValueCommand) {
-            handleError("  value   = " + (command as RemoteValueCommand).value);
-          } else if(command is RemoteChildrenCommand) {
-            for each (var childState:RemoteValueState in (command as RemoteChildrenCommand).children) {
-              handleError("  child = " + childState);
-              handleError("    guid  = " + childState.guid);
-              handleError("    value = " + childState.value);
-            }
-          }
+          if(!_postponedCommands[command.targetPeerGuid]) {
+            _postponedCommands[command.targetPeerGuid] = new ArrayCollection(new Array());
+          } 
+          (_postponedCommands[command.targetPeerGuid] as IList).addItem(command);
           return;
         }
         if(command is RemoteValueCommand) {
@@ -257,8 +263,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           (targetPeer as RAction).enabled =
             (command as RemoteEnablementCommand).enabled;
         } else if(command is RemoteChildrenCommand) {
-          var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children; 
-          //children.disableAutoUpdate();
+          var children:IList = (targetPeer as RemoteCompositeValueState).children; 
           children.removeAll();
           if((command as RemoteChildrenCommand).children != null) {
             for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
@@ -270,7 +275,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
               children.addItem(child);
             }
           }
-          //children.enableAutoUpdate();
         }
       }
     }
@@ -300,7 +304,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private function initRemoteController():void {
       _remoteController.showBusyCursor = true;
       var commandsHandler:Function = function(resultEvent:ResultEvent):void {
-        handleCommands(resultEvent.result as ListCollectionView);
+        _postponedCommands = new Object();
+        try {
+          handleCommands(resultEvent.result as IList);
+        } finally {
+          checkPostponedCommandsCompletion();
+          _postponedCommands = null;
+        }
       };
       var errorHandler:Function = function(faultEvent:FaultEvent):void {
         handleError(faultEvent.fault.message);
@@ -314,13 +324,39 @@ package org.jspresso.framework.application.frontend.controller.flex {
       operation.addEventListener(FaultEvent.FAULT, errorHandler);
     }
     
+    private function checkPostponedCommandsCompletion():void {
+      for(var guid:String in _postponedCommands) {
+        var commands:IList = _postponedCommands[guid] as IList;
+        for each(var command:RemoteCommand in commands) {
+          handleError("Target remote peer could not be retrieved :");
+          handleError("  guid    = " + command.targetPeerGuid);
+          handleError("  command = " + command);
+          if(command is RemoteValueCommand) {
+            handleError("  value   = " + (command as RemoteValueCommand).value);
+          } else if(command is RemoteChildrenCommand) {
+            for each (var childState:RemoteValueState in (command as RemoteChildrenCommand).children) {
+              handleError("  child = " + childState);
+              handleError("    guid  = " + childState.guid);
+              handleError("    value = " + childState.value);
+            }
+          }
+        }
+      }
+    }
+    
     private function initApplicationFrame(workspaceActions:Array,
                                           actions:Array,
                                           helpActions:Array):void {
       var controlBar:ApplicationControlBar = new ApplicationControlBar();
       controlBar.dock = true;
-      (Application.application as Application).addChild(controlBar);
+      var applicationFrame:Application = Application.application as Application; 
+      applicationFrame.addChild(controlBar);
       controlBar.addChild(createApplicationMenuBar(workspaceActions, actions, helpActions));
+      _workspaceViewStack = new ViewStack();
+      _workspaceViewStack.resizeToContent = true;
+      _workspaceViewStack.percentWidth = 100.0;
+      _workspaceViewStack.percentHeight = 100.0;
+      applicationFrame.addChild(_workspaceViewStack);
     }
     
     private function createApplicationMenuBar(workspaceActions:Array,
@@ -418,5 +454,20 @@ package org.jspresso.framework.application.frontend.controller.flex {
       operation.send(language);
     }
     
+    private function displayWorkspace(workspaceName:String, workspaceView:RComponent):void {
+      if(workspaceView) {
+        var cardCanvas:Canvas = new Canvas();
+        cardCanvas.percentWidth = 100.0;
+        cardCanvas.percentHeight = 100.0;
+        cardCanvas.name = workspaceName;
+        _workspaceViewStack.addChild(cardCanvas);
+
+        var workspace:UIComponent = _viewFactory.createComponent(workspaceView);
+        workspace.percentWidth = 100.0;
+        workspace.percentHeight = 100.0;
+        cardCanvas.addChild(workspace) ;
+      }
+      _workspaceViewStack.selectedChild = _workspaceViewStack.getChildByName(workspaceName) as Container;
+    }
   }
 }

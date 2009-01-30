@@ -363,6 +363,14 @@ public class DefaultUlcViewFactory extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ULCComponent createEmptyComponent() {
+    return createBorderLayoutPane();
+  }
+  
+  /**
    * Creates an action field.
    * 
    * @param showTextField
@@ -756,7 +764,7 @@ public class DefaultUlcViewFactory extends
         viewDescriptor);
     Map<String, IView<ULCComponent>> childrenViews = new HashMap<String, IView<ULCComponent>>();
 
-    viewComponent.add(createBorderLayoutPane(),
+    viewComponent.add(createEmptyComponent(),
         ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityComponent(),
         ICardViewDescriptor.SECURITY_CARD);

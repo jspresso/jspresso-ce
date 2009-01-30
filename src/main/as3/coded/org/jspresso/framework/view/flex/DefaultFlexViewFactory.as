@@ -539,7 +539,7 @@ package org.jspresso.framework.view.flex {
         var cardCanvas:Canvas = new Canvas();
         cardCanvas.percentWidth = 100.0;
         cardCanvas.percentHeight = 100.0;
-        cardCanvas.id = remoteCardContainer.cardNames[i] as String;
+        cardCanvas.name = remoteCardContainer.cardNames[i] as String;
         cardContainer.addChild(cardCanvas);
 
         var cardComponent:UIComponent = createComponent(remoteCardContainer.cards[i] as RComponent);
@@ -547,7 +547,20 @@ package org.jspresso.framework.view.flex {
         cardComponent.percentHeight = 100.0;
         cardCanvas.addChild(cardComponent);
       }
+      bindCardContainer(cardContainer, remoteCardContainer.state);
       return cardContainer;
+    }
+
+    private function bindCardContainer(cardContainer:ViewStack, remoteState:RemoteValueState):void {
+      var selectCard:Function = function (value:Object):void {
+        if(value == null) {
+          cardContainer.selectedChild = null;
+        } else {
+          var selectedCard:Container = cardContainer.getChildByName(value as String) as Container;
+          cardContainer.selectedChild = selectedCard;
+        }
+      };
+      BindingUtils.bindSetter(selectCard, remoteState, "value", true);
     }
 
     private function createConstrainedGridContainer(remoteConstrainedGridContainer:RConstrainedGridContainer):UIComponent {
@@ -1072,31 +1085,6 @@ package org.jspresso.framework.view.flex {
       });
       bindTable(table, remoteTable.state as RemoteCompositeValueState);
       return table;
-
-//      var test:HBox = new HBox();
-//      test.addChild(table);
-//      var testB:Button = new Button();
-//      testB.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-//        var cellState:RemoteValueState = (((remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState).children[11] as RemoteValueState);
-//        cellState.value = !cellState.value;
-//      });
-//      testB.label = "test";
-//      var testB2:Button = new Button();
-//      testB2.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-//        var row:RemoteCompositeValueState = (remoteTable.state as RemoteCompositeValueState).children[0] as RemoteCompositeValueState;
-//        var newRow:RemoteCompositeValueState = new RemoteCompositeValueState();
-//        newRow.children = new ArrayCollection();
-//        for(var c:int = 0; c < row.children.length; c++) {
-//          var newCell:RemoteValueState = new RemoteValueState()
-//          newCell.value = "test " + c
-//          newRow.children.addItem(newCell);
-//        }
-//        (remoteTable.state as RemoteCompositeValueState).children.addItem(newRow);
-//      });
-//      testB2.label = "test2";
-//      test.addChild(testB);
-//      test.addChild(testB2);
-//      return test;
     }
     
     private function bindTable(table:DataGrid, state:RemoteCompositeValueState):void {

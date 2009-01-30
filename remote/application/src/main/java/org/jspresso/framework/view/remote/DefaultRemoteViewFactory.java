@@ -84,6 +84,7 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
@@ -179,7 +180,7 @@ public class DefaultRemoteViewFactory extends
     List<String> cardNames = new ArrayList<String>();
     List<RComponent> cards = new ArrayList<RComponent>();
     cardNames.add(ICardViewDescriptor.DEFAULT_CARD);
-    cards.add(createRBorderContainer());
+    cards.add(createEmptyComponent());
     cardNames.add(ICardViewDescriptor.SECURITY_CARD);
     cards.add(createSecurityComponent());
 
@@ -743,7 +744,19 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected RComponent createSecurityComponent() {
-    return new RSecurityComponent(guidGenerator.generateGUID());
+    RComponent securityComponent = new RSecurityComponent(guidGenerator.generateGUID());
+    securityComponent.setState(new RemoteValueState(guidGenerator.generateGUID()));
+    return securityComponent;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected RComponent createEmptyComponent() {
+    RComponent emptyComponent = createRBorderContainer();
+    emptyComponent.setState(new RemoteCompositeValueState(guidGenerator.generateGUID()));
+    return emptyComponent;
   }
 
   /**

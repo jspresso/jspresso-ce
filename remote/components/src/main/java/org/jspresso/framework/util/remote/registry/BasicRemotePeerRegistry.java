@@ -54,7 +54,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   @SuppressWarnings("unchecked")
   public BasicRemotePeerRegistry() {
     backingStore = new ReferenceMap(AbstractReferenceMap.HARD,
-        AbstractReferenceMap.WEAK, true);
+        AbstractReferenceMap.HARD, true);
   }
 
   /**

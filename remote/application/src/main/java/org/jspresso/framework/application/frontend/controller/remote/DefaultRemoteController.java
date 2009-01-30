@@ -19,8 +19,10 @@
 package org.jspresso.framework.application.frontend.controller.remote;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.security.auth.callback.CallbackHandler;
 
@@ -33,7 +35,9 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteInitComm
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
+import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
@@ -46,15 +50,18 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.remote.DefaultRemoteViewFactory;
 import org.jspresso.framework.view.remote.RemoteActionFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -88,6 +95,7 @@ public class DefaultRemoteController extends
   private boolean             commandRegistrationEnabled;
   private int                 commandLowPriorityOffset;
   private IGUIDGenerator      guidGenerator;
+  private Set<String>         workspaceViews;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
@@ -118,6 +126,7 @@ public class DefaultRemoteController extends
    */
   @Override
   public boolean handleException(Throwable ex, Map<String, Object> context) {
+    ex.printStackTrace();
     if (super.handleException(ex, context)) {
       return true;
     }
@@ -346,5 +355,35 @@ public class DefaultRemoteController extends
    */
   public void setGuidGenerator(IGUIDGenerator guidGenerator) {
     this.guidGenerator = guidGenerator;
+  }
+
+  /**
+   * Sends a remote workspace display command.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayWorkspace(String workspaceName) {
+    RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceViews == null) {
+        workspaceViews = new HashSet<String>();
+      }
+      if (!workspaceViews.contains(workspaceName)) {
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<RComponent> workspaceView = createWorkspaceView(workspaceName,
+            workspaceViewDescriptor, (Workspace) workspaceConnector
+                .getConnectorValue());
+        workspaceViews.add(workspaceName);
+        workspaceDisplayCommand.setWorkspaceView(workspaceView.getPeer());
+        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+      }
+      workspaceDisplayCommand.setWorkspaceName(workspaceName);
+      registerCommand(workspaceDisplayCommand);
+    }
   }
 }

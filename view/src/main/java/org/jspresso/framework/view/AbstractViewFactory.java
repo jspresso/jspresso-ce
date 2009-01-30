@@ -253,6 +253,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected abstract E createSecurityComponent();
 
   /**
+   * Creates an empty panel.
+   * 
+   * @return the security panel.
+   */
+  protected abstract E createEmptyComponent();
+
+  /**
    * Creates a tree view.
    * 
    * @param viewDescriptor

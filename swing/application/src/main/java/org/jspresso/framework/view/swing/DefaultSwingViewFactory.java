@@ -598,6 +598,14 @@ public class DefaultSwingViewFactory extends
     // panel.add(label, BorderLayout.CENTER);
     return panel;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected JComponent createEmptyComponent() {
+    return createJPanel();
+  }
 
   /**
    * Decorates the created view with the apropriate border.
@@ -749,7 +757,7 @@ public class DefaultSwingViewFactory extends
         viewDescriptor);
     Map<String, IView<JComponent>> childrenViews = new HashMap<String, IView<JComponent>>();
 
-    viewComponent.add(createJPanel(), ICardViewDescriptor.DEFAULT_CARD);
+    viewComponent.add(createEmptyComponent(), ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityComponent(),
         ICardViewDescriptor.SECURITY_CARD);
 

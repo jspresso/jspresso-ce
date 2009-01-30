@@ -395,6 +395,14 @@ public class DefaultWingsViewFactory extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected SComponent createEmptyComponent() {
+    return createSPanel(new SBorderLayout());
+  }
+
+  /**
    * Creates an internal frame.
    * 
    * @return the created panel.
@@ -762,8 +770,7 @@ public class DefaultWingsViewFactory extends
         viewDescriptor);
     Map<String, IView<SComponent>> childrenViews = new HashMap<String, IView<SComponent>>();
 
-    viewComponent.add(createSPanel(new SBorderLayout()),
-        ICardViewDescriptor.DEFAULT_CARD);
+    viewComponent.add(createEmptyComponent(), ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityComponent(),
         ICardViewDescriptor.SECURITY_CARD);
 
