@@ -157,11 +157,12 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
   }
 
   private RAction createRAction(IDisplayableAction action,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") RComponent sourceComponent,
-      @SuppressWarnings("unused") IModelDescriptor modelDescriptor,
-      @SuppressWarnings("unused") IValueConnector viewConnector, Locale locale) {
+      IActionHandler actionHandler, RComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
     RAction remoteAction = new RAction(guidGenerator.generateGUID());
+    remoteAction.setContext(action, actionHandler, sourceComponent,
+        modelDescriptor, viewConnector);
     remoteAction.setName(action.getI18nName(translationProvider, locale));
     String i18nDescription = action.getI18nDescription(translationProvider,
         locale);
@@ -252,11 +253,11 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
     this.remotePeerRegistry = remotePeerRegistry;
   }
 
-  
   /**
    * Sets the remoteCommandHandler.
    * 
-   * @param remoteCommandHandler the remoteCommandHandler to set.
+   * @param remoteCommandHandler
+   *          the remoteCommandHandler to set.
    */
   public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
     this.remoteCommandHandler = remoteCommandHandler;

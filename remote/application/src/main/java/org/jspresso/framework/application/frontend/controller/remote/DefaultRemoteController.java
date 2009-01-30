@@ -26,6 +26,7 @@ import javax.security.auth.callback.CallbackHandler;
 
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
@@ -85,14 +86,14 @@ public class DefaultRemoteController extends
   private IRemotePeerRegistry remotePeerRegistry;
   private List<RemoteCommand> commandQueue;
   private boolean             commandRegistrationEnabled;
-  private int                 hpIndex;
+  private int                 commandLowPriorityOffset;
   private IGUIDGenerator      guidGenerator;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
    */
   public DefaultRemoteController() {
-    hpIndex = 0;
+    commandLowPriorityOffset = 0;
     commandRegistrationEnabled = false;
   }
 
@@ -150,7 +151,7 @@ public class DefaultRemoteController extends
     try {
       commandRegistrationEnabled = true;
       commandQueue = new ArrayList<RemoteCommand>();
-      hpIndex = 0;
+      commandLowPriorityOffset = 0;
       if (commands != null) {
         for (RemoteCommand command : commands) {
           handleCommand(command);
@@ -187,6 +188,9 @@ public class DefaultRemoteController extends
       selectable.setSelectedIndices(((RemoteSelectionCommand) command)
           .getSelectedIndices(), ((RemoteSelectionCommand) command)
           .getLeadingIndex());
+    } else if (command instanceof RemoteActionCommand) {
+      RAction action = (RAction) targetPeer;
+      action.actionPerformed(((RemoteActionCommand) command).getParameter());
     } else {
       throw new CommandException("Unsupported command type : "
           + command.getClass().getSimpleName());
@@ -202,8 +206,8 @@ public class DefaultRemoteController extends
       if (command instanceof RemoteChildrenCommand) {
         // The remote children commands, that may create and register
         // remote server peers on client side must be handled first.
-        commandQueue.add(hpIndex, command);
-        hpIndex++;
+        commandQueue.add(commandLowPriorityOffset, command);
+        commandLowPriorityOffset++;
       } else {
         commandQueue.add(command);
       }
