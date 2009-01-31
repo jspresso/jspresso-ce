@@ -312,8 +312,8 @@ package org.jspresso.framework.view.flex {
             }
             var childIndex:int = parentNode.children.getItemIndex(node);
             selectedIndices.push(childIndex);
-            parentNode.selectedIndices = selectedIndices;
             parentNode.leadingIndex = childIndex;
+            parentNode.selectedIndices = selectedIndices;
           }
         }
       };
@@ -977,8 +977,8 @@ package org.jspresso.framework.view.flex {
             list.selectedItems = selectedItems;
           }
         } else {
-          list.selectedIndices = [];
           list.selectedIndex = -1;
+          list.selectedIndices = [];
         }
       }, state, "selectedIndices", true);
 
@@ -997,8 +997,8 @@ package org.jspresso.framework.view.flex {
           translatedSelectedIndices.sort(Array.NUMERIC);
           state.selectedIndices = translatedSelectedIndices;
         } else {
-          state.selectedIndices = null;
           state.leadingIndex = -1;
+          state.selectedIndices = null;
         }
       }, list, "selectedItems", true);
     }
@@ -1124,8 +1124,8 @@ package org.jspresso.framework.view.flex {
             state.selectedIndices = translatedSelectedIndices;
           }
         } else {
-          state.selectedIndices = null;
           state.leadingIndex = -1;
+          state.selectedIndices = null;
         }
       }, table, "selectedItems", true);
       BindingUtils.bindSetter(function(selectedIndices:Array):void {
@@ -1139,8 +1139,8 @@ package org.jspresso.framework.view.flex {
             table.selectedItems = selectedItems;
           }
         } else {
-          table.selectedIndices = [];
           table.selectedIndex = -1;
+          table.selectedIndices = [];
         }
       }, state, "selectedIndices", true);
       
