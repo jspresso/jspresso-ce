@@ -203,6 +203,8 @@ package org.jspresso.framework.view.flex {
       }
       if(remoteComponent.borderType == "TITLED") {
         var decorator:Panel = new Panel();
+        decorator.percentWidth = component.percentWidth;
+        decorator.percentHeight = component.percentHeight;
         component.percentWidth = 100.0;
         component.percentHeight = 100.0;
         decorator.addChild(component);
@@ -477,6 +479,7 @@ package org.jspresso.framework.view.flex {
          || remoteBorderContainer.east != null) {
         row = new GridRow();
         row.percentWidth = 100.0;
+        row.percentHeight = 100.0;
         borderContainer.addChild(row);
         if(remoteBorderContainer.west != null) {
           cell = new GridItem();
@@ -527,7 +530,7 @@ package org.jspresso.framework.view.flex {
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
       }
-      
+
       return borderContainer;
     }
 
@@ -548,6 +551,7 @@ package org.jspresso.framework.view.flex {
         cardCanvas.addChild(cardComponent);
       }
       bindCardContainer(cardContainer, remoteCardContainer.state);
+
       return cardContainer;
     }
 
