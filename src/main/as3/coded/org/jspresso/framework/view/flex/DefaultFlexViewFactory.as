@@ -23,6 +23,7 @@ package org.jspresso.framework.view.flex {
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
+  import mx.collections.ICollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -282,11 +283,12 @@ package org.jspresso.framework.view.flex {
 
     private function createTree(remoteTree:RTree):UIComponent {
       var tree:Tree = new Tree();
-      bindTree(tree, remoteTree.state as RemoteCompositeValueState); 
       tree.labelField = "value";
       tree.dataTipField = "description";
       tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
       tree.dataProvider = remoteTree.state;
+      
+      bindTree(tree, remoteTree.state as RemoteCompositeValueState);
       return tree;
     }
 
@@ -320,6 +322,18 @@ package org.jspresso.framework.view.flex {
         }
       };
       BindingUtils.bindSetter(updateModel, tree, "selectedItems", true);
+
+      var updateView:Function = function (event:FlexEvent):void {
+        trace(event);
+      }
+      
+      var attachListener:Function = function (treeModel:ICollectionView):void {
+        //var treeModel:ICollectionView = tree.dataProvider as ICollectionView;
+        treeModel.addEventListener(CollectionEvent.COLLECTION_CHANGE,
+                                                                updateView);
+      }
+
+      BindingUtils.bindSetter(attachListener, tree, "dataProvider", true);
     }
     
     private function clearStateSelection(remoteState:RemoteCompositeValueState, excludedNodes:Array):void {
