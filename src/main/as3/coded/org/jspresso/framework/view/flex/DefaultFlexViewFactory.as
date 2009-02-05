@@ -23,7 +23,6 @@ package org.jspresso.framework.view.flex {
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
-  import mx.collections.ICollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.BoxDirection;
   import mx.containers.Canvas;
@@ -102,6 +101,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RTree;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
+  import org.jspresso.framework.util.array.ArrayUtil;
   import org.jspresso.framework.util.format.NumberParser;
   import org.jspresso.framework.util.format.Parser;
   import org.jspresso.framework.util.format.PercentFormatter;
@@ -282,7 +282,7 @@ package org.jspresso.framework.view.flex {
     }
 
     private function createTree(remoteTree:RTree):UIComponent {
-      var tree:Tree = new Tree();
+      var tree:Tree = new SelectionTrackingTree();
       tree.labelField = "value";
       tree.dataTipField = "description";
       tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
@@ -322,18 +322,6 @@ package org.jspresso.framework.view.flex {
         }
       };
       BindingUtils.bindSetter(updateModel, tree, "selectedItems", true);
-
-      var updateView:Function = function (event:FlexEvent):void {
-        trace(event);
-      }
-      
-      var attachListener:Function = function (treeModel:ICollectionView):void {
-        //var treeModel:ICollectionView = tree.dataProvider as ICollectionView;
-        treeModel.addEventListener(CollectionEvent.COLLECTION_CHANGE,
-                                                                updateView);
-      }
-
-      BindingUtils.bindSetter(attachListener, tree, "dataProvider", true);
     }
     
     private function clearStateSelection(remoteState:RemoteCompositeValueState, excludedNodes:Array):void {
@@ -991,7 +979,7 @@ package org.jspresso.framework.view.flex {
           for(var i:int = 0; i < selectedIndices.length; i++) {
             selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
           }
-          if(!areUnorderedArraysEqual(list.selectedItems, selectedItems)) {
+          if(!ArrayUtil.areUnorderedArraysEqual(list.selectedItems, selectedItems)) {
             list.selectedItems = selectedItems;
           }
         } else {
@@ -1137,7 +1125,7 @@ package org.jspresso.framework.view.flex {
           } else {
             state.leadingIndex = -1;
           }
-          if(!areUnorderedArraysEqual(translatedSelectedIndices, state.selectedIndices)) {
+          if(!ArrayUtil.areUnorderedArraysEqual(translatedSelectedIndices, state.selectedIndices)) {
             translatedSelectedIndices.sort(Array.NUMERIC);
             state.selectedIndices = translatedSelectedIndices;
           }
@@ -1153,7 +1141,7 @@ package org.jspresso.framework.view.flex {
           for(var i:int = 0; i < selectedIndices.length; i++) {
             selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
           }
-          if(!areUnorderedArraysEqual(table.selectedItems, selectedItems)) {
+          if(!ArrayUtil.areUnorderedArraysEqual(table.selectedItems, selectedItems)) {
             table.selectedItems = selectedItems;
           }
         } else {
@@ -1353,21 +1341,6 @@ package org.jspresso.framework.view.flex {
     
     public function get iconTemplate():Class  {
       return _iconTemplate;
-    }
-    
-    public static function areUnorderedArraysEqual(a1:Array, a2:Array):Boolean {
-      if((a1 && !a2) || (a2 && !a1)) {
-        return false;
-      } else if(a1.length != a2.length) {
-        return false;
-      } else {
-        for each (var e:Object in a1) {
-          if(a2.indexOf(e) < 0) {
-            return false;
-          }
-        }
-      }
-      return true;
     }
   }
 }

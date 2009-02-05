@@ -255,10 +255,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
           (targetPeer as RemoteValueState).writable =
             (command as RemoteWritabilityCommand).writable;
         } else if(command is RemoteSelectionCommand) {
-          (targetPeer as RemoteCompositeValueState).selectedIndices =
-            (command as RemoteSelectionCommand).selectedIndices;
           (targetPeer as RemoteCompositeValueState).leadingIndex =
             (command as RemoteSelectionCommand).leadingIndex;
+          (targetPeer as RemoteCompositeValueState).selectedIndices =
+            (command as RemoteSelectionCommand).selectedIndices;
         } else if(command is RemoteEnablementCommand) {
           (targetPeer as RAction).enabled =
             (command as RemoteEnablementCommand).enabled;

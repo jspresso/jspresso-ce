@@ -3,6 +3,7 @@
   <includeClasses>
     <classEntry path="org.jspresso.framework.action.IActionHandler"/>
     <classEntry path="org.jspresso.framework.application.frontend.controller.flex.DefaultFlexController"/>
+    <classEntry path="org.jspresso.framework.util.array.ArrayUtil"/>
     <classEntry path="org.jspresso.framework.util.format.NumberParser"/>
     <classEntry path="org.jspresso.framework.util.format.Parser"/>
     <classEntry path="org.jspresso.framework.util.format.PercentFormatter"/>
@@ -21,6 +22,7 @@
     <classEntry path="org.jspresso.framework.view.flex.RemoteValueDgItemRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.RemoteValueSorter"/>
     <classEntry path="org.jspresso.framework.view.flex.RemoteValueTreeItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.SelectionTrackingTree"/>
     <classEntry path="org.jspresso.framework.view.flex.UIComponentDgItemRenderer"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand"/>
@@ -31,6 +33,7 @@
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand"/>
     <classEntry path="org.jspresso.framework.gui.remote.RAction"/>
     <classEntry path="org.jspresso.framework.gui.remote.RActionField"/>
