@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.backend.action;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.accessor.IListAccessor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
-
 
 /**
  * An action used in master/detail views to create and add a new detail to a
@@ -66,7 +66,8 @@ public abstract class AbstractAddCollectionToMasterAction extends
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
       return false;
@@ -97,12 +98,17 @@ public abstract class AbstractAddCollectionToMasterAction extends
             index = getSelectedIndices(context)[getSelectedIndices(context).length - 1];
           }
         }
+        Collection<?> existingCollection = collectionAccessor.getValue(master);
         for (int i = 0; i < newComponents.size(); i++) {
-          if (index >= 0) {
-            ((IListAccessor) collectionAccessor).addToValue(master, index + 1
-                + i, newComponents.get(i));
-          } else {
-            collectionAccessor.addToValue(master, newComponents.get(i));
+          Object addedComponent = newComponents.get(i);
+          if (existingCollection == null
+              || !existingCollection.contains(addedComponent)) {
+            if (index >= 0) {
+              ((IListAccessor) collectionAccessor).addToValue(master, index + 1
+                  + i, addedComponent);
+            } else {
+              collectionAccessor.addToValue(master, addedComponent);
+            }
           }
         }
         if (!(master instanceof IPropertyChangeCapable)
@@ -128,7 +134,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * in the context.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the entity to add to the collection.
    */
   protected abstract List<?> getAddedComponents(Map<String, Object> context);

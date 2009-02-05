@@ -332,7 +332,7 @@ public abstract class AbstractComponentInvocationHandler implements
       ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
     Object property = straightGetProperty(propertyDescriptor.getName());
     if (property == null) {
-      property = collectionFactory.createEntityCollection(propertyDescriptor
+      property = collectionFactory.createComponentCollection(propertyDescriptor
           .getReferencedDescriptor().getCollectionInterface());
       storeProperty(propertyDescriptor.getName(), property);
     }

@@ -19,13 +19,17 @@
 package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.model.IModelValueConnector;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.model.entity.IEntity;
-
+import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 /**
  * An action used in master/detail views to remove selected details from a
@@ -57,29 +61,52 @@ public class RemoveCollectionFromMasterAction extends
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
       return false;
     }
+    Class<?> elementComponentContract = getModelDescriptor(context)
+        .getCollectionDescriptor().getElementDescriptor()
+        .getComponentContract();
     int[] selectedIndices = getSelectedIndices(context);
     if (selectedIndices != null) {
-      // Traverse the collection reversly for performance reasons.
-      for (int i = selectedIndices.length - 1; i >= 0; i--) {
-        int selectedIndex = selectedIndices[i];
-        IEntity nextDetailToRemove = (IEntity) collectionConnector
-            .getChildConnector(selectedIndex).getConnectorValue();
-        try {
+      Object master = collectionConnector.getParentConnector()
+          .getConnectorValue();
+      ICollectionAccessor collectionAccessor = getAccessorFactory(context)
+          .createCollectionPropertyAccessor(
+              collectionConnector.getId(),
+              ((IModelValueConnector) collectionConnector).getModelProvider()
+                  .getModelDescriptor().getComponentDescriptor()
+                  .getComponentContract(), elementComponentContract);
+      if (collectionAccessor instanceof IModelDescriptorAware) {
+        ((IModelDescriptorAware) collectionAccessor)
+            .setModelDescriptor(getModelDescriptor(context));
+      }
+      try {
+        Collection<?> existingCollection = collectionAccessor.getValue(master);
+        // Traverse the collection reversly for performance reasons.
+        for (int i = selectedIndices.length - 1; i >= 0; i--) {
+          int selectedIndex = selectedIndices[i];
+          IComponent nextDetailToRemove = (IComponent) collectionConnector
+              .getChildConnector(selectedIndex).getConnectorValue();
           cleanRelationshipsOnDeletion(nextDetailToRemove, context, true);
           cleanRelationshipsOnDeletion(nextDetailToRemove, context, false);
-        } catch (IllegalAccessException ex) {
-          throw new ActionException(ex);
-        } catch (InvocationTargetException ex) {
-          throw new ActionException(ex);
-        } catch (NoSuchMethodException ex) {
-          throw new ActionException(ex);
+          if (existingCollection.contains(nextDetailToRemove)) {
+            collectionAccessor.removeFromValue(master, nextDetailToRemove);
+          }
+          if (nextDetailToRemove instanceof IEntity) {
+            getApplicationSession(context).registerForDeletion(
+                (IEntity) nextDetailToRemove);
+          }
         }
-        getApplicationSession(context).registerForDeletion(nextDetailToRemove);
+      } catch (IllegalAccessException ex) {
+        throw new ActionException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new ActionException(ex);
+      } catch (NoSuchMethodException ex) {
+        throw new ActionException(ex);
       }
     }
     return super.execute(actionHandler, context);

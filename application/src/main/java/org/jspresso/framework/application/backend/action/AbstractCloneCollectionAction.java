@@ -19,12 +19,9 @@
 package org.jspresso.framework.application.backend.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 
 
@@ -49,31 +46,26 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCloneCollectionAction extends
-    AbstractCollectionAction {
+    AbstractAddCollectionToMasterAction {
 
   /**
-   * Retrieves the managed collection from the model connector then clones the
-   * selected elements.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  protected List<?> getAddedComponents(Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (selectedIndices == null || selectedIndices.length == 0
         || collectionConnector == null) {
-      return false;
+      return null;
     }
-    Collection<Object> elementClones = new ArrayList<Object>();
+    List<Object> elementClones = new ArrayList<Object>();
     for (int i = 0; i < selectedIndices.length; i++) {
       Object element = collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue();
       elementClones.add(cloneElement(element, context));
     }
-    context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-        .getIndicesOf(collectionConnector, elementClones));
-    return super.execute(actionHandler, context);
+    return elementClones;
   }
 
   /**

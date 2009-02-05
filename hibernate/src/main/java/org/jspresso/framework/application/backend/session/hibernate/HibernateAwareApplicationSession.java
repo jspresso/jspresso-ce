@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -316,16 +315,16 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected Collection<IEntity> wrapDetachedEntityCollection(IEntity entity,
-      Collection<IEntity> transientCollection,
-      Collection<IEntity> snapshotCollection, String role) {
-    Collection<IEntity> varSnapshotCollection = snapshotCollection;
+  protected Collection<IComponent> wrapDetachedCollection(IEntity owner,
+      Collection<IComponent> transientCollection,
+      Collection<IComponent> snapshotCollection, String role) {
+    Collection<IComponent> varSnapshotCollection = snapshotCollection;
     if (!(transientCollection instanceof PersistentCollection)) {
-      if (entity.isPersistent()) {
+      if (owner.isPersistent()) {
         if (transientCollection instanceof Set) {
           PersistentSet persistentSet = new PersistentSet(null,
               (Set<?>) transientCollection);
-          persistentSet.setOwner(entity);
+          persistentSet.setOwner(owner);
           HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
           if (varSnapshotCollection == null) {
             persistentSet.clearDirty();
@@ -334,13 +333,13 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           for (Object snapshotCollectionElement : varSnapshotCollection) {
             snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
           }
-          persistentSet.setSnapshot(entity.getId(), getHibernateRoleName(entity
+          persistentSet.setSnapshot(owner.getId(), getHibernateRoleName(owner
               .getContract(), role), snapshot);
           return persistentSet;
         } else if (transientCollection instanceof List) {
           PersistentList persistentList = new PersistentList(null,
               (List<?>) transientCollection);
-          persistentList.setOwner(entity);
+          persistentList.setOwner(owner);
           ArrayList<Object> snapshot = new ArrayList<Object>();
           if (varSnapshotCollection == null) {
             persistentList.clearDirty();
@@ -349,8 +348,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           for (Object snapshotCollectionElement : varSnapshotCollection) {
             snapshot.add(snapshotCollectionElement);
           }
-          persistentList.setSnapshot(entity.getId(), getHibernateRoleName(
-              entity.getContract(), role), snapshot);
+          persistentList.setSnapshot(owner.getId(), getHibernateRoleName(owner
+              .getContract(), role), snapshot);
           return persistentList;
         }
       }
@@ -361,7 +360,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         ((PersistentCollection) transientCollection).dirty();
       }
     }
-    return super.wrapDetachedEntityCollection(entity, transientCollection,
+    return super.wrapDetachedCollection(owner, transientCollection,
         varSnapshotCollection, role);
   }
 
@@ -386,28 +385,32 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   }
 
   @SuppressWarnings("unchecked")
-  private void lockInHibernate(IEntity entity, Session hibernateSession,
+  private void lockInHibernate(IComponent component, Session hibernateSession,
       Set<IEntity> alreadyLocked) {
-    if (alreadyLocked.add(entity)) {
-      if (entity.isPersistent()) {
-        try {
-          hibernateSession.lock(entity, LockMode.NONE);
-        } catch (Exception ex) {
-          // ex.printStackTrace();
-          hibernateSession.evict(hibernateSession.get(entity.getContract(),
-              entity.getId()));
-          hibernateSession.lock(entity, LockMode.NONE);
+    boolean isEntity = component instanceof IEntity;
+    if (!isEntity || alreadyLocked.add((IEntity) component)) {
+      if (!isEntity || ((IEntity) component).isPersistent()) {
+        if (isEntity) {
+          try {
+            hibernateSession.lock(component, LockMode.NONE);
+          } catch (Exception ex) {
+            // ex.printStackTrace();
+            hibernateSession.evict(hibernateSession.get(
+                component.getContract(), ((IEntity) component).getId()));
+            hibernateSession.lock(component, LockMode.NONE);
+          }
         }
-        Map<String, Object> entityProperties = entity.straightGetProperties();
+        Map<String, Object> entityProperties = component
+            .straightGetProperties();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (Hibernate.isInitialized(property.getValue())) {
             if (property.getValue() instanceof IEntity) {
               lockInHibernate((IEntity) property.getValue(), hibernateSession,
                   alreadyLocked);
             } else if (property.getValue() instanceof Collection) {
-              for (Iterator<IEntity> ite = ((Collection<IEntity>) property
-                  .getValue()).iterator(); ite.hasNext();) {
-                lockInHibernate(ite.next(), hibernateSession, alreadyLocked);
+              for (IComponent element : ((Collection<IComponent>) property
+                  .getValue())) {
+                lockInHibernate(element, hibernateSession, alreadyLocked);
               }
             }
           }

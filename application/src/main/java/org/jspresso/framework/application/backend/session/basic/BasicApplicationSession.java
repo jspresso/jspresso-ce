@@ -70,15 +70,15 @@ import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
  */
 public class BasicApplicationSession implements IApplicationSession {
 
-  private IAccessorFactory                     accessorFactory;
-  private IEntityCloneFactory                  carbonEntityCloneFactory;
-  private IComponentCollectionFactory<IEntity> collectionFactory;
-  private BeanPropertyChangeRecorder           dirtRecorder;
-  private IEntityFactory                       entityFactory;
-  private IEntityRegistry                      entityRegistry;
-  private Locale                               locale;
-  private Subject                              subject;
-  private IEntityUnitOfWork                    unitOfWork;
+  private IAccessorFactory                        accessorFactory;
+  private IEntityCloneFactory                     carbonEntityCloneFactory;
+  private IComponentCollectionFactory<IComponent> collectionFactory;
+  private BeanPropertyChangeRecorder              dirtRecorder;
+  private IEntityFactory                          entityFactory;
+  private IEntityRegistry                         entityRegistry;
+  private Locale                                  locale;
+  private Subject                                 subject;
+  private IEntityUnitOfWork                       unitOfWork;
 
   /**
    * Constructs a new <code>BasicApplicationSession</code> instance.
@@ -220,11 +220,13 @@ public class BasicApplicationSession implements IApplicationSession {
       Object propertyValue = componentOrEntity
           .straightGetProperty(propertyName);
       sortCollectionProperty(componentOrEntity, propertyName);
-      for (Iterator<IEntity> ite = ((Collection<IEntity>) propertyValue)
+      for (Iterator<IComponent> ite = ((Collection<IComponent>) propertyValue)
           .iterator(); ite.hasNext();) {
-        IEntity collectionElement = ite.next();
-        if (isEntityRegisteredForDeletion(collectionElement)) {
-          ite.remove();
+        IComponent collectionElement = ite.next();
+        if (collectionElement instanceof IEntity) {
+          if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
+            ite.remove();
+          }
         }
       }
     }
@@ -378,7 +380,7 @@ public class BasicApplicationSession implements IApplicationSession {
    *          the collectionFactory to set.
    */
   public void setCollectionFactory(
-      IComponentCollectionFactory<IEntity> collectionFactory) {
+      IComponentCollectionFactory<IComponent> collectionFactory) {
     this.collectionFactory = collectionFactory;
   }
 
@@ -448,14 +450,15 @@ public class BasicApplicationSession implements IApplicationSession {
    * @return a transient collection instance with the same interface type as the
    *         parameter.
    */
-  protected Collection<IEntity> createTransientEntityCollection(
+  protected Collection<IComponent> createTransientEntityCollection(
       Collection<?> collection) {
-    Collection<IEntity> uowEntityCollection = null;
+    Collection<IComponent> uowEntityCollection = null;
     if (collection instanceof Set) {
-      uowEntityCollection = collectionFactory.createEntityCollection(Set.class);
+      uowEntityCollection = collectionFactory
+          .createComponentCollection(Set.class);
     } else if (collection instanceof List) {
       uowEntityCollection = collectionFactory
-          .createEntityCollection(List.class);
+          .createComponentCollection(List.class);
     }
     return uowEntityCollection;
   }
@@ -515,7 +518,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * Gives a chance to the session to wrap a collection before making it part of
    * the unit of work.
    * 
-   * @param entity
+   * @param owner
    *          the entity the collection belongs to.
    * @param transientCollection
    *          the transient collection to make part of the unit of work.
@@ -527,9 +530,9 @@ public class BasicApplicationSession implements IApplicationSession {
    * @return the wrapped collection if any (it may be the collection itself as
    *         in this implementation).
    */
-  protected Collection<IEntity> wrapDetachedEntityCollection(IEntity entity,
-      Collection<IEntity> transientCollection,
-      Collection<IEntity> snapshotCollection, String role) {
+  protected Collection<IComponent> wrapDetachedCollection(IEntity owner,
+      Collection<IComponent> transientCollection,
+      Collection<IComponent> snapshotCollection, String role) {
     return transientCollection;
   }
 
@@ -570,24 +573,34 @@ public class BasicApplicationSession implements IApplicationSession {
         }
       } else if (property.getValue() instanceof Collection) {
         if (isInitialized(property.getValue())) {
-          Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
+          Collection<IComponent> uowEntityCollection = createTransientEntityCollection((Collection) property
               .getValue());
-          for (IEntity entityCollectionElement : (Collection<IEntity>) property
+          for (IComponent collectionElement : (Collection<IComponent>) property
               .getValue()) {
-            uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
-                alreadyCloned));
+            if (collectionElement instanceof IEntity) {
+              uowEntityCollection.add(cloneInUnitOfWork(
+                  (IEntity) collectionElement, alreadyCloned));
+            } else {
+              uowEntityCollection.add(cloneComponentInUnitOfWork(
+                  collectionElement, alreadyCloned));
+            }
           }
-          Collection snapshotCollection = (Collection) dirtyProperties
+          Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
               .get(property.getKey());
           if (snapshotCollection != null) {
             Collection clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
-            for (Object snapshotCollectionElement : snapshotCollection) {
-              clonedSnapshotCollection.add(cloneInUnitOfWork(
-                  (IEntity) snapshotCollectionElement, alreadyCloned));
+            for (IComponent snapshotCollectionElement : snapshotCollection) {
+              if (snapshotCollectionElement instanceof IEntity) {
+                clonedSnapshotCollection.add(cloneInUnitOfWork(
+                    (IEntity) snapshotCollectionElement, alreadyCloned));
+              } else {
+                clonedSnapshotCollection.add(cloneComponentInUnitOfWork(
+                    snapshotCollectionElement, alreadyCloned));
+              }
             }
             snapshotCollection = clonedSnapshotCollection;
           }
-          uowEntityCollection = wrapDetachedEntityCollection(entity,
+          uowEntityCollection = wrapDetachedCollection(entity,
               uowEntityCollection, snapshotCollection, property.getKey());
           uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
         } else {
@@ -691,30 +704,35 @@ public class BasicApplicationSession implements IApplicationSession {
                 mergedProperties.put(property.getKey(), property.getValue());
               }
             } else {
-              Collection<IEntity> registeredCollection = (Collection<IEntity>) registeredEntityProperties
+              Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                   .get(property.getKey());
               if (isInitialized(registeredCollection)) {
                 if (property.getValue() instanceof Set) {
                   registeredCollection = collectionFactory
-                      .createEntityCollection(Set.class);
+                      .createComponentCollection(Set.class);
                 } else if (property.getValue() instanceof List) {
                   registeredCollection = collectionFactory
-                      .createEntityCollection(List.class);
+                      .createComponentCollection(List.class);
                 }
-                for (IEntity entityCollectionElement : (Collection<IEntity>) property
+                for (IComponent collectionElement : (Collection<IComponent>) property
                     .getValue()) {
-                  registeredCollection.add(merge(entityCollectionElement,
-                      mergeMode, alreadyMerged));
+                  if (collectionElement instanceof IEntity) {
+                    registeredCollection.add(merge((IEntity) collectionElement,
+                        mergeMode, alreadyMerged));
+                  } else {
+                    registeredCollection.add(mergeComponent(collectionElement,
+                        null, mergeMode, alreadyMerged));
+                  }
                 }
                 if (registeredEntity.isPersistent()) {
-                  Collection<IEntity> snapshotCollection = null;
+                  Collection<IComponent> snapshotCollection = null;
                   Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
                   if (dirtyProperties != null) {
-                    snapshotCollection = (Collection<IEntity>) dirtyProperties
+                    snapshotCollection = (Collection<IComponent>) dirtyProperties
                         .get(property.getKey());
                   }
                   mergedProperties.put(property.getKey(),
-                      wrapDetachedEntityCollection(registeredEntity,
+                      wrapDetachedCollection(registeredEntity,
                           registeredCollection, snapshotCollection, property
                               .getKey()));
                 } else {
