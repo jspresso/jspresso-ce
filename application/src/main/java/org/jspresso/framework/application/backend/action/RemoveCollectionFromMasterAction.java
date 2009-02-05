@@ -67,7 +67,7 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
     }
     int[] selectedIndices = getSelectedIndices(context);
     if (selectedIndices != null) {
-      Class<?> newComponentContract = getModelDescriptor(context)
+      Class<?> elementComponentContract = getModelDescriptor(context)
           .getCollectionDescriptor().getElementDescriptor()
           .getComponentContract();
       Object master = collectionConnector.getParentConnector()
@@ -77,7 +77,7 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
               collectionConnector.getId(),
               ((IModelValueConnector) collectionConnector).getModelProvider()
                   .getModelDescriptor().getComponentDescriptor()
-                  .getComponentContract(), newComponentContract);
+                  .getComponentContract(), elementComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(getModelDescriptor(context));

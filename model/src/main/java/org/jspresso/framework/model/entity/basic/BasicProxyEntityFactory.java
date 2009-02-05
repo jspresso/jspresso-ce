@@ -101,7 +101,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
             .straightSetProperty(
                 propertyDescriptor.getName(),
                 entityCollectionFactory
-                    .createEntityCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .createComponentCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                         .getModelType()));
       } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
           && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {

@@ -61,10 +61,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
-   * Performs necessary cleanings when an entity is deleted.
+   * Performs necessary cleanings when an entity or component is deleted.
    * 
-   * @param entity
-   *          the deleted entity.
+   * @param component
+   *          the deleted entity or component.
    * @param context
    *          The action context.
    * @param dryRun
@@ -76,46 +76,46 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * @throws NoSuchMethodException
    *           whenever this kind of exception occurs.
    */
-  protected void cleanRelationshipsOnDeletion(IEntity entity,
+  protected void cleanRelationshipsOnDeletion(IComponent component,
       Map<String, Object> context, boolean dryRun)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    cleanRelationshipsOnDeletion(entity, context, dryRun,
-        new HashSet<IEntity>());
+    cleanRelationshipsOnDeletion(component, context, dryRun,
+        new HashSet<IComponent>());
   }
 
   @SuppressWarnings("unchecked")
-  private void cleanRelationshipsOnDeletion(IEntity entityOrProxy,
-      Map<String, Object> context, boolean dryRun, Set<IEntity> clearedEntities)
+  private void cleanRelationshipsOnDeletion(IComponent componentOrProxy,
+      Map<String, Object> context, boolean dryRun, Set<IComponent> clearedEntities)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    IEntity entity;
-    if (entityOrProxy instanceof HibernateProxy) {
+    IComponent component;
+    if (componentOrProxy instanceof HibernateProxy) {
       // we must unwrap the proxy to avoid class cast exceptions.
       // see
       // http://forum.hibernate.org/viewtopic.php?p=2323464&sid=cb4ba3a4418276e5d2fbdd6c906ba734
-      entity = (IEntity) ((HibernateProxy) entityOrProxy)
+      component = (IComponent) ((HibernateProxy) componentOrProxy)
           .getHibernateLazyInitializer().getImplementation();
     } else {
-      entity = entityOrProxy;
+      component = componentOrProxy;
     }
-    if (clearedEntities.contains(entity)) {
+    if (clearedEntities.contains(component)) {
       return;
     }
-    clearedEntities.add(entity);
+    clearedEntities.add(component);
     try {
-      entity.setPropertyProcessorsEnabled(false);
-      IComponentDescriptor<?> entityDescriptor = getEntityFactory(context)
-          .getComponentDescriptor(entity.getContract());
-      for (Map.Entry<String, Object> property : entity.straightGetProperties()
+      component.setPropertyProcessorsEnabled(false);
+      IComponentDescriptor<?> componentDescriptor = getEntityFactory(context)
+          .getComponentDescriptor(component.getContract());
+      for (Map.Entry<String, Object> property : component.straightGetProperties()
           .entrySet()) {
         if (property.getValue() != null) {
-          IPropertyDescriptor propertyDescriptor = entityDescriptor
+          IPropertyDescriptor propertyDescriptor = componentDescriptor
               .getPropertyDescriptor(property.getKey());
           if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
             // force initialization of relationship property.
             getAccessorFactory(context).createPropertyAccessor(
-                property.getKey(), entity.getContract()).getValue(entity);
+                property.getKey(), component.getContract()).getValue(component);
             if (propertyDescriptor instanceof IReferencePropertyDescriptor
                 && property.getValue() instanceof IEntity) {
               if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
@@ -142,7 +142,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
                           .getValue(property.getValue());
                       ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
                           .preprocessRemover(property.getValue(),
-                              reverseCollection, entity);
+                              reverseCollection, component);
                     }
                   }
                 } else {
@@ -155,12 +155,12 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
                           .contains(property.getValue()))) {
                     // set to null to clean reverse relation ends
                     getAccessorFactory(context).createPropertyAccessor(
-                        property.getKey(), entity.getContract()).setValue(
-                        entity, null);
+                        property.getKey(), component.getContract()).setValue(
+                            component, null);
                     // but technically reset to original value to avoid
                     // Hibernate
                     // not-null checks
-                    entity.straightSetProperty(property.getKey(), property
+                    component.straightSetProperty(property.getKey(), property
                         .getValue());
                   }
                 }
@@ -168,8 +168,8 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
             } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
               if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                   .isComposition()) {
-                for (IEntity composedEntity : new ArrayList<IEntity>(
-                    (Collection<IEntity>) property.getValue())) {
+                for (IComponent composedEntity : new ArrayList<IComponent>(
+                    (Collection<IComponent>) property.getValue())) {
                   cleanRelationshipsOnDeletion(composedEntity, context, dryRun,
                       clearedEntities);
                 }
@@ -193,13 +193,13 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
                             .getValue(collectionElement);
                         ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
                             .preprocessRemover(collectionElement,
-                                reverseCollection, entity);
+                                reverseCollection, component);
                       }
                     }
                   }
                 } else {
                   getAccessorFactory(context).createPropertyAccessor(
-                      property.getKey(), entity.getContract()).setValue(entity,
+                      property.getKey(), component.getContract()).setValue(component,
                       null);
                 }
               }
@@ -208,7 +208,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         }
       }
     } finally {
-      entity.setPropertyProcessorsEnabled(true);
+      component.setPropertyProcessorsEnabled(true);
     }
   }
 

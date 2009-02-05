@@ -18,15 +18,19 @@
  */
 package org.jspresso.framework.application.backend.action;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.entity.IEntityCloneFactory;
-
 
 /**
- * An action used duplicate a collection of domain objects. Cloning an entity
- * should result in adding it to the collection the action was triggered on.
+ * An action used in master/detail views to create and add a new detail to a
+ * master domain object.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -44,27 +48,35 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CloneEntityCollectionAction extends AbstractCloneCollectionAction {
-
-  private IEntityCloneFactory entityCloneFactory;
+public class AddComponentCollectionToMasterAction extends
+    AbstractAddCollectionToMasterAction {
 
   /**
-   * Sets the entityCloneFactory.
+   * Gets the new entity to add. It is created using the informations contained
+   * in the context.
    * 
-   * @param entityCloneFactory
-   *            the entityCloneFactory to set.
-   */
-  public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
-    this.entityCloneFactory = entityCloneFactory;
-  }
-
-  /**
-   * {@inheritDoc}
+   * @param context
+   *          the action context.
+   * @return the entity to add to the collection.
    */
   @Override
-  protected Object cloneElement(Object element, Map<String, Object> context) {
-    return entityCloneFactory.cloneEntity((IEntity) element,
-        getEntityFactory(context));
+  @SuppressWarnings("unchecked")
+  protected List<?> getAddedComponents(Map<String, Object> context) {
+    IComponentDescriptor elementDescriptor = (IComponentDescriptor) context
+        .get(ActionContextConstants.ELEMENT_DESCRIPTOR);
+    if (elementDescriptor == null) {
+      elementDescriptor = ((ICollectionPropertyDescriptor) getModelDescriptor(context))
+          .getReferencedDescriptor().getElementDescriptor();
+    }
+    IComponent newElement;
+    if (IEntity.class.isAssignableFrom(elementDescriptor.getComponentContract())) {
+      newElement = getEntityFactory(context).createEntityInstance(
+          (Class<? extends IEntity>) elementDescriptor.getComponentContract());
+    } else {
+      newElement = getEntityFactory(context).createComponentInstance(
+          (Class<? extends IComponent>) elementDescriptor
+              .getComponentContract());
+    }
+    return Collections.singletonList(newElement);
   }
-
 }

@@ -53,7 +53,7 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public <E extends IComponent> E cloneComponent(IComponent componentToClone,
+  public <E extends IComponent> E cloneComponent(E componentToClone,
       IEntityFactory entityFactory) {
     E clonedComponent = (E) entityFactory
         .createComponentInstance(componentToClone.getContract());

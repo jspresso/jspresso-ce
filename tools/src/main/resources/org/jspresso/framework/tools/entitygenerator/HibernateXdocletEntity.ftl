@@ -224,6 +224,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#local elementName=elementType[elementType?last_index_of(".")+1..]/>
   <#local isEntity=componentDescriptor.entity/>
+  <#local isElementEntity=elementDescriptor.entity/>
   <#if collectionType="java.util.List">
     <#local hibernateCollectionType="list"/>
   <#elseif collectionType="java.util.Set">
@@ -319,9 +320,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    <#if !isEntity>
    *           foreign-key = "none"
    </#if>
+   <#if isElementEntity>
    * @hibernate.one-to-many
    *           class = "${elementType}"
-     </#if>
+   <#else>
+   * @hibernate.composite-element
+   *           class = "${elementType}"
+   </#if>
+   </#if>
      <#if hibernateCollectionType="list">
    * @hibernate.list-index
    *           column = "${generateSQLName(propertyName)}_SEQ"

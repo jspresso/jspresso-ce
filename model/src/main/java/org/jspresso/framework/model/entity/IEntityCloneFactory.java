@@ -52,7 +52,7 @@ public interface IEntityCloneFactory {
    *            the entity factory to use to create new entities.
    * @return the cloned component.
    */
-  <E extends IComponent> E cloneComponent(IComponent componentToClone,
+  <E extends IComponent> E cloneComponent(E componentToClone,
       IEntityFactory entityFactory);
 
   /**
