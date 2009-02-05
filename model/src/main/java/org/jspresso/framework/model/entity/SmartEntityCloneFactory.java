@@ -67,11 +67,17 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
     E clonedEntity = (E) entityFactory.createEntityInstance(entityToClone
         .getContract());
 
-    IComponentDescriptor componentDescriptor = entityFactory
-        .getComponentDescriptor(entityToClone.getContract());
+    handleRelationships(entityToClone, clonedEntity, entityFactory);
+    return clonedEntity;
+  }
 
-    Map<Object, ICollectionPropertyDescriptor> collRelToUpdate = new HashMap<Object, ICollectionPropertyDescriptor>();
-    for (Map.Entry<String, Object> propertyEntry : entityToClone
+  private <E extends IComponent> void handleRelationships(E componentToClone, E clonedComponent,
+      IEntityFactory entityFactory) {
+    IComponentDescriptor<?> componentDescriptor = entityFactory
+        .getComponentDescriptor(componentToClone.getContract());
+
+    Map<Object, ICollectionPropertyDescriptor<?>> collRelToUpdate = new HashMap<Object, ICollectionPropertyDescriptor<?>>();
+    for (Map.Entry<String, Object> propertyEntry : componentToClone
         .straightGetProperties().entrySet()) {
       if (propertyEntry.getValue() != null
           && !(IEntity.ID.equals(propertyEntry.getKey())
@@ -82,7 +88,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
         if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
           if (propertyEntry.getValue() instanceof IComponent
               && !(propertyEntry.getValue() instanceof IEntity)) {
-            clonedEntity.straightSetProperty(propertyEntry.getKey(),
+            clonedComponent.straightSetProperty(propertyEntry.getKey(),
                 cloneComponent((IComponent) propertyEntry.getValue(),
                     entityFactory));
           } else {
@@ -90,12 +96,12 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                 .getReverseRelationEnd();
             if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
               if (!(reverseDescriptor instanceof IReferencePropertyDescriptor)) {
-                clonedEntity.straightSetProperty(propertyEntry.getKey(),
+                clonedComponent.straightSetProperty(propertyEntry.getKey(),
                     propertyEntry.getValue());
                 if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
                   if (isInitialized(propertyEntry.getValue())) {
                     collRelToUpdate.put(propertyEntry.getValue(),
-                        (ICollectionPropertyDescriptor) reverseDescriptor);
+                        (ICollectionPropertyDescriptor<?>) reverseDescriptor);
                   }
                 }
               }
@@ -104,8 +110,8 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                 // We must force initialization of the collection. So do a get.
                 try {
                   accessorFactory.createPropertyAccessor(
-                      propertyEntry.getKey(), entityToClone.getContract())
-                      .getValue(entityToClone);
+                      propertyEntry.getKey(), componentToClone.getContract())
+                      .getValue(componentToClone);
                 } catch (IllegalAccessException ex) {
                   throw new EntityException(ex);
                 } catch (InvocationTargetException ex) {
@@ -113,45 +119,45 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                 } catch (NoSuchMethodException ex) {
                   throw new EntityException(ex);
                 }
-                for (Object reverseCollectionElement : (Collection) propertyEntry
+                for (Object reverseCollectionElement : (Collection<?>) propertyEntry
                     .getValue()) {
                   if (isInitialized(reverseCollectionElement)) {
                     collRelToUpdate.put(reverseCollectionElement,
-                        (ICollectionPropertyDescriptor) reverseDescriptor);
+                        (ICollectionPropertyDescriptor<?>) reverseDescriptor);
                   }
                 }
               }
             }
           }
         } else {
-          clonedEntity.straightSetProperty(propertyEntry.getKey(),
+          clonedComponent.straightSetProperty(propertyEntry.getKey(),
               propertyEntry.getValue());
         }
       }
     }
-    for (Map.Entry<Object, ICollectionPropertyDescriptor> collectionEntry : collRelToUpdate
+    for (Map.Entry<Object, ICollectionPropertyDescriptor<?>> collectionEntry : collRelToUpdate
         .entrySet()) {
-      ICollectionPropertyDescriptor collectionDescriptor = collectionEntry
+      ICollectionPropertyDescriptor<?> collectionDescriptor = collectionEntry
           .getValue();
-      Class masterContract = null;
+      Class<?> masterContract = null;
       if (collectionDescriptor.getReverseRelationEnd() instanceof IReferencePropertyDescriptor) {
-        masterContract = ((IReferencePropertyDescriptor) collectionDescriptor
+        masterContract = ((IReferencePropertyDescriptor<?>) collectionDescriptor
             .getReverseRelationEnd()).getReferencedDescriptor()
             .getComponentContract();
       } else if (collectionDescriptor.getReverseRelationEnd() instanceof ICollectionPropertyDescriptor) {
-        masterContract = ((ICollectionPropertyDescriptor) collectionDescriptor
+        masterContract = ((ICollectionPropertyDescriptor<?>) collectionDescriptor
             .getReverseRelationEnd()).getReferencedDescriptor()
             .getElementDescriptor().getComponentContract();
       }
       ICollectionAccessor collectionAccessor = accessorFactory
           .createCollectionPropertyAccessor(collectionDescriptor.getName(),
-              masterContract, clonedEntity.getContract());
+              masterContract, clonedComponent.getContract());
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(collectionDescriptor);
       }
       try {
-        collectionAccessor.addToValue(collectionEntry.getKey(), clonedEntity);
+        collectionAccessor.addToValue(collectionEntry.getKey(), clonedComponent);
       } catch (IllegalAccessException ex) {
         throw new EntityException(ex);
       } catch (InvocationTargetException ex) {
@@ -160,7 +166,19 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
         throw new EntityException(ex);
       }
     }
-    return clonedEntity;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public <E extends IComponent> E cloneComponent(E componentToClone,
+      IEntityFactory entityFactory) {
+    E clonedComponent = (E) entityFactory
+        .createComponentInstance(componentToClone.getContract());
+    handleRelationships(componentToClone, clonedComponent, entityFactory);
+    return clonedComponent;
   }
 
   /**
