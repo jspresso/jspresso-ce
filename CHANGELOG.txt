@@ -25,6 +25,7 @@ New features
 2319923  	 Change static constants to typesafe enums
            Support for BigDecimal on decimal property descriptors
            Implemented onLoad lifecycle hook
+           Prepared support for component collection properties as soon as Hibernate gets fixed (see HHH-3275)
 
 2.2.1
 =====
