@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.action;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -63,11 +64,17 @@ public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     IView<E> mainView = getMainView(context);
-    List<IDisplayableAction> actions = getActions(context);
+    List<IDisplayableAction> dActions = getActions(context);
     String title = getI18nName(
         getTranslationProvider(context), getLocale(context));
     E sourceComponent = getSourceComponent(context);
-    getController(context).displayModalDialog(mainView, actions, title, sourceComponent);
+
+    List<G> actions = new ArrayList<G>();
+    for (IDisplayableAction action : dActions) {
+      actions.add(getActionFactory(context).createAction(action,
+          actionHandler, mainView, getLocale(context)));
+    }
+    getController(context).displayModalDialog(mainView.getPeer(), actions, title, sourceComponent);
     return super.execute(actionHandler, context);
   }
 

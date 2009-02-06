@@ -1060,6 +1060,44 @@
   </bean>
 
   <!--
+    Login utils 
+   -->
+  <bean
+    id="loginViewDescriptor"
+    class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
+    <property
+      name="name"
+      value="login.name" />
+    <property name="modelDescriptor">
+    <bean class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
+     <constructor-arg value="org.jspresso.framework.security.UsernamePasswordHandler"/>
+     <property name="propertyDescriptors">
+     <list>
+        <bean
+          class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property
+            name="name"
+            value="name" />
+          <property
+            name="maxLength"
+            value="64" />
+        </bean>
+        <bean
+          class="org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor">
+          <property
+            name="name"
+            value="password" />
+          <property
+            name="maxLength"
+            value="64" />
+        </bean>
+     </list>
+     </property>
+    </bean>
+    </property>
+  </bean>
+
+  <!--
     Standard ready to use modules
   -->
 

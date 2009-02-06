@@ -19,12 +19,16 @@
 package org.jspresso.framework.application.frontend.controller.remote;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -34,6 +38,8 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDia
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
@@ -44,6 +50,7 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.binding.remote.RemoteConnectorFactory;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionList;
@@ -56,6 +63,7 @@ import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
@@ -93,12 +101,14 @@ public class DefaultRemoteController extends
     AbstractFrontendController<RComponent, RIcon, RAction> implements
     IRemoteCommandHandler, IRemotePeerRegistry {
 
-  private IRemotePeerRegistry remotePeerRegistry;
-  private List<RemoteCommand> commandQueue;
-  private boolean             commandRegistrationEnabled;
-  private int                 commandLowPriorityOffset;
-  private IGUIDGenerator      guidGenerator;
-  private Set<String>         workspaceViews;
+  private IRemotePeerRegistry    remotePeerRegistry;
+  private List<RemoteCommand>    commandQueue;
+  private boolean                commandRegistrationEnabled;
+  private int                    commandLowPriorityOffset;
+  private IGUIDGenerator         guidGenerator;
+  private Set<String>            workspaceViews;
+  private IViewDescriptor        loginViewDescriptor;
+  private IModelConnectorFactory modelConnectorFactory;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
@@ -182,30 +192,34 @@ public class DefaultRemoteController extends
    *          the command to handle.
    */
   protected void handleCommand(RemoteCommand command) {
-    IRemotePeer targetPeer = getRegistered(command.getTargetPeerGuid());
-    if (targetPeer == null) {
-      throw new CommandException("Target remote peer could not be retrieved");
-    }
-    if (command instanceof RemoteValueCommand) {
-      ((IValueConnector) targetPeer)
-          .setConnectorValue(((RemoteValueCommand) command).getValue());
-    } else if (command instanceof RemoteSelectionCommand) {
-      ISelectable selectable;
-      if (targetPeer instanceof ICollectionConnectorProvider) {
-        selectable = ((ICollectionConnectorProvider) targetPeer)
-            .getCollectionConnector();
-      } else {
-        selectable = (ISelectable) targetPeer;
-      }
-      selectable.setSelectedIndices(((RemoteSelectionCommand) command)
-          .getSelectedIndices(), ((RemoteSelectionCommand) command)
-          .getLeadingIndex());
-    } else if (command instanceof RemoteActionCommand) {
-      RAction action = (RAction) targetPeer;
-      action.actionPerformed(((RemoteActionCommand) command).getParameter());
+    if (command instanceof RemoteLoginCommand) {
+      performLogin();
     } else {
-      throw new CommandException("Unsupported command type : "
-          + command.getClass().getSimpleName());
+      IRemotePeer targetPeer = getRegistered(command.getTargetPeerGuid());
+      if (targetPeer == null) {
+        throw new CommandException("Target remote peer could not be retrieved");
+      }
+      if (command instanceof RemoteValueCommand) {
+        ((IValueConnector) targetPeer)
+            .setConnectorValue(((RemoteValueCommand) command).getValue());
+      } else if (command instanceof RemoteSelectionCommand) {
+        ISelectable selectable;
+        if (targetPeer instanceof ICollectionConnectorProvider) {
+          selectable = ((ICollectionConnectorProvider) targetPeer)
+              .getCollectionConnector();
+        } else {
+          selectable = (ISelectable) targetPeer;
+        }
+        selectable.setSelectedIndices(((RemoteSelectionCommand) command)
+            .getSelectedIndices(), ((RemoteSelectionCommand) command)
+            .getLeadingIndex());
+      } else if (command instanceof RemoteActionCommand) {
+        RAction action = (RAction) targetPeer;
+        action.actionPerformed(((RemoteActionCommand) command).getParameter());
+      } else {
+        throw new CommandException("Unsupported command type : "
+            + command.getClass().getSimpleName());
+      }
     }
   }
 
@@ -394,18 +408,12 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(IView<RComponent> mainView,
-      List<IDisplayableAction> actions, String title,
-      @SuppressWarnings("unused") RComponent sourceComponent) {
+  public void displayModalDialog(RComponent mainView, List<RAction> actions,
+      String title, @SuppressWarnings("unused") RComponent sourceComponent) {
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
-    dialogCommand.setView(mainView.getPeer());
-    List<RAction> rActions = new ArrayList<RAction>();
-    for (IDisplayableAction action : actions) {
-      rActions.add(getViewFactory().getActionFactory().createAction(action,
-          this, mainView, getLocale()));
-    }
-    dialogCommand.setActions(rActions.toArray(new RAction[0]));
+    dialogCommand.setView(mainView);
+    dialogCommand.setActions(actions.toArray(new RAction[0]));
     registerCommand(dialogCommand);
   }
 
@@ -416,5 +424,91 @@ public class DefaultRemoteController extends
   public void disposeModalDialog(
       @SuppressWarnings("unused") RComponent sourceWidget) {
     registerCommand(new RemoteCloseDialogCommand());
+  }
+
+  private void performLogin() {
+    if (getLoginContextName() != null) {
+      try {
+        LoginContext lc = null;
+        try {
+          lc = new LoginContext(getLoginContextName(),
+              getLoginCallbackHandler());
+        } catch (LoginException le) {
+          System.err.println("Cannot create LoginContext. " + le.getMessage());
+          return;
+        } catch (SecurityException se) {
+          System.err.println("Cannot create LoginContext. " + se.getMessage());
+          return;
+        }
+        lc.login();
+        loginSuccess(lc.getSubject());
+      } catch (LoginException le) {
+        System.err.println("Authentication failed:");
+        System.err.println("  " + le.getMessage());
+      }
+    } else {
+      loginSuccess(getAnonymousSubject());
+    }
+    return;
+  }
+
+  /**
+   * Starts the application login process.
+   * 
+   * @param language
+   *          the client peer locale.
+   * @return the list of login actions.
+   */
+  public List<RemoteCommand> start(String language) {
+    // if (getBackendController() == null) {
+    // IBackendController backController = (IBackendController)
+    // applicationContext
+    // .getBean("applicationBackController");
+    // start(backController, new Locale(language));
+    // loginSuccess(SecurityHelper.createAnonymousSubject());
+    // }
+    Locale startingLocale;
+    if (getForcedStartingLocale() != null) {
+      startingLocale = new Locale(getForcedStartingLocale());
+    } else {
+      startingLocale = new Locale(language);
+    }
+    RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
+    IView<RComponent> loginView = getViewFactory().createView(
+        loginViewDescriptor, this, startingLocale);
+    IValueConnector loginModelConnector = modelConnectorFactory
+        .createModelConnector("login", loginViewDescriptor.getModelDescriptor());
+    getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
+    initLoginCommand.setLoginView(loginView.getPeer());
+    initLoginCommand.setTitle(getTranslationProvider().getTranslation(
+        LoginUtils.CRED_MESSAGE, startingLocale));
+    initLoginCommand.setMessage(getTranslationProvider().getTranslation(
+        LoginUtils.CRED_MESSAGE, startingLocale));
+    initLoginCommand.setOkLabel(getTranslationProvider().getTranslation("ok",
+        startingLocale));
+    initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
+        IIconFactory.SMALL_ICON_SIZE));
+    return Collections.singletonList((RemoteCommand) initLoginCommand);
+  }
+
+  /**
+   * Sets the loginViewDescriptor.
+   * 
+   * @param loginViewDescriptor
+   *          the loginViewDescriptor to set.
+   */
+  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
+    this.loginViewDescriptor = loginViewDescriptor;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
   }
 }

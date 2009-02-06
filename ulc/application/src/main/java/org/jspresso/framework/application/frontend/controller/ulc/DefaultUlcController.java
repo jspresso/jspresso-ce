@@ -462,8 +462,8 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(IView<ULCComponent> mainView,
-      List<IDisplayableAction> actions, String title,
+  public void displayModalDialog(ULCComponent mainView,
+      List<IAction> actions, String title,
       ULCComponent sourceComponent) {
     final ULCDialog dialog;
     ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
@@ -474,10 +474,9 @@ public class DefaultUlcController extends
     buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
 
     ULCExtendedButton defaultButton = null;
-    for (IDisplayableAction action : actions) {
+    for (IAction action : actions) {
       ULCExtendedButton actionButton = new ULCExtendedButton();
-      actionButton.setAction(getViewFactory().getActionFactory().createAction(action,
-          this, mainView, getLocale()));
+      actionButton.setAction(action);
       buttonBox.add(actionButton);
       buttonBox.add(ULCFiller.createHorizontalStrut(10));
       if (defaultButton == null) {
@@ -488,7 +487,7 @@ public class DefaultUlcController extends
     actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
 
     ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
-    mainPanel.add(mainView.getPeer(), ULCBorderLayoutPane.CENTER);
+    mainPanel.add(mainView, ULCBorderLayoutPane.CENTER);
     mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
     dialog.getContentPane().add(mainPanel);
     dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);

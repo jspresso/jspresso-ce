@@ -46,8 +46,6 @@ import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IIconFactory;
-import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.dao.ConcurrencyFailureException;
 
 
@@ -110,8 +108,8 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void displayModalDialog(IView<JComponent> mainView,
-      List<IDisplayableAction> actions, String title, JComponent sourceComponent) {
+  public void displayModalDialog(JComponent mainView,
+      List<Action> actions, String title, JComponent sourceComponent) {
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     if (window instanceof Dialog) {
@@ -124,11 +122,10 @@ public class MockSwingController extends
     buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
     JButton defaultButton = null;
-    for (IDisplayableAction action : actions) {
+    for (Action action : actions) {
       JButton actionButton = new JButton();
       SwingUtil.configureButton(actionButton);
-      actionButton.setAction(getViewFactory().getActionFactory().createAction(
-          action, this, mainView, getLocale()));
+      actionButton.setAction(action);
       buttonBox.add(actionButton);
       buttonBox.add(Box.createHorizontalStrut(10));
       if (defaultButton == null) {
@@ -141,7 +138,7 @@ public class MockSwingController extends
 
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BorderLayout());
-    mainPanel.add(mainView.getPeer(), BorderLayout.CENTER);
+    mainPanel.add(mainView, BorderLayout.CENTER);
     mainPanel.add(actionPanel, BorderLayout.SOUTH);
     dialog.getContentPane().add(mainPanel);
     dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

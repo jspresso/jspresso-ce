@@ -355,8 +355,8 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(IView<SComponent> mainView,
-      List<IDisplayableAction> actions, String title, SComponent sourceComponent) {
+  public void displayModalDialog(SComponent mainView,
+      List<Action> actions, String title, SComponent sourceComponent) {
     final SDialog dialog;
     SFrame window = sourceComponent.getParentFrame();
     dialog = new SDialog(window, title, true);
@@ -366,10 +366,9 @@ public class DefaultWingsController extends
     buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
 
     SButton defaultButton = null;
-    for (IDisplayableAction action : actions) {
+    for (Action action : actions) {
       SButton actionButton = new SButton();
-      actionButton.setAction(getViewFactory().getActionFactory().createAction(
-          action, this, mainView, getLocale()));
+      actionButton.setAction(action);
       buttonBox.add(actionButton);
       buttonBox.add(new SSpacer(10, 10));
       if (defaultButton == null) {
@@ -380,7 +379,7 @@ public class DefaultWingsController extends
     actionPanel.add(buttonBox, SBorderLayout.EAST);
 
     SPanel mainPanel = new SPanel(new SBorderLayout());
-    mainPanel.add(mainView.getPeer(), SBorderLayout.CENTER);
+    mainPanel.add(mainView, SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
     mainPanel.setPreferredSize(DIALOG_DIMENSION);
     dialog.add(mainPanel);

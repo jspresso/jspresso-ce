@@ -1195,10 +1195,12 @@ package org.jspresso.framework.view.flex {
       return textField;
     }
 
-    public function createAction(remoteAction:RAction):UIComponent {
-      var button:Button = new Button();
-	    button.setStyle("icon", getIconForComponent(button, remoteAction.icon));
-		  button.toolTip = remoteAction.description + TOOLTIP_ELLIPSIS;
+    public function createAction(remoteAction:RAction, useLabel:Boolean=false):Button {
+      var label:String = null;
+      if(useLabel) {
+        label = remoteAction.name;
+      }
+      var button:Button = createButton(label, remoteAction.description, remoteAction.icon);
 		  BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
 		  _remotePeerRegistry.register(remoteAction);
 		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
@@ -1207,6 +1209,20 @@ package org.jspresso.framework.view.flex {
       return button;
     }
     
+    public function createButton(label:String, tooltip:String, icon:RIcon):Button {
+      var button:Button = new Button();
+      if(icon) {
+	      button.setStyle("icon", getIconForComponent(button, icon));
+	    }
+	    if(label) {
+		    button.label = label;
+	    }
+	    if(tooltip) {
+		    button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
+		  }
+      return button;
+    }
+
     private function bindTextInput(textInput:TextInput, remoteState:RemoteValueState,
                                    formatter:Formatter = null, parser:Parser = null):void {
       

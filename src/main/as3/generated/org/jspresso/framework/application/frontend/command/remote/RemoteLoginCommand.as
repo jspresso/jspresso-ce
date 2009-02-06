@@ -13,11 +13,11 @@
  */
 
 
-package org.jspresso.framework.gui.remote {
+package org.jspresso.framework.application.frontend.command.remote {
 
 		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RPasswordField")]
-    public class RPasswordField extends RTextField {
+    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand")]
+    public class RemoteLoginCommand extends RemoteCommand {
 
     }
 }

@@ -37,7 +37,7 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RPasswordField extends RComponent {
+public class RPasswordField extends RTextField {
 
   /**
    * Constructs a new <code>RPasswordField</code> instance.

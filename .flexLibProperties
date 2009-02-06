@@ -26,9 +26,13 @@
     <classEntry path="org.jspresso.framework.view.flex.UIComponentDgItemRenderer"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand"/>

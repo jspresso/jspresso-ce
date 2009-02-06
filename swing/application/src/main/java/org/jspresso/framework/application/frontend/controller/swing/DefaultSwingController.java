@@ -556,8 +556,8 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void displayModalDialog(IView<JComponent> mainView,
-      List<IDisplayableAction> actions, String title, JComponent sourceComponent) {
+  public void displayModalDialog(JComponent mainView,
+      List<Action> actions, String title, JComponent sourceComponent) {
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     if (window instanceof Dialog) {
@@ -570,11 +570,10 @@ public class DefaultSwingController extends
     buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
     JButton defaultButton = null;
-    for (IDisplayableAction action : actions) {
+    for (Action action : actions) {
       JButton actionButton = new JButton();
       SwingUtil.configureButton(actionButton);
-      actionButton.setAction(getViewFactory().getActionFactory().createAction(
-          action, this, mainView, getLocale()));
+      actionButton.setAction(action);
       buttonBox.add(actionButton);
       buttonBox.add(Box.createHorizontalStrut(10));
       if (defaultButton == null) {
@@ -587,7 +586,7 @@ public class DefaultSwingController extends
 
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BorderLayout());
-    mainPanel.add(mainView.getPeer(), BorderLayout.CENTER);
+    mainPanel.add(mainView, BorderLayout.CENTER);
     mainPanel.add(actionPanel, BorderLayout.SOUTH);
     dialog.getContentPane().add(mainPanel);
     dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

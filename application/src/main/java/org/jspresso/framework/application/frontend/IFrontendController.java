@@ -26,11 +26,9 @@ import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
-import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IActionable;
-import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * General contract of frontend (view) application controllers.
@@ -123,7 +121,7 @@ public interface IFrontendController<E, F, G> extends IController,
    * @param sourceComponent
    *          the source component.
    */
-  void displayModalDialog(IView<E> mainView, List<IDisplayableAction> actions,
+  void displayModalDialog(E mainView, List<G> actions,
       String title, E sourceComponent);
 
   /**
