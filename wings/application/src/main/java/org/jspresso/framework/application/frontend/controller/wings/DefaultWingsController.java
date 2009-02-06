@@ -38,6 +38,7 @@ import org.jspresso.framework.gui.wings.components.SErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.wings.WingsUtil;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
@@ -47,9 +48,13 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SButton;
 import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SConstants;
+import org.wings.SContainer;
+import org.wings.SDialog;
 import org.wings.SDimension;
 import org.wings.SFrame;
 import org.wings.SIcon;
@@ -58,6 +63,8 @@ import org.wings.SMenuBar;
 import org.wings.SMenuItem;
 import org.wings.SOptionPane;
 import org.wings.SPanel;
+import org.wings.SSpacer;
+import org.wings.border.SEmptyBorder;
 import org.wings.border.SLineBorder;
 import org.wings.session.SessionManager;
 
@@ -84,13 +91,15 @@ import org.wings.session.SessionManager;
 public class DefaultWingsController extends
     AbstractFrontendController<SComponent, SIcon, Action> {
 
-  private SPanel      cardPanel;
+  private SPanel                  cardPanel;
 
-  private SFrame      controllerFrame;
-  private String      frameHeight = "768px";
+  private SFrame                  controllerFrame;
+  private String                  frameHeight      = "768px";
 
-  private String      frameWidth  = "95%";
-  private Set<String> workspaceViews;
+  private String                  frameWidth       = "95%";
+  private Set<String>             workspaceViews;
+  private static final SDimension DIALOG_DIMENSION = new SDimension("800px",
+                                                       "600px");
 
   /**
    * {@inheritDoc}
@@ -339,6 +348,58 @@ public class DefaultWingsController extends
     } else {
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
           getLocale()));
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayModalDialog(IView<SComponent> mainView,
+      List<IDisplayableAction> actions, String title, SComponent sourceComponent) {
+    final SDialog dialog;
+    SFrame window = sourceComponent.getParentFrame();
+    dialog = new SDialog(window, title, true);
+    dialog.setDraggable(true);
+
+    SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
+    buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
+
+    SButton defaultButton = null;
+    for (IDisplayableAction action : actions) {
+      SButton actionButton = new SButton();
+      actionButton.setAction(getViewFactory().getActionFactory().createAction(
+          action, this, mainView, getLocale()));
+      buttonBox.add(actionButton);
+      buttonBox.add(new SSpacer(10, 10));
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
+    }
+    SPanel actionPanel = new SPanel(new SBorderLayout());
+    actionPanel.add(buttonBox, SBorderLayout.EAST);
+
+    SPanel mainPanel = new SPanel(new SBorderLayout());
+    mainPanel.add(mainView.getPeer(), SBorderLayout.CENTER);
+    mainPanel.add(actionPanel, SBorderLayout.SOUTH);
+    mainPanel.setPreferredSize(DIALOG_DIMENSION);
+    dialog.add(mainPanel);
+    if (defaultButton != null) {
+      dialog.setDefaultButton(defaultButton);
+    }
+    dialog.setVisible(true);
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void disposeModalDialog(SComponent sourceWidget) {
+    SContainer actionWindow = WingsUtil.getVisibleWindow(sourceWidget);
+    if (actionWindow instanceof SDialog) {
+      ((SDialog) actionWindow).dispose();
     }
   }
 }

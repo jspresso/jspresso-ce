@@ -18,20 +18,36 @@
  */
 package org.jspresso.framework.tools.viewtester;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Window;
+import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.swing.Action;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.dao.ConcurrencyFailureException;
 
 
@@ -89,6 +105,63 @@ public class MockSwingController extends
       ex.printStackTrace();
     }
     return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayModalDialog(IView<JComponent> mainView,
+      List<IDisplayableAction> actions, String title, JComponent sourceComponent) {
+    final JDialog dialog;
+    Window window = SwingUtil.getVisibleWindow(sourceComponent);
+    if (window instanceof Dialog) {
+      dialog = new JDialog((Dialog) window, title, true);
+    } else {
+      dialog = new JDialog((Frame) window, title, true);
+    }
+
+    Box buttonBox = new Box(BoxLayout.LINE_AXIS);
+    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+
+    JButton defaultButton = null;
+    for (IDisplayableAction action : actions) {
+      JButton actionButton = new JButton();
+      SwingUtil.configureButton(actionButton);
+      actionButton.setAction(getViewFactory().getActionFactory().createAction(
+          action, this, mainView, getLocale()));
+      buttonBox.add(actionButton);
+      buttonBox.add(Box.createHorizontalStrut(10));
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
+    }
+    JPanel actionPanel = new JPanel();
+    actionPanel.setLayout(new BorderLayout());
+    actionPanel.add(buttonBox, BorderLayout.EAST);
+
+    JPanel mainPanel = new JPanel();
+    mainPanel.setLayout(new BorderLayout());
+    mainPanel.add(mainView.getPeer(), BorderLayout.CENTER);
+    mainPanel.add(actionPanel, BorderLayout.SOUTH);
+    dialog.getContentPane().add(mainPanel);
+    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    if (defaultButton != null) {
+      dialog.getRootPane().setDefaultButton(defaultButton);
+    }
+    dialog.pack();
+    SwingUtil.centerInParent(dialog);
+    dialog.setVisible(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void disposeModalDialog(JComponent sourceWidget) {
+    Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
+    if (actionWindow instanceof Dialog) {
+      actionWindow.dispose();
+    }
   }
 
   /**

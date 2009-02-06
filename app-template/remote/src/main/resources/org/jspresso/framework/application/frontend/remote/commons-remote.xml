@@ -135,14 +135,6 @@
     class="org.jspresso.framework.application.frontend.action.remote.wizard.WizardAction" />
 
   <bean
-    id="modalDialogAction"
-    class="org.jspresso.framework.application.frontend.action.remote.std.ModalDialogAction" />
-
-  <bean
-    id="closeDialogAction"
-    class="org.jspresso.framework.application.frontend.action.remote.std.CloseDialogAction" />
-
-  <bean
     id="viewFactory"
     class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
     parent="abstractViewFactory"

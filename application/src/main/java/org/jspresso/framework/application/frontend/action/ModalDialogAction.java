@@ -16,17 +16,18 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.swing.std;
+package org.jspresso.framework.application.frontend.action;
 
+import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
-
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
- * A standard close dialog action. Since it is a chained action, it can be chained with
- * another action.
+ * A generic modal dialog action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,18 +42,58 @@ import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAct
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision: 1249 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class CloseDialogAction extends AbstractSwingAction {
+public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
 
   /**
+   * Shows a modal dialog containig a main view and a button panel with the list
+   * of registered actions.
+   * <p>
    * {@inheritDoc}
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    closeDialog(context);
+    IView<E> mainView = getMainView(context);
+    List<IDisplayableAction> actions = getActions(context);
+    String title = getI18nName(
+        getTranslationProvider(context), getLocale(context));
+    E sourceComponent = getSourceComponent(context);
+    getController(context).displayModalDialog(mainView, actions, title, sourceComponent);
     return super.execute(actionHandler, context);
   }
+
+  /**
+   * Gets the actions.
+   * 
+   * @param context
+   *          the action context.
+   * @return the actions.
+   */
+  @SuppressWarnings("unchecked")
+  public List<IDisplayableAction> getActions(Map<String, Object> context) {
+    return (List<IDisplayableAction>) context
+        .get(ActionContextConstants.DIALOG_ACTIONS);
+  }
+
+  /**
+   * Gets the mainView.
+   * 
+   * @param context
+   *          the action context.
+   * @return the mainView.
+   */
+  @SuppressWarnings("unchecked")
+  public IView<E> getMainView(Map<String, Object> context) {
+    return (IView<E>) context.get(ActionContextConstants.DIALOG_VIEW);
+  }
+
 }

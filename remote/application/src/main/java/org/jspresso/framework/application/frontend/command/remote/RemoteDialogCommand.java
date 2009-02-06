@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,19 +16,15 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.remote.std;
+package org.jspresso.framework.application.frontend.command.remote;
 
-import java.util.Map;
-
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
-
+import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RComponent;
 
 /**
- * A standard close dialog action. Since it is a chained action, it can be chained with
- * another action.
+ * A command to trigger a modal remote dialog pop-up.
  * <p>
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -41,18 +37,67 @@ import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteA
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision: 1249 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CloseDialogAction extends AbstractRemoteAction {
+public class RemoteDialogCommand extends RemoteCommand {
 
+  private String     title;
+  private RComponent view;
+  private RAction[]  actions;
+  
   /**
-   * {@inheritDoc}
+   * Gets the title.
+   * 
+   * @return the title.
    */
-  @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    closeDialog(context);
-    return super.execute(actionHandler, context);
+  public String getTitle() {
+    return title;
   }
+  
+  /**
+   * Sets the title.
+   * 
+   * @param title the title to set.
+   */
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  
+  /**
+   * Gets the view.
+   * 
+   * @return the view.
+   */
+  public RComponent getView() {
+    return view;
+  }
+  
+  /**
+   * Sets the view.
+   * 
+   * @param view the view to set.
+   */
+  public void setView(RComponent view) {
+    this.view = view;
+  }
+  
+  /**
+   * Gets the actions.
+   * 
+   * @return the actions.
+   */
+  public RAction[] getActions() {
+    return actions;
+  }
+  
+  /**
+   * Sets the actions.
+   * 
+   * @param actions the actions to set.
+   */
+  public void setActions(RAction[] actions) {
+    this.actions = actions;
+  }
+
 }

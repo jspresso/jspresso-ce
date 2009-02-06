@@ -134,14 +134,6 @@
     class="org.jspresso.framework.application.frontend.action.wings.wizard.WizardAction" />
 
   <bean
-    id="modalDialogAction"
-    class="org.jspresso.framework.application.frontend.action.wings.std.ModalDialogAction" />
-
-  <bean
-    id="closeDialogAction"
-    class="org.jspresso.framework.application.frontend.action.wings.std.CloseDialogAction" />
-
-  <bean
     id="viewFactory"
     parent="abstractViewFactory"
     class="org.jspresso.framework.view.wings.DefaultWingsViewFactory"

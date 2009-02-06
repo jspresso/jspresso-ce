@@ -36,6 +36,7 @@ import org.jspresso.framework.application.frontend.controller.AbstractFrontendCo
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.ulc.components.server.ULCErrorDialog;
+import org.jspresso.framework.gui.ulc.components.server.ULCExtendedButton;
 import org.jspresso.framework.gui.ulc.components.server.ULCExtendedInternalFrame;
 import org.jspresso.framework.gui.ulc.components.server.event.ExtendedInternalFrameEvent;
 import org.jspresso.framework.gui.ulc.components.server.event.IExtendedInternalFrameListener;
@@ -58,18 +59,24 @@ import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCAlert;
+import com.ulcjava.base.application.ULCBorderLayoutPane;
+import com.ulcjava.base.application.ULCBoxLayoutPane;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
+import com.ulcjava.base.application.ULCDialog;
 import com.ulcjava.base.application.ULCFiller;
 import com.ulcjava.base.application.ULCFrame;
 import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
 import com.ulcjava.base.application.ULCPollingTimer;
+import com.ulcjava.base.application.ULCWindow;
+import com.ulcjava.base.application.border.ULCEmptyBorder;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
 import com.ulcjava.base.application.event.serializable.IWindowListener;
+import com.ulcjava.base.application.util.Insets;
 import com.ulcjava.base.application.util.ULCIcon;
 import com.ulcjava.base.shared.IWindowConstants;
 
@@ -448,6 +455,58 @@ public class DefaultUlcController extends
     } else {
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
           getLocale()));
+    }
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayModalDialog(IView<ULCComponent> mainView,
+      List<IDisplayableAction> actions, String title,
+      ULCComponent sourceComponent) {
+    final ULCDialog dialog;
+    ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
+    dialog = new ULCDialog(window, title, true);
+
+    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
+        ULCBoxLayoutPane.LINE_AXIS);
+    buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
+
+    ULCExtendedButton defaultButton = null;
+    for (IDisplayableAction action : actions) {
+      ULCExtendedButton actionButton = new ULCExtendedButton();
+      actionButton.setAction(getViewFactory().getActionFactory().createAction(action,
+          this, mainView, getLocale()));
+      buttonBox.add(actionButton);
+      buttonBox.add(ULCFiller.createHorizontalStrut(10));
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
+    }
+    ULCBorderLayoutPane actionPanel = new ULCBorderLayoutPane();
+    actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
+
+    ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
+    mainPanel.add(mainView.getPeer(), ULCBorderLayoutPane.CENTER);
+    mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
+    dialog.getContentPane().add(mainPanel);
+    dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    if (defaultButton != null) {
+      dialog.getRootPane().setDefaultButton(defaultButton);
+    }
+    dialog.pack();
+    dialog.setVisible(true);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void disposeModalDialog(ULCComponent sourceWidget) {
+    ULCWindow actionWindow = UlcUtil.getVisibleWindow(sourceWidget);
+    if (actionWindow instanceof ULCDialog) {
+      actionWindow.setVisible(false);
     }
   }
 

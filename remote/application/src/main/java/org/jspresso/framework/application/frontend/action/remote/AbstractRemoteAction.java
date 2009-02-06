@@ -18,14 +18,10 @@
  */
 package org.jspresso.framework.application.frontend.action.remote;
 
-import java.util.Map;
-
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.action.WrappingAction;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
-
 
 /**
  * This class serves as base class for remote actions. It provides accessors on
@@ -50,38 +46,5 @@ import org.jspresso.framework.gui.remote.RIcon;
 public abstract class AbstractRemoteAction extends
     WrappingAction<RComponent, RIcon, RAction> {
 
-  /**
-   * Retrieves the widget which triggered the action from the action context.
-   * 
-   * @param context
-   *            the action context.
-   * @return the widget which triggered the action.
-   */
-  public RComponent getActionWidget(Map<String, Object> context) {
-    return (RComponent) context.get(ActionContextConstants.ACTION_WIDGET);
-  }
-
-  /**
-   * Retrieves the widget this action was triggered from. It may serve to
-   * determine the root window or dialog for instance. It uses a well-known
-   * action context key which is :
-   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
-   * 
-   * @param context
-   *            the action context.
-   * @return the source widget this action was triggered from.
-   */
-  public RComponent getSourceComponent(Map<String, Object> context) {
-    return (RComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
-  }
-
-  /**
-   * If the ancestor of the action widget is a dialog, dispose it.
-   * 
-   * @param context
-   *            the action context.
-   */
-  protected void closeDialog(Map<String, Object> context) {
-    //TODO complete
-  }
+  // NO-OP.
 }

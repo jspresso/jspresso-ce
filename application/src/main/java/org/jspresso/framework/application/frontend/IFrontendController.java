@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.jspresso.framework.action.IAction;
@@ -25,9 +26,11 @@ import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IActionable;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * General contract of frontend (view) application controllers.
@@ -99,7 +102,7 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale startingLocale);
-  
+
   /**
    * Displays a workspace.
    * 
@@ -107,4 +110,27 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the workspace identifier.
    */
   void displayWorkspace(String workspaceName);
+
+  /**
+   * Displays a modal dialog.
+   * 
+   * @param mainView
+   *          the view to install in the modal dialog.
+   * @param actions
+   *          the actions available in the dialog.
+   * @param title
+   *          the dialog title.
+   * @param sourceComponent
+   *          the source component.
+   */
+  void displayModalDialog(IView<E> mainView, List<IDisplayableAction> actions,
+      String title, E sourceComponent);
+
+  /**
+   * Disposes a modal dialog.
+   * 
+   * @param sourceWidget
+   *          the source widget.
+   */
+  void disposeModalDialog(E sourceWidget);
 }

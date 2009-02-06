@@ -2,10 +2,6 @@ package org.jspresso.framework.security;
 
 import java.io.IOException;
 
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.NameCallback;
-import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletConfig;
@@ -88,8 +84,9 @@ public class LoginServlet extends HttpServlet {
       }
 
       // create a JAAS callback handler and hand it over username and password
-      CallbackHandler callbackHandler = new UserPasswordHandler(username,
-          password);
+      UsernamePasswordHandler callbackHandler = new UsernamePasswordHandler();
+      callbackHandler.setUsername(username);
+      callbackHandler.setPassword(password);
 
       // perform the JAAS login; it will callback on the callbackHandler to
       // obtain
@@ -136,40 +133,6 @@ public class LoginServlet extends HttpServlet {
     errorRedirectUrl = config.getInitParameter(ERROR_PARAM_NAME);
     if (errorRedirectUrl == null) {
       errorRedirectUrl = ERROR_DEFAULT;
-    }
-  }
-
-  /**
-   * Simple JAAS callback handler that provides username and password.
-   */
-  private static final class UserPasswordHandler implements CallbackHandler {
-
-    private char[] password;
-    private String username;
-
-    /**
-     * Constructs a callback handler.
-     */
-    private UserPasswordHandler(String username, String password) {
-      this.username = username;
-      this.password = password.toCharArray();
-    }
-
-    /**
-     * Handles the JAAS callbacks.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void handle(Callback[] callbacks) {
-      for (int i = 0; i < callbacks.length; i++) {
-        if (callbacks[i] instanceof NameCallback) {
-          ((NameCallback) callbacks[i]).setName(username);
-        } else if (callbacks[i] instanceof PasswordCallback) {
-          ((PasswordCallback) callbacks[i]).setPassword(password);
-          // } else {
-          // throw new UnsupportedCallbackException(callbacks[i]);
-        }
-      }
     }
   }
 }

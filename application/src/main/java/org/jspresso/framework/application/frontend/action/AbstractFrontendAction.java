@@ -375,4 +375,31 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
   }
+
+  /**
+   * Retrieves the widget this action was triggered from. It may serve to
+   * determine the root window or dialog for instance. It uses a well-known
+   * action context key which is :
+   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
+   * 
+   * @param context
+   *            the action context.
+   * @return the source widget this action was triggered from.
+   */
+  @SuppressWarnings("unchecked")
+  public E getSourceComponent(Map<String, Object> context) {
+    return (E) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  }
+
+  /**
+   * Retrieves the widget which triggered the action from the action context.
+   * 
+   * @param context
+   *            the action context.
+   * @return the widget which triggered the action.
+   */
+  @SuppressWarnings("unchecked")
+  public E getActionWidget(Map<String, Object> context) {
+    return (E) context.get(ActionContextConstants.ACTION_WIDGET);
+  }
 }

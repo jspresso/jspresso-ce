@@ -20,6 +20,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.collections.IList;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Canvas;
+  import mx.containers.HBox;
+  import mx.containers.Panel;
+  import mx.containers.VBox;
   import mx.containers.ViewStack;
   import mx.controls.Alert;
   import mx.controls.Button;
@@ -27,8 +30,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
+  import mx.core.IFlexDisplayObject;
   import mx.core.UIComponent;
   import mx.events.MenuEvent;
+  import mx.managers.PopUpManager;
   import mx.rpc.events.FaultEvent;
   import mx.rpc.events.ResultEvent;
   import mx.rpc.remoting.mxml.Operation;
@@ -37,7 +42,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
@@ -71,6 +78,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _commandRegistrationEnabled:Boolean;
     private var _workspaceViewStack:ViewStack;
     private var _postponedCommands:Object;
+    private var _dialogStack:Array;
     
     public function DefaultFlexController(remoteController:RemoteObject) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -79,6 +87,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
       _commandRegistrationEnabled = true;
+      _dialogStack = new Array();
       initRemoteController();
     }
     
@@ -220,6 +229,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
         if(messageCommand.titleIcon) {
           var titleIcon:Class = _viewFactory.getIconForComponent(alert, messageCommand.titleIcon);
           alert.titleIcon = titleIcon;
+        }
+      } else if(command is RemoteDialogCommand) {
+        var dialogCommand:RemoteDialogCommand = command as RemoteDialogCommand;
+        popupDialog(dialogCommand.title, dialogCommand.view, dialogCommand.actions);
+      } else if(command is RemoteCloseDialogCommand) {
+        if(_dialogStack && _dialogStack.length > 0) {
+          PopUpManager.removePopUp(_dialogStack.pop() as IFlexDisplayObject);
         }
       } else if(command is RemoteInitCommand) {
         var initCommand:RemoteInitCommand = command as RemoteInitCommand;
@@ -468,6 +484,32 @@ package org.jspresso.framework.application.frontend.controller.flex {
         cardCanvas.addChild(workspace) ;
       }
       _workspaceViewStack.selectedChild = _workspaceViewStack.getChildByName(workspaceName) as Container;
+    }
+    
+    private function popupDialog(title:String, view:RComponent, actions:Array):void {
+      var dialogView:UIComponent = _viewFactory.createComponent(view);
+      dialogView.percentWidth = 100.0;
+      dialogView.percentHeight = 100.0;
+      var buttonBox:HBox = new HBox();
+      buttonBox.setStyle("horizontalAlign","right");
+      buttonBox.percentWidth = 100.0;
+      for each(var action:RAction in actions) {
+        buttonBox.addChild(_viewFactory.createAction(action));
+      }
+      var dialogBox:VBox = new VBox();
+      dialogBox.addChild(dialogView);
+      dialogBox.addChild(buttonBox);
+      
+      var dialogParent:DisplayObject;
+      if(_dialogStack && _dialogStack.length > 0) {
+        dialogParent = _dialogStack[_dialogStack.length -1];
+      } else {
+        dialogParent = Application.application as DisplayObject;
+      }
+      var dialog:Panel = PopUpManager.createPopUp(dialogParent,Panel,true) as Panel;
+      dialog.title = title;
+      PopUpManager.centerPopUp(dialog);
+      _dialogStack.push(dialog);
     }
   }
 }

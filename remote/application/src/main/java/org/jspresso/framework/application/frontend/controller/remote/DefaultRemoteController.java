@@ -30,7 +30,9 @@ import org.jspresso.framework.application.frontend.command.remote.CommandExcepti
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
@@ -48,6 +50,7 @@ import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.lang.ObjectUtils;
@@ -110,7 +113,7 @@ public class DefaultRemoteController extends
    */
   @Override
   protected CallbackHandler createLoginCallbackHandler() {
-    return null;
+    return new UsernamePasswordHandler();
   }
 
   /**
@@ -385,5 +388,33 @@ public class DefaultRemoteController extends
       workspaceDisplayCommand.setWorkspaceName(workspaceName);
       registerCommand(workspaceDisplayCommand);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayModalDialog(IView<RComponent> mainView,
+      List<IDisplayableAction> actions, String title,
+      @SuppressWarnings("unused") RComponent sourceComponent) {
+    RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
+    dialogCommand.setTitle(title);
+    dialogCommand.setView(mainView.getPeer());
+    List<RAction> rActions = new ArrayList<RAction>();
+    for (IDisplayableAction action : actions) {
+      rActions.add(getViewFactory().getActionFactory().createAction(action,
+          this, mainView, getLocale()));
+    }
+    dialogCommand.setActions(rActions.toArray(new RAction[0]));
+    registerCommand(dialogCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void disposeModalDialog(
+      @SuppressWarnings("unused") RComponent sourceWidget) {
+    registerCommand(new RemoteCloseDialogCommand());
   }
 }

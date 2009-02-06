@@ -16,17 +16,15 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.wings.std;
+package org.jspresso.framework.application.frontend.action;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction;
-
 
 /**
- * A standard close dialog action. Since it is a chained action, it can be chained with
- * another action.
+ * A standard close dialog action. Since it is a chained action, it can be
+ * chained with another action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,10 +39,16 @@ import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAct
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision: 1249 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class CloseDialogAction extends AbstractWingsAction {
+public class CloseDialogAction<E, F, G> extends WrappingAction<E, F, G> {
 
   /**
    * {@inheritDoc}
@@ -52,7 +56,7 @@ public class CloseDialogAction extends AbstractWingsAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    closeDialog(context);
+    getController(context).disposeModalDialog(getActionWidget(context));
     return super.execute(actionHandler, context);
   }
 }

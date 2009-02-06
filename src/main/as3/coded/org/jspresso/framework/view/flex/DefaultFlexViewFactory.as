@@ -1067,6 +1067,7 @@ package org.jspresso.framework.view.flex {
                                     editorComponent.maxWidth),
                            table.measureText(column.headerText).width + 16
                          );
+          editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
         }
         column.editorDataField = "state";
         
@@ -1194,7 +1195,7 @@ package org.jspresso.framework.view.flex {
       return textField;
     }
 
-    private function createAction(remoteAction:RAction):UIComponent {
+    public function createAction(remoteAction:RAction):UIComponent {
       var button:Button = new Button();
 	    button.setStyle("icon", getIconForComponent(button, remoteAction.icon));
 		  button.toolTip = remoteAction.description + TOOLTIP_ELLIPSIS;

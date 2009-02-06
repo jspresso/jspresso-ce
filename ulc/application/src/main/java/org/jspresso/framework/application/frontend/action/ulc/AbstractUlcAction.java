@@ -18,16 +18,10 @@
  */
 package org.jspresso.framework.application.frontend.action.ulc;
 
-import java.util.Map;
-
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.action.WrappingAction;
-import org.jspresso.framework.util.ulc.UlcUtil;
 
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCComponent;
-import com.ulcjava.base.application.ULCDialog;
-import com.ulcjava.base.application.ULCWindow;
 import com.ulcjava.base.application.util.ULCIcon;
 
 /**
@@ -53,41 +47,5 @@ import com.ulcjava.base.application.util.ULCIcon;
 public abstract class AbstractUlcAction extends
     WrappingAction<ULCComponent, ULCIcon, IAction> {
 
-  /**
-   * Retrieves the widget which triggered the action from the action context.
-   * 
-   * @param context
-   *            the action context.
-   * @return the widget which triggered the action.
-   */
-  public ULCComponent getActionWidget(Map<String, Object> context) {
-    return (ULCComponent) context.get(ActionContextConstants.ACTION_WIDGET);
-  }
-
-  /**
-   * Retrieves the widget this action was triggered from. It may serve to
-   * determine the root window or dialog for instance. It uses a well-known
-   * action context key which is :
-   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
-   * 
-   * @param context
-   *            the action context.
-   * @return the source widget this action was triggered from.
-   */
-  public ULCComponent getSourceComponent(Map<String, Object> context) {
-    return (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
-  }
-
-  /**
-   * If the ancestor of the action widget is a dialog, dispose it.
-   * 
-   * @param context
-   *            the action context.
-   */
-  protected void closeDialog(Map<String, Object> context) {
-    ULCWindow actionWindow = UlcUtil.getVisibleWindow(getActionWidget(context));
-    if (actionWindow instanceof ULCDialog) {
-      actionWindow.setVisible(false);
-    }
-  }
+  // NO-OP
 }

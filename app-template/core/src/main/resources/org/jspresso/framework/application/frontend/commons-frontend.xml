@@ -325,6 +325,14 @@
   </bean>
 
   <bean
+    id="modalDialogAction"
+    class="org.jspresso.framework.application.frontend.action.ModalDialogAction" />
+
+  <bean
+    id="closeDialogAction"
+    class="org.jspresso.framework.application.frontend.action.CloseDialogAction" />
+
+  <bean
     id="abstractWizardAction"
     abstract="true">
     <property
