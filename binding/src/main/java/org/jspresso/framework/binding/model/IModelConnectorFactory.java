@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.binding.model;
 
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -54,7 +53,7 @@ public interface IModelConnectorFactory {
    *          the model descriptor to create the connector for.
    * @return the created model connector.
    */
-  IValueConnector createModelConnector(String id,
+  IModelValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor);
 
   /**
@@ -67,7 +66,7 @@ public interface IModelConnectorFactory {
    *          the model type to create the connector for.
    * @return the created model connector.
    */
-  IValueConnector createModelConnector(String id,
+  IModelValueConnector createModelConnector(String id,
       Class<? extends IComponent> componentContract);
 
   /**
