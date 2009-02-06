@@ -228,7 +228,7 @@ package org.jspresso.framework.view.flex {
     }
     
     private function createContainer(remoteContainer:RContainer):UIComponent {
-      var container:UIComponent;
+      var container:Container;
       if(remoteContainer is RBorderContainer) {
         container = createBorderContainer(remoteContainer as RBorderContainer);
       } else if(remoteContainer is RCardContainer) {
@@ -244,6 +244,8 @@ package org.jspresso.framework.view.flex {
       } else if(remoteContainer is RTabContainer) {
         container = createTabContainer(remoteContainer as RTabContainer);
       }
+      container.horizontalScrollPolicy = ScrollPolicy.OFF;
+      container.verticalScrollPolicy = ScrollPolicy.OFF;
       return container;
     }
 
@@ -448,7 +450,7 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindProperty(comboBox, "enabled", remoteComboBox.state, "writable");
     }
 
-    private function createBorderContainer(remoteBorderContainer:RBorderContainer):UIComponent {
+    private function createBorderContainer(remoteBorderContainer:RBorderContainer):Container {
       var borderContainer:Grid = new Grid();
       var row:GridRow;
       var cell:GridItem;
@@ -538,14 +540,16 @@ package org.jspresso.framework.view.flex {
       return borderContainer;
     }
 
-    private function createCardContainer(remoteCardContainer:RCardContainer):UIComponent {
+    private function createCardContainer(remoteCardContainer:RCardContainer):Container {
       var cardContainer:ViewStack = new ViewStack();
-      cardContainer.resizeToContent = true;
+      //cardContainer.resizeToContent = true;
       
       for(var i:int = 0; i < remoteCardContainer.cardNames.length; i++) {
         var cardCanvas:Canvas = new Canvas();
         cardCanvas.percentWidth = 100.0;
         cardCanvas.percentHeight = 100.0;
+        cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
+        cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
         cardCanvas.name = remoteCardContainer.cardNames[i] as String;
         cardContainer.addChild(cardCanvas);
 
@@ -571,7 +575,7 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(selectCard, remoteState, "value", true);
     }
 
-    private function createConstrainedGridContainer(remoteConstrainedGridContainer:RConstrainedGridContainer):UIComponent {
+    private function createConstrainedGridContainer(remoteConstrainedGridContainer:RConstrainedGridContainer):Container {
       var constrainedGridContainer:Grid = new Grid();
       
       var i:int;
@@ -640,7 +644,7 @@ package org.jspresso.framework.view.flex {
       return constrainedGridContainer;
     }
 
-    private function createEvenGridContainer(remoteEvenGridContainer:REvenGridContainer):UIComponent {
+    private function createEvenGridContainer(remoteEvenGridContainer:REvenGridContainer):Container {
       var evenGridContainer:Grid = new Grid();
       
       var nbRows:int;
@@ -700,7 +704,7 @@ package org.jspresso.framework.view.flex {
       return evenGridContainer;
     }
 
-    private function createForm(remoteForm:RForm):Grid {
+    private function createForm(remoteForm:RForm):Container {
       var form:Grid = new Grid();
       var col:int = 0;
       var labelsRow:GridRow;
@@ -722,6 +726,7 @@ package org.jspresso.framework.view.flex {
         var component:UIComponent = createComponent(rComponent);
         var componentLabel:Label = new Label();
         var labelCell:GridItem = new GridItem();
+        
         var componentCell:GridItem = new GridItem();
 
         componentLabel.text = rComponent.label;
@@ -774,8 +779,10 @@ package org.jspresso.framework.view.flex {
       return form;
     }
 
-    private function createSplitContainer(remoteSplitContainer:RSplitContainer):UIComponent {
+    private function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
       var splitContainer:DividedBox = new DividedBox();
+      //splitContainer.resizeToContent = true;
+
       var component:UIComponent;
       if(remoteSplitContainer.orientation == "VERTICAL") {
         splitContainer.direction = BoxDirection.VERTICAL;
@@ -789,21 +796,26 @@ package org.jspresso.framework.view.flex {
         } else {
           component.percentHeight = 100.0;
         }
+//        component.percentWidth = 100.0;
+//        component.percentHeight = 100.0;
         splitContainer.addChild(component);
       }
       if(remoteSplitContainer.rightBottom != null) {
         component = createComponent(remoteSplitContainer.rightBottom);
-        if(remoteSplitContainer.orientation == "VERTICAL") {
-          component.percentWidth = 100.0;
-        } else {
-          component.percentHeight = 100.0;
-        }
+//        if(remoteSplitContainer.orientation == "VERTICAL") {
+//          component.percentWidth = 100.0;
+//        } else {
+//          component.percentHeight = 100.0;
+//        }
+        component.percentWidth = 100.0;
+        component.percentHeight = 100.0;
+
         splitContainer.addChild(component);
       }
       return splitContainer;
     }
 
-    private function createTabContainer(remoteTabContainer:RTabContainer):UIComponent {
+    private function createTabContainer(remoteTabContainer:RTabContainer):Container {
       var tabContainer:TabNavigator = new TabNavigator();
       for(var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
         var rTab:RComponent = remoteTabContainer.tabs[i] as RComponent;

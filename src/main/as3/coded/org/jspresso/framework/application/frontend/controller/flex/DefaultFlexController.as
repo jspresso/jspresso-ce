@@ -439,9 +439,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       applicationFrame.addChild(controlBar);
       controlBar.addChild(createApplicationMenuBar(workspaceActions, actions, helpActions));
       _workspaceViewStack = new ViewStack();
-      _workspaceViewStack.resizeToContent = true;
+      //_workspaceViewStack.resizeToContent = true;
       _workspaceViewStack.percentWidth = 100.0;
       _workspaceViewStack.percentHeight = 100.0;
+      
       applicationFrame.addChild(_workspaceViewStack);
     }
     

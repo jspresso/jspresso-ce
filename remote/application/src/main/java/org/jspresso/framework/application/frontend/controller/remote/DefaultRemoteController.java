@@ -58,7 +58,6 @@ import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
-import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -315,7 +314,7 @@ public class DefaultRemoteController extends
       }
     }
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -503,7 +502,7 @@ public class DefaultRemoteController extends
     clientLocale = startingLocale;
     return super.start(peerController, startingLocale);
   }
-  
+
   /**
    * {@inheritDoc}
    */
