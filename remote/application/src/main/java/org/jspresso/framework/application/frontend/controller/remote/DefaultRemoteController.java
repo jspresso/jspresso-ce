@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.frontend.controller.remote;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +29,7 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
@@ -42,6 +42,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteInitLogi
 import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
@@ -109,6 +110,7 @@ public class DefaultRemoteController extends
   private Set<String>            workspaceViews;
   private IViewDescriptor        loginViewDescriptor;
   private IModelConnectorFactory modelConnectorFactory;
+  private Locale                 clientLocale;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
@@ -143,13 +145,7 @@ public class DefaultRemoteController extends
     if (super.handleException(ex, context)) {
       return true;
     }
-    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
-    messageCommand.setTitle(getTranslationProvider().getTranslation("error",
-        getLocale()));
-    messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
-        IIconFactory.TINY_ICON_SIZE));
-    messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
-        IIconFactory.LARGE_ICON_SIZE));
+    RemoteMessageCommand messageCommand = createErrorMessageCommand();
     if (ex instanceof SecurityException) {
       messageCommand.setMessage(ex.getMessage());
     } else if (ex instanceof BusinessException) {
@@ -163,6 +159,17 @@ public class DefaultRemoteController extends
     }
     registerCommand(messageCommand);
     return true;
+  }
+
+  private RemoteMessageCommand createErrorMessageCommand() {
+    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
+    messageCommand.setTitle(getTranslationProvider().getTranslation("error",
+        getLocale()));
+    messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
+        IIconFactory.TINY_ICON_SIZE));
+    messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
+        IIconFactory.LARGE_ICON_SIZE));
+    return messageCommand;
   }
 
   /**
@@ -179,6 +186,8 @@ public class DefaultRemoteController extends
           handleCommand(command);
         }
       }
+    } catch (Throwable ex) {
+      ex.printStackTrace();
     } finally {
       commandRegistrationEnabled = false;
     }
@@ -192,8 +201,38 @@ public class DefaultRemoteController extends
    *          the command to handle.
    */
   protected void handleCommand(RemoteCommand command) {
-    if (command instanceof RemoteLoginCommand) {
-      performLogin();
+    if (command instanceof RemoteStartCommand) {
+      RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
+      IView<RComponent> loginView = getViewFactory().createView(
+          loginViewDescriptor, this, getLocale());
+      IValueConnector loginModelConnector = modelConnectorFactory
+          .createModelConnector("login", loginViewDescriptor
+              .getModelDescriptor());
+      getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
+      loginModelConnector.setConnectorValue(getLoginCallbackHandler());
+      initLoginCommand.setLoginView(loginView.getPeer());
+      initLoginCommand.setTitle(loginViewDescriptor.getI18nName(
+          getTranslationProvider(), getLocale()));
+      initLoginCommand.setMessage(getTranslationProvider().getTranslation(
+          LoginUtils.CRED_MESSAGE, getLocale()));
+      initLoginCommand.setOkLabel(getTranslationProvider().getTranslation("ok",
+          getLocale()));
+      initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
+          IIconFactory.SMALL_ICON_SIZE));
+      registerCommand(initLoginCommand);
+    } else if (command instanceof RemoteLoginCommand) {
+      if (performLogin()) {
+        registerCommand(new RemoteCloseDialogCommand());
+        List<RemoteCommand> initCommands = createInitCommands();
+        for (RemoteCommand initCommand : initCommands) {
+          registerCommand(initCommand);
+        }
+      } else {
+        RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
+        errorMessageCommand.setMessage(getTranslationProvider().getTranslation(
+            LoginUtils.LOGIN_FAILED, getLocale()));
+        registerCommand(errorMessageCommand);
+      }
     } else {
       IRemotePeer targetPeer = getRegistered(command.getTargetPeerGuid());
       if (targetPeer == null) {
@@ -426,7 +465,7 @@ public class DefaultRemoteController extends
     registerCommand(new RemoteCloseDialogCommand());
   }
 
-  private void performLogin() {
+  private boolean performLogin() {
     if (getLoginContextName() != null) {
       try {
         LoginContext lc = null;
@@ -435,61 +474,33 @@ public class DefaultRemoteController extends
               getLoginCallbackHandler());
         } catch (LoginException le) {
           System.err.println("Cannot create LoginContext. " + le.getMessage());
-          return;
+          return false;
         } catch (SecurityException se) {
           System.err.println("Cannot create LoginContext. " + se.getMessage());
-          return;
+          return false;
         }
         lc.login();
         loginSuccess(lc.getSubject());
       } catch (LoginException le) {
         System.err.println("Authentication failed:");
         System.err.println("  " + le.getMessage());
+        return false;
       }
     } else {
       loginSuccess(getAnonymousSubject());
     }
-    return;
+    return true;
   }
 
   /**
-   * Starts the application login process.
-   * 
-   * @param language
-   *          the client peer locale.
-   * @return the list of login actions.
+   * Initiates the login process.
+   * <p>
+   * {@inheritDoc}
    */
-  public List<RemoteCommand> start(String language) {
-    // if (getBackendController() == null) {
-    // IBackendController backController = (IBackendController)
-    // applicationContext
-    // .getBean("applicationBackController");
-    // start(backController, new Locale(language));
-    // loginSuccess(SecurityHelper.createAnonymousSubject());
-    // }
-    Locale startingLocale;
-    if (getForcedStartingLocale() != null) {
-      startingLocale = new Locale(getForcedStartingLocale());
-    } else {
-      startingLocale = new Locale(language);
-    }
-    RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
-    IView<RComponent> loginView = getViewFactory().createView(
-        loginViewDescriptor, this, startingLocale);
-    IValueConnector loginModelConnector = modelConnectorFactory
-        .createModelConnector("login", loginViewDescriptor.getModelDescriptor());
-    getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
-    loginModelConnector.setConnectorValue(getLoginCallbackHandler());
-    initLoginCommand.setLoginView(loginView.getPeer());
-    initLoginCommand.setTitle(getTranslationProvider().getTranslation(
-        LoginUtils.CRED_MESSAGE, startingLocale));
-    initLoginCommand.setMessage(getTranslationProvider().getTranslation(
-        LoginUtils.CRED_MESSAGE, startingLocale));
-    initLoginCommand.setOkLabel(getTranslationProvider().getTranslation("ok",
-        startingLocale));
-    initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
-        IIconFactory.SMALL_ICON_SIZE));
-    return Collections.singletonList((RemoteCommand) initLoginCommand);
+  @Override
+  public boolean start(IBackendController peerController, Locale startingLocale) {
+    clientLocale = startingLocale;
+    return super.start(peerController, startingLocale);
   }
 
   /**
@@ -513,7 +524,6 @@ public class DefaultRemoteController extends
     this.modelConnectorFactory = modelConnectorFactory;
   }
 
-  
   /**
    * Gets the modelConnectorFactory.
    * 
@@ -521,5 +531,19 @@ public class DefaultRemoteController extends
    */
   protected IModelConnectorFactory getModelConnectorFactory() {
     return modelConnectorFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Locale getLocale() {
+    if (getBackendController() != null) {
+      return super.getLocale();
+    }
+    if (getForcedStartingLocale() != null) {
+      return new Locale(getForcedStartingLocale());
+    }
+    return clientLocale;
   }
 }

@@ -36,6 +36,7 @@
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand"/>
