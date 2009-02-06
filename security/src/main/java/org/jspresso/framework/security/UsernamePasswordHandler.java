@@ -103,4 +103,12 @@ public class UsernamePasswordHandler implements CallbackHandler {
   public String getUsername() {
     return username;
   }
+
+  /**
+   * Resets all data.
+   */
+  public void clear() {
+    setUsername(null);
+    setPassword(null);
+  }
 }

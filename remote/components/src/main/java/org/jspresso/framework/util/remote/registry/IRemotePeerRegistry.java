@@ -75,4 +75,9 @@ public interface IRemotePeerRegistry {
    * @return true if the remote peer is already registered.
    */
   boolean isRegistered(String guid);
+
+  /**
+   * Clears the registry.
+   */
+  void clear();
 }

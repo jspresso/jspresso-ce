@@ -41,6 +41,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteInitComm
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
@@ -126,14 +127,6 @@ public class DefaultRemoteController extends
   @Override
   protected CallbackHandler createLoginCallbackHandler() {
     return new UsernamePasswordHandler();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void checkAccess(@SuppressWarnings("unused") ISecurable securable) {
-    // Empty implementation for testing.
   }
 
   /**
@@ -322,6 +315,14 @@ public class DefaultRemoteController extends
       }
     }
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void clear() {
+    remotePeerRegistry.clear();
+  }
 
   /**
    * Sets the remotePeerRegistry.
@@ -501,6 +502,17 @@ public class DefaultRemoteController extends
   public boolean start(IBackendController peerController, Locale startingLocale) {
     clientLocale = startingLocale;
     return super.start(peerController, startingLocale);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    remotePeerRegistry.clear();
+    workspaceViews.clear();
+    registerCommand(new RemoteRestartCommand());
+    return super.stop();
   }
 
   /**

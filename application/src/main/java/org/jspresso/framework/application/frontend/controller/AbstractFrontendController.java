@@ -48,6 +48,7 @@ import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
@@ -614,6 +615,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the authenticated user subject.
    */
   protected void loginSuccess(Subject subject) {
+    ((UsernamePasswordHandler) getLoginCallbackHandler()).clear();
     getBackendController().getApplicationSession().setSubject(subject);
     String userPreferredLanguageCode = (String) getBackendController()
         .getApplicationSession().getPrincipal().getCustomProperty(

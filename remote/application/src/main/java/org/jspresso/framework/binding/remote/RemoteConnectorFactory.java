@@ -459,4 +459,11 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     remotePeerRegistry.unregister(guid);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void clear() {
+    remotePeerRegistry.clear();
+  }
 }

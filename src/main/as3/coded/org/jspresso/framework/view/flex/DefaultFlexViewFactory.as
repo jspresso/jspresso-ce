@@ -287,7 +287,9 @@ package org.jspresso.framework.view.flex {
       tree.dataTipField = "description";
       tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
       tree.dataProvider = remoteTree.state;
-      
+      tree.minWidth = 200;
+      tree.horizontalScrollPolicy = ScrollPolicy.AUTO;
+      tree.verticalScrollPolicy = ScrollPolicy.AUTO;
       bindTree(tree, remoteTree.state as RemoteCompositeValueState);
       return tree;
     }
@@ -782,14 +784,20 @@ package org.jspresso.framework.view.flex {
       }
       if(remoteSplitContainer.leftTop != null) {
         component = createComponent(remoteSplitContainer.leftTop);
-        component.percentWidth = 100.0;
-        component.percentHeight = 100.0;
+        if(remoteSplitContainer.orientation == "VERTICAL") {
+          component.percentWidth = 100.0;
+        } else {
+          component.percentHeight = 100.0;
+        }
         splitContainer.addChild(component);
       }
       if(remoteSplitContainer.rightBottom != null) {
         component = createComponent(remoteSplitContainer.rightBottom);
-        component.percentWidth = 100.0;
-        component.percentHeight = 100.0;
+        if(remoteSplitContainer.orientation == "VERTICAL") {
+          component.percentWidth = 100.0;
+        } else {
+          component.percentHeight = 100.0;
+        }
         splitContainer.addChild(component);
       }
       return splitContainer;

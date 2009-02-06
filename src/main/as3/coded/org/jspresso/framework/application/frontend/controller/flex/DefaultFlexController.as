@@ -15,6 +15,8 @@
 package org.jspresso.framework.application.frontend.controller.flex {
   import flash.display.DisplayObject;
   import flash.events.MouseEvent;
+  import flash.external.ExternalInterface;
+  import flash.net.registerClassAlias;
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
@@ -54,16 +56,44 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
   import org.jspresso.framework.gui.remote.RAction;
+  import org.jspresso.framework.gui.remote.RActionField;
   import org.jspresso.framework.gui.remote.RActionList;
+  import org.jspresso.framework.gui.remote.RBorderContainer;
+  import org.jspresso.framework.gui.remote.RCardContainer;
+  import org.jspresso.framework.gui.remote.RCheckBox;
+  import org.jspresso.framework.gui.remote.RColorField;
+  import org.jspresso.framework.gui.remote.RComboBox;
   import org.jspresso.framework.gui.remote.RComponent;
+  import org.jspresso.framework.gui.remote.RConstrainedGridContainer;
+  import org.jspresso.framework.gui.remote.RContainer;
+  import org.jspresso.framework.gui.remote.RDateField;
+  import org.jspresso.framework.gui.remote.RDecimalField;
+  import org.jspresso.framework.gui.remote.RDurationField;
+  import org.jspresso.framework.gui.remote.REvenGridContainer;
+  import org.jspresso.framework.gui.remote.RForm;
+  import org.jspresso.framework.gui.remote.RIcon;
+  import org.jspresso.framework.gui.remote.RImageComponent;
+  import org.jspresso.framework.gui.remote.RIntegerField;
+  import org.jspresso.framework.gui.remote.RList;
+  import org.jspresso.framework.gui.remote.RPasswordField;
+  import org.jspresso.framework.gui.remote.RPercentField;
+  import org.jspresso.framework.gui.remote.RSplitContainer;
+  import org.jspresso.framework.gui.remote.RTabContainer;
+  import org.jspresso.framework.gui.remote.RTable;
+  import org.jspresso.framework.gui.remote.RTextArea;
+  import org.jspresso.framework.gui.remote.RTextField;
+  import org.jspresso.framework.gui.remote.RTimeField;
+  import org.jspresso.framework.gui.remote.RTree;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.remote.IRemotePeer;
+  import org.jspresso.framework.util.remote.RemotePeer;
   import org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
   import org.jspresso.framework.view.flex.DefaultFlexViewFactory;
@@ -84,8 +114,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _workspaceViewStack:ViewStack;
     private var _postponedCommands:Object;
     private var _dialogStack:Array;
+    private var _userLanguage:String;
     
-    public function DefaultFlexController(remoteController:RemoteObject) {
+    public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _viewFactory = new DefaultFlexViewFactory(this, this);
       _changeNotificationsEnabled = true;
@@ -93,6 +124,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _commandsQueue = new ArrayCollection(new Array());
       _commandRegistrationEnabled = true;
       _dialogStack = new Array();
+      _userLanguage = userLanguage;
+      if (ExternalInterface.available) {
+        ExternalInterface.addCallback("stop", stop);
+      }
+      registerRemoteClasses();
       initRemoteController();
     }
     
@@ -235,6 +271,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
           var titleIcon:Class = _viewFactory.getIconForComponent(alert, messageCommand.titleIcon);
           alert.titleIcon = titleIcon;
         }
+      } else if(command is RemoteRestartCommand) {
+        restart();
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
         var loginButton:Button = _viewFactory.createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
@@ -311,6 +349,20 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
         }
       }
+    }
+    
+    private function restart():void {
+      (Application.application as Application).removeAllChildren();
+      _remotePeerRegistry = new BasicRemotePeerRegistry();
+      _changeNotificationsEnabled = true;
+      _commandsQueue = new ArrayCollection(new Array());
+      _commandRegistrationEnabled = true;
+      _dialogStack = new Array();
+      start();
+    }
+
+    private function stop():void {
+      _remoteController.channelSet.disconnectAll();
     }
 
     protected function handleError(message:String):void {
@@ -483,9 +535,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return menuItem;
     }
 
-    public function start(language:String):void {
+    public function start():void {
       var operation:Operation = _remoteController.operations[START_METHOD] as Operation;
-      operation.send(language);
+      operation.send(_userLanguage);
     }
     
     private function displayWorkspace(workspaceName:String, workspaceView:RComponent):void {
@@ -530,9 +582,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
         messageLabel.percentWidth = 100.0;
         messageLabel.text = message;
         dialogBox.addChild(messageLabel);
-        separator = new HRule();
-        separator.percentWidth = 100.0;
-        dialogBox.addChild(separator);
       }
       dialogBox.addChild(dialogView);
       separator = new HRule();
@@ -548,6 +597,52 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialog.addChild(dialogBox);
       PopUpManager.centerPopUp(dialog);
       _dialogStack.push(dialog);
+    }
+    
+    private function registerRemoteClasses():void {
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCommand",RemoteCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand",RemoteReadabilityCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand",RemoteWritabilityCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand",RemoteActionCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand",RemoteChildrenCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand",RemoteEnablementCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand",RemoteSelectionCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",RemoteValueCommand);
+  
+      registerClassAlias("org.jspresso.framework.state.remote.RemoteCompositeValueState",RemoteCompositeValueState);
+      registerClassAlias("org.jspresso.framework.state.remote.RemoteValueState", RemoteValueState);
+  
+      registerClassAlias("org.jspresso.framework.util.remote.IRemotePeer",IRemotePeer);
+      registerClassAlias("org.jspresso.framework.util.remote.RemotePeer", RemotePeer);
+  
+      registerClassAlias("org.jspresso.framework.gui.remote.RAction", RAction);
+      registerClassAlias("org.jspresso.framework.gui.remote.RActionField", RActionField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RBorderContainer", RBorderContainer);
+      registerClassAlias("org.jspresso.framework.gui.remote.RCardContainer", RCardContainer);
+      registerClassAlias("org.jspresso.framework.gui.remote.RCheckBox", RCheckBox);
+      registerClassAlias("org.jspresso.framework.gui.remote.RColorField", RColorField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RComboBox", RComboBox);
+      registerClassAlias("org.jspresso.framework.gui.remote.RComponent", RComponent);
+      registerClassAlias("org.jspresso.framework.gui.remote.RContainer", RContainer);
+      registerClassAlias("org.jspresso.framework.gui.remote.RDateField", RDateField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RDecimalField", RDecimalField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RDurationField", RDurationField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RForm", RForm);
+      registerClassAlias("org.jspresso.framework.gui.remote.REvenGridContainer", REvenGridContainer);
+      registerClassAlias("org.jspresso.framework.gui.remote.RConstrainedGridContainer", RConstrainedGridContainer);
+      registerClassAlias("org.jspresso.framework.gui.remote.RIcon", RIcon);
+      registerClassAlias("org.jspresso.framework.gui.remote.RImageComponent", RImageComponent);
+      registerClassAlias("org.jspresso.framework.gui.remote.RIntegerField", RIntegerField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RList", RList);
+      registerClassAlias("org.jspresso.framework.gui.remote.RPasswordField", RPasswordField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RPercentField", RPercentField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RSplitContainer", RSplitContainer);
+      registerClassAlias("org.jspresso.framework.gui.remote.RTabContainer", RTabContainer);
+      registerClassAlias("org.jspresso.framework.gui.remote.RTable", RTable);
+      registerClassAlias("org.jspresso.framework.gui.remote.RTextArea", RTextArea);
+      registerClassAlias("org.jspresso.framework.gui.remote.RTextField", RTextField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RTimeField", RTimeField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RTree", RTree);
     }
   }
 }

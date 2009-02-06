@@ -16,17 +16,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.util.remote.registry;
+package org.jspresso.framework.application.frontend.command.remote;
 
-import java.util.Map;
-
-import org.apache.commons.collections.map.AbstractReferenceMap;
-import org.apache.commons.collections.map.ReferenceMap;
-import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
- * The basic implementation of a remote peer registry. It is stored by a
- * reference map so that it is memory neutral.
+ * An exit command for the remote peer.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -44,57 +38,6 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
-
-  private Map<String, IRemotePeer> backingStore;
-
-  /**
-   * Constructs a new <code>BasicRemotePeerRegistry</code> instance.
-   */
-  @SuppressWarnings("unchecked")
-  public BasicRemotePeerRegistry() {
-    backingStore = new ReferenceMap(AbstractReferenceMap.HARD,
-        AbstractReferenceMap.HARD, true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IRemotePeer getRegistered(String guid) {
-    return backingStore.get(guid);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void register(IRemotePeer remotePeer) {
-    backingStore.put(remotePeer.getGuid(), remotePeer);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void unregister(String guid) {
-    backingStore.remove(guid);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isRegistered(String guid) {
-    return backingStore.containsKey(guid);
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void clear() {
-    backingStore.clear();
-  }
-
+public class RemoteRestartCommand extends RemoteCommand {
+  //NO-OP.
 }

@@ -12,6 +12,7 @@
     <module>core</module>
     <module>swing</module>
     <module>wings</module>
+    <module>remote</module>
   </modules>
   <profiles>
     <profile>

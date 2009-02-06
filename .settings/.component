@@ -101,5 +101,7 @@
         <wb-resource deploy-path="/" source-path="/app-template/remote/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/jasper/remote/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/jasper/remote/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/app-launch/remote/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/app-launch/remote/src/main/resources"/>
 </wb-module>
 </project-modules>
