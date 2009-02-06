@@ -20,8 +20,6 @@ package org.jspresso.framework.model.descriptor;
 
 import java.util.Collection;
 
-import org.jspresso.framework.model.component.IComponent;
-
 
 /**
  * A registry mapping the component contracts with their descriptors.
@@ -52,7 +50,7 @@ public interface IComponentDescriptorRegistry {
    * @return th component descriptor.
    */
   IComponentDescriptor<?> getComponentDescriptor(
-      Class<? extends IComponent> componentContract);
+      Class<?> componentContract);
 
   /**
    * Gets all the registered component descriptors.

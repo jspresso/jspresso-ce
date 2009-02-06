@@ -97,7 +97,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    * {@inheritDoc}
    */
   public IComponentDescriptor<?> getComponentDescriptor(
-      Class<? extends IComponent> componentContract) {
+      Class<?> componentContract) {
     return componentDescriptorRegistry
         .getComponentDescriptor(componentContract);
   }

@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.springframework.context.ApplicationContext;
@@ -58,7 +57,7 @@ public class BasicComponentDescriptorRegistry implements
    * {@inheritDoc}
    */
   public IComponentDescriptor<?> getComponentDescriptor(
-      Class<? extends IComponent> componentContract) {
+      Class<?> componentContract) {
     if (contractNameToComponentDescriptorMap == null) {
       buildContractNameIdMap();
     }

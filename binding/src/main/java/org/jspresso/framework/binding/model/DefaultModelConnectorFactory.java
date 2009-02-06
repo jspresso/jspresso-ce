@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.binding.model;
 
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -118,7 +117,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    * {@inheritDoc}
    */
   public IModelValueConnector createModelConnector(String id,
-      Class<? extends IComponent> componentContract) {
+      Class<?> componentContract) {
     return createModelConnector(id, getDescriptorRegistry().getComponentDescriptor(componentContract));
   }
 

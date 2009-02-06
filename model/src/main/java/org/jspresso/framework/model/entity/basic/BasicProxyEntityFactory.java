@@ -148,7 +148,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    * {@inheritDoc}
    */
   public IComponentDescriptor<?> getComponentDescriptor(
-      Class<? extends IComponent> componentContract) {
+      Class<?> componentContract) {
     return inlineComponentFactory.getComponentDescriptor(componentContract);
   }
 

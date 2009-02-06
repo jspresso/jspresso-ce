@@ -479,6 +479,7 @@ public class DefaultRemoteController extends
     IValueConnector loginModelConnector = modelConnectorFactory
         .createModelConnector("login", loginViewDescriptor.getModelDescriptor());
     getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
+    loginModelConnector.setConnectorValue(getLoginCallbackHandler());
     initLoginCommand.setLoginView(loginView.getPeer());
     initLoginCommand.setTitle(getTranslationProvider().getTranslation(
         LoginUtils.CRED_MESSAGE, startingLocale));
@@ -510,5 +511,15 @@ public class DefaultRemoteController extends
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
     this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  
+  /**
+   * Gets the modelConnectorFactory.
+   * 
+   * @return the modelConnectorFactory.
+   */
+  protected IModelConnectorFactory getModelConnectorFactory() {
+    return modelConnectorFactory;
   }
 }
