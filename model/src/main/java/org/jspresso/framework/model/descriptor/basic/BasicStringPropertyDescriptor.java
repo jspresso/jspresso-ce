@@ -229,7 +229,7 @@ public class BasicStringPropertyDescriptor extends
   public BasicStringPropertyDescriptor createQueryDescriptor() {
     BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super
         .createQueryDescriptor();
-    queryDescriptor.setMaxLength(null);
+    //queryDescriptor.setMaxLength(null);
     queryDescriptor.setRegexpPattern(null);
     return queryDescriptor;
   }

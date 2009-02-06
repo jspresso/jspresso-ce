@@ -170,6 +170,9 @@ package org.jspresso.framework.view.flex {
       } else if(remoteComponent is RTree) {
         component = createTree(remoteComponent as RTree);
       }
+      if(!(component is Tree)) {
+        component.minWidth = 0;
+      }
       component.id = remoteComponent.guid;
       if(remoteComponent.tooltip != null) {
         component.toolTip = remoteComponent.tooltip;
@@ -441,6 +444,7 @@ package org.jspresso.framework.view.flex {
       itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate};
       comboBox.itemRenderer = itemRenderer;
       
+      sizeMaxComponentWidth(comboBox, 10);
       return comboBox;
     }
 
@@ -752,7 +756,8 @@ package org.jspresso.framework.view.flex {
           labelCell.colSpan = elementWidth;
           componentCell.colSpan = elementWidth;
         } else {
-          labelCell.setStyle("horizontalAlign","right");
+          //labelCell.setStyle("horizontalAlign","right");
+          labelCell.setStyle("verticalAlign","middle");
           componentCell.colSpan = (elementWidth * 2) - 1;
         }
 
@@ -1210,6 +1215,8 @@ package org.jspresso.framework.view.flex {
       if(remoteTextField.maxLength > 0) {
         textField.maxChars = remoteTextField.maxLength;
         sizeMaxComponentWidth(textField, remoteTextField.maxLength);
+      } else {
+        sizeMaxComponentWidth(textField);
       }
       bindTextInput(textField, remoteTextField.state);
       return textField;
