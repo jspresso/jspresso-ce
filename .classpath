@@ -43,8 +43,8 @@
 	<classpathentry kind="src" output="app-launch/ulc/target/classes" path="app-launch/ulc/src/main/resources"/>
 	<classpathentry kind="src" output="app-launch/wings/target/classes" path="app-launch/wings/src/main/java"/>
 	<classpathentry kind="src" output="app-launch/wings/target/classes" path="app-launch/wings/src/main/resources"/>
-	<classpathentry kind="src" path="app-launch/remote/src/main/java"/>
-	<classpathentry kind="src" path="app-launch/remote/src/main/resources"/>
+	<classpathentry kind="src" output="app-launch/remote/target/classes" path="app-launch/remote/src/main/java"/>
+	<classpathentry kind="src" output="app-launch/remote/target/classes" path="app-launch/remote/src/main/resources"/>
 	<classpathentry kind="src" output="action/target/classes" path="action/src/main/java"/>
 	<classpathentry kind="src" output="action/target/classes" path="action/src/main/resources"/>
 	<classpathentry kind="src" output="security/target/classes" path="security/src/main/java"/>
