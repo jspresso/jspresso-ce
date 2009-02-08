@@ -108,7 +108,7 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -266,7 +266,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
-    for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
       String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
@@ -462,7 +462,7 @@ public class DefaultRemoteViewFactory extends
         connector);
 
     List<RComponent> columns = new ArrayList<RComponent>();
-    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
       try {

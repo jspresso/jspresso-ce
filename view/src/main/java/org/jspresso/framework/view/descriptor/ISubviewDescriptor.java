@@ -19,7 +19,7 @@ import org.jspresso.framework.util.gate.IGate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ISubiviewDescriptor extends IIconDescriptor, ISecurable {
+public interface ISubviewDescriptor extends IIconDescriptor, ISecurable {
 
   /**
    * Gets the collection of gates determining the readability state of this

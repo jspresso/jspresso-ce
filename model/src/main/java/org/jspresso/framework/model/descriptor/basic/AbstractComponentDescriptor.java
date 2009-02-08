@@ -63,7 +63,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete type of components.
+ *          the concrete type of components.
  */
 public abstract class AbstractComponentDescriptor<E> extends
     DefaultIconDescriptor implements IComponentDescriptor<E> {
@@ -87,8 +87,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor which has to be the fully-qualified
-   *            class name of its contract.
+   *          the name of the descriptor which has to be the fully-qualified
+   *          class name of its contract.
    */
   public AbstractComponentDescriptor(String name) {
     setName(name);
@@ -268,9 +268,12 @@ public abstract class AbstractComponentDescriptor<E> extends
       if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
           .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
               .getReferencedDescriptor().getComponentContract()))) {
+        List<String> nestedProperties = new ArrayList<String>();
         for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
             .getReferencedDescriptor().getRenderedProperties()) {
-          explodedProperties.add(propertyName + "." + nestedRenderedProperty);
+          nestedProperties.add(propertyName + "." + nestedRenderedProperty);
+          explodedProperties
+              .addAll(explodeComponentReferences(nestedProperties));
         }
       } else {
         explodedProperties.add(propertyName);
@@ -370,7 +373,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * mapped.
    * 
    * @param ancestorDescriptors
-   *            The list of ancestor component descriptors.
+   *          The list of ancestor component descriptors.
    */
   public void setAncestorDescriptors(
       List<IComponentDescriptor<?>> ancestorDescriptors) {
@@ -381,7 +384,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the lifecycleInterceptors.
    * 
    * @param lifecycleInterceptors
-   *            the lifecycleInterceptors to set.
+   *          the lifecycleInterceptors to set.
    */
   public void setLifecycleInterceptors(
       List<ILifecycleInterceptor<?>> lifecycleInterceptors) {
@@ -392,7 +395,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the orderingProperties.
    * 
    * @param orderingProperties
-   *            the orderingProperties to set.
+   *          the orderingProperties to set.
    */
   public void setOrderingProperties(List<String> orderingProperties) {
     this.orderingProperties = orderingProperties;
@@ -402,7 +405,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the propertyDescriptors property.
    * 
    * @param descriptors
-   *            the propertyDescriptors to set.
+   *          the propertyDescriptors to set.
    */
   public void setPropertyDescriptors(Collection<IPropertyDescriptor> descriptors) {
     // This is important to use an intermediate structure since all descriptors
@@ -420,7 +423,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the queryableProperties.
    * 
    * @param queryableProperties
-   *            the queryableProperties to set.
+   *          the queryableProperties to set.
    */
   public void setQueryableProperties(List<String> queryableProperties) {
     this.queryableProperties = queryableProperties;
@@ -430,7 +433,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the renderedProperties.
    * 
    * @param renderedProperties
-   *            the renderedProperties to set.
+   *          the renderedProperties to set.
    */
   public void setRenderedProperties(List<String> renderedProperties) {
     this.renderedProperties = renderedProperties;
@@ -441,12 +444,12 @@ public abstract class AbstractComponentDescriptor<E> extends
    * services defined by its contract.
    * 
    * @param servicesByServiceContracts
-   *            the component services to be registered keyed by their contract.
-   *            A service contract is an interface class defining the service
-   *            methods to be registered as implemented by the service delegate.
-   *            Map values must be instances of <code>IComponentService</code>.
+   *          the component services to be registered keyed by their contract. A
+   *          service contract is an interface class defining the service
+   *          methods to be registered as implemented by the service delegate.
+   *          Map values must be instances of <code>IComponentService</code>.
    * @throws ClassNotFoundException
-   *             if the declared service class is not found.
+   *           if the declared service class is not found.
    */
   public void setServiceDelegates(
       Map<String, IComponentService> servicesByServiceContracts)
@@ -461,7 +464,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the toStringProperty.
    * 
    * @param toStringProperty
-   *            the toStringProperty to set.
+   *          the toStringProperty to set.
    */
   public void setToStringProperty(String toStringProperty) {
     this.toStringProperty = toStringProperty;
@@ -471,7 +474,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the unclonedProperties.
    * 
    * @param unclonedProperties
-   *            the unclonedProperties to set.
+   *          the unclonedProperties to set.
    */
   public void setUnclonedProperties(Collection<String> unclonedProperties) {
     this.unclonedProperties = unclonedProperties;
@@ -528,7 +531,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the grantedRoles.
    * 
    * @param grantedRoles
-   *            the grantedRoles to set.
+   *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;

@@ -115,7 +115,7 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -832,7 +832,7 @@ public class DefaultUlcViewFactory extends
 
     boolean isSpaceFilled = false;
 
-    for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
       String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
@@ -1646,7 +1646,7 @@ public class DefaultUlcViewFactory extends
     Map<String, IFormatter> columnFormattersByIds = new HashMap<String, IFormatter>();
     List<String> columnConnectorKeys = new ArrayList<String>();
     Set<String> forbiddenColumns = new HashSet<String>();
-    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
       try {
@@ -1723,7 +1723,7 @@ public class DefaultUlcViewFactory extends
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());
     int columnIndex = 0;
-    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String propertyName = columnViewDescriptor.getName();
       if (!forbiddenColumns.contains(propertyName)) {
