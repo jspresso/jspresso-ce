@@ -21,6 +21,7 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.descriptor.EBorderType;
@@ -53,6 +54,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   private EBorderType borderType = EBorderType.NONE;
   private String     font;
   private String     foreground;
+  private IModelDescriptor modelDescriptor;
 
   /**
    * Gets the actionMap.
@@ -183,6 +185,25 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    */
   public void setForeground(String foreground) {
     this.foreground = foreground;
+  }
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  public IModelDescriptor getModelDescriptor() {
+    return modelDescriptor;
+  }
+
+  /**
+   * Sets the modelDescriptor.
+   * 
+   * @param modelDescriptor
+   *            the modelDescriptor to set.
+   */
+  public void setModelDescriptor(IModelDescriptor modelDescriptor) {
+    this.modelDescriptor = modelDescriptor;
   }
 
 }

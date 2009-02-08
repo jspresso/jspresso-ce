@@ -30,8 +30,9 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 
 /**
@@ -57,8 +58,8 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentViewDescriptor {
 
   private int                       columnCount    = 1;
-  private ELabelPosition             labelsPosition = ELabelPosition.ASIDE;
-  private List<ISubViewDescriptor>  propertyViewDescriptors;
+  private ELabelPosition            labelsPosition = ELabelPosition.ASIDE;
+  private List<ISubviewDescriptor>  propertyViewDescriptors;
   private Map<String, Integer>      propertyWidths;
   private Map<String, List<String>> renderedChildProperties;
 
@@ -93,13 +94,13 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public List<ISubViewDescriptor> getPropertyViewDescriptors() {
+  public List<ISubviewDescriptor> getPropertyViewDescriptors() {
     if (propertyViewDescriptors == null) {
       IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
           .getComponentDescriptor();
       List<String> modelRenderedProperties = componentDescriptor
           .getRenderedProperties();
-      List<ISubViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      List<ISubviewDescriptor> defaultPropertyViewDescriptors = new ArrayList<ISubviewDescriptor>();
       for (String renderedProperty : modelRenderedProperties) {
         BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
         propertyDescriptor.setName(renderedProperty);
@@ -109,7 +110,41 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       }
       return defaultPropertyViewDescriptors;
     }
-    return propertyViewDescriptors;
+    List<ISubviewDescriptor> actualPropertyViewDescriptors = new ArrayList<ISubviewDescriptor>();
+    for (ISubviewDescriptor subViewDescriptor : propertyViewDescriptors) {
+      actualPropertyViewDescriptors
+          .addAll(explodeComponentReferences(subViewDescriptor));
+    }
+    return actualPropertyViewDescriptors;
+  }
+
+  private List<ISubviewDescriptor> explodeComponentReferences(
+      ISubviewDescriptor subViewDescriptor) {
+    List<ISubviewDescriptor> returnedList = new ArrayList<ISubviewDescriptor>();
+    IPropertyDescriptor propertyDescriptor = ((IComponentDescriptor<?>) getModelDescriptor())
+        .getPropertyDescriptor(subViewDescriptor.getName());
+    if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
+        .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor().getComponentContract()))) {
+      for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+          .getReferencedDescriptor().getRenderedProperties()) {
+        BasicSubviewDescriptor nestedSubViewDescriptor = new BasicSubviewDescriptor();
+        nestedSubViewDescriptor.setName(propertyDescriptor.getName() + "."
+            + nestedRenderedProperty);
+        nestedSubViewDescriptor.setGrantedRoles(propertyDescriptor
+            .getGrantedRoles());
+        nestedSubViewDescriptor.setReadabilityGates(propertyDescriptor
+            .getReadabilityGates());
+        nestedSubViewDescriptor.setWritabilityGates(propertyDescriptor
+            .getWritabilityGates());
+        nestedSubViewDescriptor.setReadOnly(propertyDescriptor.isReadOnly());
+        returnedList
+            .addAll(explodeComponentReferences(nestedSubViewDescriptor));
+      }
+    } else {
+      returnedList.add(subViewDescriptor);
+    }
+    return returnedList;
   }
 
   /**
@@ -175,12 +210,12 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    *          the propertyViewDescriptors to set.
    */
   public void setPropertyViewDescriptors(
-      List<ISubViewDescriptor> propertyViewDescriptors) {
+      List<ISubviewDescriptor> propertyViewDescriptors) {
     this.propertyViewDescriptors = propertyViewDescriptors;
     if (propertyViewDescriptors != null && getModelDescriptor() != null) {
       IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
           .getComponentDescriptor();
-      for (ISubViewDescriptor propertyViewDescriptor : propertyViewDescriptors) {
+      for (ISubviewDescriptor propertyViewDescriptor : propertyViewDescriptors) {
         propertyViewDescriptor.setGrantedRoles(componentDescriptor
             .getPropertyDescriptor(propertyViewDescriptor.getName())
             .getGrantedRoles());

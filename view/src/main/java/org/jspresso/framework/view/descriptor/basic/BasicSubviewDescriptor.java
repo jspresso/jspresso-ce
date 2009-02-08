@@ -20,10 +20,9 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.Collection;
 
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 
 
 /**
@@ -46,23 +45,13 @@ import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
-    ISubViewDescriptor {
+    ISubviewDescriptor {
 
-  private IModelDescriptor  modelDescriptor;
   private Collection<IGate> readabilityGates;
   private boolean           readOnly;
   private Collection<IGate> writabilityGates;
 
   private Collection<String> grantedRoles;
-
-  /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  public IModelDescriptor getModelDescriptor() {
-    return modelDescriptor;
-  }
 
   /**
    * Gets the readabilityGates.
@@ -87,16 +76,6 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    */
   public boolean isReadOnly() {
     return readOnly;
-  }
-
-  /**
-   * Sets the modelDescriptor.
-   * 
-   * @param modelDescriptor
-   *            the modelDescriptor to set.
-   */
-  public void setModelDescriptor(IModelDescriptor modelDescriptor) {
-    this.modelDescriptor = modelDescriptor;
   }
 
   /**

@@ -5,7 +5,6 @@ package org.jspresso.framework.view.descriptor;
 
 import java.util.Collection;
 
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGate;
@@ -20,14 +19,7 @@ import org.jspresso.framework.util.gate.IGate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ISubViewDescriptor extends IIconDescriptor, ISecurable {
-
-  /**
-   * Gets the model descriptor this view descriptor acts on.
-   * 
-   * @return the view model descriptor.
-   */
-  IModelDescriptor getModelDescriptor();
+public interface ISubiviewDescriptor extends IIconDescriptor, ISecurable {
 
   /**
    * Gets the collection of gates determining the readability state of this
