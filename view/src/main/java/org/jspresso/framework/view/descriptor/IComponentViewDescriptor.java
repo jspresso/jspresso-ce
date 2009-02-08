@@ -65,7 +65,7 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
    * 
    * @return the property view descriptors.
    */
-  List<ISubViewDescriptor> getPropertyViewDescriptors();
+  List<ISubviewDescriptor> getPropertyViewDescriptors();
 
   /**
    * Gets the number of columns a property spans when displayed.

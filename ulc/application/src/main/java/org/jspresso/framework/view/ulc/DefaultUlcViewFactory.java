@@ -143,7 +143,7 @@ import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
@@ -1184,7 +1184,7 @@ public class DefaultUlcViewFactory implements
     if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
       BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
       viewDescriptor.setModelDescriptor(propertyDescriptor);
-      List<ISubViewDescriptor> columnViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      List<ISubviewDescriptor> columnViewDescriptors = new ArrayList<ISubviewDescriptor>();
       for (String renderedProperty : renderedChildProperties) {
         BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
         columnDescriptor.setName(renderedProperty);
@@ -1279,7 +1279,7 @@ public class DefaultUlcViewFactory implements
 
     boolean isSpaceFilled = false;
 
-    for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
       String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
@@ -2482,7 +2482,7 @@ public class DefaultUlcViewFactory implements
     Map<String, IFormatter> columnFormattersByIds = new HashMap<String, IFormatter>();
     List<String> columnConnectorKeys = new ArrayList<String>();
     Set<String> forbiddenColumns = new HashSet<String>();
-    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
       try {
@@ -2560,7 +2560,7 @@ public class DefaultUlcViewFactory implements
         maxColumnCharacterLength);
 
     int columnIndex = 0;
-    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String propertyName = columnViewDescriptor.getName();
       if (!forbiddenColumns.contains(propertyName)) {

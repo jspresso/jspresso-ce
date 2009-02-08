@@ -142,7 +142,7 @@ import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
@@ -1211,7 +1211,7 @@ public class DefaultWingsViewFactory implements
     if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
       BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
       viewDescriptor.setModelDescriptor(propertyDescriptor);
-      List<ISubViewDescriptor> columnViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      List<ISubviewDescriptor> columnViewDescriptors = new ArrayList<ISubviewDescriptor>();
       for (String renderedProperty : renderedChildProperties) {
         BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
         columnDescriptor.setName(renderedProperty);
@@ -1307,11 +1307,11 @@ public class DefaultWingsViewFactory implements
     boolean isSpaceFilled = false;
     boolean lastRowNeedsFilling = true;
 
-    // for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
+    // for (ISubviewDescriptor propertyViewDescriptor : viewDescriptor
     // .getPropertyViewDescriptors()) {
-    for (Iterator<ISubViewDescriptor> ite = viewDescriptor
+    for (Iterator<ISubviewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
-      ISubViewDescriptor propertyViewDescriptor = ite.next();
+      ISubviewDescriptor propertyViewDescriptor = ite.next();
       String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
@@ -2509,7 +2509,7 @@ public class DefaultWingsViewFactory implements
     List<String> columnConnectorKeys = new ArrayList<String>();
     Set<String> forbiddenColumns = new HashSet<String>();
     int tableWidth = 0;
-    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
       try {
@@ -2548,7 +2548,7 @@ public class DefaultWingsViewFactory implements
     int maxColumnSize = computePixelWidth(viewComponent,
         maxColumnCharacterLength);
     int columnIndex = 0;
-    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String propertyName = columnViewDescriptor.getName();
       if (!forbiddenColumns.contains(propertyName)) {

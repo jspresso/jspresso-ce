@@ -21,6 +21,7 @@ package org.jspresso.framework.view.descriptor;
 import java.awt.Color;
 import java.awt.Font;
 
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.view.action.IActionable;
 
 /**
@@ -42,7 +43,14 @@ import org.jspresso.framework.view.action.IActionable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IViewDescriptor extends ISubViewDescriptor, IActionable {
+public interface IViewDescriptor extends ISubviewDescriptor, IActionable {
+
+  /**
+   * Gets the model descriptor this view descriptor acts on.
+   * 
+   * @return the view model descriptor.
+   */
+  IModelDescriptor getModelDescriptor();
 
   /**
    * Gets the background color of this view.

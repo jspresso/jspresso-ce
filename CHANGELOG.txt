@@ -8,6 +8,7 @@ Bugs fixed
 2319849  	 Standard duplicate action: initialization exceptions
         	 Startup action is not trigerred for wings controller
         	 Refactored accessibility connector chain to prevent extra notifications.
+           Typo in ISubviewDescriptor name.
 
 New features
 ------------
@@ -17,6 +18,7 @@ New features
            Support for BigDecimal on decimal property descriptors
            Implemented onLoad lifecycle hook
            Prepared support for component collection properties as soon as Hibernate gets fixed (see HHH-3275)
+        	 Auto explode component references in view descriptors.
 
 2.2.1
 =====

@@ -24,7 +24,7 @@ import java.util.List;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
+import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 
 /**
@@ -49,12 +49,12 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     implements ITableViewDescriptor {
 
-  private List<ISubViewDescriptor> columnViewDescriptors;
+  private List<ISubviewDescriptor> columnViewDescriptors;
 
   /**
    * {@inheritDoc}
    */
-  public List<ISubViewDescriptor> getColumnViewDescriptors() {
+  public List<ISubviewDescriptor> getColumnViewDescriptors() {
     if (columnViewDescriptors == null) {
       ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor());
       IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
@@ -68,7 +68,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
             .remove(((ICollectionPropertyDescriptor<?>) modelDescriptor)
                 .getReverseRelationEnd().getName());
       }
-      List<ISubViewDescriptor> defaultColumnViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      List<ISubviewDescriptor> defaultColumnViewDescriptors = new ArrayList<ISubviewDescriptor>();
       for (String renderedProperty : modelRenderedProperties) {
         BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
         columnDescriptor.setName(renderedProperty);
@@ -88,14 +88,14 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    *            the columnViewDescriptors to set.
    */
   public void setColumnViewDescriptors(
-      List<ISubViewDescriptor> columnViewDescriptors) {
+      List<ISubviewDescriptor> columnViewDescriptors) {
     this.columnViewDescriptors = columnViewDescriptors;
     if (columnViewDescriptors != null) {
       ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor());
       if (modelDescriptor != null) {
         IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
             .getCollectionDescriptor().getElementDescriptor();
-        for (ISubViewDescriptor columnViewDescriptor : columnViewDescriptors) {
+        for (ISubviewDescriptor columnViewDescriptor : columnViewDescriptors) {
           columnViewDescriptor.setGrantedRoles(rowModelDescriptor
               .getPropertyDescriptor(columnViewDescriptor.getName())
               .getGrantedRoles());
