@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,22 +16,23 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.swing.std;
+package org.jspresso.framework.util.http;
 
 import java.io.IOException;
-import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.ActionException;
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
-import org.jspresso.framework.util.swing.BrowserControl;
-
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * A simple action to display an static Url content.
+ * This filter needs to be installed on any broker servlet so that iot keeps
+ * track of the current HTTP request.
  * <p>
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -47,39 +48,46 @@ import org.jspresso.framework.util.swing.BrowserControl;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DisplayUrlAction extends AbstractSwingAction {
+public class HttpRequestHolder implements Filter {
 
-  private String baseUrl;
+  private static final ThreadLocal<HttpServletRequest> CURRENT_HTTP_REQUEST = new ThreadLocal<HttpServletRequest>();
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
-    StringBuffer urlSpec = new StringBuffer();
-    if (baseUrl != null) {
-      urlSpec.append(baseUrl);
-    }
-    urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
-
-    if (urlSpec.length() > 0) {
-      try {
-        BrowserControl.displayURL(urlSpec.toString());
-      } catch (IOException ex) {
-        throw new ActionException(ex);
-      }
-    }
-    return true;
+  public void destroy() {
+    // Nothing to clear.
   }
 
   /**
-   * Sets the baseUrl.
-   * 
-   * @param baseUrl
-   *            the baseUrl to set.
+   * {@inheritDoc}
    */
-  public void setBaseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response,
+      FilterChain chain) throws IOException, ServletException {
+    if (request instanceof HttpServletRequest) {
+      CURRENT_HTTP_REQUEST.set((HttpServletRequest) request);
+    }
+    chain.doFilter(request, response);
+    CURRENT_HTTP_REQUEST.set(null);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void init(@SuppressWarnings("unused") FilterConfig config) {
+    // Nothing to init.
+  }
+
+  /**
+   * Gets the current servlet request.
+   * 
+   * @return the current servlet request.
+   */
+  public static HttpServletRequest getServletRequest() {
+    return CURRENT_HTTP_REQUEST.get();
+  }
+
 }

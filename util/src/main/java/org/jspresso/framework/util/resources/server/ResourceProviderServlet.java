@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.resources.IResource;
 
@@ -65,7 +66,19 @@ public class ResourceProviderServlet extends HttpServlet {
   private static final long  serialVersionUID             = 5253634459280974738L;
 
   /**
-   * Computes the url where the resource is available for download. .
+   * Computes the url where the resource is available for download.
+   * 
+   * @param id
+   *          the resource id.
+   * @return the rsource url.
+   */
+  public static String computeUrl(String id) {
+    HttpServletRequest request = HttpRequestHolder.getServletRequest();
+    return computeUrl(request, id);
+  }
+
+  /**
+   * Computes the url where the resource is available for download.
    * 
    * @param request
    *            the incomming HTTP request.

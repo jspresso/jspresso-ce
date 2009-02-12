@@ -16,13 +16,12 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.swing.std;
+package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-
 
 /**
  * A simple action to display an static Url content.
@@ -42,8 +41,14 @@ import org.jspresso.framework.action.IActionHandler;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class DisplayStaticUrlAction extends DisplayUrlAction {
+public class DisplayStaticUrlAction<E, F, G> extends DisplayUrlAction<E, F, G> {
 
   private String urlKey;
 
@@ -51,7 +56,8 @@ public class DisplayStaticUrlAction extends DisplayUrlAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
         context).getTranslation(urlKey, getLocale(context)));
     return super.execute(actionHandler, context);
@@ -61,7 +67,7 @@ public class DisplayStaticUrlAction extends DisplayUrlAction {
    * Sets the urlKey.
    * 
    * @param urlKey
-   *            the urlKey to set.
+   *          the urlKey to set.
    */
   public void setUrlKey(String urlKey) {
     this.urlKey = urlKey;

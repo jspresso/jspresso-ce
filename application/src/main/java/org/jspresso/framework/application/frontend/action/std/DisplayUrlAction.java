@@ -16,17 +16,16 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.ulc.std;
+package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.ulc.AbstractUlcAction;
-
+import org.jspresso.framework.application.frontend.action.WrappingAction;
 
 /**
- * A standard close dialog action. Since it is a chained action, it can be chained with
- * another action.
+ * A simple action to display an static Url content.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,18 +40,45 @@ import org.jspresso.framework.application.frontend.action.ulc.AbstractUlcAction;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision: 1249 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class CloseDialogAction extends AbstractUlcAction {
+public class DisplayUrlAction<E, F, G> extends WrappingAction<E, F, G> {
+
+  private String baseUrl;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
+  public boolean execute(
+      @SuppressWarnings("unused") IActionHandler actionHandler,
       Map<String, Object> context) {
-    closeDialog(context);
-    return super.execute(actionHandler, context);
+    StringBuffer urlSpec = new StringBuffer();
+    if (baseUrl != null) {
+      urlSpec.append(baseUrl);
+    }
+    urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
+
+    if (urlSpec.length() > 0) {
+      getController(context).displayUrl(urlSpec.toString());
+    }
+    return true;
+  }
+
+  /**
+   * Sets the baseUrl.
+   * 
+   * @param baseUrl
+   *          the baseUrl to set.
+   */
+  public void setBaseUrl(String baseUrl) {
+    this.baseUrl = baseUrl;
   }
 }

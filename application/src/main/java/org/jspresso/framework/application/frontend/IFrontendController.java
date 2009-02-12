@@ -99,4 +99,11 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale startingLocale);
+  
+  /**
+   * Displays the given URL in a new braowser window (or tab).
+   * 
+   * @param urlSpec the url to display.
+   */
+  void displayUrl(String urlSpec);
 }

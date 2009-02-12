@@ -61,6 +61,8 @@ import org.wings.SMenuItem;
 import org.wings.SOptionPane;
 import org.wings.SPanel;
 import org.wings.border.SLineBorder;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
 
 
@@ -399,5 +401,16 @@ public class DefaultWingsController extends
         handleException(ex, null);
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    ScriptListener listener = new JavaScriptListener(null, null,
+        "wingS.util.openLink('download','" + urlSpec + "',null);");
+    SessionManager.getSession().getScriptManager()
+        .addScriptListener(listener);
   }
 }

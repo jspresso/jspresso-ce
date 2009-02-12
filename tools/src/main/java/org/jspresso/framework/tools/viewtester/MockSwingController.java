@@ -19,6 +19,7 @@
 package org.jspresso.framework.tools.viewtester;
 
 import java.awt.Component;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.security.auth.callback.CallbackHandler;
@@ -27,10 +28,12 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.view.IIconFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 
@@ -115,5 +118,17 @@ public class MockSwingController extends
   protected Workspace getWorkspace(@SuppressWarnings("unused")
   String workspaceName) {
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    try {
+      BrowserControl.displayURL(urlSpec);
+    } catch (IOException ex) {
+      throw new ActionException(ex);
+    }
   }
 }

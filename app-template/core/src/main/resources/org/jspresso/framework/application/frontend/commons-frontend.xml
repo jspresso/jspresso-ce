@@ -325,6 +325,16 @@
   </bean>
 
   <bean
+    id="displayUrlFrontAction"
+    class="org.jspresso.framework.application.frontend.action.std.DisplayUrlAction" />
+
+  <bean
+    id="staticDisplayUrlFrontAction"
+    abstract="true"
+    parent="displayUrlFrontAction"
+    class="org.jspresso.framework.application.frontend.action.std.DisplayStaticUrlAction" />
+
+  <bean
     id="abstractWizardAction"
     abstract="true">
     <property

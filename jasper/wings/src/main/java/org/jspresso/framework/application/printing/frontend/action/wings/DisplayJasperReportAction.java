@@ -28,13 +28,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.wings.std.DisplayUrlAction;
+import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.MemoryResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.wings.session.SessionManager;
-
 
 /**
  * A simple action to display a Jasper report.
@@ -55,13 +54,14 @@ import org.wings.session.SessionManager;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DisplayJasperReportAction extends DisplayUrlAction {
+public class DisplayJasperReportAction extends AbstractWingsAction {
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     JasperPrint report = (JasperPrint) context
         .get(ActionContextConstants.ACTION_PARAM);
 
@@ -72,9 +72,9 @@ public class DisplayJasperReportAction extends DisplayUrlAction {
       IResource resource = new MemoryResource("application/pdf", baos
           .toByteArray());
       String resourceId = ResourceManager.getInstance().register(resource);
-      context.put(ActionContextConstants.ACTION_PARAM, ResourceProviderServlet
-          .computeUrl(SessionManager.getSession().getServletRequest(),
-              resourceId));
+      getController(context).displayUrl(
+          ResourceProviderServlet.computeUrl(SessionManager.getSession()
+              .getServletRequest(), resourceId));
       return super.execute(actionHandler, context);
     } catch (JRException ex) {
       throw new ActionException(ex);
