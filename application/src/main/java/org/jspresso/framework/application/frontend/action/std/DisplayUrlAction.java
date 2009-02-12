@@ -16,17 +16,13 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.swing.std;
+package org.jspresso.framework.application.frontend.action.std;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
-import org.jspresso.framework.util.swing.BrowserControl;
-
+import org.jspresso.framework.application.frontend.action.WrappingAction;
 
 /**
  * A simple action to display an static Url content.
@@ -46,8 +42,14 @@ import org.jspresso.framework.util.swing.BrowserControl;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class DisplayUrlAction extends AbstractSwingAction {
+public class DisplayUrlAction<E, F, G> extends WrappingAction<E, F, G> {
 
   private String baseUrl;
 
@@ -55,8 +57,9 @@ public class DisplayUrlAction extends AbstractSwingAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(
+      @SuppressWarnings("unused") IActionHandler actionHandler,
+      Map<String, Object> context) {
     StringBuffer urlSpec = new StringBuffer();
     if (baseUrl != null) {
       urlSpec.append(baseUrl);
@@ -64,11 +67,7 @@ public class DisplayUrlAction extends AbstractSwingAction {
     urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
 
     if (urlSpec.length() > 0) {
-      try {
-        BrowserControl.displayURL(urlSpec.toString());
-      } catch (IOException ex) {
-        throw new ActionException(ex);
-      }
+      getController(context).displayUrl(urlSpec.toString());
     }
     return true;
   }
@@ -77,7 +76,7 @@ public class DisplayUrlAction extends AbstractSwingAction {
    * Sets the baseUrl.
    * 
    * @param baseUrl
-   *            the baseUrl to set.
+   *          the baseUrl to set.
    */
   public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;

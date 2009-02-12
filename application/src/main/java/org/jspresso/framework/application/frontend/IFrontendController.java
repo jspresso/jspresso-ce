@@ -131,4 +131,11 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the source widget.
    */
   void disposeModalDialog(E sourceWidget);
+  
+  /**
+   * Displays the given URL in a new braowser window (or tab).
+   * 
+   * @param urlSpec the url to display.
+   */
+  void displayUrl(String urlSpec);
 }

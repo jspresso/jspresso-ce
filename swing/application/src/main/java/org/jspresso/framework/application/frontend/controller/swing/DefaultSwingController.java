@@ -30,6 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +62,7 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.ControllerException;
 import org.jspresso.framework.application.backend.IBackendController;
@@ -72,6 +74,7 @@ import org.jspresso.framework.security.swing.DialogCallbackHandler;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.swing.WaitCursorEventQueue;
 import org.jspresso.framework.util.swing.WaitCursorTimer;
@@ -667,6 +670,18 @@ public class DefaultSwingController extends
     public void internalFrameOpened(
         @SuppressWarnings("unused") InternalFrameEvent e) {
       displayWorkspace(workspaceName);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    try {
+      BrowserControl.displayURL(urlSpec);
+    } catch (IOException ex) {
+      throw new ActionException(ex);
     }
   }
 }

@@ -66,6 +66,8 @@ import org.wings.SPanel;
 import org.wings.SSpacer;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.SLineBorder;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
 
 /**
@@ -400,5 +402,16 @@ public class DefaultWingsController extends
     if (actionWindow instanceof SDialog) {
       ((SDialog) actionWindow).dispose();
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    ScriptListener listener = new JavaScriptListener(null, null,
+        "wingS.util.openLink('download','" + urlSpec + "',null);");
+    SessionManager.getSession().getScriptManager()
+        .addScriptListener(listener);
   }
 }

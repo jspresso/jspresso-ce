@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,18 +16,12 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.swing.std;
-
-import java.util.Map;
-
-import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.IActionHandler;
-
+package org.jspresso.framework.application.frontend.command.remote;
 
 /**
- * A simple action to display an static Url content.
+ * This command opens an url in a new browser window.
  * <p>
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -43,27 +37,27 @@ import org.jspresso.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DisplayStaticUrlAction extends DisplayUrlAction {
+public class RemoteOpenUrlCommand extends RemoteCommand {
 
-  private String urlKey;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
-        context).getTranslation(urlKey, getLocale(context)));
-    return super.execute(actionHandler, context);
-  }
+  private String urlSpec;
 
   /**
-   * Sets the urlKey.
+   * Gets the urlSpec.
    * 
-   * @param urlKey
-   *            the urlKey to set.
+   * @return the urlSpec.
    */
-  public void setUrlKey(String urlKey) {
-    this.urlKey = urlKey;
+  public String getUrlSpec() {
+    return urlSpec;
   }
+
+  /**
+   * Sets the urlSpec.
+   * 
+   * @param urlSpec
+   *          the urlSpec to set.
+   */
+  public void setUrlSpec(String urlSpec) {
+    this.urlSpec = urlSpec;
+  }
+
 }

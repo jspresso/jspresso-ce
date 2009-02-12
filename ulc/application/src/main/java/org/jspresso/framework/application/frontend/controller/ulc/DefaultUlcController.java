@@ -623,4 +623,12 @@ public class DefaultUlcController extends
     }
 
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    ClientContext.showDocument(urlSpec);
+  }
 }

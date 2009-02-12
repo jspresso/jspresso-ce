@@ -16,6 +16,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.display.DisplayObject;
   import flash.events.MouseEvent;
   import flash.external.ExternalInterface;
+  import flash.net.URLRequest;
+  import flash.net.navigateToURL;
   import flash.net.registerClassAlias;
   
   import mx.binding.utils.BindingUtils;
@@ -55,6 +57,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
@@ -302,6 +305,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var workspaceDisplayCommand:RemoteWorkspaceDisplayCommand = command as RemoteWorkspaceDisplayCommand;
         displayWorkspace(workspaceDisplayCommand.workspaceName,
                          workspaceDisplayCommand.workspaceView);
+      } else if(command is RemoteOpenUrlCommand) {
+        var urlRequest:URLRequest = new URLRequest((command as RemoteOpenUrlCommand).urlSpec);
+        navigateToURL(urlRequest, "_blank");
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {

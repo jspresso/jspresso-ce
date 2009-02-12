@@ -28,10 +28,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.remote.std.DisplayUrlAction;
+import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.MemoryResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 
 /**
@@ -53,7 +54,7 @@ import org.jspresso.framework.util.resources.server.ResourceManager;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DisplayJasperReportAction extends DisplayUrlAction {
+public class DisplayJasperReportAction extends AbstractRemoteAction {
 
   /**
    * {@inheritDoc}
@@ -69,11 +70,9 @@ public class DisplayJasperReportAction extends DisplayUrlAction {
 
       IResource resource = new MemoryResource("application/pdf", baos
           .toByteArray());
-      @SuppressWarnings("unused")
       String resourceId = ResourceManager.getInstance().register(resource);
-//      context.put(ActionContextConstants.ACTION_PARAM, ResourceProviderServlet
-//          .computeUrl(SessionManager.getSession().getServletRequest(),
-//              resourceId));
+      getController(context).displayUrl(
+          ResourceProviderServlet.computeUrl(resourceId));
       return super.execute(actionHandler, context);
     } catch (JRException ex) {
       throw new ActionException(ex);

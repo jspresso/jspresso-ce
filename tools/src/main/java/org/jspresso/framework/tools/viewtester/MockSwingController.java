@@ -24,6 +24,7 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Window;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -40,10 +41,12 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IIconFactory;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -176,5 +179,17 @@ public class MockSwingController extends
   protected Workspace getWorkspace(@SuppressWarnings("unused")
   String workspaceName) {
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    try {
+      BrowserControl.displayURL(urlSpec);
+    } catch (IOException ex) {
+      throw new ActionException(ex);
+    }
   }
 }

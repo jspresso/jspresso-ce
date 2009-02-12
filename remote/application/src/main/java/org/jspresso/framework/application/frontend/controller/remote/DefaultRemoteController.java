@@ -41,6 +41,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteInitComm
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
@@ -556,5 +557,15 @@ public class DefaultRemoteController extends
       return new Locale(getForcedStartingLocale());
     }
     return clientLocale;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    RemoteOpenUrlCommand openUrlCommand = new RemoteOpenUrlCommand();
+    openUrlCommand.setUrlSpec(urlSpec);
+    registerCommand(openUrlCommand);
   }
 }

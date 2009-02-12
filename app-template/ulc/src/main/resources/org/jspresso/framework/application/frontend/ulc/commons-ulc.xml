@@ -117,17 +117,6 @@
     class="org.jspresso.framework.application.printing.frontend.action.ulc.DisplayJasperReportAction" />
 
   <bean
-    id="displayUrlFrontAction"
-    class="org.jspresso.framework.application.frontend.action.ulc.std.DisplayUrlAction" />
-
-  <bean
-    id="staticDisplayUrlFrontAction"
-    abstract="true"
-    parent="displayUrlFrontAction"
-    class="org.jspresso.framework.application.frontend.action.ulc.std.DisplayStaticUrlAction" />
-
-
-  <bean
     id="wizardAction"
     parent="abstractWizardAction"
     class="org.jspresso.framework.application.frontend.action.ulc.wizard.WizardAction" />

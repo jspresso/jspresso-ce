@@ -120,16 +120,6 @@
     class="org.jspresso.framework.application.printing.frontend.action.remote.DisplayJasperReportAction" />
 
   <bean
-    id="displayUrlFrontAction"
-    class="org.jspresso.framework.application.frontend.action.remote.std.DisplayUrlAction" />
-
-  <bean
-    id="staticDisplayUrlFrontAction"
-    abstract="true"
-    parent="displayUrlFrontAction"
-    class="org.jspresso.framework.application.frontend.action.remote.std.DisplayStaticUrlAction" />
-
-  <bean
     id="wizardAction"
     parent="abstractWizardAction"
     class="org.jspresso.framework.application.frontend.action.remote.wizard.WizardAction" />
@@ -161,7 +151,9 @@
     <property
       name="loginViewDescriptor"
       ref="loginViewDescriptor" />
-    <property name="modelConnectorFactory" ref="modelConnectorFactory"/>
+    <property
+      name="modelConnectorFactory"
+      ref="modelConnectorFactory" />
   </bean>
 
 </beans>
