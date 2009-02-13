@@ -96,11 +96,6 @@ public final class ActionContextConstants {
   public static final String MODULE_VIEW_CONNECTOR    = "MODULE_VIEW_CONNECTOR";
 
   /**
-   * The next action.
-   */
-  public static final String NEXT_ACTION              = "NEXT_ACTION";
-
-  /**
    * the connector of the query model.
    */
   public static final String QUERY_MODEL_CONNECTOR    = "QUERY_MODEL_CONNECTOR";

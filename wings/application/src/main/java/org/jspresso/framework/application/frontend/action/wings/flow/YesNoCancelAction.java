@@ -22,7 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.wings.SOptionPane;
@@ -67,14 +66,17 @@ public class YesNoCancelAction extends AbstractMessageAction {
         new ActionListener() {
 
           public void actionPerformed(ActionEvent e) {
+            IAction nextAction = null;
             if (SOptionPane.YES_ACTION.equals(e.getActionCommand())) {
-              context.put(ActionContextConstants.NEXT_ACTION, yesAction);
+              nextAction = yesAction;
             } else if (SOptionPane.NO_ACTION.equals(e.getActionCommand())) {
-              context.put(ActionContextConstants.NEXT_ACTION, noAction);
+              nextAction = noAction;
             } else if (SOptionPane.CANCEL_ACTION.equals(e.getActionCommand())) {
-              context.put(ActionContextConstants.NEXT_ACTION, cancelAction);
+              nextAction = cancelAction;
             }
-            executeNextAction(actionHandler, context);
+            if (nextAction != null) {
+              actionHandler.execute(nextAction, context);
+            }
           }
 
         }, null);

@@ -24,11 +24,9 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.wings.SOptionPane;
-
 
 /**
  * Action to ask a user validation.
@@ -68,14 +66,16 @@ public class OkCancelAction extends AbstractMessageAction {
         new ActionListener() {
 
           public void actionPerformed(ActionEvent e) {
+            IAction nextAction = null;
             if (SOptionPane.OK_ACTION.equals(e.getActionCommand())) {
-              context.put(ActionContextConstants.NEXT_ACTION, okAction);
+              nextAction = okAction;
             } else if (SOptionPane.CANCEL_ACTION.equals(e.getActionCommand())) {
-              context.put(ActionContextConstants.NEXT_ACTION, cancelAction);
+              nextAction = cancelAction;
             }
-            executeNextAction(actionHandler, context);
+            if (nextAction != null) {
+              actionHandler.execute(nextAction, context);
+            }
           }
-
         });
     return true;
   }
@@ -84,7 +84,7 @@ public class OkCancelAction extends AbstractMessageAction {
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *            the cancelAction to set.
+   *          the cancelAction to set.
    */
   public void setCancelAction(IAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -94,7 +94,7 @@ public class OkCancelAction extends AbstractMessageAction {
    * Sets the okAction.
    * 
    * @param okAction
-   *            the okAction to set.
+   *          the okAction to set.
    */
   public void setOkAction(IAction okAction) {
     this.okAction = okAction;

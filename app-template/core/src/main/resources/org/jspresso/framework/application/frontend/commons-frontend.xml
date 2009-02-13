@@ -179,8 +179,8 @@
   </bean>
 
   <bean
-    id="abstractBinaryPropertyInfoAction"
-    abstract="true">
+    id="binaryPropertyInfoAction"
+    class="org.jspresso.framework.application.frontend.action.std.BinaryPropertyInfoAction">
     <property
       name="iconImageURL"
       value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
@@ -190,6 +190,9 @@
     <property
       name="description"
       value="binary.info.description" />
+    <property
+      name="nextAction"
+      ref="infoFrontAction" />
   </bean>
 
   <bean
@@ -1078,32 +1081,36 @@
     <property
       name="name"
       value="login.name" />
-    <property name="modelDescriptor">
-    <bean class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
-     <constructor-arg value="org.jspresso.framework.security.UsernamePasswordHandler"/>
-     <property name="propertyDescriptors">
-     <list>
-        <bean
-          class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
-          <property
-            name="name"
-            value="username" />
-          <property
-            name="maxLength"
-            value="64" />
-        </bean>
-        <bean
-          class="org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor">
-          <property
-            name="name"
-            value="password" />
-          <property
-            name="maxLength"
-            value="64" />
-        </bean>
-     </list>
-     </property>
-    </bean>
+    <property
+      name="modelDescriptor">
+      <bean
+        class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
+        <constructor-arg
+          value="org.jspresso.framework.security.UsernamePasswordHandler" />
+        <property
+          name="propertyDescriptors">
+          <list>
+            <bean
+              class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+              <property
+                name="name"
+                value="username" />
+              <property
+                name="maxLength"
+                value="64" />
+            </bean>
+            <bean
+              class="org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor">
+              <property
+                name="name"
+                value="password" />
+              <property
+                name="maxLength"
+                value="64" />
+            </bean>
+          </list>
+        </property>
+      </bean>
     </property>
   </bean>
 

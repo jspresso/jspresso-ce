@@ -108,11 +108,6 @@
     class="org.jspresso.framework.application.frontend.action.ulc.file.SaveBinaryPropertyAsFileAction" />
 
   <bean
-    id="binaryPropertyInfoAction"
-    parent="abstractBinaryPropertyInfoAction"
-    class="org.jspresso.framework.application.frontend.action.ulc.file.BinaryPropertyInfoAction" />
-
-  <bean
     id="displayReportAction"
     class="org.jspresso.framework.application.printing.frontend.action.ulc.DisplayJasperReportAction" />
 

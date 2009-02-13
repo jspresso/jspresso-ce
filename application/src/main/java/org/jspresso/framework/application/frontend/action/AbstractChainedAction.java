@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 
@@ -79,10 +78,7 @@ public abstract class AbstractChainedAction<E, F, G> extends
    * @see #setNextAction(IAction)
    */
   public IAction getNextAction(Map<String, Object> context) {
-    if (nextAction != null) {
-      return nextAction;
-    }
-    return (IAction) context.get(ActionContextConstants.NEXT_ACTION);
+    return nextAction;
   }
 
   /**
