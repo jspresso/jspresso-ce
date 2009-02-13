@@ -362,18 +362,20 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var typeFilters:Array = null;
       if(filter) {
         typeFilters = new Array();
-        for each(var name:String in filter) {
-          var extensionsString:String = new String();
+        for (var name:String in filter) {
           var extensions:Array = filter[name];
           if(extensions) {
-            for(var i:int = 0; i < extensions.length; i++) {
-              extensionsString += ("*" + extensions.getItemAt(i) as String);
-              if(i < extensions.length -1) {
-                extensionsString += ";";
+            var extensionsString:String = new String();
+            if(extensions) {
+              for(var i:int = 0; i < extensions.length; i++) {
+                extensionsString += ("*" + extensions[i] as String);
+                if(i < extensions.length -1) {
+                  extensionsString += ";";
+                }
               }
             }
+            typeFilters.push(new FileFilter(name + " (" + extensionsString + ")", extensionsString));
           }
-          typeFilters.push(new FileFilter(name, extensionsString));
         }
       }
       return typeFilters;
