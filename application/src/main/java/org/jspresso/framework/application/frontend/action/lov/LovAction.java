@@ -276,8 +276,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
       }
       return entityRefQueryDescriptor;
     }
-    IModelDescriptor modelDescriptor = (IModelDescriptor) context
-        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    IModelDescriptor modelDescriptor = getModelDescriptor(context);
     if (modelDescriptor instanceof IReferencePropertyDescriptor) {
       return (IReferencePropertyDescriptor<IEntity>) modelDescriptor;
     }

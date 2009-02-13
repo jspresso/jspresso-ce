@@ -153,7 +153,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * {@inheritDoc}
    */
   @Override
-  public Locale getLocale(Map<String, Object> context) {
+  protected Locale getLocale(Map<String, Object> context) {
     return getController(context).getLocale();
   }
 
@@ -180,7 +180,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    *            the action context.
    * @return the value connector this model action was triggered on.
    */
-  public ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
+  protected ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
     return (ICompositeValueConnector) context
         .get(ActionContextConstants.MODULE_VIEW_CONNECTOR);
   }
@@ -208,7 +208,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    *            the action context.
    * @return the value connector this model action was triggered on.
    */
-  public IValueConnector getSourceViewConnector(Map<String, Object> context) {
+  protected IValueConnector getSourceViewConnector(Map<String, Object> context) {
     return (IValueConnector) context
         .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR);
   }
@@ -229,7 +229,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    *            the action context.
    * @return the value connector this model action was triggered on.
    */
-  public IValueConnector getViewConnector(Map<String, Object> context) {
+  protected IValueConnector getViewConnector(Map<String, Object> context) {
     return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
   }
 
@@ -374,5 +374,32 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
+  }
+
+  /**
+   * Retrieves the widget this action was triggered from. It may serve to
+   * determine the root window or dialog for instance. It uses a well-known
+   * action context key which is :
+   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
+   * 
+   * @param context
+   *            the action context.
+   * @return the source widget this action was triggered from.
+   */
+  @SuppressWarnings("unchecked")
+  protected E getSourceComponent(Map<String, Object> context) {
+    return (E) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  }
+
+  /**
+   * Retrieves the widget which triggered the action from the action context.
+   * 
+   * @param context
+   *            the action context.
+   * @return the widget which triggered the action.
+   */
+  @SuppressWarnings("unchecked")
+  protected E getActionWidget(Map<String, Object> context) {
+    return (E) context.get(ActionContextConstants.ACTION_WIDGET);
   }
 }

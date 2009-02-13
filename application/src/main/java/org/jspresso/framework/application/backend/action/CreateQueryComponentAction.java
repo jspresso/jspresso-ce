@@ -70,8 +70,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     IReferencePropertyDescriptor erqDescriptor = (IReferencePropertyDescriptor) context
         .get(ActionContextConstants.COMPONENT_REF_DESCRIPTOR);
-    IModelDescriptor modelDescriptor = (IModelDescriptor) context
-        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    IModelDescriptor modelDescriptor = getModelDescriptor(context);
     if (erqDescriptor == null) {
       erqDescriptor = (IReferencePropertyDescriptor) modelDescriptor;
     }

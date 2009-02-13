@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.swing.Action;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.action.WrappingAction;
 import org.jspresso.framework.util.wings.WingsUtil;
 import org.wings.SComponent;
@@ -53,31 +52,6 @@ import org.wings.SIcon;
  */
 public abstract class AbstractWingsAction extends
     WrappingAction<SComponent, SIcon, Action> {
-
-  /**
-   * Retrieves the widget which triggered the action from the action context.
-   * 
-   * @param context
-   *            the action context.
-   * @return the widget which triggered the action.
-   */
-  public SComponent getActionWidget(Map<String, Object> context) {
-    return (SComponent) context.get(ActionContextConstants.ACTION_WIDGET);
-  }
-
-  /**
-   * Retrieves the widget this action was triggered from. It may serve to
-   * determine the root window or dialog for instance. It uses a well-known
-   * action context key which is :
-   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
-   * 
-   * @param context
-   *            the action context.
-   * @return the source widget this action was triggered from.
-   */
-  public SComponent getSourceComponent(Map<String, Object> context) {
-    return (SComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
-  }
 
   /**
    * If the ancestor of the action widget is a dialog, dispose it.

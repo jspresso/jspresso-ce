@@ -28,10 +28,8 @@ import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
-
 
 /**
  * This class should serve as base class for implementing a action which
@@ -93,29 +91,12 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * action has to be triggered on.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the value connector this model action was triggered on.
    */
   public IValueConnector getModelConnector(Map<String, Object> context) {
     return ((IValueConnector) context
         .get(ActionContextConstants.VIEW_CONNECTOR)).getModelConnector();
-  }
-
-  /**
-   * This is a utility method which is able to retrieve the model descriptor
-   * this action has been executed on from its context. It uses well-known
-   * context keys of the action context which is :
-   * <ul>
-   * <li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code>.
-   * </ul>
-   * 
-   * @param context
-   *            the action context.
-   * @return the model descriptor this action executes on.
-   */
-  public IModelDescriptor getModelDescriptor(Map<String, Object> context) {
-    return (IModelDescriptor) context
-        .get(ActionContextConstants.MODEL_DESCRIPTOR);
   }
 
   /**
@@ -127,7 +108,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * </ul>
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the module model connector this action executes on.
    */
   public ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
@@ -148,7 +129,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * action has to be triggered on.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the value connector this model action was triggered on.
    */
   public IValueConnector getSourceModelConnector(Map<String, Object> context) {
@@ -171,7 +152,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * Sets the nextAction.
    * 
    * @param nextAction
-   *            the nextAction to set.
+   *          the nextAction to set.
    */
   public void setNextAction(AbstractBackendAction nextAction) {
     this.nextAction = nextAction;
@@ -181,7 +162,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * Gets the current application session.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the current application session.
    */
   protected IApplicationSession getApplicationSession(
@@ -193,7 +174,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * Gets the accessorFactory.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the accessorFactory.
    */
   protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
@@ -204,7 +185,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * Gets the frontend controller out of the action context.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the frontend controller.
    */
   @Override
@@ -217,7 +198,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * Gets the entityFactory.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the entityFactory.
    */
   protected IEntityFactory getEntityFactory(Map<String, Object> context) {

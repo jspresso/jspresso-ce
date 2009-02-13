@@ -23,10 +23,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.IController;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
-
 
 /**
  * Base class for all application actions. Takes care of the context reference
@@ -80,10 +81,10 @@ public abstract class AbstractAction implements IAction {
    * using a well-known key.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the locale the action executes in.
    */
-  public abstract Locale getLocale(Map<String, Object> context);
+  protected abstract Locale getLocale(Map<String, Object> context);
 
   /**
    * {@inheritDoc}
@@ -106,7 +107,7 @@ public abstract class AbstractAction implements IAction {
    * Sets the grantedRoles.
    * 
    * @param grantedRoles
-   *            the grantedRoles to set.
+   *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
@@ -116,7 +117,7 @@ public abstract class AbstractAction implements IAction {
    * Sets the longOperation.
    * 
    * @param longOperation
-   *            the longOperation to set.
+   *          the longOperation to set.
    */
   public void setLongOperation(boolean longOperation) {
     this.longOperation = longOperation;
@@ -126,7 +127,7 @@ public abstract class AbstractAction implements IAction {
    * Gets the controller (frontend or backend) out of the action context.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the controller (frontend or backend).
    */
   protected abstract IController getController(Map<String, Object> context);
@@ -135,11 +136,29 @@ public abstract class AbstractAction implements IAction {
    * Gets a translation provider out of the action context.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the translation provider.
    */
   protected ITranslationProvider getTranslationProvider(
       Map<String, Object> context) {
     return getController(context).getTranslationProvider();
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the model descriptor
+   * this action has been executed on from its context. It uses well-known
+   * context keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code> to get the the
+   * view model descriptor the action executes on.
+   * </ul>
+   * 
+   * @param context
+   *          the action context.
+   * @return the model descriptor this model action was triggered on.
+   */
+  protected IModelDescriptor getModelDescriptor(Map<String, Object> context) {
+    return (IModelDescriptor) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
   }
 }
