@@ -47,7 +47,6 @@ import com.ulcjava.base.shared.FileChooserConfig;
 public abstract class ChooseFileAction extends AbstractUlcAction {
 
   private String                    defaultFileName;
-  private FileChooserConfig         fileChooser;
   private Map<String, List<String>> fileFilter;
 
   /**
@@ -68,11 +67,18 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
    *            the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
-    Map<String, List<String>> oldFileFilter = this.fileFilter;
     this.fileFilter = fileFilter;
-    if (oldFileFilter != this.fileFilter) {
-      fileChooser = null;
-    }
+  }
+
+  /**
+   * Gets the fileFilter.
+   * 
+   * @param context
+   *          the action context.
+   * @return the fileFilter.
+   */
+  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
+    return fileFilter;
   }
 
   /**
@@ -82,33 +88,32 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
    *            the action context.
    * @return the file chooser configuration.
    */
-  protected FileChooserConfig getFileChooser(Map<String, Object> context) {
-    if (fileChooser == null) {
-      fileChooser = new FileChooserConfig();
-      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
-          getLocale(context)));
-      if (fileFilter != null) {
-        for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
-            .entrySet()) {
-          StringBuffer extensionsDescription = new StringBuffer(" (");
-          String[] allowedExtensions = new String[fileTypeEntry.getValue()
-              .size() * 2];
-          int i = 0;
-          for (String fileExtension : fileTypeEntry.getValue()) {
-            extensionsDescription.append("*").append(fileExtension).append(" ");
-            allowedExtensions[i++] = fileExtension.toLowerCase();
-            allowedExtensions[i++] = fileExtension.toUpperCase();
-          }
-          extensionsDescription.append(")");
-          fileChooser
-              .addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
-                  allowedExtensions, getTranslationProvider(context)
-                      .getTranslation(fileTypeEntry.getKey(),
-                          getLocale(context))
-                      + extensionsDescription.toString()));
-          if (defaultFileName != null) {
-            fileChooser.setSelectedFile(defaultFileName);
-          }
+  protected FileChooserConfig createFileChooser(Map<String, Object> context) {
+    FileChooserConfig fileChooser = new FileChooserConfig();
+    fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
+        getLocale(context)));
+    Map<String, List<String>> executionFileFilter = getFileFilter(context);
+    if (executionFileFilter != null) {
+      for (Map.Entry<String, List<String>> fileTypeEntry : executionFileFilter
+          .entrySet()) {
+        StringBuffer extensionsDescription = new StringBuffer(" (");
+        String[] allowedExtensions = new String[fileTypeEntry.getValue()
+            .size() * 2];
+        int i = 0;
+        for (String fileExtension : fileTypeEntry.getValue()) {
+          extensionsDescription.append("*").append(fileExtension).append(" ");
+          allowedExtensions[i++] = fileExtension.toLowerCase();
+          allowedExtensions[i++] = fileExtension.toUpperCase();
+        }
+        extensionsDescription.append(")");
+        fileChooser
+            .addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
+                allowedExtensions, getTranslationProvider(context)
+                    .getTranslation(fileTypeEntry.getKey(),
+                        getLocale(context))
+                    + extensionsDescription.toString()));
+        if (defaultFileName != null) {
+          fileChooser.setSelectedFile(defaultFileName);
         }
       }
     }

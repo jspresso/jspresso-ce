@@ -615,7 +615,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the authenticated user subject.
    */
   protected void loginSuccess(Subject subject) {
-    ((UsernamePasswordHandler) getLoginCallbackHandler()).clear();
+    if (getLoginCallbackHandler() instanceof UsernamePasswordHandler) {
+      ((UsernamePasswordHandler) getLoginCallbackHandler()).clear();
+    }
     getBackendController().getApplicationSession().setSubject(subject);
     String userPreferredLanguageCode = (String) getBackendController()
         .getApplicationSession().getPrincipal().getCustomProperty(

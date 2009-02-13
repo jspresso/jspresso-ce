@@ -352,6 +352,8 @@ package org.jspresso.framework.view.flex {
     
     private function createActionField(remoteActionField:RActionField):UIComponent {
       var actionField:HBox = new HBox();
+      actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
+      actionField.verticalScrollPolicy = ScrollPolicy.OFF;
       var textField:TextInput;
       if(remoteActionField.showTextField) {
         textField = new TextInput();
@@ -364,7 +366,7 @@ package org.jspresso.framework.view.flex {
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
-          var actionComponent:UIComponent = createAction(actionList.actions[i])
+          var actionComponent:UIComponent = createAction(actionList.actions[j])
           actionField.addChild(actionComponent);
         }
       }

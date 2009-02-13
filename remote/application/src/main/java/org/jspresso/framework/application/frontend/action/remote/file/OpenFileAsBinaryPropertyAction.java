@@ -18,9 +18,9 @@
  */
 package org.jspresso.framework.application.frontend.action.remote.file;
 
+import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.file.ConnectorValueSetterCallback;
 import org.jspresso.framework.model.descriptor.IFileFilterable;
 
@@ -58,10 +58,8 @@ public class OpenFileAsBinaryPropertyAction extends OpenFileAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
     IFileFilterable modelDescriptor = (IFileFilterable) getModelDescriptor(context);
-    setFileFilter(modelDescriptor.getFileFilter());
-    return super.execute(actionHandler, context);
+    return modelDescriptor.getFileFilter();
   }
 }

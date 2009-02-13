@@ -29,7 +29,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
 
-
 /**
  * Initiates a file choosing action.
  * <p>
@@ -52,14 +51,13 @@ import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAct
 public class ChooseFileAction extends AbstractSwingAction {
 
   private String                    defaultFileName;
-  private JFileChooser              fileChooser;
   private Map<String, List<String>> fileFilter;
 
   /**
    * Sets the defaultFileName.
    * 
    * @param defaultFileName
-   *            the defaultFileName to set.
+   *          the defaultFileName to set.
    */
   public void setDefaultFileName(String defaultFileName) {
     this.defaultFileName = defaultFileName;
@@ -70,46 +68,41 @@ public class ChooseFileAction extends AbstractSwingAction {
    * file extension arays.
    * 
    * @param fileFilter
-   *            the fileFilter to set.
+   *          the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
-    Map<String, List<String>> oldFileFilter = this.fileFilter;
     this.fileFilter = fileFilter;
-    if (oldFileFilter != this.fileFilter) {
-      fileChooser = null;
-    }
   }
 
   /**
    * Gets the file chooser.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the file chooser.
    */
-  protected JFileChooser getFileChooser(Map<String, Object> context) {
-    if (fileChooser == null) {
-      fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
-          getLocale(context)));
-      if (fileFilter != null) {
-        for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
-            .entrySet()) {
-          StringBuffer extensionsDescription = new StringBuffer(" (");
-          for (String fileExtension : fileTypeEntry.getValue()) {
-            extensionsDescription.append("*").append(fileExtension).append(" ");
-          }
-          extensionsDescription.append(")");
-          fileChooser.addChoosableFileFilter(new FileFilterAdapter(
-              fileTypeEntry.getValue(), getTranslationProvider(context)
-                  .getTranslation(fileTypeEntry.getKey(), getLocale(context))
-                  + extensionsDescription.toString()));
+  protected JFileChooser createFileChooser(Map<String, Object> context) {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
+        getLocale(context)));
+    Map<String, List<String>> executionFileFilter = getFileFilter(context);
+    if (executionFileFilter != null) {
+      for (Map.Entry<String, List<String>> fileTypeEntry : executionFileFilter
+          .entrySet()) {
+        StringBuffer extensionsDescription = new StringBuffer(" (");
+        for (String fileExtension : fileTypeEntry.getValue()) {
+          extensionsDescription.append("*").append(fileExtension).append(" ");
         }
+        extensionsDescription.append(")");
+        fileChooser.addChoosableFileFilter(new FileFilterAdapter(
+            fileTypeEntry.getValue(), getTranslationProvider(context)
+                .getTranslation(fileTypeEntry.getKey(), getLocale(context))
+                + extensionsDescription.toString()));
       }
-      fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-      if (defaultFileName != null) {
-        fileChooser.setSelectedFile(new File(defaultFileName));
-      }
+    }
+    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    if (defaultFileName != null) {
+      fileChooser.setSelectedFile(new File(defaultFileName));
     }
     return fileChooser;
   }
@@ -117,9 +110,11 @@ public class ChooseFileAction extends AbstractSwingAction {
   /**
    * Gets the fileFilter.
    * 
+   * @param context
+   *          the action context.
    * @return the fileFilter.
    */
-  protected Map<String, List<String>> getFileFilter() {
+  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
     return fileFilter;
   }
 

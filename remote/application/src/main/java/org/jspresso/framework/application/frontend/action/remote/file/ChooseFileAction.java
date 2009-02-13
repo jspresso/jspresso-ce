@@ -44,7 +44,6 @@ import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteA
  */
 public class ChooseFileAction extends AbstractRemoteAction {
 
-  @SuppressWarnings("unused")
   private String                    defaultFileName;
   private Map<String, List<String>> fileFilter;
 
@@ -72,9 +71,21 @@ public class ChooseFileAction extends AbstractRemoteAction {
   /**
    * Gets the fileFilter.
    * 
+   * @param context
+   *          the action context.
    * @return the fileFilter.
    */
-  protected Map<String, List<String>> getFileFilter() {
+  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
     return fileFilter;
+  }
+
+  
+  /**
+   * Gets the defaultFileName.
+   * 
+   * @return the defaultFileName.
+   */
+  protected String getDefaultFileName() {
+    return defaultFileName;
   }
 }
