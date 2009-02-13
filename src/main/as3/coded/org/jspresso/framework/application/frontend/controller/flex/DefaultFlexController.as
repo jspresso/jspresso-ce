@@ -16,6 +16,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.display.DisplayObject;
   import flash.events.MouseEvent;
   import flash.external.ExternalInterface;
+  import flash.net.FileFilter;
+  import flash.net.FileReference;
   import flash.net.URLRequest;
   import flash.net.navigateToURL;
   import flash.net.registerClassAlias;
@@ -23,6 +25,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
+  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Canvas;
   import mx.containers.HBox;
@@ -54,6 +57,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
@@ -256,6 +261,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
         handleMessageCommand(command as RemoteMessageCommand);
       } else if(command is RemoteRestartCommand) {
         restart();
+      } else if(command is RemoteFileUploadCommand) {
+        var fileUploadCommand:RemoteFileUploadCommand = command as RemoteFileUploadCommand;
+        handleFileUpload(fileUploadCommand.fileFilter);
+      } else if(command is RemoteFileDownloadCommand) {
+        var fileDownloadCommand:RemoteFileDownloadCommand = command as RemoteFileDownloadCommand;
+        handleFileDownload(fileDownloadCommand.fileFilter, fileDownloadCommand.defaultFileName);
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
         var loginButton:Button = _viewFactory.createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
@@ -337,6 +348,37 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
+    private function handleFileUpload(fileFilter:Object):void {
+      var uploadFileRef:FileReference = new  FileReference();
+      uploadFileRef.browse(createTypeFilters(fileFilter));
+    }
+    
+    private function handleFileDownload(fileFilter:Object, defaultFileName:String):void {
+      var downloadFileRef:FileReference = new  FileReference();
+      downloadFileRef.browse(createTypeFilters(fileFilter));
+    }
+    
+    private function createTypeFilters(filter:Object):Array {
+      var typeFilters:Array = null;
+      if(filter) {
+        typeFilters = new Array();
+        for each(var name:String in filter) {
+          var extensionsString:String = new String();
+          var extensions:Array = filter[name];
+          if(extensions) {
+            for(var i:int = 0; i < extensions.length; i++) {
+              extensionsString += ("*" + extensions.getItemAt(i) as String);
+              if(i < extensions.length -1) {
+                extensionsString += ";";
+              }
+            }
+          }
+          typeFilters.push(new FileFilter(name, extensionsString));
+        }
+      }
+      return typeFilters;
+    }
+
     private function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
       var alert:Alert = createAlert(messageCommand);
   

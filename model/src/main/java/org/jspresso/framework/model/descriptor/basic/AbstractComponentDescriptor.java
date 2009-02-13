@@ -272,9 +272,8 @@ public abstract class AbstractComponentDescriptor<E> extends
         for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
             .getReferencedDescriptor().getRenderedProperties()) {
           nestedProperties.add(propertyName + "." + nestedRenderedProperty);
-          explodedProperties
-              .addAll(explodeComponentReferences(nestedProperties));
         }
+        explodedProperties.addAll(explodeComponentReferences(nestedProperties));
       } else {
         explodedProperties.add(propertyName);
       }

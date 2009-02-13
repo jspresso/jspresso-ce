@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -43,7 +42,7 @@ import java.util.Map;
  */
 public class RemoteFileUploadCommand extends RemoteCommand {
   
-  private Map<String, List<String>> fileFilter;
+  private Map<String, String[]> fileFilter;
 
   
   /**
@@ -51,7 +50,7 @@ public class RemoteFileUploadCommand extends RemoteCommand {
    * 
    * @return the fileFilter.
    */
-  public Map<String, List<String>> getFileFilter() {
+  public Map<String, String[]> getFileFilter() {
     return fileFilter;
   }
 
@@ -61,7 +60,7 @@ public class RemoteFileUploadCommand extends RemoteCommand {
    * 
    * @param fileFilter the fileFilter to set.
    */
-  public void setFileFilter(Map<String, List<String>> fileFilter) {
+  public void setFileFilter(Map<String, String[]> fileFilter) {
     this.fileFilter = fileFilter;
   }
   

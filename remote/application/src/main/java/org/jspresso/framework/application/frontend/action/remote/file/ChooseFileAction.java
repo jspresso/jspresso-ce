@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.action.remote.file;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,7 +80,6 @@ public class ChooseFileAction extends AbstractRemoteAction {
     return fileFilter;
   }
 
-  
   /**
    * Gets the defaultFileName.
    * 
@@ -87,5 +87,28 @@ public class ChooseFileAction extends AbstractRemoteAction {
    */
   protected String getDefaultFileName() {
     return defaultFileName;
+  }
+
+  /**
+   * Translates the file filter for usage in remote commands.
+   * 
+   * @param executionFileFilter
+   *          the file filter to translate.
+   * @param context
+   *          the action context.
+   * @return the translated file filter.
+   */
+  protected Map<String, String[]> translateFilter(
+      Map<String, List<String>> executionFileFilter, Map<String, Object> context) {
+    if (executionFileFilter == null) {
+      return null;
+    }
+    Map<String, String[]> translatedFileFilter = new HashMap<String, String[]>();
+    for (Map.Entry<String, List<String>> filterEntry : executionFileFilter.entrySet()) {
+      translatedFileFilter.put(getTranslationProvider(context).getTranslation(
+          filterEntry.getKey(), getLocale(context)), filterEntry.getValue()
+          .toArray(new String[0]));
+    }
+    return translatedFileFilter;
   }
 }

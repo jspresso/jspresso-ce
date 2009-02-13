@@ -21,8 +21,8 @@ package org.jspresso.framework.application.frontend.action.remote.file;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
-
 
 /**
  * Initiates a file save action.
@@ -54,6 +54,11 @@ public class SaveFileAction extends ChooseFileAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
+    RemoteFileDownloadCommand fileDownloadCommand = new RemoteFileDownloadCommand();
+    fileDownloadCommand.setFileFilter(translateFilter(getFileFilter(context),
+        context));
+    fileDownloadCommand.setDefaultFileName(getDefaultFileName());
+    registerCommand(fileDownloadCommand, context);
     return super.execute(actionHandler, context);
   }
 
@@ -61,7 +66,7 @@ public class SaveFileAction extends ChooseFileAction {
    * Sets the fileSaveCallback.
    * 
    * @param fileSaveCallback
-   *            the fileSaveCallback to set.
+   *          the fileSaveCallback to set.
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
     this.fileSaveCallback = fileSaveCallback;

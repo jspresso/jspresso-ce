@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.action.remote.file;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
 import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 
 /**
@@ -51,10 +52,13 @@ public class OpenFileAction extends ChooseFileAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") Map<String, Object> context) {
-    return true;
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    RemoteFileUploadCommand fileUploadCommand = new RemoteFileUploadCommand();
+    fileUploadCommand.setFileFilter(translateFilter(getFileFilter(context),
+        context));
+    registerCommand(fileUploadCommand, context);
+    return super.execute(actionHandler, context);
   }
 
   /**

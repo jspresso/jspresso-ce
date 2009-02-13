@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,9 +41,9 @@ import java.util.Map;
  */
 public class RemoteFileDownloadCommand extends RemoteCommand {
 
-  private String                    defaultFileName;
-  private Map<String, List<String>> fileFilter;
-  
+  private String                defaultFileName;
+  private Map<String, String[]> fileFilter;
+
   /**
    * Gets the defaultFileName.
    * 
@@ -53,32 +52,34 @@ public class RemoteFileDownloadCommand extends RemoteCommand {
   public String getDefaultFileName() {
     return defaultFileName;
   }
-  
+
   /**
    * Sets the defaultFileName.
    * 
-   * @param defaultFileName the defaultFileName to set.
+   * @param defaultFileName
+   *          the defaultFileName to set.
    */
   public void setDefaultFileName(String defaultFileName) {
     this.defaultFileName = defaultFileName;
   }
-  
+
   /**
    * Gets the fileFilter.
    * 
    * @return the fileFilter.
    */
-  public Map<String, List<String>> getFileFilter() {
+  public Map<String, String[]> getFileFilter() {
     return fileFilter;
   }
-  
+
   /**
    * Sets the fileFilter.
    * 
-   * @param fileFilter the fileFilter to set.
+   * @param fileFilter
+   *          the fileFilter to set.
    */
-  public void setFileFilter(Map<String, List<String>> fileFilter) {
+  public void setFileFilter(Map<String, String[]> fileFilter) {
     this.fileFilter = fileFilter;
   }
-  
+
 }
