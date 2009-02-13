@@ -20,7 +20,9 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteFileDownloadCommand extends RemoteCommand {
 
         private var _defaultFileName:String;
+        private var _downloadUrl:String;
         private var _fileFilter:Object;
+        private var _resourceId:String;
 
         public function set defaultFileName(value:String):void {
             _defaultFileName = value;
@@ -29,11 +31,25 @@ package org.jspresso.framework.application.frontend.command.remote {
             return _defaultFileName;
         }
 
+        public function set downloadUrl(value:String):void {
+            _downloadUrl = value;
+        }
+        public function get downloadUrl():String {
+            return _downloadUrl;
+        }
+
         public function set fileFilter(value:Object):void {
             _fileFilter = value;
         }
         public function get fileFilter():Object {
             return _fileFilter;
+        }
+
+        public function set resourceId(value:String):void {
+            _resourceId = value;
+        }
+        public function get resourceId():String {
+            return _resourceId;
         }
     }
 }

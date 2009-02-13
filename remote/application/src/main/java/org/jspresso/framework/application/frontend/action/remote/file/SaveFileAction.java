@@ -18,11 +18,17 @@
  */
 package org.jspresso.framework.application.frontend.action.remote.file;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
+import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.server.ResourceManager;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 /**
  * Initiates a file save action.
@@ -45,7 +51,6 @@ import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
  */
 public class SaveFileAction extends ChooseFileAction {
 
-  @SuppressWarnings("unused")
   private IFileSaveCallback fileSaveCallback;
 
   /**
@@ -58,6 +63,10 @@ public class SaveFileAction extends ChooseFileAction {
     fileDownloadCommand.setFileFilter(translateFilter(getFileFilter(context),
         context));
     fileDownloadCommand.setDefaultFileName(getDefaultFileName());
+    String resourceId = ResourceManager.getInstance().register(
+        new ResourceAdapter(fileSaveCallback, context));
+    fileDownloadCommand.setResourceId(resourceId);
+    fileDownloadCommand.setDownloadUrl(ResourceProviderServlet.computeUrl(resourceId));
     registerCommand(fileDownloadCommand, context);
     return super.execute(actionHandler, context);
   }
@@ -70,5 +79,41 @@ public class SaveFileAction extends ChooseFileAction {
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
     this.fileSaveCallback = fileSaveCallback;
+  }
+
+  private class ResourceAdapter implements IResource {
+
+    private byte[] content;
+
+    public ResourceAdapter(IFileSaveCallback source, Map<String, Object> context) {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      source.fileChosen(baos, context);
+      content = baos.toByteArray();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InputStream getContent() {
+      return new ByteArrayInputStream(content);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getLength() {
+      return content.length;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMimeType() {
+      return "application/octet-stream";
+    }
+
   }
 }

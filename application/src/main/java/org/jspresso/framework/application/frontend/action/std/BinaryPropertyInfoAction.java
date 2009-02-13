@@ -66,17 +66,17 @@ public class BinaryPropertyInfoAction<E, F, G> extends WrappingAction<E, F, G> {
     if (content != null) {
       if (content.length < 1024) {
         size = new Integer(content.length);
-        unit = "o";
+        unit = getTranslationProvider(context).getTranslation("bytes", getLocale(context));
       } else if (content.length >= 1024 && content.length < 1024 * 1024) {
         size = new Integer(content.length / 1024);
-        unit = "Ko";
+        unit = getTranslationProvider(context).getTranslation("kbytes", getLocale(context));
       } else if (content.length >= 1024 * 1024
           && content.length < 1024 * 1024 * 1024) {
         size = new Integer(content.length / (1024 * 1024));
-        unit = "Mo";
+        unit = getTranslationProvider(context).getTranslation("mbytes", getLocale(context));
       } else if (content.length >= 1024 * 1024 * 1024) {
         size = new Integer(content.length / (1024 * 1024 * 1024));
-        unit = "Go";
+        unit = getTranslationProvider(context).getTranslation("gbytes", getLocale(context));
       }
     }
     context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(

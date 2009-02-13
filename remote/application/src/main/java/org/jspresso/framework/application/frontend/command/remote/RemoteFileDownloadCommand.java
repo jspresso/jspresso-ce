@@ -43,6 +43,8 @@ public class RemoteFileDownloadCommand extends RemoteCommand {
 
   private String                defaultFileName;
   private Map<String, String[]> fileFilter;
+  private String                downloadUrl;
+  private String                resourceId;
 
   /**
    * Gets the defaultFileName.
@@ -80,6 +82,46 @@ public class RemoteFileDownloadCommand extends RemoteCommand {
    */
   public void setFileFilter(Map<String, String[]> fileFilter) {
     this.fileFilter = fileFilter;
+  }
+
+  
+  /**
+   * Gets the downloadUrl.
+   * 
+   * @return the downloadUrl.
+   */
+  public String getDownloadUrl() {
+    return downloadUrl;
+  }
+
+  
+  /**
+   * Sets the downloadUrl.
+   * 
+   * @param downloadUrl the downloadUrl to set.
+   */
+  public void setDownloadUrl(String downloadUrl) {
+    this.downloadUrl = downloadUrl;
+  }
+
+  
+  /**
+   * Gets the resourceId.
+   * 
+   * @return the resourceId.
+   */
+  public String getResourceId() {
+    return resourceId;
+  }
+
+  
+  /**
+   * Sets the resourceId.
+   * 
+   * @param resourceId the resourceId to set.
+   */
+  public void setResourceId(String resourceId) {
+    this.resourceId = resourceId;
   }
 
 }

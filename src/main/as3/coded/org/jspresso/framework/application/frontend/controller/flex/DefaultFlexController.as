@@ -14,6 +14,7 @@
 
 package org.jspresso.framework.application.frontend.controller.flex {
   import flash.display.DisplayObject;
+  import flash.events.Event;
   import flash.events.MouseEvent;
   import flash.external.ExternalInterface;
   import flash.net.FileFilter;
@@ -25,7 +26,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
-  import mx.collections.ListCollectionView;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Canvas;
   import mx.containers.HBox;
@@ -265,8 +265,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var fileUploadCommand:RemoteFileUploadCommand = command as RemoteFileUploadCommand;
         handleFileUpload(fileUploadCommand.fileFilter);
       } else if(command is RemoteFileDownloadCommand) {
-        var fileDownloadCommand:RemoteFileDownloadCommand = command as RemoteFileDownloadCommand;
-        handleFileDownload(fileDownloadCommand.fileFilter, fileDownloadCommand.defaultFileName);
+        handleFileDownload(command as RemoteFileDownloadCommand);
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
         var loginButton:Button = _viewFactory.createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
@@ -351,11 +350,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private function handleFileUpload(fileFilter:Object):void {
       var uploadFileRef:FileReference = new  FileReference();
       uploadFileRef.browse(createTypeFilters(fileFilter));
+      uploadFileRef.addEventListener(Event.SELECT, function(event:Event):void {
+      });
     }
     
-    private function handleFileDownload(fileFilter:Object, defaultFileName:String):void {
+    private function handleFileDownload(downloadCommand:RemoteFileDownloadCommand):void {
       var downloadFileRef:FileReference = new  FileReference();
-      downloadFileRef.browse(createTypeFilters(fileFilter));
+      downloadFileRef.download(new URLRequest(downloadCommand.downloadUrl), downloadCommand.defaultFileName);
+      // Nettoyer.
     }
     
     private function createTypeFilters(filter:Object):Array {
