@@ -70,11 +70,11 @@ public class OpenFileAction extends ChooseFileAction {
 
       public void onSuccess(InputStream in, String filePath) {
         if (fileOpenCallback != null) {
-          getFileChooser(context).setCurrentDirectory(filePath);
+          createFileChooser(context).setCurrentDirectory(filePath);
           fileOpenCallback.fileChosen(in, filePath, actionHandler, context);
         }
       }
-    }, getFileChooser(context));
+    }, createFileChooser(context));
     return super.execute(actionHandler, context);
   }
 
@@ -95,8 +95,8 @@ public class OpenFileAction extends ChooseFileAction {
    * {@inheritDoc}
    */
   @Override
-  protected FileChooserConfig getFileChooser(Map<String, Object> context) {
-    FileChooserConfig fileChooser = super.getFileChooser(context);
+  protected FileChooserConfig createFileChooser(Map<String, Object> context) {
+    FileChooserConfig fileChooser = super.createFileChooser(context);
     return fileChooser;
   }
 }

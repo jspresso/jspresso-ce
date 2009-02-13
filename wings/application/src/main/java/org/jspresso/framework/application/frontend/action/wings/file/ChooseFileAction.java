@@ -81,9 +81,11 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
   /**
    * Gets the fileFilter.
    * 
+   * @param context
+   *          the action context.
    * @return the fileFilter.
    */
-  protected Map<String, List<String>> getFileFilter() {
+  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
     return fileFilter;
   }
 }

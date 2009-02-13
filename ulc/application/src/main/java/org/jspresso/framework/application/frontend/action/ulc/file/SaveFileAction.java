@@ -71,7 +71,7 @@ public class SaveFileAction extends ChooseFileAction {
         }
 
         public void onSuccess(String filePath) {
-          getFileChooser(context).setCurrentDirectory(filePath);
+          createFileChooser(context).setCurrentDirectory(filePath);
           if (fileSaveCallback != null) {
             fileSaveCallback.fileWritten(filePath, context);
           }
@@ -82,7 +82,7 @@ public class SaveFileAction extends ChooseFileAction {
             fileSaveCallback.fileChosen(out, context);
           }
         }
-      }, getFileChooser(context));
+      }, createFileChooser(context));
     } catch (Exception ex) {
       throw new ActionException(ex);
     }
@@ -106,8 +106,8 @@ public class SaveFileAction extends ChooseFileAction {
    * {@inheritDoc}
    */
   @Override
-  protected FileChooserConfig getFileChooser(Map<String, Object> context) {
-    FileChooserConfig fileChooser = super.getFileChooser(context);
+  protected FileChooserConfig createFileChooser(Map<String, Object> context) {
+    FileChooserConfig fileChooser = super.createFileChooser(context);
     return fileChooser;
   }
 }

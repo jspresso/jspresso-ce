@@ -63,7 +63,7 @@ public class SaveFileAction extends ChooseFileAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
 
-    JFileChooser currentFileChooser = getFileChooser(context);
+    JFileChooser currentFileChooser = createFileChooser(context);
 
     int returnVal = currentFileChooser.showSaveDialog(SwingUtil
         .getVisibleWindow(getSourceComponent(context)));
@@ -71,7 +71,7 @@ public class SaveFileAction extends ChooseFileAction {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
         if (file.getName() != null && file.getName().indexOf(".") == -1) { //$NON-NLS-1$
-          Map<String, List<String>> fileFilter = getFileFilter();
+          Map<String, List<String>> fileFilter = getFileFilter(context);
           if (fileFilter != null && !fileFilter.isEmpty()) {
             List<String> extensions = fileFilter.values().iterator().next();
             if (extensions != null && !extensions.isEmpty()) {

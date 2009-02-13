@@ -60,7 +60,7 @@ public class OpenFileAction extends ChooseFileAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
 
-    JFileChooser currentFileChooser = getFileChooser(context);
+    JFileChooser currentFileChooser = createFileChooser(context);
 
     int returnVal = currentFileChooser.showOpenDialog(SwingUtil
         .getVisibleWindow(getSourceComponent(context)));
