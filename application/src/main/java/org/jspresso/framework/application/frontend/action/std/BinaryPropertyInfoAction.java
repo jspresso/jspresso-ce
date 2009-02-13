@@ -16,14 +16,13 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.swing.file;
+package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.swing.flow.InfoAction;
-
+import org.jspresso.framework.application.frontend.action.WrappingAction;
 
 /**
  * A frontend action to display all usefull informations about a binary
@@ -44,8 +43,14 @@ import org.jspresso.framework.application.frontend.action.swing.flow.InfoAction;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class BinaryPropertyInfoAction extends InfoAction {
+public class BinaryPropertyInfoAction<E, F, G> extends WrappingAction<E, F, G> {
 
   /**
    * Displays the size of the binary property.
@@ -84,7 +89,7 @@ public class BinaryPropertyInfoAction extends InfoAction {
    * Retrieve the binary content to display the infos on.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return The binary content to display the infos on or null.
    */
   protected byte[] getBinaryContent(Map<String, Object> context) {

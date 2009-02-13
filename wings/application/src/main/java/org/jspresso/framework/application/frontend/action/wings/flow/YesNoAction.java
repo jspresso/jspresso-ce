@@ -22,7 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.wings.SOptionPane;
@@ -65,12 +64,15 @@ public class YesNoAction extends AbstractMessageAction {
             getLocale(context)), new ActionListener() {
 
           public void actionPerformed(ActionEvent e) {
+            IAction nextAction = null;
             if (SOptionPane.YES_ACTION.equals(e.getActionCommand())) {
-              context.put(ActionContextConstants.NEXT_ACTION, yesAction);
+              nextAction = yesAction;
             } else if (SOptionPane.NO_ACTION.equals(e.getActionCommand())) {
-              context.put(ActionContextConstants.NEXT_ACTION, noAction);
+              nextAction = noAction;
             }
-            executeNextAction(actionHandler, context);
+            if (nextAction != null) {
+              actionHandler.execute(nextAction, context);
+            }
           }
 
         });

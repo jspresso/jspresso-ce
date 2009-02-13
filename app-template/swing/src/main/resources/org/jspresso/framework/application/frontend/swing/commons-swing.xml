@@ -97,11 +97,6 @@
     class="org.jspresso.framework.application.frontend.action.swing.file.SaveBinaryPropertyAsFileAction" />
 
   <bean
-    id="binaryPropertyInfoAction"
-    parent="abstractBinaryPropertyInfoAction"
-    class="org.jspresso.framework.application.frontend.action.swing.file.BinaryPropertyInfoAction" />
-
-  <bean
     id="displayReportAction"
     class="org.jspresso.framework.application.printing.frontend.action.swing.DisplayJasperReportAction" />
 

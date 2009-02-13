@@ -179,8 +179,8 @@
   </bean>
 
   <bean
-    id="abstractBinaryPropertyInfoAction"
-    abstract="true">
+    id="binaryPropertyInfoAction"
+    class="org.jspresso.framework.application.frontend.action.std.BinaryPropertyInfoAction">
     <property
       name="iconImageURL"
       value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
@@ -190,6 +190,9 @@
     <property
       name="description"
       value="binary.info.description" />
+    <property
+      name="nextAction"
+      ref="infoFrontAction" />
   </bean>
 
   <bean

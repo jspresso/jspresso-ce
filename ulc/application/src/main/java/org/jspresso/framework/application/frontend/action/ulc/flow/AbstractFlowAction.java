@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -79,11 +78,11 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * Constructs a new <code>AbstractFlowAction</code> instance.
    * 
    * @param firstOption
-   *            the label for the 1st option.
+   *          the label for the 1st option.
    * @param secondOption
-   *            the label for the 2nd option.
+   *          the label for the 2nd option.
    * @param thirdOption
-   *            the label for the 3rd option.
+   *          the label for the 3rd option.
    */
   protected AbstractFlowAction(String firstOption, String secondOption,
       String thirdOption) {
@@ -131,11 +130,12 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
 
       private static final long serialVersionUID = -6049928144066455758L;
 
-      public void windowClosing(@SuppressWarnings("unused")
-      WindowEvent event) {
-        context.put(ActionContextConstants.NEXT_ACTION,
-            getNextAction(optionReverseDictionary.get(alert.getValue())));
-        executeNextAction(actionHandler, context);
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
+        IAction nextAction = getNextAction(optionReverseDictionary.get(alert
+            .getValue()));
+        if (nextAction != null) {
+          actionHandler.execute(nextAction, context);
+        }
       }
     });
     alert.show();
@@ -143,23 +143,10 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
   }
 
   /**
-   * Calls the super-implementation to execute the next action.
-   * 
-   * @param actionHandler
-   *            the action handler responsible for the action execution.
-   * @param context
-   *            the action context.
-   */
-  protected void executeNextAction(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    super.execute(actionHandler, context);
-  }
-
-  /**
    * Gets the action to execute next based on the user selected option.
    * 
    * @param selectedOption
-   *            the user selected option.
+   *          the user selected option.
    * @return the action to execute next.
    */
   protected abstract IAction getNextAction(String selectedOption);

@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.swing.SwingUtil;
@@ -67,10 +66,14 @@ public class YesNoAction extends AbstractMessageAction {
             getLocale(context)), JOptionPane.YES_NO_OPTION,
         JOptionPane.QUESTION_MESSAGE, getIconFactory(context).getIcon(
             getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+    IAction nextAction = null;
     if (selectedOption == JOptionPane.YES_OPTION) {
-      context.put(ActionContextConstants.NEXT_ACTION, yesAction);
+      nextAction = yesAction;
     } else {
-      context.put(ActionContextConstants.NEXT_ACTION, noAction);
+      nextAction = noAction;
+    }
+    if (nextAction != null) {
+      actionHandler.execute(nextAction, context);
     }
     return super.execute(actionHandler, context);
   }
