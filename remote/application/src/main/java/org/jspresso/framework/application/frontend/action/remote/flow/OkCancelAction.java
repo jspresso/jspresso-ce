@@ -22,7 +22,13 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-
+import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * Action to ask a user validation.
@@ -45,40 +51,67 @@ import org.jspresso.framework.action.IActionHandler;
  */
 public class OkCancelAction extends AbstractMessageAction {
 
-  @SuppressWarnings("unused")
-  private IAction cancelAction;
-  @SuppressWarnings("unused")
-  private IAction okAction;
+  private IDisplayableAction cancelAction;
+  private IDisplayableAction okAction;
 
   /**
-   * Displays the message using a <code>JOptionPane.OK_CANCEL_OPTION</code>.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    return super.execute(actionHandler, context);
+  protected RemoteMessageCommand createMessageCommand() {
+    return new RemoteOkCancelCommand();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void completeMessageCommand(RemoteMessageCommand messageCommand,
+      Map<String, Object> context, IActionHandler actionHandler,
+      RComponent sourceComponent, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector) {
+    messageCommand.setTitleIcon(getIconFactory(context).getWarningIcon(
+        IIconFactory.TINY_ICON_SIZE));
+    if (getIconImageURL() != null) {
+      messageCommand.setMessageIcon(getIconFactory(context).getIcon(
+          getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory(context).getWarningIcon(
+          IIconFactory.LARGE_ICON_SIZE));
+    }
+    if (okAction != null) {
+      ((RemoteOkCancelCommand) messageCommand).setOkAction(getActionFactory(
+          context).createAction(okAction, actionHandler, sourceComponent,
+          modelDescriptor, viewConnector, getLocale(context)));
+    }
+    if (cancelAction != null) {
+      ((RemoteOkCancelCommand) messageCommand)
+          .setCancelAction(getActionFactory(context).createAction(cancelAction,
+              actionHandler, sourceComponent, modelDescriptor, viewConnector,
+              getLocale(context)));
+    }
+    super.completeMessageCommand(messageCommand, context, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector);
   }
 
   /**
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *            the cancelAction to set.
+   *          the cancelAction to set.
    */
   public void setCancelAction(IAction cancelAction) {
-    this.cancelAction = cancelAction;
+    this.cancelAction = wrapAction(cancelAction);
   }
 
   /**
    * Sets the okAction.
    * 
    * @param okAction
-   *            the okAction to set.
+   *          the okAction to set.
    */
   public void setOkAction(IAction okAction) {
-    this.okAction = okAction;
+    this.okAction = wrapAction(okAction);
   }
 
 }

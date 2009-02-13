@@ -39,6 +39,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.core.Container;
   import mx.core.IFlexDisplayObject;
   import mx.core.UIComponent;
+  import mx.events.CloseEvent;
   import mx.events.MenuEvent;
   import mx.managers.PopUpManager;
   import mx.rpc.events.FaultEvent;
@@ -57,6 +58,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
@@ -64,6 +66,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionField;
   import org.jspresso.framework.gui.remote.RActionList;
@@ -166,13 +170,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
         var valueListener:Function = function(value:Object):void {
           valueUpdated(remoteValueState);
-        }
+        };
         BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
 
         if(remoteValueState is RemoteCompositeValueState) {
           var selectedIndicesListener:Function = function(selectedIndices:Array):void {
             selectedIndicesUpdated(remoteValueState as RemoteCompositeValueState);
-          }
+          };
           BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
         }
 
@@ -215,10 +219,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     public function execute(action:RAction, param:String=null):void {
       //trace(">>> Execute <<< " + action.name + " param = " + param);
-      var command:RemoteActionCommand = new RemoteActionCommand();
-      command.targetPeerGuid = action.guid;
-      command.parameter = param;
-      registerCommand(command);
+      if(action) {
+        var command:RemoteActionCommand = new RemoteActionCommand();
+        command.targetPeerGuid = action.guid;
+        command.parameter = param;
+        registerCommand(command);
+      }
     }
     
     protected function registerCommand(command:RemoteCommand):void {
@@ -247,33 +253,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     protected function handleCommand(command:RemoteCommand):void {
       if(command is RemoteMessageCommand) {
-        var messageCommand:RemoteMessageCommand = command as RemoteMessageCommand;
-        var alert:Alert = Alert.show(messageCommand.message,
-                   messageCommand.title,
-                   Alert.OK,
-                   null,
-                   null,
-                   null,
-                   Alert.OK);
-
-        if(messageCommand.messageIcon) {
-          var alertForm:UIComponent =  alert.getChildAt(0) as UIComponent;
-          var messageIcon:Class = _viewFactory.getIconForComponent(alertForm, messageCommand.messageIcon);
-          alert.iconClass = messageIcon;
-          alert.removeChild(alertForm);
-          for(var childIndex:int = alertForm.numChildren - 1; childIndex>=0; childIndex--) {
-            var childComp:DisplayObject = alertForm.getChildAt(childIndex);
-            if(childComp is Button) {
-              alertForm.removeChildAt(childIndex);
-            }
-          }
-          alert.addChild(alertForm);
-        }
-
-        if(messageCommand.titleIcon) {
-          var titleIcon:Class = _viewFactory.getIconForComponent(alert, messageCommand.titleIcon);
-          alert.titleIcon = titleIcon;
-        }
+        handleMessageCommand(command as RemoteMessageCommand);
       } else if(command is RemoteRestartCommand) {
         restart();
       } else if(command is RemoteInitLoginCommand) {
@@ -357,6 +337,94 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
+    private function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
+      var alert:Alert = createAlert(messageCommand);
+  
+      if(messageCommand.messageIcon) {
+        var alertForm:UIComponent =  alert.getChildAt(0) as UIComponent;
+        var messageIcon:Class = _viewFactory.getIconForComponent(alertForm, messageCommand.messageIcon);
+        alert.iconClass = messageIcon;
+        alert.removeChild(alertForm);
+        for(var childIndex:int = alertForm.numChildren - 1; childIndex>=0; childIndex--) {
+          var childComp:DisplayObject = alertForm.getChildAt(childIndex);
+          if(childComp is Button) {
+            alertForm.removeChildAt(childIndex);
+          }
+        }
+        alert.addChild(alertForm);
+      }
+  
+      if(messageCommand.titleIcon) {
+        var titleIcon:Class = _viewFactory.getIconForComponent(alert, messageCommand.titleIcon);
+        alert.titleIcon = titleIcon;
+      }
+    }
+    
+    private function createAlert(messageCommand:RemoteMessageCommand):Alert {
+      var alert:Alert;
+      var alertCloseHandler:Function;
+      if(messageCommand is RemoteOkCancelCommand) {
+        alertCloseHandler = function(event:CloseEvent):void {
+          switch(event.detail) {
+            case Alert.OK:
+              execute((messageCommand as RemoteOkCancelCommand).okAction);
+            default:
+              execute((messageCommand as RemoteOkCancelCommand).cancelAction);
+          }
+        };
+        alert = Alert.show(messageCommand.message,
+                   messageCommand.title,
+                   Alert.OK|Alert.CANCEL,
+                   null,
+                   alertCloseHandler,
+                   null,
+                   Alert.CANCEL);
+      } else if(messageCommand is RemoteYesNoCancelCommand) {
+        alertCloseHandler = function(event:CloseEvent):void {
+          switch(event.detail) {
+            case Alert.YES:
+              execute((messageCommand as RemoteYesNoCancelCommand).yesAction);
+            case Alert.NO:
+              execute((messageCommand as RemoteYesNoCancelCommand).noAction);
+            default:
+              execute((messageCommand as RemoteYesNoCancelCommand).cancelAction);
+          }
+        };
+        alert = Alert.show(messageCommand.message,
+                   messageCommand.title,
+                   Alert.YES|Alert.NO|Alert.CANCEL,
+                   null,
+                   alertCloseHandler,
+                   null,
+                   Alert.CANCEL);
+      } else if(messageCommand is RemoteYesNoCommand) {
+        alertCloseHandler = function(event:CloseEvent):void {
+          switch(event.detail) {
+            case Alert.YES:
+              execute((messageCommand as RemoteYesNoCommand).yesAction);
+            default:
+              execute((messageCommand as RemoteYesNoCommand).noAction);
+          }
+        };
+        alert = Alert.show(messageCommand.message,
+                   messageCommand.title,
+                   Alert.YES|Alert.NO,
+                   null,
+                   alertCloseHandler,
+                   null,
+                   Alert.NO);
+      } else {
+        alert = Alert.show(messageCommand.message,
+                   messageCommand.title,
+                   Alert.OK,
+                   null,
+                   null,
+                   null,
+                   Alert.OK);
+      }
+      return alert;
+    }
+
     private function restart():void {
       (Application.application as Application).removeAllChildren();
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -478,7 +546,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         if (event.item["data"] is RAction) {
           execute(event.item["data"] as RAction, null);
         }        
-      }
+      };
       menuBar.addEventListener(MenuEvent.ITEM_CLICK, menuHandler);
 
       return menuBar;                                            

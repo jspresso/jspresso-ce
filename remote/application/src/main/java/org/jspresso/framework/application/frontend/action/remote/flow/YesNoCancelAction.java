@@ -22,7 +22,12 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-
+import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * Action to ask a binary question to the user with a cancel option.
@@ -43,53 +48,43 @@ import org.jspresso.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class YesNoCancelAction extends AbstractMessageAction {
+public class YesNoCancelAction extends YesNoAction {
 
-  @SuppressWarnings("unused")
-  private IAction cancelAction;
-  @SuppressWarnings("unused")
-  private IAction noAction;
-  @SuppressWarnings("unused")
-  private IAction yesAction;
+  private IDisplayableAction cancelAction;
 
   /**
-   * Displays the message using a <code>JOptionPane.YES_NO_CANCEL_OPTION</code>.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    return super.execute(actionHandler, context);
+  protected RemoteMessageCommand createMessageCommand() {
+    return new RemoteYesNoCancelCommand();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void completeMessageCommand(RemoteMessageCommand messageCommand,
+      Map<String, Object> context, IActionHandler actionHandler,
+      RComponent sourceComponent, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector) {
+    if (cancelAction != null) {
+      ((RemoteYesNoCancelCommand) messageCommand)
+          .setCancelAction(getActionFactory(context).createAction(cancelAction,
+              actionHandler, sourceComponent, modelDescriptor, viewConnector,
+              getLocale(context)));
+    }
+    super.completeMessageCommand(messageCommand, context, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector);
   }
 
   /**
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *            the cancelAction to set.
+   *          the cancelAction to set.
    */
   public void setCancelAction(IAction cancelAction) {
-    this.cancelAction = cancelAction;
-  }
-
-  /**
-   * Sets the noAction.
-   * 
-   * @param noAction
-   *            the noAction to set.
-   */
-  public void setNoAction(IAction noAction) {
-    this.noAction = noAction;
-  }
-
-  /**
-   * Sets the yesAction.
-   * 
-   * @param yesAction
-   *            the yesAction to set.
-   */
-  public void setYesAction(IAction yesAction) {
-    this.yesAction = yesAction;
+    this.cancelAction = wrapAction(cancelAction);
   }
 }

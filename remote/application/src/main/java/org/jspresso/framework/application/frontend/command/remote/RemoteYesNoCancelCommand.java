@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,20 +16,15 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.ulc.file;
+package org.jspresso.framework.application.frontend.command.remote;
 
-import java.util.Map;
+import org.jspresso.framework.gui.remote.RAction;
 
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.file.ConnectorValueSetterCallback;
-import org.jspresso.framework.model.descriptor.IFileFilterable;
 
 /**
- * Lets the user browse the local file system and choose a file to update the
- * content of a binary property. Files are filtered based on the file filter
- * defined in the binary property descriptor.
+ * TODO Comment needed.
  * <p>
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -45,23 +40,29 @@ import org.jspresso.framework.model.descriptor.IFileFilterable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class OpenFileAsBinaryPropertyAction extends OpenFileAction {
+public class RemoteYesNoCancelCommand extends RemoteYesNoCommand {
 
+  private RAction cancelAction;
+
+  
   /**
-   * Constructs a new <code>OpenFileAsBinaryPropertyAction</code> instance.
+   * Gets the cancelAction.
+   * 
+   * @return the cancelAction.
    */
-  public OpenFileAsBinaryPropertyAction() {
-    setFileOpenCallback(new ConnectorValueSetterCallback());
+  public RAction getCancelAction() {
+    return cancelAction;
   }
 
+  
   /**
-   * {@inheritDoc}
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction the cancelAction to set.
    */
-  @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    IFileFilterable modelDescriptor = (IFileFilterable) getModelDescriptor(context);
-    setFileFilter(modelDescriptor.getFileFilter());
-    return super.execute(actionHandler, context);
+  public void setCancelAction(RAction cancelAction) {
+    this.cancelAction = cancelAction;
   }
+  
+  
 }

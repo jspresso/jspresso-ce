@@ -21,7 +21,11 @@ package org.jspresso.framework.application.frontend.action.remote.flow;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-
+import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.view.IIconFactory;
 
 /**
  * Action to present a message to the user.
@@ -45,13 +49,32 @@ import org.jspresso.framework.action.IActionHandler;
 public class InfoAction extends AbstractMessageAction {
 
   /**
-   * Displays the message using a <code>JOptionPane.INFORMATION_MESSAGE</code>.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    return super.execute(actionHandler, context);
+  protected RemoteMessageCommand createMessageCommand() {
+    return new RemoteMessageCommand();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void completeMessageCommand(RemoteMessageCommand messageCommand,
+      Map<String, Object> context, IActionHandler actionHandler,
+      RComponent sourceComponent, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector) {
+    messageCommand.setTitleIcon(getIconFactory(context).getInfoIcon(
+        IIconFactory.TINY_ICON_SIZE));
+    if (getIconImageURL() != null) {
+      messageCommand.setMessageIcon(getIconFactory(context).getIcon(
+          getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory(context).getInfoIcon(
+          IIconFactory.LARGE_ICON_SIZE));
+    }
+    super.completeMessageCommand(messageCommand, context, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector);
+  }
+
 }

@@ -20,11 +20,9 @@ package org.jspresso.framework.application.frontend.action.remote.file;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.file.ConnectorValueSetterCallback;
 import org.jspresso.framework.model.descriptor.IFileFilterable;
-
 
 /**
  * Lets the user browse the local file system and choose a file to update the
@@ -62,8 +60,7 @@ public class OpenFileAsBinaryPropertyAction extends OpenFileAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IFileFilterable modelDescriptor = (IFileFilterable) context
-        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    IFileFilterable modelDescriptor = (IFileFilterable) getModelDescriptor(context);
     setFileFilter(modelDescriptor.getFileFilter());
     return super.execute(actionHandler, context);
   }
