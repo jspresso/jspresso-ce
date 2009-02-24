@@ -31,6 +31,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +57,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.InternalFrameAdapter;
@@ -218,9 +220,22 @@ public class DefaultSwingController extends
             .setParentComponent(controllerFrame);
       }
       if (performLogin()) {
-        displayControllerFrame();
-        execute(getStartupAction(), getInitialActionContext());
-        return true;
+        try {
+          SwingUtilities.invokeAndWait(new Runnable() {
+
+            @Override
+            public void run() {
+              displayControllerFrame();
+              execute(getStartupAction(), getInitialActionContext());
+            }
+          });
+          return true;
+        } catch (InvocationTargetException ex) {
+          ex.printStackTrace(System.err);
+        } catch (InterruptedException ex) {
+          ex.printStackTrace(System.err);
+        }
+        return false;
       }
       stop();
     }
@@ -559,8 +574,8 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void displayModalDialog(JComponent mainView,
-      List<Action> actions, String title, JComponent sourceComponent) {
+  public void displayModalDialog(JComponent mainView, List<Action> actions,
+      String title, JComponent sourceComponent) {
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     if (window instanceof Dialog) {
@@ -600,7 +615,7 @@ public class DefaultSwingController extends
     SwingUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }
-  
+
   /**
    * {@inheritDoc}
    */
