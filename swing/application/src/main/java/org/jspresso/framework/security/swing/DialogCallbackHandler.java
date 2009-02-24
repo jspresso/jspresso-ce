@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -65,129 +67,155 @@ public class DialogCallbackHandler implements CallbackHandler {
    *           PasswordCallback
    */
 
-  public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
-    Callback[] varCallbacks = callbacks;
-    boolean tocFound = false;
-    boolean pcFound = false;
-    for (Callback callback : varCallbacks) {
-      if (callback instanceof TextOutputCallback) {
-        tocFound = true;
-      } else if (callback instanceof PasswordCallback) {
-        pcFound = true;
+  public void handle(final Callback[] callbacks)
+      throws UnsupportedCallbackException {
+    try {
+      SwingUtilities.invokeAndWait(new Runnable() {
+
+        @Override
+        public void run() {
+          try {
+            Callback[] varCallbacks = callbacks;
+            boolean tocFound = false;
+            boolean pcFound = false;
+            for (Callback callback : varCallbacks) {
+              if (callback instanceof TextOutputCallback) {
+                tocFound = true;
+              } else if (callback instanceof PasswordCallback) {
+                pcFound = true;
+              }
+            }
+
+            if (pcFound && !tocFound) {
+              TextOutputCallback defaultToc = new TextOutputCallback(
+                  TextOutputCallback.INFORMATION, "credentialMessage");
+              List<Callback> completedCallBacks = new ArrayList<Callback>(
+                  Arrays.asList(varCallbacks));
+              completedCallBacks.add(defaultToc);
+              varCallbacks = completedCallBacks
+                  .toArray(new Callback[varCallbacks.length + 1]);
+            }
+
+            String dialogTitle = null;
+
+            final JDialog callbackDialog;
+            if (parentComponent != null) {
+              Window parentWindow = SwingUtil.getVisibleWindow(parentComponent);
+              if (parentWindow instanceof Dialog) {
+                callbackDialog = new JDialog((Dialog) parentWindow, true);
+              } else {
+                callbackDialog = new JDialog((Frame) parentWindow, true);
+              }
+            } else {
+              callbackDialog = new JDialog((Frame) null, true);
+            }
+            callbackDialog
+                .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+            List<ActionListener> proceedActions = new ArrayList<ActionListener>(
+                2);
+
+            JPanel messagePanel = null;
+            JPanel inputPanel = null;
+            JPanel optionPanel = null;
+
+            for (Callback callback : varCallbacks) {
+              if (callback instanceof TextOutputCallback) {
+                if (messagePanel == null) {
+                  messagePanel = new JPanel();
+                  messagePanel.setLayout(new GridBagLayout());
+                }
+                processTextOutputCallback(messagePanel,
+                    (TextOutputCallback) callback);
+                if (dialogTitle == null) {
+                  dialogTitle = translationProvider.getTranslation(
+                      ((TextOutputCallback) callback).getMessage(), locale);
+                }
+              } else if (callback instanceof NameCallback) {
+                if (inputPanel == null) {
+                  inputPanel = new JPanel();
+                  inputPanel.setLayout(new GridBagLayout());
+                }
+                processNameCallback(proceedActions, inputPanel,
+                    (NameCallback) callback);
+
+              } else if (callback instanceof PasswordCallback) {
+                if (inputPanel == null) {
+                  inputPanel = new JPanel();
+                  inputPanel.setLayout(new GridBagLayout());
+                }
+                processPasswordCallback(proceedActions, inputPanel,
+                    (PasswordCallback) callback);
+
+              } else if (callback instanceof ConfirmationCallback) {
+                if (optionPanel == null) {
+                  optionPanel = new JPanel();
+                  optionPanel.setLayout(new GridBagLayout());
+                }
+                processConfirmationCallback(callbackDialog, proceedActions,
+                    optionPanel, (ConfirmationCallback) callback,
+                    inputPanel != null);
+
+              } else {
+                throw new UnsupportedCallbackException(callback,
+                    "Unrecognized Callback");
+              }
+            }
+
+            JPanel dialogPanel = new JPanel();
+            dialogPanel.setLayout(new GridBagLayout());
+
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.insets = DEFAULT_INSETS;
+            constraints.gridx = GridBagConstraints.RELATIVE;
+            constraints.gridy = GridBagConstraints.RELATIVE;
+            constraints.gridwidth = GridBagConstraints.REMAINDER;
+            constraints.weightx = 1.0d;
+            constraints.weighty = 0.0d;
+            constraints.fill = GridBagConstraints.BOTH;
+
+            if (messagePanel != null) {
+              dialogPanel.add(messagePanel, constraints);
+            }
+            if (inputPanel != null) {
+              dialogPanel.add(inputPanel, constraints);
+            }
+            if (optionPanel == null) {
+              optionPanel = new JPanel();
+              optionPanel.setLayout(new GridBagLayout());
+              ConfirmationCallback cc = new ConfirmationCallback(
+                  ConfirmationCallback.INFORMATION,
+                  ConfirmationCallback.OK_CANCEL_OPTION,
+                  ConfirmationCallback.OK);
+              processConfirmationCallback(callbackDialog, proceedActions,
+                  optionPanel, cc, inputPanel != null);
+            }
+            dialogPanel.add(optionPanel, constraints);
+
+            if (dialogTitle != null) {
+              callbackDialog.setTitle(dialogTitle);
+            }
+            callbackDialog.getContentPane().add(dialogPanel);
+            int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+            callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
+                * (varCallbacks.length + 1) / 2));
+            callbackDialog.pack();
+            SwingUtil.centerOnScreen(callbackDialog);
+            callbackDialog.setVisible(true);
+          } catch (UnsupportedCallbackException ex) {
+            throw new RuntimeException(ex);
+          }
+        }
+      });
+    } catch (InterruptedException ex) {
+      ex.printStackTrace();
+    } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException
+          && ex.getCause().getCause() instanceof UnsupportedCallbackException) {
+        throw (UnsupportedCallbackException) ex.getCause().getCause();
       }
+      ex.printStackTrace();
     }
-
-    if (pcFound && !tocFound) {
-      TextOutputCallback defaultToc = new TextOutputCallback(
-          TextOutputCallback.INFORMATION, "credentialMessage");
-      List<Callback> completedCallBacks = new ArrayList<Callback>(Arrays
-          .asList(varCallbacks));
-      completedCallBacks.add(defaultToc);
-      varCallbacks = completedCallBacks
-          .toArray(new Callback[varCallbacks.length + 1]);
-    }
-
-    String dialogTitle = null;
-
-    final JDialog callbackDialog;
-    if (parentComponent != null) {
-      Window parentWindow = SwingUtil.getVisibleWindow(parentComponent);
-      if (parentWindow instanceof Dialog) {
-        callbackDialog = new JDialog((Dialog) parentWindow, true);
-      } else {
-        callbackDialog = new JDialog((Frame) parentWindow, true);
-      }
-    } else {
-      callbackDialog = new JDialog((Frame) null, true);
-    }
-    callbackDialog
-        .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
-    List<ActionListener> proceedActions = new ArrayList<ActionListener>(2);
-
-    JPanel messagePanel = null;
-    JPanel inputPanel = null;
-    JPanel optionPanel = null;
-
-    for (Callback callback : varCallbacks) {
-      if (callback instanceof TextOutputCallback) {
-        if (messagePanel == null) {
-          messagePanel = new JPanel();
-          messagePanel.setLayout(new GridBagLayout());
-        }
-        processTextOutputCallback(messagePanel, (TextOutputCallback) callback);
-        if (dialogTitle == null) {
-          dialogTitle = translationProvider.getTranslation(
-              ((TextOutputCallback) callback).getMessage(), locale);
-        }
-      } else if (callback instanceof NameCallback) {
-        if (inputPanel == null) {
-          inputPanel = new JPanel();
-          inputPanel.setLayout(new GridBagLayout());
-        }
-        processNameCallback(proceedActions, inputPanel, (NameCallback) callback);
-
-      } else if (callback instanceof PasswordCallback) {
-        if (inputPanel == null) {
-          inputPanel = new JPanel();
-          inputPanel.setLayout(new GridBagLayout());
-        }
-        processPasswordCallback(proceedActions, inputPanel,
-            (PasswordCallback) callback);
-
-      } else if (callback instanceof ConfirmationCallback) {
-        if (optionPanel == null) {
-          optionPanel = new JPanel();
-          optionPanel.setLayout(new GridBagLayout());
-        }
-        processConfirmationCallback(callbackDialog, proceedActions,
-            optionPanel, (ConfirmationCallback) callback, inputPanel != null);
-
-      } else {
-        throw new UnsupportedCallbackException(callback,
-            "Unrecognized Callback");
-      }
-    }
-
-    JPanel dialogPanel = new JPanel();
-    dialogPanel.setLayout(new GridBagLayout());
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.insets = DEFAULT_INSETS;
-    constraints.gridx = GridBagConstraints.RELATIVE;
-    constraints.gridy = GridBagConstraints.RELATIVE;
-    constraints.gridwidth = GridBagConstraints.REMAINDER;
-    constraints.weightx = 1.0d;
-    constraints.weighty = 0.0d;
-    constraints.fill = GridBagConstraints.BOTH;
-
-    if (messagePanel != null) {
-      dialogPanel.add(messagePanel, constraints);
-    }
-    if (inputPanel != null) {
-      dialogPanel.add(inputPanel, constraints);
-    }
-    if (optionPanel == null) {
-      optionPanel = new JPanel();
-      optionPanel.setLayout(new GridBagLayout());
-      ConfirmationCallback cc = new ConfirmationCallback(
-          ConfirmationCallback.INFORMATION,
-          ConfirmationCallback.OK_CANCEL_OPTION, ConfirmationCallback.OK);
-      processConfirmationCallback(callbackDialog, proceedActions, optionPanel,
-          cc, inputPanel != null);
-    }
-    dialogPanel.add(optionPanel, constraints);
-
-    if (dialogTitle != null) {
-      callbackDialog.setTitle(dialogTitle);
-    }
-    callbackDialog.getContentPane().add(dialogPanel);
-    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
-        * (varCallbacks.length + 1) / 2));
-    callbackDialog.pack();
-    SwingUtil.centerOnScreen(callbackDialog);
-    callbackDialog.setVisible(true);
   }
 
   /**

@@ -65,18 +65,18 @@
         <wb-resource deploy-path="/" source-path="/wings/application/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/wings/components/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/wings/components/src/main/resources"/>
-        <wb-resource deploy-path="/" source-path="/action/src/main/java"/>
-        <wb-resource deploy-path="/" source-path="/action/src/main/resources"/>
-        <wb-resource deploy-path="/" source-path="/security/src/main/java"/>
-        <wb-resource deploy-path="/" source-path="/security/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/app-launch/core/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/app-launch/core/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/app-launch/swing/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/app-launch/swing/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/app-launch/ulc/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/app-launch/ulc/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/app-launch/wings/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/app-launch/wings/src/main/resources"/>
-        <wb-resource deploy-path="/" source-path="/app-launch/core/src/main/java"/>
-        <wb-resource deploy-path="/" source-path="/app-launch/core/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/action/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/action/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/security/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/security/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/jasper/core/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/jasper/core/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/jasper/swing/src/main/java"/>

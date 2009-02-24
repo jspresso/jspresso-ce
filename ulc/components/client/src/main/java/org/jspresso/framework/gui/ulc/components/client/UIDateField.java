@@ -46,9 +46,6 @@ import org.jspresso.framework.gui.ulc.components.shared.DateFieldConstants;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gui.GuiException;
 
-import net.sf.nachocalendar.components.DefaultDayRenderer;
-import net.sf.nachocalendar.components.DefaultHeaderRenderer;
-
 import com.ulcjava.base.client.IEditorComponent;
 import com.ulcjava.base.client.UIComponent;
 import com.ulcjava.base.client.tabletree.TableTreeCellEditor;
@@ -186,8 +183,6 @@ public class UIDateField extends UIComponent implements IEditorComponent {
         super.addFocusListener(l);
       }
     };
-    dateField.setRenderer(new DefaultDayRenderer());
-    dateField.setHeaderRenderer(new DefaultHeaderRenderer());
 
     dateField.getFormattedTextField().setFormatterFactory(
         new DefaultFormatterFactory(formatter));

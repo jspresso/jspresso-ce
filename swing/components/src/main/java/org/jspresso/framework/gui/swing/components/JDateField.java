@@ -18,21 +18,25 @@
  */
 package org.jspresso.framework.gui.swing.components;
 
+import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.text.DateFormatter;
 
-import org.jspresso.framework.util.swing.SwingUtil;
-
 import net.sf.nachocalendar.components.DateField;
+import net.sf.nachocalendar.components.DayPanel;
+import net.sf.nachocalendar.components.DefaultDayRenderer;
 import net.sf.nachocalendar.components.FormatSymbols;
 
+import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
  * A subclass of Nacho calendar datefield with some default values and
@@ -62,9 +66,9 @@ public class JDateField extends DateField {
    * Constructs a new <code>JDateField</code> instance.
    * 
    * @param showWeekNumbers
-   *            true if the week numbers must be shown.
+   *          true if the week numbers must be shown.
    * @param locale
-   *            the user locale.
+   *          the user locale.
    */
   public JDateField(boolean showWeekNumbers, Locale locale) {
     super(showWeekNumbers);
@@ -75,9 +79,9 @@ public class JDateField extends DateField {
    * Constructs a new <code>JDateField</code> instance.
    * 
    * @param formatter
-   *            formatter used for the textfield.
+   *          formatter used for the textfield.
    * @param locale
-   *            the user locale.
+   *          the user locale.
    */
   public JDateField(DateFormatter formatter, Locale locale) {
     super(formatter);
@@ -88,7 +92,7 @@ public class JDateField extends DateField {
    * Constructs a new <code>JDateField</code> instance.
    * 
    * @param locale
-   *            the user locale.
+   *          the user locale.
    */
   public JDateField(Locale locale) {
     super();
@@ -99,7 +103,7 @@ public class JDateField extends DateField {
    * Turns the date field to be editable or not.
    * 
    * @param editable
-   *            true if editable.
+   *          true if editable.
    */
   public void setEditable(boolean editable) {
     super.setEnabled(editable);
@@ -126,6 +130,7 @@ public class JDateField extends DateField {
   }
 
   private void initDefaultBehaviour(Locale locale) {
+    setRenderer(new FixedDayRenderer());
     new FormatSymbols((DateFormatter) getFormattedTextField().getFormatter(),
         locale);
     getFormattedTextField().setBorder(
@@ -142,5 +147,32 @@ public class JDateField extends DateField {
       }
     });
     setValue(null);
+  }
+
+  private static class FixedDayRenderer extends DefaultDayRenderer {
+
+    private static final long serialVersionUID = 2527435032589911078L;
+
+    /**
+     * Constructs a new <code>FixedDayRenderer</code> instance.
+     * 
+     */
+    public FixedDayRenderer() {
+      //putClientProperty(SubstanceLookAndFeel.WATERMARK_PROPERTY, Boolean.FALSE);
+    }
+
+    @Override
+    public Component getDayRenderer(DayPanel daypanel, Date day, Object data,
+        boolean selected, boolean working, boolean enabled) {
+      JLabel renderer = (JLabel) super.getDayRenderer(daypanel, day, data,
+          selected, working, enabled);
+      if (selected) {
+        renderer.setBorder(BorderFactory.createLineBorder(renderer
+            .getBackground()));
+      } else {
+        renderer.setBorder(null);
+      }
+      return renderer;
+    }
   }
 }

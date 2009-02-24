@@ -86,9 +86,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import net.sf.nachocalendar.components.DefaultDayRenderer;
-import net.sf.nachocalendar.components.DefaultHeaderRenderer;
-
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -623,8 +620,6 @@ public class DefaultSwingViewFactory implements
    */
   protected JDateField createJDateField(Locale locale) {
     JDateField dateField = new JDateField(locale);
-    dateField.setRenderer(new DefaultDayRenderer());
-    dateField.setHeaderRenderer(new DefaultHeaderRenderer());
     return dateField;
   }
 

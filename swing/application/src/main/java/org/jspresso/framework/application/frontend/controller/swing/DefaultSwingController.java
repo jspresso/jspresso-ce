@@ -28,6 +28,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +53,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -81,7 +83,6 @@ import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
-
 
 import foxtrot.Job;
 
@@ -214,9 +215,22 @@ public class DefaultSwingController extends
             .setParentComponent(controllerFrame);
       }
       if (performLogin()) {
-        displayControllerFrame();
-        execute(getStartupAction(), getInitialActionContext());
-        return true;
+        try {
+          SwingUtilities.invokeAndWait(new Runnable() {
+
+            @Override
+            public void run() {
+              displayControllerFrame();
+              execute(getStartupAction(), getInitialActionContext());
+            }
+          });
+          return true;
+        } catch (InvocationTargetException ex) {
+          ex.printStackTrace(System.err);
+        } catch (InterruptedException ex) {
+          ex.printStackTrace(System.err);
+        }
+        return false;
       }
       stop();
     }
@@ -394,8 +408,7 @@ public class DefaultSwingController extends
        * {@inheritDoc}
        */
       @Override
-      public void windowClosing(@SuppressWarnings("unused")
-      WindowEvent e) {
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
         stop();
       }
     });
@@ -422,7 +435,7 @@ public class DefaultSwingController extends
    * Creates a new JInternalFrame and populates it with a view.
    * 
    * @param view
-   *            the view to be set into the internal frame.
+   *          the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
   private JInternalFrame createJInternalFrame(IView<JComponent> view) {
@@ -564,8 +577,7 @@ public class DefaultSwingController extends
      * <p>
      * {@inheritDoc}
      */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
+    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
       stop();
     }
   }
@@ -579,7 +591,7 @@ public class DefaultSwingController extends
      * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.
      * 
      * @param workspaceName
-     *            the workspace identifier this listener is attached to.
+     *          the workspace identifier this listener is attached to.
      */
     public WorkspaceInternalFrameListener(String workspaceName) {
       this.workspaceName = workspaceName;
@@ -589,8 +601,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameActivated(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    public void internalFrameActivated(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
       setSelectedWorkspaceName(workspaceName);
     }
 
@@ -598,8 +610,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeactivated(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    public void internalFrameDeactivated(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
       setSelectedWorkspaceName(null);
     }
 
@@ -607,8 +619,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeiconified(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    public void internalFrameDeiconified(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
       setSelectedWorkspaceName(workspaceName);
     }
 
@@ -616,8 +628,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameIconified(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    public void internalFrameIconified(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
       setSelectedWorkspaceName(null);
     }
 
@@ -625,8 +637,8 @@ public class DefaultSwingController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameOpened(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    public void internalFrameOpened(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
       setSelectedWorkspaceName(workspaceName);
     }
 
@@ -661,8 +673,7 @@ public class DefaultSwingController extends
      * <p>
      * {@inheritDoc}
      */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
+    public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
       try {
         getBackendController().checkWorkspaceAccess(workspaceName);
         displayWorkspace(workspaceName);
