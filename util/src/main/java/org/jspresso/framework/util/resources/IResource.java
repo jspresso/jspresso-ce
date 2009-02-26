@@ -58,7 +58,7 @@ public interface IResource {
    * @throws IOException
    *             whenever an IO exception occurs.
    */
-  int getLength() throws IOException;
+  long getSize() throws IOException;
 
   /**
    * Gets the resource mime type.

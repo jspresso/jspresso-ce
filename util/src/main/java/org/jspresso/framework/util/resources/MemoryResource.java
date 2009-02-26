@@ -67,7 +67,7 @@ public class MemoryResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
-  public int getLength() {
+  public long getSize() {
     return resourceBytes.length;
   }
 

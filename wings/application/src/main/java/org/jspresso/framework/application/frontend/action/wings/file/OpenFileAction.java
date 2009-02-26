@@ -103,7 +103,7 @@ public class OpenFileAction extends ChooseFileAction {
           if (fileChooser.getFileName() != null
               && SOptionPane.OK_ACTION.equals(e.getActionCommand())) {
             fileOpenCallback.fileChosen(new FileInputStream(fileChooser
-                .getSelectedFile()), fileChooser.getFileName(), actionHandler,
+                .getSelectedFile()), actionHandler,
                 context);
           } else {
             fileOpenCallback.cancel(actionHandler, context);

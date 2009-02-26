@@ -108,5 +108,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.2.1/wingx-3.2.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/net/sf/jedit-syntax/jedit-syntax/2.2.2/jedit-syntax-2.2.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar" sourcepath="/ENVDEV/commons-beanutils-1.7.0/src/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-fileupload/commons-fileupload/1.2.1/commons-fileupload-1.2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-io/commons-io/1.4/commons-io-1.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -103,7 +103,7 @@ public final class DocumentHelper {
       ClientContext.showDocument(url, target);
     } else if (inServletContainerEnvironment()) {
       HttpServletRequest request = ServletContainerContext.getRequest();
-      String url = ResourceProviderServlet.computeUrl(request, id);
+      String url = ResourceProviderServlet.computeDownloadUrl(request, id);
       ClientContext.showDocument(url, target);
     } else {
       throw new IllegalStateException(

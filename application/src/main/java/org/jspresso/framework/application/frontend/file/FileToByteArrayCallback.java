@@ -63,7 +63,6 @@ public class FileToByteArrayCallback implements IFileOpenCallback {
    * {@inheritDoc}
    */
   public void fileChosen(InputStream in, @SuppressWarnings("unused")
-  String filePath, @SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {

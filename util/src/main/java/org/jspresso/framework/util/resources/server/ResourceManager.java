@@ -44,10 +44,11 @@ import java.util.Map;
 
 import org.jspresso.framework.util.resources.IResource;
 
-
 /**
  * This class allows to register a resource provider by a unique id and to
- * display the resource provider's content for a given id.
+ * display the resource provider's content for a given id. Once a resource has
+ * been taken out of the resource manager, it is automatically unregistered. So
+ * resource staorage in resource manager is a one-time usage.
  */
 public final class ResourceManager {
 
@@ -74,18 +75,20 @@ public final class ResourceManager {
    * Returns the registered resource or null.
    * 
    * @param id
-   *            the identifier under which the resource has been registered.
+   *          the identifier under which the resource has been registered.
    * @return the registsred resource or null.
    */
   public IResource getRegistered(String id) {
-    return resources.get(id);
+    IResource resource = resources.get(id);
+    unregister(id);
+    return resource;
   }
 
   /**
    * Registers a resource.
    * 
    * @param resource
-   *            the resource to be registered.
+   *          the resource to be registered.
    * @return the generated identifier under which the resource has been
    *         registered.
    */
@@ -104,12 +107,22 @@ public final class ResourceManager {
    * Registers a resource.
    * 
    * @param id
-   *            the identifier under which the resource must be registered.
+   *          the identifier under which the resource must be registered.
    * @param resource
-   *            the resource to be registered.
+   *          the resource to be registered.
    */
   public void register(String id, IResource resource) {
     resources.put(id, resource);
+  }
+
+  /**
+   * Unregisters a resource.
+   * 
+   * @param id
+   *          the identifier under which the resource is registered.
+   */
+  public void unregister(String id) {
+    resources.remove(id);
   }
 
   private String createId() throws NoSuchAlgorithmException {

@@ -73,7 +73,7 @@ public class DisplayJasperReportAction extends AbstractWingsAction {
           .toByteArray());
       String resourceId = ResourceManager.getInstance().register(resource);
       getController(context).displayUrl(
-          ResourceProviderServlet.computeUrl(SessionManager.getSession()
+          ResourceProviderServlet.computeDownloadUrl(SessionManager.getSession()
               .getServletRequest(), resourceId));
       return super.execute(actionHandler, context);
     } catch (JRException ex) {

@@ -68,8 +68,7 @@ public class OpenFileAction extends ChooseFileAction {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
         try {
-          fileOpenCallback.fileChosen(new FileInputStream(file), file
-              .getAbsolutePath(), actionHandler, context);
+          fileOpenCallback.fileChosen(new FileInputStream(file), actionHandler, context);
         } catch (FileNotFoundException ex) {
           fileOpenCallback.cancel(actionHandler, context);
         }
