@@ -18,13 +18,13 @@
  */
 package org.jspresso.framework.application.frontend.file;
 
-import java.io.InputStream;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 
 /**
- * This interface is used react to file open.
+ * This interface is the base interface used to react to file manipulation
+ * (open/save).
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -42,18 +42,16 @@ import org.jspresso.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IFileOpenCallback  extends IFileCallback {
+public interface IFileCallback {
 
   /**
-   * Called whenever a file is opened.
+   * Called whenever the file opening/saving is cancelled.
    * 
-   * @param in
-   *          the input stream to read the file bytes.
    * @param actionHandler
    *          the action handler.
    * @param context
    *          the action context.
    */
-  void fileChosen(InputStream in, IActionHandler actionHandler,
-      Map<String, Object> context);
+  void cancel(IActionHandler actionHandler, Map<String, Object> context);
+
 }

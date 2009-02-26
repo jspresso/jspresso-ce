@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
+import org.jspresso.framework.application.frontend.file.IFileCallback;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * Initiates a file choosing action.
@@ -47,6 +49,7 @@ public class ChooseFileAction extends AbstractRemoteAction {
 
   private String                    defaultFileName;
   private Map<String, List<String>> fileFilter;
+  private FileCancelCallbackAction  fileCancelCallbackAction;
 
   /**
    * Sets the defaultFileName.
@@ -104,11 +107,27 @@ public class ChooseFileAction extends AbstractRemoteAction {
       return null;
     }
     Map<String, String[]> translatedFileFilter = new HashMap<String, String[]>();
-    for (Map.Entry<String, List<String>> filterEntry : executionFileFilter.entrySet()) {
+    for (Map.Entry<String, List<String>> filterEntry : executionFileFilter
+        .entrySet()) {
       translatedFileFilter.put(getTranslationProvider(context).getTranslation(
           filterEntry.getKey(), getLocale(context)), filterEntry.getValue()
           .toArray(new String[0]));
     }
     return translatedFileFilter;
+  }
+
+  /**
+   * Creates a cancel callback action.
+   * 
+   * @param fileCallback
+   *          the file callback to cancel.
+   * @return the cancel callback action.
+   */
+  protected IDisplayableAction createCancelCallbackAction(
+      IFileCallback fileCallback) {
+    if (fileCancelCallbackAction == null) {
+      fileCancelCallbackAction = new FileCancelCallbackAction(fileCallback);
+    }
+    return fileCancelCallbackAction;
   }
 }

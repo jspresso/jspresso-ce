@@ -89,18 +89,18 @@ public class SaveFileAction extends ChooseFileAction {
         }
         if (file != null) {
           try {
-            fileSaveCallback.fileChosen(new FileOutputStream(file), context);
+            fileSaveCallback.fileChosen(new FileOutputStream(file), actionHandler, context);
           } catch (FileNotFoundException ex) {
-            fileSaveCallback.cancel(context);
+            fileSaveCallback.cancel(actionHandler, context);
           }
         } else {
-          fileSaveCallback.cancel(context);
+          fileSaveCallback.cancel(actionHandler, context);
         }
       } else {
-        fileSaveCallback.cancel(context);
+        fileSaveCallback.cancel(actionHandler, context);
       }
     } else {
-      fileSaveCallback.cancel(context);
+      fileSaveCallback.cancel(actionHandler, context);
     }
     return super.execute(actionHandler, context);
   }

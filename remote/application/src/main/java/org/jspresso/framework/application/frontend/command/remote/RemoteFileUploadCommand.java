@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-import java.util.Map;
-
 import org.jspresso.framework.gui.remote.RAction;
 
 /**
@@ -41,68 +39,28 @@ import org.jspresso.framework.gui.remote.RAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteFileUploadCommand extends RemoteCommand {
+public class RemoteFileUploadCommand extends RemoteFileCommand {
 
-  private Map<String, String[]> fileFilter;
-  private RAction               callbackAction;
-  private String                uploadUrl;
+  private RAction               successCallbackAction;
 
+  
   /**
-   * Gets the fileFilter.
+   * Gets the successCallbackAction.
    * 
-   * @return the fileFilter.
+   * @return the successCallbackAction.
    */
-  public Map<String, String[]> getFileFilter() {
-    return fileFilter;
-  }
-
-  /**
-   * Sets the fileFilter.
-   * 
-   * @param fileFilter
-   *          the fileFilter to set.
-   */
-  public void setFileFilter(Map<String, String[]> fileFilter) {
-    this.fileFilter = fileFilter;
-  }
-
-  /**
-   * Gets the callbackAction.
-   * 
-   * @return the callbackAction.
-   */
-  public RAction getCallbackAction() {
-    return callbackAction;
-  }
-
-  /**
-   * Sets the callbackAction.
-   * 
-   * @param callbackAction
-   *          the callbackAction to set.
-   */
-  public void setCallbackAction(RAction callbackAction) {
-    this.callbackAction = callbackAction;
+  public RAction getSuccessCallbackAction() {
+    return successCallbackAction;
   }
 
   
   /**
-   * Gets the uploadUrl.
+   * Sets the successCallbackAction.
    * 
-   * @return the uploadUrl.
+   * @param successCallbackAction the successCallbackAction to set.
    */
-  public String getUploadUrl() {
-    return uploadUrl;
-  }
-
-  
-  /**
-   * Sets the uploadUrl.
-   * 
-   * @param uploadUrl the uploadUrl to set.
-   */
-  public void setUploadUrl(String uploadUrl) {
-    this.uploadUrl = uploadUrl;
+  public void setSuccessCallbackAction(RAction successCallbackAction) {
+    this.successCallbackAction = successCallbackAction;
   }
 
 }

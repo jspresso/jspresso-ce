@@ -21,6 +21,8 @@ package org.jspresso.framework.application.frontend.file;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.jspresso.framework.action.IActionHandler;
+
 /**
  * This interface is used react to file save.
  * <p>
@@ -40,23 +42,18 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IFileSaveCallback {
-
-  /**
-   * Called whenever the file opening is cancelled.
-   * 
-   * @param context
-   *            the action context.
-   */
-  void cancel(Map<String, Object> context);
+public interface IFileSaveCallback extends IFileCallback {
 
   /**
    * Called whenever a file is chosen as save destination.
    * 
    * @param out
-   *            the output stream to write to the file.
+   *          the output stream to write to the file.
+   * @param actionHandler
+   *          the action handler.
    * @param context
-   *            the action context.
+   *          the action context.
    */
-  void fileChosen(OutputStream out, Map<String, Object> context);
+  void fileChosen(OutputStream out, IActionHandler actionHandler,
+      Map<String, Object> context);
 }

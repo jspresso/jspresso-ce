@@ -25,8 +25,8 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
-
 
 /**
  * Default handler implementation to deal with getting binary properties storing
@@ -53,15 +53,17 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
   /**
    * {@inheritDoc}
    */
-  public void cancel(@SuppressWarnings("unused")
-  Map<String, Object> context) {
+  public void cancel(@SuppressWarnings("unused") IActionHandler actionHandler,
+      @SuppressWarnings("unused") Map<String, Object> context) {
     // NO-OP
   }
 
   /**
    * {@inheritDoc}
    */
-  public void fileChosen(OutputStream out, Map<String, Object> context) {
+  public void fileChosen(OutputStream out,
+      @SuppressWarnings("unused") IActionHandler actionHandler,
+      Map<String, Object> context) {
     OutputStream os = new BufferedOutputStream(out);
     try {
       Object connectorValue = ((IValueConnector) context

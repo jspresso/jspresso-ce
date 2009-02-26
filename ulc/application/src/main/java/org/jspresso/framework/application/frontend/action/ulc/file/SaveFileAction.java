@@ -56,7 +56,7 @@ public class SaveFileAction extends ChooseFileAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
+  public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
     try {
       ClientContext.storeFile(new IFileStoreHandler() {
@@ -66,7 +66,7 @@ public class SaveFileAction extends ChooseFileAction {
         @SuppressWarnings("unused")
         public void onFailure(int reason, String description) {
           if (fileSaveCallback != null) {
-            fileSaveCallback.cancel(context);
+            fileSaveCallback.cancel(actionHandler, context);
           }
         }
 
@@ -76,7 +76,7 @@ public class SaveFileAction extends ChooseFileAction {
 
         public void prepareFile(OutputStream out) {
           if (fileSaveCallback != null) {
-            fileSaveCallback.fileChosen(out, context);
+            fileSaveCallback.fileChosen(out, actionHandler, context);
           }
         }
       }, createFileChooser(context));

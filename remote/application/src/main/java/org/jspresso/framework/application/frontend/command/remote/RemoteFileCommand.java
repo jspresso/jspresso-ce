@@ -18,8 +18,12 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
+import java.util.Map;
+
+import org.jspresso.framework.gui.remote.RAction;
+
 /**
- * This command is used to download a file to the client peer.
+ * This command is the base class for file commands.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,46 +41,67 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteFileDownloadCommand extends RemoteFileCommand {
+public class RemoteFileCommand extends RemoteCommand {
 
-  private String defaultFileName;
-  private String resourceId;
+  private Map<String, String[]> fileFilter;
+  private String                fileUrl;
+  private RAction               cancelCallbackAction;
 
   /**
-   * Gets the defaultFileName.
+   * Gets the fileFilter.
    * 
-   * @return the defaultFileName.
+   * @return the fileFilter.
    */
-  public String getDefaultFileName() {
-    return defaultFileName;
+  public Map<String, String[]> getFileFilter() {
+    return fileFilter;
   }
 
   /**
-   * Sets the defaultFileName.
+   * Sets the fileFilter.
    * 
-   * @param defaultFileName
-   *          the defaultFileName to set.
+   * @param fileFilter
+   *          the fileFilter to set.
    */
-  public void setDefaultFileName(String defaultFileName) {
-    this.defaultFileName = defaultFileName;
+  public void setFileFilter(Map<String, String[]> fileFilter) {
+    this.fileFilter = fileFilter;
   }
 
   /**
-   * Gets the resourceId.
+   * Gets the fileUrl.
    * 
-   * @return the resourceId.
+   * @return the fileUrl.
    */
-  public String getResourceId() {
-    return resourceId;
+  public String getFileUrl() {
+    return fileUrl;
   }
 
   /**
-   * Sets the resourceId.
+   * Sets the fileUrl.
    * 
-   * @param resourceId
-   *          the resourceId to set.
+   * @param fileUrl
+   *          the fileUrl to set.
    */
-  public void setResourceId(String resourceId) {
-    this.resourceId = resourceId;
+  public void setFileUrl(String fileUrl) {
+    this.fileUrl = fileUrl;
   }
+
+  /**
+   * Gets the cancelCallbackAction.
+   * 
+   * @return the cancelCallbackAction.
+   */
+  public RAction getCancelCallbackAction() {
+    return cancelCallbackAction;
+  }
+
+  /**
+   * Sets the cancelCallbackAction.
+   * 
+   * @param cancelCallbackAction
+   *          the cancelCallbackAction to set.
+   */
+  public void setCancelCallbackAction(RAction cancelCallbackAction) {
+    this.cancelCallbackAction = cancelCallbackAction;
+  }
+
 }

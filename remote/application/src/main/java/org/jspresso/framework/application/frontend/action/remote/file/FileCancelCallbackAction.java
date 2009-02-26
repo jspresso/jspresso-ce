@@ -16,10 +16,18 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.command.remote;
+package org.jspresso.framework.application.frontend.action.remote.file;
+
+import java.util.Map;
+
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
+import org.jspresso.framework.application.frontend.file.IFileCallback;
+import org.jspresso.framework.util.resources.server.ResourceManager;
 
 /**
- * This command is used to download a file to the client peer.
+ * An action to trigger the file open cancel callback.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,46 +45,34 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteFileDownloadCommand extends RemoteFileCommand {
+public class FileCancelCallbackAction extends AbstractRemoteAction {
 
-  private String defaultFileName;
-  private String resourceId;
+  private IFileCallback fileCallback;
 
   /**
-   * Gets the defaultFileName.
+   * Constructs a new <code>FileCancelCallbackAction</code> instance.
    * 
-   * @return the defaultFileName.
+   * @param fileCallback
+   *          the file callback to cancel.
    */
-  public String getDefaultFileName() {
-    return defaultFileName;
+  public FileCancelCallbackAction(IFileCallback fileCallback) {
+    this.fileCallback = fileCallback;
   }
 
   /**
-   * Sets the defaultFileName.
-   * 
-   * @param defaultFileName
-   *          the defaultFileName to set.
+   * Trigers the file callback to cancel.
+   * <p>
+   * {@inheritDoc}
    */
-  public void setDefaultFileName(String defaultFileName) {
-    this.defaultFileName = defaultFileName;
-  }
-
-  /**
-   * Gets the resourceId.
-   * 
-   * @return the resourceId.
-   */
-  public String getResourceId() {
-    return resourceId;
-  }
-
-  /**
-   * Sets the resourceId.
-   * 
-   * @param resourceId
-   *          the resourceId to set.
-   */
-  public void setResourceId(String resourceId) {
-    this.resourceId = resourceId;
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    String resourceId = (String) context
+        .get(ActionContextConstants.ACTION_COMMAND);
+    fileCallback.cancel(actionHandler, context);
+    if (resourceId != null) {
+      ResourceManager.getInstance().unregister(resourceId);
+    }
+    return super.execute(actionHandler, context);
   }
 }

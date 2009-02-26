@@ -60,12 +60,17 @@ public class OpenFileAction extends ChooseFileAction {
     RemoteFileUploadCommand fileUploadCommand = new RemoteFileUploadCommand();
     fileUploadCommand.setFileFilter(translateFilter(getFileFilter(context),
         context));
-    RAction callbackAction = getActionFactory(context).createAction(
-        createCallbackAction(), actionHandler, getSourceComponent(context),
+    RAction successCallbackAction = getActionFactory(context).createAction(
+        createSuccessCallbackAction(), actionHandler, getSourceComponent(context),
         getModelDescriptor(context), getViewConnector(context),
         getLocale(context));
-    fileUploadCommand.setCallbackAction(callbackAction);
-    fileUploadCommand.setUploadUrl(ResourceProviderServlet.computeUploadUrl());
+    fileUploadCommand.setSuccessCallbackAction(successCallbackAction);
+    RAction cancelCallbackAction = getActionFactory(context).createAction(
+        createCancelCallbackAction(fileOpenCallback), actionHandler, getSourceComponent(context),
+        getModelDescriptor(context), getViewConnector(context),
+        getLocale(context));
+    fileUploadCommand.setCancelCallbackAction(cancelCallbackAction);
+    fileUploadCommand.setFileUrl(ResourceProviderServlet.computeUploadUrl());
     registerCommand(fileUploadCommand, context);
     return super.execute(actionHandler, context);
   }
@@ -80,7 +85,7 @@ public class OpenFileAction extends ChooseFileAction {
     this.fileOpenCallback = fileOpenCallback;
   }
 
-  private IDisplayableAction createCallbackAction() {
+  private IDisplayableAction createSuccessCallbackAction() {
     if (fileOpenCallbackAction == null) {
       fileOpenCallbackAction = new FileOpenCallbackAction(fileOpenCallback);
     }

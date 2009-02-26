@@ -352,22 +352,26 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private function handleFileUpload(uploadCommand:RemoteFileUploadCommand):void {
       _fileReference = new  FileReference();
       _fileReference.addEventListener(Event.SELECT, function(event:Event):void {
-        var request:URLRequest = new URLRequest(uploadCommand.uploadUrl);
+        var request:URLRequest = new URLRequest(uploadCommand.fileUrl);
         _fileReference.upload(request);
       });
       _fileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, function(event:DataEvent):void {
         var xml:XML = new XML(event.data);
         var resourceId:String = xml.@id;
-        execute(uploadCommand.callbackAction, resourceId);
+        execute(uploadCommand.successCallbackAction, resourceId);
+      });
+      _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
+        execute(uploadCommand.cancelCallbackAction);
       });
       _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
-      // Nettoyer.
     }
     
     private function handleFileDownload(downloadCommand:RemoteFileDownloadCommand):void {
       _fileReference = new  FileReference();
-      _fileReference.download(new URLRequest(downloadCommand.downloadUrl), downloadCommand.defaultFileName);
-      // Nettoyer.
+      _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
+        execute(downloadCommand.cancelCallbackAction, downloadCommand.resourceId);
+      });
+      _fileReference.download(new URLRequest(downloadCommand.fileUrl), downloadCommand.defaultFileName);
     }
     
     private function createTypeFilters(filter:Object):Array {

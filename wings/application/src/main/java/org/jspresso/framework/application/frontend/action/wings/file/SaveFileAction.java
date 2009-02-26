@@ -60,7 +60,7 @@ public class SaveFileAction extends ChooseFileAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
+  public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
     if (fileSaveCallback != null) {
       DynamicResource resource = new DynamicResource(
@@ -70,7 +70,7 @@ public class SaveFileAction extends ChooseFileAction {
 
         public void write(Device device) throws IOException {
           DeviceOutputStream out = new DeviceOutputStream(device);
-          fileSaveCallback.fileChosen(out, context);
+          fileSaveCallback.fileChosen(out, actionHandler, context);
           out.flush();
           device.close();
         }

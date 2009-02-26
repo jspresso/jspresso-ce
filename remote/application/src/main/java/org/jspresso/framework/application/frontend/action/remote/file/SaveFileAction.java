@@ -26,6 +26,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.util.resources.AbstractResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
@@ -64,9 +65,15 @@ public class SaveFileAction extends ChooseFileAction {
         context));
     fileDownloadCommand.setDefaultFileName(getDefaultFileName());
     String resourceId = ResourceManager.getInstance().register(
-        new ResourceAdapter(fileSaveCallback, context));
+        new ResourceAdapter(fileSaveCallback, actionHandler, context));
     fileDownloadCommand.setResourceId(resourceId);
-    fileDownloadCommand.setDownloadUrl(ResourceProviderServlet.computeDownloadUrl(resourceId));
+    fileDownloadCommand.setFileUrl(ResourceProviderServlet
+        .computeDownloadUrl(resourceId));
+    RAction cancelCallbackAction = getActionFactory(context).createAction(
+        createCancelCallbackAction(fileSaveCallback), actionHandler,
+        getSourceComponent(context), getModelDescriptor(context),
+        getViewConnector(context), getLocale(context));
+    fileDownloadCommand.setCancelCallbackAction(cancelCallbackAction);
     registerCommand(fileDownloadCommand, context);
     return super.execute(actionHandler, context);
   }
@@ -85,10 +92,11 @@ public class SaveFileAction extends ChooseFileAction {
 
     private byte[] content;
 
-    public ResourceAdapter(IFileSaveCallback source, Map<String, Object> context) {
+    public ResourceAdapter(IFileSaveCallback source,
+        IActionHandler actionHandler, Map<String, Object> context) {
       super("application/octet-stream");
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      source.fileChosen(baos, context);
+      source.fileChosen(baos, actionHandler, context);
       content = baos.toByteArray();
     }
 
