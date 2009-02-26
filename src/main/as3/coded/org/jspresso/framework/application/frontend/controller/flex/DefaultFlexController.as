@@ -283,7 +283,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         for each(var action:RAction in dialogCommand.actions) {
           dialogButtons.push(_viewFactory.createAction(action, true));
         }
-        popupDialog(dialogCommand.title, null, dialogCommand.view, dialogCommand.actions);
+        popupDialog(dialogCommand.title, null, dialogCommand.view, dialogButtons, dialogCommand.useCurrent);
       } else if(command is RemoteCloseDialogCommand) {
         if(_dialogStack && _dialogStack.length > 0) {
           PopUpManager.removePopUp(_dialogStack.pop() as IFlexDisplayObject);
@@ -696,7 +696,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerCommand(loginCommand);
     }
     
-    private function popupDialog(title:String, message:String, view:RComponent, buttons:Array):void {
+    private function popupDialog(title:String, message:String, view:RComponent, buttons:Array, useCurrent:Boolean=false):void {
       var dialogView:UIComponent = _viewFactory.createComponent(view);
       dialogView.percentWidth = 100.0;
       dialogView.percentHeight = 100.0;
@@ -704,12 +704,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       buttonBox.setStyle("horizontalAlign","right");
       buttonBox.percentWidth = 100.0;
       
-      var dialogParent:DisplayObject;
-      if(_dialogStack && _dialogStack.length > 0) {
-        dialogParent = _dialogStack[_dialogStack.length -1];
-      } else {
-        dialogParent = Application.application as DisplayObject;
-      }
       var dialogBox:VBox = new VBox();
       var separator:HRule;
       if(message) {
@@ -727,11 +721,22 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       dialogBox.addChild(buttonBox);
 
-      var dialog:Panel = PopUpManager.createPopUp(dialogParent,Panel,true) as Panel;
+      var dialog:Panel;
+      if(useCurrent && _dialogStack && _dialogStack.length > 0) {
+        dialog.removeAllChildren();
+      } else {
+        var dialogParent:DisplayObject;
+        if(_dialogStack && _dialogStack.length > 0) {
+          dialogParent = _dialogStack[_dialogStack.length -1];
+        } else {
+          dialogParent = Application.application as DisplayObject;
+        }
+        dialog = PopUpManager.createPopUp(dialogParent,Panel,true) as Panel;
+        _dialogStack.push(dialog);
+      }
       dialog.title = title;
       dialog.addChild(dialogBox);
       PopUpManager.centerPopUp(dialog);
-      _dialogStack.push(dialog);
     }
     
     private function registerRemoteClasses():void {

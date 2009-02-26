@@ -45,7 +45,8 @@ public class RemoteDialogCommand extends RemoteCommand {
   private String     title;
   private RComponent view;
   private RAction[]  actions;
-  
+  private boolean    useCurrent;
+
   /**
    * Gets the title.
    * 
@@ -54,16 +55,17 @@ public class RemoteDialogCommand extends RemoteCommand {
   public String getTitle() {
     return title;
   }
-  
+
   /**
    * Sets the title.
    * 
-   * @param title the title to set.
+   * @param title
+   *          the title to set.
    */
   public void setTitle(String title) {
     this.title = title;
   }
-  
+
   /**
    * Gets the view.
    * 
@@ -72,16 +74,17 @@ public class RemoteDialogCommand extends RemoteCommand {
   public RComponent getView() {
     return view;
   }
-  
+
   /**
    * Sets the view.
    * 
-   * @param view the view to set.
+   * @param view
+   *          the view to set.
    */
   public void setView(RComponent view) {
     this.view = view;
   }
-  
+
   /**
    * Gets the actions.
    * 
@@ -90,14 +93,35 @@ public class RemoteDialogCommand extends RemoteCommand {
   public RAction[] getActions() {
     return actions;
   }
-  
+
   /**
    * Sets the actions.
    * 
-   * @param actions the actions to set.
+   * @param actions
+   *          the actions to set.
    */
   public void setActions(RAction[] actions) {
     this.actions = actions;
+  }
+
+  
+  /**
+   * Gets the useCurrent.
+   * 
+   * @return the useCurrent.
+   */
+  public boolean isUseCurrent() {
+    return useCurrent;
+  }
+
+  
+  /**
+   * Sets the useCurrent.
+   * 
+   * @param useCurrent the useCurrent to set.
+   */
+  public void setUseCurrent(boolean useCurrent) {
+    this.useCurrent = useCurrent;
   }
 
 }

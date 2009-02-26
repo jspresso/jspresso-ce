@@ -454,6 +454,7 @@ public class DefaultRemoteController extends
     dialogCommand.setTitle(title);
     dialogCommand.setView(mainView);
     dialogCommand.setActions(actions.toArray(new RAction[0]));
+    dialogCommand.setUseCurrent(false);
     registerCommand(dialogCommand);
   }
 

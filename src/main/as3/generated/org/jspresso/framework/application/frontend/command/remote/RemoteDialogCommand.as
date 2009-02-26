@@ -22,6 +22,7 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _actions:Array;
         private var _title:String;
+        private var _useCurrent:Boolean;
         private var _view:RComponent;
 
         public function set actions(value:Array):void {
@@ -36,6 +37,13 @@ package org.jspresso.framework.application.frontend.command.remote {
         }
         public function get title():String {
             return _title;
+        }
+
+        public function set useCurrent(value:Boolean):void {
+            _useCurrent = value;
+        }
+        public function get useCurrent():Boolean {
+            return _useCurrent;
         }
 
         public function set view(value:RComponent):void {
