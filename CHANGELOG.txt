@@ -18,6 +18,7 @@ Bugs fixed
         	 Startup action is not trigerred for wings controller
         	 Refactored accessibility connector chain to prevent extra notifications.
            Typo in ISubviewDescriptor name.
+           NachoCalendar does not show selected days with Substance L&F
 
 New features
 ------------
