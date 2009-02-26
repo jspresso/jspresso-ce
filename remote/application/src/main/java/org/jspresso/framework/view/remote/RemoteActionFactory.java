@@ -341,9 +341,6 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
         actionContext.put(ActionContextConstants.ACTION_COMMAND, parameter);
         // actionContext.put(ActionContextConstants.ACTION_WIDGET,
         // e.getSource());
-        if (action.getInitialContext() != null) {
-          actionContext.putAll(action.getInitialContext());
-        }
         actionHandler.execute(action, actionContext);
       }
     }

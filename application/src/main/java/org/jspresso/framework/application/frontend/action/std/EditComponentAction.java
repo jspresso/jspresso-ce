@@ -78,10 +78,6 @@ public class EditComponentAction<E, F, G> extends
     Object component = getModel(context);
 
     if (okAction != null) {
-      okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
-          getViewConnector(context));
-      okAction
-          .putInitialContext(ActionContextConstants.ACTION_PARAM, component);
       actions.add(okAction);
     }
     if (cancelAction != null) {

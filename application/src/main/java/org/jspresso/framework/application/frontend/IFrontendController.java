@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.IController;
@@ -120,22 +121,27 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the dialog title.
    * @param sourceComponent
    *          the source component.
+   * @param context
+   *          the context to store on the context stack.
    */
-  void displayModalDialog(E mainView, List<G> actions,
-      String title, E sourceComponent);
+  void displayModalDialog(E mainView, List<G> actions, String title,
+      E sourceComponent, Map<String, Object> context);
 
   /**
    * Disposes a modal dialog.
    * 
    * @param sourceWidget
    *          the source widget.
+   * @param context
+   *          the context to complement with the head of the context stack.
    */
-  void disposeModalDialog(E sourceWidget);
-  
+  void disposeModalDialog(E sourceWidget, Map<String, Object> context);
+
   /**
    * Displays the given URL in a new braowser window (or tab).
    * 
-   * @param urlSpec the url to display.
+   * @param urlSpec
+   *          the url to display.
    */
   void displayUrl(String urlSpec);
 }

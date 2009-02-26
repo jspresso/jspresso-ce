@@ -20,9 +20,9 @@ public class JPasswordFieldConnector extends JTextFieldConnector {
    * Constructs a new <code>JPasswordFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param passwordField
-   *            the connected JPasswordField.
+   *          the connected JPasswordField.
    */
   public JPasswordFieldConnector(String id, JPasswordField passwordField) {
     super(id, passwordField);
@@ -45,20 +45,9 @@ public class JPasswordFieldConnector extends JTextFieldConnector {
     if (password != null && password.length == 0) {
       password = null;
     }
-    return password;
-  }
-
-  /**
-   * Sets the value to the connector text.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void protectedSetConnecteeValue(Object aValue) {
-    if (aValue == null) {
-      getConnectedJComponent().setText(null);
-    } else {
-      getConnectedJComponent().setText(new String((char[]) aValue));
+    if (password == null) {
+      return null;
     }
+    return new String(password);
   }
 }

@@ -574,8 +574,11 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  @Override
   public void displayModalDialog(JComponent mainView, List<Action> actions,
-      String title, JComponent sourceComponent) {
+      String title, JComponent sourceComponent, Map<String, Object> context) {
+    super
+        .displayModalDialog(mainView, actions, title, sourceComponent, context);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     if (window instanceof Dialog) {
@@ -620,7 +623,9 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(JComponent sourceWidget) {
+  public void disposeModalDialog(JComponent sourceWidget,
+      Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
     Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
     if (actionWindow instanceof Dialog) {
       actionWindow.dispose();

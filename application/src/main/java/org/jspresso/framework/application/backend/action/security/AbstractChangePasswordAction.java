@@ -4,7 +4,6 @@
 package org.jspresso.framework.application.backend.action.security;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +16,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor;
 import org.jspresso.framework.security.UserPrincipal;
-
+import org.jspresso.framework.util.lang.ObjectUtils;
 
 /**
  * Changes a user password asking for the current and new password.
@@ -75,18 +74,19 @@ public abstract class AbstractChangePasswordAction extends
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-    Map<String, Object> actionParam = (Map<String, Object>) context
-        .get(ActionContextConstants.ACTION_PARAM);
-    char[] typedPasswd = (char[]) actionParam.get(PASSWD_TYPED);
-    char[] retypedPasswd = (char[]) actionParam.get(PASSWD_RETYPED);
-    if (!Arrays.equals(typedPasswd, retypedPasswd)) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    Map<String, Object> actionParam = (Map<String, Object>) getModelConnector(
+        context).getConnectorValue();
+    String typedPasswd = (String) actionParam.get(PASSWD_TYPED);
+    String retypedPasswd = (String) actionParam.get(PASSWD_RETYPED);
+    if (!ObjectUtils.equals(typedPasswd, retypedPasswd)) {
       throw new ActionBusinessException(
           "Typed and retyped passwords are different.",
           "password.typed.retyped.different");
     }
     UserPrincipal principal = getApplicationSession(context).getPrincipal();
-    if (changePassword(principal, (char[]) actionParam.get(PASSWD_CURRENT),
+    if (changePassword(principal, (String) actionParam.get(PASSWD_CURRENT),
         typedPasswd)) {
       context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
           context)
@@ -100,13 +100,13 @@ public abstract class AbstractChangePasswordAction extends
    * Performs the effective password change depending on the underlying storage.
    * 
    * @param userPrincipal
-   *            the connected user principal.
+   *          the connected user principal.
    * @param currentPassword
-   *            the current password.
+   *          the current password.
    * @param newPassword
-   *            the new password.
+   *          the new password.
    * @return true if password was changed succesfully.
    */
   protected abstract boolean changePassword(UserPrincipal userPrincipal,
-      char[] currentPassword, char[] newPassword);
+      String currentPassword, String newPassword);
 }

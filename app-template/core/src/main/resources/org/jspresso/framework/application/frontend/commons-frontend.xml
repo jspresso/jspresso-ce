@@ -67,7 +67,7 @@
     </property>
     <property
       name="nextAction"
-      ref="sourceViewConnectorSetAction" />
+      ref="viewConnectorSetAction" />
   </bean>
 
   <bean
@@ -143,11 +143,11 @@
   </bean>
 
   <bean
-    id="sourceViewConnectorSetAction"
+    id="viewConnectorSetAction"
     class="org.jspresso.framework.application.frontend.action.std.SetConnectorValueAction">
     <property
       name="connectorActionContextKey"
-      value="SOURCE_VIEW_CONNECTOR" />
+      value="VIEW_CONNECTOR" />
   </bean>
 
   <bean
@@ -269,12 +269,24 @@
     <property
       name="iconImageURL"
       value="classpath:org/jspresso/framework/application/images/print-48x48.png" />
+<!--
     <property
       name="wrappedAction"
       ref="doPrintBackendAction" />
     <property
       name="nextAction"
       ref="displayReportAction" />
+-->
+    <property name="nextAction">
+      <bean class="org.jspresso.framework.application.frontend.action.WrappingAction">
+        <property
+          name="wrappedAction"
+          ref="doPrintBackendAction" />
+        <property
+          name="nextAction"
+          ref="displayReportAction" />
+      </bean>
+    </property>
   </bean>
 
   <bean

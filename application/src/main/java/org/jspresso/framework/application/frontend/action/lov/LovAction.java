@@ -40,7 +40,6 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
 
-
 /**
  * A standard List of value action for reference property views. This action
  * should be used in view factories.
@@ -146,8 +145,10 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
     getViewConnector(context).setConnectorValue(
         getViewConnector(context).getConnectorValue());
-    okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
-        getViewConnector(context));
+    // The following code doesn't support nested LOVs.
+    // connector is retrieved directly from the context now.
+    // okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
+    // getViewConnector(context));
     actions.add(findAction);
     actions.add(okAction);
     actions.add(cancelAction);
@@ -162,8 +163,10 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
-    findAction.putInitialContext(ActionContextConstants.QUERY_MODEL_CONNECTOR,
-        queryEntityConnector);
+    // The following code doesn't support nested LOVs.
+    // connector is retrieved directly from the context now.
+    // findAction.putInitialContext(ActionContextConstants.QUERY_MODEL_CONNECTOR,
+    // queryEntityConnector);
     String queryPropertyValue = (String) context
         .get(ActionContextConstants.ACTION_COMMAND);
     if (autoquery && queryPropertyValue != null
@@ -187,7 +190,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the autoquery.
    * 
    * @param autoquery
-   *            the autoquery to set.
+   *          the autoquery to set.
    */
   public void setAutoquery(boolean autoquery) {
     this.autoquery = autoquery;
@@ -197,7 +200,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *            the cancelAction to set.
+   *          the cancelAction to set.
    */
   public void setCancelAction(IDisplayableAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -207,7 +210,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the createQueryComponentAction.
    * 
    * @param createQueryComponentAction
-   *            the createQueryComponentAction to set.
+   *          the createQueryComponentAction to set.
    */
   public void setCreateQueryComponentAction(
       CreateQueryComponentAction createQueryComponentAction) {
@@ -218,7 +221,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the entityRefQueryDescriptor.
    * 
    * @param entityRefQueryDescriptor
-   *            the entityRefQueryDescriptor to set.
+   *          the entityRefQueryDescriptor to set.
    */
   public void setEntityRefQueryDescriptor(
       IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor) {
@@ -229,7 +232,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the findAction.
    * 
    * @param findAction
-   *            the findAction to set.
+   *          the findAction to set.
    */
   public void setFindAction(IDisplayableAction findAction) {
     this.findAction = findAction;
@@ -239,7 +242,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the lovViewDescriptorFactory.
    * 
    * @param lovViewDescriptorFactory
-   *            the lovViewDescriptorFactory to set.
+   *          the lovViewDescriptorFactory to set.
    */
   public void setLovViewDescriptorFactory(
       ILovViewDescriptorFactory lovViewDescriptorFactory) {
@@ -250,7 +253,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the okAction.
    * 
    * @param okAction
-   *            the okAction to set.
+   *          the okAction to set.
    */
   public void setOkAction(IDisplayableAction okAction) {
     this.okAction = okAction;
@@ -260,7 +263,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Gets the entityRefQueryDescriptor.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the entityRefQueryDescriptor.
    */
   @SuppressWarnings("unchecked")
@@ -286,17 +289,18 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   /**
    * Sets the entityDescriptor.
    * 
-   * @param entityDescriptor the entityDescriptor to set.
+   * @param entityDescriptor
+   *          the entityDescriptor to set.
    */
   public void setEntityDescriptor(IComponentDescriptor<IEntity> entityDescriptor) {
     this.entityDescriptor = entityDescriptor;
   }
 
-  
   /**
    * Sets the initializationMapping.
    * 
-   * @param initializationMapping the initializationMapping to set.
+   * @param initializationMapping
+   *          the initializationMapping to set.
    */
   public void setInitializationMapping(Map<String, String> initializationMapping) {
     this.initializationMapping = initializationMapping;

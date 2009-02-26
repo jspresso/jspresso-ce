@@ -103,15 +103,4 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
     }
     return selectedObjects;
   }
-
-  /**
-   * refined to return a collection connector.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public ICollectionConnector getSourceModelConnector(
-      Map<String, Object> context) {
-    return (ICollectionConnector) super.getSourceModelConnector(context);
-  }
 }

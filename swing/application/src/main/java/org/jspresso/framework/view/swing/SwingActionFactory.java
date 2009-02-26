@@ -256,9 +256,6 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
         actionContext.put(ActionContextConstants.ACTION_COMMAND, e
             .getActionCommand());
         actionContext.put(ActionContextConstants.ACTION_WIDGET, e.getSource());
-        if (action.getInitialContext() != null) {
-          actionContext.putAll(action.getInitialContext());
-        }
         actionHandler.execute(action, actionContext);
       }
     }

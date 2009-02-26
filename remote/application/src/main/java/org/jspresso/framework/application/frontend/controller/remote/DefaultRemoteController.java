@@ -449,7 +449,9 @@ public class DefaultRemoteController extends
    */
   @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, @SuppressWarnings("unused") RComponent sourceComponent) {
+      String title, RComponent sourceComponent, Map<String, Object> context) {
+    super
+        .displayModalDialog(mainView, actions, title, sourceComponent, context);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
     dialogCommand.setView(mainView);
@@ -462,8 +464,9 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(
-      @SuppressWarnings("unused") RComponent sourceWidget) {
+  public void disposeModalDialog(RComponent sourceWidget,
+      Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
     registerCommand(new RemoteCloseDialogCommand());
   }
 

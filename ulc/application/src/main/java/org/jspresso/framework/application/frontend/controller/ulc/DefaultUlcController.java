@@ -464,7 +464,8 @@ public class DefaultUlcController extends
   @Override
   public void displayModalDialog(ULCComponent mainView,
       List<IAction> actions, String title,
-      ULCComponent sourceComponent) {
+      ULCComponent sourceComponent, Map<String, Object> context) {
+    super.displayModalDialog(mainView, actions, title, sourceComponent, context);
     final ULCDialog dialog;
     ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
     dialog = new ULCDialog(window, title, true);
@@ -502,7 +503,8 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(ULCComponent sourceWidget) {
+  public void disposeModalDialog(ULCComponent sourceWidget, Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
     ULCWindow actionWindow = UlcUtil.getVisibleWindow(sourceWidget);
     if (actionWindow instanceof ULCDialog) {
       actionWindow.setVisible(false);

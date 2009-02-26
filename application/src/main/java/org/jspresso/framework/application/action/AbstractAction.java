@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.action;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -56,7 +55,6 @@ public abstract class AbstractAction implements IAction {
    */
   protected static final String ACTION_MODEL_NAME = "ActionModel";
   private Collection<String>    grantedRoles;
-  private Map<String, Object>   initialContext;
 
   private boolean               longOperation;
 
@@ -65,15 +63,6 @@ public abstract class AbstractAction implements IAction {
    */
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
-  }
-
-  /**
-   * Gets the initialContext.
-   * 
-   * @return the initialContext.
-   */
-  public Map<String, Object> getInitialContext() {
-    return initialContext;
   }
 
   /**
@@ -91,16 +80,6 @@ public abstract class AbstractAction implements IAction {
    */
   public boolean isLongOperation() {
     return longOperation;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void putInitialContext(String key, Object value) {
-    if (initialContext == null) {
-      initialContext = new HashMap<String, Object>();
-    }
-    initialContext.put(key, value);
   }
 
   /**

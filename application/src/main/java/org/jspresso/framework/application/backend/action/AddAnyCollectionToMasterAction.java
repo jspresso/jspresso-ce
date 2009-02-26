@@ -23,10 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.model.ModelCollectionPropertyConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
-
 
 /**
  * An action used in master/detail views to add new detail(s) to a master domain
@@ -58,8 +56,7 @@ public class AddAnyCollectionToMasterAction extends
   @Override
   public ModelCollectionPropertyConnector getModelConnector(
       Map<String, Object> context) {
-    return (ModelCollectionPropertyConnector) ((ICollectionConnector) context
-        .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR)).getModelConnector();
+    return (ModelCollectionPropertyConnector) super.getModelConnector(context);
   }
 
   /**
@@ -77,7 +74,7 @@ public class AddAnyCollectionToMasterAction extends
    * The ACTION_PARAM variable is used.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the collection of details to add to the collection.
    */
   @Override

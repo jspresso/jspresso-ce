@@ -27,17 +27,4 @@ public class ULCPasswordFieldConnector extends ULCTextFieldConnector {
   public ULCPasswordFieldConnector(String id, ULCPasswordField passwordField) {
     super(id, passwordField);
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object getConnecteeValue() {
-    String password = (String) super.getConnecteeValue();
-    if (password != null) {
-      return password.toCharArray();
-    }
-    return null;
-  }
-
 }

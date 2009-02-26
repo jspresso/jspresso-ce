@@ -34,7 +34,6 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
-
 /**
  * This action adds a new object in the projected collection.
  * <p>
@@ -62,7 +61,8 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     BeanCollectionModule module = (BeanCollectionModule) moduleConnector
         .getConnectorValue();
@@ -78,7 +78,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     projectedCollection.add(newModuleObject);
     module.setModuleObjects(projectedCollection);
 
-    ICollectionConnector moduleObjectsConnector = getSourceModelConnector(context);
+    ICollectionConnector moduleObjectsConnector = getModelConnector(context);
     if (moduleObjectsConnector == null) {
       moduleObjectsConnector = getModelConnector(context);
     }
@@ -95,13 +95,14 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * Creates a new entity to add to the projected object collection.
    * 
    * @param actionHandler
-   *            the action handler (generally the controller).
+   *          the action handler (generally the controller).
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the created entity.
    */
   @SuppressWarnings("unchecked")
-  protected Object createNewModuleObject(IActionHandler actionHandler, Map<String, Object> context) {
+  protected Object createNewModuleObject(IActionHandler actionHandler,
+      Map<String, Object> context) {
     IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor(context))
         .getCollectionDescriptor().getElementDescriptor();
 

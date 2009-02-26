@@ -357,8 +357,10 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(SComponent mainView,
-      List<Action> actions, String title, SComponent sourceComponent) {
+  public void displayModalDialog(SComponent mainView, List<Action> actions,
+      String title, SComponent sourceComponent, Map<String, Object> context) {
+    super
+        .displayModalDialog(mainView, actions, title, sourceComponent, context);
     final SDialog dialog;
     SFrame window = sourceComponent.getParentFrame();
     dialog = new SDialog(window, title, true);
@@ -392,12 +394,12 @@ public class DefaultWingsController extends
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(SComponent sourceWidget) {
+  public void disposeModalDialog(SComponent sourceWidget,
+      Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
     SContainer actionWindow = WingsUtil.getVisibleWindow(sourceWidget);
     if (actionWindow instanceof SDialog) {
       ((SDialog) actionWindow).dispose();
@@ -411,7 +413,6 @@ public class DefaultWingsController extends
   public void displayUrl(String urlSpec) {
     ScriptListener listener = new JavaScriptListener(null, null,
         "wingS.util.openLink('download','" + urlSpec + "',null);");
-    SessionManager.getSession().getScriptManager()
-        .addScriptListener(listener);
+    SessionManager.getSession().getScriptManager().addScriptListener(listener);
   }
 }

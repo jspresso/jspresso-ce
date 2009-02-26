@@ -51,7 +51,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IIconFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 
-
 /**
  * Default implementation of a mock swing frontend controller. This
  * implementation is usable "as-is".
@@ -111,8 +110,11 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void displayModalDialog(JComponent mainView,
-      List<Action> actions, String title, JComponent sourceComponent) {
+  @Override
+  public void displayModalDialog(JComponent mainView, List<Action> actions,
+      String title, JComponent sourceComponent, Map<String, Object> context) {
+    super
+        .displayModalDialog(mainView, actions, title, sourceComponent, context);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     if (window instanceof Dialog) {
@@ -157,7 +159,9 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(JComponent sourceWidget) {
+  public void disposeModalDialog(JComponent sourceWidget,
+      Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
     Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
     if (actionWindow instanceof Dialog) {
       actionWindow.dispose();
@@ -176,8 +180,8 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected Workspace getWorkspace(@SuppressWarnings("unused")
-  String workspaceName) {
+  protected Workspace getWorkspace(
+      @SuppressWarnings("unused") String workspaceName) {
     return null;
   }
 

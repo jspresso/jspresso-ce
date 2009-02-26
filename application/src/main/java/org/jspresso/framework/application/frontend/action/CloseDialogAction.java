@@ -56,7 +56,17 @@ public class CloseDialogAction<E, F, G> extends WrappingAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    getController(context).disposeModalDialog(getActionWidget(context));
-    return super.execute(actionHandler, context);
+    // do not call super since dialog must be closed between wrapped and next
+    // action.
+    // return super.execute(actionHandler, context);
+    if (actionHandler.execute(getWrappedAction(), context)) {
+      getController(context).disposeModalDialog(getActionWidget(context),
+          context);
+      if (getNextAction(context) != null) {
+        return actionHandler.execute(getNextAction(context), context);
+      }
+      return true;
+    }
+    return false;
   }
 }

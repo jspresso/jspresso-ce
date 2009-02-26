@@ -74,7 +74,7 @@ public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
       actions.add(getActionFactory(context).createAction(action,
           actionHandler, mainView, getLocale(context)));
     }
-    getController(context).displayModalDialog(mainView.getPeer(), actions, title, sourceComponent);
+    getController(context).displayModalDialog(mainView.getPeer(), actions, title, sourceComponent, context);
     return super.execute(actionHandler, context);
   }
 

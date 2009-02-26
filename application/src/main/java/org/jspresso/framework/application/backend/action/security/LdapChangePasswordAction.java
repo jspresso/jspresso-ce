@@ -19,7 +19,7 @@ import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.ldap.LdapConstants;
-import org.springframework.dao.DataAccessException;
+import org.springframework.ldap.AuthenticationException;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.DirContextSource;
 
@@ -63,7 +63,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
    */
   @Override
   protected boolean changePassword(UserPrincipal userPrincipal,
-      char[] currentPassword, char[] newPassword) {
+      String currentPassword, String newPassword) {
 
     String userDn = (String) userPrincipal
         .getCustomProperty(UserPrincipal.USERDN_PROPERTY);
@@ -83,7 +83,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
     try {
       mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
           new BasicAttribute(LdapConstants.PASSWORD_ATTIBUTE,
-              digest(newPassword))));
+              digest(newPassword.toCharArray()))));
       ldapTemplate.modifyAttributes(userDn, mods
           .toArray(new ModificationItem[0]));
     } catch (NoSuchAlgorithmException ex) {
@@ -92,7 +92,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
       throw new ActionException(ex);
     } catch (IOException ex) {
       throw new ActionException(ex);
-    } catch (DataAccessException ex) {
+    } catch (AuthenticationException ex) {
       throw new ActionBusinessException("Current password is not valid.",
           "password.current.invalid");
     }

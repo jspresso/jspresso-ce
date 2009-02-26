@@ -70,8 +70,6 @@ public class ChooseComponentAction<E, F, G> extends AbstractChainedAction<E, F, 
       Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
 
-    okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
-        getViewConnector(context));
     actions.add(okAction);
     actions.add(cancelAction);
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);

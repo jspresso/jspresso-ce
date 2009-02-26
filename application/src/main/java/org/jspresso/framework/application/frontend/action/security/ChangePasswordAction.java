@@ -4,12 +4,13 @@
 package org.jspresso.framework.application.frontend.action.security;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.security.AbstractChangePasswordAction;
 import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
-
 
 /**
  * The frontend action to initiate the password change.
@@ -32,11 +33,20 @@ public class ChangePasswordAction<E, F, G> extends EditComponentAction<E, F, G> 
    * Constructs a new <code>ChangePasswordAction</code> instance.
    */
   public ChangePasswordAction() {
-    putInitialContext(ActionContextConstants.ACTION_PARAM,
-        new HashMap<String, Object>());
     BasicComponentViewDescriptor viewDescriptor = new BasicComponentViewDescriptor();
     viewDescriptor
         .setModelDescriptor(AbstractChangePasswordAction.PASSWD_CHANGE_DESCRIPTOR);
     setViewDescriptor(viewDescriptor);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    context.put(ActionContextConstants.ACTION_PARAM,
+        new HashMap<String, Object>());
+    return super.execute(actionHandler, context);
   }
 }

@@ -18,7 +18,12 @@
  */
 package org.jspresso.framework.application.frontend.action.std;
 
+import java.util.Map;
+
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.binding.IValueConnector;
 
 /**
  * A standard find action. Since it is a chained action, it can be chained with
@@ -40,11 +45,11 @@ import org.jspresso.framework.application.frontend.action.WrappingAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public class FindAction<E, F, G> extends WrappingAction<E, F, G> {
 
@@ -54,5 +59,20 @@ public class FindAction<E, F, G> extends WrappingAction<E, F, G> {
   public FindAction() {
     setName("find.name");
     setIconImageURL("classpath:org/jspresso/framework/application/images/find-48x48.png");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    IValueConnector queryEntityConnector = (IValueConnector) context
+        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
+    if (queryEntityConnector == null) {
+      context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR,
+          getViewConnector(context).getModelConnector());
+    }
+    return super.execute(actionHandler, context);
   }
 }

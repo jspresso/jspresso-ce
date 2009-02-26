@@ -118,6 +118,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private String                                workspacesMenuIconImageUrl;
 
   private String                                forcedStartingLocale;
+  private List<Map<String, Object>>             dialogContextStack;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -125,6 +126,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public AbstractFrontendController() {
     controllerDescriptor = new DefaultIconDescriptor();
     selectedModuleConnectors = new HashMap<String, ICompositeValueConnector>();
+    dialogContextStack = new ArrayList<Map<String, Object>>();
   }
 
   /**
@@ -744,5 +746,30 @@ public abstract class AbstractFrontendController<E, F, G> extends
     workspaceActionMap.setActionLists(workspaceActionLists);
 
     return workspaceActionMap;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayModalDialog(@SuppressWarnings("unused") E mainView,
+      @SuppressWarnings("unused") java.util.List<G> actions,
+      @SuppressWarnings("unused") String title,
+      @SuppressWarnings("unused") E sourceComponent,
+      Map<String, Object> context) {
+    dialogContextStack.add(0, context);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
+      Map<String, Object> context) {
+    Map<String, Object> savedContext = dialogContextStack.remove(0);
+    if (context != null && savedContext != null) {
+      // preserve action param
+      //Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
+      context.putAll(savedContext);
+      //context.put(ActionContextConstants.ACTION_PARAM, actionParam);
+    }
   }
 }

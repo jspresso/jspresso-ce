@@ -24,7 +24,6 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 
-
 /**
  * A simple action which selects indices on ath view connector.
  * <p>
@@ -44,11 +43,11 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public class ConnectorSelectionAction<E, F, G> extends
     AbstractChainedAction<E, F, G> {
@@ -62,7 +61,7 @@ public class ConnectorSelectionAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector collectionConnector = (ICollectionConnector) getSourceViewConnector(context);
+    ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
     if (collectionConnector == null) {
       collectionConnector = (ICollectionConnector) getViewConnector(context);
     }
