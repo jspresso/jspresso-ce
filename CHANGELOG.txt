@@ -6,6 +6,9 @@ Bugs fixed
 New features
 ------------
 2172464    Remove all references to java.awt in view descriptors
+           Password are now handled as strings instead of char[] to preserve interceptor consistency.
+           Got rid of action put/get initialContext since it really had a weird behaviour with diallog actions.
+           Introduced a context stack management for dialog actions.
 
 2.2.2
 =====
