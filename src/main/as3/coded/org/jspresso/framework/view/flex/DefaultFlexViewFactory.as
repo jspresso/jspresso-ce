@@ -378,16 +378,27 @@ package org.jspresso.framework.view.flex {
                                      , remoteState:RemoteValueState, action:RAction):void {
       
       BindingUtils.bindProperty(actionField, "enabled", remoteState, "writable");
-      if(textInput) {
-        var updateView:Function = function (value:Object):void {
+      
+      var updateView:Function = function (value:Object):void {
+        if(textInput) {
           if(value == null) {
             textInput.text = null;
           } else {
             textInput.text = value.toString();
           }
-        };
-        BindingUtils.bindSetter(updateView, remoteState, "value", true);
+        } else {
+          if(value == null) {
+            actionField.setStyle("borderStyle","none");
+          } else {
+            actionField.setStyle("borderStyle","solid");
+            actionField.setStyle("borderThickness", 1);
+            actionField.setStyle("borderColor", "0xFF0000");
+          }
+        }
+      };
+      BindingUtils.bindSetter(updateView, remoteState, "value", true);
   
+      if(textInput) {
         var triggerAction:Function = function (event:Event):void {
           var inputText:String = (event.currentTarget as TextInput).text;
           if(inputText != remoteState.value) {
