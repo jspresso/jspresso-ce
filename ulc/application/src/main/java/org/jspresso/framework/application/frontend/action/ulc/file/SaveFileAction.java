@@ -72,9 +72,6 @@ public class SaveFileAction extends ChooseFileAction {
 
         public void onSuccess(String filePath) {
           createFileChooser(context).setCurrentDirectory(filePath);
-          if (fileSaveCallback != null) {
-            fileSaveCallback.fileWritten(filePath, context);
-          }
         }
 
         public void prepareFile(OutputStream out) {

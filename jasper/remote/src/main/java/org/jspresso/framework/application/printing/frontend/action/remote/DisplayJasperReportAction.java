@@ -72,7 +72,7 @@ public class DisplayJasperReportAction extends AbstractRemoteAction {
           .toByteArray());
       String resourceId = ResourceManager.getInstance().register(resource);
       getController(context).displayUrl(
-          ResourceProviderServlet.computeUrl(resourceId));
+          ResourceProviderServlet.computeDownloadUrl(resourceId));
       return super.execute(actionHandler, context);
     } catch (JRException ex) {
       throw new ActionException(ex);

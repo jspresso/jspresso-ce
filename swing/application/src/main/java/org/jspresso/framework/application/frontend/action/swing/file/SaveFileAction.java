@@ -90,7 +90,6 @@ public class SaveFileAction extends ChooseFileAction {
         if (file != null) {
           try {
             fileSaveCallback.fileChosen(new FileOutputStream(file), context);
-            fileSaveCallback.fileWritten(file.getAbsolutePath(), context);
           } catch (FileNotFoundException ex) {
             fileSaveCallback.cancel(context);
           }

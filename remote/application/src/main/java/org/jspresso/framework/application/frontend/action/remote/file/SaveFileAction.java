@@ -26,7 +26,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
-import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.AbstractResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -66,7 +66,7 @@ public class SaveFileAction extends ChooseFileAction {
     String resourceId = ResourceManager.getInstance().register(
         new ResourceAdapter(fileSaveCallback, context));
     fileDownloadCommand.setResourceId(resourceId);
-    fileDownloadCommand.setDownloadUrl(ResourceProviderServlet.computeUrl(resourceId));
+    fileDownloadCommand.setDownloadUrl(ResourceProviderServlet.computeDownloadUrl(resourceId));
     registerCommand(fileDownloadCommand, context);
     return super.execute(actionHandler, context);
   }
@@ -81,11 +81,12 @@ public class SaveFileAction extends ChooseFileAction {
     this.fileSaveCallback = fileSaveCallback;
   }
 
-  private class ResourceAdapter implements IResource {
+  private static class ResourceAdapter extends AbstractResource {
 
     private byte[] content;
 
     public ResourceAdapter(IFileSaveCallback source, Map<String, Object> context) {
+      super("application/octet-stream");
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       source.fileChosen(baos, context);
       content = baos.toByteArray();
@@ -103,17 +104,8 @@ public class SaveFileAction extends ChooseFileAction {
      * {@inheritDoc}
      */
     @Override
-    public int getLength() {
+    public long getSize() {
       return content.length;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getMimeType() {
-      return "application/octet-stream";
-    }
-
   }
 }

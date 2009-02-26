@@ -71,7 +71,7 @@ public class OpenFileAction extends ChooseFileAction {
       public void onSuccess(InputStream in, String filePath) {
         if (fileOpenCallback != null) {
           createFileChooser(context).setCurrentDirectory(filePath);
-          fileOpenCallback.fileChosen(in, filePath, actionHandler, context);
+          fileOpenCallback.fileChosen(in, actionHandler, context);
         }
       }
     }, createFileChooser(context));

@@ -21,13 +21,22 @@ package org.jspresso.framework.util.resources.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.io.IoHelper;
+import org.jspresso.framework.util.resources.AbstractResource;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.url.UrlHelper;
 
@@ -59,6 +68,11 @@ public class ResourceProviderServlet extends HttpServlet {
   public static final String DOWNLOAD_SERVLET_URL_PATTERN = "/download";
 
   /**
+   * the url pattern to activate a resource upload.
+   */
+  public static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
+
+  /**
    * id.
    */
   public static final String ID_PARAMETER                 = "id";
@@ -75,11 +89,11 @@ public class ResourceProviderServlet extends HttpServlet {
    * 
    * @param id
    *          the resource id.
-   * @return the rsource url.
+   * @return the resource url.
    */
-  public static String computeUrl(String id) {
+  public static String computeDownloadUrl(String id) {
     HttpServletRequest request = HttpRequestHolder.getServletRequest();
-    return computeUrl(request, id);
+    return computeDownloadUrl(request, id);
   }
 
   /**
@@ -89,13 +103,37 @@ public class ResourceProviderServlet extends HttpServlet {
    *          the incomming HTTP request.
    * @param id
    *          the resource id.
-   * @return the rsource url.
+   * @return the resource url.
    */
-  public static String computeUrl(HttpServletRequest request, String id) {
+  public static String computeDownloadUrl(HttpServletRequest request, String id) {
     String baseUrl = request.getScheme() + "://" + request.getServerName()
         + ":" + request.getServerPort() + request.getContextPath()
         + DOWNLOAD_SERVLET_URL_PATTERN;
     return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
+  }
+
+  /**
+   * Computes the url where the resource can be uploaded.
+   * 
+   * @return the resource url.
+   */
+  public static String computeUploadUrl() {
+    HttpServletRequest request = HttpRequestHolder.getServletRequest();
+    return computeUploadUrl(request);
+  }
+
+  /**
+   * Computes the url where the resource can be uploaded.
+   * 
+   * @param request
+   *          the incomming HTTP request.
+   * @return the resource url.
+   */
+  public static String computeUploadUrl(HttpServletRequest request) {
+    String baseUrl = request.getScheme() + "://" + request.getServerName()
+        + ":" + request.getServerPort() + request.getContextPath()
+        + UPLOAD_SERVLET_URL_PATTERN;
+    return baseUrl;
   }
 
   /**
@@ -123,9 +161,9 @@ public class ResourceProviderServlet extends HttpServlet {
       }
 
       response.setContentType(resource.getMimeType());
-      int resourceLength = resource.getLength();
+      long resourceLength = resource.getSize();
       if (resourceLength > 0) {
-        response.setContentLength(resourceLength);
+        response.setContentLength((int) resourceLength);
       }
 
       inputStream = new BufferedInputStream(resource.getContent());
@@ -146,10 +184,70 @@ public class ResourceProviderServlet extends HttpServlet {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
-    doGet(request, response);
+  public void doPost(HttpServletRequest request, HttpServletResponse response) {
+
+    ServletOutputStream out = null;
+
+    try {
+      FileItemFactory factory = new DiskFileItemFactory();
+      ServletFileUpload upload = new ServletFileUpload(factory);
+
+      List<FileItem> items = upload.parseRequest(request);
+      response.setContentType("text/xml");
+      out = response.getOutputStream();
+      for (FileItem item : items) {
+        if (!item.isFormField()) {
+          out.print("<resource");
+          IResource uploadResource = new UploadResourceAdapter("application/octet-stream", item);
+          String resourceId = ResourceManager.getInstance().register(uploadResource);
+          out.print(" id=\"" + resourceId);
+          out.print("\" name=\"" + item.getName());
+          out.println("\" />");
+        }
+      }
+      out.flush();
+      out.close();
+    } catch (FileUploadException fue) {
+      fue.printStackTrace();
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
+  private static class UploadResourceAdapter extends AbstractResource {
+
+    private FileItem item;
+
+    /**
+     * Constructs a new <code>UploadResourceAdapter</code> instance.
+     * 
+     * @param mimeType the resource mime type.
+     * @param item the resource file item.
+     */
+    public UploadResourceAdapter(String mimeType, FileItem item) {
+      super(mimeType);
+      this.item = item;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InputStream getContent() throws IOException {
+      return item.getInputStream();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getSize() {
+      return item.getSize();
+    }
+
+  }
 }

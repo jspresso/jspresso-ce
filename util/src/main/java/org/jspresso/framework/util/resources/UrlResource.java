@@ -53,7 +53,7 @@ public class UrlResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
-  public int getLength() {
+  public long getSize() {
     return -1; // unknown.
   }
 }

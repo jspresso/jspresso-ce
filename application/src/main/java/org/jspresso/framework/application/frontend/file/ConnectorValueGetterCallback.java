@@ -86,13 +86,4 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
       }
     }
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void fileWritten(@SuppressWarnings("unused")
-  String filePath, @SuppressWarnings("unused")
-  Map<String, Object> context) {
-    // NO-OP
-  }
 }

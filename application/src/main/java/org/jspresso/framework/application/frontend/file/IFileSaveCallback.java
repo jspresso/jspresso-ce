@@ -59,14 +59,4 @@ public interface IFileSaveCallback {
    *            the action context.
    */
   void fileChosen(OutputStream out, Map<String, Object> context);
-
-  /**
-   * Called whenever a file is finished writing.
-   * 
-   * @param filePath
-   *            the file path.
-   * @param context
-   *            the action context.
-   */
-  void fileWritten(String filePath, Map<String, Object> context);
 }

@@ -23,6 +23,9 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
 import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
+import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * Initiates a file open action.
@@ -45,8 +48,8 @@ import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
  */
 public class OpenFileAction extends ChooseFileAction {
 
-  @SuppressWarnings("unused")
-  private IFileOpenCallback fileOpenCallback;
+  private IFileOpenCallback      fileOpenCallback;
+  private FileOpenCallbackAction fileOpenCallbackAction;
 
   /**
    * {@inheritDoc}
@@ -57,6 +60,12 @@ public class OpenFileAction extends ChooseFileAction {
     RemoteFileUploadCommand fileUploadCommand = new RemoteFileUploadCommand();
     fileUploadCommand.setFileFilter(translateFilter(getFileFilter(context),
         context));
+    RAction callbackAction = getActionFactory(context).createAction(
+        createCallbackAction(), actionHandler, getSourceComponent(context),
+        getModelDescriptor(context), getViewConnector(context),
+        getLocale(context));
+    fileUploadCommand.setCallbackAction(callbackAction);
+    fileUploadCommand.setUploadUrl(ResourceProviderServlet.computeUploadUrl());
     registerCommand(fileUploadCommand, context);
     return super.execute(actionHandler, context);
   }
@@ -69,5 +78,12 @@ public class OpenFileAction extends ChooseFileAction {
    */
   public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
     this.fileOpenCallback = fileOpenCallback;
+  }
+
+  private IDisplayableAction createCallbackAction() {
+    if (fileOpenCallbackAction == null) {
+      fileOpenCallbackAction = new FileOpenCallbackAction(fileOpenCallback);
+    }
+    return fileOpenCallbackAction;
   }
 }

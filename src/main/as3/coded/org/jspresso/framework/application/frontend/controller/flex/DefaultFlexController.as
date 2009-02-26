@@ -14,6 +14,7 @@
 
 package org.jspresso.framework.application.frontend.controller.flex {
   import flash.display.DisplayObject;
+  import flash.events.DataEvent;
   import flash.events.Event;
   import flash.events.MouseEvent;
   import flash.external.ExternalInterface;
@@ -127,6 +128,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _postponedCommands:Object;
     private var _dialogStack:Array;
     private var _userLanguage:String;
+    
+    private var _fileReference:FileReference;
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -262,8 +265,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else if(command is RemoteRestartCommand) {
         restart();
       } else if(command is RemoteFileUploadCommand) {
-        var fileUploadCommand:RemoteFileUploadCommand = command as RemoteFileUploadCommand;
-        handleFileUpload(fileUploadCommand.fileFilter);
+        handleFileUpload(command as RemoteFileUploadCommand);
       } else if(command is RemoteFileDownloadCommand) {
         handleFileDownload(command as RemoteFileDownloadCommand);
       } else if(command is RemoteInitLoginCommand) {
@@ -347,16 +349,24 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function handleFileUpload(fileFilter:Object):void {
-      var uploadFileRef:FileReference = new  FileReference();
-      uploadFileRef.browse(createTypeFilters(fileFilter));
-      uploadFileRef.addEventListener(Event.SELECT, function(event:Event):void {
+    private function handleFileUpload(uploadCommand:RemoteFileUploadCommand):void {
+      _fileReference = new  FileReference();
+      _fileReference.addEventListener(Event.SELECT, function(event:Event):void {
+        var request:URLRequest = new URLRequest(uploadCommand.uploadUrl);
+        _fileReference.upload(request);
       });
+      _fileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, function(event:DataEvent):void {
+        var xml:XML = new XML(event.data);
+        var resourceId:String = xml.@id;
+        execute(uploadCommand.callbackAction, resourceId);
+      });
+      _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
+      // Nettoyer.
     }
     
     private function handleFileDownload(downloadCommand:RemoteFileDownloadCommand):void {
-      var downloadFileRef:FileReference = new  FileReference();
-      downloadFileRef.download(new URLRequest(downloadCommand.downloadUrl), downloadCommand.defaultFileName);
+      _fileReference = new  FileReference();
+      _fileReference.download(new URLRequest(downloadCommand.downloadUrl), downloadCommand.defaultFileName);
       // Nettoyer.
     }
     

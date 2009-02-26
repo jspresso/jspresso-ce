@@ -112,6 +112,16 @@ public final class ResourceManager {
     resources.put(id, resource);
   }
 
+  /**
+   * Unregisters a resource.
+   * 
+   * @param id
+   *            the identifier under which the resource is registered.
+   */
+  public void unregister(String id) {
+    resources.remove(id);
+  }
+
   private String createId() throws NoSuchAlgorithmException {
     byte[] bytes = new byte[24];
     random.nextBytes(bytes);

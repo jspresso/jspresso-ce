@@ -54,9 +54,8 @@ public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
    * {@inheritDoc}
    */
   @Override
-  public void fileChosen(InputStream in, String filePath,
-      IActionHandler actionHandler, Map<String, Object> context) {
-    super.fileChosen(in, filePath, actionHandler, context);
+  public void fileChosen(InputStream in, IActionHandler actionHandler, Map<String, Object> context) {
+    super.fileChosen(in, actionHandler, context);
     if (context.containsKey(ActionContextConstants.ACTION_PARAM)) {
       Object valueToSet = context.get(ActionContextConstants.ACTION_PARAM);
       IModelDescriptor modelDescriptor = (IModelDescriptor) context

@@ -16,14 +16,21 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.command.remote;
+package org.jspresso.framework.application.frontend.action.remote.file;
 
+import java.io.IOException;
 import java.util.Map;
 
-import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
+import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
+import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.server.ResourceManager;
 
 /**
- * This command is used to upload a file from the client peer.
+ * An action to trigger the file open callback.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,68 +48,42 @@ import org.jspresso.framework.gui.remote.RAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteFileUploadCommand extends RemoteCommand {
+public class FileOpenCallbackAction extends AbstractRemoteAction {
 
-  private Map<String, String[]> fileFilter;
-  private RAction               callbackAction;
-  private String                uploadUrl;
+  private IFileOpenCallback fileOpenCallback;
 
   /**
-   * Gets the fileFilter.
+   * Constructs a new <code>FileOpenCallbackAction</code> instance.
    * 
-   * @return the fileFilter.
+   * @param fileOpenCallback
+   *          the file open callback to trigger.
    */
-  public Map<String, String[]> getFileFilter() {
-    return fileFilter;
+  public FileOpenCallbackAction(IFileOpenCallback fileOpenCallback) {
+    this.fileOpenCallback = fileOpenCallback;
   }
 
   /**
-   * Sets the fileFilter.
-   * 
-   * @param fileFilter
-   *          the fileFilter to set.
+   * Trigers the file open callback.
+   * <p>
+   * {@inheritDoc}
    */
-  public void setFileFilter(Map<String, String[]> fileFilter) {
-    this.fileFilter = fileFilter;
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    String resourceId = (String) context
+        .get(ActionContextConstants.ACTION_COMMAND);
+    IResource uploadedResource = ResourceManager.getInstance().getRegistered(
+        resourceId);
+    if (uploadedResource != null) {
+      try {
+        fileOpenCallback.fileChosen(uploadedResource.getContent(),
+            actionHandler, context);
+      } catch (IOException ex) {
+        throw new ActionException(ex);
+      }
+    } else {
+      fileOpenCallback.cancel(actionHandler, context);
+    }
+    return super.execute(actionHandler, context);
   }
-
-  /**
-   * Gets the callbackAction.
-   * 
-   * @return the callbackAction.
-   */
-  public RAction getCallbackAction() {
-    return callbackAction;
-  }
-
-  /**
-   * Sets the callbackAction.
-   * 
-   * @param callbackAction
-   *          the callbackAction to set.
-   */
-  public void setCallbackAction(RAction callbackAction) {
-    this.callbackAction = callbackAction;
-  }
-
-  
-  /**
-   * Gets the uploadUrl.
-   * 
-   * @return the uploadUrl.
-   */
-  public String getUploadUrl() {
-    return uploadUrl;
-  }
-
-  
-  /**
-   * Sets the uploadUrl.
-   * 
-   * @param uploadUrl the uploadUrl to set.
-   */
-  public void setUploadUrl(String uploadUrl) {
-    this.uploadUrl = uploadUrl;
-  }
-
 }

@@ -24,7 +24,6 @@ import java.util.Map;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 
-
 /**
  * A callback handler which triggers an arbitrary action.
  * <p>
@@ -52,9 +51,9 @@ public class ActionExecutorCallback extends FileToByteArrayCallback {
    * {@inheritDoc}
    */
   @Override
-  public void fileChosen(InputStream in, String filePath,
-      IActionHandler actionHandler, Map<String, Object> context) {
-    super.fileChosen(in, filePath, actionHandler, context);
+  public void fileChosen(InputStream in, IActionHandler actionHandler,
+      Map<String, Object> context) {
+    super.fileChosen(in, actionHandler, context);
     actionHandler.execute(action, context);
   }
 
@@ -62,7 +61,7 @@ public class ActionExecutorCallback extends FileToByteArrayCallback {
    * Sets the action.
    * 
    * @param action
-   *            the action to set.
+   *          the action to set.
    */
   public void setAction(IAction action) {
     this.action = action;

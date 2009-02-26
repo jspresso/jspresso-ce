@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 
-
 /**
  * This interface is used react to file open.
  * <p>
@@ -49,9 +48,9 @@ public interface IFileOpenCallback {
    * Called whenever the file opening is cancelled.
    * 
    * @param actionHandler
-   *            the action handler.
+   *          the action handler.
    * @param context
-   *            the action context.
+   *          the action context.
    */
   void cancel(IActionHandler actionHandler, Map<String, Object> context);
 
@@ -59,14 +58,12 @@ public interface IFileOpenCallback {
    * Called whenever a file is opened.
    * 
    * @param in
-   *            the input stream to read the file bytes.
-   * @param filePath
-   *            the file path.
+   *          the input stream to read the file bytes.
    * @param actionHandler
-   *            the action handler.
+   *          the action handler.
    * @param context
-   *            the action context.
+   *          the action context.
    */
-  void fileChosen(InputStream in, String filePath,
-      IActionHandler actionHandler, Map<String, Object> context);
+  void fileChosen(InputStream in, IActionHandler actionHandler,
+      Map<String, Object> context);
 }

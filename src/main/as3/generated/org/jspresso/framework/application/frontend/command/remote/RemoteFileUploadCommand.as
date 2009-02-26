@@ -14,18 +14,36 @@
 
 
 package org.jspresso.framework.application.frontend.command.remote {
+  import org.jspresso.framework.gui.remote.RAction;
+  
 
 		
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand")]
     public class RemoteFileUploadCommand extends RemoteCommand {
 
         private var _fileFilter:Object;
+        private var _callbackAction:RAction;
+        private var _uploadUrl:String;
 
         public function set fileFilter(value:Object):void {
             _fileFilter = value;
         }
         public function get fileFilter():Object {
             return _fileFilter;
+        }
+
+        public function set callbackAction(value:RAction):void {
+            _callbackAction = value;
+        }
+        public function get callbackAction():RAction {
+            return _callbackAction;
+        }
+
+        public function set uploadUrl(value:String):void {
+            _uploadUrl = value;
+        }
+        public function get uploadUrl():String {
+            return _uploadUrl;
         }
     }
 }
