@@ -18,17 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.Map;
-
-import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.remote.RemotePeer;
-import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * This class is the generic server peer of a client GUI action.
@@ -51,18 +41,12 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  */
 public class RAction extends RemotePeer {
 
-  private String           name;
-  private String           description;
-  private RIcon            icon;
-  private String           mnemonicAsString;
-  private String           acceleratorAsString;
-  private boolean          enabled;
-
-  private IAction          action;
-  private IActionHandler   actionHandler;
-  private IModelDescriptor modelDescriptor;
-  private RComponent       sourceComponent;
-  private IValueConnector  viewConnector;
+  private String  name;
+  private String  description;
+  private RIcon   icon;
+  private String  mnemonicAsString;
+  private String  acceleratorAsString;
+  private boolean enabled;
 
   /**
    * Constructs a new <code>RAction</code> instance.
@@ -190,68 +174,12 @@ public class RAction extends RemotePeer {
   }
 
   /**
-   * Sets the action context.
-   * 
-   * @param anAction
-   *          the Jspresso action.
-   * @param anActionHandler
-   *          the action handler.
-   * @param aSourceComponent
-   *          the source component.
-   * @param aModelDescriptor
-   *          the model descriptor.
-   * @param aViewConnector
-   *          the view connector.
-   */
-  public void setContext(IDisplayableAction anAction,
-      IActionHandler anActionHandler, RComponent aSourceComponent,
-      IModelDescriptor aModelDescriptor, IValueConnector aViewConnector) {
-    this.action = anAction;
-    this.actionHandler = anActionHandler;
-    this.sourceComponent = aSourceComponent;
-    this.modelDescriptor = aModelDescriptor;
-    if (aModelDescriptor instanceof ICollectionDescriptor) {
-      this.viewConnector = ((ICollectionConnectorProvider) aViewConnector)
-          .getCollectionConnector();
-    } else {
-      this.viewConnector = aViewConnector;
-    }
-  }
-
-  /**
-   * Triggers the action execution on the action handler. The following initial
-   * action context is filled in : <li>
-   * <code>ActionContextConstants.SOURCE_COMPONENT</code> <li>
-   * <code>ActionContextConstants.VIEW_CONNECTOR</code> <li>
-   * <code>ActionContextConstants.MODEL_CONNECTOR</code> <li>
-   * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> <li>
-   * <code>ActionContextConstants.SELECTED_INDICES</code> <li>
-   * <code>ActionContextConstants.LOCALE</code>
+   * Triggers the action execution.
    * 
    * @param parameter
    *          the action parameter.
    */
   public void actionPerformed(String parameter) {
-    if (actionHandler != null) {
-      Map<String, Object> actionContext = actionHandler.createEmptyContext();
-      actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
-          modelDescriptor);
-      actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
-          sourceComponent);
-      actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
-      if (viewConnector instanceof ICollectionConnectorProvider
-          && ((ICollectionConnectorProvider) viewConnector)
-              .getCollectionConnector() != null) {
-        actionContext.put(ActionContextConstants.SELECTED_INDICES,
-            ((ICollectionConnectorProvider) viewConnector)
-                .getCollectionConnector().getSelectedIndices());
-      }
-      actionContext.put(ActionContextConstants.ACTION_COMMAND, parameter);
-      // actionContext.put(ActionContextConstants.ACTION_WIDGET, e.getSource());
-      if (action.getInitialContext() != null) {
-        actionContext.putAll(action.getInitialContext());
-      }
-      actionHandler.execute(action, actionContext);
-    }
+    // NO-OP
   }
 }

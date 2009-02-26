@@ -14,12 +14,8 @@
       <artifactId>jspresso-util</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-binding</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-application</artifactId>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -23,7 +23,10 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
@@ -38,6 +41,7 @@ import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.model.EmbeddedModelProvider;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
@@ -161,8 +165,6 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
       IModelDescriptor modelDescriptor, IValueConnector viewConnector,
       Locale locale) {
     RAction remoteAction = new RAction(guidGenerator.generateGUID());
-    remoteAction.setContext(action, actionHandler, sourceComponent,
-        modelDescriptor, viewConnector);
     remoteAction.setName(action.getI18nName(translationProvider, locale));
     String i18nDescription = action.getI18nDescription(translationProvider,
         locale);
@@ -174,7 +176,10 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
     if (action.getMnemonicAsString() != null) {
       remoteAction.setMnemonicAsString(action.getMnemonicAsString());
     }
-    remotePeerRegistry.register(remoteAction);
+    ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction);
+    remoteActionAdapter.setContext(action, actionHandler, sourceComponent,
+        modelDescriptor, viewConnector);
+    remotePeerRegistry.register(remoteActionAdapter);
     return remoteAction;
   }
 
@@ -261,5 +266,86 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
    */
   public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
     this.remoteCommandHandler = remoteCommandHandler;
+  }
+
+  private final class ActionAdapter extends RAction {
+
+    private IAction          action;
+    private IActionHandler   actionHandler;
+    private IModelDescriptor modelDescriptor;
+    private RComponent       sourceComponent;
+    private IValueConnector  viewConnector;
+
+    public ActionAdapter(RAction remoteAction) {
+      super(remoteAction.getGuid());
+    }
+
+    /**
+     * Sets the action context.
+     * 
+     * @param anAction
+     *          the Jspresso action.
+     * @param anActionHandler
+     *          the action handler.
+     * @param aSourceComponent
+     *          the source component.
+     * @param aModelDescriptor
+     *          the model descriptor.
+     * @param aViewConnector
+     *          the view connector.
+     */
+    public void setContext(IDisplayableAction anAction,
+        IActionHandler anActionHandler, RComponent aSourceComponent,
+        IModelDescriptor aModelDescriptor, IValueConnector aViewConnector) {
+      this.action = anAction;
+      this.actionHandler = anActionHandler;
+      this.sourceComponent = aSourceComponent;
+      this.modelDescriptor = aModelDescriptor;
+      if (aModelDescriptor instanceof ICollectionDescriptor) {
+        this.viewConnector = ((ICollectionConnectorProvider) aViewConnector)
+            .getCollectionConnector();
+      } else {
+        this.viewConnector = aViewConnector;
+      }
+    }
+
+    /**
+     * Triggers the action execution on the action handler. The following
+     * initial action context is filled in : <li>
+     * <code>ActionContextConstants.SOURCE_COMPONENT</code> <li>
+     * <code>ActionContextConstants.VIEW_CONNECTOR</code> <li>
+     * <code>ActionContextConstants.MODEL_CONNECTOR</code> <li>
+     * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> <li>
+     * <code>ActionContextConstants.SELECTED_INDICES</code> <li>
+     * <code>ActionContextConstants.LOCALE</code>
+     * 
+     * @param parameter
+     *          the action parameter.
+     */
+    @Override
+    public void actionPerformed(String parameter) {
+      if (actionHandler != null) {
+        Map<String, Object> actionContext = actionHandler.createEmptyContext();
+        actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
+            modelDescriptor);
+        actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
+            sourceComponent);
+        actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
+        if (viewConnector instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) viewConnector)
+                .getCollectionConnector() != null) {
+          actionContext.put(ActionContextConstants.SELECTED_INDICES,
+              ((ICollectionConnectorProvider) viewConnector)
+                  .getCollectionConnector().getSelectedIndices());
+        }
+        actionContext.put(ActionContextConstants.ACTION_COMMAND, parameter);
+        // actionContext.put(ActionContextConstants.ACTION_WIDGET,
+        // e.getSource());
+        if (action.getInitialContext() != null) {
+          actionContext.putAll(action.getInitialContext());
+        }
+        actionHandler.execute(action, actionContext);
+      }
+    }
   }
 }
