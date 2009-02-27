@@ -122,7 +122,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _changeNotificationsEnabled:Boolean;
-    private var _commandRegistrationEnabled:Boolean;
     private var _commandsQueue:IList;
     private var _workspaceViewStack:ViewStack;
     private var _postponedCommands:Object;
@@ -135,7 +134,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _viewFactory = new DefaultFlexViewFactory(this, this);
       _changeNotificationsEnabled = true;
-      _commandRegistrationEnabled = true;
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
@@ -235,7 +233,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function registerCommand(command:RemoteCommand):void {
-      if(_commandRegistrationEnabled) {
+      if(_changeNotificationsEnabled) {
         //trace("Command registered for next round trip : " + command);
         _commandsQueue.addItem(command);
         dispatchCommands();
@@ -245,8 +243,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     protected function handleCommands(commands:IList):void {
       //trace("Recieved commands :");
+      var wasEnabled:Boolean = _changeNotificationsEnabled;
       try {
-        _commandRegistrationEnabled = false;
+        _changeNotificationsEnabled = false;
         if (commands != null) {
           for each(var command:RemoteCommand in commands) {
             //trace("  -> " + command);
@@ -254,7 +253,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
         }
       } finally {
-        _commandRegistrationEnabled = true;
+        _changeNotificationsEnabled = wasEnabled;
       }
     }
 
@@ -489,7 +488,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _changeNotificationsEnabled = true;
       _commandsQueue = new ArrayCollection(new Array());
-      _commandRegistrationEnabled = true;
       _dialogStack = new Array();
       start();
     }
