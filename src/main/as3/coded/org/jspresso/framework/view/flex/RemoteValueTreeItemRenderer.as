@@ -34,7 +34,10 @@ package org.jspresso.framework.view.flex {
 				image.y = icon.y;
 				image.width = icon.width;
 				image.height = icon.height;
-				image.source = DefaultFlexViewFactory.computeUrl((data as RemoteCompositeValueState).iconImageUrl);
+				var iconImageUrl:String = (data as RemoteCompositeValueState).iconImageUrl;
+				if(iconImageUrl) {
+				  image.source = DefaultFlexViewFactory.computeUrl((data as RemoteCompositeValueState).iconImageUrl);
+				}
 				
 				icon.visible = false;
 			}

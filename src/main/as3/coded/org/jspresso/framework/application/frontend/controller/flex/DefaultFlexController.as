@@ -122,8 +122,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _viewFactory:DefaultFlexViewFactory;
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _changeNotificationsEnabled:Boolean;
-    private var _commandsQueue:IList;
     private var _commandRegistrationEnabled:Boolean;
+    private var _commandsQueue:IList;
     private var _workspaceViewStack:ViewStack;
     private var _postponedCommands:Object;
     private var _dialogStack:Array;
@@ -135,9 +135,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _viewFactory = new DefaultFlexViewFactory(this, this);
       _changeNotificationsEnabled = true;
+      _commandRegistrationEnabled = true;
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
-      _commandRegistrationEnabled = true;
       _dialogStack = new Array();
       _userLanguage = userLanguage;
       if (ExternalInterface.available) {
@@ -176,18 +176,17 @@ package org.jspresso.framework.application.frontend.controller.flex {
       try {
         _changeNotificationsEnabled = false;
 
-        var valueListener:Function = function(value:Object):void {
-          valueUpdated(remoteValueState);
-        };
-        BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
-
         if(remoteValueState is RemoteCompositeValueState) {
           var selectedIndicesListener:Function = function(selectedIndices:Array):void {
             selectedIndicesUpdated(remoteValueState as RemoteCompositeValueState);
           };
           BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
+        } else {
+          var valueListener:Function = function(value:Object):void {
+            valueUpdated(remoteValueState);
+          };
+          BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
         }
-
       } finally {
         _changeNotificationsEnabled = wasEnabled;
       }
