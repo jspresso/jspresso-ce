@@ -45,12 +45,12 @@ package org.jspresso.framework.view.flex {
                   }
                 }
                 if(!ArrayUtil.areUnorderedArraysEqual(selectedItems, newlySelectedItems)) {
+                  selectedItems = newlySelectedItems;
                   if(newlySelectedItems.length > 0 && !isItemOpen(changedState)) {
                     var newOpenItems:Array = new Array().concat(openItems);
                     newOpenItems.push(changedState);
                     openItems = newOpenItems;
                   }
-                  selectedItems = newlySelectedItems;
                 }
               }
             }
