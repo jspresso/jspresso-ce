@@ -401,7 +401,9 @@ package org.jspresso.framework.view.flex {
       if(textInput) {
         var triggerAction:Function = function (event:Event):void {
           var inputText:String = (event.currentTarget as TextInput).text;
-          if(inputText != remoteState.value) {
+          if(!inputText || inputText.length == 0) {
+            remoteState.value = null;
+          } else if(inputText != remoteState.value) {
             _actionHandler.execute(action, inputText);
           }
         };
@@ -1084,29 +1086,28 @@ package org.jspresso.framework.view.flex {
           itemRenderer.properties = {viewFactory:this,
                                      remoteComponent:rColumn,
                                      index:i+1};
-          column.rendererIsEditor = true;
         } else {
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
           itemRenderer.properties = {formatter:createFormatter(rColumn)};
         }
         column.itemRenderer = itemRenderer
         
+        var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
+        var editorComponent:UIComponent = createComponent(rColumn, false);
+        itemEditor.properties = {editor:editorComponent,
+                                 state:rColumn.state,
+                                 index:i+1};
+        column.itemEditor = itemEditor;
         if(rColumn is RCheckBox) {
           column.width = table.measureText(column.headerText).width + 16;
         } else {
-          var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
-          var editorComponent:UIComponent = createComponent(rColumn, false);
-          itemEditor.properties = {editor:editorComponent,
-                                   state:rColumn.state,
-                                   index:i+1};
-          column.itemEditor = itemEditor;
           column.width = Math.max(
                            Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT,
                                     editorComponent.maxWidth),
                            table.measureText(column.headerText).width + 16
                          );
-          editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
         }
+        editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
         column.editorDataField = "state";
         
         column.sortCompareFunction = _remoteValueSorter.compareStrings;

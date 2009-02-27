@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.component.query;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.jspresso.framework.model.component.IComponent;
@@ -101,6 +103,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
           .getReferencedDescriptor();
       if (isInlineComponentDescriptor(referencedDescriptor)) {
         QueryComponent referencedQueryComponent = new QueryComponent(referencedDescriptor);
+        referencedQueryComponent.addPropertyChangeListener(new InlinedComponentTracker(
+            propertyDescriptor.getName()));
         put((String) key, referencedQueryComponent);
         return referencedQueryComponent;
       }
@@ -113,5 +117,29 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     return !IEntity.class.isAssignableFrom(referencedComponentDescriptor
         .getComponentContract())
         && !referencedComponentDescriptor.isPurelyAbstract();
+  }
+
+  private class InlinedComponentTracker implements PropertyChangeListener {
+
+    private String componentName;
+
+    /**
+     * Constructs a new <code>InnerComponentTracker</code> instance.
+     * 
+     * @param componentName
+     *          the name of the component to track the properties.
+     */
+    public InlinedComponentTracker(String componentName) {
+      this.componentName = componentName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(PropertyChangeEvent evt) {
+      firePropertyChange(componentName, null, evt.getSource());
+      firePropertyChange(componentName + "." + evt.getPropertyName(), evt
+          .getOldValue(), evt.getNewValue());
+    }
   }
 }

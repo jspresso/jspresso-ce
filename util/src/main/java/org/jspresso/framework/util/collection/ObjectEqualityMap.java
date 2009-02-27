@@ -15,7 +15,6 @@ import java.util.Map;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 
-
 /**
  * a map which equality is based on object identity.
  * <p>
@@ -25,9 +24,9 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <K>
- *            the key class.
+ *          the key class.
  * @param <V>
- *            the value class.
+ *          the value class.
  */
 public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
     IPropertyChangeCapable {
@@ -48,7 +47,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    * Constructs a new <code>ObjectEqualityMap</code> instance.
    * 
    * @param initialCapacity
-   *            initialCapacity.
+   *          initialCapacity.
    */
   public ObjectEqualityMap(int initialCapacity) {
     super(initialCapacity);
@@ -59,9 +58,9 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    * Constructs a new <code>ObjectEqualityMap</code> instance.
    * 
    * @param initialCapacity
-   *            initialCapacity.
+   *          initialCapacity.
    * @param loadFactor
-   *            loadFactor.
+   *          loadFactor.
    */
   public ObjectEqualityMap(int initialCapacity, float loadFactor) {
     super(initialCapacity, loadFactor);
@@ -72,7 +71,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    * Constructs a new <code>ObjectEqualityMap</code> instance.
    * 
    * @param m
-   *            map.
+   *          map.
    */
   public ObjectEqualityMap(Map<? extends K, ? extends V> m) {
     super(m);
@@ -164,5 +163,20 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
       ClassNotFoundException {
     in.defaultReadObject();
     propertyChangeSupport = new SinglePropertyChangeSupport(this);
+  }
+
+  /**
+   * @param propertyName
+   *          the property name.
+   * @param oldValue
+   *          the old value.
+   * @param newValue
+   *          the new value.
+   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
+   *      java.lang.Object, java.lang.Object)
+   */
+  protected void firePropertyChange(String propertyName, Object oldValue,
+      Object newValue) {
+    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
   }
 }
