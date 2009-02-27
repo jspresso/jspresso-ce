@@ -353,7 +353,8 @@ public class DefaultUlcController extends
           menus.add(menu);
         } else {
           menu.addSeparator();
-          for (ULCMenuItem menuItem : createMenuItems(sourceComponent, actionList)) {
+          for (ULCMenuItem menuItem : createMenuItems(sourceComponent,
+              actionList)) {
             menu.add(menuItem);
           }
         }
@@ -457,18 +458,24 @@ public class DefaultUlcController extends
           getLocale()));
     }
   }
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
-  public void displayModalDialog(ULCComponent mainView,
-      List<IAction> actions, String title,
-      ULCComponent sourceComponent, Map<String, Object> context) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent, context);
+  public void displayModalDialog(ULCComponent mainView, List<IAction> actions,
+      String title, ULCComponent sourceComponent, Map<String, Object> context,
+      boolean reuseCurrent) {
+    super.displayModalDialog(mainView, actions, title, sourceComponent,
+        context, reuseCurrent);
     final ULCDialog dialog;
     ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
-    dialog = new ULCDialog(window, title, true);
+    if (reuseCurrent && window instanceof ULCDialog) {
+        dialog = (ULCDialog) window;
+        dialog.getContentPane().removeAll();
+    } else {
+      dialog = new ULCDialog(window, title, true);
+    }
 
     ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
         ULCBoxLayoutPane.LINE_AXIS);
@@ -498,12 +505,13 @@ public class DefaultUlcController extends
     dialog.pack();
     dialog.setVisible(true);
   }
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(ULCComponent sourceWidget, Map<String, Object> context) {
+  public void disposeModalDialog(ULCComponent sourceWidget,
+      Map<String, Object> context) {
     super.disposeModalDialog(sourceWidget, context);
     ULCWindow actionWindow = UlcUtil.getVisibleWindow(sourceWidget);
     if (actionWindow instanceof ULCDialog) {

@@ -117,7 +117,11 @@
   <bean
     id="wizardAction"
     parent="abstractWizardAction"
-    class="org.jspresso.framework.application.frontend.action.remote.wizard.WizardAction" />
+    class="org.jspresso.framework.application.frontend.action.remote.wizard.WizardAction">
+    <property
+      name="cancelAction"
+      ref="cancelDialogFrontAction" />
+  </bean>
 
   <bean
     id="viewFactory"

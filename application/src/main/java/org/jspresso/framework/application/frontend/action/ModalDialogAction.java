@@ -65,16 +65,17 @@ public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
       Map<String, Object> context) {
     IView<E> mainView = getMainView(context);
     List<IDisplayableAction> dActions = getActions(context);
-    String title = getI18nName(
-        getTranslationProvider(context), getLocale(context));
+    String title = getI18nName(getTranslationProvider(context),
+        getLocale(context));
     E sourceComponent = getSourceComponent(context);
 
     List<G> actions = new ArrayList<G>();
     for (IDisplayableAction action : dActions) {
-      actions.add(getActionFactory(context).createAction(action,
-          actionHandler, mainView, getLocale(context)));
+      actions.add(getActionFactory(context).createAction(action, actionHandler,
+          mainView, getLocale(context)));
     }
-    getController(context).displayModalDialog(mainView.getPeer(), actions, title, sourceComponent, context);
+    getController(context).displayModalDialog(mainView.getPeer(), actions,
+        title, sourceComponent, context, false);
     return super.execute(actionHandler, context);
   }
 

@@ -20,7 +20,6 @@ package org.jspresso.framework.tools.viewtester;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Window;
@@ -112,13 +111,19 @@ public class MockSwingController extends
    */
   @Override
   public void displayModalDialog(JComponent mainView, List<Action> actions,
-      String title, JComponent sourceComponent, Map<String, Object> context) {
-    super
-        .displayModalDialog(mainView, actions, title, sourceComponent, context);
+      String title, JComponent sourceComponent, Map<String, Object> context,
+      boolean reuseCurrent) {
+    super.displayModalDialog(mainView, actions, title, sourceComponent,
+        context, reuseCurrent);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
-    if (window instanceof Dialog) {
-      dialog = new JDialog((Dialog) window, title, true);
+    if (window instanceof JDialog) {
+      if (reuseCurrent) {
+        dialog = (JDialog) window;
+        dialog.getContentPane().removeAll();
+      } else {
+        dialog = new JDialog((JDialog) window, title, true);
+      }
     } else {
       dialog = new JDialog((Frame) window, title, true);
     }
@@ -163,7 +168,7 @@ public class MockSwingController extends
       Map<String, Object> context) {
     super.disposeModalDialog(sourceWidget, context);
     Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
-    if (actionWindow instanceof Dialog) {
+    if (actionWindow instanceof JDialog) {
       actionWindow.dispose();
     }
   }

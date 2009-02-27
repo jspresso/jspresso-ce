@@ -755,8 +755,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
       @SuppressWarnings("unused") java.util.List<G> actions,
       @SuppressWarnings("unused") String title,
       @SuppressWarnings("unused") E sourceComponent,
-      Map<String, Object> context) {
-    dialogContextStack.add(0, context);
+      Map<String, Object> context, boolean reuseCurrent) {
+    if (!reuseCurrent || dialogContextStack.size() == 0) {
+      dialogContextStack.add(0, context);
+    }
   }
 
   /**
@@ -767,9 +769,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
       // preserve action param
-      //Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
+      // Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
       context.putAll(savedContext);
-      //context.put(ActionContextConstants.ACTION_PARAM, actionParam);
+      // context.put(ActionContextConstants.ACTION_PARAM, actionParam);
     }
   }
 }

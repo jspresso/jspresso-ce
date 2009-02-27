@@ -450,14 +450,15 @@ public class DefaultRemoteController extends
    */
   @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, RComponent sourceComponent, Map<String, Object> context) {
-    super
-        .displayModalDialog(mainView, actions, title, sourceComponent, context);
+      String title, RComponent sourceComponent, Map<String, Object> context,
+      boolean reuseCurrent) {
+    super.displayModalDialog(mainView, actions, title, sourceComponent,
+        context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
     dialogCommand.setView(mainView);
     dialogCommand.setActions(actions.toArray(new RAction[0]));
-    dialogCommand.setUseCurrent(false);
+    dialogCommand.setUseCurrent(reuseCurrent);
     registerCommand(dialogCommand);
   }
 

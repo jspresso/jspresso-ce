@@ -123,9 +123,11 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the source component.
    * @param context
    *          the context to store on the context stack.
+   * @param reuseCurrent
+   *          set to true to reuse an existing modal dialog.
    */
   void displayModalDialog(E mainView, List<G> actions, String title,
-      E sourceComponent, Map<String, Object> context);
+      E sourceComponent, Map<String, Object> context, boolean reuseCurrent);
 
   /**
    * Disposes a modal dialog.

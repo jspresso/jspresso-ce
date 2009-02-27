@@ -358,13 +358,20 @@ public class DefaultWingsController extends
    */
   @Override
   public void displayModalDialog(SComponent mainView, List<Action> actions,
-      String title, SComponent sourceComponent, Map<String, Object> context) {
+      String title, SComponent sourceComponent, Map<String, Object> context,
+      boolean reuseCurrent) {
     super
-        .displayModalDialog(mainView, actions, title, sourceComponent, context);
+        .displayModalDialog(mainView, actions, title, sourceComponent, context, reuseCurrent);
     final SDialog dialog;
-    SFrame window = sourceComponent.getParentFrame();
-    dialog = new SDialog(window, title, true);
-    dialog.setDraggable(true);
+    SContainer actionWindow = WingsUtil.getVisibleWindow(sourceComponent);
+    if (reuseCurrent && actionWindow instanceof SDialog) {
+      dialog = ((SDialog) actionWindow);
+      dialog.removeAll();
+    } else {
+      SFrame window = sourceComponent.getParentFrame();
+      dialog = new SDialog(window, title, true);
+      dialog.setDraggable(true);
+    }
 
     SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
     buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
