@@ -20,12 +20,20 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteActionCommand extends RemoteCommand {
 
         private var _parameter:String;
+        private var _viewStateGuid:String;
 
         public function set parameter(value:String):void {
             _parameter = value;
         }
         public function get parameter():String {
             return _parameter;
+        }
+
+        public function set viewStateGuid(value:String):void {
+            _viewStateGuid = value;
+        }
+        public function get viewStateGuid():String {
+            return _viewStateGuid;
         }
     }
 }

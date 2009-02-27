@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
@@ -176,9 +175,8 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
     if (action.getMnemonicAsString() != null) {
       remoteAction.setMnemonicAsString(action.getMnemonicAsString());
     }
-    ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction);
-    remoteActionAdapter.setContext(action, actionHandler, sourceComponent,
-        modelDescriptor, viewConnector);
+    ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction, action,
+        actionHandler, sourceComponent, modelDescriptor, viewConnector);
     remotePeerRegistry.register(remoteActionAdapter);
     return remoteAction;
   }
@@ -270,33 +268,16 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
 
   private final class ActionAdapter extends RAction {
 
-    private IAction          action;
-    private IActionHandler   actionHandler;
-    private IModelDescriptor modelDescriptor;
-    private RComponent       sourceComponent;
-    private IValueConnector  viewConnector;
+    private IDisplayableAction action;
+    private IActionHandler     actionHandler;
+    private IModelDescriptor   modelDescriptor;
+    private RComponent         sourceComponent;
+    private IValueConnector    viewConnector;
 
-    public ActionAdapter(RAction remoteAction) {
-      super(remoteAction.getGuid());
-    }
-
-    /**
-     * Sets the action context.
-     * 
-     * @param anAction
-     *          the Jspresso action.
-     * @param anActionHandler
-     *          the action handler.
-     * @param aSourceComponent
-     *          the source component.
-     * @param aModelDescriptor
-     *          the model descriptor.
-     * @param aViewConnector
-     *          the view connector.
-     */
-    public void setContext(IDisplayableAction anAction,
+    public ActionAdapter(RAction remoteAction, IDisplayableAction anAction,
         IActionHandler anActionHandler, RComponent aSourceComponent,
         IModelDescriptor aModelDescriptor, IValueConnector aViewConnector) {
+      super(remoteAction.getGuid());
       this.action = anAction;
       this.actionHandler = anActionHandler;
       this.sourceComponent = aSourceComponent;
@@ -321,21 +302,32 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
      * 
      * @param parameter
      *          the action parameter.
+     * @param viewStateGuid
+     *          the guid to retrieve the view connector the action is triggred
+     *          on. This is fundamental for the cell editors.
      */
     @Override
-    public void actionPerformed(String parameter) {
+    public void actionPerformed(String parameter, String viewStateGuid) {
       if (actionHandler != null) {
         Map<String, Object> actionContext = actionHandler.createEmptyContext();
         actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
             modelDescriptor);
         actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
             sourceComponent);
-        actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
-        if (viewConnector instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) viewConnector)
+        IValueConnector contextViewConnector;
+        if (viewStateGuid != null) {
+          contextViewConnector = (IValueConnector) remotePeerRegistry
+              .getRegistered(viewStateGuid);
+        } else {
+          contextViewConnector = viewConnector;
+        }
+        actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
+            contextViewConnector);
+        if (contextViewConnector instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) contextViewConnector)
                 .getCollectionConnector() != null) {
           actionContext.put(ActionContextConstants.SELECTED_INDICES,
-              ((ICollectionConnectorProvider) viewConnector)
+              ((ICollectionConnectorProvider) contextViewConnector)
                   .getCollectionConnector().getSelectedIndices());
         }
         actionContext.put(ActionContextConstants.ACTION_COMMAND, parameter);

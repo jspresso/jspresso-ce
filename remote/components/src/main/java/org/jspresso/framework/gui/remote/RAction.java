@@ -178,8 +178,11 @@ public class RAction extends RemotePeer {
    * 
    * @param parameter
    *          the action parameter.
+   * @param viewStateGuid
+   *          the guid to retrieve the view connector the action is triggred on.
+   *          This is fundamental for the cell editors.
    */
-  public void actionPerformed(String parameter) {
+  public void actionPerformed(String parameter, String viewStateGuid) {
     // NO-OP
   }
 }

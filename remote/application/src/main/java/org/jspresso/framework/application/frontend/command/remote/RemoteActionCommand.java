@@ -40,6 +40,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 public class RemoteActionCommand extends RemoteCommand {
   
   private String parameter;
+  private String viewStateGuid;
 
   
   /**
@@ -59,5 +60,27 @@ public class RemoteActionCommand extends RemoteCommand {
    */
   public void setParameter(String parameter) {
     this.parameter = parameter;
+  }
+
+
+  
+  /**
+   * Gets the viewStateGuid.
+   * 
+   * @return the viewStateGuid.
+   */
+  public String getViewStateGuid() {
+    return viewStateGuid;
+  }
+
+
+  
+  /**
+   * Sets the viewStateGuid.
+   * 
+   * @param viewStateGuid the viewStateGuid to set.
+   */
+  public void setViewStateGuid(String viewStateGuid) {
+    this.viewStateGuid = viewStateGuid;
   }
 }

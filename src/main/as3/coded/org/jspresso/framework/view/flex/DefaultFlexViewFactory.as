@@ -1179,7 +1179,9 @@ package org.jspresso.framework.view.flex {
           // work on items to translate indices independently of table sorting state.
           var selectedItems:Array = new Array(selectedIndices.length);
           for(var i:int = 0; i < selectedIndices.length; i++) {
-            selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
+            if(selectedIndices[i] > -1) {
+              selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
+            }
           }
           if(!ArrayUtil.areUnorderedArraysEqual(table.selectedItems, selectedItems)) {
             table.selectedItems = selectedItems;
@@ -1191,6 +1193,7 @@ package org.jspresso.framework.view.flex {
       }, state, "selectedIndices", true);
       
       table.addEventListener(DataGridEvent.ITEM_EDIT_END, function(event:DataGridEvent):void {
+    	  _actionHandler.setCurrentViewStateGuid(null);
         if (event.reason != DataGridEventReason.CANCELLED) {
           var table:DataGrid = event.currentTarget as DataGrid;
           if(table.itemEditorInstance is RemoteValueDgItemEditor) {
@@ -1209,6 +1212,11 @@ package org.jspresso.framework.view.flex {
         if(!cellValueState.writable) {
     	    event.preventDefault();
     	  }
+    	});
+      table.addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, function(event:DataGridEvent):void {
+        var rowCollection:ArrayCollection = (event.currentTarget as DataGrid).dataProvider as ArrayCollection;
+        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState;
+    	  _actionHandler.setCurrentViewStateGuid(cellValueState.guid);
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();

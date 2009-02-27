@@ -247,7 +247,8 @@ public class DefaultRemoteController extends
             .getLeadingIndex());
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
-        action.actionPerformed(((RemoteActionCommand) command).getParameter());
+        action.actionPerformed(((RemoteActionCommand) command).getParameter(),
+            ((RemoteActionCommand) command).getViewStateGuid());
       } else {
         throw new CommandException("Unsupported command type : "
             + command.getClass().getSimpleName());

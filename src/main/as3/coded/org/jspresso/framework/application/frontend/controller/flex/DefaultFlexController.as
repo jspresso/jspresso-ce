@@ -127,7 +127,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _postponedCommands:Object;
     private var _dialogStack:Array;
     private var _userLanguage:String;
-    
     private var _fileReference:FileReference;
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
@@ -137,6 +136,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
+      _dialogStack.push([null, null]);
       _userLanguage = userLanguage;
       if (ExternalInterface.available) {
         ExternalInterface.addCallback("stop", stop);
@@ -228,6 +228,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var command:RemoteActionCommand = new RemoteActionCommand();
         command.targetPeerGuid = action.guid;
         command.parameter = param;
+        command.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
         registerCommand(command);
       }
     }
@@ -283,8 +284,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
         popupDialog(dialogCommand.title, null, dialogCommand.view, dialogButtons, dialogCommand.useCurrent);
       } else if(command is RemoteCloseDialogCommand) {
-        if(_dialogStack && _dialogStack.length > 0) {
-          PopUpManager.removePopUp(_dialogStack.pop() as IFlexDisplayObject);
+        if(_dialogStack && _dialogStack.length > 1) {
+          PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as IFlexDisplayObject);
         }
       } else if(command is RemoteInitCommand) {
         var initCommand:RemoteInitCommand = command as RemoteInitCommand;
@@ -489,6 +490,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _changeNotificationsEnabled = true;
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
+      _dialogStack.push([null, null]);
       start();
     }
 
@@ -719,21 +721,26 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialogBox.addChild(buttonBox);
 
       var dialog:Panel;
-      if(useCurrent && _dialogStack && _dialogStack.length > 0) {
+      if(useCurrent && _dialogStack && _dialogStack.length > 1) {
+        dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as Panel;
         dialog.removeAllChildren();
       } else {
         var dialogParent:DisplayObject;
-        if(_dialogStack && _dialogStack.length > 0) {
+        if(_dialogStack && _dialogStack.length > 1) {
           dialogParent = _dialogStack[_dialogStack.length -1];
         } else {
           dialogParent = Application.application as DisplayObject;
         }
         dialog = PopUpManager.createPopUp(dialogParent,Panel,true) as Panel;
-        _dialogStack.push(dialog);
+        _dialogStack.push([dialog, null]);
       }
       dialog.title = title;
       dialog.addChild(dialogBox);
       PopUpManager.centerPopUp(dialog);
+    }
+    
+    public function setCurrentViewStateGuid(viewStateGuid:String):void {
+      (_dialogStack[_dialogStack.length -1] as Array)[1] = viewStateGuid;
     }
     
     private function registerRemoteClasses():void {

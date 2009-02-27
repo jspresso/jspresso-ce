@@ -20,12 +20,15 @@ package org.jspresso.framework.binding;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import org.jspresso.framework.binding.model.IModelValueConnector;
+import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
@@ -417,7 +420,39 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void setConnectorValue(Object aValue) {
-    setConnecteeValue(aValue);
+    if (aValue instanceof Number) {
+      if (getModelConnector() != null
+          && getModelConnector() instanceof IModelValueConnector) {
+        Class<?> expectedType = ((INumberPropertyDescriptor) ((IModelValueConnector) getModelConnector())
+            .getModelDescriptor()).getModelType();
+        if (expectedType.equals(aValue.getClass())) {
+          setConnecteeValue(aValue);
+        } else {
+            try {
+              Object adaptedValue = expectedType.getConstructor(
+                  new Class<?>[] {String.class}).newInstance(
+                  new Object[] {aValue.toString()});
+              setConnecteeValue(adaptedValue);
+            } catch (IllegalArgumentException ex) {
+              throw new ConnectorBindingException(ex);
+            } catch (SecurityException ex) {
+              throw new ConnectorBindingException(ex);
+            } catch (InstantiationException ex) {
+              throw new ConnectorBindingException(ex);
+            } catch (IllegalAccessException ex) {
+              throw new ConnectorBindingException(ex);
+            } catch (InvocationTargetException ex) {
+              throw new ConnectorBindingException(ex);
+            } catch (NoSuchMethodException ex) {
+              throw new ConnectorBindingException(ex);
+            }
+        }
+      } else {
+        setConnecteeValue(aValue);
+      }
+    } else {
+      setConnecteeValue(aValue);
+    }
     fireConnectorValueChange();
   }
 
@@ -567,8 +602,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         Object badValue = getConnectorValue();
         setConnecteeValue(oldConnectorValue);
         // propagate the reverse change...
-        valueChangeSupport.fireConnectorValueChange(createChangeEvent(
-            badValue, getConnecteeValue()));
+        valueChangeSupport.fireConnectorValueChange(createChangeEvent(badValue,
+            getConnecteeValue()));
       } catch (Exception ex2) {
         // ignore. Nothing can be done about it.
       }
