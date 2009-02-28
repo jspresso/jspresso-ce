@@ -18,5 +18,9 @@
       <groupId>org.jspresso</groupId>
       <artifactId>jspresso-remote-application</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-app-launch-remote</artifactId>
+    </dependency>
   </dependencies>
 </project>
