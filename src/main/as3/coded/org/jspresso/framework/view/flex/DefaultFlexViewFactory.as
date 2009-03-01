@@ -585,7 +585,8 @@ package org.jspresso.framework.view.flex {
     private function bindCardContainer(cardContainer:ViewStack, remoteState:RemoteValueState):void {
       var selectCard:Function = function (value:Object):void {
         if(value == null) {
-          cardContainer.selectedChild = null;
+          //TODO check why null
+          //cardContainer.selectedChild = null;
         } else {
           var selectedCard:Container = cardContainer.getChildByName(value as String) as Container;
           cardContainer.selectedChild = selectedCard;
@@ -619,7 +620,7 @@ package org.jspresso.framework.view.flex {
         }
       }
       // Add cells
-      for(i = 0; j < constrainedGridContainer.getChildren().length; i++) {
+      for(i = 0; i < constrainedGridContainer.getChildren().length; i++) {
         row = constrainedGridContainer.getChildAt(i) as GridRow;
         for(j = 0; j < nbCols; j++) {
           row.addChild(new GridItem());

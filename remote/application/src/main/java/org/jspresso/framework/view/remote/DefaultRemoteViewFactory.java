@@ -744,18 +744,21 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected RComponent createSecurityComponent() {
-    RComponent securityComponent = new RSecurityComponent(guidGenerator.generateGUID());
-    securityComponent.setState(new RemoteValueState(guidGenerator.generateGUID()));
+    RComponent securityComponent = new RSecurityComponent(guidGenerator
+        .generateGUID());
+    securityComponent.setState(new RemoteValueState(guidGenerator
+        .generateGUID()));
     return securityComponent;
   }
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
   protected RComponent createEmptyComponent() {
     RComponent emptyComponent = createRBorderContainer();
-    emptyComponent.setState(new RemoteCompositeValueState(guidGenerator.generateGUID()));
+    emptyComponent.setState(new RemoteCompositeValueState(guidGenerator
+        .generateGUID()));
     return emptyComponent;
   }
 
@@ -1086,7 +1089,8 @@ public class DefaultRemoteViewFactory extends
         .getChildViewDescriptors()) {
       IView<RComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
-      viewDescriptor.getCellConstraints(childViewDescriptor);
+      cellConstraints.add(viewDescriptor
+          .getCellConstraints(childViewDescriptor));
       cells.add(childView.getPeer());
       childrenViews.add(childView);
     }
@@ -1327,11 +1331,11 @@ public class DefaultRemoteViewFactory extends
     this.numberServerParse = numberServerParse;
   }
 
-  
   /**
    * Sets the remoteCommandHandler.
    * 
-   * @param remoteCommandHandler the remoteCommandHandler to set.
+   * @param remoteCommandHandler
+   *          the remoteCommandHandler to set.
    */
   public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
     this.remoteCommandHandler = remoteCommandHandler;

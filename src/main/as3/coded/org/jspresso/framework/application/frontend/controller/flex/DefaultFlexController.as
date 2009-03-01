@@ -697,6 +697,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     private function popupDialog(title:String, message:String, view:RComponent, buttons:Array, useCurrent:Boolean=false):void {
       var dialogView:UIComponent = _viewFactory.createComponent(view);
+      // if(dialogView is Panel) {
+      //   dialogView = dialogView.getChildAt(0) as UIComponent;
+      // }
       dialogView.percentWidth = 100.0;
       dialogView.percentHeight = 100.0;
       var buttonBox:HBox = new HBox();
