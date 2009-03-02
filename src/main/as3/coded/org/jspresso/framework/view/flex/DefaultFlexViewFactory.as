@@ -1266,6 +1266,9 @@ package org.jspresso.framework.view.flex {
 	    }
 	    if(label) {
 		    button.label = label;
+	    } else {
+	      button.width = icon.width +2;
+	      button.height = icon.height +2;
 	    }
 	    if(tooltip) {
 		    button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
