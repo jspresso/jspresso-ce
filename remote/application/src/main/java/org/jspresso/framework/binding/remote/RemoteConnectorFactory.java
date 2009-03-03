@@ -94,27 +94,53 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     readabilityListener = new PropertyChangeListener() {
 
       public void propertyChange(PropertyChangeEvent evt) {
-        RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
-            .getState();
-        state.setReadable(((Boolean) evt.getNewValue()).booleanValue());
-
-        RemoteReadabilityCommand command = new RemoteReadabilityCommand();
-        command.setTargetPeerGuid(state.getGuid());
-        command.setReadable(state.isReadable());
-        remoteCommandHandler.registerCommand(command);
+        IValueConnector connector = (IValueConnector) evt.getSource();
+        if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
+            && ((IRenderableCompositeValueConnector) connector
+                .getParentConnector()).getRenderingConnector() == connector) {
+          // don't listen to rendering connectors.
+          connector.removePropertyChangeListener(
+              IValueConnector.READABLE_PROPERTY, this);
+        } else if (connector.getParentConnector() instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) connector.getParentConnector())
+                .getCollectionConnector() == connector) {
+          // don't listen to provided collection connector.
+          connector.removePropertyChangeListener(
+              IValueConnector.READABLE_PROPERTY, this);
+        } else {
+          RemoteValueState state = ((IRemoteStateOwner) connector).getState();
+          state.setReadable(((Boolean) evt.getNewValue()).booleanValue());
+          RemoteReadabilityCommand command = new RemoteReadabilityCommand();
+          command.setTargetPeerGuid(state.getGuid());
+          command.setReadable(state.isReadable());
+          remoteCommandHandler.registerCommand(command);
+        }
       }
     };
     writabilityListener = new PropertyChangeListener() {
 
       public void propertyChange(PropertyChangeEvent evt) {
-        RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
-            .getState();
-        state.setWritable(((Boolean) evt.getNewValue()).booleanValue());
-
-        RemoteWritabilityCommand command = new RemoteWritabilityCommand();
-        command.setTargetPeerGuid(state.getGuid());
-        command.setWritable(state.isWritable());
-        remoteCommandHandler.registerCommand(command);
+        IValueConnector connector = (IValueConnector) evt.getSource();
+        if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
+            && ((IRenderableCompositeValueConnector) connector
+                .getParentConnector()).getRenderingConnector() == connector) {
+          // don't listen to rendering connectors.
+          connector.removePropertyChangeListener(
+              IValueConnector.WRITABLE_PROPERTY, this);
+        } else if (connector.getParentConnector() instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) connector.getParentConnector())
+                .getCollectionConnector() == connector) {
+          // don't listen to provided collection connector.
+          connector.removePropertyChangeListener(
+              IValueConnector.WRITABLE_PROPERTY, this);
+        } else {
+          RemoteValueState state = ((IRemoteStateOwner) connector).getState();
+          state.setWritable(((Boolean) evt.getNewValue()).booleanValue());
+          RemoteWritabilityCommand command = new RemoteWritabilityCommand();
+          command.setTargetPeerGuid(state.getGuid());
+          command.setWritable(state.isWritable());
+          remoteCommandHandler.registerCommand(command);
+        }
       }
     };
     connectorValueChangeListener = new IConnectorValueChangeListener() {
@@ -133,7 +159,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
               .getState();
           state.setValue(evt.getNewValue());
-
           RemoteValueCommand command = new RemoteValueCommand();
           command.setTargetPeerGuid(state.getGuid());
           command.setValue(state.getValue());
@@ -148,7 +173,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             .getState();
         state.setValue(((IFormattedValueConnector) evt.getSource())
             .getConnectorValueAsString());
-
         RemoteValueCommand command = new RemoteValueCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setValue(state.getValue());
@@ -165,7 +189,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         state.setValue(connector.getDisplayValue());
         state.setDescription(connector.getDisplayDescription());
         state.setIconImageUrl(connector.getDisplayIconImageUrl());
-
         RemoteValueCommand command = new RemoteValueCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setValue(state.getValue());
@@ -179,7 +202,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
         ICollectionConnector connector = (ICollectionConnector) evt.getSource();
         IValueConnector parentConnector = connector.getParentConnector();
-
         List<RemoteValueState> children = new ArrayList<RemoteValueState>();
         for (int i = 0; i < connector.getChildConnectorCount(); i++) {
           IValueConnector childConnector = connector.getChildConnector(i);
@@ -187,7 +209,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             children.add(((IRemoteStateOwner) childConnector).getState());
           }
         }
-
         if (parentConnector instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) parentConnector)
                 .getCollectionConnector() == connector
@@ -197,7 +218,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
               .getState());
           parentState.setChildren(new ArrayList<RemoteValueState>(children));
-
           RemoteChildrenCommand parentCommand = new RemoteChildrenCommand();
           parentCommand.setTargetPeerGuid(parentState.getGuid());
           if (parentState.getChildren() != null) {
@@ -210,9 +230,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         } else {
           RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)
               .getState());
-
           compositeValueState.setChildren(children);
-
           RemoteChildrenCommand command = new RemoteChildrenCommand();
           command.setTargetPeerGuid(compositeValueState.getGuid());
           if (compositeValueState.getChildren() != null) {
@@ -223,7 +241,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           }
           remoteCommandHandler.registerCommand(command);
         }
-
         // reset selection to force details refresh if any.
         connector.setSelectedIndices(null, -1);
       }
@@ -233,7 +250,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       public void selectionChange(SelectionChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
         IValueConnector parentConnector = connector.getParentConnector();
-
         if (parentConnector instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) parentConnector)
                 .getCollectionConnector() == connector
@@ -244,7 +260,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
               .getState());
           parentState.setSelectedIndices(evt.getNewSelection());
           parentState.setLeadingIndex(evt.getLeadingIndex());
-
           RemoteSelectionCommand parentCommand = new RemoteSelectionCommand();
           parentCommand.setTargetPeerGuid(parentState.getGuid());
           parentCommand.setLeadingIndex(parentState.getLeadingIndex());
@@ -255,7 +270,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
               .getState());
           compositeValueState.setSelectedIndices(evt.getNewSelection());
           compositeValueState.setLeadingIndex(evt.getLeadingIndex());
-
           RemoteSelectionCommand command = new RemoteSelectionCommand();
           command.setTargetPeerGuid(compositeValueState.getGuid());
           command.setLeadingIndex(compositeValueState.getLeadingIndex());

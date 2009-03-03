@@ -65,8 +65,10 @@ public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
       Map<String, Object> context) {
     IView<E> mainView = getMainView(context);
     List<IDisplayableAction> dActions = getActions(context);
-    String title = getI18nName(getTranslationProvider(context),
-        getLocale(context));
+    String title = getTitle(context);
+    if (title == null) {
+      title = getI18nName(getTranslationProvider(context), getLocale(context));
+    }
     E sourceComponent = getSourceComponent(context);
 
     List<G> actions = new ArrayList<G>();
@@ -102,6 +104,17 @@ public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
   @SuppressWarnings("unchecked")
   public IView<E> getMainView(Map<String, Object> context) {
     return (IView<E>) context.get(ActionContextConstants.DIALOG_VIEW);
+  }
+
+  /**
+   * Gets the title.
+   * 
+   * @param context
+   *          the action context.
+   * @return the dialog title.
+   */
+  public String getTitle(Map<String, Object> context) {
+    return (String) context.get(ActionContextConstants.DIALOG_TITLE);
   }
 
 }

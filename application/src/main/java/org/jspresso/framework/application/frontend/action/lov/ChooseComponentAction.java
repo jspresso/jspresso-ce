@@ -82,6 +82,8 @@ public class ChooseComponentAction<E, F, G> extends AbstractChainedAction<E, F, 
 
     IView<E> collectionView = getViewFactory(context).createView(
         tableViewDescriptor, actionHandler, getLocale(context));
+    context.put(ActionContextConstants.DIALOG_TITLE, getI18nName(
+        getTranslationProvider(context), getLocale(context)));
     context.put(ActionContextConstants.DIALOG_VIEW, collectionView);
 
     getMvcBinder(context).bind(collectionView.getConnector(),

@@ -769,9 +769,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
     Map<String, Object> savedContext = dialogContextStack.remove(0);
     if (context != null && savedContext != null) {
       // preserve action param
-      // Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
+      Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
       context.putAll(savedContext);
-      // context.put(ActionContextConstants.ACTION_PARAM, actionParam);
+      context.put(ActionContextConstants.ACTION_PARAM, actionParam);
     }
   }
 }

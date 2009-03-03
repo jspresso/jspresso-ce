@@ -182,6 +182,7 @@ package org.jspresso.framework.view.flex {
         toolBar.percentWidth = 100.0;
         toolBar.setStyle("fillAlphas",[0.5,0.5]);
         toolBar.setStyle("fillColors",[0xBBBBBB,0x666666]);
+        toolBar.setStyle("horizontalGap",2);
         for(var i:int = 0; i < remoteComponent.actionLists.length; i++) {
           var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
           if(actionList.actions != null) {
@@ -1267,8 +1268,10 @@ package org.jspresso.framework.view.flex {
 	    if(label) {
 		    button.label = label;
 	    } else {
-	      button.width = icon.width +2;
-	      button.height = icon.height +2;
+	      button.regenerateStyleCache(false);
+	      var cornerRadius:Number = button.getStyle("cornerRadius") as Number;
+	      button.width = icon.width + cornerRadius;
+	      button.height = icon.height + cornerRadius;
 	    }
 	    if(tooltip) {
 		    button.toolTip = tooltip + TOOLTIP_ELLIPSIS;

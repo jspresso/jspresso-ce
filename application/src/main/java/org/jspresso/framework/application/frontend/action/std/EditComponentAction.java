@@ -87,6 +87,8 @@ public class EditComponentAction<E, F, G> extends
 
     IView<E> componentView = getViewFactory(context).createView(
         getViewDescriptor(context), actionHandler, getLocale(context));
+    context.put(ActionContextConstants.DIALOG_TITLE, getI18nName(
+        getTranslationProvider(context), getLocale(context)));
     context.put(ActionContextConstants.DIALOG_VIEW, componentView);
 
     IValueConnector componentConnector = modelConnectorFactory

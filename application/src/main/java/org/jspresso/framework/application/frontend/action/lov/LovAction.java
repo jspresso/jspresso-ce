@@ -142,33 +142,15 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
-    getViewConnector(context).setConnectorValue(
-        getViewConnector(context).getConnectorValue());
-    // The following code doesn't support nested LOVs.
-    // connector is retrieved directly from the context now.
-    // okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
-    // getViewConnector(context));
-    actions.add(findAction);
-    actions.add(okAction);
-    actions.add(cancelAction);
-    context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
+
     IReferencePropertyDescriptor<IEntity> erqDescriptor = getEntityRefQueryDescriptor(context);
-    IView<E> lovView = getViewFactory(context).createView(
-        lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor),
-        actionHandler, getLocale(context));
-    context.put(ActionContextConstants.DIALOG_VIEW, lovView);
     context.put(ActionContextConstants.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
     actionHandler.execute(createQueryComponentAction, context);
-    IValueConnector queryEntityConnector = (IValueConnector) context
-        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
-    getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
-    // The following code doesn't support nested LOVs.
-    // connector is retrieved directly from the context now.
-    // findAction.putInitialContext(ActionContextConstants.QUERY_MODEL_CONNECTOR,
-    // queryEntityConnector);
+
     String queryPropertyValue = (String) context
         .get(ActionContextConstants.ACTION_COMMAND);
+    IValueConnector queryEntityConnector = (IValueConnector) context
+        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
     if (autoquery && queryPropertyValue != null
         && queryPropertyValue.length() > 0 && !queryPropertyValue.equals("*")) {
       actionHandler.execute(findAction, context);
@@ -183,6 +165,23 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
         return true;
       }
     }
+
+    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+    getViewConnector(context).setConnectorValue(
+        getViewConnector(context).getConnectorValue());
+
+    actions.add(findAction);
+    actions.add(okAction);
+    actions.add(cancelAction);
+    context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
+    IView<E> lovView = getViewFactory(context).createView(
+        lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor),
+        actionHandler, getLocale(context));
+    context.put(ActionContextConstants.DIALOG_TITLE, getI18nName(
+        getTranslationProvider(context), getLocale(context)));
+    context.put(ActionContextConstants.DIALOG_VIEW, lovView);
+    getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
+
     return super.execute(actionHandler, context);
   }
 
