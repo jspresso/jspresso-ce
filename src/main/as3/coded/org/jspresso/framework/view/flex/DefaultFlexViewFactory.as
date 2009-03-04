@@ -1267,7 +1267,7 @@ package org.jspresso.framework.view.flex {
 	    }
 	    if(label) {
 		    button.label = label;
-	    } else {
+	    } else if(icon) {
 	      button.regenerateStyleCache(false);
 	      var cornerRadius:Number = button.getStyle("cornerRadius") as Number;
 	      button.width = icon.width + cornerRadius;

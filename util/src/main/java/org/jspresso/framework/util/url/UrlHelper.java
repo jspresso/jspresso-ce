@@ -23,7 +23,6 @@ import java.net.URL;
 
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
-
 /**
  * This is a simple helper class to be able to cope with "classpath:" urls.
  * <p>
@@ -57,8 +56,8 @@ public final class UrlHelper {
    * Creates a URL object.
    * 
    * @param urlSpec
-   *            the string representation of the URL. In case of a classpath url
-   *            the thread context classloader will be used.
+   *          the string representation of the URL. In case of a classpath url
+   *          the thread context classloader will be used.
    * @return the constructed URL or null.
    */
   public static URL createURL(String urlSpec) {
@@ -69,10 +68,10 @@ public final class UrlHelper {
    * Creates a URL object.
    * 
    * @param urlSpec
-   *            the string representation of the URL.
+   *          the string representation of the URL.
    * @param cl
-   *            the class loader used to get the resource URL in case of a
-   *            "classpath:" URL.
+   *          the class loader used to get the resource URL in case of a
+   *          "classpath:" URL.
    * @return the constructed URL or null.
    */
   public static URL createURL(String urlSpec, ClassLoader cl) {
@@ -85,8 +84,9 @@ public final class UrlHelper {
       URL jarFileUrl = createURL(urlSpec.substring(JAR_URL.length(), urlSpec
           .indexOf(JAR_URL_SEPARATOR)), cl);
       try {
-        returnedURL = new URL(JAR_URL + jarFileUrl.toString()
-            + JAR_URL_SEPARATOR + entryPath);
+        String spec = JAR_URL + jarFileUrl.toString() + JAR_URL_SEPARATOR
+            + entryPath;
+        returnedURL = new URL(spec);
       } catch (MalformedURLException ex) {
         throw new NestedRuntimeException(ex);
       }

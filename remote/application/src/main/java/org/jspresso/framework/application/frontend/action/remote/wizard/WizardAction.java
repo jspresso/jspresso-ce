@@ -134,7 +134,8 @@ public class WizardAction extends AbstractRemoteAction {
       IActionHandler actionHandler, IView<RComponent> view,
       ITranslationProvider translationProvider, Locale locale,
       IValueConnector modelConnector, Map<String, Object> context) {
-    IDisplayableAction nextAction = new NextAction(wizardStep, modelConnector);
+    NextAction nextAction = new NextAction(wizardStep, modelConnector);
+    nextAction.setIconImageURL(getIconFactory(context).getForwardIconUrl());
     RAction nextRAction = getActionFactory(context).createAction(nextAction,
         actionHandler, view, locale);
     if (wizardStep.getNextStepDescriptor(context) != null) {
@@ -156,8 +157,9 @@ public class WizardAction extends AbstractRemoteAction {
       IActionHandler actionHandler, IView<RComponent> view,
       ITranslationProvider translationProvider, Locale locale,
       IValueConnector modelConnector, Map<String, Object> context) {
-    IDisplayableAction previousAction = new PreviousAction(wizardStep,
+    PreviousAction previousAction = new PreviousAction(wizardStep,
         modelConnector);
+    previousAction.setIconImageURL(getIconFactory(context).getBackwardIconUrl());
     RAction previousRAction = getActionFactory(context).createAction(
         previousAction, actionHandler, view, locale);
     if (wizardStep.getPreviousStepDescriptor(context) != null) {
@@ -229,13 +231,13 @@ public class WizardAction extends AbstractRemoteAction {
     this.cancelAction = cancelAction;
   }
 
-  private class PreviousAction extends
+  private class NextAction extends
       AbstractFrontendAction<RComponent, RIcon, RAction> {
 
     private IWizardStepDescriptor wizardStep;
     private IValueConnector       modelConnector;
 
-    public PreviousAction(IWizardStepDescriptor wizardStep,
+    public NextAction(IWizardStepDescriptor wizardStep,
         IValueConnector modelConnector) {
       this.wizardStep = wizardStep;
       this.modelConnector = modelConnector;
@@ -258,13 +260,13 @@ public class WizardAction extends AbstractRemoteAction {
     }
   }
 
-  private class NextAction extends
+  private class PreviousAction extends
       AbstractFrontendAction<RComponent, RIcon, RAction> {
 
     private IWizardStepDescriptor wizardStep;
     private IValueConnector       modelConnector;
 
-    public NextAction(IWizardStepDescriptor wizardStep,
+    public PreviousAction(IWizardStepDescriptor wizardStep,
         IValueConnector modelConnector) {
       this.wizardStep = wizardStep;
       this.modelConnector = modelConnector;
@@ -304,6 +306,30 @@ public class WizardAction extends AbstractRemoteAction {
       }
       return true;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+      return wrappedFinishAction.getName();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+      return wrappedFinishAction.getDescription();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getIconImageURL() {
+      return wrappedFinishAction.getIconImageURL();
+    }
   }
 
   private class CancelAction extends
@@ -324,6 +350,30 @@ public class WizardAction extends AbstractRemoteAction {
         Map<String, Object> context) {
       actionHandler.execute(wrappedCancelAction, context);
       return true;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+      return wrappedCancelAction.getName();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+      return wrappedCancelAction.getDescription();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getIconImageURL() {
+      return wrappedCancelAction.getIconImageURL();
     }
   }
 }
