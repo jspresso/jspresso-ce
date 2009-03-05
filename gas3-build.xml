@@ -15,7 +15,7 @@
   <target
     name="generate.as3">
     <gas3
-      outputdir="flex/src/main/flex/generated"
+      outputdir="flex/src/main/flex"
       interfacetemplate="class:org/granite/generator/template/jspressoInterface.gsp"
       beantemplate="class:org/granite/generator/template/jspressoBean.gsp">
       <classpath
@@ -44,7 +44,7 @@
     </gas3>
     <delete>
       <fileset
-        dir="src/main/flex">
+        dir="flex/src/main/flex">
         <include
           name="**/*Base.as" />
       </fileset>

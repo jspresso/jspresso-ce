@@ -39,6 +39,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
@@ -369,6 +370,9 @@ public class DefaultRemoteController extends
    */
   protected List<RemoteCommand> createInitCommands() {
     List<RemoteCommand> initCommands = new ArrayList<RemoteCommand>();
+    RemoteLocaleCommand localeCommand = new RemoteLocaleCommand();
+    localeCommand.setLanguage(getLocale().getLanguage());
+    initCommands.add(localeCommand);
     RemoteInitCommand initCommand = new RemoteInitCommand();
     initCommand
         .setWorkspaceActions(createRActionLists(createWorkspaceActionMap()));
@@ -516,8 +520,12 @@ public class DefaultRemoteController extends
    */
   @Override
   public boolean stop() {
-    remotePeerRegistry.clear();
-    workspaceViews.clear();
+    if (remotePeerRegistry != null) {
+      remotePeerRegistry.clear();
+    }
+    if (workspaceViews != null) {
+      workspaceViews.clear();
+    }
     registerCommand(new RemoteRestartCommand());
     return super.stop();
   }

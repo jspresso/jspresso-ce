@@ -46,6 +46,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.events.CloseEvent;
   import mx.events.MenuEvent;
   import mx.managers.PopUpManager;
+  import mx.resources.Locale;
+  import mx.resources.ResourceManager;
   import mx.rpc.events.FaultEvent;
   import mx.rpc.events.ResultEvent;
   import mx.rpc.remoting.mxml.Operation;
@@ -62,6 +64,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand;
@@ -128,6 +131,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _dialogStack:Array;
     private var _userLanguage:String;
     private var _fileReference:FileReference;
+    private var _initialLocaleChain:Array;
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -138,6 +142,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _dialogStack = new Array();
       _dialogStack.push([null, null]);
       _userLanguage = userLanguage;
+      _initialLocaleChain = ResourceManager.getInstance().localeChain;
       if (ExternalInterface.available) {
         ExternalInterface.addCallback("stop", stop);
       }
@@ -267,6 +272,17 @@ package org.jspresso.framework.application.frontend.controller.flex {
         handleFileUpload(command as RemoteFileUploadCommand);
       } else if(command is RemoteFileDownloadCommand) {
         handleFileDownload(command as RemoteFileDownloadCommand);
+      } else if(command is RemoteLocaleCommand) {
+        var locale:Locale;
+        for each (var availableLocaleString:String in ResourceManager.getInstance().getLocales()) {
+          var availableLocale:Locale = new Locale(availableLocaleString);
+          if(!locale && (command as RemoteLocaleCommand).language == availableLocale.language) {
+            locale = availableLocale;
+          }
+        }
+        if(locale) {
+          ResourceManager.getInstance().localeChain = [locale.toString()].concat(_initialLocaleChain);
+        }
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
         var loginButton:Button = _viewFactory.createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
