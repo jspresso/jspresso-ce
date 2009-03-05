@@ -34,19 +34,4 @@
       <type>swc</type>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>flex-compiler-mojo</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <locales>
-            <locale>fr_FR</locale>
-          </locales>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
