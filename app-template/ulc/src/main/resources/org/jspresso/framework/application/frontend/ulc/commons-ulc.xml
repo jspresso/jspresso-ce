@@ -112,11 +112,6 @@
     class="org.jspresso.framework.application.printing.frontend.action.ulc.DisplayJasperReportAction" />
 
   <bean
-    id="wizardAction"
-    parent="abstractWizardAction"
-    class="org.jspresso.framework.application.frontend.action.ulc.wizard.WizardAction" />
-
-  <bean
     id="viewFactory"
     parent="abstractViewFactory"
     class="org.jspresso.framework.view.ulc.DefaultUlcViewFactory"

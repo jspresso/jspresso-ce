@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package org.jspresso.framework.application.frontend.action.remote.wizard;
+package org.jspresso.framework.application.frontend.action.wizard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,28 +11,29 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.AbstractFrontendAction;
-import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
-import org.jspresso.framework.application.frontend.action.wizard.IWizardStepDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
-import org.jspresso.framework.gui.remote.RAction;
-import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
- * A Wizard remote action.
+ * A Wizard action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1302 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class WizardAction extends AbstractRemoteAction {
+public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
 
   private IDisplayableAction     finishAction;
   private IDisplayableAction     cancelAction;
@@ -50,16 +51,15 @@ public class WizardAction extends AbstractRemoteAction {
         .createModelConnector(ACTION_MODEL_NAME, firstWizardStep
             .getViewDescriptor().getModelDescriptor());
     Map<String, Object> wizardModelInit = (Map<String, Object>) context
-        .get(ActionContextConstants.ACTION_PARAM);
+        .get(IWizardStepDescriptor.INITIAL_WIZARD_MODEL);
     Map<String, Object> wizardModel = new ObjectEqualityMap<String, Object>();
     if (wizardModelInit != null) {
       wizardModel.putAll(wizardModelInit);
     }
     completeInitialWizardModel(wizardModel, context);
     modelConnector.setConnectorValue(wizardModel);
-    context.put(ActionContextConstants.ACTION_PARAM, wizardModel);
     displayWizardStep(firstWizardStep, modelConnector, actionHandler, context);
-    return super.execute(actionHandler, context);
+    return true;
   }
 
   private void displayWizardStep(IWizardStepDescriptor wizardStep,
@@ -68,7 +68,7 @@ public class WizardAction extends AbstractRemoteAction {
 
     ITranslationProvider translationProvider = getTranslationProvider(context);
     Locale locale = getLocale(context);
-    IView<RComponent> view = getViewFactory(context).createView(
+    IView<E> view = getViewFactory(context).createView(
         wizardStep.getViewDescriptor(), actionHandler, getLocale(context));
     getMvcBinder(context).bind(view.getConnector(), modelConnector);
 
@@ -81,100 +81,109 @@ public class WizardAction extends AbstractRemoteAction {
         getSourceComponent(context), context, true);
   }
 
-  private List<RAction> createWizardStepActions(
-      IWizardStepDescriptor wizardStep, IView<RComponent> view,
-      IActionHandler actionHandler, ITranslationProvider translationProvider,
-      Locale locale, IValueConnector modelConnector, Map<String, Object> context) {
+  private List<G> createWizardStepActions(IWizardStepDescriptor wizardStep,
+      IView<E> view, IActionHandler actionHandler,
+      ITranslationProvider translationProvider, Locale locale,
+      IValueConnector modelConnector, Map<String, Object> context) {
 
-    List<RAction> wizardStepActions = new ArrayList<RAction>();
+    List<G> wizardStepActions = new ArrayList<G>();
 
-    RAction previousRAction = createPreviousAction(wizardStep, actionHandler,
+    G previousGAction = createPreviousAction(wizardStep, actionHandler,
         view, translationProvider, locale, modelConnector, context);
-    RAction nextRAction = createNextAction(wizardStep, actionHandler, view,
+    G nextGAction = createNextAction(wizardStep, actionHandler, view,
         translationProvider, locale, modelConnector, context);
-    RAction cancelRAction = createCancelAction(wizardStep, actionHandler, view,
+    G cancelGAction = createCancelAction(wizardStep, actionHandler, view,
         locale, context);
-    RAction finishRAction = createFinishAction(wizardStep, actionHandler, view,
+    G finishGAction = createFinishAction(wizardStep, actionHandler, view,
         locale, context);
 
-    wizardStepActions.add(previousRAction);
-    wizardStepActions.add(nextRAction);
-    wizardStepActions.add(finishRAction);
-    wizardStepActions.add(cancelRAction);
+    wizardStepActions.add(previousGAction);
+    wizardStepActions.add(nextGAction);
+    wizardStepActions.add(finishGAction);
+    wizardStepActions.add(cancelGAction);
 
     return wizardStepActions;
   }
 
-  private RAction createFinishAction(IWizardStepDescriptor wizardStep,
-      IActionHandler actionHandler, IView<RComponent> view, Locale locale,
+  private G createFinishAction(IWizardStepDescriptor wizardStep,
+      IActionHandler actionHandler, IView<E> view, Locale locale,
       Map<String, Object> context) {
     IDisplayableAction finishActionAdapter = new FinishAction(wizardStep,
         finishAction);
-    RAction finishRAction = getActionFactory(context).createAction(
+    G finishGAction = getActionFactory(context).createAction(
         finishActionAdapter, actionHandler, view, locale);
     if (wizardStep.canFinish(context)) {
-      finishRAction.setEnabled(true);
+      getActionFactory(context).setActionEnabled(finishGAction, true);
     } else {
-      finishRAction.setEnabled(false);
+      getActionFactory(context).setActionEnabled(finishGAction, false);
     }
-    return finishRAction;
+    return finishGAction;
   }
 
-  private RAction createCancelAction(IWizardStepDescriptor wizardStep,
-      IActionHandler actionHandler, IView<RComponent> view, Locale locale,
+  private G createCancelAction(IWizardStepDescriptor wizardStep,
+      IActionHandler actionHandler, IView<E> view, Locale locale,
       Map<String, Object> context) {
     IDisplayableAction cancelActionAdapter = new CancelAction(wizardStep,
         cancelAction);
-    RAction cancelRAction = getActionFactory(context).createAction(
+    G cancelGAction = getActionFactory(context).createAction(
         cancelActionAdapter, actionHandler, view, locale);
-    return cancelRAction;
+    return cancelGAction;
   }
 
-  private RAction createNextAction(IWizardStepDescriptor wizardStep,
-      IActionHandler actionHandler, IView<RComponent> view,
+  private G createNextAction(IWizardStepDescriptor wizardStep,
+      IActionHandler actionHandler, IView<E> view,
       ITranslationProvider translationProvider, Locale locale,
       IValueConnector modelConnector, Map<String, Object> context) {
     NextAction nextAction = new NextAction(wizardStep, modelConnector);
     nextAction.setIconImageURL(getIconFactory(context).getForwardIconUrl());
-    RAction nextRAction = getActionFactory(context).createAction(nextAction,
+    G nextGAction = getActionFactory(context).createAction(nextAction,
         actionHandler, view, locale);
     if (wizardStep.getNextStepDescriptor(context) != null) {
-      nextRAction.setEnabled(true);
+      getActionFactory(context).setActionEnabled(nextGAction, true);
     } else {
-      nextRAction.setEnabled(false);
+      getActionFactory(context).setActionEnabled(nextGAction, false);
     }
     if (wizardStep.getNextLabelKey() != null) {
-      nextRAction.setName(translationProvider.getTranslation(wizardStep
-          .getNextLabelKey(), locale));
+      getActionFactory(context).setActionName(
+          nextGAction,
+          translationProvider.getTranslation(wizardStep.getNextLabelKey(),
+              locale));
     } else {
-      nextRAction.setName(translationProvider.getTranslation(
-          IWizardStepDescriptor.DEFAULT_NEXT_KEY, locale));
+      getActionFactory(context).setActionName(
+          nextGAction,
+          translationProvider.getTranslation(
+              IWizardStepDescriptor.DEFAULT_NEXT_KEY, locale));
     }
-    return nextRAction;
+    return nextGAction;
   }
 
-  private RAction createPreviousAction(IWizardStepDescriptor wizardStep,
-      IActionHandler actionHandler, IView<RComponent> view,
+  private G createPreviousAction(IWizardStepDescriptor wizardStep,
+      IActionHandler actionHandler, IView<E> view,
       ITranslationProvider translationProvider, Locale locale,
       IValueConnector modelConnector, Map<String, Object> context) {
     PreviousAction previousAction = new PreviousAction(wizardStep,
         modelConnector);
-    previousAction.setIconImageURL(getIconFactory(context).getBackwardIconUrl());
-    RAction previousRAction = getActionFactory(context).createAction(
+    previousAction
+        .setIconImageURL(getIconFactory(context).getBackwardIconUrl());
+    G previousGAction = getActionFactory(context).createAction(
         previousAction, actionHandler, view, locale);
     if (wizardStep.getPreviousStepDescriptor(context) != null) {
-      previousRAction.setEnabled(true);
+      getActionFactory(context).setActionEnabled(previousGAction, true);
     } else {
-      previousRAction.setEnabled(false);
+      getActionFactory(context).setActionEnabled(previousGAction, false);
     }
     if (wizardStep.getPreviousLabelKey() != null) {
-      previousRAction.setName(translationProvider.getTranslation(wizardStep
-          .getPreviousLabelKey(), locale));
+      getActionFactory(context).setActionName(
+          previousGAction,
+          translationProvider.getTranslation(wizardStep.getPreviousLabelKey(),
+              locale));
     } else {
-      previousRAction.setName(translationProvider.getTranslation(
-          IWizardStepDescriptor.DEFAULT_PREVIOUS_KEY, locale));
+      getActionFactory(context).setActionName(
+          previousGAction,
+          translationProvider.getTranslation(
+              IWizardStepDescriptor.DEFAULT_PREVIOUS_KEY, locale));
     }
-    return previousRAction;
+    return previousGAction;
   }
 
   /**
@@ -231,8 +240,7 @@ public class WizardAction extends AbstractRemoteAction {
     this.cancelAction = cancelAction;
   }
 
-  private class NextAction extends
-      AbstractFrontendAction<RComponent, RIcon, RAction> {
+  private class NextAction extends AbstractFrontendAction<E, F, G> {
 
     private IWizardStepDescriptor wizardStep;
     private IValueConnector       modelConnector;
@@ -260,8 +268,7 @@ public class WizardAction extends AbstractRemoteAction {
     }
   }
 
-  private class PreviousAction extends
-      AbstractFrontendAction<RComponent, RIcon, RAction> {
+  private class PreviousAction extends AbstractFrontendAction<E, F, G> {
 
     private IWizardStepDescriptor wizardStep;
     private IValueConnector       modelConnector;
@@ -283,8 +290,7 @@ public class WizardAction extends AbstractRemoteAction {
     }
   }
 
-  private class FinishAction extends
-      AbstractFrontendAction<RComponent, RIcon, RAction> {
+  private class FinishAction extends AbstractFrontendAction<E, F, G> {
 
     private IWizardStepDescriptor wizardStep;
     private IDisplayableAction    wrappedFinishAction;
@@ -300,8 +306,8 @@ public class WizardAction extends AbstractRemoteAction {
         Map<String, Object> context) {
       if (wizardStep.getOnLeaveAction() == null
           || actionHandler.execute(wizardStep.getOnLeaveAction(), context)) {
-        getController(context).disposeModalDialog(getSourceComponent(context),
-            context);
+        context.put(ActionContextConstants.ACTION_PARAM, getViewConnector(
+            context).getConnectorValue());
         actionHandler.execute(wrappedFinishAction, context);
       }
       return true;
@@ -314,7 +320,7 @@ public class WizardAction extends AbstractRemoteAction {
     public String getName() {
       return wrappedFinishAction.getName();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -332,8 +338,7 @@ public class WizardAction extends AbstractRemoteAction {
     }
   }
 
-  private class CancelAction extends
-      AbstractFrontendAction<RComponent, RIcon, RAction> {
+  private class CancelAction extends AbstractFrontendAction<E, F, G> {
 
     @SuppressWarnings("unused")
     private IWizardStepDescriptor wizardStep;
@@ -351,7 +356,7 @@ public class WizardAction extends AbstractRemoteAction {
       actionHandler.execute(wrappedCancelAction, context);
       return true;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -359,7 +364,7 @@ public class WizardAction extends AbstractRemoteAction {
     public String getName() {
       return wrappedCancelAction.getName();
     }
-    
+
     /**
      * {@inheritDoc}
      */

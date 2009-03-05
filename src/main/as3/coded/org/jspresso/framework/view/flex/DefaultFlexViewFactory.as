@@ -348,7 +348,15 @@ package org.jspresso.framework.view.flex {
 
     private function createImageComponent(remoteImageComponent:RImageComponent):UIComponent {
       var imageComponent:Image = new Image();
+      bindImage(imageComponent, remoteImageComponent.state);
       return imageComponent;
+    }
+    
+    private function bindImage(imageComponent:Image, remoteState:RemoteValueState):void {
+      var updateView:Function = function (value:Object):void {
+        imageComponent.source = value;
+      };
+      BindingUtils.bindSetter(updateView, remoteState, "value", true);
     }
     
     private function createActionField(remoteActionField:RActionField):UIComponent {
@@ -1083,7 +1091,8 @@ package org.jspresso.framework.view.flex {
                                      labels:(rColumn as RComboBox).translations,
                                      icons :(rColumn as RComboBox).icons,
                                      iconTemplate:_iconTemplate};
-        } else if(rColumn is RCheckBox) {
+        } else if( rColumn is RCheckBox
+               || (rColumn is RActionField && !(rColumn as RActionField).showTextField)) {
           itemRenderer = new ClassFactory(UIComponentDgItemRenderer);
           itemRenderer.properties = {viewFactory:this,
                                      remoteComponent:rColumn,

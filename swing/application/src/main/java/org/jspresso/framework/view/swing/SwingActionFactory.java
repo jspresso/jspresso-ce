@@ -57,7 +57,6 @@ import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
-
 /**
  * A swing action factory.
  * <p>
@@ -135,8 +134,8 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
             collectionConnector
                 .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
 
-                  public void connectorValueChange(@SuppressWarnings("unused")
-                  ConnectorValueChangeEvent evt) {
+                  public void connectorValueChange(
+                      @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
                     if (collectionConnector.getModelConnector() != null) {
                       ((EmbeddedModelProvider) ((IModelGate) clonedGate)
                           .getModelProvider())
@@ -162,7 +161,7 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
    * Sets the iconFactory.
    * 
    * @param iconFactory
-   *            the iconFactory to set.
+   *          the iconFactory to set.
    */
   public void setIconFactory(IIconFactory<Icon> iconFactory) {
     this.iconFactory = iconFactory;
@@ -172,7 +171,7 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *            the translationProvider to set.
+   *          the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
@@ -228,13 +227,13 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
 
     /**
      * Triggers the action execution on the action handler. The following
-     * initial action context is filled in :
-     * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>
-     * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code>
-     * <li> <code>ActionContextConstants.MODEL_CONNECTOR</code>
-     * <li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code>
-     * <li> <code>ActionContextConstants.SELECTED_INDICES</code>
-     * <li> <code>ActionContextConstants.LOCALE</code>
+     * initial action context is filled in : <li>
+     * <code>ActionContextConstants.SOURCE_COMPONENT</code> <li>
+     * <code>ActionContextConstants.VIEW_CONNECTOR</code> <li>
+     * <code>ActionContextConstants.MODEL_CONNECTOR</code> <li>
+     * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> <li>
+     * <code>ActionContextConstants.SELECTED_INDICES</code> <li>
+     * <code>ActionContextConstants.LOCALE</code>
      * <p>
      * {@inheritDoc}
      */
@@ -270,9 +269,9 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
      * Constructs a new <code>GatesListener</code> instance.
      * 
      * @param action
-     *            the action to (de)activate based on gates state.
+     *          the action to (de)activate based on gates state.
      * @param gates
-     *            the gates that determine action state.
+     *          the gates that determine action state.
      */
     public GatesListener(Action action, Collection<IGate> gates) {
       this.action = action;
@@ -285,9 +284,25 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
     /**
      * {@inheritDoc}
      */
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
+    public void propertyChange(
+        @SuppressWarnings("unused") PropertyChangeEvent evt) {
       action.setEnabled(GateHelper.areGatesOpen(gates));
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionEnabled(Action action, boolean enabled) {
+    action.setEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionName(Action action, String name) {
+    action.putValue(Action.NAME, name);
   }
 }

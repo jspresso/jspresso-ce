@@ -108,11 +108,6 @@
     class="org.jspresso.framework.application.printing.frontend.action.swing.DisplayJasperReportAction" />
 
   <bean
-    id="wizardAction"
-    parent="abstractWizardAction"
-    class="org.jspresso.framework.application.frontend.action.swing.wizard.WizardAction" />
-
-  <bean
     id="viewFactory"
     class="org.jspresso.framework.view.swing.DefaultSwingViewFactory"
     parent="abstractViewFactory"

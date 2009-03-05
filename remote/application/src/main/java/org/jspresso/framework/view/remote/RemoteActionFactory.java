@@ -337,4 +337,20 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
       }
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionEnabled(RAction action, boolean enabled) {
+    action.setEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionName(RAction action, String name) {
+    action.setName(name);
+  }
 }

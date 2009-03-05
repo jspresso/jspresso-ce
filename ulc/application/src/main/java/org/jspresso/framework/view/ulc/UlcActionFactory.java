@@ -131,8 +131,8 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
             collectionConnector
                 .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
 
-                  public void connectorValueChange(@SuppressWarnings("unused")
-                  ConnectorValueChangeEvent evt) {
+                  public void connectorValueChange(
+                      @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
                     if (collectionConnector.getModelConnector() != null) {
                       ((EmbeddedModelProvider) ((IModelGate) clonedGate)
                           .getModelProvider())
@@ -158,7 +158,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
    * Sets the iconFactory.
    * 
    * @param iconFactory
-   *            the iconFactory to set.
+   *          the iconFactory to set.
    */
   public void setIconFactory(IIconFactory<ULCIcon> iconFactory) {
     this.iconFactory = iconFactory;
@@ -168,7 +168,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *            the translationProvider to set.
+   *          the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
@@ -177,13 +177,13 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
   private final class ActionAdapter extends
       com.ulcjava.base.application.AbstractAction {
 
-    private static final long                serialVersionUID = 5819377672533326496L;
+    private static final long                     serialVersionUID = 5819377672533326496L;
 
     private org.jspresso.framework.action.IAction action;
-    private IActionHandler                   actionHandler;
-    private IModelDescriptor                 modelDescriptor;
-    private ULCComponent                     sourceComponent;
-    private IValueConnector                  viewConnector;
+    private IActionHandler                        actionHandler;
+    private IModelDescriptor                      modelDescriptor;
+    private ULCComponent                          sourceComponent;
+    private IValueConnector                       viewConnector;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
@@ -220,13 +220,13 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
     /**
      * Triggers the action execution on the action handler. The following
-     * initial action context is filled in :
-     * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>
-     * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code>
-     * <li> <code>ActionContextConstants.MODEL_CONNECTOR</code>
-     * <li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code>
-     * <li> <code>ActionContextConstants.SELECTED_INDICES</code>
-     * <li> <code>ActionContextConstants.LOCALE</code>
+     * initial action context is filled in : <li>
+     * <code>ActionContextConstants.SOURCE_COMPONENT</code> <li>
+     * <code>ActionContextConstants.VIEW_CONNECTOR</code> <li>
+     * <code>ActionContextConstants.MODEL_CONNECTOR</code> <li>
+     * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> <li>
+     * <code>ActionContextConstants.SELECTED_INDICES</code> <li>
+     * <code>ActionContextConstants.LOCALE</code>
      * <p>
      * {@inheritDoc}
      */
@@ -263,9 +263,9 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
      * Constructs a new <code>GatesListener</code> instance.
      * 
      * @param action
-     *            the action to (de)activate based on gates state.
+     *          the action to (de)activate based on gates state.
      * @param gates
-     *            the gates that determine action state.
+     *          the gates that determine action state.
      */
     public GatesListener(IAction action, Collection<IGate> gates) {
       this.action = action;
@@ -278,9 +278,25 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
     /**
      * {@inheritDoc}
      */
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
+    public void propertyChange(
+        @SuppressWarnings("unused") PropertyChangeEvent evt) {
       action.setEnabled(GateHelper.areGatesOpen(gates));
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionEnabled(IAction action, boolean enabled) {
+    action.setEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionName(IAction action, String name) {
+    action.putValue(IAction.NAME, name);
   }
 }

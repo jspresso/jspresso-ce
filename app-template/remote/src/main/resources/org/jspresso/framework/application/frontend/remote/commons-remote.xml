@@ -115,15 +115,6 @@
     class="org.jspresso.framework.application.printing.frontend.action.remote.DisplayJasperReportAction" />
 
   <bean
-    id="wizardAction"
-    parent="abstractWizardAction"
-    class="org.jspresso.framework.application.frontend.action.remote.wizard.WizardAction">
-    <property
-      name="cancelAction"
-      ref="cancelDialogFrontAction" />
-  </bean>
-
-  <bean
     id="viewFactory"
     class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
     parent="abstractViewFactory"

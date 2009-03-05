@@ -31,6 +31,12 @@ public interface IWizardStepDescriptor extends IDescriptor {
   String DEFAULT_PREVIOUS_KEY = "previous";
 
   /**
+   * <code>INITIAL_WIZARD_MODEL</code> is a context entry used to store the
+   * initial wizard model.
+   */
+  String  INITIAL_WIZARD_MODEL = "INITIAL_WIZARD_MODEL";
+
+  /**
    * Gets wether this wizard step descriptor can finish the wizard.
    * 
    * @param context

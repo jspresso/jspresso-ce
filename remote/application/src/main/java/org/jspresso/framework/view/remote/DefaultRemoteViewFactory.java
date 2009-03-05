@@ -211,7 +211,7 @@ public class DefaultRemoteViewFactory extends
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     IValueConnector connector = getConnectorFactory().createValueConnector(
-        viewDescriptor.getName());
+        viewDescriptor.getModelDescriptor().getName());
     connector.setExceptionHandler(actionHandler);
     RImageComponent viewComponent = createRImageComponent(connector);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,

@@ -92,4 +92,20 @@ public interface IActionFactory<E, F> {
    */
   E createAction(IDisplayableAction action, IActionHandler actionHandler,
       IView<F> view, Locale locale);
+
+  /**
+   * Enabled or disables an action.
+   * 
+   * @param action the action to work on.
+   * @param enabled true to enable, false otherwise.
+   */
+  void setActionEnabled(E action, boolean enabled);
+
+  /**
+   * Sets an action name.
+   * 
+   * @param action the action to work on.
+   * @param name the action name.
+   */
+  void setActionName(E action, String name);
 }

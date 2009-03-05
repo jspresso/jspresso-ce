@@ -77,7 +77,7 @@ public final class ActionContextConstants {
   /**
    * The dialog title.
    */
-  public static final String DIALOG_TITLE              = "DIALOG_TITLE";
+  public static final String DIALOG_TITLE             = "DIALOG_TITLE";
 
   /**
    * The the descriptor of the model collection element domain object the action

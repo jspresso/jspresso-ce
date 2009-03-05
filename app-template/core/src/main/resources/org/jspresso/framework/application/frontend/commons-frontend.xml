@@ -358,8 +358,9 @@
     class="org.jspresso.framework.application.frontend.action.std.DisplayStaticUrlAction" />
 
   <bean
-    id="abstractWizardAction"
-    abstract="true">
+    id="wizardAction"
+    abstract="true"
+    class="org.jspresso.framework.application.frontend.action.wizard.WizardAction">
     <property
       name="name"
       value="wizard.name" />
@@ -369,6 +370,9 @@
     <property
       name="modelConnectorFactory"
       ref="modelConnectorFactory" />
+    <property
+      name="cancelAction"
+      ref="cancelDialogFrontAction" />
   </bean>
 
   <bean
