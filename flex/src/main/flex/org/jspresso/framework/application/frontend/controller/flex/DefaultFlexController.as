@@ -501,7 +501,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
 
     private function restart():void {
-      (Application.application as Application).removeAllChildren();
+      var applicationFrame:Application = Application.application as Application;
+//      (applicationFrame.controlBar as ApplicationControlBar).dock = false;// to workaround remove bug
+//      applicationFrame.removeChild(applicationFrame.controlBar as DisplayObject);
+//      applicationFrame.controlBar = null;
+      applicationFrame.removeAllChildren();
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _changeNotificationsEnabled = true;
       _commandsQueue = new ArrayCollection(new Array());
@@ -582,10 +586,15 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private function initApplicationFrame(workspaceActions:Array,
                                           actions:Array,
                                           helpActions:Array):void {
-      var controlBar:ApplicationControlBar = new ApplicationControlBar();
-      controlBar.dock = true;
       var applicationFrame:Application = Application.application as Application; 
-      applicationFrame.addChild(controlBar);
+      var controlBar:ApplicationControlBar = applicationFrame.controlBar as ApplicationControlBar;
+      if(controlBar) {
+        controlBar.removeAllChildren();
+      } else {
+        controlBar = new ApplicationControlBar();
+        controlBar.dock = true;
+        applicationFrame.addChild(controlBar);
+      }
       controlBar.addChild(createApplicationMenuBar(workspaceActions, actions, helpActions));
       _workspaceViewStack = new ViewStack();
       //_workspaceViewStack.resizeToContent = true;
