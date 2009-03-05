@@ -19,5 +19,9 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RDecimalField")]
     public class RDecimalField extends RDecimalComponent {
 
+        public function RDecimalField() {
+          //default constructor.
+        }
+
     }
 }

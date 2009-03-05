@@ -22,6 +22,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _parameter:String;
         private var _viewStateGuid:String;
 
+        public function RemoteActionCommand() {
+          //default constructor.
+        }
+
         public function set parameter(value:String):void {
             _parameter = value;
         }

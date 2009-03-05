@@ -22,6 +22,10 @@ package org.jspresso.framework.gui.remote {
         private var _maxValue:Number;
         private var _minValue:Number;
 
+        public function RNumericComponent() {
+          //default constructor.
+        }
+
         public function set maxValue(value:Number):void {
             _maxValue = value;
         }

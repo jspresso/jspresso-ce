@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _showTextField:Boolean;
 
+        public function RActionField() {
+          //default constructor.
+        }
+
         public function set showTextField(value:Boolean):void {
             _showTextField = value;
         }

@@ -19,5 +19,9 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RImageComponent")]
     public class RImageComponent extends RComponent {
 
+        public function RImageComponent() {
+          //default constructor.
+        }
+
     }
 }

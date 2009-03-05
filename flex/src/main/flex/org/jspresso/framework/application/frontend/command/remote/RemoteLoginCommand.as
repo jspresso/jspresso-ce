@@ -19,5 +19,9 @@ package org.jspresso.framework.application.frontend.command.remote {
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand")]
     public class RemoteLoginCommand extends RemoteCommand {
 
+        public function RemoteLoginCommand() {
+          //default constructor.
+        }
+
     }
 }

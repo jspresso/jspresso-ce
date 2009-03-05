@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _columns:Array;
 
+        public function RTable() {
+          //default constructor.
+        }
+
         public function set columns(value:Array):void {
             _columns = value;
         }

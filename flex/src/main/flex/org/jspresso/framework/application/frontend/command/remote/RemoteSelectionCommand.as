@@ -22,6 +22,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _leadingIndex:int;
         private var _selectedIndices:Array;
 
+        public function RemoteSelectionCommand() {
+          //default constructor.
+        }
+
         public function set leadingIndex(value:int):void {
             _leadingIndex = value;
         }

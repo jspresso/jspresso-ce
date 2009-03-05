@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _defaultColor:String;
 
+        public function RColorField() {
+          //default constructor.
+        }
+
         public function set defaultColor(value:String):void {
             _defaultColor = value;
         }

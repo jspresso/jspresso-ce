@@ -22,6 +22,10 @@ package org.jspresso.framework.view.flex {
     
     private var _sortColumnIndex:int;
     
+    public function RemoteValueSorter() {
+      //default constructor.
+    }
+
     public function set sortColumnIndex(value:int):void {
         _sortColumnIndex = value;
     }

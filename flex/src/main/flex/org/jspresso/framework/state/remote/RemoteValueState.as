@@ -25,6 +25,10 @@ package org.jspresso.framework.state.remote {
         private var _value:Object;
         private var _writable:Boolean;
 
+        public function RemoteValueState() {
+          //default constructor.
+        }
+
         public function set readable(value:Boolean):void {
             _readable = value;
         }

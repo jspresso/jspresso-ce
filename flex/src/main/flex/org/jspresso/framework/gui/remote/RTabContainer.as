@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _tabs:Array;
 
+        public function RTabContainer() {
+          //default constructor.
+        }
+
         public function set tabs(value:Array):void {
             _tabs = value;
         }

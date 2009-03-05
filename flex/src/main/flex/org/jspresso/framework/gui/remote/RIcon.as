@@ -24,6 +24,10 @@ package org.jspresso.framework.gui.remote {
         private var _imageUrlSpec:String;
         private var _width:int;
 
+        public function RIcon() {
+          //default constructor.
+        }
+
         public function set height(value:int):void {
             _height = value;
         }

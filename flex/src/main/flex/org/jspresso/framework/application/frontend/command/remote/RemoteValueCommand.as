@@ -23,6 +23,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _iconImageUrl:String;
         private var _value:Object;
 
+        public function RemoteValueCommand() {
+          //default constructor.
+        }
+
         public function set description(value:String):void {
             _description = value;
         }

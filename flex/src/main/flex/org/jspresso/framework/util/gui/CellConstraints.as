@@ -26,6 +26,10 @@ package org.jspresso.framework.util.gui {
         private var _width:int;
         private var _widthResizable:Boolean;
 
+        public function CellConstraints() {
+          //default constructor.
+        }
+
         public function set column(value:int):void {
             _column = value;
         }

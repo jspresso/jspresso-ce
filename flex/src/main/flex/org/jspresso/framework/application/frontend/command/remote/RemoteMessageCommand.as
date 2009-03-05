@@ -25,6 +25,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _title:String;
         private var _titleIcon:RIcon;
 
+        public function RemoteMessageCommand() {
+          //default constructor.
+        }
+
         public function set message(value:String):void {
             _message = value;
         }

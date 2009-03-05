@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _type:String;
 
+        public function RDateField() {
+          //default constructor.
+        }
+
         public function set type(value:String):void {
             _type = value;
         }

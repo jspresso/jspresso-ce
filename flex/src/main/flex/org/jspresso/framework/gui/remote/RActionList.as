@@ -25,6 +25,10 @@ package org.jspresso.framework.gui.remote {
         private var _icon:RIcon;
         private var _name:String;
 
+        public function RActionList() {
+          //default constructor.
+        }
+
         public function set actions(value:Array):void {
             _actions = value;
         }

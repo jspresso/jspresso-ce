@@ -23,6 +23,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _noAction:RAction;
         private var _yesAction:RAction;
 
+        public function RemoteYesNoCommand() {
+          //default constructor.
+        }
+
         public function set noAction(value:RAction):void {
             _noAction = value;
         }

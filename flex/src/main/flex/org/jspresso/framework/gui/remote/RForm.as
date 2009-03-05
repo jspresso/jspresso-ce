@@ -24,6 +24,10 @@ package org.jspresso.framework.gui.remote {
         private var _elements:Array;
         private var _labelsPosition:String;
 
+        public function RForm() {
+          //default constructor.
+        }
+
         public function set columnCount(value:int):void {
             _columnCount = value;
         }

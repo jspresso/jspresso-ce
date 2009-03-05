@@ -31,6 +31,10 @@ package org.jspresso.framework.view.flex {
     private var _listData:BaseListData;
     private var _formatter:Formatter;
     
+    public function RemoteValueDgItemRenderer() {
+      //default constructor.
+    }
+
   	override public function set listData(value:BaseListData):void {
    	  updateLabel(data, value);
    	  if(value) {

@@ -27,6 +27,10 @@ package org.jspresso.framework.state.remote {
         private var _leadingIndex:int;
         private var _selectedIndices:Array;
 
+        public function RemoteCompositeValueState() {
+          //default constructor.
+        }
+
         public function set children(value:ListCollectionView):void {
             _children = value;
         }

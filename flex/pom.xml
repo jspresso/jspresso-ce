@@ -1,0 +1,52 @@
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>info.flex-mojos</groupId>
+    <artifactId>flex-super-pom</artifactId>
+    <version>2.0.3</version>
+  </parent>
+  <artifactId>jspresso-flex</artifactId>
+  <version>2.3-SNAPSHOT</version>
+  <packaging>swc</packaging>
+  <name>Flex</name>
+
+  <repositories>
+    <repository>
+      <id>flex-mojos-repository</id>
+      <url>http://svn.sonatype.org/flexmojos/repository</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>datetimelibrary</groupId>
+      <artifactId>datetimelibrary</artifactId>
+      <version>1.0.1</version>
+      <type>swc</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>info.flex-mojos</groupId>
+        <artifactId>flex-compiler-mojo</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <locales>
+            <locale>fr_FR</locale>
+          </locales>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

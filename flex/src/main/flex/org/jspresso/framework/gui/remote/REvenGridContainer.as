@@ -23,6 +23,10 @@ package org.jspresso.framework.gui.remote {
         private var _drivingDimension:String;
         private var _drivingDimensionCellCount:int;
 
+        public function REvenGridContainer() {
+          //default constructor.
+        }
+
         public function set cells(value:Array):void {
             _cells = value;
         }

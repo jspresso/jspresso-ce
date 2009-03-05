@@ -19,5 +19,9 @@ package org.jspresso.framework.application.frontend.command.remote {
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand")]
     public class RemoteCloseDialogCommand extends RemoteCommand {
 
+        public function RemoteCloseDialogCommand() {
+          //default constructor.
+        }
+
     }
 }

@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _selectionMode:String;
 
+        public function RCollectionComponent() {
+          //default constructor.
+        }
+
         public function set selectionMode(value:String):void {
             _selectionMode = value;
         }

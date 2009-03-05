@@ -24,6 +24,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _fileFilter:Object;
         private var _fileUrl:String;
 
+        public function RemoteFileCommand() {
+          //default constructor.
+        }
+
         public function set cancelCallbackAction(value:RAction):void {
             _cancelCallbackAction = value;
         }

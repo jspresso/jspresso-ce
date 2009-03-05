@@ -22,6 +22,10 @@ package org.jspresso.framework.util.format {
     private var _parser:NumberBase;
     private var _precision:uint;
 
+    public function NumberParser() {
+      //default constructor.
+    }
+
     override public function parse(value:String):Object	{
       if(value == null || value.length == 0) {
         return null;

@@ -21,6 +21,10 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _readable:Boolean;
 
+        public function RemoteReadabilityCommand() {
+          //default constructor.
+        }
+
         public function set readable(value:Boolean):void {
             _readable = value;
         }

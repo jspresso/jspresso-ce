@@ -23,6 +23,10 @@ package org.jspresso.framework.gui.remote {
         private var _orientation:String;
         private var _rightBottom:RComponent;
 
+        public function RSplitContainer() {
+          //default constructor.
+        }
+
         public function set leftTop(value:RComponent):void {
             _leftTop = value;
         }

@@ -27,6 +27,10 @@ package org.jspresso.framework.gui.remote {
         private var _mnemonicAsString:String;
         private var _name:String;
 
+        public function RAction() {
+          //default constructor.
+        }
+
         public function set acceleratorAsString(value:String):void {
             _acceleratorAsString = value;
         }

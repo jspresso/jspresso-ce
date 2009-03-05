@@ -19,5 +19,9 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RCheckBox")]
     public class RCheckBox extends RComponent {
 
+        public function RCheckBox() {
+          //default constructor.
+        }
+
     }
 }

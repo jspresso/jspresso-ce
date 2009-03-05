@@ -23,6 +23,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _workspaceName:String;
         private var _workspaceView:RComponent;
 
+        public function RemoteWorkspaceDisplayCommand() {
+          //default constructor.
+        }
+
         public function set workspaceName(value:String):void {
             _workspaceName = value;
         }

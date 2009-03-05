@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _maxMillis:Number;
 
+        public function RDurationField() {
+          //default constructor.
+        }
+
         public function set maxMillis(value:Number):void {
             _maxMillis = value;
         }

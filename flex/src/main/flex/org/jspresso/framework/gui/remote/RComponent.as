@@ -32,6 +32,10 @@ package org.jspresso.framework.gui.remote {
         private var _state:RemoteValueState;
         private var _tooltip:String;
 
+        public function RComponent() {
+          //default constructor.
+        }
+
         public function set actionLists(value:Array):void {
             _actionLists = value;
         }

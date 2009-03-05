@@ -21,6 +21,10 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _writable:Boolean;
 
+        public function RemoteWritabilityCommand() {
+          //default constructor.
+        }
+
         public function set writable(value:Boolean):void {
             _writable = value;
         }

@@ -22,6 +22,10 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _successCallbackAction:RAction;
 
+        public function RemoteFileUploadCommand() {
+          //default constructor.
+        }
+
         public function set successCallbackAction(value:RAction):void {
             _successCallbackAction = value;
         }

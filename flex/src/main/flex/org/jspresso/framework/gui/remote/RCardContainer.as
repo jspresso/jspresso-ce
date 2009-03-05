@@ -22,6 +22,10 @@ package org.jspresso.framework.gui.remote {
         private var _cardNames:Array;
         private var _cards:Array;
 
+        public function RCardContainer() {
+          //default constructor.
+        }
+
         public function set cardNames(value:Array):void {
             _cardNames = value;
         }

@@ -23,6 +23,10 @@ package org.jspresso.framework.gui.remote {
         private var _translations:Array;
         private var _values:Array;
 
+        public function RComboBox() {
+          //default constructor.
+        }
+
         public function set icons(value:Array):void {
             _icons = value;
         }

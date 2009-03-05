@@ -25,6 +25,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _useCurrent:Boolean;
         private var _view:RComponent;
 
+        public function RemoteDialogCommand() {
+          //default constructor.
+        }
+
         public function set actions(value:Array):void {
             _actions = value;
         }

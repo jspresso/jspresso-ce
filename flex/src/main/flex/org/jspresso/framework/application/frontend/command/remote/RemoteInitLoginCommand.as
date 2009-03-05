@@ -27,6 +27,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _okLabel:String;
         private var _title:String;
 
+        public function RemoteInitLoginCommand() {
+          //default constructor.
+        }
+
         public function set loginView(value:RComponent):void {
             _loginView = value;
         }

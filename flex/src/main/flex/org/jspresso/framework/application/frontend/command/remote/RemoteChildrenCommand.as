@@ -22,6 +22,10 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _children:ListCollectionView;
 
+        public function RemoteChildrenCommand() {
+          //default constructor.
+        }
+
         public function set children(value:ListCollectionView):void {
             _children = value;
         }

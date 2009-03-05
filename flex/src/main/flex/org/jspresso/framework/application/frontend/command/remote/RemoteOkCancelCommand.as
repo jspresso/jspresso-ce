@@ -23,6 +23,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _cancelAction:RAction;
         private var _okAction:RAction;
 
+        public function RemoteOkCancelCommand() {
+          //default constructor.
+        }
+
         public function set cancelAction(value:RAction):void {
             _cancelAction = value;
         }

@@ -22,6 +22,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _defaultFileName:String;
         private var _resourceId:String;
 
+        public function RemoteFileDownloadCommand() {
+          //default constructor.
+        }
+
         public function set defaultFileName(value:String):void {
             _defaultFileName = value;
         }

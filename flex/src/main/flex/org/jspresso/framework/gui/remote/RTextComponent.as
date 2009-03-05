@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _maxLength:int;
 
+        public function RTextComponent() {
+          //default constructor.
+        }
+
         public function set maxLength(value:int):void {
             _maxLength = value;
         }

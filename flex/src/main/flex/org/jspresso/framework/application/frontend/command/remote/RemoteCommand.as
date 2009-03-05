@@ -20,6 +20,10 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteCommand {
 
         private var _targetPeerGuid:String;
+        
+        public function RemoteCommand() {
+          //default constructor.
+        }
 
         public function set targetPeerGuid(value:String):void {
             _targetPeerGuid = value;

@@ -21,6 +21,10 @@ package org.jspresso.framework.util.remote {
 
         private var _guid:String;
 
+        public function RemotePeer() {
+          //default constructor.
+        }
+
         public function set guid(value:String):void {
             _guid = value;
         }

@@ -23,6 +23,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _helpActions:Array;
         private var _workspaceActions:Array;
 
+        public function RemoteInitCommand() {
+          //default constructor.
+        }
+
         public function set actions(value:Array):void {
             _actions = value;
         }

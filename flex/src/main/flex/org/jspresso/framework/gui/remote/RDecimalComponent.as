@@ -21,6 +21,10 @@ package org.jspresso.framework.gui.remote {
 
         private var _maxFractionDigit:int;
 
+        public function RDecimalComponent() {
+          //default constructor.
+        }
+
         public function set maxFractionDigit(value:int):void {
             _maxFractionDigit = value;
         }

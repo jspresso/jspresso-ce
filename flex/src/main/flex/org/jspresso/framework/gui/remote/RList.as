@@ -19,5 +19,9 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RList")]
     public class RList extends RCollectionComponent {
 
+        public function RList() {
+          //default constructor.
+        }
+
     }
 }

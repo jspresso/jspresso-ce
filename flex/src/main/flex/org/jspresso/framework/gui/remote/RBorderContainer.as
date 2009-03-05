@@ -25,6 +25,10 @@ package org.jspresso.framework.gui.remote {
         private var _south:RComponent;
         private var _west:RComponent;
 
+        public function RBorderContainer() {
+          //default constructor.
+        }
+
         public function set center(value:RComponent):void {
             _center = value;
         }

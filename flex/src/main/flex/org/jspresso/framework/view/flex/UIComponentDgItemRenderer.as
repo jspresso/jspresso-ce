@@ -27,6 +27,10 @@ package org.jspresso.framework.view.flex {
 
     private var valueChangeListener:ChangeWatcher;
     
+    public function UIComponentDgItemRenderer() {
+      //default constructor.
+    }
+
     public function set viewFactory(value:DefaultFlexViewFactory):void {
       _viewFactory = value;
       updateComponents();

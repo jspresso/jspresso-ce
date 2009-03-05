@@ -21,6 +21,10 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _enabled:Boolean;
 
+        public function RemoteEnablementCommand() {
+          //default constructor.
+        }
+
         public function set enabled(value:Boolean):void {
             _enabled = value;
         }

@@ -19,9 +19,13 @@ package org.jspresso.framework.application.frontend.command.remote {
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand")]
     public class RemoteOpenUrlCommand extends RemoteCommand {
 
-        private var _urlSpec:String;
+       private var _urlSpec:String;
 
-        public function set urlSpec(value:String):void {
+       public function RemoteOpenUrlCommand() {
+          //default constructor.
+       }
+
+       public function set urlSpec(value:String):void {
             _urlSpec = value;
         }
         public function get urlSpec():String {

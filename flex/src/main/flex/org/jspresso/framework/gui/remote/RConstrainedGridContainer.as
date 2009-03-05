@@ -22,6 +22,10 @@ package org.jspresso.framework.gui.remote {
         private var _cellConstraints:Array;
         private var _cells:Array;
 
+        public function RConstrainedGridContainer() {
+          //default constructor.
+        }
+
         public function set cellConstraints(value:Array):void {
             _cellConstraints = value;
         }
