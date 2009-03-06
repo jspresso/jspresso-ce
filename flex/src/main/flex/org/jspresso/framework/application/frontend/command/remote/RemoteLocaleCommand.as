@@ -19,6 +19,10 @@ package org.jspresso.framework.application.frontend.command.remote {
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand")]
     public class RemoteLocaleCommand extends RemoteCommand {
 
+        public function RemoteLocaleCommand() {
+          //default constructor.
+        }
+
         private var _language:String;
 
         public function set language(value:String):void {

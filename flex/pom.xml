@@ -8,6 +8,7 @@
     <artifactId>flex-super-pom</artifactId>
     <version>2.0.3</version>
   </parent>
+  <groupId>org.jspresso</groupId>
   <artifactId>jspresso-flex</artifactId>
   <version>2.3-SNAPSHOT</version>
   <packaging>swc</packaging>
