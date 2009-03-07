@@ -32,7 +32,7 @@ package org.jspresso.framework.view.flex {
   	  if(value) {
   	    var rIcon:RIcon = value["rIcon"];
   	    if(rIcon) {
-  	      _image.source = DefaultFlexViewFactory.computeUrl(rIcon.imageUrlSpec);
+  	      _image.source = rIcon.imageUrlSpec;
   	    }
   	  }
   	  super.data = value;

@@ -13,6 +13,7 @@
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand"/>

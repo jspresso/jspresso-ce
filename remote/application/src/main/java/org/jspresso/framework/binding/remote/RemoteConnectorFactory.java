@@ -52,6 +52,7 @@ import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
@@ -188,7 +189,10 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
             .getState();
         state.setValue(connector.getDisplayValue());
         state.setDescription(connector.getDisplayDescription());
-        state.setIconImageUrl(connector.getDisplayIconImageUrl());
+        state
+            .setIconImageUrl(ResourceProviderServlet
+                .computeLocalResourceDownloadUrl(connector
+                    .getDisplayIconImageUrl()));
         RemoteValueCommand command = new RemoteValueCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setValue(state.getValue());

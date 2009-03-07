@@ -114,6 +114,9 @@ package org.jspresso.framework.view.flex {
     [Embed(source="mx/controls/Image.png")]
     private var _iconTemplate:Class;
 
+    [Embed(source="/assets/images/reset-16x16.png")]
+    private var _resetIcon:Class;
+
     private static const TOOLTIP_ELLIPSIS:String = "...";
     private static const TEMPLATE_CHAR:String = "O";
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
@@ -429,9 +432,10 @@ package org.jspresso.framework.view.flex {
       bindColorPicker(colorPicker, remoteColorField.state);
       colorField.addChild(colorPicker);
       var resetButton:Button = new Button();
-	    resetButton.setStyle("icon", IconFactory.getClass(resetButton
-	                               , computeUrl("classpath:org/jspresso/framework/application/images/reset-48x48.png") 
-                                 , 16, 16));
+//	    resetButton.setStyle("icon", IconFactory.getClass(resetButton
+//	                               , computeUrl("classpath:org/jspresso/framework/application/images/reset-48x48.png") 
+//                                 , 16, 16));
+      resetButton.setStyle("icon", _resetIcon);
       colorField.addChild(resetButton);
       resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
         remoteColorField.state.value = remoteColorField.defaultColor;
@@ -1351,20 +1355,12 @@ package org.jspresso.framework.view.flex {
 
     public function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
       if(rIcon != null) {
-        return IconFactory.getClass(component, computeUrl(rIcon.imageUrlSpec) 
+        return IconFactory.getClass(component, rIcon.imageUrlSpec 
                                     , rIcon.width, rIcon.height);
       }
       return null;
     }
     
-    public static function computeUrl(imageUrlSpec:String):String {
-      return getContextRoot() + "/download?localUrl=" + imageUrlSpec;
-    }
-    
-    internal static function getContextRoot():String {
-      return Application.application.url.substring(0,Application.application.url.lastIndexOf("/"));
-    }
-
     private function createFormatter(remoteComponent:RComponent):Formatter {
       if(remoteComponent is RDateField) {
         var dateFormatter:DateFormatter = new DateFormatter();        

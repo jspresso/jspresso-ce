@@ -53,7 +53,7 @@ package org.jspresso.framework.view.flex {
       if(_icon != _rIcon) {
         if(_icon != null) {
           _rIcon = _icon;
-          iconImage.source = DefaultFlexViewFactory.computeUrl(_icon.imageUrlSpec);
+          iconImage.source = _icon.imageUrlSpec;
         } else {
           iconImage.source = null;
         }

@@ -72,7 +72,7 @@ package org.jspresso.framework.view.flex {
 			
 			var _selectedIcon:RIcon = _icons[_labels.indexOf(listData.label)] as RIcon;
 			if(_selectedIcon != null) {
-			  _image.source = DefaultFlexViewFactory.computeUrl(_selectedIcon.imageUrlSpec);
+			  _image.source = _selectedIcon.imageUrlSpec;
 			}
 			icon.visible = false;
 		}

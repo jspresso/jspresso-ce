@@ -29,6 +29,7 @@ import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 /**
  * The server peer of a remote collection connector.
@@ -130,7 +131,8 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     createdState.setReadable(isReadable());
     createdState.setWritable(isWritable());
     createdState.setDescription(getDisplayDescription());
-    createdState.setIconImageUrl(getDisplayIconImageUrl());
+    createdState.setIconImageUrl(ResourceProviderServlet
+        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
     createdState.setSelectedIndices(getSelectedIndices());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (int i = 0; i < getChildConnectorCount(); i++) {

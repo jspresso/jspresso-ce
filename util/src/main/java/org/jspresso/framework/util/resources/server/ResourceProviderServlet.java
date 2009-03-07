@@ -87,6 +87,19 @@ public class ResourceProviderServlet extends HttpServlet {
   /**
    * Computes the url where the resource is available for download.
    * 
+   * @param localUrl
+   *          the resource local url.
+   * @return the resource url.
+   */
+  public static String computeLocalResourceDownloadUrl(String localUrl) {
+    HttpServletRequest request = HttpRequestHolder.getServletRequest();
+    return computeUrl(request, "?"
+        + ResourceProviderServlet.LOCAL_URL_PARAMETER + "=" + localUrl);
+  }
+
+  /**
+   * Computes the url where the resource is available for download.
+   * 
    * @param id
    *          the resource id.
    * @return the resource url.
@@ -106,10 +119,16 @@ public class ResourceProviderServlet extends HttpServlet {
    * @return the resource url.
    */
   public static String computeDownloadUrl(HttpServletRequest request, String id) {
+    return computeUrl(request, "?" + ResourceProviderServlet.ID_PARAMETER + "="
+        + id);
+  }
+
+  private static String computeUrl(HttpServletRequest request,
+      String getParameters) {
     String baseUrl = request.getScheme() + "://" + request.getServerName()
         + ":" + request.getServerPort() + request.getContextPath()
         + DOWNLOAD_SERVLET_URL_PATTERN;
-    return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
+    return baseUrl + getParameters;
   }
 
   /**
@@ -200,8 +219,10 @@ public class ResourceProviderServlet extends HttpServlet {
       for (FileItem item : items) {
         if (!item.isFormField()) {
           out.print("<resource");
-          IResource uploadResource = new UploadResourceAdapter("application/octet-stream", item);
-          String resourceId = ResourceManager.getInstance().register(uploadResource);
+          IResource uploadResource = new UploadResourceAdapter(
+              "application/octet-stream", item);
+          String resourceId = ResourceManager.getInstance().register(
+              uploadResource);
           out.print(" id=\"" + resourceId);
           out.print("\" name=\"" + item.getName());
           out.println("\" />");
@@ -225,8 +246,10 @@ public class ResourceProviderServlet extends HttpServlet {
     /**
      * Constructs a new <code>UploadResourceAdapter</code> instance.
      * 
-     * @param mimeType the resource mime type.
-     * @param item the resource file item.
+     * @param mimeType
+     *          the resource mime type.
+     * @param item
+     *          the resource file item.
      */
     public UploadResourceAdapter(String mimeType, FileItem item) {
       super(mimeType);
