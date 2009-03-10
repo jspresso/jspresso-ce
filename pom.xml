@@ -97,6 +97,9 @@
     <repository>
       <id>jspresso-repository</id>
       <url>http://repository.jspresso.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -104,6 +107,9 @@
     <repository>
       <id>jspresso-snapshots-repository</id>
       <url>http://repository.jspresso.org/maven2-snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
