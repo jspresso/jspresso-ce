@@ -66,6 +66,9 @@ public abstract class AbstractStartup<E, F, G> implements IStartup {
    * {@inheritDoc}
    */
   public void start() {
+    // start on brand new instances.
+    frontendController = null;
+    backendController = null;
     getFrontendController().start(getBackendController(), getStartupLocale());
   }
 

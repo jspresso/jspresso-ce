@@ -419,6 +419,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   public boolean stop() {
+    selectedModuleConnectors = new HashMap<String, ICompositeValueConnector>();
+    selectedWorkspaceName = null;
     return getBackendController().stop();
   }
 
