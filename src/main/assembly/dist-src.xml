@@ -14,11 +14,15 @@
         <fileSets>
           <fileSet>
             <directory>src/main/java</directory>
-            <outputDirectory>src</outputDirectory>
+            <outputDirectory>src/java</outputDirectory>
+          </fileSet>
+          <fileSet>
+            <directory>src/main/flex</directory>
+            <outputDirectory>src/flex</outputDirectory>
           </fileSet>
           <fileSet>
             <directory>src/main/resources</directory>
-            <outputDirectory>src</outputDirectory>
+            <outputDirectory>src/resources</outputDirectory>
           </fileSet>
         </fileSets>
       </sources>
@@ -26,7 +30,7 @@
         <unpack>false</unpack>
         <dependencySets>
           <dependencySet>
-            <useTransitiveFiltering>true</useTransitiveFiltering>
+            <useTransitiveFiltering>false</useTransitiveFiltering>
             <outputDirectory>lib</outputDirectory>
             <excludes>
               <exclude>org.jspresso:*</exclude>

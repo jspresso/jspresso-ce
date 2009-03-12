@@ -55,4 +55,9 @@
       <type>swc</type>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
+  </properties>
+  
 </project>

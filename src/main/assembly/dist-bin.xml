@@ -13,7 +13,7 @@
         <unpack>false</unpack>
         <dependencySets>
           <dependencySet>
-            <useTransitiveFiltering>true</useTransitiveFiltering>
+            <useTransitiveFiltering>false</useTransitiveFiltering>
             <outputDirectory>lib</outputDirectory>
             <excludes>
               <exclude>org.jspresso:*</exclude>
