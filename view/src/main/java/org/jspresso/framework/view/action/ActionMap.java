@@ -19,7 +19,6 @@
 package org.jspresso.framework.view.action;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class ActionMap {
   private static void completeActionMap(
       Map<String, ActionList> bufferActionMap, List<ActionList> actionLists) {
     if (actionLists != null) {
-      Map<String, ActionList> mapOfActionLists = new HashMap<String, ActionList>();
+      Map<String, ActionList> mapOfActionLists = new LinkedHashMap<String, ActionList>();
       for (ActionList al : actionLists) {
         mapOfActionLists.put(al.getName(), al);
       }
