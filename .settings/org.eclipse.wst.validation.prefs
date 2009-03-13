@@ -1,10 +1,13 @@
-#Fri Mar 13 17:26:47 CET 2009
+#Fri Mar 13 17:43:15 CET 2009
 DELEGATES_PREFERENCE=delegateValidatorList
-USER_BUILD_PREFERENCE=enabledBuildValidatorListorg.eclipse.jst.j2ee.internal.classpathdep.ClasspathDependencyValidator;org.eclipse.wst.common.componentcore.internal.ModuleCoreValidator;org.eclipse.wst.wsi.ui.internal.WSIMessageValidator;
-USER_MANUAL_PREFERENCE=enabledManualValidatorListorg.eclipse.jst.j2ee.internal.classpathdep.ClasspathDependencyValidator;org.eclipse.wst.common.componentcore.internal.ModuleCoreValidator;org.eclipse.wst.wsi.ui.internal.WSIMessageValidator;
-USER_PREFERENCE=overrideGlobalPreferencesfalse
+USER_BUILD_PREFERENCE=enabledBuildValidatorListorg.eclipse.wst.wsi.ui.internal.WSIMessageValidator;
+USER_MANUAL_PREFERENCE=enabledManualValidatorListorg.eclipse.wst.wsi.ui.internal.WSIMessageValidator;
+USER_PREFERENCE=overrideGlobalPreferencestruedisableAllValidationfalseversion1.2.6.v200902121900
 eclipse.preferences.version=1
-override=false
+override=true
 suspend=false
 vals/org.eclipse.jst.jsf.ui.JSFNonELAttributeValueValidator/global=TT01
+vals/org.eclipse.wst.html.ui.HTMLValidator/global=TT01
+vals/org.eclipse.wst.html.ui.HTMLValidator/groups=0107include06111contentType136org.eclipse.wst.html.core.htmlsourceT07fileext04htmlF07fileext05xhtmlF07fileext03htmF07fileext04htplF07fileext03wmlF0107exclude0104file03docF02
+vals/org.eclipse.wst.xml.core.xml/groups=0107include05111contentType128org.eclipse.core.runtime.xmlT111contentType134org.eclipse.wst.xml.core.xmlsourceT111contentType134org.eclipse.wst.xml.core.xslsourceT111contentType134org.eclipse.jst.jsp.core.tldsourceT07fileext03xmlF0107exclude06113projectNature134org.eclipse.jst.j2ee.ejb.EJBNature113projectNature130org.eclipse.jst.j2ee.EARNature04file08.projectT0104file110.classpathT0104file110.settings/T0204file03docF02
 vf.version=3
