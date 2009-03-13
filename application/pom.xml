@@ -27,7 +27,7 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.ldap</groupId>
-      <artifactId>spring-ldap</artifactId>
+      <artifactId>spring-ldap-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.sun</groupId>

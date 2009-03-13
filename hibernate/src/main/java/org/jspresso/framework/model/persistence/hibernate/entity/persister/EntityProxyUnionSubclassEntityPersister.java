@@ -19,7 +19,7 @@
 package org.jspresso.framework.model.persistence.hibernate.entity.persister;
 
 import org.hibernate.EntityMode;
-import org.hibernate.cache.CacheConcurrencyStrategy;
+import org.hibernate.cache.access.EntityRegionAccessStrategy;
 import org.hibernate.engine.Mapping;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.mapping.PersistentClass;
@@ -53,22 +53,23 @@ public class EntityProxyUnionSubclassEntityPersister extends
     UnionSubclassEntityPersister {
 
   /**
-   * Constructs a new <code>EntityProxyUnionSubclassEntityPersister</code>
+   * Constructs a new <code>EntityProxyJoinedSubclassEntityPersister</code>
    * instance.
    * 
    * @param persistentClass
-   *            the persistentClass.
-   * @param cache
-   *            the cache.
+   *          the persistent class.
+   * @param cacheAccessStrategy
+   *          the cache access strategy.
    * @param factory
-   *            the factory.
+   *          the session.
    * @param mapping
-   *            the mapping.
+   *          the mapping.
    */
   public EntityProxyUnionSubclassEntityPersister(
-      PersistentClass persistentClass, CacheConcurrencyStrategy cache,
+      PersistentClass persistentClass,
+      EntityRegionAccessStrategy cacheAccessStrategy,
       SessionFactoryImplementor factory, Mapping mapping) {
-    super(persistentClass, cache, factory, mapping);
+    super(persistentClass, cacheAccessStrategy, factory, mapping);
   }
 
   /**

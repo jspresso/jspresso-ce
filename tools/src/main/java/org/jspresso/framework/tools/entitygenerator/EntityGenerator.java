@@ -40,11 +40,10 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.freemarker.CompareStrings;
 import org.jspresso.framework.util.freemarker.GenerateSqlName;
 import org.jspresso.framework.util.freemarker.InstanceOf;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
-import org.springframework.context.ApplicationContext;
-
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
@@ -174,7 +173,7 @@ public class EntityGenerator {
    */
   @SuppressWarnings("unchecked")
   public void generateComponents() {
-    ApplicationContext appContext = getApplicationContext();
+    ListableBeanFactory appContext = getListableBeanFactory();
     Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
     if (componentIds == null) {
       Map<String, IComponentDescriptor<?>> allComponents = appContext
@@ -343,9 +342,9 @@ public class EntityGenerator {
     this.templateResourcePath = templateResourcePath;
   }
 
-  private ApplicationContext getApplicationContext() {
+  private ListableBeanFactory getListableBeanFactory() {
     BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
-    return (ApplicationContext) bf.getFactory();
+    return (ListableBeanFactory) bf.getFactory();
   }
 }

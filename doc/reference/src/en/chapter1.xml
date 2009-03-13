@@ -703,7 +703,7 @@
       &lt;include name="**/jspresso/**/2.2/*.jar" /&gt;
       &lt;include name="**/commons-cli-1.0.jar" /&gt;
       &lt;include name="**/freemarker-2.3.3.jar" /&gt;
-      &lt;include name="**/spring-2.5.1.jar" /&gt;
+      &lt;include name="**/spring-2.5.6.jar" /&gt;
       &lt;include name="**/commons-logging-1.1.jar" /&gt;
       &lt;include name="**/xml-apis-2.0.2.jar" /&gt;
       &lt;include name="**/xerces-2.0.2.jar" /&gt;
@@ -7268,7 +7268,7 @@ public class WingsApplicationStartup extends WingsStartup {
 				jspresso-wings-components.jar
 
 				spring.jar <co id="spring" />
-				spring-ldap.jar
+				spring-ldap-core.jar
 				ldapbp.jar
 
 				bsf.jar <co id="bsf" />

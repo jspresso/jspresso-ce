@@ -19,14 +19,13 @@
 package org.jspresso.framework.model.persistence.hibernate.entity.persister;
 
 import org.hibernate.EntityMode;
-import org.hibernate.cache.CacheConcurrencyStrategy;
+import org.hibernate.cache.access.EntityRegionAccessStrategy;
 import org.hibernate.engine.Mapping;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
 import org.jspresso.framework.model.entity.IEntity;
-
 
 /**
  * Subclassed the hibernate default persister for joined subclasses to
@@ -57,18 +56,19 @@ public class EntityProxyJoinedSubclassEntityPersister extends
    * instance.
    * 
    * @param persistentClass
-   *            the persistentClass.
-   * @param cache
-   *            the cache.
+   *          the persistent class.
+   * @param cacheAccessStrategy
+   *          the cache access strategy.
    * @param factory
-   *            the factory.
+   *          the session.
    * @param mapping
-   *            the mapping.
+   *          the mapping.
    */
   public EntityProxyJoinedSubclassEntityPersister(
-      PersistentClass persistentClass, CacheConcurrencyStrategy cache,
+      PersistentClass persistentClass,
+      EntityRegionAccessStrategy cacheAccessStrategy,
       SessionFactoryImplementor factory, Mapping mapping) {
-    super(persistentClass, cache, factory, mapping);
+    super(persistentClass, cacheAccessStrategy, factory, mapping);
   }
 
   /**
@@ -91,8 +91,7 @@ public class EntityProxyJoinedSubclassEntityPersister extends
    * {@inheritDoc}
    */
   @Override
-  public EntityMode guessEntityMode(@SuppressWarnings("unused")
-  Object object) {
+  public EntityMode guessEntityMode(@SuppressWarnings("unused") Object object) {
     return EntityMode.POJO;
   }
 }

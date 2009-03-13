@@ -9,6 +9,10 @@ New features
            Password are now handled as strings instead of char[] to preserve interceptor consistency.
            Got rid of action put/get initialContext since it really had a weird behaviour with diallog actions.
            Introduced a context stack management for dialog actions.
+           Migrated to Hibernate 3.3.1.GA
+           Migrated to Spring 2.5.6
+           Modularized Spring dependencies
+           Migrated to Spring LDAP 1.3.0.RELEASE
 
 2.2.2
 =====

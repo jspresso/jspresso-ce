@@ -28,15 +28,19 @@
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring</artifactId>
+      <artifactId>spring-orm</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate</artifactId>
+      <artifactId>hibernate-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>cglib</groupId>
-      <artifactId>cglib-nodep</artifactId>
+      <groupId>javassist</groupId>
+      <artifactId>javassist</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
     </dependency>
   </dependencies>
 </project>
