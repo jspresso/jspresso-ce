@@ -29,17 +29,17 @@
               <targetDirectory>${basedir}/target/reference/html-chunked</targetDirectory>
               <chunkedOutput>true</chunkedOutput>
               <htmlStylesheet>../css/docbook.css</htmlStylesheet>
-              <htmlCustomization>src/main/docbook/xsl/html.xsl</htmlCustomization>
-              <preProcess>
+              <htmlCustomization>target/staging/xsl/html.xsl</htmlCustomization>
+              <postProcess>
                 <copy todir="target/reference/html-chunked">
                   <fileset dir="src/main/docbook/reference">
                     <include name="**/images/*.*" />
                   </fileset>
-                  <fileset dir="src/main/docbook">
+                  <fileset dir="target/staging">
                     <include name="**/*.css" />
                   </fileset>
                 </copy>
-              </preProcess>
+              </postProcess>
             </configuration>
           </execution>
           <execution>
@@ -52,17 +52,17 @@
               <targetDirectory>${basedir}/target/reference/html-single</targetDirectory>
               <chunkedOutput>false</chunkedOutput>
               <htmlStylesheet>../css/docbook.css</htmlStylesheet>
-              <htmlCustomization>src/main/docbook/xsl/html.xsl</htmlCustomization>
-              <preProcess>
+              <htmlCustomization>target/staging/xsl/html.xsl</htmlCustomization>
+              <postProcess>
                 <copy todir="target/reference/html-single">
                   <fileset dir="src/main/docbook/reference">
                     <include name="**/images/*.*" />
                   </fileset>
-                  <fileset dir="src/main/docbook">
+                  <fileset dir="target/staging">
                     <include name="**/*.css" />
                   </fileset>
                 </copy>
-              </preProcess>
+              </postProcess>
             </configuration>
           </execution>
           <execution>
@@ -73,8 +73,8 @@
             <phase>package</phase>
             <configuration>
               <targetDirectory>${basedir}/target/reference/pdf/en</targetDirectory>
-              <foCustomization>src/main/docbook/xsl/fo.xsl</foCustomization>
-              <imgSrcPath>${basedir}/src/main/docbook/reference/en/</imgSrcPath>
+              <foCustomization>target/staging/xsl/fo.xsl</foCustomization>
+              <imgSrcPath>${basedir}/target/staging/reference/en/</imgSrcPath>
               <keepRelativeImageUris>0</keepRelativeImageUris>
               <postProcess>
                 <delete dir="${basedir}/target/reference/pdf/en/en" />
@@ -83,16 +83,41 @@
           </execution>
         </executions>
         <configuration>
-          <sourceDirectory>${basedir}/src/main/docbook/reference</sourceDirectory>
+          <sourceDirectory>${basedir}/target/staging/reference</sourceDirectory>
           <includes>**/reference-guide.xml</includes>
           <xincludeSupported>true</xincludeSupported>
-          <entities>
-            <entity>
-              <name>version</name>
-              <value>${pom.version}</value>
-            </entity>
-          </entities>
+          <preProcess>
+            <copy todir="target/staging">
+              <fileset dir="src/main/docbook">
+                <include name="**/images/*.*" />
+                <include name="**/css/*.*" />
+                <include name="**/fo.xsl" />
+                <include name="**/html.xsl" />
+              </fileset>
+            </copy>
+            <copy todir="target/staging">
+              <filterset>
+                <filter token="version" value="${pom.version}" />
+              </filterset>
+              <fileset dir="src/main/docbook">
+                <include name="**/reference/**/*.xml" />
+              </fileset>
+            </copy>
+            <xslt style="src/main/docbook/xsl/titlepage.xsl"
+                  extension=".xsl"
+                  basedir="src/main/docbook/xsl"
+                  destdir="target/staging/xsl"
+                  includes="**/fo-titlepages.xml **/html-titlepages.xml">
+            </xslt>
+          </preProcess>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant-trax</artifactId>
+            <version>1.6.5</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -7,7 +7,7 @@
 
     <subtitle>Jspresso Reference Manual</subtitle>
 
-    <releaseinfo>2.3</releaseinfo>
+    <releaseinfo>@version@</releaseinfo>
 
     <mediaobject>
       <imageobject>
