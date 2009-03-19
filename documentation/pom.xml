@@ -31,83 +31,76 @@
               <htmlStylesheet>../css/docbook.css</htmlStylesheet>
               <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization>
               <postProcess>
-                <copy todir="target/reference/html-chunked">
-                  <fileset dir="src/main/docbook/reference">
-                    <include name="**/images/*.*" />
+                <copy
+                  todir="target/reference/html-chunked">
+                  <fileset
+                    dir="src/main/docbook/reference">
+                    <include
+                      name="**/images/*.*" />
                   </fileset>
-                  <fileset dir="target/staging">
-                    <include name="**/*.css" />
-                  </fileset>
-                </copy>
-              </postProcess>
-            </configuration>
-          </execution>
-          <execution>
-            <goals>
-              <goal>generate-html</goal>
-            </goals>
-            <id>doc-html-single</id>
-            <phase>package</phase>
-            <configuration>
-              <targetDirectory>${basedir}/target/reference/html-single</targetDirectory>
-              <chunkedOutput>false</chunkedOutput>
-              <htmlStylesheet>../css/docbook.css</htmlStylesheet>
-              <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization>
-              <postProcess>
-                <copy todir="target/reference/html-single">
-                  <fileset dir="src/main/docbook/reference">
-                    <include name="**/images/*.*" />
-                  </fileset>
-                  <fileset dir="target/staging">
-                    <include name="**/*.css" />
+                  <fileset
+                    dir="target/staging">
+                    <include
+                      name="**/*.css" />
                   </fileset>
                 </copy>
               </postProcess>
             </configuration>
           </execution>
-          <execution>
-            <goals>
-              <goal>generate-pdf</goal>
-            </goals>
-            <id>doc-pdf</id>
-            <phase>package</phase>
-            <configuration>
-              <targetDirectory>${basedir}/target/reference/pdf/en</targetDirectory>
-              <foCustomization>${basedir}/target/staging/xsl/fo.xsl</foCustomization>
-              <imgSrcPath>${basedir}/target/staging/reference/en/</imgSrcPath>
-              <keepRelativeImageUris>0</keepRelativeImageUris>
-              <postProcess>
-                <delete dir="${basedir}/target/reference/pdf/en/en" />
-              </postProcess>
-            </configuration>
-          </execution>
+          <!--
+            <execution> <goals> <goal>generate-html</goal> </goals> <id>doc-html-single</id> <phase>package</phase>
+            <configuration> <targetDirectory>${basedir}/target/reference/html-single</targetDirectory>
+            <chunkedOutput>false</chunkedOutput> <htmlStylesheet>../css/docbook.css</htmlStylesheet>
+            <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization> <postProcess> <copy
+            todir="target/reference/html-single"> <fileset dir="src/main/docbook/reference"> <include
+            name="**/images/*.*" /> </fileset> <fileset dir="target/staging"> <include name="**/*.css" /> </fileset>
+            </copy> </postProcess> </configuration> </execution> <execution> <goals> <goal>generate-pdf</goal> </goals>
+            <id>doc-pdf</id> <phase>package</phase> <configuration>
+            <targetDirectory>${basedir}/target/reference/pdf/en</targetDirectory>
+            <foCustomization>${basedir}/target/staging/xsl/fo.xsl</foCustomization>
+            <imgSrcPath>${basedir}/target/staging/reference/en/</imgSrcPath>
+            <keepRelativeImageUris>0</keepRelativeImageUris> <postProcess> <delete
+            dir="${basedir}/target/reference/pdf/en/en" /> </postProcess> </configuration> </execution>
+          -->
         </executions>
         <configuration>
           <sourceDirectory>${basedir}/target/staging/reference</sourceDirectory>
           <includes>**/reference-guide.xml</includes>
           <xincludeSupported>true</xincludeSupported>
           <preProcess>
-            <copy todir="target/staging">
-              <fileset dir="src/main/docbook">
-                <include name="**/images/*.*" />
-                <include name="**/css/*.*" />
-                <include name="**/fo.xsl" />
-                <include name="**/html.xsl" />
+            <copy
+              todir="target/staging">
+              <fileset
+                dir="src/main/docbook">
+                <include
+                  name="**/images/*.*" />
+                <include
+                  name="**/css/*.*" />
+                <include
+                  name="**/fo.xsl" />
+                <include
+                  name="**/html.xsl" />
               </fileset>
             </copy>
-            <copy todir="target/staging">
+            <copy
+              todir="target/staging">
               <filterset>
-                <filter token="version" value="${pom.version}" />
+                <filter
+                  token="version"
+                  value="${pom.version}" />
               </filterset>
-              <fileset dir="src/main/docbook">
-                <include name="**/reference/**/*.xml" />
+              <fileset
+                dir="src/main/docbook">
+                <include
+                  name="**/reference/**/*.xml" />
               </fileset>
             </copy>
-            <xslt style="src/main/docbook/xsl/titlepage.xsl"
-                  extension=".xsl"
-                  basedir="src/main/docbook/xsl"
-                  destdir="target/staging/xsl"
-                  includes="**/fo-titlepages.xml **/html-titlepages.xml">
+            <xslt
+              style="src/main/docbook/xsl/titlepage.xsl"
+              extension=".xsl"
+              basedir="src/main/docbook/xsl"
+              destdir="target/staging/xsl"
+              includes="**/fo-titlepages.xml **/html-titlepages.xml">
             </xslt>
           </preProcess>
         </configuration>
@@ -116,6 +109,15 @@
             <groupId>ant</groupId>
             <artifactId>ant-trax</artifactId>
             <version>1.6.5</version>
+          </dependency>
+          <!--
+            there is an incompatibility between antrun 1.1 and antrun 1.3, so we force the dependency until docbkx is
+            migrated to antrun 1.3
+          -->
+          <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.3</version>
           </dependency>
         </dependencies>
       </plugin>
