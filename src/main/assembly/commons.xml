@@ -9,19 +9,12 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>doc/reference/target</directory>
-      <outputDirectory>doc/reference</outputDirectory>
-      <includes>
-        <include>html/**</include>
-        <include>pdf/**</include>
-      </includes>
-    </fileSet>
-    <fileSet>
       <directory>target/site</directory>
       <outputDirectory>doc</outputDirectory>
       <includes>
         <include>apidocs/**</include>
         <include>beandocs/**</include>
+        <include>docs/**</include>
       </includes>
     </fileSet>
     <fileSet>

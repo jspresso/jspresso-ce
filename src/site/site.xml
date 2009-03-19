@@ -22,6 +22,11 @@
         name="Standard beans"
         href="beandocs/index.html" />
     </menu>
+    <menu name="Reference Doc">
+      <item
+        name="Reference Documentation"
+        href="docs/reference/html-chunked/en/reference-guide.html" />
+    </menu>
     <menu ref="parent" />
     <menu ref="modules"/>
     <menu ref="reports" />

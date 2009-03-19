@@ -23,7 +23,7 @@
   </distributionManagement>
   <pluginRepositories>
     <pluginRepository>
-      <id>flex-mojos-repository</id>
+      <id>flexmojos-repository</id>
       <url>http://svn.sonatype.org/flexmojos/repository</url>
       <releases>
         <enabled>true</enabled>
@@ -42,28 +42,28 @@
   </pluginRepositories>
   <repositories>
     <repository>
-      <id>jboss</id>
+      <id>jboss-repository</id>
       <url>http://repository.jboss.org/maven2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>beandoc</id>
+      <id>beandoc-repository</id>
       <url>http://spring-beandoc.sourceforge.net/repo</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>sun</id>
+      <id>java.net-repository</id>
       <url>http://download.java.net/maven/2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>flex-mojos-repository</id>
+      <id>flexmojos-repository</id>
       <url>http://svn.sonatype.org/flexmojos/repository</url>
       <releases>
         <enabled>true</enabled>
@@ -289,6 +289,13 @@
         <groupId>org.jspresso</groupId>
         <artifactId>jspresso-app-launch-remote</artifactId>
         <version>2.3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-documentation</artifactId>
+        <version>2.3-SNAPSHOT</version>
+        <classifier>archive</classifier>
+        <type>zip</type>
       </dependency>
       <dependency>
         <groupId>commons-logging</groupId>

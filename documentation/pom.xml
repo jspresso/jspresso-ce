@@ -29,7 +29,7 @@
               <targetDirectory>${basedir}/target/reference/html-chunked</targetDirectory>
               <chunkedOutput>true</chunkedOutput>
               <htmlStylesheet>../css/docbook.css</htmlStylesheet>
-              <htmlCustomization>target/staging/xsl/html.xsl</htmlCustomization>
+              <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization>
               <postProcess>
                 <copy todir="target/reference/html-chunked">
                   <fileset dir="src/main/docbook/reference">
@@ -52,7 +52,7 @@
               <targetDirectory>${basedir}/target/reference/html-single</targetDirectory>
               <chunkedOutput>false</chunkedOutput>
               <htmlStylesheet>../css/docbook.css</htmlStylesheet>
-              <htmlCustomization>target/staging/xsl/html.xsl</htmlCustomization>
+              <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization>
               <postProcess>
                 <copy todir="target/reference/html-single">
                   <fileset dir="src/main/docbook/reference">
@@ -73,7 +73,7 @@
             <phase>package</phase>
             <configuration>
               <targetDirectory>${basedir}/target/reference/pdf/en</targetDirectory>
-              <foCustomization>target/staging/xsl/fo.xsl</foCustomization>
+              <foCustomization>${basedir}/target/staging/xsl/fo.xsl</foCustomization>
               <imgSrcPath>${basedir}/target/staging/reference/en/</imgSrcPath>
               <keepRelativeImageUris>0</keepRelativeImageUris>
               <postProcess>
