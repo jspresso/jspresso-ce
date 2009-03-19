@@ -2320,7 +2320,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
         illustrates this for the <code>Team</code> &lt;-&gt;
         <code>Employee</code> relationship :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Employee-teams"
   class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
               id="Employee-teams" />
@@ -2462,7 +2462,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
       <para>Here is the <filename>EmployeeService.java</filename> source file
       :</para>
 
-      <para><programlisting>package org.jspresso.hrsample.model.service;
+      <para><programlisting language="java">package org.jspresso.hrsample.model.service;
 
 import java.util.Date;
 
@@ -2483,7 +2483,7 @@ public interface EmployeeService {
 }</programlisting>And the <filename>EmployeeServiceDelegate.java</filename>
       source file :</para>
 
-      <para><programlisting>package org.jspresso.hrsample.model.service;
+      <para><programlisting language="java">package org.jspresso.hrsample.model.service;
 
 import java.util.Date;
 
@@ -2537,7 +2537,7 @@ public class EmployeeServiceDelegate implements IComponentService { <co
       updates the <code>Employee</code> definition so that it now implements
       the <code>EmployeeService</code> interface :</para>
 
-      <para><programlisting>...
+      <para><programlisting language="java">...
 public interface Employee extends
   org.jspresso.hrsample.model.Nameable,
   org.jspresso.hrsample.model.Traceable,
@@ -3088,7 +3088,7 @@ public class EmployeePropertyProcessors {
     <code>org.jspresso.hrsample.view</code> package. In this package, we will
     create a <filename>view.xml</filename> file as described below :</para>
 
-    <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -3147,7 +3147,7 @@ public class EmployeePropertyProcessors {
     need to create a new entry in the <filename>beanRefFactory.xml</filename>
     file we created when designing the domain model as below :</para>
 
-    <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -3233,7 +3233,7 @@ public class EmployeePropertyProcessors {
         <para>Let's describe our first component view on the company entity in
         the <filename>view.xml</filename> file:</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Company.pane"
   parent="decoratedView" <co id="decoratedView" />
   class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
@@ -3486,7 +3486,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <para>The following change to the view descriptor achieves that
         :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Company.pane"
   parent="decoratedView"
   class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
@@ -7061,7 +7061,7 @@ hrsample {
       (<code>org.jspresso.hrsample.startup.ulc.UlcApplicationStartup</code>)
       :</para>
 
-      <para><programlisting>/*
+      <para><programlisting language="java">/*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.hrsample.startup.ulc;
@@ -7099,7 +7099,7 @@ public class UlcApplicationStartup extends UlcStartup {
       (<code>org.jspresso.hrsample.startup.wings.WingsApplicationStartup</code>)
       :</para>
 
-      <para><programlisting>/*
+      <para><programlisting language="java">/*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.hrsample.startup.wings;
@@ -7138,7 +7138,7 @@ public class WingsApplicationStartup extends WingsStartup {
       definitions; it is actually simply a matter of replacing the swing
       specific ones by the ULC or Wings specific ones :</para>
 
-      <para><programlisting>...
+      <para><programlisting language="xml">...
 &lt;bean
   id="hrsample-ulc-context" <co id="ulc-context" />
   class="org.springframework.context.support.ClassPathXmlApplicationContext"
@@ -7984,7 +7984,7 @@ login-error.html</programlisting></para>
         <para>The <filename>login.html</filename> file, as referenced in the
         <filename>web.xml</filename> descriptor :</para>
 
-        <para><programlisting>&lt;html&gt;
+        <para><programlisting language="xml">&lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Login&lt;/title&gt;
 &lt;/head&gt;
@@ -8017,7 +8017,7 @@ login-error.html</programlisting></para>
         <filename>login-error.html</filename> file, as referenced in the
         <filename>web.xml</filename> descriptor :</para>
 
-        <para><programlisting>&lt;html&gt;
+        <para><programlisting language="xml">&lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Login Error&lt;/title&gt;
 &lt;/head&gt;

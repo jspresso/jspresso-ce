@@ -28,15 +28,18 @@
             <configuration>
               <targetDirectory>${basedir}/target/reference/html-chunked</targetDirectory>
               <chunkedOutput>true</chunkedOutput>
-              <htmlStylesheet>../css/docbook.css</htmlStylesheet>
               <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization>
+              <htmlStylesheet>../css/docbook.css</htmlStylesheet>
+              <admonGraphicsPath>../style-images/</admonGraphicsPath>
+              <calloutGraphicsPath>../style-images/callouts/</calloutGraphicsPath>
+              <navigGraphicsPath>../style-images/</navigGraphicsPath>
               <postProcess>
                 <copy
                   todir="target/reference/html-chunked">
                   <fileset
-                    dir="src/main/docbook/reference">
+                    dir="target/staging/reference">
                     <include
-                      name="**/images/*.*" />
+                      name="images/*.*" />
                   </fileset>
                   <fileset
                     dir="target/staging">
@@ -44,24 +47,76 @@
                       name="**/*.css" />
                   </fileset>
                 </copy>
+                <copy
+                  todir="target/reference/html-chunked/style-images">
+                  <fileset
+                    dir="target/staging/images">
+                    <include
+                      name="**/*.*" />
+                  </fileset>
+                </copy>
               </postProcess>
             </configuration>
           </execution>
-          <!--
-            <execution> <goals> <goal>generate-html</goal> </goals> <id>doc-html-single</id> <phase>package</phase>
-            <configuration> <targetDirectory>${basedir}/target/reference/html-single</targetDirectory>
-            <chunkedOutput>false</chunkedOutput> <htmlStylesheet>../css/docbook.css</htmlStylesheet>
-            <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization> <postProcess> <copy
-            todir="target/reference/html-single"> <fileset dir="src/main/docbook/reference"> <include
-            name="**/images/*.*" /> </fileset> <fileset dir="target/staging"> <include name="**/*.css" /> </fileset>
-            </copy> </postProcess> </configuration> </execution> <execution> <goals> <goal>generate-pdf</goal> </goals>
-            <id>doc-pdf</id> <phase>package</phase> <configuration>
-            <targetDirectory>${basedir}/target/reference/pdf/en</targetDirectory>
-            <foCustomization>${basedir}/target/staging/xsl/fo.xsl</foCustomization>
-            <imgSrcPath>${basedir}/target/staging/reference/en/</imgSrcPath>
-            <keepRelativeImageUris>0</keepRelativeImageUris> <postProcess> <delete
-            dir="${basedir}/target/reference/pdf/en/en" /> </postProcess> </configuration> </execution>
-          -->
+          <execution>
+            <goals>
+              <goal>generate-html</goal>
+            </goals>
+            <id>doc-html-single</id>
+            <phase>package</phase>
+            <configuration>
+              <targetDirectory>${basedir}/target/reference/html-single</targetDirectory>
+              <chunkedOutput>false</chunkedOutput>
+              <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization>
+              <htmlStylesheet>../css/docbook.css</htmlStylesheet>
+              <admonGraphicsPath>../style-images/</admonGraphicsPath>
+              <calloutGraphicsPath>../style-images/callouts/</calloutGraphicsPath>
+              <navigGraphicsPath>../style-images/</navigGraphicsPath>
+              <postProcess>
+                <copy
+                  todir="target/reference/html-chunked">
+                  <fileset
+                    dir="target/staging/reference">
+                    <include
+                      name="images/*.*" />
+                  </fileset>
+                  <fileset
+                    dir="target/staging">
+                    <include
+                      name="**/*.css" />
+                  </fileset>
+                </copy>
+                <copy
+                  todir="target/reference/html-chunked/style-images">
+                  <fileset
+                    dir="target/staging/images">
+                    <include
+                      name="**/*.*" />
+                  </fileset>
+                </copy>
+              </postProcess>
+            </configuration>
+          </execution>
+          <execution>
+            <goals>
+              <goal>generate-pdf</goal>
+            </goals>
+            <id>doc-pdf</id>
+            <phase>package</phase>
+            <configuration>
+              <targetDirectory>${basedir}/target/reference/pdf/en</targetDirectory>
+              <foCustomization>${basedir}/target/staging/xsl/fo.xsl</foCustomization>
+              <imgSrcPath>${basedir}/target/staging/reference/en/</imgSrcPath>
+              <keepRelativeImageUris>0</keepRelativeImageUris>
+              <admonGraphicsPath>${basedir}/target/staging/images/</admonGraphicsPath>
+              <calloutGraphicsPath>${basedir}/target/staging/images/callouts/</calloutGraphicsPath>
+              <navigGraphicsPath>${basedir}/target/staging/images/</navigGraphicsPath>
+              <postProcess>
+                <delete
+                  dir="${basedir}/target/reference/pdf/en/en" />
+              </postProcess>
+            </configuration>
+          </execution>
         </executions>
         <configuration>
           <sourceDirectory>${basedir}/target/staging/reference</sourceDirectory>
@@ -73,7 +128,7 @@
               <fileset
                 dir="src/main/docbook">
                 <include
-                  name="**/images/*.*" />
+                  name="**/images/**/*.*" />
                 <include
                   name="**/css/*.*" />
                 <include

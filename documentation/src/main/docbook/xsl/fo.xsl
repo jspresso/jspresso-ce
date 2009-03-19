@@ -17,7 +17,10 @@
   <xsl:param name="generate.index">1</xsl:param>
   <xsl:param name="ulink.show">0</xsl:param>
   <xsl:param name="shade.verbatim">1</xsl:param>
+  <!--
+  looses callouts
   <xsl:param name="highlight.source">1</xsl:param>
+  -->
   <xsl:param name="body.start.indent">0pt</xsl:param>
   <xsl:param name="alignment">left</xsl:param>
   <xsl:param name="body.font.master">11</xsl:param>
