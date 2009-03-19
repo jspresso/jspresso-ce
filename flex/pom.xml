@@ -61,16 +61,15 @@
   </properties>
   
   <reporting>
-    <excludeDefaults>true</excludeDefaults>
-    <!--<plugins>
+    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <configuration>
-           Speeds-up dependency report 
+           <!-- Speeds-up dependency report  -->
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration> 
       </plugin>
-    </plugins>-->
+    </plugins>
   </reporting>
 </project>

@@ -334,6 +334,21 @@
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration> 
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <configuration>
+              <linksource>true</linksource>
+              <aggregate>true</aggregate>
+            </configuration>
+            <reports>
+              <report>aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
     </plugins>
   </reporting>
 </project>
