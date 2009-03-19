@@ -26,6 +26,10 @@
   <scm>
     <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/trunk</connection>
   </scm>
+  <issueManagement>
+  	<system>Sourceforge Tracker</system>
+  	<url>http://sourceforge.net/tracker/?group_id=231671</url>
+  </issueManagement>
   <mailingLists>
     <mailingList>
       <name>Jspresso users</name>
@@ -324,17 +328,11 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>aggregate</report>
-            </reports>
-          </reportSet>
-        </reportSets>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
         <configuration>
-          <linksource>true</linksource>
-        </configuration>
+          <!-- Speeds-up dependency report -->
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+        </configuration> 
       </plugin>
     </plugins>
   </reporting>
