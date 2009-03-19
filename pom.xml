@@ -27,10 +27,13 @@
     <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/trunk</connection>
   </scm>
   <!--
-    <mailingLists> <mailingList> <name>${pom.name} Dev List</name> <subscribe>dev-subscribe@jspresso.org</subscribe>
-    <unsubscribe>dev-unsubscribe@jspresso.org</unsubscribe> </mailingList> <mailingList> <name>${pom.name} User
-    List</name> <subscribe>users-subscribe@jspresso.org</subscribe>
-    <unsubscribe>users-unsubscribe@jspresso.org</unsubscribe> </mailingList> </mailingLists>
+    <mailingLists> <mailingList> <name>${pom.name} Dev List</name>
+    <subscribe>dev-subscribe@jspresso.org</subscribe>
+    <unsubscribe>dev-unsubscribe@jspresso.org</unsubscribe> </mailingList>
+    <mailingList> <name>${pom.name} User List</name>
+    <subscribe>users-subscribe@jspresso.org</subscribe>
+    <unsubscribe>users-unsubscribe@jspresso.org</unsubscribe> </mailingList>
+    </mailingLists>
   -->
   <developers>
     <developer>
@@ -52,9 +55,10 @@
       </snapshots>
     </pluginRepository>
     <!--
-      <pluginRepository> <id>snapshots</id> <url>http://people.apache.org/repo/m2-snapshot-repository</url>
-      </pluginRepository> <pluginRepository> <id>codehaus</id> <url>http://snapshots.repository.codehaus.org</url>
-      </pluginRepository>
+      <pluginRepository> <id>snapshots</id>
+      <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+      </pluginRepository> <pluginRepository> <id>codehaus</id>
+      <url>http://snapshots.repository.codehaus.org</url> </pluginRepository>
     -->
   </pluginRepositories>
   <distributionManagement>
@@ -144,6 +148,7 @@
     <module>jasper</module>
     <module>app-launch</module>
     <module>app-template</module>
+    <module>documentation</module>
   </modules>
   <profiles>
     <profile>

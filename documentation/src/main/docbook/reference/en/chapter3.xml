@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<chapter id="chapter3">
+  <title>Views</title>
+
+  <section>
+    <title>View descriptors</title>
+
+    <para></para>
+
+    <figure>
+      <title>View descriptors diagram</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="60%"
+                     fileref="../images/view-descriptors.png" scalefit="1"
+                     width="100%" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+</chapter>
