@@ -26,12 +26,13 @@
   <scm>
     <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/trunk</connection>
   </scm>
-  <!--
-    <mailingLists> <mailingList> <name>${pom.name} Dev List</name> <subscribe>dev-subscribe@jspresso.org</subscribe>
-    <unsubscribe>dev-unsubscribe@jspresso.org</unsubscribe> </mailingList> <mailingList> <name>${pom.name} User
-    List</name> <subscribe>users-subscribe@jspresso.org</subscribe>
-    <unsubscribe>users-unsubscribe@jspresso.org</unsubscribe> </mailingList> </mailingLists>
-  -->
+  <mailingLists>
+    <mailingList>
+      <name>Jspresso users</name>
+      <subscribe>http://lists.sourceforge.net/mailman/listinfo/jspresso-users</subscribe>
+      <unsubscribe>http://lists.sourceforge.net/mailman/listinfo/jspresso-users</unsubscribe>
+    </mailingList>
+  </mailingLists>
   <developers>
     <developer>
       <name>Vincent Vandenschrick</name>
@@ -51,11 +52,6 @@
         <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
-    <!--
-      <pluginRepository> <id>snapshots</id> <url>http://people.apache.org/repo/m2-snapshot-repository</url>
-      </pluginRepository> <pluginRepository> <id>codehaus</id> <url>http://snapshots.repository.codehaus.org</url>
-      </pluginRepository>
-    -->
   </pluginRepositories>
   <distributionManagement>
     <repository>
@@ -326,10 +322,6 @@
   </build>
   <reporting>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
