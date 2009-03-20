@@ -24,7 +24,7 @@
               <goal>generate-html</goal>
             </goals>
             <id>doc-html-chunked</id>
-            <phase>package</phase>
+            <phase>verify</phase>
             <configuration>
               <targetDirectory>${basedir}/target/reference/html-chunked</targetDirectory>
               <chunkedOutput>true</chunkedOutput>
@@ -63,7 +63,7 @@
               <goal>generate-html</goal>
             </goals>
             <id>doc-html-single</id>
-            <phase>package</phase>
+            <phase>verify</phase>
             <configuration>
               <targetDirectory>${basedir}/target/reference/html-single</targetDirectory>
               <chunkedOutput>false</chunkedOutput>
@@ -102,7 +102,7 @@
               <goal>generate-pdf</goal>
             </goals>
             <id>doc-pdf</id>
-            <phase>package</phase>
+            <phase>verify</phase>
             <configuration>
               <targetDirectory>${basedir}/target/reference/pdf/en</targetDirectory>
               <foCustomization>${basedir}/target/staging/xsl/fo.xsl</foCustomization>
@@ -190,7 +190,7 @@
             <goals>
               <goal>single</goal>
             </goals>
-            <phase>package</phase>
+            <phase>verify</phase>
             <configuration>
               <descriptors>
                 <descriptor>src/main/assembly/archive.xml</descriptor>

@@ -4,9 +4,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>info.flex-mojos</groupId>
-    <artifactId>flex-super-pom</artifactId>
-    <version>2.0.3</version>
+    <groupId>org.jspresso</groupId>
+    <artifactId>jspresso-root</artifactId>
+    <version>2.3-SNAPSHOT</version>
   </parent>
   <groupId>org.jspresso</groupId>
   <artifactId>jspresso-flex</artifactId>
@@ -14,62 +14,36 @@
   <packaging>swc</packaging>
   <name>Flex</name>
 
-  <repositories>
-    <repository>
-      <id>flex-mojos-repository</id>
-      <url>http://svn.sonatype.org/flexmojos/repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>jspresso-repository</id>
-      <url>http://repository.jspresso.org/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>jspresso-snapshots-repository</id>
-      <url>http://repository.jspresso.org/maven2-snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
   <dependencies>
     <dependency>
       <groupId>datetimelibrary</groupId>
       <artifactId>datetimelibrary</artifactId>
-      <version>1.0.1</version>
       <type>swc</type>
     </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <type>pom</type>
+    </dependency>
   </dependencies>
-  
-  <properties>
-    <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
-  </properties>
-  
-  <reporting>
+
+  <build>
+    <sourceDirectory>src/main/flex</sourceDirectory>
+    <testSourceDirectory>src/test/flex</testSourceDirectory>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <configuration>
-           <!-- Speeds-up dependency report  -->
-          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-        </configuration> 
+        <groupId>info.flex-mojos</groupId>
+        <artifactId>flex-compiler-mojo</artifactId>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>info.flex-mojos</groupId>
+        <artifactId>asdoc-mojo</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>info.flex-mojos</groupId>
+        <artifactId>flexbuilder-mojo</artifactId>
       </plugin>
     </plugins>
-  </reporting>
+  </build>
 </project>

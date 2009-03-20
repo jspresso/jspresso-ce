@@ -207,6 +207,12 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-flex</artifactId>
+        <version>2.3-SNAPSHOT</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
         <artifactId>jspresso-remote-application</artifactId>
         <version>2.3-SNAPSHOT</version>
       </dependency>
@@ -558,6 +564,18 @@
         <artifactId>blazeds-opt</artifactId>
         <version>3.2.0.3978</version>
       </dependency>
+      <dependency>
+        <groupId>datetimelibrary</groupId>
+        <artifactId>datetimelibrary</artifactId>
+        <version>1.0.1</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>com.adobe.flex.framework</groupId>
+        <artifactId>flex-framework</artifactId>
+        <version>3.2.0.3958</version>
+        <type>pom</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -568,7 +586,7 @@
     </dependency>
   </dependencies>
   <properties>
-    <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <build>
     <pluginManagement>
@@ -590,6 +608,51 @@
               <scope>runtime</scope>
             </dependency>
           </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>asdoc-mojo</artifactId>
+          <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>air-mojo</artifactId>
+          <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>flex-compiler-mojo</artifactId>
+          <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>flexbuilder-mojo</artifactId>
+          <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>generator-mojo</artifactId>
+          <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>html-wrapper-mojo</artifactId>
+          <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>install-mojo</artifactId>
+          <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>optimizer-mojo</artifactId>
+          <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>info.flex-mojos</groupId>
+          <artifactId>source-mojo</artifactId>
+          <version>2.0.3</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -624,6 +687,7 @@
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
       <plugin>
@@ -632,6 +696,7 @@
         <executions>
           <execution>
             <id>attach-sources</id>
+            <phase>verify</phase>
             <goals>
               <goal>jar</goal>
             </goals>
@@ -644,6 +709,7 @@
         <executions>
           <execution>
             <id>attach-javadocs</id>
+            <phase>verify</phase>
             <goals>
               <goal>jar</goal>
             </goals>
