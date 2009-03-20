@@ -19,6 +19,14 @@
               <exclude>org.jspresso:*</exclude>
               <exclude>ulc:*</exclude>
               <exclude>javax.servlet:*</exclude>
+              <exclude>*:applicationupdater_ui:*</exclude>
+              <exclude>*:applicationupdater:*</exclude>
+              <exclude>*:flex:*</exclude>
+              <exclude>*:flex-framework:*</exclude>
+              <exclude>*:framework:*</exclude>
+              <exclude>*:playerglobal:*</exclude>
+              <exclude>*:rpc:*</exclude>
+              <exclude>*:utilities:*</exclude>
             </excludes>
           </dependencySet>
         </dependencySets>
