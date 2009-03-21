@@ -34,7 +34,7 @@
     </pluginRepository>
     <pluginRepository>
     	<id>agilejava-repository</id>
-    	<url>http://agilejava.com/maven/</url>
+    	<url>http://agilejava.com/maven</url>
     	<snapshots>
     		<enabled>false</enabled>
     	</snapshots>
@@ -71,6 +71,17 @@
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
+    </repository>
+    <repository>
+      <id>codehaus-legacy-repository</id>
+      <url>http://dist.codehaus.org</url>
+      <layout>legacy</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
     </repository>
     <repository>
       <id>jspresso-repository</id>
@@ -654,6 +665,18 @@
           <groupId>info.flex-mojos</groupId>
           <artifactId>source-mojo</artifactId>
           <version>2.0.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.xdoclet</groupId>
+          <artifactId>maven2-xdoclet2-plugin</artifactId>
+          <version>2.0.6</version>
+          <dependencies>
+            <dependency>
+              <groupId>xdoclet-plugins</groupId>
+              <artifactId>xdoclet-plugin-hibernate</artifactId>
+              <version>1.0.4</version>
+            </dependency>
+          </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
