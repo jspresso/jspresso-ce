@@ -186,7 +186,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>attach documentation</id>
+            <id>attach-documentation</id>
             <goals>
               <goal>single</goal>
             </goals>
