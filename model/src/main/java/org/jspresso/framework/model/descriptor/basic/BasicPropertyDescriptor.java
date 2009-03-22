@@ -18,12 +18,13 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
@@ -53,10 +54,12 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     implements IPropertyDescriptor {
 
+  private String                         delegateClassName;
   private Class<?>                       delegateClass;
 
-  private String                         delegateClassName;
+  private List<String>                   integrityProcessorClassNames;
   private List<IPropertyProcessor<?, ?>> integrityProcessors;
+
   private Boolean                        mandatory;
   private IPropertyDescriptor            parentDescriptor;
   private Collection<IGate>              readabilityGates;
@@ -64,6 +67,18 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private String                         unicityScope;
   private Collection<IGate>              writabilityGates;
   private Collection<String>             grantedRoles;
+
+  private Boolean                        delegateWritable;
+
+  /**
+   * Sets the delegateWritable.
+   * 
+   * @param delegateWritable
+   *          the delegateWritable to set.
+   */
+  public void setDelegateWritable(boolean delegateWritable) {
+    this.delegateWritable = new Boolean(delegateWritable);
+  }
 
   /**
    * {@inheritDoc}
@@ -135,6 +150,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   public List<IPropertyProcessor<?, ?>> getIntegrityProcessors() {
+    registerIntegrityProcessorsIfNecessary();
     if (integrityProcessors != null) {
       return integrityProcessors;
     }
@@ -142,6 +158,26 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
       return getParentDescriptor().getIntegrityProcessors();
     }
     return integrityProcessors;
+  }
+
+  private synchronized void registerIntegrityProcessorsIfNecessary() {
+    if (integrityProcessorClassNames != null) {
+      // process creation of integrity processors.
+      integrityProcessors = new ArrayList<IPropertyProcessor<?, ?>>();
+      for (String integrityProcessorClassName : integrityProcessorClassNames) {
+        try {
+          integrityProcessors.add((IPropertyProcessor<?, ?>) Class.forName(
+              integrityProcessorClassName).newInstance());
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        }
+      }
+      integrityProcessorClassNames = null;
+    }
   }
 
   /**
@@ -229,12 +265,10 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     if (getDelegateClassName() == null) {
       return true;
     }
-    try {
-      return PropertyHelper.getPropertyDescriptor(
-          Class.forName(getDelegateClassName()), getName()).getWriteMethod() != null;
-    } catch (ClassNotFoundException ex) {
-      throw new NestedRuntimeException(ex);
+    if (delegateWritable != null) {
+      return delegateWritable.booleanValue();
     }
+    return false;
   }
 
   /**
@@ -333,29 +367,29 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * Sets the delegate class name.
    * 
    * @param delegateClassName
-   *            The class name of the extension delegate used to compute this
-   *            property.
+   *          The class name of the extension delegate used to compute this
+   *          property.
    */
   public void setDelegateClassName(String delegateClassName) {
     this.delegateClassName = delegateClassName;
   }
 
   /**
-   * Sets the integrityProcessors.
+   * Sets the integrityProcessorClassNames.
    * 
-   * @param integrityProcessors
-   *            the integrityProcessors to set.
+   * @param integrityProcessorClassNames
+   *          the integrityProcessorClassNames to set.
    */
-  public void setIntegrityProcessors(
-      List<IPropertyProcessor<?, ?>> integrityProcessors) {
-    this.integrityProcessors = integrityProcessors;
+  public void setIntegrityProcessorClassNames(
+      List<String> integrityProcessorClassNames) {
+    this.integrityProcessorClassNames = integrityProcessorClassNames;
   }
 
   /**
    * Sets the mandatory property.
    * 
    * @param mandatory
-   *            the mandatory to set.
+   *          the mandatory to set.
    */
   public void setMandatory(boolean mandatory) {
     this.mandatory = new Boolean(mandatory);
@@ -365,7 +399,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * Sets the parentDescriptor.
    * 
    * @param parentDescriptor
-   *            the parentDescriptor to set.
+   *          the parentDescriptor to set.
    */
   public void setParentDescriptor(IPropertyDescriptor parentDescriptor) {
     this.parentDescriptor = parentDescriptor;
@@ -375,7 +409,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * Sets the readabilityGates.
    * 
    * @param readabilityGates
-   *            the readabilityGates to set.
+   *          the readabilityGates to set.
    */
   public void setReadabilityGates(Collection<IGate> readabilityGates) {
     this.readabilityGates = readabilityGates;
@@ -385,7 +419,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * Sets the readOnly property.
    * 
    * @param readOnly
-   *            the readOnly to set.
+   *          the readOnly to set.
    */
   public void setReadOnly(boolean readOnly) {
     this.readOnly = new Boolean(readOnly);
@@ -395,7 +429,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * Sets the unicityScope.
    * 
    * @param unicityScope
-   *            the unicityScope to set.
+   *          the unicityScope to set.
    */
   public void setUnicityScope(String unicityScope) {
     this.unicityScope = unicityScope;
@@ -405,7 +439,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * Sets the writabilityGates.
    * 
    * @param writabilityGates
-   *            the writabilityGates to set.
+   *          the writabilityGates to set.
    */
   public void setWritabilityGates(Collection<IGate> writabilityGates) {
     this.writabilityGates = writabilityGates;
@@ -418,7 +452,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     BasicPropertyDescriptor queryPropertyDescriptor = clone();
     queryPropertyDescriptor.setMandatory(false);
     queryPropertyDescriptor.setReadOnly(false);
-    queryPropertyDescriptor.setIntegrityProcessors(null);
+    queryPropertyDescriptor.integrityProcessors = null;
+    queryPropertyDescriptor.setIntegrityProcessorClassNames(null);
     return queryPropertyDescriptor;
   }
 
@@ -444,7 +479,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * Sets the grantedRoles.
    * 
    * @param grantedRoles
-   *            the grantedRoles to set.
+   *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;

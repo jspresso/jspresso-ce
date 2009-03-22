@@ -11,9 +11,9 @@
       </#if>
     </#list>
   </#if>
-  <#if componentDescriptor.serviceContracts?exists>
-    <#list componentDescriptor.serviceContracts as serviceContract>
-      <#local superInterfaceList=superInterfaceList + [serviceContract.name]/>
+  <#if componentDescriptor.serviceContractClassNames?exists>
+    <#list componentDescriptor.serviceContractClassNames as serviceContractClassName>
+      <#local superInterfaceList=superInterfaceList + [serviceContractClassName]/>
     </#list>
   </#if>
   <#local isEntity=componentDescriptor.entity/>

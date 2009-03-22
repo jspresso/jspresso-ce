@@ -16,13 +16,13 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.model.component;
+package org.jspresso.framework.model.descriptor;
 
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
- * This exception is thrown whenever an unexpected exception occurs on an
- * entity.
+ * This exception is thrown whenever an unexpected exception occurs on a
+ * descriptor.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -40,39 +40,39 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ComponentException extends NestedRuntimeException {
+public class DescriptorException extends NestedRuntimeException {
 
-  private static final long serialVersionUID = -3659844614276359719L;
+  private static final long serialVersionUID = 1832628349244624679L;
 
   /**
-   * Constructs a new <code>ComponentException</code> instance.
+   * Constructs a new <code>DescriptorException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
-  public ComponentException(String message) {
+  public DescriptorException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>ComponentException</code> instance.
+   * Constructs a new <code>DescriptorException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
-  public ComponentException(Throwable nestedException) {
+  public DescriptorException(Throwable nestedException) {
     super(nestedException);
   }
 
   /**
-   * Constructs a new <code>ComponentException</code> instance.
+   * Constructs a new <code>DescriptorException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
-  public ComponentException(Throwable nestedException, String message) {
+  public DescriptorException(Throwable nestedException, String message) {
     super(nestedException, message);
   }
 }

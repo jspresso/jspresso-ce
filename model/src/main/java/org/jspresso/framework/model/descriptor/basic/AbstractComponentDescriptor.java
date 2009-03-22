@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
+import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
@@ -70,14 +71,20 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   private List<IComponentDescriptor<?>>    ancestorDescriptors;
   private Class<?>                         componentContract;
+
+  private List<String>                     lifecycleInterceptorClassNames;
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
+
   private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
   private List<String>                     orderingProperties;
   private Map<String, IPropertyDescriptor> propertyDescriptorsMap;
   private List<String>                     queryableProperties;
   private List<String>                     renderedProperties;
+
+  private Map<String, String>              serviceDelegateClassNames;
   private Set<Class<?>>                    serviceContracts;
   private Map<Method, IComponentService>   serviceDelegates;
+
   private List<IPropertyDescriptor>        tempPropertyBuffer;
   private String                           toStringProperty;
   private Collection<String>               unclonedProperties;
@@ -152,10 +159,31 @@ public abstract class AbstractComponentDescriptor<E> extends
         allInterceptors.addAll(ancestorDescriptor.getLifecycleInterceptors());
       }
     }
+    registerLifecycleInterceptorsIfNecessary();
     if (lifecycleInterceptors != null) {
       allInterceptors.addAll(lifecycleInterceptors);
     }
     return allInterceptors;
+  }
+
+  private synchronized void registerLifecycleInterceptorsIfNecessary() {
+    // process creation of lifecycle interceptors.
+    if (lifecycleInterceptorClassNames != null) {
+      lifecycleInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
+      for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
+        try {
+          lifecycleInterceptors.add((ILifecycleInterceptor<?>) Class.forName(
+              lifecycleInterceptorClassName).newInstance());
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        }
+      }
+      lifecycleInterceptorClassNames = null;
+    }
   }
 
   /**
@@ -301,6 +329,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   public Collection<Class<?>> getServiceContracts() {
+    registerDelegateServicesIfNecessary();
     if (serviceContracts != null) {
       return new ArrayList<Class<?>>(serviceContracts);
     }
@@ -310,7 +339,23 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  public Collection<String> getServiceContractClassNames() {
+    if (serviceDelegateClassNames != null) {
+      return new LinkedHashSet<String>(serviceDelegateClassNames.keySet());
+    } else if (serviceContracts != null) {
+      Set<String> serviceContractClassNames = new LinkedHashSet<String>();
+      for (Class<?> serviceContract : serviceContracts) {
+        serviceContractClassNames.add(serviceContract.getName());
+      }
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IComponentService getServiceDelegate(Method targetMethod) {
+    registerDelegateServicesIfNecessary();
     IComponentService service = null;
     if (serviceDelegates != null) {
       service = serviceDelegates.get(targetMethod);
@@ -380,14 +425,14 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the lifecycleInterceptors.
+   * Sets the lifecycleInterceptorClassNames.
    * 
-   * @param lifecycleInterceptors
-   *          the lifecycleInterceptors to set.
+   * @param lifecycleInterceptorClassNames
+   *          the lifecycleInterceptorClassNames to set.
    */
-  public void setLifecycleInterceptors(
-      List<ILifecycleInterceptor<?>> lifecycleInterceptors) {
-    this.lifecycleInterceptors = lifecycleInterceptors;
+  public void setLifecycleInterceptorClassNames(
+      List<String> lifecycleInterceptorClassNames) {
+    this.lifecycleInterceptorClassNames = lifecycleInterceptorClassNames;
   }
 
   /**
@@ -442,21 +487,35 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Registers the service delegates which help the component to implement the
    * services defined by its contract.
    * 
-   * @param servicesByServiceContracts
+   * @param serviceDelegateClassNames
    *          the component services to be registered keyed by their contract. A
    *          service contract is an interface class defining the service
    *          methods to be registered as implemented by the service delegate.
    *          Map values must be instances of <code>IComponentService</code>.
-   * @throws ClassNotFoundException
-   *           if the declared service class is not found.
    */
-  public void setServiceDelegates(
-      Map<String, IComponentService> servicesByServiceContracts)
-      throws ClassNotFoundException {
-    for (Entry<String, IComponentService> nextPair : servicesByServiceContracts
-        .entrySet()) {
-      registerService(Class.forName(nextPair.getKey()), nextPair.getValue());
+  public void setServiceDelegateClassNames(
+      Map<String, String> serviceDelegateClassNames) {
+    this.serviceDelegateClassNames = serviceDelegateClassNames;
+  }
+
+  private synchronized void registerDelegateServicesIfNecessary() {
+    if (serviceDelegateClassNames != null) {
+      for (Entry<String, String> nextPair : serviceDelegateClassNames
+          .entrySet()) {
+        try {
+          registerService(Class.forName(nextPair.getKey()),
+              (IComponentService) Class.forName(nextPair.getValue())
+                  .newInstance());
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
+        }
+      }
     }
+    serviceDelegateClassNames = null;
   }
 
   /**

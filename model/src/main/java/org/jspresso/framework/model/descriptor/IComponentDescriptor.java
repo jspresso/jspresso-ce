@@ -118,11 +118,18 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
   List<String> getRenderedProperties();
 
   /**
-   * Retrieves list of service contracts implemented by this entity.
+   * Retrieves list of service contracts implemented by this component.
    * 
-   * @return the class establishing the entity service contract.
+   * @return the list of service contracts implemented by this component.
    */
   Collection<Class<?>> getServiceContracts();
+
+  /**
+   * Retrieves list of service contract class names implemented by this component.
+   * 
+   * @return the list of service contract class names implemented by this component.
+   */
+  Collection<String> getServiceContractClassNames();
 
   /**
    * Retrieves the service delegate implemented by this component.
