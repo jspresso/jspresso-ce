@@ -94,7 +94,7 @@ public class EntityGenerator {
    * Starts Code generation for an component.
    * 
    * @param args
-   *            the command line arguments.
+   *          the command line arguments.
    */
   @SuppressWarnings("static-access")
   public static void main(String[] args) {
@@ -178,34 +178,40 @@ public class EntityGenerator {
     if (componentIds == null) {
       Map<String, IComponentDescriptor<?>> allComponents = appContext
           .getBeansOfType(IComponentDescriptor.class);
-      if (includePackages != null) {
-        for (Map.Entry<String, IComponentDescriptor<?>> componentEntry : allComponents
-            .entrySet()) {
-          if (componentEntry.getValue().getName() != null) {
+      for (Map.Entry<String, IComponentDescriptor<?>> componentEntry : allComponents
+          .entrySet()) {
+        String className = componentEntry.getValue().getName();
+        if (className != null) {
+          boolean include = false;
+          if (includePackages != null) {
             for (String pkg : includePackages) {
-              if (componentEntry.getValue().getName().startsWith(pkg)) {
-                boolean include = true;
-                if (excludePatterns != null) {
-                  for (String excludePattern : excludePatterns) {
-                    if (include
-                        && Pattern.matches(excludePattern, componentEntry
-                            .getValue().getName())) {
-                      include = false;
-                    }
-                  }
-                }
-                if (include) {
-                  componentDescriptors.add(componentEntry.getValue());
+              if (className.startsWith(pkg)) {
+                include = true;
+              }
+            }
+          } else {
+            include = true;
+          }
+          if (include) {
+            if (excludePatterns != null) {
+              for (String excludePattern : excludePatterns) {
+                if (include
+                    && Pattern.matches(excludePattern, componentEntry
+                        .getValue().getName())) {
+                  include = false;
                 }
               }
             }
+            if (include) {
+              componentDescriptors.add(componentEntry.getValue());
+            }
           }
         }
-      } else {
-        for (String componentId : componentIds) {
-          componentDescriptors.add((IComponentDescriptor<?>) appContext
-              .getBean(componentId));
-        }
+      }
+    } else {
+      for (String componentId : componentIds) {
+        componentDescriptors.add((IComponentDescriptor<?>) appContext
+            .getBean(componentId));
       }
     }
     Configuration cfg = new Configuration();
@@ -266,7 +272,7 @@ public class EntityGenerator {
    * Sets the applicationContextKey.
    * 
    * @param applicationContextKey
-   *            the applicationContextKey to set.
+   *          the applicationContextKey to set.
    */
   public void setApplicationContextKey(String applicationContextKey) {
     this.applicationContextKey = applicationContextKey;
@@ -276,7 +282,7 @@ public class EntityGenerator {
    * Sets the componentIds.
    * 
    * @param componentIds
-   *            the componentIds to set.
+   *          the componentIds to set.
    */
   public void setComponentIds(String[] componentIds) {
     this.componentIds = componentIds;
@@ -286,7 +292,7 @@ public class EntityGenerator {
    * Sets the excludePatterns.
    * 
    * @param excludePatterns
-   *            the excludePatterns to set.
+   *          the excludePatterns to set.
    */
   public void setExcludePatterns(String[] excludePatterns) {
     this.excludePatterns = excludePatterns;
@@ -296,7 +302,7 @@ public class EntityGenerator {
    * Sets the generateAnnotations.
    * 
    * @param generateAnnotations
-   *            the generateAnnotations to set.
+   *          the generateAnnotations to set.
    */
   public void setGenerateAnnotations(boolean generateAnnotations) {
     this.generateAnnotations = generateAnnotations;
@@ -306,7 +312,7 @@ public class EntityGenerator {
    * Sets the includePackages.
    * 
    * @param includePackages
-   *            the includePackages to set.
+   *          the includePackages to set.
    */
   public void setIncludePackages(String[] includePackages) {
     this.includePackages = includePackages;
@@ -316,7 +322,7 @@ public class EntityGenerator {
    * Sets the outputDir.
    * 
    * @param outputDir
-   *            the outputDir to set.
+   *          the outputDir to set.
    */
   public void setOutputDir(String outputDir) {
     this.outputDir = outputDir;
@@ -326,7 +332,7 @@ public class EntityGenerator {
    * Sets the templateName.
    * 
    * @param templateName
-   *            the templateName to set.
+   *          the templateName to set.
    */
   public void setTemplateName(String templateName) {
     this.templateName = templateName;
@@ -336,7 +342,7 @@ public class EntityGenerator {
    * Sets the templateResourcePath.
    * 
    * @param templateResourcePath
-   *            the templateResourcePath to set.
+   *          the templateResourcePath to set.
    */
   public void setTemplateResourcePath(String templateResourcePath) {
     this.templateResourcePath = templateResourcePath;
