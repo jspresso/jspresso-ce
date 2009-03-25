@@ -425,7 +425,6 @@ public class DefaultWingsController extends
     SPanel mainPanel = new SPanel(new SBorderLayout());
     mainPanel.add(loginView.getPeer(), SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
-    mainPanel.setPreferredSize(DIALOG_DIMENSION);
     dialog.add(mainPanel);
 
     dialog.setVisible(true);
