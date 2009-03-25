@@ -30,6 +30,7 @@ New features
 2709435    Prepare support for component collection properties as soon as Hibernate gets fixed (see HHH-3275)
 2709439 	 Auto explode component references in view descriptors
 2709450    Get rid of external ant
+2711206    Get rid of Wings html login page
 
 2.2.1
 =====
