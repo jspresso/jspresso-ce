@@ -1,6 +1,7 @@
-2.2.2
-=====
-- The 2.2.2 release introduces typesafe enums in place of interface constants.
+3.0
+===
+
+- The 3.0 release introduces typesafe enums in place of interface constants.
 This implies a light change in the spring definition files.
 For instance instead of referring to static beans definitions like :
 
@@ -15,3 +16,69 @@ You will now use direct enum injection :
 	  value="HORIZONTAL" />
 	  
 see http://sourceforge.net/tracker2/index.php?func=detail&aid=2319923&group_id=231671&atid=1083851
+
+- The 3.0 release changes the way interceptors are declared in components and properties.
+This is due to the fact the interceptors classes reference their owning component classes, thus
+introducing a circular dependency that is unresolvable during the build whenever entities
+and components are not available yet (not yet generated) making the spring context unable
+to instanciate.
+This leads to a mandatory change in the spring definitions files. Instead of referencing
+interceptors instances directly in the component and property descriptors, the developer
+must register the interceptor class names. The change is actually straightforward  as
+detailed below :
+
+For lifecycle interceptors, you must change definitions like :
+  <property
+    name="lifecycleInterceptorClassNames">
+    <list>
+      <bean
+        class="org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor"/>
+    </list>
+  </property>
+
+with :
+  <property
+    name="lifecycleInterceptors">
+    <list>
+      <value>org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor</value>
+    </list>
+  </property>
+  
+Same kind of modification for property processors :
+  <property
+    name="integrityProcessors">
+    <list>
+      <bean
+        class="org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor"/>
+    </list>
+  </property>
+
+becomes :
+  <property
+    name="integrityProcessorClassNames">
+    <list>
+      <value>org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor</value>
+    </list>
+  </property>
+
+And finally, same modification for service delegates :
+  <property
+    name="serviceDelegateClassNames">
+    <map>
+      <entry
+        key="org.jspresso.hrsample.model.service.EmployeeService">
+        <bean
+          class="org.jspresso.hrsample.model.service.EmployeeServiceDelegate"/>
+      </entry>
+    </map>
+  </property>
+
+becomes :
+  <property
+    name="serviceDelegateClassNames">
+    <map>
+      <entry
+        key="org.jspresso.hrsample.model.service.EmployeeService"
+        value="org.jspresso.hrsample.model.service.EmployeeServiceDelegate"/>
+    </map>
+  </property>

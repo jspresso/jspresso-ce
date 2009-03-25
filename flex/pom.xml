@@ -33,6 +33,8 @@
       <plugin>
         <groupId>info.flex-mojos</groupId>
         <artifactId>flex-compiler-mojo</artifactId>
+        <!-- don't know why but it doesn't take plugins management in m2eclipse -->
+        <version>2.0.3</version>
         <extensions>true</extensions>
       </plugin>
       <plugin>

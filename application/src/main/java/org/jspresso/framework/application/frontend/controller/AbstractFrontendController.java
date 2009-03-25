@@ -120,6 +120,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private String                                forcedStartingLocale;
   private List<Map<String, Object>>             dialogContextStack;
 
+  private Locale                                clientLocale;
+
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
    */
@@ -236,12 +238,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the locale.
-   * 
-   * @return the locale.
+   * {@inheritDoc}
    */
+  @Override
   public Locale getLocale() {
-    return getBackendController().getApplicationSession().getLocale();
+    if (getBackendController() != null) {
+      return getBackendController().getApplicationSession().getLocale();
+    }
+    if (getForcedStartingLocale() != null) {
+      return new Locale(getForcedStartingLocale());
+    }
+    return clientLocale;
   }
 
   /**
@@ -406,9 +413,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
-  public boolean start(IBackendController peerController, Locale startingLocale) {
+  public boolean start(IBackendController peerController, Locale theClientLocale) {
+    this.clientLocale = theClientLocale;
     setBackendController(peerController);
-    Locale initialLocale = startingLocale;
+    Locale initialLocale = theClientLocale;
     if (forcedStartingLocale != null) {
       initialLocale = new Locale(forcedStartingLocale);
     }

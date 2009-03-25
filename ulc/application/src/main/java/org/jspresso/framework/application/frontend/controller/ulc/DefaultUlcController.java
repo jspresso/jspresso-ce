@@ -177,8 +177,8 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  public boolean start(IBackendController backendController, Locale locale) {
-    if (super.start(backendController, locale)) {
+  public boolean start(IBackendController backendController, Locale clientLocale) {
+    if (super.start(backendController, clientLocale)) {
       loginRetries = 0;
       loginSuccessful = false;
       loginComplete = false;

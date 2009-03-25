@@ -95,12 +95,12 @@ public interface IFrontendController<E, F, G> extends IController,
    * 
    * @param backendController
    *          the backend controller to bind to.
-   * @param startingLocale
+   * @param clientLocale
    *          the locale this controller should use to initiate the login
    *          session while not knowing yet the user locale.
    * @return true if the controller succesfully started.
    */
-  boolean start(IBackendController backendController, Locale startingLocale);
+  boolean start(IBackendController backendController, Locale clientLocale);
 
   /**
    * Displays a workspace.

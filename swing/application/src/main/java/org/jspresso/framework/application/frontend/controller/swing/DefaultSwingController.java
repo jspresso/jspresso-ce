@@ -209,8 +209,8 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public boolean start(IBackendController backendController, Locale locale) {
-    if (super.start(backendController, locale)) {
+  public boolean start(IBackendController backendController, Locale clientLocale) {
+    if (super.start(backendController, clientLocale)) {
       Toolkit.getDefaultToolkit().getSystemEventQueue().push(
           new WaitCursorEventQueue(500));
       CallbackHandler callbackHandler = getLoginCallbackHandler();

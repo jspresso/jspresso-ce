@@ -1,41 +1,35 @@
-2.3
+3.0
 ===
-Bugs fixed
-----------
-
-New features
-------------
-2172464    Remove all references to java.awt in view descriptors
-           Password are now handled as strings instead of char[] to preserve interceptor consistency.
-           Got rid of action put/get initialContext since it really had a weird behaviour with diallog actions.
-           Introduced a context stack management for dialog actions.
-           Migrated to Hibernate 3.3.1.GA
-           Migrated to Spring 2.5.6
-           Modularized Spring dependencies
-           Migrated to Spring LDAP 1.3.0.RELEASE
-
-2.2.2
-=====
 Bugs fixed
 ----------
 2319842  	 Bidi one to many associations with mandatory manyToOne
 2319846  	 Entity generator: bidi one to many associations with list
 2319847  	 Standard remove action: integrity violations
 2319849  	 Standard duplicate action: initialization exceptions
-        	 Startup action is not trigerred for wings controller
-        	 Refactored accessibility connector chain to prevent extra notifications.
-           Typo in ISubviewDescriptor name.
-           NachoCalendar does not show selected days with Substance L&F
+2709153 	 Startup action is not trigerred for wings controller
+2709162  	 Accessibility connector chain triggers extra notifications
+2709168    Typo in ISubviewDescriptor name
+2709194    NachoCalendar does not show selected days with Substance L&F
+2709217    Interceptors definitions in spring introduce circular dependencies in build (see release notes)
+2709231    Service delegates definitions in spring introduce circular dependencies in build (see release notes)
 
 New features
 ------------
+2172484  	 Implement the Flex GUI channel
+2172464    Remove all references to java.awt in view descriptors
+2709396    Password are now handled as strings instead of char[] to preserve interceptor consistency
+2709402    Get rid of action put/get initialContext since it really has a weird behaviour with dialog actions
+2709408    Introduce a context stack management for dialog actions
+2709411    Migrate library dependencies to Hibernate 3.3.1.GA, Spring 2.5.6, Spring LDAP 1.3.0.RELEASE
+2709414    Modularize Spring dependencies
 2444628  	 Allow selection mode on collection view descriptors
 2319851  	 Unit of Work and tx management refactoring
 2319923  	 Change static constants to typesafe enums
-           Support for BigDecimal on decimal property descriptors
-           Implemented onLoad lifecycle hook
-           Prepared support for component collection properties as soon as Hibernate gets fixed (see HHH-3275)
-        	 Auto explode component references in view descriptors.
+2709425    Support for BigDecimal on decimal property descriptors
+2709433    Implement onLoad lifecycle hook
+2709435    Prepare support for component collection properties as soon as Hibernate gets fixed (see HHH-3275)
+2709439 	 Auto explode component references in view descriptors
+2709450    Get rid of external ant
 
 2.2.1
 =====

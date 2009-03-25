@@ -19,6 +19,8 @@
 package org.jspresso.framework.application.frontend.controller.wings;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,18 +28,22 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 import javax.swing.Action;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.gui.wings.components.SErrorDialog;
+import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.wings.WingsUtil;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
@@ -102,6 +108,8 @@ public class DefaultWingsController extends
   private Set<String>             workspaceViews;
   private static final SDimension DIALOG_DIMENSION = new SDimension("800px",
                                                        "600px");
+  private IViewDescriptor         loginViewDescriptor;
+  private IModelConnectorFactory  modelConnectorFactory;
 
   /**
    * {@inheritDoc}
@@ -172,12 +180,9 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  public boolean start(IBackendController backendController, Locale locale) {
-    if (super.start(backendController, locale)) {
-      loginSuccess((Subject) SessionManager.getSession().getServletRequest()
-          .getSession().getAttribute("SUBJECT"));
-      displayControllerFrame();
-      execute(getStartupAction(), getInitialActionContext());
+  public boolean start(IBackendController backendController, Locale clientLocale) {
+    if (super.start(backendController, clientLocale)) {
+      initLoginProcess();
       return true;
     }
     return false;
@@ -196,11 +201,59 @@ public class DefaultWingsController extends
   }
 
   /**
+   * Sets the loginViewDescriptor.
+   * 
+   * @param loginViewDescriptor
+   *          the loginViewDescriptor to set.
+   */
+  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
+    this.loginViewDescriptor = loginViewDescriptor;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
   protected CallbackHandler createLoginCallbackHandler() {
-    return null;
+    return new UsernamePasswordHandler();
+  }
+
+  private boolean performLogin() {
+    if (getLoginContextName() != null) {
+      try {
+        LoginContext lc = null;
+        try {
+          lc = new LoginContext(getLoginContextName(),
+              getLoginCallbackHandler());
+        } catch (LoginException le) {
+          System.err.println("Cannot create LoginContext. " + le.getMessage());
+          return false;
+        } catch (SecurityException se) {
+          System.err.println("Cannot create LoginContext. " + se.getMessage());
+          return false;
+        }
+        lc.login();
+        loginSuccess(lc.getSubject());
+      } catch (LoginException le) {
+        System.err.println("Authentication failed:");
+        System.err.println("  " + le.getMessage());
+        return false;
+      }
+    } else {
+      loginSuccess(getAnonymousSubject());
+    }
+    return true;
   }
 
   /**
@@ -289,19 +342,6 @@ public class DefaultWingsController extends
     return applicationMenuBar;
   }
 
-  private SFrame createControllerFrame() {
-    SFrame frame = new SFrame();
-    frame.setPreferredSize(new SDimension(frameWidth, frameHeight/*
-                                                                  * WingsUtil.FULL_DIM_PERCENT
-                                                                  */));
-    cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(SDimension.FULLAREA);
-    frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
-    frame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
-    frame.getContentPane().setPreferredSize(SDimension.FULLAREA);
-    return frame;
-  }
-
   private List<SMenu> createHelpActionMenus() {
     return createMenus(getHelpActions(), true);
   }
@@ -334,10 +374,70 @@ public class DefaultWingsController extends
     return createMenus(createWorkspaceActionMap(), true);
   }
 
-  private void displayControllerFrame() {
-    controllerFrame = createControllerFrame();
-    updateFrameTitle();
+  private void initLoginProcess() {
+    controllerFrame = new SFrame();
+    controllerFrame
+        .setPreferredSize(new SDimension(frameWidth, frameHeight/*
+                                                                 * WingsUtil.FULL_DIM_PERCENT
+                                                                 */));
+    controllerFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
     controllerFrame.setVisible(true);
+
+    IView<SComponent> loginView = getViewFactory().createView(
+        loginViewDescriptor, this, getLocale());
+    IValueConnector loginModelConnector = modelConnectorFactory
+        .createModelConnector("login", loginViewDescriptor.getModelDescriptor());
+    getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
+    loginModelConnector.setConnectorValue(getLoginCallbackHandler());
+
+    // Login dialog
+    final SDialog dialog = new SDialog(controllerFrame, loginViewDescriptor
+        .getI18nName(getTranslationProvider(), getLocale()), true);
+    dialog.setDraggable(true);
+
+    SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
+    buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
+
+    SButton loginButton = new SButton(getTranslationProvider().getTranslation(
+        "ok", getLocale()));
+    loginButton.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+        if (performLogin()) {
+          dialog.dispose();
+          initControllerFrame();
+          execute(getStartupAction(), getInitialActionContext());
+        } else {
+          SOptionPane.showMessageDialog(dialog, getTranslationProvider()
+              .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
+              getTranslationProvider().getTranslation("error", getLocale()),
+              SOptionPane.ERROR_MESSAGE);
+        }
+      }
+    });
+    buttonBox.add(loginButton);
+    dialog.setDefaultButton(loginButton);
+
+    SPanel actionPanel = new SPanel(new SBorderLayout());
+    actionPanel.add(buttonBox, SBorderLayout.EAST);
+
+    SPanel mainPanel = new SPanel(new SBorderLayout());
+    mainPanel.add(loginView.getPeer(), SBorderLayout.CENTER);
+    mainPanel.add(actionPanel, SBorderLayout.SOUTH);
+    mainPanel.setPreferredSize(DIALOG_DIMENSION);
+    dialog.add(mainPanel);
+
+    dialog.setVisible(true);
+  }
+
+  private void initControllerFrame() {
+    cardPanel = new SPanel(new SCardLayout());
+    cardPanel.setPreferredSize(SDimension.FULLAREA);
+    controllerFrame.getContentPane().add(createApplicationMenuBar(),
+        SBorderLayout.NORTH);
+    controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
+    updateFrameTitle();
   }
 
   private void updateFrameTitle() {
@@ -360,8 +460,8 @@ public class DefaultWingsController extends
   public void displayModalDialog(SComponent mainView, List<Action> actions,
       String title, SComponent sourceComponent, Map<String, Object> context,
       boolean reuseCurrent) {
-    super
-        .displayModalDialog(mainView, actions, title, sourceComponent, context, reuseCurrent);
+    super.displayModalDialog(mainView, actions, title, sourceComponent,
+        context, reuseCurrent);
     final SDialog dialog;
     SContainer actionWindow = WingsUtil.getVisibleWindow(sourceComponent);
     if (reuseCurrent && actionWindow instanceof SDialog) {

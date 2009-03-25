@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.controller.remote;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,7 +28,6 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
-import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
@@ -112,7 +110,6 @@ public class DefaultRemoteController extends
   private Set<String>            workspaceViews;
   private IViewDescriptor        loginViewDescriptor;
   private IModelConnectorFactory modelConnectorFactory;
-  private Locale                 clientLocale;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
@@ -505,17 +502,6 @@ public class DefaultRemoteController extends
   }
 
   /**
-   * Initiates the login process.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean start(IBackendController peerController, Locale startingLocale) {
-    clientLocale = startingLocale;
-    return super.start(peerController, startingLocale);
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -558,20 +544,6 @@ public class DefaultRemoteController extends
    */
   protected IModelConnectorFactory getModelConnectorFactory() {
     return modelConnectorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Locale getLocale() {
-    if (getBackendController() != null) {
-      return super.getLocale();
-    }
-    if (getForcedStartingLocale() != null) {
-      return new Locale(getForcedStartingLocale());
-    }
-    return clientLocale;
   }
 
   /**
