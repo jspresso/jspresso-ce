@@ -41,9 +41,17 @@
     </resources>
     <plugins>
       <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>flex-compiler-mojo</artifactId>
-        <extensions>true</extensions>
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-asdoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>asdoc</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <locales>
             <locale>en_US</locale>
@@ -52,14 +60,6 @@
           <mergeResourceBundle>true</mergeResourceBundle>
           <contextRoot>${rootArtifactId}-webapp</contextRoot>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>asdoc-mojo</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>flexbuilder-mojo</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -23,18 +23,15 @@
   </distributionManagement>
   <pluginRepositories>
     <pluginRepository>
-      <id>flexmojos-repository</id>
-      <url>http://svn.sonatype.org/flexmojos/repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
     	<id>agilejava-repository</id>
     	<url>http://agilejava.com/maven</url>
+    	<snapshots>
+    		<enabled>false</enabled>
+    	</snapshots>
+    </pluginRepository>
+    <pluginRepository>
+    	<id>sonatype-repository</id>
+    	<url>http://repository.sonatype.org/content/groups/public</url>
     	<snapshots>
     		<enabled>false</enabled>
     	</snapshots>
@@ -58,16 +55,6 @@
     <repository>
       <id>java.net-repository</id>
       <url>http://download.java.net/maven/2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>flexmojos-repository</id>
-      <url>http://svn.sonatype.org/flexmojos/repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -102,6 +89,13 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
+    </repository>
+    <repository>
+    	<id>sonatype-repository</id>
+    	<url>http://repository.sonatype.org/content/groups/public</url>
+    	<snapshots>
+    		<enabled>false</enabled>
+    	</snapshots>
     </repository>
   </repositories>
   <dependencyManagement>
@@ -625,51 +619,6 @@
           </dependencies>
         </plugin>
         <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>asdoc-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>air-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>flex-compiler-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>flexbuilder-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>generator-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>html-wrapper-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>install-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>optimizer-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>source-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
           <groupId>org.codehaus.xdoclet</groupId>
           <artifactId>maven2-xdoclet2-plugin</artifactId>
           <version>2.0.6</version>
@@ -766,6 +715,12 @@
               <version>1.0.1</version>
             </dependency>
           </dependencies> 
+        </plugin>
+        <plugin>
+        	<groupId>org.sonatype.flexmojos</groupId>
+        	<artifactId>flexmojos-maven-plugin</artifactId>
+        	<version>3.0.0</version>
+        	<extensions>true</extensions>
         </plugin>
       </plugins>
     </pluginManagement>

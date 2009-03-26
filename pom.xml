@@ -47,14 +47,11 @@
   </developers>
   <pluginRepositories>
     <pluginRepository>
-      <id>flexmojos-repository</id>
-      <url>http://svn.sonatype.org/flexmojos/repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
+    	<id>sonatype-repository</id>
+    	<url>http://repository.sonatype.org/content/groups/public</url>
+    	<snapshots>
+    		<enabled>false</enabled>
+    	</snapshots>
     </pluginRepository>
   </pluginRepositories>
   <distributionManagement>
@@ -115,14 +112,11 @@
       </snapshots>
     </repository>
     <repository>
-      <id>flexmojos-repository</id>
-      <url>http://svn.sonatype.org/flexmojos/repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
+    	<id>sonatype-repository</id>
+    	<url>http://repository.sonatype.org/content/groups/public</url>
+    	<snapshots>
+    		<enabled>false</enabled>
+    	</snapshots>
     </repository>
   </repositories>
   <dependencyManagement>

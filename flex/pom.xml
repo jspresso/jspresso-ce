@@ -31,19 +31,17 @@
     <testSourceDirectory>src/test/flex</testSourceDirectory>
     <plugins>
       <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>flex-compiler-mojo</artifactId>
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
         <!-- don't know why but it doesn't take plugins management in m2eclipse -->
-        <version>2.0.3</version>
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>asdoc-mojo</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>flexbuilder-mojo</artifactId>
+        <!--<version>2.0.3</version>-->
+        <executions>
+          <execution>
+            <goals>
+              <goal>asdoc</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
