@@ -28,8 +28,8 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src/main/flex</sourceDirectory>
-    <testSourceDirectory>src/test/flex</testSourceDirectory>
+    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/flex</testSourceDirectory>
     <resources>
       <resource>
         <directory>${basedir}/src/main/resources</directory>
