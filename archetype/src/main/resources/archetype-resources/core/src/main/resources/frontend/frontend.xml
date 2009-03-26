@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+  default-lazy-init="true">
+
+  <!--
+    The workspaces and modules
+  -->
+  <!-- Describe your workspaces and modules here. -->
+
+  <!--
+    The controller
+  -->
+  <bean
+    id="applicationFrontController"
+    parent="frontController"
+    scope="prototype">
+    <property
+      name="name"
+      value="${parentArtifactId}.name" />
+    <property
+      name="description"
+      value="${parentArtifactId}.description" />
+    <property
+      name="iconImageURL"
+      value="classpath:${packageInPathFormat}/images/icon.png" />
+    <property
+      name="loginContextName"
+      value="${parentArtifactId}" />
+    <property
+      name="forcedStartingLocale"
+      value="en" />
+    <property
+      name="workspaces">
+      <list>
+        <!-- Reference your workspaces here. -->
+      </list>
+    </property>
+  </bean>
+</beans>

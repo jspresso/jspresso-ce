@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+  default-lazy-init="true">
+
+  <!--
+    The views
+  -->
+  <!-- Describe your application views here. -->
+
+  <!--
+    The application I18N resources. 
+  -->
+  <bean
+    id="applicationMessageSource"
+    class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property
+      name="parentMessageSource"
+      ref="commonsMessageSource" />
+    <property
+      name="basenames">
+      <list>
+        <value>${package}.i18n.Messages</value>
+      </list>
+    </property>
+  </bean>
+</beans>

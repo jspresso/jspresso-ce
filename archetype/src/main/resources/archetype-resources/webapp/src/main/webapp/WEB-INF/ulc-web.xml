@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+  id="WebApp_ID"
+  version="2.4"
+  xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+  <!-- Common web application configuration section -->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <display-name>${applicationName}</display-name>
+  <description>${applicationDescription}</description>
+  <session-config>
+    <session-timeout>5</session-timeout>
+  </session-config>
+  <!-- End common web application configuration section -->
+
+  <!-- Jspresso all deployments section -->
+  <servlet>
+    <servlet-name>ResourceProviderServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.util.resources.server.ResourceProviderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResourceProviderServlet</servlet-name>
+    <url-pattern>/download</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ResourceProviderServlet</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+
+  <listener>
+    <listener-class>${package}.webapp.TestDataContextListener</listener-class>
+  </listener>
+
+  <context-param>
+    <param-name>appContextKey</param-name>
+    <param-value>${parentArtifactId}-remote-context</param-value>
+  </context-param>
+
+  <!-- Jspresso filter -->
+  <filter>
+    <filter-name>HttpRequestHolder</filter-name>
+    <filter-class>org.jspresso.framework.util.http.HttpRequestHolder</filter-class>
+  </filter>
+  <!-- End Jspresso all deployments section -->
+
+  <!-- Jspresso ULC deployment section -->
+  <servlet>
+    <servlet-name>ApplicationUlcServlet</servlet-name>
+    <servlet-class>com.ulcjava.container.servlet.server.ServletContainerAdapter</servlet-class>
+    <init-param>
+      <param-name>application-class</param-name>
+      <param-value>${package}.startup.ulc.UlcApplicationStartup</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ApplicationUlcServlet</servlet-name>
+    <url-pattern>/${parentArtifactId}-ulc</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>JnlpDownloadServlet</servlet-name>
+    <servlet-class>jnlp.sample.servlet.JnlpDownloadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JnlpDownloadServlet</servlet-name>
+    <url-pattern>*.jnlp</url-pattern>
+  </servlet-mapping>
+  <mime-mapping>
+    <extension>jnlp</extension>
+    <mime-type>application/x-java-jnlp-file</mime-type>
+  </mime-mapping>
+  <!-- End Jspresso ULC deployment section -->
+
+  <!-- Jspresso WingS deployment section -->
+  <servlet>
+    <servlet-name>ApplicationWingsServlet</servlet-name>
+    <servlet-class>org.wings.session.WingServlet</servlet-class>
+    <init-param>
+      <param-name>wings.mainclass</param-name>
+      <param-value>${package}.startup.wings.WingsApplicationStartup</param-value>
+    </init-param>
+    <!--
+      <init-param>
+      <param-name>wings.lookandfeel.factory</param-name>
+      <param-value>org.wings.plaf.LookAndFeelFactory$Default</param-value>
+      </init-param>
+      <init-param>
+      <param-name>wings.lookandfeel.default</param-name>
+      <param-value>org.wings.plaf.css.CSSLookAndFeel</param-value>
+      </init-param>
+      <init-param>
+      <description>The template for the default error catcher</description>
+      <param-name>wings.error.template</param-name>
+      <param-value>/templates/ErrorTemplate.thtml</param-value>
+      </init-param>
+      <init-param>
+      <description>
+      If you want to attach key listeners to generic keys, you must prevent the browser to execute the default action
+      bound to the key (i.e. you do not want to present the browser help on F1, but your own action). This is a
+      comma-separated list of all keys for which wings should generate a script that prevents the default key binding.
+      For notation see See KeyStroke.getKeyStroke(String s).
+      </description>
+      <param-name>wings.prevent.default.keybindings</param-name>
+      <param-value>alt pressed LEFT, alt pressed RIGHT, pressed F1, shift pressed F1</param-value>
+      </init-param>
+      <init-param>
+      <description>Allows bean scripting in STemplate layout templates.</description>
+      <param-name>wings.template.beanscript</param-name>
+      <param-value>TRUE</param-value>
+      </init-param>
+      <init-param>
+      <description>Decorate generated HTML with comments about the component</description>
+      <param-name>SComponent.printDebug</param-name>
+      <param-value>TRUE</param-value>
+      </init-param>
+      <init-param>
+      <description>Do identation according to component depth.</description>
+      <param-name>SComponent.printPretty</param-name>
+      <param-value>TRUE</param-value>
+      </init-param>
+    -->
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ApplicationWingsServlet</servlet-name>
+    <url-pattern>/wings/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description>Direct Web Remoter Servlet</description>
+    <display-name>DWR Servlet</display-name>
+    <servlet-name>dwr-invoker</servlet-name>
+    <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+    <!--
+      <init-param>
+      <description>Do we startup in debug/test mode?</description>
+      <param-name>debug</param-name>
+      <param-value>true</param-value>
+      </init-param>
+      <init-param>
+      <description>How verbose do we want logging to be?</description>
+      <param-name>logLevel</param-name>
+      <param-value>DEBUG</param-value>
+      </init-param>
+    -->
+    <init-param>
+      <description>Install a session local CreatorManager</description>
+      <param-name>org.directwebremoting.extend.CreatorManager</param-name>
+      <param-value>org.wings.plaf.css.dwr.SessionCreatorManager</param-value>
+    </init-param>
+    <init-param>
+      <description>Install a session local AccessControl</description>
+      <param-name>org.directwebremoting.extend.AccessControl</param-name>
+      <param-value>org.wings.plaf.css.dwr.SessionAccessControl</param-value>
+    </init-param>
+    <init-param>
+      <description>Install a session local Remoter</description>
+      <param-name>org.directwebremoting.extend.Remoter</param-name>
+      <param-value>org.wings.plaf.css.dwr.SessionRemoter</param-value>
+    </init-param>
+    <load-on-startup>-1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dwr-invoker</servlet-name>
+    <url-pattern>/dwr/*</url-pattern>
+  </servlet-mapping>
+  <!-- End Jspresso WingS deployment section -->
+
+  <!-- MessageBroker Servlet -->
+  <servlet>
+    <servlet-name>MessageBrokerServlet</servlet-name>
+    <servlet-class>flex.messaging.MessageBrokerServlet</servlet-class>
+    <init-param>
+      <param-name>services.configuration.file</param-name>
+      <param-value>/WEB-INF/flex/services-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>flex.write.path</param-name>
+      <param-value>/WEB-INF/flex</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>MessageBrokerServlet</servlet-name>
+    <url-pattern>/messagebroker/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- for WebSphere deployment, please uncomment -->
+  <!--
+    <resource-ref>
+    <description>Flex Messaging WorkManager</description>
+    <res-ref-name>wm/MessagingWorkManager</res-ref-name>
+    <res-type>com.ibm.websphere.asynchbeans.WorkManager</res-type>
+    <res-auth>Container</res-auth>
+    <res-sharing-scope>Shareable</res-sharing-scope>
+  </resource-ref>
+  -->
+  
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>MessageBrokerServlet</servlet-name>
+  </filter-mapping>
+  <!--End Flex/BlazeDS deployment section -->
+
+</web-app>

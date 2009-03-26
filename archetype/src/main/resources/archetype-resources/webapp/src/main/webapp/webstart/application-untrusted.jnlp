@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<jnlp spec="1.0+" codebase="$$context/webstart" href="application-untrusted.jnlp">
+
+  <information>
+    <title>${applicationName} - Untrusted code</title>
+    <vendor>Jspresso</vendor>
+  </information>
+
+  <update check="always" policy="always"/>
+
+  <resources>
+    <jar href="../lib/jspresso-ulc-components-client.jar"/>
+    <jar href="../lib/jspresso-ulc-components-shared.jar"/>
+    <jar href="../lib/jspresso-util.jar"/>
+    <jar href="../lib/ulc-servlet-client.jar"/>
+    <jar href="../lib/jedit-syntax.jar"/>
+    <jar href="../lib/joda-time.jar"/>
+  </resources>
+
+  <component-desc/>
+
+</jnlp>

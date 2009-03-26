@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="${artifactId}">
+        <wb-resource deploy-path="/" source-path="/webapp/src/main/webapp"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/swing/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/swing/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/wings/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/wings/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/remote/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/remote/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/webapp/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/webapp/src/main/resources"/>
+        <property name="context-root" value="${artifactId}-webapp"/>
+        <property name="java-output-path"/>
+    </wb-module>
+</project-modules>

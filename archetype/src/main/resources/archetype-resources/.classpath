@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+  <classpathentry
+    kind="con"
+    path="org.eclipse.jdt.launching.JRE_CONTAINER" />
+  <classpathentry
+    kind="src"
+    output="core/target/classes"
+    path="core/src/main/java" />
+  <classpathentry
+    kind="src"
+    output="core/target/classes"
+    path="core/src/main/resources" />
+  <classpathentry
+    kind="src"
+    output="core/target/classes"
+    path="core/target/generated-sources/entitygenerator" />
+  <classpathentry
+    kind="src"
+    output="core/target/classes"
+    path="core/target/generated-resources/jasperreports" />
+  <classpathentry
+    kind="src"
+    output="core/target/classes"
+    path="core/target/generated-resources/xdoclet" />
+  <classpathentry
+    kind="src"
+    output="startup/swing/target/classes"
+    path="startup/swing/src/main/java" />
+  <classpathentry
+    kind="src"
+    output="startup/swing/target/classes"
+    path="startup/swing/src/main/resources" />
+  <classpathentry
+    kind="src"
+    output="startup/wings/target/classes"
+    path="startup/wings/src/main/java" />
+  <classpathentry
+    kind="src"
+    output="startup/wings/target/classes"
+    path="startup/wings/src/main/resources" />
+  <classpathentry
+    kind="src"
+    output="startup/remote/target/classes"
+    path="startup/remote/src/main/java" />
+  <classpathentry
+    kind="src"
+    output="startup/remote/target/classes"
+    path="startup/remote/src/main/resources" />
+  <classpathentry
+    kind="src"
+    output="webapp/target/classes"
+    path="webapp/src/main/java" />
+  <classpathentry
+    kind="src"
+    output="webapp/target/classes"
+    path="webapp/src/main/resources" />
+  <classpathentry
+    kind="con"
+    path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v6.0" />
+  <classpathentry
+    kind="con"
+    path="org.eclipse.jst.j2ee.internal.web.container" />
+  <classpathentry
+    kind="con"
+    path="org.eclipse.jst.j2ee.internal.module.container" />
+  <classpathentry
+    kind="var"
+    path="M2_REPO/org/jspresso/jspresso-app-launch-swing/${jspressoVersion}/jspresso-app-launch-swing-${jspressoVersion}.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/org/jspresso/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/org/jspresso/jspresso-jasper-swing/${jspressoVersion}/jspresso-jasper-swing-${jspressoVersion}.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/org/jspresso/jspresso-swing-application/${jspressoVersion}/jspresso-swing-application-${jspressoVersion}.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/org/jspresso/jspresso-swing-components/${jspressoVersion}/jspresso-swing-components-${jspressoVersion}.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/commons-cli/commons-cli/1.0/commons-cli-1.0.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/foxtrot/foxtrot/2.0/foxtrot-2.0.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/net/sf/jedit-syntax/jedit-syntax/2.2.2/jedit-syntax-2.2.2.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/net/sf/nachocalendar/nachocalendar/0.23/nachocalendar-0.23.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/org/jvnet/substance/substance/4.3/substance-4.3.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="output"
+    path="core/target/classes" />
+</classpath>
