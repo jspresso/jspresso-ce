@@ -31,6 +31,8 @@ New features
 2709439 	 Auto explode component references in view descriptors
 2709450    Get rid of external ant
 2711206    Get rid of Wings html login page
+2712170    Change group of jspresso framework artifacts to org.jspresso.framework
+2712174    Make archetype a module of the framework and keep versions aligned
 
 2.2.1
 =====

@@ -82,3 +82,6 @@ becomes :
         value="org.jspresso.hrsample.model.service.EmployeeServiceDelegate"/>
     </map>
   </property>
+  
+- The 3.0 release changes the framework artifacts group from org.jspresso to org.jspresso.framework.
+You must update your POMs accordingly.

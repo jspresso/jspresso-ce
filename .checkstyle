@@ -3,7 +3,5 @@
     <fileset name="tous" enabled="true" check-config-name="Jspresso Checks" local="false">
         <file-match-pattern match-pattern="." include-pattern="true"/>
     </fileset>
-    <filter name="FilesFromPackage" enabled="true">
-        <filter-data value="util/src/main/java/com/d2s/framework/util/security"/>
-    </filter>
+    <filter name="NonSrcDirs" enabled="true"/>
 </fileset-config>

@@ -33,7 +33,7 @@
             <useTransitiveFiltering>false</useTransitiveFiltering>
             <outputDirectory>lib</outputDirectory>
             <excludes>
-              <exclude>org.jspresso:*</exclude>
+              <exclude>org.jspresso.framework:*</exclude>
               <exclude>ulc:*</exclude>
               <exclude>javax.servlet:*</exclude>
               <exclude>*:applicationupdater_ui:*</exclude>
