@@ -74,7 +74,7 @@
               <navigGraphicsPath>../style-images/</navigGraphicsPath>
               <postProcess>
                 <copy
-                  todir="target/reference/html-chunked">
+                  todir="target/reference/html-single">
                   <fileset
                     dir="target/staging/reference">
                     <include
@@ -87,7 +87,7 @@
                   </fileset>
                 </copy>
                 <copy
-                  todir="target/reference/html-chunked/style-images">
+                  todir="target/reference/html-single/style-images">
                   <fileset
                     dir="target/staging/images">
                     <include
