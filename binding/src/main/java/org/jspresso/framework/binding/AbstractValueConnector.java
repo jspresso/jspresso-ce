@@ -63,26 +63,26 @@ public abstract class AbstractValueConnector extends AbstractConnector
     implements IValueConnector {
 
   private IExceptionHandler           exceptionHandler;
-  private PropertyChangeListener      readabilityGatesListener;
-  private PropertyChangeListener      writabilityGatesListener;
-
   private boolean                     locallyReadable;
   private boolean                     locallyWritable;
-  private boolean                     oldReadability;
-  private boolean                     oldWritability;
 
   private IValueConnector             modelConnector;
+  private PropertyChangeListener      modelReadabilityListener;
+  private PropertyChangeListener      modelWritabilityListener;
   private Object                      oldConnectorValue;
+
+  private boolean                     oldReadability;
+  private boolean                     oldWritability;
 
   private ICompositeValueConnector    parentConnector;
   private Collection<IGate>           readabilityGates;
 
-  private PropertyChangeListener      modelReadabilityListener;
+  private PropertyChangeListener      readabilityGatesListener;
   private ConnectorValueChangeSupport valueChangeSupport;
 
   private Collection<IGate>           writabilityGates;
 
-  private PropertyChangeListener      modelWritabilityListener;
+  private PropertyChangeListener      writabilityGatesListener;
 
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
@@ -125,15 +125,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Called whenever readability may have changed.
-   */
-  protected void readabilityChange() {
-    boolean readable = isReadable();
-    firePropertyChange(READABLE_PROPERTY, oldReadability, readable);
-    oldReadability = readable;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void addWritabilityGate(IGate gate) {
@@ -144,15 +135,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
         getWritabilityGatesListener());
     writabilityChange();
-  }
-
-  /**
-   * Called whenever writability may have changed.
-   */
-  protected void writabilityChange() {
-    boolean writable = isWritable();
-    firePropertyChange(WRITABLE_PROPERTY, oldWritability, writable);
-    oldWritability = writable;
   }
 
   /**
@@ -295,6 +277,24 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
+   * Gets the modelConnector.
+   * 
+   * @return the modelConnector.
+   */
+  public IValueConnector getModelConnector() {
+    return modelConnector;
+  }
+
+  /**
+   * Gets the parentConnector.
+   * 
+   * @return the parentConnector.
+   */
+  public ICompositeValueConnector getParentConnector() {
+    return parentConnector;
+  }
+
+  /**
    * Gets the readability gates listener.
    * 
    * @return the readability gates listener.
@@ -328,24 +328,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
       };
     }
     return writabilityGatesListener;
-  }
-
-  /**
-   * Gets the modelConnector.
-   * 
-   * @return the modelConnector.
-   */
-  public IValueConnector getModelConnector() {
-    return modelConnector;
-  }
-
-  /**
-   * Gets the parentConnector.
-   * 
-   * @return the parentConnector.
-   */
-  public ICompositeValueConnector getParentConnector() {
-    return parentConnector;
   }
 
   /**
@@ -653,10 +635,28 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
+   * Called whenever readability may have changed.
+   */
+  protected void readabilityChange() {
+    boolean readable = isReadable();
+    firePropertyChange(READABLE_PROPERTY, oldReadability, readable);
+    oldReadability = readable;
+  }
+
+  /**
    * Sets the value to the peer connectee.
    * 
    * @param connecteeValue
    *          the connectee value to set
    */
   protected abstract void setConnecteeValue(Object connecteeValue);
+
+  /**
+   * Called whenever writability may have changed.
+   */
+  protected void writabilityChange() {
+    boolean writable = isWritable();
+    firePropertyChange(WRITABLE_PROPERTY, oldWritability, writable);
+    oldWritability = writable;
+  }
 }

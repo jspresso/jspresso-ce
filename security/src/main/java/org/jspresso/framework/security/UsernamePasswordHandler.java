@@ -49,6 +49,32 @@ public class UsernamePasswordHandler implements CallbackHandler {
   private String username;
 
   /**
+   * Resets all data.
+   */
+  public void clear() {
+    setUsername(null);
+    setPassword(null);
+  }
+
+  /**
+   * Gets the password.
+   * 
+   * @return the password.
+   */
+  public String getPassword() {
+    return password;
+  }
+
+  /**
+   * Gets the username.
+   * 
+   * @return the username.
+   */
+  public String getUsername() {
+    return username;
+  }
+
+  /**
    * Handles the JAAS callbacks.
    * <p>
    * {@inheritDoc}
@@ -81,15 +107,6 @@ public class UsernamePasswordHandler implements CallbackHandler {
   }
 
   /**
-   * Gets the password.
-   * 
-   * @return the password.
-   */
-  public String getPassword() {
-    return password;
-  }
-
-  /**
    * Sets the username.
    * 
    * @param username
@@ -97,22 +114,5 @@ public class UsernamePasswordHandler implements CallbackHandler {
    */
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  /**
-   * Gets the username.
-   * 
-   * @return the username.
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
-   * Resets all data.
-   */
-  public void clear() {
-    setUsername(null);
-    setPassword(null);
   }
 }

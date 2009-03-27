@@ -63,6 +63,15 @@ public class RCardContainer extends RContainer {
   }
 
   /**
+   * Gets the cards.
+   * 
+   * @return the cards.
+   */
+  public RComponent[] getCards() {
+    return cards;
+  }
+
+  /**
    * Sets the cardNames.
    * 
    * @param cardNames
@@ -70,15 +79,6 @@ public class RCardContainer extends RContainer {
    */
   public void setCardNames(String[] cardNames) {
     this.cardNames = cardNames;
-  }
-
-  /**
-   * Gets the cards.
-   * 
-   * @return the cards.
-   */
-  public RComponent[] getCards() {
-    return cards;
   }
 
   /**

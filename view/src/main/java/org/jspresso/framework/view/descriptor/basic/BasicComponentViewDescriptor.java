@@ -74,6 +74,20 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * {@inheritDoc}
    */
   @Override
+  public Collection<String> getGrantedRoles() {
+    Collection<String> grantedRoles = super.getGrantedRoles();
+    if (grantedRoles == null && getModelDescriptor() != null) {
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor();
+      grantedRoles = componentDescriptor.getGrantedRoles();
+    }
+    return grantedRoles;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public String getIconImageURL() {
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null) {
@@ -116,35 +130,6 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
           .addAll(explodeComponentReferences(subViewDescriptor));
     }
     return actualPropertyViewDescriptors;
-  }
-
-  private List<ISubviewDescriptor> explodeComponentReferences(
-      ISubviewDescriptor subViewDescriptor) {
-    List<ISubviewDescriptor> returnedList = new ArrayList<ISubviewDescriptor>();
-    IPropertyDescriptor propertyDescriptor = ((IComponentDescriptor<?>) getModelDescriptor())
-        .getPropertyDescriptor(subViewDescriptor.getName());
-    if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-        .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getComponentContract()))) {
-      for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor().getRenderedProperties()) {
-        BasicSubviewDescriptor nestedSubViewDescriptor = new BasicSubviewDescriptor();
-        nestedSubViewDescriptor.setName(propertyDescriptor.getName() + "."
-            + nestedRenderedProperty);
-        nestedSubViewDescriptor.setGrantedRoles(propertyDescriptor
-            .getGrantedRoles());
-        nestedSubViewDescriptor.setReadabilityGates(propertyDescriptor
-            .getReadabilityGates());
-        nestedSubViewDescriptor.setWritabilityGates(propertyDescriptor
-            .getWritabilityGates());
-        nestedSubViewDescriptor.setReadOnly(propertyDescriptor.isReadOnly());
-        returnedList
-            .addAll(explodeComponentReferences(nestedSubViewDescriptor));
-      }
-    } else {
-      returnedList.add(subViewDescriptor);
-    }
-    return returnedList;
   }
 
   /**
@@ -253,17 +238,32 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     this.renderedChildProperties = renderedChildProperties;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection<String> getGrantedRoles() {
-    Collection<String> grantedRoles = super.getGrantedRoles();
-    if (grantedRoles == null && getModelDescriptor() != null) {
-      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor();
-      grantedRoles = componentDescriptor.getGrantedRoles();
+  private List<ISubviewDescriptor> explodeComponentReferences(
+      ISubviewDescriptor subViewDescriptor) {
+    List<ISubviewDescriptor> returnedList = new ArrayList<ISubviewDescriptor>();
+    IPropertyDescriptor propertyDescriptor = ((IComponentDescriptor<?>) getModelDescriptor())
+        .getPropertyDescriptor(subViewDescriptor.getName());
+    if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
+        .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor().getComponentContract()))) {
+      for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+          .getReferencedDescriptor().getRenderedProperties()) {
+        BasicSubviewDescriptor nestedSubViewDescriptor = new BasicSubviewDescriptor();
+        nestedSubViewDescriptor.setName(propertyDescriptor.getName() + "."
+            + nestedRenderedProperty);
+        nestedSubViewDescriptor.setGrantedRoles(propertyDescriptor
+            .getGrantedRoles());
+        nestedSubViewDescriptor.setReadabilityGates(propertyDescriptor
+            .getReadabilityGates());
+        nestedSubViewDescriptor.setWritabilityGates(propertyDescriptor
+            .getWritabilityGates());
+        nestedSubViewDescriptor.setReadOnly(propertyDescriptor.isReadOnly());
+        returnedList
+            .addAll(explodeComponentReferences(nestedSubViewDescriptor));
+      }
+    } else {
+      returnedList.add(subViewDescriptor);
     }
-    return grantedRoles;
+    return returnedList;
   }
 }

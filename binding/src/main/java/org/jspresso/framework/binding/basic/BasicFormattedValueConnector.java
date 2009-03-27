@@ -82,6 +82,15 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
   }
 
   /**
+   * Gets the connector value as a string representation.
+   * 
+   * @return the connector value as a string representation.
+   */
+  public String getConnectorValueAsString() {
+    return getFormatter().format(getConnectorValue());
+  }
+
+  /**
    * Sets the connector value as a string representation.
    * 
    * @param valueAsString
@@ -93,15 +102,6 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
     } catch (ParseException ex) {
       throw new ConnectorBindingException(ex);
     }
-  }
-
-  /**
-   * Gets the connector value as a string representation.
-   * 
-   * @return the connector value as a string representation.
-   */
-  public String getConnectorValueAsString() {
-    return getFormatter().format(getConnectorValue());
   }
 
   /**

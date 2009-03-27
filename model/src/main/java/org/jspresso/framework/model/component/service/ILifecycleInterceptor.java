@@ -64,17 +64,6 @@ public interface ILifecycleInterceptor<E> {
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
-   * Called whenever an entity is loaded from the persistent store or merged back
-   * from the unit of work. The component state is fully initialized when this
-   * method is called. The onLoad callback may be used to perform some extra
-   * technical initializations like registering some listeners.
-   * 
-   * @param component
-   *            the created entity.
-   */
-  void onLoad(E component);
-
-  /**
    * Called whenever an persistent entity is deleted.
    * 
    * @param component
@@ -90,6 +79,17 @@ public interface ILifecycleInterceptor<E> {
    */
   boolean onDelete(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
+
+  /**
+   * Called whenever an entity is loaded from the persistent store or merged back
+   * from the unit of work. The component state is fully initialized when this
+   * method is called. The onLoad callback may be used to perform some extra
+   * technical initializations like registering some listeners.
+   * 
+   * @param component
+   *            the created entity.
+   */
+  void onLoad(E component);
 
   /**
    * Called whenever an entity is made persistent for the first time.

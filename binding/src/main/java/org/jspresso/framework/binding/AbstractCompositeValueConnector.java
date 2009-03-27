@@ -50,12 +50,12 @@ public abstract class AbstractCompositeValueConnector extends
   private IConnectorMap             childConnectors;
   private ChildConnectorSupport     childConnectorSupport;
   private ConnectorSelectionSupport connectorSelectionSupport;
-  private String                    renderingChildConnectorId;
-  private boolean                   trackingChildrenSelection;
-  private String                    displayValue;
   private String                    displayDescription;
   private String                    displayIconImageUrl;
+  private String                    displayValue;
   private IIconImageURLProvider     iconImageURLProvider;
+  private String                    renderingChildConnectorId;
+  private boolean                   trackingChildrenSelection;
 
   /**
    * Constructs a new <code>AbstractCompositeValueConnector</code>.
@@ -153,33 +153,30 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public IValueConnector getRenderingConnector() {
-    if (renderingChildConnectorId != null) {
-      return getChildConnector(renderingChildConnectorId);
-    }
-    return null;
-  }
-
-  /**
-   * Sets the renderingChildConnectorId.
+   * Gets the displayDescription.
    * 
-   * @param renderingChildConnectorId
-   *          the renderingChildConnectorId to set.
+   * @return the displayDescription.
    */
-  public void setRenderingChildConnectorId(String renderingChildConnectorId) {
-    this.renderingChildConnectorId = renderingChildConnectorId;
+  public String getDisplayDescription() {
+    return displayDescription;
   }
 
   /**
-   * Uses the value to compute the string representation.
+   * Gets the static icon image url or uses the icon image url provider to
+   * compute it based on the connector value.
    * <p>
    * {@inheritDoc}
    */
-  @Override
-  public String toString() {
-    return getDisplayValue();
+  public String getDisplayIconImageUrl() {
+    String iconImageUrl = null;
+    if (iconImageURLProvider != null) {
+      iconImageUrl = iconImageURLProvider
+          .getIconImageURLForObject(getConnectorValue());
+    }
+    if (iconImageUrl == null) {
+      iconImageUrl = displayIconImageUrl;
+    }
+    return iconImageUrl;
   }
 
   /**
@@ -207,21 +204,73 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * Gets the static icon image url or uses the icon image url provider to
-   * compute it based on the connector value.
+   * {@inheritDoc}
+   */
+  public IValueConnector getRenderingConnector() {
+    if (renderingChildConnectorId != null) {
+      return getChildConnector(renderingChildConnectorId);
+    }
+    return null;
+  }
+
+  /**
+   * Sets the displayDescription.
+   * 
+   * @param displayDescription
+   *          the displayDescription to set.
+   */
+  public void setDisplayDescription(String displayDescription) {
+    this.displayDescription = displayDescription;
+  }
+
+  /**
+   * Sets the static displayIconImageUrl.
+   * 
+   * @param displayIconImageUrl
+   *          the displayIconImageUrl to set.
+   */
+  public void setDisplayIconImageUrl(String displayIconImageUrl) {
+    this.displayIconImageUrl = displayIconImageUrl;
+  }
+
+  /**
+   * Sets the static displayValue.
+   * 
+   * @param displayValue
+   *          the displayValue to set.
+   */
+  public void setDisplayValue(String displayValue) {
+    this.displayValue = displayValue;
+  }
+
+  /**
+   * Sets the iconImageURLProvider.
+   * 
+   * @param iconImageURLProvider
+   *          the iconImageURLProvider to set.
+   */
+  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
+    this.iconImageURLProvider = iconImageURLProvider;
+  }
+
+  /**
+   * Sets the renderingChildConnectorId.
+   * 
+   * @param renderingChildConnectorId
+   *          the renderingChildConnectorId to set.
+   */
+  public void setRenderingChildConnectorId(String renderingChildConnectorId) {
+    this.renderingChildConnectorId = renderingChildConnectorId;
+  }
+
+  /**
+   * Uses the value to compute the string representation.
    * <p>
    * {@inheritDoc}
    */
-  public String getDisplayIconImageUrl() {
-    String iconImageUrl = null;
-    if (iconImageURLProvider != null) {
-      iconImageUrl = iconImageURLProvider
-          .getIconImageURLForObject(getConnectorValue());
-    }
-    if (iconImageUrl == null) {
-      iconImageUrl = displayIconImageUrl;
-    }
-    return iconImageUrl;
+  @Override
+  public String toString() {
+    return getDisplayValue();
   }
 
   /**
@@ -324,55 +373,6 @@ public abstract class AbstractCompositeValueConnector extends
   protected void removeChildConnector(IValueConnector connector) {
     getConnectorMap().removeConnector(connector.getId());
     connector.setParentConnector(null);
-  }
-
-  /**
-   * Sets the static displayValue.
-   * 
-   * @param displayValue
-   *          the displayValue to set.
-   */
-  public void setDisplayValue(String displayValue) {
-    this.displayValue = displayValue;
-  }
-
-  /**
-   * Sets the static displayIconImageUrl.
-   * 
-   * @param displayIconImageUrl
-   *          the displayIconImageUrl to set.
-   */
-  public void setDisplayIconImageUrl(String displayIconImageUrl) {
-    this.displayIconImageUrl = displayIconImageUrl;
-  }
-
-  /**
-   * Sets the iconImageURLProvider.
-   * 
-   * @param iconImageURLProvider
-   *          the iconImageURLProvider to set.
-   */
-  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
-    this.iconImageURLProvider = iconImageURLProvider;
-  }
-
-  /**
-   * Sets the displayDescription.
-   * 
-   * @param displayDescription
-   *          the displayDescription to set.
-   */
-  public void setDisplayDescription(String displayDescription) {
-    this.displayDescription = displayDescription;
-  }
-
-  /**
-   * Gets the displayDescription.
-   * 
-   * @return the displayDescription.
-   */
-  public String getDisplayDescription() {
-    return displayDescription;
   }
 
 }

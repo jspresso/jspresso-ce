@@ -99,17 +99,115 @@ import org.wings.session.SessionManager;
 public class DefaultWingsController extends
     AbstractFrontendController<SComponent, SIcon, Action> {
 
-  private SPanel                  cardPanel;
-
-  private SFrame                  controllerFrame;
-  private String                  frameHeight      = "768px";
-
-  private String                  frameWidth       = "95%";
-  private Set<String>             workspaceViews;
   private static final SDimension DIALOG_DIMENSION = new SDimension("800px",
                                                        "600px");
+
+  private SPanel                  cardPanel;
+  private SFrame                  controllerFrame;
+
+  private String                  frameHeight      = "768px";
+  private String                  frameWidth       = "95%";
   private IViewDescriptor         loginViewDescriptor;
   private IModelConnectorFactory  modelConnectorFactory;
+  private Set<String>             workspaceViews;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayModalDialog(SComponent mainView, List<Action> actions,
+      String title, SComponent sourceComponent, Map<String, Object> context,
+      boolean reuseCurrent) {
+    super.displayModalDialog(mainView, actions, title, sourceComponent,
+        context, reuseCurrent);
+    final SDialog dialog;
+    SContainer actionWindow = WingsUtil.getVisibleWindow(sourceComponent);
+    if (reuseCurrent && actionWindow instanceof SDialog) {
+      dialog = ((SDialog) actionWindow);
+      dialog.removeAll();
+    } else {
+      SFrame window = sourceComponent.getParentFrame();
+      dialog = new SDialog(window, title, true);
+      dialog.setDraggable(true);
+    }
+
+    SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
+    buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
+
+    SButton defaultButton = null;
+    for (Action action : actions) {
+      SButton actionButton = new SButton();
+      actionButton.setAction(action);
+      buttonBox.add(actionButton);
+      buttonBox.add(new SSpacer(10, 10));
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
+    }
+    SPanel actionPanel = new SPanel(new SBorderLayout());
+    actionPanel.add(buttonBox, SBorderLayout.EAST);
+
+    SPanel mainPanel = new SPanel(new SBorderLayout());
+    mainPanel.add(mainView, SBorderLayout.CENTER);
+    mainPanel.add(actionPanel, SBorderLayout.SOUTH);
+    mainPanel.setPreferredSize(DIALOG_DIMENSION);
+    dialog.add(mainPanel);
+    if (defaultButton != null) {
+      dialog.setDefaultButton(defaultButton);
+    }
+    dialog.setVisible(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    ScriptListener listener = new JavaScriptListener(null, null,
+        "wingS.util.openLink('download','" + urlSpec + "',null);");
+    SessionManager.getSession().getScriptManager().addScriptListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayWorkspace(String workspaceName) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceViews == null) {
+        workspaceViews = new HashSet<String>();
+      }
+      if (!workspaceViews.contains(workspaceName)) {
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<SComponent> workspaceView = createWorkspaceView(workspaceName,
+            workspaceViewDescriptor, (Workspace) workspaceConnector
+                .getConnectorValue());
+        // getViewFactory().decorateWithTitle(moduleView, getLocale());
+        workspaceViews.add(workspaceName);
+        cardPanel.add(workspaceView.getPeer(), workspaceName);
+        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+      }
+      ((SCardLayout) cardPanel.getLayout()).show(workspaceName);
+      updateFrameTitle();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void disposeModalDialog(SComponent sourceWidget,
+      Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
+    SContainer actionWindow = WingsUtil.getVisibleWindow(sourceWidget);
+    if (actionWindow instanceof SDialog) {
+      ((SDialog) actionWindow).dispose();
+    }
+  }
 
   /**
    * {@inheritDoc}
@@ -174,6 +272,27 @@ public class DefaultWingsController extends
   }
 
   /**
+   * Sets the loginViewDescriptor.
+   * 
+   * @param loginViewDescriptor
+   *          the loginViewDescriptor to set.
+   */
+  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
+    this.loginViewDescriptor = loginViewDescriptor;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
    * Creates the initial view from the root view descriptor, then a SFrame
    * containing this view and presents it to the user.
    * <p>
@@ -201,116 +320,11 @@ public class DefaultWingsController extends
   }
 
   /**
-   * Sets the loginViewDescriptor.
-   * 
-   * @param loginViewDescriptor
-   *          the loginViewDescriptor to set.
-   */
-  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
-    this.loginViewDescriptor = loginViewDescriptor;
-  }
-
-  /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
   protected CallbackHandler createLoginCallbackHandler() {
     return new UsernamePasswordHandler();
-  }
-
-  private boolean performLogin() {
-    if (getLoginContextName() != null) {
-      try {
-        LoginContext lc = null;
-        try {
-          lc = new LoginContext(getLoginContextName(),
-              getLoginCallbackHandler());
-        } catch (LoginException le) {
-          System.err.println("Cannot create LoginContext. " + le.getMessage());
-          return false;
-        } catch (SecurityException se) {
-          System.err.println("Cannot create LoginContext. " + se.getMessage());
-          return false;
-        }
-        lc.login();
-        loginSuccess(lc.getSubject());
-      } catch (LoginException le) {
-        System.err.println("Authentication failed:");
-        System.err.println("  " + le.getMessage());
-        return false;
-      }
-    } else {
-      loginSuccess(getAnonymousSubject());
-    }
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayWorkspace(String workspaceName) {
-    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
-      super.displayWorkspace(workspaceName);
-      if (workspaceViews == null) {
-        workspaceViews = new HashSet<String>();
-      }
-      if (!workspaceViews.contains(workspaceName)) {
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController()
-            .getWorkspaceConnector(workspaceName);
-        IView<SComponent> workspaceView = createWorkspaceView(workspaceName,
-            workspaceViewDescriptor, (Workspace) workspaceConnector
-                .getConnectorValue());
-        // getViewFactory().decorateWithTitle(moduleView, getLocale());
-        workspaceViews.add(workspaceName);
-        cardPanel.add(workspaceView.getPeer(), workspaceName);
-        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-      }
-      ((SCardLayout) cardPanel.getLayout()).show(workspaceName);
-      updateFrameTitle();
-    }
-  }
-
-  private SMenu createMenu(ActionList actionList) {
-    SMenu menu = new SMenu(actionList.getI18nName(getTranslationProvider(),
-        getLocale()));
-    if (actionList.getDescription() != null) {
-      menu.setToolTipText(actionList.getI18nDescription(
-          getTranslationProvider(), getLocale())
-          + IActionFactory.TOOLTIP_ELLIPSIS);
-    }
-    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
-    for (SMenuItem menuItem : createMenuItems(menu, actionList)) {
-      menu.add(menuItem);
-    }
-    return menu;
-  }
-
-  private List<SMenuItem> createMenuItems(SMenu menu, ActionList actionList) {
-    List<SMenuItem> menuItems = new ArrayList<SMenuItem>();
-    for (IDisplayableAction action : actionList.getActions()) {
-      menuItems.add(createMenuItem(menu, action));
-    }
-    return menuItems;
-  }
-
-  private SMenuItem createMenuItem(SMenu menu, IDisplayableAction action) {
-    return new SMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, menu, null, null, getLocale()));
   }
 
   private List<SMenu> createActionMenus() {
@@ -346,6 +360,35 @@ public class DefaultWingsController extends
     return createMenus(getHelpActions(), true);
   }
 
+  private SMenu createMenu(ActionList actionList) {
+    SMenu menu = new SMenu(actionList.getI18nName(getTranslationProvider(),
+        getLocale()));
+    if (actionList.getDescription() != null) {
+      menu.setToolTipText(actionList.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IActionFactory.TOOLTIP_ELLIPSIS);
+    }
+    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
+    for (SMenuItem menuItem : createMenuItems(menu, actionList)) {
+      menu.add(menuItem);
+    }
+    return menu;
+  }
+
+  private SMenuItem createMenuItem(SMenu menu, IDisplayableAction action) {
+    return new SMenuItem(getViewFactory().getActionFactory().createAction(
+        action, this, menu, null, null, getLocale()));
+  }
+
+  private List<SMenuItem> createMenuItems(SMenu menu, ActionList actionList) {
+    List<SMenuItem> menuItems = new ArrayList<SMenuItem>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      menuItems.add(createMenuItem(menu, action));
+    }
+    return menuItems;
+  }
+
   @SuppressWarnings("null")
   private List<SMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<SMenu> menus = new ArrayList<SMenu>();
@@ -372,6 +415,15 @@ public class DefaultWingsController extends
 
   private List<SMenu> createWorkspacesMenus() {
     return createMenus(createWorkspaceActionMap(), true);
+  }
+
+  private void initControllerFrame() {
+    cardPanel = new SPanel(new SCardLayout());
+    cardPanel.setPreferredSize(SDimension.FULLAREA);
+    controllerFrame.getContentPane().add(createApplicationMenuBar(),
+        SBorderLayout.NORTH);
+    controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
+    updateFrameTitle();
   }
 
   private void initLoginProcess() {
@@ -430,13 +482,31 @@ public class DefaultWingsController extends
     dialog.setVisible(true);
   }
 
-  private void initControllerFrame() {
-    cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(SDimension.FULLAREA);
-    controllerFrame.getContentPane().add(createApplicationMenuBar(),
-        SBorderLayout.NORTH);
-    controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
-    updateFrameTitle();
+  private boolean performLogin() {
+    if (getLoginContextName() != null) {
+      try {
+        LoginContext lc = null;
+        try {
+          lc = new LoginContext(getLoginContextName(),
+              getLoginCallbackHandler());
+        } catch (LoginException le) {
+          System.err.println("Cannot create LoginContext. " + le.getMessage());
+          return false;
+        } catch (SecurityException se) {
+          System.err.println("Cannot create LoginContext. " + se.getMessage());
+          return false;
+        }
+        lc.login();
+        loginSuccess(lc.getSubject());
+      } catch (LoginException le) {
+        System.err.println("Authentication failed:");
+        System.err.println("  " + le.getMessage());
+        return false;
+      }
+    } else {
+      loginSuccess(getAnonymousSubject());
+    }
+    return true;
   }
 
   private void updateFrameTitle() {
@@ -450,75 +520,5 @@ public class DefaultWingsController extends
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
           getLocale()));
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayModalDialog(SComponent mainView, List<Action> actions,
-      String title, SComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
-    final SDialog dialog;
-    SContainer actionWindow = WingsUtil.getVisibleWindow(sourceComponent);
-    if (reuseCurrent && actionWindow instanceof SDialog) {
-      dialog = ((SDialog) actionWindow);
-      dialog.removeAll();
-    } else {
-      SFrame window = sourceComponent.getParentFrame();
-      dialog = new SDialog(window, title, true);
-      dialog.setDraggable(true);
-    }
-
-    SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
-    buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
-
-    SButton defaultButton = null;
-    for (Action action : actions) {
-      SButton actionButton = new SButton();
-      actionButton.setAction(action);
-      buttonBox.add(actionButton);
-      buttonBox.add(new SSpacer(10, 10));
-      if (defaultButton == null) {
-        defaultButton = actionButton;
-      }
-    }
-    SPanel actionPanel = new SPanel(new SBorderLayout());
-    actionPanel.add(buttonBox, SBorderLayout.EAST);
-
-    SPanel mainPanel = new SPanel(new SBorderLayout());
-    mainPanel.add(mainView, SBorderLayout.CENTER);
-    mainPanel.add(actionPanel, SBorderLayout.SOUTH);
-    mainPanel.setPreferredSize(DIALOG_DIMENSION);
-    dialog.add(mainPanel);
-    if (defaultButton != null) {
-      dialog.setDefaultButton(defaultButton);
-    }
-    dialog.setVisible(true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void disposeModalDialog(SComponent sourceWidget,
-      Map<String, Object> context) {
-    super.disposeModalDialog(sourceWidget, context);
-    SContainer actionWindow = WingsUtil.getVisibleWindow(sourceWidget);
-    if (actionWindow instanceof SDialog) {
-      ((SDialog) actionWindow).dispose();
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayUrl(String urlSpec) {
-    ScriptListener listener = new JavaScriptListener(null, null,
-        "wingS.util.openLink('download','" + urlSpec + "',null);");
-    SessionManager.getSession().getScriptManager().addScriptListener(listener);
   }
 }

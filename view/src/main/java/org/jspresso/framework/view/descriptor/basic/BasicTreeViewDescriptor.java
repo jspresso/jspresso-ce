@@ -80,6 +80,15 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
+   * Gets the iconImageURLProvider.
+   * 
+   * @return the iconImageURLProvider.
+   */
+  public IIconImageURLProvider getIconImageURLProvider() {
+    return iconImageURLProvider;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public int getMaxDepth() {
@@ -149,6 +158,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
     this.renderedProperty = renderedProperty;
   }
 
+  
   /**
    * Sets the rootSubtreeDescriptor.
    * 
@@ -158,15 +168,5 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   public void setRootSubtreeDescriptor(
       ITreeLevelDescriptor rootSubtreeDescriptor) {
     this.rootSubtreeDescriptor = rootSubtreeDescriptor;
-  }
-
-  
-  /**
-   * Gets the iconImageURLProvider.
-   * 
-   * @return the iconImageURLProvider.
-   */
-  public IIconImageURLProvider getIconImageURLProvider() {
-    return iconImageURLProvider;
   }
 }

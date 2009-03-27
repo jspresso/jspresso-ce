@@ -84,17 +84,6 @@ public interface IApplicationSession extends IEntityDirtAware,
   List<IEntity> cloneInUnitOfWork(List<IEntity> entities);
 
   /**
-   * Is the passed entity already updated in the current unit of work and waits
-   * for commit ?
-   * 
-   * @param entity
-   *            the entity to test.
-   * @return true if the passed entity already updated in the current unit of
-   *         work and waits for commit.
-   */
-  boolean isUpdatedInUnitOfWork(IEntity entity);
-
-  /**
    * Commits the current unit of work.
    * 
    * @see IEntityUnitOfWork#commit()
@@ -163,6 +152,17 @@ public interface IApplicationSession extends IEntityDirtAware,
    *         application session.
    */
   boolean isUnitOfWorkActive();
+
+  /**
+   * Is the passed entity already updated in the current unit of work and waits
+   * for commit ?
+   * 
+   * @param entity
+   *            the entity to test.
+   * @return true if the passed entity already updated in the current unit of
+   *         work and waits for commit.
+   */
+  boolean isUpdatedInUnitOfWork(IEntity entity);
 
   /**
    * Merges an entity in this application session. If the application session

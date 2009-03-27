@@ -77,39 +77,6 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public boolean handleException(Throwable ex, Map<String, Object> context) {
-    if (super.handleException(ex, context)) {
-      return true;
-    }
-    Component sourceComponent = null;
-    if (ex instanceof SecurityException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
-          .getMessage()), getTranslationProvider().getTranslation("error",
-          getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
-          .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
-    } else if (ex instanceof BusinessException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .emphasis(((BusinessException) ex).getI18nMessage(
-              getTranslationProvider(), getLocale())), getTranslationProvider()
-          .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
-          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
-    } else if (ex instanceof ConcurrencyFailureException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .emphasis(getTranslationProvider().getTranslation(
-              "concurrency.error.description", getLocale())),
-          getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
-    } else {
-      ex.printStackTrace();
-    }
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public void displayModalDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
       boolean reuseCurrent) {
@@ -164,6 +131,18 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
+  public void displayUrl(String urlSpec) {
+    try {
+      BrowserControl.displayURL(urlSpec);
+    } catch (IOException ex) {
+      throw new ActionException(ex);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void disposeModalDialog(JComponent sourceWidget,
       Map<String, Object> context) {
     super.disposeModalDialog(sourceWidget, context);
@@ -171,6 +150,39 @@ public class MockSwingController extends
     if (actionWindow instanceof JDialog) {
       actionWindow.dispose();
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean handleException(Throwable ex, Map<String, Object> context) {
+    if (super.handleException(ex, context)) {
+      return true;
+    }
+    Component sourceComponent = null;
+    if (ex instanceof SecurityException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
+          .getMessage()), getTranslationProvider().getTranslation("error",
+          getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
+          .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+    } else if (ex instanceof BusinessException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .emphasis(((BusinessException) ex).getI18nMessage(
+              getTranslationProvider(), getLocale())), getTranslationProvider()
+          .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+    } else if (ex instanceof ConcurrencyFailureException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .emphasis(getTranslationProvider().getTranslation(
+              "concurrency.error.description", getLocale())),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
+              IIconFactory.LARGE_ICON_SIZE));
+    } else {
+      ex.printStackTrace();
+    }
+    return true;
   }
 
   /**
@@ -188,17 +200,5 @@ public class MockSwingController extends
   protected Workspace getWorkspace(
       @SuppressWarnings("unused") String workspaceName) {
     return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayUrl(String urlSpec) {
-    try {
-      BrowserControl.displayURL(urlSpec);
-    } catch (IOException ex) {
-      throw new ActionException(ex);
-    }
   }
 }

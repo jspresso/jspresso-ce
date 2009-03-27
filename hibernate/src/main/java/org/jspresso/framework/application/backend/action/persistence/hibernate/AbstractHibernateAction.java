@@ -84,6 +84,54 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         new HashSet<IComponent>());
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected HibernateBackendController getController(Map<String, Object> context) {
+    return (HibernateBackendController) super.getController(context);
+  }
+
+  /**
+   * Gets the hibernateTemplate.
+   * 
+   * @param context
+   *          the action context.
+   * @return the hibernateTemplate.
+   */
+  protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
+    return getController(context).getHibernateTemplate();
+  }
+
+  /**
+   * Gets the transactionTemplate.
+   * 
+   * @param context
+   *          the action context.
+   * @return the transactionTemplate.
+   */
+  protected TransactionTemplate getTransactionTemplate(
+      Map<String, Object> context) {
+    return getController(context).getTransactionTemplate();
+  }
+
+  /**
+   * Reloads an entity in hibernate.
+   * 
+   * @param entity
+   *          the entity to reload.
+   * @param context
+   *          the action context.
+   */
+  protected void reloadEntity(IEntity entity, Map<String, Object> context) {
+    if (entity.isPersistent()) {
+      HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
+      getApplicationSession(context).merge(
+          (IEntity) hibernateTemplate.load(entity.getContract().getName(),
+              entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
+    }
+  }
+
   @SuppressWarnings("unchecked")
   private void cleanRelationshipsOnDeletion(IComponent componentOrProxy,
       Map<String, Object> context, boolean dryRun, Set<IComponent> clearedEntities)
@@ -209,54 +257,6 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
       }
     } finally {
       component.setPropertyProcessorsEnabled(true);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected HibernateBackendController getController(Map<String, Object> context) {
-    return (HibernateBackendController) super.getController(context);
-  }
-
-  /**
-   * Gets the hibernateTemplate.
-   * 
-   * @param context
-   *          the action context.
-   * @return the hibernateTemplate.
-   */
-  protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
-    return getController(context).getHibernateTemplate();
-  }
-
-  /**
-   * Gets the transactionTemplate.
-   * 
-   * @param context
-   *          the action context.
-   * @return the transactionTemplate.
-   */
-  protected TransactionTemplate getTransactionTemplate(
-      Map<String, Object> context) {
-    return getController(context).getTransactionTemplate();
-  }
-
-  /**
-   * Reloads an entity in hibernate.
-   * 
-   * @param entity
-   *          the entity to reload.
-   * @param context
-   *          the action context.
-   */
-  protected void reloadEntity(IEntity entity, Map<String, Object> context) {
-    if (entity.isPersistent()) {
-      HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
-      getApplicationSession(context).merge(
-          (IEntity) hibernateTemplate.load(entity.getContract().getName(),
-              entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
     }
   }
 }

@@ -55,11 +55,23 @@ public class OkCancelAction extends AbstractMessageAction {
   private IDisplayableAction okAction;
 
   /**
-   * {@inheritDoc}
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *          the cancelAction to set.
    */
-  @Override
-  protected RemoteMessageCommand createMessageCommand() {
-    return new RemoteOkCancelCommand();
+  public void setCancelAction(IAction cancelAction) {
+    this.cancelAction = wrapAction(cancelAction);
+  }
+
+  /**
+   * Sets the okAction.
+   * 
+   * @param okAction
+   *          the okAction to set.
+   */
+  public void setOkAction(IAction okAction) {
+    this.okAction = wrapAction(okAction);
   }
 
   /**
@@ -95,23 +107,11 @@ public class OkCancelAction extends AbstractMessageAction {
   }
 
   /**
-   * Sets the cancelAction.
-   * 
-   * @param cancelAction
-   *          the cancelAction to set.
+   * {@inheritDoc}
    */
-  public void setCancelAction(IAction cancelAction) {
-    this.cancelAction = wrapAction(cancelAction);
-  }
-
-  /**
-   * Sets the okAction.
-   * 
-   * @param okAction
-   *          the okAction to set.
-   */
-  public void setOkAction(IAction okAction) {
-    this.okAction = wrapAction(okAction);
+  @Override
+  protected RemoteMessageCommand createMessageCommand() {
+    return new RemoteOkCancelCommand();
   }
 
 }

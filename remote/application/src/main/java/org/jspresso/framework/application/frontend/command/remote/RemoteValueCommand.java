@@ -40,30 +40,9 @@ package org.jspresso.framework.application.frontend.command.remote;
  */
 public class RemoteValueCommand extends RemoteCommand {
   
-  private Object value;
   private String description;
   private String iconImageUrl;
-
-  
-  /**
-   * Gets the value.
-   * 
-   * @return the value.
-   */
-  public Object getValue() {
-    return value;
-  }
-
-  
-  /**
-   * Sets the value.
-   * 
-   * @param value the value to set.
-   */
-  public void setValue(Object value) {
-    this.value = value;
-  }
-
+  private Object value;
 
   
   /**
@@ -73,6 +52,27 @@ public class RemoteValueCommand extends RemoteCommand {
    */
   public String getDescription() {
     return description;
+  }
+
+  
+  /**
+   * Gets the iconImageUrl.
+   * 
+   * @return the iconImageUrl.
+   */
+  public String getIconImageUrl() {
+    return iconImageUrl;
+  }
+
+
+  
+  /**
+   * Gets the value.
+   * 
+   * @return the value.
+   */
+  public Object getValue() {
+    return value;
   }
 
 
@@ -89,23 +89,23 @@ public class RemoteValueCommand extends RemoteCommand {
 
   
   /**
-   * Gets the iconImageUrl.
-   * 
-   * @return the iconImageUrl.
-   */
-  public String getIconImageUrl() {
-    return iconImageUrl;
-  }
-
-
-  
-  /**
    * Sets the iconImageUrl.
    * 
    * @param iconImageUrl the iconImageUrl to set.
    */
   public void setIconImageUrl(String iconImageUrl) {
     this.iconImageUrl = iconImageUrl;
+  }
+
+
+  
+  /**
+   * Sets the value.
+   * 
+   * @param value the value to set.
+   */
+  public void setValue(Object value) {
+    this.value = value;
   }
 
   

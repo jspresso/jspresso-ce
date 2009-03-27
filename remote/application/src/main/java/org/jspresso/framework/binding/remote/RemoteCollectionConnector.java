@@ -53,9 +53,9 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 public class RemoteCollectionConnector extends BasicCollectionConnector
     implements IRemotePeer, IRemoteStateOwner {
 
+  private RemoteConnectorFactory    connectorFactory;
   private String                    guid;
   private RemoteCompositeValueState state;
-  private RemoteConnectorFactory    connectorFactory;
 
   /**
    * Constructs a new <code>RemoteCollectionConnector</code> instance.
@@ -79,15 +79,6 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   }
 
   /**
-   * Gets the guid.
-   * 
-   * @return the guid.
-   */
-  public String getGuid() {
-    return guid;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -107,6 +98,15 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     connectorFactory.attachListeners(clonedConnector);
     connectorFactory.register(clonedConnector);
     return clonedConnector;
+  }
+
+  /**
+   * Gets the guid.
+   * 
+   * @return the guid.
+   */
+  public String getGuid() {
+    return guid;
   }
 
   /**

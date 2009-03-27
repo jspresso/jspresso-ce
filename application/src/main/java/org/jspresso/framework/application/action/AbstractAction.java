@@ -66,16 +66,6 @@ public abstract class AbstractAction implements IAction {
   }
 
   /**
-   * Retrieves the locale the action has to use to execute from its context
-   * using a well-known key.
-   * 
-   * @param context
-   *          the action context.
-   * @return the locale the action executes in.
-   */
-  protected abstract Locale getLocale(Map<String, Object> context);
-
-  /**
    * {@inheritDoc}
    */
   public boolean isLongOperation() {
@@ -112,16 +102,14 @@ public abstract class AbstractAction implements IAction {
   protected abstract IController getController(Map<String, Object> context);
 
   /**
-   * Gets a translation provider out of the action context.
+   * Retrieves the locale the action has to use to execute from its context
+   * using a well-known key.
    * 
    * @param context
    *          the action context.
-   * @return the translation provider.
+   * @return the locale the action executes in.
    */
-  protected ITranslationProvider getTranslationProvider(
-      Map<String, Object> context) {
-    return getController(context).getTranslationProvider();
-  }
+  protected abstract Locale getLocale(Map<String, Object> context);
 
   /**
    * This is a utility method which is able to retrieve the model descriptor
@@ -139,5 +127,17 @@ public abstract class AbstractAction implements IAction {
   protected IModelDescriptor getModelDescriptor(Map<String, Object> context) {
     return (IModelDescriptor) context
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
+  }
+
+  /**
+   * Gets a translation provider out of the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the translation provider.
+   */
+  protected ITranslationProvider getTranslationProvider(
+      Map<String, Object> context) {
+    return getController(context).getTranslationProvider();
   }
 }

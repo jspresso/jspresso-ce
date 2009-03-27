@@ -83,16 +83,6 @@ public class BasicDecimalPropertyDescriptor extends
   }
 
   /**
-   * Sets the maxFractionDigit property.
-   * 
-   * @param maxFractionDigit
-   *          the maxFractionDigit to set.
-   */
-  public void setMaxFractionDigit(Integer maxFractionDigit) {
-    this.maxFractionDigit = maxFractionDigit;
-  }
-
-  /**
    * Returns false by default.
    * <p>
    * {@inheritDoc}
@@ -106,6 +96,16 @@ public class BasicDecimalPropertyDescriptor extends
           .isUsingBigDecimal();
     }
     return false;
+  }
+
+  /**
+   * Sets the maxFractionDigit property.
+   * 
+   * @param maxFractionDigit
+   *          the maxFractionDigit to set.
+   */
+  public void setMaxFractionDigit(Integer maxFractionDigit) {
+    this.maxFractionDigit = maxFractionDigit;
   }
 
   /**

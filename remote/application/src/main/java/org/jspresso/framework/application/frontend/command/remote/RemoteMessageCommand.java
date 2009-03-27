@@ -41,10 +41,28 @@ import org.jspresso.framework.gui.remote.RIcon;
  */
 public class RemoteMessageCommand extends RemoteCommand {
 
-  private String title;
   private String message;
-  private RIcon  titleIcon;
   private RIcon  messageIcon;
+  private String title;
+  private RIcon  titleIcon;
+
+  /**
+   * Gets the message.
+   * 
+   * @return the message.
+   */
+  public String getMessage() {
+    return message;
+  }
+
+  /**
+   * Gets the messageIcon.
+   * 
+   * @return the messageIcon.
+   */
+  public RIcon getMessageIcon() {
+    return messageIcon;
+  }
 
   /**
    * Gets the title.
@@ -56,22 +74,12 @@ public class RemoteMessageCommand extends RemoteCommand {
   }
 
   /**
-   * Sets the title.
+   * Gets the titleIcon.
    * 
-   * @param title
-   *          the title to set.
+   * @return the titleIcon.
    */
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  /**
-   * Gets the message.
-   * 
-   * @return the message.
-   */
-  public String getMessage() {
-    return message;
+  public RIcon getTitleIcon() {
+    return titleIcon;
   }
 
   /**
@@ -85,12 +93,23 @@ public class RemoteMessageCommand extends RemoteCommand {
   }
 
   /**
-   * Gets the titleIcon.
+   * Sets the messageIcon.
    * 
-   * @return the titleIcon.
+   * @param messageIcon
+   *          the messageIcon to set.
    */
-  public RIcon getTitleIcon() {
-    return titleIcon;
+  public void setMessageIcon(RIcon messageIcon) {
+    this.messageIcon = messageIcon;
+  }
+
+  /**
+   * Sets the title.
+   * 
+   * @param title
+   *          the title to set.
+   */
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   /**
@@ -101,24 +120,5 @@ public class RemoteMessageCommand extends RemoteCommand {
    */
   public void setTitleIcon(RIcon titleIcon) {
     this.titleIcon = titleIcon;
-  }
-
-  /**
-   * Gets the messageIcon.
-   * 
-   * @return the messageIcon.
-   */
-  public RIcon getMessageIcon() {
-    return messageIcon;
-  }
-
-  /**
-   * Sets the messageIcon.
-   * 
-   * @param messageIcon
-   *          the messageIcon to set.
-   */
-  public void setMessageIcon(RIcon messageIcon) {
-    this.messageIcon = messageIcon;
   }
 }

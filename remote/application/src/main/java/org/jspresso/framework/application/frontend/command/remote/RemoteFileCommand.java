@@ -43,9 +43,18 @@ import org.jspresso.framework.gui.remote.RAction;
  */
 public class RemoteFileCommand extends RemoteCommand {
 
+  private RAction               cancelCallbackAction;
   private Map<String, String[]> fileFilter;
   private String                fileUrl;
-  private RAction               cancelCallbackAction;
+
+  /**
+   * Gets the cancelCallbackAction.
+   * 
+   * @return the cancelCallbackAction.
+   */
+  public RAction getCancelCallbackAction() {
+    return cancelCallbackAction;
+  }
 
   /**
    * Gets the fileFilter.
@@ -54,6 +63,25 @@ public class RemoteFileCommand extends RemoteCommand {
    */
   public Map<String, String[]> getFileFilter() {
     return fileFilter;
+  }
+
+  /**
+   * Gets the fileUrl.
+   * 
+   * @return the fileUrl.
+   */
+  public String getFileUrl() {
+    return fileUrl;
+  }
+
+  /**
+   * Sets the cancelCallbackAction.
+   * 
+   * @param cancelCallbackAction
+   *          the cancelCallbackAction to set.
+   */
+  public void setCancelCallbackAction(RAction cancelCallbackAction) {
+    this.cancelCallbackAction = cancelCallbackAction;
   }
 
   /**
@@ -67,15 +95,6 @@ public class RemoteFileCommand extends RemoteCommand {
   }
 
   /**
-   * Gets the fileUrl.
-   * 
-   * @return the fileUrl.
-   */
-  public String getFileUrl() {
-    return fileUrl;
-  }
-
-  /**
    * Sets the fileUrl.
    * 
    * @param fileUrl
@@ -83,25 +102,6 @@ public class RemoteFileCommand extends RemoteCommand {
    */
   public void setFileUrl(String fileUrl) {
     this.fileUrl = fileUrl;
-  }
-
-  /**
-   * Gets the cancelCallbackAction.
-   * 
-   * @return the cancelCallbackAction.
-   */
-  public RAction getCancelCallbackAction() {
-    return cancelCallbackAction;
-  }
-
-  /**
-   * Sets the cancelCallbackAction.
-   * 
-   * @param cancelCallbackAction
-   *          the cancelCallbackAction to set.
-   */
-  public void setCancelCallbackAction(RAction cancelCallbackAction) {
-    this.cancelCallbackAction = cancelCallbackAction;
   }
 
 }

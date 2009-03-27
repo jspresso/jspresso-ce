@@ -94,6 +94,14 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
+  public IFormattedValueConnector createFormattedValueConnector(String id,
+      IFormatter formatter) {
+    return new BasicFormattedValueConnector(id, formatter);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IValueConnector createValueConnector(String id) {
     return new BasicValueConnector(id);
   }
@@ -107,13 +115,5 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
       compositeValueConnector
           .setRenderingChildConnectorId(renderingConnectorId);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IFormattedValueConnector createFormattedValueConnector(String id,
-      IFormatter formatter) {
-    return new BasicFormattedValueConnector(id, formatter);
   }
 }

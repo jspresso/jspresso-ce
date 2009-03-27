@@ -102,14 +102,14 @@ public class DefaultRemoteController extends
     AbstractFrontendController<RComponent, RIcon, RAction> implements
     IRemoteCommandHandler, IRemotePeerRegistry {
 
-  private IRemotePeerRegistry    remotePeerRegistry;
+  private int                    commandLowPriorityOffset;
   private List<RemoteCommand>    commandQueue;
   private boolean                commandRegistrationEnabled;
-  private int                    commandLowPriorityOffset;
   private IGUIDGenerator         guidGenerator;
-  private Set<String>            workspaceViews;
   private IViewDescriptor        loginViewDescriptor;
   private IModelConnectorFactory modelConnectorFactory;
+  private IRemotePeerRegistry    remotePeerRegistry;
+  private Set<String>            workspaceViews;
 
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
@@ -123,8 +123,104 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    return new UsernamePasswordHandler();
+  public void clear() {
+    remotePeerRegistry.clear();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayModalDialog(RComponent mainView, List<RAction> actions,
+      String title, RComponent sourceComponent, Map<String, Object> context,
+      boolean reuseCurrent) {
+    super.displayModalDialog(mainView, actions, title, sourceComponent,
+        context, reuseCurrent);
+    RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
+    dialogCommand.setTitle(title);
+    dialogCommand.setView(mainView);
+    dialogCommand.setActions(actions.toArray(new RAction[0]));
+    dialogCommand.setUseCurrent(reuseCurrent);
+    registerCommand(dialogCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    RemoteOpenUrlCommand openUrlCommand = new RemoteOpenUrlCommand();
+    openUrlCommand.setUrlSpec(urlSpec);
+    registerCommand(openUrlCommand);
+  }
+
+  /**
+   * Sends a remote workspace display command.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayWorkspace(String workspaceName) {
+    RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceViews == null) {
+        workspaceViews = new HashSet<String>();
+      }
+      if (!workspaceViews.contains(workspaceName)) {
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<RComponent> workspaceView = createWorkspaceView(workspaceName,
+            workspaceViewDescriptor, (Workspace) workspaceConnector
+                .getConnectorValue());
+        workspaceViews.add(workspaceName);
+        workspaceDisplayCommand.setWorkspaceView(workspaceView.getPeer());
+        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+      }
+      workspaceDisplayCommand.setWorkspaceName(workspaceName);
+      registerCommand(workspaceDisplayCommand);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void disposeModalDialog(RComponent sourceWidget,
+      Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
+    registerCommand(new RemoteCloseDialogCommand());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IRemotePeer getRegistered(String guid) {
+    return remotePeerRegistry.getRegistered(guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
+    try {
+      commandRegistrationEnabled = true;
+      commandQueue = new ArrayList<RemoteCommand>();
+      commandLowPriorityOffset = 0;
+      if (commands != null) {
+        for (RemoteCommand command : commands) {
+          handleCommand(command);
+        }
+      }
+    } catch (Throwable ex) {
+      ex.printStackTrace();
+    } finally {
+      commandRegistrationEnabled = false;
+    }
+    return commandQueue;
   }
 
   /**
@@ -152,37 +248,176 @@ public class DefaultRemoteController extends
     return true;
   }
 
-  private RemoteMessageCommand createErrorMessageCommand() {
-    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
-    messageCommand.setTitle(getTranslationProvider().getTranslation("error",
-        getLocale()));
-    messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
-        IIconFactory.TINY_ICON_SIZE));
-    messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
-        IIconFactory.LARGE_ICON_SIZE));
-    return messageCommand;
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isRegistered(String guid) {
+    return remotePeerRegistry.isRegistered(guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void register(IRemotePeer remotePeer) {
+    remotePeerRegistry.register(remotePeer);
+    if (remotePeer instanceof ICompositeValueConnector) {
+      for (String childKey : ((ICompositeValueConnector) remotePeer)
+          .getChildConnectorKeys()) {
+        IValueConnector childConnector = ((ICompositeValueConnector) remotePeer)
+            .getChildConnector(childKey);
+        register((IRemotePeer) childConnector);
+      }
+    }
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
-    try {
-      commandRegistrationEnabled = true;
-      commandQueue = new ArrayList<RemoteCommand>();
-      commandLowPriorityOffset = 0;
-      if (commands != null) {
-        for (RemoteCommand command : commands) {
-          handleCommand(command);
-        }
+  public void registerCommand(RemoteCommand command) {
+    if (commandRegistrationEnabled) {
+      if (command instanceof RemoteChildrenCommand) {
+        // The remote children commands, that may create and register
+        // remote server peers on client side must be handled first.
+        commandQueue.add(commandLowPriorityOffset, command);
+        commandLowPriorityOffset++;
+      } else {
+        commandQueue.add(command);
       }
-    } catch (Throwable ex) {
-      ex.printStackTrace();
-    } finally {
-      commandRegistrationEnabled = false;
     }
-    return commandQueue;
+  }
+
+  /**
+   * Sets the guidGenerator.
+   * 
+   * @param guidGenerator
+   *          the guidGenerator to set.
+   */
+  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+    this.guidGenerator = guidGenerator;
+  }
+
+  /**
+   * Sets the loginViewDescriptor.
+   * 
+   * @param loginViewDescriptor
+   *          the loginViewDescriptor to set.
+   */
+  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
+    this.loginViewDescriptor = loginViewDescriptor;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
+   * Sets the remotePeerRegistry.
+   * 
+   * @param remotePeerRegistry
+   *          the remotePeerRegistry to set.
+   */
+  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
+    this.remotePeerRegistry = remotePeerRegistry;
+  }
+
+  /**
+   * Updates the view factory with the remote peer registry.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setViewFactory(
+      IViewFactory<RComponent, RIcon, RAction> viewFactory) {
+    if (viewFactory instanceof DefaultRemoteViewFactory) {
+      ((DefaultRemoteViewFactory) viewFactory).setRemoteCommandHandler(this);
+    }
+    IActionFactory<RAction, RComponent> actionFactory = viewFactory
+        .getActionFactory();
+    if (actionFactory instanceof RemoteActionFactory) {
+      ((RemoteActionFactory) actionFactory).setRemoteCommandHandler(this);
+      ((RemoteActionFactory) actionFactory).setRemotePeerRegistry(this);
+    }
+    IConfigurableConnectorFactory connectorFactory = viewFactory
+        .getConnectorFactory();
+    if (connectorFactory instanceof RemoteConnectorFactory) {
+      ((RemoteConnectorFactory) connectorFactory).setRemoteCommandHandler(this);
+      ((RemoteConnectorFactory) connectorFactory).setRemotePeerRegistry(this);
+    }
+    super.setViewFactory(viewFactory);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    if (remotePeerRegistry != null) {
+      remotePeerRegistry.clear();
+    }
+    if (workspaceViews != null) {
+      workspaceViews.clear();
+    }
+    registerCommand(new RemoteRestartCommand());
+    return super.stop();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void unregister(String guid) {
+    IRemotePeer remotePeer = getRegistered(guid);
+    remotePeerRegistry.unregister(guid);
+    if (remotePeer instanceof ICompositeValueConnector) {
+      for (String childKey : ((ICompositeValueConnector) remotePeer)
+          .getChildConnectorKeys()) {
+        unregister(((IRemotePeer) ((ICompositeValueConnector) remotePeer)
+            .getChildConnector(childKey)).getGuid());
+      }
+    }
+  }
+
+  /**
+   * Creates the init commands to be sent to the remote peer.
+   * 
+   * @return the init commands to be sent to the remote peer.
+   */
+  protected List<RemoteCommand> createInitCommands() {
+    List<RemoteCommand> initCommands = new ArrayList<RemoteCommand>();
+    RemoteLocaleCommand localeCommand = new RemoteLocaleCommand();
+    localeCommand.setLanguage(getLocale().getLanguage());
+    initCommands.add(localeCommand);
+    RemoteInitCommand initCommand = new RemoteInitCommand();
+    initCommand
+        .setWorkspaceActions(createRActionLists(createWorkspaceActionMap()));
+    initCommand.setActions(createRActionLists(getActionMap()));
+    initCommand.setHelpActions(createRActionLists(getHelpActions()));
+    initCommands.add(initCommand);
+    return initCommands;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected CallbackHandler createLoginCallbackHandler() {
+    return new UsernamePasswordHandler();
+  }
+
+  /**
+   * Gets the modelConnectorFactory.
+   * 
+   * @return the modelConnectorFactory.
+   */
+  protected IModelConnectorFactory getModelConnectorFactory() {
+    return modelConnectorFactory;
   }
 
   /**
@@ -255,138 +490,15 @@ public class DefaultRemoteController extends
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void registerCommand(RemoteCommand command) {
-    if (commandRegistrationEnabled) {
-      if (command instanceof RemoteChildrenCommand) {
-        // The remote children commands, that may create and register
-        // remote server peers on client side must be handled first.
-        commandQueue.add(commandLowPriorityOffset, command);
-        commandLowPriorityOffset++;
-      } else {
-        commandQueue.add(command);
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IRemotePeer getRegistered(String guid) {
-    return remotePeerRegistry.getRegistered(guid);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isRegistered(String guid) {
-    return remotePeerRegistry.isRegistered(guid);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void register(IRemotePeer remotePeer) {
-    remotePeerRegistry.register(remotePeer);
-    if (remotePeer instanceof ICompositeValueConnector) {
-      for (String childKey : ((ICompositeValueConnector) remotePeer)
-          .getChildConnectorKeys()) {
-        IValueConnector childConnector = ((ICompositeValueConnector) remotePeer)
-            .getChildConnector(childKey);
-        register((IRemotePeer) childConnector);
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void unregister(String guid) {
-    IRemotePeer remotePeer = getRegistered(guid);
-    remotePeerRegistry.unregister(guid);
-    if (remotePeer instanceof ICompositeValueConnector) {
-      for (String childKey : ((ICompositeValueConnector) remotePeer)
-          .getChildConnectorKeys()) {
-        unregister(((IRemotePeer) ((ICompositeValueConnector) remotePeer)
-            .getChildConnector(childKey)).getGuid());
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void clear() {
-    remotePeerRegistry.clear();
-  }
-
-  /**
-   * Sets the remotePeerRegistry.
-   * 
-   * @param remotePeerRegistry
-   *          the remotePeerRegistry to set.
-   */
-  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
-    this.remotePeerRegistry = remotePeerRegistry;
-  }
-
-  /**
-   * Updates the view factory with the remote peer registry.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setViewFactory(
-      IViewFactory<RComponent, RIcon, RAction> viewFactory) {
-    if (viewFactory instanceof DefaultRemoteViewFactory) {
-      ((DefaultRemoteViewFactory) viewFactory).setRemoteCommandHandler(this);
-    }
-    IActionFactory<RAction, RComponent> actionFactory = viewFactory
-        .getActionFactory();
-    if (actionFactory instanceof RemoteActionFactory) {
-      ((RemoteActionFactory) actionFactory).setRemoteCommandHandler(this);
-      ((RemoteActionFactory) actionFactory).setRemotePeerRegistry(this);
-    }
-    IConfigurableConnectorFactory connectorFactory = viewFactory
-        .getConnectorFactory();
-    if (connectorFactory instanceof RemoteConnectorFactory) {
-      ((RemoteConnectorFactory) connectorFactory).setRemoteCommandHandler(this);
-      ((RemoteConnectorFactory) connectorFactory).setRemotePeerRegistry(this);
-    }
-    super.setViewFactory(viewFactory);
-  }
-
-  /**
-   * Creates the init commands to be sent to the remote peer.
-   * 
-   * @return the init commands to be sent to the remote peer.
-   */
-  protected List<RemoteCommand> createInitCommands() {
-    List<RemoteCommand> initCommands = new ArrayList<RemoteCommand>();
-    RemoteLocaleCommand localeCommand = new RemoteLocaleCommand();
-    localeCommand.setLanguage(getLocale().getLanguage());
-    initCommands.add(localeCommand);
-    RemoteInitCommand initCommand = new RemoteInitCommand();
-    initCommand
-        .setWorkspaceActions(createRActionLists(createWorkspaceActionMap()));
-    initCommand.setActions(createRActionLists(getActionMap()));
-    initCommand.setHelpActions(createRActionLists(getHelpActions()));
-    initCommands.add(initCommand);
-    return initCommands;
-  }
-
-  private RActionList[] createRActionLists(ActionMap actionMap) {
-    List<RActionList> actionLists = new ArrayList<RActionList>();
-    if (actionMap != null) {
-      for (ActionList actionList : actionMap.getActionLists()) {
-        actionLists.add(createRActionList(actionList));
-      }
-    }
-    return actionLists.toArray(new RActionList[0]);
+  private RemoteMessageCommand createErrorMessageCommand() {
+    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
+    messageCommand.setTitle(getTranslationProvider().getTranslation("error",
+        getLocale()));
+    messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
+        IIconFactory.TINY_ICON_SIZE));
+    messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
+        IIconFactory.LARGE_ICON_SIZE));
+    return messageCommand;
   }
 
   private RActionList createRActionList(ActionList actionList) {
@@ -407,71 +519,14 @@ public class DefaultRemoteController extends
     return rActionList;
   }
 
-  /**
-   * Sets the guidGenerator.
-   * 
-   * @param guidGenerator
-   *          the guidGenerator to set.
-   */
-  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
-    this.guidGenerator = guidGenerator;
-  }
-
-  /**
-   * Sends a remote workspace display command.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayWorkspace(String workspaceName) {
-    RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
-    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
-      super.displayWorkspace(workspaceName);
-      if (workspaceViews == null) {
-        workspaceViews = new HashSet<String>();
+  private RActionList[] createRActionLists(ActionMap actionMap) {
+    List<RActionList> actionLists = new ArrayList<RActionList>();
+    if (actionMap != null) {
+      for (ActionList actionList : actionMap.getActionLists()) {
+        actionLists.add(createRActionList(actionList));
       }
-      if (!workspaceViews.contains(workspaceName)) {
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController()
-            .getWorkspaceConnector(workspaceName);
-        IView<RComponent> workspaceView = createWorkspaceView(workspaceName,
-            workspaceViewDescriptor, (Workspace) workspaceConnector
-                .getConnectorValue());
-        workspaceViews.add(workspaceName);
-        workspaceDisplayCommand.setWorkspaceView(workspaceView.getPeer());
-        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-      }
-      workspaceDisplayCommand.setWorkspaceName(workspaceName);
-      registerCommand(workspaceDisplayCommand);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, RComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
-    RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
-    dialogCommand.setTitle(title);
-    dialogCommand.setView(mainView);
-    dialogCommand.setActions(actions.toArray(new RAction[0]));
-    dialogCommand.setUseCurrent(reuseCurrent);
-    registerCommand(dialogCommand);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void disposeModalDialog(RComponent sourceWidget,
-      Map<String, Object> context) {
-    super.disposeModalDialog(sourceWidget, context);
-    registerCommand(new RemoteCloseDialogCommand());
+    return actionLists.toArray(new RActionList[0]);
   }
 
   private boolean performLogin() {
@@ -499,60 +554,5 @@ public class DefaultRemoteController extends
       loginSuccess(getAnonymousSubject());
     }
     return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean stop() {
-    if (remotePeerRegistry != null) {
-      remotePeerRegistry.clear();
-    }
-    if (workspaceViews != null) {
-      workspaceViews.clear();
-    }
-    registerCommand(new RemoteRestartCommand());
-    return super.stop();
-  }
-
-  /**
-   * Sets the loginViewDescriptor.
-   * 
-   * @param loginViewDescriptor
-   *          the loginViewDescriptor to set.
-   */
-  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
-    this.loginViewDescriptor = loginViewDescriptor;
-  }
-
-  /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
-   * Gets the modelConnectorFactory.
-   * 
-   * @return the modelConnectorFactory.
-   */
-  protected IModelConnectorFactory getModelConnectorFactory() {
-    return modelConnectorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayUrl(String urlSpec) {
-    RemoteOpenUrlCommand openUrlCommand = new RemoteOpenUrlCommand();
-    openUrlCommand.setUrlSpec(urlSpec);
-    registerCommand(openUrlCommand);
   }
 }

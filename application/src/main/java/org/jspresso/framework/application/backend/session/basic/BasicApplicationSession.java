@@ -99,20 +99,19 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
+   * Clears the pending operations.
+   * <p>
    * {@inheritDoc}
    */
-  public IEntity cloneInUnitOfWork(IEntity entity) {
-    return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
+  public void clearPendingOperations() {
+    unitOfWork.clearPendingOperations();
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean isUpdatedInUnitOfWork(IEntity entity) {
-    if (!unitOfWork.isActive()) {
-      throw new ApplicationSessionException("Cannot access unit of work.");
-    }
-    return unitOfWork.isUpdated(entity);
+  public IEntity cloneInUnitOfWork(IEntity entity) {
+    return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
   }
 
   /**
@@ -145,22 +144,6 @@ public class BasicApplicationSession implements IApplicationSession {
     } finally {
       unitOfWork.commit();
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void registerForDeletion(IEntity entity) {
-    unitOfWork.registerForDeletion(entity);
-  }
-
-  /**
-   * Clears the pending operations.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void clearPendingOperations() {
-    unitOfWork.clearPendingOperations();
   }
 
   /**
@@ -286,6 +269,16 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
+  public boolean isUpdatedInUnitOfWork(IEntity entity) {
+    if (!unitOfWork.isActive()) {
+      throw new ApplicationSessionException("Cannot access unit of work.");
+    }
+    return unitOfWork.isUpdated(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IEntity merge(IEntity entity, EMergeMode mergeMode) {
     return merge(entity, mergeMode, new HashMap<IEntity, IEntity>());
   }
@@ -339,6 +332,20 @@ public class BasicApplicationSession implements IApplicationSession {
       }
       dirtRecorder.register(entity, initialDirtyProperties);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void registerForDeletion(IEntity entity) {
+    unitOfWork.registerForDeletion(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void registerForUpdate(IEntity entity) {
+    unitOfWork.registerForUpdate(entity);
   }
 
   /**
@@ -435,13 +442,6 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public void registerForUpdate(IEntity entity) {
-    unitOfWork.registerForUpdate(entity);
-  }
-
-  /**
    * Creates a transient collection instance, in respect to the type of
    * collection passed as parameter.
    * 
@@ -470,6 +470,24 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   protected BeanPropertyChangeRecorder getDirtRecorder() {
     return dirtRecorder;
+  }
+
+  /**
+   * Gets the entities that are registered for deletion.
+   * 
+   * @return the entities that are registered for deletion.
+   */
+  protected Collection<IEntity> getEntitiesRegisteredForDeletion() {
+    return unitOfWork.getEntitiesRegisteredForDeletion();
+  }
+
+  /**
+   * Gets the entities that are registered for update.
+   * 
+   * @return the entities that are registered for update.
+   */
+  protected Collection<IEntity> getEntitiesRegisteredForUpdate() {
+    return unitOfWork.getEntitiesRegisteredForUpdate();
   }
 
   /**
@@ -538,6 +556,29 @@ public class BasicApplicationSession implements IApplicationSession {
 
   private void cleanDirtyProperties(IEntity entity) {
     dirtRecorder.resetChangedProperties(entity, null);
+  }
+
+  private IComponent cloneComponentInUnitOfWork(IComponent component,
+      Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned) {
+    IComponent uowComponent = carbonEntityCloneFactory.cloneComponent(
+        component, entityFactory);
+    Map<String, Object> componentProperties = component.straightGetProperties();
+    for (Map.Entry<String, Object> property : componentProperties.entrySet()) {
+      if (property.getValue() instanceof IEntity) {
+        if (isInitialized(property.getValue())) {
+          uowComponent.straightSetProperty(property.getKey(),
+              cloneInUnitOfWork((IEntity) property.getValue(), alreadyCloned));
+        } else {
+          uowComponent.straightSetProperty(property.getKey(), property
+              .getValue());
+        }
+      } else if (property.getValue() instanceof IComponent) {
+        uowComponent.straightSetProperty(property.getKey(),
+            cloneComponentInUnitOfWork((IComponent) property.getValue(),
+                alreadyCloned));
+      }
+    }
+    return uowComponent;
   }
 
   @SuppressWarnings("unchecked")
@@ -616,29 +657,6 @@ public class BasicApplicationSession implements IApplicationSession {
         .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
     uowEntity.onLoad();
     return uowEntity;
-  }
-
-  private IComponent cloneComponentInUnitOfWork(IComponent component,
-      Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned) {
-    IComponent uowComponent = carbonEntityCloneFactory.cloneComponent(
-        component, entityFactory);
-    Map<String, Object> componentProperties = component.straightGetProperties();
-    for (Map.Entry<String, Object> property : componentProperties.entrySet()) {
-      if (property.getValue() instanceof IEntity) {
-        if (isInitialized(property.getValue())) {
-          uowComponent.straightSetProperty(property.getKey(),
-              cloneInUnitOfWork((IEntity) property.getValue(), alreadyCloned));
-        } else {
-          uowComponent.straightSetProperty(property.getKey(), property
-              .getValue());
-        }
-      } else if (property.getValue() instanceof IComponent) {
-        uowComponent.straightSetProperty(property.getKey(),
-            cloneComponentInUnitOfWork((IComponent) property.getValue(),
-                alreadyCloned));
-      }
-    }
-    return uowComponent;
   }
 
   @SuppressWarnings("unchecked")
@@ -807,23 +825,5 @@ public class BasicApplicationSession implements IApplicationSession {
       varRegisteredComponent.straightSetProperties(mergedProperties);
     }
     return varRegisteredComponent;
-  }
-
-  /**
-   * Gets the entities that are registered for deletion.
-   * 
-   * @return the entities that are registered for deletion.
-   */
-  protected Collection<IEntity> getEntitiesRegisteredForDeletion() {
-    return unitOfWork.getEntitiesRegisteredForDeletion();
-  }
-
-  /**
-   * Gets the entities that are registered for update.
-   * 
-   * @return the entities that are registered for update.
-   */
-  protected Collection<IEntity> getEntitiesRegisteredForUpdate() {
-    return unitOfWork.getEntitiesRegisteredForUpdate();
   }
 }

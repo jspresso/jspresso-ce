@@ -54,21 +54,21 @@ public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
   }
   
   /**
-   * Sets the workspaceName.
-   * 
-   * @param workspaceName the workspaceName to set.
-   */
-  public void setWorkspaceName(String workspaceName) {
-    this.workspaceName = workspaceName;
-  }
-  
-  /**
    * Gets the workspaceView.
    * 
    * @return the workspaceView.
    */
   public RComponent getWorkspaceView() {
     return workspaceView;
+  }
+  
+  /**
+   * Sets the workspaceName.
+   * 
+   * @param workspaceName the workspaceName to set.
+   */
+  public void setWorkspaceName(String workspaceName) {
+    this.workspaceName = workspaceName;
   }
   
   /**

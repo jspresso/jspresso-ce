@@ -42,11 +42,11 @@ import org.jspresso.framework.gui.remote.RIcon;
  */
 public class RemoteInitLoginCommand extends RemoteCommand {
 
-  private String     title;
-  private String     message;
-  private String     okLabel;
-  private RIcon      okIcon;
   private RComponent loginView;
+  private String     message;
+  private RIcon      okIcon;
+  private String     okLabel;
+  private String     title;
 
   /**
    * Gets the loginView.
@@ -55,35 +55,6 @@ public class RemoteInitLoginCommand extends RemoteCommand {
    */
   public RComponent getLoginView() {
     return loginView;
-  }
-
-  /**
-   * Sets the loginView.
-   * 
-   * @param loginView
-   *          the loginView to set.
-   */
-  public void setLoginView(RComponent loginView) {
-    this.loginView = loginView;
-  }
-
-  /**
-   * Gets the title.
-   * 
-   * @return the title.
-   */
-  public String getTitle() {
-    return title;
-  }
-
-  /**
-   * Sets the title.
-   * 
-   * @param title
-   *          the title to set.
-   */
-  public void setTitle(String title) {
-    this.title = title;
   }
 
   /**
@@ -96,6 +67,44 @@ public class RemoteInitLoginCommand extends RemoteCommand {
   }
 
   /**
+   * Gets the okIcon.
+   * 
+   * @return the okIcon.
+   */
+  public RIcon getOkIcon() {
+    return okIcon;
+  }
+
+  /**
+   * Gets the okLabel.
+   * 
+   * @return the okLabel.
+   */
+  public String getOkLabel() {
+    return okLabel;
+  }
+
+  /**
+   * Gets the title.
+   * 
+   * @return the title.
+   */
+  public String getTitle() {
+    return title;
+  }
+
+  /**
+   * Sets the loginView.
+   * 
+   * @param loginView
+   *          the loginView to set.
+   */
+  public void setLoginView(RComponent loginView) {
+    this.loginView = loginView;
+  }
+
+  
+  /**
    * Sets the message.
    * 
    * @param message
@@ -107,12 +116,12 @@ public class RemoteInitLoginCommand extends RemoteCommand {
 
   
   /**
-   * Gets the okLabel.
+   * Sets the okIcon.
    * 
-   * @return the okLabel.
+   * @param okIcon the okIcon to set.
    */
-  public String getOkLabel() {
-    return okLabel;
+  public void setOkIcon(RIcon okIcon) {
+    this.okIcon = okIcon;
   }
 
   
@@ -127,21 +136,12 @@ public class RemoteInitLoginCommand extends RemoteCommand {
 
   
   /**
-   * Gets the okIcon.
+   * Sets the title.
    * 
-   * @return the okIcon.
+   * @param title
+   *          the title to set.
    */
-  public RIcon getOkIcon() {
-    return okIcon;
-  }
-
-  
-  /**
-   * Sets the okIcon.
-   * 
-   * @param okIcon the okIcon to set.
-   */
-  public void setOkIcon(RIcon okIcon) {
-    this.okIcon = okIcon;
+  public void setTitle(String title) {
+    this.title = title;
   }
 }

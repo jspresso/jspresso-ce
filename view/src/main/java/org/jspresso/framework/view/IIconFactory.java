@@ -71,6 +71,13 @@ public interface IIconFactory<E> {
   E getBackwardIcon(Dimension iconSize);
 
   /**
+   * Gets the backwardIconUrl.
+   * 
+   * @return the backwardIconUrl.
+   */
+  String getBackwardIconUrl();
+
+  /**
    * Gets the standard cancel icon.
    * 
    * @param iconSize
@@ -79,6 +86,13 @@ public interface IIconFactory<E> {
    * @return the constructed icon.
    */
   E getCancelIcon(Dimension iconSize);
+
+  /**
+   * Gets the cancelIconImageURL.
+   * 
+   * @return the cancelIconImageURL.
+   */
+  String getCancelIconImageURL();
 
   /**
    * Gets the standard error icon.
@@ -91,6 +105,13 @@ public interface IIconFactory<E> {
   E getErrorIcon(Dimension iconSize);
 
   /**
+   * Gets the errorIconImageURL.
+   * 
+   * @return the errorIconImageURL.
+   */
+  String getErrorIconImageURL();
+
+  /**
    * Gets the standard forbidden icon.
    * 
    * @param iconSize
@@ -101,6 +122,13 @@ public interface IIconFactory<E> {
   E getForbiddenIcon(Dimension iconSize);
 
   /**
+   * Gets the forbiddenIconUrl.
+   * 
+   * @return the forbiddenIconUrl.
+   */
+  String getForbiddenIconUrl();
+
+  /**
    * Gets the standard Forward icon.
    * 
    * @param iconSize
@@ -109,6 +137,13 @@ public interface IIconFactory<E> {
    * @return the constructed icon.
    */
   E getForwardIcon(Dimension iconSize);
+
+  /**
+   * Gets the forwardIconUrl.
+   * 
+   * @return the forwardIconUrl.
+   */
+  String getForwardIconUrl();
 
   /**
    * Creates an icon from an image url or get it from a local cache.
@@ -133,6 +168,13 @@ public interface IIconFactory<E> {
   E getInfoIcon(Dimension iconSize);
 
   /**
+   * Gets the infoIconImageURL.
+   * 
+   * @return the infoIconImageURL.
+   */
+  String getInfoIconImageURL();
+
+  /**
    * Gets the standard no icon.
    * 
    * @param iconSize
@@ -141,6 +183,13 @@ public interface IIconFactory<E> {
    * @return the constructed icon.
    */
   E getNoIcon(Dimension iconSize);
+
+  /**
+   * Gets the noIconImageURL.
+   * 
+   * @return the noIconImageURL.
+   */
+  String getNoIconImageURL();
 
   /**
    * Gets the standard ok / yes icon.
@@ -153,6 +202,13 @@ public interface IIconFactory<E> {
   E getOkYesIcon(Dimension iconSize);
 
   /**
+   * Gets the okYesIconImageURL.
+   * 
+   * @return the okYesIconImageURL.
+   */
+  String getOkYesIconImageURL();
+
+  /**
    * Gets the standard warning icon.
    * 
    * @param iconSize
@@ -161,62 +217,6 @@ public interface IIconFactory<E> {
    * @return the constructed icon.
    */
   E getWarningIcon(Dimension iconSize);
-
-  /**
-   * Gets the backwardIconUrl.
-   * 
-   * @return the backwardIconUrl.
-   */
-  String getBackwardIconUrl();
-
-  /**
-   * Gets the cancelIconImageURL.
-   * 
-   * @return the cancelIconImageURL.
-   */
-  String getCancelIconImageURL();
-
-  /**
-   * Gets the errorIconImageURL.
-   * 
-   * @return the errorIconImageURL.
-   */
-  String getErrorIconImageURL();
-
-  /**
-   * Gets the forbiddenIconUrl.
-   * 
-   * @return the forbiddenIconUrl.
-   */
-  String getForbiddenIconUrl();
-
-  /**
-   * Gets the forwardIconUrl.
-   * 
-   * @return the forwardIconUrl.
-   */
-  String getForwardIconUrl();
-
-  /**
-   * Gets the infoIconImageURL.
-   * 
-   * @return the infoIconImageURL.
-   */
-  String getInfoIconImageURL();
-
-  /**
-   * Gets the noIconImageURL.
-   * 
-   * @return the noIconImageURL.
-   */
-  String getNoIconImageURL();
-
-  /**
-   * Gets the okYesIconImageURL.
-   * 
-   * @return the okYesIconImageURL.
-   */
-  String getOkYesIconImageURL();
 
   /**
    * Gets the warningIconImageURL.

@@ -56,6 +56,27 @@ public abstract class RemoteStartup extends
   private Locale startupLocale;
 
   /**
+   * Delegates to the frontend controller.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
+    return ((IRemoteCommandHandler) getFrontendController())
+        .handleCommands(commands);
+  }
+
+  /**
+   * Delegates to the frontend controller.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void registerCommand(RemoteCommand command) {
+    ((IRemoteCommandHandler) getFrontendController()).registerCommand(command);
+  }
+
+  /**
    * Starts the remote application passing it the client locale.
    * 
    * @param startupLanguage
@@ -87,27 +108,6 @@ public abstract class RemoteStartup extends
    */
   protected void setStartupLocale(Locale startupLocale) {
     this.startupLocale = startupLocale;
-  }
-
-  /**
-   * Delegates to the frontend controller.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
-    return ((IRemoteCommandHandler) getFrontendController())
-        .handleCommands(commands);
-  }
-
-  /**
-   * Delegates to the frontend controller.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void registerCommand(RemoteCommand command) {
-    ((IRemoteCommandHandler) getFrontendController()).registerCommand(command);
   }
 
 }

@@ -50,24 +50,6 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
   private boolean cascadingModels;
 
   /**
-   * {@inheritDoc}
-   */
-  public boolean isCascadingModels() {
-    return cascadingModels;
-  }
-
-  /**
-   * Sets the cascadingModels.
-   * 
-   * @param cascadingModels
-   *            true if this descriptor is cascading its models based on a
-   *            master / detail relationship.
-   */
-  public void setCascadingModels(boolean cascadingModels) {
-    this.cascadingModels = cascadingModels;
-  }
-
-  /**
    * If no model is defined on this composite view descriptor, gets the one from
    * its leading child.
    * <p>
@@ -83,5 +65,23 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
       }
     }
     return modelDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isCascadingModels() {
+    return cascadingModels;
+  }
+
+  /**
+   * Sets the cascadingModels.
+   * 
+   * @param cascadingModels
+   *            true if this descriptor is cascading its models based on a
+   *            master / detail relationship.
+   */
+  public void setCascadingModels(boolean cascadingModels) {
+    this.cascadingModels = cascadingModels;
   }
 }

@@ -58,18 +58,11 @@ public interface IRenderableCompositeValueConnector extends
   IRenderableCompositeValueConnector clone(String newConnectorId);
 
   /**
-   * Gets the connector responsible for rendering the composite connector.
+   * Gets the string used to display this connector description.
    * 
-   * @return the rendering connector.
+   * @return the rendered description.
    */
-  IValueConnector getRenderingConnector();
-  
-  /**
-   * Gets the string used to display this connector.
-   * 
-   * @return the rendered string value.
-   */
-  String getDisplayValue();
+  String getDisplayDescription();
   
   /**
    * Gets the icon used to display this connector.
@@ -77,11 +70,18 @@ public interface IRenderableCompositeValueConnector extends
    * @return the rendered icon image url.
    */
   String getDisplayIconImageUrl();
+  
+  /**
+   * Gets the string used to display this connector.
+   * 
+   * @return the rendered string value.
+   */
+  String getDisplayValue();
 
   /**
-   * Gets the string used to display this connector description.
+   * Gets the connector responsible for rendering the composite connector.
    * 
-   * @return the rendered description.
+   * @return the rendering connector.
    */
-  String getDisplayDescription();
+  IValueConnector getRenderingConnector();
 }

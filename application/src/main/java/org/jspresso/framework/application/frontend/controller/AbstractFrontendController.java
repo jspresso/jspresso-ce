@@ -99,12 +99,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private ActionMap                             actionMap;
   private IBackendController                    backendController;
 
+  private Locale                                clientLocale;
   private DefaultIconDescriptor                 controllerDescriptor;
+  private List<Map<String, Object>>             dialogContextStack;
+  private String                                forcedStartingLocale;
   private ActionMap                             helpActionMap;
-  private CallbackHandler                       loginCallbackHandler;
-  private String                                loginContextName;
-  private IModuleViewDescriptorFactory          moduleViewDescriptorFactory;
 
+  private CallbackHandler                       loginCallbackHandler;
+
+  private String                                loginContextName;
+
+  private IModuleViewDescriptorFactory          moduleViewDescriptorFactory;
   private IMvcBinder                            mvcBinder;
 
   private Map<String, ICompositeValueConnector> selectedModuleConnectors;
@@ -113,14 +118,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private IAction                               startupAction;
 
   private IViewFactory<E, F, G>                 viewFactory;
-
   private Map<String, Workspace>                workspaces;
+
   private String                                workspacesMenuIconImageUrl;
-
-  private String                                forcedStartingLocale;
-  private List<Map<String, Object>>             dialogContextStack;
-
-  private Locale                                clientLocale;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -129,6 +129,41 @@ public abstract class AbstractFrontendController<E, F, G> extends
     controllerDescriptor = new DefaultIconDescriptor();
     selectedModuleConnectors = new HashMap<String, ICompositeValueConnector>();
     dialogContextStack = new ArrayList<Map<String, Object>>();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayModalDialog(@SuppressWarnings("unused") E mainView,
+      @SuppressWarnings("unused") java.util.List<G> actions,
+      @SuppressWarnings("unused") String title,
+      @SuppressWarnings("unused") E sourceComponent,
+      Map<String, Object> context, boolean reuseCurrent) {
+    if (!reuseCurrent || dialogContextStack.size() == 0) {
+      dialogContextStack.add(0, context);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayWorkspace(String workspaceName) {
+    getBackendController().checkWorkspaceAccess(workspaceName);
+    this.selectedWorkspaceName = workspaceName;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
+      Map<String, Object> context) {
+    Map<String, Object> savedContext = dialogContextStack.remove(0);
+    if (context != null && savedContext != null) {
+      // preserve action param
+      Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
+      context.putAll(savedContext);
+      context.put(ActionContextConstants.ACTION_PARAM, actionParam);
+    }
   }
 
   /**
@@ -304,6 +339,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Sets the forcedStartingLocale.
+   * 
+   * @param forcedStartingLocale
+   *          the forcedStartingLocale to set.
+   */
+  public void setForcedStartingLocale(String forcedStartingLocale) {
+    this.forcedStartingLocale = forcedStartingLocale;
+  }
+
+  /**
    * Sets the helpActionMap.
    * 
    * @param helpActionMap
@@ -440,6 +485,51 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected abstract CallbackHandler createLoginCallbackHandler();
 
   /**
+   * Creates the workspace action map.
+   * 
+   * @return the workspace action map.
+   */
+  protected ActionMap createWorkspaceActionMap() {
+    ActionMap workspaceActionMap = new ActionMap();
+    List<ActionList> workspaceActionLists = new ArrayList<ActionList>();
+    ActionList workspaceSelectionActionList = new ActionList();
+    workspaceSelectionActionList.setName("workspaces");
+    workspaceSelectionActionList
+        .setIconImageURL(getWorkspacesMenuIconImageUrl());
+    List<IDisplayableAction> workspaceSelectionActions = new ArrayList<IDisplayableAction>();
+    for (String workspaceName : getWorkspaceNames()) {
+      WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+          .getViewDescriptor();
+      workspaceSelectionAction.setWorkspaceName(workspaceName);
+      workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
+      workspaceSelectionAction.setDescription(workspaceViewDescriptor
+          .getDescription());
+      workspaceSelectionAction.setIconImageURL(workspaceViewDescriptor
+          .getIconImageURL());
+      workspaceSelectionActions.add(workspaceSelectionAction);
+    }
+    workspaceSelectionActionList.setActions(workspaceSelectionActions);
+
+    ActionList exitActionList = new ActionList();
+    exitActionList.setName("QUIT");
+    List<IDisplayableAction> exitActions = new ArrayList<IDisplayableAction>();
+    ExitAction<E, F, G> exitAction = new ExitAction<E, F, G>();
+    exitAction.setName("quit.name");
+    exitAction.setDescription("quit.description");
+    exitAction.setIconImageURL(getViewFactory().getIconFactory()
+        .getCancelIconImageURL());
+    exitActions.add(exitAction);
+    exitActionList.setActions(exitActions);
+
+    workspaceActionLists.add(workspaceSelectionActionList);
+    workspaceActionLists.add(exitActionList);
+    workspaceActionMap.setActionLists(workspaceActionLists);
+
+    return workspaceActionMap;
+  }
+
+  /**
    * Creates a root workspace view.
    * 
    * @param workspaceName
@@ -494,14 +584,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public void displayWorkspace(String workspaceName) {
-    getBackendController().checkWorkspaceAccess(workspaceName);
-    this.selectedWorkspaceName = workspaceName;
-  }
-
-  /**
    * Executes a backend action.
    * 
    * @param action
@@ -534,6 +616,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected Subject getAnonymousSubject() {
     return SecurityHelper.createAnonymousSubject();
+  }
+
+  /**
+   * Gets the forcedStartingLocale.
+   * 
+   * @return the forcedStartingLocale.
+   */
+  protected String getForcedStartingLocale() {
+    return forcedStartingLocale;
   }
 
   /**
@@ -691,97 +782,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
       for (Module module : workspace.getModules()) {
         translateModule(module);
       }
-    }
-  }
-
-  /**
-   * Gets the forcedStartingLocale.
-   * 
-   * @return the forcedStartingLocale.
-   */
-  protected String getForcedStartingLocale() {
-    return forcedStartingLocale;
-  }
-
-  /**
-   * Sets the forcedStartingLocale.
-   * 
-   * @param forcedStartingLocale
-   *          the forcedStartingLocale to set.
-   */
-  public void setForcedStartingLocale(String forcedStartingLocale) {
-    this.forcedStartingLocale = forcedStartingLocale;
-  }
-
-  /**
-   * Creates the workspace action map.
-   * 
-   * @return the workspace action map.
-   */
-  protected ActionMap createWorkspaceActionMap() {
-    ActionMap workspaceActionMap = new ActionMap();
-    List<ActionList> workspaceActionLists = new ArrayList<ActionList>();
-    ActionList workspaceSelectionActionList = new ActionList();
-    workspaceSelectionActionList.setName("workspaces");
-    workspaceSelectionActionList
-        .setIconImageURL(getWorkspacesMenuIconImageUrl());
-    List<IDisplayableAction> workspaceSelectionActions = new ArrayList<IDisplayableAction>();
-    for (String workspaceName : getWorkspaceNames()) {
-      WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
-      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-          .getViewDescriptor();
-      workspaceSelectionAction.setWorkspaceName(workspaceName);
-      workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
-      workspaceSelectionAction.setDescription(workspaceViewDescriptor
-          .getDescription());
-      workspaceSelectionAction.setIconImageURL(workspaceViewDescriptor
-          .getIconImageURL());
-      workspaceSelectionActions.add(workspaceSelectionAction);
-    }
-    workspaceSelectionActionList.setActions(workspaceSelectionActions);
-
-    ActionList exitActionList = new ActionList();
-    exitActionList.setName("QUIT");
-    List<IDisplayableAction> exitActions = new ArrayList<IDisplayableAction>();
-    ExitAction<E, F, G> exitAction = new ExitAction<E, F, G>();
-    exitAction.setName("quit.name");
-    exitAction.setDescription("quit.description");
-    exitAction.setIconImageURL(getViewFactory().getIconFactory()
-        .getCancelIconImageURL());
-    exitActions.add(exitAction);
-    exitActionList.setActions(exitActions);
-
-    workspaceActionLists.add(workspaceSelectionActionList);
-    workspaceActionLists.add(exitActionList);
-    workspaceActionMap.setActionLists(workspaceActionLists);
-
-    return workspaceActionMap;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void displayModalDialog(@SuppressWarnings("unused") E mainView,
-      @SuppressWarnings("unused") java.util.List<G> actions,
-      @SuppressWarnings("unused") String title,
-      @SuppressWarnings("unused") E sourceComponent,
-      Map<String, Object> context, boolean reuseCurrent) {
-    if (!reuseCurrent || dialogContextStack.size() == 0) {
-      dialogContextStack.add(0, context);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void disposeModalDialog(@SuppressWarnings("unused") E sourceWidget,
-      Map<String, Object> context) {
-    Map<String, Object> savedContext = dialogContextStack.remove(0);
-    if (context != null && savedContext != null) {
-      // preserve action param
-      Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
-      context.putAll(savedContext);
-      context.put(ActionContextConstants.ACTION_PARAM, actionParam);
     }
   }
 }

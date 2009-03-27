@@ -94,9 +94,9 @@ public abstract class AbstractComponentInvocationHandler implements
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;
   private IComponentExtensionFactory                                                   extensionFactory;
   private IComponentFactory                                                            inlineComponentFactory;
-  private boolean                                                                      propertyProcessorsEnabled;
-
   private Set<String>                                                                  modifierMonitors;
+
+  private boolean                                                                      propertyProcessorsEnabled;
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -362,6 +362,15 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
+   * Gets the inlineComponentFactory.
+   * 
+   * @return the inlineComponentFactory.
+   */
+  protected IComponentFactory getInlineComponentFactory() {
+    return inlineComponentFactory;
+  }
+
+  /**
    * Gets a property value.
    * 
    * @param proxy
@@ -486,6 +495,18 @@ public abstract class AbstractComponentInvocationHandler implements
   protected abstract Object retrievePropertyValue(String propertyName);
 
   /**
+   * Direct write access to the properties map without any other operation. Use
+   * with caution only in subclasses.
+   * 
+   * @param propertyName
+   *          the property name.
+   * @param propertyValue
+   *          the property value.
+   */
+  protected abstract void storeProperty(String propertyName,
+      Object propertyValue);
+
+  /**
    * Performs necessary registration on inline components before actually
    * storing them.
    * 
@@ -503,18 +524,6 @@ public abstract class AbstractComponentInvocationHandler implements
     }
     storeProperty(propertyDescriptor.getName(), propertyValue);
   }
-
-  /**
-   * Direct write access to the properties map without any other operation. Use
-   * with caution only in subclasses.
-   * 
-   * @param propertyName
-   *          the property name.
-   * @param propertyValue
-   *          the property value.
-   */
-  protected abstract void storeProperty(String propertyName,
-      Object propertyValue);
 
   /**
    * Directly get a property value out of the property store without any other
@@ -1018,29 +1027,6 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private static final class NeverEqualsInvocationHandler implements
-      InvocationHandler {
-
-    private Object delegate;
-
-    private NeverEqualsInvocationHandler(Object delegate) {
-      this.delegate = delegate;
-    }
-
-    /**
-     * Just 'overrides' the equals method to always return false.
-     * <p>
-     * {@inheritDoc}
-     */
-    public Object invoke(@SuppressWarnings("unused") Object proxy,
-        Method method, Object[] args) throws Throwable {
-      if (method.getName().equals("equals") && args.length == 1) {
-        return new Boolean(false);
-      }
-      return method.invoke(delegate, args);
-    }
-  }
-
   private class InlinedComponentTracker implements PropertyChangeListener {
 
     private String componentName;
@@ -1065,12 +1051,26 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  /**
-   * Gets the inlineComponentFactory.
-   * 
-   * @return the inlineComponentFactory.
-   */
-  protected IComponentFactory getInlineComponentFactory() {
-    return inlineComponentFactory;
+  private static final class NeverEqualsInvocationHandler implements
+      InvocationHandler {
+
+    private Object delegate;
+
+    private NeverEqualsInvocationHandler(Object delegate) {
+      this.delegate = delegate;
+    }
+
+    /**
+     * Just 'overrides' the equals method to always return false.
+     * <p>
+     * {@inheritDoc}
+     */
+    public Object invoke(@SuppressWarnings("unused") Object proxy,
+        Method method, Object[] args) throws Throwable {
+      if (method.getName().equals("equals") && args.length == 1) {
+        return new Boolean(false);
+      }
+      return method.invoke(delegate, args);
+    }
   }
 }

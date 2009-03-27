@@ -46,19 +46,6 @@ public interface IPropertyProcessor<E, F> {
 
   /**
    * This method gets called whenever a property has been set on an component to
-   * which this processor is registered.
-   * 
-   * @param target
-   *            the component the processor is ran on.
-   * @param oldPropertyValue
-   *            the old value of the property accessed.
-   * @param newPropertyValue
-   *            the new value of the property accessed.
-   */
-  void postprocessSetter(E target, F oldPropertyValue, F newPropertyValue);
-
-  /**
-   * This method gets called whenever a property has been set on an component to
    * which this processor is registered. This method may change the actual value
    * set to the bean.
    * 
@@ -70,6 +57,19 @@ public interface IPropertyProcessor<E, F> {
    *         course).
    */
   F interceptSetter(E target, F newPropertyValue);
+
+  /**
+   * This method gets called whenever a property has been set on an component to
+   * which this processor is registered.
+   * 
+   * @param target
+   *            the component the processor is ran on.
+   * @param oldPropertyValue
+   *            the old value of the property accessed.
+   * @param newPropertyValue
+   *            the new value of the property accessed.
+   */
+  void postprocessSetter(E target, F oldPropertyValue, F newPropertyValue);
 
   /**
    * This method gets called whenever a property is about to be set on an

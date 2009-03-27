@@ -63,6 +63,29 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
+  public List<IViewDescriptor> getChildViewDescriptors() {
+    List<IViewDescriptor> children = new ArrayList<IViewDescriptor>();
+    if (getEastViewDescriptor() != null) {
+      children.add(getEastViewDescriptor());
+    }
+    if (getNorthViewDescriptor() != null) {
+      children.add(getNorthViewDescriptor());
+    }
+    if (getCenterViewDescriptor() != null) {
+      children.add(getCenterViewDescriptor());
+    }
+    if (getWestViewDescriptor() != null) {
+      children.add(getWestViewDescriptor());
+    }
+    if (getSouthViewDescriptor() != null) {
+      children.add(getSouthViewDescriptor());
+    }
+    return children;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IViewDescriptor getEastViewDescriptor() {
     return eastViewDescriptor;
   }
@@ -136,28 +159,5 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    */
   public void setWestViewDescriptor(IViewDescriptor westViewDescriptor) {
     this.westViewDescriptor = westViewDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IViewDescriptor> getChildViewDescriptors() {
-    List<IViewDescriptor> children = new ArrayList<IViewDescriptor>();
-    if (getEastViewDescriptor() != null) {
-      children.add(getEastViewDescriptor());
-    }
-    if (getNorthViewDescriptor() != null) {
-      children.add(getNorthViewDescriptor());
-    }
-    if (getCenterViewDescriptor() != null) {
-      children.add(getCenterViewDescriptor());
-    }
-    if (getWestViewDescriptor() != null) {
-      children.add(getWestViewDescriptor());
-    }
-    if (getSouthViewDescriptor() != null) {
-      children.add(getSouthViewDescriptor());
-    }
-    return children;
   }
 }

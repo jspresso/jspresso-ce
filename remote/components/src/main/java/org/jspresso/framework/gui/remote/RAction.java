@@ -41,12 +41,12 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RAction extends RemotePeer {
 
-  private String  name;
+  private String  acceleratorAsString;
   private String  description;
+  private boolean enabled;
   private RIcon   icon;
   private String  mnemonicAsString;
-  private String  acceleratorAsString;
-  private boolean enabled;
+  private String  name;
 
   /**
    * Constructs a new <code>RAction</code> instance.
@@ -60,22 +60,25 @@ public class RAction extends RemotePeer {
   }
 
   /**
-   * Gets the name.
+   * Triggers the action execution.
    * 
-   * @return the name.
+   * @param parameter
+   *          the action parameter.
+   * @param viewStateGuid
+   *          the guid to retrieve the view connector the action is triggred on.
+   *          This is fundamental for the cell editors.
    */
-  public String getName() {
-    return name;
+  public void actionPerformed(String parameter, String viewStateGuid) {
+    // NO-OP
   }
 
   /**
-   * Sets the name.
+   * Gets the acceleratorAsString.
    * 
-   * @param name
-   *          the name to set.
+   * @return the acceleratorAsString.
    */
-  public void setName(String name) {
-    this.name = name;
+  public String getAcceleratorAsString() {
+    return acceleratorAsString;
   }
 
   /**
@@ -85,6 +88,52 @@ public class RAction extends RemotePeer {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Gets the icon.
+   * 
+   * @return the icon.
+   */
+  public RIcon getIcon() {
+    return icon;
+  }
+
+  /**
+   * Gets the mnemonicAsString.
+   * 
+   * @return the mnemonicAsString.
+   */
+  public String getMnemonicAsString() {
+    return mnemonicAsString;
+  }
+
+  /**
+   * Gets the name.
+   * 
+   * @return the name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Gets the enabled.
+   * 
+   * @return the enabled.
+   */
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  /**
+   * Sets the acceleratorAsString.
+   * 
+   * @param acceleratorAsString
+   *          the acceleratorAsString to set.
+   */
+  public void setAcceleratorAsString(String acceleratorAsString) {
+    this.acceleratorAsString = acceleratorAsString;
   }
 
   /**
@@ -98,12 +147,13 @@ public class RAction extends RemotePeer {
   }
 
   /**
-   * Gets the icon.
+   * Sets the enabled.
    * 
-   * @return the icon.
+   * @param enabled
+   *          the enabled to set.
    */
-  public RIcon getIcon() {
-    return icon;
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
   /**
@@ -127,62 +177,12 @@ public class RAction extends RemotePeer {
   }
 
   /**
-   * Gets the mnemonicAsString.
+   * Sets the name.
    * 
-   * @return the mnemonicAsString.
+   * @param name
+   *          the name to set.
    */
-  public String getMnemonicAsString() {
-    return mnemonicAsString;
-  }
-
-  /**
-   * Sets the enabled.
-   * 
-   * @param enabled
-   *          the enabled to set.
-   */
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  /**
-   * Gets the enabled.
-   * 
-   * @return the enabled.
-   */
-  public boolean isEnabled() {
-    return enabled;
-  }
-
-  /**
-   * Sets the acceleratorAsString.
-   * 
-   * @param acceleratorAsString
-   *          the acceleratorAsString to set.
-   */
-  public void setAcceleratorAsString(String acceleratorAsString) {
-    this.acceleratorAsString = acceleratorAsString;
-  }
-
-  /**
-   * Gets the acceleratorAsString.
-   * 
-   * @return the acceleratorAsString.
-   */
-  public String getAcceleratorAsString() {
-    return acceleratorAsString;
-  }
-
-  /**
-   * Triggers the action execution.
-   * 
-   * @param parameter
-   *          the action parameter.
-   * @param viewStateGuid
-   *          the guid to retrieve the view connector the action is triggred on.
-   *          This is fundamental for the cell editors.
-   */
-  public void actionPerformed(String parameter, String viewStateGuid) {
-    // NO-OP
+  public void setName(String name) {
+    this.name = name;
   }
 }

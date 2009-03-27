@@ -52,6 +52,13 @@ public interface IResource {
   InputStream getContent() throws IOException;
 
   /**
+   * Gets the resource mime type.
+   * 
+   * @return the resource mime type.
+   */
+  String getMimeType();
+
+  /**
    * Gets the resource length.
    * 
    * @return the resource length.
@@ -59,11 +66,4 @@ public interface IResource {
    *             whenever an IO exception occurs.
    */
   long getSize() throws IOException;
-
-  /**
-   * Gets the resource mime type.
-   * 
-   * @return the resource mime type.
-   */
-  String getMimeType();
 }

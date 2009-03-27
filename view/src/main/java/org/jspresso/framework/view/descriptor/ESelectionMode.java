@@ -40,9 +40,9 @@ package org.jspresso.framework.view.descriptor;
  */
 public enum ESelectionMode {
   /**
-   * <code>SINGLE_SELECTION</code>.
+   * <code>MULTIPLE_INTERVAL_SELECTION</code>.
    */
-  SINGLE_SELECTION,
+  MULTIPLE_INTERVAL_SELECTION,
   
   /**
    * <code>SINGLE_INTERVAL_SELECTION</code>.
@@ -50,7 +50,7 @@ public enum ESelectionMode {
   SINGLE_INTERVAL_SELECTION,
   
   /**
-   * <code>MULTIPLE_INTERVAL_SELECTION</code>.
+   * <code>SINGLE_SELECTION</code>.
    */
-  MULTIPLE_INTERVAL_SELECTION
+  SINGLE_SELECTION
 }

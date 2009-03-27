@@ -40,26 +40,8 @@ package org.jspresso.framework.application.frontend.command.remote;
  */
 public class RemoteSelectionCommand extends RemoteCommand {
 
-  private int[]                  selectedIndices;
   private int                    leadingIndex;
-  
-  /**
-   * Gets the selectedIndices.
-   * 
-   * @return the selectedIndices.
-   */
-  public int[] getSelectedIndices() {
-    return selectedIndices;
-  }
-  
-  /**
-   * Sets the selectedIndices.
-   * 
-   * @param selectedIndices the selectedIndices to set.
-   */
-  public void setSelectedIndices(int[] selectedIndices) {
-    this.selectedIndices = selectedIndices;
-  }
+  private int[]                  selectedIndices;
   
   /**
    * Gets the leadingIndex.
@@ -71,12 +53,30 @@ public class RemoteSelectionCommand extends RemoteCommand {
   }
   
   /**
+   * Gets the selectedIndices.
+   * 
+   * @return the selectedIndices.
+   */
+  public int[] getSelectedIndices() {
+    return selectedIndices;
+  }
+  
+  /**
    * Sets the leadingIndex.
    * 
    * @param leadingIndex the leadingIndex to set.
    */
   public void setLeadingIndex(int leadingIndex) {
     this.leadingIndex = leadingIndex;
+  }
+  
+  /**
+   * Sets the selectedIndices.
+   * 
+   * @param selectedIndices the selectedIndices to set.
+   */
+  public void setSelectedIndices(int[] selectedIndices) {
+    this.selectedIndices = selectedIndices;
   }
 
 }

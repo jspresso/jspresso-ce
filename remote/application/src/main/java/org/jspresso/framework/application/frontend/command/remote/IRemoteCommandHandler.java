@@ -42,14 +42,6 @@ import java.util.List;
 public interface IRemoteCommandHandler {
 
   /**
-   * Registers a command for next round-trip.
-   * 
-   * @param command
-   *          the command to register.
-   */
-  void registerCommand(RemoteCommand command);
-
-  /**
    * Recieves and handle a list of commands.
    * 
    * @param commands
@@ -57,4 +49,12 @@ public interface IRemoteCommandHandler {
    * @return the resulting commands.
    */
   List<RemoteCommand> handleCommands(List<RemoteCommand> commands);
+
+  /**
+   * Registers a command for next round-trip.
+   * 
+   * @param command
+   *          the command to register.
+   */
+  void registerCommand(RemoteCommand command);
 }

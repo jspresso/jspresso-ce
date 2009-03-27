@@ -158,6 +158,22 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionEnabled(Action action, boolean enabled) {
+    action.setEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionName(Action action, String name) {
+    action.putValue(Action.NAME, name);
+  }
+
+  /**
    * Sets the iconFactory.
    * 
    * @param iconFactory
@@ -288,21 +304,5 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
         @SuppressWarnings("unused") PropertyChangeEvent evt) {
       action.setEnabled(GateHelper.areGatesOpen(gates));
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setActionEnabled(Action action, boolean enabled) {
-    action.setEnabled(enabled);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setActionName(Action action, String name) {
-    action.putValue(Action.NAME, name);
   }
 }

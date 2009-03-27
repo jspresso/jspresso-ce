@@ -69,17 +69,9 @@ public abstract class AbstractTestDataPersister {
   }
 
   /**
-   * Creates an entity instance.
-   * 
-   * @param <T>
-   *            the actual entity type.
-   * @param entityContract
-   *            the entity contract.
-   * @return the created entity.
+   * Creates and persist the test data.
    */
-  protected <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
-    return entityFactory.createEntityInstance(entityContract);
-  }
+  public abstract void persistTestData();
 
   /**
    * Creates a component instance.
@@ -95,6 +87,19 @@ public abstract class AbstractTestDataPersister {
   }
 
   /**
+   * Creates an entity instance.
+   * 
+   * @param <T>
+   *            the actual entity type.
+   * @param entityContract
+   *            the entity contract.
+   * @return the created entity.
+   */
+  protected <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
+    return entityFactory.createEntityInstance(entityContract);
+  }
+
+  /**
    * Persists or update an entity.
    * 
    * @param entity
@@ -103,9 +108,4 @@ public abstract class AbstractTestDataPersister {
   protected void saveOrUpdate(IEntity entity) {
     hibernateTemplate.saveOrUpdate(entity);
   }
-
-  /**
-   * Creates and persist the test data.
-   */
-  public abstract void persistTestData();
 }

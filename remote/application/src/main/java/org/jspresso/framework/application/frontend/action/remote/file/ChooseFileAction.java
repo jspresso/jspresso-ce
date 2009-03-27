@@ -48,8 +48,8 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 public class ChooseFileAction extends AbstractRemoteAction {
 
   private String                    defaultFileName;
-  private Map<String, List<String>> fileFilter;
   private FileCancelCallbackAction  fileCancelCallbackAction;
+  private Map<String, List<String>> fileFilter;
 
   /**
    * Sets the defaultFileName.
@@ -73,14 +73,18 @@ public class ChooseFileAction extends AbstractRemoteAction {
   }
 
   /**
-   * Gets the fileFilter.
+   * Creates a cancel callback action.
    * 
-   * @param context
-   *          the action context.
-   * @return the fileFilter.
+   * @param fileCallback
+   *          the file callback to cancel.
+   * @return the cancel callback action.
    */
-  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
-    return fileFilter;
+  protected IDisplayableAction createCancelCallbackAction(
+      IFileCallback fileCallback) {
+    if (fileCancelCallbackAction == null) {
+      fileCancelCallbackAction = new FileCancelCallbackAction(fileCallback);
+    }
+    return fileCancelCallbackAction;
   }
 
   /**
@@ -90,6 +94,17 @@ public class ChooseFileAction extends AbstractRemoteAction {
    */
   protected String getDefaultFileName() {
     return defaultFileName;
+  }
+
+  /**
+   * Gets the fileFilter.
+   * 
+   * @param context
+   *          the action context.
+   * @return the fileFilter.
+   */
+  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
+    return fileFilter;
   }
 
   /**
@@ -114,20 +129,5 @@ public class ChooseFileAction extends AbstractRemoteAction {
           .toArray(new String[0]));
     }
     return translatedFileFilter;
-  }
-
-  /**
-   * Creates a cancel callback action.
-   * 
-   * @param fileCallback
-   *          the file callback to cancel.
-   * @return the cancel callback action.
-   */
-  protected IDisplayableAction createCancelCallbackAction(
-      IFileCallback fileCallback) {
-    if (fileCancelCallbackAction == null) {
-      fileCancelCallbackAction = new FileCancelCallbackAction(fileCallback);
-    }
-    return fileCancelCallbackAction;
   }
 }

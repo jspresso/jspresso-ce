@@ -111,6 +111,13 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
   List<String> getQueryableProperties();
 
   /**
+   * Gets the query contract of this component descriptor.
+   * 
+   * @return the query contract of this component descriptor.
+   */
+  Class<?> getQueryComponentContract();
+
+  /**
    * Get the default rendered properties of this component.
    * 
    * @return the default rendered properties of this component.
@@ -118,18 +125,18 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
   List<String> getRenderedProperties();
 
   /**
-   * Retrieves list of service contracts implemented by this component.
-   * 
-   * @return the list of service contracts implemented by this component.
-   */
-  Collection<Class<?>> getServiceContracts();
-
-  /**
    * Retrieves list of service contract class names implemented by this component.
    * 
    * @return the list of service contract class names implemented by this component.
    */
   Collection<String> getServiceContractClassNames();
+
+  /**
+   * Retrieves list of service contracts implemented by this component.
+   * 
+   * @return the list of service contracts implemented by this component.
+   */
+  Collection<Class<?>> getServiceContracts();
 
   /**
    * Retrieves the service delegate implemented by this component.
@@ -181,11 +188,4 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();
-
-  /**
-   * Gets the query contract of this component descriptor.
-   * 
-   * @return the query contract of this component descriptor.
-   */
-  Class<?> getQueryComponentContract();
 }

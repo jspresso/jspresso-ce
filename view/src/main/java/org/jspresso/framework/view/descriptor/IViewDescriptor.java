@@ -43,13 +43,6 @@ import org.jspresso.framework.view.action.IActionable;
 public interface IViewDescriptor extends ISubviewDescriptor, IActionable {
 
   /**
-   * Gets the model descriptor this view descriptor acts on.
-   * 
-   * @return the view model descriptor.
-   */
-  IModelDescriptor getModelDescriptor();
-
-  /**
    * Gets the background color of this view as hex string representation argb coded.
    * 
    * @return this view's foreground color.
@@ -83,4 +76,11 @@ public interface IViewDescriptor extends ISubviewDescriptor, IActionable {
    * @return this view's foreground color.
    */
   String getForeground();
+
+  /**
+   * Gets the model descriptor this view descriptor acts on.
+   * 
+   * @return the view model descriptor.
+   */
+  IModelDescriptor getModelDescriptor();
 }

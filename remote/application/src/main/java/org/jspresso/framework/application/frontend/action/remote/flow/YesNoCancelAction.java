@@ -53,11 +53,13 @@ public class YesNoCancelAction extends YesNoAction {
   private IDisplayableAction cancelAction;
 
   /**
-   * {@inheritDoc}
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *          the cancelAction to set.
    */
-  @Override
-  protected RemoteMessageCommand createMessageCommand() {
-    return new RemoteYesNoCancelCommand();
+  public void setCancelAction(IAction cancelAction) {
+    this.cancelAction = wrapAction(cancelAction);
   }
 
   /**
@@ -79,12 +81,10 @@ public class YesNoCancelAction extends YesNoAction {
   }
 
   /**
-   * Sets the cancelAction.
-   * 
-   * @param cancelAction
-   *          the cancelAction to set.
+   * {@inheritDoc}
    */
-  public void setCancelAction(IAction cancelAction) {
-    this.cancelAction = wrapAction(cancelAction);
+  @Override
+  protected RemoteMessageCommand createMessageCommand() {
+    return new RemoteYesNoCancelCommand();
   }
 }

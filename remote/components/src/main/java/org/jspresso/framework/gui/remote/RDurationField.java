@@ -52,20 +52,20 @@ public class RDurationField extends RComponent {
   }
 
   /**
-   * Sets the maxMillis.
-   * 
-   * @param maxMillis the maxMillis to set.
-   */
-  public void setMaxMillis(long maxMillis) {
-    this.maxMillis = maxMillis;
-  }
-
-  /**
    * Gets the maxMillis.
    * 
    * @return the maxMillis.
    */
   public long getMaxMillis() {
     return maxMillis;
+  }
+
+  /**
+   * Sets the maxMillis.
+   * 
+   * @param maxMillis the maxMillis to set.
+   */
+  public void setMaxMillis(long maxMillis) {
+    this.maxMillis = maxMillis;
   }
 }

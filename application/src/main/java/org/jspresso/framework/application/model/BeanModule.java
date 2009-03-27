@@ -92,6 +92,28 @@ public class BeanModule extends Module implements PropertyChangeListener {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getProjectedViewDescriptor() {
+    IViewDescriptor projectedViewDescriptor = super
+        .getProjectedViewDescriptor();
+    if (projectedViewDescriptor == null) {
+      projectedViewDescriptor = new BasicComponentViewDescriptor();
+      ((BasicComponentViewDescriptor) projectedViewDescriptor)
+          .setModelDescriptor(getComponentDescriptor());
+      ((BasicComponentViewDescriptor) projectedViewDescriptor)
+          .setBorderType(EBorderType.TITLED);
+      ((BasicComponentViewDescriptor) projectedViewDescriptor)
+          .setName(getComponentDescriptor().getName());
+      ((BasicComponentViewDescriptor) projectedViewDescriptor)
+          .setColumnCount(3);
+      setProjectedViewDescriptor(projectedViewDescriptor);
+    }
+    return projectedViewDescriptor;
+  }
+
+  /**
    * Hash code based on projected object.
    * <p>
    * {@inheritDoc}
@@ -145,27 +167,5 @@ public class BeanModule extends Module implements PropertyChangeListener {
           .addPropertyChangeListener(this);
     }
     firePropertyChange("moduleObject", oldValue, getModuleObject());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IViewDescriptor getProjectedViewDescriptor() {
-    IViewDescriptor projectedViewDescriptor = super
-        .getProjectedViewDescriptor();
-    if (projectedViewDescriptor == null) {
-      projectedViewDescriptor = new BasicComponentViewDescriptor();
-      ((BasicComponentViewDescriptor) projectedViewDescriptor)
-          .setModelDescriptor(getComponentDescriptor());
-      ((BasicComponentViewDescriptor) projectedViewDescriptor)
-          .setBorderType(EBorderType.TITLED);
-      ((BasicComponentViewDescriptor) projectedViewDescriptor)
-          .setName(getComponentDescriptor().getName());
-      ((BasicComponentViewDescriptor) projectedViewDescriptor)
-          .setColumnCount(3);
-      setProjectedViewDescriptor(projectedViewDescriptor);
-    }
-    return projectedViewDescriptor;
   }
 }

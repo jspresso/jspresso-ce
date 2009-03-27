@@ -52,20 +52,20 @@ public abstract class RTextComponent extends RComponent {
   }
 
   /**
-   * Sets the maxLength.
-   * 
-   * @param maxLength the maxLength to set.
-   */
-  public void setMaxLength(int maxLength) {
-    this.maxLength = maxLength;
-  }
-
-  /**
    * Gets the maxLength.
    * 
    * @return the maxLength.
    */
   public int getMaxLength() {
     return maxLength;
+  }
+
+  /**
+   * Sets the maxLength.
+   * 
+   * @param maxLength the maxLength to set.
+   */
+  public void setMaxLength(int maxLength) {
+    this.maxLength = maxLength;
   }
 }

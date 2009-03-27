@@ -54,31 +54,21 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     implements IPropertyDescriptor {
 
-  private String                         delegateClassName;
   private Class<?>                       delegateClass;
+  private String                         delegateClassName;
+
+  private Boolean                        delegateWritable;
+  private Collection<String>             grantedRoles;
 
   private List<String>                   integrityProcessorClassNames;
   private List<IPropertyProcessor<?, ?>> integrityProcessors;
-
   private Boolean                        mandatory;
   private IPropertyDescriptor            parentDescriptor;
   private Collection<IGate>              readabilityGates;
   private Boolean                        readOnly;
   private String                         unicityScope;
+
   private Collection<IGate>              writabilityGates;
-  private Collection<String>             grantedRoles;
-
-  private Boolean                        delegateWritable;
-
-  /**
-   * Sets the delegateWritable.
-   * 
-   * @param delegateWritable
-   *          the delegateWritable to set.
-   */
-  public void setDelegateWritable(boolean delegateWritable) {
-    this.delegateWritable = new Boolean(delegateWritable);
-  }
 
   /**
    * {@inheritDoc}
@@ -86,6 +76,18 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   @Override
   public BasicPropertyDescriptor clone() {
     return (BasicPropertyDescriptor) super.clone();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public BasicPropertyDescriptor createQueryDescriptor() {
+    BasicPropertyDescriptor queryPropertyDescriptor = clone();
+    queryPropertyDescriptor.setMandatory(false);
+    queryPropertyDescriptor.setReadOnly(false);
+    queryPropertyDescriptor.integrityProcessors = null;
+    queryPropertyDescriptor.setIntegrityProcessorClassNames(null);
+    return queryPropertyDescriptor;
   }
 
   /**
@@ -147,6 +149,15 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public List<IPropertyProcessor<?, ?>> getIntegrityProcessors() {
@@ -158,26 +169,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
       return getParentDescriptor().getIntegrityProcessors();
     }
     return integrityProcessors;
-  }
-
-  private synchronized void registerIntegrityProcessorsIfNecessary() {
-    if (integrityProcessorClassNames != null) {
-      // process creation of integrity processors.
-      integrityProcessors = new ArrayList<IPropertyProcessor<?, ?>>();
-      for (String integrityProcessorClassName : integrityProcessorClassNames) {
-        try {
-          integrityProcessors.add((IPropertyProcessor<?, ?>) Class.forName(
-              integrityProcessorClassName).newInstance());
-        } catch (InstantiationException ex) {
-          throw new DescriptorException(ex);
-        } catch (IllegalAccessException ex) {
-          throw new DescriptorException(ex);
-        } catch (ClassNotFoundException ex) {
-          throw new DescriptorException(ex);
-        }
-      }
-      integrityProcessorClassNames = null;
-    }
   }
 
   /**
@@ -243,6 +234,23 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   @Override
   public int hashCode() {
     return getName().hashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public Object interceptSetter(Object component, Object newValue) {
+    Object interceptedValue = newValue;
+    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return interceptedValue;
+    }
+    for (IPropertyProcessor<?, ?> processor : processors) {
+      interceptedValue = ((IPropertyProcessor<Object, Object>) processor)
+          .interceptSetter(component, interceptedValue);
+    }
+    return interceptedValue;
   }
 
   /**
@@ -318,23 +326,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public Object interceptSetter(Object component, Object newValue) {
-    Object interceptedValue = newValue;
-    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
-    if (processors == null) {
-      return interceptedValue;
-    }
-    for (IPropertyProcessor<?, ?> processor : processors) {
-      interceptedValue = ((IPropertyProcessor<Object, Object>) processor)
-          .interceptSetter(component, interceptedValue);
-    }
-    return interceptedValue;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
   public void preprocessSetter(final Object component, Object newValue) {
     if (isMandatory() && newValue == null) {
       IntegrityException ie = new IntegrityException("Mandatory property ["
@@ -372,6 +363,26 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public void setDelegateClassName(String delegateClassName) {
     this.delegateClassName = delegateClassName;
+  }
+
+  /**
+   * Sets the delegateWritable.
+   * 
+   * @param delegateWritable
+   *          the delegateWritable to set.
+   */
+  public void setDelegateWritable(boolean delegateWritable) {
+    this.delegateWritable = new Boolean(delegateWritable);
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 
   /**
@@ -446,18 +457,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public BasicPropertyDescriptor createQueryDescriptor() {
-    BasicPropertyDescriptor queryPropertyDescriptor = clone();
-    queryPropertyDescriptor.setMandatory(false);
-    queryPropertyDescriptor.setReadOnly(false);
-    queryPropertyDescriptor.integrityProcessors = null;
-    queryPropertyDescriptor.setIntegrityProcessorClassNames(null);
-    return queryPropertyDescriptor;
-  }
-
-  /**
    * Gets the parentDescriptor.
    * 
    * @return the parentDescriptor.
@@ -466,22 +465,23 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     return parentDescriptor;
   }
 
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
-  }
-
-  /**
-   * Sets the grantedRoles.
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
+  private synchronized void registerIntegrityProcessorsIfNecessary() {
+    if (integrityProcessorClassNames != null) {
+      // process creation of integrity processors.
+      integrityProcessors = new ArrayList<IPropertyProcessor<?, ?>>();
+      for (String integrityProcessorClassName : integrityProcessorClassNames) {
+        try {
+          integrityProcessors.add((IPropertyProcessor<?, ?>) Class.forName(
+              integrityProcessorClassName).newInstance());
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        }
+      }
+      integrityProcessorClassNames = null;
+    }
   }
 }

@@ -40,11 +40,11 @@ package org.jspresso.framework.gui.remote;
  */
 public class RBorderContainer extends RContainer {
   
+  private RComponent center;
+  private RComponent east;
   private RComponent north;
   private RComponent south;
-  private RComponent east;
   private RComponent west;
-  private RComponent center;
 
   /**
    * Constructs a new <code>RBorderContainer</code> instance.
@@ -53,86 +53,6 @@ public class RBorderContainer extends RContainer {
    */
   public RBorderContainer(String guid) {
     super(guid);
-  }
-
-  
-  /**
-   * Gets the north.
-   * 
-   * @return the north.
-   */
-  public RComponent getNorth() {
-    return north;
-  }
-
-  
-  /**
-   * Sets the north.
-   * 
-   * @param north the north to set.
-   */
-  public void setNorth(RComponent north) {
-    this.north = north;
-  }
-
-  
-  /**
-   * Gets the south.
-   * 
-   * @return the south.
-   */
-  public RComponent getSouth() {
-    return south;
-  }
-
-  
-  /**
-   * Sets the south.
-   * 
-   * @param south the south to set.
-   */
-  public void setSouth(RComponent south) {
-    this.south = south;
-  }
-
-  
-  /**
-   * Gets the east.
-   * 
-   * @return the east.
-   */
-  public RComponent getEast() {
-    return east;
-  }
-
-  
-  /**
-   * Sets the east.
-   * 
-   * @param east the east to set.
-   */
-  public void setEast(RComponent east) {
-    this.east = east;
-  }
-
-  
-  /**
-   * Gets the west.
-   * 
-   * @return the west.
-   */
-  public RComponent getWest() {
-    return west;
-  }
-
-  
-  /**
-   * Sets the west.
-   * 
-   * @param west the west to set.
-   */
-  public void setWest(RComponent west) {
-    this.west = west;
   }
 
   
@@ -147,11 +67,91 @@ public class RBorderContainer extends RContainer {
 
   
   /**
+   * Gets the east.
+   * 
+   * @return the east.
+   */
+  public RComponent getEast() {
+    return east;
+  }
+
+  
+  /**
+   * Gets the north.
+   * 
+   * @return the north.
+   */
+  public RComponent getNorth() {
+    return north;
+  }
+
+  
+  /**
+   * Gets the south.
+   * 
+   * @return the south.
+   */
+  public RComponent getSouth() {
+    return south;
+  }
+
+  
+  /**
+   * Gets the west.
+   * 
+   * @return the west.
+   */
+  public RComponent getWest() {
+    return west;
+  }
+
+  
+  /**
    * Sets the center.
    * 
    * @param center the center to set.
    */
   public void setCenter(RComponent center) {
     this.center = center;
+  }
+
+  
+  /**
+   * Sets the east.
+   * 
+   * @param east the east to set.
+   */
+  public void setEast(RComponent east) {
+    this.east = east;
+  }
+
+  
+  /**
+   * Sets the north.
+   * 
+   * @param north the north to set.
+   */
+  public void setNorth(RComponent north) {
+    this.north = north;
+  }
+
+  
+  /**
+   * Sets the south.
+   * 
+   * @param south the south to set.
+   */
+  public void setSouth(RComponent south) {
+    this.south = south;
+  }
+
+  
+  /**
+   * Sets the west.
+   * 
+   * @param west the west to set.
+   */
+  public void setWest(RComponent west) {
+    this.west = west;
   }
 }

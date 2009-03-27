@@ -104,17 +104,6 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
   }
 
   /**
-   * Sets the value to the connector text after formatting the string
-   * representation.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void protectedSetConnecteeValue(Object aValue) {
-    getConnectedJComponent().setValue(aValue);
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -132,6 +121,17 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
       getConnectedJComponent().getFormattedTextField().setSelectedTextColor(
           getConnectedJComponent().getFormattedTextField().getSelectionColor());
     }
+  }
+
+  /**
+   * Sets the value to the connector text after formatting the string
+   * representation.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void protectedSetConnecteeValue(Object aValue) {
+    getConnectedJComponent().setValue(aValue);
   }
 
   /**

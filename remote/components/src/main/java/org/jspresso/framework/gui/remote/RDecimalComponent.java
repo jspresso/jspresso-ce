@@ -52,21 +52,21 @@ public abstract class RDecimalComponent extends RNumericComponent {
   }
 
   /**
-   * Sets the maxFractionDigit.
-   * 
-   * @param maxFractionDigit the maxFractionDigit to set.
-   */
-  public void setMaxFractionDigit(int maxFractionDigit) {
-    this.maxFractionDigit = maxFractionDigit;
-  }
-
-  /**
    * Gets the maxFractionDigit.
    * 
    * @return the maxFractionDigit.
    */
   public int getMaxFractionDigit() {
     return maxFractionDigit;
+  }
+
+  /**
+   * Sets the maxFractionDigit.
+   * 
+   * @param maxFractionDigit the maxFractionDigit to set.
+   */
+  public void setMaxFractionDigit(int maxFractionDigit) {
+    this.maxFractionDigit = maxFractionDigit;
   }
 
 }

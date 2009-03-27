@@ -53,6 +53,15 @@ public class HttpRequestHolder implements Filter {
   private static final ThreadLocal<HttpServletRequest> CURRENT_HTTP_REQUEST = new ThreadLocal<HttpServletRequest>();
 
   /**
+   * Gets the current servlet request.
+   * 
+   * @return the current servlet request.
+   */
+  public static HttpServletRequest getServletRequest() {
+    return CURRENT_HTTP_REQUEST.get();
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -79,15 +88,6 @@ public class HttpRequestHolder implements Filter {
   @Override
   public void init(@SuppressWarnings("unused") FilterConfig config) {
     // Nothing to init.
-  }
-
-  /**
-   * Gets the current servlet request.
-   * 
-   * @return the current servlet request.
-   */
-  public static HttpServletRequest getServletRequest() {
-    return CURRENT_HTTP_REQUEST.get();
   }
 
 }

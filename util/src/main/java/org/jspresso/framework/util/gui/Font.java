@@ -39,9 +39,9 @@ package org.jspresso.framework.util.gui;
  */
 public class Font {
 
-  private String  name;
-  private boolean italic;
   private boolean bold;
+  private boolean italic;
+  private String  name;
   private int     size;
   
   /**
@@ -63,30 +63,12 @@ public class Font {
   }
   
   /**
-   * Sets the name.
+   * Gets the size.
    * 
-   * @param name the name to set.
+   * @return the size.
    */
-  public void setName(String name) {
-    this.name = name;
-  }
-  
-  /**
-   * Gets the italic.
-   * 
-   * @return the italic.
-   */
-  public boolean isItalic() {
-    return italic;
-  }
-  
-  /**
-   * Sets the italic.
-   * 
-   * @param italic the italic to set.
-   */
-  public void setItalic(boolean italic) {
-    this.italic = italic;
+  public int getSize() {
+    return size;
   }
   
   /**
@@ -99,6 +81,15 @@ public class Font {
   }
   
   /**
+   * Gets the italic.
+   * 
+   * @return the italic.
+   */
+  public boolean isItalic() {
+    return italic;
+  }
+  
+  /**
    * Sets the bold.
    * 
    * @param bold the bold to set.
@@ -108,12 +99,21 @@ public class Font {
   }
   
   /**
-   * Gets the size.
+   * Sets the italic.
    * 
-   * @return the size.
+   * @param italic the italic to set.
    */
-  public int getSize() {
-    return size;
+  public void setItalic(boolean italic) {
+    this.italic = italic;
+  }
+  
+  /**
+   * Sets the name.
+   * 
+   * @param name the name to set.
+   */
+  public void setName(String name) {
+    this.name = name;
   }
   
   /**

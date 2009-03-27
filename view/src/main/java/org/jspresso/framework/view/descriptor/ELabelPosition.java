@@ -41,12 +41,12 @@ package org.jspresso.framework.view.descriptor;
 public enum ELabelPosition {
   
   /**
-   * <code>ASIDE</code>.
-   */
-  ASIDE,
-  
-  /**
    * <code>ABOVE</code>.
    */
-  ABOVE
+  ABOVE,
+  
+  /**
+   * <code>ASIDE</code>.
+   */
+  ASIDE
 }

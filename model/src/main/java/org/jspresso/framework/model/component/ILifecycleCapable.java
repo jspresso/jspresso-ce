@@ -49,14 +49,14 @@ public interface ILifecycleCapable {
   String ON_CREATE_METHOD_NAME  = "onCreate";
 
   /**
-   * <code>ON_LOAD_METHOD_NAME</code>.
-   */
-  String ON_LOAD_METHOD_NAME    = "onLoad";
-
-  /**
    * <code>ON_DELETE_METHOD_NAME</code>.
    */
   String ON_DELETE_METHOD_NAME  = "onDelete";
+
+  /**
+   * <code>ON_LOAD_METHOD_NAME</code>.
+   */
+  String ON_LOAD_METHOD_NAME    = "onLoad";
 
   /**
    * <code>ON_PERSIST_METHOD_NAME</code>.
@@ -84,14 +84,6 @@ public interface ILifecycleCapable {
       IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
-   * Called when an component is loaded from the persistent store or merged back
-   * from the unit of work. The component state is fully initialized when this
-   * method is called. The onLoad callback may be used to perform some extra
-   * technical initializations like registering some listeners.
-   */
-  void onLoad();
-
-  /**
    * Called just before an component is deleted (delete).
    * 
    * @param entityFactory
@@ -105,6 +97,14 @@ public interface ILifecycleCapable {
    */
   boolean onDelete(IEntityFactory entityFactory, UserPrincipal principal,
       IEntityLifecycleHandler entityLifecycleHandler);
+
+  /**
+   * Called when an component is loaded from the persistent store or merged back
+   * from the unit of work. The component state is fully initialized when this
+   * method is called. The onLoad callback may be used to perform some extra
+   * technical initializations like registering some listeners.
+   */
+  void onLoad();
 
   /**
    * Called just before an component is persisted (insert).

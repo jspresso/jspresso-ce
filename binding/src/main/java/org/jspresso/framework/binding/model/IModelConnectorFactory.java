@@ -44,18 +44,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 public interface IModelConnectorFactory {
 
   /**
-   * Creates a model connector based on a model descriptor.
-   * 
-   * @param id
-   *          the connector identifier.
-   * @param modelDescriptor
-   *          the model descriptor to create the connector for.
-   * @return the created model connector.
-   */
-  IModelValueConnector createModelConnector(String id,
-      IModelDescriptor modelDescriptor);
-
-  /**
    * Creates a model connector based on a model type. It uses the descriptor
    * registry to locate the model descriptor based on its type.
    * 
@@ -67,6 +55,18 @@ public interface IModelConnectorFactory {
    */
   IModelValueConnector createModelConnector(String id,
       Class<?> componentContract);
+
+  /**
+   * Creates a model connector based on a model descriptor.
+   * 
+   * @param id
+   *          the connector identifier.
+   * @param modelDescriptor
+   *          the model descriptor to create the connector for.
+   * @return the created model connector.
+   */
+  IModelValueConnector createModelConnector(String id,
+      IModelDescriptor modelDescriptor);
 
   /**
    * Gets the <code>IAccessorFactory</code> used.

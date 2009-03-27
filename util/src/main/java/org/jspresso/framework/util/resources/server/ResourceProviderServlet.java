@@ -68,11 +68,6 @@ public class ResourceProviderServlet extends HttpServlet {
   public static final String DOWNLOAD_SERVLET_URL_PATTERN = "/download";
 
   /**
-   * the url pattern to activate a resource upload.
-   */
-  public static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
-
-  /**
    * id.
    */
   public static final String ID_PARAMETER                 = "id";
@@ -82,19 +77,25 @@ public class ResourceProviderServlet extends HttpServlet {
    */
   public static final String LOCAL_URL_PARAMETER          = "localUrl";
 
+  /**
+   * the url pattern to activate a resource upload.
+   */
+  public static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
+
   private static final long  serialVersionUID             = 5253634459280974738L;
 
   /**
    * Computes the url where the resource is available for download.
    * 
-   * @param localUrl
-   *          the resource local url.
+   * @param request
+   *          the incomming HTTP request.
+   * @param id
+   *          the resource id.
    * @return the resource url.
    */
-  public static String computeLocalResourceDownloadUrl(String localUrl) {
-    HttpServletRequest request = HttpRequestHolder.getServletRequest();
-    return computeUrl(request, "?"
-        + ResourceProviderServlet.LOCAL_URL_PARAMETER + "=" + localUrl);
+  public static String computeDownloadUrl(HttpServletRequest request, String id) {
+    return computeUrl(request, "?" + ResourceProviderServlet.ID_PARAMETER + "="
+        + id);
   }
 
   /**
@@ -112,23 +113,14 @@ public class ResourceProviderServlet extends HttpServlet {
   /**
    * Computes the url where the resource is available for download.
    * 
-   * @param request
-   *          the incomming HTTP request.
-   * @param id
-   *          the resource id.
+   * @param localUrl
+   *          the resource local url.
    * @return the resource url.
    */
-  public static String computeDownloadUrl(HttpServletRequest request, String id) {
-    return computeUrl(request, "?" + ResourceProviderServlet.ID_PARAMETER + "="
-        + id);
-  }
-
-  private static String computeUrl(HttpServletRequest request,
-      String getParameters) {
-    String baseUrl = request.getScheme() + "://" + request.getServerName()
-        + ":" + request.getServerPort() + request.getContextPath()
-        + DOWNLOAD_SERVLET_URL_PATTERN;
-    return baseUrl + getParameters;
+  public static String computeLocalResourceDownloadUrl(String localUrl) {
+    HttpServletRequest request = HttpRequestHolder.getServletRequest();
+    return computeUrl(request, "?"
+        + ResourceProviderServlet.LOCAL_URL_PARAMETER + "=" + localUrl);
   }
 
   /**
@@ -153,6 +145,53 @@ public class ResourceProviderServlet extends HttpServlet {
         + ":" + request.getServerPort() + request.getContextPath()
         + UPLOAD_SERVLET_URL_PATTERN;
     return baseUrl;
+  }
+
+  private static String computeUrl(HttpServletRequest request,
+      String getParameters) {
+    String baseUrl = request.getScheme() + "://" + request.getServerName()
+        + ":" + request.getServerPort() + request.getContextPath()
+        + DOWNLOAD_SERVLET_URL_PATTERN;
+    return baseUrl + getParameters;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) {
+
+    ServletOutputStream out = null;
+
+    try {
+      FileItemFactory factory = new DiskFileItemFactory();
+      ServletFileUpload upload = new ServletFileUpload(factory);
+
+      List<FileItem> items = upload.parseRequest(request);
+      response.setContentType("text/xml");
+      out = response.getOutputStream();
+      for (FileItem item : items) {
+        if (!item.isFormField()) {
+          out.print("<resource");
+          IResource uploadResource = new UploadResourceAdapter(
+              "application/octet-stream", item);
+          String resourceId = ResourceManager.getInstance().register(
+              uploadResource);
+          out.print(" id=\"" + resourceId);
+          out.print("\" name=\"" + item.getName());
+          out.println("\" />");
+        }
+      }
+      out.flush();
+      out.close();
+    } catch (FileUploadException fue) {
+      fue.printStackTrace();
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -198,45 +237,6 @@ public class ResourceProviderServlet extends HttpServlet {
 
     inputStream.close();
     outputStream.close();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) {
-
-    ServletOutputStream out = null;
-
-    try {
-      FileItemFactory factory = new DiskFileItemFactory();
-      ServletFileUpload upload = new ServletFileUpload(factory);
-
-      List<FileItem> items = upload.parseRequest(request);
-      response.setContentType("text/xml");
-      out = response.getOutputStream();
-      for (FileItem item : items) {
-        if (!item.isFormField()) {
-          out.print("<resource");
-          IResource uploadResource = new UploadResourceAdapter(
-              "application/octet-stream", item);
-          String resourceId = ResourceManager.getInstance().register(
-              uploadResource);
-          out.print(" id=\"" + resourceId);
-          out.print("\" name=\"" + item.getName());
-          out.println("\" />");
-        }
-      }
-      out.flush();
-      out.close();
-    } catch (FileUploadException fue) {
-      fue.printStackTrace();
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   private static class UploadResourceAdapter extends AbstractResource {

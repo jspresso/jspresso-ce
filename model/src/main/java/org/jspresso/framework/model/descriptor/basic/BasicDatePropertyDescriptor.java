@@ -70,6 +70,14 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
+  public ComparableQueryStructureDescriptor createQueryDescriptor() {
+    return new ComparableQueryStructureDescriptor(super.createQueryDescriptor());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Class<?> getModelType() {
     return Date.class;
   }
@@ -86,7 +94,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
     }
     return type;
   }
-
+  
   /**
    * Sets the type.
    * 
@@ -95,13 +103,5 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    */
   public void setType(EDateType type) {
     this.type = type;
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ComparableQueryStructureDescriptor createQueryDescriptor() {
-    return new ComparableQueryStructureDescriptor(super.createQueryDescriptor());
   }
 }

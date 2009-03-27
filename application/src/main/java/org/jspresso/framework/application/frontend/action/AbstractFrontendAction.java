@@ -152,37 +152,8 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   /**
    * {@inheritDoc}
    */
-  @Override
-  protected Locale getLocale(Map<String, Object> context) {
-    return getController(context).getLocale();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public String getMnemonicAsString() {
     return mnemonicAsString;
-  }
-
-  /**
-   * This is a utility method which is able to retrieve the module view
-   * connector this action has been executed on from its context. It uses
-   * well-known context keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.MODULE_VIEW_CONNECTOR</code> to get the
-   * the module view connector the action executes on.
-   * </ul>
-   * <p>
-   * The returned connector mainly serves for acting on the view component the
-   * action has to be triggered on.
-   * 
-   * @param context
-   *            the action context.
-   * @return the value connector this model action was triggered on.
-   */
-  protected ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
-    return (ICompositeValueConnector) context
-        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR);
   }
 
   /**
@@ -190,26 +161,6 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   public String getName() {
     return actionDescriptor.getName();
-  }
-
-  /**
-   * This is a utility method which is able to retrieve the view connector this
-   * action has been executed on from its context. It uses well-known context
-   * keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the
-   * view value connector the action executes on.
-   * </ul>
-   * <p>
-   * The returned connector mainly serves for acting on the view component the
-   * action has to be triggered on.
-   * 
-   * @param context
-   *            the action context.
-   * @return the value connector this model action was triggered on.
-   */
-  protected IValueConnector getViewConnector(Map<String, Object> context) {
-    return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
   }
 
   /**
@@ -308,6 +259,18 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
+   * Retrieves the widget which triggered the action from the action context.
+   * 
+   * @param context
+   *            the action context.
+   * @return the widget which triggered the action.
+   */
+  @SuppressWarnings("unchecked")
+  protected E getActionWidget(Map<String, Object> context) {
+    return (E) context.get(ActionContextConstants.ACTION_WIDGET);
+  }
+
+  /**
    * Gets the frontend controller out of the action context.
    * 
    * @param context
@@ -334,6 +297,35 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Locale getLocale(Map<String, Object> context) {
+    return getController(context).getLocale();
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the module view
+   * connector this action has been executed on from its context. It uses
+   * well-known context keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.MODULE_VIEW_CONNECTOR</code> to get the
+   * the module view connector the action executes on.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
+   * 
+   * @param context
+   *            the action context.
+   * @return the value connector this model action was triggered on.
+   */
+  protected ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
+    return (ICompositeValueConnector) context
+        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR);
+  }
+
+  /**
    * Gets the mvcBinder.
    * 
    * @param context
@@ -342,17 +334,6 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   protected IMvcBinder getMvcBinder(Map<String, Object> context) {
     return getController(context).getMvcBinder();
-  }
-
-  /**
-   * Gets the viewFactory.
-   * 
-   * @param context
-   *            the action context.
-   * @return the viewFactory.
-   */
-  protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
-    return getController(context).getViewFactory();
   }
 
   /**
@@ -371,14 +352,33 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
-   * Retrieves the widget which triggered the action from the action context.
+   * This is a utility method which is able to retrieve the view connector this
+   * action has been executed on from its context. It uses well-known context
+   * keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the
+   * view value connector the action executes on.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
    * 
    * @param context
    *            the action context.
-   * @return the widget which triggered the action.
+   * @return the value connector this model action was triggered on.
    */
-  @SuppressWarnings("unchecked")
-  protected E getActionWidget(Map<String, Object> context) {
-    return (E) context.get(ActionContextConstants.ACTION_WIDGET);
+  protected IValueConnector getViewConnector(Map<String, Object> context) {
+    return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
+  }
+
+  /**
+   * Gets the viewFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the viewFactory.
+   */
+  protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
+    return getController(context).getViewFactory();
   }
 }

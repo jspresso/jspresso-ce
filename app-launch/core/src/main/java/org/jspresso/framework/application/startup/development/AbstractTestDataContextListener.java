@@ -59,14 +59,6 @@ public abstract class AbstractTestDataContextListener implements ServletContextL
   }
 
   /**
-   * Triggers the test data creation.
-   * 
-   * @param beanFactory
-   *            the bean factory to use.
-   */
-  public abstract void persistTestData(BeanFactory beanFactory);
-
-  /**
    * Retrieves the spring application context key to use.
    * 
    * @param event
@@ -77,5 +69,13 @@ public abstract class AbstractTestDataContextListener implements ServletContextL
   public String getApplicationContextKey(ServletContextEvent event) {
     return event.getServletContext().getInitParameter("appContextKey");
   }
+
+  /**
+   * Triggers the test data creation.
+   * 
+   * @param beanFactory
+   *            the bean factory to use.
+   */
+  public abstract void persistTestData(BeanFactory beanFactory);
 
 }

@@ -50,8 +50,8 @@ public abstract class EmptyPropertyProcessor<E, F> implements
    * {@inheritDoc}
    */
   @SuppressWarnings("unused")
-  public void postprocessSetter(E target, F oldPropertyValue, F newPropertyValue) {
-    // NO-OP
+  public F interceptSetter(E target, F newPropertyValue) {
+    return newPropertyValue;
   }
 
   /**
@@ -60,8 +60,8 @@ public abstract class EmptyPropertyProcessor<E, F> implements
    * {@inheritDoc}
    */
   @SuppressWarnings("unused")
-  public F interceptSetter(E target, F newPropertyValue) {
-    return newPropertyValue;
+  public void postprocessSetter(E target, F oldPropertyValue, F newPropertyValue) {
+    // NO-OP
   }
 
   /**

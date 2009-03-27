@@ -47,11 +47,20 @@ import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
     ISubviewDescriptor {
 
+  private Collection<String> grantedRoles;
   private Collection<IGate> readabilityGates;
   private boolean           readOnly;
+
   private Collection<IGate> writabilityGates;
 
-  private Collection<String> grantedRoles;
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
 
   /**
    * Gets the readabilityGates.
@@ -76,6 +85,13 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    */
   public boolean isReadOnly() {
     return readOnly;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 
   /**
@@ -106,21 +122,5 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    */
   public void setWritabilityGates(Collection<IGate> writabilityGates) {
     this.writabilityGates = writabilityGates;
-  }
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
   }
 }

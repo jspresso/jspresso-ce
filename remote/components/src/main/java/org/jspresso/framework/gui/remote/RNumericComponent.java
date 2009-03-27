@@ -64,22 +64,22 @@ public abstract class RNumericComponent extends RComponent {
 
   
   /**
-   * Sets the maxValue.
-   * 
-   * @param maxValue the maxValue to set.
-   */
-  public void setMaxValue(Number maxValue) {
-    this.maxValue = maxValue;
-  }
-
-  
-  /**
    * Gets the minValue.
    * 
    * @return the minValue.
    */
   public Number getMinValue() {
     return minValue;
+  }
+
+  
+  /**
+   * Sets the maxValue.
+   * 
+   * @param maxValue the maxValue to set.
+   */
+  public void setMaxValue(Number maxValue) {
+    this.maxValue = maxValue;
   }
 
   

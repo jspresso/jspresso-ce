@@ -49,9 +49,9 @@ import org.jspresso.framework.util.IIconImageURLProvider;
  */
 public class ComponentIconImageURLProvider implements IIconImageURLProvider {
 
-  private Collection<IComponentDescriptor<?>> componentDescriptors;
-  private IComponentDescriptorRegistry        componentDescriptorRegistry;
   private Map<Class<?>, String>               cache;
+  private IComponentDescriptorRegistry        componentDescriptorRegistry;
+  private Collection<IComponentDescriptor<?>> componentDescriptors;
 
   /**
    * Constructs a new <code>ComponentIconImageURLProvider</code> instance.
@@ -80,6 +80,28 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
     return iconImageURL;
   }
 
+  /**
+   * Sets the componentDescriptorRegistry.
+   * 
+   * @param componentDescriptorRegistry
+   *            the componentDescriptorRegistry to set.
+   */
+  public void setComponentDescriptorRegistry(
+      IComponentDescriptorRegistry componentDescriptorRegistry) {
+    this.componentDescriptorRegistry = componentDescriptorRegistry;
+  }
+
+  /**
+   * Sets the componentDescriptors.
+   * 
+   * @param componentDescriptors
+   *            the componentDescriptors to set.
+   */
+  public void setComponentDescriptors(
+      Collection<IComponentDescriptor<?>> componentDescriptors) {
+    this.componentDescriptors = componentDescriptors;
+  }
+
   private String computeIconImageURL(Class<?> modelClass) {
     String iconImageURL = null;
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
@@ -98,27 +120,5 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
       }
     }
     return iconImageURL;
-  }
-
-  /**
-   * Sets the componentDescriptors.
-   * 
-   * @param componentDescriptors
-   *            the componentDescriptors to set.
-   */
-  public void setComponentDescriptors(
-      Collection<IComponentDescriptor<?>> componentDescriptors) {
-    this.componentDescriptors = componentDescriptors;
-  }
-
-  /**
-   * Sets the componentDescriptorRegistry.
-   * 
-   * @param componentDescriptorRegistry
-   *            the componentDescriptorRegistry to set.
-   */
-  public void setComponentDescriptorRegistry(
-      IComponentDescriptorRegistry componentDescriptorRegistry) {
-    this.componentDescriptorRegistry = componentDescriptorRegistry;
   }
 }

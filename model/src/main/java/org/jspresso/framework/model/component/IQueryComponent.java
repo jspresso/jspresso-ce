@@ -57,17 +57,17 @@ public interface IQueryComponent extends Map<String, Object> {
   List<? extends IComponent> getQueriedComponents();
 
   /**
+   * Gets the contract of the components to query.
+   * 
+   * @return the contract of the components to query.
+   */
+  Class<?> getQueryContract();
+  
+  /**
    * Sets the list of components result of the query.
    * 
    * @param queriedComponents
    *            the list of components result of the query.
    */
   void setQueriedComponents(List<? extends IComponent> queriedComponents);
-  
-  /**
-   * Gets the contract of the components to query.
-   * 
-   * @return the contract of the components to query.
-   */
-  Class<?> getQueryContract();
 }

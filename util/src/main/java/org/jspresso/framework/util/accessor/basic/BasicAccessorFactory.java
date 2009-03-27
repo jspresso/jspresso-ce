@@ -58,16 +58,6 @@ public class BasicAccessorFactory implements IAccessorFactory {
         property, beanClass, elementClass);
   }
 
-  private IAccessorFactory getAccessorDelegate(Class<?> beanClass) {
-    IAccessorFactory delegate;
-    if (beanClass == null || Map.class.isAssignableFrom(beanClass)) {
-      delegate = mapAccessorFactory;
-    } else {
-      delegate = beanAccessorFactory;
-    }
-    return delegate;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -76,7 +66,6 @@ public class BasicAccessorFactory implements IAccessorFactory {
         beanClass);
   }
 
-  
   /**
    * Sets the beanAccessorFactory.
    * 
@@ -94,6 +83,17 @@ public class BasicAccessorFactory implements IAccessorFactory {
    */
   public void setMapAccessorFactory(IAccessorFactory mapAccessorFactory) {
     this.mapAccessorFactory = mapAccessorFactory;
+  }
+
+  
+  private IAccessorFactory getAccessorDelegate(Class<?> beanClass) {
+    IAccessorFactory delegate;
+    if (beanClass == null || Map.class.isAssignableFrom(beanClass)) {
+      delegate = mapAccessorFactory;
+    } else {
+      delegate = beanAccessorFactory;
+    }
+    return delegate;
   }
 
 }

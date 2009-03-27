@@ -52,6 +52,13 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 public interface IEntityUnitOfWork extends IEntityDirtAware, IEntityLifecycleHandler {
 
   /**
+   * Registers an entity as being updated.
+   * 
+   * @param entity the entity to register.
+   */
+  void addUpdatedEntity(IEntity entity);
+
+  /**
    * Begins a new unit of work.
    */
   void begin();
@@ -71,30 +78,33 @@ public interface IEntityUnitOfWork extends IEntityDirtAware, IEntityLifecycleHan
   void commit();
 
   /**
+   * Gets the entitiesRegisteredForDeletion.
+   * 
+   * @return the entitiesRegisteredForDeletion.
+   */
+  Collection<IEntity> getEntitiesRegisteredForDeletion();
+
+  /**
+   * Gets the entitiesRegisteredForUpdate.
+   * 
+   * @return the entitiesRegisteredForUpdate.
+   */
+  Collection<IEntity> getEntitiesRegisteredForUpdate();
+
+  /**
+   * Gets the entitiesToMergeBack.
+   * 
+   * @return the entitiesToMergeBack.
+   */
+  Collection<IEntity> getUpdatedEntities();
+  
+  /**
    * Tests wether this unit of work is currently in use.
    * 
    * @return true if the unit of work is active.
    */
   boolean isActive();
-
-  /**
-   * Registers an entity in the unit of work.
-   * 
-   * @param entity
-   *            the entity to register.
-   * @param initialChangedProperties
-   *            the map of dirty properties the entity has before entering the
-   *            unit of work along with their original values.
-   */
-  void register(IEntity entity, Map<String, Object> initialChangedProperties);
-
-  /**
-   * Rollbacks the unit of work. It should clear it state, restore the entity
-   * states to the one before the unit of work begining and be ready for another
-   * work.
-   */
-  void rollback();
-
+  
   /**
    * Is the passed entity already updated in the current unit of work and waits
    * for commit ?
@@ -107,30 +117,20 @@ public interface IEntityUnitOfWork extends IEntityDirtAware, IEntityLifecycleHan
   boolean isUpdated(IEntity entity);
   
   /**
-   * Gets the entitiesRegisteredForDeletion.
+   * Registers an entity in the unit of work.
    * 
-   * @return the entitiesRegisteredForDeletion.
+   * @param entity
+   *            the entity to register.
+   * @param initialChangedProperties
+   *            the map of dirty properties the entity has before entering the
+   *            unit of work along with their original values.
    */
-  Collection<IEntity> getEntitiesRegisteredForDeletion();
+  void register(IEntity entity, Map<String, Object> initialChangedProperties);
   
   /**
-   * Gets the entitiesRegisteredForUpdate.
-   * 
-   * @return the entitiesRegisteredForUpdate.
+   * Rollbacks the unit of work. It should clear it state, restore the entity
+   * states to the one before the unit of work begining and be ready for another
+   * work.
    */
-  Collection<IEntity> getEntitiesRegisteredForUpdate();
-  
-  /**
-   * Gets the entitiesToMergeBack.
-   * 
-   * @return the entitiesToMergeBack.
-   */
-  Collection<IEntity> getUpdatedEntities();
-  
-  /**
-   * Registers an entity as being updated.
-   * 
-   * @param entity the entity to register.
-   */
-  void addUpdatedEntity(IEntity entity);
+  void rollback();
 }

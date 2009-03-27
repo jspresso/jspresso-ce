@@ -46,8 +46,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public class DefaultDescriptor implements IDescriptor, Cloneable {
 
   private String description;
-  private String name;
   private String i18nNameKey;
+  private String name;
 
   /**
    * {@inheritDoc}
@@ -110,16 +110,6 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
   }
 
   /**
-   * The name setter.
-   * 
-   * @param name
-   *            the name to set.
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Sets the i18nNameKey.
    * 
    * @param nameKey
@@ -127,5 +117,15 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    */
   public void setI18nNameKey(String nameKey) {
     i18nNameKey = nameKey;
+  }
+
+  /**
+   * The name setter.
+   * 
+   * @param name
+   *            the name to set.
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 }

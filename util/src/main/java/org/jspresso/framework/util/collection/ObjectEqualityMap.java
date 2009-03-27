@@ -159,12 +159,6 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
     propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
   }
 
-  private void readObject(ObjectInputStream in) throws IOException,
-      ClassNotFoundException {
-    in.defaultReadObject();
-    propertyChangeSupport = new SinglePropertyChangeSupport(this);
-  }
-
   /**
    * @param propertyName
    *          the property name.
@@ -178,5 +172,11 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   protected void firePropertyChange(String propertyName, Object oldValue,
       Object newValue) {
     propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+  }
+
+  private void readObject(ObjectInputStream in) throws IOException,
+      ClassNotFoundException {
+    in.defaultReadObject();
+    propertyChangeSupport = new SinglePropertyChangeSupport(this);
   }
 }
