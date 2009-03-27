@@ -45,7 +45,6 @@
           </execution>
           <execution>
             <id>optimize-swc</id>
-            <phase>compile</phase>
             <goals>
               <goal>optimize</goal>
             </goals>
