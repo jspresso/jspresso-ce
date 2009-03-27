@@ -21,7 +21,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 import org.jspresso.framework.gui.remote.RAction;
 
 /**
- * TODO Comment needed.
+ * Yes - No remote flow action.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
