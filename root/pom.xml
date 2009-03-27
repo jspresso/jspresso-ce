@@ -788,13 +788,15 @@
   </build>
 
   <reporting>
-  	<!--<excludeDefaults>true</excludeDefaults>-->
+  	<excludeDefaults>true</excludeDefaults>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <configuration>
-          <!--Speeds-up dependency report-->
+          <!--
+            Speeds-up dependency report
+          -->
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration> 
       </plugin>

@@ -43,10 +43,10 @@
   <build>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
+        <directory>${basedir}/src/main/resources</directory>
       </resource>
       <resource>
-        <directory>target/generated-resources/jasperreports</directory>
+        <directory>${project.build.directory}/generated-resources/jasperreports</directory>
       </resource>
     </resources>
     <plugins>
@@ -172,7 +172,7 @@
             </goals>
             <configuration>
               <sources>
-                <source>target/generated-sources/entitygenerator</source>
+                <source>${project.build.directory}/generated-sources/entitygenerator</source>
               </sources>
             </configuration>
           </execution>
@@ -242,7 +242,7 @@
             <phase>package</phase>
             <configuration>
               <descriptors>
-                <descriptor>src/main/assembly/ddl-scripts.xml</descriptor>
+                <descriptor>${basedir}/src/main/assembly/ddl-scripts.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
