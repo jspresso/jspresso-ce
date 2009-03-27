@@ -193,7 +193,7 @@
             <phase>verify</phase>
             <configuration>
               <descriptors>
-                <descriptor>src/main/assembly/archive.xml</descriptor>
+                <descriptor>${basedir}/src/main/assembly/archive.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
