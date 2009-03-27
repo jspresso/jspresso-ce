@@ -66,7 +66,7 @@
     path="org.eclipse.jst.j2ee.internal.module.container" />
   <classpathentry
     kind="var"
-    path="M2_REPO/org/jspresso/jspresso-app-launch-swing/${jspressoVersion}/jspresso-app-launch-swing-${jspressoVersion}.jar">
+    path="M2_REPO/org/jspresso/framework/jspresso-app-launch-swing/${jspressoVersion}/jspresso-app-launch-swing-${jspressoVersion}.jar">
     <attributes>
       <attribute
         name="org.eclipse.jst.component.nondependency"
@@ -75,7 +75,7 @@
   </classpathentry>
   <classpathentry
     kind="var"
-    path="M2_REPO/org/jspresso/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar">
+    path="M2_REPO/org/jspresso/framework/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar">
     <attributes>
       <attribute
         name="org.eclipse.jst.component.nondependency"
@@ -84,7 +84,7 @@
   </classpathentry>
   <classpathentry
     kind="var"
-    path="M2_REPO/org/jspresso/jspresso-jasper-swing/${jspressoVersion}/jspresso-jasper-swing-${jspressoVersion}.jar">
+    path="M2_REPO/org/jspresso/framework/jspresso-jasper-swing/${jspressoVersion}/jspresso-jasper-swing-${jspressoVersion}.jar">
     <attributes>
       <attribute
         name="org.eclipse.jst.component.nondependency"
@@ -93,7 +93,7 @@
   </classpathentry>
   <classpathentry
     kind="var"
-    path="M2_REPO/org/jspresso/jspresso-swing-application/${jspressoVersion}/jspresso-swing-application-${jspressoVersion}.jar">
+    path="M2_REPO/org/jspresso/framework/jspresso-swing-application/${jspressoVersion}/jspresso-swing-application-${jspressoVersion}.jar">
     <attributes>
       <attribute
         name="org.eclipse.jst.component.nondependency"
@@ -102,7 +102,7 @@
   </classpathentry>
   <classpathentry
     kind="var"
-    path="M2_REPO/org/jspresso/jspresso-swing-components/${jspressoVersion}/jspresso-swing-components-${jspressoVersion}.jar">
+    path="M2_REPO/org/jspresso/framework/jspresso-swing-components/${jspressoVersion}/jspresso-swing-components-${jspressoVersion}.jar">
     <attributes>
       <attribute
         name="org.eclipse.jst.component.nondependency"

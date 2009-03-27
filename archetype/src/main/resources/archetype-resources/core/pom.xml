@@ -85,6 +85,7 @@
                       <params>
                         <version>3.0</version>
                         <destdir>${project.build.directory}/generated-resources/xdoclet</destdir>
+                        <validate>false</validate>
                       </params>
                     </component>
                   </components>
