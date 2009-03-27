@@ -1,4 +1,4 @@
-<class-diagram icons="false" always-add-relationships="false" generalizations="true" realizations="true" 
+<class-diagram icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" version="0.9.65">  
   <classifier-display autosize="true" package="true" attributes="false" operations="true" initial-value="false" 
     signature="true" visibility="true">    
@@ -7,7 +7,7 @@
   </classifier-display>  
   <association-display labels="true" multiplicity="true"/>  
   <class language="java" name="org.jboss.security.auth.spi.LdapExtLoginModule" project="jspresso-framework" 
-    file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" binary="true" 
+    file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" binary="true" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -39,6 +39,6 @@
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jboss.security.auth.spi.LdapExtLoginModule" 
-      file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" binary="true"/>  
+      file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" binary="true"/>  
   </generalization>
 </class-diagram>

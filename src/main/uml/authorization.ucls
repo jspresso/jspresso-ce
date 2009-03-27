@@ -1,4 +1,4 @@
-<class-diagram icons="false" always-add-relationships="false" generalizations="true" realizations="true" 
+<class-diagram icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" version="0.9.65">  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
     <attributes public="false" package="false" protected="false" private="false"/>    
@@ -81,22 +81,21 @@
     <position x="276" y="221" width="-1" height="-1"/>  
   </interface>  
   <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
+      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
+  </generalization>  
+  <realization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Workspace" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
+  </realization>  
+  <generalization>    
     <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISubviewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISubviewDescriptor.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
-      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
-      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
@@ -110,23 +109,24 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
-      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
-      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Workspace" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </realization>  
+  </generalization>  
   <realization>    
     <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </realization>
+  </realization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
+  </generalization>
 </class-diagram>
