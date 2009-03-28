@@ -6,9 +6,11 @@
     </compilerSourcePath>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
-      <libraryPathEntry kind="3" linkType="1" path="/datetimelibrary/bin/datetimelibrary.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="C:/Documents and Settings/Vincent/.m2/repository/datetimelibrary/datetimelibrary/1.0.1/datetimelibrary-1.0.1.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
     </libraryPath>
-    <sourceAttachmentPath/>
+    <sourceAttachmentPath>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/Documents and Settings/Vincent/.m2/repository/datetimelibrary/datetimelibrary/1.0.1/datetimelibrary-1.0.1.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
+    </sourceAttachmentPath>
   </compiler>
   <applications>
     <application path="JspressoAsTest.as"/>
