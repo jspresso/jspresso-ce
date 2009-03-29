@@ -433,6 +433,7 @@ public class DefaultWingsController extends
                                                                  * WingsUtil.FULL_DIM_PERCENT
                                                                  */));
     controllerFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
+    updateFrameTitle();
     controllerFrame.setVisible(true);
 
     IView<SComponent> loginView = getViewFactory().createView(
