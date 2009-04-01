@@ -26,6 +26,7 @@ import javax.swing.Action;
 
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
 import org.jspresso.framework.application.startup.AbstractStartup;
 import org.jspresso.framework.gui.remote.RComponent;
@@ -53,7 +54,16 @@ import org.jspresso.framework.gui.remote.RIcon;
 public abstract class RemoteStartup extends
     AbstractStartup<RComponent, RIcon, Action> implements IRemoteCommandHandler {
 
-  private Locale startupLocale;
+  private Locale  startupLocale;
+  private boolean started;
+
+  /**
+   * Constructs a new <code>RemoteStartup</code> instance.
+   */
+  public RemoteStartup() {
+    // This is a brand new session instance.
+    started = false;
+  }
 
   /**
    * Delegates to the frontend controller.
@@ -62,6 +72,11 @@ public abstract class RemoteStartup extends
    */
   @Override
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
+    if (!started) {
+      // we are on a brand new session instance.
+      return Collections
+          .singletonList((RemoteCommand) new RemoteRestartCommand());
+    }
     return ((IRemoteCommandHandler) getFrontendController())
         .handleCommands(commands);
   }
@@ -86,6 +101,7 @@ public abstract class RemoteStartup extends
   public List<RemoteCommand> start(String startupLanguage) {
     setStartupLocale(new Locale(startupLanguage));
     super.start();
+    started = true;
     return handleCommands(Collections
         .singletonList((RemoteCommand) new RemoteStartCommand()));
   }
