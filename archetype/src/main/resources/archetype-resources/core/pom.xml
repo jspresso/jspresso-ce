@@ -117,7 +117,8 @@
                 <property name="generator.dest" value="${project.build.directory}/generated-sources/entitygenerator"/>
                 <mkdir dir="${generator.dest}"/>
                 <java classname="org.jspresso.framework.tools.entitygenerator.EntityGenerator"
-                      classpathref="spring.beans.classpath">
+                      classpathref="spring.beans.classpath"
+                      failonerror="true">
                   <arg value="-applicationContextKey" />
                   <arg value="${rootArtifactId}-model-context" />
                   <arg value="-templateResourcePath" />
