@@ -321,6 +321,12 @@
     <property
       name="workspacesMenuIconImageUrl"
       value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
+    <property
+      name="loginViewDescriptor"
+      ref="loginViewDescriptor" />
+    <property
+      name="modelConnectorFactory"
+      ref="modelConnectorFactory" />
   </bean>
 
   <bean

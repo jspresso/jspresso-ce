@@ -12,8 +12,20 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="50%"
+          <imagedata align="center" contentdepth="60%"
                      fileref="../images/controllers.png" scalefit="1"
+                     width="100%" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <figure>
+      <title>Controllers class diagram continued</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="50%"
+                     fileref="../images/controllers-2.png" scalefit="1"
                      width="100%" />
         </imageobject>
       </mediaobject>

@@ -24,21 +24,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
-
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.gui.ulc.components.server.ULCErrorDialog;
 import org.jspresso.framework.gui.ulc.components.server.ULCExtendedButton;
 import org.jspresso.framework.gui.ulc.components.server.ULCExtendedInternalFrame;
 import org.jspresso.framework.gui.ulc.components.server.event.ExtendedInternalFrameEvent;
 import org.jspresso.framework.gui.ulc.components.server.event.IExtendedInternalFrameListener;
-import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
@@ -105,8 +99,6 @@ public class DefaultUlcController extends
 
   private ULCFrame                              controllerFrame;
 
-  private IViewDescriptor                       loginViewDescriptor;
-  private IModelConnectorFactory                modelConnectorFactory;
   private Map<String, ULCExtendedInternalFrame> workspaceInternalFrames;
 
   /**
@@ -270,27 +262,6 @@ public class DefaultUlcController extends
   }
 
   /**
-   * Sets the loginViewDescriptor.
-   * 
-   * @param loginViewDescriptor
-   *          the loginViewDescriptor to set.
-   */
-  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
-    this.loginViewDescriptor = loginViewDescriptor;
-  }
-
-  /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
    * Creates the initial view from the root view descriptor, then a SFrame
    * containing this view and presents it to the user.
    * <p>
@@ -315,14 +286,6 @@ public class DefaultUlcController extends
     }
     ApplicationContext.terminate();
     return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    return new UsernamePasswordHandler();
   }
 
   private List<ULCMenu> createActionMenus(ULCComponent sourceComponent) {
@@ -353,7 +316,7 @@ public class DefaultUlcController extends
     return applicationMenuBar;
   }
 
-  private void initControllerFrame() {
+  private void updateControllerFrame() {
     controllerFrame.setMenuBar(createApplicationMenuBar(controllerFrame));
     updateFrameTitle();
   }
@@ -442,37 +405,14 @@ public class DefaultUlcController extends
   }
 
   private void initLoginProcess() {
-    controllerFrame = new ULCFrame();
-    controllerFrame.setContentPane(new ULCDesktopPane());
-    controllerFrame
-        .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
-    controllerFrame.addWindowListener(new IWindowListener() {
+    createControllerFrame();
 
-      private static final long serialVersionUID = -7845554617417316256L;
-
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
-        stop();
-      }
-    });
-    controllerFrame.pack();
-    int screenRes = ClientContext.getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-    controllerFrame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
-    UlcUtil.centerOnScreen(controllerFrame);
-    updateFrameTitle();
-    controllerFrame.setVisible(true);
-
-    IView<ULCComponent> loginView = getViewFactory().createView(
-        loginViewDescriptor, this, getLocale());
-    IValueConnector loginModelConnector = modelConnectorFactory
-        .createModelConnector("login", loginViewDescriptor.getModelDescriptor());
-    getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
-    loginModelConnector.setConnectorValue(getLoginCallbackHandler());
+    IView<ULCComponent> loginView = createLoginView();
 
     // Login dialog
-    final ULCDialog dialog = new ULCDialog(controllerFrame, loginViewDescriptor
-        .getI18nName(getTranslationProvider(), getLocale()), true);
+    final ULCDialog dialog = new ULCDialog(controllerFrame,
+        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
+            getLocale()), true);
 
     ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
         ULCBoxLayoutPane.LINE_AXIS);
@@ -490,7 +430,7 @@ public class DefaultUlcController extends
       public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         if (performLogin()) {
           dialog.setVisible(false);
-          initControllerFrame();
+          updateControllerFrame();
           execute(getStartupAction(), getInitialActionContext());
         } else {
           ULCAlert alert = new ULCAlert(dialog, getTranslationProvider()
@@ -515,38 +455,34 @@ public class DefaultUlcController extends
     mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
     dialog.add(mainPanel);
 
-    dialog.setSize(new Dimension(3 * screenRes, screenRes
-        * 3 / 2));
+    int screenRes = ClientContext.getScreenResolution();
+    dialog.setSize(new Dimension(3 * screenRes, screenRes * 3 / 2));
     dialog.pack();
     UlcUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }
 
-  private boolean performLogin() {
-    if (getLoginContextName() != null) {
-      try {
-        LoginContext lc = null;
-        try {
-          lc = new LoginContext(getLoginContextName(),
-              getLoginCallbackHandler());
-        } catch (LoginException le) {
-          System.err.println("Cannot create LoginContext. " + le.getMessage());
-          return false;
-        } catch (SecurityException se) {
-          System.err.println("Cannot create LoginContext. " + se.getMessage());
-          return false;
-        }
-        lc.login();
-        loginSuccess(lc.getSubject());
-      } catch (LoginException le) {
-        System.err.println("Authentication failed:");
-        System.err.println("  " + le.getMessage());
-        return false;
+  private void createControllerFrame() {
+    controllerFrame = new ULCFrame();
+    controllerFrame.setContentPane(new ULCDesktopPane());
+    controllerFrame
+        .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    controllerFrame.addWindowListener(new IWindowListener() {
+
+      private static final long serialVersionUID = -7845554617417316256L;
+
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
+        stop();
       }
-    } else {
-      loginSuccess(getAnonymousSubject());
-    }
-    return true;
+    });
+    controllerFrame.pack();
+    int screenRes = ClientContext.getScreenResolution();
+    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    controllerFrame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
+    UlcUtil.centerOnScreen(controllerFrame);
+    updateFrameTitle();
+    controllerFrame.setVisible(true);
   }
 
   private void updateFrameTitle() {

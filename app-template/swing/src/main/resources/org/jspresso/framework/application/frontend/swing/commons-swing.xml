@@ -128,12 +128,6 @@
     abstract="true"
     parent="abstractFrontController"
     class="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController">
-    <property
-      name="loginViewDescriptor"
-      ref="loginViewDescriptor" />
-    <property
-      name="modelConnectorFactory"
-      ref="modelConnectorFactory" />
   </bean>
 </beans>
 

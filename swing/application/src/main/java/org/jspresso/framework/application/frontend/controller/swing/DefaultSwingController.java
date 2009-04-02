@@ -38,9 +38,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -71,9 +68,7 @@ import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.gui.swing.components.JErrorDialog;
-import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
@@ -119,8 +114,6 @@ public class DefaultSwingController extends
   private JFrame                      controllerFrame;
   private WaitCursorTimer             waitTimer;
 
-  private IViewDescriptor             loginViewDescriptor;
-  private IModelConnectorFactory      modelConnectorFactory;
   private Map<String, JInternalFrame> workspaceInternalFrames;
 
   /**
@@ -336,27 +329,6 @@ public class DefaultSwingController extends
   }
 
   /**
-   * Sets the loginViewDescriptor.
-   * 
-   * @param loginViewDescriptor
-   *          the loginViewDescriptor to set.
-   */
-  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
-    this.loginViewDescriptor = loginViewDescriptor;
-  }
-
-  /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
    * Creates the initial view from the root view descriptor, then a SFrame
    * containing this view and presents it to the user.
    * <p>
@@ -369,7 +341,7 @@ public class DefaultSwingController extends
       waitTimer.setDaemon(true);
       waitTimer.start();
       Toolkit.getDefaultToolkit().getSystemEventQueue().push(
-        new WaitCursorEventQueue(500));
+          new WaitCursorEventQueue(500));
       initLoginProcess();
       return true;
     }
@@ -389,14 +361,6 @@ public class DefaultSwingController extends
       return true;
     }
     return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    return new UsernamePasswordHandler();
   }
 
   /**
@@ -463,7 +427,7 @@ public class DefaultSwingController extends
     return applicationMenuBar;
   }
 
-  private void initControllerFrame() {
+  private void updateControllerFrame() {
     controllerFrame.setJMenuBar(createApplicationMenuBar());
     controllerFrame.invalidate();
     controllerFrame.validate();
@@ -572,40 +536,14 @@ public class DefaultSwingController extends
   }
 
   private void initLoginProcess() {
-    controllerFrame = new JFrame();
-    controllerFrame.setContentPane(new JDesktopPane());
-    controllerFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    controllerFrame.setGlassPane(createHermeticGlassPane());
-    controllerFrame.addWindowListener(new WindowAdapter() {
+    createControllerFrame();
 
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
-        stop();
-      }
-    });
-    controllerFrame.pack();
-    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-    //controllerFrame.setSize(1100, 800);
-    controllerFrame.setIconImage(((ImageIcon) getIconFactory().getIcon(getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE)).getImage());
-    SwingUtil.centerOnScreen(controllerFrame);
-    updateFrameTitle();
-    controllerFrame.setVisible(true);
-
-    IView<JComponent> loginView = getViewFactory().createView(
-        loginViewDescriptor, this, getLocale());
-    IValueConnector loginModelConnector = modelConnectorFactory
-        .createModelConnector("login", loginViewDescriptor.getModelDescriptor());
-    getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
-    loginModelConnector.setConnectorValue(getLoginCallbackHandler());
+    IView<JComponent> loginView = createLoginView();
 
     // Login dialog
-    final JDialog dialog = new JDialog(controllerFrame, loginViewDescriptor
-        .getI18nName(getTranslationProvider(), getLocale()), true);
+    final JDialog dialog = new JDialog(controllerFrame,
+        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
+            getLocale()), true);
 
     JPanel buttonBox = new JPanel();
     buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
@@ -614,14 +552,14 @@ public class DefaultSwingController extends
     JButton loginButton = new JButton(getTranslationProvider().getTranslation(
         "ok", getLocale()));
     loginButton.setIcon(getIconFactory().getOkYesIcon(
-          IIconFactory.SMALL_ICON_SIZE));
+        IIconFactory.SMALL_ICON_SIZE));
     loginButton.addActionListener(new ActionListener() {
 
       @Override
       public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         if (performLogin()) {
           dialog.dispose();
-          initControllerFrame();
+          updateControllerFrame();
           execute(getStartupAction(), getInitialActionContext());
         } else {
           JOptionPane.showMessageDialog(dialog, getTranslationProvider()
@@ -643,37 +581,37 @@ public class DefaultSwingController extends
     mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
     mainPanel.add(actionPanel, BorderLayout.SOUTH);
     dialog.add(mainPanel);
-    
+
     dialog.pack();
     SwingUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }
 
-  private boolean performLogin() {
-    if (getLoginContextName() != null) {
-      try {
-        LoginContext lc = null;
-        try {
-          lc = new LoginContext(getLoginContextName(),
-              getLoginCallbackHandler());
-        } catch (LoginException le) {
-          System.err.println("Cannot create LoginContext. " + le.getMessage());
-          return false;
-        } catch (SecurityException se) {
-          System.err.println("Cannot create LoginContext. " + se.getMessage());
-          return false;
-        }
-        lc.login();
-        loginSuccess(lc.getSubject());
-      } catch (LoginException le) {
-        System.err.println("Authentication failed:");
-        System.err.println("  " + le.getMessage());
-        return false;
+  private void createControllerFrame() {
+    controllerFrame = new JFrame();
+    controllerFrame.setContentPane(new JDesktopPane());
+    controllerFrame
+        .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    controllerFrame.setGlassPane(createHermeticGlassPane());
+    controllerFrame.addWindowListener(new WindowAdapter() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
+        stop();
       }
-    } else {
-      loginSuccess(getAnonymousSubject());
-    }
-    return true;
+    });
+    controllerFrame.pack();
+    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    // controllerFrame.setSize(1100, 800);
+    controllerFrame.setIconImage(((ImageIcon) getIconFactory().getIcon(
+        getIconImageURL(), IIconFactory.SMALL_ICON_SIZE)).getImage());
+    SwingUtil.centerOnScreen(controllerFrame);
+    updateFrameTitle();
+    controllerFrame.setVisible(true);
   }
 
   private void updateFrameTitle() {

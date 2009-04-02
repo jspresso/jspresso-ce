@@ -28,6 +28,8 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
@@ -46,6 +48,8 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConnectorSelectionListener;
 import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IMvcBinder;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.security.UsernamePasswordHandler;
@@ -121,6 +125,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private Map<String, Workspace>                workspaces;
 
   private String                                workspacesMenuIconImageUrl;
+
+  private IViewDescriptor                       loginViewDescriptor;
+  private IModelConnectorFactory                modelConnectorFactory;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -454,6 +461,27 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Sets the loginViewDescriptor.
+   * 
+   * @param loginViewDescriptor
+   *          the loginViewDescriptor to set.
+   */
+  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
+    this.loginViewDescriptor = loginViewDescriptor;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
    * Binds to the backend controller and ask it to start.
    * <p>
    * {@inheritDoc}
@@ -482,7 +510,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return a new login callback handler
    */
-  protected abstract CallbackHandler createLoginCallbackHandler();
+  protected CallbackHandler createLoginCallbackHandler() {
+    return new UsernamePasswordHandler();
+  }
+
+  /**
+   * Creates and binds the login view.
+   * 
+   * @return the login view
+   */
+  protected IView<E> createLoginView() {
+    IView<E> loginView = getViewFactory().createView(
+        getLoginViewDescriptor(), this, getLocale());
+    IValueConnector loginModelConnector = getModelConnectorFactory()
+        .createModelConnector("login", getLoginViewDescriptor().getModelDescriptor());
+    getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
+    loginModelConnector.setConnectorValue(getLoginCallbackHandler());
+    return loginView;
+  }
 
   /**
    * Creates the workspace action map.
@@ -738,6 +783,38 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Performs the actual JAAS login.
+   * 
+   * @return true if login succeeded.
+   */
+  protected boolean performLogin() {
+    if (getLoginContextName() != null) {
+      try {
+        LoginContext lc = null;
+        try {
+          lc = new LoginContext(getLoginContextName(),
+              getLoginCallbackHandler());
+        } catch (LoginException le) {
+          System.err.println("Cannot create LoginContext. " + le.getMessage());
+          return false;
+        } catch (SecurityException se) {
+          System.err.println("Cannot create LoginContext. " + se.getMessage());
+          return false;
+        }
+        lc.login();
+        loginSuccess(lc.getSubject());
+      } catch (LoginException le) {
+        System.err.println("Authentication failed:");
+        System.err.println("  " + le.getMessage());
+        return false;
+      }
+    } else {
+      loginSuccess(getAnonymousSubject());
+    }
+    return true;
+  }
+
+  /**
    * Sets the backend controller this controller is attached to.
    * 
    * @param backendController
@@ -783,5 +860,25 @@ public abstract class AbstractFrontendController<E, F, G> extends
         translateModule(module);
       }
     }
+  }
+
+  
+  /**
+   * Gets the loginViewDescriptor.
+   * 
+   * @return the loginViewDescriptor.
+   */
+  protected IViewDescriptor getLoginViewDescriptor() {
+    return loginViewDescriptor;
+  }
+
+  
+  /**
+   * Gets the modelConnectorFactory.
+   * 
+   * @return the modelConnectorFactory.
+   */
+  protected IModelConnectorFactory getModelConnectorFactory() {
+    return modelConnectorFactory;
   }
 }
