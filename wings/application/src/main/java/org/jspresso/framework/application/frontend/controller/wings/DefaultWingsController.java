@@ -64,6 +64,7 @@ import org.wings.SDialog;
 import org.wings.SDimension;
 import org.wings.SFrame;
 import org.wings.SIcon;
+import org.wings.SLabel;
 import org.wings.SMenu;
 import org.wings.SMenuBar;
 import org.wings.SMenuItem;
@@ -131,7 +132,8 @@ public class DefaultWingsController extends
       dialog.setDraggable(true);
     }
 
-    SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
+    SPanel buttonBox = new SPanel();
+    buttonBox.setLayout(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
     buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
 
     SButton defaultButton = null;
@@ -418,11 +420,8 @@ public class DefaultWingsController extends
   }
 
   private void initControllerFrame() {
-    cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(SDimension.FULLAREA);
     controllerFrame.getContentPane().add(createApplicationMenuBar(),
         SBorderLayout.NORTH);
-    controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
     updateFrameTitle();
   }
 
@@ -433,6 +432,9 @@ public class DefaultWingsController extends
                                                                  * WingsUtil.FULL_DIM_PERCENT
                                                                  */));
     controllerFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
+    cardPanel = new SPanel(new SCardLayout());
+    cardPanel.setPreferredSize(SDimension.FULLAREA);
+    controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
     updateFrameTitle();
     controllerFrame.setVisible(true);
 
@@ -453,6 +455,8 @@ public class DefaultWingsController extends
 
     SButton loginButton = new SButton(getTranslationProvider().getTranslation(
         "ok", getLocale()));
+    loginButton.setIcon(getIconFactory().getOkYesIcon(
+          IIconFactory.SMALL_ICON_SIZE));
     loginButton.addActionListener(new ActionListener() {
 
       @Override
@@ -476,6 +480,8 @@ public class DefaultWingsController extends
     actionPanel.add(buttonBox, SBorderLayout.EAST);
 
     SPanel mainPanel = new SPanel(new SBorderLayout());
+    mainPanel.add(new SLabel(getTranslationProvider().getTranslation(
+        LoginUtils.CRED_MESSAGE, getLocale())), SBorderLayout.NORTH);
     mainPanel.add(loginView.getPeer(), SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
     dialog.add(mainPanel);

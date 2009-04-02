@@ -744,6 +744,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       separator.percentWidth = 100.0;
       dialogBox.addChild(separator);
       for each(var button:Button in buttons) {
+        if(!dialogBox.defaultButton) {
+          dialogBox.defaultButton = button;
+        }
         buttonBox.addChild(button);
       }
       dialogBox.addChild(buttonBox);
