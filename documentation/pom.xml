@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>3.0.0</version>
   </parent>
   <artifactId>jspresso-documentation</artifactId>
   <packaging>pom</packaging>
@@ -34,25 +31,17 @@
               <calloutGraphicsPath>../style-images/callouts/</calloutGraphicsPath>
               <navigGraphicsPath>../style-images/</navigGraphicsPath>
               <postProcess>
-                <copy
-                  todir="target/reference/html-chunked">
-                  <fileset
-                    dir="target/staging/reference">
-                    <include
-                      name="images/*.*" />
+                <copy todir="target/reference/html-chunked">
+                  <fileset dir="target/staging/reference">
+                    <include name="images/*.*" />
                   </fileset>
-                  <fileset
-                    dir="target/staging">
-                    <include
-                      name="**/*.css" />
+                  <fileset dir="target/staging">
+                    <include name="**/*.css" />
                   </fileset>
                 </copy>
-                <copy
-                  todir="target/reference/html-chunked/style-images">
-                  <fileset
-                    dir="target/staging/images">
-                    <include
-                      name="**/*.*" />
+                <copy todir="target/reference/html-chunked/style-images">
+                  <fileset dir="target/staging/images">
+                    <include name="**/*.*" />
                   </fileset>
                 </copy>
               </postProcess>
@@ -73,25 +62,17 @@
               <calloutGraphicsPath>../style-images/callouts/</calloutGraphicsPath>
               <navigGraphicsPath>../style-images/</navigGraphicsPath>
               <postProcess>
-                <copy
-                  todir="target/reference/html-single">
-                  <fileset
-                    dir="target/staging/reference">
-                    <include
-                      name="images/*.*" />
+                <copy todir="target/reference/html-single">
+                  <fileset dir="target/staging/reference">
+                    <include name="images/*.*" />
                   </fileset>
-                  <fileset
-                    dir="target/staging">
-                    <include
-                      name="**/*.css" />
+                  <fileset dir="target/staging">
+                    <include name="**/*.css" />
                   </fileset>
                 </copy>
-                <copy
-                  todir="target/reference/html-single/style-images">
-                  <fileset
-                    dir="target/staging/images">
-                    <include
-                      name="**/*.*" />
+                <copy todir="target/reference/html-single/style-images">
+                  <fileset dir="target/staging/images">
+                    <include name="**/*.*" />
                   </fileset>
                 </copy>
               </postProcess>
@@ -112,8 +93,7 @@
               <calloutGraphicsPath>${basedir}/target/staging/images/callouts/</calloutGraphicsPath>
               <navigGraphicsPath>${basedir}/target/staging/images/</navigGraphicsPath>
               <postProcess>
-                <delete
-                  dir="${basedir}/target/reference/pdf/en/en" />
+                <delete dir="${basedir}/target/reference/pdf/en/en" />
               </postProcess>
             </configuration>
           </execution>
@@ -123,39 +103,23 @@
           <includes>**/reference-guide.xml</includes>
           <xincludeSupported>true</xincludeSupported>
           <preProcess>
-            <copy
-              todir="target/staging">
-              <fileset
-                dir="src/main/docbook">
-                <include
-                  name="**/images/**/*.*" />
-                <include
-                  name="**/css/*.*" />
-                <include
-                  name="**/fo.xsl" />
-                <include
-                  name="**/html.xsl" />
+            <copy todir="target/staging">
+              <fileset dir="src/main/docbook">
+                <include name="**/images/**/*.*" />
+                <include name="**/css/*.*" />
+                <include name="**/fo.xsl" />
+                <include name="**/html.xsl" />
               </fileset>
             </copy>
-            <copy
-              todir="target/staging">
+            <copy todir="target/staging">
               <filterset>
-                <filter
-                  token="version"
-                  value="${project.version}" />
+                <filter token="version" value="${project.version}" />
               </filterset>
-              <fileset
-                dir="src/main/docbook">
-                <include
-                  name="**/reference/**/*.xml" />
+              <fileset dir="src/main/docbook">
+                <include name="**/reference/**/*.xml" />
               </fileset>
             </copy>
-            <xslt
-              style="src/main/docbook/xsl/titlepage.xsl"
-              extension=".xsl"
-              basedir="src/main/docbook/xsl"
-              destdir="target/staging/xsl"
-              includes="**/fo-titlepages.xml **/html-titlepages.xml">
+            <xslt style="src/main/docbook/xsl/titlepage.xsl" extension=".xsl" basedir="src/main/docbook/xsl" destdir="target/staging/xsl" includes="**/fo-titlepages.xml **/html-titlepages.xml">
             </xslt>
           </preProcess>
         </configuration>
