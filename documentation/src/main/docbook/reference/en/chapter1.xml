@@ -8,6 +8,328 @@
   application framework and how to work with it.</para>
 
   <section>
+    <title>Setting-up the development environment</title>
+
+    <para>One of the interesting feature of Jspresso is its native integration
+    with now standard build tools. All the complex build process is completely
+    handled in <ulink url="http://maven.apache.org/">Maven</ulink>. Jspresso
+    also offers a Maven archetype to quickly setup your project and import it
+    directly in <ulink url="http://www.eclipse.org/">Eclipse</ulink>.</para>
+
+    <section>
+      <title>Installing the tools</title>
+
+      <para>Download, install and configure the following tools :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The <ulink
+          url="http://java.sun.com/javase/downloads/index.jsp">Java
+          Development Kit</ulink> for your platform (JDK 6+).</para>
+        </listitem>
+
+        <listitem>
+          <para>The <ulink url="http://maven.apache.org/download.html">Apache
+          Maven</ulink> project management tool (2.0.10 or 2.1).</para>
+        </listitem>
+
+        <listitem>
+          <para>The <ulink url="http://www.eclipse.org/downloads/">Eclipse IDE
+          for Java EE Developers</ulink> (3.4+).</para>
+        </listitem>
+
+        <listitem>
+          <para>the <ulink
+          url="http://tomcat.apache.org/download-60.cgi">Apache Tomcat servlet
+          container</ulink> (6.0+).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>You must also increase the java heap space allocated to Maven
+      :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>on windows : <code>set MAVEN_OPTS=-Xmx512m</code> (or set it
+          as a user env variable)</para>
+        </listitem>
+
+        <listitem>
+          <para>on linux : <code>export MAVEN_OPTS=-Xmx512m</code> (or set it
+          as a user env variable)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Generating the skeleton project</title>
+
+      <para>This is a one-step operation using the Jspresso application Maven
+      archetype. Move to your Eclipse workspace and perform :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>mvn archetype:generate
+          -DarchetypeCatalog=http://repository.jspresso.org/maven2/</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>And choose the <quote>Jspresso Application
+      Archetype</quote>.</para>
+
+      <para>Then fill-in the questions with the following answers :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><quote>groupId</quote> :
+          <code>org.jspresso.hrsample</code></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>artifactId</quote> : <code>hrsample</code></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>package</quote> :
+          <code>org.jspresso.hrsample</code></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>version</quote> : <code>1.0-SNAPSHOT</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This will generate a complete project ready to be compiled and
+      packaged under the <filename>hrsample/</filename> directory. So move to
+      the generated directory and type :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>mvn package</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The operation may take some time to finish since Maven will
+      download all the needed plugins and dependencies in its local
+      repository. Just wait for the <quote>BUILD SUCCESSFUL</quote> message
+      and you should have a packaged <filename>hrsample-webapp.war</filename>
+      in the <filename>hrsample/webapp/target/</filename> directory.</para>
+    </section>
+
+    <section>
+      <title>Importing the project in Eclipse</title>
+
+      <para>There are several steps to perform to prepare your Eclipse
+      workspace. So launch Eclipse.</para>
+
+      <para>Define a path variable that points to your Eclipse workspace
+      :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><quote>Window</quote> -&gt; <quote>Preferences</quote> -&gt;
+          <quote>General</quote> -&gt; <quote>Workspace</quote> -&gt;
+          <quote>Link Resources</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>New...</quote></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>Name</quote> :
+          <code>WORKSPACE_ABSOLUTE_PATH</code></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>Location</quote> : <filename>[the absolute location of
+          your Eclipse workspace folder, e.g. "/workspace"]</filename></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Define a classpath variable that points to your Maven2 local
+      repository (usually <filename>${USER_HOME}/.m2/repository</filename>)
+      :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><quote>Window</quote> -&gt; <quote>Preferences</quote> -&gt;
+          <quote>Java</quote> -&gt; <quote>Build Path</quote> -&gt;
+          <quote>Classpath Variables</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>New...</quote></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>Name</quote> : <code>M2_REPO</code></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>Path</quote> : <filename>[the absolute location of your
+          Maven2 local repository, e.g. "~/.m2/repository"]</filename></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Configure the <quote>Apache Tomcat v6.0</quote> server runtime
+      environment :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><quote>Window</quote> -&gt; <quote>Preferences</quote> -&gt;
+          <quote>Server</quote> -&gt; <quote>Runtime
+          Environments</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>Add...</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Select <quote>Apache</quote> -&gt; <quote>Tomcat
+          v6.0</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>Next &gt;</quote></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>Name</quote> : <code>Apache Tomcat v6.0</code></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>Tomcat installation directory</quote> : <filename>[your
+          Tomcat 6 installation directory]</filename></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>Finish</quote></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Open the "Java EE" perspective :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><quote>Window</quote> -&gt; <quote>Open Perspective</quote>
+          -&gt; <quote>Other...</quote> -&gt; <quote>Java EE</quote></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Create the Apache Tomcat launch configuration :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Select the <quote>Server</quote> view (you should have it
+          automatically in the Java EE eclipse perspective)</para>
+        </listitem>
+
+        <listitem>
+          <para>Right click</para>
+        </listitem>
+
+        <listitem>
+          <para>Select <quote>New</quote> -&gt; <quote>Server</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Select <quote>Tomcat v6.0 Server</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>Finish</quote></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Configure the previous launch configuration to point to the JAAS
+      configuration of the Jspresso project :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Double-click on the server you have just created</para>
+        </listitem>
+
+        <listitem>
+          <para>Click on the <quote>Open launch configuration</quote>
+          hyperlink</para>
+        </listitem>
+
+        <listitem>
+          <para>Select the <quote>Arguments</quote> tab</para>
+        </listitem>
+
+        <listitem>
+          <para>Add the following system option - keep ${workspace_loc} as is,
+          it's a built-in variable - in the <quote>VM arguments</quote> text
+          area:</para>
+
+          <para><code>-Djava.security.auth.login.config=${workspace_loc}/hrsample/conf/jaas.config</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Now that our Eclipse workspace is ready, we can import the
+      generated project :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><quote>File</quote> -&gt; <quote>Import...</quote> -&gt;
+          <quote>General</quote> -&gt; <quote>Existing Projects into
+          Workspace</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>Next &gt;</quote></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>Select root directory</quote> : <filename>[your project
+          root folder]</filename></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>Finish</quote></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>And finally the launch configurations :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><quote>File</quote> -&gt; <quote>Import...</quote> -&gt;
+          <quote>Run/Debug</quote> -&gt; <quote>Launch
+          Configurations</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>Next &gt;</quote></para>
+        </listitem>
+
+        <listitem>
+          <para><quote>From Directory</quote> : <filename>[your project root
+          folder]/launches</filename></para>
+        </listitem>
+
+        <listitem>
+          <para>Check <quote>launches</quote></para>
+        </listitem>
+
+        <listitem>
+          <para>Select all available launch configurations</para>
+        </listitem>
+
+        <listitem>
+          <para>Click <quote>Finish</quote></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The development environment is now set-up. We can begin the Human
+      Resources sample application coding.</para>
+    </section>
+  </section>
+
+  <section>
     <title>The human resources (HR) sample application</title>
 
     <para>The human resources application is a simple yet comprehensive
@@ -23,7 +345,7 @@
 
       <para>To quickly introduce the HR domain model, let's dive into the
       following UML class diagrams. As a general rule to make the diagrams
-      more readable attributes must in fact be considered as getter / setter
+      more readable, attributes must be considered as getter / setter
       pairs.</para>
 
       <para>The <link linkend="commons-cd">commons class diagram</link>
@@ -370,22 +692,22 @@
         </listitem>
 
         <listitem>
-          <para>The application modules along with their hierarchies of
-          sub-modules. A module is a top application entry point which is
+          <para>The application workspaces along with their hierarchy of
+          modules. A workspace is a top application entry point which is
           directly accessible by the end user.</para>
         </listitem>
 
         <listitem>
-          <para>The application sub-modules. They form a hierarchy since
-          sub-modules may contain other sub-modules. Each sub-module is an
-          independent application part targeted at accessing the backend data
-          (domain model manipulation, reporting, ...).</para>
+          <para>The application modules. They form a hierarchy since modules
+          may contain other modules. Each module is an independent application
+          part targeted at accessing the backend data (domain model
+          manipulation, reporting, ...).</para>
         </listitem>
 
         <listitem>
           <para>The backend controller which holds the user backend
-          application state and its configuration (application modules
-          registration)</para>
+          application state and its configuration (in-memory model
+          state)</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -412,8 +734,8 @@
 
         <listitem>
           <para>The frontend controller which holds the user frontend
-          application state and its configuration (client application modules
-          registration)</para>
+          application state and its configuration (workspaces and modules
+          state)</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -432,26 +754,46 @@
       introduced above, describing the domain model will consist in assembling
       Jspresso description java beans using the <ulink
       url="http://www.springframework.org/">Spring framework Dependency
-      Injection Container</ulink>. To achieve this, you will have to write an
-      XML file that conforms to the <ulink
-      url="http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">spring
-      beans schema</ulink>. Of course, you can use any text editor but we will
-      encourage you to use at least a schema-aware XML editor like <ulink
-      url="http://www.jedit.org/">jEdit</ulink> or even better, use <ulink
-      url="http://www.eclipse.org/">Eclipse</ulink> and <ulink
+      Injection Container</ulink>. To achieve this, you will have to complete
+      Spring configuration files that were generated by the archetype.
+      Hopefuly, the generated project comes pre-configured for <ulink
       url="http://springide.org/project/wiki/SpringideInstall">Spring
-      IDE</ulink>. The latest will offer a lot of productivity enhancement
-      with code completion for the XML elements and attributes as well as for
-      the description bean class names and properties of Jspresso.</para>
+      IDE</ulink> that will bring a lot of productivity enhancements :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Code completion for the XML elements and attributes</para>
+        </listitem>
+
+        <listitem>
+          <para>Code completion for the Jspresso descriptors</para>
+        </listitem>
+
+        <listitem>
+          <para>Quick navigation between beans and from beans to java
+          sources</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Moreover, Spring IDE will validate your Spring configuration files
+      during the project compilation and report any error in the standard
+      Eclipse <quote>problems</quote> view.</para>
 
       <para>The various description java beans that are provided by Jspresso
       are detailed in the next chapter.</para>
 
       <para>We will use the root package <code>org.jspresso.hrsample</code>
-      for our application. The domain model description will logically go to
-      the <code>org.jspresso.hrsample.model</code> package. In this package,
-      we will create a <filename>model.xml</filename> file as described below
-      :</para>
+      for our application as defined during the archetype project generation.
+      The domain model description will logically go to the
+      <code>org.jspresso.hrsample.model</code> package. An empty one has been
+      created in the following folder (you can quickly navigate to it using
+      the Eclipse <quote>Open resource</quote> function) :</para>
+
+      <blockquote>
+        <para><filename>hrsample/core/src/main/resources/org/jspresso/hrsample/model/model.xml</filename></para>
+      </blockquote>
+
+      <para>Here is what it looks like :</para>
 
       <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
@@ -461,6 +803,10 @@
                       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true"&gt;
 
+  &lt;!--
+    The domain model
+  --&gt;
+  &lt;!-- Describe your application domain model here. --&gt;
 &lt;/beans&gt;</programlisting>
     </section>
 
@@ -629,112 +975,51 @@
     </section>
 
     <section>
-      <title>Generating the code</title>
+      <title>Generating the domain model code</title>
 
       <para>It is time now to get our interfaces generated before going
-      further. Let's use the Jspresso generation tool to make it happen.
-      Jspresso provides a <ulink
-      url="http://freemarker.org/">freemarker</ulink> template to generate the
-      components that may be easily triggered using a simple ant task. Since
-      this generator explores the spring beans definitions, we first need to
-      declare our <filename>model.xml</filename> as being part of our
-      application. To achieve that, let's create a configuration file named
-      <filename><code>beanRefFactory.xml</code></filename> in the root source
-      folder (without any package) as follow :</para>
+      further. Let's use the Jspresso generation tool to make it
+      happen.</para>
 
-      <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
-  default-lazy-init="true"&gt;
+      <para>As we saw before the Jspresso build is completely integrated in
+      Maven. This includes domain model code generation. You can trigger the
+      build from an external terminal window or directly from the IDE using an
+      maven Eclipse plugin. Navigate to your project root folder and type
+      :</para>
 
-  &lt;bean
-    id="hrsample-model-context"
-    class="org.springframework.context.support.ClassPathXmlApplicationContext"
-    lazy-init="true"&gt;
-    &lt;constructor-arg&gt;
-      &lt;list&gt;
-        &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt; <co
-            id="brf-commons" />
-        &lt;value&gt;org/jspresso/framework/tools/mock.xml&lt;/value&gt; <co
-            id="brf-mock" />
-        &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt; <co
-            id="brf-model" />
-      &lt;/list&gt;
-    &lt;/constructor-arg&gt;
-  &lt;/bean&gt;
-&lt;/beans&gt;</programlisting><calloutlist>
-          <callout arearefs="brf-commons">
-            <para>The commons bean definitions of the Jspresso
-            framework.</para>
-          </callout>
+      <blockquote>
+        <para><code>mvn compile</code></para>
+      </blockquote>
 
-          <callout arearefs="brf-mock">
-            <para>A configuration file that contain necessary but yet
-            undefined (for the moment) application bean references; this file
-            is only used for the component generation phase.</para>
-          </callout>
+      <para><note>
+          <para>If you want to speed up this generation phase, instead of
+          launching <code>mvn compile</code> from the
+          <filename>hrsample/</filename> root folder, you can lauch it from
+          the <filename>hrsample/core/</filename> folder which is the project
+          module that holds the domain model.</para>
+        </note>Go back to Eclipse and refresh your project -
+      <keycode>F5</keycode> - so that the generated java source is detected.
+      You may now have a look to the following folder to see the generated
+      java source files :</para>
 
-          <callout arearefs="brf-model">
-            <para>Our application model description file.</para>
-          </callout>
-        </calloutlist>This configuration file assembles the necessary spring
-      configuration files for the generator to operate. So we are ready to
-      operate the generator using the following build.xml ant file :</para>
+      <blockquote>
+        <para><filename>hrsample/core/target/generated-sources/entitygenerator/org/jspresso/hrsample/model</filename></para>
+      </blockquote>
 
-      <programlisting language="xml">&lt;?xml version="1.0"?&gt;
+      <para>Alternatively you can directly use the Eclipse <quote>Open
+      type</quote> function to Quickly navigate navigate to the generated
+      <code>Nameable</code> and <code>Traceable</code> types.</para>
 
-&lt;project default="all"&gt;
-
-  &lt;property file="build.properties" /&gt;
-
-  &lt;property name="src.dir" value="${basedir}/src/main" /&gt;
-  &lt;property name="java.src.dir" value="${src.dir}/java" /&gt;
-  &lt;property name="resources.src.dir" value="${src.dir}/resources" /&gt;
-  &lt;property name="ddl.dir" value="${src.dir}/ddl" /&gt;
-
-  &lt;path id="entity.generator.classpath"&gt;
-    &lt;dirset dir="${basedir}"&gt;
-      &lt;include name="**/target/classes" /&gt;
-    &lt;/dirset&gt;
-    &lt;fileset dir="${m2.repo}"&gt;
-      &lt;include name="**/jspresso/**/2.2/*.jar" /&gt;
-      &lt;include name="**/commons-cli-1.0.jar" /&gt;
-      &lt;include name="**/freemarker-2.3.3.jar" /&gt;
-      &lt;include name="**/spring-2.5.6.jar" /&gt;
-      &lt;include name="**/commons-logging-1.1.jar" /&gt;
-      &lt;include name="**/xml-apis-2.0.2.jar" /&gt;
-      &lt;include name="**/xerces-2.0.2.jar" /&gt;
-      &lt;include name="**/bsf-2.3.0.jar" /&gt;
-      &lt;include name="**/commons-beanutils-1.7.0.jar" /&gt;
-    &lt;/fileset&gt;
-  &lt;/path&gt;
-
-  &lt;target name="generate-entities"&gt;
-    &lt;java classname="org.jspresso.framework.tools.entitygenerator.EntityGenerator"
-          classpathref="entity.generator.classpath"&gt;
-      &lt;arg value="-applicationContextKey" /&gt;
-      &lt;arg value="hrsample-model-context" /&gt;
-      &lt;arg value="-templateResourcePath" /&gt;
-      &lt;arg value="/org/jspresso/framework/tools/entitygenerator" /&gt;
-      &lt;arg value="-templateName" /&gt;
-      &lt;arg value="HibernateXdocletEntity.ftl" /&gt;
-      &lt;arg value="-outputDir" /&gt;
-      &lt;arg value="${java.src.dir}" /&gt;
-      &lt;arg value="-includePackages" /&gt;
-      &lt;arg value="org.jspresso.hrsample.model" /&gt;
-    &lt;/java&gt;
-  &lt;/target&gt;
-
-  &lt;target name="all" depends="generate-entities" /&gt;
-
-&lt;/project&gt;</programlisting>
-
-      <para>You may now have a look into the
-      <code>org.jspresso.hrsample.model</code> package source directory. You
-      may find the 2 generated classes :</para>
+      <para><note>
+          <para>Jpresso uses compile time generation of the domain model
+          classes and resources. Generated artifacts always go into
+          <filename>target/generated-xxx</filename> folders. You should never
+          place any hand-written code in these generated source folders since
+          they can be deleted at any time during a <code>maven clean</code>
+          operation. Always use standard maven source folders
+          (<filename>src/main/java</filename> and
+          <filename>src/main/resources</filename>).</para>
+        </note>You should have now the 2 generated classes :</para>
 
       <itemizedlist>
         <listitem>
@@ -757,7 +1042,6 @@
  * &lt;p&gt;
  *
  * @author Generated by Jspresso
- * @version $LastChangedRevision: 1711 $
  */
 public interface Nameable {
 
@@ -783,7 +1067,7 @@ public interface Nameable {
 
 }</programlisting>
 
-      <para>These 2 java classes are in fact interfaces with getters and
+      <para>These 2 java classes are actually java interfaces with getters and
       setters for the declared properties. In fact, you will never need any
       implementation for them since Jspresso will automatically handle their
       implementation for you at runtime using J2SE proxies. This approach
@@ -817,8 +1101,9 @@ public interface Nameable {
         </listitem>
       </itemizedlist>
 
-      <para>It is time to write our first lines of java to achieve that. So
-      let's create the life-cycle interceptor
+      <para>It is time to write our first lines of java to achieve that.
+      Navigate to the <filename>/hrsample/core/src/main/java</filename> source
+      folder and create the life-cycle interceptor
       <code>org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor</code>
       java class as follow :</para>
 
@@ -844,7 +1129,6 @@ public class TraceableLifecycleInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public boolean onPersist(Traceable traceable, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     traceable.setCreateTimestamp(new Date()); <co id="onPersist" />
@@ -857,7 +1141,6 @@ public class TraceableLifecycleInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
   public boolean onUpdate(Traceable traceable, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     traceable.setLastUpdateTimestamp(new Date()); <co id="onUpdate" />
@@ -900,10 +1183,10 @@ public class TraceableLifecycleInterceptor extends
   id="Traceable"
   class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
   ...
-  &lt;property name="lifecycleInterceptors"&gt; <co id="lcInterceptors" />
+  &lt;property name="lifecycleInterceptorClassNames"&gt; <co
+            id="lcInterceptors" />
     &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor" /&gt;
+      &lt;value&gt;org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor&lt;/value&gt;
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
@@ -963,8 +1246,8 @@ public class TraceableLifecycleInterceptor extends
         </callout>
       </calloutlist>
 
-      <para>Relaunching the Jspresso generator will produce the following
-      class (<filename>City.java</filename>) :</para>
+      <para>Relaunching the Jspresso Maven compilation will produce the
+      following class (<filename>City.java</filename>) :</para>
 
       <programlisting language="java">package org.jspresso.hrsample.model;
 
@@ -983,7 +1266,6 @@ public class TraceableLifecycleInterceptor extends
  *   persister =
  *   "org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
  * @author Generated by Jspresso
- * @version $LastChangedRevision: 1711 $
  */
 public interface City extends
   org.jspresso.hrsample.model.Nameable,
@@ -1036,11 +1318,9 @@ public interface City extends
 
       <para>You might notice that there are slightly more hibernate xDoclet
       tags (class level tags, id and version) to handle the entity persistence
-      specifics. More important is that as for <code>Nameable</code> and
-      <code>Traceable</code>, the <code>City</code> entity is not more than an
-      interface. This brings to it a fundamental property which is
-      multiple-inheritance; and this characteristic is also available among
-      entities.</para>
+      specifics. But as for <code>Nameable</code> and <code>Traceable</code>,
+      the <code>City</code> entity is not more than an interface and its
+      implementation will be completely handled by the framework.</para>
     </section>
 
     <section>
@@ -1113,8 +1393,8 @@ public interface City extends
         </callout>
 
         <callout arearefs="regexpPatternSample">
-          <para>Whenever there is some kind of communication to initiate (a
-          GUI notification for instance), this is an example of a correct
+          <para>Whenever there is some kind of communication to initiate (an
+          invalid value for instance), this is an example of a correct
           value.</para>
         </callout>
       </calloutlist>
@@ -1131,7 +1411,6 @@ public interface City extends
  * &lt;p&gt;
  *
  * @author Generated by Jspresso
- * @version $LastChangedRevision: 1711 $
  */
 public interface ContactInfo extends
   org.jspresso.framework.model.component.IComponent <co id="IComponent" /> {
@@ -1218,8 +1497,8 @@ public interface ContactInfo extends
         <title>Unidirectional N-1 relationships</title>
 
         <para>Let's first deal with the simple unidirectional association
-        <code>ContactInfo</code> → <code>City</code>. We are going to define a
-        <code>city</code> property in the <code>ContactInfo</code>
+        <code>ContactInfo</code> -&gt; <code>City</code>. We are going to
+        define a <code>city</code> property in the <code>ContactInfo</code>
         component.</para>
 
         <para>The following XML fragment will do the trick :</para>
@@ -1258,7 +1537,7 @@ public interface ContactInfo extends
               <code>City</code> entity descriptor we described above (note the
               usage of the <code>ref</code> spring attribute).</para>
             </callout>
-          </calloutlist>Relaunching the Jspresso generator will update the
+          </calloutlist>Relaunching the Maven compilation will update the
         <filename>ContactInfo.java</filename> source file we generated above,
         but since this is a unidirectional relationship, the
         <filename>City.java</filename> file will remain untouched. The
@@ -1329,9 +1608,9 @@ public interface ContactInfo extends
               <code>Event</code> text property).</para>
             </callout>
           </calloutlist>This first relationship is fairly simple since it is a
-        n-1 unidirectional association. Of course, the Jspresso can seamlessly
-        handle 1-n, 1-1 and n-n unidirectional and bi-directional associations
-        and compositions (strong aggregations).</para>
+        n-1 unidirectional association. Of course, the Jspresso can also
+        seamlessly handle 1-n, 1-1 and n-n unidirectional and bi-directional
+        associations and compositions (strong aggregations).</para>
 
         <para>Now that we are done with the commons model part, let's see how
         we can handle the employees model part.</para>
@@ -1596,7 +1875,6 @@ public interface ContactInfo extends
  *   persister =
  *   "org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
  * @author Generated by Jspresso
- * @version $LastChangedRevision: 1711 $
  */
 public interface Employee extends org.jspresso.hrsample.model.Nameable,
     org.jspresso.hrsample.model.Traceable,
@@ -1972,7 +2250,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
       <title>Bi-directional relationships</title>
 
       <para>It is time see how the Jspresso framework handles relationships
-      which are navigable at both ends.</para>
+      that are navigable at both ends.</para>
 
       <section>
         <title>Bi-directional 1-N relationships</title>
@@ -2429,14 +2707,12 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
   id="Employee"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
-  &lt;property name="serviceDelegates"&gt; <co id="serviceDelegates" />
+  &lt;property name="serviceDelegateClassNames"&gt; <co id="serviceDelegates" />
     &lt;map&gt;
-      &lt;entry key="org.jspresso.hrsample.model.service.EmployeeService"&gt; <co
+      &lt;entry key="org.jspresso.hrsample.model.service.EmployeeService" <co
             id="NameableService" />
-        &lt;bean
-          class="org.jspresso.hrsample.model.service.EmployeeServiceDelegate" /&gt; <co
+           value="org.jspresso.hrsample.model.service.EmployeeServiceDelegate" /&gt; <co
             id="NameableServiceImpl" />
-      &lt;/entry&gt;
     &lt;/map&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
@@ -2605,8 +2881,6 @@ public interface Employee extends
 
       <para><programlisting language="java">package org.jspresso.hrsample.model.extension;
 
-import java.util.Date;
-
 import org.jspresso.hrsample.model.Employee;
 import org.jspresso.framework.model.component.AbstractComponentExtension;
 
@@ -2623,7 +2897,7 @@ public class EmployeeExtension extends
    * @param extendedEmployee
    *            The extended employee instance.
    */
-  public EmployeeExtensionSimple(Employee extendedEmployee) {
+  public EmployeeExtension(Employee extendedEmployee) {
     super(extendedEmployee);
   }
 
@@ -2687,7 +2961,6 @@ public class EmployeeExtension extends
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Date;
 
 import org.jspresso.hrsample.model.Employee;
 import org.jspresso.framework.model.component.AbstractComponentExtension;
@@ -2712,8 +2985,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
             id="addPropertyChangeListener" />
         new PropertyChangeListener() {
 
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(PropertyChangeEvent evt) {
             Integer oldAge = age;
             age = null; <co id="ageReset" />
             getComponent().firePropertyChange("age", oldAge,
@@ -2891,11 +3163,11 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
           name="name"
           value="firstName" /&gt;
         ...
-        &lt;property name="integrityProcessors"&gt; <co
+        &lt;property name="integrityProcessorClassNames"&gt; <co
             id="integrityProcessors" />
           &lt;list&gt;
-            &lt;bean <co id="FirstNameIntegrityProcessor" />
-              class="org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor" /&gt;
+            &lt;value&gt;class="org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor"&lt;/value&gt; <co
+            id="FirstNameIntegrityProcessor" />
           &lt;/list&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -2906,10 +3178,10 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
           name="name"
           value="birthDate" /&gt;
         ...
-        &lt;property name="integrityProcessors"&gt;
+        &lt;property name="integrityProcessorClassNames"&gt;
           &lt;list&gt;
-            &lt;bean <co id="BirthDateIntegrityProcessor" />
-              class="org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$BirthDateProcessor" /&gt;
+            &lt;value&gt;org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$BirthDateProcessor&lt;/value&gt; <co
+            id="BirthDateIntegrityProcessor" />
           &lt;/list&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -2952,7 +3224,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
 import java.util.Date;
 
 import org.jspresso.hrsample.model.Employee;
-import org.jspresso.framework.util.bean.integrity.EmptyPropertyIntegrityProcessor;
+import org.jspresso.framework.util.bean.integrity.EmptyPropertyProcessor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
 
 /**
@@ -3008,7 +3280,7 @@ public class EmployeePropertyProcessors {
         formattedName.append(newFirstName.substring(1).toLowerCase());
         return formattedName.toString(); <co id="formattedName" />
       }
-      return super.interceptSetter(employee, oldFirstName, newFirstName);
+      return super.interceptSetter(employee, newFirstName);
     }
   }
 }</programlisting><calloutlist>
@@ -3057,6 +3329,19 @@ public class EmployeePropertyProcessors {
       implementations for all required methods and then to override the method
       you want to provide an implementation for.</para>
     </section>
+
+    <section>
+      <title>Hibernate mapping</title>
+
+      <para>This is actually nothing to do. When you compiled the project with
+      maven, all the Hibernate mapping files were automatically generated by
+      xDoclet in the
+      <filename>/hrsample/core/target/generated-resources/xdoclet</filename>
+      folder that is already declared as a source folder in the Eclipse
+      project. You might have a look to the generated files to chack how
+      Jspresso translated your model description into Hibernate mapping
+      files.</para>
+    </section>
   </section>
 
   <section>
@@ -3083,10 +3368,15 @@ public class EmployeePropertyProcessors {
     comes into the game. Jspresso is definitely targeted at multi-lingual
     applications and as such, fully supports internationalized GUIs.</para>
 
-    <para>Before going further, let's create the frontend application
-    descriptor. The frontend description will logically go to the
-    <code>org.jspresso.hrsample.view</code> package. In this package, we will
-    create a <filename>view.xml</filename> file as described below :</para>
+    <para>The views description will logically go to the
+    <code>org.jspresso.hrsample.view</code> package. An empty Spring
+    descriptor has been created in the following folder (you can quickly
+    navigate to it using the Eclipse <quote>Open resource</quote> function)
+    :</para>
+
+    <para><filename>hrsample/core/src/main/resources/org/jspresso/hrsample/view/view.xml</filename></para>
+
+    <para>Here is what it looks like :</para>
 
     <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
@@ -3095,6 +3385,11 @@ public class EmployeePropertyProcessors {
   xsi:schemaLocation="http://www.springframework.org/schema/beans
                       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true"&gt;
+
+  &lt;!--
+    The views
+  --&gt;
+  &lt;!-- Describe your application views here. --&gt;
 
   &lt;!--
    The application I18N resources. 
@@ -3129,84 +3424,36 @@ public class EmployeePropertyProcessors {
     heavily relies on layouts, the translator won't have to care about
     translations length.</para>
 
-    <para>As declared in the XML fragment above, we will create a
+    <para>As declared in the XML fragment above, we will use a
     <code>org.jspresso.hrsample.i18n</code> package that will contain the
     resource bundle property files. We will translate the application in
-    English and French; so let's create the two files
+    English and French; hopefuly, the archetype has already created both
+    property files for us. You should have the two files
     <filename>Messages_en.properties</filename> and
     <filename>Messages_fr.properties</filename> that will respectively contain
-    the English and French translations. Adding a language will be just a
-    mater of creating, in the same package, a new property file with the 2
-    letter ISO code of the language. Those 2 files are empty as of now but
-    don't care about that; Jspresso will graphically notify you that a
-    translation is missing for a given language.</para>
+    the English and French translations in the following folder :</para>
+
+    <para><filename>/hrsample/core/src/main/resources/org/jspresso/hrsample/i18n</filename></para>
+
+    <para>Adding a new language will be just a mater of creating, in the same
+    package, a new property file with the 2 letter ISO code of the language.
+    Those 2 files are almost empty as of now but don't care about that;
+    Jspresso will graphically notify you that a translation is missing for a
+    given language.</para>
 
     <para>In order to ease the work of the GUI designer, Jspresso provides a
     view tester tool that enables an immediate java swing preview of each
-    described view fragment. In order to have this tool up and running, we
-    need to create a new entry in the <filename>beanRefFactory.xml</filename>
-    file we created when designing the domain model as below :</para>
-
-    <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
-  default-lazy-init="true"&gt;
-  ...
-  &lt;bean
-    id="hrsample-viewtester-context"
-    class="org.springframework.context.support.ClassPathXmlApplicationContext"
-    lazy-init="true"&gt;
-    &lt;constructor-arg&gt;
-      &lt;list&gt;
-        &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt;
-        &lt;value&gt;org/jspresso/framework/tools/mock.xml&lt;/value&gt;
-        &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt; <co
-          id="hrsample-model.xml" />
-        &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt; <co
-          id="commons-frontend.xml" />
-        &lt;value&gt;org/jspresso/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt; <co
-          id="commons-swing.xml" />
-        &lt;value&gt;org/jspresso/hrsample/frontend/view.xml&lt;/value&gt; <co
-          id="hrsample-frontend.xml" />
-      &lt;/list&gt;
-    &lt;/constructor-arg&gt;
-  &lt;/bean&gt;
-&lt;/beans&gt;</programlisting><calloutlist>
-        <callout arch="" arearefs="hrsample-model.xml">
-          <para>Our sample application domain model description.</para>
-        </callout>
-
-        <callout arearefs="commons-frontend.xml">
-          <para>The commons frontend bean definitions of the Jspresso
-          framework.</para>
-        </callout>
-
-        <callout arearefs="commons-swing.xml">
-          <para>The commons swing bean definitions of the Jspresso
-          framework.</para>
-        </callout>
-
-        <callout arearefs="hrsample-frontend.xml">
-          <para>Our sample application frontend description.</para>
-        </callout>
-      </calloutlist>In order to start the Jspresso view tester tool, we will
-    launch the <code>org.jspresso.framework.tools.viewtester.ViewTester</code>
-    java class with the following arguments : <code>-applicationContextKey
-    hrsample-viewtester-context -viewId &lt;view descriptor id&gt; -language
-    en</code>.</para>
-
-    <para>The application context key used above is the one we have just added
-    in the <filename>beanRefFactory.xml</filename> configuration file.</para>
+    described view fragment. At the beginning of this tutorial, you should
+    have imported the <quote>view tester</quote> configuration that alows you
+    to launch the tool. No further configuration is needed.</para>
 
     <note>
       <para>You are able to choose the language to use for displaying the
-      tested view through the use of the <code>-language</code> option.
-      Whenever this option is omitted, the view tester will fall back to the
-      platform default locale. Changing the language when testing a view will
-      allow for early missing translations identification.</para>
+      tested view through the use of the <code>-language</code> option in the
+      <quote>view tester</quote> launch configuration. Whenever this option is
+      omitted, the view tester will fall back to the platform default locale.
+      Changing the language when testing a view will allow for early missing
+      translations identification.</para>
     </note>
 
     <note>
@@ -3284,8 +3531,16 @@ public class EmployeePropertyProcessors {
           at runtime by Jspresso.</para>
         </note>
 
-        <para>Launching the tester with the <code>Company.pane</code> view
-        descriptor id will produce the following result :</para>
+        <para>The view tester launch configuration has been set-up to
+        instanciate and display a view whose descriptor id is
+        <quote>testView</quote>. As a result, we simply have to reference the
+        view to test in the <filename>view.xml</filename> file as follows
+        :</para>
+
+        <programlisting language="xml">&lt;bean id="testView" parent="Company.pane" /&gt;</programlisting>
+
+        <para>Now, launching the tester will produce the following result
+        :</para>
 
         <para><figure>
             <title>The first component view</title>
@@ -3327,10 +3582,8 @@ public class EmployeePropertyProcessors {
             <para>The <code>city</code> property field has been added a list
             of value (LOV) button. This button will bring a dialog box
             allowing the user to look-up available cities and select
-            one.</para>
-
-            <para><screenshot>
-                <screeninfo>City LOV</screeninfo>
+            one.<figure>
+                <title>City LOV</title>
 
                 <mediaobject>
                   <imageobject>
@@ -3339,11 +3592,13 @@ public class EmployeePropertyProcessors {
                                width="100%" />
                   </imageobject>
                 </mediaobject>
-              </screenshot>Of course, leaving the field with an incomplete
-            value would auto-complete the value if the typed-in string is
-            sufficient to determine one and only one city or bring up the LOV
-            dialog without for the user to push the LOV button. This reference
-            field behaviour is only the consequence of having declared the
+              </figure></para>
+
+            <para>Of course, leaving the field with an incomplete value would
+            auto-complete the value if the typed-in string is sufficient to
+            determine one and only one city or bring up the LOV dialog without
+            for the user to push the LOV button. This reference field
+            behaviour is only the consequence of having declared the
             <code>ContactInfo</code> -&gt; <code>City</code> <link
             linkend="BasicReferencePropertyDescriptor">relationship</link>. In
             the view tester tool, the search button and the auto-completion
@@ -3353,10 +3608,8 @@ public class EmployeePropertyProcessors {
 
           <listitem>
             <para>Whenever you try to type-in "aze" in the email property
-            field, you will obtain the following error message :</para>
-
-            <para><screenshot>
-                <screeninfo>Regular expression error message</screeninfo>
+            field, you will obtain the following error message :<figure>
+                <title>Regular expression error message</title>
 
                 <mediaobject>
                   <imageobject>
@@ -3365,10 +3618,11 @@ public class EmployeePropertyProcessors {
                                scalefit="1" width="100%" />
                   </imageobject>
                 </mediaobject>
-              </screenshot>This is due to the <link
-            linkend="regexpPattern">constraint we applied on the email
-            property</link> in the <code>ContactInfo</code> inlined
-            component.</para>
+              </figure></para>
+
+            <para>This is due to the <link linkend="regexpPattern">constraint
+            we applied on the email property</link> in the
+            <code>ContactInfo</code> inlined component.</para>
           </listitem>
 
           <listitem>
@@ -3553,8 +3807,15 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               <para>We assign width (columns span) to properties we don't want
               to have the default value of 1.</para>
             </callout>
-          </calloutlist>Relaunching the view tester will produce the following
-        output :</para>
+          </calloutlist><note>
+            <para>Jspresso supports the use of nested properties for all
+            descriptors. For instance, in the example above, we have used the
+            <code>contact.phone</code> nested property of the
+            <code>Company</code> entity. It simply means the the field will
+            reference <code>company -&gt; contact -&gt; phone</code> of its
+            underlying company model.</para>
+          </note>Relaunching the view tester will produce the following output
+        :</para>
 
         <para><figure>
             <title>The customized company view</title>
@@ -3727,7 +3988,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
           </listitem>
 
           <listitem>
-            <para>For the tool tips, it is more link to the user interface
+            <para>For the tool tips, it is more linked to the user interface
             itself, so we will declare it on the view; but in fact, we will
             not declare a tool tip as such but rather bring a description
             information to the view so that the framework may, at runtime,
@@ -4556,12 +4817,16 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     <title>Wiring the application</title>
 
     <para>As we saw it at the beginning of this tutorial, a Jspresso based
-    application is cleanly organized into 3 separate layers :</para>
+    application is cleanly organized into 4 separate layers :</para>
 
     <orderedlist>
       <listitem>
-        <para>The model layer which contains the rich domain business
+        <para>The model layer that contains the rich domain business
         objects</para>
+      </listitem>
+
+      <listitem>
+        <para>The view layer that binds to and displays the model</para>
       </listitem>
 
       <listitem>
@@ -4602,7 +4867,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
           <listitem>
             <para>application starting and access to the various registered
-            modules</para>
+            workspaces and modules</para>
           </listitem>
 
           <listitem>
@@ -4617,117 +4882,66 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       </listitem>
     </orderedlist>
 
-    <para>We have already covered in details the model layer in this tutorial.
-    This section will address the backend and frontend layers.</para>
+    <para>We have already covered in details the model and view layers in this
+    tutorial. This section will address the backend and frontend
+    layers.</para>
 
     <section>
       <title>Configuring the backend layer</title>
 
-      <para>The backend layer is organized around the backend controller. The
-      backend controller is the conductor of all backend operations. As of
-      now, Jspresso provides one concrete implementation of a backend
-      controller : the Hibernate backend controller. This implementation
-      provides all the backend management described above using hibernate and
-      the hibernate spring stack (using hibernate and transaction templates).
-      We will see later on how the spring hibernate stack is used when dealing
-      with actions.</para>
+      <section>
+        <title>The backend controller</title>
 
-      <para>To materialize and further configure the application backend,
-      let's create 2 new spring configuration files (listings below omit the
-      standard XML spring headers) :</para>
+        <para>The backend layer is organized around the backend controller.
+        The backend controller is the conductor of all backend operations. As
+        of now, Jspresso provides one concrete implementation of a backend
+        controller : the Hibernate backend controller. This implementation
+        provides all the backend management described above using hibernate
+        and the hibernate spring stack (using hibernate and transaction
+        templates). We will see later on how the spring hibernate stack is
+        used when dealing with actions.</para>
 
-      <orderedlist>
-        <listitem>
-          <para><filename>backend.xml</filename> that will logically go into
-          the <code>org.jspresso.hrsample.backend</code> package and will hold
-          all the description of the backend.</para>
-        </listitem>
+        <para>As for <filename>model.xml</filename> and
+        <filename>view.xml</filename>, the archetype has generated a ready to
+        use Spring configuration file for the backend named
+        <filename>backend.xml</filename>. Here is what it looks like :</para>
 
-        <listitem>
-          <para><filename>config.xml</filename> that we will put in the
-          <code>org.jspresso.hrsample</code> package and that will hold all
-          the specific configuration related to a deployment
-          environment.</para>
-        </listitem>
-      </orderedlist>
+        <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+  default-lazy-init="true"&gt;
 
-      <para>As always, getting the hibernate backend controller into the
-      application will be a matter of configuration. The first part will be
-      achieved by updating the <filename>beanRefFactory.xml</filename> with a
-      new context entry (named <code>hrsample-swing-context</code>) for the
-      application to run with swing and hibernate with the hibernate
-      controller installed :</para>
+&lt;/beans&gt;</programlisting>
 
-      <para><programlisting language="xml">&lt;bean
-  id="hrsample-model-context"
-  class="org.springframework.context.support.ClassPathXmlApplicationContext"
-  lazy-init="true"&gt;
-  ...
-&lt;/bean&gt;
+        <para>And the good news is that there is nothing to configure in it
+        for a standard usage.</para>
+      </section>
 
-&lt;bean
-  id="hrsample-viewtester-context"
-  class="org.springframework.context.support.ClassPathXmlApplicationContext"
-  lazy-init="true"&gt;
-  ...
-&lt;/bean&gt;
+      <section>
+        <title>The backend configuration</title>
 
-&lt;bean
-  id="hrsample-swing-context"
-  class="org.springframework.context.support.ClassPathXmlApplicationContext"
-  lazy-init="true"&gt;
-  &lt;constructor-arg&gt;
-    &lt;list&gt;
-      &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml&lt;/value&gt; <co
-            id="commons-hibernate.xml" />
-      &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/backend/backend.xml&lt;/value&gt; <co
-            id="hrsample-backend.xml" />
-      &lt;value&gt;org/jspresso/hrsample/view/view.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/frontend/frontend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/config.xml&lt;/value&gt; <co
-            id="config.xml" />
-    &lt;/list&gt;
-  &lt;/constructor-arg&gt;
-&lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="commons-hibernate.xml">
-            <para>This is the standard Jspresso spring configuration file to
-            bring an hibernate powered backend to our application.</para>
-          </callout>
+        <para>The archetype also generated the <filename>config.xml</filename>
+        Spring configuration file where we can define everything related to
+        the deployment environment. The default configuration generated by the
+        archetype uses HSQL DB as the database. In a production environment,
+        you will adapt it to your targetted database.</para>
 
-          <callout arearefs="hrsample-backend.xml">
-            <para>The backend spring configuration file that we have created
-            above.</para>
-          </callout>
+        <para>Here is the file commented :</para>
 
-          <callout arearefs="config.xml">
-            <para>The environment configuration file that we also have created
-            above.</para>
-          </callout>
-        </calloutlist></para>
-
-      <para>As of now, we will keep the <filename>backend.xml</filename>
-      configuration file empty.</para>
-
-      <para>On the other hand, let's complete the
-      <filename>config.xml</filename> file for our development environment
-      like the following :</para>
-
-      <para><programlisting language="xml">&lt;bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"&gt; <co
-            id="dataSource" />
+        <para><programlisting language="xml">&lt;bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"&gt; <co
+              id="dataSource" />
   &lt;property name="driverClassName" value="org.hsqldb.jdbcDriver" /&gt; <co
-            id="dataSource-params" />
+              id="dataSource-params" />
   &lt;property name="url" value="jdbc:hsqldb:mem:hrsample" /&gt; <co
-            id="hsqldbmem" />
+              id="hsqldbmem" />
   &lt;property name="username" value="sa" /&gt;
   &lt;property name="password" value="" /&gt;
 &lt;/bean&gt;
 
 &lt;bean id="hibernateSessionFactory" parent="abstractHibernateSessionFactory"&gt; <co
-            id="hibernateSessionFactory" />
+              id="hibernateSessionFactory" />
   &lt;property name="hibernateProperties"&gt;
     &lt;props&gt;
       &lt;prop key="hibernate.query.substitutions"&gt;true 1, false 0, yes 'Y', no 'N'&lt;/prop&gt;
@@ -4740,163 +4954,64 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       &lt;prop key="hibernate.cache.region_prefix"&gt;hibernate.test&lt;/prop&gt;
       &lt;prop key="hibernate.cache.provider_class"&gt;org.hibernate.cache.HashtableCacheProvider&lt;/prop&gt;
       &lt;prop key="hibernate.hbm2ddl.auto"&gt;update&lt;/prop&gt; <co
-            id="hbm2ddl" />
+              id="hbm2ddl" />
     &lt;/props&gt;
   &lt;/property&gt;
   &lt;property name="mappingLocations"&gt;
     &lt;list&gt;
       &lt;value&gt;classpath*:org/jspresso/hrsample/**/*.hbm.xml&lt;/value&gt; <co
-            id="mappingLocations" />
+              id="mappingLocations" />
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="dataSource">
-            <para>We configure the data source that will be used in this
-            environment.</para>
-          </callout>
+            <callout arearefs="dataSource">
+              <para>We configure the data source that will be used in this
+              environment.</para>
+            </callout>
 
-          <callout arearefs="dataSource-params">
-            <para>In the development phase, we will use the well known HSQL DB
-            in-memory database. HSQL DB will freshly start every-time the
-            application itself starts and instantiate the data source.</para>
-          </callout>
+            <callout arearefs="dataSource-params">
+              <para>In the development phase, we will use the well known HSQL
+              DB in-memory database. HSQL DB will freshly start every-time the
+              application itself starts and instantiate the data
+              source.</para>
+            </callout>
 
-          <callout arearefs="hsqldbmem">
-            <para>We configures the JDBC URL to use the in-memory
-            database.</para>
-          </callout>
+            <callout arearefs="hsqldbmem">
+              <para>We configures the JDBC URL to use the in-memory
+              database.</para>
+            </callout>
 
-          <callout arearefs="hibernateSessionFactory">
-            <para>We configure the hibernate session factory with sensible
-            values inheriting from the one brought by the hibernate standard
-            configuration. For a complete reference of the meaning of the
-            different parameters, please either refer to the hibernate or
-            spring reference documentation. The most important here is that we
-            tell hibernate to talk to the database using the HSQL DB
-            dialect.</para>
-          </callout>
+            <callout arearefs="hibernateSessionFactory">
+              <para>We configure the hibernate session factory with sensible
+              values inheriting from the one brought by the hibernate standard
+              configuration. For a complete reference of the meaning of the
+              different parameters, please either refer to the hibernate or
+              spring reference documentation. The most important here is that
+              we tell hibernate to talk to the database using the HSQL DB
+              dialect.</para>
+            </callout>
 
-          <callout arearefs="hbm2ddl">
-            <para>Last but not least, since we configure a development
-            environment, we tell hibernate to update (in our case create) the
-            DB schema when starting so that our in memory HSQL DB gets
-            populated with a fresh, empty, domain-synchronized schema.</para>
-          </callout>
+            <callout arearefs="hbm2ddl">
+              <para>Last but not least, since we configure a development
+              environment, we tell hibernate to update (in our case create)
+              the DB schema when starting so that our in memory HSQL DB gets
+              populated with a fresh, empty, domain-synchronized
+              schema.</para>
+            </callout>
 
-          <callout arearefs="mappingLocations">
-            <para>We instruct hibernate to load the mapping files from
-            resources located in any <code>org.jspresso.hrsample</code>
-            subpackage.</para>
-          </callout>
-        </calloutlist></para>
+            <callout arearefs="mappingLocations">
+              <para>We instruct hibernate to load the mapping files from
+              resources located in any <code>org.jspresso.hrsample</code>
+              subpackage.</para>
+            </callout>
+          </calloutlist></para>
 
-      <para>But you surely noticed that we are missing the hibernate mapping
-      files. Hopefully, all the generated entities are marked with xDoclet
-      tags to ease this step. So let's update our
-      <filename>build.xml</filename> as below :</para>
+        <para>Without any extra configuration, we actually have a fully
+        functional hibernate aware backend relying on our domain model.</para>
 
-      <para><programlisting language="xml">...
-&lt;property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" /&gt;
-&lt;property name="xdoclet.plugins.dir" value="${xdoclet.home}/lib" /&gt;
-&lt;property name="model.src.dir" value="${java.src.dir}/org/jspresso/hrsample/model" /&gt;
-...
-&lt;target name="clean-hibernate"&gt;
-  &lt;delete&gt;
-    &lt;fileset dir="${resources.src.dir}" includes="**/*.hbm.xml" /&gt;
-  &lt;/delete&gt;
-&lt;/target&gt;
-
-&lt;target name="xdoclet-hibernate" depends="clean-hibernate"&gt;
-  &lt;mkdir dir="${resources.src.dir}" /&gt;
-  &lt;path id="xdoclet.task.classpath"&gt;
-    &lt;pathelement location="${xdoclet.plugins.dir}/xdoclet-plugin-hibernate-1.0.4.jar" /&gt;
-    &lt;fileset dir="${xdoclet.lib.dir}"&gt;
-      &lt;include name="**/*.jar" /&gt;
-    &lt;/fileset&gt;
-  &lt;/path&gt;
-  &lt;taskdef name="xdoclet" classname="org.xdoclet.ant.XDocletTask" classpathref="xdoclet.task.classpath" /&gt;
-
-  &lt;xdoclet&gt;
-    &lt;fileset dir="${model.src.dir}"&gt;
-      &lt;include name="*.java"/&gt;
-    &lt;/fileset&gt;
-    &lt;component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
-               destdir="${resources.src.dir}"
-               version="3.0" /&gt;
-  &lt;/xdoclet&gt;
-  &lt;replaceregexp byline="true"&gt; <co id="replaceregexp" />
-    &lt;regexp pattern="&amp;lt;component name=&amp;quot;(.*)&amp;quot;&amp;gt;" /&gt;
-    &lt;substitution expression="&amp;lt;component name=&amp;quot;\1&amp;quot;&amp;gt;
-        &amp;lt;tuplizer entity-mode=&amp;quot;pojo&amp;quot;
-        class=&amp;quot;org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&amp;quot;
-        /&amp;gt;" /&gt;
-    &lt;fileset dir="${resources.src.dir}"&gt;
-      &lt;include name="**/*.hbm.xml" /&gt;
-    &lt;/fileset&gt;
-  &lt;/replaceregexp&gt;
-&lt;/target&gt;
-
-&lt;target name="all" depends="generate-entities, xdoclet-hibernate" /&gt;</programlisting><calloutlist>
-          <callout arearefs="replaceregexp">
-            <para>The "replaceregexp" section is important for the inlined
-            components mapping to support Jspresso ones; as of this writing,
-            xDoclet does not support for changing the tuplizer of an entity or
-            component, which is required.</para>
-          </callout>
-        </calloutlist>Running ant produces the following mapping file in the
-      <code>org.jspresso.hrsample.model</code> package :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><filename>City.hbm.xml</filename></para>
-        </listitem>
-
-        <listitem>
-          <para><filename>Company.hbm.xml</filename></para>
-        </listitem>
-
-        <listitem>
-          <para><filename>Employee.hbm.xml</filename></para>
-        </listitem>
-
-        <listitem>
-          <para><filename>Event.hbm.xml</filename></para>
-        </listitem>
-
-        <listitem>
-          <para><filename>OrganizationalUnit.hbm.xml</filename></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>As an example, here is the <filename>City.hbm.xml</filename>
-      generated mapping file :</para>
-
-      <para><programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;
-
-&lt;hibernate-mapping default-access="org.jspresso.framework.model.persistence.hibernate.property.EntityPropertyAccessor"&gt;
-  &lt;class dynamic-update="true"
-    table="CITY"
-    persister="org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
-    name="org.jspresso.hrsample.model.City"
-    dynamic-insert="true"&gt;
-    &lt;id type="string" column="ID" length="36" name="id"&gt;
-      &lt;generator class="assigned"/&gt;
-    &lt;/id&gt;
-    &lt;version column="VERSION" unsaved-value="null" name="version"/&gt;
-    &lt;property name="zip"&gt;
-      &lt;column name="ZIP" length="10"/&gt;
-    &lt;/property&gt;
-    &lt;property name="name"&gt;
-      &lt;column name="NAME" not-null="true" length="64"/&gt;
-    &lt;/property&gt;
-  &lt;/class&gt;
-&lt;/hibernate-mapping&gt;</programlisting></para>
-
-      <para>With this little configuration steps, we now have a fully
-      functional hibernate aware backend relying on our domain model. The next
-      phase consist in setting up the configuration for the frontend.</para>
+        <para>The next phase consists in setting up the configuration for the
+        frontend.</para>
+      </section>
     </section>
 
     <section>
@@ -4905,250 +5020,174 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <para>In this section, we will go through the different steps to finally
       have our application up and running.</para>
 
-      <para>The minimal frontend configuration requires the definition of the
-      frontend controller. Although the backend controller is quite generic
-      and requires no special parametrization (the default implementation
-      brought to you by the <filename>commons-hibernate.xml</filename> is
-      usable as-is) most of the application assembling is done in the
-      front-end controller. We will configure the frontend controller in a new
-      <filename>frontend.xml</filename> configuration file located in the
-      <code>org.jspresso.hrsample.frontend</code> package. Don't forget that
-      you are free to split all the configuration files in smaller pieces but
-      then, don't forget to update the various context entries in the
-      <filename>beanRefFactory.xml</filename> bootstrap configuration
-      file.</para>
+      <section id="frontend.controller">
+        <title>The frontend controller</title>
 
-      <para>So lets add our front controller definition :</para>
+        <para>The minimal frontend configuration requires the definition of
+        the frontend controller. Although the backend controller is quite
+        generic and requires no special parametrization most of the
+        application final assembling is done in the frontend.</para>
 
-      <para><programlisting language="xml">&lt;bean
-  id="applicationFrontController"
-  parent="frontController"
-  scope="prototype"&gt; <co id="applicationFrontController" />
-  &lt;property
-    name="name"
-    value="hrsample.name" /&gt; <co id="hrsample.name" />
-  &lt;property
-    name="iconImageURL"
-    value="classpath:org/jspresso/hrsample/images/people-48x48.png" /&gt; <co
-            id="hrsample.iconImageURL" />
-&lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="applicationFrontController">
-            <para>We declare our application frontend controller to inherit
-            from the standard concrete frontend controller. In our case, since
-            we imported the <filename>commons-swing.xml</filename> standard
-            configuration file for swing, our controller will be a swing
-            controller. Switching to another presentation technology (ULC or
-            AJAX as of this writing) will then just be a matter of changing
-            the imported configuration file
-            (<filename>commons-ulc.xml</filename> for instance) in the
-            <filename>beanRefFactory.xml</filename> file.</para>
-          </callout>
-
-          <callout arearefs="hrsample.name">
-            <para>We define the name (in fact the I18N key) of the controller,
-            or more generally of the application. It will be used as the frame
-            title in the case of the swing controller.</para>
-          </callout>
-
-          <callout arearefs="hrsample.iconImageURL">
-            <para>We define the icon of the controller, or more generally of
-            the application. It will be used as the frame icon in the case of
-            the swing controller.</para>
-          </callout>
-        </calloutlist>That's it for the minimal frontend configuration.</para>
-    </section>
-
-    <section>
-      <title>Starting up the application</title>
-
-      <para>To be able to launch the application, we need a startup class. In
-      Jspresso, the startup class configures the spring context to be used
-      when starting the application. The actual startup is performed by a
-      generic launcher depending on the presentation technology used. For
-      instance, the swing generic launcher is
-      <code>org.jspresso.framework.application.launch.swing.SwingLauncher</code>;
-      this is the one we are going to use now. So let's create our swing
-      startup class. We will name it <code>SwingApplicationStartup</code> and
-      create it in a new <code>org.jspresso.hrsample.startup.swing</code> java
-      package :</para>
-
-      <para><programlisting language="xml">package org.jspresso.hrsample.startup.swing;
-
-import org.jspresso.framework.application.startup.swing.SwingStartup;
-
-/**
- * Swing HR sample startup class.
- */
-public class SwingApplicationStartup extends SwingStartup { <co
-            id="SwingHrSampleStartup" />
-
-  /**
-   * Returns the "hrsample-swing-context" value.
-   * &lt;p&gt;
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getApplicationContextKey() {
-    return "hrsample-swing-context"; <co id="getApplicationContextKey" />
-  }
-}</programlisting></para>
-
-      <para><calloutlist>
-          <callout arearefs="SwingHrSampleStartup">
-            <para>We inherit from <code>SwingStartup</code> since we are
-            starting a swing application.</para>
-          </callout>
-
-          <callout arearefs="getApplicationContextKey">
-            <para>Our swing application will use the
-            <code>hrsample-swing-context</code> entry we defined in the
-            bootstrap <filename>beanRefFactory.xml</filename> file.</para>
-          </callout>
-        </calloutlist>We are now ready to launch our application for the first
-      time. Issue the following command with the appropriate classpath
-      :</para>
-
-      <para><code>java
-      org.jspresso.framework.application.launch.swing.SwingLauncher
-      -applicationClass
-      org.jspresso.hrsample.startup.swing.SwingApplicationStartup -splash
-      classpath:org/jspresso/hrsample/images/logo-small.png</code></para>
-
-      <para>You should have a splash screen popping up and soon after the
-      following MDI frame (here with a substance look and feel and a French
-      locale) :</para>
-
-      <para><figure>
-          <title>The first application run</title>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata align="center" contentdepth="60%"
-                         fileref="../images/AppLaunch.jpg" scalefit="1"
-                         width="100%" />
-            </imageobject>
-          </mediaobject>
-        </figure></para>
-
-      <para>Of course, this is a very basic launch for a pretty useless
-      application... But to make sure that our entities are actually
-      registered in hibernate, let's activate the debug mode for the hbm2dll
-      tool (remember that we are in the development phase and that we told
-      hibernate to regenerate the database schema in HSQL DB at startup);
-      create a log4j.properties file at the root of the classpath
-      :<programlisting>log4j.rootLogger=INFO, CONSOLE
-
-# CONSOLE is set to be a ConsoleAppender which outputs to System.out.
-log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
-
-# CONSOLE uses PatternLayout.
-log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
-
-# The conversion pattern uses format specifiers. You might want to
-# change the pattern an watch the output format change.
-log4j.appender.CONSOLE.layout.ConversionPattern=%-5p &lt;%d{ISO8601}&gt; %c : %m%n
-
-#####################
-# Hibernate Section #
-#####################
-
-### log schema export/update ###
-log4j.logger.org.hibernate.tool.hbm2ddl=DEBUG</programlisting></para>
-
-      <para>You should obtain the following traces in the console :</para>
-
-      <para><programlisting>INFO  &lt;2008-01-23 13:36:29,015&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : Running hbm2ddl schema update
-INFO  &lt;2008-01-23 13:36:29,015&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : fetching database metadata
-INFO  &lt;2008-01-23 13:36:29,046&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : updating schema
-INFO  &lt;2008-01-23 13:36:29,093&gt; org.hibernate.tool.hbm2ddl.DatabaseMetadata : table not found: CITY
-...
-DEBUG &lt;2008-01-23 13:36:29,125&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : create table CITY (ID varchar(36) not null,
-                                          VERSION integer not null,
-                                          ZIP varchar(10),
-                                          NAME varchar(64) not null,
-                                          primary key (ID))
-...
-DEBUG &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : alter table COMPANY
-                                          add constraint FK6372C85DBA3A8814
-                                          foreign key (CONTACT_CITY_ID)
-                                          references CITY
-...
-INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programlisting>To
-      improve the application, we will first secure it with a login module and
-      then create some application modules.</para>
-    </section>
-
-    <section>
-      <title>Securing the application access : Authentication</title>
-
-      <para>Securing an application is a matter of handling :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Authentication (is the user the one he pretends to be
-          ?).</para>
-        </listitem>
-
-        <listitem>
-          <para>Authorization (is the user granted access to what he's trying
-          to achieve ?).</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Both of these topics are extensively covered by the Jspresso
-      framework. This chapter covers the authentication part.</para>
-
-      <para>Authentication in a Jspresso application relies on JAAS (Java
-      Authentication and Authorization Service). We will not go into details
-      about JAAS since there are excellent tutorials on the web (<ulink
-      url="http://java.sun.com/j2se/1.5.0/docs/guide/security/jaas/tutorials/index.html">this
-      one</ulink> for instance). Jspresso provides all the necessary plumbing
-      to seamlessly integrate any JAAS login module and as of this writing,
-      there are 2 login modules that come with the framework :</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>The development login module which does not require any
-          backend and is perfectly suited for development.</para>
-        </listitem>
-
-        <listitem>
-          <para>The ldap login module which authenticates the user against an
-          LDAP directory.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>You may find many other, freely available, JAAS login modules to
-      meet your needs (JDBC, ascii encrypted file, ...). In this section, we
-      will secure our application with the development login module but the
-      exact same principles (except for the module configuration itself) can
-      be applied for others.</para>
-
-      <section>
-        <title>Configuring the development login module</title>
-
-        <para>As for any JAAS based login module, we will create a
-        configuration file (here <filename>jaas.config</filename> that we will
-        place in the root of our project) that we will later reference as a
-        java system property (<code>java.security.auth.login.config</code>)
-        when launching the application.</para>
-
-        <para>Here is the <filename>jaas.config</filename> file explained
+        <para>The archetype generated a default
+        <filename>frontend.xml</filename> in the
+        <code>org.jspresso.hrsample.frontend</code> package that contains a
+        minimal frontend controller definition. Here is what it contains
         :</para>
 
-        <para><programlisting>/** Login Configuration for the HR sample application **/
+        <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+  default-lazy-init="true"&gt;
+
+  &lt;!--
+    The workspaces and modules
+  --&gt;
+  &lt;!-- Describe your workspaces and modules here. --&gt;
+
+  &lt;!--
+    The controller
+  --&gt;
+  &lt;bean
+    id="applicationFrontController"
+    parent="frontController"
+    scope="prototype"&gt; <co id="applicationFrontController" />
+    &lt;property
+      name="name"
+      value="hrsample.name" /&gt; <co id="hrsample.name" />
+    &lt;property
+      name="description"
+      value="hrsample.description" /&gt;
+    &lt;property
+      name="iconImageURL"
+      value="classpath:org/jspresso/hrsample/images/icon.png" /&gt; <co
+              id="hrsample.iconImageURL" />
+    &lt;property
+      name="loginContextName"
+      value="hrsample" /&gt; <co id="hrsample.loginContextName" />
+    &lt;property
+      name="forcedStartingLocale"
+      value="fr" /&gt; <co id="hrsample.forcedStartingLocale" />
+    &lt;property
+      name="workspaces"&gt;
+      &lt;list&gt;
+        &lt;!-- Reference your workspaces here. --&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
+&lt;/beans&gt;</programlisting><calloutlist>
+            <callout arearefs="applicationFrontController">
+              <para>We declare our application frontend controller to inherit
+              from the standard concrete frontend controller. In our case,
+              since we imported the <filename>commons-swing.xml</filename>
+              standard configuration file for swing, our controller will be a
+              swing controller. Switching to another presentation technology
+              (ULC or AJAX as of this writing) will then just be a matter of
+              changing the imported configuration file
+              (<filename>commons-ulc.xml</filename> for instance) in the
+              <filename>beanRefFactory.xml</filename> file.</para>
+            </callout>
+
+            <callout arearefs="hrsample.name">
+              <para>We define the name (in fact the I18N key) of the
+              controller, or more generally of the application. It will be
+              used as the frame title in the case of the swing
+              controller.</para>
+            </callout>
+
+            <callout arearefs="hrsample.iconImageURL">
+              <para>We define the icon of the controller, or more generally of
+              the application. It will be used as the frame icon in the case
+              of the swing controller.</para>
+            </callout>
+
+            <callout arearefs="hrsample.loginContextName">
+              <para>We tell the controller the JAAS login context to use. We
+              will go later into details regarding Jspresso and
+              security.</para>
+            </callout>
+
+            <callout arearefs="hrsample.forcedStartingLocale">
+              <para>Jspresso uses the locale of the logged-in user to
+              translate the application. But before the user has actually
+              logged-in, or for anonymous access, we still need to tell
+              Jspresso which locale to use at least to translate the login
+              dialog ! Whenever this property is omitted, the locale of the
+              client machine (or browser language, depending on the used GUI
+              technology) will be used.</para>
+            </callout>
+          </calloutlist></para>
+      </section>
+
+      <section>
+        <title>Securing the application access : Authentication</title>
+
+        <para>Securing an application is a matter of handling :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Authentication (is the user the one he pretends to be
+            ?).</para>
+          </listitem>
+
+          <listitem>
+            <para>Authorization (is the user granted access to what he's
+            trying to achieve ?).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Both of these topics are extensively covered by the Jspresso
+        framework. This chapter covers the authentication part.</para>
+
+        <para>Authentication in a Jspresso application relies on JAAS (Java
+        Authentication and Authorization Service). We will not go into details
+        about JAAS since there are excellent tutorials on the web (<ulink
+        url="http://java.sun.com/j2se/1.5.0/docs/guide/security/jaas/tutorials/index.html">this
+        one</ulink> for instance). Jspresso provides all the necessary
+        plumbing to seamlessly integrate any JAAS login module and as of this
+        writing, there are 2 login modules that come with the framework
+        :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The development login module which does not require any
+            backend and is perfectly suited for development.</para>
+          </listitem>
+
+          <listitem>
+            <para>The ldap login module which authenticates the user against
+            an LDAP directory.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>You may find many other, freely available, JAAS login modules to
+        meet your needs (JDBC, ascii encrypted file, ...). In this section, we
+        will secure our application with the development login module but the
+        exact same principles (except for the module configuration itself) can
+        be applied for others.</para>
+
+        <para>As for any JAAS based login module, we will need a JAAS
+        configuration. The archetype created the
+        <filename>hrsample/conf/jaas.config</filename> that registers the
+        development login module. Here is the generated
+        <filename>jaas.config</filename> file detailed :</para>
+
+        <para><programlisting>/** Login Configuration for the application **/
 
 hrsample { <co id="hrsample-app" />
    org.jspresso.framework.security.auth.spi.DevelopmentLoginModule required <co
               id="DevelopmentLoginModule" />
        user=demo <co id="user" />
        password=demo <co id="password" />
-       roles=administrator <co id="roles" />
+       roles="administrator" <co id="roles" />
        custom.language=en; <co id="language" />
 };</programlisting><calloutlist>
             <callout arearefs="hrsample-app">
               <para>The name of the login context that we use for the
-              application.</para>
+              application as registered in the <link
+              linkend="frontend.controller">frontend controller</link>.</para>
             </callout>
 
             <callout arearefs="DevelopmentLoginModule">
@@ -5176,7 +5215,7 @@ hrsample { <co id="hrsample-app" />
               principal; these properties are kept in a map. Here, we store
               the custom <code>language</code> property as being English. the
               <code>language</code> property is a well-known property that
-              will be used by the front-end and back-end controllers to apply
+              will be used by the frontend and backend controllers to apply
               the correct locale for GUI and messages.</para>
             </callout>
           </calloutlist>As you can see, this login module is absolutely not
@@ -5197,35 +5236,87 @@ hrsample { <co id="hrsample-app" />
       </section>
 
       <section>
-        <title>Declaring the login context</title>
+        <title>The application startup</title>
 
-        <para>The next and final step to activate the login module in our
-        application is to declare the login context created above in the
-        front-end controller :</para>
+        <para>Starting up a Jspresso application actually depends on the GUI
+        technology used. Jspresso does the glue between the underlying
+        technology and the application code. All the developer has to do is to
+        declare the Spring context to be used when launching the application.
+        It is done in a startup class that inherits a base class that depends
+        on the used GUI technology. Hopefully, the archetype generated all the
+        needed startup classes in the <filename>hrsample/startup</filename>
+        project module.</para>
 
-        <para><programlisting language="xml">  &lt;bean
-    id="applicationFrontController"
-    parent="frontController"
-    scope="prototype"&gt;
-    ...
-    &lt;property
-      name="loginContextName"
-      value="hrsample" /&gt; <co id="loginContextName" />
-   &lt;/bean&gt;</programlisting><calloutlist>
-            <callout arearefs="loginContextName">
-              <para>We configure the controller to use the
-              <code>hrsample</code> login context.</para>
-            </callout>
-          </calloutlist>When relaunching the application with the java system
-        property
-        <code>-Djava.security.auth.login.config=/path/to/jaas.config</code>, a
-        login dialog appears and once the user has logged-in, the entire
-        application is translated in its locale; notice that until the user
-        has actually logged in, the client machine default locale
-        applies.</para>
+        <para><note>
+            <para>The different Spring contexts that are to be referenced in
+            the startup classes depending on the frontend technology are
+            actually defined in the standard Spring bootstrap configuration
+            file <filename>beanRefFactory.xml</filename>. Again, this file was
+            generated and doesn't need to be modified for standard usage. For
+            large applications, you may want to split the generated
+            <filename>model.xml</filename>, <filename>view.xml</filename>,
+            <filename>frontend.xml</filename> and
+            <filename>backend.xml</filename> context files into smaller parts.
+            In that case, you need to reflect these modifications into the
+            bootstrap <filename>beanRefFactory.xml</filename> file so that
+            your new context files get loaded.</para>
+          </note></para>
+
+        <para>Even though you won't have to modify startup classes, take some
+        time to have a look at what was generated. For instance, you may open
+        the <filename>SwingApplicationStartup.java</filename> class that is
+        used to lauch the Swing version of the application.</para>
+
+        <para>Here is the code commented :</para>
+
+        <programlisting language="xml">package org.jspresso.hrsample.startup.swing;
+
+import org.jspresso.framework.application.startup.swing.SwingStartup;
+
+/**
+ * Swing application startup class.
+ */
+public class SwingApplicationStartup extends SwingStartup { <co
+            id="SwingHrSampleStartup" />
+
+  /**
+   * Returns the "hrsample-swing-context" value.
+   * &lt;p&gt;
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getApplicationContextKey() {
+    return "hrsample-swing-context"; <co id="getApplicationContextKey" />
+  }
+}</programlisting>
+
+        <calloutlist>
+          <callout arearefs="SwingHrSampleStartup">
+            <para>We inherit from <code>SwingStartup</code> since we are
+            starting the application in Swing mode.</para>
+          </callout>
+
+          <callout arearefs="getApplicationContextKey">
+            <para>Our swing application will use the
+            <code>hrsample-swing-context</code> entry we defined in the
+            bootstrap <filename>beanRefFactory.xml</filename> file.</para>
+          </callout>
+        </calloutlist>
+
+        <para>This startup class will be used by a generic swing launcher -
+        <code>org.jspresso.framework.application.launch.swing.SwingLauncher</code>
+        - that is declared as the main class of the Eclipse launch
+        configuration we have imported in our Eclipse workspace.</para>
+
+        <para>You can launch the appication now. You should have a splash
+        screen popping up, then a login dialog appears and once the user has
+        logged-in (demo/demo as per the <filename>jaas.config</filename>
+        file), the entire application is translated in its locale; notice that
+        until the user has actually logged in, the frontend controller startup
+        locale applies (here, french).</para>
 
         <para><figure>
-            <title>The login dialog on a French client machine</title>
+            <title>The login dialog with a french startup locale</title>
 
             <mediaobject>
               <imageobject>
@@ -5245,10 +5336,50 @@ hrsample { <co id="hrsample-app" />
                            width="100%" />
               </imageobject>
             </mediaobject>
-          </figure>We will see further how to take care of the profiles
-        (roles) authorizations and how the framework will handle it for you
-        with very little configuration. But before getting there, we need to
-        install some application workspaces and modules.</para>
+          </figure><figure>
+            <title>The application main window with a French logged-in
+            user</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/AppLaunch.jpg" scalefit="1"
+                           width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+
+        <para>Of course, this is a very basic launch for a pretty useless
+        application... But to make sure that our entities are actually
+        registered in hibernate, let's activate the debug mode for the hbm2dll
+        tool (remember that we are in the development phase and that we told
+        hibernate to regenerate the database schema in HSQL DB at startup);
+        edit the <filename>log4j.properties</filename> file at the root of the
+        classpath and uncomment the following line :<programlisting>#log4j.logger.org.hibernate.tool.hbm2ddl=DEBUG</programlisting></para>
+
+        <para>You should obtain the following traces in the console :</para>
+
+        <para><programlisting>INFO  &lt;2008-01-23 13:36:29,015&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : Running hbm2ddl schema update
+INFO  &lt;2008-01-23 13:36:29,015&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : fetching database metadata
+INFO  &lt;2008-01-23 13:36:29,046&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : updating schema
+INFO  &lt;2008-01-23 13:36:29,093&gt; org.hibernate.tool.hbm2ddl.DatabaseMetadata : table not found: CITY
+...
+DEBUG &lt;2008-01-23 13:36:29,125&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : create table CITY (ID varchar(36) not null,
+                                          VERSION integer not null,
+                                          ZIP varchar(10),
+                                          NAME varchar(64) not null,
+                                          primary key (ID))
+...
+DEBUG &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : alter table COMPANY
+                                          add constraint FK6372C85DBA3A8814
+                                          foreign key (CONTACT_CITY_ID)
+                                          references CITY
+...
+INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programlisting>We
+        will see later how to take care of the profiles (roles) authorizations
+        and how the framework will handle it for you with very little
+        configuration. But before getting there, we need to install some
+        application workspaces and modules.</para>
       </section>
     </section>
   </section>
@@ -5262,16 +5393,15 @@ hrsample { <co id="hrsample-app" />
     autonomous part of the application that can be registered in workspaces
     which in turn are registered in the frontend controller to make them
     available to the end-user. As of this writing, the built-in frontend
-    controllers (Swing, ULC and Wings) create a main MDI frame and give access
-    to the registered workspaces through a menu. Whenever a workspace is
-    started, a new internal frame is opened and the workspace modules
-    structure is displayed.</para>
+    controllers (Swing, ULC, Wings and Flax) create a main application frame
+    and give access to the registered workspaces through a menu. Whenever a
+    workspace is opened, the workspace modules structure is displayed.</para>
 
     <para>Since we talk about module structure, let's explore it. A module is
     basically a tree structure with nested sub-modules (refer to the modules
     class diagram to better understand it). The workspace is the root of this
-    tree structure and each workspace registered module is an actual
-    application entry point.</para>
+    tree structure and each workspace registered module (and sub-module) is an
+    actual application entry point.</para>
 
     <para>There are 3 different categories of modules :</para>
 
@@ -5309,7 +5439,7 @@ hrsample { <co id="hrsample-app" />
       built-in, ready to assemble components to achieve this.</para>
 
       <section>
-        <title>The cities filterable bean collection module</title>
+        <title>The cities bean collection module</title>
 
         <para>The first module we will build is a bean collection module
         (actually a filterable one) that offers the end user all the standard
@@ -5317,7 +5447,7 @@ hrsample { <co id="hrsample-app" />
         and module definition and registration.</para>
 
         <para>Open the <filename>frontend.xml</filename> spring context file
-        :</para>
+        and add the following :</para>
 
         <para><programlisting language="xml">&lt;bean
   id="Masterdata.workspace"
@@ -5660,7 +5790,7 @@ hrsample { <co id="hrsample-app" />
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="elementViewDescriptor">
-              <para>We register the new city view as being the preferred view
+              <para>We register the new city view as being the view to use
               when displaying a single city.</para>
             </callout>
           </calloutlist>We are now ready to re-open the workspace, create a
@@ -5678,18 +5808,18 @@ hrsample { <co id="hrsample-app" />
             </mediaobject>
           </figure>We have seen here one usage of a bean module that is
         implicitly created and installed using an action registered on a bean
-        collection module. Although this is actually one of the major usage of
-        this type of module, another usage consists in giving access to a
-        session singleton-like component.</para>
+        collection module.</para>
 
-        <para>For instance, you could explicitly install a bean module to
-        allow the logged-in user to edit his personal informations. In that
-        particular case, the logged-in user account would be used as the
-        module object of the account editing module. The question left is how
-        to initialize the user account as the bean module object? Every
-        Jspresso application module provides a startup hook that gets
-        triggered when the module is first selected by the end-user. So in
-        this case, you would code a custom startup action to retrieve the
+        <para>Although this is actually one of the major usage of this type of
+        module, another usage consists in giving access to a session
+        singleton-like component. For instance, you could explicitly install a
+        bean module to allow the logged-in user to edit his personal
+        informations. In that particular case, the logged-in user account
+        would be used as the module object of the account editing module. The
+        question left is how to initialize the user account as the bean module
+        object? Every Jspresso application module provides a startup hook that
+        gets triggered when the module is first selected by the end-user. So
+        in this case, you would code a custom startup action to retrieve the
         logged-in user informations from whatever backing store (LDAP for
         instance), wrap them in a java bean and set the result as the bean
         module object. This startup action is then registered in the module
@@ -5697,8 +5827,9 @@ hrsample { <co id="hrsample-app" />
         topic is beyond the scope of this section, but read further to learn
         how to write custom actions and remember that you can register them as
         being startup-triggered at different places in a Jspresso application
-        i.e. controller (when the application starts) and modules (when the
-        module is first selected).</para>
+        i.e. controller (when the application starts) workspace (when the
+        workspace is opened for the first time) and modules (when the module
+        is first selected).</para>
       </section>
     </section>
 
@@ -5725,25 +5856,22 @@ hrsample { <co id="hrsample-app" />
 
       <para>It is also a good idea to centralize the test data production in a
       separate class that can be used by the various development startup class
-      (actually one per presentation technology) and thus avoiding un-needed
-      duplication of code. Jspresso offers an abstract base class for this
-      task :
+      thus avoiding un-needed duplication of code. Jspresso offers an abstract
+      base class for this task -
       <code>org.jspresso.framework.application.startup.development.AbstractTestDataPersister</code>
-      on which you simply have to override the <code>persistTestData()</code>
-      method.</para>
+      - on which you simply have to override the
+      <code>persistTestData()</code> method.</para>
 
-      <para>Afterwards, a simple change in the startup command line will
-      launch either the production or the development version of the
-      application.</para>
+      <para>The Jspresso archetype generated a skeleton for you that you have
+      to complement with your test data :
+      <code>org.jspresso.hrsample.development.TestDataPersister</code>. You
+      also imported a launch configuration that allows you to start the
+      application with test data in place.</para>
 
       <para>So let's write this simple test data production class for the HR
-      application. Place it in the
-      <code>org.jspresso.hrsample.development</code> package :</para>
+      application :</para>
 
-      <para><programlisting language="java">/*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- */
-package org.jspresso.hrsample.development;
+      <para><programlisting language="java">package org.jspresso.hrsample.development;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -5759,12 +5887,6 @@ import org.jspresso.hrsample.model.Team;
 
 /**
  * Persists some test data for the HR sample application.
- * &lt;p&gt;
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- * &lt;p&gt;
- * 
- * @version $LastChangedRevision: 1711 $
- * @author Vincent Vandenschrick
  */
 public class TestDataPersister extends AbstractTestDataPersister {
 
@@ -5940,26 +6062,18 @@ public class TestDataPersister extends AbstractTestDataPersister {
       <para>As you can see in the code above, we have set up the test data by
       simply creating and composing some domain entities in plain java.</para>
 
-      <para>You can now create the development application startup class
+      <para>You can now have a look to the Swing development startup class
       (<code>org.jspresso.hrsample.startup.swing.development.SwingDevApplicationStartup</code>)
-      that inherits from the existing production one :</para>
+      that already exists in your project code base and that is used by the
+      development launch configuration :</para>
 
-      <para><programlisting language="java">/*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- */
-package org.jspresso.hrsample.startup.swing.development;
+      <para><programlisting language="java">package org.jspresso.hrsample.startup.swing.development;
 
 import org.jspresso.hrsample.development.TestDataPersister;
 import org.jspresso.hrsample.startup.swing.SwingApplicationStartup;
 
 /**
- * Swing development HR sample startup class.
- * &lt;p&gt;
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- * &lt;p&gt;
- * 
- * @version $LastChangedRevision: 1711 $
- * @author Vincent Vandenschrick
+ * Swing development application startup class.
  */
 public class SwingDevApplicationStartup extends SwingApplicationStartup {
 
@@ -5981,16 +6095,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
             <para>Before actually launching the application, we persist the
             test data produced by the test data persister.</para>
           </callout>
-        </calloutlist>You can then update the startup command line to use this
-      new development startup class so that your domain gets filled in at each
-      application startup :</para>
-
-      <para><code>java
-      org.jspresso.framework.application.launch.swing.SwingLauncher
-      -applicationClass
-      org.jspresso.hrsample.startup.swing.development.SwingDevApplicationStartup
-      -splash
-      classpath:org/jspresso/hrsample/images/logo-small.png</code></para>
+        </calloutlist></para>
     </section>
 
     <section>
@@ -6226,10 +6331,10 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
   id="OrganizationalUnit-manager"
   class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
   ...
-  &lt;property name="integrityProcessors"&gt; <co id="manager.processor" />
+  &lt;property name="integrityProcessorClassNames"&gt; <co
+                id="manager.processor" />
     &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.hrsample.model.processor.OrganizationalUnitPropertyProcessors$ManagerProcessor" /&gt;
+      &lt;value&gt;org.jspresso.hrsample.model.processor.OrganizationalUnitPropertyProcessors$ManagerProcessor"&lt;/value&gt;
     &lt;/list&gt;
   &lt;/property&gt;
   &lt;property name="initializationMapping"&gt; <co id="initializationMapping" />
@@ -6291,7 +6396,8 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
 
           <para>Since we added a property to the
           <code>OrganizationalUnit</code> entity, we need to re-generate it so
-          that the accessors are available in the entity interface.</para>
+          that the accessors are available in the entity interface (<code>mvn
+          compile</code> then refresh in Eclipse).</para>
 
           <para>As before when dealing with property processors and computed
           properties, we need to implement the java delegates.</para>
@@ -6303,10 +6409,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
           as when we dealt with computing the age of the <code>Employee</code>
           entity :</para>
 
-          <para><programlisting language="java">/*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- */
-package org.jspresso.hrsample.model.extension;
+          <para><programlisting language="java">package org.jspresso.hrsample.model.extension;
 
 import org.jspresso.framework.model.component.AbstractComponentExtension;
 import org.jspresso.hrsample.model.Company;
@@ -6316,12 +6419,6 @@ import org.jspresso.hrsample.model.Team;
 
 /**
  * Helper class computing extended properties for OrganizationalUnit entity.
- * &lt;p&gt;
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- * &lt;p&gt;
- * 
- * @version $LastChangedRevision: 1711 $
- * @author Vincent Vandenschrick
  */
 public class OrganizationalUnitExtension extends
     AbstractComponentExtension&lt;OrganizationalUnit&gt; {
@@ -6365,10 +6462,7 @@ public class OrganizationalUnitExtension extends
           as when we dealt with checking the birth date of the
           <code>Employee</code> entity :</para>
 
-          <para><programlisting language="java">/*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- */
-package org.jspresso.hrsample.model.processor;
+          <para><programlisting language="java">package org.jspresso.hrsample.model.processor;
 
 import org.jspresso.framework.util.bean.integrity.EmptyPropertyProcessor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
@@ -6377,23 +6471,11 @@ import org.jspresso.hrsample.model.OrganizationalUnit;
 
 /**
  * OrganizationalUnit property processors.
- * &lt;p&gt;
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- * &lt;p&gt;
- * 
- * @version $LastChangedRevision: 1711 $
- * @author Vincent Vandenschrick
  */
 public class OrganizationalUnitPropertyProcessors {
 
   /**
    * Manager property processor.
-   * &lt;p&gt;
-   * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
-   * &lt;p&gt;
-   * 
-   * @version $LastChangedRevision: 1711 $
-   * @author Vincent Vandenschrick
    */
   public static class ManagerProcessor extends
       EmptyPropertyProcessor&lt;OrganizationalUnit, Employee&gt; { <co
@@ -6829,7 +6911,7 @@ public class OrganizationalUnitPropertyProcessors {
         </listitem>
 
         <listitem>
-          <para>Component properties</para>
+          <para>Components (and entities) properties</para>
         </listitem>
       </itemizedlist>
 
@@ -6919,9 +7001,9 @@ public class OrganizationalUnitPropertyProcessors {
         efficiently tested. We will use this feature to test the workspace
         restrictions that we have declared above.</para>
 
-        <para>So let's assign the "staff-manager" role to our demo user by
-        modifying the configuration of the development login module in the
-        <filename>jaas.config</filename> file :</para>
+        <para>So let's assign the <quote>staff-manager</quote> role to our
+        demo user by modifying the configuration of the development login
+        module in the <filename>jaas.config</filename> file :</para>
 
         <para><programlisting>/** Login Configuration for the HR sample application **/
 
@@ -6929,15 +7011,15 @@ hrsample {
    org.jspresso.framework.security.auth.spi.DevelopmentLoginModule required
        user=demo
        password=demo
-       roles=staff-manager <co id="staff-manager" />
+       roles="staff-manager" <co id="staff-manager" />
        custom.language=en;
 };</programlisting><calloutlist>
             <callout arearefs="staff-manager">
               <para>When logged-in, the demo user will be assigned the
-              "staff-manager" role. You can even assign multiple roles to the
-              development user by listing them separated by comas; in that
-              case, the JAAS configuration syntax makes the use of double
-              quotes mandatory to surround the list.</para>
+              <quote>staff-manager</quote> role. You can even assign multiple
+              roles to the development user by listing them separated by
+              comas; in that case, the JAAS configuration syntax makes the use
+              of double quotes mandatory to surround the list.</para>
             </callout>
           </calloutlist></para>
 
@@ -6970,8 +7052,9 @@ hrsample {
 
     <para>Last but not least, we need to package and deploy the final
     application. Choosing the target environment highly depends on the
-    requirements. Jspresso supports as of now 3 different deployment scenarios
-    : Swing, AJAX (<ulink url="???">Wings</ulink>) and <ulink
+    requirements. Jspresso supports as of now 4 different deployment scenarios
+    : Swing, AJAX (<ulink url="???">Wings</ulink>), Flash (<ulink
+    url="http://flex.org/">Flex</ulink>) and <ulink
     url="http://www.canoo.com/ulc/">ULC</ulink>.</para>
 
     <section>
@@ -6988,13 +7071,13 @@ hrsample {
       between the clients and the server or limited resources on the client
       machines but it might perfectly fit for a limited number of clients
       residing on the same LAN than the database server. Although, this option
-      is not commonly considered as a good option, we believe that it should
-      not be underestimated especially when dealing with small-scale
+      is not commonly considered as a good option, it should not be
+      underestimated especially when dealing with small-scale
       deployments.</para>
 
-      <para>Ajax and ULC deployment require a servlet 2.4 compatible
+      <para>Ajax, Flex and ULC deployments require a servlet 2.5 compatible
       application server (<ulink url="http://tomcat.apache.org/">Apache
-      tomcat</ulink> is one of them, free and production-ready). This means
+      tomcat</ulink> is one of them, free and production-robust). This means
       that you can just package your application as a WAR archive and drop it
       in the application server to have it deployed. Jspresso, although very
       powerful and flexible doesn't require an overkilling, latest
@@ -7003,8 +7086,8 @@ hrsample {
       them. For instance, if you need some heterogeneous transaction
       capability and must use a full fledged JTA compliant transaction
       service, you have little other choice than going to one of the market
-      big application servers. You can still stay in the free and opensource
-      world.</para>
+      big application servers. Of course, we encourage you to stay in the free
+      and opensource world.</para>
 
       <para>We won't discuss here the database side since Jspresso database
       support is directly linked to the Hibernate database support.</para>
@@ -7020,11 +7103,10 @@ hrsample {
       <para>Although the Wings library is a LGPL opensource library, ULC is
       not. As of this writing, ULC requires at least a developer licence that
       comes with an unlimited deployment licence. Jspresso is strongly
-      attached to the opensource and free software philosophy, but we believe
-      that licensing ULC is really worth the money you will spend due to the
-      really high quality, performance and support of the library. ULC is
-      developed and supported by <ulink
-      url="http://www.canoo.com/">Canoo</ulink>.</para>
+      attached to the opensource and free software philosophy, but licensing
+      ULC is really worth the money you will spend due to the really high
+      quality, performance and support of the library. ULC is developed and
+      supported by <ulink url="http://www.canoo.com/">Canoo</ulink>.</para>
 
       <note>
         <para>The preferred way to deploy the ULC client is to use Java Web
@@ -7034,999 +7116,113 @@ hrsample {
       <para>On the Wings side, the architecture is basically the same as ULC,
       but the frontend is an Ajax enabled web application. This makes the
       deployment of the client really smooth (no plugin), but the look and
-      feel has many differences compared to the Swing and ULC front-end.
+      feel has many differences compared to the Swing, Flex and ULC frontends.
       Although Jspresso tends to limit those differences to their minimum,
       some of them (like table cells mouseless navigation) cannot be bypassed
       due to the underlying limitations. Improving the look of a Wings
       application might also require some web design and CSS skills that are
       beyond the scope of this document but they are extensively covered by
       the Wings reference documentation. Just have a look to the real-life
-      applications that the Wings web site points to, and you will get a good
+      applications that the Wings web site reffers, and you will get a good
       idea of what can be achieved with some styling capabilities. Having said
       that, Wings is certainly one of the best available library to seamlessly
       bridge the AJAX world and the java world.</para>
-    </section>
 
-    <section>
-      <title>Preparing the application startup for the ULC and Wings
-      deployments</title>
+      <para>Last but not least, Jspresso introduced with the 3.0 release a
+      native support for Adobe's Flex. As for the other deployment options,
+      there is absolutely nothing to code against the Flex API (no MXML, no
+      ActionScript). Jspresso takes care at runtime of the frontend display
+      and client/server communication through :</para>
 
-      <para>As of now, we only dealt with swing deployement; and this is quite
-      fair in the development phase. Now that we are close to package and
-      deploy the application, we need startup classes for the remaining GUI
-      channels : ULC and Wings. Both follow the exact same principles than for
-      the swing one.</para>
+      <itemizedlist>
+        <listitem>
+          <para>a generic Flex rendering engine that reads everything it needs
+          from the server side</para>
+        </listitem>
 
-      <para>For ULC
-      (<code>org.jspresso.hrsample.startup.ulc.UlcApplicationStartup</code>)
-      :</para>
+        <listitem>
+          <para>a generic communication layer based on <ulink
+          url="http://opensource.adobe.com/wiki/display/blazeds/BlazeDS/">BlazeDS</ulink>
+          that takes care of exchanging low-level GUI commands back and forth
+          with the server.</para>
+        </listitem>
+      </itemizedlist>
 
-      <para><programlisting language="java">/*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- */
-package org.jspresso.hrsample.startup.ulc;
+      <para>Your Jspresso application will then be able to run in any Flash
+      enabled browser.</para>
 
-import org.jspresso.framework.application.startup.ulc.UlcStartup;
-
-/**
- * ULC HR sample startup class.
- * &lt;p&gt;
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- * &lt;p&gt;
- * 
- * @version $LastChangedRevision: 1711 $
- * @author Vincent Vandenschrick
- */
-public class UlcApplicationStartup extends UlcStartup {
-
-  /**
-   * Returns the "hrsample-ulc-context" value.
-   * &lt;p&gt;
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getApplicationContextKey() {
-    return "hrsample-ulc-context"; <co id="hrsample-ulc-context" />
-  }
-}</programlisting></para>
-
-      <para><calloutlist>
-          <callout arearefs="hrsample-ulc-context">
-            <para>We tell the application to use the spring context assembled
-            for ULC.</para>
-          </callout>
-        </calloutlist>And for Wings
-      (<code>org.jspresso.hrsample.startup.wings.WingsApplicationStartup</code>)
-      :</para>
-
-      <para><programlisting language="java">/*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- */
-package org.jspresso.hrsample.startup.wings;
-
-import org.jspresso.framework.application.startup.wings.WingsStartup;
-
-/**
- * Wings HR sample startup class.
- * &lt;p&gt;
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
- * &lt;p&gt;
- * 
- * @version $LastChangedRevision: 1711 $
- * @author Vincent Vandenschrick
- */
-public class WingsApplicationStartup extends WingsStartup {
-
-  /**
-   * Returns the "hrsample-wings-context" value.
-   * &lt;p&gt;
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getApplicationContextKey() {
-    return "hrsample-wings-context"; <co id="hrsample-wings-context" />
-  }
-}</programlisting><calloutlist>
-          <callout arearefs="hrsample-wings-context">
-            <para>We tell the application to use the spring context assembled
-            for Wings.</para>
-          </callout>
-        </calloutlist>Of course, we need to complement the spring bootstrap
-      config file with these new contexts. Simply edit the
-      <filename>beanRefFactory.xml</filename> and create the new entries
-      simply assembling the corresponding Jspresso built-in spring
-      definitions; it is actually simply a matter of replacing the swing
-      specific ones by the ULC or Wings specific ones :</para>
-
-      <para><programlisting language="xml">...
-&lt;bean
-  id="hrsample-ulc-context" <co id="ulc-context" />
-  class="org.springframework.context.support.ClassPathXmlApplicationContext"
-  lazy-init="true"&gt;
-  &lt;constructor-arg&gt;
-    &lt;list&gt;
-      &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/framework/application/frontend/ulc/commons-ulc.xml&lt;/value&gt; <co
-            id="commons-ulc" />
-      &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/backend/backend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/view/view.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/frontend/frontend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/config.xml&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/constructor-arg&gt;
-&lt;/bean&gt;
-
-&lt;bean
-  id="hrsample-wings-context" <co id="wings-context" />
-  class="org.springframework.context.support.ClassPathXmlApplicationContext"
-  lazy-init="true"&gt;
-  &lt;constructor-arg&gt;
-    &lt;list&gt;
-      &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/framework/application/frontend/wings/commons-wings.xml&lt;/value&gt; <co
-            id="commons-wings" />
-      &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/backend/backend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/view/view.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/frontend/frontend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/config.xml&lt;/value&gt;
-    &lt;/list&gt;
-  &lt;/constructor-arg&gt;
-&lt;/bean&gt;
-...</programlisting><calloutlist>
-          <callout arearefs="ulc-context">
-            <para>We declare the ULC application context...</para>
-          </callout>
-
-          <callout arearefs="commons-ulc">
-            <para>... and replace the swing specific beans by the ULC specific
-            beans; all the other definitions remain.</para>
-          </callout>
-
-          <callout arearefs="wings-context">
-            <para>We declare the Wings application context...</para>
-          </callout>
-
-          <callout arearefs="commons-wings">
-            <para>... and replace the swing specific beans by the Wings
-            specific beans; all the other definitions remain.</para>
-          </callout>
-        </calloutlist></para>
-
-      <para>Congratulations ! In a few seconds, you have enabled your
-      application for 3-tier deployment.</para>
+      <para>What ever option you take to deploy your Jspresso application (you
+      may choose all of them), everything is already prepared in the project
+      and the Maven build will take care of every complicated packaging
+      steps.</para>
     </section>
 
     <section>
       <title>Packaging the application WAR archive</title>
 
-      <para>Depending on your development habits, you might choose any project
-      building tool to package the application WAR; Apache <ulink
-      url="http://ant.apache.org/">ant</ulink> and <ulink
-      url="http://maven.apache.org/">maven</ulink> are such tools you can
-      safely rely on for the whole project lifecycle including the packaging.
-      So rather than dealing with a specific project environment integration,
-      we will precisely define what artifact should be packaged in the WAR and
-      where they should be packaged.</para>
-
-      <section>
-        <title>The WAR structure</title>
-
-        <para>So let's go back to our sample application. The WAR layout
-        should be the following (versions of the libraries are omitted but
-        safely replace them by the ones distributed with Jspresso).</para>
-
-        <note>
-          <para>You might complement the content based on the extra libraries
-          you might need in the application.</para>
-        </note>
-
-        <note>
-          <para>This WAR layout gathers both ULC and Wings deployment channels
-          together. Whenever you choose not to deploy your application through
-          one of these technologies, you can safely get rid of some parts
-          (e.g. webstart is not needed for Wings deployment).</para>
-        </note>
-
-        <para>Although typical of a WAR layout, this is a quite long list !
-        But don't be afraid, we will go into structural details so that you
-        will get a logical understanding of it.</para>
-
-        <para><programlisting>WEB-INF/
-		web.xml <co id="web.xml" />
-
-		lib/ <co id="webinf-lib" />
-
-				hrsample.jar <co id="hrsample" />
-
-				jspresso-action.jar <co id="jspresso-server" />
-				jspresso-app-launch-core.jar
-				jspresso-app-launch-ulc.jar
-				jspresso-app-launch-wings.jar
-				jspresso-app-template-core.jar
-				jspresso-app-template-ulc.jar
-				jspresso-app-template-wings.jar
-				jspresso-application.jar
-				jspresso-binding.jar
-				jspresso-hibernate.jar
-				jspresso-jasper-core.jar
-				jspresso-jasper-ulc.jar
-				jspresso-jasper-wings.jar
-				jspresso-model.jar
-				jspresso-security.jar
-				jspresso-ulc-application.jar
-				jspresso-ulc-components-server.jar
-				jspresso-ulc-components-shared.jar
-				jspresso-util.jar
-				jspresso-view.jar
-				jspresso-wings-application.jar
-				jspresso-wings-components.jar
-
-				spring.jar <co id="spring" />
-				spring-ldap-core.jar
-				ldapbp.jar
-
-				bsf.jar <co id="bsf" />
-
-				joda-time.jar <co id="joda-time-server" />
-
-				commons-beanutils.jar <co id="various" />
-				commons-collections.jar
-				commons-digester.jar
-				commons-lang.jar
-				commons-logging.jar
-				log4j.jar
-
-				jasperreports.jar <co id="jasperreports" />
-				jdtcore.jar
-				itext.jar
-				jcommon.jar
-				jfreechart.jar
-
-				jboss-common.jar <co id="jboss" />
-				jbosssx.jar
-
-				ulc-base-server.jar <co id="ulc-server" />
-				ulc-deployment-key.jar
-				ulc-servlet-server.jar
-				jnlp-servlet.jar
-
-				wings.jar <co id="wings" />
-				wings-experimental.jar
-				wingx.jar
-				dwr.jar
-				bsh.jar
-
-				hibernate.jar <co id="hibernate" />
-				antlr.jar
-				cglib-nodep.jar
-				dom4j.jar
-				jaxen.jar
-				ehcache.jar
-				jta.jar
-				xerces.jar
-				xml-apis.jar
-
-				commons-pool.jar <co id="db-config" />
-				commons-dbcp.jar
-				hsqldb.jar
-
-		classes/
-				org/
-						jspresso/
-								hrsample/
-								config.xml <co id="webapp-config.xml" />
-
-				log4j.properties <co id="log4j.properties" />
-
-webstart/ <co id="webstart" />
-		jspresso.jpg
-		application.jnlp
-		application-untrusted.jnlp
-
-lib/ <co id="client-libs" />
-		jedit-syntax.jar <co id="jedit-syntax" />
-
-		joda-time.jar <co id="joda-time-client" />
-
-		nachocalendar.jar <co id="nachocalendar" />
-
-		jspresso-app-launch-core.jar <co id="jspresso-client" />
-		jspresso-app-launch-ulc.jar
-		jspresso-swing-components.jar
-		jspresso-ulc-components-client.jar
-		jspresso-ulc-components-shared.jar
-		jspresso-util.jar
-
-		ulc-base-client.jar <co id="ulc-client" />
-		ulc-base-trusted.jar
-		ulc-jnlp-client.jar
-		ulc-servlet-client.jar
-
-		substance.jar <co id="substance" />
-
-login.html <co id="html-pages" />
-login-error.html</programlisting></para>
-
-        <para><calloutlist>
-            <callout arearefs="web.xml">
-              <para>The standard <filename>web.xml</filename> web application
-              descriptor. We will have a closer look to it.</para>
-            </callout>
-
-            <callout arearefs="webinf-lib">
-              <para>The directory containing the dependencies of the web
-              application.</para>
-            </callout>
-
-            <callout arearefs="hrsample">
-              <para>Our application archive containing all the code we've
-              developed so far.</para>
-            </callout>
-
-            <callout arearefs="jspresso-server">
-              <para>The Jspresso server libraries.</para>
-            </callout>
-
-            <callout arearefs="spring">
-              <para>The spring libraries and dependencies.</para>
-            </callout>
-
-            <callout arearefs="bsf">
-              <para>The <ulink
-              url="http://jakarta.apache.org/bsf/">BSF</ulink> (Bean Scripting
-              Framework) library. This is used by a built-in Jspresso action
-              we haven't seen yet. It allows for the action code to be
-              entirely scripted using a BSF supported scripting language
-              (Jython, Groovy, BeanShell, ...)</para>
-            </callout>
-
-            <callout arearefs="joda-time-server">
-              <para>A library to manipulate duration information. Only useful
-              on server-side for Wings deployment.</para>
-            </callout>
-
-            <callout arearefs="various">
-              <para>Various commons libraries heavilly used by the Jspresso
-              framework itself. Most of them come from the <ulink
-              url="http://jakarta.apache.org/">Apache Jakarta</ulink>
-              project.</para>
-            </callout>
-
-            <callout arearefs="jasperreports">
-              <para>The <ulink
-              url="http://jasperreports.sourceforge.net/">Jasper
-              Reports</ulink> library and its dependencies. This is used by a
-              built-in Jspresso action we haven't seen yet that brings first
-              class reporting capabilities to your applications.</para>
-            </callout>
-
-            <callout arearefs="jboss">
-              <para>The <ulink url="http://www.jboss.org/">JBoss</ulink>
-              implementation of JAAS/LDAP provider.</para>
-            </callout>
-
-            <callout arearefs="ulc-server">
-              <para>The ULC server libraries and the JNLP enablling servlet.
-              Only useful for ULC deployment.</para>
-            </callout>
-
-            <callout arearefs="wings">
-              <para>The Wings libraries and dependencies. Only useful for
-              Wings deployment.</para>
-            </callout>
-
-            <callout arearefs="hibernate">
-              <para>The Hibernate libraries and dependencies.</para>
-            </callout>
-
-            <callout arearefs="db-config">
-              <para>The necessary libraries for database access (JDBC driver)
-              and connexion pooling. Of course, you might use the JDBC driver
-              that matches your targeted database. Here, we still use
-              HSQLDB.</para>
-            </callout>
-
-            <callout arearefs="webapp-config.xml">
-              <para>The spring configuration file that supercedes the one we
-              used during the development phase
-              (<filename>config.xml</filename> in the application jar).
-              Targeting the application to different environments (e.g.
-              development, integration, preproduction, production) is then
-              just a matter of changing the content of this file.</para>
-            </callout>
-
-            <callout arearefs="log4j.properties">
-              <para>The logging configuration file that supercedes the one we
-              used during the development phase
-              (<filename>log4j.properties</filename> in the application
-              jar).</para>
-            </callout>
-
-            <callout arearefs="webstart">
-              <para>The Java Web Start descriptors and resources. We will have
-              a closer look to it. Only useful for ULC deployment.</para>
-            </callout>
-
-            <callout arearefs="client-libs">
-              <para>The directory containing the client libraries for ULC
-              deployment.</para>
-            </callout>
-
-            <callout arearefs="jedit-syntax">
-              <para>A text component capable of coloring code syntax for
-              various languages. It is used to build views on source code
-              property descriptors (a text property containg source
-              code).</para>
-            </callout>
-
-            <callout arearefs="joda-time-client">
-              <para>A library to manipulate duration information. Only useful
-              on server-side for ULC deployment.</para>
-            </callout>
-
-            <callout arearefs="nachocalendar">
-              <para>A calendar component.</para>
-            </callout>
-
-            <callout arearefs="jspresso-client">
-              <para>The Jspresso client libraries.</para>
-            </callout>
-
-            <callout arearefs="ulc-client">
-              <para>The ULC client libraries.</para>
-            </callout>
-
-            <callout arearefs="substance">
-              <para>The <ulink
-              url="https://substance.dev.java.net/">substance</ulink> swing
-              L&amp;F. Only useful if you want to change the default look and
-              feel of the GUI.</para>
-            </callout>
-
-            <callout arearefs="html-pages">
-              <para>The HTML pages used to log in the user in case of a Wings
-              deployment.</para>
-            </callout>
-          </calloutlist></para>
-
-        <para>Next, we are going to detail the <filename>web.xml</filename>
-        web application descriptor as well as a very basic HTML login page for
-        the Wings deployment and a simple JNLP configuration for ULC
-        deployment.</para>
-      </section>
-
-      <section>
-        <title>The web.xml descriptor</title>
-
-        <para>You will find below a minimal <filename>web.xml</filename>
-        descriptor gathering both Wings and ULC through JNLP
-        deployment.</para>
-
-        <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;web-app
-  id="WebApp_ID"
-  version="2.4"
-  xmlns="http://java.sun.com/xml/ns/j2ee"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt;
-
-  <emphasis role="bold">&lt;!-- Common web application configuration section --&gt;</emphasis> <co
-              id="std-webapp-config" />
-  &lt;display-name&gt;Jspresso HR sample&lt;/display-name&gt;
-  &lt;description&gt;Jspresso HR sample Application&lt;/description&gt;
-
-  &lt;session-config&gt;
-    &lt;session-timeout&gt;5&lt;/session-timeout&gt;
-  &lt;/session-config&gt;
-  <emphasis role="bold">&lt;!-- End common web application configuration section --&gt;</emphasis>
-
-  <emphasis role="bold">&lt;!-- Jspresso all deployments section --&gt;</emphasis> <co
-              id="jspresso-commons" />
-  &lt;servlet&gt; <co id="ResourceProviderServlet" />
-    &lt;servlet-name&gt;ResourceProviderServlet&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.jspresso.framework.util.resources.server.ResourceProviderServlet&lt;/servlet-class&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ResourceProviderServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/download&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  <emphasis role="bold">&lt;!-- End Jspresso all deployments section --&gt;</emphasis>
-
-  <emphasis role="bold">&lt;!-- ULC deployment section --&gt;</emphasis> <co
-              id="ulc-specifics" />
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;ApplicationUlcServlet&lt;/servlet-name&gt; <co
-              id="HrSampleUlcServlet" />
-    &lt;servlet-class&gt;com.ulcjava.container.servlet.server.ServletContainerAdapter&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;application-class&lt;/param-name&gt;
-      &lt;param-value&gt;org.jspresso.hrsample.startup.ulc.UlcApplicationStartup&lt;/param-value&gt; <co
-              id="UlcHrSampleStartup" />
-    &lt;/init-param&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ApplicationUlcServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/hrsample-ulc&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;JnlpDownloadServlet&lt;/servlet-name&gt; <co
-              id="JnlpDownloadServlet" />
-    &lt;servlet-class&gt;jnlp.sample.servlet.JnlpDownloadServlet&lt;/servlet-class&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;JnlpDownloadServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;*.jnlp&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-  &lt;mime-mapping&gt;
-    &lt;extension&gt;jnlp&lt;/extension&gt;
-    &lt;mime-type&gt;application/x-java-jnlp-file&lt;/mime-type&gt;
-  &lt;/mime-mapping&gt;
-  <emphasis role="bold">&lt;!-- End ULC deployment section --&gt;</emphasis>
-
-  <emphasis role="bold">&lt;!-- WingS deployment section --&gt;</emphasis> <co
-              id="wings-specifics" />
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;ApplicationWingsServlet&lt;/servlet-name&gt; <co
-              id="HrSampleWingsServlet" />
-    &lt;servlet-class&gt;org.wings.session.WingServlet&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;wings.mainclass&lt;/param-name&gt;
-      &lt;param-value&gt;org.jspresso.hrsample.startup.wings.WingsApplicationStartup&lt;/param-value&gt; <co
-              id="WingsHrSampleStartup" />
-    &lt;/init-param&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ApplicationWingsServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/hrsample-ajax/*&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-
-  &lt;servlet&gt; <co id="wings-config" />
-    &lt;description&gt;Direct Web Remoter Servlet&lt;/description&gt;
-    &lt;display-name&gt;DWR Servlet&lt;/display-name&gt;
-    &lt;servlet-name&gt;dwr-invoker&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.directwebremoting.servlet.DwrServlet&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-      &lt;description&gt;Install a session local CreatorManager&lt;/description&gt;
-      &lt;param-name&gt;org.directwebremoting.extend.CreatorManager&lt;/param-name&gt;
-      &lt;param-value&gt;org.wings.plaf.css.dwr.SessionCreatorManager&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;init-param&gt;
-      &lt;description&gt;Install a session local AccessControl&lt;/description&gt;
-      &lt;param-name&gt;org.directwebremoting.extend.AccessControl&lt;/param-name&gt;
-      &lt;param-value&gt;org.wings.plaf.css.dwr.SessionAccessControl&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;init-param&gt;
-      &lt;description&gt;Install a session local Remoter&lt;/description&gt;
-      &lt;param-name&gt;org.directwebremoting.extend.Remoter&lt;/param-name&gt;
-      &lt;param-value&gt;org.wings.plaf.css.dwr.SessionRemoter&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;load-on-startup&gt;-1&lt;/load-on-startup&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;dwr-invoker&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/dwr/*&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;LoginServlet&lt;/servlet-name&gt; <co
-              id="LoginServlet" />
-    &lt;servlet-class&gt;org.jspresso.framework.security.LoginServlet&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;jaas-application&lt;/param-name&gt; <co
-              id="jaas-application" />
-      &lt;param-value&gt;hrsample&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;success.redirect&lt;/param-name&gt;
-      &lt;param-value&gt;/hrsample-ajax&lt;/param-value&gt;
-    &lt;/init-param&gt;
-  &lt;/servlet&gt;
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;LoginServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/login.do&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
-
-  &lt;filter&gt;
-    &lt;filter-name&gt;AutenticationFilter&lt;/filter-name&gt; <co
-              id="AutenticationFilter" />
-    &lt;filter-class&gt;org.jspresso.framework.security.SecurityContextFilter&lt;/filter-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;login.redirect&lt;/param-name&gt;
-      &lt;param-value&gt;/login.html&lt;/param-value&gt;
-    &lt;/init-param&gt;
-  &lt;/filter&gt;
-  &lt;filter-mapping&gt;
-    &lt;filter-name&gt;AutenticationFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;/hrsample-ajax/*&lt;/url-pattern&gt;
-  &lt;/filter-mapping&gt;
-  <emphasis role="bold">&lt;!-- End WingS deployment section --&gt;</emphasis>
-
-&lt;/web-app&gt;</programlisting><calloutlist>
-            <callout arearefs="std-webapp-config">
-              <para>Standard web application configuration with name,
-              description, session timeout and so on.</para>
-            </callout>
-
-            <callout arearefs="jspresso-commons">
-              <para>Some standard Jspresso components that are not tied to a
-              specific deployment channel.</para>
-            </callout>
-
-            <callout arearefs="ResourceProviderServlet">
-              <para>The resource provider servlet is used internally by the
-              framework to allow the client for downloading a server in-memory
-              generated resource. One example of its usage is when the user
-              requests a report, a PDF is generated in memory by the server
-              and sent back to the client browser without transiting by the
-              file system. Of course, this is one example among others.</para>
-            </callout>
-
-            <callout arearefs="ulc-specifics">
-              <para>This section is only necessary for the ULC deployment
-              channel.</para>
-            </callout>
-
-            <callout arearefs="HrSampleUlcServlet">
-              <para>The standard ULC servlet, along with its mapping...</para>
-            </callout>
-
-            <callout arearefs="UlcHrSampleStartup">
-              <para>... and configured to start the HR sample application ULC
-              startup class, actually the one we have just written.</para>
-            </callout>
-
-            <callout arearefs="JnlpDownloadServlet">
-              <para>The standard JNLP download servlet, provided by Sun
-              Microsystems, that allows for the distribution of the Java Web
-              Start application (i.e. in our case, the ULC client).</para>
-            </callout>
-
-            <callout arearefs="wings-specifics">
-              <para>This section is only necessary for the Wings deployment
-              channel.</para>
-            </callout>
-
-            <callout arearefs="HrSampleWingsServlet">
-              <para>The standard ULC servlet, along with its mapping...</para>
-            </callout>
-
-            <callout arearefs="WingsHrSampleStartup">
-              <para>... and configured to start the HR sample application
-              Wings startup class, actually the one we have just
-              written.</para>
-            </callout>
-
-            <callout arearefs="wings-config">
-              <para>Some extra components that are necessary for the Wings
-              deployment. They are provided by Wings and you it's very
-              unlikely that you will need to change their
-              configuration.</para>
-            </callout>
-
-            <callout arearefs="LoginServlet">
-              <para>A Jspresso built-in login servlet that is JAAS aware and
-              provides the login capability to the Wings deployment channel,
-              along with its mapping.</para>
-            </callout>
-
-            <callout arearefs="jaas-application">
-              <para>The JAAS configuration section to use to log the user in
-              (declared in the JAAS configuration file).</para>
-            </callout>
-
-            <callout arearefs="AutenticationFilter">
-              <para>A Jspresso built-in web application filter to prevent an
-              anonymous user to access the application.</para>
-            </callout>
-          </calloutlist><note>
-            <para>ULC and Wings are highly configurable presentation
-            technologies. The <filename>web.xml</filename> descriptor
-            presented above is a minimal (but working) one and their are
-            plenty of options you can tweak to achieve some specific needs.
-            Don't hesitate to open the respective deployment guides to get a
-            complete understanding of what can be achieved in terms of
-            parametrization.</para>
-          </note>We are almost there... All that remain is :</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Writing the JNLP descriptors in case of an ULC
-            deployment.</para>
-          </listitem>
-
-          <listitem>
-            <para>Writing the HTML static login page in case of a Wings
-            deployment</para>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section>
-        <title>The JNLP descriptors for an ULC deployment</title>
-
-        <para>As we already discussed it, the preferred way of distributing an
-        ULC based application is through JNLP; the 2 other modes, applet and
-        standalone won't be detailed but feel free to refer to the ULC
-        documentation if you wish to use one of them.</para>
-
-        <para>As described in the WAR structure, the JNLP descriptors are
-        located by convention in the <filename>webstart</filename>
-        subdirectory. Since the ULC client application runs in the Java Web
-        Start security manager, there are some special steps to perform so
-        that the application is given broader access to the client machine
-        resources. For instance, there are Jspresso built-in actions that
-        allow for choosing a file on the client host file system, saving a
-        file to the client file system, opening a connexion to another server
-        than the one the application runs on, and so on. By default, the Java
-        Web Start sandbox doesn't allow for such actions due to security
-        reasons. Hopefully, you can make some (or all) of your application
-        jars trusted so that once the end user has accepted to release those
-        limitations, the code contained in the trusted jars can be given
-        broader access. This special step is called jar
-        <emphasis>signing</emphasis>. It requires to post-process the jars
-        with a certificate (either delivered and certified by a certificate
-        authority or self generated for development purpose).</para>
-
-        <para>There are plenty of documents over the internet that deal with
-        this standard process and is beyond the scope of this manual to detail
-        this general purpose topic. However, here are some pointers to useful
-        resources that will help you to make a jar trusted :</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><ulink
-            url="http://java.sun.com/docs/books/tutorial/deployment/jar/signindex.html">Signing
-            and Verifying JAR Files</ulink> in the Sun's Java Tutorial will
-            teach you all the basics.</para>
-          </listitem>
-
-          <listitem>
-            <para>The excellent <ulink
-            url="http://yellowcat1.free.fr/keytool_iui.html">KeyTool
-            IUI</ulink> freeware will dramatically ease your keystore and
-            certificates management.</para>
-          </listitem>
-
-          <listitem>
-            <para>The <ulink
-            url="http://ant.apache.org/manual/CoreTasks/signjar.html">ant
-            signjar task</ulink> will allow you to include jar signing into
-            your build process without effort.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>Following this signing process, the client jars can be divided
-        in 2 different categories : the jars that need to be trusted to
-        overcome the sandbox limitations and the jars that don't need any
-        extra authorization. This is why we need 2 separate JNLP descriptors
-        as shown below.</para>
-
-        <para><note>
-            <para><ulink
-            url="http://java.sun.com/products/javawebstart/1.2/docs/developersguide.html">Java[tm]
-            Web Start Developer's Guide</ulink> is an excellent tutorial to
-            understand and deploy Java Web Start; refer to the section <ulink
-            url="http://java.sun.com/products/javawebstart/1.2/docs/developersguide.html#jnlp">JNLP
-            file syntax</ulink> to get a deeper understanding of what's
-            described below.</para>
-          </note>The <filename>application.jnlp</filename> file is the main
-        descriptor and references the signed jars as resources.</para>
-
-        <para><programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;jnlp spec="1.0+" codebase="$$context/webstart" href="application.jnlp"&gt;
-
-  &lt;information&gt; <co id="information" />
-    &lt;title&gt;Jspresso HR Sample&lt;/title&gt;
-    &lt;vendor&gt;Jspresso&lt;/vendor&gt;
-    &lt;description&gt;Jspresso HR Sample Application&lt;/description&gt;
-    &lt;homepage href="http://www.jspresso.org"/&gt;
-    &lt;icon href="$$context/webstart/jspresso.jpg" width="192" height="96"/&gt;
-    &lt;icon kind="splash" href="$$context/webstart/jspresso.jpg" width="192" height="96"/&gt;
-  &lt;/information&gt;
-
-  &lt;update check="always" policy="always"/&gt;
-
-  &lt;resources&gt; <co id="resources-trusted" />
-    &lt;java version="1.5+" href="http://java.sun.com/products/autodl/j2se"/&gt; <co
-              id="j2se" />
-    &lt;jar href="../lib/jspresso-app-launch-ulc.jar" main="true"/&gt; <co
-              id="libraries" />
-    &lt;jar href="../lib/jspresso-app-launch-core.jar"/&gt;
-    &lt;jar href="../lib/jspresso-swing-components.jar"/&gt;
-    &lt;jar href="../lib/ulc-base-client.jar"/&gt;
-    &lt;jar href="../lib/ulc-base-trusted.jar"/&gt;
-    &lt;jar href="../lib/ulc-jnlp-client.jar"/&gt;
-    &lt;jar href="../lib/nachocalendar.jar"/&gt;
-    &lt;jar href="../lib/substance.jar"/&gt;
-    &lt;property name="swing.defaultlaf" value="org.jvnet.substance.SubstanceLookAndFeel"/&gt; <co
-              id="property-laf" />
-    &lt;property name="sun.awt.noerasebackground" value="true"/&gt; 
-    &lt;extension name="untrusted jars" href="$$context/webstart/application-untrusted.jnlp"/&gt; <co
-              id="untrusted-ref" />
-  &lt;/resources&gt;
-
-  &lt;security&gt; <co id="security" />
-    &lt;all-permissions/&gt;
-  &lt;/security&gt;
-
-  &lt;application-desc main-class="org.jspresso.framework.application.launch.ulc.jnlp.UlcJnlpLauncher"&gt; <co
-              id="UlcJnlpLauncher" />
-    &lt;argument&gt;-splash&lt;/argument&gt;
-    &lt;argument&gt;$$context/webstart/jspresso.jpg&lt;/argument&gt; <co
-              id="splash" />
-    &lt;argument&gt;$$context/hrsample-ulc&lt;/argument&gt; <co
-              id="jspresso-hrsample-url" />
-    &lt;argument&gt;60&lt;/argument&gt; <co id="timeout" />
-    &lt;argument&gt;WARNING&lt;/argument&gt; <co id="log-level" />
-  &lt;/application-desc&gt;
-
-&lt;/jnlp&gt;</programlisting><calloutlist>
-            <callout arearefs="information">
-              <para>JNLP standard informations like name, description, splash
-              screen, icon, ...</para>
-            </callout>
-
-            <callout arearefs="resources-trusted">
-              <para>The resources list the application relies on.</para>
-            </callout>
-
-            <callout arearefs="j2se">
-              <para>The Java virtual machine requirement. Here, we need at
-              least a 1.5 VM.</para>
-            </callout>
-
-            <callout arearefs="libraries">
-              <para>The list of jar libraries that are trusted and required by
-              the client application.</para>
-            </callout>
-
-            <callout arearefs="property-laf">
-              <para>Java system properties to install the client look and feel
-              (although not necessary, it improves the user
-              experience).</para>
-            </callout>
-
-            <callout arearefs="untrusted-ref">
-              <para>We reference the other, unsigned, library jars.</para>
-            </callout>
-
-            <callout arearefs="security">
-              <para>This is where we ask to release security for the resources
-              contained in this descriptor; the
-              <emphasis>all-premissions</emphasis> is not strictly requiered
-              by the application but tailoring it further would have
-              unnecessarily complicated things.</para>
-            </callout>
-
-            <callout arearefs="UlcJnlpLauncher">
-              <para>We tell Java Web Start to start the Jspresso built-in ULC
-              client launcher. It is a fully generic class that is configured
-              by program arguments...</para>
-            </callout>
-
-            <callout arearefs="splash">
-              <para>... like a splash screen, ...</para>
-            </callout>
-
-            <callout arearefs="jspresso-hrsample-url">
-              <para>... the URL to connect to to run tha application; it is
-              actually the URL of the
-              <emphasis>ApplicationUlcServlet</emphasis> as defined in the
-              web.xml descriptor...</para>
-            </callout>
-
-            <callout arearefs="timeout">
-              <para>... the connexion timeout after wich the server is
-              considered as unreachable...</para>
-            </callout>
-
-            <callout arearefs="log-level">
-              <para>... and the logging treshold of the ULC stack.</para>
-            </callout>
-          </calloutlist>The <filename>application-untrusted.jnlp</filename> is
-        included by the former one and references the unsigned jars as
-        resources.</para>
-
-        <para><programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;jnlp spec="1.0+" codebase="$$context/webstart" href="application-untrusted.jnlp"&gt;
-
-  &lt;information&gt;
-    &lt;title&gt;Jspresso HR Sample - Untrusted code&lt;/title&gt;
-    &lt;vendor&gt;Jspresso&lt;/vendor&gt;
-  &lt;/information&gt;
-
-  &lt;update check="always" policy="always"/&gt;
-
-  &lt;resources&gt; <co id="resources-untrusted" />
-    &lt;jar href="../lib/jspresso-ulc-components-client.jar"/&gt;
-    &lt;jar href="../lib/jspresso-ulc-components-shared.jar"/&gt;
-    &lt;jar href="../lib/jspresso-util.jar"/&gt;
-    &lt;jar href="../lib/ulc-servlet-client.jar"/&gt;
-    &lt;jar href="../lib/jedit-syntax.jar"/&gt;
-    &lt;jar href="../lib/joda-time.jar"/&gt;
-  &lt;/resources&gt;
-
-  &lt;component-desc/&gt;
-
-&lt;/jnlp&gt;</programlisting><calloutlist>
-            <callout arearefs="resources-untrusted">
-              <para>We list the remaining dependencies of the ULC client
-              application.</para>
-            </callout>
-          </calloutlist><note>
-            <para>As you can see, there is nothing that references the jar
-            specific to our application; the client is then completely generic
-            (only ULC and Jspresso framework). This really speeds-up the
-            maintenance of a Jspresso based application since any change on
-            the application side does not require the deployed clients to
-            update anything.</para>
-          </note>That's over for an ULC deployment. For Wings, it is somehow
-        easier since it does not require any further packaging... but some
-        HTML code for the login page.</para>
-      </section>
-
-      <section>
-        <title>The HTML login pages for a Wings deployment</title>
-
-        <para>The following HTML pages show how to implement the Jspresso
-        login for a Wings deployment. Although they are fully functioning, you
-        will certainly not use them "as is" but rather include the HTML code
-        into some corporate web site following your styling conventions as
-        well as section language.</para>
-
-        <para>The <filename>login.html</filename> file, as referenced in the
-        <filename>web.xml</filename> descriptor :</para>
-
-        <para><programlisting language="xml">&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Login&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;form method="post" action="login.do"&gt; <co id="login.do" />
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;Name:&lt;/td&gt;
-    &lt;td&gt;&lt;input type="text" name="username"&gt;&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;Password:&lt;/td&gt;
-    &lt;td&gt;&lt;input type="password" name="password"&gt;&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;&amp;nbsp;&lt;/td&gt;
-    &lt;td&gt;&lt;input type="submit" value="login"&gt;&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-&lt;/form&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;</programlisting><calloutlist>
-            <callout arearefs="login.do">
-              <para>The login post action as referenced by the login servlet
-              in the <filename>web.xml</filename> descriptor.</para>
-            </callout>
-          </calloutlist>And whenever the login is not successful, the
-        <filename>login-error.html</filename> file, as referenced in the
-        <filename>web.xml</filename> descriptor :</para>
-
-        <para><programlisting language="xml">&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Login Error&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;Login Error&lt;/h1&gt;
-&lt;/body&gt;
-&lt;/html&gt;</programlisting>That's it for Wings. The last step is to
-        actually deploy the application into the application server.</para>
-      </section>
+      <para>Surely the shortest section of the manual. Just launch :</para>
+
+      <blockquote>
+        <para><code>mvn package</code></para>
+      </blockquote>
+
+      <para>Go to <filename>hrsample/webapp/target/</filename> and you will
+      have a ready-to deploy war archive containing your Jspresso application.
+      The generated Jspresso project is also ready to to be used in Eclipse
+      WTP. Just add it to the Eclipse managed Tomcat you've created when
+      setting-up the development environment and start the server.</para>
+
+      <para>Regarding ULC deployment, you have to explicitely instruct the
+      Maven build that you want it since ULC is a commercial library. First,
+      install the ULC libraries in your local maven repository :</para>
+
+      <blockquote>
+        <para><code>mvn validate -Dulc.home=</code><filename>[the absolute
+        location of your ULC 6.0.5 installation, e.g.
+        "/ulc-6.0.5"]</filename></para>
+      </blockquote>
+
+      <para>Then, perform the packaging with the ulc profile :</para>
+
+      <blockquote>
+        <para><code>mvn package -Pulc</code></para>
+      </blockquote>
+
+      <para>Jspresso will take care of packaging the JNLP descriptor,
+      packaging the client libraries and signing the requiried jar
+      archives.</para>
+
+      <para><note>
+          <para>The archetype project comes with a sample keystore used to
+          sign the jars :
+          <filename>/hrsample/webapp/conf/keystore.jks</filename>. Obviously,
+          it shouldn't be used for production. Whenever you want to use your
+          own keystore, just update the <quote>signjar</quote> portion of the
+          <filename>/hrsample/webapp/pom.xml</filename> with sensible values
+          :</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>alias=[the alias of the key you want to use]</para>
+            </listitem>
+
+            <listitem>
+              <para>keystore=[the path to the key store you want to
+              use]</para>
+            </listitem>
+
+            <listitem>
+              <para>storepass=[your keystore password]</para>
+            </listitem>
+
+            <listitem>
+              <para>keypass=[your key password]</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Obviously, some of the values above are sensible values;
+          beware not to deploy your pom in a Maven public repository !</para>
+        </note></para>
     </section>
 
     <section>
@@ -8038,7 +7234,7 @@ login-error.html</programlisting></para>
       directory to the use of a specific deployment tool; so refer to the
       documentation of your J2EE server to know how to perform this task. As
       an example, in the Apache Tomcat AS, deploying a WAR is a matter of
-      copying it to the <code>webapps/</code> directory.</para>
+      copying it to the <filename>webapps/</filename> directory.</para>
 
       <para>There is still one thing to achieve before being able to go live.
       The JAAS configuration (held in the <filename>jaas.config</filename>
@@ -8056,7 +7252,9 @@ login-error.html</programlisting></para>
       property is achieved by setting the <code>CATALINA_OPTS</code>
       environment variable, e.g. :</para>
 
-      <para><code>CATALINA_OPTS=-Djava.security.auth.login.config=/path/to/my/jaas.config</code></para>
+      <blockquote>
+        <para><code>CATALINA_OPTS=-Djava.security.auth.login.config=/path/to/my/jaas.config</code></para>
+      </blockquote>
 
       <para>We can now see the result of the deployment.</para>
 
@@ -8064,9 +7262,13 @@ login-error.html</programlisting></para>
         <title>The first ULC launch</title>
 
         <para>Point your browser to the <filename>application.jnlp</filename>
-        file deployed; this should be in the form
-        <code>http://[machine]:[port]/[webapp-context]/webstart/application.jnlp</code>.
-        You shoul see the following happening (this is on a french
+        file deployed :</para>
+
+        <blockquote>
+          <para><code>http://[machine]:[port]/hrsample-webapp/webstart/application.jnlp</code></para>
+        </blockquote>
+
+        <para>You shoul see the following happening (this is on a french
         workstation) :</para>
 
         <para><figure>
@@ -8099,14 +7301,16 @@ login-error.html</programlisting></para>
       <section>
         <title>The first Wings launch</title>
 
-        <para>Point your browser to the login.html file deployed; this should
-        be in the form
-        <code>http://[machine]:[port]/[webapp-context]/login.html</code>.</para>
+        <para>Point your browser to the <code>wings</code> context :</para>
 
-        <para>The browser shows you the "rudimentary" login page.</para>
+        <blockquote>
+          <para><code>http://[machine]:[port]/hrsample-webapp/wings/</code></para>
+        </blockquote>
+
+        <para>The browser shows you the WingS login dialog.</para>
 
         <para><figure>
-            <title>The browser displays the login page</title>
+            <title>The browser displays the WingS login dialog</title>
 
             <mediaobject>
               <imageobject>
@@ -8128,16 +7332,47 @@ login-error.html</programlisting></para>
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
+          </figure></para>
+      </section>
+
+      <section>
+        <title>The first Flex launch</title>
+
+        <para>Point your browser to the <code>flex</code> context :</para>
+
+        <blockquote>
+          <para><code>http://[machine]:[port]/hrsample-webapp/flex/</code></para>
+        </blockquote>
+
+        <para>The browser shows you the Flex login dialog.</para>
+
+        <para><figure>
+            <title>The browser displays the Flex login dialog</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Flex_login.jpg" scalefit="1"
+                           width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure>And you can play with the same application but in Flash
+        !</para>
+
+        <para><figure>
+            <title>You query the companies in Flex !</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Flex_application.jpg"
+                           scalefit="1" width="100%" />
+              </imageobject>
+            </mediaobject>
           </figure>Congratulations! we have now closed the circle and in tenth
         of the effort usually required to achieve the equivalent, we
         developped and deployed a multi-channel, distributed desktop-like
         business application.</para>
-      </section>
-
-      <section>
-        <title>Further reading</title>
-
-        <para></para>
       </section>
     </section>
   </section>
