@@ -65,6 +65,16 @@ public class ULCTextFieldConnector extends
   }
 
   /**
+   * Sets the formatter.
+   * 
+   * @param formatter
+   *          the formatter to set.
+   */
+  public void setFormatter(IFormatter formatter) {
+    this.formatter = formatter;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -120,15 +130,5 @@ public class ULCTextFieldConnector extends
     } else {
       super.setConnecteeValue(aValue);
     }
-  }
-
-  /**
-   * Sets the formatter.
-   * 
-   * @param formatter
-   *          the formatter to set.
-   */
-  public void setFormatter(IFormatter formatter) {
-    this.formatter = formatter;
   }
 }

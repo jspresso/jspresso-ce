@@ -23,10 +23,10 @@
             <goals>
               <goal>single</goal>
             </goals>
-            <phase>process-resources</phase>
+            <phase>generate-resources</phase>
             <configuration>
               <descriptors>
-                <descriptor>src/main/assembly/resources.xml</descriptor>
+                <descriptor>${basedir}/src/main/assembly/resources.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>

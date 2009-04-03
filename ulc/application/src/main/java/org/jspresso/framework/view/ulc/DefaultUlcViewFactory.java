@@ -202,91 +202,6 @@ public class DefaultUlcViewFactory extends
   private ITreeSelectionModelBinder     treeSelectionModelBinder;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
-      Locale locale, IView<ULCComponent> view) {
-    if (viewDescriptor.getForeground() != null) {
-      view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
-    }
-    if (viewDescriptor.getBackground() != null) {
-      view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
-    }
-    if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
-    }
-    if (viewDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
-          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-              + TOOLTIP_ELLIPSIS);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void decorateWithActions(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale, IView<ULCComponent> view) {
-    if (viewDescriptor.getActionMap() != null) {
-      ULCToolBar toolBar = createULCToolBar();
-      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
-          .getActionLists().iterator(); iter.hasNext();) {
-        ActionList nextActionList = iter.next();
-        for (IDisplayableAction action : nextActionList.getActions()) {
-          IAction ulcAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          ULCButton actionButton = createULCButton();
-          actionButton.setAction(ulcAction);
-
-          if (action.getAcceleratorAsString() != null) {
-            KeyStroke ks = KeyStroke.getKeyStroke(action
-                .getAcceleratorAsString());
-            view.getPeer().registerKeyboardAction(ulcAction, ks,
-                ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-            String acceleratorString = java.awt.event.KeyEvent
-                .getKeyModifiersText(ks.getModifiers())
-                + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
-            actionButton.setToolTipText("<HTML>"
-                + actionButton.getToolTipText()
-                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                + "</FONT></HTML>");
-          }
-
-          actionButton.setText("");
-          toolBar.add(actionButton);
-        }
-        if (iter.hasNext()) {
-          toolBar.addSeparator();
-        }
-      }
-
-      ULCBorderLayoutPane viewPanel = createBorderLayoutPane();
-      viewPanel.add(toolBar, ULCBorderLayoutPane.NORTH);
-      viewPanel.add(view.getPeer(), ULCBorderLayoutPane.CENTER);
-      view.setPeer(viewPanel);
-    }
-  }
-
-  private void decorateWithTitle(IView<ULCComponent> view, Locale locale) {
-    view.getPeer()
-        .setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), view.getDescriptor()
-                    .getI18nName(getTranslationProvider(), locale)));
-    // ULCInternalFrame iFrame = new ULCInternalFrame(view.getDescriptor()
-    // .getI18nName(getTranslationProvider(), locale), true, true,
-    // true, true);
-    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
-    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    // iFrame.add(view.getPeer());
-    // iFrame.pack();
-    // iFrame.setPreferredSize(new Dimension(100,100));
-    // view.setPeer(iFrame);
-  }
-
-  /**
    * Sets the listSelectionModelBinder.
    * 
    * @param listSelectionModelBinder
@@ -309,6 +224,65 @@ public class DefaultUlcViewFactory extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void adjustSizes(ULCComponent component, IFormatter formatter,
+      Object templateValue, int extraWidth) {
+    int preferredWidth = computePixelWidth(component, getFormatLength(
+        formatter, templateValue))
+        + extraWidth;
+    Dimension size = new Dimension(preferredWidth, component.getFont()
+        .getSize() + 6);
+    component.setMinimumSize(size);
+    component.setPreferredSize(size);
+    component.setMaximumSize(size);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected int computePixelWidth(ULCComponent component, int characterLength) {
+    int charLength = getMaxCharacterLength() + 2;
+    if (characterLength > 0 && characterLength < getMaxCharacterLength()) {
+      charLength = characterLength + 2;
+    }
+    return component.getFont().getSize() * charLength / 2;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createBinaryPropertyView(
+      IBinaryPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ULCActionField viewComponent = createULCActionField(false);
+    ULCActionFieldConnector connector = new ULCActionFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    viewComponent.setActions(createBinaryActions(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale));
+    adjustSizes(viewComponent, null, null);
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createBooleanPropertyView(
+      IBooleanPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ULCCheckBox viewComponent = createULCCheckBox();
+    ULCToggleButtonConnector connector = new ULCToggleButtonConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
    * Creates a borderlayout pane.
    * 
    * @return the created borderlayout pane.
@@ -319,6 +293,52 @@ public class DefaultUlcViewFactory extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<ULCComponent> createBorderView(
+      IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
+    BasicCompositeView<ULCComponent> view = constructCompositeView(
+        viewComponent, viewDescriptor);
+    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
+
+    if (viewDescriptor.getEastViewDescriptor() != null) {
+      IView<ULCComponent> eastView = createView(viewDescriptor
+          .getEastViewDescriptor(), actionHandler, locale);
+      viewComponent.add(eastView.getPeer(), ULCBorderLayoutPane.EAST);
+      childrenViews.add(eastView);
+    }
+    if (viewDescriptor.getNorthViewDescriptor() != null) {
+      IView<ULCComponent> northView = createView(viewDescriptor
+          .getNorthViewDescriptor(), actionHandler, locale);
+      viewComponent.add(northView.getPeer(), ULCBorderLayoutPane.NORTH);
+      childrenViews.add(northView);
+    }
+    if (viewDescriptor.getCenterViewDescriptor() != null) {
+      IView<ULCComponent> centerView = createView(viewDescriptor
+          .getCenterViewDescriptor(), actionHandler, locale);
+      viewComponent.add(centerView.getPeer(), ULCBorderLayoutPane.CENTER);
+      childrenViews.add(centerView);
+    }
+    if (viewDescriptor.getWestViewDescriptor() != null) {
+      IView<ULCComponent> westView = createView(viewDescriptor
+          .getWestViewDescriptor(), actionHandler, locale);
+      viewComponent.add(westView.getPeer(), ULCBorderLayoutPane.WEST);
+      childrenViews.add(westView);
+    }
+    if (viewDescriptor.getSouthViewDescriptor() != null) {
+      IView<ULCComponent> southView = createView(viewDescriptor
+          .getSouthViewDescriptor(), actionHandler, locale);
+      viewComponent.add(southView.getPeer(), ULCBorderLayoutPane.SOUTH);
+      childrenViews.add(southView);
+    }
+    view.setChildren(childrenViews);
+    return view;
+  }
+
+  /**
    * Creates a cardlayout pane.
    * 
    * @return the created cardlayout pane.
@@ -326,6 +346,377 @@ public class DefaultUlcViewFactory extends
   protected ULCCardPane createCardPane() {
     ULCCardPane pane = new ULCCardPane();
     return pane;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IMapView<ULCComponent> createCardView(
+      ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ULCCardPane viewComponent = createCardPane();
+    BasicMapView<ULCComponent> view = constructMapView(viewComponent,
+        viewDescriptor);
+    Map<String, IView<ULCComponent>> childrenViews = new HashMap<String, IView<ULCComponent>>();
+
+    viewComponent.add(createEmptyComponent(),
+        ICardViewDescriptor.DEFAULT_CARD);
+    viewComponent.add(createSecurityComponent(),
+        ICardViewDescriptor.SECURITY_CARD);
+
+    for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
+        .getCardViewDescriptors().entrySet()) {
+      IView<ULCComponent> childView = createView(
+          childViewDescriptor.getValue(), actionHandler, locale);
+      viewComponent.addCard(childViewDescriptor.getKey(), childView.getPeer());
+      childrenViews.put(childViewDescriptor.getKey(), childView);
+    }
+    view.setChildrenMap(childrenViews);
+    view.setConnector(createCardViewConnector(view, actionHandler));
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createColorPropertyView(
+      IColorPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ULCColorPicker viewComponent = createULCColorPicker();
+    if (propertyDescriptor.getDefaultValue() != null) {
+      int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
+          .getDefaultValue());
+      viewComponent
+          .setResetValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+    }
+    ULCColorPickerConnector connector = new ULCColorPickerConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    return constructView(viewComponent, null, connector);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createComponentView(
+      IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ICompositeValueConnector connector = getConnectorFactory()
+        .createCompositeValueConnector(
+            getConnectorIdForComponentView(viewDescriptor), null);
+    ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
+    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+
+    int currentX = 0;
+    int currentY = 0;
+
+    boolean isSpaceFilled = false;
+
+    for (ISubviewDescriptor propertyViewDescriptor : viewDescriptor
+        .getPropertyViewDescriptors()) {
+      String propertyName = propertyViewDescriptor.getName();
+      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
+          .getModelDescriptor()).getComponentDescriptor()
+          .getPropertyDescriptor(propertyName);
+      if (propertyDescriptor == null) {
+        throw new ViewException("Property descriptor [" + propertyName
+            + "] does not exist for model descriptor "
+            + viewDescriptor.getModelDescriptor().getName() + ".");
+      }
+      IView<ULCComponent> propertyView = createPropertyView(propertyDescriptor,
+          viewDescriptor.getRenderedChildProperties(propertyName),
+          actionHandler, locale);
+      boolean forbidden = false;
+      try {
+        actionHandler.checkAccess(propertyViewDescriptor);
+      } catch (SecurityException ex) {
+        forbidden = true;
+        propertyView.setPeer(createSecurityComponent());
+      }
+      connector.addChildConnector(propertyView.getConnector());
+      if (propertyViewDescriptor.getReadabilityGates() != null) {
+        for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
+          propertyView.getConnector().addReadabilityGate(gate.clone());
+        }
+      }
+      if (propertyViewDescriptor.getWritabilityGates() != null) {
+        for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
+          propertyView.getConnector().addWritabilityGate(gate.clone());
+        }
+      }
+      propertyView.getConnector().setLocallyWritable(
+          !propertyViewDescriptor.isReadOnly());
+      ULCLabel propertyLabel = createPropertyLabel(propertyDescriptor,
+          propertyView.getPeer(), locale);
+      if (forbidden) {
+        propertyLabel.setText(" ");
+      }
+
+      int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
+      if (propertyWidth > viewDescriptor.getColumnCount()) {
+        propertyWidth = viewDescriptor.getColumnCount();
+      }
+      if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
+        currentX = 0;
+        currentY++;
+      }
+
+      // label positionning
+      GridBagConstraints constraints = new GridBagConstraints();
+      switch (viewDescriptor.getLabelsPosition()) {
+        case ASIDE:
+          constraints.setInsets(new Insets(5, 5, 5, 5));
+          if (propertyView.getPeer() instanceof ULCTextArea
+              || propertyView.getPeer() instanceof ULCList
+              || propertyView.getPeer() instanceof ULCScrollPane
+              || propertyView.getPeer() instanceof ULCExtendedTable
+              || propertyView.getPeer() instanceof ULCJEditTextArea) {
+            constraints.setAnchor(GridBagConstraints.NORTHEAST);
+          } else {
+            constraints.setAnchor(GridBagConstraints.EAST);
+          }
+          constraints.setGridX(currentX * 2);
+          constraints.setGridY(currentY);
+          break;
+        case ABOVE:
+          constraints.setInsets(new Insets(5, 5, 0, 5));
+          constraints.setAnchor(GridBagConstraints.SOUTHWEST);
+          constraints.setGridX(currentX);
+          constraints.setGridY(currentY * 2);
+          constraints.setGridWidth(propertyWidth);
+          break;
+        default:
+          break;
+      }
+      if (propertyLabel.getText() != null
+          && propertyLabel.getText().length() > 0) {
+        viewComponent.add(propertyLabel, constraints);
+      }
+
+      // component positionning
+      switch (viewDescriptor.getLabelsPosition()) {
+        case ASIDE:
+          constraints.setGridX(constraints.getGridX() + 1);
+          constraints.setInsets(new Insets(5, 0, 5, 5));
+          constraints.setGridWidth(propertyWidth * 2 - 1);
+          break;
+        case ABOVE:
+          constraints.setGridY(constraints.getGridY() + 1);
+          constraints.setInsets(new Insets(0, 5, 0, 5));
+          constraints.setGridWidth(propertyWidth);
+          break;
+        default:
+          break;
+      }
+
+      constraints.setAnchor(GridBagConstraints.WEST);
+      if (propertyView.getPeer().getPreferredSize() != null) {
+        constraints.setWeightX(propertyView.getPeer().getPreferredSize()
+            .getWidth());
+      }
+      if (propertyView.getPeer() instanceof ULCCheckBox) {
+        constraints.setWeightX(ClientContext.getScreenResolution());
+      }
+      if (propertyView.getPeer() instanceof ULCTextArea
+          || propertyView.getPeer() instanceof ULCList
+          || propertyView.getPeer() instanceof ULCScrollPane
+          || propertyView.getPeer() instanceof ULCExtendedTable
+          || propertyView.getPeer() instanceof ULCJEditTextArea) {
+        constraints.setWeightY(1.0);
+        constraints.setFill(GridBagConstraints.BOTH);
+        isSpaceFilled = true;
+      } else {
+        constraints.setFill(GridBagConstraints.NONE);
+      }
+      viewComponent.add(propertyView.getPeer(), constraints);
+
+      currentX += propertyWidth;
+    }
+    if (!isSpaceFilled) {
+      ULCBorderLayoutPane filler = createBorderLayoutPane();
+      GridBagConstraints constraints = new GridBagConstraints();
+      constraints.setGridX(0);
+      constraints.setWeightX(1.0);
+      constraints.setWeightY(1.0);
+      constraints.setFill(GridBagConstraints.BOTH);
+      switch (viewDescriptor.getLabelsPosition()) {
+        case ASIDE:
+          constraints.setGridY(currentY + 1);
+          constraints.setGridWidth(viewDescriptor.getColumnCount() * 2);
+          break;
+        case ABOVE:
+          constraints.setGridY((currentY + 1) * 2);
+          constraints.setGridWidth(viewDescriptor.getColumnCount());
+          break;
+        default:
+          break;
+      }
+      viewComponent.add(filler, constraints);
+    }
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<ULCComponent> createConstrainedGridView(
+      IConstrainedGridViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
+    BasicCompositeView<ULCComponent> view = constructCompositeView(
+        viewComponent, viewDescriptor);
+    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
+
+    for (IViewDescriptor childViewDescriptor : viewDescriptor
+        .getChildViewDescriptors()) {
+      IView<ULCComponent> childView = createView(childViewDescriptor,
+          actionHandler, locale);
+      viewComponent.add(childView.getPeer(),
+          createGridBagConstraints(viewDescriptor
+              .getCellConstraints(childViewDescriptor)));
+      childrenViews.add(childView);
+    }
+    view.setChildren(childrenViews);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createDatePropertyView(
+      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+
+    SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
+
+    ULCDateField viewComponent = createULCDateField(format.toPattern(), locale);
+    ULCDateFieldConnector connector = new ULCDateFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, createFormatter(format),
+        getDateTemplateValue(propertyDescriptor), ClientContext
+            .getScreenResolution() / 3);
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createDecimalPropertyView(
+      IDecimalPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
+      return createPercentPropertyView(
+          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    }
+    ULCTextField viewComponent = createULCTextField();
+
+    IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
+    ULCTextFieldConnector connector = new ULCTextFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, formatter,
+        getDecimalTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createDurationPropertyView(
+      IDurationPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ULCTextField viewComponent = createULCTextField();
+    IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
+
+    ULCTextFieldConnector connector = new ULCTextFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, formatter,
+        getDurationTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ULCComponent createEmptyComponent() {
+    return createBorderLayoutPane();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createEnumerationPropertyView(
+      IEnumerationPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ULCComboBox viewComponent = createULCComboBox();
+    if (!propertyDescriptor.isMandatory()) {
+      viewComponent.addItem(null);
+    }
+    for (String enumElement : propertyDescriptor.getEnumerationValues()) {
+      viewComponent.addItem(enumElement);
+    }
+    viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
+        propertyDescriptor, locale));
+    adjustSizes(viewComponent, null, getEnumerationTemplateValue(
+        propertyDescriptor, locale),
+        ClientContext.getScreenResolution() * 2 / 6);
+    ULCComboBoxConnector connector = new ULCComboBoxConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<ULCComponent> createEvenGridView(
+      IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ULCGridLayoutPane viewComponent = createGridLayoutPane();
+    BasicCompositeView<ULCComponent> view = constructCompositeView(
+        viewComponent, viewDescriptor);
+    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
+
+    switch (viewDescriptor.getDrivingDimension()) {
+      case ROW:
+        viewComponent.setColumns(viewDescriptor.getDrivingDimensionCellCount());
+        viewComponent.setRows(0);
+        break;
+      case COLUMN:
+        viewComponent.setRows(viewDescriptor.getDrivingDimensionCellCount());
+        viewComponent.setColumns(0);
+        break;
+      default:
+        break;
+    }
+    viewComponent.setHgap(5);
+    viewComponent.setVgap(5);
+
+    for (IViewDescriptor childViewDescriptor : viewDescriptor
+        .getChildViewDescriptors()) {
+      IView<ULCComponent> childView = createView(childViewDescriptor,
+          actionHandler, locale);
+      viewComponent.add(childView.getPeer());
+      childrenViews.add(childView);
+    }
+    view.setChildren(childrenViews);
+    return view;
   }
 
   /**
@@ -352,6 +743,175 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected IView<ULCComponent> createImageView(
+      IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      @SuppressWarnings("unused") Locale locale) {
+    ULCLabel imageLabel = createULCLabel();
+    imageLabel.setHorizontalAlignment(IDefaults.CENTER);
+    ULCImageConnector connector = new ULCImageConnector(viewDescriptor
+        .getModelDescriptor().getName(), imageLabel);
+    connector.setExceptionHandler(actionHandler);
+    ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
+    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    ULCScrollPane scrollPane = createULCScrollPane();
+    scrollPane.setViewPortView(imageLabel);
+    viewComponent.add(scrollPane, ULCBorderLayoutPane.CENTER);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createIntegerPropertyView(
+      IIntegerPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ULCTextField viewComponent = createULCTextField();
+
+    IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
+    ULCTextFieldConnector connector = new ULCTextFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, formatter,
+        getIntegerTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createListView(
+      IListViewDescriptor viewDescriptor,
+      @SuppressWarnings("unused") IActionHandler actionHandler,
+      @SuppressWarnings("unused") Locale locale) {
+    ICollectionDescriptorProvider<?> modelDescriptor = (ICollectionDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor();
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
+        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+            viewDescriptor.getRenderedProperty());
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
+            rowConnectorPrototype);
+    ULCList viewComponent = createULCList();
+    ULCScrollPane scrollPane = createULCScrollPane();
+    scrollPane.setViewPortView(viewComponent);
+    IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
+        connector);
+
+    if (viewDescriptor.getRenderedProperty() != null) {
+      IValueConnector cellConnector = createColumnConnector(viewDescriptor
+          .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
+          .getElementDescriptor());
+      rowConnectorPrototype.addChildConnector(cellConnector);
+    }
+    viewComponent.setCellRenderer(new EvenOddListCellRenderer());
+
+    CollectionConnectorListModel listModel = new CollectionConnectorListModel(
+        connector);
+    viewComponent.setModel(listModel);
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
+    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
+        .getSelectionModel(), null);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createNestingView(
+      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+
+    ICompositeValueConnector connector = getConnectorFactory()
+        .createCompositeValueConnector(
+            viewDescriptor.getModelDescriptor().getName(), null);
+    ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
+    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    IView<ULCComponent> nestedView = createView(viewDescriptor
+        .getNestedViewDescriptor(), actionHandler, locale);
+    connector.addChildConnector(nestedView.getConnector());
+    viewComponent.add(nestedView.getPeer(), ULCBorderLayoutPane.CENTER);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createPasswordPropertyView(
+      IPasswordPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ULCPasswordField viewComponent = createULCPasswordField();
+    ULCPasswordFieldConnector connector = new ULCPasswordFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createPercentPropertyView(
+      IPercentPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ULCTextField viewComponent = createULCTextField();
+
+    IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
+    ULCTextFieldConnector connector = new ULCTextFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, formatter,
+        getPercentTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createReferencePropertyView(
+      IReferencePropertyDescriptor<?> propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ULCActionField viewComponent = createULCActionField(true);
+    ULCReferenceFieldConnector connector = new ULCReferenceFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setToStringPropertyConnector(new BasicValueConnector(
+        propertyDescriptor.getComponentDescriptor().getToStringProperty()));
+    connector.setExceptionHandler(actionHandler);
+    IAction lovAction = createLovAction(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale);
+    lovAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
+        "lov.element.name",
+        new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
+            getTranslationProvider(), locale)}, locale));
+    lovAction.putValue(IAction.SHORT_DESCRIPTION, getTranslationProvider()
+        .getTranslation(
+            "lov.element.description",
+            new Object[] {propertyDescriptor.getReferencedDescriptor()
+                .getI18nName(getTranslationProvider(), locale)}, locale)
+        + TOOLTIP_ELLIPSIS);
+    if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
+      lovAction.putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
+          propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+          IIconFactory.TINY_ICON_SIZE));
+    }
+    viewComponent.setActions(Collections.singletonList(lovAction));
+    adjustSizes(viewComponent, null, null);
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected ULCBorderLayoutPane createSecurityComponent() {
     ULCBorderLayoutPane panel = new ULCBorderLayoutPane();
     // ULCLabel label = createULCLabel();
@@ -366,10 +926,424 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected ULCComponent createEmptyComponent() {
-    return createBorderLayoutPane();
+  protected IView<ULCComponent> createSourceCodePropertyView(
+      ISourceCodePropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ULCJEditTextArea viewComponent = createULCJEditTextArea(propertyDescriptor
+        .getLanguage());
+    ULCJEditTextAreaConnector connector = new ULCJEditTextAreaConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    return constructView(viewComponent, null, connector);
   }
-  
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<ULCComponent> createSplitView(
+      ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ULCSplitPane viewComponent = createULCSplitPane();
+    BasicCompositeView<ULCComponent> view = constructCompositeView(
+        viewComponent, viewDescriptor);
+    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
+
+    switch (viewDescriptor.getOrientation()) {
+      case HORIZONTAL:
+        viewComponent.setOrientation(ULCSplitPane.HORIZONTAL_SPLIT);
+        break;
+      case VERTICAL:
+        viewComponent.setOrientation(ULCSplitPane.VERTICAL_SPLIT);
+        break;
+      default:
+        break;
+    }
+
+    if (viewDescriptor.getLeftTopViewDescriptor() != null) {
+      IView<ULCComponent> leftTopView = createView(viewDescriptor
+          .getLeftTopViewDescriptor(), actionHandler, locale);
+      viewComponent.setLeftComponent(leftTopView.getPeer());
+      childrenViews.add(leftTopView);
+    }
+    if (viewDescriptor.getRightBottomViewDescriptor() != null) {
+      IView<ULCComponent> rightBottomView = createView(viewDescriptor
+          .getRightBottomViewDescriptor(), actionHandler, locale);
+      viewComponent.setRightComponent(rightBottomView.getPeer());
+      rightBottomView.getPeer().setMinimumSize(new Dimension(0, 0));
+      childrenViews.add(rightBottomView);
+    }
+    view.setChildren(childrenViews);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createStringPropertyView(
+      IStringPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ULCTextField viewComponent = createULCTextField();
+    ULCTextFieldConnector connector = new ULCTextFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * Creates a table cell renderer for a given property descriptor.
+   * 
+   * @param column
+   *          the table column index.
+   * @param propertyDescriptor
+   *          the property descriptor to create the renderer for.
+   * @param locale
+   *          the locale.
+   * @return the created table cell renderer.
+   */
+  protected ITableCellRenderer createTableCellRenderer(int column,
+      IPropertyDescriptor propertyDescriptor, Locale locale) {
+    ITableCellRenderer cellRenderer = null;
+    if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
+      cellRenderer = createBooleanTableCellRenderer(
+          (IBooleanPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
+      cellRenderer = createDateTableCellRenderer(column,
+          (IDatePropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      cellRenderer = createTimeTableCellRenderer(column,
+          (ITimePropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
+      cellRenderer = createDurationTableCellRenderer(column,
+          (IDurationPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+      cellRenderer = createEnumerationTableCellRenderer(column,
+          (IEnumerationPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
+      cellRenderer = createNumberTableCellRenderer(column,
+          (INumberPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+      cellRenderer = createRelationshipEndTableCellRenderer(
+          (IRelationshipEndPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
+      cellRenderer = createStringTableCellRenderer(column,
+          (IStringPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
+      cellRenderer = createColorTableCellRenderer(
+          (IColorPropertyDescriptor) propertyDescriptor, locale);
+    }
+    return cellRenderer;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createTableView(
+      ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor());
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
+        .createCompositeValueConnector(
+            modelDescriptor.getName() + "Element",
+            modelDescriptor.getCollectionDescriptor().getElementDescriptor()
+                .getToStringProperty());
+    ICollectionConnector connector = getConnectorFactory()
+        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
+            rowConnectorPrototype);
+    ULCExtendedTable viewComponent = createULCTable();
+    ULCScrollPane scrollPane = createULCScrollPane();
+    scrollPane.setViewPortView(viewComponent);
+    ULCLabel iconLabel = createULCLabel();
+    iconLabel.setIcon(getIconFactory().getIcon(
+        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
+            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
+    scrollPane.setCorner(ULCScrollPane.UPPER_RIGHT_CORNER, iconLabel);
+    IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
+        connector);
+    viewComponent
+        .setAutoResizeMode(com.ulcjava.base.application.ULCTable.AUTO_RESIZE_OFF);
+
+    Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
+    Map<String, IFormatter> columnFormattersByIds = new HashMap<String, IFormatter>();
+    List<String> columnConnectorKeys = new ArrayList<String>();
+    Set<String> forbiddenColumns = new HashSet<String>();
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
+        .getColumnViewDescriptors()) {
+      String columnId = columnViewDescriptor.getName();
+      try {
+        actionHandler.checkAccess(columnViewDescriptor);
+        IValueConnector columnConnector = createColumnConnector(columnId,
+            modelDescriptor.getCollectionDescriptor().getElementDescriptor());
+        rowConnectorPrototype.addChildConnector(columnConnector);
+        IPropertyDescriptor columnModelDescriptor = modelDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getPropertyDescriptor(columnId);
+        if (columnModelDescriptor instanceof IReferencePropertyDescriptor) {
+          columnClassesByIds.put(columnId, String.class);
+        } else if (columnModelDescriptor instanceof IBooleanPropertyDescriptor) {
+          columnClassesByIds.put(columnId, Boolean.class);
+        } else {
+          if (columnModelDescriptor instanceof IDecimalPropertyDescriptor
+              && ((IDecimalPropertyDescriptor) columnModelDescriptor)
+                  .isUsingBigDecimal()) {
+            columnClassesByIds.put(columnId, String.class);
+            columnFormattersByIds.put(columnId, createFormatter(
+                columnModelDescriptor, locale));
+          } else {
+            columnClassesByIds.put(columnId, columnModelDescriptor
+                .getModelType());
+          }
+        }
+        columnConnectorKeys.add(columnId);
+        if (columnViewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+            columnConnector.addReadabilityGate(gate.clone());
+          }
+        }
+        if (columnViewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+            columnConnector.addWritabilityGate(gate.clone());
+          }
+        }
+        columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+      } catch (SecurityException ex) {
+        // The column simply won't be added.
+        forbiddenColumns.add(columnId);
+      }
+    }
+    CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
+        connector, columnConnectorKeys);
+    tableModel.setExceptionHandler(actionHandler);
+    tableModel.setColumnClassesByIds(columnClassesByIds);
+    tableModel.setColumnFormattersByIds(columnFormattersByIds);
+
+    TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent
+        .getTableHeader());
+    java.awt.Dimension iconSize = new java.awt.Dimension(viewComponent
+        .getTableHeader().getFont().getSize(), viewComponent.getTableHeader()
+        .getFont().getSize());
+    sorterDecorator
+        .setUpIcon(getIconFactory()
+            .getIcon(
+                "classpath:org/jspresso/framework/application/images/1uparrow-48x48.png",
+                iconSize));
+    sorterDecorator
+        .setDownIcon(getIconFactory()
+            .getIcon(
+                "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
+                iconSize));
+    sorterDecorator.setColumnComparator(String.class,
+        String.CASE_INSENSITIVE_ORDER);
+    ClientContext.setModelUpdateMode(sorterDecorator,
+        IUlcEventConstants.ASYNCHRONOUS_MODE);
+    viewComponent.setModel(sorterDecorator);
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
+    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
+        .getSelectionModel(), sorterDecorator);
+
+    int maxColumnSize = computePixelWidth(viewComponent,
+        getMaxColumnCharacterLength());
+    int columnIndex = 0;
+    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
+        .getColumnViewDescriptors()) {
+      String propertyName = columnViewDescriptor.getName();
+      if (!forbiddenColumns.contains(propertyName)) {
+        ULCTableColumn column = viewComponent.getColumnModel().getColumn(
+            columnIndex++);
+        column.setHeaderRenderer(null);
+        column.setIdentifier(propertyName);
+        IPropertyDescriptor propertyDescriptor = modelDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getPropertyDescriptor(propertyName);
+        StringBuffer columnName = new StringBuffer(propertyDescriptor
+            .getI18nName(getTranslationProvider(), locale));
+        if (propertyDescriptor.isMandatory()) {
+          columnName.append("*");
+        }
+        column.setHeaderValue(columnName.toString());
+        IView<ULCComponent> editorView = createPropertyView(propertyDescriptor,
+            null, actionHandler, locale);
+        if (editorView.getPeer() instanceof ULCActionField) {
+          ULCActionField actionField = (ULCActionField) editorView.getPeer();
+          actionField.setActions(Collections.singletonList(actionField
+              .getActions().get(0)));
+        }
+        if (editorView.getConnector().getParentConnector() == null) {
+          editorView.getConnector().setParentConnector(connector);
+        }
+        if (editorView.getPeer() instanceof IEditorComponent) {
+          UlcViewCellEditorAdapter editor = new UlcViewCellEditorAdapter(
+              editorView);
+          column.setCellEditor(editor);
+        }
+        ITableCellRenderer cellRenderer = createTableCellRenderer(column
+            .getModelIndex(), propertyDescriptor, locale);
+        if (cellRenderer != null) {
+          column.setCellRenderer(cellRenderer);
+        } else {
+          column.setCellRenderer(new EvenOddTableCellRenderer(column
+              .getModelIndex()));
+        }
+        int minHeaderWidth = computePixelWidth(viewComponent, columnName
+            .length());
+        if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+            || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+          column.setPreferredWidth(Math.max(
+              computePixelWidth(viewComponent, 2), minHeaderWidth));
+          if (editorView.getPeer() instanceof ULCAbstractButton) {
+            ((ULCAbstractButton) editorView.getPeer())
+                .setHorizontalAlignment(IDefaults.CENTER);
+          } else if (editorView.getPeer() instanceof ULCLabel) {
+            ((ULCLabel) editorView.getPeer())
+                .setHorizontalAlignment(IDefaults.CENTER);
+          }
+        } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+          column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
+              getEnumerationTemplateValue(
+                  (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
+                  .length() + 4), minHeaderWidth));
+        } else {
+          column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
+              viewComponent, getFormatLength(createFormatter(
+                  propertyDescriptor, locale),
+                  getTemplateValue(propertyDescriptor))), maxColumnSize),
+              minHeaderWidth));
+        }
+      }
+    }
+    viewComponent.setComponentPopupMenu(createPopupMenu(viewComponent, view,
+        actionHandler, locale));
+    int minimumWidth = 0;
+    for (int i = 0; i < 1
+        && i < viewComponent.getColumnModel().getColumnCount(); i++) {
+      minimumWidth += viewComponent.getColumnModel().getColumn(i)
+          .getPreferredWidth();
+    }
+    scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
+        .getRowHeight() * 7));
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<ULCComponent> createTabView(
+      ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ULCTabbedPane viewComponent = createULCTabbedPane();
+    BasicCompositeView<ULCComponent> view = constructCompositeView(
+        viewComponent, viewDescriptor);
+    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
+
+    for (IViewDescriptor childViewDescriptor : viewDescriptor
+        .getChildViewDescriptors()) {
+      IView<ULCComponent> childView = createView(childViewDescriptor,
+          actionHandler, locale);
+      ULCIcon childIcon = getIconFactory().getIcon(
+          childViewDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
+      if (childViewDescriptor.getDescription() != null) {
+        viewComponent.addTab(childViewDescriptor.getI18nName(
+            getTranslationProvider(), locale), childIcon, childView.getPeer(),
+            childViewDescriptor.getI18nDescription(getTranslationProvider(),
+                locale)
+                + TOOLTIP_ELLIPSIS);
+      } else {
+        viewComponent.addTab(childViewDescriptor.getI18nName(
+            getTranslationProvider(), locale), childIcon, childView.getPeer());
+      }
+      childrenViews.add(childView);
+    }
+    view.setChildren(childrenViews);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createTextPropertyView(
+      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      @SuppressWarnings("unused") Locale locale) {
+    ULCTextArea viewComponent = createULCTextArea();
+    viewComponent.setLineWrap(true);
+    ULCScrollPane scrollPane = createULCScrollPane();
+    scrollPane.setViewPortView(viewComponent);
+    scrollPane
+        .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    ULCTextAreaConnector connector = new ULCTextAreaConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    return constructView(scrollPane, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createTimePropertyView(
+      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ULCTextField viewComponent = createULCTextField();
+
+    IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
+    ULCTextFieldConnector connector = new ULCTextFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setFormatter(formatter);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, formatter,
+        getTimeTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createTreeView(
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+
+    ICompositeValueConnector connector = createTreeViewConnector(
+        viewDescriptor, locale);
+
+    ULCExtendedTree viewComponent = createULCTree();
+    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
+        connector);
+
+    // TODO tabletree mgt
+    // ULCTableTree viewComponent = createULCTableTree();
+    // ConnectorHierarchyTableTreeModel treeModel = new
+    // ConnectorHierarchyTableTreeModel(
+    // connector, viewComponent);
+    // List<String> columnIds = new ArrayList<String>();
+    // columnIds.add("text");
+    // columnIds.add("text");
+    // treeModel.setColumnConnectorKeys(columnIds);
+    // Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
+    // columnClassesByIds.put("text", String.class);
+    // treeModel.setColumnClassesByIds(columnClassesByIds);
+
+    viewComponent.getSelectionModel().setSelectionMode(
+        ULCTreeSelectionModel.SINGLE_TREE_SELECTION);
+    viewComponent.setModel(treeModel);
+    viewComponent.setCellRenderer(new ConnectorTreeCellRenderer());
+    treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
+    ULCScrollPane scrollPane = createULCScrollPane();
+    scrollPane.setViewPortView(viewComponent);
+    IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
+        connector);
+    viewComponent.setPopupFactory(new TreeNodePopupFactory(viewComponent, view,
+        actionHandler, locale));
+    scrollPane.setMinimumSize(TREE_PREFERRED_SIZE);
+    return view;
+  }
+
   /**
    * Creates an action field.
    * 
@@ -616,6 +1590,52 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void decorateWithActions(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale, IView<ULCComponent> view) {
+    if (viewDescriptor.getActionMap() != null) {
+      ULCToolBar toolBar = createULCToolBar();
+      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
+          .getActionLists().iterator(); iter.hasNext();) {
+        ActionList nextActionList = iter.next();
+        for (IDisplayableAction action : nextActionList.getActions()) {
+          IAction ulcAction = getActionFactory().createAction(action,
+              actionHandler, view, locale);
+          ULCButton actionButton = createULCButton();
+          actionButton.setAction(ulcAction);
+
+          if (action.getAcceleratorAsString() != null) {
+            KeyStroke ks = KeyStroke.getKeyStroke(action
+                .getAcceleratorAsString());
+            view.getPeer().registerKeyboardAction(ulcAction, ks,
+                ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+            String acceleratorString = java.awt.event.KeyEvent
+                .getKeyModifiersText(ks.getModifiers())
+                + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
+            actionButton.setToolTipText("<HTML>"
+                + actionButton.getToolTipText()
+                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                + "</FONT></HTML>");
+          }
+
+          actionButton.setText("");
+          toolBar.add(actionButton);
+        }
+        if (iter.hasNext()) {
+          toolBar.addSeparator();
+        }
+      }
+
+      ULCBorderLayoutPane viewPanel = createBorderLayoutPane();
+      viewPanel.add(toolBar, ULCBorderLayoutPane.NORTH);
+      viewPanel.add(view.getPeer(), ULCBorderLayoutPane.CENTER);
+      view.setPeer(viewPanel);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected void decorateWithBorder(IView<ULCComponent> view, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
       case SIMPLE:
@@ -633,28 +1653,45 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void adjustSizes(ULCComponent component, IFormatter formatter,
-      Object templateValue, int extraWidth) {
-    int preferredWidth = computePixelWidth(component, getFormatLength(
-        formatter, templateValue))
-        + extraWidth;
-    Dimension size = new Dimension(preferredWidth, component.getFont()
-        .getSize() + 6);
-    component.setMinimumSize(size);
-    component.setPreferredSize(size);
-    component.setMaximumSize(size);
+  protected void decorateWithDescription(
+      IPropertyDescriptor propertyDescriptor, Locale locale,
+      IView<ULCComponent> view) {
+    if (view != null && propertyDescriptor.getDescription() != null) {
+      view.getPeer().setToolTipText(
+          propertyDescriptor.getI18nDescription(getTranslationProvider(),
+              locale)
+              + TOOLTIP_ELLIPSIS);
+    }
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected int computePixelWidth(ULCComponent component, int characterLength) {
-    int charLength = getMaxCharacterLength() + 2;
-    if (characterLength > 0 && characterLength < getMaxCharacterLength()) {
-      charLength = characterLength + 2;
+  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
+      Locale locale, IView<ULCComponent> view) {
+    if (viewDescriptor.getForeground() != null) {
+      view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
     }
-    return component.getFont().getSize() * charLength / 2;
+    if (viewDescriptor.getBackground() != null) {
+      view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
+    }
+    if (viewDescriptor.getFont() != null) {
+      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+    }
+    if (viewDescriptor.getDescription() != null) {
+      view.getPeer().setToolTipText(
+          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+              + TOOLTIP_ELLIPSIS);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void showCardInPanel(ULCComponent cardsPeer, String cardName) {
+    ((ULCCardPane) cardsPeer).setSelectedName(cardName);
   }
 
   private Map<String, String> computeTranslationMapping(
@@ -669,116 +1706,10 @@ public class DefaultUlcViewFactory extends
     return translationMapping;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createBinaryPropertyView(
-      IBinaryPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    ULCActionField viewComponent = createULCActionField(false);
-    ULCActionFieldConnector connector = new ULCActionFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    viewComponent.setActions(createBinaryActions(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale));
-    adjustSizes(viewComponent, null, null);
-    return constructView(viewComponent, null, connector);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createBooleanPropertyView(
-      IBooleanPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    ULCCheckBox viewComponent = createULCCheckBox();
-    ULCToggleButtonConnector connector = new ULCToggleButtonConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
-  }
-
   private ITableCellRenderer createBooleanTableCellRenderer(
       @SuppressWarnings("unused") IBooleanPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
     return new BooleanTableCellRenderer();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<ULCComponent> createBorderView(
-      IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
-    BasicCompositeView<ULCComponent> view = constructCompositeView(
-        viewComponent, viewDescriptor);
-    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
-
-    if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<ULCComponent> eastView = createView(viewDescriptor
-          .getEastViewDescriptor(), actionHandler, locale);
-      viewComponent.add(eastView.getPeer(), ULCBorderLayoutPane.EAST);
-      childrenViews.add(eastView);
-    }
-    if (viewDescriptor.getNorthViewDescriptor() != null) {
-      IView<ULCComponent> northView = createView(viewDescriptor
-          .getNorthViewDescriptor(), actionHandler, locale);
-      viewComponent.add(northView.getPeer(), ULCBorderLayoutPane.NORTH);
-      childrenViews.add(northView);
-    }
-    if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<ULCComponent> centerView = createView(viewDescriptor
-          .getCenterViewDescriptor(), actionHandler, locale);
-      viewComponent.add(centerView.getPeer(), ULCBorderLayoutPane.CENTER);
-      childrenViews.add(centerView);
-    }
-    if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<ULCComponent> westView = createView(viewDescriptor
-          .getWestViewDescriptor(), actionHandler, locale);
-      viewComponent.add(westView.getPeer(), ULCBorderLayoutPane.WEST);
-      childrenViews.add(westView);
-    }
-    if (viewDescriptor.getSouthViewDescriptor() != null) {
-      IView<ULCComponent> southView = createView(viewDescriptor
-          .getSouthViewDescriptor(), actionHandler, locale);
-      viewComponent.add(southView.getPeer(), ULCBorderLayoutPane.SOUTH);
-      childrenViews.add(southView);
-    }
-    view.setChildren(childrenViews);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IMapView<ULCComponent> createCardView(
-      ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ULCCardPane viewComponent = createCardPane();
-    BasicMapView<ULCComponent> view = constructMapView(viewComponent,
-        viewDescriptor);
-    Map<String, IView<ULCComponent>> childrenViews = new HashMap<String, IView<ULCComponent>>();
-
-    viewComponent.add(createEmptyComponent(),
-        ICardViewDescriptor.DEFAULT_CARD);
-    viewComponent.add(createSecurityComponent(),
-        ICardViewDescriptor.SECURITY_CARD);
-
-    for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
-        .getCardViewDescriptors().entrySet()) {
-      IView<ULCComponent> childView = createView(
-          childViewDescriptor.getValue(), actionHandler, locale);
-      viewComponent.addCard(childViewDescriptor.getKey(), childView.getPeer());
-      childrenViews.put(childViewDescriptor.getKey(), childView);
-    }
-    view.setChildrenMap(childrenViews);
-    view.setConnector(createCardViewConnector(view, actionHandler));
-    return view;
   }
 
   private ITableCellRenderer createCollectionTableCellRenderer(
@@ -787,24 +1718,9 @@ public class DefaultUlcViewFactory extends
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createColorPropertyView(
-      IColorPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    ULCColorPicker viewComponent = createULCColorPicker();
-    if (propertyDescriptor.getDefaultValue() != null) {
-      int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
-          .getDefaultValue());
-      viewComponent
-          .setResetValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
-    }
-    ULCColorPickerConnector connector = new ULCColorPickerConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
+  private Color createColor(String colorAsHexString) {
+    int[] rgba = ColorHelper.fromHexString(colorAsHexString);
+    return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
   }
 
   private ITableCellRenderer createColorTableCellRenderer(
@@ -813,218 +1729,10 @@ public class DefaultUlcViewFactory extends
     return new ColorTableCellRenderer();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createComponentView(
-      IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ICompositeValueConnector connector = getConnectorFactory()
-        .createCompositeValueConnector(
-            getConnectorIdForComponentView(viewDescriptor), null);
-    ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
-    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-
-    int currentX = 0;
-    int currentY = 0;
-
-    boolean isSpaceFilled = false;
-
-    for (ISubviewDescriptor propertyViewDescriptor : viewDescriptor
-        .getPropertyViewDescriptors()) {
-      String propertyName = propertyViewDescriptor.getName();
-      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
-          .getModelDescriptor()).getComponentDescriptor()
-          .getPropertyDescriptor(propertyName);
-      if (propertyDescriptor == null) {
-        throw new ViewException("Property descriptor [" + propertyName
-            + "] does not exist for model descriptor "
-            + viewDescriptor.getModelDescriptor().getName() + ".");
-      }
-      IView<ULCComponent> propertyView = createPropertyView(propertyDescriptor,
-          viewDescriptor.getRenderedChildProperties(propertyName),
-          actionHandler, locale);
-      boolean forbidden = false;
-      try {
-        actionHandler.checkAccess(propertyViewDescriptor);
-      } catch (SecurityException ex) {
-        forbidden = true;
-        propertyView.setPeer(createSecurityComponent());
-      }
-      connector.addChildConnector(propertyView.getConnector());
-      if (propertyViewDescriptor.getReadabilityGates() != null) {
-        for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
-          propertyView.getConnector().addReadabilityGate(gate.clone());
-        }
-      }
-      if (propertyViewDescriptor.getWritabilityGates() != null) {
-        for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
-          propertyView.getConnector().addWritabilityGate(gate.clone());
-        }
-      }
-      propertyView.getConnector().setLocallyWritable(
-          !propertyViewDescriptor.isReadOnly());
-      ULCLabel propertyLabel = createPropertyLabel(propertyDescriptor,
-          propertyView.getPeer(), locale);
-      if (forbidden) {
-        propertyLabel.setText(" ");
-      }
-
-      int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
-      if (propertyWidth > viewDescriptor.getColumnCount()) {
-        propertyWidth = viewDescriptor.getColumnCount();
-      }
-      if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
-        currentX = 0;
-        currentY++;
-      }
-
-      // label positionning
-      GridBagConstraints constraints = new GridBagConstraints();
-      switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
-          constraints.setInsets(new Insets(5, 5, 5, 5));
-          if (propertyView.getPeer() instanceof ULCTextArea
-              || propertyView.getPeer() instanceof ULCList
-              || propertyView.getPeer() instanceof ULCScrollPane
-              || propertyView.getPeer() instanceof ULCExtendedTable
-              || propertyView.getPeer() instanceof ULCJEditTextArea) {
-            constraints.setAnchor(GridBagConstraints.NORTHEAST);
-          } else {
-            constraints.setAnchor(GridBagConstraints.EAST);
-          }
-          constraints.setGridX(currentX * 2);
-          constraints.setGridY(currentY);
-          break;
-        case ABOVE:
-          constraints.setInsets(new Insets(5, 5, 0, 5));
-          constraints.setAnchor(GridBagConstraints.SOUTHWEST);
-          constraints.setGridX(currentX);
-          constraints.setGridY(currentY * 2);
-          constraints.setGridWidth(propertyWidth);
-          break;
-        default:
-          break;
-      }
-      if (propertyLabel.getText() != null
-          && propertyLabel.getText().length() > 0) {
-        viewComponent.add(propertyLabel, constraints);
-      }
-
-      // component positionning
-      switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
-          constraints.setGridX(constraints.getGridX() + 1);
-          constraints.setInsets(new Insets(5, 0, 5, 5));
-          constraints.setGridWidth(propertyWidth * 2 - 1);
-          break;
-        case ABOVE:
-          constraints.setGridY(constraints.getGridY() + 1);
-          constraints.setInsets(new Insets(0, 5, 0, 5));
-          constraints.setGridWidth(propertyWidth);
-          break;
-        default:
-          break;
-      }
-
-      constraints.setAnchor(GridBagConstraints.WEST);
-      if (propertyView.getPeer().getPreferredSize() != null) {
-        constraints.setWeightX(propertyView.getPeer().getPreferredSize()
-            .getWidth());
-      }
-      if (propertyView.getPeer() instanceof ULCCheckBox) {
-        constraints.setWeightX(ClientContext.getScreenResolution());
-      }
-      if (propertyView.getPeer() instanceof ULCTextArea
-          || propertyView.getPeer() instanceof ULCList
-          || propertyView.getPeer() instanceof ULCScrollPane
-          || propertyView.getPeer() instanceof ULCExtendedTable
-          || propertyView.getPeer() instanceof ULCJEditTextArea) {
-        constraints.setWeightY(1.0);
-        constraints.setFill(GridBagConstraints.BOTH);
-        isSpaceFilled = true;
-      } else {
-        constraints.setFill(GridBagConstraints.NONE);
-      }
-      viewComponent.add(propertyView.getPeer(), constraints);
-
-      currentX += propertyWidth;
-    }
-    if (!isSpaceFilled) {
-      ULCBorderLayoutPane filler = createBorderLayoutPane();
-      GridBagConstraints constraints = new GridBagConstraints();
-      constraints.setGridX(0);
-      constraints.setWeightX(1.0);
-      constraints.setWeightY(1.0);
-      constraints.setFill(GridBagConstraints.BOTH);
-      switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
-          constraints.setGridY(currentY + 1);
-          constraints.setGridWidth(viewDescriptor.getColumnCount() * 2);
-          break;
-        case ABOVE:
-          constraints.setGridY((currentY + 1) * 2);
-          constraints.setGridWidth(viewDescriptor.getColumnCount());
-          break;
-        default:
-          break;
-      }
-      viewComponent.add(filler, constraints);
-    }
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<ULCComponent> createConstrainedGridView(
-      IConstrainedGridViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
-    BasicCompositeView<ULCComponent> view = constructCompositeView(
-        viewComponent, viewDescriptor);
-    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
-
-    for (IViewDescriptor childViewDescriptor : viewDescriptor
-        .getChildViewDescriptors()) {
-      IView<ULCComponent> childView = createView(childViewDescriptor,
-          actionHandler, locale);
-      viewComponent.add(childView.getPeer(),
-          createGridBagConstraints(viewDescriptor
-              .getCellConstraints(childViewDescriptor)));
-      childrenViews.add(childView);
-    }
-    view.setChildren(childrenViews);
-    return view;
-  }
-
   private ULCDateDataType createDateDataType(
       @SuppressWarnings("unused") IDatePropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale, SimpleDateFormat format) {
     return new ULCDateDataType(format.toPattern());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createDatePropertyView(
-      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-
-    SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
-
-    ULCDateField viewComponent = createULCDateField(format.toPattern(), locale);
-    ULCDateFieldConnector connector = new ULCDateFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, createFormatter(format),
-        getDateTemplateValue(propertyDescriptor), ClientContext
-            .getScreenResolution() / 3);
-    return constructView(viewComponent, null, connector);
   }
 
   private ITableCellRenderer createDateTableCellRenderer(int column,
@@ -1048,30 +1756,6 @@ public class DefaultUlcViewFactory extends
     return numberDataType;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createDecimalPropertyView(
-      IDecimalPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentPropertyView(
-          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
-    }
-    ULCTextField viewComponent = createULCTextField();
-
-    IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
-    connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
-        getDecimalTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
-  }
-
   private ITableCellRenderer createDecimalTableCellRenderer(int column,
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
@@ -1091,55 +1775,11 @@ public class DefaultUlcViewFactory extends
     return durationDataType;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createDurationPropertyView(
-      IDurationPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    ULCTextField viewComponent = createULCTextField();
-    IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
-
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
-    connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
-        getDurationTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
-  }
-
   private ITableCellRenderer createDurationTableCellRenderer(int column,
       IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormattedTableCellRenderer(column, createDurationDataType(
         propertyDescriptor, locale, createDurationFormatter(propertyDescriptor,
             locale)));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createEnumerationPropertyView(
-      IEnumerationPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    ULCComboBox viewComponent = createULCComboBox();
-    if (!propertyDescriptor.isMandatory()) {
-      viewComponent.addItem(null);
-    }
-    for (String enumElement : propertyDescriptor.getEnumerationValues()) {
-      viewComponent.addItem(enumElement);
-    }
-    viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
-        propertyDescriptor, locale));
-    adjustSizes(viewComponent, null, getEnumerationTemplateValue(
-        propertyDescriptor, locale),
-        ClientContext.getScreenResolution() * 2 / 6);
-    ULCComboBoxConnector connector = new ULCComboBoxConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
   }
 
   private ITableCellRenderer createEnumerationTableCellRenderer(int column,
@@ -1148,42 +1788,20 @@ public class DefaultUlcViewFactory extends
         propertyDescriptor, locale);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<ULCComponent> createEvenGridView(
-      IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ULCGridLayoutPane viewComponent = createGridLayoutPane();
-    BasicCompositeView<ULCComponent> view = constructCompositeView(
-        viewComponent, viewDescriptor);
-    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
-
-    switch (viewDescriptor.getDrivingDimension()) {
-      case ROW:
-        viewComponent.setColumns(viewDescriptor.getDrivingDimensionCellCount());
-        viewComponent.setRows(0);
-        break;
-      case COLUMN:
-        viewComponent.setRows(viewDescriptor.getDrivingDimensionCellCount());
-        viewComponent.setColumns(0);
-        break;
-      default:
-        break;
+  private Font createFont(String fontString) {
+    org.jspresso.framework.util.gui.Font font = FontHelper
+        .fromString(fontString);
+    int fontStyle;
+    if (font.isBold() && font.isItalic()) {
+      fontStyle = Font.BOLD | Font.ITALIC;
+    } else if (font.isBold()) {
+      fontStyle = Font.BOLD;
+    } else if (font.isItalic()) {
+      fontStyle = Font.ITALIC;
+    } else {
+      fontStyle = Font.PLAIN;
     }
-    viewComponent.setHgap(5);
-    viewComponent.setVgap(5);
-
-    for (IViewDescriptor childViewDescriptor : viewDescriptor
-        .getChildViewDescriptors()) {
-      IView<ULCComponent> childView = createView(childViewDescriptor,
-          actionHandler, locale);
-      viewComponent.add(childView.getPeer());
-      childrenViews.add(childView);
-    }
-    view.setChildren(childrenViews);
-    return view;
+    return new Font(font.getName(), fontStyle, font.getSize());
   }
 
   private GridBagConstraints createGridBagConstraints(
@@ -1212,27 +1830,6 @@ public class DefaultUlcViewFactory extends
     return constraints;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createImageView(
-      IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
-    ULCLabel imageLabel = createULCLabel();
-    imageLabel.setHorizontalAlignment(IDefaults.CENTER);
-    ULCImageConnector connector = new ULCImageConnector(viewDescriptor
-        .getModelDescriptor().getName(), imageLabel);
-    connector.setExceptionHandler(actionHandler);
-    ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
-    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-    ULCScrollPane scrollPane = createULCScrollPane();
-    scrollPane.setViewPortView(imageLabel);
-    viewComponent.add(scrollPane, ULCBorderLayoutPane.CENTER);
-    return view;
-  }
-
   private ULCNumberDataType createIntegerDataType(
       IIntegerPropertyDescriptor propertyDescriptor, Locale locale,
       NumberFormat format) {
@@ -1246,90 +1843,11 @@ public class DefaultUlcViewFactory extends
     return numberDataType;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createIntegerPropertyView(
-      IIntegerPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    ULCTextField viewComponent = createULCTextField();
-
-    IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
-    connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
-        getIntegerTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
-  }
-
   private ITableCellRenderer createIntegerTableCellRenderer(int column,
       IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormattedTableCellRenderer(column, createIntegerDataType(
         propertyDescriptor, locale, createIntegerFormat(propertyDescriptor,
             locale)));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createListView(
-      IListViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
-    ICollectionDescriptorProvider<?> modelDescriptor = (ICollectionDescriptorProvider<?>) viewDescriptor
-        .getModelDescriptor();
-    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
-            viewDescriptor.getRenderedProperty());
-    ICollectionConnector connector = getConnectorFactory()
-        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
-            rowConnectorPrototype);
-    ULCList viewComponent = createULCList();
-    ULCScrollPane scrollPane = createULCScrollPane();
-    scrollPane.setViewPortView(viewComponent);
-    IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
-        connector);
-
-    if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createColumnConnector(viewDescriptor
-          .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
-          .getElementDescriptor());
-      rowConnectorPrototype.addChildConnector(cellConnector);
-    }
-    viewComponent.setCellRenderer(new EvenOddListCellRenderer());
-
-    CollectionConnectorListModel listModel = new CollectionConnectorListModel(
-        connector);
-    viewComponent.setModel(listModel);
-    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel(), null);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createNestingView(
-      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-
-    ICompositeValueConnector connector = getConnectorFactory()
-        .createCompositeValueConnector(
-            viewDescriptor.getModelDescriptor().getName(), null);
-    ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
-    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-    IView<ULCComponent> nestedView = createView(viewDescriptor
-        .getNestedViewDescriptor(), actionHandler, locale);
-    connector.addChildConnector(nestedView.getConnector());
-    viewComponent.add(nestedView.getPeer(), ULCBorderLayoutPane.CENTER);
-    return view;
   }
 
   private ITableCellRenderer createNumberTableCellRenderer(int column,
@@ -1345,21 +1863,6 @@ public class DefaultUlcViewFactory extends
     return cellRenderer;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createPasswordPropertyView(
-      IPasswordPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    ULCPasswordField viewComponent = createULCPasswordField();
-    ULCPasswordFieldConnector connector = new ULCPasswordFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
-  }
-
   private ULCPercentDataType createPercentDataType(
       IPercentPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
@@ -1369,25 +1872,6 @@ public class DefaultUlcViewFactory extends
           .getMaxFractionDigit().intValue());
     }
     return percentDataType;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createPercentPropertyView(
-      IPercentPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    ULCTextField viewComponent = createULCTextField();
-
-    IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
-    connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
-        getPercentTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
   }
 
   private ITableCellRenderer createPercentTableCellRenderer(int column,
@@ -1420,56 +1904,6 @@ public class DefaultUlcViewFactory extends
     return propertyLabel;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor, Locale locale,
-      IView<ULCComponent> view) {
-    if (view != null && propertyDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
-          propertyDescriptor.getI18nDescription(getTranslationProvider(),
-              locale)
-              + TOOLTIP_ELLIPSIS);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createReferencePropertyView(
-      IReferencePropertyDescriptor<?> propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    ULCActionField viewComponent = createULCActionField(true);
-    ULCReferenceFieldConnector connector = new ULCReferenceFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setToStringPropertyConnector(new BasicValueConnector(
-        propertyDescriptor.getComponentDescriptor().getToStringProperty()));
-    connector.setExceptionHandler(actionHandler);
-    IAction lovAction = createLovAction(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale);
-    lovAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
-        "lov.element.name",
-        new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            getTranslationProvider(), locale)}, locale));
-    lovAction.putValue(IAction.SHORT_DESCRIPTION, getTranslationProvider()
-        .getTranslation(
-            "lov.element.description",
-            new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(getTranslationProvider(), locale)}, locale)
-        + TOOLTIP_ELLIPSIS);
-    if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      lovAction.putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
-          propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
-          IIconFactory.TINY_ICON_SIZE));
-    }
-    viewComponent.setActions(Collections.singletonList(lovAction));
-    adjustSizes(viewComponent, null, null);
-    return constructView(viewComponent, null, connector);
-  }
-
   private ITableCellRenderer createReferenceTableCellRenderer(
       @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
@@ -1490,386 +1924,10 @@ public class DefaultUlcViewFactory extends
     return cellRenderer;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createSourceCodePropertyView(
-      ISourceCodePropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    ULCJEditTextArea viewComponent = createULCJEditTextArea(propertyDescriptor
-        .getLanguage());
-    ULCJEditTextAreaConnector connector = new ULCJEditTextAreaConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<ULCComponent> createSplitView(
-      ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ULCSplitPane viewComponent = createULCSplitPane();
-    BasicCompositeView<ULCComponent> view = constructCompositeView(
-        viewComponent, viewDescriptor);
-    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
-
-    switch (viewDescriptor.getOrientation()) {
-      case HORIZONTAL:
-        viewComponent.setOrientation(ULCSplitPane.HORIZONTAL_SPLIT);
-        break;
-      case VERTICAL:
-        viewComponent.setOrientation(ULCSplitPane.VERTICAL_SPLIT);
-        break;
-      default:
-        break;
-    }
-
-    if (viewDescriptor.getLeftTopViewDescriptor() != null) {
-      IView<ULCComponent> leftTopView = createView(viewDescriptor
-          .getLeftTopViewDescriptor(), actionHandler, locale);
-      viewComponent.setLeftComponent(leftTopView.getPeer());
-      childrenViews.add(leftTopView);
-    }
-    if (viewDescriptor.getRightBottomViewDescriptor() != null) {
-      IView<ULCComponent> rightBottomView = createView(viewDescriptor
-          .getRightBottomViewDescriptor(), actionHandler, locale);
-      viewComponent.setRightComponent(rightBottomView.getPeer());
-      rightBottomView.getPeer().setMinimumSize(new Dimension(0, 0));
-      childrenViews.add(rightBottomView);
-    }
-    view.setChildren(childrenViews);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createStringPropertyView(
-      IStringPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    ULCTextField viewComponent = createULCTextField();
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
-  }
-
   private ITableCellRenderer createStringTableCellRenderer(int column,
       @SuppressWarnings("unused") IStringPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
     return new FormattedTableCellRenderer(column, null);
-  }
-
-  /**
-   * Creates a table cell renderer for a given property descriptor.
-   * 
-   * @param column
-   *          the table column index.
-   * @param propertyDescriptor
-   *          the property descriptor to create the renderer for.
-   * @param locale
-   *          the locale.
-   * @return the created table cell renderer.
-   */
-  protected ITableCellRenderer createTableCellRenderer(int column,
-      IPropertyDescriptor propertyDescriptor, Locale locale) {
-    ITableCellRenderer cellRenderer = null;
-    if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
-      cellRenderer = createBooleanTableCellRenderer(
-          (IBooleanPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
-      cellRenderer = createDateTableCellRenderer(column,
-          (IDatePropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      cellRenderer = createTimeTableCellRenderer(column,
-          (ITimePropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      cellRenderer = createDurationTableCellRenderer(column,
-          (IDurationPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-      cellRenderer = createEnumerationTableCellRenderer(column,
-          (IEnumerationPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
-      cellRenderer = createNumberTableCellRenderer(column,
-          (INumberPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-      cellRenderer = createRelationshipEndTableCellRenderer(
-          (IRelationshipEndPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
-      cellRenderer = createStringTableCellRenderer(column,
-          (IStringPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
-      cellRenderer = createColorTableCellRenderer(
-          (IColorPropertyDescriptor) propertyDescriptor, locale);
-    }
-    return cellRenderer;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createTableView(
-      ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
-        .getModelDescriptor());
-    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(
-            modelDescriptor.getName() + "Element",
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-                .getToStringProperty());
-    ICollectionConnector connector = getConnectorFactory()
-        .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
-            rowConnectorPrototype);
-    ULCExtendedTable viewComponent = createULCTable();
-    ULCScrollPane scrollPane = createULCScrollPane();
-    scrollPane.setViewPortView(viewComponent);
-    ULCLabel iconLabel = createULCLabel();
-    iconLabel.setIcon(getIconFactory().getIcon(
-        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
-    scrollPane.setCorner(ULCScrollPane.UPPER_RIGHT_CORNER, iconLabel);
-    IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
-        connector);
-    viewComponent
-        .setAutoResizeMode(com.ulcjava.base.application.ULCTable.AUTO_RESIZE_OFF);
-
-    Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
-    Map<String, IFormatter> columnFormattersByIds = new HashMap<String, IFormatter>();
-    List<String> columnConnectorKeys = new ArrayList<String>();
-    Set<String> forbiddenColumns = new HashSet<String>();
-    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
-        .getColumnViewDescriptors()) {
-      String columnId = columnViewDescriptor.getName();
-      try {
-        actionHandler.checkAccess(columnViewDescriptor);
-        IValueConnector columnConnector = createColumnConnector(columnId,
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor());
-        rowConnectorPrototype.addChildConnector(columnConnector);
-        IPropertyDescriptor columnModelDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getPropertyDescriptor(columnId);
-        if (columnModelDescriptor instanceof IReferencePropertyDescriptor) {
-          columnClassesByIds.put(columnId, String.class);
-        } else if (columnModelDescriptor instanceof IBooleanPropertyDescriptor) {
-          columnClassesByIds.put(columnId, Boolean.class);
-        } else {
-          if (columnModelDescriptor instanceof IDecimalPropertyDescriptor
-              && ((IDecimalPropertyDescriptor) columnModelDescriptor)
-                  .isUsingBigDecimal()) {
-            columnClassesByIds.put(columnId, String.class);
-            columnFormattersByIds.put(columnId, createFormatter(
-                columnModelDescriptor, locale));
-          } else {
-            columnClassesByIds.put(columnId, columnModelDescriptor
-                .getModelType());
-          }
-        }
-        columnConnectorKeys.add(columnId);
-        if (columnViewDescriptor.getReadabilityGates() != null) {
-          for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-            columnConnector.addReadabilityGate(gate.clone());
-          }
-        }
-        if (columnViewDescriptor.getWritabilityGates() != null) {
-          for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-            columnConnector.addWritabilityGate(gate.clone());
-          }
-        }
-        columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
-      } catch (SecurityException ex) {
-        // The column simply won't be added.
-        forbiddenColumns.add(columnId);
-      }
-    }
-    CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
-        connector, columnConnectorKeys);
-    tableModel.setExceptionHandler(actionHandler);
-    tableModel.setColumnClassesByIds(columnClassesByIds);
-    tableModel.setColumnFormattersByIds(columnFormattersByIds);
-
-    TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent
-        .getTableHeader());
-    java.awt.Dimension iconSize = new java.awt.Dimension(viewComponent
-        .getTableHeader().getFont().getSize(), viewComponent.getTableHeader()
-        .getFont().getSize());
-    sorterDecorator
-        .setUpIcon(getIconFactory()
-            .getIcon(
-                "classpath:org/jspresso/framework/application/images/1uparrow-48x48.png",
-                iconSize));
-    sorterDecorator
-        .setDownIcon(getIconFactory()
-            .getIcon(
-                "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
-                iconSize));
-    sorterDecorator.setColumnComparator(String.class,
-        String.CASE_INSENSITIVE_ORDER);
-    ClientContext.setModelUpdateMode(sorterDecorator,
-        IUlcEventConstants.ASYNCHRONOUS_MODE);
-    viewComponent.setModel(sorterDecorator);
-    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel(), sorterDecorator);
-
-    int maxColumnSize = computePixelWidth(viewComponent,
-        getMaxColumnCharacterLength());
-    int columnIndex = 0;
-    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
-        .getColumnViewDescriptors()) {
-      String propertyName = columnViewDescriptor.getName();
-      if (!forbiddenColumns.contains(propertyName)) {
-        ULCTableColumn column = viewComponent.getColumnModel().getColumn(
-            columnIndex++);
-        column.setHeaderRenderer(null);
-        column.setIdentifier(propertyName);
-        IPropertyDescriptor propertyDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getPropertyDescriptor(propertyName);
-        StringBuffer columnName = new StringBuffer(propertyDescriptor
-            .getI18nName(getTranslationProvider(), locale));
-        if (propertyDescriptor.isMandatory()) {
-          columnName.append("*");
-        }
-        column.setHeaderValue(columnName.toString());
-        IView<ULCComponent> editorView = createPropertyView(propertyDescriptor,
-            null, actionHandler, locale);
-        if (editorView.getPeer() instanceof ULCActionField) {
-          ULCActionField actionField = (ULCActionField) editorView.getPeer();
-          actionField.setActions(Collections.singletonList(actionField
-              .getActions().get(0)));
-        }
-        if (editorView.getConnector().getParentConnector() == null) {
-          editorView.getConnector().setParentConnector(connector);
-        }
-        if (editorView.getPeer() instanceof IEditorComponent) {
-          UlcViewCellEditorAdapter editor = new UlcViewCellEditorAdapter(
-              editorView);
-          column.setCellEditor(editor);
-        }
-        ITableCellRenderer cellRenderer = createTableCellRenderer(column
-            .getModelIndex(), propertyDescriptor, locale);
-        if (cellRenderer != null) {
-          column.setCellRenderer(cellRenderer);
-        } else {
-          column.setCellRenderer(new EvenOddTableCellRenderer(column
-              .getModelIndex()));
-        }
-        int minHeaderWidth = computePixelWidth(viewComponent, columnName
-            .length());
-        if (propertyDescriptor instanceof IBooleanPropertyDescriptor
-            || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(
-              computePixelWidth(viewComponent, 2), minHeaderWidth));
-          if (editorView.getPeer() instanceof ULCAbstractButton) {
-            ((ULCAbstractButton) editorView.getPeer())
-                .setHorizontalAlignment(IDefaults.CENTER);
-          } else if (editorView.getPeer() instanceof ULCLabel) {
-            ((ULCLabel) editorView.getPeer())
-                .setHorizontalAlignment(IDefaults.CENTER);
-          }
-        } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
-              getEnumerationTemplateValue(
-                  (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                  .length() + 4), minHeaderWidth));
-        } else {
-          column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
-              viewComponent, getFormatLength(createFormatter(
-                  propertyDescriptor, locale),
-                  getTemplateValue(propertyDescriptor))), maxColumnSize),
-              minHeaderWidth));
-        }
-      }
-    }
-    viewComponent.setComponentPopupMenu(createPopupMenu(viewComponent, view,
-        actionHandler, locale));
-    int minimumWidth = 0;
-    for (int i = 0; i < 1
-        && i < viewComponent.getColumnModel().getColumnCount(); i++) {
-      minimumWidth += viewComponent.getColumnModel().getColumn(i)
-          .getPreferredWidth();
-    }
-    scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
-        .getRowHeight() * 7));
-    return view;
-  }
-
-  private int getSelectionMode(ICollectionViewDescriptor viewDescriptor) {
-    int selectionMode;
-    switch (viewDescriptor.getSelectionMode()) {
-      case SINGLE_SELECTION:
-        selectionMode = ULCListSelectionModel.SINGLE_SELECTION;
-        break;
-      case SINGLE_INTERVAL_SELECTION:
-        selectionMode = ULCListSelectionModel.SINGLE_INTERVAL_SELECTION;
-        break;
-      default:
-        selectionMode = ULCListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-        break;
-    }
-    return selectionMode;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<ULCComponent> createTabView(
-      ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ULCTabbedPane viewComponent = createULCTabbedPane();
-    BasicCompositeView<ULCComponent> view = constructCompositeView(
-        viewComponent, viewDescriptor);
-    List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
-
-    for (IViewDescriptor childViewDescriptor : viewDescriptor
-        .getChildViewDescriptors()) {
-      IView<ULCComponent> childView = createView(childViewDescriptor,
-          actionHandler, locale);
-      ULCIcon childIcon = getIconFactory().getIcon(
-          childViewDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
-      if (childViewDescriptor.getDescription() != null) {
-        viewComponent.addTab(childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale), childIcon, childView.getPeer(),
-            childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                locale)
-                + TOOLTIP_ELLIPSIS);
-      } else {
-        viewComponent.addTab(childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale), childIcon, childView.getPeer());
-      }
-      childrenViews.add(childView);
-    }
-    view.setChildren(childrenViews);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createTextPropertyView(
-      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
-    ULCTextArea viewComponent = createULCTextArea();
-    viewComponent.setLineWrap(true);
-    ULCScrollPane scrollPane = createULCScrollPane();
-    scrollPane.setViewPortView(viewComponent);
-    scrollPane
-        .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    ULCTextAreaConnector connector = new ULCTextAreaConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    return constructView(scrollPane, null, connector);
   }
 
   private ULCDateDataType createTimeDataType(
@@ -1878,94 +1936,11 @@ public class DefaultUlcViewFactory extends
     return new ULCDateDataType(format.toPattern());
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createTimePropertyView(
-      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ULCTextField viewComponent = createULCTextField();
-
-    IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
-    connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
-        getTimeTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
-  }
-
   private ITableCellRenderer createTimeTableCellRenderer(int column,
       ITimePropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormattedTableCellRenderer(column, createTimeDataType(
         propertyDescriptor, locale,
         createTimeFormat(propertyDescriptor, locale)));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createTreeView(
-      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-
-    ICompositeValueConnector connector = createTreeViewConnector(
-        viewDescriptor, locale);
-
-    ULCExtendedTree viewComponent = createULCTree();
-    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
-        connector);
-
-    // TODO tabletree mgt
-    // ULCTableTree viewComponent = createULCTableTree();
-    // ConnectorHierarchyTableTreeModel treeModel = new
-    // ConnectorHierarchyTableTreeModel(
-    // connector, viewComponent);
-    // List<String> columnIds = new ArrayList<String>();
-    // columnIds.add("text");
-    // columnIds.add("text");
-    // treeModel.setColumnConnectorKeys(columnIds);
-    // Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
-    // columnClassesByIds.put("text", String.class);
-    // treeModel.setColumnClassesByIds(columnClassesByIds);
-
-    viewComponent.getSelectionModel().setSelectionMode(
-        ULCTreeSelectionModel.SINGLE_TREE_SELECTION);
-    viewComponent.setModel(treeModel);
-    viewComponent.setCellRenderer(new ConnectorTreeCellRenderer());
-    treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
-    ULCScrollPane scrollPane = createULCScrollPane();
-    scrollPane.setViewPortView(viewComponent);
-    IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
-        connector);
-    viewComponent.setPopupFactory(new TreeNodePopupFactory(viewComponent, view,
-        actionHandler, locale));
-    scrollPane.setMinimumSize(TREE_PREFERRED_SIZE);
-    return view;
-  }
-
-  private Color createColor(String colorAsHexString) {
-    int[] rgba = ColorHelper.fromHexString(colorAsHexString);
-    return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
-  }
-
-  private Font createFont(String fontString) {
-    org.jspresso.framework.util.gui.Font font = FontHelper
-        .fromString(fontString);
-    int fontStyle;
-    if (font.isBold() && font.isItalic()) {
-      fontStyle = Font.BOLD | Font.ITALIC;
-    } else if (font.isBold()) {
-      fontStyle = Font.BOLD;
-    } else if (font.isItalic()) {
-      fontStyle = Font.ITALIC;
-    } else {
-      fontStyle = Font.PLAIN;
-    }
-    return new Font(font.getName(), fontStyle, font.getSize());
   }
 
   private ULCPopupMenu createULCPopupMenu(ULCComponent sourceComponent,
@@ -2067,6 +2042,23 @@ public class DefaultUlcViewFactory extends
         viewConnector, actionHandler, locale);
   }
 
+  private void decorateWithTitle(IView<ULCComponent> view, Locale locale) {
+    view.getPeer()
+        .setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), view.getDescriptor()
+                    .getI18nName(getTranslationProvider(), locale)));
+    // ULCInternalFrame iFrame = new ULCInternalFrame(view.getDescriptor()
+    // .getI18nName(getTranslationProvider(), locale), true, true,
+    // true, true);
+    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
+    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    // iFrame.add(view.getPeer());
+    // iFrame.pack();
+    // iFrame.setPreferredSize(new Dimension(100,100));
+    // view.setPeer(iFrame);
+  }
+
   private List<String> getDescriptorPathFromConnectorTreePath(
       TreePath connectorTreePath) {
     List<String> descriptorPath = new ArrayList<String>();
@@ -2079,6 +2071,22 @@ public class DefaultUlcViewFactory extends
       }
     }
     return descriptorPath;
+  }
+
+  private int getSelectionMode(ICollectionViewDescriptor viewDescriptor) {
+    int selectionMode;
+    switch (viewDescriptor.getSelectionMode()) {
+      case SINGLE_SELECTION:
+        selectionMode = ULCListSelectionModel.SINGLE_SELECTION;
+        break;
+      case SINGLE_INTERVAL_SELECTION:
+        selectionMode = ULCListSelectionModel.SINGLE_INTERVAL_SELECTION;
+        break;
+      default:
+        selectionMode = ULCListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+        break;
+    }
+    return selectionMode;
   }
 
   private final class ColorTableCellRenderer extends DefaultTableCellRenderer {
@@ -2248,13 +2256,5 @@ public class DefaultUlcViewFactory extends
     public ULCPopupMenu createPopupForTreepath(TreePath path) {
       return createULCTreePopupMenu(tree, view, path, actionHandler, locale);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void showCardInPanel(ULCComponent cardsPeer, String cardName) {
-    ((ULCCardPane) cardsPeer).setSelectedName(cardName);
   }
 }

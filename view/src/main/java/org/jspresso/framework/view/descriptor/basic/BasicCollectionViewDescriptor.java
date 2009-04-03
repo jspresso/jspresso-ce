@@ -49,25 +49,6 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   
   /**
-   * Gets the selectionMode.
-   * 
-   * @return the selectionMode.
-   */
-  public ESelectionMode getSelectionMode() {
-    return selectionMode;
-  }
-
-  
-  /**
-   * Sets the selectionMode.
-   * 
-   * @param selectionMode the selectionMode to set.
-   */
-  public void setSelectionMode(ESelectionMode selectionMode) {
-    this.selectionMode = selectionMode;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -79,6 +60,25 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
       setIconImageURL(iconImageURL);
     }
     return iconImageURL;
+  }
+
+  
+  /**
+   * Gets the selectionMode.
+   * 
+   * @return the selectionMode.
+   */
+  public ESelectionMode getSelectionMode() {
+    return selectionMode;
+  }
+
+  /**
+   * Sets the selectionMode.
+   * 
+   * @param selectionMode the selectionMode to set.
+   */
+  public void setSelectionMode(ESelectionMode selectionMode) {
+    this.selectionMode = selectionMode;
   }
 
 }

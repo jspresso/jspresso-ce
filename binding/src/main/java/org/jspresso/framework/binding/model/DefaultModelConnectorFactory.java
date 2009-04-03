@@ -59,6 +59,14 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    * {@inheritDoc}
    */
   public IModelValueConnector createModelConnector(String id,
+      Class<?> componentContract) {
+    return createModelConnector(id, getDescriptorRegistry().getComponentDescriptor(componentContract));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IModelValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor) {
     IModelValueConnector modelConnector = null;
     if (modelDescriptor instanceof IComponentDescriptor) {
@@ -111,14 +119,6 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
     // });
     // }
     return modelConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IModelValueConnector createModelConnector(String id,
-      Class<?> componentContract) {
-    return createModelConnector(id, getDescriptorRegistry().getComponentDescriptor(componentContract));
   }
 
   /**

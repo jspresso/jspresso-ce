@@ -1,12 +1,9 @@
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>3.0.0</version>
   </parent>
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-flex</artifactId>
@@ -27,23 +24,29 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src/main/flex</sourceDirectory>
-    <testSourceDirectory>src/test/flex</testSourceDirectory>
+    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/flex</testSourceDirectory>
     <plugins>
       <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>flex-compiler-mojo</artifactId>
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
         <!-- don't know why but it doesn't take plugins management in m2eclipse -->
-        <version>2.0.3</version>
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>asdoc-mojo</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>info.flex-mojos</groupId>
-        <artifactId>flexbuilder-mojo</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>generate-asdoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>asdoc</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>optimize-swc</id>
+            <goals>
+              <goal>optimize</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

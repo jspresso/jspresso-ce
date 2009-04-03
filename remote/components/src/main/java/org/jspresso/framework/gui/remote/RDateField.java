@@ -52,20 +52,20 @@ public class RDateField extends RComponent {
   }
 
   /**
-   * Sets the type.
-   * 
-   * @param type the type to set.
-   */
-  public void setType(String type) {
-    this.type = type;
-  }
-
-  /**
    * Gets the type.
    * 
    * @return the type.
    */
   public String getType() {
     return type;
+  }
+
+  /**
+   * Sets the type.
+   * 
+   * @param type the type to set.
+   */
+  public void setType(String type) {
+    this.type = type;
   }
 }

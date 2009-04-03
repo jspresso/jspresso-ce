@@ -60,6 +60,19 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
+  @Override
+  public <E extends IComponent> E cloneComponent(E componentToClone,
+      IEntityFactory entityFactory) {
+    E clonedComponent = (E) entityFactory
+        .createComponentInstance(componentToClone.getContract());
+    handleRelationships(componentToClone, clonedComponent, entityFactory);
+    return clonedComponent;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @SuppressWarnings("unchecked")
   public <E extends IEntity> E cloneEntity(E entityToClone,
@@ -69,6 +82,27 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
 
     handleRelationships(entityToClone, clonedEntity, entityFactory);
     return clonedEntity;
+  }
+
+  /**
+   * Sets the accessorFactory.
+   * 
+   * @param accessorFactory
+   *          the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
+  }
+
+  /**
+   * Wether the object is fully initialized.
+   * 
+   * @param objectOrProxy
+   *          the object to test.
+   * @return true if the object is fully initialized.
+   */
+  protected boolean isInitialized(Object objectOrProxy) {
+    return true;
   }
 
   private <E extends IComponent> void handleRelationships(E componentToClone, E clonedComponent,
@@ -166,39 +200,5 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
         throw new EntityException(ex);
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public <E extends IComponent> E cloneComponent(E componentToClone,
-      IEntityFactory entityFactory) {
-    E clonedComponent = (E) entityFactory
-        .createComponentInstance(componentToClone.getContract());
-    handleRelationships(componentToClone, clonedComponent, entityFactory);
-    return clonedComponent;
-  }
-
-  /**
-   * Sets the accessorFactory.
-   * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
-   * Wether the object is fully initialized.
-   * 
-   * @param objectOrProxy
-   *          the object to test.
-   * @return true if the object is fully initialized.
-   */
-  protected boolean isInitialized(Object objectOrProxy) {
-    return true;
   }
 }

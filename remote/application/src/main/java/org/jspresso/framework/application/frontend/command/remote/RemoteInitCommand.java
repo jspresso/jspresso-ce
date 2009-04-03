@@ -41,30 +41,11 @@ import org.jspresso.framework.gui.remote.RActionList;
  */
 public class RemoteInitCommand extends RemoteCommand {
 
-  private RActionList[] workspaceActions;
   private RActionList[] actions;
   private RActionList[] helpActions;
+  private RActionList[] workspaceActions;
 
   
-  /**
-   * Gets the workspaceActions.
-   * 
-   * @return the workspaceActions.
-   */
-  public RActionList[] getWorkspaceActions() {
-    return workspaceActions;
-  }
-
-  
-  /**
-   * Sets the workspaceActions.
-   * 
-   * @param workspaceActions the workspaceActions to set.
-   */
-  public void setWorkspaceActions(RActionList[] workspaceActions) {
-    this.workspaceActions = workspaceActions;
-  }
-
   /**
    * Gets the actions.
    * 
@@ -72,6 +53,25 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public RActionList[] getActions() {
     return actions;
+  }
+
+  
+  /**
+   * Gets the helpActions.
+   * 
+   * @return the helpActions.
+   */
+  public RActionList[] getHelpActions() {
+    return helpActions;
+  }
+
+  /**
+   * Gets the workspaceActions.
+   * 
+   * @return the workspaceActions.
+   */
+  public RActionList[] getWorkspaceActions() {
+    return workspaceActions;
   }
 
   /**
@@ -85,15 +85,6 @@ public class RemoteInitCommand extends RemoteCommand {
   }
 
   /**
-   * Gets the helpActions.
-   * 
-   * @return the helpActions.
-   */
-  public RActionList[] getHelpActions() {
-    return helpActions;
-  }
-
-  /**
    * Sets the helpActions.
    * 
    * @param helpActions
@@ -101,5 +92,14 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public void setHelpActions(RActionList[] helpActions) {
     this.helpActions = helpActions;
+  }
+
+  /**
+   * Sets the workspaceActions.
+   * 
+   * @param workspaceActions the workspaceActions to set.
+   */
+  public void setWorkspaceActions(RActionList[] workspaceActions) {
+    this.workspaceActions = workspaceActions;
   }
 }

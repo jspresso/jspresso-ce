@@ -52,20 +52,20 @@ public class RColorField extends RComponent {
   }
 
   /**
-   * Sets the defaultColor.
-   * 
-   * @param defaultColor the defaultColor to set.
-   */
-  public void setDefaultColor(String defaultColor) {
-    this.defaultColor = defaultColor;
-  }
-
-  /**
    * Gets the defaultColor.
    * 
    * @return the defaultColor.
    */
   public String getDefaultColor() {
     return defaultColor;
+  }
+
+  /**
+   * Sets the defaultColor.
+   * 
+   * @param defaultColor the defaultColor to set.
+   */
+  public void setDefaultColor(String defaultColor) {
+    this.defaultColor = defaultColor;
   }
 }

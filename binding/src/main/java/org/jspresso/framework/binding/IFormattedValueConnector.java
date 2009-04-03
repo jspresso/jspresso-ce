@@ -41,17 +41,17 @@ package org.jspresso.framework.binding;
 public interface IFormattedValueConnector extends IValueConnector {
 
   /**
+   * Gets the connector value as its string representation.
+   * 
+   * @return the value string representation.
+   */
+  String getConnectorValueAsString();
+
+  /**
    * Sets the connector value using the value string representation.
    * 
    * @param valueAsString
    *          the value string representation.
    */
   void setConnectorValueAsString(String valueAsString);
-
-  /**
-   * Gets the connector value as its string representation.
-   * 
-   * @return the value string representation.
-   */
-  String getConnectorValueAsString();
 }

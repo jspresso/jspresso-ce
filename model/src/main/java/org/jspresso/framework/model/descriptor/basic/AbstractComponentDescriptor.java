@@ -72,23 +72,23 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<IComponentDescriptor<?>>    ancestorDescriptors;
   private Class<?>                         componentContract;
 
+  private Collection<String>               grantedRoles;
   private List<String>                     lifecycleInterceptorClassNames;
-  private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
 
+  private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
   private List<String>                     orderingProperties;
   private Map<String, IPropertyDescriptor> propertyDescriptorsMap;
   private List<String>                     queryableProperties;
+
   private List<String>                     renderedProperties;
-
-  private Map<String, String>              serviceDelegateClassNames;
   private Set<Class<?>>                    serviceContracts;
-  private Map<Method, IComponentService>   serviceDelegates;
+  private Map<String, String>              serviceDelegateClassNames;
 
+  private Map<Method, IComponentService>   serviceDelegates;
   private List<IPropertyDescriptor>        tempPropertyBuffer;
   private String                           toStringProperty;
   private Collection<String>               unclonedProperties;
-  private Collection<String>               grantedRoles;
 
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
@@ -148,6 +148,15 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
    * Gets the lifecycleInterceptors.
    * 
    * @return the lifecycleInterceptors.
@@ -164,26 +173,6 @@ public abstract class AbstractComponentDescriptor<E> extends
       allInterceptors.addAll(lifecycleInterceptors);
     }
     return allInterceptors;
-  }
-
-  private synchronized void registerLifecycleInterceptorsIfNecessary() {
-    // process creation of lifecycle interceptors.
-    if (lifecycleInterceptorClassNames != null) {
-      lifecycleInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
-      for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
-        try {
-          lifecycleInterceptors.add((ILifecycleInterceptor<?>) Class.forName(
-              lifecycleInterceptorClassName).newInstance());
-        } catch (InstantiationException ex) {
-          throw new DescriptorException(ex);
-        } catch (IllegalAccessException ex) {
-          throw new DescriptorException(ex);
-        } catch (ClassNotFoundException ex) {
-          throw new DescriptorException(ex);
-        }
-      }
-      lifecycleInterceptorClassNames = null;
-    }
   }
 
   /**
@@ -289,24 +278,11 @@ public abstract class AbstractComponentDescriptor<E> extends
     return explodeComponentReferences(queryableProperties);
   }
 
-  private List<String> explodeComponentReferences(List<String> propertyNames) {
-    List<String> explodedProperties = new ArrayList<String>();
-    for (String propertyName : propertyNames) {
-      IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(propertyName);
-      if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-          .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getComponentContract()))) {
-        List<String> nestedProperties = new ArrayList<String>();
-        for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getRenderedProperties()) {
-          nestedProperties.add(propertyName + "." + nestedRenderedProperty);
-        }
-        explodedProperties.addAll(explodeComponentReferences(nestedProperties));
-      } else {
-        explodedProperties.add(propertyName);
-      }
-    }
-    return explodedProperties;
+  /**
+   * {@inheritDoc}
+   */
+  public Class<?> getQueryComponentContract() {
+    return getComponentContract();
   }
 
   /**
@@ -328,17 +304,6 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public Collection<Class<?>> getServiceContracts() {
-    registerDelegateServicesIfNecessary();
-    if (serviceContracts != null) {
-      return new ArrayList<Class<?>>(serviceContracts);
-    }
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public Collection<String> getServiceContractClassNames() {
     if (serviceDelegateClassNames != null) {
       return new LinkedHashSet<String>(serviceDelegateClassNames.keySet());
@@ -347,6 +312,17 @@ public abstract class AbstractComponentDescriptor<E> extends
       for (Class<?> serviceContract : serviceContracts) {
         serviceContractClassNames.add(serviceContract.getName());
       }
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Collection<Class<?>> getServiceContracts() {
+    registerDelegateServicesIfNecessary();
+    if (serviceContracts != null) {
+      return new ArrayList<Class<?>>(serviceContracts);
     }
     return null;
   }
@@ -425,6 +401,16 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
+  }
+
+  /**
    * Sets the lifecycleInterceptorClassNames.
    * 
    * @param lifecycleInterceptorClassNames
@@ -498,26 +484,6 @@ public abstract class AbstractComponentDescriptor<E> extends
     this.serviceDelegateClassNames = serviceDelegateClassNames;
   }
 
-  private synchronized void registerDelegateServicesIfNecessary() {
-    if (serviceDelegateClassNames != null) {
-      for (Entry<String, String> nextPair : serviceDelegateClassNames
-          .entrySet()) {
-        try {
-          registerService(Class.forName(nextPair.getKey()),
-              (IComponentService) Class.forName(nextPair.getValue())
-                  .newInstance());
-        } catch (ClassNotFoundException ex) {
-          throw new DescriptorException(ex);
-        } catch (InstantiationException ex) {
-          throw new DescriptorException(ex);
-        } catch (IllegalAccessException ex) {
-          throw new DescriptorException(ex);
-        }
-      }
-    }
-    serviceDelegateClassNames = null;
-  }
-
   /**
    * Sets the toStringProperty.
    * 
@@ -538,6 +504,26 @@ public abstract class AbstractComponentDescriptor<E> extends
     this.unclonedProperties = unclonedProperties;
   }
 
+  private List<String> explodeComponentReferences(List<String> propertyNames) {
+    List<String> explodedProperties = new ArrayList<String>();
+    for (String propertyName : propertyNames) {
+      IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(propertyName);
+      if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
+          .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+              .getReferencedDescriptor().getComponentContract()))) {
+        List<String> nestedProperties = new ArrayList<String>();
+        for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor().getRenderedProperties()) {
+          nestedProperties.add(propertyName + "." + nestedRenderedProperty);
+        }
+        explodedProperties.addAll(explodeComponentReferences(nestedProperties));
+      } else {
+        explodedProperties.add(propertyName);
+      }
+    }
+    return explodedProperties;
+  }
+
   private IPropertyDescriptor getDeclaredPropertyDescriptor(String propertyName) {
     processPropertiesBufferIfNecessary();
     if (propertyDescriptorsMap != null) {
@@ -556,6 +542,46 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
   }
 
+  private synchronized void registerDelegateServicesIfNecessary() {
+    if (serviceDelegateClassNames != null) {
+      for (Entry<String, String> nextPair : serviceDelegateClassNames
+          .entrySet()) {
+        try {
+          registerService(Class.forName(nextPair.getKey()),
+              (IComponentService) Class.forName(nextPair.getValue())
+                  .newInstance());
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
+        }
+      }
+    }
+    serviceDelegateClassNames = null;
+  }
+
+  private synchronized void registerLifecycleInterceptorsIfNecessary() {
+    // process creation of lifecycle interceptors.
+    if (lifecycleInterceptorClassNames != null) {
+      lifecycleInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
+      for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
+        try {
+          lifecycleInterceptors.add((ILifecycleInterceptor<?>) Class.forName(
+              lifecycleInterceptorClassName).newInstance());
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        }
+      }
+      lifecycleInterceptorClassNames = null;
+    }
+  }
+
   private synchronized void registerService(Class<?> serviceContract,
       IComponentService service) {
     if (serviceDelegates == null) {
@@ -567,31 +593,5 @@ public abstract class AbstractComponentDescriptor<E> extends
     for (Method serviceMethod : contractServices) {
       serviceDelegates.put(serviceMethod, service);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class<?> getQueryComponentContract() {
-    return getComponentContract();
-  }
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
-  }
-
-  /**
-   * Sets the grantedRoles.
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
   }
 }

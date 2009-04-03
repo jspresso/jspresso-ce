@@ -53,31 +53,6 @@ public class ComparableQueryStructureDescriptor extends
     BasicReferencePropertyDescriptor<ComparableQueryStructure> {
 
   /**
-   * <code>EQ</code> equals.
-   */
-  public static final String EQ         = "EQ";
-
-  /**
-   * <code>GT</code> greater than.
-   */
-  public static final String GT         = "GT";
-
-  /**
-   * <code>GT</code> greater than or equals.
-   */
-  public static final String GE         = "GE";
-
-  /**
-   * <code>LT</code> lower than.
-   */
-  public static final String LT         = "LT";
-
-  /**
-   * <code>LT</code> lower than or equals.
-   */
-  public static final String LE         = "LE";
-
-  /**
    * <code>LG</code> between.
    */
   public static final String BE         = "BE";
@@ -88,9 +63,34 @@ public class ComparableQueryStructureDescriptor extends
   public static final String COMPARATOR = "comparator";
 
   /**
+   * <code>EQ</code> equals.
+   */
+  public static final String EQ         = "EQ";
+
+  /**
+   * <code>GT</code> greater than or equals.
+   */
+  public static final String GE         = "GE";
+
+  /**
+   * <code>GT</code> greater than.
+   */
+  public static final String GT         = "GT";
+
+  /**
    * <code>INF_VALUE</code> infValue.
    */
   public static final String INF_VALUE  = "infValue";
+
+  /**
+   * <code>LT</code> lower than or equals.
+   */
+  public static final String LE         = "LE";
+
+  /**
+   * <code>LT</code> lower than.
+   */
+  public static final String LT         = "LT";
 
   /**
    * <code>SUP_VALUE</code> supValue.

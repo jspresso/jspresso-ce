@@ -40,15 +40,6 @@ package org.jspresso.framework.state.remote;
 public interface IRemoteValueStateFactory {
 
   /**
-   * Creates a new <code>RemoteValueState</code> instance.
-   * 
-   * @param guid
-   *          the state guid.
-   * @return the created <code>RemoteValueState</code>.
-   */
-  RemoteValueState createRemoteValueState(String guid);
-
-  /**
    * Creates a new <code>RemoteCompositeValueState</code> instance.
    * 
    * @param guid
@@ -56,5 +47,14 @@ public interface IRemoteValueStateFactory {
    * @return the created <code>RemoteValueState</code>.
    */
   RemoteCompositeValueState createRemoteCompositeValueState(String guid);
+
+  /**
+   * Creates a new <code>RemoteValueState</code> instance.
+   * 
+   * @param guid
+   *          the state guid.
+   * @return the created <code>RemoteValueState</code>.
+   */
+  RemoteValueState createRemoteValueState(String guid);
 
 }

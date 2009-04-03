@@ -70,28 +70,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
-  public List<? extends IComponent> getQueriedComponents() {
-    return (List<? extends IComponent>) get(QUERIED_COMPONENTS);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class<?> getQueryContract() {
-    return componentDescriptor.getQueryComponentContract();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setQueriedComponents(List<? extends IComponent> queriedComponents) {
-    put(QUERIED_COMPONENTS, queriedComponents);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public Object get(Object key) {
     IPropertyDescriptor propertyDescriptor = componentDescriptor
@@ -110,6 +88,28 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       }
     }
     return actualValue;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public List<? extends IComponent> getQueriedComponents() {
+    return (List<? extends IComponent>) get(QUERIED_COMPONENTS);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<?> getQueryContract() {
+    return componentDescriptor.getQueryComponentContract();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setQueriedComponents(List<? extends IComponent> queriedComponents) {
+    put(QUERIED_COMPONENTS, queriedComponents);
   }
 
   private boolean isInlineComponentDescriptor(

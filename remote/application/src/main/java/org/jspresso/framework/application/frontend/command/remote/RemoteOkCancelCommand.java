@@ -22,7 +22,7 @@ import org.jspresso.framework.gui.remote.RAction;
 
 
 /**
- * TODO Comment needed.
+ * OK - Cancel remote flow action.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -42,26 +42,8 @@ import org.jspresso.framework.gui.remote.RAction;
  */
 public class RemoteOkCancelCommand extends RemoteMessageCommand {
 
-  private RAction okAction;
   private RAction cancelAction;
-  
-  /**
-   * Gets the okAction.
-   * 
-   * @return the okAction.
-   */
-  public RAction getOkAction() {
-    return okAction;
-  }
-  
-  /**
-   * Sets the okAction.
-   * 
-   * @param okAction the okAction to set.
-   */
-  public void setOkAction(RAction okAction) {
-    this.okAction = okAction;
-  }
+  private RAction okAction;
   
   /**
    * Gets the cancelAction.
@@ -73,12 +55,30 @@ public class RemoteOkCancelCommand extends RemoteMessageCommand {
   }
   
   /**
+   * Gets the okAction.
+   * 
+   * @return the okAction.
+   */
+  public RAction getOkAction() {
+    return okAction;
+  }
+  
+  /**
    * Sets the cancelAction.
    * 
    * @param cancelAction the cancelAction to set.
    */
   public void setCancelAction(RAction cancelAction) {
     this.cancelAction = cancelAction;
+  }
+  
+  /**
+   * Sets the okAction.
+   * 
+   * @param okAction the okAction to set.
+   */
+  public void setOkAction(RAction okAction) {
+    this.okAction = okAction;
   }
   
   

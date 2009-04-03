@@ -35,8 +35,8 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  */
 public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
 
-  private IDisplayableAction     finishAction;
   private IDisplayableAction     cancelAction;
+  private IDisplayableAction     finishAction;
   private IWizardStepDescriptor  firstWizardStep;
   private IModelConnectorFactory modelConnectorFactory;
 
@@ -62,47 +62,68 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
     return true;
   }
 
-  private void displayWizardStep(IWizardStepDescriptor wizardStep,
-      IValueConnector modelConnector, IActionHandler actionHandler,
-      Map<String, Object> context) {
-
-    ITranslationProvider translationProvider = getTranslationProvider(context);
-    Locale locale = getLocale(context);
-    IView<E> view = getViewFactory(context).createView(
-        wizardStep.getViewDescriptor(), actionHandler, getLocale(context));
-    getMvcBinder(context).bind(view.getConnector(), modelConnector);
-
-    String title = getI18nName(translationProvider, locale) + " - "
-        + wizardStep.getI18nName(translationProvider, locale);
-    getController(context).displayModalDialog(
-        view.getPeer(),
-        createWizardStepActions(wizardStep, view, actionHandler,
-            translationProvider, locale, modelConnector, context), title,
-        getSourceComponent(context), context, true);
+  /**
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *          the cancelAction to set.
+   */
+  public void setCancelAction(IDisplayableAction cancelAction) {
+    this.cancelAction = cancelAction;
   }
 
-  private List<G> createWizardStepActions(IWizardStepDescriptor wizardStep,
-      IView<E> view, IActionHandler actionHandler,
-      ITranslationProvider translationProvider, Locale locale,
-      IValueConnector modelConnector, Map<String, Object> context) {
+  /**
+   * Sets the finishAction.
+   * 
+   * @param finishAction
+   *          the finishAction to set.
+   */
+  public void setFinishAction(IDisplayableAction finishAction) {
+    this.finishAction = finishAction;
+  }
 
-    List<G> wizardStepActions = new ArrayList<G>();
+  /**
+   * Sets the firstWizardStep.
+   * 
+   * @param firstWizardStep
+   *          the firstWizardStep to set.
+   */
+  public void setFirstWizardStep(IWizardStepDescriptor firstWizardStep) {
+    this.firstWizardStep = firstWizardStep;
+  }
 
-    G previousGAction = createPreviousAction(wizardStep, actionHandler,
-        view, translationProvider, locale, modelConnector, context);
-    G nextGAction = createNextAction(wizardStep, actionHandler, view,
-        translationProvider, locale, modelConnector, context);
-    G cancelGAction = createCancelAction(wizardStep, actionHandler, view,
-        locale, context);
-    G finishGAction = createFinishAction(wizardStep, actionHandler, view,
-        locale, context);
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
 
-    wizardStepActions.add(previousGAction);
-    wizardStepActions.add(nextGAction);
-    wizardStepActions.add(finishGAction);
-    wizardStepActions.add(cancelGAction);
+  /**
+   * Creates (and initializes) the wizard model.
+   * 
+   * @param initialWizardModel
+   *          the initial wizard model.
+   * @param context
+   *          the action context.
+   */
+  protected void completeInitialWizardModel(
+      Map<String, Object> initialWizardModel, Map<String, Object> context) {
+    // No-op by default.
+  }
 
-    return wizardStepActions;
+  private G createCancelAction(IWizardStepDescriptor wizardStep,
+      IActionHandler actionHandler, IView<E> view, Locale locale,
+      Map<String, Object> context) {
+    IDisplayableAction cancelActionAdapter = new CancelAction(wizardStep,
+        cancelAction);
+    G cancelGAction = getActionFactory(context).createAction(
+        cancelActionAdapter, actionHandler, view, locale);
+    return cancelGAction;
   }
 
   private G createFinishAction(IWizardStepDescriptor wizardStep,
@@ -118,16 +139,6 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       getActionFactory(context).setActionEnabled(finishGAction, false);
     }
     return finishGAction;
-  }
-
-  private G createCancelAction(IWizardStepDescriptor wizardStep,
-      IActionHandler actionHandler, IView<E> view, Locale locale,
-      Map<String, Object> context) {
-    IDisplayableAction cancelActionAdapter = new CancelAction(wizardStep,
-        cancelAction);
-    G cancelGAction = getActionFactory(context).createAction(
-        cancelActionAdapter, actionHandler, view, locale);
-    return cancelGAction;
   }
 
   private G createNextAction(IWizardStepDescriptor wizardStep,
@@ -186,107 +197,90 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
     return previousGAction;
   }
 
-  /**
-   * Creates (and initializes) the wizard model.
-   * 
-   * @param initialWizardModel
-   *          the initial wizard model.
-   * @param context
-   *          the action context.
-   */
-  protected void completeInitialWizardModel(
-      Map<String, Object> initialWizardModel, Map<String, Object> context) {
-    // No-op by default.
+  private List<G> createWizardStepActions(IWizardStepDescriptor wizardStep,
+      IView<E> view, IActionHandler actionHandler,
+      ITranslationProvider translationProvider, Locale locale,
+      IValueConnector modelConnector, Map<String, Object> context) {
+
+    List<G> wizardStepActions = new ArrayList<G>();
+
+    G previousGAction = createPreviousAction(wizardStep, actionHandler,
+        view, translationProvider, locale, modelConnector, context);
+    G nextGAction = createNextAction(wizardStep, actionHandler, view,
+        translationProvider, locale, modelConnector, context);
+    G cancelGAction = createCancelAction(wizardStep, actionHandler, view,
+        locale, context);
+    G finishGAction = createFinishAction(wizardStep, actionHandler, view,
+        locale, context);
+
+    wizardStepActions.add(previousGAction);
+    wizardStepActions.add(nextGAction);
+    wizardStepActions.add(finishGAction);
+    wizardStepActions.add(cancelGAction);
+
+    return wizardStepActions;
   }
 
-  /**
-   * Sets the finishAction.
-   * 
-   * @param finishAction
-   *          the finishAction to set.
-   */
-  public void setFinishAction(IDisplayableAction finishAction) {
-    this.finishAction = finishAction;
+  private void displayWizardStep(IWizardStepDescriptor wizardStep,
+      IValueConnector modelConnector, IActionHandler actionHandler,
+      Map<String, Object> context) {
+
+    ITranslationProvider translationProvider = getTranslationProvider(context);
+    Locale locale = getLocale(context);
+    IView<E> view = getViewFactory(context).createView(
+        wizardStep.getViewDescriptor(), actionHandler, getLocale(context));
+    getMvcBinder(context).bind(view.getConnector(), modelConnector);
+
+    String title = getI18nName(translationProvider, locale) + " - "
+        + wizardStep.getI18nName(translationProvider, locale);
+    getController(context).displayModalDialog(
+        view.getPeer(),
+        createWizardStepActions(wizardStep, view, actionHandler,
+            translationProvider, locale, modelConnector, context), title,
+        getSourceComponent(context), context, true);
   }
 
-  /**
-   * Sets the firstWizardStep.
-   * 
-   * @param firstWizardStep
-   *          the firstWizardStep to set.
-   */
-  public void setFirstWizardStep(IWizardStepDescriptor firstWizardStep) {
-    this.firstWizardStep = firstWizardStep;
-  }
+  private class CancelAction extends AbstractFrontendAction<E, F, G> {
 
-  /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
-   * Sets the cancelAction.
-   * 
-   * @param cancelAction
-   *          the cancelAction to set.
-   */
-  public void setCancelAction(IDisplayableAction cancelAction) {
-    this.cancelAction = cancelAction;
-  }
-
-  private class NextAction extends AbstractFrontendAction<E, F, G> {
-
+    @SuppressWarnings("unused")
     private IWizardStepDescriptor wizardStep;
-    private IValueConnector       modelConnector;
+    private IDisplayableAction    wrappedCancelAction;
 
-    public NextAction(IWizardStepDescriptor wizardStep,
-        IValueConnector modelConnector) {
+    public CancelAction(IWizardStepDescriptor wizardStep,
+        IDisplayableAction wrappedCancelAction) {
       this.wizardStep = wizardStep;
-      this.modelConnector = modelConnector;
+      this.wrappedCancelAction = wrappedCancelAction;
     }
 
     @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
-      if (wizardStep.getOnLeaveAction() == null
-          || actionHandler.execute(wizardStep.getOnLeaveAction(), context)) {
-        IWizardStepDescriptor nextWizardStep = wizardStep
-            .getNextStepDescriptor(context);
-        displayWizardStep(nextWizardStep, modelConnector, actionHandler,
-            context);
-        if (nextWizardStep.getOnEnterAction() != null) {
-          actionHandler.execute(nextWizardStep.getOnEnterAction(), context);
-        }
-      }
+      actionHandler.execute(wrappedCancelAction, context);
       return true;
     }
-  }
 
-  private class PreviousAction extends AbstractFrontendAction<E, F, G> {
-
-    private IWizardStepDescriptor wizardStep;
-    private IValueConnector       modelConnector;
-
-    public PreviousAction(IWizardStepDescriptor wizardStep,
-        IValueConnector modelConnector) {
-      this.wizardStep = wizardStep;
-      this.modelConnector = modelConnector;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean execute(IActionHandler actionHandler,
-        Map<String, Object> context) {
-      IWizardStepDescriptor previousWizardStep = wizardStep
-          .getPreviousStepDescriptor(context);
-      displayWizardStep(previousWizardStep, modelConnector, actionHandler,
-          context);
-      return true;
+    public String getDescription() {
+      return wrappedCancelAction.getDescription();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getIconImageURL() {
+      return wrappedCancelAction.getIconImageURL();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+      return wrappedCancelAction.getName();
     }
   }
 
@@ -317,14 +311,6 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
      * {@inheritDoc}
      */
     @Override
-    public String getName() {
-      return wrappedFinishAction.getName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getDescription() {
       return wrappedFinishAction.getDescription();
     }
@@ -336,49 +322,63 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
     public String getIconImageURL() {
       return wrappedFinishAction.getIconImageURL();
     }
-  }
-
-  private class CancelAction extends AbstractFrontendAction<E, F, G> {
-
-    @SuppressWarnings("unused")
-    private IWizardStepDescriptor wizardStep;
-    private IDisplayableAction    wrappedCancelAction;
-
-    public CancelAction(IWizardStepDescriptor wizardStep,
-        IDisplayableAction wrappedCancelAction) {
-      this.wizardStep = wizardStep;
-      this.wrappedCancelAction = wrappedCancelAction;
-    }
-
-    @Override
-    public boolean execute(IActionHandler actionHandler,
-        Map<String, Object> context) {
-      actionHandler.execute(wrappedCancelAction, context);
-      return true;
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public String getName() {
-      return wrappedCancelAction.getName();
+      return wrappedFinishAction.getName();
+    }
+  }
+
+  private class NextAction extends AbstractFrontendAction<E, F, G> {
+
+    private IValueConnector       modelConnector;
+    private IWizardStepDescriptor wizardStep;
+
+    public NextAction(IWizardStepDescriptor wizardStep,
+        IValueConnector modelConnector) {
+      this.wizardStep = wizardStep;
+      this.modelConnector = modelConnector;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public String getDescription() {
-      return wrappedCancelAction.getDescription();
+    public boolean execute(IActionHandler actionHandler,
+        Map<String, Object> context) {
+      if (wizardStep.getOnLeaveAction() == null
+          || actionHandler.execute(wizardStep.getOnLeaveAction(), context)) {
+        IWizardStepDescriptor nextWizardStep = wizardStep
+            .getNextStepDescriptor(context);
+        displayWizardStep(nextWizardStep, modelConnector, actionHandler,
+            context);
+        if (nextWizardStep.getOnEnterAction() != null) {
+          actionHandler.execute(nextWizardStep.getOnEnterAction(), context);
+        }
+      }
+      return true;
+    }
+  }
+
+  private class PreviousAction extends AbstractFrontendAction<E, F, G> {
+
+    private IValueConnector       modelConnector;
+    private IWizardStepDescriptor wizardStep;
+
+    public PreviousAction(IWizardStepDescriptor wizardStep,
+        IValueConnector modelConnector) {
+      this.wizardStep = wizardStep;
+      this.modelConnector = modelConnector;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public String getIconImageURL() {
-      return wrappedCancelAction.getIconImageURL();
+    public boolean execute(IActionHandler actionHandler,
+        Map<String, Object> context) {
+      IWizardStepDescriptor previousWizardStep = wizardStep
+          .getPreviousStepDescriptor(context);
+      displayWizardStep(previousWizardStep, modelConnector, actionHandler,
+          context);
+      return true;
     }
   }
 }

@@ -42,10 +42,19 @@ import org.jspresso.framework.gui.remote.RComponent;
  */
 public class RemoteDialogCommand extends RemoteCommand {
 
-  private String     title;
-  private RComponent view;
   private RAction[]  actions;
+  private String     title;
   private boolean    useCurrent;
+  private RComponent view;
+
+  /**
+   * Gets the actions.
+   * 
+   * @return the actions.
+   */
+  public RAction[] getActions() {
+    return actions;
+  }
 
   /**
    * Gets the title.
@@ -54,16 +63,6 @@ public class RemoteDialogCommand extends RemoteCommand {
    */
   public String getTitle() {
     return title;
-  }
-
-  /**
-   * Sets the title.
-   * 
-   * @param title
-   *          the title to set.
-   */
-  public void setTitle(String title) {
-    this.title = title;
   }
 
   /**
@@ -76,22 +75,12 @@ public class RemoteDialogCommand extends RemoteCommand {
   }
 
   /**
-   * Sets the view.
+   * Gets the useCurrent.
    * 
-   * @param view
-   *          the view to set.
+   * @return the useCurrent.
    */
-  public void setView(RComponent view) {
-    this.view = view;
-  }
-
-  /**
-   * Gets the actions.
-   * 
-   * @return the actions.
-   */
-  public RAction[] getActions() {
-    return actions;
+  public boolean isUseCurrent() {
+    return useCurrent;
   }
 
   /**
@@ -104,14 +93,14 @@ public class RemoteDialogCommand extends RemoteCommand {
     this.actions = actions;
   }
 
-  
   /**
-   * Gets the useCurrent.
+   * Sets the title.
    * 
-   * @return the useCurrent.
+   * @param title
+   *          the title to set.
    */
-  public boolean isUseCurrent() {
-    return useCurrent;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   
@@ -122,6 +111,17 @@ public class RemoteDialogCommand extends RemoteCommand {
    */
   public void setUseCurrent(boolean useCurrent) {
     this.useCurrent = useCurrent;
+  }
+
+  
+  /**
+   * Sets the view.
+   * 
+   * @param view
+   *          the view to set.
+   */
+  public void setView(RComponent view) {
+    this.view = view;
   }
 
 }

@@ -44,15 +44,15 @@ import org.jspresso.framework.util.remote.RemotePeer;
 public abstract class RComponent extends RemotePeer implements
     IRemoteStateOwner {
 
-  private String           label;
-  private String           tooltip;
+  private RActionList[]    actionLists;
   private String           background;
   private String           borderType;
   private String           font;
   private String           foreground;
   private RIcon            icon;
-  private RActionList[]    actionLists;
+  private String           label;
   private RemoteValueState state;
+  private String           tooltip;
 
   /**
    * Constructs a new <code>RComponent</code> instance.
@@ -65,51 +65,48 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Sets the label.
+   * Gets the actionLists.
    * 
-   * @param label
-   *          the label to set.
+   * @return the actionLists.
    */
-  public void setLabel(String label) {
-    this.label = label;
+  public RActionList[] getActionLists() {
+    return actionLists;
   }
 
   /**
-   * Gets the name.
+   * Gets the background.
    * 
-   * @return the name.
+   * @return the background.
    */
-  public String getLabel() {
-    return label;
+  public String getBackground() {
+    return background;
   }
 
   /**
-   * Sets the tooltip.
+   * Gets the borderType.
    * 
-   * @param tooltip
-   *          the tooltip to set.
+   * @return the borderType.
    */
-  public void setTooltip(String tooltip) {
-    this.tooltip = tooltip;
+  public String getBorderType() {
+    return borderType;
   }
 
   /**
-   * Gets the description.
+   * Gets the font.
    * 
-   * @return the description.
+   * @return the font.
    */
-  public String getTooltip() {
-    return tooltip;
+  public String getFont() {
+    return font;
   }
 
   /**
-   * Sets the icon.
+   * Gets the foreground.
    * 
-   * @param icon
-   *          the icon to set.
+   * @return the foreground.
    */
-  public void setIcon(RIcon icon) {
-    this.icon = icon;
+  public String getForeground() {
+    return foreground;
   }
 
   /**
@@ -122,6 +119,15 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
+   * Gets the name.
+   * 
+   * @return the name.
+   */
+  public String getLabel() {
+    return label;
+  }
+
+  /**
    * Gets the state.
    * 
    * @return the state.
@@ -131,22 +137,22 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Sets the state.
+   * Gets the description.
    * 
-   * @param state
-   *          the state to set.
+   * @return the description.
    */
-  public void setState(RemoteValueState state) {
-    this.state = state;
+  public String getTooltip() {
+    return tooltip;
   }
 
   /**
-   * Gets the background.
+   * Sets the actionLists.
    * 
-   * @return the background.
+   * @param actionLists
+   *          the actionLists to set.
    */
-  public String getBackground() {
-    return background;
+  public void setActionLists(RActionList[] actionLists) {
+    this.actionLists = actionLists;
   }
 
   /**
@@ -160,15 +166,6 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Gets the borderType.
-   * 
-   * @return the borderType.
-   */
-  public String getBorderType() {
-    return borderType;
-  }
-
-  /**
    * Sets the borderType.
    * 
    * @param borderType
@@ -176,15 +173,6 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setBorderType(String borderType) {
     this.borderType = borderType;
-  }
-
-  /**
-   * Gets the font.
-   * 
-   * @return the font.
-   */
-  public String getFont() {
-    return font;
   }
 
   /**
@@ -198,15 +186,6 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Gets the foreground.
-   * 
-   * @return the foreground.
-   */
-  public String getForeground() {
-    return foreground;
-  }
-
-  /**
    * Sets the foreground.
    * 
    * @param foreground
@@ -217,21 +196,42 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Gets the actionLists.
+   * Sets the icon.
    * 
-   * @return the actionLists.
+   * @param icon
+   *          the icon to set.
    */
-  public RActionList[] getActionLists() {
-    return actionLists;
+  public void setIcon(RIcon icon) {
+    this.icon = icon;
   }
 
   /**
-   * Sets the actionLists.
+   * Sets the label.
    * 
-   * @param actionLists
-   *          the actionLists to set.
+   * @param label
+   *          the label to set.
    */
-  public void setActionLists(RActionList[] actionLists) {
-    this.actionLists = actionLists;
+  public void setLabel(String label) {
+    this.label = label;
+  }
+
+  /**
+   * Sets the state.
+   * 
+   * @param state
+   *          the state to set.
+   */
+  public void setState(RemoteValueState state) {
+    this.state = state;
+  }
+
+  /**
+   * Sets the tooltip.
+   * 
+   * @param tooltip
+   *          the tooltip to set.
+   */
+  public void setTooltip(String tooltip) {
+    this.tooltip = tooltip;
   }
 }

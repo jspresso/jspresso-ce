@@ -57,64 +57,23 @@ public class BasicStringPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public void preprocessSetter(final Object component, Object newValue) {
-    super.preprocessSetter(component, newValue);
-    final String propertyValueAsString = getValueAsString(newValue);
-    if (propertyValueAsString != null && getMaxLength() != null
-        && propertyValueAsString.length() > getMaxLength().intValue()) {
-      IntegrityException ie = new IntegrityException("[" + getName()
-          + "] value (" + propertyValueAsString + ") is too long on ["
-          + component + "].") {
+  public BasicStringPropertyDescriptor clone() {
+    BasicStringPropertyDescriptor clonedDescriptor = (BasicStringPropertyDescriptor) super
+        .clone();
 
-        private static final long serialVersionUID = 7459823123892198831L;
-
-        @Override
-        public String getI18nMessage(ITranslationProvider translationProvider,
-            Locale locale) {
-          StringBuffer boundsSpec = new StringBuffer("l");
-          if (getMaxLength() != null) {
-            boundsSpec.append(" &lt= ").append(getMaxLength());
-          }
-          return translationProvider.getTranslation(
-              "integrity.property.toolong", new Object[] {
-                  getI18nName(translationProvider, locale), boundsSpec,
-                  component}, locale);
-        }
-
-      };
-      throw ie;
-    }
-    if (propertyValueAsString != null && getRegexpPattern() != null
-        && !Pattern.matches(getRegexpPattern(), propertyValueAsString)) {
-      IntegrityException ie = new IntegrityException("[" + getName()
-          + "] value (" + propertyValueAsString + ") does not match pattern ["
-          + getRegexpPatternSample() + "] on [" + component + "].") {
-
-        private static final long serialVersionUID = 7459823123892198831L;
-
-        @Override
-        public String getI18nMessage(ITranslationProvider translationProvider,
-            Locale locale) {
-          return translationProvider.getTranslation(
-              "integrity.property.pattern", new Object[] {
-                  getI18nName(translationProvider, locale),
-                  getRegexpPatternSample(), component}, locale);
-        }
-
-      };
-      throw ie;
-    }
+    return clonedDescriptor;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public BasicStringPropertyDescriptor clone() {
-    BasicStringPropertyDescriptor clonedDescriptor = (BasicStringPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
+  public BasicStringPropertyDescriptor createQueryDescriptor() {
+    BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super
+        .createQueryDescriptor();
+    //queryDescriptor.setMaxLength(null);
+    queryDescriptor.setRegexpPattern(null);
+    return queryDescriptor;
   }
 
   /**
@@ -172,6 +131,18 @@ public class BasicStringPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public Object interceptSetter(Object component, Object newValue) {
+    String actualNewValue = (String) newValue;
+    if (isUpperCase()) {
+      actualNewValue = actualNewValue.toUpperCase();
+    }
+    return super.interceptSetter(component, actualNewValue);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean isUpperCase() {
     if (upperCase != null) {
       return upperCase.booleanValue();
@@ -180,6 +151,59 @@ public class BasicStringPropertyDescriptor extends
       return ((IStringPropertyDescriptor) getParentDescriptor()).isUpperCase();
     }
     return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void preprocessSetter(final Object component, Object newValue) {
+    super.preprocessSetter(component, newValue);
+    final String propertyValueAsString = getValueAsString(newValue);
+    if (propertyValueAsString != null && getMaxLength() != null
+        && propertyValueAsString.length() > getMaxLength().intValue()) {
+      IntegrityException ie = new IntegrityException("[" + getName()
+          + "] value (" + propertyValueAsString + ") is too long on ["
+          + component + "].") {
+
+        private static final long serialVersionUID = 7459823123892198831L;
+
+        @Override
+        public String getI18nMessage(ITranslationProvider translationProvider,
+            Locale locale) {
+          StringBuffer boundsSpec = new StringBuffer("l");
+          if (getMaxLength() != null) {
+            boundsSpec.append(" &lt= ").append(getMaxLength());
+          }
+          return translationProvider.getTranslation(
+              "integrity.property.toolong", new Object[] {
+                  getI18nName(translationProvider, locale), boundsSpec,
+                  component}, locale);
+        }
+
+      };
+      throw ie;
+    }
+    if (propertyValueAsString != null && getRegexpPattern() != null
+        && !Pattern.matches(getRegexpPattern(), propertyValueAsString)) {
+      IntegrityException ie = new IntegrityException("[" + getName()
+          + "] value (" + propertyValueAsString + ") does not match pattern ["
+          + getRegexpPatternSample() + "] on [" + component + "].") {
+
+        private static final long serialVersionUID = 7459823123892198831L;
+
+        @Override
+        public String getI18nMessage(ITranslationProvider translationProvider,
+            Locale locale) {
+          return translationProvider.getTranslation(
+              "integrity.property.pattern", new Object[] {
+                  getI18nName(translationProvider, locale),
+                  getRegexpPatternSample(), component}, locale);
+        }
+
+      };
+      throw ie;
+    }
   }
 
   /**
@@ -223,18 +247,6 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicStringPropertyDescriptor createQueryDescriptor() {
-    BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super
-        .createQueryDescriptor();
-    //queryDescriptor.setMaxLength(null);
-    queryDescriptor.setRegexpPattern(null);
-    return queryDescriptor;
-  }
-
-  /**
    * Performs the necessary transformations to build a tring out of a property
    * value.
    * 
@@ -244,17 +256,5 @@ public class BasicStringPropertyDescriptor extends
    */
   protected String getValueAsString(Object value) {
     return (String) value;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Object interceptSetter(Object component, Object newValue) {
-    String actualNewValue = (String) newValue;
-    if (isUpperCase()) {
-      actualNewValue = actualNewValue.toUpperCase();
-    }
-    return super.interceptSetter(component, actualNewValue);
   }
 }

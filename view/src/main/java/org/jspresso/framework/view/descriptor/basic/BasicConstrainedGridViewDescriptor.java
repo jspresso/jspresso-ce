@@ -54,18 +54,18 @@ public class BasicConstrainedGridViewDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public List<IViewDescriptor> getChildViewDescriptors() {
-    return new ArrayList<IViewDescriptor>(constrainedViews.keySet());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public CellConstraints getCellConstraints(IViewDescriptor viewDescriptor) {
     if (constrainedViews != null) {
       return constrainedViews.get(viewDescriptor);
     }
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IViewDescriptor> getChildViewDescriptors() {
+    return new ArrayList<IViewDescriptor>(constrainedViews.keySet());
   }
 
   /**

@@ -40,9 +40,9 @@ package org.jspresso.framework.gui.remote;
  */
 public class RComboBox extends RComponent {
 
-  private String[] values;
-  private String[] translations;
   private RIcon[]  icons;
+  private String[] translations;
+  private String[] values;
 
   /**
    * Constructs a new <code>RComboBox</code> instance.
@@ -55,32 +55,21 @@ public class RComboBox extends RComponent {
   }
 
   /**
+   * Gets the icons.
+   * 
+   * @return the icons.
+   */
+  public RIcon[] getIcons() {
+    return icons;
+  }
+
+  /**
    * Gets the translations.
    * 
    * @return the translations.
    */
   public String[] getTranslations() {
     return translations;
-  }
-
-  /**
-   * Sets the translations.
-   * 
-   * @param translations
-   *          the translations to set.
-   */
-  public void setTranslations(String[] translations) {
-    this.translations = translations;
-  }
-
-  /**
-   * Sets the values.
-   * 
-   * @param values
-   *          the values to set.
-   */
-  public void setValues(String[] values) {
-    this.values = values;
   }
 
   /**
@@ -102,12 +91,23 @@ public class RComboBox extends RComponent {
   }
 
   /**
-   * Gets the icons.
+   * Sets the translations.
    * 
-   * @return the icons.
+   * @param translations
+   *          the translations to set.
    */
-  public RIcon[] getIcons() {
-    return icons;
+  public void setTranslations(String[] translations) {
+    this.translations = translations;
+  }
+
+  /**
+   * Sets the values.
+   * 
+   * @param values
+   *          the values to set.
+   */
+  public void setValues(String[] values) {
+    this.values = values;
   }
 
 }

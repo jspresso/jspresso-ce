@@ -70,6 +70,17 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
 
   }
 
+  /**
+   * Sets the queryViewDescriptorFactory.
+   * 
+   * @param queryViewDescriptorFactory
+   *            the queryViewDescriptorFactory to set.
+   */
+  public void setQueryViewDescriptorFactory(
+      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
+    this.queryViewDescriptorFactory = queryViewDescriptorFactory;
+  }
+
   private IViewDescriptor createResultViewDescriptor(
       IComponentDescriptor<Object> entityDescriptor) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
@@ -86,16 +97,5 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
     return resultViewDescriptor;
-  }
-
-  /**
-   * Sets the queryViewDescriptorFactory.
-   * 
-   * @param queryViewDescriptorFactory
-   *            the queryViewDescriptorFactory to set.
-   */
-  public void setQueryViewDescriptorFactory(
-      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
-    this.queryViewDescriptorFactory = queryViewDescriptorFactory;
   }
 }

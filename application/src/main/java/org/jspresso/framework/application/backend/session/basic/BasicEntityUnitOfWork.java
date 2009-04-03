@@ -61,6 +61,16 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  public void addUpdatedEntity(IEntity entity) {
+    if (updatedEntities == null) {
+      updatedEntities = new LinkedHashSet<IEntity>();
+    }
+    updatedEntities.add(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void begin() {
     dirtRecorder = new BeanPropertyChangeRecorder();
   }
@@ -70,6 +80,16 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   public void clearDirtyState(IEntity flushedEntity) {
     dirtRecorder.resetChangedProperties(flushedEntity, null);
+  }
+
+  /**
+   * Clears the pending operations.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void clearPendingOperations() {
+    entitiesRegisteredForUpdate = null;
+    entitiesRegisteredForDeletion = null;
   }
 
   /**
@@ -88,6 +108,27 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   public Map<String, Object> getDirtyProperties(IEntity entity) {
     return dirtRecorder.getChangedProperties(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Set<IEntity> getEntitiesRegisteredForDeletion() {
+    return entitiesRegisteredForDeletion;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IEntity> getEntitiesRegisteredForUpdate() {
+    return entitiesRegisteredForUpdate;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Set<IEntity> getUpdatedEntities() {
+    return updatedEntities;
   }
 
   /**
@@ -117,26 +158,17 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
-  public void register(IEntity bean,
-      Map<String, Object> initialChangedProperties) {
-    dirtRecorder.register(bean, initialChangedProperties);
+  public boolean isEntityRegisteredForDeletion(IEntity entity) {
+    return entitiesRegisteredForDeletion != null
+        && entitiesRegisteredForDeletion.contains(entity);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void rollback() {
-    cleanup();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addUpdatedEntity(IEntity entity) {
-    if (updatedEntities == null) {
-      updatedEntities = new LinkedHashSet<IEntity>();
-    }
-    updatedEntities.add(entity);
+  public boolean isEntityRegisteredForUpdate(IEntity entity) {
+    return entitiesRegisteredForUpdate != null
+        && entitiesRegisteredForUpdate.contains(entity);
   }
 
   /**
@@ -146,9 +178,12 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     return updatedEntities != null && updatedEntities.contains(entity);
   }
 
-  private void cleanup() {
-    dirtRecorder = null;
-    updatedEntities = null;
+  /**
+   * {@inheritDoc}
+   */
+  public void register(IEntity bean,
+      Map<String, Object> initialChangedProperties) {
+    dirtRecorder.register(bean, initialChangedProperties);
   }
 
   /**
@@ -166,43 +201,6 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
-  public Set<IEntity> getUpdatedEntities() {
-    return updatedEntities;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Set<IEntity> getEntitiesRegisteredForDeletion() {
-    return entitiesRegisteredForDeletion;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IEntity> getEntitiesRegisteredForUpdate() {
-    return entitiesRegisteredForUpdate;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isEntityRegisteredForDeletion(IEntity entity) {
-    return entitiesRegisteredForDeletion != null
-        && entitiesRegisteredForDeletion.contains(entity);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isEntityRegisteredForUpdate(IEntity entity) {
-    return entitiesRegisteredForUpdate != null
-        && entitiesRegisteredForUpdate.contains(entity);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void registerForUpdate(IEntity entity) {
     if (entitiesRegisteredForUpdate == null) {
       entitiesRegisteredForUpdate = new ArrayList<IEntity>();
@@ -211,12 +209,14 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   }
 
   /**
-   * Clears the pending operations.
-   * <p>
    * {@inheritDoc}
    */
-  public void clearPendingOperations() {
-    entitiesRegisteredForUpdate = null;
-    entitiesRegisteredForDeletion = null;
+  public void rollback() {
+    cleanup();
+  }
+
+  private void cleanup() {
+    dirtRecorder = null;
+    updatedEntities = null;
   }
 }

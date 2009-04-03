@@ -188,109 +188,6 @@ public class DefaultWingsViewFactory extends
   private ITreeSelectionModelBinder treeSelectionModelBinder;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
-      Locale locale, IView<SComponent> view) {
-    if (viewDescriptor.getForeground() != null) {
-      view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
-    }
-    if (viewDescriptor.getBackground() != null) {
-      view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
-    }
-    if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
-    }
-    if (viewDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
-          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-              + TOOLTIP_ELLIPSIS);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void decorateWithActions(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale, IView<SComponent> view) {
-    if (viewDescriptor.getActionMap() != null) {
-      SToolBar toolBar = createSToolBar();
-      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
-          .getActionLists().iterator(); iter.hasNext();) {
-        ActionList nextActionList = iter.next();
-        for (IDisplayableAction action : nextActionList.getActions()) {
-          Action wingsAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          SButton actionButton = createSButton();
-          actionButton.setShowAsFormComponent(false);
-          actionButton.setAction(wingsAction);
-          if (action.getAcceleratorAsString() != null) {
-            KeyStroke ks = KeyStroke.getKeyStroke(action
-                .getAcceleratorAsString());
-            view.getPeer().getActionMap().put(
-                wingsAction.getValue(Action.NAME), wingsAction);
-            view.getPeer().getInputMap(
-                SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT).put(
-                ks, wingsAction.getValue(Action.NAME));
-            String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                .getModifiers())
-                + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-            actionButton.setToolTipText("<HTML>"
-                + actionButton.getToolTipText()
-                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                + "</FONT></HTML>");
-          }
-          actionButton.setText("");
-          toolBar.add(actionButton);
-        }
-        if (iter.hasNext()) {
-          toolBar.add(new SSpacer(10, 0));
-        }
-      }
-      SPanel viewPanel = createSPanel(new SBorderLayout());
-      viewPanel.add(toolBar, SBorderLayout.NORTH);
-      viewPanel.add(view.getPeer(), SBorderLayout.CENTER);
-      view.setPeer(viewPanel);
-    }
-  }
-
-  private void decorateWithTitle(IView<SComponent> view, Locale locale) {
-    // SInternalFrame iFrame = createSInternalFrame();
-    // iFrame.setTitle(view.getDescriptor().getI18nName(
-    // getTranslationProvider(), locale));
-    // iFrame.setMaximizable(false);
-    // iFrame.setClosable(false);
-    // iFrame.setIconifyable(true);
-    // iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
-    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    // iFrame.getContentPane().setLayout(new SBorderLayout());
-    // iFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
-    // iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
-    // WingsUtil.FULL_DIM_PERCENT));
-    // view.setPeer(iFrame);
-
-    // view.getPeer().setBorder(new
-    // STitledBorder(view.getDescriptor().getI18nName(
-    // getTranslationProvider(), locale)));
-
-    SPanel titledPanel = createSPanel(new SBorderLayout());
-    SLabel titleLabel = createSLabel();
-    titleLabel.setIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    titleLabel.setText(view.getDescriptor().getI18nName(
-        getTranslationProvider(), locale));
-    titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    titleLabel.setBorder(new SEmptyBorder(new Insets(2, 2, 6, 2)));
-    titledPanel.add(titleLabel, SBorderLayout.NORTH);
-    titledPanel.add(view.getPeer(), SBorderLayout.CENTER);
-    titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(0, 0,
-        2, 2)));
-    view.setPeer(titledPanel);
-  }
-
-  /**
    * Sets the listSelectionModelBinder.
    * 
    * @param listSelectionModelBinder
@@ -310,339 +207,6 @@ public class DefaultWingsViewFactory extends
   public void setTreeSelectionModelBinder(
       ITreeSelectionModelBinder treeSelectionModelBinder) {
     this.treeSelectionModelBinder = treeSelectionModelBinder;
-  }
-
-  /**
-   * Creates a date field.
-   * 
-   * @return the created date field.
-   */
-  protected XCalendar createDateField() {
-    XCalendar dateField = new XCalendar();
-    dateField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return dateField;
-  }
-
-  /**
-   * Creates an action field.
-   * 
-   * @param showTextField
-   *          is the text field visible to the user.
-   * @return the created action field.
-   */
-  protected SActionField createSActionField(boolean showTextField) {
-    SActionField actionField = new SActionField(showTextField);
-    actionField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return actionField;
-  }
-
-  /**
-   * Creates a button.
-   * 
-   * @return the created button.
-   */
-  protected SButton createSButton() {
-    SButton button = new SButton();
-    button.setActionCommand("*"); // For LOV actions to avoid "1".
-    return button;
-  }
-
-  /**
-   * Creates a check box.
-   * 
-   * @return the created check box.
-   */
-  protected SCheckBox createSCheckBox() {
-    SCheckBox checkBox = new SCheckBox();
-    checkBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return checkBox;
-  }
-
-  /**
-   * Creates an color picker.
-   * 
-   * @return the created color picker.
-   */
-  protected SColorPicker createSColorPicker() {
-    SColorPicker colorPicker = new SColorPicker();
-    colorPicker.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return colorPicker;
-  }
-
-  /**
-   * Creates a combo box.
-   * 
-   * @return the created combo box.
-   */
-  protected SComboBox createSComboBox() {
-    SComboBox comboBox = new SComboBox();
-    comboBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return comboBox;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected SPanel createSecurityComponent() {
-    SPanel panel = createSPanel(new SBorderLayout());
-    // SLabel label = createSLabel();
-    // label.setHorizontalAlignment(SConstants.CENTER);
-    // label.setVerticalAlignment(SConstants.CENTER);
-    // label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
-    // panel.add(label, SBorderLayout.CENTER);
-    return panel;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected SComponent createEmptyComponent() {
-    return createSPanel(new SBorderLayout());
-  }
-
-  /**
-   * Creates an internal frame.
-   * 
-   * @return the created panel.
-   */
-  protected SInternalFrame createSInternalFrame() {
-    SInternalFrame iFrame = new SInternalFrame();
-    iFrame.setPreferredSize(SDimension.FULLAREA);
-    iFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
-    iFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    iFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
-    return iFrame;
-  }
-
-  /**
-   * Creates a label.
-   * 
-   * @return the created label.
-   */
-  protected SLabel createSLabel() {
-    return new SLabel();
-  }
-
-  /**
-   * Creates a list.
-   * 
-   * @return the created list.
-   */
-  protected SList createSList() {
-    SList list = new SList();
-    return list;
-  }
-
-  /**
-   * Creates a menu item.
-   * 
-   * @return the created menu item.
-   */
-  protected SMenuItem createSMenuItem() {
-    return new SMenuItem();
-  }
-
-  /**
-   * Creates a panel.
-   * 
-   * @param layout
-   *          the layout to apply to the panel.
-   * @return the created panel.
-   */
-  protected SPanel createSPanel(SLayoutManager layout) {
-    SPanel panel = new SPanel(layout);
-    panel.setPreferredSize(SDimension.FULLAREA);
-    panel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    panel.setVerticalAlignment(SConstants.TOP_ALIGN);
-    return panel;
-  }
-
-  /**
-   * Creates a password field.
-   * 
-   * @return the created password field.
-   */
-  protected SPasswordField createSPasswordField() {
-    SPasswordField passwordField = new SPasswordField();
-    passwordField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return passwordField;
-  }
-
-  /**
-   * Creates a popup menu.
-   * 
-   * @return the created popup menu.
-   */
-  protected SPopupMenu createSPopupMenu() {
-    return new SPopupMenu();
-  }
-
-  /**
-   * Creates a scroll pane.
-   * 
-   * @return the created scroll pane.
-   */
-  protected SScrollPane createSScrollPane() {
-    SScrollPane scrollPane = new SScrollPane();
-    scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-    scrollPane.setPreferredSize(SDimension.FULLAREA);
-    scrollPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
-    // TODO remove workaround asa WingS is fixed.
-    scrollPane.setAttribute(CSSProperty.TABLE_LAYOUT, "fixed");
-    return scrollPane;
-  }
-
-  /**
-   * Creates a split pane.
-   * 
-   * @return the created split pane.
-   */
-  protected SSplitPane createSSplitPane() {
-    SSplitPane splitPane = new SSplitPane();
-    splitPane.setPreferredSize(SDimension.FULLAREA);
-    splitPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    splitPane.setVerticalAlignment(SConstants.TOP_ALIGN);
-    splitPane.setContinuousLayout(true);
-    // splitPane.setOneTouchExpandable(true);
-    return splitPane;
-  }
-
-  /**
-   * Creates a tabbed pane.
-   * 
-   * @return the created tabbed pane.
-   */
-  protected STabbedPane createSTabbedPane() {
-    STabbedPane tabbedPane = new STabbedPane();
-    tabbedPane.setPreferredSize(SDimension.FULLAREA);
-    tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
-    tabbedPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return tabbedPane;
-  }
-
-  /**
-   * Creates a table.
-   * 
-   * @return the created table.
-   */
-  protected STable createSTable() {
-    STable table = new STable() {
-
-      private static final long serialVersionUID = -8821125434835138650L;
-      private SCellRendererPane cellRendererPane = new SCellRendererPane() {
-
-                                                   private static final long serialVersionUID = 3159574506651887983L;
-
-                                                   @Override
-                                                   public void writeComponent(
-                                                       Device d, SComponent c,
-                                                       SComponent p)
-                                                       throws IOException {
-                                                     if (c != null
-                                                         && p instanceof STable) {
-                                                       STable renderedTable = (STable) p;
-                                                       if (renderedTable
-                                                           .isEditing()
-                                                           && renderedTable
-                                                               .getEditorComponent() == c) {
-                                                         addComponent(c);
-                                                         c.write(d);
-                                                       } else {
-                                                         super.writeComponent(
-                                                             d, c, p);
-                                                       }
-                                                     } else {
-                                                       super.writeComponent(d,
-                                                           c, p);
-                                                     }
-                                                   }
-                                                 };
-
-      @Override
-      public SCellRendererPane getCellRendererPane() {
-        return cellRendererPane;
-      }
-    };
-    table.setVerticalAlignment(SConstants.TOP_ALIGN);
-    table.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    table.setPreferredSize(SDimension.FULLWIDTH);
-    table.setSelectable(true);
-    return table;
-  }
-
-  /**
-   * Creates a text area.
-   * 
-   * @return the created text area.
-   */
-  protected STextArea createSTextArea() {
-    STextArea textArea = new STextArea();
-    textArea.setVerticalAlignment(SConstants.TOP_ALIGN);
-    textArea.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    textArea.setPreferredSize(SDimension.FULLAREA);
-    textArea.setRows(20);
-    return textArea;
-  }
-
-  /**
-   * Creates a text field.
-   * 
-   * @return the created text field.
-   */
-  protected STextField createSTextField() {
-    STextField textField = new STextField();
-    textField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return textField;
-  }
-
-  /**
-   * Creates a tool bar.
-   * 
-   * @return the created tool bar.
-   */
-  protected SToolBar createSToolBar() {
-    SToolBar toolBar = new SToolBar();
-    SBoxLayout toolBarLayout = new SBoxLayout(toolBar, SConstants.LEFT_ALIGN);
-    toolBar.setLayout(toolBarLayout);
-    SBevelBorder toolBarBorder = new SBevelBorder(SBevelBorder.RAISED,
-        new Insets(2, 2, 2, 2), 2);
-    toolBarBorder.setColor(Color.LIGHT_GRAY);
-    toolBar.setBorder(toolBarBorder);
-    // toolBar.setPreferredSize(SDimension.FULLWIDTH);
-    toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return toolBar;
-  }
-
-  /**
-   * Creates a tree.
-   * 
-   * @return the created tree.
-   */
-  protected STree createSTree() {
-    STree tree = new STree();
-    tree.setVerticalAlignment(SConstants.TOP_ALIGN);
-    tree.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return tree;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void decorateWithBorder(IView<SComponent> view, Locale locale) {
-    switch (view.getDescriptor().getBorderType()) {
-      case SIMPLE:
-        view.getPeer().setBorder(new SEtchedBorder());
-        break;
-      case TITLED:
-        decorateWithTitle(view, locale);
-        break;
-      default:
-        break;
-    }
   }
 
   /**
@@ -703,12 +267,6 @@ public class DefaultWingsViewFactory extends
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
-  }
-
-  private STableCellRenderer createBooleanTableCellRenderer(
-      @SuppressWarnings("unused") IBooleanPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
-    return new BooleanTableCellRenderer();
   }
 
   /**
@@ -787,12 +345,6 @@ public class DefaultWingsViewFactory extends
     return view;
   }
 
-  private STableCellRenderer createCollectionTableCellRenderer(
-      @SuppressWarnings("unused") ICollectionPropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
-    return null;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -811,12 +363,6 @@ public class DefaultWingsViewFactory extends
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
-  }
-
-  private STableCellRenderer createColorTableCellRenderer(
-      @SuppressWarnings("unused") IColorPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
-    return new ColorTableCellRenderer();
   }
 
   /**
@@ -988,17 +534,6 @@ public class DefaultWingsViewFactory extends
     return view;
   }
 
-  private void fillLastRow(SPanel viewComponent) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = GridBagConstraints.RELATIVE;
-    constraints.weightx = 1.0;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.gridwidth = GridBagConstraints.REMAINDER;
-    SPanel filler = createSPanel(new SBorderLayout());
-    // filler.setBorder(new SLineBorder(Color.BLUE));
-    viewComponent.add(filler, constraints);
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -1025,6 +560,17 @@ public class DefaultWingsViewFactory extends
   }
 
   /**
+   * Creates a date field.
+   * 
+   * @return the created date field.
+   */
+  protected XCalendar createDateField() {
+    XCalendar dateField = new XCalendar();
+    dateField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return dateField;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -1040,12 +586,6 @@ public class DefaultWingsViewFactory extends
     adjustSizes(viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), 64);
     return constructView(viewComponent, null, connector);
-  }
-
-  private STableCellRenderer createDateTableCellRenderer(
-      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createDateFormatter(
-        propertyDescriptor, locale));
   }
 
   /**
@@ -1070,16 +610,6 @@ public class DefaultWingsViewFactory extends
     return constructView(viewComponent, null, connector);
   }
 
-  private STableCellRenderer createDecimalTableCellRenderer(
-      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
-    if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentTableCellRenderer(
-          (IPercentPropertyDescriptor) propertyDescriptor, locale);
-    }
-    return new FormattedTableCellRenderer(createDecimalFormatter(
-        propertyDescriptor, locale));
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -1097,10 +627,12 @@ public class DefaultWingsViewFactory extends
     return constructView(viewComponent, null, connector);
   }
 
-  private STableCellRenderer createDurationTableCellRenderer(
-      IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createDurationFormatter(
-        propertyDescriptor, locale));
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected SComponent createEmptyComponent() {
+    return createSPanel(new SBorderLayout());
   }
 
   /**
@@ -1125,12 +657,6 @@ public class DefaultWingsViewFactory extends
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
-  }
-
-  private STableCellRenderer createEnumerationTableCellRenderer(
-      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
-        locale);
   }
 
   /**
@@ -1171,32 +697,6 @@ public class DefaultWingsViewFactory extends
     return view;
   }
 
-  private GridBagConstraints createGridBagConstraints(
-      CellConstraints viewConstraints) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = viewConstraints.getColumn();
-    constraints.gridy = viewConstraints.getRow();
-    constraints.gridwidth = viewConstraints.getWidth();
-    constraints.gridheight = viewConstraints.getHeight();
-    if (viewConstraints.isWidthResizable()) {
-      constraints.weightx = 1.0D;
-      if (viewConstraints.isHeightResizable()) {
-        constraints.fill = GridBagConstraints.BOTH;
-      } else {
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-      }
-    }
-    if (viewConstraints.isHeightResizable()) {
-      constraints.weighty = 1.0D;
-      if (viewConstraints.isWidthResizable()) {
-        constraints.fill = GridBagConstraints.BOTH;
-      } else {
-        constraints.fill = GridBagConstraints.VERTICAL;
-      }
-    }
-    return constraints;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -1234,12 +734,6 @@ public class DefaultWingsViewFactory extends
     adjustSizes(viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
-  }
-
-  private STableCellRenderer createIntegerTableCellRenderer(
-      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createIntegerFormatter(
-        propertyDescriptor, locale));
   }
 
   /**
@@ -1306,19 +800,6 @@ public class DefaultWingsViewFactory extends
     return view;
   }
 
-  private STableCellRenderer createNumberTableCellRenderer(
-      INumberPropertyDescriptor propertyDescriptor, Locale locale) {
-    STableCellRenderer cellRenderer = null;
-    if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      cellRenderer = createIntegerTableCellRenderer(
-          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      cellRenderer = createDecimalTableCellRenderer(
-          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
-    }
-    return cellRenderer;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -1349,40 +830,6 @@ public class DefaultWingsViewFactory extends
     adjustSizes(viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
-  }
-
-  private STableCellRenderer createPercentTableCellRenderer(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createPercentFormatter(
-        propertyDescriptor, locale));
-  }
-
-  private SLabel createPropertyLabel(IPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") SComponent propertyComponent, Locale locale) {
-    SLabel propertyLabel = createSLabel();
-    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
-        getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
-      labelText.append("*");
-      propertyLabel.setForeground(Color.RED);
-    }
-    propertyLabel.setText(labelText.toString());
-    return propertyLabel;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void decorateWithDescription(
-      IPropertyDescriptor propertyDescriptor, Locale locale,
-      IView<SComponent> view) {
-    if (view != null && propertyDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
-          propertyDescriptor.getI18nDescription(getTranslationProvider(),
-              locale)
-              + TOOLTIP_ELLIPSIS);
-    }
   }
 
   /**
@@ -1420,24 +867,117 @@ public class DefaultWingsViewFactory extends
     return constructView(viewComponent, null, connector);
   }
 
-  private STableCellRenderer createReferenceTableCellRenderer(
-      @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
-    return null;
+  /**
+   * Creates an action field.
+   * 
+   * @param showTextField
+   *          is the text field visible to the user.
+   * @return the created action field.
+   */
+  protected SActionField createSActionField(boolean showTextField) {
+    SActionField actionField = new SActionField(showTextField);
+    actionField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return actionField;
   }
 
-  private STableCellRenderer createRelationshipEndTableCellRenderer(
-      IRelationshipEndPropertyDescriptor propertyDescriptor, Locale locale) {
-    STableCellRenderer cellRenderer = null;
+  /**
+   * Creates a button.
+   * 
+   * @return the created button.
+   */
+  protected SButton createSButton() {
+    SButton button = new SButton();
+    button.setActionCommand("*"); // For LOV actions to avoid "1".
+    return button;
+  }
 
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      cellRenderer = createReferenceTableCellRenderer(
-          (IReferencePropertyDescriptor<?>) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      cellRenderer = createCollectionTableCellRenderer(
-          (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
-    }
-    return cellRenderer;
+  /**
+   * Creates a check box.
+   * 
+   * @return the created check box.
+   */
+  protected SCheckBox createSCheckBox() {
+    SCheckBox checkBox = new SCheckBox();
+    checkBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return checkBox;
+  }
+
+  /**
+   * Creates an color picker.
+   * 
+   * @return the created color picker.
+   */
+  protected SColorPicker createSColorPicker() {
+    SColorPicker colorPicker = new SColorPicker();
+    colorPicker.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return colorPicker;
+  }
+
+  /**
+   * Creates a combo box.
+   * 
+   * @return the created combo box.
+   */
+  protected SComboBox createSComboBox() {
+    SComboBox comboBox = new SComboBox();
+    comboBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return comboBox;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected SPanel createSecurityComponent() {
+    SPanel panel = createSPanel(new SBorderLayout());
+    // SLabel label = createSLabel();
+    // label.setHorizontalAlignment(SConstants.CENTER);
+    // label.setVerticalAlignment(SConstants.CENTER);
+    // label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
+    // panel.add(label, SBorderLayout.CENTER);
+    return panel;
+  }
+
+  /**
+   * Creates an internal frame.
+   * 
+   * @return the created panel.
+   */
+  protected SInternalFrame createSInternalFrame() {
+    SInternalFrame iFrame = new SInternalFrame();
+    iFrame.setPreferredSize(SDimension.FULLAREA);
+    iFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
+    iFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    iFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
+    return iFrame;
+  }
+
+  /**
+   * Creates a label.
+   * 
+   * @return the created label.
+   */
+  protected SLabel createSLabel() {
+    return new SLabel();
+  }
+
+  /**
+   * Creates a list.
+   * 
+   * @return the created list.
+   */
+  protected SList createSList() {
+    SList list = new SList();
+    return list;
+  }
+
+  /**
+   * Creates a menu item.
+   * 
+   * @return the created menu item.
+   */
+  protected SMenuItem createSMenuItem() {
+    return new SMenuItem();
   }
 
   /**
@@ -1450,6 +990,32 @@ public class DefaultWingsViewFactory extends
       IActionHandler actionHandler, Locale locale) {
 
     return createTextPropertyView(propertyDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * Creates a panel.
+   * 
+   * @param layout
+   *          the layout to apply to the panel.
+   * @return the created panel.
+   */
+  protected SPanel createSPanel(SLayoutManager layout) {
+    SPanel panel = new SPanel(layout);
+    panel.setPreferredSize(SDimension.FULLAREA);
+    panel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    panel.setVerticalAlignment(SConstants.TOP_ALIGN);
+    return panel;
+  }
+
+  /**
+   * Creates a password field.
+   * 
+   * @return the created password field.
+   */
+  protected SPasswordField createSPasswordField() {
+    SPasswordField passwordField = new SPasswordField();
+    passwordField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return passwordField;
   }
 
   /**
@@ -1524,40 +1090,163 @@ public class DefaultWingsViewFactory extends
     return view;
   }
 
-  // private ICompositeView<SComponent> createSplitView(
-  // ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
-  // Locale locale) {
-  // SSplitPane viewComponent = createSSplitPane();
-  // BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
-  // viewDescriptor);
-  // List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
-  //
-  // switch (viewDescriptor.getOrientation()) {
-  // case ISplitViewDescriptor.HORIZONTAL:
-  // viewComponent.setOrientation(SSplitPane.HORIZONTAL_SPLIT);
-  // break;
-  // case ISplitViewDescriptor.VERTICAL:
-  // viewComponent.setOrientation(SSplitPane.VERTICAL_SPLIT);
-  // break;
-  // default:
-  // break;
-  // }
-  //
-  // if (viewDescriptor.getLeftTopViewDescriptor() != null) {
-  // IView<SComponent> leftTopView = createView(viewDescriptor
-  // .getLeftTopViewDescriptor(), actionHandler, locale);
-  // viewComponent.setLeftComponent(leftTopView.getPeer());
-  // childrenViews.add(leftTopView);
-  // }
-  // if (viewDescriptor.getRightBottomViewDescriptor() != null) {
-  // IView<SComponent> rightBottomView = createView(viewDescriptor
-  // .getRightBottomViewDescriptor(), actionHandler, locale);
-  // viewComponent.setRightComponent(rightBottomView.getPeer());
-  // childrenViews.add(rightBottomView);
-  // }
-  // view.setChildren(childrenViews);
-  // return view;
-  // }
+  /**
+   * Creates a popup menu.
+   * 
+   * @return the created popup menu.
+   */
+  protected SPopupMenu createSPopupMenu() {
+    return new SPopupMenu();
+  }
+
+  /**
+   * Creates a scroll pane.
+   * 
+   * @return the created scroll pane.
+   */
+  protected SScrollPane createSScrollPane() {
+    SScrollPane scrollPane = new SScrollPane();
+    scrollPane.setMode(SScrollPane.MODE_COMPLETE);
+    scrollPane.setPreferredSize(SDimension.FULLAREA);
+    scrollPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
+    // TODO remove workaround asa WingS is fixed.
+    scrollPane.setAttribute(CSSProperty.TABLE_LAYOUT, "fixed");
+    return scrollPane;
+  }
+
+  /**
+   * Creates a split pane.
+   * 
+   * @return the created split pane.
+   */
+  protected SSplitPane createSSplitPane() {
+    SSplitPane splitPane = new SSplitPane();
+    splitPane.setPreferredSize(SDimension.FULLAREA);
+    splitPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    splitPane.setVerticalAlignment(SConstants.TOP_ALIGN);
+    splitPane.setContinuousLayout(true);
+    // splitPane.setOneTouchExpandable(true);
+    return splitPane;
+  }
+
+  /**
+   * Creates a tabbed pane.
+   * 
+   * @return the created tabbed pane.
+   */
+  protected STabbedPane createSTabbedPane() {
+    STabbedPane tabbedPane = new STabbedPane();
+    tabbedPane.setPreferredSize(SDimension.FULLAREA);
+    tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
+    tabbedPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return tabbedPane;
+  }
+
+  /**
+   * Creates a table.
+   * 
+   * @return the created table.
+   */
+  protected STable createSTable() {
+    STable table = new STable() {
+
+      private static final long serialVersionUID = -8821125434835138650L;
+      private SCellRendererPane cellRendererPane = new SCellRendererPane() {
+
+                                                   private static final long serialVersionUID = 3159574506651887983L;
+
+                                                   @Override
+                                                   public void writeComponent(
+                                                       Device d, SComponent c,
+                                                       SComponent p)
+                                                       throws IOException {
+                                                     if (c != null
+                                                         && p instanceof STable) {
+                                                       STable renderedTable = (STable) p;
+                                                       if (renderedTable
+                                                           .isEditing()
+                                                           && renderedTable
+                                                               .getEditorComponent() == c) {
+                                                         addComponent(c);
+                                                         c.write(d);
+                                                       } else {
+                                                         super.writeComponent(
+                                                             d, c, p);
+                                                       }
+                                                     } else {
+                                                       super.writeComponent(d,
+                                                           c, p);
+                                                     }
+                                                   }
+                                                 };
+
+      @Override
+      public SCellRendererPane getCellRendererPane() {
+        return cellRendererPane;
+      }
+    };
+    table.setVerticalAlignment(SConstants.TOP_ALIGN);
+    table.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    table.setPreferredSize(SDimension.FULLWIDTH);
+    table.setSelectable(true);
+    return table;
+  }
+
+  /**
+   * Creates a text area.
+   * 
+   * @return the created text area.
+   */
+  protected STextArea createSTextArea() {
+    STextArea textArea = new STextArea();
+    textArea.setVerticalAlignment(SConstants.TOP_ALIGN);
+    textArea.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    textArea.setPreferredSize(SDimension.FULLAREA);
+    textArea.setRows(20);
+    return textArea;
+  }
+
+  /**
+   * Creates a text field.
+   * 
+   * @return the created text field.
+   */
+  protected STextField createSTextField() {
+    STextField textField = new STextField();
+    textField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return textField;
+  }
+
+  /**
+   * Creates a tool bar.
+   * 
+   * @return the created tool bar.
+   */
+  protected SToolBar createSToolBar() {
+    SToolBar toolBar = new SToolBar();
+    SBoxLayout toolBarLayout = new SBoxLayout(toolBar, SConstants.LEFT_ALIGN);
+    toolBar.setLayout(toolBarLayout);
+    SBevelBorder toolBarBorder = new SBevelBorder(SBevelBorder.RAISED,
+        new Insets(2, 2, 2, 2), 2);
+    toolBarBorder.setColor(Color.LIGHT_GRAY);
+    toolBar.setBorder(toolBarBorder);
+    // toolBar.setPreferredSize(SDimension.FULLWIDTH);
+    toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return toolBar;
+  }
+
+  /**
+   * Creates a tree.
+   * 
+   * @return the created tree.
+   */
+  protected STree createSTree() {
+    STree tree = new STree();
+    tree.setVerticalAlignment(SConstants.TOP_ALIGN);
+    tree.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return tree;
+  }
 
   /**
    * {@inheritDoc}
@@ -1572,18 +1261,6 @@ public class DefaultWingsViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
-  }
-
-  private STableCellRenderer createStringTableCellRenderer(
-      @SuppressWarnings("unused") IStringPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
-    return new FormattedTableCellRenderer(null);
-  }
-
-  private STableCellEditor createTableCellEditor(IView<SComponent> editorView) {
-    WingsViewCellEditorAdapter editor;
-    editor = new WingsViewCellEditorAdapter(editorView);
-    return editor;
   }
 
   /**
@@ -1768,22 +1445,6 @@ public class DefaultWingsViewFactory extends
     return view;
   }
 
-  private int getSelectionMode(ICollectionViewDescriptor viewDescriptor) {
-    int selectionMode;
-    switch (viewDescriptor.getSelectionMode()) {
-      case SINGLE_SELECTION:
-        selectionMode = ListSelectionModel.SINGLE_SELECTION;
-        break;
-      case SINGLE_INTERVAL_SELECTION:
-        selectionMode = ListSelectionModel.SINGLE_INTERVAL_SELECTION;
-        break;
-      default:
-        selectionMode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
-        break;
-    }
-    return selectionMode;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -1854,12 +1515,6 @@ public class DefaultWingsViewFactory extends
     return constructView(viewComponent, null, connector);
   }
 
-  private STableCellRenderer createTimeTableCellRenderer(
-      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createTimeFormatter(
-        propertyDescriptor, locale));
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -1889,10 +1544,201 @@ public class DefaultWingsViewFactory extends
     return view;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithActions(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale, IView<SComponent> view) {
+    if (viewDescriptor.getActionMap() != null) {
+      SToolBar toolBar = createSToolBar();
+      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
+          .getActionLists().iterator(); iter.hasNext();) {
+        ActionList nextActionList = iter.next();
+        for (IDisplayableAction action : nextActionList.getActions()) {
+          Action wingsAction = getActionFactory().createAction(action,
+              actionHandler, view, locale);
+          SButton actionButton = createSButton();
+          actionButton.setShowAsFormComponent(false);
+          actionButton.setAction(wingsAction);
+          if (action.getAcceleratorAsString() != null) {
+            KeyStroke ks = KeyStroke.getKeyStroke(action
+                .getAcceleratorAsString());
+            view.getPeer().getActionMap().put(
+                wingsAction.getValue(Action.NAME), wingsAction);
+            view.getPeer().getInputMap(
+                SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+                ks, wingsAction.getValue(Action.NAME));
+            String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                .getModifiers())
+                + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+            actionButton.setToolTipText("<HTML>"
+                + actionButton.getToolTipText()
+                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                + "</FONT></HTML>");
+          }
+          actionButton.setText("");
+          toolBar.add(actionButton);
+        }
+        if (iter.hasNext()) {
+          toolBar.add(new SSpacer(10, 0));
+        }
+      }
+      SPanel viewPanel = createSPanel(new SBorderLayout());
+      viewPanel.add(toolBar, SBorderLayout.NORTH);
+      viewPanel.add(view.getPeer(), SBorderLayout.CENTER);
+      view.setPeer(viewPanel);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithBorder(IView<SComponent> view, Locale locale) {
+    switch (view.getDescriptor().getBorderType()) {
+      case SIMPLE:
+        view.getPeer().setBorder(new SEtchedBorder());
+        break;
+      case TITLED:
+        decorateWithTitle(view, locale);
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void decorateWithDescription(
+      IPropertyDescriptor propertyDescriptor, Locale locale,
+      IView<SComponent> view) {
+    if (view != null && propertyDescriptor.getDescription() != null) {
+      view.getPeer().setToolTipText(
+          propertyDescriptor.getI18nDescription(getTranslationProvider(),
+              locale)
+              + TOOLTIP_ELLIPSIS);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
+      Locale locale, IView<SComponent> view) {
+    if (viewDescriptor.getForeground() != null) {
+      view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
+    }
+    if (viewDescriptor.getBackground() != null) {
+      view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
+    }
+    if (viewDescriptor.getFont() != null) {
+      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+    }
+    if (viewDescriptor.getDescription() != null) {
+      view.getPeer().setToolTipText(
+          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+              + TOOLTIP_ELLIPSIS);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void showCardInPanel(SComponent cardsPeer, String cardName) {
+    ((SCardLayout) ((SContainer) cardsPeer).getLayout()).show(
+        (SContainer) cardsPeer, cardName);
+  }
+
+  private STableCellRenderer createBooleanTableCellRenderer(
+      @SuppressWarnings("unused") IBooleanPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
+    return new BooleanTableCellRenderer();
+  }
+
+  private STableCellRenderer createCollectionTableCellRenderer(
+      @SuppressWarnings("unused") ICollectionPropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
+    return null;
+  }
+
   private Color createColor(String colorAsHexString) {
     int[] rgba = ColorHelper.fromHexString(colorAsHexString);
     return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
   }
+
+  private STableCellRenderer createColorTableCellRenderer(
+      @SuppressWarnings("unused") IColorPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
+    return new ColorTableCellRenderer();
+  }
+
+  private STableCellRenderer createDateTableCellRenderer(
+      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(createDateFormatter(
+        propertyDescriptor, locale));
+  }
+
+  private STableCellRenderer createDecimalTableCellRenderer(
+      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+    if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
+      return createPercentTableCellRenderer(
+          (IPercentPropertyDescriptor) propertyDescriptor, locale);
+    }
+    return new FormattedTableCellRenderer(createDecimalFormatter(
+        propertyDescriptor, locale));
+  }
+
+  private STableCellRenderer createDurationTableCellRenderer(
+      IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(createDurationFormatter(
+        propertyDescriptor, locale));
+  }
+
+  private STableCellRenderer createEnumerationTableCellRenderer(
+      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
+        locale);
+  }
+
+  // private ICompositeView<SComponent> createSplitView(
+  // ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  // Locale locale) {
+  // SSplitPane viewComponent = createSSplitPane();
+  // BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
+  // viewDescriptor);
+  // List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
+  //
+  // switch (viewDescriptor.getOrientation()) {
+  // case ISplitViewDescriptor.HORIZONTAL:
+  // viewComponent.setOrientation(SSplitPane.HORIZONTAL_SPLIT);
+  // break;
+  // case ISplitViewDescriptor.VERTICAL:
+  // viewComponent.setOrientation(SSplitPane.VERTICAL_SPLIT);
+  // break;
+  // default:
+  // break;
+  // }
+  //
+  // if (viewDescriptor.getLeftTopViewDescriptor() != null) {
+  // IView<SComponent> leftTopView = createView(viewDescriptor
+  // .getLeftTopViewDescriptor(), actionHandler, locale);
+  // viewComponent.setLeftComponent(leftTopView.getPeer());
+  // childrenViews.add(leftTopView);
+  // }
+  // if (viewDescriptor.getRightBottomViewDescriptor() != null) {
+  // IView<SComponent> rightBottomView = createView(viewDescriptor
+  // .getRightBottomViewDescriptor(), actionHandler, locale);
+  // viewComponent.setRightComponent(rightBottomView.getPeer());
+  // childrenViews.add(rightBottomView);
+  // }
+  // view.setChildren(childrenViews);
+  // return view;
+  // }
 
   private SFont createFont(String fontString) {
     org.jspresso.framework.util.gui.Font font = FontHelper
@@ -1908,6 +1754,169 @@ public class DefaultWingsViewFactory extends
       fontStyle = SFont.PLAIN;
     }
     return new SFont(font.getName(), fontStyle, font.getSize());
+  }
+
+  private GridBagConstraints createGridBagConstraints(
+      CellConstraints viewConstraints) {
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = viewConstraints.getColumn();
+    constraints.gridy = viewConstraints.getRow();
+    constraints.gridwidth = viewConstraints.getWidth();
+    constraints.gridheight = viewConstraints.getHeight();
+    if (viewConstraints.isWidthResizable()) {
+      constraints.weightx = 1.0D;
+      if (viewConstraints.isHeightResizable()) {
+        constraints.fill = GridBagConstraints.BOTH;
+      } else {
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+      }
+    }
+    if (viewConstraints.isHeightResizable()) {
+      constraints.weighty = 1.0D;
+      if (viewConstraints.isWidthResizable()) {
+        constraints.fill = GridBagConstraints.BOTH;
+      } else {
+        constraints.fill = GridBagConstraints.VERTICAL;
+      }
+    }
+    return constraints;
+  }
+
+  private STableCellRenderer createIntegerTableCellRenderer(
+      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(createIntegerFormatter(
+        propertyDescriptor, locale));
+  }
+
+  private STableCellRenderer createNumberTableCellRenderer(
+      INumberPropertyDescriptor propertyDescriptor, Locale locale) {
+    STableCellRenderer cellRenderer = null;
+    if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
+      cellRenderer = createIntegerTableCellRenderer(
+          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+      cellRenderer = createDecimalTableCellRenderer(
+          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
+    }
+    return cellRenderer;
+  }
+
+  private STableCellRenderer createPercentTableCellRenderer(
+      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(createPercentFormatter(
+        propertyDescriptor, locale));
+  }
+
+  private SLabel createPropertyLabel(IPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused") SComponent propertyComponent, Locale locale) {
+    SLabel propertyLabel = createSLabel();
+    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
+        getTranslationProvider(), locale));
+    if (propertyDescriptor.isMandatory()) {
+      labelText.append("*");
+      propertyLabel.setForeground(Color.RED);
+    }
+    propertyLabel.setText(labelText.toString());
+    return propertyLabel;
+  }
+
+  private STableCellRenderer createReferenceTableCellRenderer(
+      @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
+    return null;
+  }
+
+  private STableCellRenderer createRelationshipEndTableCellRenderer(
+      IRelationshipEndPropertyDescriptor propertyDescriptor, Locale locale) {
+    STableCellRenderer cellRenderer = null;
+
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      cellRenderer = createReferenceTableCellRenderer(
+          (IReferencePropertyDescriptor<?>) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      cellRenderer = createCollectionTableCellRenderer(
+          (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
+    }
+    return cellRenderer;
+  }
+
+  private STableCellRenderer createStringTableCellRenderer(
+      @SuppressWarnings("unused") IStringPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
+    return new FormattedTableCellRenderer(null);
+  }
+
+  private STableCellEditor createTableCellEditor(IView<SComponent> editorView) {
+    WingsViewCellEditorAdapter editor;
+    editor = new WingsViewCellEditorAdapter(editorView);
+    return editor;
+  }
+
+  private STableCellRenderer createTimeTableCellRenderer(
+      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(createTimeFormatter(
+        propertyDescriptor, locale));
+  }
+
+  private void decorateWithTitle(IView<SComponent> view, Locale locale) {
+    // SInternalFrame iFrame = createSInternalFrame();
+    // iFrame.setTitle(view.getDescriptor().getI18nName(
+    // getTranslationProvider(), locale));
+    // iFrame.setMaximizable(false);
+    // iFrame.setClosable(false);
+    // iFrame.setIconifyable(true);
+    // iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
+    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    // iFrame.getContentPane().setLayout(new SBorderLayout());
+    // iFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
+    // iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
+    // WingsUtil.FULL_DIM_PERCENT));
+    // view.setPeer(iFrame);
+
+    // view.getPeer().setBorder(new
+    // STitledBorder(view.getDescriptor().getI18nName(
+    // getTranslationProvider(), locale)));
+
+    SPanel titledPanel = createSPanel(new SBorderLayout());
+    SLabel titleLabel = createSLabel();
+    titleLabel.setIcon(getIconFactory().getIcon(
+        view.getDescriptor().getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    titleLabel.setText(view.getDescriptor().getI18nName(
+        getTranslationProvider(), locale));
+    titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    titleLabel.setBorder(new SEmptyBorder(new Insets(2, 2, 6, 2)));
+    titledPanel.add(titleLabel, SBorderLayout.NORTH);
+    titledPanel.add(view.getPeer(), SBorderLayout.CENTER);
+    titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(0, 0,
+        2, 2)));
+    view.setPeer(titledPanel);
+  }
+
+  private void fillLastRow(SPanel viewComponent) {
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.weightx = 1.0;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    SPanel filler = createSPanel(new SBorderLayout());
+    // filler.setBorder(new SLineBorder(Color.BLUE));
+    viewComponent.add(filler, constraints);
+  }
+
+  private int getSelectionMode(ICollectionViewDescriptor viewDescriptor) {
+    int selectionMode;
+    switch (viewDescriptor.getSelectionMode()) {
+      case SINGLE_SELECTION:
+        selectionMode = ListSelectionModel.SINGLE_SELECTION;
+        break;
+      case SINGLE_INTERVAL_SELECTION:
+        selectionMode = ListSelectionModel.SINGLE_INTERVAL_SELECTION;
+        break;
+      default:
+        selectionMode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+        break;
+    }
+    return selectionMode;
   }
 
   private final class ColorTableCellRenderer extends SDefaultTableCellRenderer {
@@ -2073,14 +2082,5 @@ public class DefaultWingsViewFactory extends
       }
       return renderer;
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void showCardInPanel(SComponent cardsPeer, String cardName) {
-    ((SCardLayout) ((SContainer) cardsPeer).getLayout()).show(
-        (SContainer) cardsPeer, cardName);
   }
 }

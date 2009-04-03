@@ -18,18 +18,11 @@
  */
 package org.jspresso.framework.application.frontend.controller.ulc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
@@ -40,11 +33,10 @@ import org.jspresso.framework.gui.ulc.components.server.ULCExtendedButton;
 import org.jspresso.framework.gui.ulc.components.server.ULCExtendedInternalFrame;
 import org.jspresso.framework.gui.ulc.components.server.event.ExtendedInternalFrameEvent;
 import org.jspresso.framework.gui.ulc.components.server.event.IExtendedInternalFrameListener;
-import org.jspresso.framework.security.ulc.DialogCallbackHandler;
-import org.jspresso.framework.security.ulc.ICallbackHandlerListener;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
@@ -61,21 +53,23 @@ import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCAlert;
 import com.ulcjava.base.application.ULCBorderLayoutPane;
 import com.ulcjava.base.application.ULCBoxLayoutPane;
+import com.ulcjava.base.application.ULCButton;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
 import com.ulcjava.base.application.ULCDialog;
 import com.ulcjava.base.application.ULCFiller;
 import com.ulcjava.base.application.ULCFrame;
+import com.ulcjava.base.application.ULCLabel;
 import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
-import com.ulcjava.base.application.ULCPollingTimer;
 import com.ulcjava.base.application.ULCWindow;
 import com.ulcjava.base.application.border.ULCEmptyBorder;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
 import com.ulcjava.base.application.event.serializable.IWindowListener;
+import com.ulcjava.base.application.util.Dimension;
 import com.ulcjava.base.application.util.Insets;
 import com.ulcjava.base.application.util.ULCIcon;
 import com.ulcjava.base.shared.IWindowConstants;
@@ -101,22 +95,119 @@ import com.ulcjava.base.shared.IWindowConstants;
  * @author Vincent Vandenschrick
  */
 public class DefaultUlcController extends
-    AbstractFrontendController<ULCComponent, ULCIcon, IAction> implements
-    ICallbackHandlerListener {
+    AbstractFrontendController<ULCComponent, ULCIcon, IAction> {
 
   private ULCFrame                              controllerFrame;
-  private Callback[]                            loginCallbacks;
-  private boolean                               loginComplete;
-  private int                                   loginRetries;
-  private boolean                               loginSuccessful;
-  private ULCPollingTimer                       loginTimer;
+
   private Map<String, ULCExtendedInternalFrame> workspaceInternalFrames;
 
   /**
    * {@inheritDoc}
    */
-  public void callbackHandlingComplete() {
-    notifyWaiters();
+  @Override
+  public void displayModalDialog(ULCComponent mainView, List<IAction> actions,
+      String title, ULCComponent sourceComponent, Map<String, Object> context,
+      boolean reuseCurrent) {
+    super.displayModalDialog(mainView, actions, title, sourceComponent,
+        context, reuseCurrent);
+    final ULCDialog dialog;
+    ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
+    if (reuseCurrent && window instanceof ULCDialog) {
+      dialog = (ULCDialog) window;
+      dialog.getContentPane().removeAll();
+    } else {
+      dialog = new ULCDialog(window, title, true);
+    }
+
+    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
+        ULCBoxLayoutPane.LINE_AXIS);
+    buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
+
+    ULCExtendedButton defaultButton = null;
+    for (IAction action : actions) {
+      ULCExtendedButton actionButton = new ULCExtendedButton();
+      actionButton.setAction(action);
+      buttonBox.add(actionButton);
+      buttonBox.add(ULCFiller.createHorizontalStrut(10));
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
+    }
+    ULCBorderLayoutPane actionPanel = new ULCBorderLayoutPane();
+    actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
+
+    ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
+    mainPanel.add(mainView, ULCBorderLayoutPane.CENTER);
+    mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
+    dialog.getContentPane().add(mainPanel);
+    dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    if (defaultButton != null) {
+      dialog.getRootPane().setDefaultButton(defaultButton);
+    }
+    dialog.pack();
+    dialog.setVisible(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    ClientContext.showDocument(urlSpec);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayWorkspace(String workspaceName) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceInternalFrames == null) {
+        workspaceInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
+      }
+      ULCExtendedInternalFrame workspaceInternalFrame = workspaceInternalFrames
+          .get(workspaceName);
+      if (workspaceInternalFrame == null) {
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<ULCComponent> workspaceView = createWorkspaceView(workspaceName,
+            workspaceViewDescriptor, (Workspace) workspaceConnector
+                .getConnectorValue());
+        workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
+        workspaceInternalFrame
+            .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
+                workspaceName));
+        workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
+        controllerFrame.getContentPane().add(workspaceInternalFrame);
+        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+        workspaceInternalFrame.pack();
+        workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
+            controllerFrame.getHeight() - 50);
+        workspaceInternalFrame.setMaximum(true);
+      }
+      workspaceInternalFrame.setVisible(true);
+      if (workspaceInternalFrame.isIcon()) {
+        workspaceInternalFrame.setIcon(false);
+      }
+      workspaceInternalFrame.moveToFront();
+      updateFrameTitle();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void disposeModalDialog(ULCComponent sourceWidget,
+      Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
+    ULCWindow actionWindow = UlcUtil.getVisibleWindow(sourceWidget);
+    if (actionWindow instanceof ULCDialog) {
+      actionWindow.setVisible(false);
+    }
   }
 
   /**
@@ -171,7 +262,7 @@ public class DefaultUlcController extends
   }
 
   /**
-   * Creates the initial view from the root view descriptor, then a JFrame
+   * Creates the initial view from the root view descriptor, then a SFrame
    * containing this view and presents it to the user.
    * <p>
    * {@inheritDoc}
@@ -179,17 +270,7 @@ public class DefaultUlcController extends
   @Override
   public boolean start(IBackendController backendController, Locale clientLocale) {
     if (super.start(backendController, clientLocale)) {
-      loginRetries = 0;
-      loginSuccessful = false;
-      loginComplete = false;
-      CallbackHandler callbackHandler = getLoginCallbackHandler();
-      if (callbackHandler instanceof DialogCallbackHandler) {
-        ((DialogCallbackHandler) callbackHandler)
-            .setParentComponent(controllerFrame);
-        ((DialogCallbackHandler) callbackHandler)
-            .setCallbackHandlerListener(this);
-      }
-      performLogin();
+      initLoginProcess();
       return true;
     }
     return false;
@@ -205,90 +286,6 @@ public class DefaultUlcController extends
     }
     ApplicationContext.terminate();
     return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
-    callbackHandler.setLocale(getLocale());
-    callbackHandler.setTranslationProvider(getTranslationProvider());
-    callbackHandler.setIconFactory(getIconFactory());
-    return callbackHandler;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayWorkspace(String workspaceName) {
-    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
-      super.displayWorkspace(workspaceName);
-      if (workspaceInternalFrames == null) {
-        workspaceInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
-      }
-      ULCExtendedInternalFrame workspaceInternalFrame = workspaceInternalFrames
-          .get(workspaceName);
-      if (workspaceInternalFrame == null) {
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController()
-            .getWorkspaceConnector(workspaceName);
-        IView<ULCComponent> workspaceView = createWorkspaceView(workspaceName,
-            workspaceViewDescriptor, (Workspace) workspaceConnector
-                .getConnectorValue());
-        workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
-        workspaceInternalFrame
-            .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
-                workspaceName));
-        workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
-        controllerFrame.getContentPane().add(workspaceInternalFrame);
-        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-        workspaceInternalFrame.pack();
-        workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
-            controllerFrame.getHeight() - 50);
-        workspaceInternalFrame.setMaximum(true);
-      }
-      workspaceInternalFrame.setVisible(true);
-      if (workspaceInternalFrame.isIcon()) {
-        workspaceInternalFrame.setIcon(false);
-      }
-      workspaceInternalFrame.moveToFront();
-      updateFrameTitle();
-    }
-  }
-
-  private ULCMenu createMenu(ActionList actionList, ULCComponent sourceComponent) {
-    ULCMenu menu = new ULCMenu(actionList.getI18nName(getTranslationProvider(),
-        getLocale()));
-    if (actionList.getDescription() != null) {
-      menu.setToolTipText(actionList.getI18nDescription(
-          getTranslationProvider(), getLocale())
-          + IActionFactory.TOOLTIP_ELLIPSIS);
-    }
-    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
-    for (ULCMenuItem menuItem : createMenuItems(sourceComponent, actionList)) {
-      menu.add(menuItem);
-    }
-    return menu;
-  }
-
-  private List<ULCMenuItem> createMenuItems(ULCComponent sourceComponent,
-      ActionList actionList) {
-    List<ULCMenuItem> menuItems = new ArrayList<ULCMenuItem>();
-    for (IDisplayableAction action : actionList.getActions()) {
-      menuItems.add(createMenuItem(sourceComponent, action));
-    }
-    return menuItems;
-  }
-
-  private ULCMenuItem createMenuItem(ULCComponent sourceComponent,
-      IDisplayableAction action) {
-    return new ULCMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, sourceComponent, null, null, getLocale()));
   }
 
   private List<ULCMenu> createActionMenus(ULCComponent sourceComponent) {
@@ -319,26 +316,44 @@ public class DefaultUlcController extends
     return applicationMenuBar;
   }
 
-  private ULCFrame createControllerFrame() {
-    ULCFrame frame = new ULCFrame();
-    frame.setContentPane(new ULCDesktopPane());
-    frame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
-    frame.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
-    frame.setMenuBar(createApplicationMenuBar(frame));
-    frame.addWindowListener(new IWindowListener() {
-
-      private static final long serialVersionUID = -7845554617417316256L;
-
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
-        stop();
-      }
-    });
-    return frame;
+  private void updateControllerFrame() {
+    controllerFrame.setMenuBar(createApplicationMenuBar(controllerFrame));
+    updateFrameTitle();
   }
 
   private List<ULCMenu> createHelpActionMenus(ULCComponent sourceComponent) {
     return createMenus(sourceComponent, getHelpActions(), true);
+  }
+
+  private ULCMenu createMenu(ActionList actionList, ULCComponent sourceComponent) {
+    ULCMenu menu = new ULCMenu(actionList.getI18nName(getTranslationProvider(),
+        getLocale()));
+    if (actionList.getDescription() != null) {
+      menu.setToolTipText(actionList.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IActionFactory.TOOLTIP_ELLIPSIS);
+    }
+    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
+    for (ULCMenuItem menuItem : createMenuItems(sourceComponent, actionList)) {
+      menu.add(menuItem);
+    }
+    return menu;
+  }
+
+  private ULCMenuItem createMenuItem(ULCComponent sourceComponent,
+      IDisplayableAction action) {
+    return new ULCMenuItem(getViewFactory().getActionFactory().createAction(
+        action, this, sourceComponent, null, null, getLocale()));
+  }
+
+  private List<ULCMenuItem> createMenuItems(ULCComponent sourceComponent,
+      ActionList actionList) {
+    List<ULCMenuItem> menuItems = new ArrayList<ULCMenuItem>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      menuItems.add(createMenuItem(sourceComponent, action));
+    }
+    return menuItems;
   }
 
   @SuppressWarnings("null")
@@ -389,61 +404,85 @@ public class DefaultUlcController extends
     return createMenus(sourceComponent, createWorkspaceActionMap(), true);
   }
 
-  private void displayControllerFrame() {
-    controllerFrame = createControllerFrame();
+  private void initLoginProcess() {
+    createControllerFrame();
+
+    IView<ULCComponent> loginView = createLoginView();
+
+    // Login dialog
+    final ULCDialog dialog = new ULCDialog(controllerFrame,
+        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
+            getLocale()), true);
+
+    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
+        ULCBoxLayoutPane.LINE_AXIS);
+    buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
+
+    ULCButton loginButton = new ULCButton(getTranslationProvider()
+        .getTranslation("ok", getLocale()));
+    loginButton.setIcon(getIconFactory().getOkYesIcon(
+        IIconFactory.SMALL_ICON_SIZE));
+    loginButton.addActionListener(new IActionListener() {
+
+      private static final long serialVersionUID = 2403541025764054935L;
+
+      @Override
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+        if (performLogin()) {
+          dialog.setVisible(false);
+          updateControllerFrame();
+          execute(getStartupAction(), getInitialActionContext());
+        } else {
+          ULCAlert alert = new ULCAlert(dialog, getTranslationProvider()
+              .getTranslation("error", getLocale()), getTranslationProvider()
+              .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
+              getTranslationProvider().getTranslation("ok", getLocale()), null,
+              null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          alert.show();
+        }
+      }
+    });
+    buttonBox.add(loginButton);
+    dialog.getRootPane().setDefaultButton(loginButton);
+
+    ULCBorderLayoutPane actionPanel = new ULCBorderLayoutPane();
+    actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
+
+    ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
+    mainPanel.add(new ULCLabel(getTranslationProvider().getTranslation(
+        LoginUtils.CRED_MESSAGE, getLocale())), ULCBorderLayoutPane.NORTH);
+    mainPanel.add(loginView.getPeer(), ULCBorderLayoutPane.CENTER);
+    mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
+    dialog.add(mainPanel);
+
+    int screenRes = ClientContext.getScreenResolution();
+    dialog.setSize(new Dimension(3 * screenRes, screenRes * 3 / 2));
+    dialog.pack();
+    UlcUtil.centerInParent(dialog);
+    dialog.setVisible(true);
+  }
+
+  private void createControllerFrame() {
+    controllerFrame = new ULCFrame();
+    controllerFrame.setContentPane(new ULCDesktopPane());
+    controllerFrame
+        .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    controllerFrame.addWindowListener(new IWindowListener() {
+
+      private static final long serialVersionUID = -7845554617417316256L;
+
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
+        stop();
+      }
+    });
     controllerFrame.pack();
     int screenRes = ClientContext.getScreenResolution();
     controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    controllerFrame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
     UlcUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
     controllerFrame.setVisible(true);
-  }
-
-  private synchronized void notifyWaiters() {
-    notifyAll();
-  }
-
-  private void performLogin() {
-    if (getLoginContextName() != null) {
-      new LoginThread().start();
-      loginTimer = new ULCPollingTimer(2000, new IActionListener() {
-
-        private static final long serialVersionUID = 5630061795918376362L;
-
-        public void actionPerformed(
-            @SuppressWarnings("unused") ActionEvent event) {
-          if (loginCallbacks != null) {
-            Callback[] loginCallbacksCopy = loginCallbacks;
-            loginCallbacks = null;
-            try {
-              getLoginCallbackHandler().handle(loginCallbacksCopy);
-            } catch (IOException ex) {
-              // NO-OP
-            } catch (UnsupportedCallbackException ex) {
-              // NO-OP
-            }
-          }
-          if (loginComplete) {
-            loginTimer.stop();
-            loginTimer = null;
-            ClientContext.sendMessage("appStarted");
-            if (loginSuccessful) {
-              displayControllerFrame();
-              execute(getStartupAction(), getInitialActionContext());
-            } else {
-              stop();
-            }
-          }
-        }
-      });
-      loginTimer.setInitialDelay(100);
-      loginTimer.start();
-    } else {
-      loginSuccess(getAnonymousSubject());
-      ClientContext.sendMessage("appStarted");
-      displayControllerFrame();
-      execute(getStartupAction(), getInitialActionContext());
-    }
   }
 
   private void updateFrameTitle() {
@@ -456,124 +495,6 @@ public class DefaultUlcController extends
     } else {
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
           getLocale()));
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayModalDialog(ULCComponent mainView, List<IAction> actions,
-      String title, ULCComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
-    final ULCDialog dialog;
-    ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
-    if (reuseCurrent && window instanceof ULCDialog) {
-        dialog = (ULCDialog) window;
-        dialog.getContentPane().removeAll();
-    } else {
-      dialog = new ULCDialog(window, title, true);
-    }
-
-    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
-        ULCBoxLayoutPane.LINE_AXIS);
-    buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
-
-    ULCExtendedButton defaultButton = null;
-    for (IAction action : actions) {
-      ULCExtendedButton actionButton = new ULCExtendedButton();
-      actionButton.setAction(action);
-      buttonBox.add(actionButton);
-      buttonBox.add(ULCFiller.createHorizontalStrut(10));
-      if (defaultButton == null) {
-        defaultButton = actionButton;
-      }
-    }
-    ULCBorderLayoutPane actionPanel = new ULCBorderLayoutPane();
-    actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
-
-    ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
-    mainPanel.add(mainView, ULCBorderLayoutPane.CENTER);
-    mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
-    dialog.getContentPane().add(mainPanel);
-    dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
-    if (defaultButton != null) {
-      dialog.getRootPane().setDefaultButton(defaultButton);
-    }
-    dialog.pack();
-    dialog.setVisible(true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void disposeModalDialog(ULCComponent sourceWidget,
-      Map<String, Object> context) {
-    super.disposeModalDialog(sourceWidget, context);
-    ULCWindow actionWindow = UlcUtil.getVisibleWindow(sourceWidget);
-    if (actionWindow instanceof ULCDialog) {
-      actionWindow.setVisible(false);
-    }
-  }
-
-  private synchronized void waitForNotification() {
-    try {
-      wait();
-    } catch (InterruptedException ex) {
-      // NO-OP.
-    }
-  }
-
-  private class LoginThread extends Thread {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void run() {
-      if (getLoginContextName() != null) {
-        while (!loginSuccessful && loginRetries < MAX_LOGIN_RETRIES) {
-          LoginContext lc = null;
-          try {
-            lc = new LoginContext(getLoginContextName(),
-                new ThreadBlockingCallbackHandler());
-          } catch (LoginException le) {
-            System.err
-                .println("Cannot create LoginContext. " + le.getMessage());
-          } catch (SecurityException se) {
-            System.err
-                .println("Cannot create LoginContext. " + se.getMessage());
-          }
-          if (lc != null) {
-            try {
-              lc.login();
-              loginSuccess(lc.getSubject());
-              loginSuccessful = true;
-            } catch (LoginException le) {
-              loginRetries++;
-              System.err.println("Authentication failed:");
-              System.err.println("  " + le.getMessage());
-            }
-          }
-        }
-      } else {
-        loginSuccess(getAnonymousSubject());
-      }
-      loginComplete = true;
-    }
-  }
-
-  private class ThreadBlockingCallbackHandler implements CallbackHandler {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void handle(Callback[] callbacks) {
-      loginCallbacks = callbacks;
-      waitForNotification();
     }
   }
 
@@ -632,13 +553,5 @@ public class DefaultUlcController extends
       displayWorkspace(workspaceName);
     }
 
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayUrl(String urlSpec) {
-    ClientContext.showDocument(urlSpec);
   }
 }

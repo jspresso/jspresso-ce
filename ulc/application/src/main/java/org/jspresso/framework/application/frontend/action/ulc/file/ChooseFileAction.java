@@ -71,17 +71,6 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
   }
 
   /**
-   * Gets the fileFilter.
-   * 
-   * @param context
-   *          the action context.
-   * @return the fileFilter.
-   */
-  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
-    return fileFilter;
-  }
-
-  /**
    * Gets the file chooser configuration used to build this file chooser.
    * 
    * @param context
@@ -118,5 +107,16 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
       }
     }
     return fileChooser;
+  }
+
+  /**
+   * Gets the fileFilter.
+   * 
+   * @param context
+   *          the action context.
+   * @return the fileFilter.
+   */
+  protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
+    return fileFilter;
   }
 }

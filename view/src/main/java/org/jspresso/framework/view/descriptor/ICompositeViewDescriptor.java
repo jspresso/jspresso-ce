@@ -43,6 +43,13 @@ import java.util.List;
 public interface ICompositeViewDescriptor extends IViewDescriptor {
 
   /**
+   * Gets the child view descriptors.
+   * 
+   * @return the list of contained view descriptors.
+   */
+  List<IViewDescriptor> getChildViewDescriptors();
+  
+  /**
    * Gets wether this composite view is a master / detail view. When such a
    * master / detail composite view is built, each added child is bound to the
    * previous one in a master / detail relationship.
@@ -50,12 +57,5 @@ public interface ICompositeViewDescriptor extends IViewDescriptor {
    * @return true if the child views are in a master / detail relationship.
    */
   boolean isCascadingModels();
-  
-  /**
-   * Gets the child view descriptors.
-   * 
-   * @return the list of contained view descriptors.
-   */
-  List<IViewDescriptor> getChildViewDescriptors();
 
 }

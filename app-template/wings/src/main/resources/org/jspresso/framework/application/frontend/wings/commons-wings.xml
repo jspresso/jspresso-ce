@@ -137,12 +137,6 @@
     parent="abstractFrontController"
     class="org.jspresso.framework.application.frontend.controller.wings.DefaultWingsController"
     scope="prototype">
-    <property
-      name="loginViewDescriptor"
-      ref="loginViewDescriptor" />
-    <property
-      name="modelConnectorFactory"
-      ref="modelConnectorFactory" />
   </bean>
 
 </beans>

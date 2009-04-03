@@ -41,10 +41,10 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RActionList extends RemotePeer {
 
-  private String    name;
+  private RAction[] actions;
   private String    description;
   private RIcon     icon;
-  private RAction[] actions;
+  private String    name;
 
   /**
    * Constructs a new <code>RActionList</code> instance.
@@ -57,22 +57,12 @@ public class RActionList extends RemotePeer {
   }
 
   /**
-   * Gets the name.
+   * Gets the actions.
    * 
-   * @return the name.
+   * @return the actions.
    */
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * Sets the name.
-   * 
-   * @param name
-   *          the name to set.
-   */
-  public void setName(String name) {
-    this.name = name;
+  public RAction[] getActions() {
+    return actions;
   }
 
   /**
@@ -85,6 +75,33 @@ public class RActionList extends RemotePeer {
   }
 
   /**
+   * Gets the icon.
+   * 
+   * @return the icon.
+   */
+  public RIcon getIcon() {
+    return icon;
+  }
+
+  /**
+   * Gets the name.
+   * 
+   * @return the name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets the actions.
+   * 
+   * @param actions the actions to set.
+   */
+  public void setActions(RAction[] actions) {
+    this.actions = actions;
+  }
+
+  /**
    * Sets the description.
    * 
    * @param description
@@ -94,15 +111,7 @@ public class RActionList extends RemotePeer {
     this.description = description;
   }
 
-  /**
-   * Gets the icon.
-   * 
-   * @return the icon.
-   */
-  public RIcon getIcon() {
-    return icon;
-  }
-
+  
   /**
    * Sets the icon.
    * 
@@ -115,21 +124,12 @@ public class RActionList extends RemotePeer {
 
   
   /**
-   * Gets the actions.
+   * Sets the name.
    * 
-   * @return the actions.
+   * @param name
+   *          the name to set.
    */
-  public RAction[] getActions() {
-    return actions;
-  }
-
-  
-  /**
-   * Sets the actions.
-   * 
-   * @param actions the actions to set.
-   */
-  public void setActions(RAction[] actions) {
-    this.actions = actions;
+  public void setName(String name) {
+    this.name = name;
   }
 }

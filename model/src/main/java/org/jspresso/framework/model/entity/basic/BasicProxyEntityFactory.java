@@ -153,6 +153,13 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
+    return inlineComponentFactory.getComponentDescriptors();
+  }
+
+  /**
    * Sets the accessorFactory used by this entity factory.
    * 
    * @param accessorFactory
@@ -194,7 +201,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   public void setEntityGUIDGenerator(IGUIDGenerator entityGUIDGenerator) {
     this.entityGUIDGenerator = entityGUIDGenerator;
   }
-
+  
   /**
    * Sets the inlineComponentFactory.
    * 
@@ -204,7 +211,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   public void setInlineComponentFactory(IComponentFactory inlineComponentFactory) {
     this.inlineComponentFactory = inlineComponentFactory;
   }
-  
+
   /**
    * Creates the entity proxy invocation handler.
    * 
@@ -298,12 +305,5 @@ public class BasicProxyEntityFactory implements IEntityFactory {
         .getContextClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
-    return inlineComponentFactory.getComponentDescriptors();
   }
 }

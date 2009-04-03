@@ -138,6 +138,15 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   }
 
   /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  public IModelDescriptor getModelDescriptor() {
+    return modelDescriptor;
+  }
+
+  /**
    * Sets the actionMap.
    * 
    * @param actionMap
@@ -185,15 +194,6 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    */
   public void setForeground(String foreground) {
     this.foreground = foreground;
-  }
-
-  /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  public IModelDescriptor getModelDescriptor() {
-    return modelDescriptor;
   }
 
   /**

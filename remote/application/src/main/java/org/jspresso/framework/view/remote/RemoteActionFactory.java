@@ -77,11 +77,11 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  */
 public class RemoteActionFactory implements IActionFactory<RAction, RComponent> {
 
-  private IIconFactory<RIcon>   iconFactory;
-  private ITranslationProvider  translationProvider;
   private IGUIDGenerator        guidGenerator;
-  private IRemotePeerRegistry   remotePeerRegistry;
+  private IIconFactory<RIcon>   iconFactory;
   private IRemoteCommandHandler remoteCommandHandler;
+  private IRemotePeerRegistry   remotePeerRegistry;
+  private ITranslationProvider  translationProvider;
 
   /**
    * {@inheritDoc}
@@ -159,6 +159,72 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
     return remoteAction;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionEnabled(RAction action, boolean enabled) {
+    action.setEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionName(RAction action, String name) {
+    action.setName(name);
+  }
+
+  /**
+   * Sets the guidGenerator.
+   * 
+   * @param guidGenerator
+   *          the guidGenerator to set.
+   */
+  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+    this.guidGenerator = guidGenerator;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *          the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<RIcon> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the remoteCommandHandler.
+   * 
+   * @param remoteCommandHandler
+   *          the remoteCommandHandler to set.
+   */
+  public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
+    this.remoteCommandHandler = remoteCommandHandler;
+  }
+
+  /**
+   * Sets the remotePeerRegistry.
+   * 
+   * @param remotePeerRegistry
+   *          the remotePeerRegistry to set.
+   */
+  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
+    this.remotePeerRegistry = remotePeerRegistry;
+  }
+
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *          the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
   private RAction createRAction(IDisplayableAction action,
       IActionHandler actionHandler, RComponent sourceComponent,
       IModelDescriptor modelDescriptor, IValueConnector viewConnector,
@@ -179,91 +245,6 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
         actionHandler, sourceComponent, modelDescriptor, viewConnector);
     remotePeerRegistry.register(remoteActionAdapter);
     return remoteAction;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<RIcon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
-  }
-
-  private final class GatesListener implements PropertyChangeListener {
-
-    private RAction           action;
-    private Collection<IGate> gates;
-
-    /**
-     * Constructs a new <code>GatesListener</code> instance.
-     * 
-     * @param action
-     *          the action to (de)activate based on gates state.
-     * @param gates
-     *          the gates that determine action state.
-     */
-    public GatesListener(RAction action, Collection<IGate> gates) {
-      this.action = action;
-      this.gates = gates;
-      for (IGate gate : gates) {
-        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(
-        @SuppressWarnings("unused") PropertyChangeEvent evt) {
-      action.setEnabled(GateHelper.areGatesOpen(gates));
-
-      RemoteEnablementCommand command = new RemoteEnablementCommand();
-      command.setTargetPeerGuid(action.getGuid());
-      command.setEnabled(action.isEnabled());
-      remoteCommandHandler.registerCommand(command);
-    }
-  }
-
-  /**
-   * Sets the guidGenerator.
-   * 
-   * @param guidGenerator
-   *          the guidGenerator to set.
-   */
-  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
-    this.guidGenerator = guidGenerator;
-  }
-
-  /**
-   * Sets the remotePeerRegistry.
-   * 
-   * @param remotePeerRegistry
-   *          the remotePeerRegistry to set.
-   */
-  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
-    this.remotePeerRegistry = remotePeerRegistry;
-  }
-
-  /**
-   * Sets the remoteCommandHandler.
-   * 
-   * @param remoteCommandHandler
-   *          the remoteCommandHandler to set.
-   */
-  public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
-    this.remoteCommandHandler = remoteCommandHandler;
   }
 
   private final class ActionAdapter extends RAction {
@@ -338,19 +319,38 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setActionEnabled(RAction action, boolean enabled) {
-    action.setEnabled(enabled);
-  }
+  private final class GatesListener implements PropertyChangeListener {
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setActionName(RAction action, String name) {
-    action.setName(name);
+    private RAction           action;
+    private Collection<IGate> gates;
+
+    /**
+     * Constructs a new <code>GatesListener</code> instance.
+     * 
+     * @param action
+     *          the action to (de)activate based on gates state.
+     * @param gates
+     *          the gates that determine action state.
+     */
+    public GatesListener(RAction action, Collection<IGate> gates) {
+      this.action = action;
+      this.gates = gates;
+      for (IGate gate : gates) {
+        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(
+        @SuppressWarnings("unused") PropertyChangeEvent evt) {
+      action.setEnabled(GateHelper.areGatesOpen(gates));
+
+      RemoteEnablementCommand command = new RemoteEnablementCommand();
+      command.setTargetPeerGuid(action.getGuid());
+      command.setEnabled(action.isEnabled());
+      remoteCommandHandler.registerCommand(command);
+    }
   }
 }

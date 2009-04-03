@@ -44,8 +44,8 @@ public class RemoteCompositeValueState extends RemoteValueState {
   private List<RemoteValueState> children;
   private String                 description;
   private String                 iconImageUrl;
-  private int[]                  selectedIndices;
   private int                    leadingIndex;
+  private int[]                  selectedIndices;
 
   /**
    * Constructs a new <code>RemoteCompositeValueState</code> instance.
@@ -68,6 +68,42 @@ public class RemoteCompositeValueState extends RemoteValueState {
   }
 
   /**
+   * Gets the description.
+   * 
+   * @return the description.
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * Gets the iconImageUrl.
+   * 
+   * @return the iconImageUrl.
+   */
+  public String getIconImageUrl() {
+    return iconImageUrl;
+  }
+
+  /**
+   * Gets the leadingIndex.
+   * 
+   * @return the leadingIndex.
+   */
+  public int getLeadingIndex() {
+    return leadingIndex;
+  }
+
+  /**
+   * Gets the selectedIndices.
+   * 
+   * @return the selectedIndices.
+   */
+  public int[] getSelectedIndices() {
+    return selectedIndices;
+  }
+
+  /**
    * Sets the children.
    * 
    * @param children
@@ -75,15 +111,6 @@ public class RemoteCompositeValueState extends RemoteValueState {
    */
   public void setChildren(List<RemoteValueState> children) {
     this.children = children;
-  }
-
-  /**
-   * Gets the description.
-   * 
-   * @return the description.
-   */
-  public String getDescription() {
-    return description;
   }
 
   /**
@@ -97,15 +124,6 @@ public class RemoteCompositeValueState extends RemoteValueState {
   }
 
   /**
-   * Gets the iconImageUrl.
-   * 
-   * @return the iconImageUrl.
-   */
-  public String getIconImageUrl() {
-    return iconImageUrl;
-  }
-
-  /**
    * Sets the iconImageUrl.
    * 
    * @param iconImageUrl
@@ -113,35 +131,6 @@ public class RemoteCompositeValueState extends RemoteValueState {
    */
   public void setIconImageUrl(String iconImageUrl) {
     this.iconImageUrl = iconImageUrl;
-  }
-
-  /**
-   * Sets the selectedIndices.
-   * 
-   * @param selectedIndices
-   *          the selectedIndices to set.
-   */
-  public void setSelectedIndices(int[] selectedIndices) {
-    this.selectedIndices = selectedIndices;
-  }
-
-  /**
-   * Gets the selectedIndices.
-   * 
-   * @return the selectedIndices.
-   */
-  public int[] getSelectedIndices() {
-    return selectedIndices;
-  }
-
-  
-  /**
-   * Gets the leadingIndex.
-   * 
-   * @return the leadingIndex.
-   */
-  public int getLeadingIndex() {
-    return leadingIndex;
   }
 
   
@@ -152,5 +141,16 @@ public class RemoteCompositeValueState extends RemoteValueState {
    */
   public void setLeadingIndex(int leadingIndex) {
     this.leadingIndex = leadingIndex;
+  }
+
+  
+  /**
+   * Sets the selectedIndices.
+   * 
+   * @param selectedIndices
+   *          the selectedIndices to set.
+   */
+  public void setSelectedIndices(int[] selectedIndices) {
+    this.selectedIndices = selectedIndices;
   }
 }

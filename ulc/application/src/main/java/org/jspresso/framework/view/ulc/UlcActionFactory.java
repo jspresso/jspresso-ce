@@ -155,6 +155,22 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionEnabled(IAction action, boolean enabled) {
+    action.setEnabled(enabled);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionName(IAction action, String name) {
+    action.putValue(IAction.NAME, name);
+  }
+
+  /**
    * Sets the iconFactory.
    * 
    * @param iconFactory
@@ -282,21 +298,5 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
         @SuppressWarnings("unused") PropertyChangeEvent evt) {
       action.setEnabled(GateHelper.areGatesOpen(gates));
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setActionEnabled(IAction action, boolean enabled) {
-    action.setEnabled(enabled);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setActionName(IAction action, String name) {
-    action.putValue(IAction.NAME, name);
   }
 }

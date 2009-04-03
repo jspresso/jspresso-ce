@@ -60,15 +60,15 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
-  public Class<?> getModelType() {
-    return Date.class;
+  @Override
+  public ComparableQueryStructureDescriptor createQueryDescriptor() {
+    return new ComparableQueryStructureDescriptor(super.createQueryDescriptor());
   }
 
   /**
    * {@inheritDoc}
    */
-  @Override
-  public ComparableQueryStructureDescriptor createQueryDescriptor() {
-    return new ComparableQueryStructureDescriptor(super.createQueryDescriptor());
+  public Class<?> getModelType() {
+    return Date.class;
   }
 }

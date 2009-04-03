@@ -54,23 +54,23 @@ public class RemoteActionCommand extends RemoteCommand {
 
   
   /**
-   * Sets the parameter.
-   * 
-   * @param parameter the parameter to set.
-   */
-  public void setParameter(String parameter) {
-    this.parameter = parameter;
-  }
-
-
-  
-  /**
    * Gets the viewStateGuid.
    * 
    * @return the viewStateGuid.
    */
   public String getViewStateGuid() {
     return viewStateGuid;
+  }
+
+
+  
+  /**
+   * Sets the parameter.
+   * 
+   * @param parameter the parameter to set.
+   */
+  public void setParameter(String parameter) {
+    this.parameter = parameter;
   }
 
 

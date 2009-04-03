@@ -65,6 +65,18 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
   Class<? extends IComponent> getContract();
 
   /**
+   * Allows for temporary enabling/disabling property processors for internal
+   * operations. This is useful for instance when cleaning relationships before
+   * removing an entity. Calls to this method are typically enclosed in a
+   * try/finally block to make sure that whatever the output is, the property
+   * processors are re-enabled.
+   * 
+   * @param enabled
+   *          true if property processors should be enabled.
+   */
+  void setPropertyProcessorsEnabled(boolean enabled);
+
+  /**
    * This method is used to get all the persistent properties without triggering
    * any other behaviour.
    * 
@@ -101,16 +113,4 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
    *          the value to set the property with.
    */
   void straightSetProperty(String propertyName, Object backendPropertyValue);
-
-  /**
-   * Allows for temporary enabling/disabling property processors for internal
-   * operations. This is useful for instance when cleaning relationships before
-   * removing an entity. Calls to this method are typically enclosed in a
-   * try/finally block to make sure that whatever the output is, the property
-   * processors are re-enabled.
-   * 
-   * @param enabled
-   *          true if property processors should be enabled.
-   */
-  void setPropertyProcessorsEnabled(boolean enabled);
 }

@@ -41,9 +41,9 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RIcon extends RemotePeer {
 
+  private int height;
   private String imageUrlSpec;
   private int width;
-  private int height;
   
   /**
    * Constructs a new <code>RIcon</code> instance.
@@ -55,30 +55,30 @@ public class RIcon extends RemotePeer {
   }
 
   /**
-   * Gets the width.
-   * 
-   * @return the width.
-   */
-  public int getWidth() {
-    return width;
-  }
-  
-  /**
-   * Sets the width.
-   * 
-   * @param width the width to set.
-   */
-  public void setWidth(int width) {
-    this.width = width;
-  }
-  
-  /**
    * Gets the height.
    * 
    * @return the height.
    */
   public int getHeight() {
     return height;
+  }
+  
+  /**
+   * Gets the imageUrlSpec.
+   * 
+   * @return the imageUrlSpec.
+   */
+  public String getImageUrlSpec() {
+    return imageUrlSpec;
+  }
+  
+  /**
+   * Gets the width.
+   * 
+   * @return the width.
+   */
+  public int getWidth() {
+    return width;
   }
   
   /**
@@ -100,12 +100,12 @@ public class RIcon extends RemotePeer {
   }
 
   /**
-   * Gets the imageUrlSpec.
+   * Sets the width.
    * 
-   * @return the imageUrlSpec.
+   * @param width the width to set.
    */
-  public String getImageUrlSpec() {
-    return imageUrlSpec;
+  public void setWidth(int width) {
+    this.width = width;
   }
   
 }

@@ -83,50 +83,6 @@ public abstract class JComponentConnector<E extends JComponent> extends
   }
 
   /**
-   * This implementation takes care of having the peer component modifications
-   * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedReadabilityChange</code> method.
-   * 
-   * @see #protectedReadabilityChange() <p>
-   *      {@inheritDoc}
-   */
-  @Override
-  protected final void readabilityChange() {
-    super.readabilityChange();
-    SwingUtil.updateSwingGui(new Runnable() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void run() {
-        protectedReadabilityChange();
-      }
-    });
-  }
-
-  /**
-   * This implementation takes care of having the peer component modifications
-   * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedWritabilityChange</code> method.
-   * 
-   * @see #protectedWritabilityChange() <p>
-   *      {@inheritDoc}
-   */
-  @Override
-  protected final void writabilityChange() {
-    super.writabilityChange();
-    SwingUtil.updateSwingGui(new Runnable() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void run() {
-        protectedWritabilityChange();
-      }
-    });
-  }
-
-  /**
    * Attaches the JComponent to the connector.
    */
   protected abstract void bindJComponent();
@@ -165,16 +121,6 @@ public abstract class JComponentConnector<E extends JComponent> extends
   }
 
   /**
-   * Implementation of connectee modifications which normally would have been
-   * coded in the <code>setConnecteeValue</code> should go here to preserve the
-   * connector modification to be handled in the event dispatch thread.
-   * 
-   * @param aValue
-   *          the connectee value to set.
-   */
-  protected abstract void protectedSetConnecteeValue(Object aValue);
-
-  /**
    * Implementation of connectee readability state modifications which normally
    * would have been coded in the <code>readabilityChange</code> method should
    * go here to preserve the connector modification to be handled in the event
@@ -194,6 +140,16 @@ public abstract class JComponentConnector<E extends JComponent> extends
   }
 
   /**
+   * Implementation of connectee modifications which normally would have been
+   * coded in the <code>setConnecteeValue</code> should go here to preserve the
+   * connector modification to be handled in the event dispatch thread.
+   * 
+   * @param aValue
+   *          the connectee value to set.
+   */
+  protected abstract void protectedSetConnecteeValue(Object aValue);
+
+  /**
    * Implementation of connectee writability state modifications which normally
    * would have been coded in the <code>writabilityChange</code> method should
    * go here to preserve the connector modification to be handled in the event
@@ -201,6 +157,28 @@ public abstract class JComponentConnector<E extends JComponent> extends
    */
   protected void protectedWritabilityChange() {
     // Empty implementation.
+  }
+
+  /**
+   * This implementation takes care of having the peer component modifications
+   * ran on the Swing event dispatch thread. It actually delegates the connectee
+   * modification to the <code>protectedReadabilityChange</code> method.
+   * 
+   * @see #protectedReadabilityChange() <p>
+   *      {@inheritDoc}
+   */
+  @Override
+  protected final void readabilityChange() {
+    super.readabilityChange();
+    SwingUtil.updateSwingGui(new Runnable() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void run() {
+        protectedReadabilityChange();
+      }
+    });
   }
 
   /**
@@ -218,6 +196,28 @@ public abstract class JComponentConnector<E extends JComponent> extends
 
       public void run() {
         protectedSetConnecteeValue(aValue);
+      }
+    });
+  }
+
+  /**
+   * This implementation takes care of having the peer component modifications
+   * ran on the Swing event dispatch thread. It actually delegates the connectee
+   * modification to the <code>protectedWritabilityChange</code> method.
+   * 
+   * @see #protectedWritabilityChange() <p>
+   *      {@inheritDoc}
+   */
+  @Override
+  protected final void writabilityChange() {
+    super.writabilityChange();
+    SwingUtil.updateSwingGui(new Runnable() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void run() {
+        protectedWritabilityChange();
       }
     });
   }

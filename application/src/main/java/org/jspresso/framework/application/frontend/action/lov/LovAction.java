@@ -71,10 +71,10 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   private boolean                               autoquery;
   private IDisplayableAction                    cancelAction;
   private CreateQueryComponentAction            createQueryComponentAction;
-  private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
   private IComponentDescriptor<IEntity>         entityDescriptor;
-  private Map<String, String>                   initializationMapping;
+  private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
   private IDisplayableAction                    findAction;
+  private Map<String, String>                   initializationMapping;
   private ILovViewDescriptorFactory             lovViewDescriptorFactory;
   private IDisplayableAction                    okAction;
 
@@ -83,57 +83,6 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    */
   public LovAction() {
     setAutoquery(true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getI18nName(ITranslationProvider translationProvider,
-      Locale locale) {
-    if (getName() == null) {
-      if (entityDescriptor != null) {
-        return translationProvider.getTranslation("lov.element.name",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
-      }
-      return translationProvider.getTranslation("lov.name", locale);
-    }
-    return super.getI18nName(translationProvider, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getI18nDescription(ITranslationProvider translationProvider,
-      Locale locale) {
-    if (getDescription() == null) {
-      if (entityDescriptor != null) {
-        return translationProvider.getTranslation("lov.element.description",
-            new Object[] {entityDescriptor.getI18nName(translationProvider,
-                locale)}, locale);
-      }
-      return translationProvider.getTranslation("lov.description", locale);
-    }
-    return super.getI18nDescription(translationProvider, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getIconImageURL() {
-    String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null) {
-      if (entityDescriptor != null) {
-        iconImageURL = entityDescriptor.getIconImageURL();
-      }
-      if (iconImageURL == null) {
-        iconImageURL = "classpath:org/jspresso/framework/application/images/find-48x48.png";
-      }
-    }
-    return iconImageURL;
   }
 
   /**
@@ -186,6 +135,57 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
+    if (getDescription() == null) {
+      if (entityDescriptor != null) {
+        return translationProvider.getTranslation("lov.element.description",
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
+      }
+      return translationProvider.getTranslation("lov.description", locale);
+    }
+    return super.getI18nDescription(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
+    if (getName() == null) {
+      if (entityDescriptor != null) {
+        return translationProvider.getTranslation("lov.element.name",
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
+      }
+      return translationProvider.getTranslation("lov.name", locale);
+    }
+    return super.getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getIconImageURL() {
+    String iconImageURL = super.getIconImageURL();
+    if (iconImageURL == null) {
+      if (entityDescriptor != null) {
+        iconImageURL = entityDescriptor.getIconImageURL();
+      }
+      if (iconImageURL == null) {
+        iconImageURL = "classpath:org/jspresso/framework/application/images/find-48x48.png";
+      }
+    }
+    return iconImageURL;
+  }
+
+  /**
    * Sets the autoquery.
    * 
    * @param autoquery
@@ -217,6 +217,16 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   }
 
   /**
+   * Sets the entityDescriptor.
+   * 
+   * @param entityDescriptor
+   *          the entityDescriptor to set.
+   */
+  public void setEntityDescriptor(IComponentDescriptor<IEntity> entityDescriptor) {
+    this.entityDescriptor = entityDescriptor;
+  }
+
+  /**
    * Sets the entityRefQueryDescriptor.
    * 
    * @param entityRefQueryDescriptor
@@ -235,6 +245,16 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    */
   public void setFindAction(IDisplayableAction findAction) {
     this.findAction = findAction;
+  }
+
+  /**
+   * Sets the initializationMapping.
+   * 
+   * @param initializationMapping
+   *          the initializationMapping to set.
+   */
+  public void setInitializationMapping(Map<String, String> initializationMapping) {
+    this.initializationMapping = initializationMapping;
   }
 
   /**
@@ -283,25 +303,5 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
       return (IReferencePropertyDescriptor<IEntity>) modelDescriptor;
     }
     return null;
-  }
-
-  /**
-   * Sets the entityDescriptor.
-   * 
-   * @param entityDescriptor
-   *          the entityDescriptor to set.
-   */
-  public void setEntityDescriptor(IComponentDescriptor<IEntity> entityDescriptor) {
-    this.entityDescriptor = entityDescriptor;
-  }
-
-  /**
-   * Sets the initializationMapping.
-   * 
-   * @param initializationMapping
-   *          the initializationMapping to set.
-   */
-  public void setInitializationMapping(Map<String, String> initializationMapping) {
-    this.initializationMapping = initializationMapping;
   }
 }

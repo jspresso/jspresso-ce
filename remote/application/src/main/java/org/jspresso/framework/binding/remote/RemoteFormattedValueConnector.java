@@ -47,9 +47,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     implements IRemotePeer, IRemoteStateOwner {
 
+  private RemoteConnectorFactory connectorFactory;
   private String                 guid;
   private RemoteValueState       state;
-  private RemoteConnectorFactory connectorFactory;
 
   /**
    * Constructs a new <code>RemoteFormattedValueConnector</code> instance.
@@ -67,15 +67,6 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
     connectorFactory.register(this);
-  }
-
-  /**
-   * Gets the guid.
-   * 
-   * @return the guid.
-   */
-  public String getGuid() {
-    return guid;
   }
 
   /**
@@ -98,6 +89,15 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     connectorFactory.attachListeners(clonedConnector);
     connectorFactory.register(clonedConnector);
     return clonedConnector;
+  }
+
+  /**
+   * Gets the guid.
+   * 
+   * @return the guid.
+   */
+  public String getGuid() {
+    return guid;
   }
 
   /**

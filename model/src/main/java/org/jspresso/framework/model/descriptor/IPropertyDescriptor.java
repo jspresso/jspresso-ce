@@ -56,6 +56,14 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
   IPropertyDescriptor clone();
 
   /**
+   * Creates a new property descriptor to allow for querying.
+   * 
+   * @return a new property descriptor that allows for expressing constraints on
+   *         this property.
+   */
+  IPropertyDescriptor createQueryDescriptor();
+
+  /**
    * Gets the <code>Class</code> of the delegates used to compute the values
    * of the property or <code>null</code> if this property is not a derived
    * one.
@@ -105,6 +113,17 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    *         property.
    */
   Collection<IGate> getWritabilityGates();
+
+  /**
+   * Triggers all setter interceptors.
+   * 
+   * @param component
+   *            the component targetted by the setter.
+   * @param newValue
+   *            the property new value.
+   * @return the result of the interception.
+   */
+  Object interceptSetter(Object component, Object newValue);
 
   /**
    * Wether the underlying property is mandatory.
@@ -164,23 +183,4 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    *            the property new value.
    */
   void preprocessSetter(Object component, Object newValue);
-
-  /**
-   * Triggers all setter interceptors.
-   * 
-   * @param component
-   *            the component targetted by the setter.
-   * @param newValue
-   *            the property new value.
-   * @return the result of the interception.
-   */
-  Object interceptSetter(Object component, Object newValue);
-
-  /**
-   * Creates a new property descriptor to allow for querying.
-   * 
-   * @return a new property descriptor that allows for expressing constraints on
-   *         this property.
-   */
-  IPropertyDescriptor createQueryDescriptor();
 }

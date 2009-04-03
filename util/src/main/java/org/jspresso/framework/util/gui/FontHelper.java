@@ -39,9 +39,9 @@ package org.jspresso.framework.util.gui;
  */
 public final class FontHelper {
 
-  private static final String PLAIN  = "PLAIN";
   private static final String BOLD   = "BOLD";
   private static final String ITALIC = "ITALIC";
+  private static final String PLAIN  = "PLAIN";
   private static final String SEP    = ";";
 
   private FontHelper() {

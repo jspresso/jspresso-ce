@@ -103,6 +103,13 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
+    return componentDescriptorRegistry.getComponentDescriptors();
+  }
+
+  /**
    * Sets the accessorFactory used by this entity factory.
    * 
    * @param accessorFactory
@@ -144,6 +151,19 @@ public class BasicProxyComponentFactory implements IComponentFactory {
       IComponentExtensionFactory componentExtensionFactory) {
     componentExtensionFactory.setComponentFactory(this);
     this.componentExtensionFactory = componentExtensionFactory;
+  }
+
+  /**
+   * Creates the component proxy invocation handler.
+   * 
+   * @param componentDescriptor
+   *            the component descriptor.
+   * @return the component proxy invocation handler.
+   */
+  protected InvocationHandler createComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor) {
+    return new BasicComponentInvocationHandler(componentDescriptor, this,
+        componentCollectionFactory, accessorFactory, componentExtensionFactory);
   }
 
   /**
@@ -210,30 +230,10 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return component;
   }
 
-  /**
-   * Creates the component proxy invocation handler.
-   * 
-   * @param componentDescriptor
-   *            the component descriptor.
-   * @return the component proxy invocation handler.
-   */
-  protected InvocationHandler createComponentInvocationHandler(
-      IComponentDescriptor<IComponent> componentDescriptor) {
-    return new BasicComponentInvocationHandler(componentDescriptor, this,
-        componentCollectionFactory, accessorFactory, componentExtensionFactory);
-  }
-
   private InvocationHandler createDelegatingComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
     return new BasicDelegatingComponentInvocationHandler(delegate, this,
         componentDescriptor, componentCollectionFactory, accessorFactory,
         componentExtensionFactory);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
-    return componentDescriptorRegistry.getComponentDescriptors();
   }
 }

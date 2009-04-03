@@ -55,6 +55,55 @@ public abstract class BasicNumberPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
+  public BasicNumberPropertyDescriptor clone() {
+    BasicNumberPropertyDescriptor clonedDescriptor = (BasicNumberPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ComparableQueryStructureDescriptor createQueryDescriptor() {
+    BasicNumberPropertyDescriptor queryDescriptor = (BasicNumberPropertyDescriptor) super
+        .createQueryDescriptor();
+    queryDescriptor.setMinValue(null);
+    queryDescriptor.setMaxValue(null);
+    return new ComparableQueryStructureDescriptor(queryDescriptor);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public BigDecimal getMaxValue() {
+    if (maxValue != null) {
+      return maxValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((INumberPropertyDescriptor) getParentDescriptor()).getMaxValue();
+    }
+    return maxValue;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public BigDecimal getMinValue() {
+    if (minValue != null) {
+      return minValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((INumberPropertyDescriptor) getParentDescriptor()).getMinValue();
+    }
+    return minValue;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);
     if (newValue != null) {
@@ -95,50 +144,6 @@ public abstract class BasicNumberPropertyDescriptor extends
     }
   }
 
-  private int compare(Number value, BigDecimal bound) {
-    if (value instanceof BigDecimal) {
-      return ((BigDecimal) value).compareTo(bound);
-    }
-    return new BigDecimal(value.doubleValue()).compareTo(bound);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicNumberPropertyDescriptor clone() {
-    BasicNumberPropertyDescriptor clonedDescriptor = (BasicNumberPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public BigDecimal getMaxValue() {
-    if (maxValue != null) {
-      return maxValue;
-    }
-    if (getParentDescriptor() != null) {
-      return ((INumberPropertyDescriptor) getParentDescriptor()).getMaxValue();
-    }
-    return maxValue;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public BigDecimal getMinValue() {
-    if (minValue != null) {
-      return minValue;
-    }
-    if (getParentDescriptor() != null) {
-      return ((INumberPropertyDescriptor) getParentDescriptor()).getMinValue();
-    }
-    return minValue;
-  }
-
   /**
    * Sets the maxValue property.
    * 
@@ -159,15 +164,10 @@ public abstract class BasicNumberPropertyDescriptor extends
     this.minValue = minValue;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ComparableQueryStructureDescriptor createQueryDescriptor() {
-    BasicNumberPropertyDescriptor queryDescriptor = (BasicNumberPropertyDescriptor) super
-        .createQueryDescriptor();
-    queryDescriptor.setMinValue(null);
-    queryDescriptor.setMaxValue(null);
-    return new ComparableQueryStructureDescriptor(queryDescriptor);
+  private int compare(Number value, BigDecimal bound) {
+    if (value instanceof BigDecimal) {
+      return ((BigDecimal) value).compareTo(bound);
+    }
+    return new BigDecimal(value.doubleValue()).compareTo(bound);
   }
 }

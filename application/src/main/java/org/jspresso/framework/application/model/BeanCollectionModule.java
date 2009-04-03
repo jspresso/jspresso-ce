@@ -94,12 +94,16 @@ public class BeanCollectionModule extends Module {
   }
 
   /**
-   * Gets the module's projected objects.
-   * 
-   * @return the projected objects.
+   * {@inheritDoc}
    */
-  public Collection<?> getModuleObjects() {
-    return moduleObjects;
+  @Override
+  public String getIconImageURL() {
+    String iconImageUrl = super.getIconImageURL();
+    if (iconImageUrl == null) {
+      iconImageUrl = getElementComponentDescriptor().getIconImageURL();
+      setIconImageURL(iconImageUrl);
+    }
+    return iconImageUrl;
   }
 
 //  /**
@@ -112,6 +116,15 @@ public class BeanCollectionModule extends Module {
 //    return new HashCodeBuilder(23, 53).append(getName()).toHashCode();
 //    see the equals comment.
 //  }
+
+  /**
+   * Gets the module's projected objects.
+   * 
+   * @return the projected objects.
+   */
+  public Collection<?> getModuleObjects() {
+    return moduleObjects;
+  }
 
   /**
    * Sets the elementComponentDescriptor.
@@ -147,18 +160,5 @@ public class BeanCollectionModule extends Module {
     Object oldValue = getModuleObjects();
     this.moduleObjects = moduleObjects;
     firePropertyChange("moduleObjects", oldValue, getModuleObjects());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getIconImageURL() {
-    String iconImageUrl = super.getIconImageURL();
-    if (iconImageUrl == null) {
-      iconImageUrl = getElementComponentDescriptor().getIconImageURL();
-      setIconImageURL(iconImageUrl);
-    }
-    return iconImageUrl;
   }
 }

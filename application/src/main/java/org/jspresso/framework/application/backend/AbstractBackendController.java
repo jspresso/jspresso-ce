@@ -66,8 +66,8 @@ public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
   private IApplicationSession                              applicationSession;
-  private IModelConnectorFactory                           modelConnectorFactory;
   private IEntityFactory                                   entityFactory;
+  private IModelConnectorFactory                           modelConnectorFactory;
   private ComponentTransferStructure<? extends IComponent> transferStructure;
 
   private Map<String, IValueConnector>                     workspaceConnectors;
@@ -110,15 +110,15 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IApplicationSession getApplicationSession() {
-    return applicationSession;
+  public IAccessorFactory getAccessorFactory() {
+    return modelConnectorFactory.getAccessorFactory();
   }
 
   /**
    * {@inheritDoc}
    */
-  public IAccessorFactory getAccessorFactory() {
-    return modelConnectorFactory.getAccessorFactory();
+  public IApplicationSession getApplicationSession() {
+    return applicationSession;
   }
 
   /**
@@ -199,17 +199,6 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *            the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
    * Sets the entityFactory.
    * 
    * @param entityFactory
@@ -222,6 +211,17 @@ public abstract class AbstractBackendController extends AbstractController
     }
     this.entityFactory = entityFactory;
     linkSessionArtifacts();
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *            the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
   }
 
   /**

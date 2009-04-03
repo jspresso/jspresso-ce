@@ -52,6 +52,15 @@ public class RemoteFileDownloadCommand extends RemoteFileCommand {
   }
 
   /**
+   * Gets the resourceId.
+   * 
+   * @return the resourceId.
+   */
+  public String getResourceId() {
+    return resourceId;
+  }
+
+  /**
    * Sets the defaultFileName.
    * 
    * @param defaultFileName
@@ -59,15 +68,6 @@ public class RemoteFileDownloadCommand extends RemoteFileCommand {
    */
   public void setDefaultFileName(String defaultFileName) {
     this.defaultFileName = defaultFileName;
-  }
-
-  /**
-   * Gets the resourceId.
-   * 
-   * @return the resourceId.
-   */
-  public String getResourceId() {
-    return resourceId;
   }
 
   /**

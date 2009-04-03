@@ -3,7 +3,7 @@
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <book lang="en" revision="1.0">
   <bookinfo>
-    <title>The Jspresso Framework</title>
+    <title>Jspresso : The Java RIA Framework</title>
 
     <subtitle>Jspresso Reference Manual</subtitle>
 
@@ -29,7 +29,7 @@
     <title>Preface</title>
 
     <para>Software development requires many different skills. This is even
-    more true when you have to deal with a distributed business application
+    more true when you have to deal with a distributed corporate application
     for which you have to get expertise on :</para>
 
     <itemizedlist>
@@ -84,7 +84,7 @@
 
       <listitem>
         <para>End-to-end proprietary solutions locking the software and thus
-        the customer into the chosen technology and tools</para>
+        the customer into the selected technology and tools</para>
       </listitem>
 
       <listitem>
@@ -114,17 +114,17 @@
     <ulink
     url="http://www.opensource.org/licenses/apachepl.php">Apache</ulink>, ...)
     that enables its inclusion in closed-source software under copyright
-    notice conditions. Jspresso put them all together, in a loosely coupled
-    architecture so that the resulting software is not locked in any of them.
-    As an example, you don't have to choose whether you want to distribute
-    your application as a Java swing application through Java Web Start or as
-    an Ajax application without any plug in or both ! Jspresso will take care
-    of it at runtime.<figure id="Jspresso-modules">
+    notice conditions. Jspresso assembles them all together, in a loosely
+    coupled architecture so that the resulting software is not locked in any
+    of them. As an example, you don't have to choose whether you want to
+    deploy your application as a Java swing application through Java Web Start
+    or as an Ajax application without any plug-in or both ! Jspresso will take
+    care of it at runtime.<figure id="Jspresso-modules">
         <title>Jspresso Modules</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="40%"
+            <imagedata align="center" contentdepth="60%"
                        fileref="../images/Jspresso-modules.jpg" scalefit="1"
                        width="100%" />
           </imageobject>
@@ -146,11 +146,11 @@
     quantity, the date when this article was made available in the system, and
     so on). Everyone is able to describe this view precisely and everyone is
     able to understand what has been described. There should not be a need for
-    coding a single line of code (swing, html, jsp, javascript, ...) whenever
-    this description has been captured by the framework. That is exactly what
-    Jspresso does by taking care of the implementation once you have expressed
-    the requirements. And there is no complex code generation. Everything is
-    just handled at runtime.</para>
+    coding a single line of code (swing, flex, html, jsp, javascript, ...)
+    whenever this description has been captured by the framework. That is
+    exactly what Jspresso does by taking care of the implementation once you
+    have expressed the requirements. And there is no complex code generation.
+    Everything is just handled at runtime.</para>
 
     <para>Here are some of the key features of the Jspresso framework :</para>
 
@@ -206,9 +206,13 @@
           </listitem>
 
           <listitem>
-            <para>entities inheritance o more than 15 property types handled
-            through all layers (string, integer, enumeration, date, duration,
-            color, percentage, binary, ...)</para>
+            <para>entities inheritance</para>
+          </listitem>
+
+          <listitem>
+            <para>more than 15 property types handled through all layers
+            (string, integer, enumeration, date, duration, color, percentage,
+            binary, ...)</para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -216,7 +220,7 @@
       <listitem>
         <para>Services offered by entities (and components) are objects
         themselves that are assembled in the entity (or component) through
-        dependency injection. This allows for easy mok-up, logging and
+        dependency injection. This allows for easy mock-up, logging and
         tracing, KPI implementation, inheritance between services, ... You can
         get all the advantages of AOP without its drawbacks.</para>
       </listitem>
@@ -225,12 +229,12 @@
         <para>Model descriptors offer fine-grained model description (rich
         validation constraints on properties). This is one of the most
         important feature of Jspresso since this rich semantic is then
-        leveraged in all other layers without the need of repeating things.
+        leveraged in all other layers without the need for repeating things.
         For instance, once you have constrained a property with a regular
         expression, views presenting this property will automagically enforce
         this constraint by allowing only matching values to be entered.
         Describe finely your domain model and building a complete application
-        over it will be an effortless process.</para>
+        over it will then be an effortless process.</para>
       </listitem>
 
       <listitem>
@@ -241,8 +245,8 @@
 
       <listitem>
         <para>Jspresso entities (and components) support life-cycle
-        interceptors (on-create, on-persist, on-update, on-delete). Life-cycle
-        interceptors are objects that are assembled in entities and
+        interceptors (on-create, on-persist, on-update, on-delete, on-load).
+        Life-cycle interceptors are objects that are assembled in entities and
         dynamically triggered by the framework when needed.</para>
       </listitem>
 
@@ -257,7 +261,7 @@
         <para>Jspresso handles transparently the persistence of the domain
         model in the backend store. Everything needed to achieve this is
         inferred form the model description. Atomic backend synchronization is
-        also completely handled by the framework and allow delayed updates of
+        also completely handled by the framework and allows delayed updates of
         in-memory changes.</para>
       </listitem>
     </itemizedlist>
@@ -270,9 +274,9 @@
         principle, views are generated at runtime through built-in factories
         depending on the chosen deployment strategy. Developing views is
         achieved by composing technology agnostic java beans view descriptors;
-        this means absolutely no swing, ULC, javascript, HTML or whatever
-        direct coding. Jspresso offers an extensive range of ready-to-use,
-        highly configurable, view descriptors including :</para>
+        this means absolutely no Swing, Flex, ULC, javascript, HTML or
+        whatever specific GUI coding. Jspresso offers an extensive range of
+        ready-to-use, highly configurable, view descriptors including :</para>
 
         <itemizedlist>
           <listitem>
@@ -294,8 +298,15 @@
           </listitem>
 
           <listitem>
-            <para>single property view o image view o composite (container)
-            views :</para>
+            <para>single property view</para>
+          </listitem>
+
+          <listitem>
+            <para>image view</para>
+          </listitem>
+
+          <listitem>
+            <para>composite (container) views :</para>
 
             <itemizedlist>
               <listitem>
@@ -316,8 +327,8 @@
               </listitem>
 
               <listitem>
-                <para>grid composite views : evenly size distributed grids and
-                constrained size distributed grids</para>
+                <para>grid composite views : evenly distributed size grids and
+                constrained distributed size grids</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -332,7 +343,7 @@
 
       <listitem>
         <para>View descriptors are highly configurable but offer sensible
-        default values; you can assemble really rich views in minutes. General
+        default values; you can assemble rich views in minutes. General
         customizations include fonts, colors and border. Of course, each view
         descriptor allows for specialized customization; some examples of such
         customizations are :</para>
@@ -340,7 +351,11 @@
         <itemizedlist>
           <listitem>
             <para>number of columns and list of displayed properties in form
-            views o split orientation in split views</para>
+            views</para>
+          </listitem>
+
+          <listitem>
+            <para>split orientation in split views</para>
           </listitem>
 
           <listitem>
@@ -354,11 +369,11 @@
       </listitem>
 
       <listitem>
-        <para>Jspresso views are naturally internationalized. Special care has
+        <para>Jspresso views are natively internationalized. Special care has
         been taken to nicely handle common I18N problems such as translation
         lengths differences by exclusively using layouts behind the scene;
-        this means no problematic absolute positioning of components and thus
-        GUI resize friendly behaviour.</para>
+        this means no absolute positioning of components and thus GUI resize
+        friendly behaviour.</para>
       </listitem>
 
       <listitem>
@@ -375,7 +390,7 @@
     <itemizedlist>
       <listitem>
         <para>Jspresso offers a rich set of ready-to-use high level
-        application components that are ready to assemble in application
+        application components that are ready to be assembled in application
         modules. For instance, Jspresso offers a highly configurable built-in
         module for CRUD operations on an entity family.</para>
       </listitem>
@@ -421,14 +436,22 @@
 
           <listitem>
             <para>copy, cut, paste actions that manage an entity oriented
-            clipboard o create and add, remove from, duplicate and add actions
-            to handle "master-detail" like GUIs</para>
+            clipboard</para>
           </listitem>
 
           <listitem>
-            <para>query action that implements a query by example to retrieve
-            entities from the backend store o wizard action that chain views
-            and populate an arbitrary context</para>
+            <para>create and add, remove from, duplicate and add actions to
+            handle "master-detail" like GUIs</para>
+          </listitem>
+
+          <listitem>
+            <para>query action that implements "query by example" to retrieve
+            entities from the backend store</para>
+          </listitem>
+
+          <listitem>
+            <para>wizard action that chain views and populate an arbitrary
+            context</para>
           </listitem>
 
           <listitem>
@@ -459,8 +482,8 @@
 
       <listitem>
         <para>Front-end actions are assembled in views so that users can
-        trigger them. They compose a tool bar attached to the view but can
-        also be triggered using a contextual pop-up menu.</para>
+        trigger them. They are composed in a tool bar attached to the view but
+        can also be triggered using a contextual pop-up menu.</para>
       </listitem>
 
       <listitem>
@@ -502,19 +525,19 @@
 
         <itemizedlist>
           <listitem>
-            <para>based on profiles that are hierarchically organized and
+            <para>based on roles that are hierarchically organized and
             populated by JAAS authentication</para>
           </listitem>
 
           <listitem>
             <para>declarative so that you just have to configure the
-            descriptors with a list of authorized profiles (using their
-            names). Whenever this list is missing means that there is no
-            restriction on the underlying component.</para>
+            descriptors with a list of authorized roles (using their names).
+            Whenever this list is missing means that there is no restriction
+            on the underlying component.</para>
           </listitem>
 
           <listitem>
-            <para>applicable in all layers.</para>
+            <para>applicable in all layers (model, view, actions).</para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -523,7 +546,7 @@
     <itemizedlist>
       <listitem>
         <para>Each and every part of a Jspresso application is securable with
-        authorization rules Authorizations are propagated across layers so
+        authorization rules. Authorizations are propagated across layers so
         that if you declare a restriction in the domain model layer it is
         automatically propagated in the related views. But of course you can
         declare the restriction in the view (or part of the view) itself.
@@ -574,9 +597,9 @@
         instance, whenever a form field is presented to the user, the
         framework will automatically look for a translation of the underlying
         property name. This means that once you've translated your entities
-        names and property names, all your application is potentially
+        and properties names, all your application is potentially
         internationalized. You can of course override this standard behaviour
-        if you want to name the same property differently in different
+        if you need to translate the same property differently in different
         views.</para>
       </listitem>
     </itemizedlist>
@@ -599,6 +622,10 @@
 
           <listitem>
             <para>WingS (Ajax)</para>
+          </listitem>
+
+          <listitem>
+            <para>Flex (Flash)</para>
           </listitem>
         </itemizedlist>
       </listitem>

@@ -41,10 +41,10 @@ package org.jspresso.framework.gui.remote;
 public class RForm extends RContainer {
 
   private int                columnCount;
-  private String             labelsPosition;
+  private RComponent[]   elements;
   private Integer[]      elementWidths;
 
-  private RComponent[]   elements;
+  private String             labelsPosition;
 
   /**
    * Constructs a new <code>RForm</code> instance.
@@ -57,13 +57,12 @@ public class RForm extends RContainer {
   }
 
   /**
-   * Sets the elements.
+   * Gets the columnCount.
    * 
-   * @param elements
-   *          the elements to set.
+   * @return the columnCount.
    */
-  public void setElements(RComponent[] elements) {
-    this.elements = elements;
+  public int getColumnCount() {
+    return columnCount;
   }
 
   /**
@@ -73,46 +72,6 @@ public class RForm extends RContainer {
    */
   public RComponent[] getElements() {
     return elements;
-  }
-
-  
-  /**
-   * Gets the columnCount.
-   * 
-   * @return the columnCount.
-   */
-  public int getColumnCount() {
-    return columnCount;
-  }
-
-  
-  /**
-   * Sets the columnCount.
-   * 
-   * @param columnCount the columnCount to set.
-   */
-  public void setColumnCount(int columnCount) {
-    this.columnCount = columnCount;
-  }
-
-  
-  /**
-   * Gets the labelsPosition.
-   * 
-   * @return the labelsPosition.
-   */
-  public String getLabelsPosition() {
-    return labelsPosition;
-  }
-
-  
-  /**
-   * Sets the labelsPosition.
-   * 
-   * @param labelsPosition the labelsPosition to set.
-   */
-  public void setLabelsPosition(String labelsPosition) {
-    this.labelsPosition = labelsPosition;
   }
 
   
@@ -127,12 +86,53 @@ public class RForm extends RContainer {
 
   
   /**
+   * Gets the labelsPosition.
+   * 
+   * @return the labelsPosition.
+   */
+  public String getLabelsPosition() {
+    return labelsPosition;
+  }
+
+  
+  /**
+   * Sets the columnCount.
+   * 
+   * @param columnCount the columnCount to set.
+   */
+  public void setColumnCount(int columnCount) {
+    this.columnCount = columnCount;
+  }
+
+  
+  /**
+   * Sets the elements.
+   * 
+   * @param elements
+   *          the elements to set.
+   */
+  public void setElements(RComponent[] elements) {
+    this.elements = elements;
+  }
+
+  
+  /**
    * Sets the elementWidths.
    * 
    * @param elementWidths the elementWidths to set.
    */
   public void setElementWidths(Integer[] elementWidths) {
     this.elementWidths = elementWidths;
+  }
+
+  
+  /**
+   * Sets the labelsPosition.
+   * 
+   * @param labelsPosition the labelsPosition to set.
+   */
+  public void setLabelsPosition(String labelsPosition) {
+    this.labelsPosition = labelsPosition;
   }
 
 }

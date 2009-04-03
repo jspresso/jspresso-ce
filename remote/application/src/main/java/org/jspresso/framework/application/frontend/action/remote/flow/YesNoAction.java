@@ -56,13 +56,25 @@ public class YesNoAction extends AbstractMessageAction {
   private IDisplayableAction yesAction;
 
   /**
-   * {@inheritDoc}
+   * Sets the noAction.
+   * 
+   * @param noAction
+   *            the noAction to set.
    */
-  @Override
-  protected RemoteMessageCommand createMessageCommand() {
-    return new RemoteYesNoCommand();
+  public void setNoAction(IAction noAction) {
+    this.noAction = wrapAction(noAction);
   }
   
+  /**
+   * Sets the yesAction.
+   * 
+   * @param yesAction
+   *            the yesAction to set.
+   */
+  public void setYesAction(IAction yesAction) {
+    this.yesAction = wrapAction(yesAction);
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -95,23 +107,11 @@ public class YesNoAction extends AbstractMessageAction {
   }
 
   /**
-   * Sets the noAction.
-   * 
-   * @param noAction
-   *            the noAction to set.
+   * {@inheritDoc}
    */
-  public void setNoAction(IAction noAction) {
-    this.noAction = wrapAction(noAction);
-  }
-
-  /**
-   * Sets the yesAction.
-   * 
-   * @param yesAction
-   *            the yesAction to set.
-   */
-  public void setYesAction(IAction yesAction) {
-    this.yesAction = wrapAction(yesAction);
+  @Override
+  protected RemoteMessageCommand createMessageCommand() {
+    return new RemoteYesNoCommand();
   }
 
 }

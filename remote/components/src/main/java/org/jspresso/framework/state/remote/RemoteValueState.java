@@ -41,9 +41,9 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RemoteValueState extends RemotePeer {
 
+  private boolean readable;
   private Object  value;
   private boolean writable;
-  private boolean readable;
 
   /**
    * Constructs a new <code>RemoteValueState</code> instance.
@@ -56,6 +56,24 @@ public class RemoteValueState extends RemotePeer {
   }
 
   /**
+   * Gets the value.
+   * 
+   * @return the value.
+   */
+  public Object getValue() {
+    return value;
+  }
+
+  /**
+   * Gets the readable.
+   * 
+   * @return the readable.
+   */
+  public boolean isReadable() {
+    return readable;
+  }
+
+  /**
    * Gets the writable.
    * 
    * @return the writable.
@@ -65,22 +83,13 @@ public class RemoteValueState extends RemotePeer {
   }
 
   /**
-   * Sets the writable.
+   * Sets the readable.
    * 
-   * @param writable
-   *          the writable to set.
+   * @param readable
+   *          the readable to set.
    */
-  public void setWritable(boolean writable) {
-    this.writable = writable;
-  }
-
-  /**
-   * Gets the value.
-   * 
-   * @return the value.
-   */
-  public Object getValue() {
-    return value;
+  public void setReadable(boolean readable) {
+    this.readable = readable;
   }
 
   /**
@@ -94,22 +103,13 @@ public class RemoteValueState extends RemotePeer {
   }
 
   /**
-   * Gets the readable.
+   * Sets the writable.
    * 
-   * @return the readable.
+   * @param writable
+   *          the writable to set.
    */
-  public boolean isReadable() {
-    return readable;
-  }
-
-  /**
-   * Sets the readable.
-   * 
-   * @param readable
-   *          the readable to set.
-   */
-  public void setReadable(boolean readable) {
-    this.readable = readable;
+  public void setWritable(boolean writable) {
+    this.writable = writable;
   }
 
 }

@@ -127,6 +127,46 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * {@inheritDoc}
    */
   @Override
+  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
+    final List<IEntity> uowEntities = super.cloneInUnitOfWork(entities);
+    hibernateTemplate.execute(new HibernateCallback() {
+
+      public Object doInHibernate(Session session) {
+        Set<IEntity> alreadyLocked = new HashSet<IEntity>();
+        for (IEntity mergedEntity : uowEntities) {
+          lockInHibernate(mergedEntity, session, alreadyLocked);
+        }
+        return null;
+      }
+
+    });
+    return uowEntities;
+  }
+
+  // private Object unwrapProxyIfNeeded(Object maybeProxy) {
+  // if (maybeProxy instanceof HibernateProxy) {
+  // return ((HibernateProxy) maybeProxy).getHibernateLazyInitializer()
+  // .getImplementation();
+  // }
+  // return maybeProxy;
+  // }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void commitUnitOfWork() {
+    try {
+      super.commitUnitOfWork();
+    } finally {
+      traversedPendingOperations = false;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void initializePropertyIfNeeded(final IComponent componentOrEntity,
       IPropertyDescriptor propertyDescriptor) {
     boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
@@ -204,14 +244,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     }
   }
 
-  // private Object unwrapProxyIfNeeded(Object maybeProxy) {
-  // if (maybeProxy instanceof HibernateProxy) {
-  // return ((HibernateProxy) maybeProxy).getHibernateLazyInitializer()
-  // .getImplementation();
-  // }
-  // return maybeProxy;
-  // }
-
   /**
    * {@inheritDoc}
    */
@@ -272,18 +304,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           return null;
         }
       });
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void commitUnitOfWork() {
-    try {
-      super.commitUnitOfWork();
-    } finally {
-      traversedPendingOperations = false;
     }
   }
 
@@ -362,26 +382,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     }
     return super.wrapDetachedCollection(owner, transientCollection,
         varSnapshotCollection, role);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
-    final List<IEntity> uowEntities = super.cloneInUnitOfWork(entities);
-    hibernateTemplate.execute(new HibernateCallback() {
-
-      public Object doInHibernate(Session session) {
-        Set<IEntity> alreadyLocked = new HashSet<IEntity>();
-        for (IEntity mergedEntity : uowEntities) {
-          lockInHibernate(mergedEntity, session, alreadyLocked);
-        }
-        return null;
-      }
-
-    });
-    return uowEntities;
   }
 
   @SuppressWarnings("unchecked")

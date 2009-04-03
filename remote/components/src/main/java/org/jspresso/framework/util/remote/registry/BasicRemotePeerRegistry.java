@@ -61,24 +61,16 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    * {@inheritDoc}
    */
   @Override
+  public void clear() {
+    backingStore.clear();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public IRemotePeer getRegistered(String guid) {
     return backingStore.get(guid);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void register(IRemotePeer remotePeer) {
-    backingStore.put(remotePeer.getGuid(), remotePeer);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void unregister(String guid) {
-    backingStore.remove(guid);
   }
 
   /**
@@ -88,13 +80,21 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   public boolean isRegistered(String guid) {
     return backingStore.containsKey(guid);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void register(IRemotePeer remotePeer) {
+    backingStore.put(remotePeer.getGuid(), remotePeer);
+  }
   
   /**
    * {@inheritDoc}
    */
   @Override
-  public void clear() {
-    backingStore.clear();
+  public void unregister(String guid) {
+    backingStore.remove(guid);
   }
 
 }

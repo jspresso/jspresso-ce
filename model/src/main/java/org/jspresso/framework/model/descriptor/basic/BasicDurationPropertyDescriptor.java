@@ -54,6 +54,49 @@ public class BasicDurationPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
+  public BasicDurationPropertyDescriptor clone() {
+    BasicDurationPropertyDescriptor clonedDescriptor = (BasicDurationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ComparableQueryStructureDescriptor createQueryDescriptor() {
+    BasicDurationPropertyDescriptor queryDescriptor = (BasicDurationPropertyDescriptor) super
+        .createQueryDescriptor();
+    queryDescriptor.setMaxMillis(null);
+    return new ComparableQueryStructureDescriptor(queryDescriptor);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Long getMaxMillis() {
+    if (maxMillis != null) {
+      return maxMillis;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IDurationPropertyDescriptor) getParentDescriptor())
+          .getMaxMillis();
+    }
+    return maxMillis;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<?> getModelType() {
+    return Long.class;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void preprocessSetter(final Object component, Object newValue) {
     super.preprocessSetter(component, newValue);
     if (newValue != null && getMaxMillis() != null
@@ -83,38 +126,6 @@ public class BasicDurationPropertyDescriptor extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicDurationPropertyDescriptor clone() {
-    BasicDurationPropertyDescriptor clonedDescriptor = (BasicDurationPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Long getMaxMillis() {
-    if (maxMillis != null) {
-      return maxMillis;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IDurationPropertyDescriptor) getParentDescriptor())
-          .getMaxMillis();
-    }
-    return maxMillis;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class<?> getModelType() {
-    return Long.class;
-  }
-
-  /**
    * Sets the maxMillis property.
    * 
    * @param maxMillis
@@ -122,16 +133,5 @@ public class BasicDurationPropertyDescriptor extends
    */
   public void setMaxMillis(Long maxMillis) {
     this.maxMillis = maxMillis;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ComparableQueryStructureDescriptor createQueryDescriptor() {
-    BasicDurationPropertyDescriptor queryDescriptor = (BasicDurationPropertyDescriptor) super
-        .createQueryDescriptor();
-    queryDescriptor.setMaxMillis(null);
-    return new ComparableQueryStructureDescriptor(queryDescriptor);
   }
 }

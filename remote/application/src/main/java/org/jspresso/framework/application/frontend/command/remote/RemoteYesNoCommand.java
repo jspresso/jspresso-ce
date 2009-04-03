@@ -21,7 +21,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 import org.jspresso.framework.gui.remote.RAction;
 
 /**
- * TODO Comment needed.
+ * Yes - No remote flow action.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,26 +41,8 @@ import org.jspresso.framework.gui.remote.RAction;
  */
 public class RemoteYesNoCommand extends RemoteMessageCommand {
 
-  private RAction yesAction;
   private RAction noAction;
-  
-  /**
-   * Gets the yesAction.
-   * 
-   * @return the yesAction.
-   */
-  public RAction getYesAction() {
-    return yesAction;
-  }
-  
-  /**
-   * Sets the yesAction.
-   * 
-   * @param yesAction the yesAction to set.
-   */
-  public void setYesAction(RAction yesAction) {
-    this.yesAction = yesAction;
-  }
+  private RAction yesAction;
   
   /**
    * Gets the noAction.
@@ -72,12 +54,30 @@ public class RemoteYesNoCommand extends RemoteMessageCommand {
   }
   
   /**
+   * Gets the yesAction.
+   * 
+   * @return the yesAction.
+   */
+  public RAction getYesAction() {
+    return yesAction;
+  }
+  
+  /**
    * Sets the noAction.
    * 
    * @param noAction the noAction to set.
    */
   public void setNoAction(RAction noAction) {
     this.noAction = noAction;
+  }
+  
+  /**
+   * Sets the yesAction.
+   * 
+   * @param yesAction the yesAction to set.
+   */
+  public void setYesAction(RAction yesAction) {
+    this.yesAction = yesAction;
   }
   
 }

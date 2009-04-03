@@ -41,13 +41,13 @@ package org.jspresso.framework.view.descriptor;
 public enum EAxis {
   
   /**
-   * <code>ROW</code>.
-   */
-  ROW,
-  
-  /**
    * <code>COLUMN</code>.
    */
-  COLUMN
+  COLUMN,
+  
+  /**
+   * <code>ROW</code>.
+   */
+  ROW
 
 }

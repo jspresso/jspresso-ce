@@ -138,12 +138,6 @@
     <property
       name="guidGenerator"
       ref="guidGenerator" />
-    <property
-      name="loginViewDescriptor"
-      ref="loginViewDescriptor" />
-    <property
-      name="modelConnectorFactory"
-      ref="modelConnectorFactory" />
   </bean>
 
 </beans>

@@ -57,6 +57,24 @@ public class ComparableQueryStructure extends
   }
 
   /**
+   * Gets the infValue.
+   * 
+   * @return the infValue.
+   */
+  public Object getInfValue() {
+    return infValue;
+  }
+
+  /**
+   * Gets the supValue.
+   * 
+   * @return the supValue.
+   */
+  public Object getSupValue() {
+    return supValue;
+  }
+
+  /**
    * Sets the comparator.
    * 
    * @param comparator
@@ -69,15 +87,6 @@ public class ComparableQueryStructure extends
   }
 
   /**
-   * Gets the infValue.
-   * 
-   * @return the infValue.
-   */
-  public Object getInfValue() {
-    return infValue;
-  }
-
-  /**
    * Sets the infValue.
    * 
    * @param infValue
@@ -87,15 +96,6 @@ public class ComparableQueryStructure extends
     Object oldInfValue = this.infValue;
     this.infValue = infValue;
     firePropertyChange("infValue", oldInfValue, this.infValue);
-  }
-
-  /**
-   * Gets the supValue.
-   * 
-   * @return the supValue.
-   */
-  public Object getSupValue() {
-    return supValue;
   }
 
   /**

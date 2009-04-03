@@ -49,6 +49,18 @@ public abstract class AbstractCloneCollectionAction extends
     AbstractAddCollectionToMasterAction {
 
   /**
+   * Clones an element.
+   * 
+   * @param element
+   *            the element to clone.
+   * @param context
+   *            the action context.
+   * @return the cloned element.
+   */
+  protected abstract Object cloneElement(Object element,
+      Map<String, Object> context);
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -67,17 +79,5 @@ public abstract class AbstractCloneCollectionAction extends
     }
     return elementClones;
   }
-
-  /**
-   * Clones an element.
-   * 
-   * @param element
-   *            the element to clone.
-   * @param context
-   *            the action context.
-   * @return the cloned element.
-   */
-  protected abstract Object cloneElement(Object element,
-      Map<String, Object> context);
 
 }

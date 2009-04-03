@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
-  <version>3.0-SNAPSHOT</version>
+  <version>3.0.0</version>
   <name>Jspresso Root POM</name>
   <url>http://www.jspresso.org</url>
   <distributionManagement>
@@ -23,18 +23,15 @@
   </distributionManagement>
   <pluginRepositories>
     <pluginRepository>
-      <id>flexmojos-repository</id>
-      <url>http://svn.sonatype.org/flexmojos/repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
     	<id>agilejava-repository</id>
     	<url>http://agilejava.com/maven</url>
+    	<snapshots>
+    		<enabled>false</enabled>
+    	</snapshots>
+    </pluginRepository>
+    <pluginRepository>
+    	<id>sonatype-repository</id>
+    	<url>http://repository.sonatype.org/content/groups/public</url>
     	<snapshots>
     		<enabled>false</enabled>
     	</snapshots>
@@ -58,16 +55,6 @@
     <repository>
       <id>java.net-repository</id>
       <url>http://download.java.net/maven/2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>flexmojos-repository</id>
-      <url>http://svn.sonatype.org/flexmojos/repository</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -103,214 +90,221 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    <repository>
+    	<id>sonatype-repository</id>
+    	<url>http://repository.sonatype.org/content/groups/public</url>
+    	<snapshots>
+    		<enabled>false</enabled>
+    	</snapshots>
+    </repository>
   </repositories>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-application</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-binding</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-action</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-model</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-tools</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-util</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-security</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-view</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-hibernate</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-swing</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-swing-application</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-swing-components</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-ulc</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-ulc-application</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-ulc-components</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-ulc-components-server</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-ulc-components-shared</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-ulc-components-client</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-wings</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-wings-application</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-wings-components</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-remote</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-flex</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
         <type>swc</type>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-remote-application</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-remote-components</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-template-core</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-template-swing</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-template-ulc</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-template-wings</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-template-remote</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-jasper-core</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-jasper-swing</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-jasper-ulc</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-jasper-wings</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-jasper-remote</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-launch-core</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-launch-swing</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-launch-ulc</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-launch-wings</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-launch-remote</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-documentation</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${project.version}</version>
         <classifier>archive</classifier>
         <type>zip</type>
       </dependency>
@@ -625,51 +619,6 @@
           </dependencies>
         </plugin>
         <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>asdoc-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>air-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>flex-compiler-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>flexbuilder-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>generator-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>html-wrapper-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>install-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>optimizer-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
-          <groupId>info.flex-mojos</groupId>
-          <artifactId>source-mojo</artifactId>
-          <version>2.0.3</version>
-        </plugin>
-        <plugin>
           <groupId>org.codehaus.xdoclet</groupId>
           <artifactId>maven2-xdoclet2-plugin</artifactId>
           <version>2.0.6</version>
@@ -743,22 +692,22 @@
             <dependency>
               <groupId>org.jspresso.framework</groupId>
               <artifactId>jspresso-tools</artifactId>
-              <version>3.0-SNAPSHOT</version>
+              <version>${project.version}</version>
             </dependency>
             <dependency>
               <groupId>org.jspresso.framework</groupId>
               <artifactId>jspresso-jasper-core</artifactId>
-              <version>3.0-SNAPSHOT</version>
+              <version>${project.version}</version>
             </dependency>
             <dependency>
               <groupId>org.jspresso.framework</groupId>
               <artifactId>jspresso-app-template-core</artifactId>
-              <version>3.0-SNAPSHOT</version>
+              <version>${project.version}</version>
             </dependency>
             <dependency>
               <groupId>org.jspresso.framework</groupId>
               <artifactId>jspresso-app-template-core</artifactId>
-              <version>3.0-SNAPSHOT</version>
+              <version>${project.version}</version>
             </dependency>
             <dependency>
               <groupId>jfree</groupId>
@@ -766,6 +715,12 @@
               <version>1.0.1</version>
             </dependency>
           </dependencies> 
+        </plugin>
+        <plugin>
+        	<groupId>org.sonatype.flexmojos</groupId>
+        	<artifactId>flexmojos-maven-plugin</artifactId>
+        	<version>3.0.0</version>
+        	<extensions>true</extensions>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -833,13 +788,15 @@
   </build>
 
   <reporting>
-  	<!--<excludeDefaults>true</excludeDefaults>-->
+  	<excludeDefaults>true</excludeDefaults>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <configuration>
-          <!--Speeds-up dependency report-->
+          <!--
+            Speeds-up dependency report
+          -->
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration> 
       </plugin>

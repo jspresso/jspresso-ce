@@ -40,12 +40,9 @@ package org.jspresso.framework.model.entity;
 public interface IEntityLifecycleHandler {
 
   /**
-   * Registers an entity for deletion.
-   * 
-   * @param entity
-   *            the entity to register.
+   * Clears the pending operations.
    */
-  void registerForDeletion(IEntity entity);
+  void clearPendingOperations();
 
   /**
    * Tests wether an entity has been registered for deletion.
@@ -66,15 +63,18 @@ public interface IEntityLifecycleHandler {
   boolean isEntityRegisteredForUpdate(IEntity entity);
 
   /**
+   * Registers an entity for deletion.
+   * 
+   * @param entity
+   *            the entity to register.
+   */
+  void registerForDeletion(IEntity entity);
+
+  /**
    * Registers an entity for update.
    * 
    * @param entity
    *            the entity to register.
    */
   void registerForUpdate(IEntity entity);
-
-  /**
-   * Clears the pending operations.
-   */
-  void clearPendingOperations();
 }

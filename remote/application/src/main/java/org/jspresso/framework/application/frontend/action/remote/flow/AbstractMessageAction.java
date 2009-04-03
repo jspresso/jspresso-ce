@@ -72,26 +72,6 @@ public abstract class AbstractMessageAction extends AbstractRemoteAction {
   }
 
   /**
-   * Gets the message.
-   * 
-   * @param context
-   *          the actionContext.
-   * @return the message.
-   */
-  protected String getMessage(Map<String, Object> context) {
-    return (String) context.get(ActionContextConstants.ACTION_PARAM);
-  }
-
-  /**
-   * Creates the message command to be handled by the client peer. It should be
-   * created empty and will be automatically completed bay a call to
-   * completeMessageCommand.
-   * 
-   * @return the messageCommand.
-   */
-  protected abstract RemoteMessageCommand createMessageCommand();
-
-  /**
    * Completes the message command.
    * 
    * @param messageCommand
@@ -114,6 +94,26 @@ public abstract class AbstractMessageAction extends AbstractRemoteAction {
     messageCommand.setTitle(getI18nName(getTranslationProvider(context),
         getLocale(context)));
     messageCommand.setMessage(getMessage(context));
+  }
+
+  /**
+   * Creates the message command to be handled by the client peer. It should be
+   * created empty and will be automatically completed bay a call to
+   * completeMessageCommand.
+   * 
+   * @return the messageCommand.
+   */
+  protected abstract RemoteMessageCommand createMessageCommand();
+
+  /**
+   * Gets the message.
+   * 
+   * @param context
+   *          the actionContext.
+   * @return the message.
+   */
+  protected String getMessage(Map<String, Object> context) {
+    return (String) context.get(ActionContextConstants.ACTION_PARAM);
   }
 
   /**

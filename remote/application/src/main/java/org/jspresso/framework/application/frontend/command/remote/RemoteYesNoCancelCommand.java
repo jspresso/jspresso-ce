@@ -22,7 +22,7 @@ import org.jspresso.framework.gui.remote.RAction;
 
 
 /**
- * TODO Comment needed.
+ * Yes - No - Cancel remote flow action.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>

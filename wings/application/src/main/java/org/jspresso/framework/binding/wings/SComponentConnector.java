@@ -82,24 +82,6 @@ public abstract class SComponentConnector<E extends SComponent> extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void readabilityChange() {
-    super.readabilityChange();
-    if (isReadable()) {
-      if (savedForeground != null) {
-        getConnectedSComponent().setForeground(savedForeground);
-      }
-      savedForeground = null;
-    } else if (savedForeground == null) {
-      savedForeground = getConnectedSComponent().getForeground();
-      getConnectedSComponent().setForeground(
-          getConnectedSComponent().getBackground());
-    }
-  }
-
-  /**
    * Attaches the SComponent to the connector.
    */
   protected abstract void bindSComponent();
@@ -135,6 +117,24 @@ public abstract class SComponentConnector<E extends SComponent> extends
    */
   protected E getConnectedSComponent() {
     return connectedSComponent;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void readabilityChange() {
+    super.readabilityChange();
+    if (isReadable()) {
+      if (savedForeground != null) {
+        getConnectedSComponent().setForeground(savedForeground);
+      }
+      savedForeground = null;
+    } else if (savedForeground == null) {
+      savedForeground = getConnectedSComponent().getForeground();
+      getConnectedSComponent().setForeground(
+          getConnectedSComponent().getBackground());
+    }
   }
 
   private void protectedFireConnectorValueChange() {

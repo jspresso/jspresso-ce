@@ -60,6 +60,51 @@ public interface IFrontendController<E, F, G> extends IController,
     IIconDescriptor, IActionable {
 
   /**
+   * Displays a modal dialog.
+   * 
+   * @param mainView
+   *          the view to install in the modal dialog.
+   * @param actions
+   *          the actions available in the dialog.
+   * @param title
+   *          the dialog title.
+   * @param sourceComponent
+   *          the source component.
+   * @param context
+   *          the context to store on the context stack.
+   * @param reuseCurrent
+   *          set to true to reuse an existing modal dialog.
+   */
+  void displayModalDialog(E mainView, List<G> actions, String title,
+      E sourceComponent, Map<String, Object> context, boolean reuseCurrent);
+
+  /**
+   * Displays the given URL in a new braowser window (or tab).
+   * 
+   * @param urlSpec
+   *          the url to display.
+   */
+  void displayUrl(String urlSpec);
+
+  /**
+   * Displays a workspace.
+   * 
+   * @param workspaceName
+   *          the workspace identifier.
+   */
+  void displayWorkspace(String workspaceName);
+
+  /**
+   * Disposes a modal dialog.
+   * 
+   * @param sourceWidget
+   *          the source widget.
+   * @param context
+   *          the context to complement with the head of the context stack.
+   */
+  void disposeModalDialog(E sourceWidget, Map<String, Object> context);
+
+  /**
    * Retrieves a map of help action lists to be presented on this view.
    * 
    * @return the map of action lists handled by this view.
@@ -101,49 +146,4 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale clientLocale);
-
-  /**
-   * Displays a workspace.
-   * 
-   * @param workspaceName
-   *          the workspace identifier.
-   */
-  void displayWorkspace(String workspaceName);
-
-  /**
-   * Displays a modal dialog.
-   * 
-   * @param mainView
-   *          the view to install in the modal dialog.
-   * @param actions
-   *          the actions available in the dialog.
-   * @param title
-   *          the dialog title.
-   * @param sourceComponent
-   *          the source component.
-   * @param context
-   *          the context to store on the context stack.
-   * @param reuseCurrent
-   *          set to true to reuse an existing modal dialog.
-   */
-  void displayModalDialog(E mainView, List<G> actions, String title,
-      E sourceComponent, Map<String, Object> context, boolean reuseCurrent);
-
-  /**
-   * Disposes a modal dialog.
-   * 
-   * @param sourceWidget
-   *          the source widget.
-   * @param context
-   *          the context to complement with the head of the context stack.
-   */
-  void disposeModalDialog(E sourceWidget, Map<String, Object> context);
-
-  /**
-   * Displays the given URL in a new braowser window (or tab).
-   * 
-   * @param urlSpec
-   *          the url to display.
-   */
-  void displayUrl(String urlSpec);
 }

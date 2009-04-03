@@ -77,16 +77,16 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     IRemoteValueStateFactory, IRemotePeerRegistry {
 
-  private IGUIDGenerator                guidGenerator;
-  private PropertyChangeListener        readabilityListener;
-  private PropertyChangeListener        writabilityListener;
+  private IConnectorValueChangeListener collectionConnectorValueChangeListener;
   private IConnectorValueChangeListener connectorValueChangeListener;
   private IConnectorValueChangeListener formattedConnectorValueChangeListener;
-  private IConnectorValueChangeListener renderingConnectorValueChangeListener;
-  private IConnectorValueChangeListener collectionConnectorValueChangeListener;
-  private ISelectionChangeListener      selectionChangeListener;
-  private IRemotePeerRegistry           remotePeerRegistry;
+  private IGUIDGenerator                guidGenerator;
+  private PropertyChangeListener        readabilityListener;
   private IRemoteCommandHandler         remoteCommandHandler;
+  private IRemotePeerRegistry           remotePeerRegistry;
+  private IConnectorValueChangeListener renderingConnectorValueChangeListener;
+  private ISelectionChangeListener      selectionChangeListener;
+  private PropertyChangeListener        writabilityListener;
 
   /**
    * Constructs a new <code>RemoteConnectorFactory</code> instance.
@@ -284,11 +284,12 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     };
   }
 
-  private boolean isCascadingModelWrapperConnector(IValueConnector connector) {
-    return ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
-        && connector.getParentConnector() == null
-        && !(connector instanceof IRenderableCompositeValueConnector && ((IRenderableCompositeValueConnector) connector)
-            .getRenderingConnector() != null);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void clear() {
+    remotePeerRegistry.clear();
   }
 
   /**
@@ -340,6 +341,39 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
+  public IFormattedValueConnector createFormattedValueConnector(String id,
+      IFormatter formatter) {
+    RemoteFormattedValueConnector connector = new RemoteFormattedValueConnector(
+        id, this, formatter);
+    attachListeners(connector);
+    return connector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteCompositeValueState createRemoteCompositeValueState(String guid) {
+    RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
+    // connectors are registered with the same guid as their state.
+    // remotePeerRegistry.register(state);
+    return state;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteValueState createRemoteValueState(String guid) {
+    RemoteValueState state = new RemoteValueState(guid);
+    // connectors are registered with the same guid as their state.
+    // remotePeerRegistry.register(state);
+    return state;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IValueConnector createValueConnector(String id) {
     RemoteValueConnector connector = new RemoteValueConnector(id, this);
     attachListeners(connector);
@@ -349,23 +383,22 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  public IFormattedValueConnector createFormattedValueConnector(String id,
-      IFormatter formatter) {
-    RemoteFormattedValueConnector connector = new RemoteFormattedValueConnector(
-        id, this, formatter);
-    attachListeners(connector);
-    return connector;
+  public IRemotePeer getRegistered(String guid) {
+    return remotePeerRegistry.getRegistered(guid);
   }
 
-  private void createAndAddRenderingChildConnector(
-      AbstractCompositeValueConnector compositeValueConnector,
-      String renderingConnectorId) {
-    if (renderingConnectorId != null) {
-      compositeValueConnector
-          .addChildConnector(createValueConnector(renderingConnectorId));
-      compositeValueConnector
-          .setRenderingChildConnectorId(renderingConnectorId);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isRegistered(String guid) {
+    return remotePeerRegistry.isRegistered(guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void register(IRemotePeer remotePeer) {
+    remotePeerRegistry.register(remotePeer);
   }
 
   /**
@@ -376,6 +409,33 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    */
   public void setGuidGenerator(IGUIDGenerator guidGenerator) {
     this.guidGenerator = guidGenerator;
+  }
+
+  /**
+   * Sets the remoteCommandHandler.
+   * 
+   * @param remoteCommandHandler
+   *          the remoteCommandHandler to set.
+   */
+  public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
+    this.remoteCommandHandler = remoteCommandHandler;
+  }
+
+  /**
+   * Sets the remotePeerRegistry.
+   * 
+   * @param remotePeerRegistry
+   *          the remotePeerRegistry to set.
+   */
+  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
+    this.remotePeerRegistry = remotePeerRegistry;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void unregister(String guid) {
+    remotePeerRegistry.unregister(guid);
   }
 
   void attachListeners(IValueConnector connector) {
@@ -407,81 +467,21 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     return guidGenerator.generateGUID();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public RemoteCompositeValueState createRemoteCompositeValueState(String guid) {
-    RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
-    // connectors are registered with the same guid as their state.
-    // remotePeerRegistry.register(state);
-    return state;
+  private void createAndAddRenderingChildConnector(
+      AbstractCompositeValueConnector compositeValueConnector,
+      String renderingConnectorId) {
+    if (renderingConnectorId != null) {
+      compositeValueConnector
+          .addChildConnector(createValueConnector(renderingConnectorId));
+      compositeValueConnector
+          .setRenderingChildConnectorId(renderingConnectorId);
+    }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public RemoteValueState createRemoteValueState(String guid) {
-    RemoteValueState state = new RemoteValueState(guid);
-    // connectors are registered with the same guid as their state.
-    // remotePeerRegistry.register(state);
-    return state;
-  }
-
-  /**
-   * Sets the remotePeerRegistry.
-   * 
-   * @param remotePeerRegistry
-   *          the remotePeerRegistry to set.
-   */
-  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
-    this.remotePeerRegistry = remotePeerRegistry;
-  }
-
-  /**
-   * Sets the remoteCommandHandler.
-   * 
-   * @param remoteCommandHandler
-   *          the remoteCommandHandler to set.
-   */
-  public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
-    this.remoteCommandHandler = remoteCommandHandler;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IRemotePeer getRegistered(String guid) {
-    return remotePeerRegistry.getRegistered(guid);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isRegistered(String guid) {
-    return remotePeerRegistry.isRegistered(guid);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void register(IRemotePeer remotePeer) {
-    remotePeerRegistry.register(remotePeer);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void unregister(String guid) {
-    remotePeerRegistry.unregister(guid);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void clear() {
-    remotePeerRegistry.clear();
+  private boolean isCascadingModelWrapperConnector(IValueConnector connector) {
+    return ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
+        && connector.getParentConnector() == null
+        && !(connector instanceof IRenderableCompositeValueConnector && ((IRenderableCompositeValueConnector) connector)
+            .getRenderingConnector() != null);
   }
 }

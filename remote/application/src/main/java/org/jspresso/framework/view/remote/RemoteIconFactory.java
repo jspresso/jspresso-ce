@@ -49,6 +49,16 @@ public class RemoteIconFactory extends AbstractIconFactory<RIcon> {
   private IGUIDGenerator guidGenerator;
 
   /**
+   * Sets the guidGenerator.
+   * 
+   * @param guidGenerator
+   *          the guidGenerator to set.
+   */
+  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
+    this.guidGenerator = guidGenerator;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -62,15 +72,5 @@ public class RemoteIconFactory extends AbstractIconFactory<RIcon> {
       return imageIcon;
     }
     return null;
-  }
-
-  /**
-   * Sets the guidGenerator.
-   * 
-   * @param guidGenerator
-   *          the guidGenerator to set.
-   */
-  public void setGuidGenerator(IGUIDGenerator guidGenerator) {
-    this.guidGenerator = guidGenerator;
   }
 }

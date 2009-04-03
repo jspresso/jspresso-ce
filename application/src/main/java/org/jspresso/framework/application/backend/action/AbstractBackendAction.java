@@ -134,6 +134,17 @@ public abstract class AbstractBackendAction extends AbstractAction {
   }
 
   /**
+   * Gets the accessorFactory.
+   * 
+   * @param context
+   *          the action context.
+   * @return the accessorFactory.
+   */
+  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
+    return getController(context).getAccessorFactory();
+  }
+
+  /**
    * Gets the current application session.
    * 
    * @param context
@@ -143,17 +154,6 @@ public abstract class AbstractBackendAction extends AbstractAction {
   protected IApplicationSession getApplicationSession(
       Map<String, Object> context) {
     return getController(context).getApplicationSession();
-  }
-
-  /**
-   * Gets the accessorFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
-    return getController(context).getAccessorFactory();
   }
 
   /**

@@ -42,12 +42,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 public interface IRemotePeerRegistry {
 
   /**
-   * Registers a remote peer.
-   * 
-   * @param remotePeer
-   *          the remote peer to register.
+   * Clears the registry.
    */
-  void register(IRemotePeer remotePeer);
+  void clear();
 
   /**
    * Retrieves a registered remote peer.
@@ -60,14 +57,6 @@ public interface IRemotePeerRegistry {
   IRemotePeer getRegistered(String guid);
 
   /**
-   * Unregisters a remote peer.
-   * 
-   * @param guid
-   *          the remote peer guid.
-   */
-  void unregister(String guid);
-
-  /**
    * Tests wether a remote peer is already registered.
    * 
    * @param guid
@@ -77,7 +66,18 @@ public interface IRemotePeerRegistry {
   boolean isRegistered(String guid);
 
   /**
-   * Clears the registry.
+   * Registers a remote peer.
+   * 
+   * @param remotePeer
+   *          the remote peer to register.
    */
-  void clear();
+  void register(IRemotePeer remotePeer);
+
+  /**
+   * Unregisters a remote peer.
+   * 
+   * @param guid
+   *          the remote peer guid.
+   */
+  void unregister(String guid);
 }

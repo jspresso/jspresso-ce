@@ -94,15 +94,6 @@ public interface IConfigurableConnectorFactory {
       String id, String renderingConnectorId);
 
   /**
-   * Creates a <code>IValueConnector</code>.
-   * 
-   * @param id
-   *          the connector identifier.
-   * @return the created connector.
-   */
-  IValueConnector createValueConnector(String id);
-
-  /**
    * Creates a <code>IFormattedValueConnector</code>.
    * 
    * @param id
@@ -113,4 +104,13 @@ public interface IConfigurableConnectorFactory {
    */
   IFormattedValueConnector createFormattedValueConnector(String id,
       IFormatter formatter);
+
+  /**
+   * Creates a <code>IValueConnector</code>.
+   * 
+   * @param id
+   *          the connector identifier.
+   * @return the created connector.
+   */
+  IValueConnector createValueConnector(String id);
 }

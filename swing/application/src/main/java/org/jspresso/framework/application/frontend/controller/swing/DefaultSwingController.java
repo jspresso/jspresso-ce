@@ -24,22 +24,20 @@ import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -51,12 +49,12 @@ import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.InternalFrameAdapter;
@@ -71,10 +69,10 @@ import org.jspresso.framework.application.frontend.controller.AbstractFrontendCo
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.swing.components.JErrorDialog;
-import org.jspresso.framework.security.swing.DialogCallbackHandler;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.swing.WaitCursorEventQueue;
@@ -117,6 +115,134 @@ public class DefaultSwingController extends
   private WaitCursorTimer             waitTimer;
 
   private Map<String, JInternalFrame> workspaceInternalFrames;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayModalDialog(JComponent mainView, List<Action> actions,
+      String title, JComponent sourceComponent, Map<String, Object> context,
+      boolean reuseCurrent) {
+    super.displayModalDialog(mainView, actions, title, sourceComponent,
+        context, reuseCurrent);
+    final JDialog dialog;
+    Window window = SwingUtil.getVisibleWindow(sourceComponent);
+    if (window instanceof JDialog) {
+      if (reuseCurrent) {
+        dialog = (JDialog) window;
+        dialog.getContentPane().removeAll();
+      } else {
+        dialog = new JDialog((JDialog) window, title, true);
+      }
+    } else {
+      dialog = new JDialog((Frame) window, title, true);
+    }
+
+    Box buttonBox = new Box(BoxLayout.LINE_AXIS);
+    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+
+    JButton defaultButton = null;
+    for (Action action : actions) {
+      JButton actionButton = new JButton();
+      SwingUtil.configureButton(actionButton);
+      actionButton.setAction(action);
+      buttonBox.add(actionButton);
+      buttonBox.add(Box.createHorizontalStrut(10));
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
+    }
+    JPanel actionPanel = new JPanel();
+    actionPanel.setLayout(new BorderLayout());
+    actionPanel.add(buttonBox, BorderLayout.EAST);
+
+    JPanel mainPanel = new JPanel();
+    mainPanel.setLayout(new BorderLayout());
+    mainPanel.add(mainView, BorderLayout.CENTER);
+    mainPanel.add(actionPanel, BorderLayout.SOUTH);
+    dialog.getContentPane().add(mainPanel);
+    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    if (defaultButton != null) {
+      dialog.getRootPane().setDefaultButton(defaultButton);
+    }
+    dialog.pack();
+    SwingUtil.centerInParent(dialog);
+    dialog.setVisible(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayUrl(String urlSpec) {
+    try {
+      BrowserControl.displayURL(urlSpec);
+    } catch (IOException ex) {
+      throw new ActionException(ex);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayWorkspace(String workspaceName) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceInternalFrames == null) {
+        workspaceInternalFrames = new HashMap<String, JInternalFrame>();
+      }
+      JInternalFrame workspaceInternalFrame = workspaceInternalFrames
+          .get(workspaceName);
+      if (workspaceInternalFrame == null) {
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
+            workspaceViewDescriptor, (Workspace) workspaceConnector
+                .getConnectorValue());
+        workspaceInternalFrame = createJInternalFrame(workspaceView);
+        workspaceInternalFrame
+            .addInternalFrameListener(new WorkspaceInternalFrameListener(
+                workspaceName));
+        workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
+        controllerFrame.getContentPane().add(workspaceInternalFrame);
+        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+        workspaceInternalFrame.pack();
+        workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
+            controllerFrame.getHeight() - 50);
+        try {
+          workspaceInternalFrame.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+          throw new ControllerException(ex);
+        }
+      }
+      workspaceInternalFrame.setVisible(true);
+      if (workspaceInternalFrame.isIcon()) {
+        try {
+          workspaceInternalFrame.setIcon(false);
+        } catch (PropertyVetoException ex) {
+          throw new ControllerException(ex);
+        }
+      }
+      workspaceInternalFrame.toFront();
+      updateFrameTitle();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void disposeModalDialog(JComponent sourceWidget,
+      Map<String, Object> context) {
+    super.disposeModalDialog(sourceWidget, context);
+    Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
+    if (actionWindow instanceof JDialog) {
+      actionWindow.dispose();
+    }
+  }
 
   /**
    * {@inheritDoc}
@@ -203,7 +329,7 @@ public class DefaultSwingController extends
   }
 
   /**
-   * Creates the initial view from the root view descriptor, then a JFrame
+   * Creates the initial view from the root view descriptor, then a SFrame
    * containing this view and presents it to the user.
    * <p>
    * {@inheritDoc}
@@ -211,32 +337,13 @@ public class DefaultSwingController extends
   @Override
   public boolean start(IBackendController backendController, Locale clientLocale) {
     if (super.start(backendController, clientLocale)) {
+      waitTimer = new WaitCursorTimer(500);
+      waitTimer.setDaemon(true);
+      waitTimer.start();
       Toolkit.getDefaultToolkit().getSystemEventQueue().push(
           new WaitCursorEventQueue(500));
-      CallbackHandler callbackHandler = getLoginCallbackHandler();
-      if (callbackHandler instanceof DialogCallbackHandler) {
-        ((DialogCallbackHandler) callbackHandler)
-            .setParentComponent(controllerFrame);
-      }
-      if (performLogin()) {
-        try {
-          SwingUtilities.invokeAndWait(new Runnable() {
-
-            @Override
-            public void run() {
-              displayControllerFrame();
-              execute(getStartupAction(), getInitialActionContext());
-            }
-          });
-          return true;
-        } catch (InvocationTargetException ex) {
-          ex.printStackTrace(System.err);
-        } catch (InterruptedException ex) {
-          ex.printStackTrace(System.err);
-        }
-        return false;
-      }
-      stop();
+      initLoginProcess();
+      return true;
     }
     return false;
   }
@@ -254,67 +361,6 @@ public class DefaultSwingController extends
       return true;
     }
     return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
-    callbackHandler.setLocale(getLocale());
-    callbackHandler.setTranslationProvider(getTranslationProvider());
-    callbackHandler.setIconFactory(getIconFactory());
-    return callbackHandler;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayWorkspace(String workspaceName) {
-    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
-      super.displayWorkspace(workspaceName);
-      if (workspaceInternalFrames == null) {
-        workspaceInternalFrames = new HashMap<String, JInternalFrame>();
-      }
-      JInternalFrame workspaceInternalFrame = workspaceInternalFrames
-          .get(workspaceName);
-      if (workspaceInternalFrame == null) {
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController()
-            .getWorkspaceConnector(workspaceName);
-        IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
-            workspaceViewDescriptor, (Workspace) workspaceConnector
-                .getConnectorValue());
-        workspaceInternalFrame = createJInternalFrame(workspaceView);
-        workspaceInternalFrame
-            .addInternalFrameListener(new WorkspaceInternalFrameListener(
-                workspaceName));
-        workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
-        controllerFrame.getContentPane().add(workspaceInternalFrame);
-        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-        workspaceInternalFrame.pack();
-        workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
-            controllerFrame.getHeight() - 50);
-        try {
-          workspaceInternalFrame.setMaximum(true);
-        } catch (PropertyVetoException ex) {
-          throw new ControllerException(ex);
-        }
-      }
-      workspaceInternalFrame.setVisible(true);
-      if (workspaceInternalFrame.isIcon()) {
-        try {
-          workspaceInternalFrame.setIcon(false);
-        } catch (PropertyVetoException ex) {
-          throw new ControllerException(ex);
-        }
-      }
-      workspaceInternalFrame.toFront();
-      updateFrameTitle();
-    }
   }
 
   /**
@@ -353,35 +399,6 @@ public class DefaultSwingController extends
     return protectedExecuteFrontend(action, context);
   }
 
-  private JMenu createMenu(ActionList actionList) {
-    JMenu menu = new JMenu(actionList.getI18nName(getTranslationProvider(),
-        getLocale()));
-    if (actionList.getDescription() != null) {
-      menu.setToolTipText(actionList.getI18nDescription(
-          getTranslationProvider(), getLocale())
-          + IActionFactory.TOOLTIP_ELLIPSIS);
-    }
-    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
-    for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
-      menu.add(menuItem);
-    }
-    return menu;
-  }
-
-  private List<JMenuItem> createMenuItems(JMenu menu, ActionList actionList) {
-    List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
-    for (IDisplayableAction action : actionList.getActions()) {
-      menuItems.add(createMenuItem(menu, action));
-    }
-    return menuItems;
-  }
-
-  private JMenuItem createMenuItem(JMenu menu, IDisplayableAction action) {
-    return new JMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, menu, null, null, getLocale()));
-  }
-
   private List<JMenu> createActionMenus() {
     return createMenus(getActionMap(), false);
   }
@@ -410,25 +427,11 @@ public class DefaultSwingController extends
     return applicationMenuBar;
   }
 
-  private JFrame createControllerFrame() {
-    JFrame frame = new JFrame();
-    frame.setContentPane(new JDesktopPane());
-    frame.setIconImage(((ImageIcon) getIconFactory().getIcon(getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE)).getImage());
-    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    frame.setJMenuBar(createApplicationMenuBar());
-    frame.setGlassPane(createHermeticGlassPane());
-    frame.addWindowListener(new WindowAdapter() {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
-        stop();
-      }
-    });
-    return frame;
+  private void updateControllerFrame() {
+    controllerFrame.setJMenuBar(createApplicationMenuBar());
+    controllerFrame.invalidate();
+    controllerFrame.validate();
+    updateFrameTitle();
   }
 
   private List<JMenu> createHelpActionMenus() {
@@ -469,6 +472,35 @@ public class DefaultSwingController extends
     return internalFrame;
   }
 
+  private JMenu createMenu(ActionList actionList) {
+    JMenu menu = new JMenu(actionList.getI18nName(getTranslationProvider(),
+        getLocale()));
+    if (actionList.getDescription() != null) {
+      menu.setToolTipText(actionList.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IActionFactory.TOOLTIP_ELLIPSIS);
+    }
+    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
+    for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
+      menu.add(menuItem);
+    }
+    return menu;
+  }
+
+  private JMenuItem createMenuItem(JMenu menu, IDisplayableAction action) {
+    return new JMenuItem(getViewFactory().getActionFactory().createAction(
+        action, this, menu, null, null, getLocale()));
+  }
+
+  private List<JMenuItem> createMenuItems(JMenu menu, ActionList actionList) {
+    List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      menuItems.add(createMenuItem(menu, action));
+    }
+    return menuItems;
+  }
+
   @SuppressWarnings("null")
   private List<JMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<JMenu> menus = new ArrayList<JMenu>();
@@ -493,60 +525,6 @@ public class DefaultSwingController extends
     return createMenus(createWorkspaceActionMap(), true);
   }
 
-  private void displayControllerFrame() {
-    waitTimer = new WaitCursorTimer(500);
-    waitTimer.setDaemon(true);
-    waitTimer.start();
-    controllerFrame = createControllerFrame();
-    controllerFrame.pack();
-    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-    controllerFrame.setSize(1100, 800);
-    SwingUtil.centerOnScreen(controllerFrame);
-    updateFrameTitle();
-    controllerFrame.setVisible(true);
-  }
-
-  /**
-   * Performs login using JAAS configuration.
-   * 
-   * @return true if login is successful.
-   */
-  private boolean performLogin() {
-    if (getLoginContextName() != null) {
-      int i;
-      for (i = 0; i < MAX_LOGIN_RETRIES; i++) {
-        try {
-          LoginContext lc = null;
-          try {
-            lc = new LoginContext(getLoginContextName(),
-                getLoginCallbackHandler());
-          } catch (LoginException le) {
-            System.err
-                .println("Cannot create LoginContext. " + le.getMessage());
-            return false;
-          } catch (SecurityException se) {
-            System.err
-                .println("Cannot create LoginContext. " + se.getMessage());
-            return false;
-          }
-          lc.login();
-          loginSuccess(lc.getSubject());
-          break;
-        } catch (LoginException le) {
-          System.err.println("Authentication failed:");
-          System.err.println("  " + le.getMessage());
-        }
-      }
-      if (i == 3) {
-        return false;
-      }
-    } else {
-      loginSuccess(getAnonymousSubject());
-    }
-    return true;
-  }
-
   private boolean protectedExecuteBackend(IAction action,
       Map<String, Object> context) {
     return super.executeBackend(action, context);
@@ -555,6 +533,85 @@ public class DefaultSwingController extends
   private boolean protectedExecuteFrontend(IAction action,
       Map<String, Object> context) {
     return super.executeFrontend(action, context);
+  }
+
+  private void initLoginProcess() {
+    createControllerFrame();
+
+    IView<JComponent> loginView = createLoginView();
+
+    // Login dialog
+    final JDialog dialog = new JDialog(controllerFrame,
+        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
+            getLocale()), true);
+
+    JPanel buttonBox = new JPanel();
+    buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
+    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+
+    JButton loginButton = new JButton(getTranslationProvider().getTranslation(
+        "ok", getLocale()));
+    loginButton.setIcon(getIconFactory().getOkYesIcon(
+        IIconFactory.SMALL_ICON_SIZE));
+    loginButton.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+        if (performLogin()) {
+          dialog.dispose();
+          updateControllerFrame();
+          execute(getStartupAction(), getInitialActionContext());
+        } else {
+          JOptionPane.showMessageDialog(dialog, getTranslationProvider()
+              .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
+              getTranslationProvider().getTranslation("error", getLocale()),
+              JOptionPane.ERROR_MESSAGE);
+        }
+      }
+    });
+    buttonBox.add(loginButton);
+    dialog.getRootPane().setDefaultButton(loginButton);
+
+    JPanel actionPanel = new JPanel(new BorderLayout());
+    actionPanel.add(buttonBox, BorderLayout.EAST);
+
+    JPanel mainPanel = new JPanel(new BorderLayout());
+    mainPanel.add(new JLabel(getTranslationProvider().getTranslation(
+        LoginUtils.CRED_MESSAGE, getLocale())), BorderLayout.NORTH);
+    mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
+    mainPanel.add(actionPanel, BorderLayout.SOUTH);
+    dialog.add(mainPanel);
+
+    dialog.pack();
+    SwingUtil.centerInParent(dialog);
+    dialog.setVisible(true);
+  }
+
+  private void createControllerFrame() {
+    controllerFrame = new JFrame();
+    controllerFrame.setContentPane(new JDesktopPane());
+    controllerFrame
+        .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    controllerFrame.setGlassPane(createHermeticGlassPane());
+    controllerFrame.addWindowListener(new WindowAdapter() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
+        stop();
+      }
+    });
+    controllerFrame.pack();
+    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    // controllerFrame.setSize(1100, 800);
+    controllerFrame.setIconImage(((ImageIcon) getIconFactory().getIcon(
+        getIconImageURL(), IIconFactory.SMALL_ICON_SIZE)).getImage());
+    SwingUtil.centerOnScreen(controllerFrame);
+    updateFrameTitle();
+    controllerFrame.setVisible(true);
   }
 
   private void updateFrameTitle() {
@@ -567,73 +624,6 @@ public class DefaultSwingController extends
     } else {
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
           getLocale()));
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayModalDialog(JComponent mainView, List<Action> actions,
-      String title, JComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
-    final JDialog dialog;
-    Window window = SwingUtil.getVisibleWindow(sourceComponent);
-    if (window instanceof JDialog) {
-      if (reuseCurrent) {
-        dialog = (JDialog) window;
-        dialog.getContentPane().removeAll();
-      } else {
-        dialog = new JDialog((JDialog) window, title, true);
-      }
-    } else {
-      dialog = new JDialog((Frame) window, title, true);
-    }
-
-    Box buttonBox = new Box(BoxLayout.LINE_AXIS);
-    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
-
-    JButton defaultButton = null;
-    for (Action action : actions) {
-      JButton actionButton = new JButton();
-      SwingUtil.configureButton(actionButton);
-      actionButton.setAction(action);
-      buttonBox.add(actionButton);
-      buttonBox.add(Box.createHorizontalStrut(10));
-      if (defaultButton == null) {
-        defaultButton = actionButton;
-      }
-    }
-    JPanel actionPanel = new JPanel();
-    actionPanel.setLayout(new BorderLayout());
-    actionPanel.add(buttonBox, BorderLayout.EAST);
-
-    JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BorderLayout());
-    mainPanel.add(mainView, BorderLayout.CENTER);
-    mainPanel.add(actionPanel, BorderLayout.SOUTH);
-    dialog.getContentPane().add(mainPanel);
-    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    if (defaultButton != null) {
-      dialog.getRootPane().setDefaultButton(defaultButton);
-    }
-    dialog.pack();
-    SwingUtil.centerInParent(dialog);
-    dialog.setVisible(true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void disposeModalDialog(JComponent sourceWidget,
-      Map<String, Object> context) {
-    super.disposeModalDialog(sourceWidget, context);
-    Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
-    if (actionWindow instanceof JDialog) {
-      actionWindow.dispose();
     }
   }
 
@@ -695,18 +685,6 @@ public class DefaultSwingController extends
     public void internalFrameOpened(
         @SuppressWarnings("unused") InternalFrameEvent e) {
       displayWorkspace(workspaceName);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void displayUrl(String urlSpec) {
-    try {
-      BrowserControl.displayURL(urlSpec);
-    } catch (IOException ex) {
-      throw new ActionException(ex);
     }
   }
 }

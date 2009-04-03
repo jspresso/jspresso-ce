@@ -53,20 +53,20 @@ public class RTabContainer extends RContainer {
   }
 
   /**
-   * Sets the tabs.
-   * 
-   * @param tabs the tabs to set.
-   */
-  public void setTabs(RComponent[] tabs) {
-    this.tabs = tabs;
-  }
-
-  /**
    * Gets the tabs.
    * 
    * @return the tabs.
    */
   public RComponent[] getTabs() {
     return tabs;
+  }
+
+  /**
+   * Sets the tabs.
+   * 
+   * @param tabs the tabs to set.
+   */
+  public void setTabs(RComponent[] tabs) {
+    this.tabs = tabs;
   }
 }

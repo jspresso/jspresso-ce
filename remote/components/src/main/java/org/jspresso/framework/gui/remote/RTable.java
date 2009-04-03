@@ -53,6 +53,15 @@ public class RTable extends RCollectionComponent {
   }
 
   /**
+   * Gets the columns.
+   * 
+   * @return the columns.
+   */
+  public RComponent[] getColumns() {
+    return columns;
+  }
+
+  /**
    * Sets the columns.
    * 
    * @param columns
@@ -60,14 +69,5 @@ public class RTable extends RCollectionComponent {
    */
   public void setColumns(RComponent[] columns) {
     this.columns = columns;
-  }
-
-  /**
-   * Gets the columns.
-   * 
-   * @return the columns.
-   */
-  public RComponent[] getColumns() {
-    return columns;
   }
 }

@@ -71,8 +71,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   private ICollectionConnector                        collectionConnector;
   private Map<String, Class<?>>                       columnClassesByIds;
-  private Map<String, IFormatter>                     columnFormattersByIds;
   private List<String>                                columnConnectorKeys;
+  private Map<String, IFormatter>                     columnFormattersByIds;
 
   private IExceptionHandler                           exceptionHandler;
 
@@ -164,6 +164,17 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   }
 
   /**
+   * Sets the columnFormattersByIds.
+   * 
+   * @param columnFormattersByIds
+   *          the columnFormattersByIds to set.
+   */
+  public void setColumnFormattersByIds(
+      Map<String, IFormatter> columnFormattersByIds) {
+    this.columnFormattersByIds = columnFormattersByIds;
+  }
+
+  /**
    * Sets the exceptionHandler.
    * 
    * @param exceptionHandler
@@ -215,13 +226,6 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         throw ex;
       }
     }
-  }
-
-  private IFormatter getColumnFormatter(int columnIndex) {
-    if (columnFormattersByIds != null) {
-      return columnFormattersByIds.get(columnConnectorKeys.get(columnIndex));
-    }
-    return null;
   }
 
   private void bindChildRowConnector(int row) {
@@ -281,6 +285,13 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
       cachedRowListeners.put(new Integer(row), cachedListener);
     }
     return cachedListener;
+  }
+
+  private IFormatter getColumnFormatter(int columnIndex) {
+    if (columnFormattersByIds != null) {
+      return columnFormattersByIds.get(columnConnectorKeys.get(columnIndex));
+    }
+    return null;
   }
 
   private IValueConnector getConnectorAt(int rowIndex, int columnIndex) {
@@ -378,16 +389,5 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         collectionConnector.setSelectedIndices(new int[] {0});
       }
     }
-  }
-
-  /**
-   * Sets the columnFormattersByIds.
-   * 
-   * @param columnFormattersByIds
-   *          the columnFormattersByIds to set.
-   */
-  public void setColumnFormattersByIds(
-      Map<String, IFormatter> columnFormattersByIds) {
-    this.columnFormattersByIds = columnFormattersByIds;
   }
 }

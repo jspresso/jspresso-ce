@@ -65,6 +65,16 @@ public class BasicComponentDescriptorRegistry implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
+    if (contractNameToComponentDescriptorMap == null) {
+      buildContractNameIdMap();
+    }
+    return contractNameToComponentDescriptorMap.values();
+  }
+
+  /**
    * Sets the application context holding the component descriptor bean
    * definitions.
    * 
@@ -88,15 +98,5 @@ public class BasicComponentDescriptorRegistry implements
             .getName(), descriptorEntry.getValue());
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
-    if (contractNameToComponentDescriptorMap == null) {
-      buildContractNameIdMap();
-    }
-    return contractNameToComponentDescriptorMap.values();
   }
 }

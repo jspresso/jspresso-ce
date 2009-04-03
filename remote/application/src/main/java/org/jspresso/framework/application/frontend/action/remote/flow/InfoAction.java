@@ -52,14 +52,6 @@ public class InfoAction extends AbstractMessageAction {
    * {@inheritDoc}
    */
   @Override
-  protected RemoteMessageCommand createMessageCommand() {
-    return new RemoteMessageCommand();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected void completeMessageCommand(RemoteMessageCommand messageCommand,
       Map<String, Object> context, IActionHandler actionHandler,
       RComponent sourceComponent, IModelDescriptor modelDescriptor,
@@ -75,6 +67,14 @@ public class InfoAction extends AbstractMessageAction {
     }
     super.completeMessageCommand(messageCommand, context, actionHandler,
         sourceComponent, modelDescriptor, viewConnector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected RemoteMessageCommand createMessageCommand() {
+    return new RemoteMessageCommand();
   }
 
 }
