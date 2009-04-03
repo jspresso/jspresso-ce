@@ -138,12 +138,12 @@
       <mediaobject
         text-align="center"
       />
-
       <subtitle
 		text-align="center"
 		font-size="&hsize4;"
 		space-before="&hsize4space;"
 		font-family="{$title.fontset}"/>
+      <releaseinfo text-align="center" space-before="0.5em"/>
       <corpauthor font-size="&hsize3;"
 		  keep-with-next.within-column="always"
 		  space-before="2in"/>
