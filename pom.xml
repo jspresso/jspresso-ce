@@ -207,7 +207,7 @@
                         <include name="**/commons-swing.xml" />
                       </fileset>
                     </copy>
-                    <beandoc outputDir="${project.reporting.outputDirectory}/beandocs" beandocProps="${basedir}/jspresso-beandoc.properties">
+                    <beandoc outputDir="${project.reporting.outputDirectory}/beandocs" beandocProps="${basedir}/src/main/beandoc/jspresso-beandoc.properties">
                       <fileset dir="${project.reporting.outputDirectory}/beandocs/tmp">
                         <include name="**/*.xml" />
                       </fileset>
@@ -266,6 +266,7 @@
           <descriptors>
             <descriptor>${basedir}/src/main/assembly/dist-bin.xml</descriptor>
             <descriptor>${basedir}/src/main/assembly/dist-src.xml</descriptor>
+            <descriptor>${basedir}/src/main/assembly/project-dist-src.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>
