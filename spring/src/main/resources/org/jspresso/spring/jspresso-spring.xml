@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jso:component
+  xmlns:jso="http://www.jspresso.org/jspresso-spring"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.jspresso.org/jspresso-spring jspresso-spring.xsd ">
+  <jso:properties>
+    <jso:decimal />
+    <jso:integer />
+  </jso:properties>
+  <jso:ancestors>
+    <jso:component>
+    </jso:component>
+  </jso:ancestors>
+</jso:component>
