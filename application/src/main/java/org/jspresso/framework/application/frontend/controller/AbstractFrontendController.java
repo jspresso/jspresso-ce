@@ -156,6 +156,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void displayWorkspace(String workspaceName) {
     getBackendController().checkWorkspaceAccess(workspaceName);
+    Workspace workspace = getWorkspace(workspaceName);
+    if (!workspace.isStarted()) {
+      if (workspace.getStartupAction() != null) {
+        Map<String, Object> actionContext = getInitialActionContext();
+        actionContext.put(ActionContextConstants.ACTION_PARAM, workspace);
+        execute(workspace.getStartupAction(), actionContext);
+        workspace.setStarted(true);
+      }
+    }
     this.selectedWorkspaceName = workspaceName;
   }
 
@@ -520,10 +529,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the login view
    */
   protected IView<E> createLoginView() {
-    IView<E> loginView = getViewFactory().createView(
-        getLoginViewDescriptor(), this, getLocale());
+    IView<E> loginView = getViewFactory().createView(getLoginViewDescriptor(),
+        this, getLocale());
     IValueConnector loginModelConnector = getModelConnectorFactory()
-        .createModelConnector("login", getLoginViewDescriptor().getModelDescriptor());
+        .createModelConnector("login",
+            getLoginViewDescriptor().getModelDescriptor());
     getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
     loginModelConnector.setConnectorValue(getLoginCallbackHandler());
     return loginView;
@@ -862,7 +872,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
   }
 
-  
   /**
    * Gets the loginViewDescriptor.
    * 
@@ -872,7 +881,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
     return loginViewDescriptor;
   }
 
-  
   /**
    * Gets the modelConnectorFactory.
    * 

@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 
 /**
@@ -41,6 +42,8 @@ import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
  */
 public class BasicObjectPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IObjectPropertyDescriptor {
+  
+  private String modelTypeClassName;
 
   /**
    * {@inheritDoc}
@@ -54,11 +57,18 @@ public class BasicObjectPropertyDescriptor extends
   }
 
   /**
-   * Returns Object class.
+   * Returns Object class or the class refined by <code>modelTypeClassName</code>.
    * <p>
    * {@inheritDoc}
    */
   public Class<?> getModelType() {
+    if(modelTypeClassName != null) {
+      try {
+        return Class.forName(modelTypeClassName);
+      } catch(Exception ex) {
+        throw new DescriptorException(ex);
+      }
+    }
     return Object.class;
   }
 
@@ -69,4 +79,15 @@ public class BasicObjectPropertyDescriptor extends
   public boolean isQueryable() {
     return false;
   }
+
+  
+  /**
+   * Sets the modelTypeClassName.
+   * 
+   * @param modelTypeClassName the modelTypeClassName to set.
+   */
+  public void setModelTypeClassName(String modelTypeClassName) {
+    this.modelTypeClassName = modelTypeClassName;
+  }
+  
 }

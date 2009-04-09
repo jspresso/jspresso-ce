@@ -23,11 +23,11 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
 
 /**
  * A workspace is a central element in the application architecture. It serves
@@ -64,9 +64,20 @@ public class Workspace implements ISecurable {
   private IIconImageURLProvider iconImageURLProvider;
   private List<Module>          modules;
 
+  private boolean               started;
+  private IAction               startupAction;
+
   private String                name;
 
   private IViewDescriptor       viewDescriptor;
+
+  /**
+   * Constructs a new <code>Workspace</code> instance.
+   * 
+   */
+  public Workspace() {
+    started = false;
+  }
 
   /**
    * Equality based on name.
@@ -191,7 +202,7 @@ public class Workspace implements ISecurable {
    * Sets the workspace description. It may serve for the workspace view.
    * 
    * @param description
-   *            the workspace description.
+   *          the workspace description.
    */
   public void setDescription(String description) {
     this.description = description;
@@ -201,7 +212,7 @@ public class Workspace implements ISecurable {
    * Sets the grantedRoles.
    * 
    * @param grantedRoles
-   *            the grantedRoles to set.
+   *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
@@ -211,7 +222,7 @@ public class Workspace implements ISecurable {
    * Sets the i18nDescription.
    * 
    * @param i18nDescription
-   *            the i18nDescription to set.
+   *          the i18nDescription to set.
    */
   public void setI18nDescription(String i18nDescription) {
     this.i18nDescription = i18nDescription;
@@ -221,7 +232,7 @@ public class Workspace implements ISecurable {
    * Sets the i18nName.
    * 
    * @param i18nName
-   *            the i18nName to set.
+   *          the i18nName to set.
    */
   public void setI18nName(String i18nName) {
     this.i18nName = i18nName;
@@ -231,7 +242,7 @@ public class Workspace implements ISecurable {
    * Sets the iconImageURL.
    * 
    * @param iconImageURL
-   *            the iconImageURL to set.
+   *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     this.iconImageURL = iconImageURL;
@@ -241,7 +252,7 @@ public class Workspace implements ISecurable {
    * Sets the iconImageURLProvider.
    * 
    * @param iconImageURLProvider
-   *            the iconImageURLProvider to set.
+   *          the iconImageURLProvider to set.
    */
   public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
@@ -251,7 +262,7 @@ public class Workspace implements ISecurable {
    * Sets the modules modules. It will fire a "modules" property change event.
    * 
    * @param modules
-   *            the modules modules to set.
+   *          the modules modules to set.
    */
   public void setModules(List<Module> modules) {
     this.modules = modules;
@@ -261,7 +272,7 @@ public class Workspace implements ISecurable {
    * Sets the module's name. It may serve for the module's view.
    * 
    * @param name
-   *            the module's name.
+   *          the module's name.
    */
   public void setName(String name) {
     this.name = name;
@@ -278,5 +289,44 @@ public class Workspace implements ISecurable {
       return getI18nName();
     }
     return "";
+  }
+
+  /**
+   * Gets the startupAction.
+   * 
+   * @return the startupAction.
+   */
+  public IAction getStartupAction() {
+    return startupAction;
+  }
+
+  /**
+   * Sets the startupAction.
+   * 
+   * @param startupAction
+   *          the startupAction to set.
+   */
+  public void setStartupAction(IAction startupAction) {
+    this.startupAction = startupAction;
+  }
+
+  
+  /**
+   * Gets the started.
+   * 
+   * @return the started.
+   */
+  public boolean isStarted() {
+    return started;
+  }
+
+  
+  /**
+   * Sets the started.
+   * 
+   * @param started the started to set.
+   */
+  public void setStarted(boolean started) {
+    this.started = started;
   }
 }
