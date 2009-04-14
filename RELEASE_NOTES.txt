@@ -1,5 +1,5 @@
-3.0
-===
+3.0.0
+=====
 
 - The 3.0 release introduces typesafe enums in place of interface constants.
 This implies a light change in the spring definition files.

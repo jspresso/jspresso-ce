@@ -7,8 +7,8 @@ New features
 ------------
 Introduced startup action for workspaces
 
-3.0
-===
+3.0.0
+=====
 Bugs fixed
 ----------
 2319842    Bidi one to many associations with mandatory manyToOne
