@@ -649,10 +649,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
                     // To handle polymorphism, especially for modules, we refine
                     // the model descriptor.
                     if (((IModelValueConnector) cardView.getConnector()
-                        .getModelConnector()).getModelDescriptor().getClass()
+                        .getModelConnector()).getModelDescriptor().getModelType()
                         .isAssignableFrom(
                             childCardView.getDescriptor().getModelDescriptor()
-                                .getClass())) {
+                                .getModelType())) {
                       ((IModelValueConnector) cardView.getConnector()
                           .getModelConnector())
                           .setModelDescriptor(childCardView.getDescriptor()

@@ -42,7 +42,7 @@ import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
  */
 public class BasicObjectPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IObjectPropertyDescriptor {
-  
+
   private String modelTypeClassName;
 
   /**
@@ -57,15 +57,16 @@ public class BasicObjectPropertyDescriptor extends
   }
 
   /**
-   * Returns Object class or the class refined by <code>modelTypeClassName</code>.
+   * Returns Object class or the class refined by
+   * <code>modelTypeClassName</code>.
    * <p>
    * {@inheritDoc}
    */
   public Class<?> getModelType() {
-    if(modelTypeClassName != null) {
+    if (modelTypeClassName != null) {
       try {
         return Class.forName(modelTypeClassName);
-      } catch(Exception ex) {
+      } catch (Exception ex) {
         throw new DescriptorException(ex);
       }
     }
@@ -80,14 +81,14 @@ public class BasicObjectPropertyDescriptor extends
     return false;
   }
 
-  
   /**
    * Sets the modelTypeClassName.
    * 
-   * @param modelTypeClassName the modelTypeClassName to set.
+   * @param modelTypeClassName
+   *          the modelTypeClassName to set.
    */
   public void setModelTypeClassName(String modelTypeClassName) {
     this.modelTypeClassName = modelTypeClassName;
   }
-  
+
 }
