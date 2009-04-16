@@ -2,10 +2,12 @@
 =====
 Bugs fixed
 ----------
+2769168  	 1-1 relationships with composition=true cloning
 
 New features
 ------------
-Introduced startup action for workspaces
+2769159  	 Subview model descriptor should override parent one
+2769161  	 Introduce startup action for workspaces
 
 3.0.0
 =====

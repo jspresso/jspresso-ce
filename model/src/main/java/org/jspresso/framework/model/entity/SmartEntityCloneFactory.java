@@ -105,8 +105,8 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
     return true;
   }
 
-  private <E extends IComponent> void handleRelationships(E componentToClone, E clonedComponent,
-      IEntityFactory entityFactory) {
+  private <E extends IComponent> void handleRelationships(E componentToClone,
+      E clonedComponent, IEntityFactory entityFactory) {
     IComponentDescriptor<?> componentDescriptor = entityFactory
         .getComponentDescriptor(componentToClone.getContract());
 
@@ -130,12 +130,19 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                 .getReverseRelationEnd();
             if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
               if (!(reverseDescriptor instanceof IReferencePropertyDescriptor)) {
-                clonedComponent.straightSetProperty(propertyEntry.getKey(),
-                    propertyEntry.getValue());
-                if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-                  if (isInitialized(propertyEntry.getValue())) {
-                    collRelToUpdate.put(propertyEntry.getValue(),
-                        (ICollectionPropertyDescriptor<?>) reverseDescriptor);
+                if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                    .isComposition()) {
+                  clonedComponent.straightSetProperty(propertyEntry.getKey(),
+                      cloneEntity((IEntity) propertyEntry.getValue(),
+                          entityFactory));
+                } else {
+                  clonedComponent.straightSetProperty(propertyEntry.getKey(),
+                      propertyEntry.getValue());
+                  if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
+                    if (isInitialized(propertyEntry.getValue())) {
+                      collRelToUpdate.put(propertyEntry.getValue(),
+                          (ICollectionPropertyDescriptor<?>) reverseDescriptor);
+                    }
                   }
                 }
               }
@@ -191,7 +198,8 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
             .setModelDescriptor(collectionDescriptor);
       }
       try {
-        collectionAccessor.addToValue(collectionEntry.getKey(), clonedComponent);
+        collectionAccessor
+            .addToValue(collectionEntry.getKey(), clonedComponent);
       } catch (IllegalAccessException ex) {
         throw new EntityException(ex);
       } catch (InvocationTargetException ex) {
