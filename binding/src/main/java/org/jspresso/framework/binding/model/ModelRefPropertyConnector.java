@@ -164,9 +164,22 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * {@inheritDoc}
    */
   @Override
-  public IValueConnector getChildConnector(
-      IModelDescriptor childConnectorModelDescriptor) {
-    return null;
+  public IValueConnector getChildConnector(String connectorKey,
+      IModelDescriptor childModelDescriptor) {
+    if (childModelDescriptor == null) {
+      return getChildConnector(connectorKey);
+    }
+    if (THIS_PROPERTY.equals(connectorKey)) {
+      return this;
+    }
+    IValueConnector connector = childConnectors.get(connectorKey);
+    if (connector == null) {
+      connector = modelConnectorFactory.createModelConnector(connectorKey,
+          childModelDescriptor);
+      connector.setParentConnector(this);
+      childConnectors.put(connectorKey, connector);
+    }
+    return connector;
   }
 
   /**

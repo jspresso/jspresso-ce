@@ -46,11 +46,13 @@ public interface IComponentValueConnector extends ICompositeValueConnector {
    * Gets a child connector based on its model descriptor. It should directly
    * delegate to the <code>IConnectorMap</code>.
    * 
-   * @param childConnectorModelDescriptor
+   * @param connectorKey
+   *          The key indexing the looked-up connector
+   * @param childModelDescriptor
    *          The child connector model descriptor.
    * @return The retrieved connector or null if non exists.
    */
-  IValueConnector getChildConnector(
-      IModelDescriptor childConnectorModelDescriptor);
+  IValueConnector getChildConnector(String connectorKey,
+      IModelDescriptor childModelDescriptor);
 
 }
