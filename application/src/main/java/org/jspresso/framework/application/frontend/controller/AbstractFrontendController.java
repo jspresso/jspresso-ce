@@ -49,7 +49,6 @@ import org.jspresso.framework.binding.IConnectorSelectionListener;
 import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.security.UsernamePasswordHandler;
@@ -127,7 +126,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private String                                workspacesMenuIconImageUrl;
 
   private IViewDescriptor                       loginViewDescriptor;
-  private IModelConnectorFactory                modelConnectorFactory;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -480,17 +478,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
    * Binds to the backend controller and ask it to start.
    * <p>
    * {@inheritDoc}
@@ -531,7 +518,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected IView<E> createLoginView() {
     IView<E> loginView = getViewFactory().createView(getLoginViewDescriptor(),
         this, getLocale());
-    IValueConnector loginModelConnector = getModelConnectorFactory()
+    IValueConnector loginModelConnector = getBackendController()
         .createModelConnector("login",
             getLoginViewDescriptor().getModelDescriptor());
     getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
@@ -879,14 +866,5 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected IViewDescriptor getLoginViewDescriptor() {
     return loginViewDescriptor;
-  }
-
-  /**
-   * Gets the modelConnectorFactory.
-   * 
-   * @return the modelConnectorFactory.
-   */
-  protected IModelConnectorFactory getModelConnectorFactory() {
-    return modelConnectorFactory;
   }
 }

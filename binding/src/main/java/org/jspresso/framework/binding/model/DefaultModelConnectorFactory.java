@@ -18,18 +18,19 @@
  */
 package org.jspresso.framework.binding.model;
 
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.gate.IGate;
-
 
 /**
  * Default implementation for model connectors factory.
@@ -58,17 +59,18 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   /**
    * {@inheritDoc}
    */
-  public IModelValueConnector createModelConnector(String id,
+  public IValueConnector createModelConnector(String id,
       Class<?> componentContract) {
-    return createModelConnector(id, getDescriptorRegistry().getComponentDescriptor(componentContract));
+    return createModelConnector(id, getDescriptorRegistry()
+        .getComponentDescriptor(componentContract));
   }
 
   /**
    * {@inheritDoc}
    */
-  public IModelValueConnector createModelConnector(String id,
+  public IValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor) {
-    IModelValueConnector modelConnector = null;
+    IValueConnector modelConnector = null;
     if (modelDescriptor instanceof IComponentDescriptor) {
       modelConnector = new ModelConnector(id,
           (IComponentDescriptor<?>) modelDescriptor, this);
@@ -83,7 +85,10 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
         modelConnector = new ModelCollectionPropertyConnector(
             (ICollectionPropertyDescriptor<?>) modelDescriptor, this);
       } else if (modelDescriptor instanceof IScalarPropertyDescriptor) {
-        if (modelDescriptor instanceof IIntegerPropertyDescriptor) {
+        if (modelDescriptor instanceof IObjectPropertyDescriptor) {
+          modelConnector = new ModelRefPropertyConnector(
+              (IObjectPropertyDescriptor) modelDescriptor, this);
+        } else if (modelDescriptor instanceof IIntegerPropertyDescriptor) {
           modelConnector = new ModelIntegerPropertyConnector(
               (IIntegerPropertyDescriptor) modelDescriptor, accessorFactory);
         } else {
@@ -141,7 +146,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    * Sets the factory for the accessors used to access the model properties.
    * 
    * @param accessorFactory
-   *            The <code>IAccessorFactory</code> to use.
+   *          The <code>IAccessorFactory</code> to use.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -151,7 +156,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    * Sets the descriptorRegistry.
    * 
    * @param descriptorRegistry
-   *            the descriptorRegistry to set.
+   *          the descriptorRegistry to set.
    */
   public void setDescriptorRegistry(
       IComponentDescriptorRegistry descriptorRegistry) {

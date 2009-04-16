@@ -28,7 +28,6 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelPropertyConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
@@ -83,9 +82,9 @@ public abstract class AbstractAddCollectionToMasterAction extends
       ICollectionAccessor collectionAccessor = getAccessorFactory(context)
           .createCollectionPropertyAccessor(
               collectionConnector.getId(),
-              ((IModelValueConnector) collectionConnector).getModelProvider()
-                  .getModelDescriptor().getComponentDescriptor()
-                  .getComponentContract(), newComponentContract);
+              collectionConnector.getModelProvider().getModelDescriptor()
+                  .getComponentDescriptor().getComponentContract(),
+              newComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(getModelDescriptor(context));

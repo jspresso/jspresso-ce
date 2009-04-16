@@ -37,7 +37,6 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
-
 /**
  * This connector is a model property connector.
  * <p>
@@ -58,26 +57,24 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * @author Vincent Vandenschrick
  */
 public abstract class ModelPropertyConnector extends AbstractValueConnector
-    implements IModelValueConnector, IModelChangeListener,
-    PropertyChangeListener {
+    implements IModelChangeListener, PropertyChangeListener {
 
   private IAccessor        accessor;
   private IAccessorFactory accessorFactory;
-  private IModelDescriptor modelDescriptor;
 
   /**
    * Constructs a new model connector on a model property.
    * 
    * @param modelDescriptor
-   *            The model descriptor to which the connector is bound at.
+   *          The model descriptor to which the connector is bound at.
    * @param accessorFactory
-   *            The factory which is used to build the <code>IAccessor</code>
-   *            used to access the java model property bi-directionally
+   *          The factory which is used to build the <code>IAccessor</code> used
+   *          to access the java model property bi-directionally
    */
   ModelPropertyConnector(IModelDescriptor modelDescriptor,
       IAccessorFactory accessorFactory) {
     super(modelDescriptor.getName());
-    this.modelDescriptor = modelDescriptor;
+    setModelDescriptor(modelDescriptor);
     this.accessorFactory = accessorFactory;
   }
 
@@ -122,19 +119,11 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   }
 
   /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  public IModelDescriptor getModelDescriptor() {
-    return modelDescriptor;
-  }
-
-  /**
    * Gets the modelProvider.
    * 
    * @return the modelProvider.
    */
+  @Override
   public IModelProvider getModelProvider() {
     if (getParentConnector() instanceof IModelProvider) {
       return (IModelProvider) getParentConnector();
@@ -158,11 +147,11 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   }
 
   /**
-   * Detaches <code>this</code> as <code>PropertyChangeListener</code> on
-   * the old model instance and attaches as <code>PropertyChangeListener</code>
-   * on the new model instance. When this is done, it notifies its
-   * <code>IConnectorValueChangeListener</code> s about a possible change on
-   * the model property value (the new model property).
+   * Detaches <code>this</code> as <code>PropertyChangeListener</code> on the
+   * old model instance and attaches as <code>PropertyChangeListener</code> on
+   * the new model instance. When this is done, it notifies its
+   * <code>IConnectorValueChangeListener</code> s about a possible change on the
+   * model property value (the new model property).
    * <p>
    * {@inheritDoc}
    */
@@ -204,8 +193,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * <p>
    * {@inheritDoc}
    */
-  public void propertyChange(@SuppressWarnings("unused")
-  PropertyChangeEvent evt) {
+  public void propertyChange(@SuppressWarnings("unused") PropertyChangeEvent evt) {
     fireConnectorValueChange();
   }
 
@@ -229,16 +217,6 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
       ((IModelGate) gate).setModelProvider(null);
     }
     super.removeWritabilityGate(gate);
-  }
-
-  /**
-   * Sets the modelDescriptor.
-   * 
-   * @param modelDescriptor
-   *            the modelDescriptor to set.
-   */
-  public void setModelDescriptor(IModelDescriptor modelDescriptor) {
-    this.modelDescriptor = modelDescriptor;
   }
 
   /**
@@ -291,7 +269,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * needed.
    * 
    * @param oldModelProvider
-   *            the old model provider or null if none.
+   *          the old model provider or null if none.
    */
   protected void modelProviderChanged(IModelProvider oldModelProvider) {
     Object oldModel = null;
@@ -299,10 +277,11 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
     if (isValueAccessedAsProperty() && getModelProvider() != null
         && accessor == null && accessorFactory != null) {
-      accessor = accessorFactory.createPropertyAccessor(modelDescriptor
-          .getName(), getModelProvider().getModelDescriptor().getModelType());
+      accessor = accessorFactory.createPropertyAccessor(getId(),
+          getModelProvider().getModelDescriptor().getModelType());
       if (accessor instanceof IModelDescriptorAware) {
-        ((IModelDescriptorAware) accessor).setModelDescriptor(modelDescriptor);
+        ((IModelDescriptorAware) accessor)
+            .setModelDescriptor(getModelDescriptor());
       }
     }
     if (oldModelProvider != null) {

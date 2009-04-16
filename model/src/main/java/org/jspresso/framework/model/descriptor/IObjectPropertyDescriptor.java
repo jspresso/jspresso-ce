@@ -37,6 +37,7 @@ package org.jspresso.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IObjectPropertyDescriptor extends IScalarPropertyDescriptor {
+public interface IObjectPropertyDescriptor extends IScalarPropertyDescriptor,
+    IComponentDescriptorProvider<Object> {
   // Just a marker interface.
 }

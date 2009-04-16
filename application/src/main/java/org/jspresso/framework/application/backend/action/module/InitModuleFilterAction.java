@@ -24,7 +24,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractBackendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
-import org.jspresso.framework.binding.model.IModelValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
 
 
 /**
@@ -56,7 +56,7 @@ public class InitModuleFilterAction extends AbstractBackendAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IModelValueConnector filterModelConnector = (IModelValueConnector) getModuleConnector(
+    IValueConnector filterModelConnector = getModuleConnector(
         context).getChildConnector("filter");
     context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR,
         filterModelConnector);

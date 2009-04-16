@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import org.jspresso.framework.model.descriptor.DescriptorException;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 
 /**
@@ -89,6 +90,17 @@ public class BasicObjectPropertyDescriptor extends
    */
   public void setModelTypeClassName(String modelTypeClassName) {
     this.modelTypeClassName = modelTypeClassName;
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IComponentDescriptor<Object> getComponentDescriptor() {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

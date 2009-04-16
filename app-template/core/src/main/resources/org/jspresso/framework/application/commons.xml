@@ -324,9 +324,6 @@
     <property
       name="loginViewDescriptor"
       ref="loginViewDescriptor" />
-    <property
-      name="modelConnectorFactory"
-      ref="modelConnectorFactory" />
   </bean>
 
   <bean

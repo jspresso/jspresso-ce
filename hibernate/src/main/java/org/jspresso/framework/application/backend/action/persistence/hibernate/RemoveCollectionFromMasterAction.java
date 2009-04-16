@@ -25,7 +25,6 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.model.entity.IEntity;
@@ -77,9 +76,9 @@ public class RemoveCollectionFromMasterAction extends
       ICollectionAccessor collectionAccessor = getAccessorFactory(context)
           .createCollectionPropertyAccessor(
               collectionConnector.getId(),
-              ((IModelValueConnector) collectionConnector).getModelProvider()
-                  .getModelDescriptor().getComponentDescriptor()
-                  .getComponentContract(), elementComponentContract);
+              collectionConnector.getModelProvider().getModelDescriptor()
+                  .getComponentDescriptor().getComponentContract(),
+              elementComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(getModelDescriptor(context));

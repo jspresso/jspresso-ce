@@ -39,7 +39,6 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelGate;
-import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.model.EmbeddedModelProvider;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -139,8 +138,7 @@ public class WingsActionFactory implements IActionFactory<Action, SComponent> {
                     if (collectionConnector.getModelConnector() != null) {
                       ((EmbeddedModelProvider) ((IModelGate) clonedGate)
                           .getModelProvider())
-                          .setModel(((IModelValueConnector) collectionConnector
-                              .getModelConnector()).getModelProvider()
+                          .setModel(collectionConnector.getModelProvider()
                               .getModel());
                     } else {
                       ((EmbeddedModelProvider) ((IModelGate) clonedGate)

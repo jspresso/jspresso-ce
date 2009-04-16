@@ -27,7 +27,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.jspresso.framework.binding.model.IModelValueConnector;
+import org.jspresso.framework.model.IModelProvider;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.GateHelper;
@@ -83,6 +84,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   private Collection<IGate>           writabilityGates;
 
   private PropertyChangeListener      writabilityGatesListener;
+  private IModelDescriptor            modelDescriptor;
 
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
@@ -403,31 +405,29 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public void setConnectorValue(Object aValue) {
     if (aValue instanceof Number) {
-      if (getModelConnector() != null
-          && getModelConnector() instanceof IModelValueConnector) {
-        Class<?> expectedType = ((INumberPropertyDescriptor) ((IModelValueConnector) getModelConnector())
-            .getModelDescriptor()).getModelType();
+      if (getModelDescriptor() != null) {
+        Class<?> expectedType = ((INumberPropertyDescriptor) getModelDescriptor()).getModelType();
         if (expectedType.equals(aValue.getClass())) {
           setConnecteeValue(aValue);
         } else {
-            try {
-              Object adaptedValue = expectedType.getConstructor(
-                  new Class<?>[] {String.class}).newInstance(
-                  new Object[] {aValue.toString()});
-              setConnecteeValue(adaptedValue);
-            } catch (IllegalArgumentException ex) {
-              throw new ConnectorBindingException(ex);
-            } catch (SecurityException ex) {
-              throw new ConnectorBindingException(ex);
-            } catch (InstantiationException ex) {
-              throw new ConnectorBindingException(ex);
-            } catch (IllegalAccessException ex) {
-              throw new ConnectorBindingException(ex);
-            } catch (InvocationTargetException ex) {
-              throw new ConnectorBindingException(ex);
-            } catch (NoSuchMethodException ex) {
-              throw new ConnectorBindingException(ex);
-            }
+          try {
+            Object adaptedValue = expectedType.getConstructor(
+                new Class<?>[] {String.class}).newInstance(
+                new Object[] {aValue.toString()});
+            setConnecteeValue(adaptedValue);
+          } catch (IllegalArgumentException ex) {
+            throw new ConnectorBindingException(ex);
+          } catch (SecurityException ex) {
+            throw new ConnectorBindingException(ex);
+          } catch (InstantiationException ex) {
+            throw new ConnectorBindingException(ex);
+          } catch (IllegalAccessException ex) {
+            throw new ConnectorBindingException(ex);
+          } catch (InvocationTargetException ex) {
+            throw new ConnectorBindingException(ex);
+          } catch (NoSuchMethodException ex) {
+            throw new ConnectorBindingException(ex);
+          }
         }
       } else {
         setConnecteeValue(aValue);
@@ -658,5 +658,40 @@ public abstract class AbstractValueConnector extends AbstractConnector
     boolean writable = isWritable();
     firePropertyChange(WRITABLE_PROPERTY, oldWritability, writable);
     oldWritability = writable;
+  }
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  public IModelDescriptor getModelDescriptor() {
+    if (modelDescriptor != null) {
+      return modelDescriptor;
+    } else if (getModelConnector() != null) {
+      return getModelConnector().getModelDescriptor();
+    }
+    return null;
+  }
+
+  /**
+   * Sets the modelDescriptor.
+   * 
+   * @param modelDescriptor
+   *          the modelDescriptor to set.
+   */
+  public void setModelDescriptor(IModelDescriptor modelDescriptor) {
+    this.modelDescriptor = modelDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IModelProvider getModelProvider() {
+    if (getModelConnector() != null) {
+      return getModelConnector().getModelProvider();
+    }
+    return null;
   }
 }

@@ -42,7 +42,6 @@ import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
-import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.EDuration;
@@ -648,15 +647,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
                   if (childCardConnector != null) {
                     // To handle polymorphism, especially for modules, we refine
                     // the model descriptor.
-                    if (((IModelValueConnector) cardView.getConnector()
-                        .getModelConnector()).getModelDescriptor().getModelType()
-                        .isAssignableFrom(
+                    if (cardView.getConnector().getModelConnector()
+                        .getModelDescriptor().getModelType().isAssignableFrom(
                             childCardView.getDescriptor().getModelDescriptor()
                                 .getModelType())) {
-                      ((IModelValueConnector) cardView.getConnector()
-                          .getModelConnector())
-                          .setModelDescriptor(childCardView.getDescriptor()
-                              .getModelDescriptor());
+                      cardView.getConnector().getModelConnector()
+                          .setModelDescriptor(
+                              childCardView.getDescriptor()
+                                  .getModelDescriptor());
                     }
                     getMvcBinder().bind(childCardConnector,
                         cardView.getConnector().getModelConnector());

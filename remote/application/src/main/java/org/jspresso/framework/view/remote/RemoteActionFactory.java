@@ -35,7 +35,6 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelGate;
-import org.jspresso.framework.binding.model.IModelValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
@@ -141,8 +140,7 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
                     if (collectionConnector.getModelConnector() != null) {
                       ((EmbeddedModelProvider) ((IModelGate) clonedGate)
                           .getModelProvider())
-                          .setModel(((IModelValueConnector) collectionConnector
-                              .getModelConnector()).getModelProvider()
+                          .setModel(collectionConnector.getModelProvider()
                               .getModel());
                     } else {
                       ((EmbeddedModelProvider) ((IModelGate) clonedGate)

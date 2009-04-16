@@ -34,7 +34,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.entity.IEntity;
 
-
 /**
  * This class is a model property connector which manages a model reference
  * property.
@@ -74,9 +73,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * Constructs a new model property connector on a model reference property.
    * 
    * @param modelDescriptor
-   *            the model descriptor backing this connector.
+   *          the model descriptor backing this connector.
    * @param modelConnectorFactory
-   *            the factory used to create the property connectors.
+   *          the factory used to create the property connectors.
    */
   ModelRefPropertyConnector(IComponentDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
@@ -90,9 +89,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
-  public void addChildConnector(@SuppressWarnings("unused")
-  IValueConnector childConnector) {
-    throw new UnsupportedOperationException();
+  public void addChildConnector(IValueConnector childConnector) {
+    getConnectorMap().addConnector(childConnector.getId(), childConnector);
   }
 
   /**
@@ -171,8 +169,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * Returns the child connectors of this <code>ModelRefPropertyConnector</code>
    * instance. This is the lazilly created map of
-   * <code>ModelPropertyConnector</code> s connected to the model properties
-   * of the referenced model.
+   * <code>ModelPropertyConnector</code> s connected to the model properties of
+   * the referenced model.
    * <p>
    * {@inheritDoc}
    */
@@ -213,8 +211,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
 
   /**
    * After having performed the standard (super implementation) handling of the
-   * <code>ModelChangeEvent</code>, it will notify its child connectors of
-   * the referenced model change.
+   * <code>ModelChangeEvent</code>, it will notify its child connectors of the
+   * referenced model change.
    * <p>
    * {@inheritDoc}
    */
@@ -256,9 +254,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * Notifies its listeners that the connector's model changed.
    * 
    * @param oldModel
-   *            The old model of the connector
+   *          The old model of the connector
    * @param newModel
-   *            The new model of the connector
+   *          The new model of the connector
    */
   protected void fireModelChange(Object oldModel, Object newModel) {
     modelChangeSupport.fireModelChange(oldModel, newModel);

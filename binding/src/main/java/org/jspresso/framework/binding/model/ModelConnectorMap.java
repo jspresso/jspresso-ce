@@ -22,10 +22,9 @@ import org.jspresso.framework.binding.ConnectorMap;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 
-
 /**
- * Serves as an auto-generating ConnectorMap for maps. It may be used to hold a
- * map model in a MVC pattern.
+ * Serves as an auto-generating ConnectorMap for bean models. It may also be
+ * used to hold a map model in a MVC pattern.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -51,9 +50,9 @@ public class ModelConnectorMap extends ConnectorMap {
    * Constructs a new instance based on the model class passed as parameter.
    * 
    * @param parentConnector
-   *            the model connector holding the connector map.
+   *          the model connector holding the connector map.
    * @param modelConnectorFactory
-   *            the factory used to create the model connectors.
+   *          the factory used to create the model connectors.
    */
   ModelConnectorMap(ModelRefPropertyConnector parentConnector,
       IModelConnectorFactory modelConnectorFactory) {
@@ -62,24 +61,9 @@ public class ModelConnectorMap extends ConnectorMap {
   }
 
   /**
-   * Will throw an <code>UnsupportedOperationException</code>. This is a
-   * self-generating connector map.
-   * <p>
-   * {@inheritDoc}
-   * 
-   * @see org.jspresso.framework.binding.IConnectorMap#getConnector(String)
-   */
-  @Override
-  public void addConnector(@SuppressWarnings("unused")
-  String storageKey, @SuppressWarnings("unused")
-  IValueConnector connector) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
    * This method implements connector auto creation. If a connector with the
-   * <code>connectorId</code> doesn't already exist, a new one is created
-   * using the <code>IModelConnectorFactory</code> and register it as
+   * <code>connectorId</code> doesn't already exist, a new one is created using
+   * the <code>IModelConnectorFactory</code> and register it as
    * <code>IModelChangeListener</code>.
    * <p>
    * {@inheritDoc}
@@ -90,9 +74,11 @@ public class ModelConnectorMap extends ConnectorMap {
     if (connector == null) {
       IComponentDescriptor<?> componentDescriptor = getParentConnector()
           .getModelDescriptor().getComponentDescriptor();
-      connector = modelConnectorFactory.createModelConnector(connectorId,
-          componentDescriptor.getPropertyDescriptor(connectorId));
-      super.addConnector(connectorId, connector);
+      if (componentDescriptor != null) {
+        connector = modelConnectorFactory.createModelConnector(connectorId,
+            componentDescriptor.getPropertyDescriptor(connectorId));
+        super.addConnector(connectorId, connector);
+      }
     }
     return connector;
   }

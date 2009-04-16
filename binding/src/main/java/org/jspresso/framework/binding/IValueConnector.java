@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.binding;
 
+import org.jspresso.framework.model.IModelProvider;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.IGate;
 
@@ -239,4 +241,26 @@ public interface IValueConnector extends IConnector,
    *            the parent connector.
    */
   void setParentConnector(ICompositeValueConnector parent);
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  IModelDescriptor getModelDescriptor();
+
+  /**
+   * Sets the modelDescriptor.
+   * 
+   * @param modelDescriptor
+   *            the modelDescriptor.
+   */
+  void setModelDescriptor(IModelDescriptor modelDescriptor);
+
+  /**
+   * Gets the modelProvider.
+   * 
+   * @return the modelProvider.
+   */
+  IModelProvider getModelProvider();
 }
