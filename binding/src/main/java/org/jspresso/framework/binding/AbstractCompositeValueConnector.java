@@ -19,6 +19,8 @@
 package org.jspresso.framework.binding;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.jspresso.framework.util.IIconImageURLProvider;
 
@@ -44,18 +46,16 @@ import org.jspresso.framework.util.IIconImageURLProvider;
  */
 
 public abstract class AbstractCompositeValueConnector extends
-    AbstractValueConnector implements IRenderableCompositeValueConnector,
-    IConnectorMapProvider {
+    AbstractValueConnector implements IRenderableCompositeValueConnector {
 
-  private IConnectorMap             childConnectors;
-  private ChildConnectorSupport     childConnectorSupport;
-  private ConnectorSelectionSupport connectorSelectionSupport;
-  private String                    displayDescription;
-  private String                    displayIconImageUrl;
-  private String                    displayValue;
-  private IIconImageURLProvider     iconImageURLProvider;
-  private String                    renderingChildConnectorId;
-  private boolean                   trackingChildrenSelection;
+  private Map<String, IValueConnector> childConnectors;
+  private ConnectorSelectionSupport    connectorSelectionSupport;
+  private String                       displayDescription;
+  private String                       displayIconImageUrl;
+  private String                       displayValue;
+  private IIconImageURLProvider        iconImageURLProvider;
+  private String                       renderingChildConnectorId;
+  private boolean                      trackingChildrenSelection;
 
   /**
    * Constructs a new <code>AbstractCompositeValueConnector</code>.
@@ -65,10 +65,9 @@ public abstract class AbstractCompositeValueConnector extends
    */
   public AbstractCompositeValueConnector(String id) {
     super(id);
-    childConnectorSupport = new ChildConnectorSupport(this);
     connectorSelectionSupport = new ConnectorSelectionSupport();
     trackingChildrenSelection = false;
-    childConnectors = new ConnectorMap(this);
+    childConnectors = new LinkedHashMap<String, IValueConnector>();
   }
 
   /**
@@ -110,9 +109,7 @@ public abstract class AbstractCompositeValueConnector extends
   public AbstractCompositeValueConnector clone(String newConnectorId) {
     AbstractCompositeValueConnector clonedConnector = (AbstractCompositeValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.childConnectors = new ConnectorMap(clonedConnector);
-    clonedConnector.childConnectorSupport = new ChildConnectorSupport(
-        clonedConnector);
+    clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
     clonedConnector.connectorSelectionSupport = new ConnectorSelectionSupport();
     for (String connectorKey : getChildConnectorKeys()) {
       clonedConnector
@@ -125,7 +122,7 @@ public abstract class AbstractCompositeValueConnector extends
    * {@inheritDoc}
    */
   public IValueConnector getChildConnector(String connectorKey) {
-    return childConnectorSupport.getChildConnector(connectorKey);
+    return childConnectors.get(connectorKey);
   }
 
   /**
@@ -139,17 +136,7 @@ public abstract class AbstractCompositeValueConnector extends
    * {@inheritDoc}
    */
   public Collection<String> getChildConnectorKeys() {
-    return childConnectorSupport.getChildConnectorKeys();
-  }
-
-  /**
-   * Returns the connector map of the connectors contained in this connector.
-   * This method should return null if no connector are child in this connector.
-   * 
-   * @return the connector map of the child connectors
-   */
-  public IConnectorMap getConnectorMap() {
-    return childConnectors;
+    return childConnectors.keySet();
   }
 
   /**
@@ -283,7 +270,8 @@ public abstract class AbstractCompositeValueConnector extends
    *          the connector to be added as composite.
    */
   protected void addChildConnector(String storageKey, IValueConnector connector) {
-    getConnectorMap().addConnector(storageKey, connector);
+    childConnectors.put(storageKey, connector);
+    connector.setParentConnector(this);
   }
 
   /**
@@ -371,8 +359,11 @@ public abstract class AbstractCompositeValueConnector extends
    *          the connector to be removed.
    */
   protected void removeChildConnector(IValueConnector connector) {
-    getConnectorMap().removeConnector(connector.getId());
-    connector.setParentConnector(null);
+    IValueConnector removedConnector = childConnectors
+        .remove(connector.getId());
+    if (removedConnector != null) {
+      removedConnector.setParentConnector(null);
+    }
   }
 
 }

@@ -21,14 +21,12 @@ package org.jspresso.framework.binding.model;
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.jspresso.framework.binding.ChildConnectorSupport;
 import org.jspresso.framework.binding.CollectionConnectorHelper;
-import org.jspresso.framework.binding.ConnectorMap;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.IConnectorMap;
-import org.jspresso.framework.binding.IConnectorMapProvider;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.ModelChangeEvent;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -37,7 +35,6 @@ import org.jspresso.framework.util.collection.CollectionHelper;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.event.SelectionChangeSupport;
-
 
 /**
  * This class is a model property connector which manages a collection property.
@@ -59,14 +56,12 @@ import org.jspresso.framework.util.event.SelectionChangeSupport;
  * @author Vincent Vandenschrick
  */
 public class ModelCollectionPropertyConnector extends ModelPropertyConnector
-    implements ICollectionConnector, IConnectorMapProvider {
+    implements ICollectionConnector {
 
-  private IConnectorMap          childConnectors;
-  private ChildConnectorSupport  childConnectorSupport;
-  private IModelConnectorFactory modelConnectorFactory;
-  private boolean                needsChildrenUpdate;
+  private Map<String, IValueConnector> childConnectors;
+  private IModelConnectorFactory       modelConnectorFactory;
 
-  private SelectionChangeSupport selectionChangeSupport;
+  private SelectionChangeSupport       selectionChangeSupport;
 
   /**
    * Constructs a new model property connector on a model collection property.
@@ -74,29 +69,28 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * connector. It must be setted afterwards using the apropriate setter.
    * 
    * @param modelDescriptor
-   *            the model descriptor backing this connector.
+   *          the model descriptor backing this connector.
    * @param modelConnectorFactory
-   *            the factory used to create the collection model connectors.
+   *          the factory used to create the collection model connectors.
    */
   public ModelCollectionPropertyConnector(
       ICollectionDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
-    childConnectors = new ConnectorMap(this);
-    childConnectorSupport = new ChildConnectorSupport(this);
+    childConnectors = new LinkedHashMap<String, IValueConnector>();
     selectionChangeSupport = new SelectionChangeSupport(this);
-    needsChildrenUpdate = false;
   }
 
   /**
    * Adds a new child connector.
    * 
    * @param connector
-   *            the connector to be added as composite.
+   *          the connector to be added as composite.
    */
   public void addChildConnector(IValueConnector connector) {
-    getConnectorMap().addConnector(connector.getId(), connector);
+    childConnectors.put(connector.getId(), connector);
+    connector.setParentConnector(this);
   }
 
   /**
@@ -127,7 +121,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void boundAsModel() {
-    needsChildrenUpdate = true;
+    updateChildConnectors();
   }
 
   /**
@@ -145,12 +139,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   public ModelCollectionPropertyConnector clone(String newConnectorId) {
     ModelCollectionPropertyConnector clonedConnector = (ModelCollectionPropertyConnector) super
         .clone(newConnectorId);
-    clonedConnector.childConnectors = new ConnectorMap(clonedConnector);
-    clonedConnector.childConnectorSupport = new ChildConnectorSupport(
-        clonedConnector);
+    clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
-    clonedConnector.needsChildrenUpdate = false;
     return clonedConnector;
   }
 
@@ -179,7 +170,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * {@inheritDoc}
    */
   public IValueConnector getChildConnector(String connectorKey) {
-    return childConnectorSupport.getChildConnector(connectorKey);
+    return childConnectors.get(connectorKey);
   }
 
   /**
@@ -193,7 +184,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * {@inheritDoc}
    */
   public Collection<String> getChildConnectorKeys() {
-    return childConnectorSupport.getChildConnectorKeys();
+    return childConnectors.keySet();
   }
 
   /**
@@ -217,30 +208,20 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
-  public IConnectorMap getConnectorMap() {
-    if (needsChildrenUpdate) {
-      updateChildConnectors();
-    }
-    return childConnectors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public int[] getSelectedIndices() {
     return selectionChangeSupport.getSelectedIndices();
   }
 
   /**
    * Before invoking the super implementation which handles the
-   * <code>ModelChangeEvent</code>, this implementation reconstructs the
-   * child connectors based on the retrieved collection.
+   * <code>ModelChangeEvent</code>, this implementation reconstructs the child
+   * connectors based on the retrieved collection.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public void modelChange(ModelChangeEvent evt) {
-    needsChildrenUpdate = true;
+    updateChildConnectors();
     super.modelChange(evt);
   }
 
@@ -253,7 +234,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    needsChildrenUpdate = true;
+    updateChildConnectors();
     super.propertyChange(evt);
   }
 
@@ -314,13 +295,16 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * Removes a child connector.
    * 
    * @param connector
-   *            the connector to be removed.
+   *          the connector to be removed.
    */
   private void removeChildConnector(IValueConnector connector) {
-    getConnectorMap().removeConnector(connector.getId());
-    connector.setParentConnector(null);
-    connector.cleanBindings();
-    connector.setConnectorValue(null);
+    IValueConnector removedConnector = childConnectors
+        .remove(connector.getId());
+    if (removedConnector != null) {
+      removedConnector.setParentConnector(null);
+      removedConnector.cleanBindings();
+      removedConnector.setConnectorValue(null);
+    }
   }
 
   /**
@@ -328,7 +312,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   private void updateChildConnectors() {
     Collection<?> modelCollection = (Collection<?>) getConnecteeValue();
-    needsChildrenUpdate = false;
     int modelCollectionSize = 0;
     if (modelCollection != null && modelCollection.size() > 0) {
       modelCollectionSize = modelCollection.size();

@@ -236,6 +236,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
         finishComponentConfiguration(viewDescriptor, locale, view);
         decorateWithActions(viewDescriptor, actionHandler, locale, view);
         decorateWithBorder(view, locale);
+        view.getConnector().setModelDescriptor(
+            viewDescriptor.getModelDescriptor());
       } catch (SecurityException ex) {
         view.setPeer(createSecurityComponent());
       }

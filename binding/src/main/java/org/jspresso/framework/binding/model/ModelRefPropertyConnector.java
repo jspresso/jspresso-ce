@@ -20,18 +20,19 @@ package org.jspresso.framework.binding.model;
 
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import org.jspresso.framework.binding.ChildConnectorSupport;
-import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConnectorMap;
-import org.jspresso.framework.binding.IConnectorMapProvider;
+import org.jspresso.framework.binding.IComponentValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelChangeListener;
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.ModelChangeEvent;
 import org.jspresso.framework.model.ModelChangeSupport;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -56,18 +57,17 @@ import org.jspresso.framework.model.entity.IEntity;
  */
 
 public class ModelRefPropertyConnector extends ModelPropertyConnector implements
-    ICompositeValueConnector, IConnectorMapProvider, IModelProvider {
+    IComponentValueConnector, IModelProvider {
 
   /**
    * <code>THIS_PROPERTY</code> is a fake property name returning the model
    * itself.
    */
-  public static final String     THIS_PROPERTY = "&this";
-  private IConnectorMap          childConnectors;
-  private ChildConnectorSupport  childConnectorSupport;
-  private ModelChangeSupport     modelChangeSupport;
+  public static final String           THIS_PROPERTY = "&this";
+  private Map<String, IValueConnector> childConnectors;
+  private ModelChangeSupport           modelChangeSupport;
 
-  private IModelConnectorFactory modelConnectorFactory;
+  private IModelConnectorFactory       modelConnectorFactory;
 
   /**
    * Constructs a new model property connector on a model reference property.
@@ -82,15 +82,15 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
     modelChangeSupport = new ModelChangeSupport(this);
-    childConnectors = new ModelConnectorMap(this, modelConnectorFactory);
-    childConnectorSupport = new ChildConnectorSupport(this);
+    childConnectors = new LinkedHashMap<String, IValueConnector>();
   }
 
   /**
    * {@inheritDoc}
    */
-  public void addChildConnector(IValueConnector childConnector) {
-    getConnectorMap().addConnector(childConnector.getId(), childConnector);
+  public void addChildConnector(
+      @SuppressWarnings("unused") IValueConnector childConnector) {
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -135,10 +135,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     ModelRefPropertyConnector clonedConnector = (ModelRefPropertyConnector) super
         .clone(newConnectorId);
     clonedConnector.modelChangeSupport = new ModelChangeSupport(clonedConnector);
-    clonedConnector.childConnectors = new ModelConnectorMap(clonedConnector,
-        modelConnectorFactory);
-    clonedConnector.childConnectorSupport = new ChildConnectorSupport(
-        clonedConnector);
+    clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
     return clonedConnector;
   }
 
@@ -149,7 +146,27 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     if (THIS_PROPERTY.equals(connectorKey)) {
       return this;
     }
-    return childConnectorSupport.getChildConnector(connectorKey);
+    IValueConnector connector = childConnectors.get(connectorKey);
+    if (connector == null) {
+      IComponentDescriptor<?> componentDescriptor = getModelDescriptor()
+          .getComponentDescriptor();
+      if (componentDescriptor != null) {
+        connector = modelConnectorFactory.createModelConnector(connectorKey,
+            componentDescriptor.getPropertyDescriptor(connectorKey));
+        connector.setParentConnector(this);
+        childConnectors.put(connectorKey, connector);
+      }
+    }
+    return connector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IValueConnector getChildConnector(
+      IModelDescriptor childConnectorModelDescriptor) {
+    return null;
   }
 
   /**
@@ -163,19 +180,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * {@inheritDoc}
    */
   public Collection<String> getChildConnectorKeys() {
-    return childConnectorSupport.getChildConnectorKeys();
-  }
-
-  /**
-   * Returns the child connectors of this <code>ModelRefPropertyConnector</code>
-   * instance. This is the lazilly created map of
-   * <code>ModelPropertyConnector</code> s connected to the model properties of
-   * the referenced model.
-   * <p>
-   * {@inheritDoc}
-   */
-  public IConnectorMap getConnectorMap() {
-    return childConnectors;
+    return childConnectors.keySet();
   }
 
   /**

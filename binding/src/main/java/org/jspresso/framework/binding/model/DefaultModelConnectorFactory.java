@@ -25,7 +25,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
@@ -85,10 +84,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
         modelConnector = new ModelCollectionPropertyConnector(
             (ICollectionPropertyDescriptor<?>) modelDescriptor, this);
       } else if (modelDescriptor instanceof IScalarPropertyDescriptor) {
-        if (modelDescriptor instanceof IObjectPropertyDescriptor) {
-          modelConnector = new ModelRefPropertyConnector(
-              (IObjectPropertyDescriptor) modelDescriptor, this);
-        } else if (modelDescriptor instanceof IIntegerPropertyDescriptor) {
+        if (modelDescriptor instanceof IIntegerPropertyDescriptor) {
           modelConnector = new ModelIntegerPropertyConnector(
               (IIntegerPropertyDescriptor) modelDescriptor, accessorFactory);
         } else {

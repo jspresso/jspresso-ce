@@ -18,12 +18,11 @@
  */
 package org.jspresso.framework.binding;
 
-import java.util.Collection;
-import java.util.Collections;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 
 /**
- * This class supports the child connectors management. It is used by composite
- * connectors.
+ * This is the interface implemented by connectors that are self generating
+ * their children.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,48 +40,17 @@ import java.util.Collections;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ChildConnectorSupport {
-
-  private IConnectorMapProvider connectorMapProvider;
+public interface IComponentValueConnector extends ICompositeValueConnector {
 
   /**
-   * Constructs a new <code>ChildConnectorSupport</code> instance.
+   * Gets a child connector based on its model descriptor. It should directly
+   * delegate to the <code>IConnectorMap</code>.
    * 
-   * @param connectorMapProvider
-   *            the provider of the connector map.
+   * @param childConnectorModelDescriptor
+   *          The child connector model descriptor.
+   * @return The retrieved connector or null if non exists.
    */
-  public ChildConnectorSupport(IConnectorMapProvider connectorMapProvider) {
-    this.connectorMapProvider = connectorMapProvider;
-  }
-
-  /**
-   * Support method holding the implementation of
-   * {@link ICompositeValueConnector#getChildConnector(String)}.
-   * 
-   * @param connectorKey
-   *            the key indexing the connector.
-   * @return the child connector.
-   */
-  public IValueConnector getChildConnector(String connectorKey) {
-    IConnectorMap childConnectors = connectorMapProvider.getConnectorMap();
-    if (childConnectors != null) {
-      return childConnectors.getConnector(connectorKey);
-    }
-    return null;
-  }
-
-  /**
-   * Support method holding the implementation of
-   * {@link ICompositeValueConnector#getChildConnectorKeys()}.
-   * 
-   * @return the child connector ids collection.
-   */
-  public Collection<String> getChildConnectorKeys() {
-    IConnectorMap childConnectors = connectorMapProvider.getConnectorMap();
-    if (childConnectors != null) {
-      return childConnectors.getStorageKeys();
-    }
-    return Collections.emptySet();
-  }
+  IValueConnector getChildConnector(
+      IModelDescriptor childConnectorModelDescriptor);
 
 }
