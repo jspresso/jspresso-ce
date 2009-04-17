@@ -48,7 +48,7 @@ import org.jspresso.framework.util.descriptor.IIconDescriptor;
  * @see org.jspresso.framework.model.descriptor.IPropertyDescriptor
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete type of component.
+ *          the concrete type of component.
  */
 public interface IComponentDescriptor<E> extends IModelDescriptor,
     IIconDescriptor, IComponentDescriptorProvider<E>, ISecurable {
@@ -89,7 +89,7 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * whose name is passed in parameter.
    * 
    * @param propertyName
-   *            the name of the property of which to look for the descriptor.
+   *          the name of the property of which to look for the descriptor.
    * @return the <code>IPropertyDescriptor</code> or null if the property does
    *         not exists.
    */
@@ -125,9 +125,11 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
   List<String> getRenderedProperties();
 
   /**
-   * Retrieves list of service contract class names implemented by this component.
+   * Retrieves list of service contract class names implemented by this
+   * component.
    * 
-   * @return the list of service contract class names implemented by this component.
+   * @return the list of service contract class names implemented by this
+   *         component.
    */
   Collection<String> getServiceContractClassNames();
 
@@ -142,9 +144,9 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * Retrieves the service delegate implemented by this component.
    * 
    * @param targetMethod
-   *            the method invoked as service.
-   * @return the <code>IComponentService</code> or null if the service does
-   *         not exists.
+   *          the method invoked as service.
+   * @return the <code>IComponentService</code> or null if the service does not
+   *         exists.
    */
   IComponentService getServiceDelegate(Method targetMethod);
 
@@ -188,4 +190,12 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();
+
+  /**
+   * Whenever this component is used as a query filter, this is the default page
+   * size applied for the query.
+   * 
+   * @return the page size for the query when used as query filter.
+   */
+  Integer getPageSize();
 }

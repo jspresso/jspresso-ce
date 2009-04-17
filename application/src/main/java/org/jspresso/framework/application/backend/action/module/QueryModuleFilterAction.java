@@ -28,7 +28,6 @@ import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 
-
 /**
  * Retrieves the filter of a module and queries the persistent store to populate
  * the module objects.
@@ -60,16 +59,41 @@ public class QueryModuleFilterAction extends AbstractBackendAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     if (queryAction != null) {
+      Integer pageOffset = (Integer) context
+          .get(ActionContextConstants.ACTION_PARAM);
       FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModuleConnector(
           context).getConnectorValue();
       IValueConnector filterConnector = getModuleConnector(context)
           .getChildConnector("filter");
       context
           .put(ActionContextConstants.QUERY_MODEL_CONNECTOR, filterConnector);
-      IQueryComponent filter = (IQueryComponent) module.getFilter();
+      IQueryComponent queryComponent = (IQueryComponent) module.getFilter();
+      if (pageOffset == null || pageOffset.intValue() == 0) {
+        // This is a plain first query.
+        queryComponent.setPage(null);
+        queryComponent.setRecordCount(null);
+      } else {
+        if (queryComponent.getRecordCount() == null
+            || queryComponent.getPageSize() == null) {
+          // do not navigate into pages unless a 1st query has been done or
+          // pagination is disabled.
+          return false;
+        }
+        if (queryComponent.getPage() != null
+            && queryComponent.getPage().intValue() + pageOffset.intValue() >= 0
+            && queryComponent.getPage().intValue() + pageOffset.intValue() < queryComponent
+                .getPageCount().intValue() - 1) {
+          queryComponent.setPage(new Integer(queryComponent.getPage()
+              .intValue()
+              + pageOffset.intValue()));
+        } else {
+          // We are of limits
+          return false;
+        }
+      }
       if (actionHandler.execute(queryAction, context)) {
-        module.setModuleObjects(filter.getQueriedComponents());
-        filter.setQueriedComponents(null);
+        module.setModuleObjects(queryComponent.getQueriedComponents());
+        queryComponent.setQueriedComponents(null);
       }
     }
     return super.execute(actionHandler, context);
@@ -88,7 +112,7 @@ public class QueryModuleFilterAction extends AbstractBackendAction {
    * Sets the queryAction.
    * 
    * @param queryAction
-   *            the queryAction to set.
+   *          the queryAction to set.
    */
   public void setQueryAction(IAction queryAction) {
     this.queryAction = queryAction;

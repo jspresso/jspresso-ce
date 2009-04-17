@@ -30,7 +30,6 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
 
-
 /**
  * The default implementation of a query component.
  * <p>
@@ -56,15 +55,19 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private static final long       serialVersionUID = 4271673164192796253L;
 
   private IComponentDescriptor<?> componentDescriptor;
+  private Integer                 page;
+  private Integer                 pageSize;
+  private Integer                 recordCount;
 
   /**
    * Constructs a new <code>QueryComponent</code> instance.
    * 
    * @param componentDescriptor
-   *            the query componentDescriptor.
+   *          the query componentDescriptor.
    */
   public QueryComponent(IComponentDescriptor<?> componentDescriptor) {
     this.componentDescriptor = componentDescriptor;
+    setPageSize(componentDescriptor.getPageSize());
   }
 
   /**
@@ -80,9 +83,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
       if (isInlineComponentDescriptor(referencedDescriptor)) {
-        QueryComponent referencedQueryComponent = new QueryComponent(referencedDescriptor);
-        referencedQueryComponent.addPropertyChangeListener(new InlinedComponentTracker(
-            propertyDescriptor.getName()));
+        QueryComponent referencedQueryComponent = new QueryComponent(
+            referencedDescriptor);
+        referencedQueryComponent
+            .addPropertyChangeListener(new InlinedComponentTracker(
+                propertyDescriptor.getName()));
         put((String) key, referencedQueryComponent);
         return referencedQueryComponent;
       }
@@ -141,5 +146,66 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       firePropertyChange(componentName + "." + evt.getPropertyName(), evt
           .getOldValue(), evt.getNewValue());
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Integer getPage() {
+    return page;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Integer getPageSize() {
+    return pageSize;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setPage(Integer page) {
+    this.page = page;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Integer getRecordCount() {
+    return recordCount;
+  }
+
+  /**
+   * Sets the recordCount.
+   * 
+   * @param recordCount
+   *          the recordCount to set.
+   */
+  public void setRecordCount(Integer recordCount) {
+    this.recordCount = recordCount;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Integer getPageCount() {
+    if (getPageSize() == null || getPageSize().intValue() <= 0) {
+      return new Integer(1);
+    }
+    return new Integer(getRecordCount().intValue() / getPageSize().intValue()
+        + 1);
   }
 }

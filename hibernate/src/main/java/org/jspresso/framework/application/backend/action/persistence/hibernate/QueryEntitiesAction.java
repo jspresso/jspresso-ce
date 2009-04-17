@@ -27,12 +27,13 @@ import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.EMergeMode;
+import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
@@ -40,7 +41,6 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
-
 
 /**
  * An action to hibernate query entities by example.
@@ -68,7 +68,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      final Map<String, Object> context) {
     final IQueryComponent queryComponent = (IQueryComponent) ((IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR)).getConnectorValue();
 
@@ -82,8 +83,30 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         List entities;
         if (abort) {
           entities = new ArrayList<IEntity>();
+          queryComponent.setRecordCount(new Integer(0));
         } else {
-          entities = getHibernateTemplate(context).findByCriteria(criteria);
+          Integer totalCount = null;
+          Integer pageSize = queryComponent.getPageSize();
+          Integer page = queryComponent.getPage();
+          if (pageSize != null) {
+            if (page == null) {
+              page = new Integer(0);
+              queryComponent.setPage(page);
+            }
+            entities = getHibernateTemplate(context).findByCriteria(criteria,
+                page.intValue() * pageSize.intValue(), pageSize.intValue());
+            if (queryComponent.getRecordCount() == null) {
+              criteria.setProjection(Projections.rowCount());
+              totalCount = (Integer) getHibernateTemplate(context)
+                  .findByCriteria(criteria).get(0);
+            }
+          } else {
+            entities = getHibernateTemplate(context).findByCriteria(criteria);
+            totalCount = new Integer(entities.size());
+          }
+          if (totalCount != null) {
+            queryComponent.setRecordCount(totalCount);
+          }
         }
         status.setRollbackOnly();
         return entities;

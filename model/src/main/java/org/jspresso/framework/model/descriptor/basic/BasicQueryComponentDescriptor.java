@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
-
 /**
  * An implementation used for query components.
  * <p>
@@ -57,7 +56,7 @@ public class BasicQueryComponentDescriptor extends
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
    * 
    * @param componentDescriptor
-   *            the delegate entity descriptor.
+   *          the delegate entity descriptor.
    */
   public BasicQueryComponentDescriptor(
       IComponentDescriptor<Object> componentDescriptor) {
@@ -81,6 +80,15 @@ public class BasicQueryComponentDescriptor extends
     qCPDescriptor.setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
 
     propertyDescriptors.add(qCPDescriptor);
+
+    BasicIntegerPropertyDescriptor pagePropertyDescripror = new BasicIntegerPropertyDescriptor();
+    pagePropertyDescripror.setName(IQueryComponent.PAGE);
+    propertyDescriptors.add(pagePropertyDescripror);
+
+    BasicIntegerPropertyDescriptor pageSizePropertyDescripror = new BasicIntegerPropertyDescriptor();
+    pageSizePropertyDescripror.setName(IQueryComponent.PAGE_SIZE);
+    propertyDescriptors.add(pageSizePropertyDescripror);
+
     setPropertyDescriptors(propertyDescriptors);
     setDescription(componentDescriptor.getDescription());
     setIconImageURL(componentDescriptor.getIconImageURL());
@@ -142,5 +150,13 @@ public class BasicQueryComponentDescriptor extends
    */
   public boolean isPurelyAbstract() {
     return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Integer getPageSize() {
+    return componentDescriptor.getPageSize();
   }
 }

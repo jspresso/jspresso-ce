@@ -25,10 +25,10 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
+import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
 
 /**
  * A default implementation for lov view factories.
@@ -52,6 +52,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory {
 
   private IQueryViewDescriptorFactory queryViewDescriptorFactory;
+  private ActionMap                   resultViewActionMap;
 
   /**
    * {@inheritDoc}
@@ -60,9 +61,10 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   public IViewDescriptor createLovViewDescriptor(
       IReferencePropertyDescriptor entityRefDescriptor) {
     BasicSplitViewDescriptor lovViewDescriptor = new BasicSplitViewDescriptor();
-    lovViewDescriptor.setLeftTopViewDescriptor(queryViewDescriptorFactory
-        .createQueryViewDescriptor(
-            entityRefDescriptor.getComponentDescriptor()));
+    lovViewDescriptor
+        .setLeftTopViewDescriptor(queryViewDescriptorFactory
+            .createQueryViewDescriptor(entityRefDescriptor
+                .getComponentDescriptor()));
     lovViewDescriptor
         .setRightBottomViewDescriptor(createResultViewDescriptor(entityRefDescriptor
             .getComponentDescriptor()));
@@ -74,7 +76,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    * Sets the queryViewDescriptorFactory.
    * 
    * @param queryViewDescriptorFactory
-   *            the queryViewDescriptorFactory to set.
+   *          the queryViewDescriptorFactory to set.
    */
   public void setQueryViewDescriptorFactory(
       IQueryViewDescriptorFactory queryViewDescriptorFactory) {
@@ -93,9 +95,22 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     queriedEntitiesDescriptor
         .setReferencedDescriptor(queriedEntitiesListDescriptor);
     queriedEntitiesDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
+    if (resultViewActionMap != null) {
+      resultViewDescriptor.setActionMap(resultViewActionMap);
+    }
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
     return resultViewDescriptor;
+  }
+
+  /**
+   * Sets the resultViewActionMap.
+   * 
+   * @param resultViewActionMap
+   *          the resultViewActionMap to set.
+   */
+  public void setResultViewActionMap(ActionMap resultViewActionMap) {
+    this.resultViewActionMap = resultViewActionMap;
   }
 }

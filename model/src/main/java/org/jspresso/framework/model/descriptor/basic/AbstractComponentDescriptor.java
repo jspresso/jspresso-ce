@@ -90,6 +90,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   private String                           toStringProperty;
   private Collection<String>               unclonedProperties;
 
+  private Integer                          pageSize;
+
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
    * 
@@ -593,5 +595,22 @@ public abstract class AbstractComponentDescriptor<E> extends
     for (Method serviceMethod : contractServices) {
       serviceDelegates.put(serviceMethod, service);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Integer getPageSize() {
+    return pageSize;
+  }
+
+  /**
+   * Sets the pageSize.
+   * 
+   * @param pageSize
+   *          the pageSize to set.
+   */
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
   }
 }

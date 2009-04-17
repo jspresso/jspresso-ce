@@ -23,12 +23,9 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.WrappingAction;
-import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
- * A standard find action. Since it is a chained action, it can be chained with
- * another action.
+ * A standard action to fill the contaxt with a page offset.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -52,7 +49,9 @@ import org.jspresso.framework.model.component.IQueryComponent;
  * @param <G>
  *          the actual action type used.
  */
-public class FindAction<E, F, G> extends WrappingAction<E, F, G> {
+public class PageOffsetAction<E, F, G> extends WrappingAction<E, F, G> {
+
+  private Integer pageOffset;
 
   /**
    * {@inheritDoc}
@@ -60,49 +59,17 @@ public class FindAction<E, F, G> extends WrappingAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IValueConnector queryEntityConnector = (IValueConnector) context
-        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
-    if (queryEntityConnector == null) {
-      queryEntityConnector = getViewConnector(context).getModelConnector();
-      while (queryEntityConnector != null
-          && !(queryEntityConnector.getConnectorValue() instanceof IQueryComponent)) {
-        // climb the connector hierarchy to retrieve the IQueryComponent
-        // connector.
-        queryEntityConnector = queryEntityConnector.getParentConnector();
-      }
-      context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR,
-          queryEntityConnector);
-    }
-    if (queryEntityConnector != null
-        && queryEntityConnector.getConnectorValue() != null) {
-      Integer pageOffset = (Integer) context
-          .get(ActionContextConstants.ACTION_PARAM);
-      IQueryComponent queryComponent = ((IQueryComponent) queryEntityConnector
-          .getConnectorValue());
-      if (pageOffset == null || pageOffset.intValue() == 0) {
-        // This is a plain first query.
-        queryComponent.setPage(null);
-        queryComponent.setRecordCount(null);
-      } else {
-        if (queryComponent.getRecordCount() == null
-            || queryComponent.getPageSize() == null) {
-          // do not navigate into pages unless a 1st query has been done or
-          // pagination is disabled.
-          return false;
-        }
-        if (queryComponent.getPage() != null
-            && queryComponent.getPage().intValue() + pageOffset.intValue() >= 0
-            && queryComponent.getPage().intValue() + pageOffset.intValue() < queryComponent
-                .getPageCount().intValue() - 1) {
-          queryComponent.setPage(new Integer(queryComponent.getPage()
-              .intValue()
-              + pageOffset.intValue()));
-        } else {
-          // We are of limits
-          return false;
-        }
-      }
-    }
+    context.put(ActionContextConstants.ACTION_PARAM, pageOffset);
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Sets the pageOffset.
+   * 
+   * @param pageOffset
+   *          the pageOffset to set.
+   */
+  public void setPageOffset(Integer pageOffset) {
+    this.pageOffset = pageOffset;
   }
 }
