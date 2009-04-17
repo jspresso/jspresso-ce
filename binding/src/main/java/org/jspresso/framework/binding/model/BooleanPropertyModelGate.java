@@ -29,7 +29,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
-
 /**
  * This gate opens and closes based on the value of a boolean property of its
  * model.
@@ -63,8 +62,8 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * Constructs a new <code>BooleanPropertyModelGate</code> instance.
    */
   public BooleanPropertyModelGate() {
-    open = true;
     openOnTrue = true;
+    open = !openOnTrue;
   }
 
   /**
@@ -74,7 +73,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
   public BooleanPropertyModelGate clone() {
     BooleanPropertyModelGate clonedGate = (BooleanPropertyModelGate) super
         .clone();
-    clonedGate.open = true;
+    clonedGate.open = !openOnTrue;
     return clonedGate;
   }
 
@@ -135,7 +134,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * Sets the accessorFactory.
    * 
    * @param accessorFactory
-   *            the accessorFactory to set.
+   *          the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -145,7 +144,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * Sets the booleanPropertyName.
    * 
    * @param booleanPropertyName
-   *            the booleanPropertyName to set.
+   *          the booleanPropertyName to set.
    */
   public void setBooleanPropertyName(String booleanPropertyName) {
     this.booleanPropertyName = booleanPropertyName;
@@ -167,7 +166,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * Sets the openOnTrue.
    * 
    * @param openOnTrue
-   *            the openOnTrue to set.
+   *          the openOnTrue to set.
    */
   public void setOpenOnTrue(boolean openOnTrue) {
     this.openOnTrue = openOnTrue;

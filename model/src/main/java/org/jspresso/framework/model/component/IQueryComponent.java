@@ -142,4 +142,18 @@ public interface IQueryComponent extends Map<String, Object> {
    * @return the the current page count.
    */
   Integer getPageCount();
+
+  /**
+   * Wether navigation to next page is enabled.
+   * 
+   * @return true if navigation to next page is enabled, false otherwise.
+   */
+  boolean isNextPageEnabled();
+
+  /**
+   * Wether navigation to previous page is enabled.
+   * 
+   * @return true if navigation to previous page is enabled, false otherwise.
+   */
+  boolean isPreviousPageEnabled();
 }

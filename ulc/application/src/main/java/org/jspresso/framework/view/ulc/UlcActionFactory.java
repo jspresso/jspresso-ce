@@ -18,31 +18,15 @@
  */
 package org.jspresso.framework.view.ulc;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.model.IModelGate;
-import org.jspresso.framework.model.EmbeddedModelProvider;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-import org.jspresso.framework.util.gate.GateHelper;
-import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
-import org.jspresso.framework.view.IActionFactory;
+import org.jspresso.framework.view.AbstractActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -72,10 +56,8 @@ import com.ulcjava.base.application.util.ULCIcon;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
-
-  private IIconFactory<ULCIcon> iconFactory;
-  private ITranslationProvider  translationProvider;
+public class UlcActionFactory extends
+    AbstractActionFactory<IAction, ULCComponent, ULCIcon> {
 
   /**
    * {@inheritDoc}
@@ -95,60 +77,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       Locale locale) {
     IAction ulcAction = new ActionAdapter(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
-    if (action.getActionabilityGates() != null) {
-      Collection<IGate> clonedGates = new HashSet<IGate>();
-      for (IGate gate : action.getActionabilityGates()) {
-        final IGate clonedGate = gate.clone();
-        if (clonedGate instanceof IModelGate) {
-          if (modelDescriptor instanceof IComponentDescriptorProvider) {
-            ((IModelGate) clonedGate)
-                .setModelProvider(new EmbeddedModelProvider(
-                    (IComponentDescriptorProvider<?>) modelDescriptor));
-            viewConnector
-                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                  public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                    ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                        .getModelProvider()).setModel(evt.getNewValue());
-                  }
-                });
-          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
-            IRelationshipEndPropertyDescriptor reverseDescriptor = ((ICollectionPropertyDescriptor<?>) modelDescriptor)
-                .getReverseRelationEnd();
-            if (reverseDescriptor instanceof IComponentDescriptorProvider) {
-              ((IModelGate) clonedGate)
-                  .setModelProvider(new EmbeddedModelProvider(
-                      (IComponentDescriptorProvider<?>) reverseDescriptor));
-            } else if (reverseDescriptor instanceof ICollectionDescriptorProvider) {
-              ((IModelGate) clonedGate)
-                  .setModelProvider(new EmbeddedModelProvider(
-                      ((ICollectionDescriptorProvider<?>) reverseDescriptor)
-                          .getCollectionDescriptor().getElementDescriptor()));
-            }
-            final ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) viewConnector)
-                .getCollectionConnector();
-            collectionConnector
-                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                  public void connectorValueChange(
-                      @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
-                    if (collectionConnector.getModelConnector() != null) {
-                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                          .getModelProvider())
-                          .setModel(collectionConnector.getModelProvider()
-                              .getModel());
-                    } else {
-                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                          .getModelProvider()).setModel(null);
-                    }
-                  }
-                });
-          }
-        }
-        clonedGates.add(clonedGate);
-      }
-      new GatesListener(ulcAction, clonedGates);
-    }
+    attachActionGates(action, modelDescriptor, viewConnector, ulcAction);
     return ulcAction;
   }
 
@@ -166,26 +95,6 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
   @Override
   public void setActionName(IAction action, String name) {
     action.putValue(IAction.NAME, name);
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<ULCIcon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 
   private final class ActionAdapter extends
@@ -218,13 +127,14 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       this.sourceComponent = sourceComponent;
       this.modelDescriptor = modelDescriptor;
       this.viewConnector = viewConnector;
-      putValue(IAction.NAME, action.getI18nName(translationProvider, locale));
-      String i18nDescription = action.getI18nDescription(translationProvider,
-          locale);
+      putValue(IAction.NAME, action.getI18nName(getTranslationProvider(),
+          locale));
+      String i18nDescription = action.getI18nDescription(
+          getTranslationProvider(), locale);
       if (i18nDescription != null) {
         putValue(IAction.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
       }
-      putValue(IAction.SMALL_ICON, iconFactory.getIcon(
+      putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
           action.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
       if (action.getMnemonicAsString() != null) {
         putValue(IAction.MNEMONIC_KEY, new Integer(KeyStroke.getKeyStroke(
@@ -266,35 +176,5 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       }
     }
 
-  }
-
-  private final class GatesListener implements PropertyChangeListener {
-
-    private IAction           action;
-    private Collection<IGate> gates;
-
-    /**
-     * Constructs a new <code>GatesListener</code> instance.
-     * 
-     * @param action
-     *          the action to (de)activate based on gates state.
-     * @param gates
-     *          the gates that determine action state.
-     */
-    public GatesListener(IAction action, Collection<IGate> gates) {
-      this.action = action;
-      this.gates = gates;
-      for (IGate gate : gates) {
-        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(
-        @SuppressWarnings("unused") PropertyChangeEvent evt) {
-      action.setEnabled(GateHelper.areGatesOpen(gates));
-    }
   }
 }

@@ -1265,7 +1265,11 @@ package org.jspresso.framework.view.flex {
         label = remoteAction.name;
       }
       var button:Button = createButton(label, remoteAction.description, remoteAction.icon);
-		  BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
+		  //BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
+      var updateButtonState:Function = function (enabled:Boolean):void {
+        button.enabled = enabled;
+      };
+      BindingUtils.bindSetter(updateButtonState, remoteAction, "enabled", true);
 		  _remotePeerRegistry.register(remoteAction);
 		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
 		    _actionHandler.execute(remoteAction);

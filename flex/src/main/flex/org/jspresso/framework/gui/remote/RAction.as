@@ -17,6 +17,7 @@ package org.jspresso.framework.gui.remote {
 
     import org.jspresso.framework.util.remote.RemotePeer;
 		
+    [Bindable]
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RAction")]
     public class RAction extends RemotePeer {
 

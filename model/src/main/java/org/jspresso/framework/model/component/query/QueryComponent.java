@@ -202,10 +202,31 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public Integer getPageCount() {
+    if (getRecordCount() == null) {
+      return null;
+    }
     if (getPageSize() == null || getPageSize().intValue() <= 0) {
       return new Integer(1);
     }
     return new Integer(getRecordCount().intValue() / getPageSize().intValue()
         + 1);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isNextPageEnabled() {
+    return getPageCount() != null && getPage() != null
+        && getPage().intValue() < getPageCount().intValue() - 1;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isPreviousPageEnabled() {
+    return getPage() != null && getPage().intValue() > 0;
+  }
+
 }

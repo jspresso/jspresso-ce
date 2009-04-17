@@ -19,10 +19,6 @@
 package org.jspresso.framework.view.wings;
 
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
@@ -33,23 +29,11 @@ import javax.swing.KeyStroke;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.model.IModelGate;
-import org.jspresso.framework.model.EmbeddedModelProvider;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-import org.jspresso.framework.util.gate.GateHelper;
-import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
-import org.jspresso.framework.view.IActionFactory;
+import org.jspresso.framework.view.AbstractActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -57,7 +41,7 @@ import org.wings.SComponent;
 import org.wings.SIcon;
 
 /**
- * A swing action factory.
+ * A wings action factory.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -75,10 +59,8 @@ import org.wings.SIcon;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class WingsActionFactory implements IActionFactory<Action, SComponent> {
-
-  private IIconFactory<SIcon>  iconFactory;
-  private ITranslationProvider translationProvider;
+public class WingsActionFactory extends
+    AbstractActionFactory<Action, SComponent, SIcon> {
 
   /**
    * {@inheritDoc}
@@ -98,60 +80,7 @@ public class WingsActionFactory implements IActionFactory<Action, SComponent> {
       Locale locale) {
     Action wingsAction = new ActionAdapter(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
-    if (action.getActionabilityGates() != null) {
-      Collection<IGate> clonedGates = new HashSet<IGate>();
-      for (IGate gate : action.getActionabilityGates()) {
-        final IGate clonedGate = gate.clone();
-        if (clonedGate instanceof IModelGate) {
-          if (modelDescriptor instanceof IComponentDescriptorProvider) {
-            ((IModelGate) clonedGate)
-                .setModelProvider(new EmbeddedModelProvider(
-                    (IComponentDescriptorProvider<?>) modelDescriptor));
-            viewConnector
-                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                  public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                    ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                        .getModelProvider()).setModel(evt.getNewValue());
-                  }
-                });
-          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
-            IRelationshipEndPropertyDescriptor reverseDescriptor = ((ICollectionPropertyDescriptor<?>) modelDescriptor)
-                .getReverseRelationEnd();
-            if (reverseDescriptor instanceof IComponentDescriptorProvider) {
-              ((IModelGate) clonedGate)
-                  .setModelProvider(new EmbeddedModelProvider(
-                      (IComponentDescriptorProvider<?>) reverseDescriptor));
-            } else if (reverseDescriptor instanceof ICollectionDescriptorProvider) {
-              ((IModelGate) clonedGate)
-                  .setModelProvider(new EmbeddedModelProvider(
-                      ((ICollectionDescriptorProvider<?>) reverseDescriptor)
-                          .getCollectionDescriptor().getElementDescriptor()));
-            }
-            final ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) viewConnector)
-                .getCollectionConnector();
-            collectionConnector
-                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                  public void connectorValueChange(
-                      @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
-                    if (collectionConnector.getModelConnector() != null) {
-                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                          .getModelProvider())
-                          .setModel(collectionConnector.getModelProvider()
-                              .getModel());
-                    } else {
-                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                          .getModelProvider()).setModel(null);
-                    }
-                  }
-                });
-          }
-        }
-        clonedGates.add(clonedGate);
-      }
-      new GatesListener(wingsAction, clonedGates);
-    }
+    attachActionGates(action, modelDescriptor, viewConnector, wingsAction);
     return wingsAction;
   }
 
@@ -169,26 +98,6 @@ public class WingsActionFactory implements IActionFactory<Action, SComponent> {
   @Override
   public void setActionName(Action action, String name) {
     action.putValue(Action.NAME, name);
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<SIcon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 
   private final class ActionAdapter extends AbstractAction {
@@ -225,14 +134,15 @@ public class WingsActionFactory implements IActionFactory<Action, SComponent> {
       } else {
         this.viewConnector = viewConnector;
       }
-      putValue(Action.NAME, action.getI18nName(translationProvider, locale));
-      String i18nDescription = action.getI18nDescription(translationProvider,
-          locale);
+      putValue(Action.NAME, action
+          .getI18nName(getTranslationProvider(), locale));
+      String i18nDescription = action.getI18nDescription(
+          getTranslationProvider(), locale);
       if (i18nDescription != null) {
         putValue(Action.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
       }
-      putValue(Action.SMALL_ICON, iconFactory.getIcon(action.getIconImageURL(),
-          IIconFactory.TINY_ICON_SIZE));
+      putValue(Action.SMALL_ICON, getIconFactory().getIcon(
+          action.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
       if (action.getMnemonicAsString() != null) {
         putValue(Action.MNEMONIC_KEY, new Integer(KeyStroke.getKeyStroke(
             action.getMnemonicAsString()).getKeyCode()));
@@ -273,36 +183,6 @@ public class WingsActionFactory implements IActionFactory<Action, SComponent> {
         actionContext.put(ActionContextConstants.ACTION_WIDGET, e.getSource());
         actionHandler.execute(action, actionContext);
       }
-    }
-  }
-
-  private final class GatesListener implements PropertyChangeListener {
-
-    private Action            action;
-    private Collection<IGate> gates;
-
-    /**
-     * Constructs a new <code>GatesListener</code> instance.
-     * 
-     * @param action
-     *          the action to (de)activate based on gates state.
-     * @param gates
-     *          the gates that determine action state.
-     */
-    public GatesListener(Action action, Collection<IGate> gates) {
-      this.action = action;
-      this.gates = gates;
-      for (IGate gate : gates) {
-        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(
-        @SuppressWarnings("unused") PropertyChangeEvent evt) {
-      action.setEnabled(GateHelper.areGatesOpen(gates));
     }
   }
 }

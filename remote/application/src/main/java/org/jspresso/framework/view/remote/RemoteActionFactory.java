@@ -18,10 +18,6 @@
  */
 package org.jspresso.framework.view.remote;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
@@ -29,28 +25,16 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.model.IModelGate;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
-import org.jspresso.framework.model.EmbeddedModelProvider;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-import org.jspresso.framework.util.gate.GateHelper;
-import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
-import org.jspresso.framework.view.IActionFactory;
+import org.jspresso.framework.view.AbstractActionFactory;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -74,13 +58,12 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoteActionFactory implements IActionFactory<RAction, RComponent> {
+public class RemoteActionFactory extends
+    AbstractActionFactory<RAction, RComponent, RIcon> {
 
   private IGUIDGenerator        guidGenerator;
-  private IIconFactory<RIcon>   iconFactory;
   private IRemoteCommandHandler remoteCommandHandler;
   private IRemotePeerRegistry   remotePeerRegistry;
-  private ITranslationProvider  translationProvider;
 
   /**
    * {@inheritDoc}
@@ -100,60 +83,7 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
       Locale locale) {
     RAction remoteAction = createRAction(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
-    if (action.getActionabilityGates() != null) {
-      Collection<IGate> clonedGates = new HashSet<IGate>();
-      for (IGate gate : action.getActionabilityGates()) {
-        final IGate clonedGate = gate.clone();
-        if (clonedGate instanceof IModelGate) {
-          if (modelDescriptor instanceof IComponentDescriptorProvider) {
-            ((IModelGate) clonedGate)
-                .setModelProvider(new EmbeddedModelProvider(
-                    (IComponentDescriptorProvider<?>) modelDescriptor));
-            viewConnector
-                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                  public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                    ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                        .getModelProvider()).setModel(evt.getNewValue());
-                  }
-                });
-          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
-            IRelationshipEndPropertyDescriptor reverseDescriptor = ((ICollectionPropertyDescriptor<?>) modelDescriptor)
-                .getReverseRelationEnd();
-            if (reverseDescriptor instanceof IComponentDescriptorProvider) {
-              ((IModelGate) clonedGate)
-                  .setModelProvider(new EmbeddedModelProvider(
-                      (IComponentDescriptorProvider<?>) reverseDescriptor));
-            } else if (reverseDescriptor instanceof ICollectionDescriptorProvider) {
-              ((IModelGate) clonedGate)
-                  .setModelProvider(new EmbeddedModelProvider(
-                      ((ICollectionDescriptorProvider<?>) reverseDescriptor)
-                          .getCollectionDescriptor().getElementDescriptor()));
-            }
-            final ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) viewConnector)
-                .getCollectionConnector();
-            collectionConnector
-                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                  public void connectorValueChange(
-                      @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
-                    if (collectionConnector.getModelConnector() != null) {
-                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                          .getModelProvider())
-                          .setModel(collectionConnector.getModelProvider()
-                              .getModel());
-                    } else {
-                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                          .getModelProvider()).setModel(null);
-                    }
-                  }
-                });
-          }
-        }
-        clonedGates.add(clonedGate);
-      }
-      new GatesListener(remoteAction, clonedGates);
-    }
+    attachActionGates(action, modelDescriptor, viewConnector, remoteAction);
     return remoteAction;
   }
 
@@ -163,6 +93,11 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
   @Override
   public void setActionEnabled(RAction action, boolean enabled) {
     action.setEnabled(enabled);
+
+    RemoteEnablementCommand command = new RemoteEnablementCommand();
+    command.setTargetPeerGuid(action.getGuid());
+    command.setEnabled(action.isEnabled());
+    remoteCommandHandler.registerCommand(command);
   }
 
   /**
@@ -181,16 +116,6 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
    */
   public void setGuidGenerator(IGUIDGenerator guidGenerator) {
     this.guidGenerator = guidGenerator;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<RIcon> iconFactory) {
-    this.iconFactory = iconFactory;
   }
 
   /**
@@ -213,28 +138,18 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
     this.remotePeerRegistry = remotePeerRegistry;
   }
 
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
-  }
-
   private RAction createRAction(IDisplayableAction action,
       IActionHandler actionHandler, RComponent sourceComponent,
       IModelDescriptor modelDescriptor, IValueConnector viewConnector,
       Locale locale) {
     RAction remoteAction = new RAction(guidGenerator.generateGUID());
-    remoteAction.setName(action.getI18nName(translationProvider, locale));
-    String i18nDescription = action.getI18nDescription(translationProvider,
-        locale);
+    remoteAction.setName(action.getI18nName(getTranslationProvider(), locale));
+    String i18nDescription = action.getI18nDescription(
+        getTranslationProvider(), locale);
     if (i18nDescription != null) {
       remoteAction.setDescription(i18nDescription);
     }
-    remoteAction.setIcon(iconFactory.getIcon(action.getIconImageURL(),
+    remoteAction.setIcon(getIconFactory().getIcon(action.getIconImageURL(),
         IIconFactory.TINY_ICON_SIZE));
     if (action.getMnemonicAsString() != null) {
       remoteAction.setMnemonicAsString(action.getMnemonicAsString());
@@ -314,41 +229,6 @@ public class RemoteActionFactory implements IActionFactory<RAction, RComponent> 
         // e.getSource());
         actionHandler.execute(action, actionContext);
       }
-    }
-  }
-
-  private final class GatesListener implements PropertyChangeListener {
-
-    private RAction           action;
-    private Collection<IGate> gates;
-
-    /**
-     * Constructs a new <code>GatesListener</code> instance.
-     * 
-     * @param action
-     *          the action to (de)activate based on gates state.
-     * @param gates
-     *          the gates that determine action state.
-     */
-    public GatesListener(RAction action, Collection<IGate> gates) {
-      this.action = action;
-      this.gates = gates;
-      for (IGate gate : gates) {
-        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(
-        @SuppressWarnings("unused") PropertyChangeEvent evt) {
-      action.setEnabled(GateHelper.areGatesOpen(gates));
-
-      RemoteEnablementCommand command = new RemoteEnablementCommand();
-      command.setTargetPeerGuid(action.getGuid());
-      command.setEnabled(action.isEnabled());
-      remoteCommandHandler.registerCommand(command);
     }
   }
 }

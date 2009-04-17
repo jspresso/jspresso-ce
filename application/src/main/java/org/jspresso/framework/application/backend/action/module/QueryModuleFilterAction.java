@@ -67,7 +67,7 @@ public class QueryModuleFilterAction extends AbstractBackendAction {
           .getChildConnector("filter");
       context
           .put(ActionContextConstants.QUERY_MODEL_CONNECTOR, filterConnector);
-      IQueryComponent queryComponent = (IQueryComponent) module.getFilter();
+      IQueryComponent queryComponent = module.getFilter();
       if (pageOffset == null || pageOffset.intValue() == 0) {
         // This is a plain first query.
         queryComponent.setPage(null);

@@ -3,12 +3,14 @@
 Bugs fixed
 ----------
 2769168  	 1-1 relationships with composition=true cloning
+2770973  	 NullPointer on actionability gates
 
 New features
 ------------
 2769159  	 Subview model descriptor should override parent one
 2769161  	 Introduce startup action for workspaces
 2770273  	 Support html text in Flex alerts
+2770380  	 Support paging in collection views
 
 3.0.0
 =====

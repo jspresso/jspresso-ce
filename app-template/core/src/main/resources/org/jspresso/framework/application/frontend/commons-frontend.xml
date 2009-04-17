@@ -80,6 +80,18 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/forward-48x48.png" />
     <property name="pageOffset" value="1" />
     <property name="nextAction" ref="lovFindFrontAction"/>
+    <property
+      name="actionabilityGates">
+      <bean
+        class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+        <property
+          name="accessorFactory"
+          ref="accessorFactory" />
+        <property
+          name="booleanPropertyName"
+          value="nextPageEnabled" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="previousLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction" scope="prototype">
@@ -88,6 +100,18 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
     <property name="pageOffset" value="-1" />
     <property name="nextAction" ref="lovFindFrontAction"/>
+    <property
+      name="actionabilityGates">
+      <bean
+        class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+        <property
+          name="accessorFactory"
+          ref="accessorFactory" />
+        <property
+          name="booleanPropertyName"
+          value="previousPageEnabled" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="printOkFrontAction" parent="okDialogFrontAction">
@@ -235,10 +259,34 @@
 
   <bean id="nextModuleFilterPageAction" parent="nextLovPageFrontAction" scope="prototype">
     <property name="nextAction" ref="queryModuleFilterAction"/>
+    <property
+      name="actionabilityGates">
+      <bean
+        class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+        <property
+          name="accessorFactory"
+          ref="accessorFactory" />
+        <property
+          name="booleanPropertyName"
+          value="filter.nextPageEnabled" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="previousModuleFilterPageAction" parent="previousLovPageFrontAction" scope="prototype">
     <property name="nextAction" ref="queryModuleFilterAction"/>
+    <property
+      name="actionabilityGates">
+      <bean
+        class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+        <property
+          name="accessorFactory"
+          ref="accessorFactory" />
+        <property
+          name="booleanPropertyName"
+          value="filter.previousPageEnabled" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="scriptedBackAction" class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction">

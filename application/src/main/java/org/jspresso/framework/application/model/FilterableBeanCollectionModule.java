@@ -18,11 +18,10 @@
  */
 package org.jspresso.framework.application.model;
 
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
-
 
 /**
  * A bean collection module that offers a filter.
@@ -45,7 +44,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class FilterableBeanCollectionModule extends BeanCollectionModule {
 
-  private Object                       filter;
+  private IQueryComponent              filter;
   private IComponentDescriptor<Object> filterComponentDescriptor;
   private IViewDescriptor              filterViewDescriptor;
 
@@ -54,7 +53,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    * 
    * @return the filter.
    */
-  public Object getFilter() {
+  public IQueryComponent getFilter() {
     return filter;
   }
 
@@ -83,9 +82,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    * Sets the filter.
    * 
    * @param filter
-   *            the filter to set.
+   *          the filter to set.
    */
-  public void setFilter(Object filter) {
+  public void setFilter(IQueryComponent filter) {
     if (ObjectUtils.equals(this.filter, filter)) {
       return;
     }
@@ -98,7 +97,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    * Sets the filterComponentDescriptor.
    * 
    * @param filterComponentDescriptor
-   *            the filterComponentDescriptor to set.
+   *          the filterComponentDescriptor to set.
    */
   public void setFilterComponentDescriptor(
       IComponentDescriptor<Object> filterComponentDescriptor) {
@@ -109,7 +108,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    * Sets the filterViewDescriptor.
    * 
    * @param filterViewDescriptor
-   *            the filterViewDescriptor to set.
+   *          the filterViewDescriptor to set.
    */
   public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
     this.filterViewDescriptor = filterViewDescriptor;
