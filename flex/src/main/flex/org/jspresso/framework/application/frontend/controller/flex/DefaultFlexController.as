@@ -43,6 +43,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.core.Container;
   import mx.core.IFlexDisplayObject;
   import mx.core.UIComponent;
+  import mx.core.mx_internal;
   import mx.events.CloseEvent;
   import mx.events.MenuEvent;
   import mx.managers.PopUpManager;
@@ -416,7 +417,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var alert:Alert = createAlert(messageCommand);
   
       if(messageCommand.messageIcon) {
-        var alertForm:UIComponent =  alert.getChildAt(0) as UIComponent;
+        var alertForm:UIComponent =  alert.mx_internal::alertForm;
         var messageIcon:Class = _viewFactory.getIconForComponent(alertForm, messageCommand.messageIcon);
         alert.iconClass = messageIcon;
         alert.removeChild(alertForm);
@@ -438,6 +439,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private function createAlert(messageCommand:RemoteMessageCommand):Alert {
       var alert:Alert;
       var alertCloseHandler:Function;
+      var message:String = new String(messageCommand.message);
+      var isHtml:Boolean = false;
+      if(message.indexOf("<html>") >= 0) {
+        isHtml = true;
+       	// The HTML string must be passed to the show() method, so the width and height of
+      	// the textField can be calculated correctly. All HTML tags will be removed and the
+      	// <br> and <br/> tag will be replaced by /n (new line).
+      	message = message.replace(/<br.*?>/g, "/n");
+      	message = message.replace(/<.*?>/g, "");
+      }
       if(messageCommand is RemoteOkCancelCommand) {
         alertCloseHandler = function(event:CloseEvent):void {
           switch(event.detail) {
@@ -447,7 +458,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
               execute((messageCommand as RemoteOkCancelCommand).cancelAction);
           }
         };
-        alert = Alert.show(messageCommand.message,
+        alert = Alert.show(message,
                    messageCommand.title,
                    Alert.OK|Alert.CANCEL,
                    null,
@@ -465,7 +476,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
               execute((messageCommand as RemoteYesNoCancelCommand).cancelAction);
           }
         };
-        alert = Alert.show(messageCommand.message,
+        alert = Alert.show(message,
                    messageCommand.title,
                    Alert.YES|Alert.NO|Alert.CANCEL,
                    null,
@@ -481,7 +492,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
               execute((messageCommand as RemoteYesNoCommand).noAction);
           }
         };
-        alert = Alert.show(messageCommand.message,
+        alert = Alert.show(message,
                    messageCommand.title,
                    Alert.YES|Alert.NO,
                    null,
@@ -489,13 +500,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
                    null,
                    Alert.NO);
       } else {
-        alert = Alert.show(messageCommand.message,
+        alert = Alert.show(message,
                    messageCommand.title,
                    Alert.OK,
                    null,
                    null,
                    null,
                    Alert.OK);
+      }
+      if(isHtml) {
+        alert.mx_internal::alertForm.mx_internal::textField.htmlText = messageCommand.message;
       }
       return alert;
     }
