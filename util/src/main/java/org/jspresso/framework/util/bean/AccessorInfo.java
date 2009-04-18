@@ -67,7 +67,7 @@ public class AccessorInfo {
   public static final String SETTER_PREFIX  = "set";
 
   private String             accessedPropertyName;
-  private EAccessorType       accessorType;
+  private EAccessorType      accessorType;
 
   /**
    * Constructs a new <code>AccessorInfo</code> instance. If the method passed

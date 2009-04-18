@@ -26,7 +26,6 @@ import org.apache.commons.beanutils.MethodUtils;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.bean.AccessorInfo;
 
-
 /**
  * This class is the default implementation of collection property accessors.
  * <p>
@@ -57,11 +56,11 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
    * Constructs a new default java bean collection property accessor.
    * 
    * @param property
-   *            the property to be accessed.
+   *          the property to be accessed.
    * @param beanClass
-   *            the java bean class.
+   *          the java bean class.
    * @param elementClass
-   *            the collection element class.
+   *          the collection element class.
    */
   public BeanCollectionAccessor(String property, Class<?> beanClass,
       Class<?> elementClass) {
@@ -80,12 +79,17 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
           new Class[] {getElementClass()});
     }
     try {
-      adderMethod.invoke(target, new Object[] {value});
+      adderMethod.invoke(getLastNestedTarget(target, getProperty()),
+          new Object[] {value});
     } catch (InvocationTargetException ex) {
       if (ex.getTargetException() instanceof RuntimeException) {
         throw (RuntimeException) ex.getTargetException();
       }
       throw ex;
+    } catch (IllegalArgumentException ex) {
+      throw new RuntimeException(ex);
+    } catch (NoSuchMethodException ex) {
+      throw new RuntimeException(ex);
     }
   }
 
@@ -109,12 +113,17 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
           new Class[] {getElementClass()});
     }
     try {
-      removerMethod.invoke(target, new Object[] {value});
+      removerMethod.invoke(getLastNestedTarget(target, getProperty()),
+          new Object[] {value});
     } catch (InvocationTargetException ex) {
       if (ex.getTargetException() instanceof RuntimeException) {
         throw (RuntimeException) ex.getTargetException();
       }
       throw ex;
+    } catch (IllegalArgumentException ex) {
+      throw new RuntimeException(ex);
+    } catch (NoSuchMethodException ex) {
+      throw new RuntimeException(ex);
     }
   }
 
@@ -122,7 +131,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
    * Capitalizes the first caracter of a string.
    * 
    * @param input
-   *            the string to capitalize the first caracter.
+   *          the string to capitalize the first caracter.
    * @return the transformed string.
    */
   protected String capitalizeFirst(String input) {

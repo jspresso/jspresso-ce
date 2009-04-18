@@ -21,6 +21,7 @@ package org.jspresso.framework.util.accessor.bean;
 import java.beans.PropertyDescriptor;
 
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
+import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
@@ -58,10 +59,10 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
    */
   public BeanPropertyAccessor(String property, Class<?> beanClass) {
     super(property);
-    this.beanClass = beanClass;
+    this.beanClass = computeTargetBeanClass(beanClass, getProperty());
 
     PropertyDescriptor propertyDescriptor = PropertyHelper
-        .getPropertyDescriptor(beanClass, property);
+        .getPropertyDescriptor(getBeanClass(), getLastNestedProperty());
     if (propertyDescriptor != null) {
       this.writable = propertyDescriptor.getWriteMethod() != null;
     }
@@ -74,6 +75,17 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
    */
   public boolean isWritable() {
     return writable;
+  }
+
+  private Class<?> computeTargetBeanClass(Class<?> beanClazz, String prop) {
+    int indexOfNestedDelim = prop.indexOf(IAccessor.NESTED_DELIM);
+    if (indexOfNestedDelim < 0) {
+      return beanClazz;
+    }
+    Class<?> rootClass = PropertyHelper.getPropertyType(beanClazz, prop
+        .substring(0, indexOfNestedDelim));
+    return computeTargetBeanClass(rootClass, prop
+        .substring(indexOfNestedDelim + 1));
   }
 
   /**

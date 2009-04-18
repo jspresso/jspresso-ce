@@ -38,8 +38,6 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    * 
    * @param target
    *          the target object.
-   * @param prop
-   *          the property to acccess.
    * @throws IllegalAccessException
    *           whenever an exception occurs.
    * @throws InvocationTargetException
@@ -48,26 +46,22 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    *           whenever an exception occurs.
    * @return the property value.
    */
-  protected Object getValue(Object target, String prop)
-      throws IllegalAccessException, InvocationTargetException,
-      NoSuchMethodException {
-    if (target != null) {
-      int indexOfNestedDelim = prop.indexOf(IAccessor.NESTED_DELIM);
-      if (indexOfNestedDelim < 0) {
-        if (target instanceof Map) {
-          if (PropertyHelper.getPropertyNames(target.getClass()).contains(prop)) {
-            // We are explicitely on a bean property. Do not use
-            // PropertyUtils.getProperty since it will detect that the target is
-            // a
-            // Map and access its properties as such.
-            return PropertyUtils.getSimpleProperty(target, prop);
-          }
-          return PropertyUtils.getProperty(target, prop);
+  public Object getValue(Object target) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
+    Object finalTarget = getLastNestedTarget(target, getProperty());
+    if (finalTarget != null) {
+      if (finalTarget instanceof Map) {
+        if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
+            getLastNestedProperty())) {
+          // We are explicitely on a bean property. Do not use
+          // PropertyUtils.getProperty since it will detect that the target
+          // is a Map and access its properties as such.
+          return PropertyUtils.getSimpleProperty(finalTarget,
+              getLastNestedProperty());
         }
-        return PropertyUtils.getProperty(target, prop);
+        return PropertyUtils.getProperty(finalTarget, getLastNestedProperty());
       }
-      Object root = getValue(target, prop.substring(0, indexOfNestedDelim));
-      return getValue(root, prop.substring(indexOfNestedDelim + 1));
+      return PropertyUtils.getProperty(finalTarget, getLastNestedProperty());
     }
     return null;
   }
@@ -78,8 +72,6 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    * 
    * @param target
    *          the target object.
-   * @param prop
-   *          the property to acccess.
    * @param value
    *          the value to set.
    * @throws IllegalAccessException
@@ -89,54 +81,27 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    * @throws NoSuchMethodException
    *           whenever an exception occurs.
    */
-  protected void setValue(Object target, String prop, Object value)
-      throws IllegalAccessException, InvocationTargetException,
-      NoSuchMethodException {
-    if (target != null) {
-      try {
-        int indexOfNestedDelim = prop.indexOf(IAccessor.NESTED_DELIM);
-        if (indexOfNestedDelim < 0) {
-          if (target instanceof Map) {
-            if (PropertyHelper.getPropertyNames(target.getClass()).contains(
-                prop)) {
-              // We are explicitely on a bean property. Do not use
-              // PropertyUtils.getProperty since it will detect that the target
-              // is a Map and access its properties as such.
-              PropertyUtils.setSimpleProperty(target, prop, value);
-            } else {
-              PropertyUtils.setProperty(target, prop, value);
-            }
-          } else {
-            PropertyUtils.setProperty(target, prop, value);
-          }
-        } else {
-          Object root = getValue(target, prop.substring(0, indexOfNestedDelim));
-          setValue(root, prop.substring(indexOfNestedDelim + 1), value);
-        }
-      } catch (InvocationTargetException ex) {
-        if (ex.getTargetException() instanceof RuntimeException) {
-          throw (RuntimeException) ex.getTargetException();
-        }
-        throw ex;
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getValue(Object target) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException {
-    return getValue(target, getProperty());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void setValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    setValue(target, getProperty(), value);
+    Object finalTarget = getLastNestedTarget(target, getProperty());
+    if (finalTarget != null) {
+      if (finalTarget instanceof Map) {
+        if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
+            getLastNestedProperty())) {
+          // We are explicitely on a bean property. Do not use
+          // PropertyUtils.getProperty since it will detect that the target
+          // is a Map and access its properties as such.
+          PropertyUtils.setSimpleProperty(finalTarget, getLastNestedProperty(),
+              value);
+        } else {
+          PropertyUtils
+              .setProperty(finalTarget, getLastNestedProperty(), value);
+        }
+      } else {
+        PropertyUtils.setProperty(finalTarget, getLastNestedProperty(), value);
+      }
+    }
   }
 
   /**
@@ -146,5 +111,59 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
    */
   protected String getProperty() {
     return property;
+  }
+
+  /**
+   * Gets the last target of a nested property.
+   * 
+   * @param target
+   *          the starting target.
+   * @param prop
+   *          the property.
+   * @return the last target of a nested property.
+   * @throws IllegalAccessException
+   *           whenever an exception occurs.
+   * @throws InvocationTargetException
+   *           whenever an exception occurs.
+   * @throws NoSuchMethodException
+   *           whenever an exception occurs.
+   */
+  protected Object getLastNestedTarget(Object target, String prop)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    if (target != null) {
+      int indexOfNestedDelim = prop.indexOf(IAccessor.NESTED_DELIM);
+      if (indexOfNestedDelim < 0) {
+        return target;
+      }
+      if (target instanceof Map) {
+        if (PropertyHelper.getPropertyNames(target.getClass()).contains(prop)) {
+          // We are explicitely on a bean property. Do not use
+          // PropertyUtils.getProperty since it will detect that the target is
+          // a
+          // Map and access its properties as such.
+          return getLastNestedTarget(PropertyUtils.getSimpleProperty(target,
+              prop.substring(0, indexOfNestedDelim)), prop
+              .substring(indexOfNestedDelim + 1));
+        }
+        return getLastNestedTarget(PropertyUtils.getProperty(target, prop
+            .substring(0, indexOfNestedDelim)), prop
+            .substring(indexOfNestedDelim + 1));
+      }
+      return getLastNestedTarget(PropertyUtils.getProperty(target, prop
+          .substring(0, indexOfNestedDelim)), prop
+          .substring(indexOfNestedDelim + 1));
+    }
+    return null;
+  }
+
+  /**
+   * Gets the final nested property.
+   * 
+   * @return the final nested property.
+   */
+  protected String getLastNestedProperty() {
+    return getProperty().substring(
+        getProperty().lastIndexOf(IAccessor.NESTED_DELIM) + 1);
   }
 }

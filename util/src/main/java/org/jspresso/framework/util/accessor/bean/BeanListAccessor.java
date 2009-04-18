@@ -26,7 +26,6 @@ import org.apache.commons.beanutils.MethodUtils;
 import org.jspresso.framework.util.accessor.IListAccessor;
 import org.jspresso.framework.util.bean.AccessorInfo;
 
-
 /**
  * This class is the default implementation of list property accessors.
  * <p>
@@ -55,11 +54,11 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
    * Constructs a new default java bean list property accessor.
    * 
    * @param property
-   *            the property to be accessed.
+   *          the property to be accessed.
    * @param beanClass
-   *            the java bean class.
+   *          the java bean class.
    * @param elementClass
-   *            the collection element class.
+   *          the collection element class.
    */
   public BeanListAccessor(String property, Class<?> beanClass,
       Class<?> elementClass) {
@@ -77,12 +76,17 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
           new Class[] {Integer.TYPE, getElementClass()});
     }
     try {
-      adderAtMethod.invoke(target, new Object[] {new Integer(index), value});
+      adderAtMethod.invoke(getLastNestedTarget(target, getProperty()),
+          new Object[] {new Integer(index), value});
     } catch (InvocationTargetException ex) {
       if (ex.getTargetException() instanceof RuntimeException) {
         throw (RuntimeException) ex.getTargetException();
       }
       throw ex;
+    } catch (IllegalArgumentException ex) {
+      throw new RuntimeException(ex);
+    } catch (NoSuchMethodException ex) {
+      throw new RuntimeException(ex);
     }
   }
 
