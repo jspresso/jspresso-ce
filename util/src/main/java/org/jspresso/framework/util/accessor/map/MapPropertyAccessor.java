@@ -18,11 +18,7 @@
  */
 package org.jspresso.framework.util.accessor.map;
 
-import java.lang.reflect.InvocationTargetException;
-
-import org.apache.commons.beanutils.PropertyUtils;
-import org.jspresso.framework.util.accessor.IAccessor;
-
+import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 
 /**
  * This class is the default implementation of property accessors. It relies on
@@ -44,33 +40,16 @@ import org.jspresso.framework.util.accessor.IAccessor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MapPropertyAccessor implements IAccessor {
-
-  private String property;
+public class MapPropertyAccessor extends AbstractPropertyAccessor {
 
   /**
    * Constructs a map property accessor.
    * 
    * @param property
-   *            the property accessed.
+   *          the property accessed.
    */
   public MapPropertyAccessor(String property) {
-    this.property = property;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getValue(Object target) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException {
-    // if (target != null && target instanceof Map) {
-    // return ((Map<?, ?>) target).get(property);
-    // }
-    // PropertyUtils can also handle maps
-    if (target != null) {
-      return PropertyUtils.getProperty(target, property);
-    }
-    return null;
+    super(property);
   }
 
   /**
@@ -80,32 +59,5 @@ public class MapPropertyAccessor implements IAccessor {
    */
   public boolean isWritable() {
     return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setValue(Object target, Object value)
-      throws IllegalAccessException, InvocationTargetException,
-      NoSuchMethodException {
-    if (target != null) {
-      try {
-        PropertyUtils.setProperty(target, property, value);
-      } catch (InvocationTargetException ex) {
-        if (ex.getTargetException() instanceof RuntimeException) {
-          throw (RuntimeException) ex.getTargetException();
-        }
-        throw ex;
-      }
-    }
-  }
-
-  /**
-   * Gets the property property.
-   * 
-   * @return the property.
-   */
-  protected String getProperty() {
-    return property;
   }
 }

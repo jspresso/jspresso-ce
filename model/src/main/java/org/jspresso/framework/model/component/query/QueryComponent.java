@@ -169,7 +169,15 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public void setPage(Integer page) {
+    Integer oldValue = getPage();
+    boolean oldPreviousPageEnabled = isPreviousPageEnabled();
+    boolean oldNextPageEnabled = isNextPageEnabled();
     this.page = page;
+    firePropertyChange(PAGE, oldValue, getPage());
+    firePropertyChange("previousPageEnabled", new Boolean(
+        oldPreviousPageEnabled), new Boolean(isPreviousPageEnabled()));
+    firePropertyChange("nextPageEnabled", new Boolean(oldNextPageEnabled),
+        new Boolean(isNextPageEnabled()));
   }
 
   /**
@@ -177,7 +185,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public void setPageSize(Integer pageSize) {
+    Integer oldValue = getPageSize();
+    Integer oldPageCount = getPageCount();
     this.pageSize = pageSize;
+    firePropertyChange(PAGE_SIZE, oldValue, getPageSize());
+    firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
   }
 
   /**
@@ -194,7 +206,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    *          the recordCount to set.
    */
   public void setRecordCount(Integer recordCount) {
+    Integer oldValue = getRecordCount();
+    Integer oldPageCount = getPageCount();
+    boolean oldNextPageEnabled = isNextPageEnabled();
     this.recordCount = recordCount;
+    firePropertyChange(RECORD_COUNT, oldValue, getRecordCount());
+    firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
+    firePropertyChange("nextPageEnabled", new Boolean(oldNextPageEnabled),
+        new Boolean(isNextPageEnabled()));
   }
 
   /**
@@ -218,7 +237,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public boolean isNextPageEnabled() {
     return getPageCount() != null && getPage() != null
-        && getPage().intValue() < getPageCount().intValue() - 1;
+        && getPage().intValue() < getPageCount().intValue() - 2;
   }
 
   /**

@@ -42,18 +42,23 @@ import java.lang.reflect.InvocationTargetException;
 public interface IAccessor {
 
   /**
+   * <code>NESTED_DELIM</code> is '.' constant for nested properties.
+   */
+  char NESTED_DELIM = '.';
+
+  /**
    * Gets the value from the target of this accessor.
    * 
    * @param target
-   *            the target from which to get the value.
+   *          the target from which to get the value.
    * @return the value obtained.
    * @throws NoSuchMethodException
-   *             if a matching method is not found.
+   *           if a matching method is not found.
    * @throws InvocationTargetException
-   *             if the underlying method throws an exception.
+   *           if the underlying method throws an exception.
    * @throws IllegalAccessException
-   *             if this <code>Method</code> object enforces Java language
-   *             access control and the underlying method is inaccessible.
+   *           if this <code>Method</code> object enforces Java language access
+   *           control and the underlying method is inaccessible.
    */
   Object getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;
@@ -69,16 +74,16 @@ public interface IAccessor {
    * Sets the value on the target of this accessor.
    * 
    * @param target
-   *            the target on which to set the value.
+   *          the target on which to set the value.
    * @param value
-   *            the value to set.
+   *          the value to set.
    * @throws InvocationTargetException
-   *             if the underlying method throws an exception.
+   *           if the underlying method throws an exception.
    * @throws IllegalAccessException
-   *             if this <code>Method</code> object enforces Java language
-   *             access control and the underlying method is inaccessible.
+   *           if this <code>Method</code> object enforces Java language access
+   *           control and the underlying method is inaccessible.
    * @throws NoSuchMethodException
-   *             if a matching method is not found.
+   *           if a matching method is not found.
    */
   void setValue(Object target, Object value) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;

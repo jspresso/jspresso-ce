@@ -4,6 +4,7 @@ Bugs fixed
 ----------
 2769168  	 1-1 relationships with composition=true cloning
 2770973  	 NullPointer on actionability gates
+2772086  	 Nested accessors fail when accessing beans in maps
 
 New features
 ------------

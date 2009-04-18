@@ -112,7 +112,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
         throw new NestedRuntimeException(ex);
       }
     } else {
-      this.open = true;
+      this.open = !openOnTrue;
     }
     firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }

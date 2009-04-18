@@ -24,8 +24,8 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractBackendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
+import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
-
 
 /**
  * Initialize a module filter with a query entity.
@@ -56,8 +56,8 @@ public class InitModuleFilterAction extends AbstractBackendAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IValueConnector filterModelConnector = getModuleConnector(
-        context).getChildConnector("filter");
+    IValueConnector filterModelConnector = getModuleConnector(context)
+        .getChildConnector(FilterableBeanCollectionModuleDescriptor.FILTER);
     context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR,
         filterModelConnector);
     context.put(ActionContextConstants.COMPONENT_REF_DESCRIPTOR,

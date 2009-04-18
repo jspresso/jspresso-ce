@@ -47,27 +47,37 @@ public interface IQueryComponent extends Map<String, Object> {
   /**
    * "queriedComponents" string constant.
    */
-  String QUERIED_COMPONENTS = "queriedComponents";
+  String QUERIED_COMPONENTS    = "queriedComponents";
 
   /**
    * "page" string constant.
    */
-  String PAGE               = "page";
+  String PAGE                  = "page";
 
   /**
    * "pageSize" string constant.
    */
-  String PAGE_SIZE          = "pageSize";
+  String PAGE_SIZE             = "pageSize";
 
   /**
    * "recordCount" string constant.
    */
-  String RECORD_COUNT       = "recordCount";
+  String RECORD_COUNT          = "recordCount";
 
   /**
    * "pageCount" string constant.
    */
-  String PAGE_COUNT         = "pageCount";
+  String PAGE_COUNT            = "pageCount";
+
+  /**
+   * "nextPageEnabled" string constant.
+   */
+  String NEXT_PAGE_ENABLED     = "nextPageEnabled";
+
+  /**
+   * "previousPageEnabled" string constant.
+   */
+  String PREVIOUS_PAGE_ENABLED = "previousPageEnabled";
 
   /**
    * Gets the list of components result of the query.

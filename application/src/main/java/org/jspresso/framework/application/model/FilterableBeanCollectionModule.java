@@ -18,8 +18,13 @@
  */
 package org.jspresso.framework.application.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -47,6 +52,14 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   private IQueryComponent              filter;
   private IComponentDescriptor<Object> filterComponentDescriptor;
   private IViewDescriptor              filterViewDescriptor;
+  private PropertyChangeListener       filterComponentTracker;
+
+  /**
+   * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
+   */
+  public FilterableBeanCollectionModule() {
+    filterComponentTracker = new FilterComponentTracker();
+  }
 
   /**
    * Gets the filter.
@@ -89,8 +102,17 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
       return;
     }
     Object oldValue = getFilter();
+    if (oldValue instanceof IPropertyChangeCapable) {
+      ((IPropertyChangeCapable) oldValue)
+          .removePropertyChangeListener(filterComponentTracker);
+    }
     this.filter = filter;
-    firePropertyChange("filter", oldValue, getFilter());
+    if (filter instanceof IPropertyChangeCapable) {
+      ((IPropertyChangeCapable) filter)
+          .addPropertyChangeListener(filterComponentTracker);
+    }
+    firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER,
+        oldValue, getFilter());
   }
 
   /**
@@ -113,4 +135,16 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
     this.filterViewDescriptor = filterViewDescriptor;
   }
+
+  private class FilterComponentTracker implements PropertyChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(PropertyChangeEvent evt) {
+      firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
+          + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+    }
+  }
+
 }

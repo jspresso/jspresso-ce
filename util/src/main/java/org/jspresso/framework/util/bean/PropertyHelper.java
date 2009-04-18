@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.jspresso.framework.util.accessor.IAccessor;
 
 /**
  * This helper class contains utility methods to work with bean properties.
@@ -56,15 +57,15 @@ public final class PropertyHelper {
    * processed.
    * 
    * @param beanClass
-   *            the class to get the property descriptor of.
+   *          the class to get the property descriptor of.
    * @param property
-   *            the property to be searched for its descriptor.
+   *          the property to be searched for its descriptor.
    * @return the property descriptor found.
    */
   public static PropertyDescriptor getPropertyDescriptor(Class<?> beanClass,
       String property) {
     PropertyDescriptor descriptorToReturn = null;
-    int nestedDotIndex = property.indexOf('.');
+    int nestedDotIndex = property.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
       PropertyDescriptor rootDescriptor = getPropertyDescriptor(beanClass,
           property.substring(0, nestedDotIndex));
@@ -119,7 +120,7 @@ public final class PropertyHelper {
    * Retrieves all property names declared by a bean class.
    * 
    * @param beanClass
-   *            the class to introspect.
+   *          the class to introspect.
    * @return the collection of property names.
    */
   public static Collection<String> getPropertyNames(Class<?> beanClass) {
@@ -141,9 +142,9 @@ public final class PropertyHelper {
    * Retrieves the type of a bean property.
    * 
    * @param beanClass
-   *            the bean class on which to look for the property.
+   *          the bean class on which to look for the property.
    * @param property
-   *            the property to look for.
+   *          the property to look for.
    * @return the type of the property.
    */
   public static Class<?> getPropertyType(Class<?> beanClass, String property) {

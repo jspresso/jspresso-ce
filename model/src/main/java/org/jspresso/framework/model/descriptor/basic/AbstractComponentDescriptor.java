@@ -42,6 +42,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
@@ -211,7 +212,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
     IPropertyDescriptor descriptor = null;
-    int nestedDotIndex = propertyName.indexOf('.');
+    int nestedDotIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
       if (nestedPropertyDescriptors == null) {
         nestedPropertyDescriptors = new HashMap<String, IPropertyDescriptor>();

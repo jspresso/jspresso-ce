@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 
-
 /**
  * The model descriptor for filterable bean collection modules.
  * <p>
@@ -52,13 +51,18 @@ public class FilterableBeanCollectionModuleDescriptor extends
     BeanCollectionModuleDescriptor {
 
   /**
+   * <code>FILTER</code> is the "filter" constant.
+   */
+  public static final String FILTER = "filter";
+
+  /**
    * Constructs a new <code>FilterableBeanCollectionModuleDescriptor</code>
    * instance.
    * 
    * @param moduleObjectReferencedDescriptor
-   *            the component descriptor of the module objects.
+   *          the component descriptor of the module objects.
    * @param moduleFilterReferencedDescriptor
-   *            the component descriptor for the filter object.
+   *          the component descriptor for the filter object.
    */
   public FilterableBeanCollectionModuleDescriptor(
       IComponentDescriptor<Object> moduleObjectReferencedDescriptor,
@@ -72,11 +76,11 @@ public class FilterableBeanCollectionModuleDescriptor extends
    * instance.
    * 
    * @param name
-   *            the name of the descriptor (the actual module class name).
+   *          the name of the descriptor (the actual module class name).
    * @param moduleObjectReferencedDescriptor
-   *            the component descriptor of the module objects.
+   *          the component descriptor of the module objects.
    * @param moduleFilterReferencedDescriptor
-   *            the component descriptor for the filter object.
+   *          the component descriptor for the filter object.
    */
   protected FilterableBeanCollectionModuleDescriptor(String name,
       IComponentDescriptor<Object> moduleObjectReferencedDescriptor,
@@ -86,7 +90,7 @@ public class FilterableBeanCollectionModuleDescriptor extends
     BasicReferencePropertyDescriptor<IQueryComponent> filterDescriptor = new BasicReferencePropertyDescriptor<IQueryComponent>();
     filterDescriptor.setReferencedDescriptor(new BasicQueryComponentDescriptor(
         moduleFilterReferencedDescriptor));
-    filterDescriptor.setName("filter");
+    filterDescriptor.setName(FILTER);
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
         getPropertyDescriptors());

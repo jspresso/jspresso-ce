@@ -24,7 +24,6 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
-
 /**
  * This is the default implementation of the accessor factory.
  * <p>
@@ -54,39 +53,40 @@ public class BasicAccessorFactory implements IAccessorFactory {
    */
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
       Class<?> beanClass, Class<?> elementClass) {
-    return getAccessorDelegate(beanClass).createCollectionPropertyAccessor(
-        property, beanClass, elementClass);
+    return getAccessorDelegate(beanClass, property)
+        .createCollectionPropertyAccessor(property, beanClass, elementClass);
   }
 
   /**
    * {@inheritDoc}
    */
   public IAccessor createPropertyAccessor(String property, Class<?> beanClass) {
-    return getAccessorDelegate(beanClass).createPropertyAccessor(property,
-        beanClass);
+    return getAccessorDelegate(beanClass, property).createPropertyAccessor(
+        property, beanClass);
   }
 
   /**
    * Sets the beanAccessorFactory.
    * 
-   * @param beanAccessorFactory the beanAccessorFactory to set.
+   * @param beanAccessorFactory
+   *          the beanAccessorFactory to set.
    */
   public void setBeanAccessorFactory(IAccessorFactory beanAccessorFactory) {
     this.beanAccessorFactory = beanAccessorFactory;
   }
 
-  
   /**
    * Sets the mapAccessorFactory.
    * 
-   * @param mapAccessorFactory the mapAccessorFactory to set.
+   * @param mapAccessorFactory
+   *          the mapAccessorFactory to set.
    */
   public void setMapAccessorFactory(IAccessorFactory mapAccessorFactory) {
     this.mapAccessorFactory = mapAccessorFactory;
   }
 
-  
-  private IAccessorFactory getAccessorDelegate(Class<?> beanClass) {
+  private IAccessorFactory getAccessorDelegate(Class<?> beanClass,
+      @SuppressWarnings("unused") String property) {
     IAccessorFactory delegate;
     if (beanClass == null || Map.class.isAssignableFrom(beanClass)) {
       delegate = mapAccessorFactory;

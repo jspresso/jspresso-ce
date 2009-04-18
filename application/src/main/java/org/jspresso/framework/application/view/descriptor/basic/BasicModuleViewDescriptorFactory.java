@@ -35,7 +35,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicNestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
-
 /**
  * The default implementation for module view descriptor factory.
  * <p>
@@ -100,7 +99,7 @@ public class BasicModuleViewDescriptorFactory implements
         }
         ((BasicViewDescriptor) filterViewDescriptor)
             .setModelDescriptor(moduleDescriptor
-                .getPropertyDescriptor("filter"));
+                .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
         BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
         decorator.setNorthViewDescriptor(filterViewDescriptor);
         decorator.setCenterViewDescriptor(projectedViewDescriptor);
@@ -138,7 +137,7 @@ public class BasicModuleViewDescriptorFactory implements
    * Sets the queryViewDescriptorFactory.
    * 
    * @param queryViewDescriptorFactory
-   *            the queryViewDescriptorFactory to set.
+   *          the queryViewDescriptorFactory to set.
    */
   public void setQueryViewDescriptorFactory(
       IQueryViewDescriptorFactory queryViewDescriptorFactory) {

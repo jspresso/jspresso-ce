@@ -19,16 +19,13 @@
 package org.jspresso.framework.util.accessor.bean;
 
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.jspresso.framework.util.accessor.IAccessor;
+import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 import org.jspresso.framework.util.bean.PropertyHelper;
 
-
 /**
- * This class is the default implementation of property accessors. It relies on
- * Jakarta commmons beanutils.
+ * This class is the default implementation of bean property accessors. It
+ * relies on Jakarta commmons beanutils.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -46,22 +43,21 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BeanPropertyAccessor implements IAccessor {
+public class BeanPropertyAccessor extends AbstractPropertyAccessor {
 
   private Class<?> beanClass;
-  private String   property;
-  private boolean  writable = true;
+  private boolean  writable;
 
   /**
    * Constructs a property accessor based on reflection.
    * 
    * @param property
-   *            the property accessed.
+   *          the property accessed.
    * @param beanClass
-   *            the class of the beans accessed using this accessor.
+   *          the class of the beans accessed using this accessor.
    */
   public BeanPropertyAccessor(String property, Class<?> beanClass) {
-    this.property = property;
+    super(property);
     this.beanClass = beanClass;
 
     PropertyDescriptor propertyDescriptor = PropertyHelper
@@ -69,17 +65,6 @@ public class BeanPropertyAccessor implements IAccessor {
     if (propertyDescriptor != null) {
       this.writable = propertyDescriptor.getWriteMethod() != null;
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getValue(Object target) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException {
-    if (target != null) {
-      return PropertyUtils.getProperty(target, property);
-    }
-    return null;
   }
 
   /**
@@ -92,24 +77,6 @@ public class BeanPropertyAccessor implements IAccessor {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public void setValue(Object target, Object value)
-      throws IllegalAccessException, InvocationTargetException,
-      NoSuchMethodException {
-    if (target != null) {
-      try {
-        PropertyUtils.setProperty(target, property, value);
-      } catch (InvocationTargetException ex) {
-        if (ex.getTargetException() instanceof RuntimeException) {
-          throw (RuntimeException) ex.getTargetException();
-        }
-        throw ex;
-      }
-    }
-  }
-
-  /**
    * Gets the beanClass property.
    * 
    * @return the beanClass.
@@ -118,12 +85,4 @@ public class BeanPropertyAccessor implements IAccessor {
     return beanClass;
   }
 
-  /**
-   * Gets the property property.
-   * 
-   * @return the property.
-   */
-  protected String getProperty() {
-    return property;
-  }
 }
