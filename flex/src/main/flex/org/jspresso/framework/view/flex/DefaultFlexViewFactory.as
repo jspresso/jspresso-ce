@@ -48,7 +48,6 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Tree;
   import mx.controls.VRule;
   import mx.controls.dataGridClasses.DataGridColumn;
-  import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
   import mx.core.ScrollPolicy;
@@ -86,6 +85,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RIcon;
   import org.jspresso.framework.gui.remote.RImageComponent;
   import org.jspresso.framework.gui.remote.RIntegerField;
+  import org.jspresso.framework.gui.remote.RLabel;
   import org.jspresso.framework.gui.remote.RList;
   import org.jspresso.framework.gui.remote.RNumericComponent;
   import org.jspresso.framework.gui.remote.RPasswordField;
@@ -284,8 +284,10 @@ package org.jspresso.framework.view.flex {
       var textComponent:UIComponent;
       if(remoteTextComponent is RTextArea) {
         textComponent = createTextArea(remoteTextComponent as RTextArea);
-      } else if(remoteTextComponent is RTextComponent) {
+      } else if(remoteTextComponent is RTextField) {
         textComponent = createTextField(remoteTextComponent as RTextField);
+      } else if(remoteTextComponent is RLabel) {
+        textComponent = createLabel(remoteTextComponent as RLabel);
       }
       return textComponent;
     }
@@ -762,7 +764,13 @@ package org.jspresso.framework.view.flex {
         
         var componentCell:GridItem = new GridItem();
 
-        componentLabel.text = rComponent.label;
+        if(rComponent.label) {
+          if(isHtml(rComponent.label)) {
+            componentLabel.htmlText = rComponent.label;
+          } else {
+            componentLabel.text = rComponent.label;
+          }
+        }
 
         if(elementWidth > remoteForm.columnCount) {
           elementWidth = remoteForm.columnCount;
@@ -1245,6 +1253,69 @@ package org.jspresso.framework.view.flex {
       }
       bindTextArea(textArea, remoteTextArea.state);
       return textArea;
+    }
+
+    private function createLabel(remoteLabel:RLabel):UIComponent {
+      var uiComponent:UIComponent;
+      if(remoteLabel.multiLine) {
+        var textArea:TextArea = new TextArea();
+        textArea.editable = false;
+        textArea.wordWrap = false;
+        if(remoteLabel.maxLength > 0) {
+          textArea.maxChars = remoteLabel.maxLength;
+        }
+        uiComponent = textArea;
+      } else {
+        var label:Label = new Label();
+        if(remoteLabel.maxLength > 0) {
+          sizeMaxComponentWidth(label, remoteLabel.maxLength);
+        } else {
+          sizeMaxComponentWidth(label);
+        }
+        uiComponent = label;
+      }
+      bindLabel(uiComponent, remoteLabel.state);
+      return uiComponent;
+    }
+
+    private function bindLabel(label:UIComponent, remoteState:RemoteValueState):void {
+      if(label is Label) {
+        var updateLabel:Function = function (value:Object):void {
+          if(value == null) {
+            (label as Label).text = null;
+            (label as Label).htmlText = null;
+          } else {
+            if(isHtml(value.toString())) {
+              (label as Label).text = null;
+              (label as Label).htmlText = value.toString();
+            } else {
+              (label as Label).htmlText = null;
+              (label as Label).text = value.toString();
+            }
+          }
+        };
+        BindingUtils.bindSetter(updateLabel, remoteState, "value", true);
+      } else if(label is TextArea) {
+        var updateTextArea:Function = function (value:Object):void {
+          if(value == null) {
+            (label as TextArea).text = null;
+            (label as TextArea).htmlText = null;
+          } else {
+            if(isHtml(value.toString())) {
+              (label as TextArea).text = null;
+              (label as TextArea).htmlText = value.toString();
+            } else {
+              (label as TextArea).htmlText = null;
+              (label as TextArea).text = value.toString();
+            }
+          }
+        };
+        BindingUtils.bindSetter(updateTextArea, remoteState, "value", true);
+      }
+    }
+    
+    private static function isHtml(text:String):Boolean {
+      return text.toUpperCase().indexOf("<HTML>") >= 0;
     }
 
     private function createTextField(remoteTextField:RTextField):UIComponent {

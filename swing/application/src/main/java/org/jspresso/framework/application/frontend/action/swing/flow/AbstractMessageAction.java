@@ -24,7 +24,6 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
 import org.jspresso.framework.util.html.HtmlHelper;
 
-
 /**
  * Base class for all message swing actions. It just keeps a reference on the
  * message to be displayed.
@@ -51,11 +50,11 @@ public abstract class AbstractMessageAction extends AbstractSwingAction {
    * Gets the message.
    * 
    * @param context
-   *            the actionContext.
+   *          the actionContext.
    * @return the message.
    */
   protected String getMessage(Map<String, Object> context) {
-    return HtmlHelper.emphasis((String) context
-        .get(ActionContextConstants.ACTION_PARAM));
+    return HtmlHelper.toHtml(HtmlHelper.emphasis((String) context
+        .get(ActionContextConstants.ACTION_PARAM)));
   }
 }

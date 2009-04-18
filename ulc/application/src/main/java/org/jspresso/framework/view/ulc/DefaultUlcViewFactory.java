@@ -48,6 +48,7 @@ import org.jspresso.framework.binding.ulc.ULCComboBoxConnector;
 import org.jspresso.framework.binding.ulc.ULCDateFieldConnector;
 import org.jspresso.framework.binding.ulc.ULCImageConnector;
 import org.jspresso.framework.binding.ulc.ULCJEditTextAreaConnector;
+import org.jspresso.framework.binding.ulc.ULCLabelConnector;
 import org.jspresso.framework.binding.ulc.ULCPasswordFieldConnector;
 import org.jspresso.framework.binding.ulc.ULCReferenceFieldConnector;
 import org.jspresso.framework.binding.ulc.ULCTextAreaConnector;
@@ -360,8 +361,7 @@ public class DefaultUlcViewFactory extends
         viewDescriptor);
     Map<String, IView<ULCComponent>> childrenViews = new HashMap<String, IView<ULCComponent>>();
 
-    viewComponent.add(createEmptyComponent(),
-        ICardViewDescriptor.DEFAULT_CARD);
+    viewComponent.add(createEmptyComponent(), ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityComponent(),
         ICardViewDescriptor.SECURITY_CARD);
 
@@ -396,7 +396,7 @@ public class DefaultUlcViewFactory extends
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -984,9 +984,17 @@ public class DefaultUlcViewFactory extends
   protected IView<ULCComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    ULCTextField viewComponent = createULCTextField();
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
+    ULCComponent viewComponent;
+    IValueConnector connector;
+    if (propertyDescriptor.isReadOnly()) {
+      viewComponent = createULCLabel();
+      connector = new ULCLabelConnector(propertyDescriptor.getName(),
+          (ULCLabel) viewComponent);
+    } else {
+      viewComponent = createULCTextField();
+      connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
+          (ULCTextField) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1270,14 +1278,25 @@ public class DefaultUlcViewFactory extends
   protected IView<ULCComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
-    ULCTextArea viewComponent = createULCTextArea();
-    viewComponent.setLineWrap(true);
+    IValueConnector connector;
     ULCScrollPane scrollPane = createULCScrollPane();
-    scrollPane.setViewPortView(viewComponent);
-    scrollPane
-        .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    ULCTextAreaConnector connector = new ULCTextAreaConnector(
-        propertyDescriptor.getName(), viewComponent);
+    if (propertyDescriptor.isReadOnly()) {
+      ULCLabel viewComponent = createULCLabel();
+      viewComponent.setVerticalAlignment(IDefaults.TOP);
+      viewComponent.setHorizontalAlignment(IDefaults.LEADING);
+      connector = new ULCLabelConnector(propertyDescriptor.getName(),
+          viewComponent);
+      ((ULCLabelConnector) connector).setMultiLine(true);
+      scrollPane.setViewPortView(viewComponent);
+    } else {
+      ULCTextArea viewComponent = createULCTextArea();
+      viewComponent.setLineWrap(true);
+      scrollPane.setViewPortView(viewComponent);
+      scrollPane
+          .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+      connector = new ULCTextAreaConnector(propertyDescriptor.getName(),
+          viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
     return constructView(scrollPane, null, connector);
   }

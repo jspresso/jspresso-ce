@@ -97,6 +97,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.gui.remote.RIcon;
   import org.jspresso.framework.gui.remote.RImageComponent;
   import org.jspresso.framework.gui.remote.RIntegerField;
+  import org.jspresso.framework.gui.remote.RLabel;
   import org.jspresso.framework.gui.remote.RList;
   import org.jspresso.framework.gui.remote.RPasswordField;
   import org.jspresso.framework.gui.remote.RPercentField;
@@ -822,6 +823,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.gui.remote.RIcon", RIcon);
       registerClassAlias("org.jspresso.framework.gui.remote.RImageComponent", RImageComponent);
       registerClassAlias("org.jspresso.framework.gui.remote.RIntegerField", RIntegerField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RLabel", RLabel);
       registerClassAlias("org.jspresso.framework.gui.remote.RList", RList);
       registerClassAlias("org.jspresso.framework.gui.remote.RPasswordField", RPasswordField);
       registerClassAlias("org.jspresso.framework.gui.remote.RPercentField", RPercentField);

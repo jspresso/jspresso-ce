@@ -50,6 +50,7 @@ import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RIntegerField;
+import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
@@ -885,7 +886,12 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RTextField viewComponent = createRTextField(connector);
+    RComponent viewComponent;
+    if (propertyDescriptor.isReadOnly()) {
+      viewComponent = createRLabel(connector);
+    } else {
+      viewComponent = createRTextField(connector);
+    }
     IView<RComponent> view = constructView(viewComponent, null, connector);
     return view;
   }
@@ -985,7 +991,13 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RTextArea viewComponent = createRTextArea(connector);
+    RComponent viewComponent;
+    if (propertyDescriptor.isReadOnly()) {
+      viewComponent = createRLabel(connector);
+      ((RLabel) viewComponent).setMultiLine(true);
+    } else {
+      viewComponent = createRTextArea(connector);
+    }
     IView<RComponent> view = constructView(viewComponent, null, connector);
     return view;
   }
@@ -1311,6 +1323,14 @@ public class DefaultRemoteViewFactory extends
 
   private RTextArea createRTextArea(IValueConnector connector) {
     RTextArea component = new RTextArea(guidGenerator.generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  private RLabel createRLabel(IValueConnector connector) {
+    RLabel component = new RLabel(guidGenerator.generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }

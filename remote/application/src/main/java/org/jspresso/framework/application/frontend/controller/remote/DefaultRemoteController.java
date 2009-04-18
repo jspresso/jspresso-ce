@@ -382,18 +382,27 @@ public class DefaultRemoteController extends
    */
   protected void handleCommand(RemoteCommand command) {
     if (command instanceof RemoteStartCommand) {
-      RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
-      IView<RComponent> loginView = createLoginView();
-      initLoginCommand.setLoginView(loginView.getPeer());
-      initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(
-          getTranslationProvider(), getLocale()));
-      initLoginCommand.setMessage(getTranslationProvider().getTranslation(
-          LoginUtils.CRED_MESSAGE, getLocale()));
-      initLoginCommand.setOkLabel(getTranslationProvider().getTranslation("ok",
-          getLocale()));
-      initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
-          IIconFactory.SMALL_ICON_SIZE));
-      registerCommand(initLoginCommand);
+      if (getLoginContextName() != null) {
+        RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
+        IView<RComponent> loginView = createLoginView();
+        initLoginCommand.setLoginView(loginView.getPeer());
+        initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(
+            getTranslationProvider(), getLocale()));
+        initLoginCommand.setMessage(getTranslationProvider().getTranslation(
+            LoginUtils.CRED_MESSAGE, getLocale()));
+        initLoginCommand.setOkLabel(getTranslationProvider().getTranslation(
+            "ok", getLocale()));
+        initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
+            IIconFactory.SMALL_ICON_SIZE));
+        registerCommand(initLoginCommand);
+      } else {
+        performLogin();
+        execute(getStartupAction(), getInitialActionContext());
+        List<RemoteCommand> initCommands = createInitCommands();
+        for (RemoteCommand initCommand : initCommands) {
+          registerCommand(initCommand);
+        }
+      }
     } else if (command instanceof RemoteLoginCommand) {
       if (performLogin()) {
         execute(getStartupAction(), getInitialActionContext());

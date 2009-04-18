@@ -39,6 +39,16 @@ package org.jspresso.framework.util.html;
  */
 public final class HtmlHelper {
 
+  /**
+   * <code>HTML_START</code>.
+   */
+  public static final String HTML_START = "<HTML>";
+
+  /**
+   * <code>HTML_END</code>.
+   */
+  public static final String HTML_END   = "</HTML>";
+
   private HtmlHelper() {
     // private constructor for helper class.
   }
@@ -47,12 +57,40 @@ public final class HtmlHelper {
    * Transforms a string to html and emphasis.
    * 
    * @param message
-   *            the message to transform.
+   *          the message to transform.
    * @return the html emphasised string.
    */
   public static String emphasis(String message) {
     if (message != null) {
-      return "<html><b>" + message + "</b></html>";
+      return "<b>" + message + "</b>";
+    }
+    return message;
+  }
+
+  /**
+   * Keeps the text preformatted.
+   * 
+   * @param message
+   *          the message to transform.
+   * @return the html preformatted text.
+   */
+  public static String preformat(String message) {
+    if (message != null) {
+      return "<pre>" + message + "</pre>";
+    }
+    return message;
+  }
+
+  /**
+   * Surrounds with html tags.
+   * 
+   * @param message
+   *          the message to transform.
+   * @return the html preformatted text.
+   */
+  public static String toHtml(String message) {
+    if (message != null) {
+      return HTML_START + message + HTML_END;
     }
     return message;
   }

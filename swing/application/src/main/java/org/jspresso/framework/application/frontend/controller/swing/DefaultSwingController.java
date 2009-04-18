@@ -292,20 +292,22 @@ public class DefaultSwingController extends
     }
     Component sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
-          .getMessage()), getTranslationProvider().getTranslation("error",
-          getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
-          .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .toHtml(HtmlHelper.emphasis(ex.getMessage())),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
+              IIconFactory.LARGE_ICON_SIZE));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .emphasis(((BusinessException) ex).getI18nMessage(
-              getTranslationProvider(), getLocale())), getTranslationProvider()
-          .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
-          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
+              getTranslationProvider(), getLocale()))),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
+              IIconFactory.LARGE_ICON_SIZE));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .emphasis(getTranslationProvider().getTranslation(
-              "concurrency.error.description", getLocale())),
+          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
+              "concurrency.error.description", getLocale()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
               IIconFactory.LARGE_ICON_SIZE));
@@ -317,7 +319,8 @@ public class DefaultSwingController extends
           IIconFactory.MEDIUM_ICON_SIZE));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
-      dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
+      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
+          .getLocalizedMessage())));
       dialog.setDetails(ex);
       int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
       dialog.setSize(8 * screenRes, 3 * screenRes);
@@ -537,6 +540,12 @@ public class DefaultSwingController extends
 
   private void initLoginProcess() {
     createControllerFrame();
+    if (getLoginContextName() == null) {
+      performLogin();
+      updateControllerFrame();
+      execute(getStartupAction(), getInitialActionContext());
+      return;
+    }
 
     IView<JComponent> loginView = createLoginView();
 

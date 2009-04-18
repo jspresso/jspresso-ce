@@ -1,0 +1,86 @@
+/*
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.framework.binding.ulc;
+
+import org.apache.commons.lang.StringUtils;
+import org.jspresso.framework.util.html.HtmlHelper;
+
+import com.ulcjava.base.application.ULCLabel;
+
+/**
+ * A connector for label.
+ * <p>
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
+
+  private boolean multiLine;
+
+  /**
+   * Constructs a new <code>ULCLabelConnector</code> instance.
+   * 
+   * @param id
+   *          the connector id.
+   * @param connectedULCComponent
+   *          the label.
+   */
+  public ULCLabelConnector(String id, ULCLabel connectedULCComponent) {
+    super(id, connectedULCComponent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void bindULCComponent() {
+    // Empty since a label is read-only.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void setConnecteeValue(Object aValue) {
+    if (aValue == null) {
+      getConnectedULCComponent().setText(null);
+    } else {
+      if (multiLine) {
+        if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
+          getConnectedULCComponent().setText(
+              HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
+        } else {
+          getConnectedULCComponent().setText(aValue.toString());
+        }
+      } else {
+        getConnectedULCComponent().setText(aValue.toString());
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getConnecteeValue() {
+    String text = getConnectedULCComponent().getText();
+    if (StringUtils.isEmpty(text)) {
+      return null;
+    }
+    return text;
+  }
+
+  /**
+   * Sets the multiLine.
+   * 
+   * @param multiLine
+   *          the multiLine to set.
+   */
+  public void setMultiLine(boolean multiLine) {
+    this.multiLine = multiLine;
+  }
+}

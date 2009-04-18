@@ -100,6 +100,7 @@ import org.jspresso.framework.binding.swing.JDateFieldConnector;
 import org.jspresso.framework.binding.swing.JEditTextAreaConnector;
 import org.jspresso.framework.binding.swing.JFormattedFieldConnector;
 import org.jspresso.framework.binding.swing.JImageConnector;
+import org.jspresso.framework.binding.swing.JLabelConnector;
 import org.jspresso.framework.binding.swing.JPasswordFieldConnector;
 import org.jspresso.framework.binding.swing.JPercentFieldConnector;
 import org.jspresso.framework.binding.swing.JReferenceFieldConnector;
@@ -831,7 +832,7 @@ public class DefaultSwingViewFactory extends
   protected JLabel createJLabel() {
     return new JLabel();
   }
-  
+
   /**
    * Creates a list.
    * 
@@ -1225,9 +1226,17 @@ public class DefaultSwingViewFactory extends
   protected IView<JComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    JTextField viewComponent = createJTextField();
-    JTextFieldConnector connector = new JTextFieldConnector(propertyDescriptor
-        .getName(), viewComponent);
+    JComponent viewComponent;
+    IValueConnector connector;
+    if (propertyDescriptor.isReadOnly()) {
+      viewComponent = createJLabel();
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
+    } else {
+      viewComponent = createJTextField();
+      connector = new JTextFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1474,14 +1483,25 @@ public class DefaultSwingViewFactory extends
   protected IView<JComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
-    JTextArea viewComponent = createJTextArea();
-    viewComponent.setLineWrap(true);
+    IValueConnector connector;
     JScrollPane scrollPane = createJScrollPane();
-    scrollPane.setViewportView(viewComponent);
-    scrollPane
-        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    JTextAreaConnector connector = new JTextAreaConnector(propertyDescriptor
-        .getName(), viewComponent);
+    if (propertyDescriptor.isReadOnly()) {
+      JLabel viewComponent = createJLabel();
+      viewComponent.setVerticalAlignment(SwingConstants.TOP);
+      viewComponent.setHorizontalAlignment(SwingConstants.LEADING);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          viewComponent);
+      ((JLabelConnector) connector).setMultiLine(true);
+      scrollPane.setViewportView(viewComponent);
+    } else {
+      JTextArea viewComponent = createJTextArea();
+      viewComponent.setLineWrap(true);
+      scrollPane.setViewportView(viewComponent);
+      scrollPane
+          .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      connector = new JTextAreaConnector(propertyDescriptor.getName(),
+          viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
     return constructView(scrollPane, null, connector);
   }

@@ -56,6 +56,7 @@ import org.jspresso.framework.binding.wings.SColorPickerConnector;
 import org.jspresso.framework.binding.wings.SComboBoxConnector;
 import org.jspresso.framework.binding.wings.SFormattedFieldConnector;
 import org.jspresso.framework.binding.wings.SImageConnector;
+import org.jspresso.framework.binding.wings.SLabelConnector;
 import org.jspresso.framework.binding.wings.SPasswordFieldConnector;
 import org.jspresso.framework.binding.wings.SPercentFieldConnector;
 import org.jspresso.framework.binding.wings.SReferenceFieldConnector;
@@ -1255,9 +1256,17 @@ public class DefaultWingsViewFactory extends
   protected IView<SComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    STextField viewComponent = createSTextField();
-    STextFieldConnector connector = new STextFieldConnector(propertyDescriptor
-        .getName(), viewComponent);
+    SComponent viewComponent;
+    IValueConnector connector;
+    if (propertyDescriptor.isReadOnly()) {
+      viewComponent = createSLabel();
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+    } else {
+      viewComponent = createSTextField();
+      connector = new STextFieldConnector(propertyDescriptor.getName(),
+          (STextField) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1487,13 +1496,25 @@ public class DefaultWingsViewFactory extends
   protected IView<SComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
-    STextArea viewComponent = createSTextArea();
-    viewComponent.setLineWrap(STextArea.VIRTUAL_WRAP);
-
-    STextAreaConnector connector = new STextAreaConnector(propertyDescriptor
-        .getName(), viewComponent);
+    IValueConnector connector;
+    SComponent viewComponent;
+    if (propertyDescriptor.isReadOnly()) {
+      viewComponent = createSLabel();
+      viewComponent.setVerticalAlignment(SConstants.TOP);
+      viewComponent.setHorizontalAlignment(SConstants.LEFT);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+      ((SLabelConnector) connector).setMultiLine(true);
+      SScrollPane scrollPane = createSScrollPane();
+      scrollPane.setViewportView(viewComponent);
+      viewComponent = scrollPane;
+    } else {
+      viewComponent = createSTextArea();
+      ((STextArea) viewComponent).setLineWrap(STextArea.VIRTUAL_WRAP);
+      connector = new STextAreaConnector(propertyDescriptor.getName(),
+          (STextArea) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
-
     IView<SComponent> view = constructView(viewComponent, null, connector);
     return view;
   }
