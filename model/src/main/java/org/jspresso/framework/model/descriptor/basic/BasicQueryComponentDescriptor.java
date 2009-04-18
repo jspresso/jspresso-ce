@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.jspresso.framework.model.component.IPageable;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -82,12 +83,24 @@ public class BasicQueryComponentDescriptor extends
     propertyDescriptors.add(qCPDescriptor);
 
     BasicIntegerPropertyDescriptor pagePropertyDescripror = new BasicIntegerPropertyDescriptor();
-    pagePropertyDescripror.setName(IQueryComponent.PAGE);
+    pagePropertyDescripror.setName(IPageable.PAGE);
+    pagePropertyDescripror.setReadOnly(true);
     propertyDescriptors.add(pagePropertyDescripror);
 
     BasicIntegerPropertyDescriptor pageSizePropertyDescripror = new BasicIntegerPropertyDescriptor();
-    pageSizePropertyDescripror.setName(IQueryComponent.PAGE_SIZE);
+    pageSizePropertyDescripror.setName(IPageable.PAGE_SIZE);
+    pageSizePropertyDescripror.setReadOnly(true);
     propertyDescriptors.add(pageSizePropertyDescripror);
+
+    BasicIntegerPropertyDescriptor pageCountPropertyDescripror = new BasicIntegerPropertyDescriptor();
+    pageCountPropertyDescripror.setName(IPageable.PAGE_COUNT);
+    pageCountPropertyDescripror.setReadOnly(true);
+    propertyDescriptors.add(pageCountPropertyDescripror);
+
+    BasicIntegerPropertyDescriptor recordCountPropertyDescripror = new BasicIntegerPropertyDescriptor();
+    recordCountPropertyDescripror.setName(IPageable.RECORD_COUNT);
+    recordCountPropertyDescripror.setReadOnly(true);
+    propertyDescriptors.add(recordCountPropertyDescripror);
 
     setPropertyDescriptors(propertyDescriptors);
     setDescription(componentDescriptor.getDescription());

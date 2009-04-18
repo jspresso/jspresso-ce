@@ -25,6 +25,50 @@
         </property>
       </bean>
     </property>
+    <property name="pagingStatusViewDescriptor" ref="pageableStatusView" />
+  </bean>
+
+  <!--
+    Standard views
+  -->
+  <bean id="pageableStatusModel" class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor">
+    <constructor-arg value="org.jspresso.framework.model.component.IPageable" />
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
+          <property name="name" value="page" />
+          <property name="readOnly" value="true" />
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
+          <property name="name" value="pageCount" />
+          <property name="readOnly" value="true" />
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
+          <property name="name" value="recordCount" />
+          <property name="readOnly" value="true" />
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="pageableStatusView" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
+    <property name="name" value="pageableStatus" />
+    <property name="modelDescriptor" ref="pageableStatusModel" />
+    <property name="columnCount" value="3" />
+    <property name="labelsPosition" value="ASIDE" />
+    <property name="propertyViewDescriptors">
+      <list>
+        <bean class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor">
+          <property name="name" value="page" />
+        </bean>
+        <bean class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor">
+          <property name="name" value="pageCount" />
+        </bean>
+        <bean class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor">
+          <property name="name" value="recordCount" />
+        </bean>
+      </list>
+    </property>
   </bean>
 
   <!--
@@ -74,42 +118,32 @@
     <property name="wrappedAction" ref="queryEntitiesBackAction" />
   </bean>
 
-  <bean id="nextLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction" scope="prototype">
+  <bean id="nextLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction"
+    scope="prototype">
     <property name="name" value="next.page.name" />
     <property name="description" value="next.page.description" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/forward-48x48.png" />
     <property name="pageOffset" value="1" />
-    <property name="nextAction" ref="lovFindFrontAction"/>
-    <property
-      name="actionabilityGates">
-      <bean
-        class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
-        <property
-          name="accessorFactory"
-          ref="accessorFactory" />
-        <property
-          name="booleanPropertyName"
-          value="nextPageEnabled" />
+    <property name="nextAction" ref="lovFindFrontAction" />
+    <property name="actionabilityGates">
+      <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+        <property name="accessorFactory" ref="accessorFactory" />
+        <property name="booleanPropertyName" value="nextPageEnabled" />
       </bean>
     </property>
   </bean>
 
-  <bean id="previousLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction" scope="prototype">
+  <bean id="previousLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction"
+    scope="prototype">
     <property name="name" value="previous.page.name" />
     <property name="description" value="previous.page.description" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
     <property name="pageOffset" value="-1" />
-    <property name="nextAction" ref="lovFindFrontAction"/>
-    <property
-      name="actionabilityGates">
-      <bean
-        class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
-        <property
-          name="accessorFactory"
-          ref="accessorFactory" />
-        <property
-          name="booleanPropertyName"
-          value="previousPageEnabled" />
+    <property name="nextAction" ref="lovFindFrontAction" />
+    <property name="actionabilityGates">
+      <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+        <property name="accessorFactory" ref="accessorFactory" />
+        <property name="booleanPropertyName" value="previousPageEnabled" />
       </bean>
     </property>
   </bean>
@@ -258,33 +292,21 @@
   </bean>
 
   <bean id="nextModuleFilterPageAction" parent="nextLovPageFrontAction" scope="prototype">
-    <property name="nextAction" ref="queryModuleFilterAction"/>
-    <property
-      name="actionabilityGates">
-      <bean
-        class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
-        <property
-          name="accessorFactory"
-          ref="accessorFactory" />
-        <property
-          name="booleanPropertyName"
-          value="filter.nextPageEnabled" />
+    <property name="nextAction" ref="queryModuleFilterAction" />
+    <property name="actionabilityGates">
+      <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+        <property name="accessorFactory" ref="accessorFactory" />
+        <property name="booleanPropertyName" value="filter.nextPageEnabled" />
       </bean>
     </property>
   </bean>
 
   <bean id="previousModuleFilterPageAction" parent="previousLovPageFrontAction" scope="prototype">
-    <property name="nextAction" ref="queryModuleFilterAction"/>
-    <property
-      name="actionabilityGates">
-      <bean
-        class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
-        <property
-          name="accessorFactory"
-          ref="accessorFactory" />
-        <property
-          name="booleanPropertyName"
-          value="filter.previousPageEnabled" />
+    <property name="nextAction" ref="queryModuleFilterAction" />
+    <property name="actionabilityGates">
+      <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+        <property name="accessorFactory" ref="accessorFactory" />
+        <property name="booleanPropertyName" value="filter.previousPageEnabled" />
       </bean>
     </property>
   </bean>

@@ -58,6 +58,7 @@ public class BasicModuleViewDescriptorFactory implements
     IModuleViewDescriptorFactory {
 
   private IQueryViewDescriptorFactory queryViewDescriptorFactory;
+  private IViewDescriptor             pagingStatusViewDescriptor;
 
   /**
    * {@inheritDoc}
@@ -105,6 +106,15 @@ public class BasicModuleViewDescriptorFactory implements
         decorator.setCenterViewDescriptor(projectedViewDescriptor);
         // decorator.setActionMap(projectedViewDescriptor.getActionMap());
         // ((BasicViewDescriptor) projectedViewDescriptor).setActionMap(null);
+        if (pagingStatusViewDescriptor != null) {
+          BasicNestingViewDescriptor nestingViewDescriptor = new BasicNestingViewDescriptor();
+          nestingViewDescriptor
+              .setModelDescriptor(moduleDescriptor
+                  .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
+          nestingViewDescriptor
+              .setNestedViewDescriptor(pagingStatusViewDescriptor);
+          decorator.setSouthViewDescriptor(nestingViewDescriptor);
+        }
         projectedViewDescriptor = decorator;
       }
       BasicNestingViewDescriptor moduleViewDescriptor = new BasicNestingViewDescriptor();
@@ -142,6 +152,17 @@ public class BasicModuleViewDescriptorFactory implements
   public void setQueryViewDescriptorFactory(
       IQueryViewDescriptorFactory queryViewDescriptorFactory) {
     this.queryViewDescriptorFactory = queryViewDescriptorFactory;
+  }
+
+  /**
+   * Sets the pagingStatusViewDescriptor.
+   * 
+   * @param pagingStatusViewDescriptor
+   *          the pagingStatusViewDescriptor to set.
+   */
+  public void setPagingStatusViewDescriptor(
+      IViewDescriptor pagingStatusViewDescriptor) {
+    this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
   }
 
 }

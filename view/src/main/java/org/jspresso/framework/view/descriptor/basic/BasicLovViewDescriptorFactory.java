@@ -53,6 +53,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
 
   private IQueryViewDescriptorFactory queryViewDescriptorFactory;
   private ActionMap                   resultViewActionMap;
+  private IViewDescriptor             pagingStatusViewDescriptor;
 
   /**
    * {@inheritDoc}
@@ -60,14 +61,26 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   @SuppressWarnings("unchecked")
   public IViewDescriptor createLovViewDescriptor(
       IReferencePropertyDescriptor entityRefDescriptor) {
-    BasicSplitViewDescriptor lovViewDescriptor = new BasicSplitViewDescriptor();
+    // BasicSplitViewDescriptor lovViewDescriptor = new
+    // BasicSplitViewDescriptor();
+    // lovViewDescriptor
+    // .setLeftTopViewDescriptor(queryViewDescriptorFactory
+    // .createQueryViewDescriptor(entityRefDescriptor
+    // .getComponentDescriptor()));
+    // lovViewDescriptor
+    // .setRightBottomViewDescriptor(createResultViewDescriptor(entityRefDescriptor
+    // .getComponentDescriptor()));
+    BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     lovViewDescriptor
-        .setLeftTopViewDescriptor(queryViewDescriptorFactory
+        .setNorthViewDescriptor(queryViewDescriptorFactory
             .createQueryViewDescriptor(entityRefDescriptor
                 .getComponentDescriptor()));
     lovViewDescriptor
-        .setRightBottomViewDescriptor(createResultViewDescriptor(entityRefDescriptor
+        .setCenterViewDescriptor(createResultViewDescriptor(entityRefDescriptor
             .getComponentDescriptor()));
+    if (pagingStatusViewDescriptor != null) {
+      lovViewDescriptor.setSouthViewDescriptor(pagingStatusViewDescriptor);
+    }
     return lovViewDescriptor;
 
   }
@@ -112,5 +125,16 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    */
   public void setResultViewActionMap(ActionMap resultViewActionMap) {
     this.resultViewActionMap = resultViewActionMap;
+  }
+
+  /**
+   * Sets the pagingStatusViewDescriptor.
+   * 
+   * @param pagingStatusViewDescriptor
+   *          the pagingStatusViewDescriptor to set.
+   */
+  public void setPagingStatusViewDescriptor(
+      IViewDescriptor pagingStatusViewDescriptor) {
+    this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
   }
 }
