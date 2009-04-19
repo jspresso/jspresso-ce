@@ -254,7 +254,7 @@ public class DefaultWingsViewFactory extends
     viewComponent.setActions(createBinaryActions(viewComponent, connector,
         propertyDescriptor, actionHandler, locale));
     adjustSizes(viewComponent, null, null);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -270,7 +270,7 @@ public class DefaultWingsViewFactory extends
     SCheckBoxConnector connector = new SCheckBoxConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -368,7 +368,7 @@ public class DefaultWingsViewFactory extends
     SColorPickerConnector connector = new SColorPickerConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -592,7 +592,7 @@ public class DefaultWingsViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), 64);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -616,7 +616,7 @@ public class DefaultWingsViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -635,7 +635,7 @@ public class DefaultWingsViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -669,7 +669,7 @@ public class DefaultWingsViewFactory extends
     SComboBoxConnector connector = new SComboBoxConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -748,7 +748,7 @@ public class DefaultWingsViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -829,7 +829,7 @@ public class DefaultWingsViewFactory extends
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -848,7 +848,7 @@ public class DefaultWingsViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -885,7 +885,7 @@ public class DefaultWingsViewFactory extends
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(viewComponent, null, null);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -1289,7 +1289,7 @@ public class DefaultWingsViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -1536,7 +1536,7 @@ public class DefaultWingsViewFactory extends
           (STextArea) viewComponent);
     }
     connector.setExceptionHandler(actionHandler);
-    IView<SComponent> view = constructView(viewComponent, null, connector);
+    IView<SComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -1556,7 +1556,7 @@ public class DefaultWingsViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getTimeTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**

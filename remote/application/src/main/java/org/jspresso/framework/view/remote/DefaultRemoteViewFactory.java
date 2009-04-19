@@ -253,7 +253,7 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(false, connector);
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     RActionList actionList = new RActionList(guidGenerator.generateGUID());
     actionList.setActions(createBinaryActions(viewComponent, connector,
         propertyDescriptor, actionHandler, locale).toArray(new RAction[0]));
@@ -274,7 +274,7 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RCheckBox viewComponent = createRCheckBox(connector);
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -373,7 +373,7 @@ public class DefaultRemoteViewFactory extends
     RColorField viewComponent = createRColorField(connector);
     viewComponent
         .setDefaultColor((String) propertyDescriptor.getDefaultValue());
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -489,7 +489,7 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     RDateField viewComponent = createRDateField(connector);
     viewComponent.setType(propertyDescriptor.getType().toString());
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -519,7 +519,7 @@ public class DefaultRemoteViewFactory extends
       }
       connector.setExceptionHandler(actionHandler);
       RDecimalField viewComponent = createRDecimalField(connector);
-      view = constructView(viewComponent, null, connector);
+      view = constructView(viewComponent, propertyViewDescriptor, connector);
     }
     if (propertyDescriptor.getMaxFractionDigit() != null) {
       ((RDecimalComponent) view.getPeer())
@@ -556,7 +556,7 @@ public class DefaultRemoteViewFactory extends
     } else {
       viewComponent.setMaxMillis(-1);
     }
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -587,7 +587,7 @@ public class DefaultRemoteViewFactory extends
     List<String> values = new ArrayList<String>();
     List<String> translations = new ArrayList<String>();
     List<RIcon> icons = new ArrayList<RIcon>();
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     for (String value : propertyDescriptor.getEnumerationValues()) {
       if (value != null && propertyDescriptor.isTranslated()) {
         values.add(value);
@@ -670,7 +670,7 @@ public class DefaultRemoteViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     RIntegerField viewComponent = createRIntegerField(connector);
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -762,7 +762,7 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RPasswordField viewComponent = createRPasswordField(connector);
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -786,7 +786,7 @@ public class DefaultRemoteViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     RPercentField viewComponent = createRPercentField(connector);
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -827,7 +827,7 @@ public class DefaultRemoteViewFactory extends
             propertyDescriptor.getReferencedDescriptor().getToStringProperty());
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(true, connector);
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     RAction lovAction = createLovAction(view.getPeer(), view.getConnector(),
         propertyDescriptor, actionHandler, locale);
     lovAction.setName(getTranslationProvider().getTranslation(
@@ -918,7 +918,7 @@ public class DefaultRemoteViewFactory extends
     } else {
       viewComponent = createRTextField(connector);
     }
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -1022,7 +1022,7 @@ public class DefaultRemoteViewFactory extends
     } else {
       viewComponent = createRTextArea(connector);
     }
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 
@@ -1066,7 +1066,7 @@ public class DefaultRemoteViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     RTimeField viewComponent = createRTimeField(connector);
-    IView<RComponent> view = constructView(viewComponent, null, connector);
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
 

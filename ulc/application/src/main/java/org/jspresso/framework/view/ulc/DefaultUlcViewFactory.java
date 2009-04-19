@@ -268,7 +268,7 @@ public class DefaultUlcViewFactory extends
     viewComponent.setActions(createBinaryActions(viewComponent, connector,
         propertyDescriptor, actionHandler, locale));
     adjustSizes(viewComponent, null, null);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -284,7 +284,7 @@ public class DefaultUlcViewFactory extends
     ULCToggleButtonConnector connector = new ULCToggleButtonConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -400,7 +400,7 @@ public class DefaultUlcViewFactory extends
     ULCColorPickerConnector connector = new ULCColorPickerConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -607,7 +607,7 @@ public class DefaultUlcViewFactory extends
     adjustSizes(viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), ClientContext
             .getScreenResolution() / 3);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -632,7 +632,7 @@ public class DefaultUlcViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -653,7 +653,7 @@ public class DefaultUlcViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -688,7 +688,7 @@ public class DefaultUlcViewFactory extends
     ULCComboBoxConnector connector = new ULCComboBoxConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -787,7 +787,7 @@ public class DefaultUlcViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -864,7 +864,7 @@ public class DefaultUlcViewFactory extends
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -884,7 +884,7 @@ public class DefaultUlcViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -921,7 +921,7 @@ public class DefaultUlcViewFactory extends
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(viewComponent, null, null);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -952,7 +952,7 @@ public class DefaultUlcViewFactory extends
     ULCJEditTextAreaConnector connector = new ULCJEditTextAreaConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -1017,7 +1017,7 @@ public class DefaultUlcViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -1319,7 +1319,7 @@ public class DefaultUlcViewFactory extends
           viewComponent);
     }
     connector.setExceptionHandler(actionHandler);
-    return constructView(scrollPane, null, connector);
+    return constructView(scrollPane, propertyViewDescriptor, connector);
   }
 
   /**
@@ -1340,7 +1340,7 @@ public class DefaultUlcViewFactory extends
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getTimeTemplateValue(propertyDescriptor));
-    return constructView(viewComponent, null, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
