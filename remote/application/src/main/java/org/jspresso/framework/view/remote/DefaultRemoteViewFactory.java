@@ -79,7 +79,6 @@ import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
@@ -246,8 +245,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createBinaryPropertyView(
-      IBinaryPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IBinaryPropertyDescriptor propertyDescriptor = (IBinaryPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
@@ -265,8 +266,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createBooleanPropertyView(
-      IBooleanPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
@@ -360,8 +363,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createColorPropertyView(
-      IColorPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
@@ -404,8 +409,8 @@ public class DefaultRemoteViewFactory extends
             + "] does not exist for model descriptor "
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
-      IView<RComponent> propertyView = createPropertyView(propertyDescriptor,
-          propertyViewDescriptor.getRenderedChildProperties(), actionHandler,
+      IView<RComponent> propertyView = createPropertyView(propertyViewDescriptor,
+          actionHandler,
           locale);
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
@@ -468,9 +473,11 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createDatePropertyView(
-      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      IPropertyViewDescriptor propertyViewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     IValueConnector connector;
+    IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     if (isDateServerParse()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(),
@@ -491,12 +498,14 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createDecimalPropertyView(
-      IDecimalPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IDecimalPropertyDescriptor propertyDescriptor = (IDecimalPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IView<RComponent> view;
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       view = createPercentPropertyView(
-          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
+          propertyViewDescriptor, actionHandler,
           locale);
     } else {
       IValueConnector connector;
@@ -527,8 +536,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createDurationPropertyView(
-      IDurationPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector;
     if (isDurationServerParse()) {
       connector = getConnectorFactory().createFormattedValueConnector(
@@ -565,8 +576,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createEnumerationPropertyView(
-      IEnumerationPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
@@ -642,8 +655,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createIntegerPropertyView(
-      IIntegerPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector;
     if (isNumberServerParse()) {
       connector = getConnectorFactory().createFormattedValueConnector(
@@ -721,9 +736,11 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createNumberPropertyView(
-      INumberPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IView<RComponent> view = super.createNumberPropertyView(propertyDescriptor,
+    INumberPropertyDescriptor propertyDescriptor = (INumberPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
+    IView<RComponent> view = super.createNumberPropertyView(propertyViewDescriptor,
         actionHandler, locale);
     ((RNumericComponent) view.getPeer()).setMaxValue(propertyDescriptor
         .getMaxValue());
@@ -737,8 +754,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createPasswordPropertyView(
-      IPasswordPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IPasswordPropertyDescriptor propertyDescriptor = (IPasswordPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
@@ -752,8 +771,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createPercentPropertyView(
-      IPercentPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector;
     if (isNumberServerParse()) {
       connector = getConnectorFactory().createFormattedValueConnector(
@@ -776,11 +797,13 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createPropertyView(
-      IPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler,
       Locale locale) {
-    IView<RComponent> view = super.createPropertyView(propertyDescriptor,
-        renderedChildProperties, actionHandler, locale);
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
+    IView<RComponent> view = super.createPropertyView(propertyViewDescriptor,
+        actionHandler, locale);
     if (view != null) {
       if (propertyDescriptor.getName() != null) {
         view.getPeer().setLabel(
@@ -795,8 +818,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createReferencePropertyView(
-      IReferencePropertyDescriptor<?> propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(propertyDescriptor.getName(),
             propertyDescriptor.getReferencedDescriptor().getToStringProperty());
@@ -841,9 +866,9 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createSourceCodePropertyView(
-      ISourceCodePropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    return createTextPropertyView(propertyDescriptor, actionHandler, locale);
+    return createTextPropertyView(propertyViewDescriptor, actionHandler, locale);
   }
 
   /**
@@ -880,13 +905,15 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createStringPropertyView(
-      IStringPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
-    if (propertyDescriptor.isReadOnly()) {
+    if (propertyViewDescriptor.isReadOnly()) {
       viewComponent = createRLabel(connector);
     } else {
       viewComponent = createRTextField(connector);
@@ -919,13 +946,9 @@ public class DefaultRemoteViewFactory extends
     List<RComponent> columns = new ArrayList<RComponent>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
-      String columnId = columnViewDescriptor.getName();
       try {
         actionHandler.checkAccess(columnViewDescriptor);
-        IPropertyDescriptor propertyDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getPropertyDescriptor(columnId);
-        IView<RComponent> column = createPropertyView(propertyDescriptor, null,
+        IView<RComponent> column = createPropertyView(columnViewDescriptor,
             actionHandler, locale);
         // Do not use standard createColumnConnector method to preserve
         // formatted value connectors.
@@ -985,13 +1008,15 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createTextPropertyView(
-      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      IPropertyViewDescriptor propertyViewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
+    ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
-    if (propertyDescriptor.isReadOnly()) {
+    if (propertyViewDescriptor.isReadOnly()) {
       viewComponent = createRLabel(connector);
       ((RLabel) viewComponent).setMultiLine(true);
     } else {
@@ -1006,10 +1031,12 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createTextualPropertyView(
-      IStringPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IView<RComponent> view = super.createTextualPropertyView(
-        propertyDescriptor, actionHandler, locale);
+        propertyViewDescriptor, actionHandler, locale);
     if (propertyDescriptor.getMaxLength() != null) {
       ((RTextComponent) view.getPeer()).setMaxLength(propertyDescriptor
           .getMaxLength().intValue());
@@ -1024,8 +1051,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createTimePropertyView(
-      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      IPropertyViewDescriptor propertyViewDescriptor, IActionHandler actionHandler,
       Locale locale) {
+    ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
+    .getModelDescriptor();
     IValueConnector connector;
     if (isDateServerParse()) {
       connector = getConnectorFactory().createFormattedValueConnector(

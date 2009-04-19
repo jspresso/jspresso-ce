@@ -101,12 +101,10 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
           .getRenderedProperties();
       List<IPropertyViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
       for (String renderedProperty : modelRenderedProperties) {
-        IPropertyDescriptor propertyDescriptor = componentDescriptor
-            .getPropertyDescriptor(renderedProperty);
         BasicPropertyViewDescriptor propertyViewDescriptor = new BasicPropertyViewDescriptor();
         propertyViewDescriptor.setName(renderedProperty);
-        propertyViewDescriptor.setGrantedRoles(propertyDescriptor
-            .getGrantedRoles());
+        propertyViewDescriptor.setModelDescriptor(componentDescriptor
+            .getPropertyDescriptor(renderedProperty));
         defaultPropertyViewDescriptors.add(propertyViewDescriptor);
       }
       return defaultPropertyViewDescriptors;

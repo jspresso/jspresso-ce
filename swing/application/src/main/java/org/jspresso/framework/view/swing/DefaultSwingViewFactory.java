@@ -251,8 +251,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createBinaryPropertyView(
-      IBinaryPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IBinaryPropertyDescriptor propertyDescriptor = (IBinaryPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JActionField viewComponent = createJActionField(false);
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -268,8 +270,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createBooleanPropertyView(
-      IBooleanPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JCheckBox viewComponent = createJCheckBox();
     JToggleButtonConnector connector = new JToggleButtonConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -361,8 +365,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createColorPropertyView(
-      IColorPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JColorPicker viewComponent = createJColorPicker();
     if (propertyDescriptor.getDefaultValue() != null) {
       int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
@@ -409,9 +415,8 @@ public class DefaultSwingViewFactory extends
             + "] does not exist for model descriptor "
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
-      IView<JComponent> propertyView = createPropertyView(propertyDescriptor,
-          propertyViewDescriptor.getRenderedChildProperties(), actionHandler,
-          locale);
+      IView<JComponent> propertyView = createPropertyView(
+          propertyViewDescriptor, actionHandler, locale);
       boolean forbidden = false;
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
@@ -438,7 +443,7 @@ public class DefaultSwingViewFactory extends
         propertyLabel.setText(" ");
       }
 
-      int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
+      int propertyWidth = propertyViewDescriptor.getWidth();
       if (propertyWidth > viewDescriptor.getColumnCount()) {
         propertyWidth = viewDescriptor.getColumnCount();
       }
@@ -573,8 +578,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createDatePropertyView(
-      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JDateField viewComponent = createJDateField(locale);
     DateFormat format = createDateFormat(propertyDescriptor, locale);
     viewComponent.getFormattedTextField().setFormatterFactory(
@@ -593,11 +600,12 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createDecimalPropertyView(
-      IDecimalPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IDecimalPropertyDescriptor propertyDescriptor = (IDecimalPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentPropertyView(
-          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
+      return createPercentPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
     JTextField viewComponent = createJTextField();
@@ -615,8 +623,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createDurationPropertyView(
-      IDurationPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
     JFormattedFieldConnector connector = new JFormattedFieldConnector(
@@ -640,8 +650,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createEnumerationPropertyView(
-      IEnumerationPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JComboBox viewComponent = createJComboBox();
     if (!propertyDescriptor.isMandatory()) {
       viewComponent.addItem(null);
@@ -728,8 +740,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createIntegerPropertyView(
-      IIntegerPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
     JFormattedFieldConnector connector = new JFormattedFieldConnector(
@@ -1085,8 +1099,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createPasswordPropertyView(
-      IPasswordPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IPasswordPropertyDescriptor propertyDescriptor = (IPasswordPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JPasswordField viewComponent = createJPasswordField();
     JPasswordFieldConnector connector = new JPasswordFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -1100,8 +1116,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createPercentPropertyView(
-      IPercentPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
     JPercentFieldConnector connector = new JPercentFieldConnector(
@@ -1117,8 +1135,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createReferencePropertyView(
-      IReferencePropertyDescriptor<?> propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
+        .getModelDescriptor();
     JActionField viewComponent = createJActionField(true);
     JReferenceFieldConnector connector = new JReferenceFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -1169,8 +1189,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createSourceCodePropertyView(
-      ISourceCodePropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ISourceCodePropertyDescriptor propertyDescriptor = (ISourceCodePropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JEditTextArea viewComponent = createJEditTextArea(propertyDescriptor
         .getLanguage());
     JEditTextAreaConnector connector = new JEditTextAreaConnector(
@@ -1224,11 +1246,13 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createStringPropertyView(
-      IStringPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
-    if (propertyDescriptor.isReadOnly()) {
+    if (propertyViewDescriptor.isReadOnly()) {
       viewComponent = createJLabel();
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
@@ -1390,8 +1414,8 @@ public class DefaultSwingViewFactory extends
         }
         column.setHeaderValue(columnName.toString());
 
-        IView<JComponent> editorView = createPropertyView(propertyDescriptor,
-            null, actionHandler, locale);
+        IView<JComponent> editorView = createPropertyView(columnViewDescriptor,
+            actionHandler, locale);
         if (editorView.getPeer() instanceof JActionField) {
           JActionField actionField = (JActionField) editorView.getPeer();
           actionField.setActions(Collections.singletonList(actionField
@@ -1481,11 +1505,13 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createTextPropertyView(
-      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     IValueConnector connector;
     JScrollPane scrollPane = createJScrollPane();
-    if (propertyDescriptor.isReadOnly()) {
+    if (propertyViewDescriptor.isReadOnly()) {
       JLabel viewComponent = createJLabel();
       viewComponent.setVerticalAlignment(SwingConstants.TOP);
       viewComponent.setHorizontalAlignment(SwingConstants.LEADING);
@@ -1511,8 +1537,10 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createTimePropertyView(
-      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
     JFormattedFieldConnector connector = new JFormattedFieldConnector(

@@ -58,13 +58,13 @@
     <property name="labelsPosition" value="ASIDE" />
     <property name="propertyViewDescriptors">
       <list>
-        <bean class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor">
+        <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="page" />
         </bean>
-        <bean class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor">
+        <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="pageCount" />
         </bean>
-        <bean class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor">
+        <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="recordCount" />
         </bean>
       </list>

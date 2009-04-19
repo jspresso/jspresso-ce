@@ -257,8 +257,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createBinaryPropertyView(
-      IBinaryPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IBinaryPropertyDescriptor propertyDescriptor = (IBinaryPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCActionField viewComponent = createULCActionField(false);
     ULCActionFieldConnector connector = new ULCActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -274,8 +276,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createBooleanPropertyView(
-      IBooleanPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCCheckBox viewComponent = createULCCheckBox();
     ULCToggleButtonConnector connector = new ULCToggleButtonConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -382,8 +386,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createColorPropertyView(
-      IColorPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCColorPicker viewComponent = createULCColorPicker();
     if (propertyDescriptor.getDefaultValue() != null) {
       int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
@@ -427,9 +433,8 @@ public class DefaultUlcViewFactory extends
             + "] does not exist for model descriptor "
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
-      IView<ULCComponent> propertyView = createPropertyView(propertyDescriptor,
-          propertyViewDescriptor.getRenderedChildProperties(), actionHandler,
-          locale);
+      IView<ULCComponent> propertyView = createPropertyView(
+          propertyViewDescriptor, actionHandler, locale);
       boolean forbidden = false;
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
@@ -456,7 +461,7 @@ public class DefaultUlcViewFactory extends
         propertyLabel.setText(" ");
       }
 
-      int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
+      int propertyWidth = propertyViewDescriptor.getWidth();
       if (propertyWidth > viewDescriptor.getColumnCount()) {
         propertyWidth = viewDescriptor.getColumnCount();
       }
@@ -590,11 +595,11 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createDatePropertyView(
-      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
-
     ULCDateField viewComponent = createULCDateField(format.toPattern(), locale);
     ULCDateFieldConnector connector = new ULCDateFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -610,11 +615,12 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createDecimalPropertyView(
-      IDecimalPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IDecimalPropertyDescriptor propertyDescriptor = (IDecimalPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentPropertyView(
-          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
+      return createPercentPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
     ULCTextField viewComponent = createULCTextField();
@@ -634,8 +640,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createDurationPropertyView(
-      IDurationPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCTextField viewComponent = createULCTextField();
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
 
@@ -661,8 +669,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createEnumerationPropertyView(
-      IEnumerationPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCComboBox viewComponent = createULCComboBox();
     if (!propertyDescriptor.isMandatory()) {
       viewComponent.addItem(null);
@@ -765,10 +775,11 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createIntegerPropertyView(
-      IIntegerPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCTextField viewComponent = createULCTextField();
-
     IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -844,8 +855,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createPasswordPropertyView(
-      IPasswordPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IPasswordPropertyDescriptor propertyDescriptor = (IPasswordPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCPasswordField viewComponent = createULCPasswordField();
     ULCPasswordFieldConnector connector = new ULCPasswordFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -859,10 +872,11 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createPercentPropertyView(
-      IPercentPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCTextField viewComponent = createULCTextField();
-
     IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -878,8 +892,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createReferencePropertyView(
-      IReferencePropertyDescriptor<?> propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
+        .getModelDescriptor();
     ULCActionField viewComponent = createULCActionField(true);
     ULCReferenceFieldConnector connector = new ULCReferenceFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -927,8 +943,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createSourceCodePropertyView(
-      ISourceCodePropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ISourceCodePropertyDescriptor propertyDescriptor = (ISourceCodePropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCJEditTextArea viewComponent = createULCJEditTextArea(propertyDescriptor
         .getLanguage());
     ULCJEditTextAreaConnector connector = new ULCJEditTextAreaConnector(
@@ -982,11 +1000,13 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createStringPropertyView(
-      IStringPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCComponent viewComponent;
     IValueConnector connector;
-    if (propertyDescriptor.isReadOnly()) {
+    if (propertyViewDescriptor.isReadOnly()) {
       viewComponent = createULCLabel();
       connector = new ULCLabelConnector(propertyDescriptor.getName(),
           (ULCLabel) viewComponent);
@@ -1174,8 +1194,7 @@ public class DefaultUlcViewFactory extends
           columnName.append("*");
         }
         column.setHeaderValue(columnName.toString());
-        IView<ULCComponent> editorView = createPropertyView(propertyDescriptor,
-            null, actionHandler, locale);
+        IView<ULCComponent> editorView = createPropertyView(columnViewDescriptor, actionHandler, locale);
         if (editorView.getPeer() instanceof ULCActionField) {
           ULCActionField actionField = (ULCActionField) editorView.getPeer();
           actionField.setActions(Collections.singletonList(actionField
@@ -1276,11 +1295,13 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createTextPropertyView(
-      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     IValueConnector connector;
     ULCScrollPane scrollPane = createULCScrollPane();
-    if (propertyDescriptor.isReadOnly()) {
+    if (propertyViewDescriptor.isReadOnly()) {
       ULCLabel viewComponent = createULCLabel();
       viewComponent.setVerticalAlignment(IDefaults.TOP);
       viewComponent.setHorizontalAlignment(IDefaults.LEADING);
@@ -1306,8 +1327,10 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createTimePropertyView(
-      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCTextField viewComponent = createULCTextField();
 
     IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);

@@ -1,3 +1,8 @@
+3.0.1
+=====
+Due to a API refactoring in component view descriptors, all references to
+BasicSubviewDescriptor must be changed to BasicPropertyViewDescriptor.
+
 3.0.0
 =====
 

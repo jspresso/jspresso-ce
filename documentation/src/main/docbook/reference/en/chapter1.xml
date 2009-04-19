@@ -3753,31 +3753,31 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               id="propertyViewDescriptors" />
     &lt;list&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="name" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="contact.address" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="contact.city" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="contact.phone" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="contact.email" /&gt;
@@ -3902,13 +3902,13 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;property name="propertyViewDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="createTimestamp" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="lastUpdateTimestamp" /&gt;
@@ -4461,19 +4461,19 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;property name="columnViewDescriptors"&gt; <co id="columnViewDescriptors" />
     &lt;list&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="ouId" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="name" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
         &lt;property
           name="name"
           value="manager" /&gt;
