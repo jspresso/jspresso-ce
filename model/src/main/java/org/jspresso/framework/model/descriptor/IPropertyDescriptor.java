@@ -18,12 +18,11 @@
  */
 package org.jspresso.framework.model.descriptor;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
-import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.IGateAccessible;
 
 /**
  * This interface is the super-interface of all properties descriptors.
@@ -46,7 +45,7 @@ import org.jspresso.framework.util.gate.IGate;
  * @see org.jspresso.framework.model.descriptor.IComponentDescriptor
  */
 public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
-    ISecurable {
+    ISecurable, IGateAccessible {
 
   /**
    * Clones this descriptor.
@@ -64,9 +63,8 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
   IPropertyDescriptor createQueryDescriptor();
 
   /**
-   * Gets the <code>Class</code> of the delegates used to compute the values
-   * of the property or <code>null</code> if this property is not a derived
-   * one.
+   * Gets the <code>Class</code> of the delegates used to compute the values of
+   * the property or <code>null</code> if this property is not a derived one.
    * 
    * @return The class of the extension delegates used to compute the property.
    */
@@ -90,15 +88,6 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
   List<IPropertyProcessor<?, ?>> getIntegrityProcessors();
 
   /**
-   * Gets the collection of gates determining the readability state of this
-   * property.
-   * 
-   * @return the collection of gates determining the readability state of this
-   *         property.
-   */
-  Collection<IGate> getReadabilityGates();
-
-  /**
    * Gets the scope on which the property is unique.
    * 
    * @return the unicity scope.
@@ -106,21 +95,12 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
   String getUnicityScope();
 
   /**
-   * Gets the collection of gates determining the writability state of this
-   * property.
-   * 
-   * @return the collection of gates determining the writability state of this
-   *         property.
-   */
-  Collection<IGate> getWritabilityGates();
-
-  /**
    * Triggers all setter interceptors.
    * 
    * @param component
-   *            the component targetted by the setter.
+   *          the component targetted by the setter.
    * @param newValue
-   *            the property new value.
+   *          the property new value.
    * @return the result of the interception.
    */
   Object interceptSetter(Object component, Object newValue);
@@ -156,21 +136,14 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
   boolean isQueryable();
 
   /**
-   * Wether the underlying property is read-only.
-   * 
-   * @return true if read-only
-   */
-  boolean isReadOnly();
-
-  /**
    * Triggers all setter postprocessors.
    * 
    * @param component
-   *            the component targetted by the setter.
+   *          the component targetted by the setter.
    * @param oldValue
-   *            the property old value.
+   *          the property old value.
    * @param newValue
-   *            the property new value.
+   *          the property new value.
    */
   void postprocessSetter(Object component, Object oldValue, Object newValue);
 
@@ -178,9 +151,9 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    * Triggers all setter preprocessors.
    * 
    * @param component
-   *            the component targetted by the setter.
+   *          the component targetted by the setter.
    * @param newValue
-   *            the property new value.
+   *          the property new value.
    */
   void preprocessSetter(Object component, Object newValue);
 }

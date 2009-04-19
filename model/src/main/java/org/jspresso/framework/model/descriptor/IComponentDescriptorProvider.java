@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.descriptor;
 
+import org.jspresso.framework.security.ISecurable;
+
 /**
  * Marks classes capable of providing a component descriptor.
  * <p>
@@ -37,9 +39,10 @@ package org.jspresso.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete component type.
+ *          the concrete component type.
  */
-public interface IComponentDescriptorProvider<E> extends IModelDescriptor {
+public interface IComponentDescriptorProvider<E> extends IModelDescriptor,
+    ISecurable {
 
   /**
    * Gets the referenced component descriptor.

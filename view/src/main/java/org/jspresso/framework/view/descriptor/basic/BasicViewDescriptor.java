@@ -18,10 +18,15 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
+import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.descriptor.EBorderType;
@@ -46,15 +51,115 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
+public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     implements IViewDescriptor {
 
-  private ActionMap  actionMap;
-  private String     background;
-  private EBorderType borderType = EBorderType.NONE;
-  private String     font;
-  private String     foreground;
-  private IModelDescriptor modelDescriptor;
+  private ActionMap          actionMap;
+  private String             background;
+  private EBorderType        borderType = EBorderType.NONE;
+  private String             font;
+  private String             foreground;
+  private IModelDescriptor   modelDescriptor;
+
+  private Collection<String> grantedRoles;
+  private Collection<IGate>  readabilityGates;
+  private boolean            readOnly;
+
+  private Collection<IGate>  writabilityGates;
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    if (grantedRoles == null && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof ISecurable) {
+        return ((ISecurable) getModelDescriptor()).getGrantedRoles();
+      }
+    }
+    return grantedRoles;
+  }
+
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  public Collection<IGate> getReadabilityGates() {
+    if (readabilityGates == null && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).getReadabilityGates();
+      }
+    }
+    return readabilityGates;
+  }
+
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  public Collection<IGate> getWritabilityGates() {
+    if (writabilityGates == null && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).getWritabilityGates();
+      }
+    }
+    return writabilityGates;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isReadOnly() {
+    if (!readOnly && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).isReadOnly();
+      }
+    }
+    return readOnly;
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
+  }
+
+  /**
+   * Sets the readabilityGates.
+   * 
+   * @param readabilityGates
+   *          the readabilityGates to set.
+   */
+  public void setReadabilityGates(Collection<IGate> readabilityGates) {
+    this.readabilityGates = readabilityGates;
+  }
+
+  /**
+   * Sets the readOnly.
+   * 
+   * @param readOnly
+   *          the readOnly to set.
+   */
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = readOnly;
+  }
+
+  /**
+   * Sets the writabilityGates.
+   * 
+   * @param writabilityGates
+   *          the writabilityGates to set.
+   */
+  public void setWritabilityGates(Collection<IGate> writabilityGates) {
+    this.writabilityGates = writabilityGates;
+  }
 
   /**
    * Gets the actionMap.
@@ -200,7 +305,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the modelDescriptor.
    * 
    * @param modelDescriptor
-   *            the modelDescriptor to set.
+   *          the modelDescriptor to set.
    */
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
     this.modelDescriptor = modelDescriptor;

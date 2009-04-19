@@ -19,6 +19,9 @@
 package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.descriptor.IIconDescriptor;
+import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.view.action.IActionable;
 
 /**
@@ -40,10 +43,12 @@ import org.jspresso.framework.view.action.IActionable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IViewDescriptor extends ISubviewDescriptor, IActionable {
+public interface IViewDescriptor extends IIconDescriptor, ISecurable,
+    IActionable, IGateAccessible {
 
   /**
-   * Gets the background color of this view as hex string representation argb coded.
+   * Gets the background color of this view as hex string representation argb
+   * coded.
    * 
    * @return this view's foreground color.
    */
@@ -52,26 +57,26 @@ public interface IViewDescriptor extends ISubviewDescriptor, IActionable {
   /**
    * Gets the border type used to surround view.
    * 
-   * @return the border type :
-   *         <li> <code>NONE</code> means no border.
-   *         <li> <code>SIMPLE</code> means a simple line border.
-   *         <li> <code>TITLED</code> means a titled border. The title will be
-   *         the name of the view.
+   * @return the border type : <li> <code>NONE</code> means no border. <li>
+   *         <code>SIMPLE</code> means a simple line border. <li>
+   *         <code>TITLED</code> means a titled border. The title will be the
+   *         name of the view.
    */
   EBorderType getBorderType();
 
   /**
-   * Gets the font of this view as string representation. The font is coded <code>[name];[style];[size]</code>.
-   * <li> [name] is the name of the font.
-   * <li> [style] is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC combined with the '|' character, i.e. BOLD|ITALIC.
-   * <li> [size] is the size of the font.
+   * Gets the font of this view as string representation. The font is coded
+   * <code>[name];[style];[size]</code>. <li>[name] is the name of the font. <li>
+   * [style] is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC combined with
+   * the '|' character, i.e. BOLD|ITALIC. <li>[size] is the size of the font.
    * 
    * @return this view's font.
    */
   String getFont();
 
   /**
-   * Gets the foreground color of this view as hex string representation argb coded.
+   * Gets the foreground color of this view as hex string representation argb
+   * coded.
    * 
    * @return this view's foreground color.
    */

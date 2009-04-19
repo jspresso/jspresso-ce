@@ -89,14 +89,13 @@ import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 
 /**
@@ -553,8 +552,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a binary property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -562,14 +561,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createBinaryPropertyView(
-      IBinaryPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
    * Creates a boolean property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -577,7 +576,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createBooleanPropertyView(
-      IBooleanPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -678,8 +677,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a color property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -687,7 +686,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createColorPropertyView(
-      IColorPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -859,8 +858,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a date property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -868,8 +867,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createDatePropertyView(
-      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale);
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale);
 
   /**
    * Creates a decimal format based on a decimal property descriptor.
@@ -914,8 +913,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a decimal property view.
    * 
-   * @param propertyDescriptor
-   *          the number property descriptor
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -923,7 +922,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createDecimalPropertyView(
-      IDecimalPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -943,8 +942,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a duration property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -952,7 +951,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createDurationPropertyView(
-      IDurationPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -965,8 +964,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates an enumeration property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -974,7 +973,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createEnumerationPropertyView(
-      IEnumerationPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -1108,8 +1107,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates an integer property view.
    * 
-   * @param propertyDescriptor
-   *          the number property descriptor
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1117,7 +1116,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createIntegerPropertyView(
-      IIntegerPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -1176,8 +1175,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a number property view.
    * 
-   * @param propertyDescriptor
-   *          the number property descriptor
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1185,16 +1184,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected IView<E> createNumberPropertyView(
-      INumberPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IView<E> view = null;
+    INumberPropertyDescriptor propertyDescriptor = (INumberPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      view = createIntegerPropertyView(
-          (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler,
+      view = createIntegerPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      view = createDecimalPropertyView(
-          (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler,
+      view = createDecimalPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
     return view;
@@ -1203,8 +1202,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a password property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1212,7 +1211,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createPasswordPropertyView(
-      IPasswordPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -1258,8 +1257,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a percent property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1267,90 +1266,66 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the evenly distributed grid view.
    */
   protected abstract IView<E> createPercentPropertyView(
-      IPercentPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
    * Creates a single property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
-   * @param renderedChildProperties
-   *          the rendered children properties if the property is a reference
-   *          property.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
    *          the locale.
    * @return the created property view.
    */
-  protected IView<E> createPropertyView(IPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
+  protected IView<E> createPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     IView<E> view = null;
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
-      view = createBooleanPropertyView(
-          (IBooleanPropertyDescriptor) propertyDescriptor, actionHandler,
+      view = createBooleanPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
-      view = createDatePropertyView(
-          (IDatePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      view = createDatePropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      view = createTimePropertyView(
-          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      view = createTimePropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      view = createDurationPropertyView(
-          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
+      view = createDurationPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-      view = createEnumerationPropertyView(
-          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
+      view = createEnumerationPropertyView(propertyViewDescriptor,
+          actionHandler, locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
-      view = createNumberPropertyView(
-          (INumberPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      view = createNumberPropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-      view = createRelationshipEndPropertyView(
-          (IRelationshipEndPropertyDescriptor) propertyDescriptor,
-          renderedChildProperties, actionHandler, locale);
+      view = createRelationshipEndPropertyView(propertyViewDescriptor,
+          actionHandler, locale);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
-      view = createTextualPropertyView(
-          (IStringPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      view = createTextualPropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-      view = createBinaryPropertyView(
-          (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      view = createBinaryPropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
-      view = createColorPropertyView(
-          (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      view = createColorPropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     }
     decorateWithDescription(propertyDescriptor, locale, view);
     return view;
   }
 
   /**
-   * Creates a property view.
-   * 
-   * @param viewDescriptor
-   *          the view descriptor.
-   * @param actionHandler
-   *          the action handler.
-   * @param locale
-   *          the locale.
-   * @return the created property view.
-   */
-  protected IView<E> createPropertyView(IPropertyViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<E> view = createPropertyView((IPropertyDescriptor) viewDescriptor
-        .getModelDescriptor(), viewDescriptor.getRenderedChildProperties(),
-        actionHandler, locale);
-    return constructView(view.getPeer(), viewDescriptor, view.getConnector());
-  }
-
-  /**
    * Creates a reference property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1358,16 +1333,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createReferencePropertyView(
-      IReferencePropertyDescriptor<?> propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
    * Creates a relationship end property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
-   * @param renderedChildProperties
-   *          the rendered child properties.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1375,19 +1348,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected IView<E> createRelationshipEndPropertyView(
-      IRelationshipEndPropertyDescriptor propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     IView<E> view = null;
-
+    IRelationshipEndPropertyDescriptor propertyDescriptor = (IRelationshipEndPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      view = createReferencePropertyView(
-          (IReferencePropertyDescriptor<?>) propertyDescriptor, actionHandler,
+      view = createReferencePropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      view = createCollectionPropertyView(
-          (ICollectionPropertyDescriptor<?>) propertyDescriptor,
-          renderedChildProperties, actionHandler, locale);
+      view = createCollectionPropertyView(propertyViewDescriptor,
+          actionHandler, locale);
     }
     return view;
   }
@@ -1403,8 +1374,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a source code property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1412,7 +1383,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createSourceCodePropertyView(
-      ISourceCodePropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -1433,8 +1404,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a string property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1442,7 +1413,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createStringPropertyView(
-      IStringPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
 
   /**
@@ -1478,8 +1449,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a text property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1487,14 +1458,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createTextPropertyView(
-      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale);
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale);
 
   /**
    * Creates a textual property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1502,21 +1473,22 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected IView<E> createTextualPropertyView(
-      IStringPropertyDescriptor propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
-      return createPasswordPropertyView(
-          (IPasswordPropertyDescriptor) propertyDescriptor, actionHandler,
+      return createPasswordPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
-      return createSourceCodePropertyView(
-          (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
+      return createSourceCodePropertyView(propertyViewDescriptor,
+          actionHandler, locale);
     } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
-      return createTextPropertyView(
-          (ITextPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createTextPropertyView(propertyViewDescriptor, actionHandler,
+          locale);
     }
-    return createStringPropertyView(propertyDescriptor, actionHandler, locale);
+    return createStringPropertyView(propertyViewDescriptor, actionHandler,
+        locale);
   }
 
   /**
@@ -1552,8 +1524,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a time property view.
    * 
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1561,8 +1533,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the created property view.
    */
   protected abstract IView<E> createTimePropertyView(
-      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale);
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale);
 
   /**
    * Creates a tree view.
@@ -1988,17 +1960,20 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected abstract void showCardInPanel(E cardsPeer, String cardName);
 
   private IView<E> createCollectionPropertyView(
-      ICollectionPropertyDescriptor<?> propertyDescriptor,
-      List<String> renderedChildProperties, IActionHandler actionHandler,
-      Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
 
     IView<E> view;
+    ICollectionPropertyDescriptor<?> propertyDescriptor = (ICollectionPropertyDescriptor<?>) propertyViewDescriptor
+        .getModelDescriptor();
+    List<String> renderedChildProperties = propertyViewDescriptor
+        .getRenderedChildProperties();
     if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
       BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
       viewDescriptor.setModelDescriptor(propertyDescriptor);
-      List<ISubviewDescriptor> columnViewDescriptors = new ArrayList<ISubviewDescriptor>();
+      List<IPropertyViewDescriptor> columnViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
       for (String renderedProperty : renderedChildProperties) {
-        BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
+        BasicPropertyViewDescriptor columnDescriptor = new BasicPropertyViewDescriptor();
         columnDescriptor.setName(renderedProperty);
         columnViewDescriptors.add(columnDescriptor);
       }

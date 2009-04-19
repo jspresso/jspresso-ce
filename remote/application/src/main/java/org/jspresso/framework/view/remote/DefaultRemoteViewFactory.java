@@ -108,8 +108,8 @@ import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -393,7 +393,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
-    for (ISubviewDescriptor propertyViewDescriptor : viewDescriptor
+    for (IPropertyViewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
       String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
@@ -405,16 +405,15 @@ public class DefaultRemoteViewFactory extends
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
       IView<RComponent> propertyView = createPropertyView(propertyDescriptor,
-          viewDescriptor.getRenderedChildProperties(propertyName),
-          actionHandler, locale);
+          propertyViewDescriptor.getRenderedChildProperties(), actionHandler,
+          locale);
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
         propertyView.setPeer(createSecurityComponent());
       }
       elements.add(propertyView.getPeer());
-      elementWidths.add(new Integer(viewDescriptor
-          .getPropertyWidth(propertyName)));
+      elementWidths.add(new Integer(propertyViewDescriptor.getWidth()));
       connector.addChildConnector(propertyView.getConnector());
       if (propertyViewDescriptor.getReadabilityGates() != null) {
         for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
@@ -918,7 +917,7 @@ public class DefaultRemoteViewFactory extends
         connector);
 
     List<RComponent> columns = new ArrayList<RComponent>();
-    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
+    for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
       try {

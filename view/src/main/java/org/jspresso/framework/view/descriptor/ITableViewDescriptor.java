@@ -48,5 +48,5 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
    * 
    * @return the column view descriptors.
    */
-  List<ISubviewDescriptor> getColumnViewDescriptors();
+  List<IPropertyViewDescriptor> getColumnViewDescriptors();
 }

@@ -65,23 +65,5 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
    * 
    * @return the property view descriptors.
    */
-  List<ISubviewDescriptor> getPropertyViewDescriptors();
-
-  /**
-   * Gets the number of columns a property spans when displayed.
-   * 
-   * @param propertyName
-   *            the name of the property.
-   * @return the spanned column count.
-   */
-  int getPropertyWidth(String propertyName);
-
-  /**
-   * Gets the child properties to display in case of a complex property.
-   * 
-   * @param propertyName
-   *            the name of the property.
-   * @return The list of displayed properties in the case of a complex property.
-   */
-  List<String> getRenderedChildProperties(String propertyName);
+  List<IPropertyViewDescriptor> getPropertyViewDescriptors();
 }

@@ -110,8 +110,8 @@ import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -388,9 +388,9 @@ public class DefaultWingsViewFactory extends
 
     // for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
     // .getPropertyViewDescriptors()) {
-    for (Iterator<ISubviewDescriptor> ite = viewDescriptor
+    for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
-      ISubviewDescriptor propertyViewDescriptor = ite.next();
+      IPropertyViewDescriptor propertyViewDescriptor = ite.next();
       String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
@@ -1341,7 +1341,7 @@ public class DefaultWingsViewFactory extends
     List<String> columnConnectorKeys = new ArrayList<String>();
     Set<String> forbiddenColumns = new HashSet<String>();
     int tableWidth = 0;
-    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
+    for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
       try {
@@ -1383,7 +1383,7 @@ public class DefaultWingsViewFactory extends
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());
     int columnIndex = 0;
-    for (ISubviewDescriptor columnViewDescriptor : viewDescriptor
+    for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String propertyName = columnViewDescriptor.getName();
       if (!forbiddenColumns.contains(propertyName)) {

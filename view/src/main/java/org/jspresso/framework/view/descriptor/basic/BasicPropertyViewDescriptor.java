@@ -20,8 +20,12 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.List;
 
+import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
-
 
 /**
  * Default implementation of a property view descriptor.
@@ -46,23 +50,61 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     IPropertyViewDescriptor {
 
   private List<String> renderedChildProperties;
+  private int          width;
 
   /**
-   * Gets the renderedChildProperties.
-   * 
-   * @return the renderedChildProperties.
+   * Constructs a new <code>BasicPropertyViewDescriptor</code> instance.
+   */
+  public BasicPropertyViewDescriptor() {
+    width = 1;
+  }
+
+  /**
+   * {@inheritDoc}
    */
   public List<String> getRenderedChildProperties() {
-    return renderedChildProperties;
+    if (renderedChildProperties != null) {
+      return renderedChildProperties;
+    }
+    IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+        .getComponentDescriptor().getPropertyDescriptor(getName());
+    if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) childPropertyDescriptor)
+          .getCollectionDescriptor()).getElementDescriptor()
+          .getRenderedProperties();
+    } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor) {
+      return ((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
+          .getReferencedDescriptor().getRenderedProperties();
+    }
+    return null;
   }
 
   /**
    * Sets the renderedChildProperties.
    * 
    * @param renderedChildProperties
-   *            the renderedChildProperties to set.
+   *          the renderedChildProperties to set.
    */
   public void setRenderedChildProperties(List<String> renderedChildProperties) {
     this.renderedChildProperties = renderedChildProperties;
+  }
+
+  /**
+   * Gets the width.
+   * 
+   * @return the width.
+   */
+  public int getWidth() {
+    return width;
+  }
+
+  /**
+   * Sets the width.
+   * 
+   * @param width
+   *          the width to set.
+   */
+  public void setWidth(int width) {
+    this.width = width;
   }
 }

@@ -19,7 +19,6 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +30,9 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
-import org.jspresso.framework.view.descriptor.ISubviewDescriptor;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
+import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
 /**
  * Default implementation of a component view descriptor.
@@ -57,31 +56,17 @@ import org.jspresso.framework.view.descriptor.ELabelPosition;
 public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentViewDescriptor {
 
-  private int                       columnCount    = 1;
-  private ELabelPosition            labelsPosition = ELabelPosition.ASIDE;
-  private List<ISubviewDescriptor>  propertyViewDescriptors;
-  private Map<String, Integer>      propertyWidths;
-  private Map<String, List<String>> renderedChildProperties;
+  private int                           columnCount    = 1;
+  private ELabelPosition                labelsPosition = ELabelPosition.ASIDE;
+  private List<IPropertyViewDescriptor> propertyViewDescriptors;
+  private Map<String, Integer>          propertyWidths;
+  private Map<String, List<String>>     renderedChildProperties;
 
   /**
    * {@inheritDoc}
    */
   public int getColumnCount() {
     return columnCount;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection<String> getGrantedRoles() {
-    Collection<String> grantedRoles = super.getGrantedRoles();
-    if (grantedRoles == null && getModelDescriptor() != null) {
-      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor();
-      grantedRoles = componentDescriptor.getGrantedRoles();
-    }
-    return grantedRoles;
   }
 
   /**
@@ -108,64 +93,31 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public List<ISubviewDescriptor> getPropertyViewDescriptors() {
+  public List<IPropertyViewDescriptor> getPropertyViewDescriptors() {
+    IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+        .getComponentDescriptor();
     if (propertyViewDescriptors == null) {
-      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor();
       List<String> modelRenderedProperties = componentDescriptor
           .getRenderedProperties();
-      List<ISubviewDescriptor> defaultPropertyViewDescriptors = new ArrayList<ISubviewDescriptor>();
+      List<IPropertyViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
       for (String renderedProperty : modelRenderedProperties) {
-        BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
-        propertyDescriptor.setName(renderedProperty);
-        propertyDescriptor.setGrantedRoles(componentDescriptor
-            .getPropertyDescriptor(renderedProperty).getGrantedRoles());
-        defaultPropertyViewDescriptors.add(propertyDescriptor);
+        IPropertyDescriptor propertyDescriptor = componentDescriptor
+            .getPropertyDescriptor(renderedProperty);
+        BasicPropertyViewDescriptor propertyViewDescriptor = new BasicPropertyViewDescriptor();
+        propertyViewDescriptor.setName(renderedProperty);
+        propertyViewDescriptor.setGrantedRoles(propertyDescriptor
+            .getGrantedRoles());
+        defaultPropertyViewDescriptors.add(propertyViewDescriptor);
       }
       return defaultPropertyViewDescriptors;
     }
-    List<ISubviewDescriptor> actualPropertyViewDescriptors = new ArrayList<ISubviewDescriptor>();
-    for (ISubviewDescriptor subViewDescriptor : propertyViewDescriptors) {
-      actualPropertyViewDescriptors
-          .addAll(explodeComponentReferences(subViewDescriptor));
+    List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+    for (IPropertyViewDescriptor propertyViewDescriptor : propertyViewDescriptors) {
+      actualPropertyViewDescriptors.addAll(explodeComponentReferences(
+          propertyViewDescriptor,
+          (IComponentDescriptorProvider<?>) getModelDescriptor()));
     }
     return actualPropertyViewDescriptors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getPropertyWidth(String propertyName) {
-    if (propertyWidths != null) {
-      Integer width = propertyWidths.get(propertyName);
-      if (width != null) {
-        return width.intValue();
-      }
-    }
-    return 1;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<String> getRenderedChildProperties(String propertyName) {
-    List<String> childProperties = null;
-    if (renderedChildProperties != null) {
-      childProperties = renderedChildProperties.get(propertyName);
-    }
-    if (childProperties == null) {
-      IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor().getPropertyDescriptor(propertyName);
-      if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) childPropertyDescriptor)
-            .getCollectionDescriptor()).getElementDescriptor()
-            .getRenderedProperties();
-      } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor) {
-        return ((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
-            .getReferencedDescriptor().getRenderedProperties();
-      }
-    }
-    return childProperties;
   }
 
   /**
@@ -195,17 +147,58 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    *          the propertyViewDescriptors to set.
    */
   public void setPropertyViewDescriptors(
-      List<ISubviewDescriptor> propertyViewDescriptors) {
+      List<IPropertyViewDescriptor> propertyViewDescriptors) {
     this.propertyViewDescriptors = propertyViewDescriptors;
-    if (propertyViewDescriptors != null && getModelDescriptor() != null) {
-      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor();
-      for (ISubviewDescriptor propertyViewDescriptor : propertyViewDescriptors) {
-        propertyViewDescriptor.setGrantedRoles(componentDescriptor
-            .getPropertyDescriptor(propertyViewDescriptor.getName())
-            .getGrantedRoles());
+  }
+
+  private List<IPropertyViewDescriptor> explodeComponentReferences(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IComponentDescriptorProvider<?> componentDescriptorProvider) {
+    List<IPropertyViewDescriptor> returnedList = new ArrayList<IPropertyViewDescriptor>();
+    IPropertyDescriptor propertyDescriptor = componentDescriptorProvider
+        .getComponentDescriptor().getPropertyDescriptor(
+            propertyViewDescriptor.getName());
+    if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
+        .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor().getComponentContract()))) {
+      for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+          .getReferencedDescriptor().getRenderedProperties()) {
+        BasicPropertyViewDescriptor nestedPropertyViewDescriptor = new BasicPropertyViewDescriptor();
+        nestedPropertyViewDescriptor.setName(propertyDescriptor.getName() + "."
+            + nestedRenderedProperty);
+        nestedPropertyViewDescriptor.setModelDescriptor(propertyDescriptor);
+        nestedPropertyViewDescriptor
+            .setWidth(getPropertyWidth(nestedPropertyViewDescriptor.getName()));
+        nestedPropertyViewDescriptor
+            .setRenderedChildProperties(getRenderedChildProperties(nestedPropertyViewDescriptor
+                .getName()));
+        if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+          returnedList.addAll(explodeComponentReferences(
+              nestedPropertyViewDescriptor,
+              (IReferencePropertyDescriptor<?>) propertyDescriptor));
+        } else {
+          returnedList.add(nestedPropertyViewDescriptor);
+        }
       }
+    } else {
+      if (propertyViewDescriptor instanceof BasicPropertyViewDescriptor) {
+        if (propertyViewDescriptor.getModelDescriptor() == null) {
+          ((BasicPropertyViewDescriptor) propertyViewDescriptor)
+              .setModelDescriptor(propertyDescriptor);
+        }
+        if (getPropertyWidth(propertyDescriptor.getName()) > 1) {
+          ((BasicPropertyViewDescriptor) propertyViewDescriptor)
+              .setWidth(getPropertyWidth(propertyDescriptor.getName()));
+        }
+        if (getRenderedChildProperties(propertyDescriptor.getName()) != null) {
+          ((BasicPropertyViewDescriptor) propertyViewDescriptor)
+              .setRenderedChildProperties(getRenderedChildProperties(propertyDescriptor
+                  .getName()));
+        }
+      }
+      returnedList.add(propertyViewDescriptor);
     }
+    return returnedList;
   }
 
   /**
@@ -227,6 +220,16 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     }
   }
 
+  private int getPropertyWidth(String propertyName) {
+    if (propertyWidths != null) {
+      Integer width = propertyWidths.get(propertyName);
+      if (width != null) {
+        return width.intValue();
+      }
+    }
+    return 1;
+  }
+
   /**
    * Sets the renderedChildProperties.
    * 
@@ -238,32 +241,23 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     this.renderedChildProperties = renderedChildProperties;
   }
 
-  private List<ISubviewDescriptor> explodeComponentReferences(
-      ISubviewDescriptor subViewDescriptor) {
-    List<ISubviewDescriptor> returnedList = new ArrayList<ISubviewDescriptor>();
-    IPropertyDescriptor propertyDescriptor = ((IComponentDescriptor<?>) getModelDescriptor())
-        .getPropertyDescriptor(subViewDescriptor.getName());
-    if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-        .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getComponentContract()))) {
-      for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor().getRenderedProperties()) {
-        BasicSubviewDescriptor nestedSubViewDescriptor = new BasicSubviewDescriptor();
-        nestedSubViewDescriptor.setName(propertyDescriptor.getName() + "."
-            + nestedRenderedProperty);
-        nestedSubViewDescriptor.setGrantedRoles(propertyDescriptor
-            .getGrantedRoles());
-        nestedSubViewDescriptor.setReadabilityGates(propertyDescriptor
-            .getReadabilityGates());
-        nestedSubViewDescriptor.setWritabilityGates(propertyDescriptor
-            .getWritabilityGates());
-        nestedSubViewDescriptor.setReadOnly(propertyDescriptor.isReadOnly());
-        returnedList
-            .addAll(explodeComponentReferences(nestedSubViewDescriptor));
-      }
-    } else {
-      returnedList.add(subViewDescriptor);
+  private List<String> getRenderedChildProperties(String propertyName) {
+    List<String> childProperties = null;
+    if (renderedChildProperties != null) {
+      childProperties = renderedChildProperties.get(propertyName);
     }
-    return returnedList;
+    if (childProperties == null) {
+      IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor().getPropertyDescriptor(propertyName);
+      if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor) {
+        return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) childPropertyDescriptor)
+            .getCollectionDescriptor()).getElementDescriptor()
+            .getRenderedProperties();
+      } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor) {
+        return ((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
+            .getReferencedDescriptor().getRenderedProperties();
+      }
+    }
+    return childProperties;
   }
 }
