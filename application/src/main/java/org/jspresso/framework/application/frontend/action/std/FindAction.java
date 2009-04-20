@@ -93,7 +93,7 @@ public class FindAction<E, F, G> extends WrappingAction<E, F, G> {
         if (queryComponent.getPage() != null
             && queryComponent.getPage().intValue() + pageOffset.intValue() >= 0
             && queryComponent.getPage().intValue() + pageOffset.intValue() < queryComponent
-                .getPageCount().intValue() - 1) {
+                .getPageCount().intValue()) {
           queryComponent.setPage(new Integer(queryComponent.getPage()
               .intValue()
               + pageOffset.intValue()));

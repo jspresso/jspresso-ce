@@ -421,6 +421,7 @@ public class DefaultUlcViewFactory extends
     int currentY = 0;
 
     boolean isSpaceFilled = false;
+    // boolean lastRowNeedsFilling = true;
 
     for (IPropertyViewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
@@ -469,17 +470,18 @@ public class DefaultUlcViewFactory extends
         currentX = 0;
         currentY++;
       }
+      // if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
+      // fillLastRow(viewComponent);
+      // currentX = 0;
+      // currentY++;
+      // }
 
       // label positionning
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
           constraints.setInsets(new Insets(5, 5, 5, 5));
-          if (propertyView.getPeer() instanceof ULCTextArea
-              || propertyView.getPeer() instanceof ULCList
-              || propertyView.getPeer() instanceof ULCScrollPane
-              || propertyView.getPeer() instanceof ULCExtendedTable
-              || propertyView.getPeer() instanceof ULCJEditTextArea) {
+          if (isHeightExtensible(propertyViewDescriptor)) {
             constraints.setAnchor(GridBagConstraints.NORTHEAST);
           } else {
             constraints.setAnchor(GridBagConstraints.EAST);
@@ -526,14 +528,14 @@ public class DefaultUlcViewFactory extends
       if (propertyView.getPeer() instanceof ULCCheckBox) {
         constraints.setWeightX(ClientContext.getScreenResolution());
       }
-      if (propertyView.getPeer() instanceof ULCTextArea
-          || propertyView.getPeer() instanceof ULCList
-          || propertyView.getPeer() instanceof ULCScrollPane
-          || propertyView.getPeer() instanceof ULCExtendedTable
-          || propertyView.getPeer() instanceof ULCJEditTextArea) {
+      if (isHeightExtensible(propertyViewDescriptor)) {
         constraints.setWeightY(1.0);
         constraints.setFill(GridBagConstraints.BOTH);
         isSpaceFilled = true;
+        // if (!ite.hasNext()) {
+        // constraints.gridwidth = GridBagConstraints.REMAINDER;
+        // lastRowNeedsFilling = false;
+        // }
       } else {
         constraints.setFill(GridBagConstraints.NONE);
       }
@@ -541,6 +543,9 @@ public class DefaultUlcViewFactory extends
 
       currentX += propertyWidth;
     }
+    // if (lastRowNeedsFilling) {
+    // fillLastRow(viewComponent);
+    // }
     if (!isSpaceFilled) {
       ULCBorderLayoutPane filler = createBorderLayoutPane();
       GridBagConstraints constraints = new GridBagConstraints();
@@ -564,6 +569,17 @@ public class DefaultUlcViewFactory extends
     }
     return view;
   }
+
+  // private void fillLastRow(ULCGridBagLayoutPane viewComponent) {
+  // GridBagConstraints constraints = new GridBagConstraints();
+  // constraints.setGridX(GridBagConstraints.RELATIVE);
+  // constraints.setWeightX(1.0);
+  // constraints.setFill(GridBagConstraints.HORIZONTAL);
+  // constraints.setGridWidth(GridBagConstraints.REMAINDER);
+  // ULCBorderLayoutPane filler = createBorderLayoutPane();
+  // // filler.setBorder(new SLineBorder(Color.BLUE));
+  // viewComponent.add(filler, constraints);
+  // }
 
   /**
    * {@inheritDoc}
@@ -779,11 +795,19 @@ public class DefaultUlcViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    ULCTextField viewComponent = createULCTextField();
     IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
+    ULCComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createULCLabel();
+      connector = new ULCLabelConnector(propertyDescriptor.getName(),
+          (ULCLabel) viewComponent);
+      ((ULCLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createULCTextField();
+      connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
+          (ULCTextField) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
@@ -1194,7 +1218,8 @@ public class DefaultUlcViewFactory extends
           columnName.append("*");
         }
         column.setHeaderValue(columnName.toString());
-        IView<ULCComponent> editorView = createPropertyView(columnViewDescriptor, actionHandler, locale);
+        IView<ULCComponent> editorView = createPropertyView(
+            columnViewDescriptor, actionHandler, locale);
         if (editorView.getPeer() instanceof ULCActionField) {
           ULCActionField actionField = (ULCActionField) editorView.getPeer();
           actionField.setActions(Collections.singletonList(actionField
@@ -1469,7 +1494,8 @@ public class DefaultUlcViewFactory extends
    * @return the created label.
    */
   protected ULCLabel createULCLabel() {
-    return new ULCLabel();
+    // To have preferred height computed.
+    return new ULCLabel(" ");
   }
 
   /**

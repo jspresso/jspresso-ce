@@ -56,6 +56,7 @@ import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
@@ -2124,5 +2125,25 @@ public abstract class AbstractViewFactory<E, F, G> implements
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
             mvcBinder, nodeGroupPrototypeConnector);
     return nodeGroupCollectionConnector;
+  }
+
+  /**
+   * Gets wether a property view is considered to fill all the available height
+   * space.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @return true if a property view is considered to fill all the available
+   *         height space.
+   */
+  protected boolean isHeightExtensible(
+      IPropertyViewDescriptor propertyViewDescriptor) {
+    IModelDescriptor propertyDescriptor = propertyViewDescriptor
+        .getModelDescriptor();
+    if (propertyDescriptor instanceof ITextPropertyDescriptor
+        || propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+      return true;
+    }
+    return false;
   }
 }

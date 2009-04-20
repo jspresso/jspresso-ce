@@ -403,9 +403,11 @@ public class DefaultSwingViewFactory extends
     int currentY = 0;
 
     boolean isSpaceFilled = false;
+    // boolean lastRowNeedsFilling = true;
 
-    for (IPropertyViewDescriptor propertyViewDescriptor : viewDescriptor
-        .getPropertyViewDescriptors()) {
+    for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
+        .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
+      IPropertyViewDescriptor propertyViewDescriptor = ite.next();
       String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
@@ -451,17 +453,18 @@ public class DefaultSwingViewFactory extends
         currentX = 0;
         currentY++;
       }
+      // if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
+      // fillLastRow(viewComponent);
+      // currentX = 0;
+      // currentY++;
+      // }
 
       // label positionning
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
           constraints.insets = new Insets(5, 5, 5, 5);
-          if (propertyView.getPeer() instanceof JTextArea
-              || propertyView.getPeer() instanceof JList
-              || propertyView.getPeer() instanceof JScrollPane
-              || propertyView.getPeer() instanceof JTable
-              || propertyView.getPeer() instanceof JEditTextArea) {
+          if (isHeightExtensible(propertyViewDescriptor)) {
             constraints.anchor = GridBagConstraints.NORTHEAST;
           } else {
             constraints.anchor = GridBagConstraints.EAST;
@@ -506,14 +509,14 @@ public class DefaultSwingViewFactory extends
       if (propertyView.getPeer() instanceof JCheckBox) {
         constraints.weightx = Toolkit.getDefaultToolkit().getScreenResolution();
       }
-      if (propertyView.getPeer() instanceof JTextArea
-          || propertyView.getPeer() instanceof JList
-          || propertyView.getPeer() instanceof JScrollPane
-          || propertyView.getPeer() instanceof JTable
-          || propertyView.getPeer() instanceof JEditTextArea) {
+      if (isHeightExtensible(propertyViewDescriptor)) {
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
         isSpaceFilled = true;
+        // if (!ite.hasNext()) {
+        // constraints.gridwidth = GridBagConstraints.REMAINDER;
+        // lastRowNeedsFilling = false;
+        // }
       } else {
         constraints.fill = GridBagConstraints.NONE;
       }
@@ -521,6 +524,9 @@ public class DefaultSwingViewFactory extends
 
       currentX += propertyWidth;
     }
+    // if (lastRowNeedsFilling) {
+    // fillLastRow(viewComponent);
+    // }
     if (!isSpaceFilled) {
       JPanel filler = createJPanel();
       GridBagConstraints constraints = new GridBagConstraints();
@@ -544,6 +550,17 @@ public class DefaultSwingViewFactory extends
     }
     return view;
   }
+
+  // private void fillLastRow(JPanel viewComponent) {
+  // GridBagConstraints constraints = new GridBagConstraints();
+  // constraints.gridx = GridBagConstraints.RELATIVE;
+  // constraints.weightx = 1.0;
+  // constraints.fill = GridBagConstraints.HORIZONTAL;
+  // constraints.gridwidth = GridBagConstraints.REMAINDER;
+  // JPanel filler = createJPanel();
+  // // filler.setBorder(new SLineBorder(Color.BLUE));
+  // viewComponent.add(filler, constraints);
+  // }
 
   /**
    * {@inheritDoc}
@@ -744,10 +761,19 @@ public class DefaultSwingViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JTextField viewComponent = createJTextField();
     IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
-    JFormattedFieldConnector connector = new JFormattedFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    JComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createJLabel();
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
+      ((JLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createJTextField();
+      connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
@@ -844,7 +870,8 @@ public class DefaultSwingViewFactory extends
    * @return the created label.
    */
   protected JLabel createJLabel() {
-    return new JLabel();
+    // To have preferred height computed.
+    return new JLabel(" ");
   }
 
   /**

@@ -227,8 +227,13 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (getPageSize() == null || getPageSize().intValue() <= 0) {
       return new Integer(1);
     }
+    int remainder = getRecordCount().intValue() % getPageSize().intValue();
+    int lastIncompletePage = 0;
+    if (remainder > 0) {
+      lastIncompletePage = 1;
+    }
     return new Integer(getRecordCount().intValue() / getPageSize().intValue()
-        + 1);
+        + lastIncompletePage);
   }
 
   /**
@@ -237,7 +242,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public boolean isNextPageEnabled() {
     return getPageCount() != null && getPage() != null
-        && getPage().intValue() < getPageCount().intValue() - 2;
+        && getPage().intValue() < getPageCount().intValue() - 1;
   }
 
   /**

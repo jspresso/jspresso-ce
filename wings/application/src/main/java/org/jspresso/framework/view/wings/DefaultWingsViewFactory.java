@@ -264,7 +264,7 @@ public class DefaultWingsViewFactory extends
   protected IView<SComponent> createBooleanPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
+    IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
     .getModelDescriptor();
     SCheckBox viewComponent = createSCheckBox();
     SCheckBoxConnector connector = new SCheckBoxConnector(propertyDescriptor
@@ -391,8 +391,6 @@ public class DefaultWingsViewFactory extends
     boolean isSpaceFilled = false;
     boolean lastRowNeedsFilling = true;
 
-    // for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
-    // .getPropertyViewDescriptors()) {
     for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
       IPropertyViewDescriptor propertyViewDescriptor = ite.next();
@@ -448,10 +446,7 @@ public class DefaultWingsViewFactory extends
       switch (viewDescriptor.getLabelsPosition()) {
         case ASIDE:
           constraints.insets = new Insets(5, 5, 5, 5);
-          if (propertyView.getPeer() instanceof STextArea
-              || propertyView.getPeer() instanceof SList
-              || propertyView.getPeer() instanceof SScrollPane
-              || propertyView.getPeer() instanceof STable) {
+          if (isHeightExtensible(propertyViewDescriptor)) {
             constraints.anchor = GridBagConstraints.NORTHEAST;
           } else {
             constraints.anchor = GridBagConstraints.EAST;
@@ -491,10 +486,7 @@ public class DefaultWingsViewFactory extends
       }
 
       constraints.anchor = GridBagConstraints.WEST;
-      if (propertyView.getPeer() instanceof STextArea
-          || propertyView.getPeer() instanceof SList
-          || propertyView.getPeer() instanceof SScrollPane
-          || propertyView.getPeer() instanceof STable) {
+      if (isHeightExtensible(propertyViewDescriptor)) {
         constraints.weightx = 1.0D;
         constraints.weighty = 1.0D;
         constraints.fill = GridBagConstraints.BOTH;
@@ -741,10 +733,19 @@ public class DefaultWingsViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
     .getModelDescriptor();
-    STextField viewComponent = createSTextField();
     IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
-    SFormattedFieldConnector connector = new SFormattedFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    SComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createSLabel();
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+      ((SLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createSTextField();
+      connector = new SFormattedFieldConnector(propertyDescriptor.getName(),
+          (STextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
@@ -979,7 +980,8 @@ public class DefaultWingsViewFactory extends
    * @return the created label.
    */
   protected SLabel createSLabel() {
-    return new SLabel();
+    // To have preferred height computed.
+    return new SLabel(" ");
   }
 
   /**
