@@ -61,6 +61,30 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   private List<IPropertyViewDescriptor> propertyViewDescriptors;
   private Map<String, Integer>          propertyWidths;
   private Map<String, List<String>>     renderedChildProperties;
+  private List<String>                  renderedProperties;
+
+  /**
+   * Gets the renderedProperties.
+   * 
+   * @return the renderedProperties.
+   */
+  private List<String> getRenderedProperties() {
+    if (renderedProperties == null) {
+      renderedProperties = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor().getRenderedProperties();
+    }
+    return renderedProperties;
+  }
+
+  /**
+   * Sets the renderedProperties.
+   * 
+   * @param renderedProperties
+   *          the renderedProperties to set.
+   */
+  public void setRenderedProperties(List<String> renderedProperties) {
+    this.renderedProperties = renderedProperties;
+  }
 
   /**
    * {@inheritDoc}
@@ -97,12 +121,14 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
         .getComponentDescriptor();
     if (propertyViewDescriptors == null) {
-      List<String> modelRenderedProperties = componentDescriptor
-          .getRenderedProperties();
+      List<String> viewRenderedProperties = getRenderedProperties();
       List<IPropertyViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
-      for (String renderedProperty : modelRenderedProperties) {
+      for (String renderedProperty : viewRenderedProperties) {
         BasicPropertyViewDescriptor propertyViewDescriptor = new BasicPropertyViewDescriptor();
         propertyViewDescriptor.setName(renderedProperty);
+        propertyViewDescriptor.setWidth(getPropertyWidth(renderedProperty));
+        propertyViewDescriptor
+            .setRenderedChildProperties(getRenderedChildProperties(renderedProperty));
         propertyViewDescriptor.setModelDescriptor(componentDescriptor
             .getPropertyDescriptor(renderedProperty));
         defaultPropertyViewDescriptors.add(propertyViewDescriptor);

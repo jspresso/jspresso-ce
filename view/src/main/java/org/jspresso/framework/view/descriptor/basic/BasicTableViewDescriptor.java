@@ -54,6 +54,31 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     implements ITableViewDescriptor {
 
   private List<IPropertyViewDescriptor> columnViewDescriptors;
+  private List<String>                  renderedProperties;
+
+  /**
+   * Gets the renderedProperties.
+   * 
+   * @return the renderedProperties.
+   */
+  private List<String> getRenderedProperties() {
+    if (renderedProperties == null) {
+      renderedProperties = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
+          .getCollectionDescriptor().getElementDescriptor()
+          .getRenderedProperties();
+    }
+    return renderedProperties;
+  }
+
+  /**
+   * Sets the renderedProperties.
+   * 
+   * @param renderedProperties
+   *          the renderedProperties to set.
+   */
+  public void setRenderedProperties(List<String> renderedProperties) {
+    this.renderedProperties = renderedProperties;
+  }
 
   /**
    * {@inheritDoc}
@@ -63,17 +88,16 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
         .getCollectionDescriptor().getElementDescriptor();
     if (columnViewDescriptors == null) {
-      List<String> modelRenderedProperties = rowModelDescriptor
-          .getRenderedProperties();
+      List<String> viewRenderedProperties = getRenderedProperties();
       if (modelDescriptor instanceof ICollectionPropertyDescriptor
           && ((ICollectionPropertyDescriptor<?>) modelDescriptor)
               .getReverseRelationEnd() != null) {
-        modelRenderedProperties
+        viewRenderedProperties
             .remove(((ICollectionPropertyDescriptor<?>) modelDescriptor)
                 .getReverseRelationEnd().getName());
       }
       List<IPropertyViewDescriptor> defaultColumnViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
-      for (String renderedProperty : modelRenderedProperties) {
+      for (String renderedProperty : viewRenderedProperties) {
         BasicPropertyViewDescriptor columnDescriptor = new BasicPropertyViewDescriptor();
         columnDescriptor.setName(renderedProperty);
         columnDescriptor.setModelDescriptor(rowModelDescriptor
