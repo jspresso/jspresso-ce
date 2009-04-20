@@ -3,9 +3,12 @@
  */
 package org.jspresso.framework.binding.swing;
 
+import java.text.ParseException;
+
 import javax.swing.JLabel;
 
 import org.apache.commons.lang.StringUtils;
+import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.html.HtmlHelper;
 
 /**
@@ -19,7 +22,8 @@ import org.jspresso.framework.util.html.HtmlHelper;
  */
 public class JLabelConnector extends JComponentConnector<JLabel> {
 
-  private boolean multiLine;
+  private boolean    multiLine;
+  private IFormatter formatter;
 
   /**
    * Constructs a new <code>JLabelConnector</code> instance.
@@ -49,7 +53,9 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
     if (aValue == null) {
       getConnectedJComponent().setText(null);
     } else {
-      if (multiLine) {
+      if (formatter != null) {
+        getConnectedJComponent().setText(formatter.format(aValue));
+      } else if (multiLine) {
         if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
           getConnectedJComponent().setText(
               HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
@@ -71,6 +77,16 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
     if (StringUtils.isEmpty(text)) {
       return null;
     }
+    if (formatter != null) {
+      try {
+        Object value = formatter.parse(getConnectedJComponent().getText());
+        getConnectedJComponent().setText(formatter.format(value));
+        return value;
+      } catch (ParseException ex) {
+        setConnecteeValue(null);
+        return null;
+      }
+    }
     return text;
   }
 
@@ -82,5 +98,15 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
    */
   public void setMultiLine(boolean multiLine) {
     this.multiLine = multiLine;
+  }
+
+  /**
+   * Sets the formatter.
+   * 
+   * @param formatter
+   *          the formatter to set.
+   */
+  public void setFormatter(IFormatter formatter) {
+    this.formatter = formatter;
   }
 }

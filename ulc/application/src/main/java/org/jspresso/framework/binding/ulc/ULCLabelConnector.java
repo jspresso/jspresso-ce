@@ -3,7 +3,10 @@
  */
 package org.jspresso.framework.binding.ulc;
 
+import java.text.ParseException;
+
 import org.apache.commons.lang.StringUtils;
+import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.html.HtmlHelper;
 
 import com.ulcjava.base.application.ULCLabel;
@@ -19,7 +22,8 @@ import com.ulcjava.base.application.ULCLabel;
  */
 public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
 
-  private boolean multiLine;
+  private boolean    multiLine;
+  private IFormatter formatter;
 
   /**
    * Constructs a new <code>ULCLabelConnector</code> instance.
@@ -49,7 +53,9 @@ public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
     if (aValue == null) {
       getConnectedULCComponent().setText(null);
     } else {
-      if (multiLine) {
+      if (formatter != null) {
+        getConnectedULCComponent().setText(formatter.format(aValue));
+      } else if (multiLine) {
         if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
           getConnectedULCComponent().setText(
               HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
@@ -71,6 +77,16 @@ public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
     if (StringUtils.isEmpty(text)) {
       return null;
     }
+    if (formatter != null) {
+      try {
+        Object value = formatter.parse(getConnectedULCComponent().getText());
+        getConnectedULCComponent().setText(formatter.format(value));
+        return value;
+      } catch (ParseException ex) {
+        setConnecteeValue(null);
+        return null;
+      }
+    }
     return text;
   }
 
@@ -82,5 +98,15 @@ public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
    */
   public void setMultiLine(boolean multiLine) {
     this.multiLine = multiLine;
+  }
+
+  /**
+   * Sets the formatter.
+   * 
+   * @param formatter
+   *          the formatter to set.
+   */
+  public void setFormatter(IFormatter formatter) {
+    this.formatter = formatter;
   }
 }
