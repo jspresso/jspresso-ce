@@ -3749,39 +3749,13 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     name="columnCount"
     value="2" /&gt; <co id="columnCount_2" />
   ...
-  &lt;property name="propertyViewDescriptors"&gt; <co
-              id="propertyViewDescriptors" />
+  &lt;property name="renderedProperties"&gt; <co id="propertyViewDescriptors" />
     &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="name" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="contact.address" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="contact.city" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="contact.phone" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="contact.email" /&gt;
-      &lt;/bean&gt;
+      &lt;value&gt;name&lt;/value&gt;
+      &lt;value&gt;contact.address&lt;/value&gt;
+      &lt;value&gt;contact.city&lt;/value&gt;
+      &lt;value&gt;contact.phone&lt;/value&gt;
+      &lt;value&gt;contact.email&lt;/value&gt;
     &lt;/list&gt;
   &lt;/property&gt;
   &lt;property name="propertyWidths"&gt; <co id="propertyWidths" />
@@ -3899,20 +3873,10 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;property
     name="modelDescriptor"
     ref="Traceable" /&gt; <co id="modelDescriptor-traceable" />
-  &lt;property name="propertyViewDescriptors"&gt;
+  &lt;property name="renderedProperties"&gt;
     &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="createTimestamp" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="lastUpdateTimestamp" /&gt;
-      &lt;/bean&gt;
+      &lt;value&gt;createTimestamp&lt;/value&gt;
+      &lt;value&gt;lastUpdateTimestamp&lt;/value&gt;
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;
@@ -4458,26 +4422,11 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;property
     name="actionMap"
     ref="masterDetailActionMap" /&gt;
-  &lt;property name="columnViewDescriptors"&gt; <co id="columnViewDescriptors" />
+  &lt;property name="renderedProperties"&gt; <co id="columnViewDescriptors" />
     &lt;list&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="ouId" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="name" /&gt;
-      &lt;/bean&gt;
-      &lt;bean
-        class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"&gt;
-        &lt;property
-          name="name"
-          value="manager" /&gt;
-      &lt;/bean&gt;
+      &lt;value&gt;ouId&lt;/value&gt;
+      &lt;value&gt;name&lt;/value&gt;
+      &lt;value&gt;manager&lt;/value&gt;
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting></para>
