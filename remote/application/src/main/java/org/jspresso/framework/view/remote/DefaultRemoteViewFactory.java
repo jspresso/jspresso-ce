@@ -46,6 +46,7 @@ import org.jspresso.framework.gui.remote.RDecimalComponent;
 import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
 import org.jspresso.framework.gui.remote.REvenGridContainer;
+import org.jspresso.framework.gui.remote.RFont;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RImageComponent;
@@ -89,6 +90,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.CellConstraints;
+import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -414,8 +416,8 @@ public class DefaultRemoteViewFactory extends
             + "] does not exist for model descriptor "
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
-      IView<RComponent> propertyView = createPropertyView(
-          propertyViewDescriptor, actionHandler, locale);
+      IView<RComponent> propertyView = createView(propertyViewDescriptor,
+          actionHandler, locale);
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
@@ -470,7 +472,7 @@ public class DefaultRemoteViewFactory extends
     }
     propertyLabel.setLabel(labelText.toString());
     if (propertyViewDescriptor.getLabelFont() != null) {
-      propertyLabel.setFont(propertyViewDescriptor.getLabelFont());
+      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont()));
     }
     if (propertyViewDescriptor.getLabelForeground() != null) {
       propertyLabel.setForeground(propertyViewDescriptor.getLabelForeground());
@@ -479,6 +481,17 @@ public class DefaultRemoteViewFactory extends
       propertyLabel.setBackground(propertyViewDescriptor.getLabelBackground());
     }
     return propertyLabel;
+  }
+
+  private RFont createFont(String fontString) {
+    org.jspresso.framework.util.gui.Font font = FontHelper
+        .fromString(fontString);
+    RFont rFont = new RFont(getGuidGenerator().generateGUID());
+    rFont.setName(font.getName());
+    rFont.setBold(font.isBold());
+    rFont.setItalic(font.isItalic());
+    rFont.setSize(font.getSize());
+    return rFont;
   }
 
   /**
@@ -980,7 +993,7 @@ public class DefaultRemoteViewFactory extends
         .getColumnViewDescriptors()) {
       try {
         actionHandler.checkAccess(columnViewDescriptor);
-        IView<RComponent> column = createPropertyView(columnViewDescriptor,
+        IView<RComponent> column = createView(columnViewDescriptor,
             actionHandler, locale);
         // Do not use standard createColumnConnector method to preserve
         // formatted value connectors.
@@ -1195,7 +1208,7 @@ public class DefaultRemoteViewFactory extends
       view.getPeer().setBackground(viewDescriptor.getBackground());
     }
     if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(viewDescriptor.getFont());
+      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
     }
     if (viewDescriptor.getIconImageURL() != null) {
       view.getPeer().setIcon(

@@ -47,7 +47,7 @@ public abstract class RComponent extends RemotePeer implements
   private RActionList[]    actionLists;
   private String           background;
   private String           borderType;
-  private String           font;
+  private RFont            font;
   private String           foreground;
   private RIcon            icon;
   private String           label;
@@ -89,15 +89,6 @@ public abstract class RComponent extends RemotePeer implements
    */
   public String getBorderType() {
     return borderType;
-  }
-
-  /**
-   * Gets the font.
-   * 
-   * @return the font.
-   */
-  public String getFont() {
-    return font;
   }
 
   /**
@@ -176,16 +167,6 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Sets the font.
-   * 
-   * @param font
-   *          the font to set.
-   */
-  public void setFont(String font) {
-    this.font = font;
-  }
-
-  /**
    * Sets the foreground.
    * 
    * @param foreground
@@ -233,5 +214,24 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setTooltip(String tooltip) {
     this.tooltip = tooltip;
+  }
+
+  /**
+   * Gets the font.
+   * 
+   * @return the font.
+   */
+  public RFont getFont() {
+    return font;
+  }
+
+  /**
+   * Sets the font.
+   * 
+   * @param font
+   *          the font to set.
+   */
+  public void setFont(RFont font) {
+    this.font = font;
   }
 }

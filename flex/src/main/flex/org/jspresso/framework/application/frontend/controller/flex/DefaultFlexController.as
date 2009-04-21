@@ -93,6 +93,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.gui.remote.RDecimalField;
   import org.jspresso.framework.gui.remote.RDurationField;
   import org.jspresso.framework.gui.remote.REvenGridContainer;
+  import org.jspresso.framework.gui.remote.RFont;
   import org.jspresso.framework.gui.remote.RForm;
   import org.jspresso.framework.gui.remote.RIcon;
   import org.jspresso.framework.gui.remote.RImageComponent;
@@ -817,6 +818,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.gui.remote.RDateField", RDateField);
       registerClassAlias("org.jspresso.framework.gui.remote.RDecimalField", RDecimalField);
       registerClassAlias("org.jspresso.framework.gui.remote.RDurationField", RDurationField);
+      registerClassAlias("org.jspresso.framework.gui.remote.RFont", RFont);
       registerClassAlias("org.jspresso.framework.gui.remote.RForm", RForm);
       registerClassAlias("org.jspresso.framework.gui.remote.REvenGridContainer", REvenGridContainer);
       registerClassAlias("org.jspresso.framework.gui.remote.RConstrainedGridContainer", RConstrainedGridContainer);

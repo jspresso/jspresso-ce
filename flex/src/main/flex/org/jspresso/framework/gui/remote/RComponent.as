@@ -25,7 +25,7 @@ package org.jspresso.framework.gui.remote {
         private var _actionLists:Array;
         private var _background:String;
         private var _borderType:String;
-        private var _font:String;
+        private var _font:RFont;
         private var _foreground:String;
         private var _icon:RIcon;
         private var _label:String;
@@ -57,10 +57,10 @@ package org.jspresso.framework.gui.remote {
             return _borderType;
         }
 
-        public function set font(value:String):void {
+        public function set font(value:RFont):void {
             _font = value;
         }
-        public function get font():String {
+        public function get font():RFont {
             return _font;
         }
 

@@ -413,8 +413,8 @@ public class DefaultWingsViewFactory extends
             + "] does not exist for model descriptor "
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
-      IView<SComponent> propertyView = createPropertyView(
-          propertyViewDescriptor, actionHandler, locale);
+      IView<SComponent> propertyView = createView(propertyViewDescriptor,
+          actionHandler, locale);
       boolean forbidden = false;
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
@@ -1407,8 +1407,8 @@ public class DefaultWingsViewFactory extends
         column.setHeaderValue(columnName.toString());
 
         if (!viewDescriptor.isReadOnly()) {
-          IView<SComponent> editorView = createPropertyView(
-              columnViewDescriptor, actionHandler, locale);
+          IView<SComponent> editorView = createView(columnViewDescriptor,
+              actionHandler, locale);
           if (editorView.getPeer() instanceof SActionField) {
             SActionField actionField = (SActionField) editorView.getPeer();
             actionField.setActions(Collections.singletonList(actionField

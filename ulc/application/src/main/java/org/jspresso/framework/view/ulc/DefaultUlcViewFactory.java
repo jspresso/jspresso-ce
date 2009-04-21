@@ -439,8 +439,8 @@ public class DefaultUlcViewFactory extends
             + "] does not exist for model descriptor "
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
-      IView<ULCComponent> propertyView = createPropertyView(
-          propertyViewDescriptor, actionHandler, locale);
+      IView<ULCComponent> propertyView = createView(propertyViewDescriptor,
+          actionHandler, locale);
       boolean forbidden = false;
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
@@ -1204,8 +1204,8 @@ public class DefaultUlcViewFactory extends
           columnName.append("*");
         }
         column.setHeaderValue(columnName.toString());
-        IView<ULCComponent> editorView = createPropertyView(
-            columnViewDescriptor, actionHandler, locale);
+        IView<ULCComponent> editorView = createView(columnViewDescriptor,
+            actionHandler, locale);
         if (editorView.getPeer() instanceof ULCActionField) {
           ULCActionField actionField = (ULCActionField) editorView.getPeer();
           actionField.setActions(Collections.singletonList(actionField

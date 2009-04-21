@@ -228,6 +228,26 @@ package org.jspresso.framework.view.flex {
         component.setStyle("borderStyle","solid");
         component.setStyle("borderThickness", 3);
       }
+      if(remoteComponent.foreground) {
+        component.setStyle("color", remoteComponent.foreground);
+      }
+      if(remoteComponent.background) {
+        component.setStyle("backgroundColor", remoteComponent.background);
+      }
+      if(remoteComponent.font) {
+        if(remoteComponent.font.name) {
+          component.setStyle("fontFamily", remoteComponent.font.name);
+        }
+        if(remoteComponent.font.size > 0) {
+          component.setStyle("fontSize", remoteComponent.font.size);
+        }
+        if(remoteComponent.font.italic) {
+          component.setStyle("fontStyle", "italic");
+        }
+        if(remoteComponent.font.bold) {
+          component.setStyle("fontWeight", "bold");
+        }
+      }
       if(registerState) {
         _remotePeerRegistry.register(remoteComponent.state);
       }
