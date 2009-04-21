@@ -50,6 +50,7 @@ public class BasicReferencePropertyDescriptor<E> extends
 
   private Map<String, String>     initializationMapping;
   private IComponentDescriptor<E> referencedDescriptor;
+  private Integer                 pageSize;
 
   /**
    * {@inheritDoc}
@@ -149,5 +150,27 @@ public class BasicReferencePropertyDescriptor<E> extends
     // return true;
     // }
     return false;
+  }
+
+  /**
+   * Gets the pageSize.
+   * 
+   * @return the pageSize.
+   */
+  public Integer getPageSize() {
+    if (pageSize == null) {
+      return getComponentDescriptor().getPageSize();
+    }
+    return pageSize;
+  }
+
+  /**
+   * Sets the pageSize.
+   * 
+   * @param pageSize
+   *          the pageSize to set.
+   */
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
   }
 }

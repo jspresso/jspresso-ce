@@ -36,7 +36,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescript
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-
 /**
  * Creates a query component.
  * <p>
@@ -67,7 +66,8 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     IReferencePropertyDescriptor erqDescriptor = (IReferencePropertyDescriptor) context
         .get(ActionContextConstants.COMPONENT_REF_DESCRIPTOR);
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
@@ -77,6 +77,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
     IQueryComponent queryComponent = getEntityFactory(context)
         .createQueryComponentInstance(
             erqDescriptor.getReferencedDescriptor().getQueryComponentContract());
+    queryComponent.setPageSize(erqDescriptor.getPageSize());
 
     Map<String, String> initializationMapping = erqDescriptor
         .getInitializationMapping();

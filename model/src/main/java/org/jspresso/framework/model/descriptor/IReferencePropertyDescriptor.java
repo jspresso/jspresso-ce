@@ -39,7 +39,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete component type.
+ *          the concrete component type.
  */
 public interface IReferencePropertyDescriptor<E> extends
     IRelationshipEndPropertyDescriptor, IComponentDescriptorProvider<E> {
@@ -60,5 +60,13 @@ public interface IReferencePropertyDescriptor<E> extends
    * @return the referenced component descriptor
    */
   IComponentDescriptor<E> getReferencedDescriptor();
+
+  /**
+   * When a list of value is triggered, this is the default page size of the
+   * result list.
+   * 
+   * @return the default page size of the result list.
+   */
+  Integer getPageSize();
 
 }
