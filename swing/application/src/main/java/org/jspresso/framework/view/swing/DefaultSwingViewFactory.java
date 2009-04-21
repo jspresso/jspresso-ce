@@ -157,7 +157,6 @@ import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
-import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -1095,35 +1094,6 @@ public class DefaultSwingViewFactory extends
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<JComponent> createNestingView(
-      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-
-    ICompositeValueConnector connector = getConnectorFactory()
-        .createCompositeValueConnector(
-            viewDescriptor.getModelDescriptor().getName(), null);
-
-    JPanel viewComponent = createJPanel();
-    BorderLayout layout = new BorderLayout();
-    viewComponent.setLayout(layout);
-
-    IView<JComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-
-    IView<JComponent> nestedView = createView(viewDescriptor
-        .getNestedViewDescriptor(), actionHandler, locale);
-
-    connector.addChildConnector(nestedView.getConnector());
-
-    viewComponent.add(nestedView.getPeer(), BorderLayout.CENTER);
-
     return view;
   }
 

@@ -32,7 +32,6 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicNestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
@@ -107,18 +106,18 @@ public class BasicModuleViewDescriptorFactory implements
         // decorator.setActionMap(projectedViewDescriptor.getActionMap());
         // ((BasicViewDescriptor) projectedViewDescriptor).setActionMap(null);
         if (pagingStatusViewDescriptor != null) {
-          BasicNestingViewDescriptor nestingViewDescriptor = new BasicNestingViewDescriptor();
+          BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
           nestingViewDescriptor
               .setModelDescriptor(moduleDescriptor
                   .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
           nestingViewDescriptor
-              .setNestedViewDescriptor(pagingStatusViewDescriptor);
+              .setWestViewDescriptor(pagingStatusViewDescriptor);
           decorator.setSouthViewDescriptor(nestingViewDescriptor);
         }
         projectedViewDescriptor = decorator;
       }
-      BasicNestingViewDescriptor moduleViewDescriptor = new BasicNestingViewDescriptor();
-      moduleViewDescriptor.setNestedViewDescriptor(projectedViewDescriptor);
+      BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
+      moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
       moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
       return moduleViewDescriptor;
     } else if (module instanceof BeanModule) {
@@ -134,9 +133,9 @@ public class BasicModuleViewDescriptorFactory implements
       ((BasicViewDescriptor) projectedViewDescriptor)
           .setModelDescriptor(moduleDescriptor
               .getPropertyDescriptor("moduleObject"));
-      BasicNestingViewDescriptor moduleElementViewDescriptor = new BasicNestingViewDescriptor();
+      BasicBorderViewDescriptor moduleElementViewDescriptor = new BasicBorderViewDescriptor();
       moduleElementViewDescriptor
-          .setNestedViewDescriptor(projectedViewDescriptor);
+          .setCenterViewDescriptor(projectedViewDescriptor);
       moduleElementViewDescriptor.setModelDescriptor(moduleDescriptor);
       return moduleElementViewDescriptor;
     }

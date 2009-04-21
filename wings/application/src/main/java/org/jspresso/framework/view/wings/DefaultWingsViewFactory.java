@@ -108,7 +108,6 @@ import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
-import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -796,33 +795,6 @@ public class DefaultWingsViewFactory extends
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<SComponent> createNestingView(
-      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-
-    ICompositeValueConnector connector = getConnectorFactory()
-        .createCompositeValueConnector(
-            viewDescriptor.getModelDescriptor().getName(), null);
-
-    SPanel viewComponent = createSPanel(new SBorderLayout());
-
-    IView<SComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-
-    IView<SComponent> nestedView = createView(viewDescriptor
-        .getNestedViewDescriptor(), actionHandler, locale);
-
-    connector.addChildConnector(nestedView.getConnector());
-
-    viewComponent.add(nestedView.getPeer(), SBorderLayout.CENTER);
-
     return view;
   }
 

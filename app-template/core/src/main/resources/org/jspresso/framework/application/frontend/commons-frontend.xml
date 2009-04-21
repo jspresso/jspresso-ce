@@ -51,7 +51,7 @@
     </property>
   </bean>
 
-  <bean id="pageableStatusInnerView" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
+  <bean id="pageableStatusView" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
     <property name="name" value="pageableStatus" />
     <property name="modelDescriptor" ref="pageableStatusModel" />
     <property name="columnCount" value="3" />
@@ -69,10 +69,6 @@
         </bean>
       </list>
     </property>
-  </bean>
-  <bean id="pageableStatusView" class="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor">
-    <property name="borderType" value="SIMPLE" />
-    <property name="westViewDescriptor" ref="pageableStatusInnerView" />
   </bean>
 
   <!--
@@ -698,7 +694,6 @@
       <list>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="username" />
-          <property name="labelFont" value=";BOLD;"/>
         </bean>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="password" />

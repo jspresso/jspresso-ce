@@ -21,9 +21,9 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.EOrientation;
 
 /**
  * Default implementation of a split view descriptor.
@@ -48,7 +48,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
     implements ISplitViewDescriptor {
 
   private IViewDescriptor leftTopViewDescriptor;
-  private EOrientation     orientation = EOrientation.VERTICAL;
+  private EOrientation    orientation = EOrientation.VERTICAL;
   private IViewDescriptor rightBottomViewDescriptor;
 
   /**
@@ -93,7 +93,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    *          the leftTopViewDescriptor to set.
    */
   public void setLeftTopViewDescriptor(IViewDescriptor leftTopViewDescriptor) {
-    this.leftTopViewDescriptor = leftTopViewDescriptor;
+    this.leftTopViewDescriptor = completeChildDescriptor(leftTopViewDescriptor);
   }
 
   /**
@@ -114,6 +114,6 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    */
   public void setRightBottomViewDescriptor(
       IViewDescriptor rightBottomViewDescriptor) {
-    this.rightBottomViewDescriptor = rightBottomViewDescriptor;
+    this.rightBottomViewDescriptor = completeChildDescriptor(rightBottomViewDescriptor);
   }
 }

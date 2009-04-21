@@ -26,7 +26,6 @@ import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * Default implementation of a constrained grid view descriptor.
  * <p>
@@ -49,14 +48,14 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class BasicConstrainedGridViewDescriptor extends
     BasicCompositeViewDescriptor implements IConstrainedGridViewDescriptor {
 
-  private Map<IViewDescriptor, CellConstraints> constrainedViews;
+  private Map<IViewDescriptor, CellConstraints> constrainedCells;
 
   /**
    * {@inheritDoc}
    */
   public CellConstraints getCellConstraints(IViewDescriptor viewDescriptor) {
-    if (constrainedViews != null) {
-      return constrainedViews.get(viewDescriptor);
+    if (constrainedCells != null) {
+      return constrainedCells.get(viewDescriptor);
     }
     return null;
   }
@@ -65,17 +64,36 @@ public class BasicConstrainedGridViewDescriptor extends
    * {@inheritDoc}
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
-    return new ArrayList<IViewDescriptor>(constrainedViews.keySet());
+    return new ArrayList<IViewDescriptor>(constrainedCells.keySet());
   }
 
   /**
    * Sets the constrainedViews.
    * 
    * @param constrainedViews
-   *            the constrainedViews to set.
+   *          the constrainedViews to set.
+   * @deprecated use setContrainedCells instead.
    */
+  @Deprecated
   public void setConstrainedViews(
       Map<IViewDescriptor, CellConstraints> constrainedViews) {
-    this.constrainedViews = constrainedViews;
+    setConstrainedCells(constrainedViews);
+  }
+
+  /**
+   * Sets the constrainedCells.
+   * 
+   * @param constrainedCells
+   *          the constrainedCells to set.
+   */
+  public void setConstrainedCells(
+      Map<IViewDescriptor, CellConstraints> constrainedCells) {
+    if (constrainedCells != null) {
+      for (Map.Entry<IViewDescriptor, CellConstraints> constrainedCell : constrainedCells
+          .entrySet()) {
+        completeChildDescriptor(constrainedCell.getKey());
+      }
+    }
+    this.constrainedCells = constrainedCells;
   }
 }

@@ -15,6 +15,9 @@ New features
 2770273  	 Support html text in Flex alerts
 2770380  	 Support paging in collection views
 2772374  	 Suport HTML in read-only text properties
+2777176  	 Get rid of nesting view descriptor (see release notes)
+2777177  	 Get rid of sub view descriptors (see release notes)
+2777219  	 Child view descriptors should inherit enclosing view model
 
 3.0.0
 =====

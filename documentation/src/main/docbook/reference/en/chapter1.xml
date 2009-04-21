@@ -3888,7 +3888,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;property
     name="modelDescriptor"
     ref="Company" /&gt;
-  &lt;property name="viewDescriptors"&gt; <co id="viewDescriptors-tab" />
+  &lt;property name="tabs"&gt; <co id="viewDescriptors-tab" />
     &lt;list&gt;
       &lt;ref local="Company.pane" /&gt;
       &lt;ref local="Traceable.pane" /&gt;
@@ -4703,7 +4703,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   id="Company.tab.pane"
   class="org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt;
   ...
-  &lt;property name="viewDescriptors"&gt;
+  &lt;property name="tabs"&gt;
     &lt;list&gt;
       ...
       &lt;ref local="Company.tree" /&gt; <co id="Company.tree" />

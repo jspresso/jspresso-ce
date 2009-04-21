@@ -86,7 +86,6 @@ import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
-import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
@@ -192,9 +191,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
     IView<E> view = null;
     if (viewDescriptor instanceof IComponentViewDescriptor) {
       view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof INestingViewDescriptor) {
-      view = createNestingView((INestingViewDescriptor) viewDescriptor,
           actionHandler, locale);
     } else if (viewDescriptor instanceof IImageViewDescriptor) {
       view = createImageView((IImageViewDescriptor) viewDescriptor,
@@ -1161,21 +1157,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
         viewComponent, propertyDescriptor, connector, locale);
     return action;
   }
-
-  /**
-   * Creates a nesting view.
-   * 
-   * @param viewDescriptor
-   *          the view descriptor.
-   * @param actionHandler
-   *          the action handler.
-   * @param locale
-   *          the locale.
-   * @return the created nesting view.
-   */
-  protected abstract IView<E> createNestingView(
-      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale);
 
   /**
    * Creates a number property view.

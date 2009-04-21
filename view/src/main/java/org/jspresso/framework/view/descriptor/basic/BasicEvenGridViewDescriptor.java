@@ -46,15 +46,15 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
     implements IEvenGridViewDescriptor {
 
-  private List<IViewDescriptor> childViewDescriptors;
-  private EAxis                  drivingDimension = EAxis.ROW;
+  private List<IViewDescriptor> cells;
+  private EAxis                 drivingDimension = EAxis.ROW;
   private int                   drivingDimensionCellCount;
 
   /**
    * {@inheritDoc}
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
-    return childViewDescriptors;
+    return cells;
   }
 
   /**
@@ -76,9 +76,26 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * 
    * @param viewDescriptors
    *          the viewDescriptors to set.
+   * @deprecated use setCells instead.
    */
+  @Deprecated
   public void setChildViewDescriptors(List<IViewDescriptor> viewDescriptors) {
-    this.childViewDescriptors = viewDescriptors;
+    setCells(viewDescriptors);
+  }
+
+  /**
+   * Sets the cells.
+   * 
+   * @param cells
+   *          the cells to set.
+   */
+  public void setCells(List<IViewDescriptor> cells) {
+    if (cells != null) {
+      for (IViewDescriptor cell : cells) {
+        completeChildDescriptor(cell);
+      }
+    }
+    this.cells = cells;
   }
 
   /**

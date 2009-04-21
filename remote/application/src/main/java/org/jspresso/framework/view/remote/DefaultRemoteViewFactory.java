@@ -106,7 +106,6 @@ import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
-import org.jspresso.framework.view.descriptor.INestingViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -716,32 +715,6 @@ public class DefaultRemoteViewFactory extends
     }
     viewComponent
         .setSelectionMode(viewDescriptor.getSelectionMode().toString());
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<RComponent> createNestingView(
-      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ICompositeValueConnector connector = getConnectorFactory()
-        .createCompositeValueConnector(
-            viewDescriptor.getModelDescriptor().getName(), null);
-
-    RBorderContainer viewComponent = createRBorderContainer();
-
-    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-
-    IView<RComponent> nestedView = createView(viewDescriptor
-        .getNestedViewDescriptor(), actionHandler, locale);
-
-    connector.addChildConnector(nestedView.getConnector());
-
-    viewComponent.setCenter(nestedView.getPeer());
-
     return view;
   }
 

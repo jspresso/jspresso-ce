@@ -24,7 +24,6 @@ import java.util.List;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * Default implementation of a border view descriptor.
  * <p>
@@ -115,49 +114,49 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the centerViewDescriptor.
    * 
    * @param centerViewDescriptor
-   *            the centerViewDescriptor to set.
+   *          the centerViewDescriptor to set.
    */
   public void setCenterViewDescriptor(IViewDescriptor centerViewDescriptor) {
-    this.centerViewDescriptor = centerViewDescriptor;
+    this.centerViewDescriptor = completeChildDescriptor(centerViewDescriptor);
   }
 
   /**
    * Sets the eastViewDescriptor.
    * 
    * @param eastViewDescriptor
-   *            the eastViewDescriptor to set.
+   *          the eastViewDescriptor to set.
    */
   public void setEastViewDescriptor(IViewDescriptor eastViewDescriptor) {
-    this.eastViewDescriptor = eastViewDescriptor;
+    this.eastViewDescriptor = completeChildDescriptor(eastViewDescriptor);
   }
 
   /**
    * Sets the northViewDescriptor.
    * 
    * @param northViewDescriptor
-   *            the northViewDescriptor to set.
+   *          the northViewDescriptor to set.
    */
   public void setNorthViewDescriptor(IViewDescriptor northViewDescriptor) {
-    this.northViewDescriptor = northViewDescriptor;
+    this.northViewDescriptor = completeChildDescriptor(northViewDescriptor);
   }
 
   /**
    * Sets the southViewDescriptor.
    * 
    * @param southViewDescriptor
-   *            the southViewDescriptor to set.
+   *          the southViewDescriptor to set.
    */
   public void setSouthViewDescriptor(IViewDescriptor southViewDescriptor) {
-    this.southViewDescriptor = southViewDescriptor;
+    this.southViewDescriptor = completeChildDescriptor(southViewDescriptor);
   }
 
   /**
    * Sets the westViewDescriptor.
    * 
    * @param westViewDescriptor
-   *            the westViewDescriptor to set.
+   *          the westViewDescriptor to set.
    */
   public void setWestViewDescriptor(IViewDescriptor westViewDescriptor) {
-    this.westViewDescriptor = westViewDescriptor;
+    this.westViewDescriptor = completeChildDescriptor(westViewDescriptor);
   }
 }

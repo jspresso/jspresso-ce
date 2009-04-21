@@ -61,15 +61,6 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   @SuppressWarnings("unchecked")
   public IViewDescriptor createLovViewDescriptor(
       IReferencePropertyDescriptor entityRefDescriptor) {
-    // BasicSplitViewDescriptor lovViewDescriptor = new
-    // BasicSplitViewDescriptor();
-    // lovViewDescriptor
-    // .setLeftTopViewDescriptor(queryViewDescriptorFactory
-    // .createQueryViewDescriptor(entityRefDescriptor
-    // .getComponentDescriptor()));
-    // lovViewDescriptor
-    // .setRightBottomViewDescriptor(createResultViewDescriptor(entityRefDescriptor
-    // .getComponentDescriptor()));
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     lovViewDescriptor
         .setNorthViewDescriptor(queryViewDescriptorFactory
@@ -79,7 +70,9 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
         .setCenterViewDescriptor(createResultViewDescriptor(entityRefDescriptor
             .getComponentDescriptor()));
     if (pagingStatusViewDescriptor != null) {
-      lovViewDescriptor.setSouthViewDescriptor(pagingStatusViewDescriptor);
+      BasicBorderViewDescriptor pagingViewDescriptor = new BasicBorderViewDescriptor();
+      pagingViewDescriptor.setWestViewDescriptor(pagingStatusViewDescriptor);
+      lovViewDescriptor.setSouthViewDescriptor(pagingViewDescriptor);
     }
     return lovViewDescriptor;
 

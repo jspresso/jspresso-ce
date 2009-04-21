@@ -24,7 +24,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * Default implementation of a composite view descriptor.
  * <p>
@@ -78,10 +77,28 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
    * Sets the cascadingModels.
    * 
    * @param cascadingModels
-   *            true if this descriptor is cascading its models based on a
-   *            master / detail relationship.
+   *          true if this descriptor is cascading its models based on a master
+   *          / detail relationship.
    */
   public void setCascadingModels(boolean cascadingModels) {
     this.cascadingModels = cascadingModels;
+  }
+
+  /**
+   * Performs any default initialization on a child view descriptor.
+   * 
+   * @param childViewDescriptor
+   *          the child view descriptor to initialize.
+   * @return the initialized view descriptor.
+   */
+  protected IViewDescriptor completeChildDescriptor(
+      IViewDescriptor childViewDescriptor) {
+    if (!isCascadingModels()
+        && childViewDescriptor instanceof BasicViewDescriptor
+        && childViewDescriptor.getModelDescriptor() == null) {
+      ((BasicViewDescriptor) childViewDescriptor)
+          .setModelDescriptor(getModelDescriptor());
+    }
+    return childViewDescriptor;
   }
 }

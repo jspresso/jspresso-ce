@@ -23,7 +23,6 @@ import java.util.List;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * Default implementation of a tab view descriptor.
  * <p>
@@ -46,22 +45,39 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
     implements ITabViewDescriptor {
 
-  private List<IViewDescriptor> viewDescriptors;
+  private List<IViewDescriptor> tabs;
 
   /**
    * {@inheritDoc}
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
-    return viewDescriptors;
+    return tabs;
   }
 
   /**
    * Sets the viewDescriptors.
    * 
    * @param viewDescriptors
-   *            the viewDescriptors to set.
+   *          the viewDescriptors to set.
+   * @deprecated use setTabs instead.
    */
+  @Deprecated
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
-    this.viewDescriptors = viewDescriptors;
+    setTabs(viewDescriptors);
+  }
+
+  /**
+   * Sets the tabs.
+   * 
+   * @param tabs
+   *          the tabs to set.
+   */
+  public void setTabs(List<IViewDescriptor> tabs) {
+    if (tabs != null) {
+      for (IViewDescriptor childViewDescriptor : tabs) {
+        completeChildDescriptor(childViewDescriptor);
+      }
+    }
+    this.tabs = tabs;
   }
 }

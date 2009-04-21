@@ -1,7 +1,12 @@
 3.0.1
 =====
-Due to a API refactoring in component view descriptors, all references to
+- nesting view descriptors (BasicNestingViewDescriptor) have been removed.
+You can safely change their reference to border view descriptors (BasicBorderViewDescriptor)
+setting the "centerViewDescriptor" to the old "nestedViewDescriptor".
+
+- Due to a API refactoring in component view descriptors, all references to
 BasicSubviewDescriptor must be changed to BasicPropertyViewDescriptor.
+
 
 3.0.0
 =====
