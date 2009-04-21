@@ -438,7 +438,14 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     remotePeerRegistry.unregister(guid);
   }
 
-  void attachListeners(IValueConnector connector) {
+  /**
+   * Attach the necessary listeners to the value connector so that adequate
+   * notifications get sent to the remote client side.
+   * 
+   * @param connector
+   *          the connector to attach listeners to.
+   */
+  protected void attachListeners(IValueConnector connector) {
     connector.addPropertyChangeListener(IValueConnector.READABLE_PROPERTY,
         readabilityListener);
     connector.addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY,

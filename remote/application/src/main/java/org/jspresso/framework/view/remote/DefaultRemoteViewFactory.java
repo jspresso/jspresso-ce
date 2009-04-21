@@ -256,7 +256,7 @@ public class DefaultRemoteViewFactory extends
     RActionField viewComponent = createRActionField(false, connector);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    RActionList actionList = new RActionList(guidGenerator.generateGUID());
+    RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     actionList.setActions(createBinaryActions(viewComponent, connector,
         propertyDescriptor, actionHandler, locale).toArray(new RAction[0]));
     viewComponent.setActionLists(new RActionList[] {actionList});
@@ -445,9 +445,20 @@ public class DefaultRemoteViewFactory extends
     return view;
   }
 
-  private RLabel createPropertyLabel(
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected RLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
-      @SuppressWarnings("unused") RComponent propertyComponent, Locale locale) {
+      RComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     RLabel propertyLabel = createRLabel(null);
@@ -599,7 +610,7 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected RComponent createEmptyComponent() {
     RComponent emptyComponent = createRBorderContainer();
-    emptyComponent.setState(new RemoteCompositeValueState(guidGenerator
+    emptyComponent.setState(new RemoteCompositeValueState(getGuidGenerator()
         .generateGUID()));
     return emptyComponent;
   }
@@ -863,7 +874,7 @@ public class DefaultRemoteViewFactory extends
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    RActionList actionList = new RActionList(guidGenerator.generateGUID());
+    RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     actionList.setActions(new RAction[] {lovAction});
     viewComponent.setActionLists(new RActionList[] {actionList});
     return view;
@@ -874,9 +885,9 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected RComponent createSecurityComponent() {
-    RComponent securityComponent = new RSecurityComponent(guidGenerator
+    RComponent securityComponent = new RSecurityComponent(getGuidGenerator()
         .generateGUID());
-    securityComponent.setState(new RemoteValueState(guidGenerator
+    securityComponent.setState(new RemoteValueState(getGuidGenerator()
         .generateGUID()));
     return securityComponent;
   }
@@ -1120,7 +1131,8 @@ public class DefaultRemoteViewFactory extends
       for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
           .getActionLists().iterator(); iter.hasNext();) {
         ActionList nextActionList = iter.next();
-        RActionList actionList = new RActionList(guidGenerator.generateGUID());
+        RActionList actionList = new RActionList(getGuidGenerator()
+            .generateGUID());
         actionList.setName(nextActionList.getName());
         actionList.setDescription(nextActionList.getDescription());
         actionList.setIcon(getIconFactory().getIcon(
@@ -1230,12 +1242,21 @@ public class DefaultRemoteViewFactory extends
     RemoteValueCommand command = new RemoteValueCommand();
     command.setTargetPeerGuid(cardState.getGuid());
     command.setValue(cardState.getValue());
-    remoteCommandHandler.registerCommand(command);
+    getRemoteCommandHandler().registerCommand(command);
   }
 
-  private RActionField createRActionField(boolean showTextField,
+  /**
+   * Creates a remote action field.
+   * 
+   * @param showTextField
+   *          does it actually show a text field ?
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RActionField createRActionField(boolean showTextField,
       IValueConnector connector) {
-    RActionField component = new RActionField(guidGenerator.generateGUID());
+    RActionField component = new RActionField(getGuidGenerator().generateGUID());
     component.setShowTextField(showTextField);
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
@@ -1243,80 +1264,106 @@ public class DefaultRemoteViewFactory extends
     return component;
   }
 
-  private RBorderContainer createRBorderContainer() {
-    return new RBorderContainer(guidGenerator.generateGUID());
+  /**
+   * Creates a remote border container.
+   * 
+   * @return the created remote component.
+   */
+  protected RBorderContainer createRBorderContainer() {
+    return new RBorderContainer(getGuidGenerator().generateGUID());
   }
 
-  private RCardContainer createRCardContainer() {
-    RCardContainer cardContainer = new RCardContainer(guidGenerator
+  /**
+   * Creates a remote card container.
+   * 
+   * @return the created remote component.
+   */
+  protected RCardContainer createRCardContainer() {
+    RCardContainer cardContainer = new RCardContainer(getGuidGenerator()
         .generateGUID());
     cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory())
-        .createRemoteValueState(guidGenerator.generateGUID()));
+        .createRemoteValueState(getGuidGenerator().generateGUID()));
     return cardContainer;
   }
 
-  private RCheckBox createRCheckBox(IValueConnector connector) {
-    RCheckBox component = new RCheckBox(guidGenerator.generateGUID());
+  /**
+   * Creates a remote check box.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RCheckBox createRCheckBox(IValueConnector connector) {
+    RCheckBox component = new RCheckBox(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RColorField createRColorField(IValueConnector connector) {
-    RColorField component = new RColorField(guidGenerator.generateGUID());
+  /**
+   * Creates a remote color field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RColorField createRColorField(IValueConnector connector) {
+    RColorField component = new RColorField(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RComboBox createRComboBox(IValueConnector connector) {
-    RComboBox component = new RComboBox(guidGenerator.generateGUID());
+  /**
+   * Creates a remote combo box.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RComboBox createRComboBox(IValueConnector connector) {
+    RComboBox component = new RComboBox(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RConstrainedGridContainer createRConstrainedGridContainer() {
-    return new RConstrainedGridContainer(guidGenerator.generateGUID());
+  /**
+   * Creates a remote contrained grid container.
+   * 
+   * @return the created remote component.
+   */
+  protected RConstrainedGridContainer createRConstrainedGridContainer() {
+    return new RConstrainedGridContainer(getGuidGenerator().generateGUID());
   }
 
-  private RDateField createRDateField(IValueConnector connector) {
-    RDateField component = new RDateField(guidGenerator.generateGUID());
+  /**
+   * Creates a remote date field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RDateField createRDateField(IValueConnector connector) {
+    RDateField component = new RDateField(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RDecimalField createRDecimalField(IValueConnector connector) {
-    RDecimalField component = new RDecimalField(guidGenerator.generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
-    return component;
-  }
-
-  private RDurationField createRDurationField(IValueConnector connector) {
-    RDurationField component = new RDurationField(guidGenerator.generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
-    return component;
-  }
-
-  private REvenGridContainer createREvenGridContainer() {
-    return new REvenGridContainer(guidGenerator.generateGUID());
-  }
-
-  private RForm createRForm() {
-    return new RForm(guidGenerator.generateGUID());
-  }
-
-  private RImageComponent createRImageComponent(IValueConnector connector) {
-    RImageComponent component = new RImageComponent(guidGenerator
+  /**
+   * Creates a remote decimal field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RDecimalField createRDecimalField(IValueConnector connector) {
+    RDecimalField component = new RDecimalField(getGuidGenerator()
         .generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
@@ -1324,91 +1371,242 @@ public class DefaultRemoteViewFactory extends
     return component;
   }
 
-  private RIntegerField createRIntegerField(IValueConnector connector) {
-    RIntegerField component = new RIntegerField(guidGenerator.generateGUID());
+  /**
+   * Creates a remote duration field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RDurationField createRDurationField(IValueConnector connector) {
+    RDurationField component = new RDurationField(getGuidGenerator()
+        .generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RList createRList(ICollectionConnector connector) {
-    RList component = new RList(guidGenerator.generateGUID());
+  /**
+   * Creates a remote even grid container.
+   * 
+   * @return the created remote component.
+   */
+  protected REvenGridContainer createREvenGridContainer() {
+    return new REvenGridContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote form.
+   * 
+   * @return the created remote component.
+   */
+  protected RForm createRForm() {
+    return new RForm(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote image component.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RImageComponent createRImageComponent(IValueConnector connector) {
+    RImageComponent component = new RImageComponent(getGuidGenerator()
+        .generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RPasswordField createRPasswordField(IValueConnector connector) {
-    RPasswordField component = new RPasswordField(guidGenerator.generateGUID());
+  /**
+   * Creates a remote integer field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RIntegerField createRIntegerField(IValueConnector connector) {
+    RIntegerField component = new RIntegerField(getGuidGenerator()
+        .generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RPercentField createRPercentField(IValueConnector connector) {
-    RPercentField component = new RPercentField(guidGenerator.generateGUID());
+  /**
+   * Creates a remote list.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RList createRList(ICollectionConnector connector) {
+    RList component = new RList(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RSplitContainer createRSplitContainer() {
-    return new RSplitContainer(guidGenerator.generateGUID());
-  }
-
-  private RTabContainer createRTabContainer() {
-    return new RTabContainer(guidGenerator.generateGUID());
-  }
-
-  private RTable createRTable(IValueConnector connector) {
-    RTable component = new RTable(guidGenerator.generateGUID());
+  /**
+   * Creates a remote password field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RPasswordField createRPasswordField(IValueConnector connector) {
+    RPasswordField component = new RPasswordField(getGuidGenerator()
+        .generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RTextArea createRTextArea(IValueConnector connector) {
-    RTextArea component = new RTextArea(guidGenerator.generateGUID());
+  /**
+   * Creates a remote percent field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RPercentField createRPercentField(IValueConnector connector) {
+    RPercentField component = new RPercentField(getGuidGenerator()
+        .generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RLabel createRLabel(IValueConnector connector) {
-    RLabel component = new RLabel(guidGenerator.generateGUID());
+  /**
+   * Creates a remote split container.
+   * 
+   * @return the created remote component.
+   */
+  protected RSplitContainer createRSplitContainer() {
+    return new RSplitContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote tab container.
+   * 
+   * @return the created remote component.
+   */
+  protected RTabContainer createRTabContainer() {
+    return new RTabContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote table.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTable createRTable(IValueConnector connector) {
+    RTable component = new RTable(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RTextField createRTextField(IValueConnector connector) {
-    RTextField component = new RTextField(guidGenerator.generateGUID());
+  /**
+   * Creates a remote text area.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTextArea createRTextArea(IValueConnector connector) {
+    RTextArea component = new RTextArea(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RTimeField createRTimeField(IValueConnector connector) {
-    RTimeField component = new RTimeField(guidGenerator.generateGUID());
+  /**
+   * Creates a remote label.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RLabel createRLabel(IValueConnector connector) {
+    RLabel component = new RLabel(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
   }
 
-  private RTree createRTree(IValueConnector connector) {
-    RTree component = new RTree(guidGenerator.generateGUID());
+  /**
+   * Creates a remote text field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTextField createRTextField(IValueConnector connector) {
+    RTextField component = new RTextField(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
     return component;
+  }
+
+  /**
+   * Creates a remote time field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTimeField createRTimeField(IValueConnector connector) {
+    RTimeField component = new RTimeField(getGuidGenerator().generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  /**
+   * Creates a remote tree.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTree createRTree(IValueConnector connector) {
+    RTree component = new RTree(getGuidGenerator().generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  /**
+   * Gets the getGuidGenerator().
+   * 
+   * @return the getGuidGenerator().
+   */
+  protected IGUIDGenerator getGuidGenerator() {
+    return guidGenerator;
+  }
+
+  /**
+   * Gets the remoteCommandHandler.
+   * 
+   * @return the remoteCommandHandler.
+   */
+  protected IRemoteCommandHandler getRemoteCommandHandler() {
+    return remoteCommandHandler;
   }
 }
