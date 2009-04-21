@@ -228,13 +228,19 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void adjustSizes(ULCComponent component, IFormatter formatter,
-      Object templateValue, int extraWidth) {
+  protected void adjustSizes(IViewDescriptor viewDescriptor,
+      ULCComponent component, IFormatter formatter, Object templateValue,
+      int extraWidth) {
+    if (viewDescriptor.getFont() != null) {
+      // must set font before computing size.
+      component.setFont(createFont(viewDescriptor.getFont(), component
+          .getFont()));
+    }
     int preferredWidth = computePixelWidth(component, getFormatLength(
         formatter, templateValue))
         + extraWidth;
     Dimension size = new Dimension(preferredWidth, component.getFont()
-        .getSize() + 6);
+        .getSize() * 5 / 3);
     component.setMinimumSize(size);
     component.setPreferredSize(size);
     component.setMaximumSize(size);
@@ -267,7 +273,7 @@ public class DefaultUlcViewFactory extends
     connector.setExceptionHandler(actionHandler);
     viewComponent.setActions(createBinaryActions(viewComponent, connector,
         propertyDescriptor, actionHandler, locale));
-    adjustSizes(viewComponent, null, null);
+    adjustSizes(propertyViewDescriptor, viewComponent, null, null);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -456,7 +462,7 @@ public class DefaultUlcViewFactory extends
       }
       propertyView.getConnector().setLocallyWritable(
           !propertyViewDescriptor.isReadOnly());
-      ULCLabel propertyLabel = createPropertyLabel(propertyDescriptor,
+      ULCLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
           propertyView.getPeer(), locale);
       if (forbidden) {
         propertyLabel.setText(" ");
@@ -620,7 +626,7 @@ public class DefaultUlcViewFactory extends
     ULCDateFieldConnector connector = new ULCDateFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, createFormatter(format),
+    adjustSizes(propertyViewDescriptor, viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), ClientContext
             .getScreenResolution() / 3);
     return constructView(viewComponent, propertyViewDescriptor, connector);
@@ -646,7 +652,7 @@ public class DefaultUlcViewFactory extends
         propertyDescriptor.getName(), viewComponent);
     connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -667,7 +673,7 @@ public class DefaultUlcViewFactory extends
         propertyDescriptor.getName(), viewComponent);
     connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -698,9 +704,9 @@ public class DefaultUlcViewFactory extends
     }
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
         propertyDescriptor, locale));
-    adjustSizes(viewComponent, null, getEnumerationTemplateValue(
-        propertyDescriptor, locale),
-        ClientContext.getScreenResolution() * 2 / 6);
+    adjustSizes(propertyViewDescriptor, viewComponent, null,
+        getEnumerationTemplateValue(propertyDescriptor, locale), ClientContext
+            .getScreenResolution() * 2 / 6);
     ULCComboBoxConnector connector = new ULCComboBoxConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
@@ -809,7 +815,7 @@ public class DefaultUlcViewFactory extends
           (ULCTextField) viewComponent);
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -887,7 +893,8 @@ public class DefaultUlcViewFactory extends
     ULCPasswordFieldConnector connector = new ULCPasswordFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    adjustSizes(propertyViewDescriptor, viewComponent, null,
+        getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -906,7 +913,7 @@ public class DefaultUlcViewFactory extends
         propertyDescriptor.getName(), viewComponent);
     connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -944,7 +951,7 @@ public class DefaultUlcViewFactory extends
           IIconFactory.TINY_ICON_SIZE));
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
-    adjustSizes(viewComponent, null, null);
+    adjustSizes(propertyViewDescriptor, viewComponent, null, null);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1040,7 +1047,8 @@ public class DefaultUlcViewFactory extends
           (ULCTextField) viewComponent);
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    adjustSizes(propertyViewDescriptor, viewComponent, null,
+        getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1363,7 +1371,7 @@ public class DefaultUlcViewFactory extends
         propertyDescriptor.getName(), viewComponent);
     connector.setFormatter(formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getTimeTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -1745,7 +1753,8 @@ public class DefaultUlcViewFactory extends
       view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
     }
     if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+      view.getPeer().setFont(
+          createFont(viewDescriptor.getFont(), view.getPeer().getFont()));
     }
     if (viewDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
@@ -1856,7 +1865,7 @@ public class DefaultUlcViewFactory extends
         propertyDescriptor, locale);
   }
 
-  private Font createFont(String fontString) {
+  private Font createFont(String fontString, Font defaultFont) {
     org.jspresso.framework.util.gui.Font font = FontHelper
         .fromString(fontString);
     int fontStyle;
@@ -1868,6 +1877,12 @@ public class DefaultUlcViewFactory extends
       fontStyle = Font.ITALIC;
     } else {
       fontStyle = Font.PLAIN;
+    }
+    if (font.getName() == null || font.getName().length() == 0) {
+      font.setName(defaultFont.getName());
+    }
+    if (font.getSize() < 0) {
+      font.setSize(defaultFont.getSize());
     }
     return new Font(font.getName(), fontStyle, font.getSize());
   }
@@ -1957,8 +1972,11 @@ public class DefaultUlcViewFactory extends
     return null;
   }
 
-  private ULCLabel createPropertyLabel(IPropertyDescriptor propertyDescriptor,
+  private ULCLabel createPropertyLabel(
+      IPropertyViewDescriptor propertyViewDescriptor,
       ULCComponent propertyComponent, Locale locale) {
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     ULCLabel propertyLabel = createULCLabel();
     StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
         getTranslationProvider(), locale));
@@ -1968,7 +1986,18 @@ public class DefaultUlcViewFactory extends
     }
     propertyLabel.setText(labelText.toString());
     propertyLabel.setLabelFor(propertyComponent);
-
+    if (propertyViewDescriptor.getLabelFont() != null) {
+      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
+          propertyLabel.getFont()));
+    }
+    if (propertyViewDescriptor.getLabelForeground() != null) {
+      propertyLabel.setForeground(createColor(propertyViewDescriptor
+          .getLabelForeground()));
+    }
+    if (propertyViewDescriptor.getLabelBackground() != null) {
+      propertyLabel.setBackground(createColor(propertyViewDescriptor
+          .getLabelBackground()));
+    }
     return propertyLabel;
   }
 

@@ -51,6 +51,9 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   private List<String> renderedChildProperties;
   private int          width;
+  private String       labelBackground;
+  private String       labelFont;
+  private String       labelForeground;
 
   /**
    * Constructs a new <code>BasicPropertyViewDescriptor</code> instance.
@@ -106,5 +109,62 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    */
   public void setWidth(int width) {
     this.width = width;
+  }
+
+  /**
+   * Gets the labelBackground.
+   * 
+   * @return the labelBackground.
+   */
+  public String getLabelBackground() {
+    return labelBackground;
+  }
+
+  /**
+   * Sets the labelBackground.
+   * 
+   * @param labelBackground
+   *          the labelBackground to set.
+   */
+  public void setLabelBackground(String labelBackground) {
+    this.labelBackground = labelBackground;
+  }
+
+  /**
+   * Gets the labelFont.
+   * 
+   * @return the labelFont.
+   */
+  public String getLabelFont() {
+    return labelFont;
+  }
+
+  /**
+   * Sets the labelFont.
+   * 
+   * @param labelFont
+   *          the labelFont to set.
+   */
+  public void setLabelFont(String labelFont) {
+    this.labelFont = labelFont;
+  }
+
+  /**
+   * Gets the labelForeground.
+   * 
+   * @return the labelForeground.
+   */
+  public String getLabelForeground() {
+    return labelForeground;
+  }
+
+  /**
+   * Sets the labelForeground.
+   * 
+   * @param labelForeground
+   *          the labelForeground to set.
+   */
+  public void setLabelForeground(String labelForeground) {
+    this.labelForeground = labelForeground;
   }
 }

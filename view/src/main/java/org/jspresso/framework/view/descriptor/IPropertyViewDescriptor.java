@@ -56,4 +56,25 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
    * @return the spanned column count.
    */
   int getWidth();
+
+  /**
+   * Gets the label background.
+   * 
+   * @return the label background.
+   */
+  String getLabelBackground();
+
+  /**
+   * Gets the label font.
+   * 
+   * @return the label font.
+   */
+  String getLabelFont();
+
+  /**
+   * Gets the label foreground.
+   * 
+   * @return the label foreground.
+   */
+  String getLabelForeground();
 }

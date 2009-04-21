@@ -163,7 +163,7 @@ import org.wings.tree.SDefaultTreeCellRenderer;
 import org.wingx.XCalendar;
 
 /**
- * Factory for swing views.
+ * Factory for Wings views.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -186,6 +186,8 @@ public class DefaultWingsViewFactory extends
 
   private IListSelectionModelBinder listSelectionModelBinder;
   private ITreeSelectionModelBinder treeSelectionModelBinder;
+  private static final SFont        DEFAULT_FONT = new SFont(null, SFont.PLAIN,
+                                                     SFont.DEFAULT_SIZE);
 
   /**
    * Sets the listSelectionModelBinder.
@@ -213,8 +215,14 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void adjustSizes(SComponent component, IFormatter formatter,
-      Object templateValue, int extraWidth) {
+  protected void adjustSizes(IViewDescriptor viewDescriptor,
+      SComponent component, IFormatter formatter, Object templateValue,
+      int extraWidth) {
+    if (viewDescriptor.getFont() != null) {
+      // must set font before computing size.
+      component.setFont(createFont(viewDescriptor.getFont(), component
+          .getFont()));
+    }
     int preferredWidth = computePixelWidth(component, getFormatLength(
         formatter, templateValue))
         + extraWidth;
@@ -231,7 +239,10 @@ public class DefaultWingsViewFactory extends
     if (characterLength > 0 && characterLength < getMaxCharacterLength()) {
       charLength = characterLength + 2;
     }
-    int fontSize = 12;
+    int fontSize = DEFAULT_FONT.getSize();
+    if (fontSize == SFont.DEFAULT_SIZE) {
+      fontSize = 12;
+    }
     if (component.getFont() != null) {
       fontSize = component.getFont().getSize();
     }
@@ -246,14 +257,14 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IBinaryPropertyDescriptor propertyDescriptor = (IBinaryPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     SActionField viewComponent = createSActionField(false);
     SActionFieldConnector connector = new SActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     viewComponent.setActions(createBinaryActions(viewComponent, connector,
         propertyDescriptor, actionHandler, locale));
-    adjustSizes(viewComponent, null, null);
+    adjustSizes(propertyViewDescriptor, viewComponent, null, null);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -265,7 +276,7 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     SCheckBox viewComponent = createSCheckBox();
     SCheckBoxConnector connector = new SCheckBoxConnector(propertyDescriptor
         .getName(), viewComponent);
@@ -357,7 +368,7 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     SColorPicker viewComponent = createSColorPicker();
     if (propertyDescriptor.getDefaultValue() != null) {
       int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
@@ -403,8 +414,8 @@ public class DefaultWingsViewFactory extends
             + "] does not exist for model descriptor "
             + viewDescriptor.getModelDescriptor().getName() + ".");
       }
-      IView<SComponent> propertyView = createPropertyView(propertyViewDescriptor,
-                    actionHandler, locale);
+      IView<SComponent> propertyView = createPropertyView(
+          propertyViewDescriptor, actionHandler, locale);
       boolean forbidden = false;
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
@@ -425,7 +436,7 @@ public class DefaultWingsViewFactory extends
       }
       propertyView.getConnector().setLocallyWritable(
           !propertyViewDescriptor.isReadOnly());
-      SLabel propertyLabel = createPropertyLabel(propertyDescriptor,
+      SLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
           propertyView.getPeer(), locale);
       if (forbidden) {
         propertyLabel.setText(" ");
@@ -572,17 +583,17 @@ public class DefaultWingsViewFactory extends
    */
   @Override
   protected IView<SComponent> createDatePropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     XCalendar viewComponent = createDateField();
     DateFormat format = createDateFormat(propertyDescriptor, locale);
     viewComponent.setFormatter(new SDateFormatter(format));
     XCalendarConnector connector = new XCalendarConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, createFormatter(format),
+    adjustSizes(propertyViewDescriptor, viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), 64);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -595,10 +606,9 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IDecimalPropertyDescriptor propertyDescriptor = (IDecimalPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentPropertyView(
-          propertyViewDescriptor, actionHandler,
+      return createPercentPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
     STextField viewComponent = createSTextField();
@@ -606,7 +616,7 @@ public class DefaultWingsViewFactory extends
     SFormattedFieldConnector connector = new SFormattedFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -619,13 +629,13 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     STextField viewComponent = createSTextField();
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
     SFormattedFieldConnector connector = new SFormattedFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -646,7 +656,7 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     SComboBox viewComponent = createSComboBox();
     if (!propertyDescriptor.isMandatory()) {
       viewComponent.addItem(null);
@@ -656,8 +666,8 @@ public class DefaultWingsViewFactory extends
     }
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
         propertyDescriptor, locale));
-    adjustSizes(viewComponent, null, getEnumerationTemplateValue(
-        propertyDescriptor, locale), 48);
+    adjustSizes(propertyViewDescriptor, viewComponent, null,
+        getEnumerationTemplateValue(propertyDescriptor, locale), 48);
     SComboBoxConnector connector = new SComboBoxConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
@@ -732,7 +742,7 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
     SComponent viewComponent;
     IValueConnector connector;
@@ -747,7 +757,7 @@ public class DefaultWingsViewFactory extends
           (STextField) viewComponent, formatter);
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -824,12 +834,13 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IPasswordPropertyDescriptor propertyDescriptor = (IPasswordPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     SPasswordField viewComponent = createSPasswordField();
     SPasswordFieldConnector connector = new SPasswordFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    adjustSizes(propertyViewDescriptor, viewComponent, null,
+        getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -841,13 +852,13 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     STextField viewComponent = createSTextField();
     IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
     SPercentFieldConnector connector = new SPercentFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -860,7 +871,7 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     SActionField viewComponent = createSActionField(true);
     SReferenceFieldConnector connector = new SReferenceFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -885,7 +896,7 @@ public class DefaultWingsViewFactory extends
           IIconFactory.TINY_ICON_SIZE));
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
-    adjustSizes(viewComponent, null, null);
+    adjustSizes(propertyViewDescriptor, viewComponent, null, null);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1277,7 +1288,7 @@ public class DefaultWingsViewFactory extends
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     SComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1290,7 +1301,8 @@ public class DefaultWingsViewFactory extends
           (STextField) viewComponent);
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    adjustSizes(propertyViewDescriptor, viewComponent, null,
+        getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1423,7 +1435,8 @@ public class DefaultWingsViewFactory extends
         column.setHeaderValue(columnName.toString());
 
         if (!viewDescriptor.isReadOnly()) {
-          IView<SComponent> editorView = createPropertyView(columnViewDescriptor, actionHandler, locale);
+          IView<SComponent> editorView = createPropertyView(
+              columnViewDescriptor, actionHandler, locale);
           if (editorView.getPeer() instanceof SActionField) {
             SActionField actionField = (SActionField) editorView.getPeer();
             actionField.setActions(Collections.singletonList(actionField
@@ -1515,10 +1528,10 @@ public class DefaultWingsViewFactory extends
    */
   @Override
   protected IView<SComponent> createTextPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     IValueConnector connector;
     SComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1538,7 +1551,8 @@ public class DefaultWingsViewFactory extends
           (STextArea) viewComponent);
     }
     connector.setExceptionHandler(actionHandler);
-    IView<SComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<SComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -1547,16 +1561,16 @@ public class DefaultWingsViewFactory extends
    */
   @Override
   protected IView<SComponent> createTimePropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
-    .getModelDescriptor();
+        .getModelDescriptor();
     STextField viewComponent = createSTextField();
     IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
     SFormattedFieldConnector connector = new SFormattedFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(viewComponent, formatter,
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getTimeTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -1682,7 +1696,8 @@ public class DefaultWingsViewFactory extends
       view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
     }
     if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+      view.getPeer().setFont(
+          createFont(viewDescriptor.getFont(), view.getPeer().getFont()));
     }
     if (viewDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
@@ -1786,7 +1801,13 @@ public class DefaultWingsViewFactory extends
   // return view;
   // }
 
-  private SFont createFont(String fontString) {
+  private SFont createFont(String fontString, SFont defaultFont) {
+    SFont actualDefaultFont;
+    if (defaultFont != null) {
+      actualDefaultFont = defaultFont;
+    } else {
+      actualDefaultFont = DEFAULT_FONT;
+    }
     org.jspresso.framework.util.gui.Font font = FontHelper
         .fromString(fontString);
     int fontStyle;
@@ -1798,6 +1819,12 @@ public class DefaultWingsViewFactory extends
       fontStyle = SFont.ITALIC;
     } else {
       fontStyle = SFont.PLAIN;
+    }
+    if (font.getName() == null || font.getName().length() == 0) {
+      font.setName(actualDefaultFont.getFace());
+    }
+    if (font.getSize() < 0) {
+      font.setSize(actualDefaultFont.getSize());
     }
     return new SFont(font.getName(), fontStyle, font.getSize());
   }
@@ -1853,8 +1880,11 @@ public class DefaultWingsViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private SLabel createPropertyLabel(IPropertyDescriptor propertyDescriptor,
+  private SLabel createPropertyLabel(
+      IPropertyViewDescriptor propertyViewDescriptor,
       @SuppressWarnings("unused") SComponent propertyComponent, Locale locale) {
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     SLabel propertyLabel = createSLabel();
     StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
         getTranslationProvider(), locale));
@@ -1863,6 +1893,18 @@ public class DefaultWingsViewFactory extends
       propertyLabel.setForeground(Color.RED);
     }
     propertyLabel.setText(labelText.toString());
+    if (propertyViewDescriptor.getLabelFont() != null) {
+      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
+          propertyLabel.getFont()));
+    }
+    if (propertyViewDescriptor.getLabelForeground() != null) {
+      propertyLabel.setForeground(createColor(propertyViewDescriptor
+          .getLabelForeground()));
+    }
+    if (propertyViewDescriptor.getLabelBackground() != null) {
+      propertyLabel.setBackground(createColor(propertyViewDescriptor
+          .getLabelBackground()));
+    }
     return propertyLabel;
   }
 

@@ -222,7 +222,9 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected void adjustSizes(@SuppressWarnings("unused") RComponent component,
+  protected void adjustSizes(
+      @SuppressWarnings("unused") IViewDescriptor viewDescriptor,
+      @SuppressWarnings("unused") RComponent component,
       @SuppressWarnings("unused") IFormatter formatter,
       @SuppressWarnings("unused") Object templateValue,
       @SuppressWarnings("unused") int extraWidth) {

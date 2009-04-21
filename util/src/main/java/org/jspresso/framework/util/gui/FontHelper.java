@@ -61,7 +61,7 @@ public final class FontHelper {
    */
   public static Font fromString(String fontString) {
     if (fontString != null) {
-      String[] fontAttributes = fontString.split(SEP);
+      String[] fontAttributes = fontString.split(SEP, -1);
       if (fontAttributes.length == 3) {
         Font font = new Font();
         font.setName(fontAttributes[0]);
@@ -71,7 +71,12 @@ public final class FontHelper {
         if (fontAttributes[1].indexOf(ITALIC) >= 0) {
           font.setItalic(true);
         }
-        font.setSize(Integer.parseInt(fontAttributes[2]));
+        if (fontAttributes[2] != null && fontAttributes[2].length() > 0) {
+          font.setSize(Integer.parseInt(fontAttributes[2]));
+        } else {
+          font.setSize(-1);
+        }
+        return font;
       }
     }
     throw new IllegalArgumentException(

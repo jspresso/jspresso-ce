@@ -415,10 +415,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the formatter used if any.
    * @param templateValue
    *          the template value used.
+   * @param viewDescriptor
+   *          the underlying view descriptor.
    */
-  protected void adjustSizes(E component, IFormatter formatter,
-      Object templateValue) {
-    adjustSizes(component, formatter, templateValue, 32);
+  protected void adjustSizes(IViewDescriptor viewDescriptor, E component,
+      IFormatter formatter, Object templateValue) {
+    adjustSizes(viewDescriptor, component, formatter, templateValue, 32);
   }
 
   /**
@@ -431,11 +433,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the formatter used if any.
    * @param templateValue
    *          the template value used.
+   * @param viewDescriptor
+   *          the underlying view descriptor.
    * @param extraWidth
    *          the extra size to be added.
    */
-  protected abstract void adjustSizes(E component, IFormatter formatter,
-      Object templateValue, int extraWidth);
+  protected abstract void adjustSizes(IViewDescriptor viewDescriptor,
+      E component, IFormatter formatter, Object templateValue, int extraWidth);
 
   /**
    * Computes an enumeration key.
