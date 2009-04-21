@@ -761,18 +761,9 @@ package org.jspresso.framework.view.flex {
         var rComponentLabel:RComponent = remoteForm.elementLabels[i] as RComponent;
         var component:UIComponent = createComponent(rComponent);
         var componentLabel:UIComponent = createComponent(rComponentLabel, false);
-//        var componentLabel:Label = new Label();
         var labelCell:GridItem = new GridItem();
         
         var componentCell:GridItem = new GridItem();
-
-//        if(rComponent.label) {
-//          if(isHtml(rComponent.label)) {
-//            componentLabel.htmlText = rComponent.label;
-//          } else {
-//            componentLabel.text = rComponent.label;
-//          }
-//        }
 
         if(elementWidth > remoteForm.columnCount) {
           elementWidth = remoteForm.columnCount;
@@ -795,7 +786,6 @@ package org.jspresso.framework.view.flex {
           labelCell.colSpan = elementWidth;
           componentCell.colSpan = elementWidth;
         } else {
-          //labelCell.setStyle("horizontalAlign","right");
           labelCell.setStyle("verticalAlign","middle");
           componentCell.colSpan = (elementWidth * 2) - 1;
         }
@@ -840,17 +830,10 @@ package org.jspresso.framework.view.flex {
         } else {
           component.percentHeight = 100.0;
         }
-//        component.percentWidth = 100.0;
-//        component.percentHeight = 100.0;
         splitContainer.addChild(component);
       }
       if(remoteSplitContainer.rightBottom != null) {
         component = createComponent(remoteSplitContainer.rightBottom);
-//        if(remoteSplitContainer.orientation == "VERTICAL") {
-//          component.percentWidth = 100.0;
-//        } else {
-//          component.percentHeight = 100.0;
-//        }
         component.percentWidth = 100.0;
         component.percentHeight = 100.0;
 
