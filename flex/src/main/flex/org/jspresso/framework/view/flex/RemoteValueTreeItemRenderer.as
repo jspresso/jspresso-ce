@@ -29,7 +29,7 @@ package org.jspresso.framework.view.flex {
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			if(data is RemoteCompositeValueState) {
+			if(data is RemoteCompositeValueState && (data as RemoteCompositeValueState).iconImageUrl) {
 				image.x = icon.x;
 				image.y = icon.y;
 				image.width = icon.width;
@@ -38,8 +38,11 @@ package org.jspresso.framework.view.flex {
 				if(iconImageUrl) {
 				  image.source = iconImageUrl;
 				}
-				
+				image.visible = true;
 				icon.visible = false;
+			} else {
+				image.visible = false;
+				icon.visible = true;
 			}
 		}
   }

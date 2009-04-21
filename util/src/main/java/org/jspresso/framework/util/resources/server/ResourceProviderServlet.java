@@ -65,24 +65,24 @@ public class ResourceProviderServlet extends HttpServlet {
   /**
    * the url pattern to activate a resource download.
    */
-  public static final String DOWNLOAD_SERVLET_URL_PATTERN = "/download";
+  private static final String DOWNLOAD_SERVLET_URL_PATTERN = "/download";
 
   /**
    * id.
    */
-  public static final String ID_PARAMETER                 = "id";
+  private static final String ID_PARAMETER                 = "id";
 
   /**
    * localUrl.
    */
-  public static final String LOCAL_URL_PARAMETER          = "localUrl";
+  private static final String LOCAL_URL_PARAMETER          = "localUrl";
 
   /**
    * the url pattern to activate a resource upload.
    */
-  public static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
+  private static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
 
-  private static final long  serialVersionUID             = 5253634459280974738L;
+  private static final long   serialVersionUID             = 5253634459280974738L;
 
   /**
    * Computes the url where the resource is available for download.
@@ -118,9 +118,12 @@ public class ResourceProviderServlet extends HttpServlet {
    * @return the resource url.
    */
   public static String computeLocalResourceDownloadUrl(String localUrl) {
-    HttpServletRequest request = HttpRequestHolder.getServletRequest();
-    return computeUrl(request, "?"
-        + ResourceProviderServlet.LOCAL_URL_PARAMETER + "=" + localUrl);
+    if (localUrl != null) {
+      HttpServletRequest request = HttpRequestHolder.getServletRequest();
+      return computeUrl(request, "?"
+          + ResourceProviderServlet.LOCAL_URL_PARAMETER + "=" + localUrl);
+    }
+    return null;
   }
 
   /**

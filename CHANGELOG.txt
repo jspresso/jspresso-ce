@@ -9,6 +9,7 @@ Bugs fixed
 2777122  	 Fonts are not handled correctly when specified
 2777344  	 Flex forms do not respect labels customizations
 2777413  	 Flex date fields are not bound correctly
+2777597  	 Unset iconImageUrls generates erronous stackTraces in tomcat
 
 New features
 ------------
