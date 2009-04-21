@@ -84,23 +84,33 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
   public void setValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    Object finalTarget = getLastNestedTarget(target, getProperty());
-    if (finalTarget != null) {
-      if (finalTarget instanceof Map) {
-        if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
-            getLastNestedProperty())) {
-          // We are explicitely on a bean property. Do not use
-          // PropertyUtils.getProperty since it will detect that the target
-          // is a Map and access its properties as such.
-          PropertyUtils.setSimpleProperty(finalTarget, getLastNestedProperty(),
-              value);
+    try {
+      Object finalTarget = getLastNestedTarget(target, getProperty());
+      if (finalTarget != null) {
+        if (finalTarget instanceof Map) {
+          if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
+              getLastNestedProperty())) {
+            // We are explicitely on a bean property. Do not use
+            // PropertyUtils.getProperty since it will detect that the target
+            // is a Map and access its properties as such.
+            PropertyUtils.setSimpleProperty(finalTarget,
+                getLastNestedProperty(), value);
+          } else {
+            PropertyUtils.setProperty(finalTarget, getLastNestedProperty(),
+                value);
+          }
         } else {
           PropertyUtils
               .setProperty(finalTarget, getLastNestedProperty(), value);
         }
-      } else {
-        PropertyUtils.setProperty(finalTarget, getLastNestedProperty(), value);
       }
+    } catch (InvocationTargetException ex) {
+      // unnest invocation target exceptions so that the original
+      // one can be correctly handled by the exception handlers.
+      if (ex.getTargetException() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getTargetException();
+      }
+      throw ex;
     }
   }
 
