@@ -57,7 +57,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * @param connectorFactory
    *          the remote connector factory.
    */
-  public RemoteValueConnector(String id, RemoteConnectorFactory     connectorFactory) {
+  public RemoteValueConnector(String id, RemoteConnectorFactory connectorFactory) {
     super(id);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
@@ -112,10 +112,19 @@ public class RemoteValueConnector extends BasicValueConnector implements
    */
   protected RemoteValueState createState() {
     RemoteValueState createdState = connectorFactory
-    .createRemoteValueState(getGuid());
+        .createRemoteValueState(getGuid());
     createdState.setValue(getConnectorValue());
     createdState.setReadable(isReadable());
     createdState.setWritable(isWritable());
     return createdState;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void setConnecteeValue(Object connecteeValue) {
+    super.setConnecteeValue(connecteeValue);
+    getState().setValue(getConnectorValue());
   }
 }

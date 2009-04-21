@@ -123,4 +123,13 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     createdState.setWritable(isWritable());
     return createdState;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void setConnecteeValue(Object connecteeValue) {
+    super.setConnecteeValue(connecteeValue);
+    getState().setValue(getConnectorValueAsString());
+  }
 }
