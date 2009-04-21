@@ -7,6 +7,7 @@ Bugs fixed
 2772086  	 Nested accessors fail when accessing beans in maps
 2772366  	 Login dialog displays with null login context
 2777122  	 Fonts are not handled correctly when specified
+2777344  	 Flex forms do not respect labels customizations
 
 New features
 ------------

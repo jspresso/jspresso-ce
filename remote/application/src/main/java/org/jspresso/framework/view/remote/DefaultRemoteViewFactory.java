@@ -398,6 +398,7 @@ public class DefaultRemoteViewFactory extends
 
     List<Integer> elementWidths = new ArrayList<Integer>();
     List<RComponent> elements = new ArrayList<RComponent>();
+    List<RComponent> elementLabels = new ArrayList<RComponent>();
 
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -421,6 +422,8 @@ public class DefaultRemoteViewFactory extends
         propertyView.setPeer(createSecurityComponent());
       }
       elements.add(propertyView.getPeer());
+      elementLabels.add(createPropertyLabel(propertyViewDescriptor,
+          propertyView.getPeer(), locale));
       elementWidths.add(new Integer(propertyViewDescriptor.getWidth()));
       connector.addChildConnector(propertyView.getConnector());
       if (propertyViewDescriptor.getReadabilityGates() != null) {
@@ -438,7 +441,33 @@ public class DefaultRemoteViewFactory extends
     }
     viewComponent.setElementWidths(elementWidths.toArray(new Integer[0]));
     viewComponent.setElements(elements.toArray(new RComponent[0]));
+    viewComponent.setElementLabels(elementLabels.toArray(new RComponent[0]));
     return view;
+  }
+
+  private RLabel createPropertyLabel(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      @SuppressWarnings("unused") RComponent propertyComponent, Locale locale) {
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    RLabel propertyLabel = createRLabel(null);
+    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
+        getTranslationProvider(), locale));
+    if (propertyDescriptor.isMandatory()) {
+      labelText.append("*");
+      propertyLabel.setForeground("0x00FF0000");
+    }
+    propertyLabel.setLabel(labelText.toString());
+    if (propertyViewDescriptor.getLabelFont() != null) {
+      propertyLabel.setFont(propertyViewDescriptor.getLabelFont());
+    }
+    if (propertyViewDescriptor.getLabelForeground() != null) {
+      propertyLabel.setForeground(propertyViewDescriptor.getLabelForeground());
+    }
+    if (propertyViewDescriptor.getLabelBackground() != null) {
+      propertyLabel.setBackground(propertyViewDescriptor.getLabelBackground());
+    }
+    return propertyLabel;
   }
 
   /**

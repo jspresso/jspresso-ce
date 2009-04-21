@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * A form component.
  * <p>
@@ -40,11 +39,12 @@ package org.jspresso.framework.gui.remote;
  */
 public class RForm extends RContainer {
 
-  private int                columnCount;
-  private RComponent[]   elements;
-  private Integer[]      elementWidths;
+  private int          columnCount;
+  private RComponent[] elements;
+  private RComponent[] elementLabels;
+  private Integer[]    elementWidths;
 
-  private String             labelsPosition;
+  private String       labelsPosition;
 
   /**
    * Constructs a new <code>RForm</code> instance.
@@ -74,7 +74,6 @@ public class RForm extends RContainer {
     return elements;
   }
 
-  
   /**
    * Gets the elementWidths.
    * 
@@ -84,7 +83,6 @@ public class RForm extends RContainer {
     return elementWidths;
   }
 
-  
   /**
    * Gets the labelsPosition.
    * 
@@ -94,17 +92,16 @@ public class RForm extends RContainer {
     return labelsPosition;
   }
 
-  
   /**
    * Sets the columnCount.
    * 
-   * @param columnCount the columnCount to set.
+   * @param columnCount
+   *          the columnCount to set.
    */
   public void setColumnCount(int columnCount) {
     this.columnCount = columnCount;
   }
 
-  
   /**
    * Sets the elements.
    * 
@@ -115,24 +112,43 @@ public class RForm extends RContainer {
     this.elements = elements;
   }
 
-  
   /**
    * Sets the elementWidths.
    * 
-   * @param elementWidths the elementWidths to set.
+   * @param elementWidths
+   *          the elementWidths to set.
    */
   public void setElementWidths(Integer[] elementWidths) {
     this.elementWidths = elementWidths;
   }
 
-  
   /**
    * Sets the labelsPosition.
    * 
-   * @param labelsPosition the labelsPosition to set.
+   * @param labelsPosition
+   *          the labelsPosition to set.
    */
   public void setLabelsPosition(String labelsPosition) {
     this.labelsPosition = labelsPosition;
+  }
+
+  /**
+   * Gets the elementLabels.
+   * 
+   * @return the elementLabels.
+   */
+  public RComponent[] getElementLabels() {
+    return elementLabels;
+  }
+
+  /**
+   * Sets the elementLabels.
+   * 
+   * @param elementLabels
+   *          the elementLabels to set.
+   */
+  public void setElementLabels(RComponent[] elementLabels) {
+    this.elementLabels = elementLabels;
   }
 
 }

@@ -22,6 +22,7 @@ package org.jspresso.framework.gui.remote {
         private var _columnCount:int;
         private var _elementWidths:Array;
         private var _elements:Array;
+        private var _elementLabels:Array;
         private var _labelsPosition:String;
 
         public function RForm() {
@@ -47,6 +48,13 @@ package org.jspresso.framework.gui.remote {
         }
         public function get elements():Array {
             return _elements;
+        }
+
+        public function set elementLabels(value:Array):void {
+            _elementLabels = value;
+        }
+        public function get elementLabels():Array {
+            return _elementLabels;
         }
 
         public function set labelsPosition(value:String):void {

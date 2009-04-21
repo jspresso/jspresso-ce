@@ -758,19 +758,21 @@ package org.jspresso.framework.view.flex {
       for(var i:int = 0; i < remoteForm.elements.length; i++) {
         var elementWidth:int = remoteForm.elementWidths[i] as int;
         var rComponent:RComponent = remoteForm.elements[i] as RComponent;
+        var rComponentLabel:RComponent = remoteForm.elementLabels[i] as RComponent;
         var component:UIComponent = createComponent(rComponent);
-        var componentLabel:Label = new Label();
+        var componentLabel:UIComponent = createComponent(rComponentLabel, false);
+//        var componentLabel:Label = new Label();
         var labelCell:GridItem = new GridItem();
         
         var componentCell:GridItem = new GridItem();
 
-        if(rComponent.label) {
-          if(isHtml(rComponent.label)) {
-            componentLabel.htmlText = rComponent.label;
-          } else {
-            componentLabel.text = rComponent.label;
-          }
-        }
+//        if(rComponent.label) {
+//          if(isHtml(rComponent.label)) {
+//            componentLabel.htmlText = rComponent.label;
+//          } else {
+//            componentLabel.text = rComponent.label;
+//          }
+//        }
 
         if(elementWidth > remoteForm.columnCount) {
           elementWidth = remoteForm.columnCount;
@@ -1272,9 +1274,20 @@ package org.jspresso.framework.view.flex {
         } else {
           sizeMaxComponentWidth(label);
         }
+        if(!remoteLabel.state && remoteLabel.label) {
+          if(isHtml(remoteLabel.label)) {
+              label.text = null;
+              label.htmlText = remoteLabel.label;
+          } else {
+            label.htmlText = null;
+            label.text = remoteLabel.label;
+          }
+        }
         uiComponent = label;
       }
-      bindLabel(uiComponent, remoteLabel.state);
+      if(remoteLabel.state) {
+        bindLabel(uiComponent, remoteLabel.state);
+      }
       return uiComponent;
     }
 
