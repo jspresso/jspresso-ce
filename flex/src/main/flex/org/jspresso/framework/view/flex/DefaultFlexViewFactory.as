@@ -904,7 +904,10 @@ package org.jspresso.framework.view.flex {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
           var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
           
-          if(currentTarget == dateField && !dateField.contains(relatedObject)) {
+          if(currentTarget == dateField
+            && !dateField.contains(relatedObject)
+            && !dateField.dropdown.contains(relatedObject)) {
+            // do not listen to inner focus events.
             remoteState.value = dateField.selectedDate;
           }
         }
@@ -931,7 +934,9 @@ package org.jspresso.framework.view.flex {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
           var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
           
-          if(currentTarget == dateTimeField && !dateTimeField.contains(relatedObject)) {
+          if(currentTarget == dateTimeField
+            && !dateTimeField.contains(relatedObject)
+            && !dateTimeField.dropdownDateTime.contains(relatedObject)) {
             remoteState.value = dateTimeField.selectedDateTime;
           }
         }

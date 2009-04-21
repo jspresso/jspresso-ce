@@ -8,6 +8,7 @@ Bugs fixed
 2772366  	 Login dialog displays with null login context
 2777122  	 Fonts are not handled correctly when specified
 2777344  	 Flex forms do not respect labels customizations
+2777413  	 Flex date fields are not bound correctly
 
 New features
 ------------
