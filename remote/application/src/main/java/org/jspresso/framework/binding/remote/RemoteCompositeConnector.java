@@ -51,7 +51,7 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 public class RemoteCompositeConnector extends BasicCompositeConnector implements
     IRemotePeer, IRemoteStateOwner {
 
-  private RemoteConnectorFactory     connectorFactory;
+  private RemoteConnectorFactory    connectorFactory;
   private String                    guid;
   private RemoteCompositeValueState state;
 
@@ -63,7 +63,8 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    * @param connectorFactory
    *          the remote connector factory.
    */
-  public RemoteCompositeConnector(String id, RemoteConnectorFactory     connectorFactory) {
+  public RemoteCompositeConnector(String id,
+      RemoteConnectorFactory connectorFactory) {
     super(id);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
@@ -107,6 +108,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   public RemoteCompositeValueState getState() {
     if (state == null) {
       state = createState();
+      synchRemoteState();
     }
     return state;
   }
@@ -118,13 +120,7 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    */
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
-    .createRemoteCompositeValueState(getGuid());
-    createdState.setValue(getDisplayValue());
-    createdState.setReadable(isReadable());
-    createdState.setWritable(isWritable());
-    createdState.setDescription(getDisplayDescription());
-    createdState.setIconImageUrl(ResourceProviderServlet
-        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
+        .createRemoteCompositeValueState(getGuid());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (String connectorKey : getChildConnectorKeys()) {
       IValueConnector childConnector = getChildConnector(connectorKey);
@@ -134,5 +130,19 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
     }
     createdState.setChildren(children);
     return createdState;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void synchRemoteState() {
+    RemoteCompositeValueState currentState = getState();
+    currentState.setValue(getDisplayValue());
+    currentState.setReadable(isReadable());
+    currentState.setWritable(isWritable());
+    currentState.setDescription(getDisplayDescription());
+    currentState.setIconImageUrl(ResourceProviderServlet
+        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
   }
 }

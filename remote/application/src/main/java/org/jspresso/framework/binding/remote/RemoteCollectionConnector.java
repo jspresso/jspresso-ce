@@ -115,6 +115,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   public RemoteCompositeValueState getState() {
     if (state == null) {
       state = createState();
+      synchRemoteState();
     }
     return state;
   }
@@ -127,12 +128,6 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
         .createRemoteCompositeValueState(getGuid());
-    createdState.setValue(getDisplayValue());
-    createdState.setReadable(isReadable());
-    createdState.setWritable(isWritable());
-    createdState.setDescription(getDisplayDescription());
-    createdState.setIconImageUrl(ResourceProviderServlet
-        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
     createdState.setSelectedIndices(getSelectedIndices());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (int i = 0; i < getChildConnectorCount(); i++) {
@@ -143,5 +138,19 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     }
     createdState.setChildren(children);
     return createdState;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void synchRemoteState() {
+    RemoteCompositeValueState currentState = getState();
+    currentState.setValue(getDisplayValue());
+    currentState.setReadable(isReadable());
+    currentState.setWritable(isWritable());
+    currentState.setDescription(getDisplayDescription());
+    currentState.setIconImageUrl(ResourceProviderServlet
+        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
   }
 }

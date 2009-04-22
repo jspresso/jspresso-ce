@@ -6,7 +6,8 @@
   <!--
     Mock configuration.
   -->
-  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" />
+  <!-- class="org.apache.commons.dbcp.BasicDataSource"  -->
+  <bean id="dataSource" class="java.lang.Object"/>
 
   <bean id="hibernateSessionFactory" parent="abstractHibernateSessionFactory" />
 

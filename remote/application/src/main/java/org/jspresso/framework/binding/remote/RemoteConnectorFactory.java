@@ -52,7 +52,6 @@ import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
-import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
@@ -109,8 +108,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           connector.removePropertyChangeListener(
               IValueConnector.READABLE_PROPERTY, this);
         } else {
+          ((IRemoteStateOwner) connector).synchRemoteState();
           RemoteValueState state = ((IRemoteStateOwner) connector).getState();
-          state.setReadable(((Boolean) evt.getNewValue()).booleanValue());
           RemoteReadabilityCommand command = new RemoteReadabilityCommand();
           command.setTargetPeerGuid(state.getGuid());
           command.setReadable(state.isReadable());
@@ -135,8 +134,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           connector.removePropertyChangeListener(
               IValueConnector.WRITABLE_PROPERTY, this);
         } else {
+          ((IRemoteStateOwner) connector).synchRemoteState();
           RemoteValueState state = ((IRemoteStateOwner) connector).getState();
-          state.setWritable(((Boolean) evt.getNewValue()).booleanValue());
+          // state.setWritable(((Boolean) evt.getNewValue()).booleanValue());
           RemoteWritabilityCommand command = new RemoteWritabilityCommand();
           command.setTargetPeerGuid(state.getGuid());
           command.setWritable(state.isWritable());
@@ -157,10 +157,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           // don't listen to root connectors.
           connector.removeConnectorValueChangeListener(this);
         } else {
+          ((IRemoteStateOwner) connector).synchRemoteState();
           RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
               .getState();
-          // state value is directly handled by the connector.
-          // state.setValue(evt.getNewValue());
           RemoteValueCommand command = new RemoteValueCommand();
           command.setTargetPeerGuid(state.getGuid());
           command.setValue(state.getValue());
@@ -171,11 +170,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     formattedConnectorValueChangeListener = new IConnectorValueChangeListener() {
 
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
-        RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
-            .getState();
-        // state value is directly handled by the connector.
-        // state.setValue(((IFormattedValueConnector) evt.getSource())
-        // .getConnectorValueAsString());
+        IValueConnector connector = evt.getSource();
+        ((IRemoteStateOwner) connector).synchRemoteState();
+        RemoteValueState state = ((IRemoteStateOwner) connector).getState();
         RemoteValueCommand command = new RemoteValueCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setValue(state.getValue());
@@ -187,14 +184,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       public void connectorValueChange(ConnectorValueChangeEvent evt) {
         IRenderableCompositeValueConnector connector = (IRenderableCompositeValueConnector) evt
             .getSource().getParentConnector();
+        ((IRemoteStateOwner) connector).synchRemoteState();
         RemoteCompositeValueState state = (RemoteCompositeValueState) ((IRemoteStateOwner) connector)
             .getState();
-        state.setValue(connector.getDisplayValue());
-        state.setDescription(connector.getDisplayDescription());
-        state
-            .setIconImageUrl(ResourceProviderServlet
-                .computeLocalResourceDownloadUrl(connector
-                    .getDisplayIconImageUrl()));
         RemoteValueCommand command = new RemoteValueCommand();
         command.setTargetPeerGuid(state.getGuid());
         command.setValue(state.getValue());

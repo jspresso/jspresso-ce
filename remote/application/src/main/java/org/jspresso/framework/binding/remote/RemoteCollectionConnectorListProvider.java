@@ -66,7 +66,7 @@ public class RemoteCollectionConnectorListProvider extends
    *          the remote connector factory.
    */
   public RemoteCollectionConnectorListProvider(String id,
-      RemoteConnectorFactory     connectorFactory) {
+      RemoteConnectorFactory connectorFactory) {
     super(id);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
@@ -110,6 +110,7 @@ public class RemoteCollectionConnectorListProvider extends
   public RemoteCompositeValueState getState() {
     if (state == null) {
       state = createState();
+      synchRemoteState();
     }
     return state;
   }
@@ -121,13 +122,7 @@ public class RemoteCollectionConnectorListProvider extends
    */
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
-    .createRemoteCompositeValueState(getGuid());
-    createdState.setValue(getDisplayValue());
-    createdState.setReadable(isReadable());
-    createdState.setWritable(isWritable());
-    createdState.setDescription(getDisplayDescription());
-    createdState.setIconImageUrl(ResourceProviderServlet
-        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
+        .createRemoteCompositeValueState(getGuid());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (ICollectionConnector childConnector : getCollectionConnectors()) {
       if (childConnector instanceof IRemoteStateOwner) {
@@ -136,5 +131,19 @@ public class RemoteCollectionConnectorListProvider extends
     }
     createdState.setChildren(children);
     return createdState;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void synchRemoteState() {
+    RemoteCompositeValueState currentState = getState();
+    currentState.setValue(getDisplayValue());
+    currentState.setReadable(isReadable());
+    currentState.setWritable(isWritable());
+    currentState.setDescription(getDisplayDescription());
+    currentState.setIconImageUrl(ResourceProviderServlet
+        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
   }
 }

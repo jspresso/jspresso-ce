@@ -106,6 +106,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   public RemoteValueState getState() {
     if (state == null) {
       state = createState();
+      synchRemoteState();
     }
     return state;
   }
@@ -118,9 +119,6 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   protected RemoteValueState createState() {
     RemoteValueState createdState = connectorFactory
         .createRemoteValueState(getGuid());
-    createdState.setValue(getConnectorValueAsString());
-    createdState.setReadable(isReadable());
-    createdState.setWritable(isWritable());
     return createdState;
   }
 
@@ -128,8 +126,10 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * {@inheritDoc}
    */
   @Override
-  protected void setConnecteeValue(Object connecteeValue) {
-    super.setConnecteeValue(connecteeValue);
-    getState().setValue(getConnectorValueAsString());
+  public void synchRemoteState() {
+    RemoteValueState currentState = getState();
+    currentState.setValue(getConnectorValueAsString());
+    currentState.setReadable(isReadable());
+    currentState.setWritable(isWritable());
   }
 }

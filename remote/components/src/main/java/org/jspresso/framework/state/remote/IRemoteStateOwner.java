@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.state.remote;
 
-
 /**
  * Implemented by classes that are remote value state aware.
  * <p>
@@ -39,11 +38,16 @@ package org.jspresso.framework.state.remote;
  * @author Vincent Vandenschrick
  */
 public interface IRemoteStateOwner {
-  
+
   /**
    * Extracts the state from the state owner.
    * 
    * @return the state value object.
    */
   RemoteValueState getState();
+
+  /**
+   * Triggers synchronization of the remote state.
+   */
+  void synchRemoteState();
 }

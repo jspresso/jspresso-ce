@@ -101,6 +101,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
   public RemoteValueState getState() {
     if (state == null) {
       state = createState();
+      synchRemoteState();
     }
     return state;
   }
@@ -113,9 +114,6 @@ public class RemoteValueConnector extends BasicValueConnector implements
   protected RemoteValueState createState() {
     RemoteValueState createdState = connectorFactory
         .createRemoteValueState(getGuid());
-    createdState.setValue(getConnectorValue());
-    createdState.setReadable(isReadable());
-    createdState.setWritable(isWritable());
     return createdState;
   }
 
@@ -123,8 +121,22 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * {@inheritDoc}
    */
   @Override
-  protected void setConnecteeValue(Object connecteeValue) {
-    super.setConnecteeValue(connecteeValue);
-    getState().setValue(getConnectorValue());
+  public void synchRemoteState() {
+    RemoteValueState currentState = getState();
+    currentState.setValue(getValueForState());
+    currentState.setReadable(isReadable());
+    currentState.setWritable(isWritable());
+  }
+
+  /**
+   * Gets the value that has to be set to the remote state when updating it. It
+   * defaults to the connector value but the developper is given a chance here
+   * to mutate the actual object returned. This allows for changing the type of
+   * objects actually exchanged with the remote frontend peer.
+   * 
+   * @return the value that has to be set to the remote state when updating it.
+   */
+  protected Object getValueForState() {
+    return getConnectorValue();
   }
 }

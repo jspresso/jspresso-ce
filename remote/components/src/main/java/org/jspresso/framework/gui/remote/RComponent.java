@@ -234,4 +234,12 @@ public abstract class RComponent extends RemotePeer implements
   public void setFont(RFont font) {
     this.font = font;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void synchRemoteState() {
+    // Empty implementation
+  }
 }
