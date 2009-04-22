@@ -167,6 +167,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected static final Date           TEMPLATE_TIME               = new Date(
                                                                         366000);
 
+  /**
+   * <code>BOLD_FONT</code>.
+   */
+  protected static final String         BOLD_FONT                   = ";BOLD;";
+
   private IActionFactory<G, E>          actionFactory;
   private IDisplayableAction            binaryPropertyInfoAction;
   private IConfigurableConnectorFactory connectorFactory;

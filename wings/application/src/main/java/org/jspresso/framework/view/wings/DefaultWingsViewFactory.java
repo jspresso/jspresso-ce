@@ -586,13 +586,23 @@ public class DefaultWingsViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    XCalendar viewComponent = createDateField();
+    IValueConnector connector;
+    SComponent viewComponent;
     DateFormat format = createDateFormat(propertyDescriptor, locale);
-    viewComponent.setFormatter(new SDateFormatter(format));
-    XCalendarConnector connector = new XCalendarConnector(propertyDescriptor
-        .getName(), viewComponent);
+    IFormatter formatter = createFormatter(format);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createSLabel(true);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+      ((SLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createDateField();
+      ((XCalendar) viewComponent).setFormatter(new SDateFormatter(format));
+      connector = new XCalendarConnector(propertyDescriptor.getName(),
+          (XCalendar) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, createFormatter(format),
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDateTemplateValue(propertyDescriptor), 64);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -610,10 +620,19 @@ public class DefaultWingsViewFactory extends
       return createPercentPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
-    STextField viewComponent = createSTextField();
     IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
-    SFormattedFieldConnector connector = new SFormattedFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    SComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createSLabel(true);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+      ((SLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createSTextField();
+      connector = new SFormattedFieldConnector(propertyDescriptor.getName(),
+          (STextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
@@ -629,10 +648,19 @@ public class DefaultWingsViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    STextField viewComponent = createSTextField();
+    SComponent viewComponent;
+    IValueConnector connector;
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
-    SFormattedFieldConnector connector = new SFormattedFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createSLabel(true);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+      ((SLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createSTextField();
+      connector = new SFormattedFieldConnector(propertyDescriptor.getName(),
+          (STextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
@@ -718,7 +746,7 @@ public class DefaultWingsViewFactory extends
   protected IView<SComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
-    SLabel imageLabel = createSLabel();
+    SLabel imageLabel = createSLabel(false);
     imageLabel.setHorizontalAlignment(SConstants.CENTER);
     SImageConnector connector = new SImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
@@ -746,7 +774,7 @@ public class DefaultWingsViewFactory extends
     SComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createSLabel();
+      viewComponent = createSLabel(true);
       connector = new SLabelConnector(propertyDescriptor.getName(),
           (SLabel) viewComponent);
       ((SLabelConnector) connector).setFormatter(formatter);
@@ -825,10 +853,19 @@ public class DefaultWingsViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    STextField viewComponent = createSTextField();
     IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
-    SPercentFieldConnector connector = new SPercentFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    SComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createSLabel(true);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+      ((SLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createSTextField();
+      connector = new SPercentFieldConnector(propertyDescriptor.getName(),
+          (STextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
@@ -960,11 +997,17 @@ public class DefaultWingsViewFactory extends
   /**
    * Creates a label.
    * 
+   * @param bold
+   *          make it bold ?
    * @return the created label.
    */
-  protected SLabel createSLabel() {
+  protected SLabel createSLabel(boolean bold) {
     // To have preferred height computed.
-    return new SLabel(" ");
+    SLabel label = new SLabel(" ");
+    if (bold) {
+      label.setFont(createFont(BOLD_FONT, label.getFont()));
+    }
+    return label;
   }
 
   /**
@@ -1264,7 +1307,7 @@ public class DefaultWingsViewFactory extends
     SComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createSLabel();
+      viewComponent = createSLabel(true);
       connector = new SLabelConnector(propertyDescriptor.getName(),
           (SLabel) viewComponent);
     } else {
@@ -1507,7 +1550,7 @@ public class DefaultWingsViewFactory extends
     IValueConnector connector;
     SComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createSLabel();
+      viewComponent = createSLabel(true);
       viewComponent.setVerticalAlignment(SConstants.TOP);
       viewComponent.setHorizontalAlignment(SConstants.LEFT);
       connector = new SLabelConnector(propertyDescriptor.getName(),
@@ -1537,13 +1580,22 @@ public class DefaultWingsViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    STextField viewComponent = createSTextField();
+    IValueConnector connector;
+    SComponent viewComponent;
     IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
-    SFormattedFieldConnector connector = new SFormattedFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createSLabel(true);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+      ((SLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createSTextField();
+      connector = new SFormattedFieldConnector(propertyDescriptor.getName(),
+          (STextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getTimeTemplateValue(propertyDescriptor));
+        getTimeTemplateValue(propertyDescriptor), 64);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1857,7 +1909,7 @@ public class DefaultWingsViewFactory extends
       @SuppressWarnings("unused") SComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    SLabel propertyLabel = createSLabel();
+    SLabel propertyLabel = createSLabel(false);
     StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
         getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
@@ -1938,7 +1990,7 @@ public class DefaultWingsViewFactory extends
     // getTranslationProvider(), locale)));
 
     SPanel titledPanel = createSPanel(new SBorderLayout());
-    SLabel titleLabel = createSLabel();
+    SLabel titleLabel = createSLabel(true);
     titleLabel.setIcon(getIconFactory().getIcon(
         view.getDescriptor().getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     titleLabel.setText(view.getDescriptor().getI18nName(

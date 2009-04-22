@@ -604,14 +604,24 @@ public class DefaultSwingViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JDateField viewComponent = createJDateField(locale);
+    IValueConnector connector;
+    JComponent viewComponent;
     DateFormat format = createDateFormat(propertyDescriptor, locale);
-    viewComponent.getFormattedTextField().setFormatterFactory(
-        new DefaultFormatterFactory(new DateFormatter(format)));
-    JDateFieldConnector connector = new JDateFieldConnector(propertyDescriptor
-        .getName(), viewComponent);
+    IFormatter formatter = createFormatter(format);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createJLabel(true);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
+      ((JLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createJDateField(locale);
+      ((JDateField) viewComponent).getFormattedTextField().setFormatterFactory(
+          new DefaultFormatterFactory(new DateFormatter(format)));
+      connector = new JDateFieldConnector(propertyDescriptor.getName(),
+          (JDateField) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, createFormatter(format),
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
             .getScreenResolution() / 3);
     return constructView(viewComponent, propertyViewDescriptor, connector);
@@ -630,10 +640,19 @@ public class DefaultSwingViewFactory extends
       return createPercentPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
-    JTextField viewComponent = createJTextField();
     IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
-    JFormattedFieldConnector connector = new JFormattedFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    JComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createJLabel(true);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
+      ((JLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createJTextField();
+      connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
@@ -649,10 +668,19 @@ public class DefaultSwingViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JTextField viewComponent = createJTextField();
+    JComponent viewComponent;
+    IValueConnector connector;
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
-    JFormattedFieldConnector connector = new JFormattedFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createJLabel(true);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
+      ((JLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createJTextField();
+      connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
@@ -741,7 +769,7 @@ public class DefaultSwingViewFactory extends
   protected IView<JComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
-    JLabel imageLabel = createJLabel();
+    JLabel imageLabel = createJLabel(false);
     imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
     JImageConnector connector = new JImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
@@ -770,7 +798,7 @@ public class DefaultSwingViewFactory extends
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel();
+      viewComponent = createJLabel(true);
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
@@ -872,11 +900,17 @@ public class DefaultSwingViewFactory extends
   /**
    * Creates a label.
    * 
+   * @param bold
+   *          make it bold ?
    * @return the created label.
    */
-  protected JLabel createJLabel() {
+  protected JLabel createJLabel(boolean bold) {
     // To have preferred height computed.
-    return new JLabel(" ");
+    JLabel label = new JLabel(" ");
+    if (bold) {
+      label.setFont(createFont(BOLD_FONT, label.getFont()));
+    }
+    return label;
   }
 
   /**
@@ -1124,10 +1158,19 @@ public class DefaultSwingViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JTextField viewComponent = createJTextField();
     IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
-    JPercentFieldConnector connector = new JPercentFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    JComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createJLabel(true);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
+      ((JLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createJTextField();
+      connector = new JPercentFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
@@ -1257,7 +1300,7 @@ public class DefaultSwingViewFactory extends
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel();
+      viewComponent = createJLabel(true);
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
     } else {
@@ -1334,7 +1377,7 @@ public class DefaultSwingViewFactory extends
     JTable viewComponent = createJTable();
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
-    JLabel iconLabel = createJLabel();
+    JLabel iconLabel = createJLabel(false);
     iconLabel.setIcon(getIconFactory().getIcon(
         modelDescriptor.getCollectionDescriptor().getElementDescriptor()
             .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
@@ -1517,7 +1560,7 @@ public class DefaultSwingViewFactory extends
     IValueConnector connector;
     JScrollPane scrollPane = createJScrollPane();
     if (propertyViewDescriptor.isReadOnly()) {
-      JLabel viewComponent = createJLabel();
+      JLabel viewComponent = createJLabel(true);
       viewComponent.setVerticalAlignment(SwingConstants.TOP);
       viewComponent.setHorizontalAlignment(SwingConstants.LEADING);
       connector = new JLabelConnector(propertyDescriptor.getName(),
@@ -1544,12 +1587,22 @@ public class DefaultSwingViewFactory extends
   protected IView<JComponent> createTimePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
+
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JTextField viewComponent = createJTextField();
+    IValueConnector connector;
+    JComponent viewComponent;
     IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
-    JFormattedFieldConnector connector = new JFormattedFieldConnector(
-        propertyDescriptor.getName(), viewComponent, formatter);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createJLabel(true);
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
+      ((JLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createJTextField();
+      connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
+          (JTextField) viewComponent, formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getTimeTemplateValue(propertyDescriptor));
@@ -1810,7 +1863,7 @@ public class DefaultSwingViewFactory extends
       IViewDescriptor viewDescriptor, IValueConnector viewConnector,
       IActionHandler actionHandler, Locale locale) {
     JPopupMenu popupMenu = createJPopupMenu();
-    JLabel titleLabel = createJLabel();
+    JLabel titleLabel = createJLabel(false);
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
         locale));
     titleLabel.setIcon(getIconFactory().getIcon(
@@ -1861,7 +1914,7 @@ public class DefaultSwingViewFactory extends
       JComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JLabel propertyLabel = createJLabel();
+    JLabel propertyLabel = createJLabel(false);
     StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
         getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {

@@ -463,7 +463,7 @@ public class DefaultRemoteViewFactory extends
       RComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    RLabel propertyLabel = createRLabel(null);
+    RLabel propertyLabel = createRLabel(null, false);
     StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
         getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
@@ -531,23 +531,30 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createDatePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IValueConnector connector;
     IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    if (isDateServerParse()) {
+    IValueConnector connector;
+    RComponent viewComponent;
+    IFormatter formatter = createDateFormatter(propertyDescriptor, locale);
+    if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
-          propertyDescriptor.getName(),
-          createDateFormatter(propertyDescriptor, locale));
+          propertyDescriptor.getName(), formatter);
+      viewComponent = createRLabel(connector, false);
     } else {
-      connector = getConnectorFactory().createValueConnector(
-          propertyDescriptor.getName());
+      if (isDateServerParse()) {
+        connector = getConnectorFactory().createFormattedValueConnector(
+            propertyDescriptor.getName(),
+            createDateFormatter(propertyDescriptor, locale));
+      } else {
+        connector = getConnectorFactory().createValueConnector(
+            propertyDescriptor.getName());
+      }
+      viewComponent = createRDateField(connector);
+      ((RDateField) viewComponent).setType(propertyDescriptor.getType()
+          .toString());
     }
     connector.setExceptionHandler(actionHandler);
-    RDateField viewComponent = createRDateField(connector);
-    viewComponent.setType(propertyDescriptor.getType().toString());
-    IView<RComponent> view = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    return view;
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -559,12 +566,18 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IDecimalPropertyDescriptor propertyDescriptor = (IDecimalPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IView<RComponent> view;
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      view = createPercentPropertyView(propertyViewDescriptor, actionHandler,
+      return createPercentPropertyView(propertyViewDescriptor, actionHandler,
           locale);
+    }
+    IValueConnector connector;
+    RComponent viewComponent;
+    IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
+    if (propertyViewDescriptor.isReadOnly()) {
+      connector = getConnectorFactory().createFormattedValueConnector(
+          propertyDescriptor.getName(), formatter);
+      viewComponent = createRLabel(connector, true);
     } else {
-      IValueConnector connector;
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
             propertyDescriptor.getName(),
@@ -574,17 +587,17 @@ public class DefaultRemoteViewFactory extends
             propertyDescriptor.getName());
       }
       connector.setExceptionHandler(actionHandler);
-      RDecimalField viewComponent = createRDecimalField(connector);
-      view = constructView(viewComponent, propertyViewDescriptor, connector);
+      viewComponent = createRDecimalField(connector);
+      if (propertyDescriptor.getMaxFractionDigit() != null) {
+        ((RDecimalComponent) viewComponent)
+            .setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit()
+                .intValue());
+      } else {
+        ((RDecimalComponent) viewComponent).setMaxFractionDigit(2);
+      }
     }
-    if (propertyDescriptor.getMaxFractionDigit() != null) {
-      ((RDecimalComponent) view.getPeer())
-          .setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit()
-              .intValue());
-    } else {
-      ((RDecimalComponent) view.getPeer()).setMaxFractionDigit(2);
-    }
-    return view;
+    connector.setExceptionHandler(actionHandler);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -597,24 +610,31 @@ public class DefaultRemoteViewFactory extends
     IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector;
-    if (isDurationServerParse()) {
+    RComponent viewComponent;
+    IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
+    if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
-          propertyDescriptor.getName(),
-          createDurationFormatter(propertyDescriptor, locale));
+          propertyDescriptor.getName(), formatter);
+      viewComponent = createRLabel(connector, true);
     } else {
-      connector = getConnectorFactory().createValueConnector(
-          propertyDescriptor.getName());
+      if (isDurationServerParse()) {
+        connector = getConnectorFactory().createFormattedValueConnector(
+            propertyDescriptor.getName(),
+            createDurationFormatter(propertyDescriptor, locale));
+      } else {
+        connector = getConnectorFactory().createValueConnector(
+            propertyDescriptor.getName());
+      }
+      viewComponent = createRDurationField(connector);
+      if (propertyDescriptor.getMaxMillis() != null) {
+        ((RDurationField) viewComponent).setMaxMillis(propertyDescriptor
+            .getMaxMillis().longValue());
+      } else {
+        ((RDurationField) viewComponent).setMaxMillis(-1);
+      }
     }
     connector.setExceptionHandler(actionHandler);
-    RDurationField viewComponent = createRDurationField(connector);
-    if (propertyDescriptor.getMaxMillis() != null) {
-      viewComponent.setMaxMillis(propertyDescriptor.getMaxMillis().longValue());
-    } else {
-      viewComponent.setMaxMillis(-1);
-    }
-    IView<RComponent> view = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    return view;
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -723,7 +743,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
-      viewComponent = createRLabel(connector);
+      viewComponent = createRLabel(connector, true);
     } else {
       if (isNumberServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(
@@ -735,9 +755,7 @@ public class DefaultRemoteViewFactory extends
       viewComponent = createRIntegerField(connector);
     }
     connector.setExceptionHandler(actionHandler);
-    IView<RComponent> view = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    return view;
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -818,20 +836,33 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
+    IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
     IValueConnector connector;
-    if (isNumberServerParse()) {
+    RComponent viewComponent;
+    if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
-          propertyDescriptor.getName(),
-          createPercentFormatter(propertyDescriptor, locale));
+          propertyDescriptor.getName(), formatter);
+      viewComponent = createRLabel(connector, true);
     } else {
-      connector = getConnectorFactory().createValueConnector(
-          propertyDescriptor.getName());
+      if (isNumberServerParse()) {
+        connector = getConnectorFactory().createFormattedValueConnector(
+            propertyDescriptor.getName(),
+            createPercentFormatter(propertyDescriptor, locale));
+      } else {
+        connector = getConnectorFactory().createValueConnector(
+            propertyDescriptor.getName());
+      }
+      connector.setExceptionHandler(actionHandler);
+      viewComponent = createRPercentField(connector);
+      if (propertyDescriptor.getMaxFractionDigit() != null) {
+        ((RPercentField) viewComponent).setMaxFractionDigit(propertyDescriptor
+            .getMaxFractionDigit().intValue());
+      } else {
+        ((RPercentField) viewComponent).setMaxFractionDigit(2);
+      }
     }
     connector.setExceptionHandler(actionHandler);
-    RPercentField viewComponent = createRPercentField(connector);
-    IView<RComponent> view = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    return view;
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -958,7 +989,7 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createRLabel(connector);
+      viewComponent = createRLabel(connector, true);
     } else {
       viewComponent = createRTextField(connector);
     }
@@ -1062,7 +1093,7 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createRLabel(connector);
+      viewComponent = createRLabel(connector, true);
       ((RLabel) viewComponent).setMultiLine(true);
     } else {
       viewComponent = createRTextArea(connector);
@@ -1102,19 +1133,24 @@ public class DefaultRemoteViewFactory extends
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector;
-    if (isDateServerParse()) {
+    RComponent viewComponent;
+    IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
+    if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
-          propertyDescriptor.getName(),
-          createTimeFormatter(propertyDescriptor, locale));
+          propertyDescriptor.getName(), formatter);
+      viewComponent = createRLabel(connector, true);
     } else {
-      connector = getConnectorFactory().createValueConnector(
-          propertyDescriptor.getName());
+      if (isDateServerParse()) {
+        connector = getConnectorFactory().createFormattedValueConnector(
+            propertyDescriptor.getName(), formatter);
+      } else {
+        connector = getConnectorFactory().createValueConnector(
+            propertyDescriptor.getName());
+      }
+      viewComponent = createRTimeField(connector);
     }
     connector.setExceptionHandler(actionHandler);
-    RTimeField viewComponent = createRTimeField(connector);
-    IView<RComponent> view = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    return view;
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
@@ -1550,12 +1586,19 @@ public class DefaultRemoteViewFactory extends
    * 
    * @param connector
    *          the component connector.
+   * @param bold
+   *          make it bold ?
    * @return the created remote component.
    */
-  protected RLabel createRLabel(IValueConnector connector) {
+  protected RLabel createRLabel(IValueConnector connector, boolean bold) {
     RLabel component = new RLabel(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    if (bold) {
+      if (bold) {
+        component.setFont(createFont(BOLD_FONT));
+      }
     }
     return component;
   }

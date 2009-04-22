@@ -620,12 +620,22 @@ public class DefaultUlcViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IDatePropertyDescriptor propertyDescriptor = (IDatePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
+    IValueConnector connector;
+    ULCComponent viewComponent;
     SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
-    ULCDateField viewComponent = createULCDateField(format.toPattern(), locale);
-    ULCDateFieldConnector connector = new ULCDateFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
+    IFormatter formatter = createFormatter(format);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createULCLabel(true);
+      connector = new ULCLabelConnector(propertyDescriptor.getName(),
+          (ULCLabel) viewComponent);
+      ((ULCLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createULCDateField(format.toPattern(), locale);
+      connector = new ULCDateFieldConnector(propertyDescriptor.getName(),
+          (ULCDateField) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, createFormatter(format),
+    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDateTemplateValue(propertyDescriptor), ClientContext
             .getScreenResolution() / 3);
     return constructView(viewComponent, propertyViewDescriptor, connector);
@@ -644,12 +654,20 @@ public class DefaultUlcViewFactory extends
       return createPercentPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
-    ULCTextField viewComponent = createULCTextField();
-
     IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
+    ULCComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createULCLabel(true);
+      connector = new ULCLabelConnector(propertyDescriptor.getName(),
+          (ULCLabel) viewComponent);
+      ((ULCLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createULCTextField();
+      connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
+          (ULCTextField) viewComponent);
+      ((ULCTextFieldConnector) connector).setFormatter(formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
@@ -665,12 +683,20 @@ public class DefaultUlcViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IDurationPropertyDescriptor propertyDescriptor = (IDurationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    ULCTextField viewComponent = createULCTextField();
+    ULCComponent viewComponent;
+    IValueConnector connector;
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
-
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createULCLabel(true);
+      connector = new ULCLabelConnector(propertyDescriptor.getName(),
+          (ULCLabel) viewComponent);
+      ((ULCLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createULCTextField();
+      connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
+          (ULCTextField) viewComponent);
+      ((ULCTextFieldConnector) connector).setFormatter(formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
@@ -777,7 +803,7 @@ public class DefaultUlcViewFactory extends
   protected IView<ULCComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
-    ULCLabel imageLabel = createULCLabel();
+    ULCLabel imageLabel = createULCLabel(false);
     imageLabel.setHorizontalAlignment(IDefaults.CENTER);
     ULCImageConnector connector = new ULCImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
@@ -804,7 +830,7 @@ public class DefaultUlcViewFactory extends
     ULCComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createULCLabel();
+      viewComponent = createULCLabel(true);
       connector = new ULCLabelConnector(propertyDescriptor.getName(),
           (ULCLabel) viewComponent);
       ((ULCLabelConnector) connector).setFormatter(formatter);
@@ -885,11 +911,20 @@ public class DefaultUlcViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    ULCTextField viewComponent = createULCTextField();
     IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
+    ULCComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createULCLabel(true);
+      connector = new ULCLabelConnector(propertyDescriptor.getName(),
+          (ULCLabel) viewComponent);
+      ((ULCLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createULCTextField();
+      connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
+          (ULCTextField) viewComponent);
+      ((ULCTextFieldConnector) connector).setFormatter(formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
@@ -1016,7 +1051,7 @@ public class DefaultUlcViewFactory extends
     ULCComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createULCLabel();
+      viewComponent = createULCLabel(true);
       connector = new ULCLabelConnector(propertyDescriptor.getName(),
           (ULCLabel) viewComponent);
     } else {
@@ -1095,7 +1130,7 @@ public class DefaultUlcViewFactory extends
     ULCExtendedTable viewComponent = createULCTable();
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
-    ULCLabel iconLabel = createULCLabel();
+    ULCLabel iconLabel = createULCLabel(false);
     iconLabel.setIcon(getIconFactory().getIcon(
         modelDescriptor.getCollectionDescriptor().getElementDescriptor()
             .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
@@ -1313,7 +1348,7 @@ public class DefaultUlcViewFactory extends
     IValueConnector connector;
     ULCScrollPane scrollPane = createULCScrollPane();
     if (propertyViewDescriptor.isReadOnly()) {
-      ULCLabel viewComponent = createULCLabel();
+      ULCLabel viewComponent = createULCLabel(true);
       viewComponent.setVerticalAlignment(IDefaults.TOP);
       viewComponent.setHorizontalAlignment(IDefaults.LEADING);
       connector = new ULCLabelConnector(propertyDescriptor.getName(),
@@ -1342,12 +1377,20 @@ public class DefaultUlcViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    ULCTextField viewComponent = createULCTextField();
-
+    IValueConnector connector;
+    ULCComponent viewComponent;
     IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
-    connector.setFormatter(formatter);
+    if (propertyViewDescriptor.isReadOnly()) {
+      viewComponent = createULCLabel(true);
+      connector = new ULCLabelConnector(propertyDescriptor.getName(),
+          (ULCLabel) viewComponent);
+      ((ULCLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createULCTextField();
+      connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
+          (ULCTextField) viewComponent);
+      ((ULCTextFieldConnector) connector).setFormatter(formatter);
+    }
     connector.setExceptionHandler(actionHandler);
     adjustSizes(propertyViewDescriptor, viewComponent, formatter,
         getTimeTemplateValue(propertyDescriptor));
@@ -1477,11 +1520,17 @@ public class DefaultUlcViewFactory extends
   /**
    * Creates a label.
    * 
+   * @param bold
+   *          make it bold ?
    * @return the created label.
    */
-  protected ULCLabel createULCLabel() {
+  protected ULCLabel createULCLabel(boolean bold) {
     // To have preferred height computed.
-    return new ULCLabel(" ");
+    ULCLabel label = new ULCLabel(" ");
+    if (bold) {
+      label.setFont(createFont(BOLD_FONT, label.getFont()));
+    }
+    return label;
   }
 
   /**
@@ -1955,7 +2004,7 @@ public class DefaultUlcViewFactory extends
       ULCComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    ULCLabel propertyLabel = createULCLabel();
+    ULCLabel propertyLabel = createULCLabel(false);
     StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
         getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
@@ -2023,7 +2072,7 @@ public class DefaultUlcViewFactory extends
       IViewDescriptor viewDescriptor, IValueConnector viewConnector,
       IActionHandler actionHandler, Locale locale) {
     ULCPopupMenu popupMenu = createULCPopupMenu();
-    ULCLabel titleLabel = createULCLabel();
+    ULCLabel titleLabel = createULCLabel(false);
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
         locale));
     titleLabel.setIcon(getIconFactory().getIcon(
