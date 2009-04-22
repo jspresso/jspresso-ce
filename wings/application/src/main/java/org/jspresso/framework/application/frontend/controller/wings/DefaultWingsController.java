@@ -133,6 +133,7 @@ public class DefaultWingsController extends
     for (Action action : actions) {
       SButton actionButton = new SButton();
       actionButton.setAction(action);
+      actionButton.setDisabledIcon(actionButton.getIcon());
       buttonBox.add(actionButton);
       buttonBox.add(new SSpacer(10, 10));
       if (defaultButton == null) {

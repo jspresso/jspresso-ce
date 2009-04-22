@@ -539,7 +539,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
-      viewComponent = createRLabel(connector, false);
+      viewComponent = createRLabel(connector, true);
     } else {
       if (isDateServerParse()) {
         connector = getConnectorFactory().createFormattedValueConnector(

@@ -37,7 +37,6 @@ import org.wings.STextField;
 import org.wings.border.SBevelBorder;
 import org.wings.event.SDocumentListener;
 
-
 /**
  * A wings component to represent an actionable field. It should behave like a
  * button except that the action is parametrized by the field text value. This
@@ -75,7 +74,7 @@ public class SActionField extends SPanel {
    * Constructs a new <code>SActionField</code> instance.
    * 
    * @param showTextField
-   *            is the text field visible to the user.
+   *          is the text field visible to the user.
    */
   public SActionField(boolean showTextField) {
     super(new SGridBagLayout());
@@ -105,7 +104,7 @@ public class SActionField extends SPanel {
    * Adds a focus listener to the text field.
    * 
    * @param l
-   *            the listener to add.
+   *          the listener to add.
    */
   public void addTextFieldDocumentListener(SDocumentListener l) {
     textField.addDocumentListener(l);
@@ -169,7 +168,7 @@ public class SActionField extends SPanel {
    * Removes a focus listener from the text field.
    * 
    * @param l
-   *            the listener to remove.
+   *          the listener to remove.
    */
   public void removeTextFieldFocusListener(SDocumentListener l) {
     textField.removeDocumentListener(l);
@@ -179,7 +178,7 @@ public class SActionField extends SPanel {
    * Sets the action field action.
    * 
    * @param actions
-   *            the action field actions.
+   *          the action field actions.
    */
   public void setActions(List<Action> actions) {
     if (!ObjectUtils.equals(this.actions, actions)) {
@@ -188,6 +187,7 @@ public class SActionField extends SPanel {
       for (Action action : actions) {
         SButton actionButton = new SButton();
         actionButton.setAction(action);
+        actionButton.setDisabledIcon(actionButton.getIcon());
         actionButton.setActionCommand("*");
         actionButton.setText(null);
         actionButton.setShowAsFormComponent(false);
@@ -207,7 +207,7 @@ public class SActionField extends SPanel {
    * Gets the action field text.
    * 
    * @param actionText
-   *            the action field text.
+   *          the action field text.
    */
   public void setActionText(String actionText) {
     textField.setText(actionText);
@@ -217,7 +217,7 @@ public class SActionField extends SPanel {
    * Decorates the component with a marker.
    * 
    * @param decorated
-   *            if the component should be decorated.
+   *          if the component should be decorated.
    */
   public void setDecorated(boolean decorated) {
     if (decorated) {
@@ -233,7 +233,7 @@ public class SActionField extends SPanel {
    * Turns the date field to be editable or not.
    * 
    * @param editable
-   *            true if editable.
+   *          true if editable.
    */
   public void setEditable(boolean editable) {
     if (defaultAction != null) {
@@ -246,7 +246,7 @@ public class SActionField extends SPanel {
    * Turns the date field to be enabled or not.
    * 
    * @param enabled
-   *            true if enabled.
+   *          true if enabled.
    */
   @Override
   public void setEnabled(boolean enabled) {
@@ -260,7 +260,7 @@ public class SActionField extends SPanel {
    * Sets the value.
    * 
    * @param value
-   *            the value to set.
+   *          the value to set.
    */
   public void setValue(Object value) {
     this.value = value;

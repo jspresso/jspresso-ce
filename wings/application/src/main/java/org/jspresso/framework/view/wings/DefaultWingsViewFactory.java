@@ -1645,6 +1645,7 @@ public class DefaultWingsViewFactory extends
           SButton actionButton = createSButton();
           actionButton.setShowAsFormComponent(false);
           actionButton.setAction(wingsAction);
+          actionButton.setDisabledIcon(actionButton.getIcon());
           if (action.getAcceleratorAsString() != null) {
             KeyStroke ks = KeyStroke.getKeyStroke(action
                 .getAcceleratorAsString());

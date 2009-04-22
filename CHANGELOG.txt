@@ -11,6 +11,7 @@ Bugs fixed
 2777413  	 Flex date fields are not bound correctly
 2777597  	 Unset iconImageUrls generates erronous stackTraces in tomcat
 2777735  	 Current design doesn't allow for simple type customization
+2778525  	 Wings icons disappear on disabled buttons
 
 New features
 ------------
