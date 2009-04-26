@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view;
 
+import java.util.Map;
+
 /**
  * This interface establishes the general contract of a composite view which has
  * child views which are keyed by a string.
@@ -55,5 +57,13 @@ public interface IMapView<E> extends ICompositeView<E> {
    * 
    * @return the children view map.
    */
-  java.util.Map<String, IView<E>> getChildrenMap();
+  Map<String, IView<E>> getChildrenMap();
+  
+  /**
+   * Adds a child view to the map.
+   * 
+   * @param key the child view key.
+   * @param childView the child view to be added.
+   */
+  void addToChildrenMap(String key, IView<E> childView);
 }

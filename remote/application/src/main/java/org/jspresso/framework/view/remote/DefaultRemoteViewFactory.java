@@ -19,7 +19,7 @@
 package org.jspresso.framework.view.remote;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -97,6 +98,7 @@ import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
@@ -346,20 +348,18 @@ public class DefaultRemoteViewFactory extends
 
     BasicMapView<RComponent> view = constructMapView(viewComponent,
         viewDescriptor);
-    Map<String, IView<RComponent>> childrenViews = new HashMap<String, IView<RComponent>>();
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
         .getCardViewDescriptors().entrySet()) {
       IView<RComponent> childView = createView(childViewDescriptor.getValue(),
           actionHandler, locale);
-      childrenViews.put(childViewDescriptor.getKey(), childView);
       cardNames.add(childViewDescriptor.getKey());
       cards.add(childView.getPeer());
+      view.addToChildrenMap(childViewDescriptor.getKey(), childView);
     }
     viewComponent.setCardNames(cardNames.toArray(new String[0]));
     viewComponent.setCards(cards.toArray(new RComponent[0]));
-    view.setChildrenMap(childrenViews);
-    view.setConnector(createCardViewConnector(view, actionHandler));
+    view.setConnector(createCardViewConnector(view, actionHandler, locale));
     return view;
   }
 
@@ -1291,6 +1291,34 @@ public class DefaultRemoteViewFactory extends
     RemoteValueCommand command = new RemoteValueCommand();
     command.setTargetPeerGuid(cardState.getGuid());
     command.setValue(cardState.getValue());
+    getRemoteCommandHandler().registerCommand(command);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void addCard(IMapView<RComponent> cardView, IView<RComponent> card,
+      String cardName) {
+    cardView.addToChildrenMap(cardName, card);
+
+    RCardContainer cardContainer = (RCardContainer) cardView.getPeer();
+
+    RComponent[] newCards = Arrays.copyOf(cardContainer.getCards(),
+        cardContainer.getCards().length + 1);
+    newCards[newCards.length - 1] = cardView.getPeer();
+    cardContainer.setCards(newCards);
+
+    String[] newCardNames = Arrays.copyOf(cardContainer.getCardNames(),
+        cardContainer.getCardNames().length + 1);
+    newCardNames[newCardNames.length - 1] = cardName;
+    cardContainer.setCardNames(newCardNames);
+
+    RemoteAddCardCommand command = new RemoteAddCardCommand();
+    command.setTargetPeerGuid(cardContainer.getGuid());
+    command.setCard(card.getPeer());
+    command.setCardName(cardName);
+
     getRemoteCommandHandler().registerCommand(command);
   }
 

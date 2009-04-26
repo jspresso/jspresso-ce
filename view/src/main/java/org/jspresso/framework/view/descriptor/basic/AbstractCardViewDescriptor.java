@@ -18,11 +18,11 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
 
 /**
  * Abstract root implementation of a card view descriptor.
@@ -54,6 +54,9 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
    * @return the childViewDescriptors.
    */
   public Map<String, IViewDescriptor> getCardViewDescriptors() {
+    if (cardViewDescriptors == null) {
+      cardViewDescriptors = new HashMap<String, IViewDescriptor>();
+    }
     return cardViewDescriptors;
   }
 
@@ -61,7 +64,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
    * Sets the childViewDescriptors.
    * 
    * @param cardViewDescriptors
-   *            the cardViewDescriptors to set.
+   *          the cardViewDescriptors to set.
    */
   protected void setCardViewDescriptors(
       Map<String, IViewDescriptor> cardViewDescriptors) {

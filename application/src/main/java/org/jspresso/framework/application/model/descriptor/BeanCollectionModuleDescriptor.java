@@ -27,7 +27,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 
-
 /**
  * The model descriptor for bean collection modules.
  * <p>
@@ -53,7 +52,7 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
    * Constructs a new <code>BeanModuleDescriptor</code> instance.
    * 
    * @param moduleObjectReferencedDescriptor
-   *            the component descriptor of the module objects.
+   *          the component descriptor of the module objects.
    */
   public BeanCollectionModuleDescriptor(
       IComponentDescriptor<Object> moduleObjectReferencedDescriptor) {
@@ -64,9 +63,9 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
    * Constructs a new <code>BeanModuleDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor (the actual module class name).
+   *          the name of the descriptor (the actual module class name).
    * @param moduleObjectReferencedDescriptor
-   *            the component descriptor of the module objects.
+   *          the component descriptor of the module objects.
    */
   protected BeanCollectionModuleDescriptor(String name,
       IComponentDescriptor<Object> moduleObjectReferencedDescriptor) {
@@ -80,7 +79,7 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
     BasicCollectionPropertyDescriptor<Object> moduleObjectsDescriptor = new BasicCollectionPropertyDescriptor<Object>();
     moduleObjectsDescriptor
         .setReferencedDescriptor(moduleObjectsListDescriptor);
-    moduleObjectsDescriptor.setName("moduleObjects");
+    moduleObjectsDescriptor.setName(BeanCollectionModule.MODULE_OBJECTS);
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
         getPropertyDescriptors());

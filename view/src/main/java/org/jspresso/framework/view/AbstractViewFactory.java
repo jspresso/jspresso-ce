@@ -94,6 +94,7 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
@@ -622,10 +623,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the card view to create the connector for.
    * @param actionHandler
    *          the action handler.
+   * @param locale
+   *          the locale.
    * @return the card view connector.
    */
   protected IValueConnector createCardViewConnector(final IMapView<E> cardView,
-      final IActionHandler actionHandler) {
+      final IActionHandler actionHandler, final Locale locale) {
     IValueConnector cardViewConnector = getConnectorFactory()
         .createValueConnector(cardView.getDescriptor().getName());
     cardViewConnector
@@ -647,6 +650,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
                   .getCardNameForModel(cardModel);
               if (cardName != null) {
                 IView<E> childCardView = cardView.getChild(cardName);
+                if (childCardView == null
+                    && cardModel instanceof IViewDescriptorProvider) {
+                  IViewDescriptor providedViewDescriptor = ((IViewDescriptorProvider) cardModel)
+                      .getViewDescriptor();
+                  if (providedViewDescriptor != null) {
+                    childCardView = createView(providedViewDescriptor,
+                        actionHandler, locale);
+                    addCard(cardView, childCardView, cardName);
+                  }
+                }
                 if (childCardView != null) {
                   showCardInPanel(cardsPeer, cardName);
                   IValueConnector childCardConnector = childCardView
@@ -679,6 +692,19 @@ public abstract class AbstractViewFactory<E, F, G> implements
         });
     return cardViewConnector;
   }
+
+  /**
+   * Adds a card in a card view.
+   * 
+   * @param cardView
+   *          the card view to add the card to.
+   * @param card
+   *          the card to add.
+   * @param cardName
+   *          the card name.
+   */
+  protected abstract void addCard(IMapView<E> cardView, IView<E> card,
+      String cardName);
 
   /**
    * Creates a color property view.

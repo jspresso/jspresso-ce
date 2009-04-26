@@ -20,6 +20,7 @@ package org.jspresso.framework.application.view.descriptor.basic;
 
 import java.util.Locale;
 
+import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.descriptor.ModuleDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
@@ -27,7 +28,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
-
 
 /**
  * This is the default implementation of a simple module view descriptor.
@@ -45,7 +45,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescript
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision: 998 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
@@ -65,8 +65,8 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
     moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
     moduleNodeGroupDescriptor
         .setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
-            .getPropertyDescriptor("subModules"));
-    moduleNodeGroupDescriptor.setRenderedProperty("i18nName");
+            .getPropertyDescriptor(Module.SUB_MODULES));
+    moduleNodeGroupDescriptor.setRenderedProperty(Module.I18N_NAME);
     setNodeGroupDescriptor(moduleNodeGroupDescriptor);
     setChildDescriptor(this);
   }
@@ -121,7 +121,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
    * Sets the description.
    * 
    * @param description
-   *            the description to set.
+   *          the description to set.
    */
   public void setDescription(String description) {
     descriptor.setDescription(description);
@@ -131,7 +131,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
    * Sets the iconImageURL.
    * 
    * @param iconImageURL
-   *            the iconImageURL to set.
+   *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     descriptor.setIconImageURL(iconImageURL);
@@ -141,7 +141,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
    * Sets the name.
    * 
    * @param name
-   *            the name to set.
+   *          the name to set.
    */
   public void setName(String name) {
     descriptor.setName(name);
@@ -151,7 +151,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
    * Sets the projectedViewDescriptor.
    * 
    * @param projectedViewDescriptor
-   *            the projectedViewDescriptor to set.
+   *          the projectedViewDescriptor to set.
    */
   public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
     this.projectedViewDescriptor = projectedViewDescriptor;

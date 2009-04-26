@@ -26,7 +26,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 
-
 /**
  * The model descriptor for bean modules.
  * <p>
@@ -52,7 +51,7 @@ public class BeanModuleDescriptor extends ModuleDescriptor {
    * Constructs a new <code>BeanModuleDescriptor</code> instance.
    * 
    * @param moduleObjectReferencedDescriptor
-   *            the component descriptor of the module object.
+   *          the component descriptor of the module object.
    */
   public BeanModuleDescriptor(
       IComponentDescriptor<Object> moduleObjectReferencedDescriptor) {
@@ -63,9 +62,9 @@ public class BeanModuleDescriptor extends ModuleDescriptor {
    * Constructs a new <code>BeanModuleDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor (the actual module class name).
+   *          the name of the descriptor (the actual module class name).
    * @param moduleObjectReferencedDescriptor
-   *            the component descriptor of the module object.
+   *          the component descriptor of the module object.
    */
   protected BeanModuleDescriptor(String name,
       IComponentDescriptor<Object> moduleObjectReferencedDescriptor) {
@@ -74,7 +73,7 @@ public class BeanModuleDescriptor extends ModuleDescriptor {
     BasicReferencePropertyDescriptor<Object> moduleObjectDescriptor = new BasicReferencePropertyDescriptor<Object>();
     moduleObjectDescriptor
         .setReferencedDescriptor(moduleObjectReferencedDescriptor);
-    moduleObjectDescriptor.setName("moduleObject");
+    moduleObjectDescriptor.setName(BeanModule.MODULE_OBJECT);
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
         getPropertyDescriptors());

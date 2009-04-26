@@ -285,18 +285,6 @@
     class="org.jspresso.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory" />
 
   <!--
-    The module view descriptor factory.
-  -->
-  <bean
-    id="moduleViewDescriptorFactory"
-    class="org.jspresso.framework.application.view.descriptor.basic.BasicModuleViewDescriptorFactory">
-    <property
-      name="queryViewDescriptorFactory"
-      ref="queryViewDescriptorFactory" />
-    <property name="pagingStatusViewDescriptor" ref="pageableStatusView"/>
-  </bean>
-
-  <!--
     The controllers.
   -->
 
@@ -316,9 +304,6 @@
     <property
       name="viewFactory"
       ref="viewFactory" />
-    <property
-      name="moduleViewDescriptorFactory"
-      ref="moduleViewDescriptorFactory" />
     <property
       name="workspacesMenuIconImageUrl"
       value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />

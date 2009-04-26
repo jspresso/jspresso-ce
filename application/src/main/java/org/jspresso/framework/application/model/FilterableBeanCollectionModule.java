@@ -21,12 +21,16 @@ package org.jspresso.framework.application.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A bean collection module that offers a filter.
@@ -54,6 +58,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   private IViewDescriptor              filterViewDescriptor;
   private PropertyChangeListener       filterComponentTracker;
   private Integer                      pageSize;
+
+  private IQueryViewDescriptorFactory  queryViewDescriptorFactory;
+  private IViewDescriptor              pagingStatusViewDescriptor;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -173,4 +180,70 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
     this.pageSize = pageSize;
   }
 
+  /**
+   * Sets the queryViewDescriptorFactory.
+   * 
+   * @param queryViewDescriptorFactory
+   *          the queryViewDescriptorFactory to set.
+   */
+  public void setQueryViewDescriptorFactory(
+      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
+    this.queryViewDescriptorFactory = queryViewDescriptorFactory;
+  }
+
+  /**
+   * Sets the pagingStatusViewDescriptor.
+   * 
+   * @param pagingStatusViewDescriptor
+   *          the pagingStatusViewDescriptor to set.
+   */
+  public void setPagingStatusViewDescriptor(
+      IViewDescriptor pagingStatusViewDescriptor) {
+    this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getViewDescriptor() {
+    IViewDescriptor superViewDescriptor = super.getViewDescriptor();
+
+    IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor
+        .getModelDescriptor();
+
+    IComponentDescriptor<Object> filterComponentDesc = getFilterComponentDescriptor();
+    IViewDescriptor filterViewDesc = getFilterViewDescriptor();
+    if (filterViewDesc == null) {
+      filterViewDesc = queryViewDescriptorFactory
+          .createQueryViewDescriptor(filterComponentDesc);
+    }
+    ((BasicViewDescriptor) filterViewDesc)
+        .setModelDescriptor(moduleDescriptor
+            .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
+    BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
+    decorator.setNorthViewDescriptor(filterViewDesc);
+    decorator.setCenterViewDescriptor(superViewDescriptor);
+    if (pagingStatusViewDescriptor != null) {
+      BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
+      nestingViewDescriptor
+          .setModelDescriptor(moduleDescriptor
+              .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
+      nestingViewDescriptor.setWestViewDescriptor(pagingStatusViewDescriptor);
+      decorator.setSouthViewDescriptor(nestingViewDescriptor);
+    }
+    decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());
+    return decorator;
+  }
+
+  /**
+   * Gets the module descriptor.
+   * 
+   * @return the module descriptor.
+   */
+  @Override
+  protected BeanCollectionModuleDescriptor getDescriptor() {
+    return new FilterableBeanCollectionModuleDescriptor(
+        getElementComponentDescriptor(), getFilterComponentDescriptor());
+  }
 }

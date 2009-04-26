@@ -23,13 +23,16 @@ import java.beans.PropertyChangeListener;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jspresso.framework.application.model.descriptor.BeanModuleDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
-
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A bean module is the base class of bean related modules.
@@ -51,6 +54,18 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
  * @author Vincent Vandenschrick
  */
 public class BeanModule extends Module implements PropertyChangeListener {
+
+  /**
+   * Constructs a new <code>BeanModule</code> instance.
+   */
+  public BeanModule() {
+    // TODO Auto-generated constructor stub
+  }
+
+  /**
+   * <code>MODULE_OBJECT</code> is "moduleObject".
+   */
+  public static final String           MODULE_OBJECT = "moduleObject";
 
   private IComponentDescriptor<Object> componentDescriptor;
   private Object                       moduleObject;
@@ -78,7 +93,15 @@ public class BeanModule extends Module implements PropertyChangeListener {
    * 
    * @return the componentDescriptor.
    */
+  @SuppressWarnings("unchecked")
   public IComponentDescriptor<Object> getComponentDescriptor() {
+    if (componentDescriptor == null) {
+      if (getProjectedViewDescriptor() != null
+          && getProjectedViewDescriptor().getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+        return ((IComponentDescriptorProvider<Object>) getProjectedViewDescriptor()
+            .getModelDescriptor()).getComponentDescriptor();
+      }
+    }
     return componentDescriptor;
   }
 
@@ -98,17 +121,24 @@ public class BeanModule extends Module implements PropertyChangeListener {
   public IViewDescriptor getProjectedViewDescriptor() {
     IViewDescriptor projectedViewDescriptor = super
         .getProjectedViewDescriptor();
-    if (projectedViewDescriptor == null) {
-      projectedViewDescriptor = new BasicComponentViewDescriptor();
-      ((BasicComponentViewDescriptor) projectedViewDescriptor)
-          .setModelDescriptor(getComponentDescriptor());
-      ((BasicComponentViewDescriptor) projectedViewDescriptor)
-          .setBorderType(EBorderType.TITLED);
-      ((BasicComponentViewDescriptor) projectedViewDescriptor)
-          .setName(getComponentDescriptor().getName());
-      ((BasicComponentViewDescriptor) projectedViewDescriptor)
-          .setColumnCount(3);
-      setProjectedViewDescriptor(projectedViewDescriptor);
+    if (componentDescriptor != null) {
+      if (projectedViewDescriptor == null) {
+        projectedViewDescriptor = new BasicComponentViewDescriptor();
+        ((BasicComponentViewDescriptor) projectedViewDescriptor)
+            .setModelDescriptor(componentDescriptor);
+        ((BasicComponentViewDescriptor) projectedViewDescriptor)
+            .setBorderType(EBorderType.TITLED);
+        ((BasicComponentViewDescriptor) projectedViewDescriptor)
+            .setName(componentDescriptor.getName());
+        ((BasicComponentViewDescriptor) projectedViewDescriptor)
+            .setColumnCount(3);
+        setProjectedViewDescriptor(projectedViewDescriptor);
+      }
+      if (projectedViewDescriptor.getModelDescriptor() == null
+          && projectedViewDescriptor instanceof BasicViewDescriptor) {
+        ((BasicViewDescriptor) projectedViewDescriptor)
+            .setModelDescriptor(componentDescriptor);
+      }
     }
     return projectedViewDescriptor;
   }
@@ -126,20 +156,19 @@ public class BeanModule extends Module implements PropertyChangeListener {
   /**
    * {@inheritDoc}
    */
-  public void propertyChange(@SuppressWarnings("unused")
-  PropertyChangeEvent evt) {
+  public void propertyChange(@SuppressWarnings("unused") PropertyChangeEvent evt) {
     String oldName = getName();
     String oldI18nName = getI18nName();
     setName(String.valueOf(this.moduleObject));
-    firePropertyChange("name", oldName, getName());
-    firePropertyChange("i18nName", oldI18nName, getI18nName());
+    firePropertyChange(NAME, oldName, getName());
+    firePropertyChange(I18N_NAME, oldI18nName, getI18nName());
   }
 
   /**
    * Sets the componentDescriptor.
    * 
    * @param componentDescriptor
-   *            the componentDescriptor to set.
+   *          the componentDescriptor to set.
    */
   public void setComponentDescriptor(
       IComponentDescriptor<Object> componentDescriptor) {
@@ -150,7 +179,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
    * Sets the module's projected object.
    * 
    * @param moduleObject
-   *            the projected object.
+   *          the projected object.
    */
   public void setModuleObject(Object moduleObject) {
     if (ObjectUtils.equals(this.moduleObject, moduleObject)) {
@@ -166,6 +195,30 @@ public class BeanModule extends Module implements PropertyChangeListener {
       ((IPropertyChangeCapable) this.moduleObject)
           .addPropertyChangeListener(this);
     }
-    firePropertyChange("moduleObject", oldValue, getModuleObject());
+    firePropertyChange(MODULE_OBJECT, oldValue, getModuleObject());
+  }
+
+  /**
+   * Returns the projectedViewDescriptor nested in a "moduleObject" property
+   * view.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getViewDescriptor() {
+    if (getProjectedViewDescriptor() != null) {
+      BeanModuleDescriptor beanModuleDescriptor = new BeanModuleDescriptor(
+          getComponentDescriptor());
+      BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
+      nestingViewDescriptor
+          .setCenterViewDescriptor(getProjectedViewDescriptor());
+      nestingViewDescriptor.setModelDescriptor(beanModuleDescriptor
+          .getPropertyDescriptor(MODULE_OBJECT));
+      BasicBorderViewDescriptor viewDescriptor = new BasicBorderViewDescriptor();
+      viewDescriptor.setModelDescriptor(beanModuleDescriptor);
+      viewDescriptor.setCenterViewDescriptor(nestingViewDescriptor);
+      return viewDescriptor;
+    }
+    return null;
   }
 }

@@ -340,8 +340,6 @@ public class DefaultWingsViewFactory extends
     SPanel viewComponent = createSPanel(layout);
     BasicMapView<SComponent> view = constructMapView(viewComponent,
         viewDescriptor);
-    Map<String, IView<SComponent>> childrenViews = new HashMap<String, IView<SComponent>>();
-
     viewComponent.add(createEmptyComponent(), ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityComponent(),
         ICardViewDescriptor.SECURITY_CARD);
@@ -351,12 +349,21 @@ public class DefaultWingsViewFactory extends
       IView<SComponent> childView = createView(childViewDescriptor.getValue(),
           actionHandler, locale);
       viewComponent.add(childView.getPeer(), childViewDescriptor.getKey());
-      childrenViews.put(childViewDescriptor.getKey(), childView);
+      view.addToChildrenMap(childViewDescriptor.getKey(), childView);
     }
     viewComponent.setPreferredSize(SDimension.FULLAREA);
-    view.setChildrenMap(childrenViews);
-    view.setConnector(createCardViewConnector(view, actionHandler));
+    view.setConnector(createCardViewConnector(view, actionHandler, locale));
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void addCard(IMapView<SComponent> cardView, IView<SComponent> card,
+      String cardName) {
+    ((SContainer) cardView.getPeer()).add(card.getPeer(), cardName);
+    cardView.addToChildrenMap(cardName, card);
   }
 
   /**
@@ -600,10 +607,10 @@ public class DefaultWingsViewFactory extends
       ((XCalendar) viewComponent).setFormatter(new SDateFormatter(format));
       connector = new XCalendarConnector(propertyDescriptor.getName(),
           (XCalendar) viewComponent);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDateTemplateValue(propertyDescriptor), 64);
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDateTemplateValue(propertyDescriptor), 64);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -632,10 +639,10 @@ public class DefaultWingsViewFactory extends
       viewComponent = createSTextField();
       connector = new SFormattedFieldConnector(propertyDescriptor.getName(),
           (STextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDecimalTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDecimalTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -660,10 +667,10 @@ public class DefaultWingsViewFactory extends
       viewComponent = createSTextField();
       connector = new SFormattedFieldConnector(propertyDescriptor.getName(),
           (STextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDurationTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDurationTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -782,10 +789,10 @@ public class DefaultWingsViewFactory extends
       viewComponent = createSTextField();
       connector = new SFormattedFieldConnector(propertyDescriptor.getName(),
           (STextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getIntegerTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -865,10 +872,10 @@ public class DefaultWingsViewFactory extends
       viewComponent = createSTextField();
       connector = new SPercentFieldConnector(propertyDescriptor.getName(),
           (STextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getPercentTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1314,10 +1321,10 @@ public class DefaultWingsViewFactory extends
       viewComponent = createSTextField();
       connector = new STextFieldConnector(propertyDescriptor.getName(),
           (STextField) viewComponent);
+      adjustSizes(propertyViewDescriptor, viewComponent, null,
+          getStringTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, null,
-        getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1592,10 +1599,10 @@ public class DefaultWingsViewFactory extends
       viewComponent = createSTextField();
       connector = new SFormattedFieldConnector(propertyDescriptor.getName(),
           (STextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getTimeTemplateValue(propertyDescriptor), 64);
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getTimeTemplateValue(propertyDescriptor), 64);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 

@@ -30,7 +30,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDesc
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 
-
 /**
  * The model descriptor of workspace objects.
  * <p>
@@ -64,7 +63,7 @@ public class WorkspaceDescriptor extends BasicComponentDescriptor<Workspace> {
    * Constructs a new <code>WorkspaceDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor (the actual workspace class name).
+   *          the name of the descriptor (the actual workspace class name).
    */
   protected WorkspaceDescriptor(String name) {
 
@@ -72,23 +71,24 @@ public class WorkspaceDescriptor extends BasicComponentDescriptor<Workspace> {
 
     BasicCollectionDescriptor<Module> moduleListDescriptor = new BasicCollectionDescriptor<Module>();
     moduleListDescriptor.setCollectionInterface(List.class);
-    moduleListDescriptor.setElementDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR);
+    moduleListDescriptor
+        .setElementDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR);
 
     BasicCollectionPropertyDescriptor<Module> modulesDescriptor = new BasicCollectionPropertyDescriptor<Module>();
     modulesDescriptor.setReferencedDescriptor(moduleListDescriptor);
-    modulesDescriptor.setName("modules");
+    modulesDescriptor.setName(Workspace.MODULES);
 
     BasicStringPropertyDescriptor nameDescriptor = new BasicStringPropertyDescriptor();
-    nameDescriptor.setName("name");
+    nameDescriptor.setName(Workspace.NAME);
 
     BasicStringPropertyDescriptor descriptionDescriptor = new BasicStringPropertyDescriptor();
-    descriptionDescriptor.setName("description");
+    descriptionDescriptor.setName(Workspace.DESCRIPTION);
 
     BasicStringPropertyDescriptor i18nNameDescriptor = new BasicStringPropertyDescriptor();
-    i18nNameDescriptor.setName("i18nName");
+    i18nNameDescriptor.setName(Workspace.I18N_NAME);
 
     BasicStringPropertyDescriptor i18nDescriptionDescriptor = new BasicStringPropertyDescriptor();
-    i18nDescriptionDescriptor.setName("i18nDescription");
+    i18nDescriptionDescriptor.setName(Workspace.I18N_DESCRIPTION);
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     propertyDescriptors.add(nameDescriptor);

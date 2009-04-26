@@ -25,12 +25,12 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
+import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
-
 
 /**
  * This action adds the selected objects as child modules.
@@ -59,7 +59,8 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
 
     if (selectedIndices == null || selectedIndices.length == 0) {
@@ -79,6 +80,14 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
       IPropertyChangeCapable nextselectedModuleObject = (IPropertyChangeCapable) collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue();
       BeanModule nextSubModule = new BeanModule();
+      if (parentModule instanceof BeanCollectionModule) {
+        nextSubModule
+            .setProjectedViewDescriptor(((BeanCollectionModule) parentModule)
+                .getElementViewDescriptor());
+        nextSubModule
+            .setComponentDescriptor(((BeanCollectionModule) parentModule)
+                .getElementComponentDescriptor());
+      }
       nextSubModule.setModuleObject(nextselectedModuleObject);
       nextSubModule.setName(String.valueOf(nextselectedModuleObject));
       int nextSubModuleIndex = children.indexOf(nextSubModule);

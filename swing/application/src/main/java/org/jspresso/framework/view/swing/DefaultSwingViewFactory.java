@@ -347,7 +347,6 @@ public class DefaultSwingViewFactory extends
     viewComponent.setLayout(layout);
     BasicMapView<JComponent> view = constructMapView(viewComponent,
         viewDescriptor);
-    Map<String, IView<JComponent>> childrenViews = new HashMap<String, IView<JComponent>>();
 
     viewComponent.add(createEmptyComponent(), ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityComponent(),
@@ -358,11 +357,20 @@ public class DefaultSwingViewFactory extends
       IView<JComponent> childView = createView(childViewDescriptor.getValue(),
           actionHandler, locale);
       viewComponent.add(childView.getPeer(), childViewDescriptor.getKey());
-      childrenViews.put(childViewDescriptor.getKey(), childView);
+      view.addToChildrenMap(childViewDescriptor.getKey(), childView);
     }
-    view.setChildrenMap(childrenViews);
-    view.setConnector(createCardViewConnector(view, actionHandler));
+    view.setConnector(createCardViewConnector(view, actionHandler, locale));
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void addCard(IMapView<JComponent> cardView, IView<JComponent> card,
+      String cardName) {
+    cardView.getPeer().add(card.getPeer(), cardName);
+    cardView.addToChildrenMap(cardName, card);
   }
 
   /**
@@ -619,11 +627,11 @@ public class DefaultSwingViewFactory extends
           new DefaultFormatterFactory(new DateFormatter(format)));
       connector = new JDateFieldConnector(propertyDescriptor.getName(),
           (JDateField) viewComponent);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
+              .getScreenResolution() / 3);
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
-            .getScreenResolution() / 3);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -652,10 +660,10 @@ public class DefaultSwingViewFactory extends
       viewComponent = createJTextField();
       connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
           (JTextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDecimalTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDecimalTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -680,10 +688,10 @@ public class DefaultSwingViewFactory extends
       viewComponent = createJTextField();
       connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
           (JTextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDurationTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDurationTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -806,10 +814,10 @@ public class DefaultSwingViewFactory extends
       viewComponent = createJTextField();
       connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
           (JTextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getIntegerTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1170,10 +1178,10 @@ public class DefaultSwingViewFactory extends
       viewComponent = createJTextField();
       connector = new JPercentFieldConnector(propertyDescriptor.getName(),
           (JTextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getPercentTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1307,10 +1315,10 @@ public class DefaultSwingViewFactory extends
       viewComponent = createJTextField();
       connector = new JTextFieldConnector(propertyDescriptor.getName(),
           (JTextField) viewComponent);
+      adjustSizes(propertyViewDescriptor, viewComponent, null,
+          getStringTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, null,
-        getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1602,10 +1610,10 @@ public class DefaultSwingViewFactory extends
       viewComponent = createJTextField();
       connector = new JFormattedFieldConnector(propertyDescriptor.getName(),
           (JTextField) viewComponent, formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getTimeTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getTimeTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 

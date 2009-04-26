@@ -39,10 +39,14 @@ package org.jspresso.framework.view.flex {
 				  image.source = iconImageUrl;
 				}
 				image.visible = true;
-				icon.visible = false;
+				if(icon) {
+				  icon.visible = false;
+				}
 			} else {
 				image.visible = false;
-				icon.visible = true;
+				if(icon) {
+				  icon.visible = true;
+				}
 			}
 		}
   }

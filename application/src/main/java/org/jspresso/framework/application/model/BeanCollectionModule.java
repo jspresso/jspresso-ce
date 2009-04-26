@@ -20,9 +20,14 @@ package org.jspresso.framework.application.model;
 
 import java.util.Collection;
 
+import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A bean collection module is a module dealing with a collection of beans.
@@ -45,42 +50,57 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class BeanCollectionModule extends Module {
 
+  /**
+   * <code>MODULE_OBJECTS</code> is "moduleObjects".
+   */
+  public static final String           MODULE_OBJECTS = "moduleObjects";
+
   private IComponentDescriptor<Object> elementComponentDescriptor;
   private IViewDescriptor              elementViewDescriptor;
   private Collection<?>                moduleObjects;
 
-//  /**
-//   * Equality based on projected object.
-//   * <p>
-//   * {@inheritDoc}
-//   */
-//  @Override
-//  public boolean equals(Object obj) {
-//    if (!(obj instanceof BeanCollectionModule)) {
-//      return false;
-//    }
-//    if (this == obj) {
-//      return true;
-//    }
-//    // BeanCollectionModule rhs = (BeanCollectionModule) obj;
-//
-//    // do not rely on object equality (null lists would make it equal)
-//    // return new EqualsBuilder().append(getModuleObjects(),
-//    // rhs.getModuleObjects()).isEquals();
-//
-//    // Do not rely on names since 2 modules with the same name would make theme
-//    // equal.
-//    // return ObjectUtils.equals(getName(), rhs.getName());
-//    // see [ 2194861 ] Bean collection modules equality should not rely on names
-//    //Just rely on object identity.
-//  }
+  // /**
+  // * Equality based on projected object.
+  // * <p>
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public boolean equals(Object obj) {
+  // if (!(obj instanceof BeanCollectionModule)) {
+  // return false;
+  // }
+  // if (this == obj) {
+  // return true;
+  // }
+  // // BeanCollectionModule rhs = (BeanCollectionModule) obj;
+  //
+  // // do not rely on object equality (null lists would make it equal)
+  // // return new EqualsBuilder().append(getModuleObjects(),
+  // // rhs.getModuleObjects()).isEquals();
+  //
+  // // Do not rely on names since 2 modules with the same name would make theme
+  // // equal.
+  // // return ObjectUtils.equals(getName(), rhs.getName());
+  // // see [ 2194861 ] Bean collection modules equality should not rely on
+  // names
+  // //Just rely on object identity.
+  // }
 
   /**
    * Gets the elementComponentDescriptor.
    * 
    * @return the elementComponentDescriptor.
    */
+  @SuppressWarnings("unchecked")
   public IComponentDescriptor<Object> getElementComponentDescriptor() {
+    if (elementComponentDescriptor == null) {
+      if (getProjectedViewDescriptor() instanceof ICollectionViewDescriptor
+          && getProjectedViewDescriptor().getModelDescriptor() != null) {
+        return (IComponentDescriptor<Object>) ((ICollectionDescriptorProvider<?>) getProjectedViewDescriptor()
+            .getModelDescriptor()).getCollectionDescriptor()
+            .getElementDescriptor();
+      }
+    }
     return elementComponentDescriptor;
   }
 
@@ -106,16 +126,16 @@ public class BeanCollectionModule extends Module {
     return iconImageUrl;
   }
 
-//  /**
-//   * Hash code based on projected object.
-//   * <p>
-//   * {@inheritDoc}
-//   */
-//  @Override
-//  public int hashCode() {
-//    return new HashCodeBuilder(23, 53).append(getName()).toHashCode();
-//    see the equals comment.
-//  }
+  // /**
+  // * Hash code based on projected object.
+  // * <p>
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public int hashCode() {
+  // return new HashCodeBuilder(23, 53).append(getName()).toHashCode();
+  // see the equals comment.
+  // }
 
   /**
    * Gets the module's projected objects.
@@ -159,6 +179,31 @@ public class BeanCollectionModule extends Module {
     }
     Object oldValue = getModuleObjects();
     this.moduleObjects = moduleObjects;
-    firePropertyChange("moduleObjects", oldValue, getModuleObjects());
+    firePropertyChange(MODULE_OBJECTS, oldValue, getModuleObjects());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getViewDescriptor() {
+    IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
+    BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
+    ((BasicViewDescriptor) projectedViewDescriptor)
+        .setModelDescriptor(moduleDescriptor
+            .getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
+    BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
+    moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+    moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
+    return moduleViewDescriptor;
+  }
+
+  /**
+   * Gets the module descriptor.
+   * 
+   * @return the module descriptor.
+   */
+  protected BeanCollectionModuleDescriptor getDescriptor() {
+    return new BeanCollectionModuleDescriptor(getElementComponentDescriptor());
   }
 }

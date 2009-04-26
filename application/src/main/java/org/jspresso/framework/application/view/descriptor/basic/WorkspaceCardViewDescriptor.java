@@ -18,18 +18,10 @@
  */
 package org.jspresso.framework.application.view.descriptor.basic;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
-import org.jspresso.framework.application.model.Workspace;
-import org.jspresso.framework.application.view.descriptor.IModuleViewDescriptorFactory;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor;
-
 
 /**
  * This is a card view descriptor which stacks the projected view descriptors of
@@ -56,23 +48,6 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
   private static final String ELEMENT_SUFFIX = ".element";
 
   /**
-   * Constructs a new <code>WorkspaceCardViewDescriptor</code> instance.
-   * 
-   * @param workspace
-   *            the workspace.
-   * @param moduleDescriptorViewFactory
-   *            the view descriptor factory used to create (or decorate) the
-   *            modules projected views.
-   */
-  public WorkspaceCardViewDescriptor(Workspace workspace,
-      IModuleViewDescriptorFactory moduleDescriptorViewFactory) {
-    Map<String, IViewDescriptor> moduleCards = new HashMap<String, IViewDescriptor>();
-    prepareModuleCards(moduleCards, workspace.getModules(),
-        moduleDescriptorViewFactory);
-    setCardViewDescriptors(moduleCards);
-  }
-
-  /**
    * {@inheritDoc}
    */
   public String getCardNameForModel(Object model) {
@@ -83,32 +58,5 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
       return ((Module) model).getName();
     }
     return null;
-  }
-
-  private void prepareModuleCards(Map<String, IViewDescriptor> moduleCards,
-      List<Module> modules,
-      IModuleViewDescriptorFactory moduleDescriptorViewFactory) {
-    if (modules != null) {
-      for (Module module : modules) {
-        if (module.getProjectedViewDescriptor() != null) {
-          moduleCards.put(module.getName(), moduleDescriptorViewFactory
-              .createProjectedViewDescriptor(module));
-          if (module instanceof BeanCollectionModule) {
-            BeanModule fakeBeanModule = new BeanModule();
-            fakeBeanModule
-                .setProjectedViewDescriptor(((BeanCollectionModule) module)
-                    .getElementViewDescriptor());
-            fakeBeanModule
-                .setComponentDescriptor(((BeanCollectionModule) module)
-                    .getElementComponentDescriptor());
-            moduleCards.put(module.getName() + ELEMENT_SUFFIX,
-                moduleDescriptorViewFactory
-                    .createProjectedViewDescriptor(fakeBeanModule));
-          }
-        }
-        prepareModuleCards(moduleCards, module.getSubModules(),
-            moduleDescriptorViewFactory);
-      }
-    }
   }
 }

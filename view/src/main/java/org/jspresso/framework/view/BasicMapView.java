@@ -42,7 +42,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the type of component this view uses.
+ *          the type of component this view uses.
  */
 public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
 
@@ -52,7 +52,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
    * Constructs a new <code>BasicMapView</code> instance.
    * 
    * @param peer
-   *            the peer component.
+   *          the peer component.
    */
   public BasicMapView(E peer) {
     super(peer);
@@ -83,18 +83,16 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
    */
   public Map<String, IView<E>> getChildrenMap() {
     if (childrenMap == null) {
-      return null;
+      childrenMap = new HashMap<String, IView<E>>();
     }
-    return new HashMap<String, IView<E>>(childrenMap);
+    return childrenMap;
   }
 
   /**
-   * Sets the childrenMap.
-   * 
-   * @param childrenMap
-   *            the childrenMap to set.
+   * {@inheritDoc}
    */
-  public void setChildrenMap(Map<String, IView<E>> childrenMap) {
-    this.childrenMap = childrenMap;
+  @Override
+  public void addToChildrenMap(String key, IView<E> childView) {
+    getChildrenMap().put(key, childView);
   }
 }

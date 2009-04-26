@@ -47,6 +47,7 @@ import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
+import org.jspresso.framework.binding.IFormattedValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.remote.RemoteConnectorFactory;
 import org.jspresso.framework.gui.remote.RAction;
@@ -423,8 +424,14 @@ public class DefaultRemoteController extends
         throw new CommandException("Target remote peer could not be retrieved");
       }
       if (command instanceof RemoteValueCommand) {
-        ((IValueConnector) targetPeer)
-            .setConnectorValue(((RemoteValueCommand) command).getValue());
+        if (targetPeer instanceof IFormattedValueConnector) {
+          ((IFormattedValueConnector) targetPeer)
+              .setConnectorValueAsString((String) ((RemoteValueCommand) command)
+                  .getValue());
+        } else {
+          ((IValueConnector) targetPeer)
+              .setConnectorValue(((RemoteValueCommand) command).getValue());
+        }
       } else if (command instanceof RemoteSelectionCommand) {
         ISelectable selectable;
         if (targetPeer instanceof ICollectionConnectorProvider) {

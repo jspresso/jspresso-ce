@@ -595,26 +595,35 @@ package org.jspresso.framework.view.flex {
     }
 
     private function createCardContainer(remoteCardContainer:RCardContainer):Container {
-      var cardContainer:ViewStack = new ViewStack();
+      var cardContainer:RViewStack = new RViewStack(remoteCardContainer.guid);
+      // view stack may have to be retrieved for late update of cards.
+      _remotePeerRegistry.register(cardContainer);
       //cardContainer.resizeToContent = true;
       
       for(var i:int = 0; i < remoteCardContainer.cardNames.length; i++) {
-        var cardCanvas:Canvas = new Canvas();
-        cardCanvas.percentWidth = 100.0;
-        cardCanvas.percentHeight = 100.0;
-        cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
-        cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
-        cardCanvas.name = remoteCardContainer.cardNames[i] as String;
-        cardContainer.addChild(cardCanvas);
-
-        var cardComponent:UIComponent = createComponent(remoteCardContainer.cards[i] as RComponent);
-        cardComponent.percentWidth = 100.0;
-        cardComponent.percentHeight = 100.0;
-        cardCanvas.addChild(cardComponent);
+        var rCardComponent:RComponent = remoteCardContainer.cards[i] as RComponent; 
+        var cardName:String = remoteCardContainer.cardNames[i] as String;
+        
+        addCard(cardContainer, rCardComponent, cardName);
       }
       bindCardContainer(cardContainer, remoteCardContainer.state);
 
       return cardContainer;
+    }
+    
+    public function addCard(cardContainer:ViewStack, rCardComponent:RComponent, cardName:String):void {
+      var cardCanvas:Canvas = new Canvas();
+      cardCanvas.percentWidth = 100.0;
+      cardCanvas.percentHeight = 100.0;
+      cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
+      cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
+      cardCanvas.name = cardName;
+      cardContainer.addChild(cardCanvas);
+  
+      var cardComponent:UIComponent = createComponent(rCardComponent);
+      cardComponent.percentWidth = 100.0;
+      cardComponent.percentHeight = 100.0;
+      cardCanvas.addChild(cardComponent);
     }
 
     private function bindCardContainer(cardContainer:ViewStack, remoteState:RemoteValueState):void {

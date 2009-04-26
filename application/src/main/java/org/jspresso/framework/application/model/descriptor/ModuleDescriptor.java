@@ -30,7 +30,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 
-
 /**
  * The model descriptor of module objects.
  * <p>
@@ -64,14 +63,14 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
    * Constructs a new <code>ModuleDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor (the actual module class name).
+   *          the name of the descriptor (the actual module class name).
    */
   protected ModuleDescriptor(String name) {
 
     super(name);
 
     BasicReferencePropertyDescriptor<Module> parentDescriptor = new BasicReferencePropertyDescriptor<Module>();
-    parentDescriptor.setName("parent");
+    parentDescriptor.setName(Module.PARENT);
     parentDescriptor.setReferencedDescriptor(this);
 
     BasicCollectionDescriptor<Module> moduleListDescriptor = new BasicCollectionDescriptor<Module>();
@@ -80,19 +79,19 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
 
     BasicCollectionPropertyDescriptor<Module> subModulesDescriptor = new BasicCollectionPropertyDescriptor<Module>();
     subModulesDescriptor.setReferencedDescriptor(moduleListDescriptor);
-    subModulesDescriptor.setName("subModules");
+    subModulesDescriptor.setName(Module.SUB_MODULES);
 
     BasicStringPropertyDescriptor nameDescriptor = new BasicStringPropertyDescriptor();
-    nameDescriptor.setName("name");
+    nameDescriptor.setName(Module.NAME);
 
     BasicStringPropertyDescriptor descriptionDescriptor = new BasicStringPropertyDescriptor();
-    descriptionDescriptor.setName("description");
+    descriptionDescriptor.setName(Module.DESCRIPTION);
 
     BasicStringPropertyDescriptor i18nNameDescriptor = new BasicStringPropertyDescriptor();
-    i18nNameDescriptor.setName("i18nName");
+    i18nNameDescriptor.setName(Module.I18N_NAME);
 
     BasicStringPropertyDescriptor i18nDescriptionDescriptor = new BasicStringPropertyDescriptor();
-    i18nDescriptionDescriptor.setName("i18nDescription");
+    i18nDescriptionDescriptor.setName(Module.I18N_DESCRIPTION);
 
     parentDescriptor.setReverseRelationEnd(subModulesDescriptor);
     subModulesDescriptor.setReverseRelationEnd(parentDescriptor);

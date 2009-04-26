@@ -368,8 +368,6 @@ public class DefaultUlcViewFactory extends
     ULCCardPane viewComponent = createCardPane();
     BasicMapView<ULCComponent> view = constructMapView(viewComponent,
         viewDescriptor);
-    Map<String, IView<ULCComponent>> childrenViews = new HashMap<String, IView<ULCComponent>>();
-
     viewComponent.add(createEmptyComponent(), ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityComponent(),
         ICardViewDescriptor.SECURITY_CARD);
@@ -378,12 +376,21 @@ public class DefaultUlcViewFactory extends
         .getCardViewDescriptors().entrySet()) {
       IView<ULCComponent> childView = createView(
           childViewDescriptor.getValue(), actionHandler, locale);
-      viewComponent.addCard(childViewDescriptor.getKey(), childView.getPeer());
-      childrenViews.put(childViewDescriptor.getKey(), childView);
+      viewComponent.add(childView.getPeer(), childViewDescriptor.getKey());
+      view.addToChildrenMap(childViewDescriptor.getKey(), childView);
     }
-    view.setChildrenMap(childrenViews);
-    view.setConnector(createCardViewConnector(view, actionHandler));
+    view.setConnector(createCardViewConnector(view, actionHandler, locale));
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void addCard(IMapView<ULCComponent> cardView,
+      IView<ULCComponent> card, String cardName) {
+    ((ULCCardPane) cardView.getPeer()).add(card.getPeer(), cardName);
+    cardView.addToChildrenMap(cardName, card);
   }
 
   /**
@@ -633,11 +640,11 @@ public class DefaultUlcViewFactory extends
       viewComponent = createULCDateField(format.toPattern(), locale);
       connector = new ULCDateFieldConnector(propertyDescriptor.getName(),
           (ULCDateField) viewComponent);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDateTemplateValue(propertyDescriptor), ClientContext
+              .getScreenResolution() / 3);
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDateTemplateValue(propertyDescriptor), ClientContext
-            .getScreenResolution() / 3);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -667,10 +674,10 @@ public class DefaultUlcViewFactory extends
       connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
           (ULCTextField) viewComponent);
       ((ULCTextFieldConnector) connector).setFormatter(formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDecimalTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDecimalTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -696,10 +703,10 @@ public class DefaultUlcViewFactory extends
       connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
           (ULCTextField) viewComponent);
       ((ULCTextFieldConnector) connector).setFormatter(formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getDurationTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getDurationTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -838,10 +845,10 @@ public class DefaultUlcViewFactory extends
       viewComponent = createULCTextField();
       connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
           (ULCTextField) viewComponent);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getIntegerTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -924,10 +931,10 @@ public class DefaultUlcViewFactory extends
       connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
           (ULCTextField) viewComponent);
       ((ULCTextFieldConnector) connector).setFormatter(formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getPercentTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1058,10 +1065,10 @@ public class DefaultUlcViewFactory extends
       viewComponent = createULCTextField();
       connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
           (ULCTextField) viewComponent);
+      adjustSizes(propertyViewDescriptor, viewComponent, null,
+          getStringTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, null,
-        getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
@@ -1390,10 +1397,10 @@ public class DefaultUlcViewFactory extends
       connector = new ULCTextFieldConnector(propertyDescriptor.getName(),
           (ULCTextField) viewComponent);
       ((ULCTextFieldConnector) connector).setFormatter(formatter);
+      adjustSizes(propertyViewDescriptor, viewComponent, formatter,
+          getTimeTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    adjustSizes(propertyViewDescriptor, viewComponent, formatter,
-        getTimeTemplateValue(propertyDescriptor));
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 

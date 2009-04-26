@@ -56,6 +56,31 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class Workspace implements ISecurable {
 
+  /**
+   * <code>MODULES</code> is "modules".
+   */
+  public static final String    MODULES          = "modules";
+
+  /**
+   * <code>NAME</code> is "name".
+   */
+  public static final String    NAME             = "name";
+
+  /**
+   * <code>I18N_NAME</code> is "i18nName".
+   */
+  public static final String    I18N_NAME        = "i18nName";
+
+  /**
+   * <code>DESCRIPTION</code> is "description".
+   */
+  public static final String    DESCRIPTION      = "description";
+
+  /**
+   * <code>I18N_DESCRIPTION</code> is "i18nDescription".
+   */
+  public static final String    I18N_DESCRIPTION = "i18nDescription";
+
   private String                description;
   private Collection<String>    grantedRoles;
   private String                i18nDescription;
@@ -73,7 +98,6 @@ public class Workspace implements ISecurable {
 
   /**
    * Constructs a new <code>Workspace</code> instance.
-   * 
    */
   public Workspace() {
     started = false;
@@ -310,7 +334,6 @@ public class Workspace implements ISecurable {
     this.startupAction = startupAction;
   }
 
-  
   /**
    * Gets the started.
    * 
@@ -320,11 +343,11 @@ public class Workspace implements ISecurable {
     return started;
   }
 
-  
   /**
    * Sets the started.
    * 
-   * @param started the started to set.
+   * @param started
+   *          the started to set.
    */
   public void setStarted(boolean started) {
     this.started = started;

@@ -41,7 +41,6 @@ import org.jspresso.framework.application.frontend.action.workspace.ExitAction;
 import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
-import org.jspresso.framework.application.view.descriptor.IModuleViewDescriptorFactory;
 import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
 import org.jspresso.framework.binding.ConnectorSelectionEvent;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -112,7 +111,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private String                                loginContextName;
 
-  private IModuleViewDescriptorFactory          moduleViewDescriptorFactory;
   private IMvcBinder                            mvcBinder;
 
   private Map<String, ICompositeValueConnector> selectedModuleConnectors;
@@ -393,17 +391,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the moduleViewDescriptorFactory.
-   * 
-   * @param moduleViewDescriptorFactory
-   *          the moduleViewDescriptorFactory to set.
-   */
-  public void setModuleViewDescriptorFactory(
-      IModuleViewDescriptorFactory moduleViewDescriptorFactory) {
-    this.moduleViewDescriptorFactory = moduleViewDescriptorFactory;
-  }
-
-  /**
    * Sets the mvcBinder.
    * 
    * @param mvcBinder
@@ -593,11 +580,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
         .getIconImageURL());
     splitViewDescriptor.setCascadingModels(true);
 
-    WorkspaceCardViewDescriptor workspacePaneDescriptor = new WorkspaceCardViewDescriptor(
-        workspace, moduleViewDescriptorFactory);
-
     splitViewDescriptor.setLeftTopViewDescriptor(workspaceViewDescriptor);
-    splitViewDescriptor.setRightBottomViewDescriptor(workspacePaneDescriptor);
+    splitViewDescriptor
+        .setRightBottomViewDescriptor(new WorkspaceCardViewDescriptor());
 
     ICompositeView<E> workspaceView = (ICompositeView<E>) viewFactory
         .createView(splitViewDescriptor, this, getLocale());

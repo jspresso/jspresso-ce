@@ -23,6 +23,7 @@ New features
 2777176  	 Get rid of nesting view descriptor (see release notes)
 2777177  	 Get rid of sub view descriptors (see release notes)
 2777219  	 Child view descriptors should inherit enclosing view model
+2781767  	 Lazy load module GUIs
 
 3.0.0
 =====

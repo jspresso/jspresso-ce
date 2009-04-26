@@ -28,7 +28,7 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
+import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 
 /**
  * A child module is a non-root module (it belongs to a workspace). A child
@@ -50,7 +50,38 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Module extends AbstractPropertyChangeCapable implements ISecurable {
+public class Module extends AbstractPropertyChangeCapable implements
+    ISecurable, IViewDescriptorProvider {
+
+  /**
+   * <code>SUB_MODULES</code> is "subModules".
+   */
+  public static final String SUB_MODULES      = "subModules";
+
+  /**
+   * <code>PARENT</code> is "parent".
+   */
+  public static final String PARENT           = "parent";
+
+  /**
+   * <code>NAME</code> is "name".
+   */
+  public static final String NAME             = "name";
+
+  /**
+   * <code>I18N_NAME</code> is "i18nName".
+   */
+  public static final String I18N_NAME        = "i18nName";
+
+  /**
+   * <code>DESCRIPTION</code> is "description".
+   */
+  public static final String DESCRIPTION      = "description";
+
+  /**
+   * <code>I18N_DESCRIPTION</code> is "i18nDescription".
+   */
+  public static final String I18N_DESCRIPTION = "i18nDescription";
 
   private String             description;
   private Collection<String> grantedRoles;
@@ -76,8 +107,8 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Adds a child module.
    * 
    * @param child
-   *            the child module to add. It will fire a "subModules" property
-   *            change event.
+   *          the child module to add. It will fire a "subModules" property
+   *          change event.
    * @return <code>true</code> if the module was succesfully added.
    */
   public boolean addSubModule(Module child) {
@@ -97,9 +128,9 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * change event.
    * 
    * @param children
-   *            the modules modules to add.
-   * @return <code>true</code> if the modules module collection was
-   *         succesfully added.
+   *          the modules modules to add.
+   * @return <code>true</code> if the modules module collection was succesfully
+   *         added.
    */
   public boolean addSubModules(Collection<? extends Module> children) {
     if (subModules == null) {
@@ -232,7 +263,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Removes a child module. It will fire a "subModules" property change event.
    * 
    * @param module
-   *            the child module to remove.
+   *          the child module to remove.
    * @return <code>true</code> if the module was succesfully removed.
    */
   public boolean removeSubModule(Module module) {
@@ -252,9 +283,9 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * change event.
    * 
    * @param children
-   *            the modules modules to remove.
-   * @return <code>true</code> if the modules module collection was
-   *         succesfully removed.
+   *          the modules modules to remove.
+   * @return <code>true</code> if the modules module collection was succesfully
+   *         removed.
    */
   public boolean removeSubModules(Collection<Module> children) {
     if (subModules != null) {
@@ -272,7 +303,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the module's description. It may serve for the module's view.
    * 
    * @param description
-   *            the module's description.
+   *          the module's description.
    */
   public void setDescription(String description) {
     if (ObjectUtils.equals(this.description, description)) {
@@ -280,14 +311,14 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
     }
     String oldValue = getDescription();
     this.description = description;
-    firePropertyChange("description", oldValue, getDescription());
+    firePropertyChange(DESCRIPTION, oldValue, getDescription());
   }
 
   /**
    * Sets the grantedRoles.
    * 
    * @param grantedRoles
-   *            the grantedRoles to set.
+   *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
@@ -297,7 +328,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the i18nDescription.
    * 
    * @param i18nDescription
-   *            the i18nDescription to set.
+   *          the i18nDescription to set.
    */
   public void setI18nDescription(String i18nDescription) {
     if (ObjectUtils.equals(this.i18nDescription, i18nDescription)) {
@@ -305,14 +336,14 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
     }
     String oldValue = getI18nDescription();
     this.i18nDescription = i18nDescription;
-    firePropertyChange("i18nDescription", oldValue, getI18nDescription());
+    firePropertyChange(I18N_DESCRIPTION, oldValue, getI18nDescription());
   }
 
   /**
    * Sets the i18nName.
    * 
    * @param i18nName
-   *            the i18nName to set.
+   *          the i18nName to set.
    */
   public void setI18nName(String i18nName) {
     if (ObjectUtils.equals(this.i18nName, i18nName)) {
@@ -320,14 +351,14 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
     }
     String oldValue = getI18nName();
     this.i18nName = i18nName;
-    firePropertyChange("i18nName", oldValue, getI18nName());
+    firePropertyChange(I18N_NAME, oldValue, getI18nName());
   }
 
   /**
    * Sets the iconImageURL.
    * 
    * @param iconImageURL
-   *            the iconImageURL to set.
+   *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     this.iconImageURL = iconImageURL;
@@ -337,7 +368,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the module's name. It may serve for the module's view.
    * 
    * @param name
-   *            the module's name.
+   *          the module's name.
    */
   public void setName(String name) {
     if (ObjectUtils.equals(this.name, name)) {
@@ -345,14 +376,14 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
     }
     String oldValue = getName();
     this.name = name;
-    firePropertyChange("name", oldValue, getName());
+    firePropertyChange(NAME, oldValue, getName());
   }
 
   /**
    * Sets the parent module. It will fire a "parent" property change event.
    * 
    * @param parent
-   *            the parent module to set or null if none.
+   *          the parent module to set or null if none.
    */
   public void setParent(Module parent) {
     if (ObjectUtils.equals(this.parent, parent)) {
@@ -366,14 +397,14 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
     if (getParent() != null && !getParent().getSubModules().contains(this)) {
       getParent().addSubModule(this);
     }
-    firePropertyChange("parent", oldParent, getParent());
+    firePropertyChange(PARENT, oldParent, getParent());
   }
 
   /**
    * Sets the projectedViewDescriptor.
    * 
    * @param projectedViewDescriptor
-   *            the projectedViewDescriptor to set.
+   *          the projectedViewDescriptor to set.
    */
   public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
     this.projectedViewDescriptor = projectedViewDescriptor;
@@ -383,7 +414,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the started.
    * 
    * @param started
-   *            the started to set.
+   *          the started to set.
    */
   public void setStarted(boolean started) {
     this.started = started;
@@ -393,7 +424,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the startupAction.
    * 
    * @param startupAction
-   *            the startupAction to set.
+   *          the startupAction to set.
    */
   public void setStartupAction(IAction startupAction) {
     this.startupAction = startupAction;
@@ -404,7 +435,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * event.
    * 
    * @param children
-   *            the modules modules to set.
+   *          the modules modules to set.
    */
   public void setSubModules(List<Module> children) {
     List<Module> oldValue = null;
@@ -434,9 +465,9 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * "subModules" property change event.
    * 
    * @param oldChildren
-   *            the old modules collection property.
+   *          the old modules collection property.
    * @param newChildren
-   *            the new modules collection property.
+   *          the new modules collection property.
    */
   protected void updateParentsAndFireSubModulesChanged(
       List<Module> oldChildren, List<Module> newChildren) {
@@ -454,6 +485,16 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
         }
       }
     }
-    firePropertyChange("subModules", oldChildren, newChildren);
+    firePropertyChange(SUB_MODULES, oldChildren, newChildren);
+  }
+
+  /**
+   * Returns unmodified projected view descriptor.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getViewDescriptor() {
+    return getProjectedViewDescriptor();
   }
 }

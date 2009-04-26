@@ -16,14 +16,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.view.descriptor;
-
-import org.jspresso.framework.application.model.Module;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
+package org.jspresso.framework.view.descriptor;
 
 /**
- * A factory to create view descriptors of modules.
+ * This public interface is implemented by objects capable of providing a
+ * reference on a IViewDescriptor.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -38,19 +35,16 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1827 $
  * @author Vincent Vandenschrick
  */
-public interface IModuleViewDescriptorFactory {
+public interface IViewDescriptorProvider {
 
   /**
-   * Creates the view descriptor projected by the application module (if any).
-   * It gives a chance to the framework to handle custom user-writtent modules
-   * (for instance a filterable bean collection module).
+   * Gets the view descriptorreferenced by this object.
    * 
-   * @param module
-   *            the module to create the view descriptor for.
-   * @return the created view descriptor.
+   * @return the view descriptorreferenced by this object.
    */
-  IViewDescriptor createProjectedViewDescriptor(Module module);
+  IViewDescriptor getViewDescriptor();
+
 }

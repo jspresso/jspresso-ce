@@ -56,6 +56,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
@@ -363,6 +364,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
               children.addItem(child);
             }
           }
+        } else if(command is RemoteAddCardCommand) {
+          _viewFactory.addCard(
+            targetPeer as ViewStack,
+            (command as RemoteAddCardCommand).card,
+            (command as RemoteAddCardCommand).cardName);
         }
       }
     }
@@ -799,6 +805,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand",RemoteEnablementCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand",RemoteSelectionCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",RemoteValueCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",RemoteAddCardCommand);
   
       registerClassAlias("org.jspresso.framework.state.remote.RemoteCompositeValueState",RemoteCompositeValueState);
       registerClassAlias("org.jspresso.framework.state.remote.RemoteValueState", RemoteValueState);

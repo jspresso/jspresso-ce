@@ -744,6 +744,10 @@
   </bean>
 
   <bean abstract="true" id="abstractFilterableBeanCollectionModule" class="org.jspresso.framework.application.model.FilterableBeanCollectionModule">
+    <property
+      name="queryViewDescriptorFactory"
+      ref="queryViewDescriptorFactory" />
+    <property name="pagingStatusViewDescriptor" ref="pageableStatusView"/>
     <property name="projectedViewDescriptor" ref="filterableBeanCollectionModuleView" />
     <property name="startupAction" ref="initModuleFilterAction" />
   </bean>
