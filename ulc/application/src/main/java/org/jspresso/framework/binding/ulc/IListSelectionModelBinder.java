@@ -18,8 +18,8 @@
  */
 package org.jspresso.framework.binding.ulc;
 
-import org.jspresso.framework.util.IIndexMapper;
 import org.jspresso.framework.util.event.ISelectable;
+import org.jspresso.framework.util.gui.IIndexMapper;
 
 import com.ulcjava.base.application.ULCListSelectionModel;
 

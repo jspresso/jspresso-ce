@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.view;
 
-import java.awt.Dimension;
+import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * A factory for icons.

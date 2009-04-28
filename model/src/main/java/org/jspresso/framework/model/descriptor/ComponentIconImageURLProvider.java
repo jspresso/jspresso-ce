@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jspresso.framework.util.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IIconImageURLProvider;
 
 
 /**

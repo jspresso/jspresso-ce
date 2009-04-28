@@ -18,9 +18,10 @@
  */
 package org.jspresso.framework.view;
 
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * A factory for icons.
@@ -41,7 +42,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual icon class created.
+ *          the actual icon class created.
  */
 public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
@@ -232,109 +233,100 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * Sets the backwardIconUrl.
    * 
    * @param backwardIconUrl
-   *            the backwardIconUrl to set.
+   *          the backwardIconUrl to set.
    */
   public void setBackwardIconUrl(String backwardIconUrl) {
     this.backwardIconUrl = backwardIconUrl;
   }
 
-  
   /**
    * Sets the cancelIconImageURL.
    * 
    * @param cancelIconImageURL
-   *            the cancelIconImageURL to set.
+   *          the cancelIconImageURL to set.
    */
   public void setCancelIconImageURL(String cancelIconImageURL) {
     this.cancelIconImageURL = cancelIconImageURL;
   }
 
-  
   /**
    * Sets the errorIconImageURL.
    * 
    * @param errorIconImageURL
-   *            the errorIconImageURL to set.
+   *          the errorIconImageURL to set.
    */
   public void setErrorIconImageURL(String errorIconImageURL) {
     this.errorIconImageURL = errorIconImageURL;
   }
 
-  
   /**
    * Sets the forbiddenIconUrl.
    * 
    * @param forbiddenIconUrl
-   *            the forbiddenIconUrl to set.
+   *          the forbiddenIconUrl to set.
    */
   public void setForbiddenIconUrl(String forbiddenIconUrl) {
     this.forbiddenIconUrl = forbiddenIconUrl;
   }
 
-  
   /**
    * Sets the forwardIconUrl.
    * 
    * @param forwardIconUrl
-   *            the forwardIconUrl to set.
+   *          the forwardIconUrl to set.
    */
   public void setForwardIconUrl(String forwardIconUrl) {
     this.forwardIconUrl = forwardIconUrl;
   }
 
-  
   /**
    * Sets the infoIconImageURL.
    * 
    * @param infoIconImageURL
-   *            the infoIconImageURL to set.
+   *          the infoIconImageURL to set.
    */
   public void setInfoIconImageURL(String infoIconImageURL) {
     this.infoIconImageURL = infoIconImageURL;
   }
 
-  
   /**
    * Sets the noIconImageURL.
    * 
    * @param noIconImageURL
-   *            the noIconImageURL to set.
+   *          the noIconImageURL to set.
    */
   public void setNoIconImageURL(String noIconImageURL) {
     this.noIconImageURL = noIconImageURL;
   }
 
-  
   /**
    * Sets the okYesIconImageURL.
    * 
    * @param okYesIconImageURL
-   *            the okYesIconImageURL to set.
+   *          the okYesIconImageURL to set.
    */
   public void setOkYesIconImageURL(String okYesIconImageURL) {
     this.okYesIconImageURL = okYesIconImageURL;
   }
 
-  
   /**
    * Sets the warningIconImageURL.
    * 
    * @param warningIconImageURL
-   *            the warningIconImageURL to set.
+   *          the warningIconImageURL to set.
    */
   public void setWarningIconImageURL(String warningIconImageURL) {
     this.warningIconImageURL = warningIconImageURL;
   }
 
-  
   /**
    * Creates a swing icon from an image url.
    * 
    * @param urlSpec
-   *            the url of the image to be used on the icon.
+   *          the url of the image to be used on the icon.
    * @param iconSize
-   *            the size of the constructed icon. The image will be resized if
-   *            nacessary to match the requested size.
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   protected abstract E createIcon(String urlSpec, Dimension iconSize);

@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-import org.jspresso.framework.util.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IIconImageURLProvider;
 
 /**
  * This public interface is implemented by any tree view descriptor.

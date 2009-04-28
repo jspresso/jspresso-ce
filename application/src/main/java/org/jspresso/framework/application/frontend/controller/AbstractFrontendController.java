@@ -52,6 +52,7 @@ import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
@@ -141,7 +142,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       @SuppressWarnings("unused") java.util.List<G> actions,
       @SuppressWarnings("unused") String title,
       @SuppressWarnings("unused") E sourceComponent,
-      Map<String, Object> context, boolean reuseCurrent) {
+      Map<String, Object> context,
+      @SuppressWarnings("unused") Dimension dimension, boolean reuseCurrent) {
     if (!reuseCurrent || dialogContextStack.size() == 0) {
       dialogContextStack.add(0, context);
     }

@@ -112,6 +112,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.gui.remote.RTree;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
+  import org.jspresso.framework.util.gui.CellConstraints;
+  import org.jspresso.framework.util.gui.Dimension;
   import org.jspresso.framework.util.remote.IRemotePeer;
   import org.jspresso.framework.util.remote.RemotePeer;
   import org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry;
@@ -807,6 +809,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",RemoteValueCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",RemoteAddCardCommand);
   
+      registerClassAlias("org.jspresso.framework.util.gui.CellConstraints",CellConstraints);
+      registerClassAlias("org.jspresso.framework.util.gui.Dimension",Dimension);
+
       registerClassAlias("org.jspresso.framework.state.remote.RemoteCompositeValueState",RemoteCompositeValueState);
       registerClassAlias("org.jspresso.framework.state.remote.RemoteValueState", RemoteValueState);
   

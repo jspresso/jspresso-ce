@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.jspresso.framework.util.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IIconImageURLProvider;
 
 /**
  * This is a simple connector implementation whic allows the management of child

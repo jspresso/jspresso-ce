@@ -26,7 +26,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import org.jspresso.framework.util.IIndexMapper;
+import org.jspresso.framework.util.gui.IIndexMapper;
 
 
 /**

@@ -18,8 +18,8 @@
  */
 package org.jspresso.framework.binding.wings;
 
-import org.jspresso.framework.util.IIndexMapper;
 import org.jspresso.framework.util.event.ISelectable;
+import org.jspresso.framework.util.gui.IIndexMapper;
 import org.wings.SListSelectionModel;
 
 

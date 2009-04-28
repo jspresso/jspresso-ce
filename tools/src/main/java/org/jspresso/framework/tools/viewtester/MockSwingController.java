@@ -44,6 +44,7 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
@@ -79,9 +80,9 @@ public class MockSwingController extends
   @Override
   public void displayModalDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
+        context, dimension, reuseCurrent);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     if (window instanceof JDialog) {
@@ -123,6 +124,9 @@ public class MockSwingController extends
       dialog.getRootPane().setDefaultButton(defaultButton);
     }
     dialog.pack();
+    if (dimension != null) {
+      dialog.setSize(dimension.getWidth(), dimension.getHeight());
+    }
     SwingUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }

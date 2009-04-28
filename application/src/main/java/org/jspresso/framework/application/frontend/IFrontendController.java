@@ -27,6 +27,7 @@ import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IActionable;
@@ -72,14 +73,18 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the source component.
    * @param context
    *          the context to store on the context stack.
+   * @param dimension
+   *          the dimension to set the dialog to. If null, the dialog will be
+   *          sized to the preferred size of the contained view.
    * @param reuseCurrent
    *          set to true to reuse an existing modal dialog.
    */
   void displayModalDialog(E mainView, List<G> actions, String title,
-      E sourceComponent, Map<String, Object> context, boolean reuseCurrent);
+      E sourceComponent, Map<String, Object> context, Dimension dimension,
+      boolean reuseCurrent);
 
   /**
-   * Displays the given URL in a new braowser window (or tab).
+   * Displays the given URL in a new browser window (or tab).
    * 
    * @param urlSpec
    *          the url to display.

@@ -21,7 +21,7 @@ package org.jspresso.framework.view.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
-import org.jspresso.framework.util.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 

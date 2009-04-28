@@ -20,8 +20,8 @@ package org.jspresso.framework.binding.swing;
 
 import javax.swing.ListSelectionModel;
 
-import org.jspresso.framework.util.IIndexMapper;
 import org.jspresso.framework.util.event.ISelectable;
+import org.jspresso.framework.util.gui.IIndexMapper;
 
 
 /**

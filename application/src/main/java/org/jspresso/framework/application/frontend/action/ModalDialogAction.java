@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -77,7 +78,7 @@ public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
           mainView, getLocale(context)));
     }
     getController(context).displayModalDialog(mainView.getPeer(), actions,
-        title, sourceComponent, context, false);
+        title, sourceComponent, context, getDialogSize(context), false);
     return super.execute(actionHandler, context);
   }
 
@@ -104,6 +105,17 @@ public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
   @SuppressWarnings("unchecked")
   public IView<E> getMainView(Map<String, Object> context) {
     return (IView<E>) context.get(ActionContextConstants.DIALOG_VIEW);
+  }
+
+  /**
+   * Gets the sialog size.
+   * 
+   * @param context
+   *          the action context.
+   * @return the dialog size.
+   */
+  public Dimension getDialogSize(Map<String, Object> context) {
+    return (Dimension) context.get(ActionContextConstants.DIALOG_SIZE);
   }
 
   /**

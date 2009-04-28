@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.ulc;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -27,6 +26,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.url.UrlHelper;
 import org.jspresso.framework.view.AbstractIconFactory;
 
@@ -63,7 +63,7 @@ public class UlcIconFactory extends AbstractIconFactory<ULCIcon> {
       if (imageURL != null) {
         try {
           Image iconImage = ImageIO.read(imageURL).getScaledInstance(
-              iconSize.width, iconSize.height, Image.SCALE_SMOOTH);
+              iconSize.getWidth(), iconSize.getHeight(), Image.SCALE_SMOOTH);
           ByteArrayOutputStream baos = new ByteArrayOutputStream();
           BufferedImage bi = new BufferedImage(iconImage.getWidth(null),
               iconImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);

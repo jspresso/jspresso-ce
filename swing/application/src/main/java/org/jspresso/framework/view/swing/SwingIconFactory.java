@@ -18,16 +18,15 @@
  */
 package org.jspresso.framework.view.swing;
 
-import java.awt.Dimension;
 import java.awt.Image;
 import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.url.UrlHelper;
 import org.jspresso.framework.view.AbstractIconFactory;
-
 
 /**
  * A factory to create (and cache) swing icons.
@@ -60,8 +59,7 @@ public class SwingIconFactory extends AbstractIconFactory<Icon> {
       if (imageURL != null) {
         ImageIcon imageIcon = new ImageIcon(imageURL);
         imageIcon.setImage(imageIcon.getImage().getScaledInstance(
-            (int) iconSize.getWidth(), (int) iconSize.getHeight(),
-            Image.SCALE_SMOOTH));
+            iconSize.getWidth(), iconSize.getHeight(), Image.SCALE_SMOOTH));
         return imageIcon;
       }
     }

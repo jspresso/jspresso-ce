@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.application.model;
 
-import org.jspresso.framework.util.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IIconImageURLProvider;
 
 /**
  * This image url provider uses a delegate provider to look up the rendering

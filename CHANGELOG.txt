@@ -24,6 +24,8 @@ New features
 2777177  	 Get rid of sub view descriptors (see release notes)
 2777219  	 Child view descriptors should inherit enclosing view model
 2781767  	 Lazy load module GUIs
+2782610  	 Dialogs should allow for an explicit size
+
 
 3.0.0
 =====

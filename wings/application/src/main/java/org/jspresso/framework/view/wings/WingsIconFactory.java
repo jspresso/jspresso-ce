@@ -18,20 +18,19 @@
  */
 package org.jspresso.framework.view.wings;
 
-import java.awt.Dimension;
 import java.awt.Image;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.url.UrlHelper;
 import org.jspresso.framework.view.AbstractIconFactory;
 import org.wings.SIcon;
 import org.wings.SImageIcon;
 
-
 /**
- * A factory to create (and cache) swing icons.
+ * A factory to create (and cache) wings icons.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -61,8 +60,7 @@ public class WingsIconFactory extends AbstractIconFactory<SIcon> {
       if (imageURL != null) {
         ImageIcon imageIcon = new ImageIcon(imageURL);
         imageIcon.setImage(imageIcon.getImage().getScaledInstance(
-            (int) iconSize.getWidth(), (int) iconSize.getHeight(),
-            Image.SCALE_SMOOTH));
+            iconSize.getWidth(), iconSize.getHeight(), Image.SCALE_SMOOTH));
         return new SImageIcon(imageIcon);
       }
     }

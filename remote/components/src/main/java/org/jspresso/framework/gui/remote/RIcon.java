@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
@@ -41,28 +42,19 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RIcon extends RemotePeer {
 
-  private int height;
-  private String imageUrlSpec;
-  private int width;
-  
+  private Dimension dimension;
+  private String    imageUrlSpec;
+
   /**
    * Constructs a new <code>RIcon</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
   public RIcon(String guid) {
     super(guid);
   }
 
-  /**
-   * Gets the height.
-   * 
-   * @return the height.
-   */
-  public int getHeight() {
-    return height;
-  }
-  
   /**
    * Gets the imageUrlSpec.
    * 
@@ -71,41 +63,34 @@ public class RIcon extends RemotePeer {
   public String getImageUrlSpec() {
     return imageUrlSpec;
   }
-  
-  /**
-   * Gets the width.
-   * 
-   * @return the width.
-   */
-  public int getWidth() {
-    return width;
-  }
-  
-  /**
-   * Sets the height.
-   * 
-   * @param height the height to set.
-   */
-  public void setHeight(int height) {
-    this.height = height;
-  }
 
   /**
    * Sets the imageUrlSpec.
    * 
-   * @param imageUrlSpec the imageUrlSpec to set.
+   * @param imageUrlSpec
+   *          the imageUrlSpec to set.
    */
   public void setImageUrlSpec(String imageUrlSpec) {
     this.imageUrlSpec = imageUrlSpec;
   }
 
   /**
-   * Sets the width.
+   * Gets the dimension.
    * 
-   * @param width the width to set.
+   * @return the dimension.
    */
-  public void setWidth(int width) {
-    this.width = width;
+  public Dimension getDimension() {
+    return dimension;
   }
-  
+
+  /**
+   * Sets the dimension.
+   * 
+   * @param dimension
+   *          the dimension to set.
+   */
+  public void setDimension(Dimension dimension) {
+    this.dimension = dimension;
+  }
+
 }

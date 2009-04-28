@@ -16,11 +16,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.util;
+package org.jspresso.framework.util.gui;
 
 /**
- * This interface is implemented by classes which provide a mapping between two
- * sets of indices (identified as model and view index sets).
+ * Implementations of this interface are designed to provide image urls based on
+ * an object.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -38,24 +38,14 @@ package org.jspresso.framework.util;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IIndexMapper {
+public interface IIconImageURLProvider {
 
   /**
-   * View to model index translation.
+   * Gets the image url for the user object passed as parameter.
    * 
-   * @param viewIndex
-   *            the view index to translate.
-   * @return the resulting model index.
+   * @param userObject
+   *            the user object to get the image url for.
+   * @return the looked up image url or null if none.
    */
-  int modelIndex(int viewIndex);
-
-  /**
-   * Model to view index translation.
-   * 
-   * @param modelIndex
-   *            the model index to translate.
-   * @return the resulting view index.
-   */
-  int viewIndex(int modelIndex);
-
+  String getIconImageURLForObject(Object userObject);
 }

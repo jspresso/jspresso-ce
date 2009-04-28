@@ -14,6 +14,7 @@ import org.jspresso.framework.application.frontend.action.AbstractFrontendAction
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -176,8 +177,8 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
         modelConnector);
     previousAction
         .setIconImageURL(getIconFactory(context).getBackwardIconUrl());
-    G previousGAction = getActionFactory(context).createAction(
-        previousAction, actionHandler, view, locale);
+    G previousGAction = getActionFactory(context).createAction(previousAction,
+        actionHandler, view, locale);
     if (wizardStep.getPreviousStepDescriptor(context) != null) {
       getActionFactory(context).setActionEnabled(previousGAction, true);
     } else {
@@ -204,8 +205,8 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
 
     List<G> wizardStepActions = new ArrayList<G>();
 
-    G previousGAction = createPreviousAction(wizardStep, actionHandler,
-        view, translationProvider, locale, modelConnector, context);
+    G previousGAction = createPreviousAction(wizardStep, actionHandler, view,
+        translationProvider, locale, modelConnector, context);
     G nextGAction = createNextAction(wizardStep, actionHandler, view,
         translationProvider, locale, modelConnector, context);
     G cancelGAction = createCancelAction(wizardStep, actionHandler, view,
@@ -233,11 +234,13 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
 
     String title = getI18nName(translationProvider, locale) + " - "
         + wizardStep.getI18nName(translationProvider, locale);
+    Dimension dialogSize = (Dimension) context
+        .get(ActionContextConstants.DIALOG_SIZE);
     getController(context).displayModalDialog(
         view.getPeer(),
         createWizardStepActions(wizardStep, view, actionHandler,
             translationProvider, locale, modelConnector, context), title,
-        getSourceComponent(context), context, true);
+        getSourceComponent(context), context, dialogSize, true);
   }
 
   private class CancelAction extends AbstractFrontendAction<E, F, G> {

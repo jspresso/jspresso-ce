@@ -34,8 +34,8 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.util.Coordinates;
 import org.jspresso.framework.util.exception.IExceptionHandler;
+import org.jspresso.framework.util.gui.Coordinates;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 

@@ -20,10 +20,10 @@ package org.jspresso.framework.binding.ulc;
 
 import java.util.Arrays;
 
-import org.jspresso.framework.util.IIndexMapper;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
+import org.jspresso.framework.util.gui.IIndexMapper;
 
 import com.ulcjava.base.application.ULCListSelectionModel;
 import com.ulcjava.base.application.event.ListSelectionEvent;

@@ -26,7 +26,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.util.IIconImageURLProvider;
+import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**

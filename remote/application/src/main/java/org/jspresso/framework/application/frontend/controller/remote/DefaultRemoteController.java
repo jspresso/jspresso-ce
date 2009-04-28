@@ -56,6 +56,7 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
@@ -126,9 +127,9 @@ public class DefaultRemoteController extends
   @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
       String title, RComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
+        context, dimension, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
     dialogCommand.setView(mainView);

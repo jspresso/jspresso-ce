@@ -34,6 +34,7 @@ import org.jspresso.framework.gui.ulc.components.server.ULCExtendedInternalFrame
 import org.jspresso.framework.gui.ulc.components.server.event.ExtendedInternalFrameEvent;
 import org.jspresso.framework.gui.ulc.components.server.event.IExtendedInternalFrameListener;
 import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.security.LoginUtils;
@@ -69,7 +70,6 @@ import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
 import com.ulcjava.base.application.event.serializable.IWindowListener;
-import com.ulcjava.base.application.util.Dimension;
 import com.ulcjava.base.application.util.Insets;
 import com.ulcjava.base.application.util.ULCIcon;
 import com.ulcjava.base.shared.IWindowConstants;
@@ -107,9 +107,9 @@ public class DefaultUlcController extends
   @Override
   public void displayModalDialog(ULCComponent mainView, List<IAction> actions,
       String title, ULCComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
+        context, dimension, reuseCurrent);
     final ULCDialog dialog;
     ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
     if (reuseCurrent && window instanceof ULCDialog) {
@@ -145,6 +145,10 @@ public class DefaultUlcController extends
       dialog.getRootPane().setDefaultButton(defaultButton);
     }
     dialog.pack();
+    if (dimension != null) {
+      dialog.setSize(dimension.getWidth(), dimension.getHeight());
+    }
+    UlcUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }
 
@@ -420,6 +424,7 @@ public class DefaultUlcController extends
     final ULCDialog dialog = new ULCDialog(controllerFrame,
         getLoginViewDescriptor().getI18nName(getTranslationProvider(),
             getLocale()), true);
+    dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
 
     ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
         ULCBoxLayoutPane.LINE_AXIS);
@@ -463,7 +468,8 @@ public class DefaultUlcController extends
     dialog.add(mainPanel);
 
     int screenRes = ClientContext.getScreenResolution();
-    dialog.setSize(new Dimension(3 * screenRes, screenRes * 3 / 2));
+    dialog.setSize(new com.ulcjava.base.application.util.Dimension(
+        3 * screenRes, screenRes * 3 / 2));
     dialog.pack();
     UlcUtil.centerInParent(dialog);
     dialog.setVisible(true);

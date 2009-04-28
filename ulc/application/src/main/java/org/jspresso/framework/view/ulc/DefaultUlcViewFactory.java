@@ -1204,9 +1204,9 @@ public class DefaultUlcViewFactory extends
 
     TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent
         .getTableHeader());
-    java.awt.Dimension iconSize = new java.awt.Dimension(viewComponent
-        .getTableHeader().getFont().getSize(), viewComponent.getTableHeader()
-        .getFont().getSize());
+    org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
+        viewComponent.getTableHeader().getFont().getSize(), viewComponent
+            .getTableHeader().getFont().getSize());
     sorterDecorator
         .setUpIcon(getIconFactory()
             .getIcon(

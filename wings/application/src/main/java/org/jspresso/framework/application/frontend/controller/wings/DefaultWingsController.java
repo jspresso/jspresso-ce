@@ -36,6 +36,7 @@ import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.wings.components.SErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.security.LoginUtils;
@@ -111,9 +112,9 @@ public class DefaultWingsController extends
   @Override
   public void displayModalDialog(SComponent mainView, List<Action> actions,
       String title, SComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
+        context, dimension, reuseCurrent);
     final SDialog dialog;
     SContainer actionWindow = WingsUtil.getVisibleWindow(sourceComponent);
     if (reuseCurrent && actionWindow instanceof SDialog) {
@@ -146,7 +147,12 @@ public class DefaultWingsController extends
     SPanel mainPanel = new SPanel(new SBorderLayout());
     mainPanel.add(mainView, SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
-    mainPanel.setPreferredSize(DIALOG_DIMENSION);
+    if (dimension != null) {
+      mainPanel.setPreferredSize(new SDimension(dimension.getWidth() + "px",
+          dimension.getHeight() + "px"));
+    } else {
+      mainPanel.setPreferredSize(DIALOG_DIMENSION);
+    }
     dialog.add(mainPanel);
     if (defaultButton != null) {
       dialog.setDefaultButton(defaultButton);

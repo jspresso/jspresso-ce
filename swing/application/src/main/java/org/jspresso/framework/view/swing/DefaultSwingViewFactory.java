@@ -1432,8 +1432,9 @@ public class DefaultSwingViewFactory extends
     tableModel.setColumnClassesByIds(columnClassesByIds);
     TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent
         .getTableHeader());
-    Dimension iconSize = new Dimension(viewComponent.getTableHeader().getFont()
-        .getSize(), viewComponent.getTableHeader().getFont().getSize());
+    org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
+        viewComponent.getTableHeader().getFont().getSize(), viewComponent
+            .getTableHeader().getFont().getSize());
     sorterDecorator
         .setUpIcon(getIconFactory()
             .getIcon(

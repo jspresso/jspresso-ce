@@ -70,6 +70,7 @@ import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.swing.components.JErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.security.LoginUtils;
@@ -122,9 +123,9 @@ public class DefaultSwingController extends
   @Override
   public void displayModalDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
-      boolean reuseCurrent) {
+      Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, reuseCurrent);
+        context, dimension, reuseCurrent);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     if (window instanceof JDialog) {
@@ -166,6 +167,9 @@ public class DefaultSwingController extends
       dialog.getRootPane().setDefaultButton(defaultButton);
     }
     dialog.pack();
+    if (dimension != null) {
+      dialog.setSize(dimension.getWidth(), dimension.getHeight());
+    }
     SwingUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }
@@ -323,8 +327,8 @@ public class DefaultSwingController extends
           .getLocalizedMessage())));
       dialog.setDetails(ex);
       int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-      dialog.setSize(8 * screenRes, 3 * screenRes);
       dialog.pack();
+      dialog.setSize(8 * screenRes, 3 * screenRes);
       SwingUtil.centerOnScreen(dialog);
       dialog.setVisible(true);
     }
@@ -553,6 +557,7 @@ public class DefaultSwingController extends
     final JDialog dialog = new JDialog(controllerFrame,
         getLoginViewDescriptor().getI18nName(getTranslationProvider(),
             getLocale()), true);
+    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
     JPanel buttonBox = new JPanel();
     buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));

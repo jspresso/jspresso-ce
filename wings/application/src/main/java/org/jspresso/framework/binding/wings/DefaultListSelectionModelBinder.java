@@ -23,10 +23,10 @@ import java.util.Arrays;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.jspresso.framework.util.IIndexMapper;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
+import org.jspresso.framework.util.gui.IIndexMapper;
 import org.wings.SListSelectionModel;
 
 

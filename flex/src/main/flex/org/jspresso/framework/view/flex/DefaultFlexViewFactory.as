@@ -1388,8 +1388,8 @@ package org.jspresso.framework.view.flex {
 	    } else if(icon) {
 	      button.regenerateStyleCache(false);
 	      var cornerRadius:Number = button.getStyle("cornerRadius") as Number;
-	      button.width = icon.width + cornerRadius;
-	      button.height = icon.height + cornerRadius;
+	      button.width = icon.dimension.width + cornerRadius;
+	      button.height = icon.dimension.height + cornerRadius;
 	    }
 	    if(tooltip) {
 		    button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
@@ -1461,7 +1461,7 @@ package org.jspresso.framework.view.flex {
     public function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
       if(rIcon != null) {
         return IconFactory.getClass(component, rIcon.imageUrlSpec 
-                                    , rIcon.width, rIcon.height);
+                                    , rIcon.dimension.width, rIcon.dimension.height);
       }
       return null;
     }
