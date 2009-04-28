@@ -25,6 +25,8 @@ New features
 2777219  	 Child view descriptors should inherit enclosing view model
 2781767  	 Lazy load module GUIs
 2782610  	 Dialogs should allow for an explicit size
+2783043  	 Variabilized generator template using properties
+2783044  	 Bound the ddl generation to generate-ddl-scripts profile
 
 
 3.0.0

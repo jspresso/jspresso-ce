@@ -39,6 +39,86 @@
         </dependency>
       </dependencies>
     </profile>
+    <profile>
+      <id>generate-ddl-scripts</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>hibernate3-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-mysql-schema</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>hbm2ddl</goal>
+                </goals>
+                <configuration>
+                  <components>
+                    <component>
+                      <name>hbm2ddl</name>
+                    </component>
+                  </components>
+                  <componentProperties>
+                    <implementation>configuration</implementation>
+                    <drop>false</drop>
+                    <export>false</export>
+                    <format>true</format>
+                    <propertyfile>conf/schema-export-mysql-innodb.properties</propertyfile>
+                    <outputfilename>${rootArtifactId}-schema-mysql-innodb.sql</outputfilename>
+                    <scan-classes>true</scan-classes>
+                  </componentProperties>
+                </configuration>
+              </execution>
+              <execution>
+                <id>generate-postgresql-schema</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>hbm2ddl</goal>
+                </goals>
+                <configuration>
+                  <components>
+                    <component>
+                      <name>hbm2ddl</name>
+                    </component>
+                  </components>
+                  <componentProperties>
+                    <implementation>configuration</implementation>
+                    <drop>false</drop>
+                    <export>false</export>
+                    <format>true</format>
+                    <propertyfile>conf/schema-export-postgresql.properties</propertyfile>
+                    <outputfilename>${rootArtifactId}-schema-postgresql.sql</outputfilename>
+                    <scan-classes>true</scan-classes>
+                  </componentProperties>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-ddl-scripts</id>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <descriptors>
+                    <descriptor>${basedir}/src/main/assembly/ddl-scripts.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
   <build>
     <resources>
@@ -122,9 +202,9 @@
                   <arg value="-applicationContextKey" />
                   <arg value="${rootArtifactId}-model-context" />
                   <arg value="-templateResourcePath" />
-                  <arg value="/org/jspresso/framework/tools/entitygenerator" />
+                  <arg value="${generator.templateResourcePath}" />
                   <arg value="-templateName" />
-                  <arg value="HibernateXdocletEntity.ftl" />
+                  <arg value="${generator.templateName}" />
                   <arg value="-outputDir" />
                   <arg value="${generator.dest}" />
                   <arg value="-includePackages" />
@@ -176,76 +256,6 @@
               <sources>
                 <source>${project.build.directory}/generated-sources/entitygenerator</source>
               </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>hibernate3-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-mysql-schema</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>hbm2ddl</goal>
-            </goals>
-            <configuration>
-              <components>
-                <component>
-                  <name>hbm2ddl</name>
-                </component>
-              </components>
-              <componentProperties>
-                <implementation>configuration</implementation>
-                <drop>false</drop>
-                <export>false</export>
-                <format>true</format>
-                <propertyfile>conf/schema-export-mysql-innodb.properties</propertyfile>
-                <outputfilename>${rootArtifactId}-schema-mysql-innodb.sql</outputfilename>
-                <scan-classes>true</scan-classes>
-              </componentProperties>
-            </configuration>
-          </execution>
-          <execution>
-            <id>generate-postgresql-schema</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>hbm2ddl</goal>
-            </goals>
-            <configuration>
-              <components>
-                <component>
-                  <name>hbm2ddl</name>
-                </component>
-              </components>
-              <componentProperties>
-                <implementation>configuration</implementation>
-                <drop>false</drop>
-                <export>false</export>
-                <format>true</format>
-                <propertyfile>conf/schema-export-postgresql.properties</propertyfile>
-                <outputfilename>${rootArtifactId}-schema-postgresql.sql</outputfilename>
-                <scan-classes>true</scan-classes>
-              </componentProperties>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-ddl-scripts</id>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <descriptors>
-                <descriptor>${basedir}/src/main/assembly/ddl-scripts.xml</descriptor>
-              </descriptors>
             </configuration>
           </execution>
         </executions>

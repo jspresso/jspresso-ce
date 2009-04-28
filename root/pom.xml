@@ -592,6 +592,8 @@
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <generator.templateResourcePath>/org/jspresso/framework/tools/entitygenerator</generator.templateResourcePath>
+    <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
   </properties>
   <build>
     <pluginManagement>
