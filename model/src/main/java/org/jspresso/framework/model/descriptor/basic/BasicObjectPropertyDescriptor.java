@@ -93,13 +93,12 @@ public class BasicObjectPropertyDescriptor extends
   }
 
   /**
-   * TODO Comment needed.
+   * Returns null.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public IComponentDescriptor<Object> getComponentDescriptor() {
-    // TODO Auto-generated method stub
     return null;
   }
 

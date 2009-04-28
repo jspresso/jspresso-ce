@@ -56,13 +56,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 public class BeanModule extends Module implements PropertyChangeListener {
 
   /**
-   * Constructs a new <code>BeanModule</code> instance.
-   */
-  public BeanModule() {
-    // TODO Auto-generated constructor stub
-  }
-
-  /**
    * <code>MODULE_OBJECT</code> is "moduleObject".
    */
   public static final String           MODULE_OBJECT = "moduleObject";

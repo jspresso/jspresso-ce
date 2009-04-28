@@ -25,6 +25,10 @@ package org.jspresso.framework.gui.remote {
         private var _name:String;
         private var _size:int;
 
+        public function RFont() {
+          //default constructor.
+        }
+
         public function set bold(value:Boolean):void {
             _bold = value;
         }
