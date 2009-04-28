@@ -21,7 +21,6 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import org.jspresso.framework.view.descriptor.EBorderType;
@@ -59,8 +58,11 @@ public class BasicQueryViewDescriptorFactory implements
         queryComponentDescriptor);
     BasicComponentViewDescriptor queryViewDescriptor = new BasicComponentViewDescriptor();
     queryViewDescriptor.setModelDescriptor(actualModelDescriptor);
-    queryViewDescriptor
-        .setName(FilterableBeanCollectionModuleDescriptor.FILTER);
+    // FIXME dependency
+    queryViewDescriptor.setName("filter"/*
+                                         * FilterableBeanCollectionModuleDescriptor.
+                                         * FILTER
+                                         */);
     queryViewDescriptor.setBorderType(EBorderType.TITLED);
     Map<String, Object> propertyWidths = new HashMap<String, Object>();
     for (String queriableProperty : queryComponentDescriptor
