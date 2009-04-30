@@ -17,6 +17,7 @@ package org.jspresso.framework.gui.remote {
 
     import org.jspresso.framework.state.remote.IRemoteStateOwner;
     import org.jspresso.framework.state.remote.RemoteValueState;
+    import org.jspresso.framework.util.gui.Font;
     import org.jspresso.framework.util.remote.RemotePeer;
 		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RComponent")]
@@ -25,7 +26,7 @@ package org.jspresso.framework.gui.remote {
         private var _actionLists:Array;
         private var _background:String;
         private var _borderType:String;
-        private var _font:RFont;
+        private var _font:Font;
         private var _foreground:String;
         private var _icon:RIcon;
         private var _label:String;
@@ -57,10 +58,10 @@ package org.jspresso.framework.gui.remote {
             return _borderType;
         }
 
-        public function set font(value:RFont):void {
+        public function set font(value:Font):void {
             _font = value;
         }
-        public function get font():RFont {
+        public function get font():Font {
             return _font;
         }
 

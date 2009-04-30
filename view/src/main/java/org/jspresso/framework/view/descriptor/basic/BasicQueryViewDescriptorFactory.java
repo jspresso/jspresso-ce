@@ -58,11 +58,6 @@ public class BasicQueryViewDescriptorFactory implements
         queryComponentDescriptor);
     BasicComponentViewDescriptor queryViewDescriptor = new BasicComponentViewDescriptor();
     queryViewDescriptor.setModelDescriptor(actualModelDescriptor);
-    // FIXME dependency
-    queryViewDescriptor.setName("filter"/*
-                                         * FilterableBeanCollectionModuleDescriptor.
-                                         * FILTER
-                                         */);
     queryViewDescriptor.setBorderType(EBorderType.TITLED);
     Map<String, Object> propertyWidths = new HashMap<String, Object>();
     for (String queriableProperty : queryComponentDescriptor

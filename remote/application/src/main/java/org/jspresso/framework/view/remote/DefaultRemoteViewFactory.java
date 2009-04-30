@@ -47,7 +47,6 @@ import org.jspresso.framework.gui.remote.RDecimalComponent;
 import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
 import org.jspresso.framework.gui.remote.REvenGridContainer;
-import org.jspresso.framework.gui.remote.RFont;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RImageComponent;
@@ -91,6 +90,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.CellConstraints;
+import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractViewFactory;
@@ -483,15 +483,9 @@ public class DefaultRemoteViewFactory extends
     return propertyLabel;
   }
 
-  private RFont createFont(String fontString) {
-    org.jspresso.framework.util.gui.Font font = FontHelper
-        .fromString(fontString);
-    RFont rFont = new RFont(getGuidGenerator().generateGUID());
-    rFont.setName(font.getName());
-    rFont.setBold(font.isBold());
-    rFont.setItalic(font.isItalic());
-    rFont.setSize(font.getSize());
-    return rFont;
+  private Font createFont(String fontString) {
+    Font font = FontHelper.fromString(fontString);
+    return font;
   }
 
   /**

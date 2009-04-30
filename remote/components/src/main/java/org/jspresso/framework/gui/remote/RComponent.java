@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
@@ -47,7 +48,7 @@ public abstract class RComponent extends RemotePeer implements
   private RActionList[]    actionLists;
   private String           background;
   private String           borderType;
-  private RFont            font;
+  private Font             font;
   private String           foreground;
   private RIcon            icon;
   private String           label;
@@ -221,7 +222,7 @@ public abstract class RComponent extends RemotePeer implements
    * 
    * @return the font.
    */
-  public RFont getFont() {
+  public Font getFont() {
     return font;
   }
 
@@ -231,7 +232,7 @@ public abstract class RComponent extends RemotePeer implements
    * @param font
    *          the font to set.
    */
-  public void setFont(RFont font) {
+  public void setFont(Font font) {
     this.font = font;
   }
 
