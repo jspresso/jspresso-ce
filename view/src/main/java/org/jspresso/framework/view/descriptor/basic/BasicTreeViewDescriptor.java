@@ -25,7 +25,6 @@ import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 
-
 /**
  * Default implementation of a tree view descriptor.
  * <p>
@@ -62,7 +61,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   public String getIconImageURL() {
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null) {
-      iconImageURL = rootSubtreeDescriptor.getNodeGroupDescriptor()
+      iconImageURL = getRootSubtreeDescriptor().getNodeGroupDescriptor()
           .getIconImageURL();
       setIconImageURL(iconImageURL);
     }
@@ -122,7 +121,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * Sets the childDescriptor.
    * 
    * @param childDescriptor
-   *            the childDescriptor to set.
+   *          the childDescriptor to set.
    */
   public void setChildDescriptor(ITreeLevelDescriptor childDescriptor) {
     this.childDescriptor = childDescriptor;
@@ -132,7 +131,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * Sets the iconImageURLProvider.
    * 
    * @param iconImageURLProvider
-   *            the iconImageURLProvider to set.
+   *          the iconImageURLProvider to set.
    */
   public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
@@ -142,7 +141,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * Sets the maxDepth.
    * 
    * @param maxDepth
-   *            the maxDepth to set.
+   *          the maxDepth to set.
    */
   public void setMaxDepth(int maxDepth) {
     this.maxDepth = maxDepth;
@@ -152,18 +151,17 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * Sets the renderedProperty.
    * 
    * @param renderedProperty
-   *            the renderedProperty to set.
+   *          the renderedProperty to set.
    */
   public void setRenderedProperty(String renderedProperty) {
     this.renderedProperty = renderedProperty;
   }
 
-  
   /**
    * Sets the rootSubtreeDescriptor.
    * 
    * @param rootSubtreeDescriptor
-   *            the rootSubtreeDescriptor to set.
+   *          the rootSubtreeDescriptor to set.
    */
   public void setRootSubtreeDescriptor(
       ITreeLevelDescriptor rootSubtreeDescriptor) {

@@ -9,5 +9,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.jspresso.framework.application.launch.swing.SwingLauncher"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-applicationClass ${package}.startup.swing.SwingApplicationStartup -splash classpath:${packageInPathFormat}/images/icon.png"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="${artifactId}"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.auth.login.config=conf/jaas.config -Dswing.defaultlaf=org.jvnet.substance.SubstanceLookAndFeel -Dsun.awt.noerasebackground=true -Dsubstancelaf.watermark.tobleed"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.auth.login.config=conf/jaas.config -Dswing.defaultlaf=org.jvnet.substance.SubstanceLookAndFeel -Dsubstancelaf.watermark.tobleed"/>
 </launchConfiguration>

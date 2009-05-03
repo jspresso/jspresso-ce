@@ -12,6 +12,7 @@ Bugs fixed
 2777597  	 Unset iconImageUrls generates erronous stackTraces in tomcat
 2777735  	 Current design doesn't allow for simple type customization
 2778525  	 Wings icons disappear on disabled buttons
+2786214  	 NullPointerException : empty workspace without iconImageUrl
 
 New features
 ------------
