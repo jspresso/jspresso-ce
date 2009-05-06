@@ -23,7 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jspresso.framework.util.accessor.IAccessor;
-
+import org.jspresso.framework.util.collection.ESort;
 
 /**
  * A bean comparator which compare beans based on a list of properties using
@@ -49,6 +49,21 @@ public class BeanComparator implements Comparator<Object> {
 
   private static final Comparator<Object> NATURAL_COMPARATOR = new NaturalComparator();
   private List<IAccessor>                 orderingAccessors;
+  private List<ESort>                     orderingDirections;
+
+  /**
+   * Constructs a new <code>BeanComparator</code> instance.
+   * 
+   * @param orderingAccessors
+   *          the ordering accessors.
+   * @param orderingDirections
+   *          the ordering directions.
+   */
+  public BeanComparator(List<IAccessor> orderingAccessors,
+      List<ESort> orderingDirections) {
+    this.orderingAccessors = orderingAccessors;
+    this.orderingDirections = orderingDirections;
+  }
 
   /**
    * {@inheritDoc}
@@ -63,7 +78,9 @@ public class BeanComparator implements Comparator<Object> {
     if (o2 == null) {
       return 1;
     }
-    for (IAccessor orderingAccessor : orderingAccessors) {
+    for (int i = 0; i < orderingAccessors.size(); i++) {
+      IAccessor orderingAccessor = orderingAccessors.get(i);
+      ESort direction = orderingDirections.get(i);
       Object o1Val = null;
       Object o2Val = null;
       try {
@@ -78,20 +95,13 @@ public class BeanComparator implements Comparator<Object> {
       }
       int result = NATURAL_COMPARATOR.compare(o1Val, o2Val);
       if (result != 0) {
+        if (direction == ESort.DESCENDING) {
+          result *= (-1);
+        }
         return result;
       }
     }
     return 0;
-  }
-
-  /**
-   * Sets the orderingAccessors.
-   * 
-   * @param orderingAccessors
-   *            the orderingAccessors to set.
-   */
-  public void setOrderingAccessors(List<IAccessor> orderingAccessors) {
-    this.orderingAccessors = orderingAccessors;
   }
 
   private static final class NaturalComparator implements Comparator<Object> {

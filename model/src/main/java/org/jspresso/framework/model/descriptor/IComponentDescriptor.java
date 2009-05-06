@@ -21,10 +21,12 @@ package org.jspresso.framework.model.descriptor;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 
 /**
@@ -77,12 +79,12 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
 
   /**
    * Get the list of properties ordering the collections containing this
-   * component.
+   * component along with their individual sorting direction.
    * 
-   * @return the list of properties ordering the collections containing this
+   * @return the map of properties ordering the collections containing this
    *         component.
    */
-  List<String> getOrderingProperties();
+  Map<String, ESort> getOrderingProperties();
 
   /**
    * Retrieves the <code>IPropertyDescriptor</code> describing the property

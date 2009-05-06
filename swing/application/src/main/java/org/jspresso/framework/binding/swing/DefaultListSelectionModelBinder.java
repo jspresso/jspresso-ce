@@ -30,7 +30,6 @@ import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.gui.IIndexMapper;
 import org.jspresso.framework.util.swing.SwingUtil;
 
-
 /**
  * Default implementation of <code>IListSelectionModelBinder</code>.
  * <p>
@@ -94,7 +93,7 @@ public class DefaultListSelectionModelBinder implements
      * Constructs a new <code>SelectionChangeListener</code> instance.
      * 
      * @param selectionModel
-     *            the selection model to forward the changes to.
+     *          the selection model to forward the changes to.
      * @param rowMapper
      */
     public SelectionChangeListener(ListSelectionModel selectionModel,
@@ -174,7 +173,7 @@ public class DefaultListSelectionModelBinder implements
      * Constructs a new <code>SelectionModelListener</code> instance.
      * 
      * @param viewSelectable
-     *            the selectable to forward the changes to.
+     *          the selectable to forward the changes to.
      * @param rowMapper
      */
     public SelectionModelListener(ISelectable viewSelectable,
@@ -193,23 +192,26 @@ public class DefaultListSelectionModelBinder implements
         return;
       }
       ListSelectionModel sm = (ListSelectionModel) e.getSource();
-      int[] selectedIndices = getSelectedIndices(sm);
+      int[] viewIndices = getSelectedIndices(sm);
+      int viewLeadingIndex = sm.getLeadSelectionIndex();
       int[] modelIndices;
-      if (selectedIndices.length > 0) {
+      int modelLeadingIndex;
+      if (viewIndices.length > 0) {
         if (rowMapper != null) {
-          int[] viewIndices = selectedIndices;
           modelIndices = new int[viewIndices.length];
           for (int i = 0; i < viewIndices.length; i++) {
             modelIndices[i] = rowMapper.modelIndex(viewIndices[i]);
           }
+          modelLeadingIndex = rowMapper.modelIndex(viewLeadingIndex);
         } else {
-          modelIndices = selectedIndices;
+          modelIndices = viewIndices;
+          modelLeadingIndex = viewLeadingIndex;
         }
       } else {
-        modelIndices = selectedIndices;
+        modelIndices = viewIndices;
+        modelLeadingIndex = viewLeadingIndex;
       }
-      viewSelectable.setSelectedIndices(modelIndices, sm
-          .getLeadSelectionIndex());
+      viewSelectable.setSelectedIndices(modelIndices, modelLeadingIndex);
     }
   }
 }

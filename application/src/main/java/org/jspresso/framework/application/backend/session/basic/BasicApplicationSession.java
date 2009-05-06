@@ -48,6 +48,7 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanComparator;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
+import org.jspresso.framework.util.collection.ESort;
 
 /**
  * Basic implementation of an application session.
@@ -510,19 +511,22 @@ public class BasicApplicationSession implements IApplicationSession {
         && !propertyValue.isEmpty()
         && !List.class.isAssignableFrom(propertyDescriptor
             .getCollectionDescriptor().getCollectionInterface())) {
-      List<String> orderingProperties = propertyDescriptor
+      Map<String, ESort> orderingProperties = propertyDescriptor
           .getOrderingProperties();
       if (orderingProperties != null && !orderingProperties.isEmpty()) {
-        BeanComparator comparator = new BeanComparator();
         List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
+        List<ESort> orderingDirections = new ArrayList<ESort>();
         Class collectionElementContract = propertyDescriptor
             .getCollectionDescriptor().getElementDescriptor()
             .getComponentContract();
-        for (String orderingProperty : orderingProperties) {
+        for (Map.Entry<String, ESort> orderingProperty : orderingProperties
+            .entrySet()) {
           orderingAccessors.add(accessorFactory.createPropertyAccessor(
-              orderingProperty, collectionElementContract));
+              orderingProperty.getKey(), collectionElementContract));
+          orderingDirections.add(orderingProperty.getValue());
         }
-        comparator.setOrderingAccessors(orderingAccessors);
+        BeanComparator comparator = new BeanComparator(orderingAccessors,
+            orderingDirections);
         List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
         Collections.sort(collectionCopy, comparator);
         Collection<Object> collectionProperty = propertyValue;

@@ -21,6 +21,7 @@ package org.jspresso.framework.model.component.query;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -28,6 +29,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
 
 /**
@@ -58,6 +60,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private Integer                 page;
   private Integer                 pageSize;
   private Integer                 recordCount;
+  private Map<String, ESort>      orderingProperties;
 
   /**
    * Constructs a new <code>QueryComponent</code> instance.
@@ -68,6 +71,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public QueryComponent(IComponentDescriptor<?> componentDescriptor) {
     this.componentDescriptor = componentDescriptor;
     setPageSize(componentDescriptor.getPageSize());
+    setOrderingProperties(componentDescriptor.getOrderingProperties());
   }
 
   /**
@@ -251,6 +255,25 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public boolean isPreviousPageEnabled() {
     return getPage() != null && getPage().intValue() > 0;
+  }
+
+  /**
+   * Gets the orderingProperties.
+   * 
+   * @return the orderingProperties.
+   */
+  public Map<String, ESort> getOrderingProperties() {
+    return orderingProperties;
+  }
+
+  /**
+   * Sets the sortingAttributes.
+   * 
+   * @param orderingProperties
+   *          the sortingAttributes to set.
+   */
+  public void setOrderingProperties(Map<String, ESort> orderingProperties) {
+    this.orderingProperties = orderingProperties;
   }
 
 }

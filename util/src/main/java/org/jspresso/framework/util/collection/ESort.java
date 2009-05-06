@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  */
-package org.jspresso.framework.util.beancollection;
+package org.jspresso.framework.util.collection;
 
 /**
  * Sorting constants.

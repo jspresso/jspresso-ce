@@ -92,7 +92,7 @@ public class DefaultListSelectionModelBinder implements
      * Constructs a new <code>SelectionChangeListener</code> instance.
      * 
      * @param selectionModel
-     *            the selection model to forward the changes to.
+     *          the selection model to forward the changes to.
      * @param rowMapper
      */
     public SelectionChangeListener(ULCListSelectionModel selectionModel,
@@ -168,7 +168,7 @@ public class DefaultListSelectionModelBinder implements
      * Constructs a new <code>SelectionModelListener</code> instance.
      * 
      * @param viewSelectable
-     *            the selectable to forward the changes to.
+     *          the selectable to forward the changes to.
      * @param rowMapper
      */
     public SelectionModelListener(ISelectable viewSelectable,
@@ -184,20 +184,19 @@ public class DefaultListSelectionModelBinder implements
      */
     public void valueChanged(ListSelectionEvent e) {
       ULCListSelectionModel sm = (ULCListSelectionModel) e.getSource();
-      int[] selectedIndices = getSelectedIndices(sm);
+      int[] viewIndices = getSelectedIndices(sm);
       int[] modelIndices;
-      if (selectedIndices.length > 0) {
+      if (viewIndices.length > 0) {
         if (rowMapper != null) {
-          int[] viewIndices = selectedIndices;
           modelIndices = new int[viewIndices.length];
           for (int i = 0; i < viewIndices.length; i++) {
             modelIndices[i] = rowMapper.modelIndex(viewIndices[i]);
           }
         } else {
-          modelIndices = selectedIndices;
+          modelIndices = viewIndices;
         }
       } else {
-        modelIndices = selectedIndices;
+        modelIndices = viewIndices;
       }
       viewSelectable.setSelectedIndices(modelIndices);
     }

@@ -13,6 +13,7 @@ Bugs fixed
 2777735  	 Current design doesn't allow for simple type customization
 2778525  	 Wings icons disappear on disabled buttons
 2786214  	 NullPointerException : empty workspace without iconImageUrl
+2787939  	 Leading selection index not correctly mapped on sorted tables
 
 New features
 ------------
@@ -28,6 +29,7 @@ New features
 2782610  	 Dialogs should allow for an explicit size
 2783043  	 Variabilized generator template using properties
 2783044  	 Bound the ddl generation to generate-ddl-scripts profile
+2787655  	 Handle sorting directions in ordering properties
 
 
 3.0.0

@@ -27,7 +27,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
-import org.jspresso.framework.util.beancollection.IPageable;
+import org.jspresso.framework.util.collection.IPageable;
 
 /**
  * An implementation used for query components.
@@ -126,6 +126,8 @@ public class BasicQueryComponentDescriptor extends
     setRenderedProperties(qProperties);
     setToStringProperty(componentDescriptor.getToStringProperty());
     setUnclonedProperties(componentDescriptor.getUnclonedProperties());
+    setPageSize(componentDescriptor.getPageSize());
+    setOrderingProperties(componentDescriptor.getOrderingProperties());
   }
 
   /**
@@ -163,13 +165,5 @@ public class BasicQueryComponentDescriptor extends
    */
   public boolean isPurelyAbstract() {
     return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Integer getPageSize() {
-    return componentDescriptor.getPageSize();
   }
 }

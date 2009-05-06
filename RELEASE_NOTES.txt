@@ -7,6 +7,11 @@ setting the "centerViewDescriptor" to the old "nestedViewDescriptor".
 - Due to a API refactoring in component view descriptors, all references to
 BasicSubviewDescriptor must be changed to BasicPropertyViewDescriptor.
 
+- Due to introduction of sorting directions in orderingProperties (see 2787655), the API
+has changed on component and collection descriptors. Instead of setting the ordering
+properties as a list, you must now use a map keyed by the ordering properties
+and valued by the sort drections (ESort.ASCENDING or ESort.DESCENDING) 
+
 
 3.0.0
 =====

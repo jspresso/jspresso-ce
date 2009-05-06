@@ -19,7 +19,9 @@
 package org.jspresso.framework.model.descriptor;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
+
+import org.jspresso.framework.util.collection.ESort;
 
 /**
  * This interface is implemented by descriptors of collection properties.
@@ -50,7 +52,7 @@ public interface ICollectionPropertyDescriptor<E> extends
    * 
    * @return the list of properties ordering this collection.
    */
-  List<String> getOrderingProperties();
+  Map<String, ESort> getOrderingProperties();
 
   /**
    * Gets the descriptor of the collection referenced by this property.

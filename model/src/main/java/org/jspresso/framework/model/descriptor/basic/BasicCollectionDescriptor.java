@@ -18,10 +18,13 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
-
 
 /**
  * Default implementation of a collection descriptor.
@@ -42,13 +45,14 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete collection component element type.
+ *          the concrete collection component element type.
  */
 public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
     ICollectionDescriptor<E> {
 
   private Class<?>                collectionInterface;
   private IComponentDescriptor<E> elementDescriptor;
+  private Map<String, ESort>      orderingProperties;
 
   /**
    * {@inheritDoc}
@@ -82,7 +86,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * Sets the collectionInterface.
    * 
    * @param collectionInterface
-   *            the collectionInterface to set.
+   *          the collectionInterface to set.
    */
   public void setCollectionInterface(Class<?> collectionInterface) {
     this.collectionInterface = collectionInterface;
@@ -92,9 +96,51 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * Sets the elementDescriptor.
    * 
    * @param elementDescriptor
-   *            the elementDescriptor to set.
+   *          the elementDescriptor to set.
    */
   public void setElementDescriptor(IComponentDescriptor<E> elementDescriptor) {
     this.elementDescriptor = elementDescriptor;
+  }
+
+  /**
+   * Gets the orderingProperties.
+   * 
+   * @return the orderingProperties.
+   */
+  public Map<String, ESort> getOrderingProperties() {
+    if (orderingProperties != null) {
+      return orderingProperties;
+    }
+    if (getElementDescriptor() != null) {
+      return getElementDescriptor().getOrderingProperties();
+    }
+    return null;
+  }
+
+  /**
+   * Sets the orderingProperties.
+   * 
+   * @param untypedOrderingProperties
+   *          the orderingProperties to set.
+   */
+  public void setOrderingProperties(Map<String, ?> untypedOrderingProperties) {
+    if (untypedOrderingProperties != null) {
+      orderingProperties = new LinkedHashMap<String, ESort>();
+      for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties
+          .entrySet()) {
+        if (untypedOrderingProperty.getValue() instanceof ESort) {
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              (ESort) untypedOrderingProperty.getValue());
+        } else if (untypedOrderingProperty.getValue() instanceof String) {
+          orderingProperties.put(untypedOrderingProperty.getKey(), ESort
+              .valueOf((String) untypedOrderingProperty.getValue()));
+        } else {
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              ESort.ASCENDING);
+        }
+      }
+    } else {
+      orderingProperties = null;
+    }
   }
 }

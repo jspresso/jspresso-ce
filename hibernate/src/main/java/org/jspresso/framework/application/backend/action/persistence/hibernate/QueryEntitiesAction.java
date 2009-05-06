@@ -25,8 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jspresso.framework.action.ActionContextConstants;
@@ -39,6 +41,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.collection.ESort;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
@@ -93,13 +96,31 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               page = new Integer(0);
               queryComponent.setPage(page);
             }
-            entities = getHibernateTemplate(context).findByCriteria(criteria,
-                page.intValue() * pageSize.intValue(), pageSize.intValue());
             if (queryComponent.getRecordCount() == null) {
               criteria.setProjection(Projections.rowCount());
               totalCount = (Integer) getHibernateTemplate(context)
                   .findByCriteria(criteria).get(0);
             }
+            criteria.setProjection(null);
+            criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
+            // complete sorting properties
+            if (queryComponent.getOrderingProperties() != null) {
+              for (Map.Entry<String, ESort> orderingProperty : queryComponent
+                  .getOrderingProperties().entrySet()) {
+                Order order;
+                switch (orderingProperty.getValue()) {
+                  case DESCENDING:
+                    order = Order.desc(orderingProperty.getKey());
+                    break;
+                  case ASCENDING:
+                  default:
+                    order = Order.asc(orderingProperty.getKey());
+                }
+                criteria.addOrder(order);
+              }
+            }
+            entities = getHibernateTemplate(context).findByCriteria(criteria,
+                page.intValue() * pageSize.intValue(), pageSize.intValue());
           } else {
             entities = getHibernateTemplate(context).findByCriteria(criteria);
             totalCount = new Integer(entities.size());

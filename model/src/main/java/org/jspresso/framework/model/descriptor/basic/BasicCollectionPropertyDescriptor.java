@@ -19,13 +19,15 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.util.bean.integrity.ICollectionPropertyProcessor;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
-
+import org.jspresso.framework.util.collection.ESort;
 
 /**
  * Default implementation of a collection descriptor.
@@ -46,14 +48,14 @@ import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete collection component element type.
+ *          the concrete collection component element type.
  */
 public class BasicCollectionPropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
     ICollectionPropertyDescriptor<E> {
 
   private Boolean                  manyToMany;
-  private List<String>             orderingProperties;
+  private Map<String, ESort>       orderingProperties;
   private ICollectionDescriptor<E> referencedDescriptor;
 
   /**
@@ -87,7 +89,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * 
    * @return the orderingProperties.
    */
-  public List<String> getOrderingProperties() {
+  public Map<String, ESort> getOrderingProperties() {
     if (orderingProperties != null) {
       return orderingProperties;
     }
@@ -95,8 +97,10 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return ((ICollectionPropertyDescriptor<?>) getParentDescriptor())
           .getOrderingProperties();
     }
-    return getReferencedDescriptor().getElementDescriptor()
-        .getOrderingProperties();
+    if (getReferencedDescriptor() != null) {
+      return getReferencedDescriptor().getOrderingProperties();
+    }
+    return null;
   }
 
   /**
@@ -147,8 +151,8 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionPropertyProcessor<Object, Collection<?>> processor =
-        (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+      ICollectionPropertyProcessor<Object, Collection<?>> processor;
+      processor = (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.postprocessAdder(component, collection, addedValue);
     }
   }
@@ -164,10 +168,9 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionPropertyProcessor<Object, Collection<?>> processor =
-        (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
-      processor
-          .postprocessRemover(component, collection, removedValue);
+      ICollectionPropertyProcessor<Object, Collection<?>> processor;
+      processor = (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+      processor.postprocessRemover(component, collection, removedValue);
     }
   }
 
@@ -182,8 +185,8 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionPropertyProcessor<Object, Collection<?>> processor =
-        (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+      ICollectionPropertyProcessor<Object, Collection<?>> processor;
+      processor = (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessAdder(component, collection, addedValue);
     }
   }
@@ -199,8 +202,8 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionPropertyProcessor<Object, Collection<?>> processor =
-        (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+      ICollectionPropertyProcessor<Object, Collection<?>> processor;
+      processor = (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessRemover(component, collection, removedValue);
     }
   }
@@ -209,7 +212,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * Sets the manyToMany.
    * 
    * @param manyToMany
-   *            the manyToMany to set.
+   *          the manyToMany to set.
    */
   public void setManyToMany(boolean manyToMany) {
     this.manyToMany = new Boolean(manyToMany);
@@ -218,18 +221,35 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * Sets the orderingProperties.
    * 
-   * @param orderingProperties
-   *            the orderingProperties to set.
+   * @param untypedOrderingProperties
+   *          the orderingProperties to set.
    */
-  public void setOrderingProperties(List<String> orderingProperties) {
-    this.orderingProperties = orderingProperties;
+  public void setOrderingProperties(Map<String, ?> untypedOrderingProperties) {
+    if (untypedOrderingProperties != null) {
+      orderingProperties = new LinkedHashMap<String, ESort>();
+      for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties
+          .entrySet()) {
+        if (untypedOrderingProperty.getValue() instanceof ESort) {
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              (ESort) untypedOrderingProperty.getValue());
+        } else if (untypedOrderingProperty.getValue() instanceof String) {
+          orderingProperties.put(untypedOrderingProperty.getKey(), ESort
+              .valueOf((String) untypedOrderingProperty.getValue()));
+        } else {
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              ESort.ASCENDING);
+        }
+      }
+    } else {
+      orderingProperties = null;
+    }
   }
 
   /**
    * Sets the referencedDescriptor.
    * 
    * @param referencedDescriptor
-   *            the referencedDescriptor to set.
+   *          the referencedDescriptor to set.
    */
   public void setReferencedDescriptor(
       ICollectionDescriptor<E> referencedDescriptor) {

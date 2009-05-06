@@ -21,7 +21,8 @@ package org.jspresso.framework.model.component;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.util.beancollection.IPageable;
+import org.jspresso.framework.util.collection.IPageable;
+import org.jspresso.framework.util.collection.ISortable;
 
 /**
  * A simple adapter to wrap a component used as selection criteria and a list of
@@ -44,7 +45,8 @@ import org.jspresso.framework.util.beancollection.IPageable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IQueryComponent extends Map<String, Object>, IPageable {
+public interface IQueryComponent extends Map<String, Object>, IPageable,
+    ISortable {
 
   /**
    * "queriedComponents" string constant.

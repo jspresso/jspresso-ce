@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.model.descriptor;
 
+import java.util.Map;
+
+import org.jspresso.framework.util.collection.ESort;
+
 /**
  * This interface is implemented by descriptors of collections.
  * <p>
@@ -37,14 +41,21 @@ package org.jspresso.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete component element type.
+ *          the concrete component element type.
  */
 public interface ICollectionDescriptor<E> extends IModelDescriptor,
     ICollectionDescriptorProvider<E> {
 
   /**
-   * Gets the <code>Collection</code> sub-interface implemented by the
-   * described collection property (i.e <code>java.util.Set</code>,
+   * Get the list of properties ordering this collection.
+   * 
+   * @return the list of properties ordering this collection.
+   */
+  Map<String, ESort> getOrderingProperties();
+
+  /**
+   * Gets the <code>Collection</code> sub-interface implemented by the described
+   * collection property (i.e <code>java.util.Set</code>,
    * <code>java.util.List</code>, ...).
    * 
    * @return the collection interface.

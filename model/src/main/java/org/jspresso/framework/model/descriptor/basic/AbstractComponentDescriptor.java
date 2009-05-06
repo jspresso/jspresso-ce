@@ -43,6 +43,7 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
+import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
@@ -78,7 +79,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
-  private List<String>                     orderingProperties;
+  private Map<String, ESort>               orderingProperties;
   private Map<String, IPropertyDescriptor> propertyDescriptorsMap;
   private List<String>                     queryableProperties;
 
@@ -188,23 +189,23 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public List<String> getOrderingProperties() {
+  public Map<String, ESort> getOrderingProperties() {
     // use a set to avoid duplicates.
-    Set<String> properties = new LinkedHashSet<String>();
+    Map<String, ESort> properties = new LinkedHashMap<String, ESort>();
     if (orderingProperties != null) {
-      properties.addAll(orderingProperties);
+      properties.putAll(orderingProperties);
     }
     if (getAncestorDescriptors() != null) {
       for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
         if (ancestorDescriptor.getOrderingProperties() != null) {
-          properties.addAll(ancestorDescriptor.getOrderingProperties());
+          properties.putAll(ancestorDescriptor.getOrderingProperties());
         }
       }
     }
     if (properties.isEmpty()) {
       return null;
     }
-    return new ArrayList<String>(properties);
+    return properties;
   }
 
   /**
@@ -427,11 +428,28 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * Sets the orderingProperties.
    * 
-   * @param orderingProperties
+   * @param untypedOrderingProperties
    *          the orderingProperties to set.
    */
-  public void setOrderingProperties(List<String> orderingProperties) {
-    this.orderingProperties = orderingProperties;
+  public void setOrderingProperties(Map<String, ?> untypedOrderingProperties) {
+    if (untypedOrderingProperties != null) {
+      orderingProperties = new LinkedHashMap<String, ESort>();
+      for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties
+          .entrySet()) {
+        if (untypedOrderingProperty.getValue() instanceof ESort) {
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              (ESort) untypedOrderingProperty.getValue());
+        } else if (untypedOrderingProperty.getValue() instanceof String) {
+          orderingProperties.put(untypedOrderingProperty.getKey(), ESort
+              .valueOf((String) untypedOrderingProperty.getValue()));
+        } else {
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              ESort.ASCENDING);
+        }
+      }
+    } else {
+      orderingProperties = null;
+    }
   }
 
   /**
