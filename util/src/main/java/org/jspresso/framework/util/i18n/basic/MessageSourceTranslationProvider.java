@@ -23,7 +23,6 @@ import java.util.Locale;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.springframework.context.MessageSource;
 
-
 /**
  * A translation provider wich relies on a spring message source. It will
  * typically be configured with a ressource bundle message source.
@@ -63,7 +62,7 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
    */
   public String getTranslation(String key, Object[] args, Locale locale) {
     if (key == null || key.length() == 0) {
-      return null;
+      return "";
     }
     return messageSource.getMessage(key, args, locale);
   }
@@ -72,10 +71,19 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
    * Sets the messageSource.
    * 
    * @param messageSource
-   *            the messageSource to set.
+   *          the messageSource to set.
    */
   public void setMessageSource(MessageSource messageSource) {
     this.messageSource = messageSource;
+  }
+
+  /**
+   * Gets the messageSource.
+   * 
+   * @return the messageSource.
+   */
+  protected MessageSource getMessageSource() {
+    return messageSource;
   }
 
 }

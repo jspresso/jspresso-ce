@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  */
-package org.jspresso.framework.model.component;
+package org.jspresso.framework.util.beancollection;
 
 /**
  * Pageable models.
@@ -9,7 +9,7 @@ package org.jspresso.framework.model.component;
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1826 $
  * @author Vincent Vandenschrick
  */
 public interface IPageable {
