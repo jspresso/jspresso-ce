@@ -37,11 +37,11 @@ package org.jspresso.framework.view.flex {
       var cell1:String= null;
       var cell2:String= null;
       if(obj1 != null) {
-        cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex +1] as RemoteValueState)
+        cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
                             .value as String;
       }
       if(obj2 != null) {
-        cell2 = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex +1] as RemoteValueState)
+        cell2 = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
                             .value as String;
       }
       return ObjectUtil.stringCompare(cell1, cell2, true);

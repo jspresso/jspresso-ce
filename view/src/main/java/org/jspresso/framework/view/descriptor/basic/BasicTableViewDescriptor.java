@@ -21,7 +21,6 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -29,6 +28,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 
@@ -56,7 +56,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   private List<IPropertyViewDescriptor> columnViewDescriptors;
   private List<String>                  renderedProperties;
-  private IAction                       sortingAction;
+  private IDisplayableAction            sortingAction;
 
   /**
    * Gets the renderedProperties.
@@ -167,7 +167,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * 
    * @return the sortingAction.
    */
-  public IAction getSortingAction() {
+  public IDisplayableAction getSortingAction() {
     return sortingAction;
   }
 
@@ -177,7 +177,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * @param sortingAction
    *          the sortingAction to set.
    */
-  public void setSortingAction(IAction sortingAction) {
+  public void setSortingAction(IDisplayableAction sortingAction) {
     this.sortingAction = sortingAction;
   }
 

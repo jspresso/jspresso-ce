@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * A tabular component.
  * <p>
@@ -41,6 +40,7 @@ package org.jspresso.framework.gui.remote;
 public class RTable extends RCollectionComponent {
 
   private RComponent[] columns;
+  private RAction      sortingAction;
 
   /**
    * Constructs a new <code>RTable</code> instance.
@@ -69,5 +69,24 @@ public class RTable extends RCollectionComponent {
    */
   public void setColumns(RComponent[] columns) {
     this.columns = columns;
+  }
+
+  /**
+   * Gets the sortingAction.
+   * 
+   * @return the sortingAction.
+   */
+  public RAction getSortingAction() {
+    return sortingAction;
+  }
+
+  /**
+   * Sets the sortingAction.
+   * 
+   * @param sortingAction
+   *          the sortingAction to set.
+   */
+  public void setSortingAction(RAction sortingAction) {
+    this.sortingAction = sortingAction;
   }
 }

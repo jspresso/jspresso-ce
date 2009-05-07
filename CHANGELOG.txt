@@ -15,6 +15,7 @@ Bugs fixed
 2786214  	 NullPointerException : empty workspace without iconImageUrl
 2787939  	 Leading selection index not correctly mapped on sorted tables
 2788370  	 ULC column headers not correctly rendered when column moved
+2788405  	 Flex table column reordering.
 
 
 New features

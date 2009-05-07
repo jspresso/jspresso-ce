@@ -1121,7 +1121,8 @@ package org.jspresso.framework.view.flex {
           itemRenderer.properties = {values:(rColumn as RComboBox).values,
                                      labels:(rColumn as RComboBox).translations,
                                      icons :(rColumn as RComboBox).icons,
-                                     iconTemplate:_iconTemplate};
+                                     iconTemplate:_iconTemplate,
+                                     index:i+1};
         } else if( rColumn is RCheckBox
                || (rColumn is RActionField && !(rColumn as RActionField).showTextField)) {
           itemRenderer = new ClassFactory(UIComponentDgItemRenderer);
@@ -1130,9 +1131,14 @@ package org.jspresso.framework.view.flex {
                                      index:i+1};
         } else {
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
-          itemRenderer.properties = {formatter:createFormatter(rColumn)};
+          itemRenderer.properties = {formatter:createFormatter(rColumn),
+                                     index:i+1};
         }
         column.itemRenderer = itemRenderer
+        
+        var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
+        headerRenderer.properties = {index:i+1};
+        column.headerRenderer = headerRenderer;
         
         var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
         var editorComponent:UIComponent = createComponent(rColumn, false);
@@ -1193,7 +1199,7 @@ package org.jspresso.framework.view.flex {
     
     private function bindTable(table:DataGrid, state:RemoteCompositeValueState):void {
       table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
-        _remoteValueSorter.sortColumnIndex = event.columnIndex;
+        _remoteValueSorter.sortColumnIndex = (event.itemRenderer as DgHeaderItemRenderer).index;
       });
       BindingUtils.bindSetter(function(selectedItems:Array):void {
         if(selectedItems != null && selectedItems.length > 0) {
@@ -1242,22 +1248,28 @@ package org.jspresso.framework.view.flex {
             var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
             var state:RemoteValueState = currentEditor.state;
             var row:RemoteCompositeValueState = (table.dataProvider as ArrayCollection)[event.rowIndex] as RemoteCompositeValueState; 
-            var cell:RemoteValueState = row.children[event.columnIndex +1] as RemoteValueState;
+            var cell:RemoteValueState = row.children[currentEditor.index] as RemoteValueState;
 
             cell.value = state.value;
           }
         }
       });
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function(event:DataGridEvent):void {
-        var rowCollection:ArrayCollection = (event.currentTarget as DataGrid).dataProvider as ArrayCollection;
-        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState;
+        var dg:DataGrid = event.currentTarget as DataGrid;
+        var column:DataGridColumn = dg.columns[event.columnIndex]; 
+        var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
+        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
+            .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
         if(!cellValueState.writable) {
     	    event.preventDefault();
     	  }
     	});
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, function(event:DataGridEvent):void {
-        var rowCollection:ArrayCollection = (event.currentTarget as DataGrid).dataProvider as ArrayCollection;
-        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState).children[event.columnIndex +1] as RemoteValueState;
+        var dg:DataGrid = event.currentTarget as DataGrid;
+        var column:DataGridColumn = dg.columns[event.columnIndex]; 
+        var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
+        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
+            .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
     	  _actionHandler.setCurrentViewStateGuid(cellValueState.guid);
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {

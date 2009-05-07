@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
     public class RTable extends RCollectionComponent {
 
         private var _columns:Array;
+        private var _sortingAction:RAction;
 
         public function RTable() {
           //default constructor.
@@ -30,6 +31,13 @@ package org.jspresso.framework.gui.remote {
         }
         public function get columns():Array {
             return _columns;
+        }
+
+        public function set sortingAction(value:RAction):void {
+            _sortingAction = value;
+        }
+        public function get sortingAction():RAction {
+            return _sortingAction;
         }
     }
 }

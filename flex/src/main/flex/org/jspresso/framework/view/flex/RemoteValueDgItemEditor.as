@@ -25,7 +25,7 @@ package org.jspresso.framework.view.flex
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   
-  public class RemoteValueDgItemEditor extends Canvas {
+  public class RemoteValueDgItemEditor extends Canvas implements IColumnIndexProvider {
     
     private var _editor:UIComponent;
     private var _state:RemoteValueState;

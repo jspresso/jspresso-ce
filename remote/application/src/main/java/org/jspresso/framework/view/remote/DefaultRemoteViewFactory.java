@@ -1013,6 +1013,10 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
+    if (viewDescriptor.getSortingAction() != null) {
+      viewComponent.setSortingAction(getActionFactory().createAction(
+          viewDescriptor.getSortingAction(), actionHandler, view, locale));
+    }
     List<RComponent> columns = new ArrayList<RComponent>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {

@@ -25,14 +25,15 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
 
-  public class RemoteValueDgItemRenderer extends ListItemRenderer {
+  public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColumnIndexProvider {
     
     private var valueChangeListener:ChangeWatcher;
     private var _listData:BaseListData;
     private var _formatter:Formatter;
+    private var _index:int;
     
     public function RemoteValueDgItemRenderer() {
-      //default constructor.
+      _index = -1;
     }
 
   	override public function set listData(value:BaseListData):void {
@@ -55,6 +56,13 @@ package org.jspresso.framework.view.flex {
   	  _listData = value;
   	}
   	
+    public function set index(value:int):void {
+      _index = value;
+    }
+    public function get index():int {
+      return _index;
+    }
+
   	protected function set listDataIcon(value:Class):void {
   	  if(super.listData != null) {
   	    (super.listData as ListData).icon = value;
@@ -81,7 +89,7 @@ package org.jspresso.framework.view.flex {
   	  if(rendererData && rendererListData) {
   	    var cellValueState:RemoteValueState;
   	    if(rendererListData.owner is DataGrid) {
-  	      cellValueState = ((rendererData as RemoteCompositeValueState).children[rendererListData.columnIndex +1] as RemoteValueState); 
+  	      cellValueState = ((rendererData as RemoteCompositeValueState).children[index] as RemoteValueState); 
   	    } else {
   	      cellValueState = rendererData as RemoteValueState;
   	    }

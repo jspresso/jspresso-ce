@@ -20,7 +20,7 @@ package org.jspresso.framework.view.descriptor;
 
 import java.util.List;
 
-import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * This public interface is implemented by tabular view descriptors. For
@@ -59,5 +59,5 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
    * @return the action triggered when sorting is triggered by the used (if
    *         supported by the UI).
    */
-  IAction getSortingAction();
+  IDisplayableAction getSortingAction();
 }

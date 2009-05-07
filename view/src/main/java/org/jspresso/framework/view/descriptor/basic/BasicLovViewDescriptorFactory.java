@@ -20,13 +20,13 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.List;
 
-import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import org.jspresso.framework.view.action.ActionMap;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -55,7 +55,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   private IQueryViewDescriptorFactory queryViewDescriptorFactory;
   private ActionMap                   resultViewActionMap;
   private IViewDescriptor             pagingStatusViewDescriptor;
-  private IAction                     sortingAction;
+  private IDisplayableAction          sortingAction;
 
   /**
    * {@inheritDoc}
@@ -140,7 +140,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    * @param sortingAction
    *          the sortingAction to set.
    */
-  public void setSortingAction(IAction sortingAction) {
+  public void setSortingAction(IDisplayableAction sortingAction) {
     this.sortingAction = sortingAction;
   }
 }
