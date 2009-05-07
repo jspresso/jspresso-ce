@@ -1,33 +1,15 @@
 package org.jspresso.framework.view.swing;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-
-import org.jspresso.framework.util.gui.IIndexMapper;
-
 
 /**
  * TableSorter is a decorator for TableModels; adding sorting functionality to a
@@ -37,30 +19,33 @@ import org.jspresso.framework.util.gui.IIndexMapper;
  * getValueAt(row, col)) they are passed to the underlying model after the row
  * numbers have been translated via the internal mapping array. This way, the
  * TableSorter appears to hold another copy of the table with the rows in a
- * different order. <p/> TableSorter registers itself as a listener to the
- * underlying model, just as the JTable itself would. Events received from the
- * model are examined, sometimes manipulated (typically widened), and then
- * passed on to the TableSorter's listeners (typically the JTable). If a change
- * to the model has invalidated the order of TableSorter's rows, a note of this
- * is made and the sorter will resort the rows the next time a value is
- * requested. <p/> When the tableHeader property is set, either by using the
- * setTableHeader() method or the two argument constructor, the table header may
- * be used as a complete UI for TableSorter. The default renderer of the
- * tableHeader is decorated with a renderer that indicates the sorting status of
- * each column. In addition, a mouse listener is installed with the following
- * behavior:
+ * different order.
+ * <p/>
+ * TableSorter registers itself as a listener to the underlying model, just as
+ * the JTable itself would. Events received from the model are examined,
+ * sometimes manipulated (typically widened), and then passed on to the
+ * TableSorter's listeners (typically the JTable). If a change to the model has
+ * invalidated the order of TableSorter's rows, a note of this is made and the
+ * sorter will resort the rows the next time a value is requested.
+ * <p/>
+ * When the tableHeader property is set, either by using the setTableHeader()
+ * method or the two argument constructor, the table header may be used as a
+ * complete UI for TableSorter. The default renderer of the tableHeader is
+ * decorated with a renderer that indicates the sorting status of each column.
+ * In addition, a mouse listener is installed with the following behavior:
  * <ul>
- * <li> Mouse-click: Clears the sorting status of all other columns and advances
+ * <li>Mouse-click: Clears the sorting status of all other columns and advances
  * the sorting status of that column through three values: {NOT_SORTED,
  * ASCENDING, DESCENDING} (then back to NOT_SORTED again).
- * <li> SHIFT-mouse-click: Clears the sorting status of all other columns and
+ * <li>SHIFT-mouse-click: Clears the sorting status of all other columns and
  * cycles the sorting status of the column through the same three values, in the
  * opposite order: {NOT_SORTED, DESCENDING, ASCENDING}.
- * <li> CONTROL-mouse-click and CONTROL-SHIFT-mouse-click: as above except that
+ * <li>CONTROL-mouse-click and CONTROL-SHIFT-mouse-click: as above except that
  * the changes to the column do not cancel the statuses of columns that are
  * already sorting - giving a way to initiate a compound sort.
  * </ul>
- * <p/> This is a long overdue rewrite of a class of the same name that first
+ * <p/>
+ * This is a long overdue rewrite of a class of the same name that first
  * appeared in the swing table demos in 1997.
  * 
  * @author Philip Milne
@@ -70,12 +55,9 @@ import org.jspresso.framework.util.gui.IIndexMapper;
  * @version 2.0 02/27/04
  */
 
-public class TableSorter extends AbstractTableModel implements IIndexMapper {
+public class TableSorter extends AbstractTableSorter {
 
-  /**
-   * <code>ASCENDING</code>.
-   */
-  public static final int                   ASCENDING             = 1;
+  private static final long                 serialVersionUID      = -5437879837063286581L;
 
   /**
    * <code>COMPARABLE_COMPARATOR</code>.
@@ -90,11 +72,6 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
                                                                           .compareTo(o2);
                                                                     }
                                                                   };
-
-  /**
-   * <code>DESCENDING</code>.
-   */
-  public static final int                   DESCENDING            = -1;
 
   /**
    * <code>LEXICAL_COMPARATOR</code>.
@@ -112,156 +89,38 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
                                                                     }
                                                                   };
 
-  /**
-   * <code>NOT_SORTED</code>.
-   */
-  public static final int                   NOT_SORTED            = 0;
-
-  private static final Directive            NOT_SORTED_DIRECTIVE  = new Directive(
-                                                                      -1,
-                                                                      NOT_SORTED);
-
-  private static final long                 serialVersionUID      = -5437879837063286581L;
   private Map<Class<?>, Comparator<Object>> columnComparators     = new HashMap<Class<?>, Comparator<Object>>();
 
-  private Icon                              downIcon;
   private int[]                             modelToView;
-
-  private MouseListener                     mouseListener;
-  private List<Directive>                   sortingColumns        = new ArrayList<Directive>();
-  private JTableHeader                      tableHeader;
-  private TableModel                        tableModel;
-  private TableModelListener                tableModelListener;
-  private Icon                              upIcon;
   private Row[]                             viewToModel;
 
   /**
    * Constructs a new <code>TableSorter</code> instance.
-   */
-  public TableSorter() {
-    this.mouseListener = new MouseHandler();
-    this.tableModelListener = new TableModelHandler();
-  }
-
-  /**
-   * Constructs a new <code>TableSorter</code> instance.
    * 
    * @param tableModel
-   *            tableModel.
+   *          tableModel.
    */
   public TableSorter(TableModel tableModel) {
-    this();
-    setTableModel(tableModel);
+    super(tableModel);
   }
 
   /**
    * Constructs a new <code>TableSorter</code> instance.
    * 
    * @param tableModel
-   *            tableModel.
+   *          tableModel.
    * @param tableHeader
-   *            tableHeader.
+   *          tableHeader.
    */
   public TableSorter(TableModel tableModel, JTableHeader tableHeader) {
-    this();
-    setTableHeader(tableHeader);
-    setTableModel(tableModel);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class<?> getColumnClass(int column) {
-    return tableModel.getColumnClass(column);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getColumnCount() {
-    if (tableModel == null) {
-      return 0;
-    }
-    return tableModel.getColumnCount();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getColumnName(int column) {
-    return tableModel.getColumnName(column);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getRowCount() {
-    if (tableModel == null) {
-      return 0;
-    }
-    return tableModel.getRowCount();
-  }
-
-  /**
-   * Gets sorting status.
-   * 
-   * @param column
-   *            column.
-   * @return sorting status.
-   */
-  public int getSortingStatus(int column) {
-    return getDirective(column).direction;
-  }
-
-  /**
-   * Gets tableHeader.
-   * 
-   * @return tableHeader.
-   */
-  public JTableHeader getTableHeader() {
-    return tableHeader;
-  }
-
-  /**
-   * Gets tableModel.
-   * 
-   * @return tableModel.
-   */
-  public TableModel getTableModel() {
-    return tableModel;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getValueAt(int row, int column) {
-    return tableModel.getValueAt(modelIndex(row), column);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isCellEditable(int row, int column) {
-    return tableModel.isCellEditable(modelIndex(row), column);
-  }
-
-  /**
-   * is sorting ?
-   * 
-   * @return true if sorting
-   */
-  public boolean isSorting() {
-    return sortingColumns.size() != 0;
+    super(tableModel, tableHeader);
   }
 
   /**
    * modelIndex.
    * 
    * @param viewIndex
-   *            viewIndex.
+   *          viewIndex.
    * @return modelIndex.
    */
   public int modelIndex(int viewIndex) {
@@ -272,9 +131,9 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
    * Sets ColumnComparator.
    * 
    * @param type
-   *            type.
+   *          type.
    * @param comparator
-   *            comparator.
+   *          comparator.
    */
   @SuppressWarnings("unchecked")
   public void setColumnComparator(Class type, Comparator comparator) {
@@ -286,102 +145,10 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   }
 
   /**
-   * Sets the downIcon.
-   * 
-   * @param downIcon
-   *            the downIcon to set.
-   */
-  public void setDownIcon(Icon downIcon) {
-    this.downIcon = downIcon;
-  }
-
-  /**
-   * Sets column sorting status.
-   * 
-   * @param column
-   *            column.
-   * @param status
-   *            status.
-   */
-  public void setSortingStatus(int column, int status) {
-    Directive directive = getDirective(column);
-    if (directive != NOT_SORTED_DIRECTIVE) {
-      sortingColumns.remove(directive);
-    }
-    if (status != NOT_SORTED) {
-      sortingColumns.add(new Directive(column, status));
-    }
-    sortingStatusChanged();
-  }
-
-  /**
-   * Sets tableHeader.
-   * 
-   * @param tableHeader
-   *            tableHeader.
-   */
-  public void setTableHeader(JTableHeader tableHeader) {
-    if (this.tableHeader != null) {
-      this.tableHeader.removeMouseListener(mouseListener);
-      TableCellRenderer defaultRenderer = this.tableHeader.getDefaultRenderer();
-      if (defaultRenderer instanceof SortableHeaderRenderer) {
-        this.tableHeader
-            .setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).tableCellRenderer);
-      }
-    }
-    this.tableHeader = tableHeader;
-    if (this.tableHeader != null) {
-      this.tableHeader.addMouseListener(mouseListener);
-      this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(
-          this.tableHeader.getDefaultRenderer()));
-    }
-  }
-
-  /**
-   * Sets tableModel.
-   * 
-   * @param tableModel
-   *            tableModel.
-   */
-  public void setTableModel(TableModel tableModel) {
-    if (this.tableModel != null) {
-      this.tableModel.removeTableModelListener(tableModelListener);
-    }
-
-    this.tableModel = tableModel;
-    if (this.tableModel != null) {
-      this.tableModel.addTableModelListener(tableModelListener);
-    }
-
-    clearSortingState();
-    fireTableStructureChanged();
-  }
-
-  /**
-   * Sets the upIcon.
-   * 
-   * @param upIcon
-   *            the upIcon to set.
-   */
-  public void setUpIcon(Icon upIcon) {
-    this.upIcon = upIcon;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setValueAt(Object aValue, int row, int column) {
-    tableModel.setValueAt(aValue, modelIndex(row), column);
-  }
-
-  // TableModel interface methods
-
-  /**
    * viewIndex.
    * 
    * @param modelIndex
-   *            modelIndex
+   *          modelIndex
    * @return viewIndex
    */
   public int viewIndex(int modelIndex) {
@@ -392,11 +159,11 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
    * Gets Comparator.
    * 
    * @param column
-   *            column.
+   *          column.
    * @return Comparator.
    */
   protected Comparator<Object> getComparator(int column) {
-    Class<?> columnType = tableModel.getColumnClass(column);
+    Class<?> columnType = getTableModel().getColumnClass(column);
     Comparator<Object> comparator = columnComparators.get(columnType);
     if (comparator != null) {
       return comparator;
@@ -408,50 +175,12 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   }
 
   /**
-   * Gets HeaderRendererIcon.
-   * 
-   * @param column
-   *            column.
-   * @param size
-   *            size.
-   * @return HeaderRendererIcon
+   * {@inheritDoc}
    */
-  protected Icon getHeaderRendererIcon(int column, int size) {
-    Directive directive = getDirective(column);
-    if (directive == NOT_SORTED_DIRECTIVE) {
-      return null;
-    }
-    if (directive.direction == DESCENDING) {
-      if (downIcon != null) {
-        return downIcon;
-      }
-    } else {
-      if (upIcon != null) {
-        return upIcon;
-      }
-    }
-    return new Arrow(directive.direction == DESCENDING, size, sortingColumns
-        .indexOf(directive));
-  }
-
-  private void cancelSorting() {
-    sortingColumns.clear();
-    sortingStatusChanged();
-  }
-
-  private void clearSortingState() {
+  @Override
+  protected void clearSortingState() {
     viewToModel = null;
     modelToView = null;
-  }
-
-  private Directive getDirective(int column) {
-    for (int i = 0; i < sortingColumns.size(); i++) {
-      Directive directive = sortingColumns.get(i);
-      if (directive.column == column) {
-        return directive;
-      }
-    }
-    return NOT_SORTED_DIRECTIVE;
   }
 
   private int[] getModelToView() {
@@ -469,7 +198,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   private Row[] getViewToModel() {
     if (viewToModel == null) {
-      int tableModelRowCount = tableModel.getRowCount();
+      int tableModelRowCount = getTableModel().getRowCount();
       viewToModel = new Row[tableModelRowCount];
       for (int row = 0; row < tableModelRowCount; row++) {
         viewToModel[row] = new Row(row);
@@ -482,148 +211,15 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
     return viewToModel;
   }
 
-  private void sortingStatusChanged() {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void sortingStatusChanged() {
     clearSortingState();
     fireTableDataChanged();
-    if (tableHeader != null) {
-      tableHeader.repaint();
-    }
-  }
-
-  private static class Arrow implements Icon {
-
-    private boolean descending;
-    private int     priority;
-    private int     size;
-
-    /**
-     * Constructs a new <code>Arrow</code> instance.
-     * 
-     * @param descending
-     * @param size
-     * @param priority
-     */
-    public Arrow(boolean descending, int size, int priority) {
-      this.descending = descending;
-      this.size = size;
-      this.priority = priority;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int getIconHeight() {
-      return size;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int getIconWidth() {
-      return size;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void paintIcon(Component c, Graphics g, int x, int y) {
-      int varY = y;
-      Color color;
-      if (c == null) {
-        color = Color.GRAY;
-      } else {
-        color = c.getBackground();
-      }
-      // In a compound sort, make each succesive triangle 20%
-      // smaller than the previous one.
-      int dx = (int) (size / 2 * Math.pow(0.8, priority));
-      int dy;
-      if (descending) {
-        dy = dx;
-      } else {
-        dy = -dx;
-      }
-      // Align icon (roughly) with font baseline.
-      varY = varY + 5 * size / 6;
-      if (descending) {
-        varY += -dy;
-      }
-      int shift;
-      if (descending) {
-        shift = 1;
-      } else {
-        shift = -1;
-      }
-      g.translate(x, varY);
-
-      // Right diagonal.
-      g.setColor(color.darker());
-      g.drawLine(dx / 2, dy, 0, 0);
-      g.drawLine(dx / 2, dy + shift, 0, shift);
-
-      // Left diagonal.
-      g.setColor(color.brighter());
-      g.drawLine(dx / 2, dy, dx, 0);
-      g.drawLine(dx / 2, dy + shift, dx, shift);
-
-      // Horizontal line.
-      if (descending) {
-        g.setColor(color.darker().darker());
-      } else {
-        g.setColor(color.brighter().brighter());
-      }
-      g.drawLine(dx, 0, 0, 0);
-
-      g.setColor(color);
-      g.translate(-x, -varY);
-    }
-  }
-
-  private static final class Directive {
-
-    private int column;
-    private int direction;
-
-    /**
-     * Constructs a new <code>Directive</code> instance.
-     * 
-     * @param column
-     * @param direction
-     */
-    private Directive(int column, int direction) {
-      this.column = column;
-      this.direction = direction;
-    }
-  }
-
-  private class MouseHandler extends MouseAdapter {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void mouseClicked(MouseEvent e) {
-      JTableHeader h = (JTableHeader) e.getSource();
-      TableColumnModel columnModel = h.getColumnModel();
-      int viewColumn = columnModel.getColumnIndexAtX(e.getX());
-      int column = columnModel.getColumn(viewColumn).getModelIndex();
-      if (column != -1) {
-        int status = getSortingStatus(column);
-        if (!e.isControlDown()) {
-          cancelSorting();
-        }
-        // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING}
-        // or
-        // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is
-        // pressed.
-        if (e.isShiftDown()) {
-          status -= 1;
-        } else {
-          status += 1;
-        }
-        status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
-        setSortingStatus(column, status);
-      }
+    if (getTableHeader() != null) {
+      getTableHeader().repaint();
     }
   }
 
@@ -651,11 +247,11 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
       int row1 = modelIndex;
       int row2 = ((Row) o).modelIndex;
 
-      for (Iterator it = sortingColumns.iterator(); it.hasNext();) {
+      for (Iterator it = getSortingColumns().iterator(); it.hasNext();) {
         Directive directive = (Directive) it.next();
-        int column = directive.column;
-        Object o1 = tableModel.getValueAt(row1, column);
-        Object o2 = tableModel.getValueAt(row2, column);
+        int column = directive.getColumn();
+        Object o1 = getTableModel().getValueAt(row1, column);
+        Object o2 = getTableModel().getValueAt(row2, column);
 
         int comparison = 0;
         // Define null less than everything, except null.
@@ -669,7 +265,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
           comparison = getComparator(column).compare(o1, o2);
         }
         if (comparison != 0) {
-          if (directive.direction == DESCENDING) {
+          if (directive.getDirection() == DESCENDING) {
             return -comparison;
           }
           return comparison;
@@ -679,35 +275,12 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
     }
   }
 
-  private class SortableHeaderRenderer implements TableCellRenderer {
-
-    private TableCellRenderer tableCellRenderer;
-
-    /**
-     * Constructs a new <code>SortableHeaderRenderer</code> instance.
-     * 
-     * @param tableCellRenderer
-     *            the wrapped table cell renderer.
-     */
-    public SortableHeaderRenderer(TableCellRenderer tableCellRenderer) {
-      this.tableCellRenderer = tableCellRenderer;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column) {
-      Component c = tableCellRenderer.getTableCellRendererComponent(table,
-          value, isSelected, hasFocus, row, column);
-      if (c instanceof JLabel) {
-        JLabel l = (JLabel) c;
-        l.setHorizontalTextPosition(SwingConstants.LEFT);
-        int modelColumn = table.convertColumnIndexToModel(column);
-        l.setIcon(getHeaderRendererIcon(modelColumn, l.getFont().getSize()));
-      }
-      return c;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected TableModelListener createTableModelHandler() {
+    return new TableModelHandler();
   }
 
   private class TableModelHandler implements TableModelListener {

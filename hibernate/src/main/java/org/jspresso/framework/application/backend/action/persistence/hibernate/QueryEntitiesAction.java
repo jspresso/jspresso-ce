@@ -101,27 +101,11 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               totalCount = (Integer) getHibernateTemplate(context)
                   .findByCriteria(criteria).get(0);
             }
-            criteria.setProjection(null);
-            criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
-            // complete sorting properties
-            if (queryComponent.getOrderingProperties() != null) {
-              for (Map.Entry<String, ESort> orderingProperty : queryComponent
-                  .getOrderingProperties().entrySet()) {
-                Order order;
-                switch (orderingProperty.getValue()) {
-                  case DESCENDING:
-                    order = Order.desc(orderingProperty.getKey());
-                    break;
-                  case ASCENDING:
-                  default:
-                    order = Order.asc(orderingProperty.getKey());
-                }
-                criteria.addOrder(order);
-              }
-            }
+            completeCriteriaWithOrdering(criteria);
             entities = getHibernateTemplate(context).findByCriteria(criteria,
                 page.intValue() * pageSize.intValue(), pageSize.intValue());
           } else {
+            completeCriteriaWithOrdering(criteria);
             entities = getHibernateTemplate(context).findByCriteria(criteria);
             totalCount = new Integer(entities.size());
           }
@@ -131,6 +115,27 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         }
         status.setRollbackOnly();
         return entities;
+      }
+
+      private void completeCriteriaWithOrdering(DetachedCriteria criteria) {
+        criteria.setProjection(null);
+        criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
+        // complete sorting properties
+        if (queryComponent.getOrderingProperties() != null) {
+          for (Map.Entry<String, ESort> orderingProperty : queryComponent
+              .getOrderingProperties().entrySet()) {
+            Order order;
+            switch (orderingProperty.getValue()) {
+              case DESCENDING:
+                order = Order.desc(orderingProperty.getKey());
+                break;
+              case ASCENDING:
+              default:
+                order = Order.asc(orderingProperty.getKey());
+            }
+            criteria.addOrder(order);
+          }
+        }
       }
 
       private boolean completeCriteria(DetachedCriteria criteria, String path,

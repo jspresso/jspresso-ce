@@ -25,6 +25,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.WrappingAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.util.collection.ESort;
 
 /**
  * A standard find action. Since it is a chained action, it can be chained with
@@ -57,6 +58,7 @@ public class FindAction<E, F, G> extends WrappingAction<E, F, G> {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -75,10 +77,14 @@ public class FindAction<E, F, G> extends WrappingAction<E, F, G> {
     }
     if (queryEntityConnector != null
         && queryEntityConnector.getConnectorValue() != null) {
-      Integer pageOffset = (Integer) context
-          .get(ActionContextConstants.ACTION_PARAM);
       IQueryComponent queryComponent = ((IQueryComponent) queryEntityConnector
           .getConnectorValue());
+      if (context.containsKey(ActionContextConstants.ORDERING_PROPERTIES)) {
+        queryComponent.setOrderingProperties((Map<String, ESort>) context
+            .get(ActionContextConstants.ORDERING_PROPERTIES));
+      }
+      Integer pageOffset = (Integer) context
+          .get(ActionContextConstants.PAGE_OFFSET);
       if (pageOffset == null || pageOffset.intValue() == 0) {
         // This is a plain first query.
         queryComponent.setPage(null);

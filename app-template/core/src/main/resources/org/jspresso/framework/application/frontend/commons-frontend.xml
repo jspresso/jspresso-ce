@@ -8,6 +8,7 @@
   -->
   <bean id="lovViewDescriptorFactory" class="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
+    <property name="sortingAction" ref="lovFindFrontAction"/>
     <property name="resultViewActionMap">
       <bean class="org.jspresso.framework.view.action.ActionMap">
         <property name="actionLists">
@@ -740,6 +741,7 @@
 
   <bean id="filterableBeanCollectionModuleView" parent="decoratedView"
     class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor" scope="prototype">
+    <property name="sortingAction" ref="queryModuleFilterAction"/>
     <property name="actionMap" ref="filterableBeanCollectionModuleActionMap" />
   </bean>
 

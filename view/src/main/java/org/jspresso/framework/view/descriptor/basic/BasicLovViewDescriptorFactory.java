@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.List;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -54,6 +55,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   private IQueryViewDescriptorFactory queryViewDescriptorFactory;
   private ActionMap                   resultViewActionMap;
   private IViewDescriptor             pagingStatusViewDescriptor;
+  private IAction                     sortingAction;
 
   /**
    * {@inheritDoc}
@@ -104,6 +106,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     if (resultViewActionMap != null) {
       resultViewDescriptor.setActionMap(resultViewActionMap);
     }
+    resultViewDescriptor.setSortingAction(sortingAction);
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
@@ -129,5 +132,15 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   public void setPagingStatusViewDescriptor(
       IViewDescriptor pagingStatusViewDescriptor) {
     this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
+  }
+
+  /**
+   * Sets the sortingAction.
+   * 
+   * @param sortingAction
+   *          the sortingAction to set.
+   */
+  public void setSortingAction(IAction sortingAction) {
+    this.sortingAction = sortingAction;
   }
 }

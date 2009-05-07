@@ -28,6 +28,7 @@ import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.util.collection.ESort;
 
 /**
  * Retrieves the filter of a module and queries the persistent store to populate
@@ -56,12 +57,11 @@ public class QueryModuleFilterAction extends AbstractBackendAction {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     if (queryAction != null) {
-      Integer pageOffset = (Integer) context
-          .get(ActionContextConstants.ACTION_PARAM);
       FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModuleConnector(
           context).getConnectorValue();
       IValueConnector filterConnector = getModuleConnector(context)
@@ -69,6 +69,12 @@ public class QueryModuleFilterAction extends AbstractBackendAction {
       context
           .put(ActionContextConstants.QUERY_MODEL_CONNECTOR, filterConnector);
       IQueryComponent queryComponent = module.getFilter();
+      if (context.containsKey(ActionContextConstants.ORDERING_PROPERTIES)) {
+        queryComponent.setOrderingProperties((Map<String, ESort>) context
+            .get(ActionContextConstants.ORDERING_PROPERTIES));
+      }
+      Integer pageOffset = (Integer) context
+          .get(ActionContextConstants.PAGE_OFFSET);
       if (pageOffset == null || pageOffset.intValue() == 0) {
         // This is a plain first query.
         queryComponent.setPage(null);

@@ -21,6 +21,7 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -55,6 +56,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   private List<IPropertyViewDescriptor> columnViewDescriptors;
   private List<String>                  renderedProperties;
+  private IAction                       sortingAction;
 
   /**
    * Gets the renderedProperties.
@@ -158,6 +160,25 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   public void setColumnViewDescriptors(
       List<IPropertyViewDescriptor> columnViewDescriptors) {
     this.columnViewDescriptors = columnViewDescriptors;
+  }
+
+  /**
+   * Gets the sortingAction.
+   * 
+   * @return the sortingAction.
+   */
+  public IAction getSortingAction() {
+    return sortingAction;
+  }
+
+  /**
+   * Sets the sortingAction.
+   * 
+   * @param sortingAction
+   *          the sortingAction to set.
+   */
+  public void setSortingAction(IAction sortingAction) {
+    this.sortingAction = sortingAction;
   }
 
 }

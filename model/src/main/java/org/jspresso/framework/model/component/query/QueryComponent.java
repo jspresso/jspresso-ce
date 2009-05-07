@@ -60,6 +60,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private Integer                 page;
   private Integer                 pageSize;
   private Integer                 recordCount;
+  private Map<String, ESort>      defaultOrderingProperties;
   private Map<String, ESort>      orderingProperties;
 
   /**
@@ -71,7 +72,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public QueryComponent(IComponentDescriptor<?> componentDescriptor) {
     this.componentDescriptor = componentDescriptor;
     setPageSize(componentDescriptor.getPageSize());
-    setOrderingProperties(componentDescriptor.getOrderingProperties());
+    defaultOrderingProperties = componentDescriptor.getOrderingProperties();
   }
 
   /**
@@ -263,6 +264,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * @return the orderingProperties.
    */
   public Map<String, ESort> getOrderingProperties() {
+    if (orderingProperties == null || orderingProperties.isEmpty()) {
+      return defaultOrderingProperties;
+    }
     return orderingProperties;
   }
 
@@ -274,6 +278,15 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   public void setOrderingProperties(Map<String, ESort> orderingProperties) {
     this.orderingProperties = orderingProperties;
+  }
+
+  /**
+   * Gets the componentDescriptor.
+   * 
+   * @return the componentDescriptor.
+   */
+  public IComponentDescriptor<?> getComponentDescriptor() {
+    return componentDescriptor;
   }
 
 }

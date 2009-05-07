@@ -20,6 +20,8 @@ package org.jspresso.framework.view.descriptor;
 
 import java.util.List;
 
+import org.jspresso.framework.action.IAction;
+
 /**
  * This public interface is implemented by tabular view descriptors. For
  * instance, the described view can be a swing JTable presenting a collection of
@@ -49,4 +51,13 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
    * @return the column view descriptors.
    */
   List<IPropertyViewDescriptor> getColumnViewDescriptors();
+
+  /**
+   * Gest the action triggered when sorting is triggered by the used (if
+   * supported by the UI).
+   * 
+   * @return the action triggered when sorting is triggered by the used (if
+   *         supported by the UI).
+   */
+  IAction getSortingAction();
 }

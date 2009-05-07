@@ -59,7 +59,7 @@ public class PageOffsetAction<E, F, G> extends WrappingAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    context.put(ActionContextConstants.ACTION_PARAM, pageOffset);
+    context.put(ActionContextConstants.PAGE_OFFSET, pageOffset);
     return super.execute(actionHandler, context);
   }
 

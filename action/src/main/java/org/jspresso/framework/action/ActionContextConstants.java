@@ -50,6 +50,16 @@ public final class ActionContextConstants {
   public static final String ACTION_PARAM             = "ACTION_PARAM";
 
   /**
+   * Page offset.
+   */
+  public static final String PAGE_OFFSET              = "PAGE_OFFSET";
+
+  /**
+   * Ordering properties.
+   */
+  public static final String ORDERING_PROPERTIES      = "ORDERING_PROPERTIES";
+
+  /**
    * The widget at the origin of the action.
    */
   public static final String ACTION_WIDGET            = "ACTION_WIDGET";
