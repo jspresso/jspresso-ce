@@ -1,24 +1,25 @@
-package org.jspresso.framework.view.swing;
+package org.jspresso.framework.view.ulc;
 
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
+import java.util.Set;
 
 import org.jspresso.framework.util.gui.IIndexMapper;
+
+import com.ulcjava.base.application.IRendererComponent;
+import com.ulcjava.base.application.ULCTable;
+import com.ulcjava.base.application.event.ActionEvent;
+import com.ulcjava.base.application.event.serializable.IActionListener;
+import com.ulcjava.base.application.event.serializable.ITableModelListener;
+import com.ulcjava.base.application.table.AbstractTableModel;
+import com.ulcjava.base.application.table.DefaultTableHeaderCellRenderer;
+import com.ulcjava.base.application.table.ITableCellRenderer;
+import com.ulcjava.base.application.table.ITableModel;
+import com.ulcjava.base.application.table.ULCTableColumn;
+import com.ulcjava.base.application.table.ULCTableHeader;
+import com.ulcjava.base.application.util.ULCIcon;
+import com.ulcjava.base.shared.IDefaults;
 
 /**
  * AbstractTableSorter is the base class for TableModels sortable decorators;
@@ -54,7 +55,7 @@ import org.jspresso.framework.util.gui.IIndexMapper;
 public abstract class AbstractTableSorter extends AbstractTableModel implements
     IIndexMapper {
 
-  private static final long      serialVersionUID     = 7759053241235858224L;
+  private static final long      serialVersionUID     = -1685247933285583431L;
 
   /**
    * <code>ASCENDING</code>.
@@ -74,22 +75,24 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   private static final Directive NOT_SORTED_DIRECTIVE = new Directive(-1,
                                                           NOT_SORTED);
 
-  private Icon                   downIcon;
+  private ULCIcon                downIcon;
+  private IActionListener        headerActionListener;
 
-  private MouseListener          mouseListener;
+  private Set<ULCTableColumn>    sortedColumnsBuffer;
   private List<Directive>        sortingColumns;
-  private JTableHeader           tableHeader;
-  private TableModel             tableModel;
-  private TableModelListener     tableModelListener;
-  private Icon                   upIcon;
+  private ULCTableHeader         tableHeader;
+  private ITableModel            tableModel;
+  private ITableModelListener    tableModelListener;
+  private ULCIcon                upIcon;
 
   /**
-   * Constructs a new <code>AbstractTableSorter</code> instance.
+   * Constructs a new <code>TableSorter</code> instance.
    */
   private AbstractTableSorter() {
     this.sortingColumns = new ArrayList<Directive>();
-    this.mouseListener = new MouseHandler();
+    this.headerActionListener = new HeaderActionHandler();
     this.tableModelListener = createTableModelHandler();
+    this.sortedColumnsBuffer = new HashSet<ULCTableColumn>();
   }
 
   /**
@@ -98,7 +101,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * @param tableModel
    *          tableModel.
    */
-  public AbstractTableSorter(TableModel tableModel) {
+  public AbstractTableSorter(ITableModel tableModel) {
     this();
     setTableModel(tableModel);
   }
@@ -111,11 +114,19 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * @param tableHeader
    *          tableHeader.
    */
-  public AbstractTableSorter(TableModel tableModel, JTableHeader tableHeader) {
+  public AbstractTableSorter(ITableModel tableModel, ULCTableHeader tableHeader) {
     this();
-    setTableHeader(tableHeader);
     setTableModel(tableModel);
+    setTableHeader(tableHeader);
   }
+
+  /**
+   * Creates a table model listener to react to the underlying table model
+   * change events.
+   * 
+   * @return the table model listener.
+   */
+  protected abstract ITableModelListener createTableModelHandler();
 
   /**
    * {@inheritDoc}
@@ -169,7 +180,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * 
    * @return tableHeader.
    */
-  public JTableHeader getTableHeader() {
+  public ULCTableHeader getTableHeader() {
     return tableHeader;
   }
 
@@ -178,7 +189,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * 
    * @return tableModel.
    */
-  public TableModel getTableModel() {
+  public ITableModel getTableModel() {
     return tableModel;
   }
 
@@ -212,7 +223,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * @param downIcon
    *          the downIcon to set.
    */
-  public void setDownIcon(Icon downIcon) {
+  public void setDownIcon(ULCIcon downIcon) {
     this.downIcon = downIcon;
   }
 
@@ -241,20 +252,13 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * @param tableHeader
    *          tableHeader.
    */
-  public void setTableHeader(JTableHeader tableHeader) {
+  public void setTableHeader(ULCTableHeader tableHeader) {
     if (this.tableHeader != null) {
-      this.tableHeader.removeMouseListener(mouseListener);
-      TableCellRenderer defaultRenderer = this.tableHeader.getDefaultRenderer();
-      if (defaultRenderer instanceof SortableHeaderRenderer) {
-        this.tableHeader
-            .setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).tableCellRenderer);
-      }
+      this.tableHeader.removeActionListener(headerActionListener);
     }
     this.tableHeader = tableHeader;
     if (this.tableHeader != null) {
-      this.tableHeader.addMouseListener(mouseListener);
-      this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(
-          this.tableHeader.getDefaultRenderer()));
+      this.tableHeader.addActionListener(headerActionListener);
     }
   }
 
@@ -264,13 +268,13 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * @param tableModel
    *          tableModel.
    */
-  public void setTableModel(TableModel tableModel) {
-    if (this.tableModel != null && tableModelListener != null) {
+  public void setTableModel(ITableModel tableModel) {
+    if (this.tableModel != null) {
       this.tableModel.removeTableModelListener(tableModelListener);
     }
 
     this.tableModel = tableModel;
-    if (this.tableModel != null && tableModelListener != null) {
+    if (this.tableModel != null) {
       this.tableModel.addTableModelListener(tableModelListener);
     }
 
@@ -284,7 +288,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * @param upIcon
    *          the upIcon to set.
    */
-  public void setUpIcon(Icon upIcon) {
+  public void setUpIcon(ULCIcon upIcon) {
     this.upIcon = upIcon;
   }
 
@@ -305,27 +309,22 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    *          size.
    * @return HeaderRendererIcon
    */
-  protected Icon getHeaderRendererIcon(int column, int size) {
+  protected ULCIcon getHeaderRendererIcon(int column, int size) {
     Directive directive = getDirective(column);
     if (directive == NOT_SORTED_DIRECTIVE) {
       return null;
     }
     if (directive.direction == DESCENDING) {
-      if (downIcon != null) {
-        return downIcon;
-      }
-    } else {
-      if (upIcon != null) {
-        return upIcon;
-      }
+      return downIcon;
     }
-    return null;
+    return upIcon;
   }
 
   /**
    * Cancels sorting.
    */
   protected void cancelSorting() {
+    resetHeaderRenderers();
     sortingColumns.clear();
     // sortingStatusChanged();
   }
@@ -348,13 +347,13 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     return NOT_SORTED_DIRECTIVE;
   }
 
-  /**
-   * Creates a table model listener to react to the underlying table model
-   * change events.
-   * 
-   * @return the table model listener.
-   */
-  protected abstract TableModelListener createTableModelHandler();
+  private void resetHeaderRenderers() {
+    for (ULCTableColumn col : sortedColumnsBuffer) {
+      col.setHeaderRenderer(null);
+    }
+    sortedColumnsBuffer.clear();
+    tableHeader.repaint();
+  }
 
   /**
    * This method is triggered whenever the user clicks changed the sorting in
@@ -386,7 +385,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
      * 
      * @return the column.
      */
-    protected int getColumn() {
+    public int getColumn() {
       return column;
     }
 
@@ -395,91 +394,107 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
      * 
      * @return the direction.
      */
-    protected int getDirection() {
+    public int getDirection() {
       return direction;
     }
   }
 
-  private class MouseHandler extends MouseAdapter {
+  private class HeaderActionHandler implements IActionListener {
+
+    private static final long serialVersionUID = 2722236995259713328L;
+
+    /**
+     * {@inheritDoc}
+     */
+    public void actionPerformed(ActionEvent e) {
+      ULCTableColumn viewColumn = (ULCTableColumn) e.getSource();
+      if (viewColumn != null) {
+        int status = getSortingStatus(viewColumn.getModelIndex());
+
+        if ((e.getModifiers() & ActionEvent.CTRL_MASK) == 0) {
+          cancelSorting();
+        }
+
+        // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING}
+        // or
+        // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is
+        // pressed.
+
+        if (((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0)) {
+          status -= 1;
+        } else {
+          status += 1;
+        }
+
+        status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
+        if (status != 0) {
+          sortedColumnsBuffer.add(viewColumn);
+        } else {
+          sortedColumnsBuffer.remove(viewColumn);
+        }
+        setSortingStatus(viewColumn.getModelIndex(), status);
+        if (status != 0) {
+          ITableCellRenderer headerRenderer = viewColumn.getHeaderRenderer();
+          if (!(headerRenderer instanceof SortableHeaderRenderer)) {
+            headerRenderer = new SortableHeaderRenderer(viewColumn
+                .getModelIndex());
+          }
+          // used to refresh the client side :(
+          viewColumn.setHeaderRenderer(headerRenderer);
+        } else {
+          viewColumn.setHeaderRenderer(null);
+        }
+        tableHeader.repaint();
+      }
+    }
+  }
+
+  private class SortableHeaderRenderer extends DefaultTableHeaderCellRenderer {
+
+    private static final long serialVersionUID = 8198258084747052695L;
+    private int               modelColumnIndex;
+
+    /**
+     * Constructs a new <code>SortableHeaderRenderer</code> instance.
+     * 
+     * @param modelColumnIndex
+     *          the model column index this renderer is used for.
+     */
+    protected SortableHeaderRenderer(int modelColumnIndex) {
+      this.modelColumnIndex = modelColumnIndex;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void mouseClicked(MouseEvent e) {
-      JTableHeader h = (JTableHeader) e.getSource();
-      TableColumnModel columnModel = h.getColumnModel();
-      int viewColumn = columnModel.getColumnIndexAtX(e.getX());
-      int column = columnModel.getColumn(viewColumn).getModelIndex();
-      if (column != -1) {
-        int status = getSortingStatus(column);
-        if (!e.isControlDown()) {
-          cancelSorting();
-        }
-        // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING}
-        // or
-        // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is
-        // pressed.
-        if (e.isShiftDown()) {
-          status -= 1;
-        } else {
-          status += 1;
-        }
-        status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
-        setSortingStatus(column, status);
-      }
+    public IRendererComponent getTableCellRendererComponent(ULCTable table,
+        Object value, boolean isSelected, boolean hasFocus, int row) {
+      setHorizontalTextPosition(IDefaults.LEFT);
+      setHorizontalAlignment(IDefaults.LEFT);
+      setIcon(getHeaderRendererIcon(modelColumnIndex, getFont().getSize()));
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row);
     }
   }
 
   /**
-   * Retrieves the column view index from the model index.
+   * Retrieves the column from the model index.
    * 
    * @param modelColumnIndex
    *          the model column index.
-   * @return the column index.
+   * @return the column.
    */
-  protected int convertColumnIndexToView(int modelColumnIndex) {
+  protected ULCTableColumn getSortedColumn(int modelColumnIndex) {
     if (modelColumnIndex < 0) {
-      return modelColumnIndex;
+      return null;
     }
-    TableColumnModel cm = getTableHeader().getColumnModel();
-    for (int column = 0; column < getColumnCount(); column++) {
-      if (cm.getColumn(column).getModelIndex() == modelColumnIndex) {
+    for (ULCTableColumn column : sortedColumnsBuffer) {
+      if (column.getModelIndex() == modelColumnIndex) {
         return column;
       }
     }
-    return -1;
-  }
-
-  private class SortableHeaderRenderer implements TableCellRenderer {
-
-    private TableCellRenderer tableCellRenderer;
-
-    /**
-     * Constructs a new <code>SortableHeaderRenderer</code> instance.
-     * 
-     * @param tableCellRenderer
-     *          the wrapped table cell renderer.
-     */
-    public SortableHeaderRenderer(TableCellRenderer tableCellRenderer) {
-      this.tableCellRenderer = tableCellRenderer;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column) {
-      Component c = tableCellRenderer.getTableCellRendererComponent(table,
-          value, isSelected, hasFocus, row, column);
-      if (c instanceof JLabel) {
-        JLabel l = (JLabel) c;
-        l.setHorizontalTextPosition(SwingConstants.LEFT);
-        int modelColumn = table.convertColumnIndexToModel(column);
-        l.setIcon(getHeaderRendererIcon(modelColumn, l.getFont().getSize()));
-      }
-      return c;
-    }
+    return null;
   }
 
   /**

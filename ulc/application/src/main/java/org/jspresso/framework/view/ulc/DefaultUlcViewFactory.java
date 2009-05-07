@@ -1202,8 +1202,16 @@ public class DefaultUlcViewFactory extends
     tableModel.setColumnClassesByIds(columnClassesByIds);
     tableModel.setColumnFormattersByIds(columnFormattersByIds);
 
-    TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent
-        .getTableHeader());
+    AbstractTableSorter sorterDecorator;
+    if (viewDescriptor.getSortingAction() != null) {
+      sorterDecorator = new ActionTableSorter(tableModel, viewComponent
+          .getTableHeader(), actionHandler, viewDescriptor.getSortingAction());
+    } else {
+      sorterDecorator = new TableSorter(tableModel, viewComponent
+          .getTableHeader());
+      ((TableSorter) sorterDecorator).setColumnComparator(String.class,
+          String.CASE_INSENSITIVE_ORDER);
+    }
     org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
         viewComponent.getTableHeader().getFont().getSize(), viewComponent
             .getTableHeader().getFont().getSize());
@@ -1217,8 +1225,6 @@ public class DefaultUlcViewFactory extends
             .getIcon(
                 "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
                 iconSize));
-    sorterDecorator.setColumnComparator(String.class,
-        String.CASE_INSENSITIVE_ORDER);
     ClientContext.setModelUpdateMode(sorterDecorator,
         IUlcEventConstants.ASYNCHRONOUS_MODE);
     viewComponent.setModel(sorterDecorator);
