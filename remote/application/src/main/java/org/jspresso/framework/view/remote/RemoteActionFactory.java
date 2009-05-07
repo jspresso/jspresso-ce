@@ -201,9 +201,13 @@ public class RemoteActionFactory extends
      *          on. This is fundamental for the cell editors.
      */
     @Override
-    public void actionPerformed(String parameter, String viewStateGuid) {
+    public void actionPerformed(String parameter, String viewStateGuid,
+        Map<String, Object> context) {
       if (actionHandler != null) {
         Map<String, Object> actionContext = actionHandler.createEmptyContext();
+        if (context != null) {
+          actionContext.putAll(context);
+        }
         actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
             modelDescriptor);
         actionContext.put(ActionContextConstants.SOURCE_COMPONENT,

@@ -13,39 +13,31 @@
  */
 
 
-package org.jspresso.framework.gui.remote {
+package org.jspresso.framework.application.frontend.command.remote {
 
 		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTable")]
-    public class RTable extends RCollectionComponent {
+    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand")]
+    public class RemoteSortCommand extends RemoteCommand {
 
-        private var _columns:Array;
-        private var _columnIds:Array;
-        private var _sortingAction:RAction;
+        private var _orderingProperties:Object;
+        private var _viewStateGuid:String;
 
-        public function RTable() {
+        public function RemoteSortCommand() {
           //default constructor.
         }
 
-        public function set columns(value:Array):void {
-            _columns = value;
+        public function set orderingProperties(value:Object):void {
+            _orderingProperties = value;
         }
-        public function get columns():Array {
-            return _columns;
-        }
-
-        public function set columnIds(value:Array):void {
-            _columnIds = value;
-        }
-        public function get columnIds():Array {
-            return _columnIds;
+        public function get orderingProperties():Object {
+            return _orderingProperties;
         }
 
-        public function set sortingAction(value:RAction):void {
-            _sortingAction = value;
+        public function set viewStateGuid(value:String):void {
+            _viewStateGuid = value;
         }
-        public function get sortingAction():RAction {
-            return _sortingAction;
+        public function get viewStateGuid():String {
+            return _viewStateGuid;
         }
     }
 }

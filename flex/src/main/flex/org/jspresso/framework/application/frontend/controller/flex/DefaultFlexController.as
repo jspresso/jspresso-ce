@@ -55,6 +55,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.rpc.remoting.mxml.RemoteObject;
   
   import org.jspresso.framework.action.IActionHandler;
+  import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
   import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
@@ -123,7 +124,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.view.flex.RIconMenuItemRenderer;
   
   
-  public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler {
+  public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler, IRemoteCommandHandler {
     
     private static const HANDLE_COMMANDS_METHOD:String = "handleCommands";
     private static const START_METHOD:String = "start";
@@ -141,7 +142,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
-      _viewFactory = new DefaultFlexViewFactory(this, this);
+      _viewFactory = new DefaultFlexViewFactory(this, this, this);
       _changeNotificationsEnabled = true;
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
@@ -244,7 +245,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    protected function registerCommand(command:RemoteCommand):void {
+    public function registerCommand(command:RemoteCommand):void {
       if(_changeNotificationsEnabled) {
         //trace("Command registered for next round trip : " + command);
         _commandsQueue.addItem(command);

@@ -19,11 +19,14 @@
 package org.jspresso.framework.application.frontend.controller.remote;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
@@ -39,6 +42,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteMessageC
 import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
@@ -54,6 +58,7 @@ import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
@@ -447,7 +452,24 @@ public class DefaultRemoteController extends
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
         action.actionPerformed(((RemoteActionCommand) command).getParameter(),
-            ((RemoteActionCommand) command).getViewStateGuid());
+            ((RemoteActionCommand) command).getViewStateGuid(), null);
+      } else if (command instanceof RemoteSortCommand) {
+        RAction sortAction = (RAction) targetPeer;
+        Map<String, String> orderingProperties = ((RemoteSortCommand) command)
+            .getOrderingProperties();
+        Map<String, ESort> typedOrderingProperties = new LinkedHashMap<String, ESort>();
+        if (orderingProperties != null) {
+          for (Map.Entry<String, String> orderingProperty : orderingProperties
+              .entrySet()) {
+            typedOrderingProperties.put(orderingProperty.getKey(), ESort
+                .valueOf(orderingProperty.getValue()));
+          }
+        }
+        Map<String, Object> context = new HashMap<String, Object>();
+        context.put(ActionContextConstants.ORDERING_PROPERTIES,
+            typedOrderingProperties);
+        sortAction.actionPerformed(null, ((RemoteSortCommand) command)
+            .getViewStateGuid(), context);
       } else {
         throw new CommandException("Unsupported command type : "
             + command.getClass().getSimpleName());

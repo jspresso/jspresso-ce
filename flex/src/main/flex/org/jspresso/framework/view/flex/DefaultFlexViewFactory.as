@@ -65,6 +65,8 @@ package org.jspresso.framework.view.flex {
   import mx.formatters.NumberFormatter;
   
   import org.jspresso.framework.action.IActionHandler;
+  import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionField;
   import org.jspresso.framework.gui.remote.RActionList;
@@ -126,13 +128,16 @@ package org.jspresso.framework.view.flex {
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
+    private var _commandHandler:IRemoteCommandHandler;
     private var _remoteValueSorter:RemoteValueSorter;
     private var _timeFormatter:DateFormatter;
 
     public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry,
-                                           actionHandler:IActionHandler) {
+                                           actionHandler:IActionHandler,
+                                           commandHandler:IRemoteCommandHandler) {
       _remotePeerRegistry = remotePeerRegistry;
       _actionHandler = actionHandler;
+      _commandHandler = commandHandler;
       _remoteValueSorter = new RemoteValueSorter();
       _timeFormatter = new DateFormatter();
       _timeFormatter.formatString = "JJ:NN:SS"
@@ -1104,7 +1109,7 @@ package org.jspresso.framework.view.flex {
     }
 
     private function createTable(remoteTable:RTable):UIComponent {
-      var table:DataGrid = new DoubleClickDataGrid();
+      var table:DoubleClickDataGrid = new DoubleClickDataGrid();
       var columns:Array = new Array();
       
       table.regenerateStyleCache(false);
@@ -1193,13 +1198,29 @@ package org.jspresso.framework.view.flex {
           }
         }
       });
-      bindTable(table, remoteTable.state as RemoteCompositeValueState);
+      bindTable(table, remoteTable);
       return table;
     }
     
-    private function bindTable(table:DataGrid, state:RemoteCompositeValueState):void {
+    private function bindTable(table:DoubleClickDataGrid, remoteTable:RTable):void {
+      var state:RemoteCompositeValueState = remoteTable.state as RemoteCompositeValueState;
       table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
-        _remoteValueSorter.sortColumnIndex = (event.itemRenderer as DgHeaderItemRenderer).index;
+        if(remoteTable.sortingAction) {
+          event.preventDefault();
+          var column:DataGridColumn = table.columns[event.columnIndex];
+          column.sortDescending = !column.sortDescending;
+          table.displaySort(event.columnIndex, column.sortDescending);
+          var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
+          var orderingProperties:Object = new Object();
+          orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
+          var sortCommand:RemoteSortCommand = new RemoteSortCommand();
+          sortCommand.orderingProperties = orderingProperties;
+          sortCommand.viewStateGuid = remoteTable.state.guid;
+          sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
+          _commandHandler.registerCommand(sortCommand);
+        } else {
+          _remoteValueSorter.sortColumnIndex = (event.itemRenderer as DgHeaderItemRenderer).index;
+        }
       });
       BindingUtils.bindSetter(function(selectedItems:Array):void {
         if(selectedItems != null && selectedItems.length > 0) {

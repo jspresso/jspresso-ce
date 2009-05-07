@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import java.util.Map;
+
 import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
@@ -67,8 +69,11 @@ public class RAction extends RemotePeer {
    * @param viewStateGuid
    *          the guid to retrieve the view connector the action is triggred on.
    *          This is fundamental for the cell editors.
+   * @param context
+   *          a pre-initialized context.
    */
-  public void actionPerformed(String parameter, String viewStateGuid) {
+  public void actionPerformed(String parameter, String viewStateGuid,
+      Map<String, Object> context) {
     // NO-OP
   }
 

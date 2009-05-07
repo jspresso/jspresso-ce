@@ -13,13 +13,16 @@
  */
 
 package org.jspresso.framework.view.flex {
+  import flash.events.Event;
   import flash.events.MouseEvent;
   
   import mx.controls.DataGrid;
   import mx.controls.listClasses.IDropInListItemRenderer;
   import mx.controls.listClasses.IListItemRenderer;
+  import mx.core.mx_internal;
   import mx.events.DataGridEvent;
   
+  use namespace mx_internal;
   
   /** 
    *  DataGrid that only allows editing if you double click
@@ -30,6 +33,8 @@ package org.jspresso.framework.view.flex {
     
     private var lastClickedRow:int;
     private var lastClickedColumn:int;
+    private var _savedSortIndex:int;
+    private var _savedSortDirection:String;
   
   	public function DoubleClickDataGrid()	{
   		super();
@@ -71,5 +76,25 @@ package org.jspresso.framework.view.flex {
   	    event.preventDefault();
   	  }
   	}
+  	
+  	public function displaySort(sortInd:int, descending:Boolean):void {
+      sortDirection = descending ? "DESC" : "ASC";
+  
+      // set the grid's sortIndex
+      lastSortIndex = sortIndex;
+      sortIndex = sortInd;
+ 
+      // save sort information to be applied when dataProvider changes
+      _savedSortIndex = sortIndex;
+      _savedSortDirection = sortDirection;
+
+      invalidateDisplayList();
+  	}
+
+    override protected function collectionChangeHandler(event:Event):void {
+      super.collectionChangeHandler(event);
+      sortIndex = _savedSortIndex;
+      sortDirection = _savedSortDirection;
+    }
   }
 }

@@ -1018,6 +1018,7 @@ public class DefaultRemoteViewFactory extends
           viewDescriptor.getSortingAction(), actionHandler, view, locale));
     }
     List<RComponent> columns = new ArrayList<RComponent>();
+    List<String> columnIds = new ArrayList<String>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       try {
@@ -1042,11 +1043,13 @@ public class DefaultRemoteViewFactory extends
         }
         columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
         columns.add(column.getPeer());
+        columnIds.add(columnViewDescriptor.getName());
       } catch (SecurityException ex) {
         // The column simply won't be added.
       }
     }
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
+    viewComponent.setColumnIds(columnIds.toArray(new String[0]));
     viewComponent
         .setSelectionMode(viewDescriptor.getSelectionMode().toString());
     return view;

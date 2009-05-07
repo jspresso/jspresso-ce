@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,12 +16,14 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.gui.remote;
+package org.jspresso.framework.application.frontend.command.remote;
+
+import java.util.Map;
 
 /**
- * A tabular component.
+ * A command to trigger a sort action.
  * <p>
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -37,76 +39,46 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RTable extends RCollectionComponent {
+public class RemoteSortCommand extends RemoteCommand {
 
-  private RComponent[] columns;
-  private String[]     columnIds;
-  private RAction      sortingAction;
+  private Map<String, String> orderingProperties;
+  private String              viewStateGuid;
 
   /**
-   * Constructs a new <code>RTable</code> instance.
+   * Gets the viewStateGuid.
    * 
-   * @param guid
-   *          the guid
+   * @return the viewStateGuid.
    */
-  public RTable(String guid) {
-    super(guid);
+  public String getViewStateGuid() {
+    return viewStateGuid;
   }
 
   /**
-   * Gets the columns.
+   * Sets the viewStateGuid.
    * 
-   * @return the columns.
+   * @param viewStateGuid
+   *          the viewStateGuid to set.
    */
-  public RComponent[] getColumns() {
-    return columns;
+  public void setViewStateGuid(String viewStateGuid) {
+    this.viewStateGuid = viewStateGuid;
   }
 
   /**
-   * Sets the columns.
+   * Gets the orderingProperties.
    * 
-   * @param columns
-   *          the columns to set.
+   * @return the orderingProperties.
    */
-  public void setColumns(RComponent[] columns) {
-    this.columns = columns;
+  public Map<String, String> getOrderingProperties() {
+    return orderingProperties;
   }
 
   /**
-   * Gets the sortingAction.
+   * Sets the orderingProperties.
    * 
-   * @return the sortingAction.
+   * @param orderingProperties
+   *          the orderingProperties to set.
    */
-  public RAction getSortingAction() {
-    return sortingAction;
-  }
-
-  /**
-   * Sets the sortingAction.
-   * 
-   * @param sortingAction
-   *          the sortingAction to set.
-   */
-  public void setSortingAction(RAction sortingAction) {
-    this.sortingAction = sortingAction;
-  }
-
-  /**
-   * Gets the columnIds.
-   * 
-   * @return the columnIds.
-   */
-  public String[] getColumnIds() {
-    return columnIds;
-  }
-
-  /**
-   * Sets the columnIds.
-   * 
-   * @param columnIds
-   *          the columnIds to set.
-   */
-  public void setColumnIds(String[] columnIds) {
-    this.columnIds = columnIds;
+  public void setOrderingProperties(Map<String, String> orderingProperties) {
+    this.orderingProperties = orderingProperties;
   }
 }
