@@ -16,6 +16,8 @@ Bugs fixed
 2787939  	 Leading selection index not correctly mapped on sorted tables
 2788370  	 ULC column headers not correctly rendered when column moved
 2788405  	 Flex table column reordering.
+2790268  	 NPE when component property is used as columnViewDescriptor
+2790281  	 getServiceContractClassNames returns null after 1st call
 
 
 New features

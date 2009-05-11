@@ -89,7 +89,8 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor());
     IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
         .getCollectionDescriptor().getElementDescriptor();
-    if (columnViewDescriptors == null) {
+    List<IPropertyViewDescriptor> declaredPropertyViewDescriptors = columnViewDescriptors;
+    if (declaredPropertyViewDescriptors == null) {
       List<String> viewRenderedProperties = getRenderedProperties();
       if (modelDescriptor instanceof ICollectionPropertyDescriptor
           && ((ICollectionPropertyDescriptor<?>) modelDescriptor)
@@ -98,47 +99,46 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
             .remove(((ICollectionPropertyDescriptor<?>) modelDescriptor)
                 .getReverseRelationEnd().getName());
       }
-      List<IPropertyViewDescriptor> defaultColumnViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
+      declaredPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
       for (String renderedProperty : viewRenderedProperties) {
         BasicPropertyViewDescriptor columnDescriptor = new BasicPropertyViewDescriptor();
         columnDescriptor.setName(renderedProperty);
         columnDescriptor.setModelDescriptor(rowModelDescriptor
             .getPropertyDescriptor(renderedProperty));
-        defaultColumnViewDescriptors.add(columnDescriptor);
+        declaredPropertyViewDescriptors.add(columnDescriptor);
       }
-      return defaultColumnViewDescriptors;
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
-    for (IPropertyViewDescriptor propertyViewDescriptor : columnViewDescriptors) {
+    for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
       actualPropertyViewDescriptors.addAll(explodeComponentReferences(
           propertyViewDescriptor, rowModelDescriptor));
     }
-    return columnViewDescriptors;
+    return actualPropertyViewDescriptors;
   }
 
   private List<IPropertyViewDescriptor> explodeComponentReferences(
       IPropertyViewDescriptor propertyViewDescriptor,
       IComponentDescriptorProvider<?> componentDescriptorProvider) {
     List<IPropertyViewDescriptor> returnedList = new ArrayList<IPropertyViewDescriptor>();
-    IPropertyDescriptor propertyDescriptor = componentDescriptorProvider
-        .getComponentDescriptor().getPropertyDescriptor(
-            propertyViewDescriptor.getName());
+    IComponentDescriptor<?> rootComponentDescriptor = componentDescriptorProvider
+        .getComponentDescriptor();
+    IPropertyDescriptor propertyDescriptor = rootComponentDescriptor
+        .getPropertyDescriptor(propertyViewDescriptor.getName());
     if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
         .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
             .getReferencedDescriptor().getComponentContract()))) {
-      for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor().getRenderedProperties()) {
+      IComponentDescriptor<?> referencedComponentDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+          .getReferencedDescriptor();
+      for (String nestedRenderedProperty : referencedComponentDescriptor
+          .getRenderedProperties()) {
         BasicPropertyViewDescriptor nestedPropertyViewDescriptor = new BasicPropertyViewDescriptor();
         nestedPropertyViewDescriptor.setName(propertyDescriptor.getName() + "."
             + nestedRenderedProperty);
-        nestedPropertyViewDescriptor.setModelDescriptor(propertyDescriptor);
-        if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-          returnedList.addAll(explodeComponentReferences(
-              nestedPropertyViewDescriptor,
-              (IReferencePropertyDescriptor<?>) propertyDescriptor));
-        } else {
-          returnedList.add(nestedPropertyViewDescriptor);
-        }
+        nestedPropertyViewDescriptor
+            .setModelDescriptor(referencedComponentDescriptor
+                .getPropertyDescriptor(nestedRenderedProperty)/* rootComponentDescriptor */);
+        returnedList.addAll(explodeComponentReferences(
+            nestedPropertyViewDescriptor, componentDescriptorProvider));
       }
     } else {
       if (propertyViewDescriptor.getModelDescriptor() == null

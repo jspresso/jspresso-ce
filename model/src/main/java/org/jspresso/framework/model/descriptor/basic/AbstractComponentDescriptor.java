@@ -316,6 +316,7 @@ public abstract class AbstractComponentDescriptor<E> extends
       for (Class<?> serviceContract : serviceContracts) {
         serviceContractClassNames.add(serviceContract.getName());
       }
+      return serviceContractClassNames;
     }
     return null;
   }
