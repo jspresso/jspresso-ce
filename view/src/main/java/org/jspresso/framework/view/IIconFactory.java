@@ -71,11 +71,11 @@ public interface IIconFactory<E> {
   E getBackwardIcon(Dimension iconSize);
 
   /**
-   * Gets the backwardIconUrl.
+   * Gets the backwardIconImageURL.
    * 
-   * @return the backwardIconUrl.
+   * @return the backwardIconImageURL.
    */
-  String getBackwardIconUrl();
+  String getBackwardIconImageURL();
 
   /**
    * Gets the standard cancel icon.
@@ -122,11 +122,11 @@ public interface IIconFactory<E> {
   E getForbiddenIcon(Dimension iconSize);
 
   /**
-   * Gets the forbiddenIconUrl.
+   * Gets the forbiddenIconImageURL.
    * 
-   * @return the forbiddenIconUrl.
+   * @return the forbiddenIconImageURL.
    */
-  String getForbiddenIconUrl();
+  String getForbiddenIconImageURL();
 
   /**
    * Gets the standard Forward icon.
@@ -139,11 +139,11 @@ public interface IIconFactory<E> {
   E getForwardIcon(Dimension iconSize);
 
   /**
-   * Gets the forwardIconUrl.
+   * Gets the forwardIconImageURL.
    * 
-   * @return the forwardIconUrl.
+   * @return the forwardIconImageURL.
    */
-  String getForwardIconUrl();
+  String getForwardIconImageURL();
 
   /**
    * Creates an icon from an image url or get it from a local cache.
@@ -224,4 +224,38 @@ public interface IIconFactory<E> {
    * @return the warningIconImageURL.
    */
   String getWarningIconImageURL();
+
+  /**
+   * Gets the standard up icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getUpIcon(Dimension iconSize);
+
+  /**
+   * Gets the upIconImageURL.
+   * 
+   * @return the upIconImageURL.
+   */
+  String getUpIconImageURL();
+
+  /**
+   * Gets the standard down icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getDownIcon(Dimension iconSize);
+
+  /**
+   * Gets the downIconImageURL.
+   * 
+   * @return the downIconImageURL.
+   */
+  String getDownIconImageURL();
 }

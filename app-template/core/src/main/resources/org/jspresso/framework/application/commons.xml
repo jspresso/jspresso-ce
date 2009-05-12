@@ -335,14 +335,20 @@
       name="errorIconImageURL"
       value="classpath:org/jspresso/framework/application/images/error-48x48.png" />
     <property
-      name="forbiddenIconUrl"
+      name="forbiddenIconImageURL"
       value="classpath:org/jspresso/framework/application/images/forbidden-48x48.png" />
     <property
-      name="backwardIconUrl"
+      name="backwardIconImageURL"
       value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
     <property
-      name="forwardIconUrl"
+      name="forwardIconImageURL"
       value="classpath:org/jspresso/framework/application/images/forward-48x48.png" />
+    <property
+      name="upIconImageURL"
+      value="classpath:org/jspresso/framework/application/images/1uparrow-48x48.png" />
+    <property
+      name="downIconImageURL"
+      value="classpath:org/jspresso/framework/application/images/1downarrow-48x48.png" />
   </bean>
 
   <bean

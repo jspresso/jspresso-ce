@@ -46,17 +46,20 @@ import org.jspresso.framework.util.gui.Dimension;
  */
 public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
-  private String                         backwardIconUrl;
+  private String                         backwardIconImageURL;
 
   private String                         cancelIconImageURL;
   private String                         errorIconImageURL;
-  private String                         forbiddenIconUrl;
+  private String                         forbiddenIconImageURL;
 
-  private String                         forwardIconUrl;
+  private String                         forwardIconImageURL;
   private Map<String, Map<Dimension, E>> iconStore;
   private String                         infoIconImageURL;
 
   private String                         noIconImageURL;
+
+  private String                         upIconImageURL;
+  private String                         downIconImageURL;
 
   private String                         okYesIconImageURL;
   private String                         warningIconImageURL;
@@ -72,16 +75,16 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * {@inheritDoc}
    */
   public E getBackwardIcon(Dimension iconSize) {
-    return getIcon(backwardIconUrl, iconSize);
+    return getIcon(backwardIconImageURL, iconSize);
   }
 
   /**
-   * Gets the backwardIconUrl.
+   * Gets the backwardIconImageURL.
    * 
-   * @return the backwardIconUrl.
+   * @return the backwardIconImageURL.
    */
-  public String getBackwardIconUrl() {
-    return backwardIconUrl;
+  public String getBackwardIconImageURL() {
+    return backwardIconImageURL;
   }
 
   /**
@@ -120,32 +123,46 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * {@inheritDoc}
    */
   public E getForbiddenIcon(Dimension iconSize) {
-    return getIcon(forbiddenIconUrl, iconSize);
+    return getIcon(forbiddenIconImageURL, iconSize);
   }
 
   /**
-   * Gets the forbiddenIconUrl.
-   * 
-   * @return the forbiddenIconUrl.
+   * {@inheritDoc}
    */
-  public String getForbiddenIconUrl() {
-    return forbiddenIconUrl;
+  public E getUpIcon(Dimension iconSize) {
+    return getIcon(upIconImageURL, iconSize);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getDownIcon(Dimension iconSize) {
+    return getIcon(downIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the forbiddenIconImageURL.
+   * 
+   * @return the forbiddenIconImageURL.
+   */
+  public String getForbiddenIconImageURL() {
+    return forbiddenIconImageURL;
   }
 
   /**
    * {@inheritDoc}
    */
   public E getForwardIcon(Dimension iconSize) {
-    return getIcon(forwardIconUrl, iconSize);
+    return getIcon(forwardIconImageURL, iconSize);
   }
 
   /**
-   * Gets the forwardIconUrl.
+   * Gets the forwardIconImageURL.
    * 
-   * @return the forwardIconUrl.
+   * @return the forwardIconImageURL.
    */
-  public String getForwardIconUrl() {
-    return forwardIconUrl;
+  public String getForwardIconImageURL() {
+    return forwardIconImageURL;
   }
 
   /**
@@ -230,13 +247,13 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
-   * Sets the backwardIconUrl.
+   * Sets the backwardIconImageURL.
    * 
-   * @param backwardIconUrl
-   *          the backwardIconUrl to set.
+   * @param backwardIconImageURL
+   *          the backwardIconImageURL to set.
    */
-  public void setBackwardIconUrl(String backwardIconUrl) {
-    this.backwardIconUrl = backwardIconUrl;
+  public void setBackwardIconImageURL(String backwardIconImageURL) {
+    this.backwardIconImageURL = backwardIconImageURL;
   }
 
   /**
@@ -260,23 +277,23 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
-   * Sets the forbiddenIconUrl.
+   * Sets the forbiddenIconImageURL.
    * 
-   * @param forbiddenIconUrl
-   *          the forbiddenIconUrl to set.
+   * @param forbiddenIconImageURL
+   *          the forbiddenIconImageURL to set.
    */
-  public void setForbiddenIconUrl(String forbiddenIconUrl) {
-    this.forbiddenIconUrl = forbiddenIconUrl;
+  public void setForbiddenIconImageURL(String forbiddenIconImageURL) {
+    this.forbiddenIconImageURL = forbiddenIconImageURL;
   }
 
   /**
-   * Sets the forwardIconUrl.
+   * Sets the forwardIconImageURL.
    * 
-   * @param forwardIconUrl
-   *          the forwardIconUrl to set.
+   * @param forwardIconImageURL
+   *          the forwardIconImageURL to set.
    */
-  public void setForwardIconUrl(String forwardIconUrl) {
-    this.forwardIconUrl = forwardIconUrl;
+  public void setForwardIconImageURL(String forwardIconImageURL) {
+    this.forwardIconImageURL = forwardIconImageURL;
   }
 
   /**
@@ -330,4 +347,42 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    * @return the constructed icon.
    */
   protected abstract E createIcon(String urlSpec, Dimension iconSize);
+
+  /**
+   * Gets the upIconImageURL.
+   * 
+   * @return the upIconImageURL.
+   */
+  public String getUpIconImageURL() {
+    return upIconImageURL;
+  }
+
+  /**
+   * Sets the upIconImageURL.
+   * 
+   * @param upIconImageURL
+   *          the upIconImageURL to set.
+   */
+  public void setUpIconImageURL(String upIconImageURL) {
+    this.upIconImageURL = upIconImageURL;
+  }
+
+  /**
+   * Gets the downIconImageURL.
+   * 
+   * @return the downIconImageURL.
+   */
+  public String getDownIconImageURL() {
+    return downIconImageURL;
+  }
+
+  /**
+   * Sets the downIconImageURL.
+   * 
+   * @param downIconImageURL
+   *          the downIconImageURL to set.
+   */
+  public void setDownIconImageURL(String downIconImageURL) {
+    this.downIconImageURL = downIconImageURL;
+  }
 }

@@ -35,7 +35,7 @@ New features
 2783043  	 Variabilized generator template using properties
 2783044  	 Bound the ddl generation to generate-ddl-scripts profile
 2787655  	 Handle sorting directions in ordering properties
-
+2790309  	 Allow for configuration of service delegates in components
 
 3.0.0
 =====

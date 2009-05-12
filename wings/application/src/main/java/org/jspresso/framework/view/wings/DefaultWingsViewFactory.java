@@ -22,7 +22,6 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,8 +62,10 @@ import org.jspresso.framework.binding.wings.SReferenceFieldConnector;
 import org.jspresso.framework.binding.wings.STextAreaConnector;
 import org.jspresso.framework.binding.wings.STextFieldConnector;
 import org.jspresso.framework.binding.wings.XCalendarConnector;
+import org.jspresso.framework.gui.wings.components.ClickableHeaderSTable;
 import org.jspresso.framework.gui.wings.components.SActionField;
 import org.jspresso.framework.gui.wings.components.SColorPicker;
+import org.jspresso.framework.gui.wings.components.plaf.ClickableHeaderTableCG;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -118,7 +119,6 @@ import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SCardLayout;
-import org.wings.SCellRendererPane;
 import org.wings.SCheckBox;
 import org.wings.SComboBox;
 import org.wings.SComponent;
@@ -151,7 +151,6 @@ import org.wings.border.SBevelBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
 import org.wings.border.SLineBorder;
-import org.wings.io.Device;
 import org.wings.style.CSSProperty;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellEditor;
@@ -1202,48 +1201,14 @@ public class DefaultWingsViewFactory extends
    * 
    * @return the created table.
    */
-  protected STable createSTable() {
-    STable table = new STable() {
-
-      private static final long serialVersionUID = -8821125434835138650L;
-      private SCellRendererPane cellRendererPane = new SCellRendererPane() {
-
-                                                   private static final long serialVersionUID = 3159574506651887983L;
-
-                                                   @Override
-                                                   public void writeComponent(
-                                                       Device d, SComponent c,
-                                                       SComponent p)
-                                                       throws IOException {
-                                                     if (c != null
-                                                         && p instanceof STable) {
-                                                       STable renderedTable = (STable) p;
-                                                       if (renderedTable
-                                                           .isEditing()
-                                                           && renderedTable
-                                                               .getEditorComponent() == c) {
-                                                         addComponent(c);
-                                                         c.write(d);
-                                                       } else {
-                                                         super.writeComponent(
-                                                             d, c, p);
-                                                       }
-                                                     } else {
-                                                       super.writeComponent(d,
-                                                           c, p);
-                                                     }
-                                                   }
-                                                 };
-
-      @Override
-      public SCellRendererPane getCellRendererPane() {
-        return cellRendererPane;
-      }
-    };
+  protected ClickableHeaderSTable createSTable() {
+    ClickableHeaderSTable table = new ClickableHeaderSTable();
     table.setVerticalAlignment(SConstants.TOP_ALIGN);
     table.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     table.setPreferredSize(SDimension.FULLWIDTH);
     table.setSelectable(true);
+
+    table.setCG(new ClickableHeaderTableCG());
     return table;
   }
 
@@ -1388,7 +1353,7 @@ public class DefaultWingsViewFactory extends
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
-    STable viewComponent = createSTable();
+    ClickableHeaderSTable viewComponent = createSTable();
     viewComponent.setBorder(new SLineBorder(Color.LIGHT_GRAY));
     if (viewDescriptor.isReadOnly()) {
       viewComponent.setEditable(false);
@@ -1429,12 +1394,27 @@ public class DefaultWingsViewFactory extends
         connector, columnConnectorKeys);
     tableModel.setExceptionHandler(actionHandler);
     tableModel.setColumnClassesByIds(columnClassesByIds);
-    viewComponent.setModel(tableModel);
+
+    AbstractTableSorter sorterDecorator;
+    if (viewDescriptor.getSortingAction() != null) {
+      sorterDecorator = new ActionTableSorter(tableModel, viewComponent,
+          actionHandler, viewDescriptor.getSortingAction());
+    } else {
+      sorterDecorator = new TableSorter(tableModel, viewComponent);
+      ((TableSorter) sorterDecorator).setColumnComparator(String.class,
+          String.CASE_INSENSITIVE_ORDER);
+    }
+
+    org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
+        12, 12);
+    sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
+    sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
+    viewComponent.setModel(sorterDecorator);
 
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
 
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel(), null);
+        .getSelectionModel(), sorterDecorator);
 
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());

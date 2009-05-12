@@ -1,4 +1,4 @@
-package org.jspresso.framework.view.swing;
+package org.jspresso.framework.view.wings;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -8,8 +8,9 @@ import java.util.Map;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
+
+import org.jspresso.framework.gui.wings.components.ClickableHeaderSTable;
 
 /**
  * TableSorter is a decorator for TableModels; adding sorting functionality to a
@@ -99,11 +100,11 @@ public class TableSorter extends AbstractTableSorter {
    * 
    * @param tableModel
    *          tableModel.
-   * @param tableHeader
-   *          tableHeader.
+   * @param table
+   *          the table to enable sorting for.
    */
-  public TableSorter(TableModel tableModel, JTableHeader tableHeader) {
-    super(tableModel, tableHeader);
+  public TableSorter(TableModel tableModel, ClickableHeaderSTable table) {
+    super(tableModel, table);
   }
 
   /**
@@ -208,9 +209,6 @@ public class TableSorter extends AbstractTableSorter {
   protected void sortingStatusChanged() {
     clearSortingState();
     fireTableDataChanged();
-    if (getTableHeader() != null) {
-      getTableHeader().repaint();
-    }
   }
 
   private class Row implements Comparable<Object> {

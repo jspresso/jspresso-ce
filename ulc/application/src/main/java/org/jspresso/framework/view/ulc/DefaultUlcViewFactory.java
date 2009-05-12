@@ -1215,16 +1215,8 @@ public class DefaultUlcViewFactory extends
     org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
         viewComponent.getTableHeader().getFont().getSize(), viewComponent
             .getTableHeader().getFont().getSize());
-    sorterDecorator
-        .setUpIcon(getIconFactory()
-            .getIcon(
-                "classpath:org/jspresso/framework/application/images/1uparrow-48x48.png",
-                iconSize));
-    sorterDecorator
-        .setDownIcon(getIconFactory()
-            .getIcon(
-                "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
-                iconSize));
+    sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
+    sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
     ClientContext.setModelUpdateMode(sorterDecorator,
         IUlcEventConstants.ASYNCHRONOUS_MODE);
     viewComponent.setModel(sorterDecorator);

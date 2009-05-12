@@ -31,6 +31,8 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * Default implementation of a property descriptor.
@@ -52,7 +54,9 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @author Vincent Vandenschrick
  */
 public abstract class BasicPropertyDescriptor extends DefaultDescriptor
-    implements IPropertyDescriptor {
+    implements IPropertyDescriptor, BeanFactoryAware {
+
+  private BeanFactory                    beanFactory;
 
   private Class<?>                       delegateClass;
   private String                         delegateClassName;
@@ -61,6 +65,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private Collection<String>             grantedRoles;
 
   private List<String>                   integrityProcessorClassNames;
+  private List<String>                   integrityProcessorBeanNames;
+
   private List<IPropertyProcessor<?, ?>> integrityProcessors;
   private Boolean                        mandatory;
   private IPropertyDescriptor            parentDescriptor;
@@ -468,10 +474,9 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private synchronized void registerIntegrityProcessorsIfNecessary() {
     if (integrityProcessorClassNames != null) {
       // process creation of integrity processors.
-      integrityProcessors = new ArrayList<IPropertyProcessor<?, ?>>();
       for (String integrityProcessorClassName : integrityProcessorClassNames) {
         try {
-          integrityProcessors.add((IPropertyProcessor<?, ?>) Class.forName(
+          registerIntegrityProcessor((IPropertyProcessor<?, ?>) Class.forName(
               integrityProcessorClassName).newInstance());
         } catch (InstantiationException ex) {
           throw new DescriptorException(ex);
@@ -483,5 +488,42 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
       }
       integrityProcessorClassNames = null;
     }
+    if (integrityProcessorBeanNames != null && beanFactory != null) {
+      // process creation of integrity processors.
+      for (String integrityProcessorBeanName : integrityProcessorBeanNames) {
+        registerIntegrityProcessor((IPropertyProcessor<?, ?>) beanFactory
+            .getBean(integrityProcessorBeanName, IPropertyProcessor.class));
+      }
+      integrityProcessorClassNames = null;
+    }
+  }
+
+  private void registerIntegrityProcessor(
+      IPropertyProcessor<?, ?> integrityProcessor) {
+    if (integrityProcessors == null) {
+      integrityProcessors = new ArrayList<IPropertyProcessor<?, ?>>();
+    }
+    integrityProcessors.add(integrityProcessor);
+  }
+
+  /**
+   * Sets the beanFactory.
+   * 
+   * @param beanFactory
+   *          the beanFactory to set.
+   */
+  public void setBeanFactory(BeanFactory beanFactory) {
+    this.beanFactory = beanFactory;
+  }
+
+  /**
+   * Sets the integrityProcessorBeanNames.
+   * 
+   * @param integrityProcessorBeanNames
+   *          the integrityProcessorBeanNames to set.
+   */
+  public void setIntegrityProcessorBeanNames(
+      List<String> integrityProcessorBeanNames) {
+    this.integrityProcessorBeanNames = integrityProcessorBeanNames;
   }
 }

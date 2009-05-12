@@ -53,23 +53,6 @@ public class ActionTableSorter extends AbstractTableSorter {
   }
 
   /**
-   * Constructs a new <code>ActionTableSorter</code> instance.
-   * 
-   * @param tableModel
-   *          tableModel.
-   * @param actionHandler
-   *          the action handler.
-   * @param sortingAction
-   *          the action triggered when sorting.
-   */
-  public ActionTableSorter(TableModel tableModel, IActionHandler actionHandler,
-      IAction sortingAction) {
-    super(tableModel);
-    this.actionHandler = actionHandler;
-    this.sortingAction = sortingAction;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override

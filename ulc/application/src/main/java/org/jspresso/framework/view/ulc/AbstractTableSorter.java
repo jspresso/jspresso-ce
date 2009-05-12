@@ -86,27 +86,6 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   private ULCIcon                upIcon;
 
   /**
-   * Constructs a new <code>TableSorter</code> instance.
-   */
-  private AbstractTableSorter() {
-    this.sortingColumns = new ArrayList<Directive>();
-    this.headerActionListener = new HeaderActionHandler();
-    this.tableModelListener = createTableModelHandler();
-    this.sortedColumnsBuffer = new HashSet<ULCTableColumn>();
-  }
-
-  /**
-   * Constructs a new <code>AbstractTableSorter</code> instance.
-   * 
-   * @param tableModel
-   *          tableModel.
-   */
-  public AbstractTableSorter(ITableModel tableModel) {
-    this();
-    setTableModel(tableModel);
-  }
-
-  /**
    * Constructs a new <code>AbstractTableSorter</code> instance.
    * 
    * @param tableModel
@@ -115,7 +94,10 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    *          tableHeader.
    */
   public AbstractTableSorter(ITableModel tableModel, ULCTableHeader tableHeader) {
-    this();
+    this.sortingColumns = new ArrayList<Directive>();
+    this.headerActionListener = new HeaderActionHandler();
+    this.tableModelListener = createTableModelHandler();
+    this.sortedColumnsBuffer = new HashSet<ULCTableColumn>();
     setTableModel(tableModel);
     setTableHeader(tableHeader);
   }
@@ -305,11 +287,9 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    * 
    * @param column
    *          column.
-   * @param size
-   *          size.
    * @return HeaderRendererIcon
    */
-  protected ULCIcon getHeaderRendererIcon(int column, int size) {
+  protected ULCIcon getHeaderRendererIcon(int column) {
     Directive directive = getDirective(column);
     if (directive == NOT_SORTED_DIRECTIVE) {
       return null;
@@ -472,7 +452,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
         Object value, boolean isSelected, boolean hasFocus, int row) {
       setHorizontalTextPosition(IDefaults.LEFT);
       setHorizontalAlignment(IDefaults.LEFT);
-      setIcon(getHeaderRendererIcon(modelColumnIndex, getFont().getSize()));
+      setIcon(getHeaderRendererIcon(modelColumnIndex));
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row);
     }

@@ -99,16 +99,6 @@ public class TableSorter extends AbstractTableSorter {
    * 
    * @param tableModel
    *          tableModel.
-   */
-  public TableSorter(ITableModel tableModel) {
-    super(tableModel);
-  }
-
-  /**
-   * Constructs a new <code>TableSorter</code> instance.
-   * 
-   * @param tableModel
-   *          tableModel.
    * @param tableHeader
    *          tableHeader.
    */

@@ -46,6 +46,8 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * Abstract implementation of a component descriptor.
@@ -69,13 +71,16 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  *          the concrete type of components.
  */
 public abstract class AbstractComponentDescriptor<E> extends
-    DefaultIconDescriptor implements IComponentDescriptor<E> {
+    DefaultIconDescriptor implements IComponentDescriptor<E>, BeanFactoryAware {
+
+  private BeanFactory                      beanFactory;
 
   private List<IComponentDescriptor<?>>    ancestorDescriptors;
   private Class<?>                         componentContract;
 
   private Collection<String>               grantedRoles;
   private List<String>                     lifecycleInterceptorClassNames;
+  private List<String>                     lifecycleInterceptorBeanNames;
 
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
@@ -86,6 +91,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<String>                     renderedProperties;
   private Set<Class<?>>                    serviceContracts;
   private Map<String, String>              serviceDelegateClassNames;
+  private Map<String, String>              serviceDelegateBeanNames;
 
   private Map<Method, IComponentService>   serviceDelegates;
   private List<IPropertyDescriptor>        tempPropertyBuffer;
@@ -309,16 +315,20 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@inheritDoc}
    */
   public Collection<String> getServiceContractClassNames() {
-    if (serviceDelegateClassNames != null) {
-      return new LinkedHashSet<String>(serviceDelegateClassNames.keySet());
-    } else if (serviceContracts != null) {
-      Set<String> serviceContractClassNames = new LinkedHashSet<String>();
+    Set<String> serviceContractClassNames = new LinkedHashSet<String>();
+    if (serviceContracts != null) {
       for (Class<?> serviceContract : serviceContracts) {
         serviceContractClassNames.add(serviceContract.getName());
       }
-      return serviceContractClassNames;
+    } else {
+      if (serviceDelegateClassNames != null) {
+        serviceContractClassNames.addAll(serviceDelegateClassNames.keySet());
+      }
+      if (serviceDelegateBeanNames != null) {
+        serviceContractClassNames.addAll(serviceDelegateBeanNames.keySet());
+      }
     }
-    return null;
+    return serviceContractClassNames;
   }
 
   /**
@@ -580,18 +590,29 @@ public abstract class AbstractComponentDescriptor<E> extends
           throw new DescriptorException(ex);
         }
       }
+      serviceDelegateClassNames = null;
     }
-    serviceDelegateClassNames = null;
+    if (serviceDelegateBeanNames != null && beanFactory != null) {
+      for (Entry<String, String> nextPair : serviceDelegateBeanNames.entrySet()) {
+        try {
+          registerService(Class.forName(nextPair.getKey()),
+              (IComponentService) beanFactory.getBean(nextPair.getValue(),
+                  IComponentService.class));
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        }
+      }
+      serviceDelegateBeanNames = null;
+    }
   }
 
   private synchronized void registerLifecycleInterceptorsIfNecessary() {
     // process creation of lifecycle interceptors.
     if (lifecycleInterceptorClassNames != null) {
-      lifecycleInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
       for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
         try {
-          lifecycleInterceptors.add((ILifecycleInterceptor<?>) Class.forName(
-              lifecycleInterceptorClassName).newInstance());
+          registerLifecycleInterceptor((ILifecycleInterceptor<?>) Class
+              .forName(lifecycleInterceptorClassName).newInstance());
         } catch (InstantiationException ex) {
           throw new DescriptorException(ex);
         } catch (IllegalAccessException ex) {
@@ -602,6 +623,21 @@ public abstract class AbstractComponentDescriptor<E> extends
       }
       lifecycleInterceptorClassNames = null;
     }
+    if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
+      for (String lifecycleInterceptorBeanName : lifecycleInterceptorBeanNames) {
+        registerLifecycleInterceptor((ILifecycleInterceptor<?>) beanFactory
+            .getBean(lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
+      }
+      lifecycleInterceptorBeanNames = null;
+    }
+  }
+
+  private void registerLifecycleInterceptor(
+      ILifecycleInterceptor<?> lifecycleInterceptor) {
+    if (lifecycleInterceptors == null) {
+      lifecycleInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
+    }
+    lifecycleInterceptors.add(lifecycleInterceptor);
   }
 
   private synchronized void registerService(Class<?> serviceContract,
@@ -632,5 +668,39 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  /**
+   * Sets the serviceDelegateBeanNames.
+   * 
+   * @param serviceDelegateBeanNames
+   *          the serviceDelegateBeanNames to set. They are used to retrieve
+   *          delegate instances from the Spring bean factory this descriptor
+   *          comes from if any.
+   */
+  public void setServiceDelegateBeanNames(
+      Map<String, String> serviceDelegateBeanNames) {
+    this.serviceDelegateBeanNames = serviceDelegateBeanNames;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBeanFactory(BeanFactory beanFactory) {
+    this.beanFactory = beanFactory;
+  }
+
+  /**
+   * Sets the lifecycleInterceptorBeanNames.
+   * 
+   * @param lifecycleInterceptorBeanNames
+   *          the lifecycleInterceptorBeanNames to set. They are used to
+   *          retrieve interceptor instances from the Spring bean factory this
+   *          descriptor comes from if any.
+   */
+  public void setLifecycleInterceptorBeanNames(
+      List<String> lifecycleInterceptorBeanNames) {
+    this.lifecycleInterceptorBeanNames = lifecycleInterceptorBeanNames;
   }
 }

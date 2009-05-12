@@ -1,21 +1,22 @@
 /*
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  */
-package org.jspresso.framework.view.ulc;
+package org.jspresso.framework.view.wings;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.gui.wings.components.ClickableHeaderSTable;
 import org.jspresso.framework.util.collection.ESort;
-
-import com.ulcjava.base.application.event.TableModelEvent;
-import com.ulcjava.base.application.event.serializable.ITableModelListener;
-import com.ulcjava.base.application.table.ITableModel;
-import com.ulcjava.base.application.table.ULCTableHeader;
+import org.wings.table.STableColumnModel;
 
 /**
  * A table sorter that triggers an action whenever the sorting state changes.
@@ -23,12 +24,13 @@ import com.ulcjava.base.application.table.ULCTableHeader;
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1863 $
  * @author Vincent Vandenschrick
  */
 public class ActionTableSorter extends AbstractTableSorter {
 
-  private static final long serialVersionUID = -7470159235923510369L;
+  private static final long serialVersionUID = 1669749134625090409L;
+
   private IActionHandler    actionHandler;
   private IAction           sortingAction;
 
@@ -37,16 +39,16 @@ public class ActionTableSorter extends AbstractTableSorter {
    * 
    * @param tableModel
    *          tableModel.
-   * @param tableHeader
-   *          tableHeader.
+   * @param table
+   *          table.
    * @param actionHandler
    *          the action handler.
    * @param sortingAction
    *          the action triggered when sorting.
    */
-  public ActionTableSorter(ITableModel tableModel, ULCTableHeader tableHeader,
+  public ActionTableSorter(TableModel tableModel, ClickableHeaderSTable table,
       IActionHandler actionHandler, IAction sortingAction) {
-    super(tableModel, tableHeader);
+    super(tableModel, table);
     this.actionHandler = actionHandler;
     this.sortingAction = sortingAction;
   }
@@ -55,7 +57,7 @@ public class ActionTableSorter extends AbstractTableSorter {
    * {@inheritDoc}
    */
   @Override
-  protected ITableModelListener createTableModelHandler() {
+  protected TableModelListener createTableModelHandler() {
     return new TableModelHandler();
   }
 
@@ -67,8 +69,9 @@ public class ActionTableSorter extends AbstractTableSorter {
     Map<String, Object> actionContext = new HashMap<String, Object>();
     Map<String, ESort> orderingProperties = new LinkedHashMap<String, ESort>();
     for (Directive directive : getSortingColumns()) {
-      String property = String.valueOf(getSortedColumn(directive.getColumn())
-          .getIdentifier());
+      STableColumnModel columnModel = getTableColumnModel();
+      String property = String.valueOf(columnModel.getColumn(
+          directive.getColumn()).getIdentifier());
       ESort direction;
       if (directive.getDirection() == ASCENDING) {
         direction = ESort.ASCENDING;
@@ -104,18 +107,14 @@ public class ActionTableSorter extends AbstractTableSorter {
     return modelIndex;
   }
 
-  private class TableModelHandler implements ITableModelListener {
-
-    private static final long serialVersionUID = 2605202157129318262L;
+  private class TableModelHandler implements TableModelListener {
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public void tableChanged(TableModelEvent e) {
       // just forward the event
       fireTableChanged(e);
     }
-
   }
 }

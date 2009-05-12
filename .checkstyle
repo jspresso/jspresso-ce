@@ -3,5 +3,8 @@
     <fileset name="tous" enabled="true" check-config-name="Jspresso Checks" local="false">
         <file-match-pattern match-pattern="." include-pattern="true"/>
     </fileset>
+    <filter name="FilesFromPackage" enabled="true">
+        <filter-data value="wings/components/src/main/java/org/jspresso/framework/gui/wings/components/plaf"/>
+    </filter>
     <filter name="NonSrcDirs" enabled="true"/>
 </fileset-config>

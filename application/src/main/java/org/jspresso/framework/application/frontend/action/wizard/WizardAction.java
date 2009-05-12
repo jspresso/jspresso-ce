@@ -147,7 +147,8 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       ITranslationProvider translationProvider, Locale locale,
       IValueConnector modelConnector, Map<String, Object> context) {
     NextAction nextAction = new NextAction(wizardStep, modelConnector);
-    nextAction.setIconImageURL(getIconFactory(context).getForwardIconUrl());
+    nextAction
+        .setIconImageURL(getIconFactory(context).getForwardIconImageURL());
     G nextGAction = getActionFactory(context).createAction(nextAction,
         actionHandler, view, locale);
     if (wizardStep.getNextStepDescriptor(context) != null) {
@@ -175,8 +176,8 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       IValueConnector modelConnector, Map<String, Object> context) {
     PreviousAction previousAction = new PreviousAction(wizardStep,
         modelConnector);
-    previousAction
-        .setIconImageURL(getIconFactory(context).getBackwardIconUrl());
+    previousAction.setIconImageURL(getIconFactory(context)
+        .getBackwardIconImageURL());
     G previousGAction = getActionFactory(context).createAction(previousAction,
         actionHandler, view, locale);
     if (wizardStep.getPreviousStepDescriptor(context) != null) {
