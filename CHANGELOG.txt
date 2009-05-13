@@ -37,6 +37,7 @@ New features
 2787655  	 Handle sorting directions in ordering properties
 2790309  	 Allow for configuration of service delegates in components
 2790798  	 Make Wings tables sortable
+2790301  	 Generate allowed column names for reserved keywords
 
 3.0.0
 =====
