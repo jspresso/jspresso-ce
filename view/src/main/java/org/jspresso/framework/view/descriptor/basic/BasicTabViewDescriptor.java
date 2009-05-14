@@ -51,6 +51,11 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
+    if (tabs != null) {
+      for (IViewDescriptor childViewDescriptor : tabs) {
+        completeChildDescriptor(childViewDescriptor);
+      }
+    }
     return tabs;
   }
 
@@ -73,11 +78,6 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
    *          the tabs to set.
    */
   public void setTabs(List<IViewDescriptor> tabs) {
-    if (tabs != null) {
-      for (IViewDescriptor childViewDescriptor : tabs) {
-        completeChildDescriptor(childViewDescriptor);
-      }
-    }
     this.tabs = tabs;
   }
 }

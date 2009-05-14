@@ -56,6 +56,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getCenterViewDescriptor() {
+    completeChildDescriptor(centerViewDescriptor);
     return centerViewDescriptor;
   }
 
@@ -86,6 +87,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getEastViewDescriptor() {
+    completeChildDescriptor(eastViewDescriptor);
     return eastViewDescriptor;
   }
 
@@ -93,6 +95,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getNorthViewDescriptor() {
+    completeChildDescriptor(northViewDescriptor);
     return northViewDescriptor;
   }
 
@@ -100,6 +103,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getSouthViewDescriptor() {
+    completeChildDescriptor(southViewDescriptor);
     return southViewDescriptor;
   }
 
@@ -107,6 +111,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getWestViewDescriptor() {
+    completeChildDescriptor(westViewDescriptor);
     return westViewDescriptor;
   }
 
@@ -117,7 +122,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    *          the centerViewDescriptor to set.
    */
   public void setCenterViewDescriptor(IViewDescriptor centerViewDescriptor) {
-    this.centerViewDescriptor = completeChildDescriptor(centerViewDescriptor);
+    this.centerViewDescriptor = centerViewDescriptor;
   }
 
   /**
@@ -127,7 +132,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    *          the eastViewDescriptor to set.
    */
   public void setEastViewDescriptor(IViewDescriptor eastViewDescriptor) {
-    this.eastViewDescriptor = completeChildDescriptor(eastViewDescriptor);
+    this.eastViewDescriptor = eastViewDescriptor;
   }
 
   /**
@@ -137,7 +142,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    *          the northViewDescriptor to set.
    */
   public void setNorthViewDescriptor(IViewDescriptor northViewDescriptor) {
-    this.northViewDescriptor = completeChildDescriptor(northViewDescriptor);
+    this.northViewDescriptor = northViewDescriptor;
   }
 
   /**
@@ -147,7 +152,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    *          the southViewDescriptor to set.
    */
   public void setSouthViewDescriptor(IViewDescriptor southViewDescriptor) {
-    this.southViewDescriptor = completeChildDescriptor(southViewDescriptor);
+    this.southViewDescriptor = southViewDescriptor;
   }
 
   /**
@@ -157,6 +162,6 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    *          the westViewDescriptor to set.
    */
   public void setWestViewDescriptor(IViewDescriptor westViewDescriptor) {
-    this.westViewDescriptor = completeChildDescriptor(westViewDescriptor);
+    this.westViewDescriptor = westViewDescriptor;
   }
 }

@@ -64,7 +64,15 @@ public class BasicConstrainedGridViewDescriptor extends
    * {@inheritDoc}
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
-    return new ArrayList<IViewDescriptor>(constrainedCells.keySet());
+    List<IViewDescriptor> childViewDescriptors = new ArrayList<IViewDescriptor>();
+    if (constrainedCells != null) {
+      for (Map.Entry<IViewDescriptor, CellConstraints> constrainedCell : constrainedCells
+          .entrySet()) {
+        completeChildDescriptor(constrainedCell.getKey());
+        childViewDescriptors.add(constrainedCell.getKey());
+      }
+    }
+    return childViewDescriptors;
   }
 
   /**
@@ -88,12 +96,6 @@ public class BasicConstrainedGridViewDescriptor extends
    */
   public void setConstrainedCells(
       Map<IViewDescriptor, CellConstraints> constrainedCells) {
-    if (constrainedCells != null) {
-      for (Map.Entry<IViewDescriptor, CellConstraints> constrainedCell : constrainedCells
-          .entrySet()) {
-        completeChildDescriptor(constrainedCell.getKey());
-      }
-    }
     this.constrainedCells = constrainedCells;
   }
 }

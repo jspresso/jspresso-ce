@@ -54,6 +54,11 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
+    if (cells != null) {
+      for (IViewDescriptor cell : cells) {
+        completeChildDescriptor(cell);
+      }
+    }
     return cells;
   }
 
@@ -90,11 +95,6 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    *          the cells to set.
    */
   public void setCells(List<IViewDescriptor> cells) {
-    if (cells != null) {
-      for (IViewDescriptor cell : cells) {
-        completeChildDescriptor(cell);
-      }
-    }
     this.cells = cells;
   }
 

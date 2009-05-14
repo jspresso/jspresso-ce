@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -63,6 +64,7 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
       List<IViewDescriptor> childViewDescriptors = getChildViewDescriptors();
       if (childViewDescriptors != null && !childViewDescriptors.isEmpty()) {
         modelDescriptor = childViewDescriptors.get(0).getModelDescriptor();
+        setModelDescriptor(modelDescriptor);
       }
     }
     return modelDescriptor;
@@ -91,24 +93,27 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
    * 
    * @param childViewDescriptor
    *          the child view descriptor to initialize.
-   * @return the initialized view descriptor.
    */
-  protected IViewDescriptor completeChildDescriptor(
-      IViewDescriptor childViewDescriptor) {
-    if (!isCascadingModels()
-        && childViewDescriptor instanceof BasicViewDescriptor
-        && childViewDescriptor.getModelDescriptor() == null) {
-      if (childViewDescriptor instanceof IPropertyViewDescriptor
-          && getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
-        ((BasicViewDescriptor) childViewDescriptor)
-            .setModelDescriptor(((IComponentDescriptorProvider<?>) getModelDescriptor())
-                .getComponentDescriptor().getPropertyDescriptor(
-                    childViewDescriptor.getName()));
-      } else {
-        ((BasicViewDescriptor) childViewDescriptor)
-            .setModelDescriptor(getModelDescriptor());
+  protected void completeChildDescriptor(IViewDescriptor childViewDescriptor) {
+    if (childViewDescriptor != null) {
+      if (!isCascadingModels()
+          && childViewDescriptor.getModelDescriptor() == null
+          && childViewDescriptor instanceof BasicViewDescriptor) {
+        if (childViewDescriptor instanceof IPropertyViewDescriptor
+            || childViewDescriptor instanceof ICollectionViewDescriptor) {
+          if (getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+            // we can complete this property view descriptor model based on the
+            // surrounding model.
+            ((BasicViewDescriptor) childViewDescriptor)
+                .setModelDescriptor(((IComponentDescriptorProvider<?>) getModelDescriptor())
+                    .getComponentDescriptor().getPropertyDescriptor(
+                        childViewDescriptor.getName()));
+          }
+        } else {
+          ((BasicViewDescriptor) childViewDescriptor)
+              .setModelDescriptor(getModelDescriptor());
+        }
       }
     }
-    return childViewDescriptor;
   }
 }

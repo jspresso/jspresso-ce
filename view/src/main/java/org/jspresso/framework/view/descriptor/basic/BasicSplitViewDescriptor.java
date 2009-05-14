@@ -69,6 +69,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getLeftTopViewDescriptor() {
+    completeChildDescriptor(leftTopViewDescriptor);
     return leftTopViewDescriptor;
   }
 
@@ -83,6 +84,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getRightBottomViewDescriptor() {
+    completeChildDescriptor(rightBottomViewDescriptor);
     return rightBottomViewDescriptor;
   }
 
@@ -93,7 +95,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    *          the leftTopViewDescriptor to set.
    */
   public void setLeftTopViewDescriptor(IViewDescriptor leftTopViewDescriptor) {
-    this.leftTopViewDescriptor = completeChildDescriptor(leftTopViewDescriptor);
+    this.leftTopViewDescriptor = leftTopViewDescriptor;
   }
 
   /**
@@ -114,6 +116,6 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    */
   public void setRightBottomViewDescriptor(
       IViewDescriptor rightBottomViewDescriptor) {
-    this.rightBottomViewDescriptor = completeChildDescriptor(rightBottomViewDescriptor);
+    this.rightBottomViewDescriptor = rightBottomViewDescriptor;
   }
 }
