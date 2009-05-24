@@ -202,7 +202,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    public function valueUpdated(remoteValueState:RemoteValueState):void {
+    private function valueUpdated(remoteValueState:RemoteValueState):void {
       if(_changeNotificationsEnabled) {
         //trace(">>> Value update <<< " + remoteValueState.value);
         var command:RemoteValueCommand = new RemoteValueCommand();
@@ -212,20 +212,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    public function selectedIndicesUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
+    private function selectedIndicesUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
       if(_changeNotificationsEnabled) {
         //trace(">>> Selected indices update <<< " + remoteCompositeValueState.selectedIndices + " on " + remoteCompositeValueState.value);
-        var command:RemoteSelectionCommand = new RemoteSelectionCommand();
-        command.targetPeerGuid = remoteCompositeValueState.guid;
-        command.selectedIndices = remoteCompositeValueState.selectedIndices;
-        command.leadingIndex = remoteCompositeValueState.leadingIndex;
-        registerCommand(command);
-      }
-    }
-
-    public function leadingIndexUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
-      if(_changeNotificationsEnabled) {
-        //trace(">>> Leading index update <<< " + remoteCompositeValueState.leadingIndex + " on " + remoteCompositeValueState.value);
         var command:RemoteSelectionCommand = new RemoteSelectionCommand();
         command.targetPeerGuid = remoteCompositeValueState.guid;
         command.selectedIndices = remoteCompositeValueState.selectedIndices;
@@ -452,7 +441,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var alertCloseHandler:Function;
       var message:String = new String(messageCommand.message);
       var isHtml:Boolean = false;
-      if(message.indexOf("<html>") >= 0) {
+      if(_viewFactory.isHtml(message)) {
         isHtml = true;
        	// The HTML string must be passed to the show() method, so the width and height of
       	// the textField can be calculated correctly. All HTML tags will be removed and the
@@ -757,7 +746,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       buttonBox.percentWidth = 100.0;
       
       var dialogBox:VBox = new VBox();
-      var separator:HRule;
       if(message) {
         var messageLabel:Label = new Label();
         messageLabel.percentWidth = 100.0;
@@ -765,7 +753,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         dialogBox.addChild(messageLabel);
       }
       dialogBox.addChild(dialogView);
-      separator = new HRule();
+      var separator:HRule = new HRule();
       separator.percentWidth = 100.0;
       dialogBox.addChild(separator);
       for each(var button:Button in buttons) {

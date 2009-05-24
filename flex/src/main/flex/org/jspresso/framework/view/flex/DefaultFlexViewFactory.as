@@ -1558,5 +1558,12 @@ package org.jspresso.framework.view.flex {
     public function get iconTemplate():Class  {
       return _iconTemplate;
     }
+    
+    public function isHtml(content:String):Boolean {
+      if(content) {
+        return content.indexOf("<html>") > -1;
+      }
+      return false;
+    }
   }
 }
