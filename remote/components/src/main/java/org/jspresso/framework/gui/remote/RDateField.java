@@ -39,7 +39,17 @@ package org.jspresso.framework.gui.remote;
  */
 public class RDateField extends RComponent {
 
-  private String type;
+  private static final long serialVersionUID = 8506924046869058069L;
+
+  private String            type;
+
+  /**
+   * Constructs a new <code>RDateField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RDateField() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RDateField</code> instance.
@@ -63,7 +73,8 @@ public class RDateField extends RComponent {
   /**
    * Sets the type.
    * 
-   * @param type the type to set.
+   * @param type
+   *          the type to set.
    */
   public void setType(String type) {
     this.type = type;

@@ -39,6 +39,16 @@ package org.jspresso.framework.gui.remote;
  */
 public class RList extends RCollectionComponent {
 
+  private static final long serialVersionUID = -1926261840192373120L;
+
+  /**
+   * Constructs a new <code>RList</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RList() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RList</code> instance.
    * 

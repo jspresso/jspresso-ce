@@ -43,6 +43,8 @@ import org.jspresso.framework.gui.remote.RAction;
  */
 public class RemoteFileCommand extends RemoteCommand {
 
+  private static final long     serialVersionUID = -3016618436886031446L;
+
   private RAction               cancelCallbackAction;
   private Map<String, String[]> fileFilter;
   private String                fileUrl;

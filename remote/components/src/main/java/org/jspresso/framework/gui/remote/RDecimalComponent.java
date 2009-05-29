@@ -38,8 +38,10 @@ package org.jspresso.framework.gui.remote;
  * @author Vincent Vandenschrick
  */
 public abstract class RDecimalComponent extends RNumericComponent {
-  
-  private int maxFractionDigit;
+
+  private static final long serialVersionUID = -1920811347497629751L;
+
+  private int               maxFractionDigit;
 
   /**
    * Constructs a new <code>RIntegerField</code> instance.
@@ -63,7 +65,8 @@ public abstract class RDecimalComponent extends RNumericComponent {
   /**
    * Sets the maxFractionDigit.
    * 
-   * @param maxFractionDigit the maxFractionDigit to set.
+   * @param maxFractionDigit
+   *          the maxFractionDigit to set.
    */
   public void setMaxFractionDigit(int maxFractionDigit) {
     this.maxFractionDigit = maxFractionDigit;

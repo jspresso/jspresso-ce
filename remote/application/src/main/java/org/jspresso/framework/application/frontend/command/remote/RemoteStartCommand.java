@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * Starts the application
  * <p>
@@ -39,5 +38,8 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteStartCommand extends RemoteCommand {
-  //NO-OP.
+
+  private static final long serialVersionUID = -8122101348450476262L;
+
+  // NO-OP.
 }

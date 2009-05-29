@@ -41,10 +41,12 @@ import org.jspresso.framework.gui.remote.RIcon;
  */
 public class RemoteMessageCommand extends RemoteCommand {
 
-  private String message;
-  private RIcon  messageIcon;
-  private String title;
-  private RIcon  titleIcon;
+  private static final long serialVersionUID = -3501069430686194296L;
+
+  private String            message;
+  private RIcon             messageIcon;
+  private String            title;
+  private RIcon             titleIcon;
 
   /**
    * Gets the message.

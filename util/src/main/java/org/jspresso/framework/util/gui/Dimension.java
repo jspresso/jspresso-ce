@@ -18,10 +18,7 @@
  */
 package org.jspresso.framework.util.gui;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.jspresso.framework.util.exception.NestedRuntimeException;
+import java.io.Serializable;
 
 /**
  * a simple holder for 2D dimension.
@@ -42,10 +39,12 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public class Dimension {
+public class Dimension implements Serializable {
 
-  private int width;
-  private int height;
+  private static final long serialVersionUID = -2769276185108835884L;
+
+  private int               width;
+  private int               height;
 
   /**
    * Constructs a new <code>Dimension</code> instance.
@@ -71,19 +70,6 @@ public class Dimension {
    * {@inheritDoc}
    */
   @Override
-  public Object clone() {
-    try {
-      Dimension clone = (Dimension) super.clone();
-      return clone;
-    } catch (CloneNotSupportedException ex) {
-      throw new NestedRuntimeException(ex);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof Dimension)) {
       return false;
@@ -92,8 +78,7 @@ public class Dimension {
       return true;
     }
     Dimension rhs = (Dimension) obj;
-    return new EqualsBuilder().append(width, rhs.width).append(height,
-        rhs.height).isEquals();
+    return width == rhs.width && height == rhs.height;
   }
 
   /**
@@ -119,8 +104,7 @@ public class Dimension {
    */
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(23, 53).append(width).append(height)
-        .toHashCode();
+    return (23 + width * 13) + (31 + height * 17);
   }
 
   /**
@@ -148,8 +132,8 @@ public class Dimension {
    */
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("width", width).append("height",
-        height).toString();
+    return new StringBuilder().append(getClass().getName()).append(" : width=")
+        .append(width).append(", height=").append(height).toString();
   }
 
 }

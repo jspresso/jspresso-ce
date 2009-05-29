@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * A command to dispose the top-level modal remote dialog.
  * <p>
@@ -39,5 +38,8 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteCloseDialogCommand extends RemoteCommand {
+
+  private static final long serialVersionUID = 1698069098590094042L;
+
   // it is a no-attribute command.
 }

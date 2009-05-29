@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
-
 /**
  * A container. Its children are indexed by their view names.
  * <p>
@@ -40,11 +38,22 @@ package org.jspresso.framework.gui.remote;
  * @author Vincent Vandenschrick
  */
 public abstract class RContainer extends RComponent {
-  
+
+  private static final long serialVersionUID = -7174072538766465667L;
+
+  /**
+   * Constructs a new <code>RContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RContainer() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RContainer</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
   public RContainer(String guid) {
     super(guid);

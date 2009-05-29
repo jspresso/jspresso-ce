@@ -42,10 +42,12 @@ import org.jspresso.framework.gui.remote.RComponent;
  */
 public class RemoteDialogCommand extends RemoteCommand {
 
-  private RAction[]  actions;
-  private String     title;
-  private boolean    useCurrent;
-  private RComponent view;
+  private static final long serialVersionUID = 7993231946633084545L;
+
+  private RAction[]         actions;
+  private String            title;
+  private boolean           useCurrent;
+  private RComponent        view;
 
   /**
    * Gets the actions.
@@ -103,17 +105,16 @@ public class RemoteDialogCommand extends RemoteCommand {
     this.title = title;
   }
 
-  
   /**
    * Sets the useCurrent.
    * 
-   * @param useCurrent the useCurrent to set.
+   * @param useCurrent
+   *          the useCurrent to set.
    */
   public void setUseCurrent(boolean useCurrent) {
     this.useCurrent = useCurrent;
   }
 
-  
   /**
    * Sets the view.
    * 

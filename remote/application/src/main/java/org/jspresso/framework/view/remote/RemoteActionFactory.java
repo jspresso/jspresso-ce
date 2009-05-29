@@ -162,6 +162,8 @@ public class RemoteActionFactory extends
 
   private final class ActionAdapter extends RAction {
 
+    private static final long  serialVersionUID = -922942515333636161L;
+
     private IDisplayableAction action;
     private IActionHandler     actionHandler;
     private IModelDescriptor   modelDescriptor;

@@ -39,6 +39,8 @@ package org.jspresso.framework.gui.remote;
  */
 public class RIntegerField extends RNumericComponent {
 
+  private static final long serialVersionUID = -8516423065572521893L;
+
   /**
    * Constructs a new <code>RIntegerField</code> instance.
    * 

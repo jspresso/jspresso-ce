@@ -38,8 +38,18 @@ package org.jspresso.framework.gui.remote;
  * @author Vincent Vandenschrick
  */
 public abstract class RTextComponent extends RComponent {
-  
-  private int maxLength;
+
+  private static final long serialVersionUID = 2668241040260840359L;
+
+  private int               maxLength;
+
+  /**
+   * Constructs a new <code>RTextComponent</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTextComponent() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RTextField</code> instance.
@@ -63,7 +73,8 @@ public abstract class RTextComponent extends RComponent {
   /**
    * Sets the maxLength.
    * 
-   * @param maxLength the maxLength to set.
+   * @param maxLength
+   *          the maxLength to set.
    */
   public void setMaxLength(int maxLength) {
     this.maxLength = maxLength;

@@ -38,8 +38,18 @@ package org.jspresso.framework.gui.remote;
  * @author Vincent Vandenschrick
  */
 public class RColorField extends RComponent {
-  
-  private String defaultColor;
+
+  private static final long serialVersionUID = 3234693770672598145L;
+
+  private String            defaultColor;
+
+  /**
+   * Constructs a new <code>RColorField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RColorField() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RColorField</code> instance.
@@ -63,7 +73,8 @@ public class RColorField extends RComponent {
   /**
    * Sets the defaultColor.
    * 
-   * @param defaultColor the defaultColor to set.
+   * @param defaultColor
+   *          the defaultColor to set.
    */
   public void setDefaultColor(String defaultColor) {
     this.defaultColor = defaultColor;

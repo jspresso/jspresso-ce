@@ -39,6 +39,16 @@ package org.jspresso.framework.gui.remote;
  */
 public class RImageComponent extends RComponent {
 
+  private static final long serialVersionUID = 7583953076670140848L;
+
+  /**
+   * Constructs a new <code>RImageComponent</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RImageComponent() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RImageComponent</code> instance.
    * 

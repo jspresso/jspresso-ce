@@ -39,12 +39,22 @@ package org.jspresso.framework.gui.remote;
  */
 public class RForm extends RContainer {
 
-  private int          columnCount;
-  private RComponent[] elements;
-  private RComponent[] elementLabels;
-  private Integer[]    elementWidths;
+  private static final long serialVersionUID = -5376646056261143239L;
 
-  private String       labelsPosition;
+  private int               columnCount;
+  private RComponent[]      elements;
+  private RComponent[]      elementLabels;
+  private Integer[]         elementWidths;
+
+  private String            labelsPosition;
+
+  /**
+   * Constructs a new <code>RForm</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RForm() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RForm</code> instance.

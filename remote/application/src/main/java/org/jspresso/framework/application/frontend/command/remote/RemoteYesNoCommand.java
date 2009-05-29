@@ -41,9 +41,11 @@ import org.jspresso.framework.gui.remote.RAction;
  */
 public class RemoteYesNoCommand extends RemoteMessageCommand {
 
-  private RAction noAction;
-  private RAction yesAction;
-  
+  private static final long serialVersionUID = -4902691344620205704L;
+
+  private RAction           noAction;
+  private RAction           yesAction;
+
   /**
    * Gets the noAction.
    * 
@@ -52,7 +54,7 @@ public class RemoteYesNoCommand extends RemoteMessageCommand {
   public RAction getNoAction() {
     return noAction;
   }
-  
+
   /**
    * Gets the yesAction.
    * 
@@ -61,23 +63,25 @@ public class RemoteYesNoCommand extends RemoteMessageCommand {
   public RAction getYesAction() {
     return yesAction;
   }
-  
+
   /**
    * Sets the noAction.
    * 
-   * @param noAction the noAction to set.
+   * @param noAction
+   *          the noAction to set.
    */
   public void setNoAction(RAction noAction) {
     this.noAction = noAction;
   }
-  
+
   /**
    * Sets the yesAction.
    * 
-   * @param yesAction the yesAction to set.
+   * @param yesAction
+   *          the yesAction to set.
    */
   public void setYesAction(RAction yesAction) {
     this.yesAction = yesAction;
   }
-  
+
 }

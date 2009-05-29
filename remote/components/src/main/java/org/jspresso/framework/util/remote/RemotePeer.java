@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.util.remote;
 
+import java.io.Serializable;
 
 /**
  * An object remote server peer.
@@ -38,14 +39,25 @@ package org.jspresso.framework.util.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RemotePeer implements IRemotePeer {
+public abstract class RemotePeer implements IRemotePeer, Serializable {
+
+  private static final long serialVersionUID = 2174357777581427148L;
 
   private String            guid;
-  
+
+  /**
+   * Constructs a new <code>RemotePeer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RemotePeer() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RemoteServerPeer</code> instance generating its UID.
    * 
-   * @param guid the guid.
+   * @param guid
+   *          the guid.
    */
   protected RemotePeer(String guid) {
     this.guid = guid;
@@ -58,11 +70,11 @@ public abstract class RemotePeer implements IRemotePeer {
     return guid;
   }
 
-  
   /**
    * Sets the guid.
    * 
-   * @param guid the guid to set.
+   * @param guid
+   *          the guid to set.
    */
   public void setGuid(String guid) {
     this.guid = guid;

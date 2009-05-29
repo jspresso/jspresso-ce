@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * A command to enable / disable a remote peer.
  * <p>
@@ -39,10 +38,11 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteEnablementCommand extends RemoteCommand {
-  
-  private boolean enabled;
 
-  
+  private static final long serialVersionUID = 1468628201616380162L;
+
+  private boolean           enabled;
+
   /**
    * Gets the enabled.
    * 
@@ -52,11 +52,11 @@ public class RemoteEnablementCommand extends RemoteCommand {
     return enabled;
   }
 
-  
   /**
    * Sets the enabled.
    * 
-   * @param enabled the enabled to set.
+   * @param enabled
+   *          the enabled to set.
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

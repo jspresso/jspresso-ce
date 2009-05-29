@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * An exit command for the remote peer.
  * <p>
@@ -39,5 +38,8 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteRestartCommand extends RemoteCommand {
-  //NO-OP.
+
+  private static final long serialVersionUID = -7333525186880682654L;
+
+  // NO-OP.
 }

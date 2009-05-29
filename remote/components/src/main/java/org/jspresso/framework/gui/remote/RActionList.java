@@ -41,10 +41,20 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RActionList extends RemotePeer {
 
-  private RAction[] actions;
-  private String    description;
-  private RIcon     icon;
-  private String    name;
+  private static final long serialVersionUID = 2147520367941975885L;
+
+  private RAction[]         actions;
+  private String            description;
+  private RIcon             icon;
+  private String            name;
+
+  /**
+   * Constructs a new <code>RActionList</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RActionList() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RActionList</code> instance.
@@ -95,7 +105,8 @@ public class RActionList extends RemotePeer {
   /**
    * Sets the actions.
    * 
-   * @param actions the actions to set.
+   * @param actions
+   *          the actions to set.
    */
   public void setActions(RAction[] actions) {
     this.actions = actions;
@@ -111,7 +122,6 @@ public class RActionList extends RemotePeer {
     this.description = description;
   }
 
-  
   /**
    * Sets the icon.
    * 
@@ -122,7 +132,6 @@ public class RActionList extends RemotePeer {
     this.icon = icon;
   }
 
-  
   /**
    * Sets the name.
    * 

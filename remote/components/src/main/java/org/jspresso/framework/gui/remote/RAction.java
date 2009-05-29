@@ -43,12 +43,22 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RAction extends RemotePeer {
 
-  private String  acceleratorAsString;
-  private String  description;
-  private boolean enabled;
-  private RIcon   icon;
-  private String  mnemonicAsString;
-  private String  name;
+  private static final long serialVersionUID = -2602197965773783997L;
+
+  private String            acceleratorAsString;
+  private String            description;
+  private boolean           enabled;
+  private RIcon             icon;
+  private String            mnemonicAsString;
+  private String            name;
+
+  /**
+   * Constructs a new <code>RAction</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RAction() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RAction</code> instance.

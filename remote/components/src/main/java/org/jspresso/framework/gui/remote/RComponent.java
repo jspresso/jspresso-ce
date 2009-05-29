@@ -45,15 +45,25 @@ import org.jspresso.framework.util.remote.RemotePeer;
 public abstract class RComponent extends RemotePeer implements
     IRemoteStateOwner {
 
-  private RActionList[]    actionLists;
-  private String           background;
-  private String           borderType;
-  private Font             font;
-  private String           foreground;
-  private RIcon            icon;
-  private String           label;
-  private RemoteValueState state;
-  private String           tooltip;
+  private static final long serialVersionUID = 4728316436476683941L;
+
+  private RActionList[]     actionLists;
+  private String            background;
+  private String            borderType;
+  private Font              font;
+  private String            foreground;
+  private RIcon             icon;
+  private String            label;
+  private RemoteValueState  state;
+  private String            tooltip;
+
+  /**
+   * Constructs a new <code>RComponent</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RComponent() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RComponent</code> instance.
@@ -239,7 +249,6 @@ public abstract class RComponent extends RemotePeer implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public void synchRemoteState() {
     // Empty implementation
   }

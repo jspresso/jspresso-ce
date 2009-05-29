@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * A border (north, south, east, west, center) container.
  * <p>
@@ -39,23 +38,33 @@ package org.jspresso.framework.gui.remote;
  * @author Vincent Vandenschrick
  */
 public class RBorderContainer extends RContainer {
-  
-  private RComponent center;
-  private RComponent east;
-  private RComponent north;
-  private RComponent south;
-  private RComponent west;
+
+  private static final long serialVersionUID = 1528650286073421026L;
+
+  private RComponent        center;
+  private RComponent        east;
+  private RComponent        north;
+  private RComponent        south;
+  private RComponent        west;
+
+  /**
+   * Constructs a new <code>RBorderContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RBorderContainer() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RBorderContainer</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
   public RBorderContainer(String guid) {
     super(guid);
   }
 
-  
   /**
    * Gets the center.
    * 
@@ -65,7 +74,6 @@ public class RBorderContainer extends RContainer {
     return center;
   }
 
-  
   /**
    * Gets the east.
    * 
@@ -75,7 +83,6 @@ public class RBorderContainer extends RContainer {
     return east;
   }
 
-  
   /**
    * Gets the north.
    * 
@@ -85,7 +92,6 @@ public class RBorderContainer extends RContainer {
     return north;
   }
 
-  
   /**
    * Gets the south.
    * 
@@ -95,7 +101,6 @@ public class RBorderContainer extends RContainer {
     return south;
   }
 
-  
   /**
    * Gets the west.
    * 
@@ -105,51 +110,51 @@ public class RBorderContainer extends RContainer {
     return west;
   }
 
-  
   /**
    * Sets the center.
    * 
-   * @param center the center to set.
+   * @param center
+   *          the center to set.
    */
   public void setCenter(RComponent center) {
     this.center = center;
   }
 
-  
   /**
    * Sets the east.
    * 
-   * @param east the east to set.
+   * @param east
+   *          the east to set.
    */
   public void setEast(RComponent east) {
     this.east = east;
   }
 
-  
   /**
    * Sets the north.
    * 
-   * @param north the north to set.
+   * @param north
+   *          the north to set.
    */
   public void setNorth(RComponent north) {
     this.north = north;
   }
 
-  
   /**
    * Sets the south.
    * 
-   * @param south the south to set.
+   * @param south
+   *          the south to set.
    */
   public void setSouth(RComponent south) {
     this.south = south;
   }
 
-  
   /**
    * Sets the west.
    * 
-   * @param west the west to set.
+   * @param west
+   *          the west to set.
    */
   public void setWest(RComponent west) {
     this.west = west;

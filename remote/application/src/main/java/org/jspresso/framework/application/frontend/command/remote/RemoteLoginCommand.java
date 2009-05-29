@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * This command trigers the actual login to the application.
  * <p>
@@ -39,5 +38,8 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteLoginCommand extends RemoteCommand {
-  //NO-OP
+
+  private static final long serialVersionUID = -6555019123301858049L;
+
+  // NO-OP
 }

@@ -39,6 +39,16 @@ package org.jspresso.framework.gui.remote;
  */
 public class RCheckBox extends RComponent {
 
+  private static final long serialVersionUID = -5911137476479351628L;
+
+  /**
+   * Constructs a new <code>RCheckBox</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RCheckBox() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RCheckBox</code> instance.
    * 

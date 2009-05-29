@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * A command to update writability of a remote peer.
  * <p>
@@ -39,9 +38,11 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteWritabilityCommand extends RemoteCommand {
-  
-  private boolean writable;
-  
+
+  private static final long serialVersionUID = 5690328483689434631L;
+
+  private boolean           writable;
+
   /**
    * Gets the writable.
    * 
@@ -50,11 +51,12 @@ public class RemoteWritabilityCommand extends RemoteCommand {
   public boolean isWritable() {
     return writable;
   }
-  
+
   /**
    * Sets the writable.
    * 
-   * @param writable the writable to set.
+   * @param writable
+   *          the writable to set.
    */
   public void setWritable(boolean writable) {
     this.writable = writable;

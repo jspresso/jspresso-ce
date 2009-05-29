@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * A container with stacked children views.
  * <p>
@@ -40,8 +39,18 @@ package org.jspresso.framework.gui.remote;
  */
 public class RCardContainer extends RContainer {
 
-  private String[]     cardNames;
-  private RComponent[] cards;
+  private static final long serialVersionUID = -5099589404498148055L;
+
+  private String[]          cardNames;
+  private RComponent[]      cards;
+
+  /**
+   * Constructs a new <code>RCardContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RCardContainer() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RCardContainer</code> instance.

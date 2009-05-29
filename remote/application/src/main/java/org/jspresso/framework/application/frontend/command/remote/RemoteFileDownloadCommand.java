@@ -39,8 +39,10 @@ package org.jspresso.framework.application.frontend.command.remote;
  */
 public class RemoteFileDownloadCommand extends RemoteFileCommand {
 
-  private String defaultFileName;
-  private String resourceId;
+  private static final long serialVersionUID = -3785240582390598709L;
+
+  private String            defaultFileName;
+  private String            resourceId;
 
   /**
    * Gets the defaultFileName.

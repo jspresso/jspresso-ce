@@ -41,8 +41,18 @@ import org.jspresso.framework.util.gui.CellConstraints;
  */
 public class RConstrainedGridContainer extends RContainer {
 
+  private static final long serialVersionUID = 6330184608837643072L;
+
   private CellConstraints[] cellConstraints;
   private RComponent[]      cells;
+
+  /**
+   * Constructs a new <code>RConstrainedGridContainer</code> instance. Only used
+   * for GWT serialization support.
+   */
+  protected RConstrainedGridContainer() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RGridContainer</code> instance.
@@ -54,7 +64,6 @@ public class RConstrainedGridContainer extends RContainer {
     super(guid);
   }
 
-  
   /**
    * Gets the cellConstraints.
    * 
@@ -64,7 +73,6 @@ public class RConstrainedGridContainer extends RContainer {
     return cellConstraints;
   }
 
-  
   /**
    * Gets the cells.
    * 
@@ -74,21 +82,21 @@ public class RConstrainedGridContainer extends RContainer {
     return cells;
   }
 
-  
   /**
    * Sets the cellConstraints.
    * 
-   * @param cellConstraints the cellConstraints to set.
+   * @param cellConstraints
+   *          the cellConstraints to set.
    */
   public void setCellConstraints(CellConstraints[] cellConstraints) {
     this.cellConstraints = cellConstraints;
   }
 
-  
   /**
    * Sets the cells.
    * 
-   * @param cells the cells to set.
+   * @param cells
+   *          the cells to set.
    */
   public void setCells(RComponent[] cells) {
     this.cells = cells;

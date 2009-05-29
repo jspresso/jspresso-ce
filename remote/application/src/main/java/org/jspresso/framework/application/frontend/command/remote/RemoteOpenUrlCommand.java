@@ -39,7 +39,9 @@ package org.jspresso.framework.application.frontend.command.remote;
  */
 public class RemoteOpenUrlCommand extends RemoteCommand {
 
-  private String urlSpec;
+  private static final long serialVersionUID = -6590187375894054973L;
+
+  private String            urlSpec;
 
   /**
    * Gets the urlSpec.

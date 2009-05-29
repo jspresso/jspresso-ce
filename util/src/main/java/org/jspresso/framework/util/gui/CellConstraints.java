@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.gui;
 
+import java.io.Serializable;
+
 /**
  * Simple holder of cell constraints.
  * <p>
@@ -37,14 +39,16 @@ package org.jspresso.framework.util.gui;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CellConstraints {
+public class CellConstraints implements Serializable {
 
-  private int     column;
-  private int     height;
-  private boolean heightResizable;
-  private int     row;
-  private int     width;
-  private boolean widthResizable;
+  private static final long serialVersionUID = -7074571604039727117L;
+
+  private int               column;
+  private int               height;
+  private boolean           heightResizable;
+  private int               row;
+  private int               width;
+  private boolean           widthResizable;
 
   /**
    * Constructs a new <code>CellConstraints</code> instance.
@@ -60,17 +64,17 @@ public class CellConstraints {
    * Constructs a new <code>CellConstraints</code> instance.
    * 
    * @param row
-   *            the row.
+   *          the row.
    * @param column
-   *            the column.
+   *          the column.
    * @param width
-   *            the width.
+   *          the width.
    * @param height
-   *            the height.
+   *          the height.
    * @param widthResizable
-   *            is resizable in width ?
+   *          is resizable in width ?
    * @param heightResizable
-   *            is resizable in height ?
+   *          is resizable in height ?
    */
   public CellConstraints(int row, int column, int width, int height,
       boolean widthResizable, boolean heightResizable) {
@@ -141,7 +145,7 @@ public class CellConstraints {
    * Sets the column.
    * 
    * @param column
-   *            the column to set.
+   *          the column to set.
    */
   public void setColumn(int column) {
     this.column = column;
@@ -151,7 +155,7 @@ public class CellConstraints {
    * Sets the height.
    * 
    * @param height
-   *            the height to set.
+   *          the height to set.
    */
   public void setHeight(int height) {
     this.height = height;
@@ -161,7 +165,7 @@ public class CellConstraints {
    * Sets the heightResizable.
    * 
    * @param heightResizable
-   *            the heightResizable to set.
+   *          the heightResizable to set.
    */
   public void setHeightResizable(boolean heightResizable) {
     this.heightResizable = heightResizable;
@@ -171,7 +175,7 @@ public class CellConstraints {
    * Sets the row.
    * 
    * @param row
-   *            the row to set.
+   *          the row to set.
    */
   public void setRow(int row) {
     this.row = row;
@@ -181,7 +185,7 @@ public class CellConstraints {
    * Sets the width.
    * 
    * @param width
-   *            the width to set.
+   *          the width to set.
    */
   public void setWidth(int width) {
     this.width = width;
@@ -191,7 +195,7 @@ public class CellConstraints {
    * Sets the widthResizable.
    * 
    * @param widthResizable
-   *            the widthResizable to set.
+   *          the widthResizable to set.
    */
   public void setWidthResizable(boolean widthResizable) {
     this.widthResizable = widthResizable;

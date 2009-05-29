@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.state.remote;
 
+import java.io.Serializable;
+
 import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
@@ -41,9 +43,19 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RemoteValueState extends RemotePeer {
 
-  private boolean readable;
-  private Object  value;
-  private boolean writable;
+  private static final long serialVersionUID = 8957401466928527268L;
+
+  private boolean           readable;
+  private Serializable      value;
+  private boolean           writable;
+
+  /**
+   * Constructs a new <code>RemoteValueState</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RemoteValueState() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RemoteValueState</code> instance.
@@ -99,7 +111,7 @@ public class RemoteValueState extends RemotePeer {
    *          the value to set.
    */
   public void setValue(Object value) {
-    this.value = value;
+    this.value = (Serializable) value;
   }
 
   /**

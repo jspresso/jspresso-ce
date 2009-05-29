@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
+import java.io.Serializable;
 
 /**
  * This command is used to update a remote peer value.
@@ -39,12 +40,13 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteValueCommand extends RemoteCommand {
-  
-  private String description;
-  private String iconImageUrl;
-  private Object value;
 
-  
+  private static final long serialVersionUID = -3870216495926436036L;
+
+  private String            description;
+  private String            iconImageUrl;
+  private Serializable      value;
+
   /**
    * Gets the description.
    * 
@@ -54,7 +56,6 @@ public class RemoteValueCommand extends RemoteCommand {
     return description;
   }
 
-  
   /**
    * Gets the iconImageUrl.
    * 
@@ -64,8 +65,6 @@ public class RemoteValueCommand extends RemoteCommand {
     return iconImageUrl;
   }
 
-
-  
   /**
    * Gets the value.
    * 
@@ -75,38 +74,34 @@ public class RemoteValueCommand extends RemoteCommand {
     return value;
   }
 
-
-  
   /**
    * Sets the description.
    * 
-   * @param description the description to set.
+   * @param description
+   *          the description to set.
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
-
-  
   /**
    * Sets the iconImageUrl.
    * 
-   * @param iconImageUrl the iconImageUrl to set.
+   * @param iconImageUrl
+   *          the iconImageUrl to set.
    */
   public void setIconImageUrl(String iconImageUrl) {
     this.iconImageUrl = iconImageUrl;
   }
 
-
-  
   /**
    * Sets the value.
    * 
-   * @param value the value to set.
+   * @param value
+   *          the value to set.
    */
   public void setValue(Object value) {
-    this.value = value;
+    this.value = (Serializable) value;
   }
 
-  
 }

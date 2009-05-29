@@ -41,11 +41,21 @@ import java.util.List;
  */
 public class RemoteCompositeValueState extends RemoteValueState {
 
+  private static final long      serialVersionUID = -50313269125938620L;
+
   private List<RemoteValueState> children;
   private String                 description;
   private String                 iconImageUrl;
   private int                    leadingIndex;
   private int[]                  selectedIndices;
+
+  /**
+   * Constructs a new <code>RemoteCompositeValueState</code> instance. Only used
+   * for GWT serialization support.
+   */
+  protected RemoteCompositeValueState() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RemoteCompositeValueState</code> instance.
@@ -133,17 +143,16 @@ public class RemoteCompositeValueState extends RemoteValueState {
     this.iconImageUrl = iconImageUrl;
   }
 
-  
   /**
    * Sets the leadingIndex.
    * 
-   * @param leadingIndex the leadingIndex to set.
+   * @param leadingIndex
+   *          the leadingIndex to set.
    */
   public void setLeadingIndex(int leadingIndex) {
     this.leadingIndex = leadingIndex;
   }
 
-  
   /**
    * Sets the selectedIndices.
    * 

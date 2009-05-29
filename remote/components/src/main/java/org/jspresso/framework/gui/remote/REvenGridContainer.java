@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * An evenly distributed grid container.
  * <p>
@@ -40,9 +39,19 @@ package org.jspresso.framework.gui.remote;
  */
 public class REvenGridContainer extends RContainer {
 
-  private RComponent[] cells;
-  private String           drivingDimension;
-  private int              drivingDimensionCellCount;
+  private static final long serialVersionUID = -7545449789544595947L;
+
+  private RComponent[]      cells;
+  private String            drivingDimension;
+  private int               drivingDimensionCellCount;
+
+  /**
+   * Constructs a new <code>REvenGridContainer</code> instance. Only used for
+   * GWT serialization support.
+   */
+  protected REvenGridContainer() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>REvenGridContainer</code> instance.
@@ -54,7 +63,6 @@ public class REvenGridContainer extends RContainer {
     super(guid);
   }
 
-  
   /**
    * Gets the cells.
    * 
@@ -64,7 +72,6 @@ public class REvenGridContainer extends RContainer {
     return cells;
   }
 
-  
   /**
    * Gets the drivingDimension.
    * 
@@ -74,7 +81,6 @@ public class REvenGridContainer extends RContainer {
     return drivingDimension;
   }
 
-  
   /**
    * Gets the drivingDimensionCellCount.
    * 
@@ -84,31 +90,31 @@ public class REvenGridContainer extends RContainer {
     return drivingDimensionCellCount;
   }
 
-  
   /**
    * Sets the cells.
    * 
-   * @param cells the cells to set.
+   * @param cells
+   *          the cells to set.
    */
   public void setCells(RComponent[] cells) {
     this.cells = cells;
   }
 
-  
   /**
    * Sets the drivingDimension.
    * 
-   * @param drivingDimension the drivingDimension to set.
+   * @param drivingDimension
+   *          the drivingDimension to set.
    */
   public void setDrivingDimension(String drivingDimension) {
     this.drivingDimension = drivingDimension;
   }
 
-  
   /**
    * Sets the drivingDimensionCellCount.
    * 
-   * @param drivingDimensionCellCount the drivingDimensionCellCount to set.
+   * @param drivingDimensionCellCount
+   *          the drivingDimensionCellCount to set.
    */
   public void setDrivingDimensionCellCount(int drivingDimensionCellCount) {
     this.drivingDimensionCellCount = drivingDimensionCellCount;

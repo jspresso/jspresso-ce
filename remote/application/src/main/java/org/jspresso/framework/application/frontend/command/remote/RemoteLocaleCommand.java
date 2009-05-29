@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * Changes the locale of the remote peer.
  * <p>
@@ -40,9 +39,10 @@ package org.jspresso.framework.application.frontend.command.remote;
  */
 public class RemoteLocaleCommand extends RemoteCommand {
 
-  private String language;
+  private static final long serialVersionUID = -1105201434420095157L;
 
-  
+  private String            language;
+
   /**
    * Gets the language.
    * 
@@ -52,11 +52,11 @@ public class RemoteLocaleCommand extends RemoteCommand {
     return language;
   }
 
-  
   /**
    * Sets the language.
    * 
-   * @param language the language to set.
+   * @param language
+   *          the language to set.
    */
   public void setLanguage(String language) {
     this.language = language;

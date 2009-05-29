@@ -41,9 +41,11 @@ import org.jspresso.framework.gui.remote.RComponent;
  */
 public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
 
-  private String     workspaceName;
-  private RComponent workspaceView;
-  
+  private static final long serialVersionUID = -3110747731728731120L;
+
+  private String            workspaceName;
+  private RComponent        workspaceView;
+
   /**
    * Gets the workspaceName.
    * 
@@ -52,7 +54,7 @@ public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
   public String getWorkspaceName() {
     return workspaceName;
   }
-  
+
   /**
    * Gets the workspaceView.
    * 
@@ -61,24 +63,25 @@ public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
   public RComponent getWorkspaceView() {
     return workspaceView;
   }
-  
+
   /**
    * Sets the workspaceName.
    * 
-   * @param workspaceName the workspaceName to set.
+   * @param workspaceName
+   *          the workspaceName to set.
    */
   public void setWorkspaceName(String workspaceName) {
     this.workspaceName = workspaceName;
   }
-  
+
   /**
    * Sets the workspaceView.
    * 
-   * @param workspaceView the workspaceView to set.
+   * @param workspaceView
+   *          the workspaceView to set.
    */
   public void setWorkspaceView(RComponent workspaceView) {
     this.workspaceView = workspaceView;
   }
-  
-  
+
 }

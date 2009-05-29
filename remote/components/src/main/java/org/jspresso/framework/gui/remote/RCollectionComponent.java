@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * A collection component.
  * <p>
@@ -40,9 +39,18 @@ package org.jspresso.framework.gui.remote;
  */
 public class RCollectionComponent extends RComponent {
 
-  private String selectionMode;
+  private static final long serialVersionUID = -5154116400205068483L;
 
-  
+  private String            selectionMode;
+
+  /**
+   * Constructs a new <code>RCollectionComponent</code> instance. Only used for
+   * GWT serialization support.
+   */
+  protected RCollectionComponent() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RCollectionComponent</code> instance.
    * 
@@ -62,14 +70,13 @@ public class RCollectionComponent extends RComponent {
     return selectionMode;
   }
 
-  
   /**
    * Sets the selectionMode.
    * 
-   * @param selectionMode the selectionMode to set.
+   * @param selectionMode
+   *          the selectionMode to set.
    */
   public void setSelectionMode(String selectionMode) {
     this.selectionMode = selectionMode;
   }
 }
-

@@ -39,9 +39,19 @@ package org.jspresso.framework.gui.remote;
  */
 public class RSplitContainer extends RContainer {
 
-  private RComponent leftTop;
-  private String     orientation;
-  private RComponent rightBottom;
+  private static final long serialVersionUID = 4276881870150436168L;
+
+  private RComponent        leftTop;
+  private String            orientation;
+  private RComponent        rightBottom;
+
+  /**
+   * Constructs a new <code>RSplitContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RSplitContainer() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RSplitContainer</code> instance.
@@ -71,7 +81,6 @@ public class RSplitContainer extends RContainer {
     return orientation;
   }
 
-  
   /**
    * Gets the rightBottom.
    * 
@@ -81,17 +90,16 @@ public class RSplitContainer extends RContainer {
     return rightBottom;
   }
 
-  
   /**
    * Sets the leftTop.
    * 
-   * @param leftTop the leftTop to set.
+   * @param leftTop
+   *          the leftTop to set.
    */
   public void setLeftTop(RComponent leftTop) {
     this.leftTop = leftTop;
   }
 
-  
   /**
    * Sets the orientation.
    * 
@@ -102,11 +110,11 @@ public class RSplitContainer extends RContainer {
     this.orientation = orientation;
   }
 
-  
   /**
    * Sets the rightBottom.
    * 
-   * @param rightBottom the rightBottom to set.
+   * @param rightBottom
+   *          the rightBottom to set.
    */
   public void setRightBottom(RComponent rightBottom) {
     this.rightBottom = rightBottom;

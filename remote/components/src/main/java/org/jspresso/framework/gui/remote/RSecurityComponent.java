@@ -39,6 +39,16 @@ package org.jspresso.framework.gui.remote;
  */
 public class RSecurityComponent extends RComponent {
 
+  private static final long serialVersionUID = 6757171028589942114L;
+
+  /**
+   * Constructs a new <code>RSecurityComponent</code> instance. Only used for
+   * GWT serialization support.
+   */
+  protected RSecurityComponent() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RSecurityComponent</code> instance.
    * 

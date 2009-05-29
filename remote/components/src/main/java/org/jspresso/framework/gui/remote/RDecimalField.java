@@ -39,6 +39,8 @@ package org.jspresso.framework.gui.remote;
  */
 public class RDecimalField extends RDecimalComponent {
 
+  private static final long serialVersionUID = 2193665529381520403L;
+
   /**
    * Constructs a new <code>RDecimalField</code> instance.
    * 

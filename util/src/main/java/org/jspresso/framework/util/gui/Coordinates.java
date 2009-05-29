@@ -18,11 +18,7 @@
  */
 package org.jspresso.framework.util.gui;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.jspresso.framework.util.exception.NestedRuntimeException;
-
+import java.io.Serializable;
 
 /**
  * a simple holder for 2D coordinates.
@@ -43,10 +39,12 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
 
-  private int x;
-  private int y;
+  private static final long serialVersionUID = -8402904245208047956L;
+
+  private int               x;
+  private int               y;
 
   /**
    * Constructs a new <code>Coordinates</code> instance.
@@ -59,26 +57,13 @@ public class Coordinates {
    * Constructs a new <code>Coordinates</code> instance.
    * 
    * @param x
-   *            the x coordinate.
+   *          the x coordinate.
    * @param y
-   *            the y coordinate.
+   *          the y coordinate.
    */
   public Coordinates(int x, int y) {
     this.x = x;
     this.y = y;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Object clone() {
-    try {
-      Coordinates clone = (Coordinates) super.clone();
-      return clone;
-    } catch (CloneNotSupportedException ex) {
-      throw new NestedRuntimeException(ex);
-    }
   }
 
   /**
@@ -93,7 +78,7 @@ public class Coordinates {
       return true;
     }
     Coordinates rhs = (Coordinates) obj;
-    return new EqualsBuilder().append(x, rhs.x).append(y, rhs.y).isEquals();
+    return x == rhs.x && y == rhs.y;
   }
 
   /**
@@ -119,14 +104,14 @@ public class Coordinates {
    */
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(23, 53).append(x).append(y).toHashCode();
+    return (23 + x * 13) + (31 + y * 17);
   }
 
   /**
    * Sets the x.
    * 
    * @param x
-   *            the x to set.
+   *          the x to set.
    */
   public void setX(int x) {
     this.x = x;
@@ -136,7 +121,7 @@ public class Coordinates {
    * Sets the y.
    * 
    * @param y
-   *            the y to set.
+   *          the y to set.
    */
   public void setY(int y) {
     this.y = y;
@@ -147,7 +132,8 @@ public class Coordinates {
    */
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("x", x).append("y", y).toString();
+    return new StringBuilder().append(getClass().getName()).append(" : x=")
+        .append(x).append(", y=").append(y).toString();
   }
 
 }

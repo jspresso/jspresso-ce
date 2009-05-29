@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.gui;
 
+import java.io.Serializable;
+
 /**
  * A simple class to represent a font.
  * <p>
@@ -37,22 +39,23 @@ package org.jspresso.framework.util.gui;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Font {
+public class Font implements Serializable {
 
-  private boolean bold;
-  private boolean italic;
-  private String  name;
-  private int     size;
-  
+  private static final long serialVersionUID = 8646399909287784996L;
+
+  private boolean           bold;
+  private boolean           italic;
+  private String            name;
+  private int               size;
+
   /**
    * Constructs a new <code>Font</code> instance.
-   * 
    */
   public Font() {
     italic = false;
     bold = false;
   }
-  
+
   /**
    * Gets the name.
    * 
@@ -61,7 +64,7 @@ public class Font {
   public String getName() {
     return name;
   }
-  
+
   /**
    * Gets the size.
    * 
@@ -70,7 +73,7 @@ public class Font {
   public int getSize() {
     return size;
   }
-  
+
   /**
    * Gets the bold.
    * 
@@ -79,7 +82,7 @@ public class Font {
   public boolean isBold() {
     return bold;
   }
-  
+
   /**
    * Gets the italic.
    * 
@@ -88,38 +91,42 @@ public class Font {
   public boolean isItalic() {
     return italic;
   }
-  
+
   /**
    * Sets the bold.
    * 
-   * @param bold the bold to set.
+   * @param bold
+   *          the bold to set.
    */
   public void setBold(boolean bold) {
     this.bold = bold;
   }
-  
+
   /**
    * Sets the italic.
    * 
-   * @param italic the italic to set.
+   * @param italic
+   *          the italic to set.
    */
   public void setItalic(boolean italic) {
     this.italic = italic;
   }
-  
+
   /**
    * Sets the name.
    * 
-   * @param name the name to set.
+   * @param name
+   *          the name to set.
    */
   public void setName(String name) {
     this.name = name;
   }
-  
+
   /**
    * Sets the size.
    * 
-   * @param size the size to set.
+   * @param size
+   *          the size to set.
    */
   public void setSize(int size) {
     this.size = size;

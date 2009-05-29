@@ -39,6 +39,16 @@ package org.jspresso.framework.gui.remote;
  */
 public class RPasswordField extends RTextField {
 
+  private static final long serialVersionUID = 1595790630114480024L;
+
+  /**
+   * Constructs a new <code>RPasswordField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RPasswordField() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RPasswordField</code> instance.
    * 

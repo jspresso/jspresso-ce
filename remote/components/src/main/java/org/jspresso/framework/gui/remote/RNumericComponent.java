@@ -38,9 +38,19 @@ package org.jspresso.framework.gui.remote;
  * @author Vincent Vandenschrick
  */
 public abstract class RNumericComponent extends RComponent {
-  
-  private Number maxValue;
-  private Number minValue;
+
+  private static final long serialVersionUID = 2168149225835180375L;
+
+  private Number            maxValue;
+  private Number            minValue;
+
+  /**
+   * Constructs a new <code>RNumericComponent</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RNumericComponent() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RIntegerField</code> instance.
@@ -52,7 +62,6 @@ public abstract class RNumericComponent extends RComponent {
     super(guid);
   }
 
-  
   /**
    * Gets the maxValue.
    * 
@@ -62,7 +71,6 @@ public abstract class RNumericComponent extends RComponent {
     return maxValue;
   }
 
-  
   /**
    * Gets the minValue.
    * 
@@ -72,21 +80,21 @@ public abstract class RNumericComponent extends RComponent {
     return minValue;
   }
 
-  
   /**
    * Sets the maxValue.
    * 
-   * @param maxValue the maxValue to set.
+   * @param maxValue
+   *          the maxValue to set.
    */
   public void setMaxValue(Number maxValue) {
     this.maxValue = maxValue;
   }
 
-  
   /**
    * Sets the minValue.
    * 
-   * @param minValue the minValue to set.
+   * @param minValue
+   *          the minValue to set.
    */
   public void setMinValue(Number minValue) {
     this.minValue = minValue;

@@ -38,8 +38,18 @@ package org.jspresso.framework.gui.remote;
  * @author Vincent Vandenschrick
  */
 public class RActionField extends RComponent {
-  
-  private boolean showTextField;
+
+  private static final long serialVersionUID = -5445056567090394779L;
+
+  private boolean           showTextField;
+
+  /**
+   * Constructs a new <code>RActionField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RActionField() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RActionField</code> instance.
@@ -52,7 +62,6 @@ public class RActionField extends RComponent {
     showTextField = true;
   }
 
-  
   /**
    * Gets the showTextField.
    * 
@@ -62,11 +71,11 @@ public class RActionField extends RComponent {
     return showTextField;
   }
 
-  
   /**
    * Sets the showTextField.
    * 
-   * @param showTextField the showTextField to set.
+   * @param showTextField
+   *          the showTextField to set.
    */
   public void setShowTextField(boolean showTextField) {
     this.showTextField = showTextField;

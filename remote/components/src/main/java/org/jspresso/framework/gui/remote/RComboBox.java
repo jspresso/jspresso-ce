@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * A component containing enumerated values.
  * <p>
@@ -40,9 +39,19 @@ package org.jspresso.framework.gui.remote;
  */
 public class RComboBox extends RComponent {
 
-  private RIcon[]  icons;
-  private String[] translations;
-  private String[] values;
+  private static final long serialVersionUID = -2604499683793881316L;
+
+  private RIcon[]           icons;
+  private String[]          translations;
+  private String[]          values;
+
+  /**
+   * Constructs a new <code>RComboBox</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RComboBox() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RComboBox</code> instance.
@@ -84,7 +93,8 @@ public class RComboBox extends RComponent {
   /**
    * Sets the icons.
    * 
-   * @param icons the icons to set.
+   * @param icons
+   *          the icons to set.
    */
   public void setIcons(RIcon[] icons) {
     this.icons = icons;

@@ -39,7 +39,17 @@ package org.jspresso.framework.gui.remote;
  */
 public class RLabel extends RTextComponent {
 
-  private boolean multiLine;
+  private static final long serialVersionUID = -7684946402506329656L;
+
+  private boolean           multiLine;
+
+  /**
+   * Constructs a new <code>RLabel</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RLabel() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RLabel</code> instance.

@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * A command to update readability of a remote peer.
  * <p>
@@ -39,9 +38,11 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @author Vincent Vandenschrick
  */
 public class RemoteReadabilityCommand extends RemoteCommand {
-  
-  private boolean readable;
-  
+
+  private static final long serialVersionUID = 8574273444507325121L;
+
+  private boolean           readable;
+
   /**
    * Gets the readable.
    * 
@@ -50,14 +51,15 @@ public class RemoteReadabilityCommand extends RemoteCommand {
   public boolean isReadable() {
     return readable;
   }
-  
+
   /**
    * Sets the readable.
    * 
-   * @param readable the readable to set.
+   * @param readable
+   *          the readable to set.
    */
   public void setReadable(boolean readable) {
     this.readable = readable;
   }
-  
+
 }

@@ -41,9 +41,10 @@ import org.jspresso.framework.gui.remote.RAction;
  */
 public class RemoteFileUploadCommand extends RemoteFileCommand {
 
-  private RAction               successCallbackAction;
+  private static final long serialVersionUID = -1367967389734501316L;
 
-  
+  private RAction           successCallbackAction;
+
   /**
    * Gets the successCallbackAction.
    * 
@@ -53,11 +54,11 @@ public class RemoteFileUploadCommand extends RemoteFileCommand {
     return successCallbackAction;
   }
 
-  
   /**
    * Sets the successCallbackAction.
    * 
-   * @param successCallbackAction the successCallbackAction to set.
+   * @param successCallbackAction
+   *          the successCallbackAction to set.
    */
   public void setSuccessCallbackAction(RAction successCallbackAction) {
     this.successCallbackAction = successCallbackAction;

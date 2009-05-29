@@ -41,11 +41,12 @@ import org.jspresso.framework.gui.remote.RActionList;
  */
 public class RemoteInitCommand extends RemoteCommand {
 
-  private RActionList[] actions;
-  private RActionList[] helpActions;
-  private RActionList[] workspaceActions;
+  private static final long serialVersionUID = -5984969345298629961L;
 
-  
+  private RActionList[]     actions;
+  private RActionList[]     helpActions;
+  private RActionList[]     workspaceActions;
+
   /**
    * Gets the actions.
    * 
@@ -55,7 +56,6 @@ public class RemoteInitCommand extends RemoteCommand {
     return actions;
   }
 
-  
   /**
    * Gets the helpActions.
    * 
@@ -97,7 +97,8 @@ public class RemoteInitCommand extends RemoteCommand {
   /**
    * Sets the workspaceActions.
    * 
-   * @param workspaceActions the workspaceActions to set.
+   * @param workspaceActions
+   *          the workspaceActions to set.
    */
   public void setWorkspaceActions(RActionList[] workspaceActions) {
     this.workspaceActions = workspaceActions;

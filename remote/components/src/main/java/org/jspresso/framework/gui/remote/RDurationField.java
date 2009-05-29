@@ -39,7 +39,17 @@ package org.jspresso.framework.gui.remote;
  */
 public class RDurationField extends RComponent {
 
-  private long maxMillis;
+  private static final long serialVersionUID = 5384453705961766246L;
+
+  private long              maxMillis;
+
+  /**
+   * Constructs a new <code>RDurationField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RDurationField() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RDurationField</code> instance.
@@ -63,7 +73,8 @@ public class RDurationField extends RComponent {
   /**
    * Sets the maxMillis.
    * 
-   * @param maxMillis the maxMillis to set.
+   * @param maxMillis
+   *          the maxMillis to set.
    */
   public void setMaxMillis(long maxMillis) {
     this.maxMillis = maxMillis;

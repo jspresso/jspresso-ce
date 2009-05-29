@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.jspresso.framework.state.remote.RemoteValueState;
 
-
 /**
  * A command to update the children of a remote peer.
  * <p>
@@ -43,10 +42,11 @@ import org.jspresso.framework.state.remote.RemoteValueState;
  * @author Vincent Vandenschrick
  */
 public class RemoteChildrenCommand extends RemoteCommand {
-  
+
+  private static final long      serialVersionUID = 5963387363740451053L;
+
   private List<RemoteValueState> children;
 
-  
   /**
    * Gets the children.
    * 
@@ -56,15 +56,14 @@ public class RemoteChildrenCommand extends RemoteCommand {
     return children;
   }
 
-  
   /**
    * Sets the children.
    * 
-   * @param children the children to set.
+   * @param children
+   *          the children to set.
    */
   public void setChildren(List<RemoteValueState> children) {
     this.children = children;
   }
-  
-  
+
 }

@@ -39,9 +39,19 @@ package org.jspresso.framework.gui.remote;
  */
 public class RTable extends RCollectionComponent {
 
-  private RComponent[] columns;
-  private String[]     columnIds;
-  private RAction      sortingAction;
+  private static final long serialVersionUID = 4825156764599864408L;
+
+  private RComponent[]      columns;
+  private String[]          columnIds;
+  private RAction           sortingAction;
+
+  /**
+   * Constructs a new <code>RTable</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTable() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RTable</code> instance.

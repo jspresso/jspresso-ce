@@ -41,6 +41,8 @@ import java.util.Map;
  */
 public class RemoteSortCommand extends RemoteCommand {
 
+  private static final long   serialVersionUID = 6499019879319233162L;
+
   private Map<String, String> orderingProperties;
   private String              viewStateGuid;
 

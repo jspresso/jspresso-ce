@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
+import java.io.Serializable;
 
 /**
  * A remote command to pilot the remote frontend.
@@ -38,10 +39,12 @@ package org.jspresso.framework.application.frontend.command.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class RemoteCommand {
-  
-  private String targetPeerGuid;
-  
+public abstract class RemoteCommand implements Serializable {
+
+  private static final long serialVersionUID = 4102568065040838006L;
+
+  private String            targetPeerGuid;
+
   /**
    * Gets the targetPeerGuid.
    * 
@@ -51,11 +54,11 @@ public abstract class RemoteCommand {
     return targetPeerGuid;
   }
 
-  
   /**
    * Sets the targetPeerGuid.
    * 
-   * @param targetPeerGuid the targetPeerGuid to set.
+   * @param targetPeerGuid
+   *          the targetPeerGuid to set.
    */
   public void setTargetPeerGuid(String targetPeerGuid) {
     this.targetPeerGuid = targetPeerGuid;

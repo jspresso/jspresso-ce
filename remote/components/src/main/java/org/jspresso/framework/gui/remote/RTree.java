@@ -39,6 +39,16 @@ package org.jspresso.framework.gui.remote;
  */
 public class RTree extends RComponent {
 
+  private static final long serialVersionUID = 7886711955466326634L;
+
+  /**
+   * Constructs a new <code>RTree</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTree() {
+    // For GWT support
+  }
+
   /**
    * Constructs a new <code>RTreeComponent</code> instance.
    * 

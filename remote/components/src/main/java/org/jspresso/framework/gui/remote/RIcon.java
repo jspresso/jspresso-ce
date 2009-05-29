@@ -42,8 +42,18 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RIcon extends RemotePeer {
 
-  private Dimension dimension;
-  private String    imageUrlSpec;
+  private static final long serialVersionUID = 4846497088272546437L;
+
+  private Dimension         dimension;
+  private String            imageUrlSpec;
+
+  /**
+   * Constructs a new <code>RIcon</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RIcon() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RIcon</code> instance.

@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-
 /**
  * A command to transfer selection of a remote peer.
  * <p>
@@ -40,9 +39,11 @@ package org.jspresso.framework.application.frontend.command.remote;
  */
 public class RemoteSelectionCommand extends RemoteCommand {
 
-  private int                    leadingIndex;
-  private int[]                  selectedIndices;
-  
+  private static final long serialVersionUID = 8776670820353559196L;
+
+  private int               leadingIndex;
+  private int[]             selectedIndices;
+
   /**
    * Gets the leadingIndex.
    * 
@@ -51,7 +52,7 @@ public class RemoteSelectionCommand extends RemoteCommand {
   public int getLeadingIndex() {
     return leadingIndex;
   }
-  
+
   /**
    * Gets the selectedIndices.
    * 
@@ -60,20 +61,22 @@ public class RemoteSelectionCommand extends RemoteCommand {
   public int[] getSelectedIndices() {
     return selectedIndices;
   }
-  
+
   /**
    * Sets the leadingIndex.
    * 
-   * @param leadingIndex the leadingIndex to set.
+   * @param leadingIndex
+   *          the leadingIndex to set.
    */
   public void setLeadingIndex(int leadingIndex) {
     this.leadingIndex = leadingIndex;
   }
-  
+
   /**
    * Sets the selectedIndices.
    * 
-   * @param selectedIndices the selectedIndices to set.
+   * @param selectedIndices
+   *          the selectedIndices to set.
    */
   public void setSelectedIndices(int[] selectedIndices) {
     this.selectedIndices = selectedIndices;

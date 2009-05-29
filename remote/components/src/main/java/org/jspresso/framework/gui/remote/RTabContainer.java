@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
-
 /**
  * A container with tabbed children views.
  * <p>
@@ -40,13 +38,24 @@ package org.jspresso.framework.gui.remote;
  * @author Vincent Vandenschrick
  */
 public class RTabContainer extends RContainer {
-  
-  private RComponent[] tabs;
+
+  private static final long serialVersionUID = 8976562094649779477L;
+
+  private RComponent[]      tabs;
+
+  /**
+   * Constructs a new <code>RTabContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTabContainer() {
+    // For GWT support
+  }
 
   /**
    * Constructs a new <code>RTabContainer</code> instance.
    * 
-   * @param guid the guid
+   * @param guid
+   *          the guid
    */
   public RTabContainer(String guid) {
     super(guid);
@@ -64,7 +73,8 @@ public class RTabContainer extends RContainer {
   /**
    * Sets the tabs.
    * 
-   * @param tabs the tabs to set.
+   * @param tabs
+   *          the tabs to set.
    */
   public void setTabs(RComponent[] tabs) {
     this.tabs = tabs;

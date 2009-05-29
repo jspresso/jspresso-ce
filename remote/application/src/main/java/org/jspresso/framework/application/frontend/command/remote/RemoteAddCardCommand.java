@@ -41,8 +41,10 @@ import org.jspresso.framework.gui.remote.RComponent;
  */
 public class RemoteAddCardCommand extends RemoteCommand {
 
-  private String     cardName;
-  private RComponent card;
+  private static final long serialVersionUID = -8530785074677068249L;
+
+  private String            cardName;
+  private RComponent        card;
 
   /**
    * Gets the cardName.

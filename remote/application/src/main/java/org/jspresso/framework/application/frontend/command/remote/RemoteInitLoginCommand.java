@@ -42,11 +42,13 @@ import org.jspresso.framework.gui.remote.RIcon;
  */
 public class RemoteInitLoginCommand extends RemoteCommand {
 
-  private RComponent loginView;
-  private String     message;
-  private RIcon      okIcon;
-  private String     okLabel;
-  private String     title;
+  private static final long serialVersionUID = 5672752293218754196L;
+
+  private RComponent        loginView;
+  private String            message;
+  private RIcon             okIcon;
+  private String            okLabel;
+  private String            title;
 
   /**
    * Gets the loginView.
@@ -103,7 +105,6 @@ public class RemoteInitLoginCommand extends RemoteCommand {
     this.loginView = loginView;
   }
 
-  
   /**
    * Sets the message.
    * 
@@ -114,27 +115,26 @@ public class RemoteInitLoginCommand extends RemoteCommand {
     this.message = message;
   }
 
-  
   /**
    * Sets the okIcon.
    * 
-   * @param okIcon the okIcon to set.
+   * @param okIcon
+   *          the okIcon to set.
    */
   public void setOkIcon(RIcon okIcon) {
     this.okIcon = okIcon;
   }
 
-  
   /**
    * Sets the okLabel.
    * 
-   * @param okLabel the okLabel to set.
+   * @param okLabel
+   *          the okLabel to set.
    */
   public void setOkLabel(String okLabel) {
     this.okLabel = okLabel;
   }
 
-  
   /**
    * Sets the title.
    * 

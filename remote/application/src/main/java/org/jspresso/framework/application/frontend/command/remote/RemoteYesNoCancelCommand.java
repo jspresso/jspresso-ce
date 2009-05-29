@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 import org.jspresso.framework.gui.remote.RAction;
 
-
 /**
  * Yes - No - Cancel remote flow action.
  * <p>
@@ -42,9 +41,10 @@ import org.jspresso.framework.gui.remote.RAction;
  */
 public class RemoteYesNoCancelCommand extends RemoteYesNoCommand {
 
-  private RAction cancelAction;
+  private static final long serialVersionUID = 8352481694662002688L;
 
-  
+  private RAction           cancelAction;
+
   /**
    * Gets the cancelAction.
    * 
@@ -54,15 +54,14 @@ public class RemoteYesNoCancelCommand extends RemoteYesNoCommand {
     return cancelAction;
   }
 
-  
   /**
    * Sets the cancelAction.
    * 
-   * @param cancelAction the cancelAction to set.
+   * @param cancelAction
+   *          the cancelAction to set.
    */
   public void setCancelAction(RAction cancelAction) {
     this.cancelAction = cancelAction;
   }
-  
-  
+
 }
