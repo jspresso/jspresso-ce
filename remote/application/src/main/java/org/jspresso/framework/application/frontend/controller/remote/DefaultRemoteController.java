@@ -154,32 +154,61 @@ public class DefaultRemoteController extends
   }
 
   /**
+   * Selects the current workspace.
+   * 
+   * @param workspaceName
+   *          the current workspace name.
+   */
+  protected void selectWorkspace(String workspaceName) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+    }
+  }
+
+  /**
    * Sends a remote workspace display command.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public void displayWorkspace(String workspaceName) {
-    RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
+    displayWorkspace(workspaceName, true);
+  }
+
+  /**
+   * Sets the workspace as selected and optionaly notifies the remote peer.
+   * 
+   * @param workspaceName
+   *          the selected workspace name.
+   * @param notifyRemote
+   *          if true, a remote notification will be sent to the remote peer.
+   */
+  protected void displayWorkspace(String workspaceName, boolean notifyRemote) {
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
       super.displayWorkspace(workspaceName);
       if (workspaceViews == null) {
         workspaceViews = new HashSet<String>();
       }
+      IView<RComponent> workspaceView = null;
       if (!workspaceViews.contains(workspaceName)) {
         IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
             .getViewDescriptor();
         IValueConnector workspaceConnector = getBackendController()
             .getWorkspaceConnector(workspaceName);
-        IView<RComponent> workspaceView = createWorkspaceView(workspaceName,
+        workspaceView = createWorkspaceView(workspaceName,
             workspaceViewDescriptor, (Workspace) workspaceConnector
                 .getConnectorValue());
         workspaceViews.add(workspaceName);
-        workspaceDisplayCommand.setWorkspaceView(workspaceView.getPeer());
         getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
       }
-      workspaceDisplayCommand.setWorkspaceName(workspaceName);
-      registerCommand(workspaceDisplayCommand);
+      if (notifyRemote) {
+        RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
+        if (workspaceView != null) {
+          workspaceDisplayCommand.setWorkspaceView(workspaceView.getPeer());
+        }
+        workspaceDisplayCommand.setWorkspaceName(workspaceName);
+        registerCommand(workspaceDisplayCommand);
+      }
     }
   }
 
@@ -424,6 +453,9 @@ public class DefaultRemoteController extends
             LoginUtils.LOGIN_FAILED, getLocale()));
         registerCommand(errorMessageCommand);
       }
+    } else if (command instanceof RemoteWorkspaceDisplayCommand) {
+      displayWorkspace(((RemoteWorkspaceDisplayCommand) command)
+          .getWorkspaceName(), false);
     } else {
       IRemotePeer targetPeer = getRegistered(command.getTargetPeerGuid());
       if (targetPeer == null) {

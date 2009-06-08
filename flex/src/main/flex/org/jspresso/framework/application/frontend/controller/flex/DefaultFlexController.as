@@ -516,9 +516,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     private function restart():void {
       var applicationFrame:Application = Application.application as Application;
-//      (applicationFrame.controlBar as ApplicationControlBar).dock = false;// to workaround remove bug
-//      applicationFrame.removeChild(applicationFrame.controlBar as DisplayObject);
-//      applicationFrame.controlBar = null;
       applicationFrame.removeAllChildren();
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _changeNotificationsEnabled = true;
@@ -661,6 +658,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           } else {
             var separator:Object = new Object();
             separator["type"] = "separator";
+            menu["children"].push(separator);
             for each (var menuItem:Object in createMenuItems(actionList)) {
               menu["children"].push(menuItem);
             }
