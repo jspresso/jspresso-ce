@@ -23,6 +23,7 @@ import java.util.Map;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
+import org.jspresso.framework.util.bean.MissingPropertyException;
 
 /**
  * This is the default implementation of the accessor factory.
@@ -61,8 +62,12 @@ public class BasicAccessorFactory implements IAccessorFactory {
    * {@inheritDoc}
    */
   public IAccessor createPropertyAccessor(String property, Class<?> beanClass) {
-    return getAccessorDelegate(beanClass, property).createPropertyAccessor(
-        property, beanClass);
+    try {
+      return getAccessorDelegate(beanClass, property).createPropertyAccessor(
+          property, beanClass);
+    } catch (MissingPropertyException ex) {
+      throw ex;
+    }
   }
 
   /**

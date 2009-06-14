@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -137,9 +136,9 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (IPropertyViewDescriptor propertyViewDescriptor : propertyViewDescriptors) {
-      actualPropertyViewDescriptors.addAll(explodeComponentReferences(
-          propertyViewDescriptor,
-          (IComponentDescriptorProvider<?>) getModelDescriptor()));
+      actualPropertyViewDescriptors.addAll(PropertyDescriptorHelper
+          .explodeComponentReferences(propertyViewDescriptor,
+              (IComponentDescriptorProvider<?>) getModelDescriptor()));
     }
     return actualPropertyViewDescriptors;
   }
@@ -173,56 +172,6 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public void setPropertyViewDescriptors(
       List<IPropertyViewDescriptor> propertyViewDescriptors) {
     this.propertyViewDescriptors = propertyViewDescriptors;
-  }
-
-  private List<IPropertyViewDescriptor> explodeComponentReferences(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IComponentDescriptorProvider<?> componentDescriptorProvider) {
-    List<IPropertyViewDescriptor> returnedList = new ArrayList<IPropertyViewDescriptor>();
-    IPropertyDescriptor propertyDescriptor = componentDescriptorProvider
-        .getComponentDescriptor().getPropertyDescriptor(
-            propertyViewDescriptor.getName());
-    if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-        .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getComponentContract()))) {
-      for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor().getRenderedProperties()) {
-        BasicPropertyViewDescriptor nestedPropertyViewDescriptor = new BasicPropertyViewDescriptor();
-        nestedPropertyViewDescriptor.setName(propertyDescriptor.getName() + "."
-            + nestedRenderedProperty);
-        nestedPropertyViewDescriptor.setModelDescriptor(propertyDescriptor);
-        nestedPropertyViewDescriptor
-            .setWidth(getPropertyWidth(nestedPropertyViewDescriptor.getName()));
-        nestedPropertyViewDescriptor
-            .setRenderedChildProperties(getRenderedChildProperties(nestedPropertyViewDescriptor
-                .getName()));
-        if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-          returnedList.addAll(explodeComponentReferences(
-              nestedPropertyViewDescriptor,
-              (IReferencePropertyDescriptor<?>) propertyDescriptor));
-        } else {
-          returnedList.add(nestedPropertyViewDescriptor);
-        }
-      }
-    } else {
-      if (propertyViewDescriptor instanceof BasicPropertyViewDescriptor) {
-        if (propertyViewDescriptor.getModelDescriptor() == null) {
-          ((BasicPropertyViewDescriptor) propertyViewDescriptor)
-              .setModelDescriptor(propertyDescriptor);
-        }
-        if (getPropertyWidth(propertyDescriptor.getName()) > 1) {
-          ((BasicPropertyViewDescriptor) propertyViewDescriptor)
-              .setWidth(getPropertyWidth(propertyDescriptor.getName()));
-        }
-        if (getRenderedChildProperties(propertyDescriptor.getName()) != null) {
-          ((BasicPropertyViewDescriptor) propertyViewDescriptor)
-              .setRenderedChildProperties(getRenderedChildProperties(propertyDescriptor
-                  .getName()));
-        }
-      }
-      returnedList.add(propertyViewDescriptor);
-    }
-    return returnedList;
   }
 
   /**

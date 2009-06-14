@@ -437,7 +437,8 @@ public class DefaultUlcViewFactory extends
 
     for (IPropertyViewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
-      String propertyName = propertyViewDescriptor.getName();
+      String propertyName = propertyViewDescriptor.getModelDescriptor()
+          .getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
           .getPropertyDescriptor(propertyName);
@@ -1154,7 +1155,7 @@ public class DefaultUlcViewFactory extends
     Set<String> forbiddenColumns = new HashSet<String>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
-      String columnId = columnViewDescriptor.getName();
+      String columnId = columnViewDescriptor.getModelDescriptor().getName();
       try {
         actionHandler.checkAccess(columnViewDescriptor);
         IValueConnector columnConnector = createColumnConnector(columnId,
@@ -1229,7 +1230,7 @@ public class DefaultUlcViewFactory extends
     int columnIndex = 0;
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
-      String propertyName = columnViewDescriptor.getName();
+      String propertyName = columnViewDescriptor.getModelDescriptor().getName();
       if (!forbiddenColumns.contains(propertyName)) {
         ULCTableColumn column = viewComponent.getColumnModel().getColumn(
             columnIndex++);

@@ -24,10 +24,6 @@ import java.util.List;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
@@ -110,45 +106,11 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
-      actualPropertyViewDescriptors.addAll(explodeComponentReferences(
-          propertyViewDescriptor, rowModelDescriptor));
+      actualPropertyViewDescriptors.addAll(PropertyDescriptorHelper
+          .explodeComponentReferences(propertyViewDescriptor,
+              rowModelDescriptor));
     }
     return actualPropertyViewDescriptors;
-  }
-
-  private List<IPropertyViewDescriptor> explodeComponentReferences(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IComponentDescriptorProvider<?> componentDescriptorProvider) {
-    List<IPropertyViewDescriptor> returnedList = new ArrayList<IPropertyViewDescriptor>();
-    IComponentDescriptor<?> rootComponentDescriptor = componentDescriptorProvider
-        .getComponentDescriptor();
-    IPropertyDescriptor propertyDescriptor = rootComponentDescriptor
-        .getPropertyDescriptor(propertyViewDescriptor.getName());
-    if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-        .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getComponentContract()))) {
-      IComponentDescriptor<?> referencedComponentDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-          .getReferencedDescriptor();
-      for (String nestedRenderedProperty : referencedComponentDescriptor
-          .getRenderedProperties()) {
-        BasicPropertyViewDescriptor nestedPropertyViewDescriptor = new BasicPropertyViewDescriptor();
-        nestedPropertyViewDescriptor.setName(propertyDescriptor.getName() + "."
-            + nestedRenderedProperty);
-        nestedPropertyViewDescriptor
-            .setModelDescriptor(referencedComponentDescriptor
-                .getPropertyDescriptor(nestedRenderedProperty)/* rootComponentDescriptor */);
-        returnedList.addAll(explodeComponentReferences(
-            nestedPropertyViewDescriptor, componentDescriptorProvider));
-      }
-    } else {
-      if (propertyViewDescriptor.getModelDescriptor() == null
-          && propertyViewDescriptor instanceof BasicPropertyViewDescriptor) {
-        ((BasicPropertyViewDescriptor) propertyViewDescriptor)
-            .setModelDescriptor(propertyDescriptor);
-      }
-      returnedList.add(propertyViewDescriptor);
-    }
-    return returnedList;
   }
 
   /**

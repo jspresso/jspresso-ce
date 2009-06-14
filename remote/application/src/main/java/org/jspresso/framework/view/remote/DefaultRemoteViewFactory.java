@@ -407,7 +407,8 @@ public class DefaultRemoteViewFactory extends
 
     for (IPropertyViewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
-      String propertyName = propertyViewDescriptor.getName();
+      String propertyName = propertyViewDescriptor.getModelDescriptor()
+          .getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
           .getPropertyDescriptor(propertyName);
@@ -1043,7 +1044,7 @@ public class DefaultRemoteViewFactory extends
         }
         columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
         columns.add(column.getPeer());
-        columnIds.add(columnViewDescriptor.getName());
+        columnIds.add(columnViewDescriptor.getModelDescriptor().getName());
       } catch (SecurityException ex) {
         // The column simply won't be added.
       }
