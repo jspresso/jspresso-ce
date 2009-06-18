@@ -18,7 +18,11 @@
  */
 package org.jspresso.framework.binding.remote;
 
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
+
 import org.jspresso.framework.binding.basic.BasicValueConnector;
+import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
@@ -137,6 +141,28 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * @return the value that has to be set to the remote state when updating it.
    */
   protected Object getValueForState() {
+    Object valueForState = getConnectorValue();
+    if (valueForState instanceof byte[]) {
+      String valueForStateUrl = RemotePeerRegistryServlet
+          .computeDownloadUrl(getGuid());
+      Checksum checksumEngine = new CRC32();
+      checksumEngine.update((byte[]) valueForState, 0,
+          ((byte[]) valueForState).length);
+      // we must add a check sum so that the client nows when the url content
+      // changes.
+      valueForStateUrl += ("&cs=" + checksumEngine.getValue());
+      return valueForStateUrl;
+    }
+    return valueForState;
+  }
+
+  /**
+   * Returns the actual connector value.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public Object actualValue() {
     return getConnectorValue();
   }
 }

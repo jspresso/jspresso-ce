@@ -31,6 +31,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteStartCom
 import org.jspresso.framework.application.startup.AbstractStartup;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.util.http.HttpRequestHolder;
 
 /**
  * Default remote startup class.
@@ -100,10 +101,22 @@ public abstract class RemoteStartup extends
    */
   public List<RemoteCommand> start(String startupLanguage) {
     setStartupLocale(new Locale(startupLanguage));
-    super.start();
+    start();
     started = true;
     return handleCommands(Collections
         .singletonList((RemoteCommand) new RemoteStartCommand()));
+  }
+
+  /**
+   * Registers the controller in the http session.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void start() {
+    super.start();
+    HttpRequestHolder.getServletRequest().getSession().setAttribute(
+        "PeerRegistry", getFrontendController());
   }
 
   /**

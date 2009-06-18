@@ -252,4 +252,12 @@ public abstract class RComponent extends RemotePeer implements
   public void synchRemoteState() {
     // Empty implementation
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Object actualValue() {
+    return getState().getValue();
+  }
 }

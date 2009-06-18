@@ -50,4 +50,12 @@ public interface IRemoteStateOwner {
    * Triggers synchronization of the remote state.
    */
   void synchRemoteState();
+
+  /**
+   * Gets the actual state owner value that may be different from the state
+   * value.
+   * 
+   * @return the actual state owner value.
+   */
+  Object actualValue();
 }

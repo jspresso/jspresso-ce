@@ -132,4 +132,14 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     currentState.setReadable(isReadable());
     currentState.setWritable(isWritable());
   }
+
+  /**
+   * Returns the actual connector value.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public Object actualValue() {
+    return getConnectorValue();
+  }
 }

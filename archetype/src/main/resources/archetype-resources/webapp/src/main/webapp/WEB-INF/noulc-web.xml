@@ -36,6 +36,15 @@
     <url-pattern>/upload</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>RemotePeerRegistryServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.server.remote.RemotePeerRegistryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemotePeerRegistryServlet</servlet-name>
+    <url-pattern>/registry</url-pattern>
+  </servlet-mapping>
+
   <listener>
     <listener-class>${package}.webapp.TestDataContextListener</listener-class>
   </listener>

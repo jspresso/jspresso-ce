@@ -94,8 +94,7 @@ public class ResourceProviderServlet extends HttpServlet {
    * @return the resource url.
    */
   public static String computeDownloadUrl(HttpServletRequest request, String id) {
-    return computeUrl(request, "?" + ResourceProviderServlet.ID_PARAMETER + "="
-        + id);
+    return computeUrl(request, "?" + ID_PARAMETER + "=" + id);
   }
 
   /**
@@ -120,8 +119,7 @@ public class ResourceProviderServlet extends HttpServlet {
   public static String computeLocalResourceDownloadUrl(String localUrl) {
     if (localUrl != null) {
       HttpServletRequest request = HttpRequestHolder.getServletRequest();
-      return computeUrl(request, "?"
-          + ResourceProviderServlet.LOCAL_URL_PARAMETER + "=" + localUrl);
+      return computeUrl(request, "?" + LOCAL_URL_PARAMETER + "=" + localUrl);
     }
     return null;
   }

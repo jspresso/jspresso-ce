@@ -145,4 +145,14 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
     currentState.setIconImageUrl(ResourceProviderServlet
         .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
   }
+
+  /**
+   * Returns the actual connector value.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public Object actualValue() {
+    return getConnectorValue();
+  }
 }
