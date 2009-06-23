@@ -48,7 +48,6 @@ import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
-import org.jspresso.framework.view.IIconFactory;
 import org.springframework.dao.ConcurrencyFailureException;
 
 /**
@@ -170,21 +169,21 @@ public class MockSwingController extends
           .toHtml(HtmlHelper.emphasis(ex.getMessage())),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
+              getIconFactory().getLargeIconSize()));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
+              getIconFactory().getLargeIconSize()));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
               "concurrency.error.description", getLocale()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
+              getIconFactory().getLargeIconSize()));
     } else {
       ex.printStackTrace();
     }

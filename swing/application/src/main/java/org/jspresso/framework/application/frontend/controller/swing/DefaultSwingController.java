@@ -79,7 +79,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.swing.WaitCursorEventQueue;
 import org.jspresso.framework.util.swing.WaitCursorTimer;
 import org.jspresso.framework.view.IActionFactory;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
@@ -300,27 +299,27 @@ public class DefaultSwingController extends
           .toHtml(HtmlHelper.emphasis(ex.getMessage())),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
+              getIconFactory().getLargeIconSize()));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
+              getIconFactory().getLargeIconSize()));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
               "concurrency.error.description", getLocale()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
+              getIconFactory().getLargeIconSize()));
     } else {
       ex.printStackTrace();
       JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,
           getTranslationProvider(), getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
-          IIconFactory.MEDIUM_ICON_SIZE));
+          getIconFactory().getMediumIconSize()));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
       dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
@@ -468,7 +467,8 @@ public class DefaultSwingController extends
     JInternalFrame internalFrame = new JInternalFrame(view.getDescriptor()
         .getI18nName(getTranslationProvider(), getLocale()));
     internalFrame.setFrameIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+        view.getDescriptor().getIconImageURL(),
+        getIconFactory().getSmallIconSize()));
     internalFrame.setResizable(true);
     internalFrame.setClosable(false);
     internalFrame.setMaximizable(true);
@@ -488,7 +488,7 @@ public class DefaultSwingController extends
           + IActionFactory.TOOLTIP_ELLIPSIS);
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
+        getIconFactory().getSmallIconSize()));
     for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
       menu.add(menuItem);
     }
@@ -566,7 +566,7 @@ public class DefaultSwingController extends
     JButton loginButton = new JButton(getTranslationProvider().getTranslation(
         "ok", getLocale()));
     loginButton.setIcon(getIconFactory().getOkYesIcon(
-        IIconFactory.SMALL_ICON_SIZE));
+        getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new ActionListener() {
 
       @Override
@@ -622,7 +622,7 @@ public class DefaultSwingController extends
     controllerFrame.setSize(12 * screenRes, 8 * screenRes);
     // controllerFrame.setSize(1100, 800);
     controllerFrame.setIconImage(((ImageIcon) getIconFactory().getIcon(
-        getIconImageURL(), IIconFactory.SMALL_ICON_SIZE)).getImage());
+        getIconImageURL(), getIconFactory().getSmallIconSize())).getImage());
     SwingUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
     controllerFrame.setVisible(true);

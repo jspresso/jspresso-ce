@@ -25,7 +25,6 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteMessageC
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.view.IIconFactory;
 
 /**
  * Action to present a message to the user.
@@ -57,13 +56,13 @@ public class InfoAction extends AbstractMessageAction {
       RComponent sourceComponent, IModelDescriptor modelDescriptor,
       IValueConnector viewConnector) {
     messageCommand.setTitleIcon(getIconFactory(context).getInfoIcon(
-        IIconFactory.TINY_ICON_SIZE));
+        getIconFactory(context).getTinyIconSize()));
     if (getIconImageURL() != null) {
       messageCommand.setMessageIcon(getIconFactory(context).getIcon(
-          getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+          getIconImageURL(), getIconFactory(context).getLargeIconSize()));
     } else {
       messageCommand.setMessageIcon(getIconFactory(context).getInfoIcon(
-          IIconFactory.LARGE_ICON_SIZE));
+          getIconFactory(context).getLargeIconSize()));
     }
     super.completeMessageCommand(messageCommand, context, actionHandler,
         sourceComponent, modelDescriptor, viewConnector);

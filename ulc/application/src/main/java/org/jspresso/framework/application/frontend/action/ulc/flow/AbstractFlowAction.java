@@ -26,7 +26,6 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.ulc.UlcUtil;
-import org.jspresso.framework.view.IIconFactory;
 
 import com.ulcjava.base.application.ULCAlert;
 import com.ulcjava.base.application.event.WindowEvent;
@@ -125,7 +124,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
         translationProvider, locale), getMessage(context),
         translatedFirstOption, translatedSecondOption, translatedThirdOption,
         getIconFactory(context).getIcon(getIconImageURL(),
-            IIconFactory.LARGE_ICON_SIZE));
+            getIconFactory(context).getLargeIconSize()));
     alert.addWindowListener(new IWindowListener() {
 
       private static final long serialVersionUID = -6049928144066455758L;

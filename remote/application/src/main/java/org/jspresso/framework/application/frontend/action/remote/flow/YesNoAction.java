@@ -27,9 +27,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCom
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.action.IDisplayableAction;
-
 
 /**
  * Action to ask a binary question to the user.
@@ -59,17 +57,17 @@ public class YesNoAction extends AbstractMessageAction {
    * Sets the noAction.
    * 
    * @param noAction
-   *            the noAction to set.
+   *          the noAction to set.
    */
   public void setNoAction(IAction noAction) {
     this.noAction = wrapAction(noAction);
   }
-  
+
   /**
    * Sets the yesAction.
    * 
    * @param yesAction
-   *            the yesAction to set.
+   *          the yesAction to set.
    */
   public void setYesAction(IAction yesAction) {
     this.yesAction = wrapAction(yesAction);
@@ -84,23 +82,23 @@ public class YesNoAction extends AbstractMessageAction {
       RComponent sourceComponent, IModelDescriptor modelDescriptor,
       IValueConnector viewConnector) {
     messageCommand.setTitleIcon(getIconFactory(context).getWarningIcon(
-        IIconFactory.TINY_ICON_SIZE));
+        getIconFactory(context).getTinyIconSize()));
     if (getIconImageURL() != null) {
       messageCommand.setMessageIcon(getIconFactory(context).getIcon(
-          getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+          getIconImageURL(), getIconFactory(context).getLargeIconSize()));
     } else {
       messageCommand.setMessageIcon(getIconFactory(context).getWarningIcon(
-          IIconFactory.LARGE_ICON_SIZE));
+          getIconFactory(context).getLargeIconSize()));
     }
     if (yesAction != null) {
-      ((RemoteYesNoCommand) messageCommand).setYesAction(getActionFactory(context).createAction(
-          yesAction, actionHandler, sourceComponent, modelDescriptor,
-          viewConnector, getLocale(context)));
+      ((RemoteYesNoCommand) messageCommand).setYesAction(getActionFactory(
+          context).createAction(yesAction, actionHandler, sourceComponent,
+          modelDescriptor, viewConnector, getLocale(context)));
     }
     if (noAction != null) {
-      ((RemoteYesNoCommand) messageCommand).setNoAction(getActionFactory(context).createAction(
-          noAction, actionHandler, sourceComponent, modelDescriptor,
-          viewConnector, getLocale(context)));
+      ((RemoteYesNoCommand) messageCommand).setNoAction(getActionFactory(
+          context).createAction(noAction, actionHandler, sourceComponent,
+          modelDescriptor, viewConnector, getLocale(context)));
     }
     super.completeMessageCommand(messageCommand, context, actionHandler,
         sourceComponent, modelDescriptor, viewConnector);

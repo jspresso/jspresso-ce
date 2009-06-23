@@ -241,8 +241,8 @@ public class DialogCallbackHandler implements CallbackHandler {
     ULCExtendedButton optionButton = new ULCExtendedButton();
     optionButton.setText(text);
     if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
-      optionButton.setIcon(iconFactory
-          .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
+      optionButton.setIcon(iconFactory.getOkYesIcon(iconFactory
+          .getSmallIconSize()));
       optionButton.addActionListener(new IActionListener() {
 
         private static final long serialVersionUID = -1794878333128512291L;
@@ -257,11 +257,11 @@ public class DialogCallbackHandler implements CallbackHandler {
       });
     } else {
       if (option == ConfirmationCallback.NO) {
-        optionButton.setIcon(iconFactory
-            .getNoIcon(IIconFactory.SMALL_ICON_SIZE));
+        optionButton.setIcon(iconFactory.getNoIcon(iconFactory
+            .getSmallIconSize()));
       } else if (option == ConfirmationCallback.CANCEL) {
-        optionButton.setIcon(iconFactory
-            .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
+        optionButton.setIcon(iconFactory.getCancelIcon(iconFactory
+            .getSmallIconSize()));
       }
       optionButton.addActionListener(new IActionListener() {
 
@@ -290,11 +290,11 @@ public class DialogCallbackHandler implements CallbackHandler {
       throws UnsupportedCallbackException {
     switch (callback.getMessageType()) {
       case TextOutputCallback.INFORMATION:
-        return iconFactory.getInfoIcon(IIconFactory.SMALL_ICON_SIZE);
+        return iconFactory.getInfoIcon(iconFactory.getSmallIconSize());
       case TextOutputCallback.WARNING:
-        return iconFactory.getWarningIcon(IIconFactory.SMALL_ICON_SIZE);
+        return iconFactory.getWarningIcon(iconFactory.getSmallIconSize());
       case TextOutputCallback.ERROR:
-        return iconFactory.getErrorIcon(IIconFactory.SMALL_ICON_SIZE);
+        return iconFactory.getErrorIcon(iconFactory.getSmallIconSize());
       default:
         throw new UnsupportedCallbackException(callback,
             "Unrecognized message type");

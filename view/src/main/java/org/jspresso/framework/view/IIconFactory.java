@@ -44,23 +44,6 @@ import org.jspresso.framework.util.gui.Dimension;
 public interface IIconFactory<E> {
 
   /**
-   * <code>LARGE_ICON_SIZE</code> is 48x48 dimension.
-   */
-  Dimension LARGE_ICON_SIZE  = new Dimension(48, 48);
-  /**
-   * <code>MEDIUM_ICON_SIZE</code> is 32x32 dimension.
-   */
-  Dimension MEDIUM_ICON_SIZE = new Dimension(32, 32);
-  /**
-   * <code>SMALL_ICON_SIZE</code> is 16x16 dimension.
-   */
-  Dimension SMALL_ICON_SIZE  = new Dimension(16, 16);
-  /**
-   * <code>SMALL_ICON_SIZE</code> is 16x16 dimension.
-   */
-  Dimension TINY_ICON_SIZE   = new Dimension(12, 12);
-
-  /**
    * Gets the standard Back icon.
    * 
    * @param iconSize
@@ -258,4 +241,32 @@ public interface IIconFactory<E> {
    * @return the downIconImageURL.
    */
   String getDownIconImageURL();
+
+  /**
+   * Gets tiny incon size.
+   * 
+   * @return tiny incon size.
+   */
+  Dimension getTinyIconSize();
+
+  /**
+   * Gets small incon size.
+   * 
+   * @return small incon size.
+   */
+  Dimension getSmallIconSize();
+
+  /**
+   * Gets medium incon size.
+   * 
+   * @return medium incon size.
+   */
+  Dimension getMediumIconSize();
+
+  /**
+   * Gets large incon size.
+   * 
+   * @return large incon size.
+   */
+  Dimension getLargeIconSize();
 }

@@ -24,8 +24,6 @@ import javax.swing.JOptionPane;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.swing.SwingUtil;
-import org.jspresso.framework.view.IIconFactory;
-
 
 /**
  * Action to present a message to the user.
@@ -61,7 +59,7 @@ public class InfoAction extends AbstractMessageAction {
         getMessage(context), getI18nName(getTranslationProvider(context),
             getLocale(context)), JOptionPane.INFORMATION_MESSAGE,
         getIconFactory(context).getIcon(getIconImageURL(),
-            IIconFactory.LARGE_ICON_SIZE));
+            getIconFactory(context).getLargeIconSize()));
     return super.execute(actionHandler, context);
   }
 }

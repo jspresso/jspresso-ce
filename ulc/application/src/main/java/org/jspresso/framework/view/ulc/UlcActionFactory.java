@@ -27,7 +27,6 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.view.AbstractActionFactory;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -135,7 +134,7 @@ public class UlcActionFactory extends
         putValue(IAction.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
       }
       putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
-          action.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+          action.getIconImageURL(), getIconFactory().getTinyIconSize()));
       if (action.getMnemonicAsString() != null) {
         putValue(IAction.MNEMONIC_KEY, new Integer(KeyStroke.getKeyStroke(
             action.getMnemonicAsString()).getKeyCode()));

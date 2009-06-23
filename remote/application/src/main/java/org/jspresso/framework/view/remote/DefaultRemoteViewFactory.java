@@ -97,7 +97,6 @@ import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.ICompositeView;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
@@ -669,7 +668,7 @@ public class DefaultRemoteViewFactory extends
                 value), locale));
         icons.add(getIconFactory().getIcon(
             propertyDescriptor.getIconImageURL(value),
-            IIconFactory.TINY_ICON_SIZE));
+            getIconFactory().getTinyIconSize()));
       }
     }
     viewComponent.setValues(values.toArray(new String[0]));
@@ -911,7 +910,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.setIcon(getIconFactory().getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
-          IIconFactory.TINY_ICON_SIZE));
+          getIconFactory().getTinyIconSize()));
     }
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     actionList.setActions(new RAction[] {lovAction});
@@ -1187,7 +1186,8 @@ public class DefaultRemoteViewFactory extends
         actionList.setName(nextActionList.getName());
         actionList.setDescription(nextActionList.getDescription());
         actionList.setIcon(getIconFactory().getIcon(
-            nextActionList.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+            nextActionList.getIconImageURL(),
+            getIconFactory().getTinyIconSize()));
         viewActionLists.add(actionList);
         List<RAction> actions = new ArrayList<RAction>();
         for (IDisplayableAction action : nextActionList.getActions()) {
@@ -1251,7 +1251,7 @@ public class DefaultRemoteViewFactory extends
     if (viewDescriptor.getIconImageURL() != null) {
       view.getPeer().setIcon(
           getIconFactory().getIcon(viewDescriptor.getIconImageURL(),
-              IIconFactory.SMALL_ICON_SIZE));
+              getIconFactory().getSmallIconSize()));
     }
   }
 

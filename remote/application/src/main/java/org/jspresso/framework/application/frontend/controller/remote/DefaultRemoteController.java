@@ -68,7 +68,6 @@ import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.IActionFactory;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionList;
@@ -429,7 +428,7 @@ public class DefaultRemoteController extends
         initLoginCommand.setOkLabel(getTranslationProvider().getTranslation(
             "ok", getLocale()));
         initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(
-            IIconFactory.SMALL_ICON_SIZE));
+            getIconFactory().getSmallIconSize()));
         registerCommand(initLoginCommand);
       } else {
         performLogin();
@@ -514,9 +513,9 @@ public class DefaultRemoteController extends
     messageCommand.setTitle(getTranslationProvider().getTranslation("error",
         getLocale()));
     messageCommand.setTitleIcon(getIconFactory().getErrorIcon(
-        IIconFactory.TINY_ICON_SIZE));
+        getIconFactory().getTinyIconSize()));
     messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
-        IIconFactory.LARGE_ICON_SIZE));
+        getIconFactory().getLargeIconSize()));
     return messageCommand;
   }
 
@@ -527,7 +526,7 @@ public class DefaultRemoteController extends
     rActionList.setDescription(actionList.getI18nDescription(
         getTranslationProvider(), getLocale()));
     rActionList.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        IIconFactory.TINY_ICON_SIZE));
+        getIconFactory().getTinyIconSize()));
 
     List<RAction> actions = new ArrayList<RAction>();
     for (IDisplayableAction action : actionList.getActions()) {

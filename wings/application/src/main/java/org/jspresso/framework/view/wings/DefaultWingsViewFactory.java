@@ -95,7 +95,6 @@ import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.ICompositeView;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
@@ -909,7 +908,7 @@ public class DefaultWingsViewFactory extends
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.putValue(Action.SMALL_ICON, getIconFactory().getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
-          IIconFactory.TINY_ICON_SIZE));
+          getIconFactory().getTinyIconSize()));
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
@@ -1508,7 +1507,8 @@ public class DefaultWingsViewFactory extends
       IView<SComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
       SIcon childIcon = getIconFactory().getIcon(
-          childViewDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
+          childViewDescriptor.getIconImageURL(),
+          getIconFactory().getSmallIconSize());
       SComponent tabView = childView.getPeer();
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
@@ -1981,7 +1981,8 @@ public class DefaultWingsViewFactory extends
     SPanel titledPanel = createSPanel(new SBorderLayout());
     SLabel titleLabel = createSLabel(true);
     titleLabel.setIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+        view.getDescriptor().getIconImageURL(),
+        getIconFactory().getTinyIconSize()));
     titleLabel.setText(view.getDescriptor().getI18nName(
         getTranslationProvider(), locale));
     titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
@@ -2061,7 +2062,8 @@ public class DefaultWingsViewFactory extends
               .getDisplayValue());
           renderer.setIcon(getIconFactory().getIcon(
               ((IRenderableCompositeValueConnector) value)
-                  .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
+                  .getDisplayIconImageUrl(),
+              getIconFactory().getSmallIconSize()));
           if (((IRenderableCompositeValueConnector) value)
               .getDisplayDescription() != null) {
             // SToolTipManager.sharedInstance().registerComponent(tree);
@@ -2111,7 +2113,7 @@ public class DefaultWingsViewFactory extends
           isSelected, index);
       label.setIcon(getIconFactory().getIcon(
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
-          IIconFactory.TINY_ICON_SIZE));
+          getIconFactory().getTinyIconSize()));
       if (value != null && propertyDescriptor.isTranslated()) {
         setText(getTranslationProvider().getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
@@ -2158,7 +2160,7 @@ public class DefaultWingsViewFactory extends
           value, isSelected, row, column);
       renderer.setIcon(getIconFactory().getIcon(
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
-          IIconFactory.TINY_ICON_SIZE));
+          getIconFactory().getTinyIconSize()));
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null && propertyDescriptor.isTranslated()) {

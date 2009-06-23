@@ -25,8 +25,6 @@ import javax.swing.JOptionPane;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.swing.SwingUtil;
-import org.jspresso.framework.view.IIconFactory;
-
 
 /**
  * Action to ask a binary question to the user.
@@ -65,7 +63,7 @@ public class YesNoAction extends AbstractMessageAction {
         getMessage(context), getI18nName(getTranslationProvider(context),
             getLocale(context)), JOptionPane.YES_NO_OPTION,
         JOptionPane.QUESTION_MESSAGE, getIconFactory(context).getIcon(
-            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+            getIconImageURL(), getIconFactory(context).getLargeIconSize()));
     IAction nextAction = null;
     if (selectedOption == JOptionPane.YES_OPTION) {
       nextAction = yesAction;
@@ -82,7 +80,7 @@ public class YesNoAction extends AbstractMessageAction {
    * Sets the noAction.
    * 
    * @param noAction
-   *            the noAction to set.
+   *          the noAction to set.
    */
   public void setNoAction(IAction noAction) {
     this.noAction = noAction;
@@ -92,7 +90,7 @@ public class YesNoAction extends AbstractMessageAction {
    * Sets the yesAction.
    * 
    * @param yesAction
-   *            the yesAction to set.
+   *          the yesAction to set.
    */
   public void setYesAction(IAction yesAction) {
     this.yesAction = yesAction;

@@ -40,7 +40,6 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.IActionFactory;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
@@ -228,7 +227,8 @@ public class DefaultUlcController extends
           getTranslationProvider().getTranslation("error", getLocale()),
           HtmlHelper.toHtml(HtmlHelper.emphasis(ex.getMessage())),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          null, getIconFactory().getErrorIcon(
+              getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof BusinessException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
@@ -236,7 +236,8 @@ public class DefaultUlcController extends
           HtmlHelper.toHtml(HtmlHelper.emphasis(((BusinessException) ex)
               .getI18nMessage(getTranslationProvider(), getLocale()))),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          null, getIconFactory().getErrorIcon(
+              getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof ConcurrencyFailureException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
@@ -244,14 +245,15 @@ public class DefaultUlcController extends
           HtmlHelper.toHtml(HtmlHelper.emphasis(getTranslationProvider()
               .getTranslation("concurrency.error.description", getLocale()))),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          null, getIconFactory().getErrorIcon(
+              getIconFactory().getLargeIconSize()));
       alert.show();
     } else {
       ex.printStackTrace();
       ULCErrorDialog dialog = ULCErrorDialog.createInstance(sourceComponent,
           getTranslationProvider(), getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
-          IIconFactory.MEDIUM_ICON_SIZE));
+          getIconFactory().getMediumIconSize()));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
       dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
@@ -339,7 +341,7 @@ public class DefaultUlcController extends
           + IActionFactory.TOOLTIP_ELLIPSIS);
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
+        getIconFactory().getSmallIconSize()));
     for (ULCMenuItem menuItem : createMenuItems(sourceComponent, actionList)) {
       menu.add(menuItem);
     }
@@ -395,7 +397,8 @@ public class DefaultUlcController extends
     ULCExtendedInternalFrame internalFrame = new ULCExtendedInternalFrame(view
         .getDescriptor().getI18nName(getTranslationProvider(), getLocale()));
     internalFrame.setFrameIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+        view.getDescriptor().getIconImageURL(),
+        getIconFactory().getSmallIconSize()));
     internalFrame.setResizable(true);
     internalFrame.setClosable(false);
     internalFrame.setMaximizable(true);
@@ -433,7 +436,7 @@ public class DefaultUlcController extends
     ULCButton loginButton = new ULCButton(getTranslationProvider()
         .getTranslation("ok", getLocale()));
     loginButton.setIcon(getIconFactory().getOkYesIcon(
-        IIconFactory.SMALL_ICON_SIZE));
+        getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new IActionListener() {
 
       private static final long serialVersionUID = 2403541025764054935L;
@@ -449,7 +452,8 @@ public class DefaultUlcController extends
               .getTranslation("error", getLocale()), getTranslationProvider()
               .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
               getTranslationProvider().getTranslation("ok", getLocale()), null,
-              null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+              null, getIconFactory().getErrorIcon(
+                  getIconFactory().getLargeIconSize()));
           alert.show();
         }
       }
@@ -492,7 +496,7 @@ public class DefaultUlcController extends
     int screenRes = ClientContext.getScreenResolution();
     controllerFrame.setSize(12 * screenRes, 8 * screenRes);
     controllerFrame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
+        getIconFactory().getSmallIconSize()));
     UlcUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
     controllerFrame.setVisible(true);

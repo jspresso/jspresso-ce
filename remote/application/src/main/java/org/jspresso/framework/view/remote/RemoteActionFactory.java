@@ -35,7 +35,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractActionFactory;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -150,7 +149,7 @@ public class RemoteActionFactory extends
       remoteAction.setDescription(i18nDescription);
     }
     remoteAction.setIcon(getIconFactory().getIcon(action.getIconImageURL(),
-        IIconFactory.TINY_ICON_SIZE));
+        getIconFactory().getTinyIconSize()));
     if (action.getMnemonicAsString() != null) {
       remoteAction.setMnemonicAsString(action.getMnemonicAsString());
     }

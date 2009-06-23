@@ -42,7 +42,6 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.wings.WingsUtil;
 import org.jspresso.framework.view.IActionFactory;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
@@ -245,7 +244,7 @@ public class DefaultWingsController extends
       SErrorDialog dialog = SErrorDialog.createInstance(sourceComponent,
           getTranslationProvider(), getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
-          IIconFactory.MEDIUM_ICON_SIZE));
+          getIconFactory().getMediumIconSize()));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
       dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
@@ -345,7 +344,7 @@ public class DefaultWingsController extends
           + IActionFactory.TOOLTIP_ELLIPSIS);
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
+        getIconFactory().getSmallIconSize()));
     for (SMenuItem menuItem : createMenuItems(menu, actionList)) {
       menu.add(menuItem);
     }
@@ -422,7 +421,7 @@ public class DefaultWingsController extends
     SButton loginButton = new SButton(getTranslationProvider().getTranslation(
         "ok", getLocale()));
     loginButton.setIcon(getIconFactory().getOkYesIcon(
-        IIconFactory.SMALL_ICON_SIZE));
+        getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new ActionListener() {
 
       @Override

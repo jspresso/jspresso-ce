@@ -64,6 +64,11 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   private String                         okYesIconImageURL;
   private String                         warningIconImageURL;
 
+  private Dimension                      tinyIconSize;
+  private Dimension                      smallIconSize;
+  private Dimension                      mediumIconSize;
+  private Dimension                      largeIconSize;
+
   /**
    * Constructs a new <code>AbstractIconFactory</code> instance.
    */
@@ -385,4 +390,93 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   public void setDownIconImageURL(String downIconImageURL) {
     this.downIconImageURL = downIconImageURL;
   }
+
+  /**
+   * Gets the tinyIconSize.
+   * 
+   * @return the tinyIconSize.
+   */
+  public Dimension getTinyIconSize() {
+    if (tinyIconSize == null) {
+      tinyIconSize = new Dimension(12, 12);
+    }
+    return tinyIconSize;
+  }
+
+  /**
+   * Sets the tinyIconSize.
+   * 
+   * @param tinyIconSize
+   *          the tinyIconSize to set.
+   */
+  public void setTinyIconSize(Dimension tinyIconSize) {
+    this.tinyIconSize = tinyIconSize;
+  }
+
+  /**
+   * Gets the smallIconSize.
+   * 
+   * @return the smallIconSize.
+   */
+  public Dimension getSmallIconSize() {
+    if (smallIconSize == null) {
+      smallIconSize = new Dimension(16, 16);
+    }
+    return smallIconSize;
+  }
+
+  /**
+   * Sets the smallIconSize.
+   * 
+   * @param smallIconSize
+   *          the smallIconSize to set.
+   */
+  public void setSmallIconSize(Dimension smallIconSize) {
+    this.smallIconSize = smallIconSize;
+  }
+
+  /**
+   * Gets the mediumIconSize.
+   * 
+   * @return the mediumIconSize.
+   */
+  public Dimension getMediumIconSize() {
+    if (mediumIconSize == null) {
+      mediumIconSize = new Dimension(32, 32);
+    }
+    return mediumIconSize;
+  }
+
+  /**
+   * Sets the mediumIconSize.
+   * 
+   * @param mediumIconSize
+   *          the mediumIconSize to set.
+   */
+  public void setMediumIconSize(Dimension mediumIconSize) {
+    this.mediumIconSize = mediumIconSize;
+  }
+
+  /**
+   * Gets the largeIconSize.
+   * 
+   * @return the largeIconSize.
+   */
+  public Dimension getLargeIconSize() {
+    if (largeIconSize == null) {
+      largeIconSize = new Dimension(48, 48);
+    }
+    return largeIconSize;
+  }
+
+  /**
+   * Sets the largeIconSize.
+   * 
+   * @param largeIconSize
+   *          the largeIconSize to set.
+   */
+  public void setLargeIconSize(Dimension largeIconSize) {
+    this.largeIconSize = largeIconSize;
+  }
+
 }

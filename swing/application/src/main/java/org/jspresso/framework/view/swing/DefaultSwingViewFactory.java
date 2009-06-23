@@ -142,7 +142,6 @@ import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.ICompositeView;
-import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
@@ -1216,7 +1215,7 @@ public class DefaultSwingViewFactory extends
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.putValue(Action.SMALL_ICON, getIconFactory().getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
-          IIconFactory.TINY_ICON_SIZE));
+          getIconFactory().getTinyIconSize()));
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
@@ -1389,7 +1388,7 @@ public class DefaultSwingViewFactory extends
     JLabel iconLabel = createJLabel(false);
     iconLabel.setIcon(getIconFactory().getIcon(
         modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+            .getIconImageURL(), getIconFactory().getTinyIconSize()));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
@@ -1539,7 +1538,8 @@ public class DefaultSwingViewFactory extends
       IView<JComponent> childView = createView(childViewDescriptor,
           actionHandler, locale);
       Icon childIcon = getIconFactory().getIcon(
-          childViewDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
+          childViewDescriptor.getIconImageURL(),
+          getIconFactory().getSmallIconSize());
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, childView.getPeer(),
@@ -1875,7 +1875,7 @@ public class DefaultSwingViewFactory extends
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
         locale));
     titleLabel.setIcon(getIconFactory().getIcon(
-        viewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+        viewDescriptor.getIconImageURL(), getIconFactory().getTinyIconSize()));
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     popupMenu.add(titleLabel);
@@ -2177,7 +2177,8 @@ public class DefaultSwingViewFactory extends
               .getDisplayValue());
           renderer.setIcon(getIconFactory().getIcon(
               ((IRenderableCompositeValueConnector) value)
-                  .getDisplayIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
+                  .getDisplayIconImageUrl(),
+              getIconFactory().getSmallIconSize()));
           if (((IRenderableCompositeValueConnector) value)
               .getDisplayDescription() != null) {
             ToolTipManager.sharedInstance().registerComponent(tree);
@@ -2273,7 +2274,7 @@ public class DefaultSwingViewFactory extends
           index, isSelected, cellHasFocus);
       label.setIcon(getIconFactory().getIcon(
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
-          IIconFactory.TINY_ICON_SIZE));
+          getIconFactory().getTinyIconSize()));
       if (value != null && propertyDescriptor.isTranslated()) {
         label.setText(getTranslationProvider().getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
@@ -2322,7 +2323,7 @@ public class DefaultSwingViewFactory extends
         boolean isSelected, boolean hasFocus, int row, int column) {
       setIcon(getIconFactory().getIcon(
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
-          IIconFactory.TINY_ICON_SIZE));
+          getIconFactory().getTinyIconSize()));
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row, column);
     }

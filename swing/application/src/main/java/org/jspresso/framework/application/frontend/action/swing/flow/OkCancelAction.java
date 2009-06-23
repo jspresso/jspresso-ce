@@ -25,7 +25,6 @@ import javax.swing.JOptionPane;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.swing.SwingUtil;
-import org.jspresso.framework.view.IIconFactory;
 
 /**
  * Action to ask a user validation.
@@ -64,7 +63,7 @@ public class OkCancelAction extends AbstractMessageAction {
         getMessage(context), getI18nName(getTranslationProvider(context),
             getLocale(context)), JOptionPane.OK_CANCEL_OPTION,
         JOptionPane.WARNING_MESSAGE, getIconFactory(context).getIcon(
-            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+            getIconImageURL(), getIconFactory(context).getLargeIconSize()));
     IAction nextAction = null;
     if (selectedOption == JOptionPane.OK_OPTION) {
       nextAction = okAction;
