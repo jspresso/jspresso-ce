@@ -470,7 +470,7 @@ public class DefaultSwingController extends
         view.getDescriptor().getIconImageURL(),
         getIconFactory().getSmallIconSize()));
     internalFrame.setResizable(true);
-    internalFrame.setClosable(false);
+    internalFrame.setClosable(true);
     internalFrame.setMaximizable(true);
     internalFrame.setIconifiable(true);
     internalFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);
