@@ -142,4 +142,12 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   public Object actualValue() {
     return getConnectorValue();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    return getModelConnector() != null && super.isWritable();
+  }
 }

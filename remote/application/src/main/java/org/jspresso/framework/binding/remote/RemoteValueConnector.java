@@ -165,4 +165,12 @@ public class RemoteValueConnector extends BasicValueConnector implements
   public Object actualValue() {
     return getConnectorValue();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    return getModelConnector() != null && super.isWritable();
+  }
 }

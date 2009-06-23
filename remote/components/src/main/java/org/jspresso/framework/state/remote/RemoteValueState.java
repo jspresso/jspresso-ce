@@ -111,7 +111,13 @@ public class RemoteValueState extends RemotePeer {
    *          the value to set.
    */
   public void setValue(Object value) {
-    this.value = (Serializable) value;
+    if (value instanceof Serializable) {
+      this.value = (Serializable) value;
+    } else if (value != null) {
+      this.value = value.toString();
+    } else {
+      this.value = null;
+    }
   }
 
   /**
