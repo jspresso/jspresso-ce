@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.view.action.IDisplayableAction;
+
 /**
  * This public interface is implemented by any collection view descriptor. For
  * example, a collection view is a table view, a list view, ...
@@ -46,4 +48,11 @@ public interface ICollectionViewDescriptor extends IViewDescriptor {
    * @return the type of selection allowed on the collection view.
    */
   ESelectionMode getSelectionMode();
+
+  /**
+   * Gets the action that is registered on the selected collection element.
+   * 
+   * @return the action that is registered on the selected collection element.
+   */
+  IDisplayableAction getRowAction();
 }

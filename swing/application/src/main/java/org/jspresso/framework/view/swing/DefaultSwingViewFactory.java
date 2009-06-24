@@ -29,6 +29,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -1108,9 +1109,8 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createListView(
-      IListViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
@@ -1136,6 +1136,22 @@ public class DefaultSwingViewFactory extends
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
+    if (viewDescriptor.getRowAction() != null) {
+      final Action rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
+      viewComponent.addMouseListener(new MouseAdapter() {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            ActionEvent ae = new ActionEvent(e.getSource(),
+                ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
+                    .getModifiers());
+            rowAction.actionPerformed(ae);
+          }
+        }
+      });
+    }
     return view;
   }
 
@@ -1518,6 +1534,22 @@ public class DefaultSwingViewFactory extends
     scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
         .getRowHeight()
         * 6 + viewComponent.getTableHeader().getPreferredSize().height));
+    if (viewDescriptor.getRowAction() != null) {
+      final Action rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
+      viewComponent.addMouseListener(new MouseAdapter() {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            ActionEvent ae = new ActionEvent(e.getSource(),
+                ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
+                    .getModifiers());
+            rowAction.actionPerformed(ae);
+          }
+        }
+      });
+    }
     return view;
   }
 

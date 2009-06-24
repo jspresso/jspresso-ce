@@ -42,6 +42,7 @@ public class RCollectionComponent extends RComponent {
   private static final long serialVersionUID = -5154116400205068483L;
 
   private String            selectionMode;
+  private RAction           rowAction;
 
   /**
    * Constructs a new <code>RCollectionComponent</code> instance. Only used for
@@ -78,5 +79,24 @@ public class RCollectionComponent extends RComponent {
    */
   public void setSelectionMode(String selectionMode) {
     this.selectionMode = selectionMode;
+  }
+
+  /**
+   * Gets the rowAction.
+   * 
+   * @return the rowAction.
+   */
+  public RAction getRowAction() {
+    return rowAction;
+  }
+
+  /**
+   * Sets the rowAction.
+   * 
+   * @param rowAction
+   *          the rowAction to set.
+   */
+  public void setRowAction(RAction rowAction) {
+    this.rowAction = rowAction;
   }
 }

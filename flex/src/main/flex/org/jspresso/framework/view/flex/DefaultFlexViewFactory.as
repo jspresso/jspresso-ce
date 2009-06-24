@@ -1056,6 +1056,11 @@ package org.jspresso.framework.view.flex {
 
       list.dataProvider = (remoteList.state as RemoteCompositeValueState).children;
       bindList(list, remoteList.state as RemoteCompositeValueState);
+      if(remoteList.rowAction) {
+        list.addEventListener(MouseEvent.DOUBLE_CLICK, function(event:MouseEvent):void {
+          _actionHandler.execute(remoteList.rowAction);
+        });
+      }
       return list;
     }
 
@@ -1201,6 +1206,11 @@ package org.jspresso.framework.view.flex {
         }
       });
       bindTable(table, remoteTable);
+      if(remoteTable.rowAction) {
+        table.addEventListener(MouseEvent.DOUBLE_CLICK, function(event:MouseEvent):void {
+          _actionHandler.execute(remoteTable.rowAction);
+        });
+      }
       return table;
     }
     

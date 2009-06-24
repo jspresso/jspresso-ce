@@ -39,8 +39,9 @@ New features
 2790309  	 Allow for configuration of service delegates in components
 2790798  	 Make Wings tables sortable
 2790301  	 Generate allowed column names for reserved keywords
-           Make icon sizes configurable through the iconfactory
-           Allow for closing internal frames in MDI
+2811349    Make icon sizes configurable through the iconfactory
+2811350    Allow for closing internal frames in MDI
+2811353    Allow for a row dble click action registration on coll views
 
 3.0.0
 =====

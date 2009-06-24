@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 
@@ -45,7 +46,8 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     implements ICollectionViewDescriptor {
 
-  private ESelectionMode selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+  private ESelectionMode     selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+  private IDisplayableAction rowAction;
 
   /**
    * {@inheritDoc}
@@ -82,6 +84,23 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    */
   public void setSelectionMode(ESelectionMode selectionMode) {
     this.selectionMode = selectionMode;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IDisplayableAction getRowAction() {
+    return rowAction;
+  }
+
+  /**
+   * Sets the rowAction.
+   * 
+   * @param rowAction
+   *          the rowAction to set.
+   */
+  public void setRowAction(IDisplayableAction rowAction) {
+    this.rowAction = rowAction;
   }
 
 }

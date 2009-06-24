@@ -829,6 +829,23 @@ public class DefaultWingsViewFactory extends
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
+    // TODO check how we could react on cell double clicks
+    // if (viewDescriptor.getRowAction() != null) {
+    // final Action rowAction = getActionFactory().createAction(
+    // viewDescriptor.getRowAction(), actionHandler, view, locale);
+    // viewComponent.addMouseListener(new MouseAdapter() {
+    //
+    // @Override
+    // public void mouseClicked(MouseEvent e) {
+    // if (e.getClickCount() == 2) {
+    // ActionEvent ae = new ActionEvent(e.getSource(),
+    // ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
+    // .getModifiers());
+    // rowAction.actionPerformed(ae);
+    // }
+    // }
+    // });
+    // }
     return view;
   }
 
@@ -1487,6 +1504,23 @@ public class DefaultWingsViewFactory extends
     // }
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
+    // TODO check how we could react on table row dbl click.
+    // if (viewDescriptor.getRowAction() != null) {
+    // final Action rowAction = getActionFactory().createAction(
+    // viewDescriptor.getRowAction(), actionHandler, view, locale);
+    // viewComponent.addMouseListener(new SMouseAdapter() {
+    //        
+    // @Override
+    // public void mouseClicked(SMouseEvent e) {
+    // if (e.getClickCount() == 2) {
+    // ActionEvent ae = new ActionEvent(e.getSource(),
+    // ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
+    // .getModifiers());
+    // rowAction.actionPerformed(ae);
+    // }
+    // }
+    // });
+    // }
     return view;
   }
 

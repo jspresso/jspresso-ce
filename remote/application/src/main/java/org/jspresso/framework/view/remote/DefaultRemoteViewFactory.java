@@ -757,9 +757,8 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createListView(
-      IListViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
@@ -780,6 +779,10 @@ public class DefaultRemoteViewFactory extends
     }
     viewComponent
         .setSelectionMode(viewDescriptor.getSelectionMode().toString());
+    if (viewDescriptor.getRowAction() != null) {
+      viewComponent.setRowAction(getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale));
+    }
     return view;
   }
 
@@ -1052,6 +1055,10 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setColumnIds(columnIds.toArray(new String[0]));
     viewComponent
         .setSelectionMode(viewDescriptor.getSelectionMode().toString());
+    if (viewDescriptor.getRowAction() != null) {
+      viewComponent.setRowAction(getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale));
+    }
     return view;
   }
 

@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
     public class RCollectionComponent extends RComponent {
 
         private var _selectionMode:String;
+        private var _rowAction:RAction;
 
         public function RCollectionComponent() {
           //default constructor.
@@ -30,6 +31,13 @@ package org.jspresso.framework.gui.remote {
         }
         public function get selectionMode():String {
             return _selectionMode;
+        }
+
+        public function set rowAction(value:RAction):void {
+            _rowAction = value;
+        }
+        public function get rowAction():RAction {
+            return _rowAction;
         }
     }
 }

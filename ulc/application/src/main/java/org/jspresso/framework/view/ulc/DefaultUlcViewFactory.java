@@ -857,9 +857,8 @@ public class DefaultUlcViewFactory extends
    */
   @Override
   protected IView<ULCComponent> createListView(
-      IListViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = (ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
@@ -888,6 +887,11 @@ public class DefaultUlcViewFactory extends
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
+    if (viewDescriptor.getRowAction() != null) {
+      final IAction rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
+      viewComponent.addActionListener(rowAction);
+    }
     return view;
   }
 
@@ -1296,6 +1300,11 @@ public class DefaultUlcViewFactory extends
     }
     viewComponent.setComponentPopupMenu(createPopupMenu(viewComponent, view,
         actionHandler, locale));
+    if (viewDescriptor.getRowAction() != null) {
+      final IAction rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
+      viewComponent.addActionListener(rowAction);
+    }
     int minimumWidth = 0;
     for (int i = 0; i < 1
         && i < viewComponent.getColumnModel().getColumnCount(); i++) {
