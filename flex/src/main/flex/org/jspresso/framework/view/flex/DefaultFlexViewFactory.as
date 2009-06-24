@@ -638,7 +638,9 @@ package org.jspresso.framework.view.flex {
           //cardContainer.selectedChild = null;
         } else {
           var selectedCard:Container = cardContainer.getChildByName(value as String) as Container;
-          cardContainer.selectedChild = selectedCard;
+          if(selectedCard) {
+            cardContainer.selectedChild = selectedCard;
+          }
         }
       };
       BindingUtils.bindSetter(selectCard, remoteState, "value", true);
@@ -1173,7 +1175,7 @@ package org.jspresso.framework.view.flex {
       } else {
         table.allowMultipleSelection = true;
       }
-      table.editable = true;
+      table.editable = remoteTable.state.writable;
       table.horizontalScrollPolicy = ScrollPolicy.AUTO;
       table.verticalScrollPolicy = ScrollPolicy.AUTO;
       
