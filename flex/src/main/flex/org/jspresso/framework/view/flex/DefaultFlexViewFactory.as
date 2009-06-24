@@ -1153,6 +1153,7 @@ package org.jspresso.framework.view.flex {
         column.headerRenderer = headerRenderer;
         
         var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
+        rColumn.state.writable = true;
         var editorComponent:UIComponent = createComponent(rColumn, false);
         itemEditor.properties = {editor:editorComponent,
                                  state:rColumn.state,
