@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * Creates and adds an entity to the selected master detail collection.
  * <p>
@@ -49,11 +48,11 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public class AddCollectionToMasterAction<E, F, G> extends
     WrappingAction<E, F, G> {
@@ -140,7 +139,7 @@ public class AddCollectionToMasterAction<E, F, G> extends
    * collection.
    * 
    * @param elementEntityDescriptor
-   *            the elementEntityDescriptor to set.
+   *          the elementEntityDescriptor to set.
    */
   public void setElementEntityDescriptor(
       IComponentDescriptor<IEntity> elementEntityDescriptor) {
@@ -148,6 +147,15 @@ public class AddCollectionToMasterAction<E, F, G> extends
     if (elementEntityDescriptor != null) {
       setIconImageURL(elementEntityDescriptor.getIconImageURL());
     }
+  }
+
+  /**
+   * Gets the elementEntityDescriptor.
+   * 
+   * @return the elementEntityDescriptor.
+   */
+  protected IComponentDescriptor<IEntity> getElementEntityDescriptor() {
+    return elementEntityDescriptor;
   }
 
 }

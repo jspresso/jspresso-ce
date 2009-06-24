@@ -62,12 +62,11 @@ public class ConnectorSelectionAction<E, F, G> extends
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
-    if (collectionConnector == null) {
-      collectionConnector = (ICollectionConnector) getViewConnector(context);
+    if (collectionConnector != null) {
+      int[] connectorSelection = (int[]) context
+          .get(ActionContextConstants.SELECTED_INDICES);
+      collectionConnector.setSelectedIndices(connectorSelection);
     }
-    int[] connectorSelection = (int[]) context
-        .get(ActionContextConstants.SELECTED_INDICES);
-    collectionConnector.setSelectedIndices(connectorSelection);
     return super.execute(actionHandler, context);
   }
 }
