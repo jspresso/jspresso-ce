@@ -661,14 +661,20 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     for (String value : propertyDescriptor.getEnumerationValues()) {
+      values.add(value);
+      icons.add(getIconFactory().getIcon(
+          propertyDescriptor.getIconImageURL(value),
+          getIconFactory().getTinyIconSize()));
       if (value != null && propertyDescriptor.isTranslated()) {
-        values.add(value);
         translations.add(getTranslationProvider().getTranslation(
             computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                 value), locale));
-        icons.add(getIconFactory().getIcon(
-            propertyDescriptor.getIconImageURL(value),
-            getIconFactory().getTinyIconSize()));
+      } else {
+        if (value == null) {
+          translations.add(" ");
+        } else {
+          translations.add(value);
+        }
       }
     }
     viewComponent.setValues(values.toArray(new String[0]));

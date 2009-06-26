@@ -89,7 +89,7 @@ public class AddCollectionToMasterAction<E, F, G> extends
       varContext = new HashMap<String, Object>();
     }
     varContext.put(ActionContextConstants.ELEMENT_DESCRIPTOR,
-        elementEntityDescriptor);
+        getElementEntityDescriptor(context));
     return super.execute(actionHandler, varContext);
   }
 
@@ -152,9 +152,12 @@ public class AddCollectionToMasterAction<E, F, G> extends
   /**
    * Gets the elementEntityDescriptor.
    * 
+   * @param context
+   *          the action context.
    * @return the elementEntityDescriptor.
    */
-  protected IComponentDescriptor<IEntity> getElementEntityDescriptor() {
+  protected IComponentDescriptor<IEntity> getElementEntityDescriptor(
+      Map<String, Object> context) {
     return elementEntityDescriptor;
   }
 
