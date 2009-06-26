@@ -59,7 +59,8 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
     }
     completeInitialWizardModel(wizardModel, context);
     modelConnector.setConnectorValue(wizardModel);
-    displayWizardStep(firstWizardStep, modelConnector, actionHandler, context);
+    displayWizardStep(firstWizardStep, modelConnector, actionHandler, context,
+        false);
     return true;
   }
 
@@ -225,7 +226,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
 
   private void displayWizardStep(IWizardStepDescriptor wizardStep,
       IValueConnector modelConnector, IActionHandler actionHandler,
-      Map<String, Object> context) {
+      Map<String, Object> context, boolean reuseCurrent) {
 
     ITranslationProvider translationProvider = getTranslationProvider(context);
     Locale locale = getLocale(context);
@@ -241,7 +242,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
         view.getPeer(),
         createWizardStepActions(wizardStep, view, actionHandler,
             translationProvider, locale, modelConnector, context), title,
-        getSourceComponent(context), context, dialogSize, true);
+        getSourceComponent(context), context, dialogSize, reuseCurrent);
   }
 
   private class CancelAction extends AbstractFrontendAction<E, F, G> {
@@ -355,7 +356,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
         IWizardStepDescriptor nextWizardStep = wizardStep
             .getNextStepDescriptor(context);
         displayWizardStep(nextWizardStep, modelConnector, actionHandler,
-            context);
+            context, true);
         if (nextWizardStep.getOnEnterAction() != null) {
           actionHandler.execute(nextWizardStep.getOnEnterAction(), context);
         }
@@ -381,7 +382,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       IWizardStepDescriptor previousWizardStep = wizardStep
           .getPreviousStepDescriptor(context);
       displayWizardStep(previousWizardStep, modelConnector, actionHandler,
-          context);
+          context, true);
       return true;
     }
   }

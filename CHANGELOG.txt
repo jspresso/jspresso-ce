@@ -20,6 +20,7 @@ Bugs fixed
 2790281  	 getServiceContractClassNames returns null after 1st call
 2791539  	 model descriptor can be wrongly inferred for view descriptor
 2810895    Remote value connectors writability wrongly handled
+           Wizard action does not work when triggered from a dialog
 
 New features
 ------------
