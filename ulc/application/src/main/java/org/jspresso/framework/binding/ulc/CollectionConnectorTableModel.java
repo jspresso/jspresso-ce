@@ -98,7 +98,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   @Override
   public Class<?> getColumnClass(int columnIndex) {
     if (columnClassesByIds != null) {
-      return columnClassesByIds.get(columnConnectorKeys.get(columnIndex));
+      Class<?> columnClass = columnClassesByIds.get(columnConnectorKeys
+          .get(columnIndex));
+      if (columnClass != null) {
+        return columnClass;
+      }
     }
     return super.getColumnClass(columnIndex);
   }

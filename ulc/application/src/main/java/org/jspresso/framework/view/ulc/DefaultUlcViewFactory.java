@@ -1163,7 +1163,6 @@ public class DefaultUlcViewFactory extends
 
     Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
     Map<String, IFormatter> columnFormattersByIds = new HashMap<String, IFormatter>();
-    List<String> columnConnectorKeys = new ArrayList<String>();
     Set<String> forbiddenColumns = new HashSet<String>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
@@ -1193,7 +1192,6 @@ public class DefaultUlcViewFactory extends
                 .getModelType());
           }
         }
-        columnConnectorKeys.add(columnId);
         if (columnViewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
             columnConnector.addReadabilityGate(gate.clone());
@@ -1210,6 +1208,10 @@ public class DefaultUlcViewFactory extends
         forbiddenColumns.add(columnId);
       }
     }
+    List<String> columnConnectorKeys = new ArrayList<String>(
+        rowConnectorPrototype.getChildConnectorKeys());
+    // remove row rendering connector id
+    columnConnectorKeys.remove(0);
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
     tableModel.setExceptionHandler(actionHandler);

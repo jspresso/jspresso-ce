@@ -1421,7 +1421,6 @@ public class DefaultSwingViewFactory extends
     viewComponent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
     Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
-    List<String> columnConnectorKeys = new ArrayList<String>();
     Set<String> forbiddenColumns = new HashSet<String>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
@@ -1435,7 +1434,6 @@ public class DefaultSwingViewFactory extends
         columnClassesByIds.put(columnId, modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()
             .getPropertyDescriptor(columnId).getModelType());
-        columnConnectorKeys.add(columnId);
         if (columnViewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
             columnConnector.addReadabilityGate(gate.clone());
@@ -1452,6 +1450,10 @@ public class DefaultSwingViewFactory extends
         forbiddenColumns.add(columnId);
       }
     }
+    List<String> columnConnectorKeys = new ArrayList<String>(
+        rowConnectorPrototype.getChildConnectorKeys());
+    // remove row rendering connector id
+    columnConnectorKeys.remove(0);
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
     tableModel.setExceptionHandler(actionHandler);

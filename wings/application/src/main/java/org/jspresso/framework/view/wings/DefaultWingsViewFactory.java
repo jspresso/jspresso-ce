@@ -917,8 +917,7 @@ public class DefaultWingsViewFactory extends
       renderedProperty = propertyDescriptor.getComponentDescriptor()
           .getToStringProperty();
     }
-    connector.setRenderingConnector(new BasicValueConnector(
-        renderedProperty));
+    connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
     Action lovAction = createLovAction(viewComponent, connector,
         propertyDescriptor, actionHandler, locale);
@@ -1386,7 +1385,6 @@ public class DefaultWingsViewFactory extends
       viewComponent.setEditable(false);
     }
     Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
-    List<String> columnConnectorKeys = new ArrayList<String>();
     Set<String> forbiddenColumns = new HashSet<String>();
     int tableWidth = 0;
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
@@ -1401,7 +1399,6 @@ public class DefaultWingsViewFactory extends
         columnClassesByIds.put(columnId, modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()
             .getPropertyDescriptor(columnId).getModelType());
-        columnConnectorKeys.add(columnId);
         if (columnViewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
             columnConnector.addReadabilityGate(gate.clone());
@@ -1418,6 +1415,10 @@ public class DefaultWingsViewFactory extends
         forbiddenColumns.add(columnId);
       }
     }
+    List<String> columnConnectorKeys = new ArrayList<String>(
+        rowConnectorPrototype.getChildConnectorKeys());
+    // remove row rendering connector id
+    columnConnectorKeys.remove(0);
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
     tableModel.setExceptionHandler(actionHandler);
