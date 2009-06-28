@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * Factory for list-of-value views.
@@ -45,9 +46,12 @@ public interface ILovViewDescriptorFactory {
    * Creates a new lov view descriptor for a component descriptor.
    * 
    * @param entityRefDescriptor
-   *            the entity reference descriptor.
+   *          the entity reference descriptor.
+   * @param okAction
+   *          the action used to select the entity in the LOV.
    * @return the created view descriptor.
    */
   IViewDescriptor createLovViewDescriptor(
-      IReferencePropertyDescriptor<?> entityRefDescriptor);
+      IReferencePropertyDescriptor<?> entityRefDescriptor,
+      IDisplayableAction okAction);
 }

@@ -20,7 +20,7 @@ Bugs fixed
 2790281  	 getServiceContractClassNames returns null after 1st call
 2791539  	 model descriptor can be wrongly inferred for view descriptor
 2810895    Remote value connectors writability wrongly handled
-           Wizard action does not work when triggered from a dialog
+2813469    Wizard action does not work when triggered from a dialog
 
 New features
 ------------
@@ -43,6 +43,8 @@ New features
 2811349    Make icon sizes configurable through the iconfactory
 2811350    Allow for closing internal frames in MDI
 2811353    Allow for a row dble click action registration on coll views
+2813468    Allow for customizing the rendered property on LOV fields
+2813470    Double click on LOV should select row
 
 3.0.0
 =====

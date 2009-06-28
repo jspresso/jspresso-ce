@@ -778,7 +778,7 @@ public class DefaultRemoteViewFactory extends
         connector);
 
     if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createColumnConnector(viewDescriptor
+      IValueConnector cellConnector = createListConnector(viewDescriptor
           .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
           .getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
@@ -899,9 +899,19 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
         .getModelDescriptor();
+    List<String> renderedProperties = propertyViewDescriptor
+        .getRenderedChildProperties();
+    String renderedProperty;
+    if (renderedProperties != null && !renderedProperties.isEmpty()) {
+      // it's a custom rendered property.
+      renderedProperty = renderedProperties.get(0);
+    } else {
+      renderedProperty = propertyDescriptor.getComponentDescriptor()
+          .getToStringProperty();
+    }
     IValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(propertyDescriptor.getName(),
-            propertyDescriptor.getReferencedDescriptor().getToStringProperty());
+            renderedProperty);
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(true, connector);
     IView<RComponent> view = constructView(viewComponent,

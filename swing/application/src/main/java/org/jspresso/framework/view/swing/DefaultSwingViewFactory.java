@@ -1126,7 +1126,7 @@ public class DefaultSwingViewFactory extends
         connector);
 
     if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createColumnConnector(viewDescriptor
+      IValueConnector cellConnector = createListConnector(viewDescriptor
           .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
           .getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
@@ -1213,8 +1213,17 @@ public class DefaultSwingViewFactory extends
     JActionField viewComponent = createJActionField(true);
     JReferenceFieldConnector connector = new JReferenceFieldConnector(
         propertyDescriptor.getName(), viewComponent);
-    connector.setToStringPropertyConnector(new BasicValueConnector(
-        propertyDescriptor.getComponentDescriptor().getToStringProperty()));
+    List<String> renderedProperties = propertyViewDescriptor
+        .getRenderedChildProperties();
+    String renderedProperty;
+    if (renderedProperties != null && !renderedProperties.isEmpty()) {
+      // it's a custom rendered property.
+      renderedProperty = renderedProperties.get(0);
+    } else {
+      renderedProperty = propertyDescriptor.getComponentDescriptor()
+          .getToStringProperty();
+    }
+    connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
     Action lovAction = createLovAction(viewComponent, connector,
         propertyDescriptor, actionHandler, locale);
@@ -1419,8 +1428,9 @@ public class DefaultSwingViewFactory extends
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       try {
         actionHandler.checkAccess(columnViewDescriptor);
-        IValueConnector columnConnector = createColumnConnector(columnId,
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor());
+        IValueConnector columnConnector = createColumnConnector(
+            columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
+                .getElementDescriptor());
         rowConnectorPrototype.addChildConnector(columnConnector);
         columnClassesByIds.put(columnId, modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()
@@ -2007,7 +2017,8 @@ public class DefaultSwingViewFactory extends
   private TableCellEditor createTableCellEditor(IView<JComponent> editorView) {
     SwingViewCellEditorAdapter editor;
     if (editorView.getPeer() instanceof JActionField) {
-      editor = new SwingViewCellEditorAdapter(editorView) {
+      editor = new SwingViewCellEditorAdapter(editorView,
+          getModelConnectorFactory(), getMvcBinder()) {
 
         private static final long serialVersionUID = -1551909997448473681L;
 
@@ -2023,7 +2034,8 @@ public class DefaultSwingViewFactory extends
         }
       };
     } else {
-      editor = new SwingViewCellEditorAdapter(editorView);
+      editor = new SwingViewCellEditorAdapter(editorView,
+          getModelConnectorFactory(), getMvcBinder());
     }
     return editor;
   }

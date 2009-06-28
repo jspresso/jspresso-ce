@@ -27,9 +27,12 @@ import javax.swing.event.EventListenerList;
 
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.gui.wings.components.SActionField;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.view.IView;
 import org.wings.SAbstractButton;
 import org.wings.SCheckBox;
@@ -73,8 +76,13 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    * 
    * @param editorView
    *          the swing view used as editor.
+   * @param modelConnectorFactory
+   *          the model connector factory.
+   * @param mvcBinder
+   *          the mvc binder.
    */
-  public WingsViewCellEditorAdapter(IView<SComponent> editorView) {
+  public WingsViewCellEditorAdapter(IView<SComponent> editorView,
+      IModelConnectorFactory modelConnectorFactory, IMvcBinder mvcBinder) {
     this.listenerList = new EventListenerList();
     this.editorView = editorView;
     if (editorView.getPeer() instanceof SAbstractButton) {
@@ -82,9 +90,18 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
           .setHorizontalAlignment(SConstants.CENTER);
     }
 
-    modelConnector = new BasicValueConnector(editorView.getConnector().getId());
     // To prevent the editor from being read-only.
-    editorView.getConnector().setModelConnector(modelConnector);
+    if (editorView.getDescriptor().getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+      modelConnector = modelConnectorFactory.createModelConnector(editorView
+          .getConnector().getId(),
+          ((IComponentDescriptorProvider<?>) editorView.getDescriptor()
+              .getModelDescriptor()).getComponentDescriptor());
+
+    } else {
+      modelConnector = new BasicValueConnector(editorView.getConnector()
+          .getId());
+    }
+    mvcBinder.bind(editorView.getConnector(), modelConnector);
   }
 
   /**

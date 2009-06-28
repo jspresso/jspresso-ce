@@ -22,11 +22,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.swing.components.JActionField;
-
 
 /**
  * JReferenceFieldConnector connector.
@@ -48,29 +47,29 @@ import org.jspresso.framework.gui.swing.components.JActionField;
  * @author Vincent Vandenschrick
  */
 public class JReferenceFieldConnector extends JActionFieldConnector implements
-    ICompositeValueConnector {
+    IRenderableCompositeValueConnector {
 
-  private IConnectorValueChangeListener toStringListener;
-  private IValueConnector               toStringPropertyConnector;
+  private IConnectorValueChangeListener renderingListener;
+  private IValueConnector               renderingConnector;
 
   /**
    * Constructs a new <code>JActionFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param actionField
-   *            the connected JActionField.
+   *          the connected JActionField.
    */
   public JReferenceFieldConnector(String id, JActionField actionField) {
     super(id, actionField);
-    toStringListener = new ToStringConnectorListener();
+    renderingListener = new RenderingConnectorListener();
   }
 
   /**
    * {@inheritDoc}
    */
-  public void addChildConnector(@SuppressWarnings("unused")
-  IValueConnector childConnector) {
+  public void addChildConnector(
+      @SuppressWarnings("unused") IValueConnector childConnector) {
     throw new UnsupportedOperationException(
         "Child connectors cannot be added to action field connector");
   }
@@ -104,9 +103,8 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   public JReferenceFieldConnector clone(String newConnectorId) {
     JReferenceFieldConnector clonedConnector = (JReferenceFieldConnector) super
         .clone(newConnectorId);
-    if (toStringPropertyConnector != null) {
-      clonedConnector.toStringPropertyConnector = toStringPropertyConnector
-          .clone();
+    if (renderingConnector != null) {
+      clonedConnector.renderingConnector = renderingConnector.clone();
     }
     return clonedConnector;
   }
@@ -115,8 +113,8 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    * {@inheritDoc}
    */
   public IValueConnector getChildConnector(String connectorKey) {
-    if (connectorKey.equals(toStringPropertyConnector.getId())) {
-      return toStringPropertyConnector;
+    if (connectorKey.equals(renderingConnector.getId())) {
+      return renderingConnector;
     }
     return null;
   }
@@ -125,7 +123,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    * {@inheritDoc}
    */
   public int getChildConnectorCount() {
-    if (toStringPropertyConnector != null) {
+    if (renderingConnector != null) {
       return 1;
     }
     return 0;
@@ -135,41 +133,88 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    * {@inheritDoc}
    */
   public Collection<String> getChildConnectorKeys() {
-    if (toStringPropertyConnector != null) {
-      return Collections.singleton(toStringPropertyConnector.getId());
+    if (renderingConnector != null) {
+      return Collections.singleton(renderingConnector.getId());
     }
     return null;
   }
 
   /**
-   * Sets the toStringPropertyConnector.
+   * Sets the renderingConnector.
    * 
-   * @param toStringPropertyConnector
-   *            the toStringPropertyConnector to set.
+   * @param renderingConnector
+   *          the renderingConnector to set.
    */
-  public void setToStringPropertyConnector(
-      IValueConnector toStringPropertyConnector) {
-    if (this.toStringPropertyConnector != null) {
-      this.toStringPropertyConnector
-          .removeConnectorValueChangeListener(toStringListener);
+  public void setRenderingConnector(IValueConnector renderingConnector) {
+    if (this.renderingConnector != null) {
+      this.renderingConnector
+          .removeConnectorValueChangeListener(renderingListener);
     }
-    this.toStringPropertyConnector = toStringPropertyConnector;
-    if (this.toStringPropertyConnector != null) {
-      this.toStringPropertyConnector
-          .addConnectorValueChangeListener(toStringListener);
+    this.renderingConnector = renderingConnector;
+    if (this.renderingConnector != null) {
+      this.renderingConnector
+          .addConnectorValueChangeListener(renderingListener);
     }
   }
 
-  private final class ToStringConnectorListener implements
+  private final class RenderingConnectorListener implements
       IConnectorValueChangeListener {
 
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
+    public void connectorValueChange(
+        @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
       protectedSetConnecteeValue(getConnecteeValue());
     }
+  }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getActionText() {
+    if (renderingConnector != null) {
+      if (renderingConnector.getConnectorValue() == null) {
+        return "";
+      }
+      return renderingConnector.getConnectorValue().toString();
+    }
+    return super.getActionText();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDisplayDescription() {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDisplayIconImageUrl() {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDisplayValue() {
+    if (getRenderingConnector() != null) {
+      return (String) getRenderingConnector().getConnectorValue();
+    }
+    return "";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IValueConnector getRenderingConnector() {
+    return renderingConnector;
   }
 }

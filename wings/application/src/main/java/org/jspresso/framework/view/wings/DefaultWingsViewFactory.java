@@ -819,7 +819,7 @@ public class DefaultWingsViewFactory extends
         connector);
 
     if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createColumnConnector(viewDescriptor
+      IValueConnector cellConnector = createListConnector(viewDescriptor
           .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
           .getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
@@ -907,8 +907,18 @@ public class DefaultWingsViewFactory extends
     SActionField viewComponent = createSActionField(true);
     SReferenceFieldConnector connector = new SReferenceFieldConnector(
         propertyDescriptor.getName(), viewComponent);
-    connector.setToStringPropertyConnector(new BasicValueConnector(
-        propertyDescriptor.getComponentDescriptor().getToStringProperty()));
+    List<String> renderedProperties = propertyViewDescriptor
+        .getRenderedChildProperties();
+    String renderedProperty;
+    if (renderedProperties != null && !renderedProperties.isEmpty()) {
+      // it's a custom rendered property.
+      renderedProperty = renderedProperties.get(0);
+    } else {
+      renderedProperty = propertyDescriptor.getComponentDescriptor()
+          .getToStringProperty();
+    }
+    connector.setRenderingConnector(new BasicValueConnector(
+        renderedProperty));
     connector.setExceptionHandler(actionHandler);
     Action lovAction = createLovAction(viewComponent, connector,
         propertyDescriptor, actionHandler, locale);
@@ -1384,8 +1394,9 @@ public class DefaultWingsViewFactory extends
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       try {
         actionHandler.checkAccess(columnViewDescriptor);
-        IValueConnector columnConnector = createColumnConnector(columnId,
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor());
+        IValueConnector columnConnector = createColumnConnector(
+            columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
+                .getElementDescriptor());
         rowConnectorPrototype.addChildConnector(columnConnector);
         columnClassesByIds.put(columnId, modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()
@@ -1983,7 +1994,8 @@ public class DefaultWingsViewFactory extends
 
   private STableCellEditor createTableCellEditor(IView<SComponent> editorView) {
     WingsViewCellEditorAdapter editor;
-    editor = new WingsViewCellEditorAdapter(editorView);
+    editor = new WingsViewCellEditorAdapter(editorView,
+        getModelConnectorFactory(), getMvcBinder());
     return editor;
   }
 

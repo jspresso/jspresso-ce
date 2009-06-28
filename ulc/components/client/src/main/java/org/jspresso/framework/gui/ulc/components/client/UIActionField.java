@@ -177,8 +177,7 @@ public class UIActionField extends UIComponent implements IEditorComponent {
        * {@inheritDoc}
        */
       @Override
-      public void focusLost(@SuppressWarnings("unused")
-      FocusEvent e) {
+      public void focusLost(@SuppressWarnings("unused") FocusEvent e) {
         if (!getBasicObject().isSynchronized()) {
           sendActionText();
         }
@@ -316,7 +315,11 @@ public class UIActionField extends UIComponent implements IEditorComponent {
     @SuppressWarnings("unused")
     public Component getTableCellEditorComponent(JTable table, Object value,
         boolean isSelected, int row, int col) {
-      getBasicObject().setValue(value);
+      if (value == null) {
+        getBasicObject().setValue("");
+      } else {
+        getBasicObject().setValue(value.toString());
+      }
       getBasicObject().selectAll();
       Anything cellEditingAnything = new Anything();
       cellEditingAnything.put(ActionFieldConstants.EDITING_ROW_KEY, row);

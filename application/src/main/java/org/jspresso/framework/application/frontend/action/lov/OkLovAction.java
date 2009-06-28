@@ -63,8 +63,17 @@ public class OkLovAction<E, F, G> extends WrappingAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) getViewConnector(context))
-        .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+    ICollectionConnector resultConnector;
+    // to support double click on the table
+    if (IQueryComponent.QUERIED_COMPONENTS.equals(getViewConnector(context)
+        .getId())) {
+      // this is from the table itself
+      resultConnector = (ICollectionConnector) getViewConnector(context);
+    } else {
+      // this is from the dialog.
+      resultConnector = (ICollectionConnector) ((ICompositeValueConnector) getViewConnector(context))
+          .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+    }
     int[] resultSelectedIndices = resultConnector.getSelectedIndices();
     if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
       IEntity selectedEntity = (IEntity) resultConnector.getChildConnector(

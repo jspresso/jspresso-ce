@@ -22,8 +22,7 @@ import java.util.List;
 
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
@@ -69,14 +68,16 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     if (renderedChildProperties != null) {
       return renderedChildProperties;
     }
-    IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-        .getComponentDescriptor().getPropertyDescriptor(getName());
-    if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) childPropertyDescriptor)
+    // IPropertyDescriptor childPropertyDescriptor =
+    // ((IComponentDescriptorProvider<?>) getModelDescriptor())
+    // .getComponentDescriptor().getPropertyDescriptor(getName());
+    IModelDescriptor propertyDescriptor = getModelDescriptor();
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
           .getCollectionDescriptor()).getElementDescriptor()
           .getRenderedProperties();
-    } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return ((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
+    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      return ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor().getRenderedProperties();
     }
     return null;

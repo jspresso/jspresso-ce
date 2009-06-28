@@ -72,7 +72,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   private boolean               showTextField;
   private ULCActionField        sourceActionField;
 
-  private Object                value;
+  private String                value;
 
   /**
    * Constructs a new <code>ULCActionField</code> instance.
@@ -85,7 +85,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Constructs a new <code>ULCActionField</code> instance.
    * 
    * @param showTextField
-   *            is the text field visible to the user.
+   *          is the text field visible to the user.
    */
   public ULCActionField(boolean showTextField) {
     propertyChangeSupport = new SinglePropertyChangeSupport(this);
@@ -99,8 +99,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * {@inheritDoc}
    */
   @Override
-  public void addFocusListener(@SuppressWarnings("unused")
-  IFocusListener l) {
+  public void addFocusListener(@SuppressWarnings("unused") IFocusListener l) {
     throw new UnsupportedOperationException();
   }
 
@@ -108,7 +107,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Directly delegates to propertyChangeSupport.
    * 
    * @param listener
-   *            the listener to add.
+   *          the listener to add.
    */
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.addPropertyChangeListener(listener);
@@ -118,9 +117,9 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Directly delegates to propertyChangeSupport.
    * 
    * @param propertyName
-   *            the name of the property.
+   *          the name of the property.
    * @param listener
-   *            the listener to add.
+   *          the listener to add.
    */
   public void addPropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
@@ -246,14 +245,14 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    *         value.
    */
   public boolean isSynchronized() {
-    return ObjectUtils.equals(valueToString(), actionText);
+    return ObjectUtils.equals(value, actionText);
   }
 
   /**
    * performs the registered action programatically.
    * 
    * @param index
-   *            the index of the action to be triggerred.
+   *          the index of the action to be triggerred.
    */
   public void performAction(int index) {
     performAction(index, actionText);
@@ -263,7 +262,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Directly delegates to propertyChangeSupport.
    * 
    * @param listener
-   *            the listener to remove.
+   *          the listener to remove.
    */
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(listener);
@@ -273,9 +272,9 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Directly delegates to propertyChangeSupport.
    * 
    * @param propertyName
-   *            the name of the property.
+   *          the name of the property.
    * @param listener
-   *            the listener to remove.
+   *          the listener to remove.
    */
   public void removePropertyChangeListener(String propertyName,
       PropertyChangeListener listener) {
@@ -286,7 +285,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Sets the action.
    * 
    * @param actions
-   *            the actions to set.
+   *          the actions to set.
    */
   public void setActions(List<IAction> actions) {
     if (!ObjectUtils.equals(this.actions, actions)) {
@@ -308,7 +307,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Sets the action field text.
    * 
    * @param actionText
-   *            the action field text.
+   *          the action field text.
    */
   public void setActionText(String actionText) {
     updateActionText(actionText, true);
@@ -318,7 +317,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Decorates the component with a marker.
    * 
    * @param decorated
-   *            if the component should be decorated.
+   *          if the component should be decorated.
    */
   public void setDecorated(boolean decorated) {
     if (this.decorated != decorated) {
@@ -333,7 +332,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Sets the editable.
    * 
    * @param editable
-   *            the editable to set.
+   *          the editable to set.
    */
   public void setEditable(boolean editable) {
     if (this.editable != editable) {
@@ -359,9 +358,9 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Sets the action field value.
    * 
    * @param value
-   *            the action field value.
+   *          the action field value.
    */
-  public void setValue(Object value) {
+  public void setValue(String value) {
     updateValue(value, true);
   }
 
@@ -377,11 +376,11 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Directly delegates to propertyChangeSupport.
    * 
    * @param propertyName
-   *            the name of the property.
+   *          the name of the property.
    * @param oldValue
-   *            the old property value.
+   *          the old property value.
    * @param newValue
-   *            the new property value.
+   *          the new property value.
    */
   protected void firePropertyChange(String propertyName, boolean oldValue,
       boolean newValue) {
@@ -392,11 +391,11 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * Directly delegates to propertyChangeSupport.
    * 
    * @param propertyName
-   *            the name of the property.
+   *          the name of the property.
    * @param oldValue
-   *            the old property value.
+   *          the old property value.
    * @param newValue
-   *            the new property value.
+   *          the new property value.
    */
   protected void firePropertyChange(String propertyName, Object oldValue,
       Object newValue) {
@@ -531,7 +530,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     }
   }
 
-  private void updateValue(Object aValue, boolean notifyClient) {
+  private void updateValue(String aValue, boolean notifyClient) {
     if (!ObjectUtils.equals(this.value, aValue)) {
       Object oldValue = this.value;
       this.value = aValue;
@@ -540,13 +539,6 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     if (sourceActionField != null) {
       sourceActionField.updateValue(aValue, notifyClient);
     }
-    updateActionText(valueToString(), notifyClient);
-  }
-
-  private String valueToString() {
-    if (value == null) {
-      return "";
-    }
-    return value.toString();
+    updateActionText(value, notifyClient);
   }
 }

@@ -68,7 +68,7 @@ public class SActionField extends SPanel {
   private Action            defaultAction;
   private boolean           showTextField;
   private STextField        textField;
-  private Object            value;
+  private String            value;
 
   /**
    * Constructs a new <code>SActionField</code> instance.
@@ -154,7 +154,7 @@ public class SActionField extends SPanel {
    *         value.
    */
   public boolean isSynchronized() {
-    return ObjectUtils.equals(valueToString(), textField.getText());
+    return ObjectUtils.equals(value, textField.getText());
   }
 
   /**
@@ -262,15 +262,8 @@ public class SActionField extends SPanel {
    * @param value
    *          the value to set.
    */
-  public void setValue(Object value) {
+  public void setValue(String value) {
     this.value = value;
-    textField.setText(valueToString());
-  }
-
-  private String valueToString() {
-    if (value == null) {
-      return "";
-    }
-    return value.toString();
+    textField.setText(value);
   }
 }

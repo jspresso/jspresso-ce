@@ -37,7 +37,6 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gui.Coordinates;
 
-
 /**
  * This class implements a table model backed by a collection connector. As
  * expected, this table model will fire necessary events depending on connectors
@@ -78,9 +77,9 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
    * 
    * @param collectionConnector
-   *            the collection connector holding the values of this table model.
+   *          the collection connector holding the values of this table model.
    * @param columnConnectorKeys
-   *            the list of column connector ids.
+   *          the list of column connector ids.
    */
   public CollectionConnectorTableModel(
       ICollectionConnector collectionConnector, List<String> columnConnectorKeys) {
@@ -127,6 +126,9 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    */
   public Object getValueAt(int rowIndex, int columnIndex) {
     IValueConnector cellConnector = getConnectorAt(rowIndex, columnIndex);
+    if (cellConnector instanceof ICompositeValueConnector) {
+      return cellConnector;
+    }
     Object connectorValue = cellConnector.getConnectorValue();
     if (connectorValue instanceof byte[]) {
       return null;
@@ -148,7 +150,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * Sets the columnClassesByIds.
    * 
    * @param columnClassesByIds
-   *            the columnClassesByIds to set.
+   *          the columnClassesByIds to set.
    */
   public void setColumnClassesByIds(Map<String, Class<?>> columnClassesByIds) {
     this.columnClassesByIds = columnClassesByIds;
@@ -158,7 +160,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * Sets the exceptionHandler.
    * 
    * @param exceptionHandler
-   *            the exceptionHandler to set.
+   *          the exceptionHandler to set.
    */
   public void setExceptionHandler(IExceptionHandler exceptionHandler) {
     this.exceptionHandler = exceptionHandler;
@@ -243,9 +245,9 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * Gets the value connector backing the table cell.
    * 
    * @param rowIndex
-   *            the row index of the cell.
+   *          the row index of the cell.
    * @param columnIndex
-   *            the column index of the cell.
+   *          the column index of the cell.
    * @return the value connector behind the cell.
    */
   private IValueConnector getConnectorAt(int rowIndex, int columnIndex) {
@@ -266,16 +268,16 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    final ConnectorValueChangeEvent evt) {
+    public void connectorValueChange(
+        @SuppressWarnings("unused") final ConnectorValueChangeEvent evt) {
       updateCell();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void propertyChange(@SuppressWarnings("unused")
-    final PropertyChangeEvent evt) {
+    public void propertyChange(
+        @SuppressWarnings("unused") final PropertyChangeEvent evt) {
       updateCell();
     }
 
@@ -298,8 +300,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
+    public void connectorValueChange(
+        @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
       if (row < getRowCount()) {
         fireTableRowsUpdated(row, row);
       }

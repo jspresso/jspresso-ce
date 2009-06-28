@@ -42,6 +42,7 @@ import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.EDuration;
@@ -182,6 +183,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   private int                           maxColumnCharacterLength    = 32;
   private IModelCascadingBinder         modelCascadingBinder;
+  private IModelConnectorFactory        modelConnectorFactory;
   private IMvcBinder                    mvcBinder;
   private IDisplayableAction            openFileAsBinaryPropertyAction;
   private IDisplayableAction            resetPropertyAction;
@@ -724,14 +726,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a table column connector.
    * 
-   * @param columnId
-   *          the column id to create the connector for.
+   * @param columnViewDescriptor
+   *          the column decriptor to create the connector for.
    * @param descriptor
    *          the component descriptor this table relies on.
    * @return the connector for the table column.
    */
-  protected IValueConnector createColumnConnector(String columnId,
+  protected IValueConnector createColumnConnector(
+      IPropertyViewDescriptor columnViewDescriptor,
       IComponentDescriptor<?> descriptor) {
+    String columnId = columnViewDescriptor.getModelDescriptor().getName();
     IPropertyDescriptor propertyDescriptor = descriptor
         .getPropertyDescriptor(columnId);
     if (propertyDescriptor == null) {
@@ -739,8 +743,43 @@ public abstract class AbstractViewFactory<E, F, G> implements
           + descriptor.getComponentContract());
     }
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      List<String> renderedProperties = columnViewDescriptor
+          .getRenderedChildProperties();
+      String renderedProperty;
+      if (renderedProperties != null && !renderedProperties.isEmpty()) {
+        // it's a custom rendered property.
+        renderedProperty = renderedProperties.get(0);
+      } else {
+        renderedProperty = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor().getToStringProperty();
+      }
+      return getConnectorFactory().createCompositeValueConnector(columnId,
+          renderedProperty);
+    }
+    return getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+  }
+
+  /**
+   * Creates a table column connector.
+   * 
+   * @param renderedProperty
+   *          the list rendered property.
+   * @param descriptor
+   *          the component descriptor this list relies on.
+   * @return the connector for the list.
+   */
+  protected IValueConnector createListConnector(String renderedProperty,
+      IComponentDescriptor<?> descriptor) {
+    IPropertyDescriptor propertyDescriptor = descriptor
+        .getPropertyDescriptor(renderedProperty);
+    if (propertyDescriptor == null) {
+      throw new ViewException("No property " + renderedProperty
+          + " defined for " + descriptor.getComponentContract());
+    }
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return getConnectorFactory().createCompositeValueConnector(
-          columnId,
+          renderedProperty,
           ((IReferencePropertyDescriptor<?>) propertyDescriptor)
               .getReferencedDescriptor().getToStringProperty());
     }
@@ -2161,5 +2200,25 @@ public abstract class AbstractViewFactory<E, F, G> implements
       return true;
     }
     return false;
+  }
+
+  /**
+   * Gets the modelConnectorFactory.
+   * 
+   * @return the modelConnectorFactory.
+   */
+  protected IModelConnectorFactory getModelConnectorFactory() {
+    return modelConnectorFactory;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
   }
 }

@@ -62,15 +62,15 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    */
   @SuppressWarnings("unchecked")
   public IViewDescriptor createLovViewDescriptor(
-      IReferencePropertyDescriptor entityRefDescriptor) {
+      IReferencePropertyDescriptor entityRefDescriptor,
+      IDisplayableAction okAction) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     lovViewDescriptor
         .setNorthViewDescriptor(queryViewDescriptorFactory
             .createQueryViewDescriptor(entityRefDescriptor
                 .getComponentDescriptor()));
-    lovViewDescriptor
-        .setCenterViewDescriptor(createResultViewDescriptor(entityRefDescriptor
-            .getComponentDescriptor()));
+    lovViewDescriptor.setCenterViewDescriptor(createResultViewDescriptor(
+        entityRefDescriptor.getComponentDescriptor(), okAction));
     if (pagingStatusViewDescriptor != null) {
       BasicBorderViewDescriptor pagingViewDescriptor = new BasicBorderViewDescriptor();
       pagingViewDescriptor.setWestViewDescriptor(pagingStatusViewDescriptor);
@@ -92,7 +92,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   }
 
   private IViewDescriptor createResultViewDescriptor(
-      IComponentDescriptor<Object> entityDescriptor) {
+      IComponentDescriptor<Object> entityDescriptor, IDisplayableAction okAction) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
     BasicCollectionDescriptor<Object> queriedEntitiesListDescriptor = new BasicCollectionDescriptor<Object>();
@@ -107,6 +107,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
       resultViewDescriptor.setActionMap(resultViewActionMap);
     }
     resultViewDescriptor.setSortingAction(sortingAction);
+    resultViewDescriptor.setRowAction(okAction);
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);

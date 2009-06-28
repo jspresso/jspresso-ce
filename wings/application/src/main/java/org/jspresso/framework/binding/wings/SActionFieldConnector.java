@@ -25,7 +25,6 @@ import org.jspresso.framework.gui.wings.components.SActionField;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
 
-
 /**
  * SActionFieldConnector connector.
  * <p>
@@ -47,13 +46,15 @@ import org.wings.event.SDocumentListener;
  */
 public class SActionFieldConnector extends SComponentConnector<SActionField> {
 
+  private Object value;
+
   /**
    * Constructs a new <code>SActionFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param actionField
-   *            the connected SActionField.
+   *          the connected SActionField.
    */
   public SActionFieldConnector(String id, SActionField actionField) {
     super(id, actionField);
@@ -103,18 +104,15 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
     getConnectedSComponent().addTextFieldDocumentListener(
         new SDocumentListener() {
 
-          public void changedUpdate(@SuppressWarnings("unused")
-          SDocumentEvent e) {
+          public void changedUpdate(@SuppressWarnings("unused") SDocumentEvent e) {
             performActionIfNeeded();
           }
 
-          public void insertUpdate(@SuppressWarnings("unused")
-          SDocumentEvent e) {
+          public void insertUpdate(@SuppressWarnings("unused") SDocumentEvent e) {
             performActionIfNeeded();
           }
 
-          public void removeUpdate(@SuppressWarnings("unused")
-          SDocumentEvent e) {
+          public void removeUpdate(@SuppressWarnings("unused") SDocumentEvent e) {
             performActionIfNeeded();
           }
         });
@@ -125,7 +123,7 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
    */
   @Override
   protected Object getConnecteeValue() {
-    return getConnectedSComponent().getValue();
+    return value;
   }
 
   /**
@@ -133,6 +131,19 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
-    getConnectedSComponent().setValue(aValue);
+    value = aValue;
+    getConnectedSComponent().setValue(getActionText());
+  }
+
+  /**
+   * Gest the action text to display in the action field.
+   * 
+   * @return the action text to display in the action field.
+   */
+  protected String getActionText() {
+    if (value == null) {
+      return "";
+    }
+    return value.toString();
   }
 }

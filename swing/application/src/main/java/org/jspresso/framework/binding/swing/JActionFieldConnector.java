@@ -26,7 +26,6 @@ import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.gui.swing.components.JActionField;
 
-
 /**
  * JActionFieldConnector connector.
  * <p>
@@ -48,13 +47,15 @@ import org.jspresso.framework.gui.swing.components.JActionField;
  */
 public class JActionFieldConnector extends JComponentConnector<JActionField> {
 
+  private Object value;
+
   /**
    * Constructs a new <code>JActionFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param actionField
-   *            the connected JActionField.
+   *          the connected JActionField.
    */
   public JActionFieldConnector(String id, JActionField actionField) {
     super(id, actionField);
@@ -111,7 +112,7 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
    */
   @Override
   protected Object getConnecteeValue() {
-    return getConnectedJComponent().getValue();
+    return value;
   }
 
   /**
@@ -119,7 +120,8 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
    */
   @Override
   protected void protectedSetConnecteeValue(Object aValue) {
-    getConnectedJComponent().setValue(aValue);
+    value = aValue;
+    getConnectedJComponent().setValue(getActionText());
   }
 
   /**
@@ -129,5 +131,17 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   protected void protectedWritabilityChange() {
     super.protectedWritabilityChange();
     getConnectedJComponent().setEditable(isWritable());
+  }
+
+  /**
+   * Gest the action text to display in the action field.
+   * 
+   * @return the action text to display in the action field.
+   */
+  protected String getActionText() {
+    if (value == null) {
+      return "";
+    }
+    return value.toString();
   }
 }

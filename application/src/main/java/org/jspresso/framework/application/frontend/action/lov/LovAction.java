@@ -28,6 +28,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -94,6 +95,15 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
     IReferencePropertyDescriptor<IEntity> erqDescriptor = getEntityRefQueryDescriptor(context);
     context.put(ActionContextConstants.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
+
+    IValueConnector viewConnector = getViewConnector(context);
+    if (viewConnector instanceof IRenderableCompositeValueConnector
+        && ((IRenderableCompositeValueConnector) viewConnector)
+            .getRenderingConnector() != null) {
+      context.put(ActionContextConstants.ACTION_PARAM,
+          ((IRenderableCompositeValueConnector) viewConnector)
+              .getRenderingConnector().getId());
+    }
     actionHandler.execute(createQueryComponentAction, context);
 
     String queryPropertyValue = (String) context
@@ -110,7 +120,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
         IEntity selectedEntity = getController(context).getApplicationSession()
             .merge((IEntity) queryComponent.getQueriedComponents().get(0),
                 EMergeMode.MERGE_KEEP);
-        getViewConnector(context).setConnectorValue(selectedEntity);
+        viewConnector.setConnectorValue(selectedEntity);
         return true;
       }
     }
@@ -124,8 +134,8 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     actions.add(cancelAction);
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
     IView<E> lovView = getViewFactory(context).createView(
-        lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor),
-        actionHandler, getLocale(context));
+        lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
+            okAction), actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_TITLE, getI18nName(
         getTranslationProvider(context), getLocale(context)));
     context.put(ActionContextConstants.DIALOG_VIEW, lovView);

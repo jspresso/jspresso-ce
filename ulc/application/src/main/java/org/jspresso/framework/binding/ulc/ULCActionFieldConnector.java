@@ -26,7 +26,6 @@ import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.gui.ulc.components.server.ULCActionField;
 
-
 /**
  * ULCActionFieldConnector connector.
  * <p>
@@ -49,13 +48,15 @@ import org.jspresso.framework.gui.ulc.components.server.ULCActionField;
 public class ULCActionFieldConnector extends
     ULCComponentConnector<ULCActionField> {
 
+  private Object value;
+
   /**
    * Constructs a new <code>ULCActionFieldConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param actionField
-   *            the connected ULCActionField.
+   *          the connected ULCActionField.
    */
   public ULCActionFieldConnector(String id, ULCActionField actionField) {
     super(id, actionField);
@@ -94,8 +95,8 @@ public class ULCActionFieldConnector extends
           /**
            * {@inheritDoc}
            */
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
             performActionIfNeeded();
           }
         });
@@ -106,8 +107,8 @@ public class ULCActionFieldConnector extends
           /**
            * {@inheritDoc}
            */
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
             fireConnectorValueChange();
           }
         });
@@ -118,7 +119,7 @@ public class ULCActionFieldConnector extends
    */
   @Override
   protected Object getConnecteeValue() {
-    return getConnectedULCComponent().getValue();
+    return value;
   }
 
   /**
@@ -126,7 +127,8 @@ public class ULCActionFieldConnector extends
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
-    getConnectedULCComponent().setValue(aValue);
+    value = aValue;
+    getConnectedULCComponent().setValue(getActionText());
   }
 
   /**
@@ -140,5 +142,17 @@ public class ULCActionFieldConnector extends
         getConnectedULCComponent().performAction(0);
       }
     }
+  }
+
+  /**
+   * Gest the action text to display in the action field.
+   * 
+   * @return the action text to display in the action field.
+   */
+  protected String getActionText() {
+    if (value == null) {
+      return "";
+    }
+    return value.toString();
   }
 }

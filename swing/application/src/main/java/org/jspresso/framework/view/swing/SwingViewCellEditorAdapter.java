@@ -35,12 +35,14 @@ import javax.swing.tree.TreeCellEditor;
 
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JDateField;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.view.IView;
-
 
 /**
  * This class is an adapter around a SwingView to be able to use it as a cell
@@ -72,9 +74,14 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    * Constructs a new <code>SwingViewCellEditorAdapter</code> instance.
    * 
    * @param editorView
-   *            the swing view used as editor.
+   *          the swing view used as editor.
+   * @param modelConnectorFactory
+   *          the model connector factory.
+   * @param mvcBinder
+   *          the mvc binder.
    */
-  public SwingViewCellEditorAdapter(IView<JComponent> editorView) {
+  public SwingViewCellEditorAdapter(IView<JComponent> editorView,
+      IModelConnectorFactory modelConnectorFactory, IMvcBinder mvcBinder) {
     this.editorView = editorView;
     if (editorView.getPeer() instanceof AbstractButton) {
       ((AbstractButton) editorView.getPeer())
@@ -85,16 +92,26 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       editorView.getConnector().addConnectorValueChangeListener(
           new IConnectorValueChangeListener() {
 
-            public void connectorValueChange(@SuppressWarnings("unused")
-            ConnectorValueChangeEvent evt) {
+            public void connectorValueChange(
+                @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
               stopCellEditing();
             }
           });
     }
 
     // To prevent the editor from being read-only.
-    editorView.getConnector().setModelConnector(
-        new BasicValueConnector(editorView.getConnector().getId()));
+    IValueConnector modelConnector;
+    if (editorView.getDescriptor().getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+      modelConnector = modelConnectorFactory.createModelConnector(editorView
+          .getConnector().getId(),
+          ((IComponentDescriptorProvider<?>) editorView.getDescriptor()
+              .getModelDescriptor()).getComponentDescriptor());
+
+    } else {
+      modelConnector = new BasicValueConnector(editorView.getConnector()
+          .getId());
+    }
+    mvcBinder.bind(editorView.getConnector(), modelConnector);
   }
 
   /**

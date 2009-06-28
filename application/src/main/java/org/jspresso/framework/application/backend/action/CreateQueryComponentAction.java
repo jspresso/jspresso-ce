@@ -134,9 +134,16 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_COMMAND);
     if (queryPropertyValue != null && !queryPropertyValue.equals("*")) {
-      modelConnector.getChildConnector(
-          erqDescriptor.getComponentDescriptor().getToStringProperty())
-          .setConnectorValue(queryPropertyValue);
+      String propertyName = (String) context
+          .get(ActionContextConstants.ACTION_PARAM);
+      if (propertyName != null) {
+        modelConnector.getChildConnector(propertyName).setConnectorValue(
+            queryPropertyValue);
+      } else {
+        modelConnector.getChildConnector(
+            erqDescriptor.getComponentDescriptor().getToStringProperty())
+            .setConnectorValue(queryPropertyValue);
+      }
     }
     return super.execute(actionHandler, context);
   }
