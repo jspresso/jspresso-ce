@@ -36,7 +36,7 @@
     "TARGET"       : "../../../target",
     "APPLICATION"  : "org.jspresso.framework.qooxdoo",
     "APPLICATION_CLASS_NAME" : "org.jspresso.framework.application.frontend.Application",
-    "QOOXDOO_PATH" : "C:/envdev/qooxdoo-0.8.2-sdk",
+    "QOOXDOO_PATH" : "../../../target/qooxdoo-sdk",
     "API_EXCLUDE"  : ["qx.legacy.*","qx.test.*"],
     "LOCALES"      : ["en","fr"],
     "ROOT"         : "..",

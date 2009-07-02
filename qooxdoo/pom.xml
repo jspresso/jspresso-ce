@@ -10,17 +10,32 @@
   <packaging>pom</packaging>
   <name>qooxdoo</name>
 
-  <repositories>
-    <repository>
-      <id>mojo-repository</id>
-      <url>http://repository.codehaus.org</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-qooxdoo-sdk</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.qooxdoo</groupId>
+                  <artifactId>qooxdoo-sdk</artifactId>
+                  <version>0.8.2</version>
+                  <type>zip</type>
+                  <outputDirectory>${project.build.directory}/qooxdoo-sdk</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -36,8 +51,9 @@
         </executions>
         <configuration>
           <executable>python</executable>
+          <workingDirectory>src/main/py</workingDirectory>
           <arguments>
-            <argument>src/main/py/generate.py</argument>
+            <argument>${basedir}/target/qooxdoo-sdk/tool/bin/generator.py</argument>
             <argument>build</argument>
           </arguments>
         </configuration>
