@@ -7,7 +7,7 @@
       "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
     },
     {
-      "path" : "jspresso.json",
+      "path" : "library.json",
       "as"   : "jspresso-qooxdoo"
     }
   ],
