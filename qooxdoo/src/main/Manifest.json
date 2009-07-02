@@ -1,0 +1,34 @@
+{
+  "info" : 
+  {
+    "name" : "jspresso-qooxdoo",
+
+    "summary" : "Jspresso Framework Qooxdoo UI",
+    "description" : "This is the implementation of the QooxDoo UI channel for the Jspresso framework.",
+    
+    "homepage" : "http://www.jspresso.org/",
+
+    "license" : "LGPL V3",
+    "authors" : 
+    [
+      {
+        "name" : "Vincent Vandenschrick (vvandens)",
+        "email" : "vvandens@jspresso.org"
+      }
+    ],
+
+    "version" : "trunk",
+    "qooxdoo-versions": ["0.8.2"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "org.jspresso.framework",
+    "encoding"    : "utf-8",
+    "class"       : "js",
+    "resource"    : "resources",
+    "translation" : "translations",
+    "type"        : "library"
+  }
+}
+
