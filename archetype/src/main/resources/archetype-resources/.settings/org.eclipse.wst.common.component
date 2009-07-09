@@ -10,6 +10,8 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/wings/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/remote/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/remote/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/qooxdoo/server/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/qooxdoo/server/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/webapp/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/webapp/src/main/resources"/>
         <property name="context-root" value="${artifactId}-webapp"/>
