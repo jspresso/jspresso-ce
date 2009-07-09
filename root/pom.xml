@@ -218,6 +218,19 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-qooxdoo-client</artifactId>
+        <version>${project.version}</version>
+        <classifier>sources</classifier>
+        <type>zip</type>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-qooxdoo-server</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-remote-application</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -307,6 +320,13 @@
         <version>${project.version}</version>
         <classifier>archive</classifier>
         <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.qooxdoo</groupId>
+        <artifactId>qooxdoo-sdk</artifactId>
+        <version>0.8.2</version>
+        <type>zip</type>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>commons-logging</groupId>
@@ -581,6 +601,17 @@
         <version>3.2.0.3958</version>
         <type>pom</type>
       </dependency>
+      <dependency>
+        <groupId>org.qooxdoo</groupId>
+        <artifactId>qooxdoo-sdk</artifactId>
+        <version>0.8.2</version>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.qooxdoo</groupId>
+        <artifactId>qooxdoo-java-rpc</artifactId>
+        <version>0.5</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -667,6 +698,11 @@
                <artifactId>jfreechart</artifactId>
                <version>1.0.1</version>
             </dependency>
+            <dependency>
+              <groupId>commons-collections</groupId>
+              <artifactId>commons-collections</artifactId>
+              <version>3.2.1</version>
+            </dependency>
           </dependencies>
         </plugin>
         <plugin>
@@ -733,6 +769,11 @@
         	<artifactId>flexmojos-maven-plugin</artifactId>
         	<version>3.0.0</version>
         	<extensions>true</extensions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.1.1</version>
         </plugin>
       </plugins>
     </pluginManagement>

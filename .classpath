@@ -64,6 +64,8 @@
 	<classpathentry excluding="**" kind="src" output="flex/target/classes" path="flex/src/main/resources"/>
 	<classpathentry kind="src" output="flex/target/test-classes" path="flex/src/test/flex"/>
 	<classpathentry excluding="**" kind="src" output="flex/target/test-classes" path="flex/src/test/resources"/>
+	<classpathentry kind="src" output="qooxdoo/server/target/classes" path="qooxdoo/server/src/main/java"/>
+	<classpathentry kind="src" output="qooxdoo/server/target/classes" path="qooxdoo/server/src/main/resources"/>
 	<classpathentry kind="src" output="jasper/core/target/classes" path="jasper/core/src/main/java"/>
 	<classpathentry excluding="**" kind="src" output="jasper/core/target/classes" path="jasper/core/src/main/resources"/>
 	<classpathentry kind="src" output="jasper/core/target/test-classes" path="jasper/core/src/test/java"/>
