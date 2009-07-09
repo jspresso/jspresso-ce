@@ -79,6 +79,18 @@
         <type>swf</type>
       </dependency>
       <dependency>
+        <groupId>${groupId}</groupId>
+        <artifactId>${rootArtifactId}-startup-qooxdoo-server</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${groupId}</groupId>
+        <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
+        <version>${project.version}</version>
+        <classifier>web-resources</classifier>
+        <type>zip</type>
+      </dependency>
+      <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-ehcache</artifactId>
         <version>3.3.1.GA</version>

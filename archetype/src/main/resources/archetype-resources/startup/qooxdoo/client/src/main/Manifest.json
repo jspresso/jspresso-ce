@@ -1,0 +1,34 @@
+{
+  "info" : 
+  {
+    "name" : "${applicationName}",
+
+    "summary" : "",
+    "description" : "",
+    
+    "homepage" : "${companyUrl}",
+
+    "license" : "",
+    "authors" : 
+    [
+      {
+        "name" : "",
+        "email" : ""
+      }
+    ],
+
+    "version" : "${version}",
+    "qooxdoo-versions": ["0.8.2"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "${package}",
+    "encoding"    : "utf-8",
+    "class"       : "js",
+    "resource"    : "resources",
+    "translation" : "translations",
+    "type"        : "application"
+  }
+}
+

@@ -49,6 +49,14 @@
     path="startup/remote/src/main/resources" />
   <classpathentry
     kind="src"
+    output="startup/qooxdoo/server/target/classes"
+    path="startup/qooxdoo/server/src/main/java" />
+  <classpathentry
+    kind="src"
+    output="startup/qooxdoo/server/target/classes"
+    path="startup/qooxdoo/server/src/main/resources" />
+  <classpathentry
+    kind="src"
     output="webapp/target/classes"
     path="webapp/src/main/java" />
   <classpathentry

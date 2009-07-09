@@ -32,6 +32,21 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>${rootArtifactId}-startup-qooxdoo-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
+      <classifier>web-resources</classifier>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-qooxdoo-server</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-ehcache</artifactId>
     </dependency>
@@ -96,6 +111,19 @@
               <outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/flex</outputDirectory>
               <includeArtifactIds>${rootArtifactId}-startup-flex-config</includeArtifactIds>
               <includeClassifiers>resources</includeClassifiers>
+              <excludeTransitive>true</excludeTransitive>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-qooxdoo-dependencies</id>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <outputDirectory>${project.build.directory}/${project.artifactId}/qooxdoo</outputDirectory>
+              <includeArtifactIds>${rootArtifactId}-startup-qooxdoo-client</includeArtifactIds>
+              <includeClassifiers>web-resources</includeClassifiers>
               <excludeTransitive>true</excludeTransitive>
             </configuration>
           </execution>
