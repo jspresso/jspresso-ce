@@ -66,7 +66,7 @@ public class AddCollectionToMasterAction<E, F, G> extends
   public boolean equals(Object obj) {
     if (super.equals(obj)) {
       if (elementEntityDescriptor != null
-          && obj instanceof AddCollectionToMasterAction) {
+          && obj instanceof AddCollectionToMasterAction<?, ?, ?>) {
         return elementEntityDescriptor
             .equals(((AddCollectionToMasterAction<?, ?, ?>) obj).elementEntityDescriptor);
       }

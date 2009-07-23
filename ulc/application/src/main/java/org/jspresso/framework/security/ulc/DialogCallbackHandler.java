@@ -39,8 +39,6 @@ import com.ulcjava.base.shared.IWindowConstants;
  * <p>
  * Uses a ULC dialog to query the user for answers to authentication questions.
  * This can be used by a JAAS application to instantiate a CallbackHandler
- * 
- * @see javax.security.auth.callback
  */
 public class DialogCallbackHandler implements CallbackHandler {
 

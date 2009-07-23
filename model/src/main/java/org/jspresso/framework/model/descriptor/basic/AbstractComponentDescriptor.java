@@ -302,7 +302,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (renderedProperties == null) {
       renderedProperties = new ArrayList<String>();
       for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
-        if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor)
+        if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
             && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
           renderedProperties.add(propertyDescriptor.getName());
         }

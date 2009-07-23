@@ -84,7 +84,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         .getPropertyDescriptor((String) key);
     Object actualValue = super.get(key);
     if (actualValue == null
-        && propertyDescriptor instanceof IReferencePropertyDescriptor) {
+        && propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
       if (isInlineComponentDescriptor(referencedDescriptor)) {

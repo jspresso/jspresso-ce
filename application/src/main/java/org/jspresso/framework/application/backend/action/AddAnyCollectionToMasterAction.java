@@ -80,7 +80,7 @@ public class AddAnyCollectionToMasterAction extends
   @Override
   protected List<?> getAddedComponents(Map<String, Object> context) {
     Object detailOrList = context.get(ActionContextConstants.ACTION_PARAM);
-    if (detailOrList instanceof List) {
+    if (detailOrList instanceof List<?>) {
       return (List<?>) detailOrList;
     }
     return Collections.singletonList(detailOrList);

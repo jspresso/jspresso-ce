@@ -28,17 +28,18 @@ import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.QueryComponent;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-
 /**
- * Default implementation of <code>IComponentFactory</code>. It creates
- * standard java proxies which delegate to
- * <code>BasicComponentInvocationHandler</code>s.
+ * Default implementation of <code>IComponentFactory</code>. It creates standard
+ * java proxies which delegate to <code>BasicComponentInvocationHandler</code>s.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -78,6 +79,21 @@ public class BasicProxyComponentFactory implements IComponentFactory {
       Class<T> componentContract, Object delegate) {
     T createdComponent = createComponentInstance(componentContract, delegate,
         null);
+    for (IPropertyDescriptor propertyDescriptor : getComponentDescriptor(
+        componentContract).getPropertyDescriptors()) {
+      if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+        createdComponent
+            .straightSetProperty(
+                propertyDescriptor.getName(),
+                componentCollectionFactory
+                    .createComponentCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                        .getModelType()));
+      } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
+          && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
+        createdComponent.straightSetProperty(propertyDescriptor.getName(),
+            ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
+      }
+    }
     createdComponent.onCreate(null, getPrincipal(), null);
     return createdComponent;
   }
@@ -113,7 +129,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    * Sets the accessorFactory used by this entity factory.
    * 
    * @param accessorFactory
-   *            the accessorFactory to set.
+   *          the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -123,7 +139,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    * Sets the componentCollectionFactory property.
    * 
    * @param componentCollectionFactory
-   *            the componentCollectionFactory to set.
+   *          the componentCollectionFactory to set.
    */
   public void setComponentCollectionFactory(
       IComponentCollectionFactory<IComponent> componentCollectionFactory) {
@@ -134,7 +150,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    * Sets the componentDescriptorRegistry.
    * 
    * @param componentDescriptorRegistry
-   *            the componentDescriptorRegistry to set.
+   *          the componentDescriptorRegistry to set.
    */
   public void setComponentDescriptorRegistry(
       IComponentDescriptorRegistry componentDescriptorRegistry) {
@@ -145,7 +161,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    * Sets the componentExtensionFactory property.
    * 
    * @param componentExtensionFactory
-   *            the componentCollectionFactory to set.
+   *          the componentCollectionFactory to set.
    */
   public void setComponentExtensionFactory(
       IComponentExtensionFactory componentExtensionFactory) {
@@ -157,7 +173,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    * Creates the component proxy invocation handler.
    * 
    * @param componentDescriptor
-   *            the component descriptor.
+   *          the component descriptor.
    * @return the component proxy invocation handler.
    */
   protected InvocationHandler createComponentInvocationHandler(

@@ -1176,7 +1176,7 @@ public class DefaultUlcViewFactory extends
         IPropertyDescriptor columnModelDescriptor = modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()
             .getPropertyDescriptor(columnId);
-        if (columnModelDescriptor instanceof IReferencePropertyDescriptor) {
+        if (columnModelDescriptor instanceof IReferencePropertyDescriptor<?>) {
           columnClassesByIds.put(columnId, String.class);
         } else if (columnModelDescriptor instanceof IBooleanPropertyDescriptor) {
           columnClassesByIds.put(columnId, Boolean.class);
@@ -2065,10 +2065,10 @@ public class DefaultUlcViewFactory extends
       IRelationshipEndPropertyDescriptor propertyDescriptor, Locale locale) {
     ITableCellRenderer cellRenderer = null;
 
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       cellRenderer = createReferenceTableCellRenderer(
           (IReferencePropertyDescriptor<?>) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
       cellRenderer = createCollectionTableCellRenderer(
           (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }

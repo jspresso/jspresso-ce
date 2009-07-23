@@ -2000,10 +2000,10 @@ public class DefaultSwingViewFactory extends
       IRelationshipEndPropertyDescriptor propertyDescriptor, Locale locale) {
     TableCellRenderer cellRenderer = null;
 
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       cellRenderer = createReferenceTableCellRenderer(
           (IReferencePropertyDescriptor<?>) propertyDescriptor, locale);
-    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
       cellRenderer = createCollectionTableCellRenderer(
           (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }

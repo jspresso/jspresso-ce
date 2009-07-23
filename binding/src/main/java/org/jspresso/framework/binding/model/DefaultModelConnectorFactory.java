@@ -70,17 +70,17 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   public IValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor) {
     IValueConnector modelConnector = null;
-    if (modelDescriptor instanceof IComponentDescriptor) {
+    if (modelDescriptor instanceof IComponentDescriptor<?>) {
       modelConnector = new ModelConnector(id,
           (IComponentDescriptor<?>) modelDescriptor, this);
-    } else if (modelDescriptor instanceof ICollectionDescriptor) {
+    } else if (modelDescriptor instanceof ICollectionDescriptor<?>) {
       modelConnector = new ModelCollectionConnector(id,
           (ICollectionDescriptor<?>) modelDescriptor, this);
     } else if (modelDescriptor instanceof IPropertyDescriptor) {
-      if (modelDescriptor instanceof IReferencePropertyDescriptor) {
+      if (modelDescriptor instanceof IReferencePropertyDescriptor<?>) {
         modelConnector = new ModelRefPropertyConnector(
             (IReferencePropertyDescriptor<?>) modelDescriptor, this);
-      } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
+      } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
         modelConnector = new ModelCollectionPropertyConnector(
             (ICollectionPropertyDescriptor<?>) modelDescriptor, this);
       } else if (modelDescriptor instanceof IScalarPropertyDescriptor) {

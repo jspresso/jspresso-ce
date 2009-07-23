@@ -24,8 +24,9 @@ import java.util.Map;
 
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
-
 
 /**
  * An action used in master/detail views where models are backed by maps to
@@ -53,24 +54,30 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
    * Gets the new map component to add.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the map to add to the collection.
    */
   @Override
   @SuppressWarnings("unchecked")
   protected List<?> getAddedComponents(Map<String, Object> context) {
-    IComponentDescriptor componentDescriptor = getModelDescriptor(context)
+    IComponentDescriptor<?> componentDescriptor = getModelDescriptor(context)
         .getCollectionDescriptor().getElementDescriptor();
     Map<String, Object> newMap = new ObjectEqualityMap<String, Object>();
-    if (componentDescriptor.getLifecycleInterceptors() != null) {
-      List<ILifecycleInterceptor> interceptors = componentDescriptor
-          .getLifecycleInterceptors();
-      if (interceptors != null) {
-        for (ILifecycleInterceptor<Map<String, Object>> interceptor : interceptors) {
-          interceptor.onCreate(newMap, getEntityFactory(context),
-              getApplicationSession(context).getPrincipal(),
-              getApplicationSession(context));
-        }
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+        .getPropertyDescriptors()) {
+      if (propertyDescriptor instanceof IScalarPropertyDescriptor
+          && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
+        newMap.put(propertyDescriptor.getName(),
+            ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
+      }
+    }
+    List<ILifecycleInterceptor<?>> interceptors = componentDescriptor
+        .getLifecycleInterceptors();
+    if (interceptors != null) {
+      for (ILifecycleInterceptor<?> interceptor : interceptors) {
+        ((ILifecycleInterceptor<Map<String, Object>>) interceptor).onCreate(
+            newMap, getEntityFactory(context), getApplicationSession(context)
+                .getPrincipal(), getApplicationSession(context));
       }
     }
     return Collections.singletonList(newMap);

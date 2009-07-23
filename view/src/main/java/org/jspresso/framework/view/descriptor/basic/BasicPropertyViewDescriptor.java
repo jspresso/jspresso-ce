@@ -72,11 +72,11 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     // ((IComponentDescriptorProvider<?>) getModelDescriptor())
     // .getComponentDescriptor().getPropertyDescriptor(getName());
     IModelDescriptor propertyDescriptor = getModelDescriptor();
-    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
       return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
           .getCollectionDescriptor()).getElementDescriptor()
           .getRenderedProperties();
-    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       return ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor().getRenderedProperties();
     }

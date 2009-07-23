@@ -164,8 +164,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * ran on the Swing event dispatch thread. It actually delegates the connectee
    * modification to the <code>protectedReadabilityChange</code> method.
    * 
-   * @see #protectedReadabilityChange() <p>
-   *      {@inheritDoc}
+   * @see #protectedReadabilityChange()
    */
   @Override
   protected final void readabilityChange() {
@@ -205,8 +204,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * ran on the Swing event dispatch thread. It actually delegates the connectee
    * modification to the <code>protectedWritabilityChange</code> method.
    * 
-   * @see #protectedWritabilityChange() <p>
-   *      {@inheritDoc}
+   * @see #protectedWritabilityChange()
    */
   @Override
   protected final void writabilityChange() {

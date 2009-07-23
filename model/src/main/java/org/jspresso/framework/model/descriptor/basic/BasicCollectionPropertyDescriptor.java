@@ -128,7 +128,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   public boolean isManyToMany() {
     if (getReverseRelationEnd() != null) {
       // priory ty is given to the reverse relation end.
-      return getReverseRelationEnd() instanceof ICollectionPropertyDescriptor;
+      return getReverseRelationEnd() instanceof ICollectionPropertyDescriptor<?>;
     }
     if (manyToMany != null) {
       return manyToMany.booleanValue();

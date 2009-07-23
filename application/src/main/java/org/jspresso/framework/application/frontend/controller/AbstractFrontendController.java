@@ -598,7 +598,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
         });
     for (IView<E> childView : workspaceView.getChildren()) {
-      if (childView instanceof IMapView) {
+      if (childView instanceof IMapView<?>) {
         for (Map.Entry<String, IView<E>> grandChildView : ((IMapView<E>) childView)
             .getChildrenMap().entrySet()) {
           mvcBinder.bind(grandChildView.getValue().getConnector(),

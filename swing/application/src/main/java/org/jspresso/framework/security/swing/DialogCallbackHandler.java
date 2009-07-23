@@ -44,8 +44,6 @@ import org.jspresso.framework.view.IIconFactory;
  * Uses a Swing dialog to query the user for answers to authentication
  * questions. This can be used by a JAAS application to instantiate a
  * CallbackHandler
- * 
- * @see javax.security.auth.callback
  */
 public class DialogCallbackHandler implements CallbackHandler {
 

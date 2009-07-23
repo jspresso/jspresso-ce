@@ -21,6 +21,7 @@ Bugs fixed
 2791539  	 model descriptor can be wrongly inferred for view descriptor
 2810895    Remote value connectors writability wrongly handled
 2813469    Wizard action does not work when triggered from a dialog
+2825811    Scalar properties default values are not correctly handled for components
 
 New features
 ------------
@@ -45,12 +46,15 @@ New features
 2811353    Allow for a row dble click action registration on coll views
 2813468    Allow for customizing the rendered property on LOV fields
 2813470    Double click on LOV should select row
-2824463    migrate libraries
+2805839  	 extended backend action
+             introduced AbstractPolymorphicAction
+2824463    Migrate libraries
              hibernate core : 3.3.1.GA -> 3.3.2.GA
              joda-time : 1.4 -> 1.6
              commons-lang : 2.1 -> 2.4
              commons-collection : 3.1 -> 3.2.1
              iText : 2.1.5
+2817947  	 Extend the scope of the defaultValue property
 
 3.0.0
 =====

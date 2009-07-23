@@ -50,7 +50,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
       InvocationTargetException, NoSuchMethodException {
     Object finalTarget = getLastNestedTarget(target, getProperty());
     if (finalTarget != null) {
-      if (finalTarget instanceof Map) {
+      if (finalTarget instanceof Map<?, ?>) {
         if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
             getLastNestedProperty())) {
           // We are explicitely on a bean property. Do not use
@@ -87,7 +87,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
     try {
       Object finalTarget = getLastNestedTarget(target, getProperty());
       if (finalTarget != null) {
-        if (finalTarget instanceof Map) {
+        if (finalTarget instanceof Map<?, ?>) {
           if (PropertyHelper.getPropertyNames(finalTarget.getClass()).contains(
               getLastNestedProperty())) {
             // We are explicitely on a bean property. Do not use
@@ -146,7 +146,7 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
       if (indexOfNestedDelim < 0) {
         return target;
       }
-      if (target instanceof Map) {
+      if (target instanceof Map<?, ?>) {
         if (PropertyHelper.getPropertyNames(target.getClass()).contains(prop)) {
           // We are explicitely on a bean property. Do not use
           // PropertyUtils.getProperty since it will detect that the target is

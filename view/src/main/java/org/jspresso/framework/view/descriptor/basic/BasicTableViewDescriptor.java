@@ -88,7 +88,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     List<IPropertyViewDescriptor> declaredPropertyViewDescriptors = columnViewDescriptors;
     if (declaredPropertyViewDescriptors == null) {
       List<String> viewRenderedProperties = getRenderedProperties();
-      if (modelDescriptor instanceof ICollectionPropertyDescriptor
+      if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>
           && ((ICollectionPropertyDescriptor<?>) modelDescriptor)
               .getReverseRelationEnd() != null) {
         viewRenderedProperties

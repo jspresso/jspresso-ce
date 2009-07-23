@@ -742,7 +742,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       throw new ViewException("No property " + columnId + " defined for "
           + descriptor.getComponentContract());
     }
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       List<String> renderedProperties = columnViewDescriptor
           .getRenderedChildProperties();
       String renderedProperty;
@@ -777,7 +777,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       throw new ViewException("No property " + renderedProperty
           + " defined for " + descriptor.getComponentContract());
     }
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       return getConnectorFactory().createCompositeValueConnector(
           renderedProperty,
           ((IReferencePropertyDescriptor<?>) propertyDescriptor)
@@ -1409,10 +1409,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
     IView<E> view = null;
     IRelationshipEndPropertyDescriptor propertyDescriptor = (IRelationshipEndPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       view = createReferencePropertyView(propertyViewDescriptor, actionHandler,
           locale);
-    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
       view = createCollectionPropertyView(propertyViewDescriptor,
           actionHandler, locale);
     }
@@ -1736,7 +1736,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected String getConnectorIdForComponentView(
       IComponentViewDescriptor viewDescriptor) {
-    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
+    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>) {
       return ModelRefPropertyConnector.THIS_PROPERTY;
     }
     return viewDescriptor.getModelDescriptor().getName();
@@ -1976,7 +1976,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       return getPercentTemplateValue((IPercentPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       return getIntegerTemplateValue((IIntegerPropertyDescriptor) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       return getTemplateValue(((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor().getPropertyDescriptor(
               ((IReferencePropertyDescriptor<?>) propertyDescriptor)

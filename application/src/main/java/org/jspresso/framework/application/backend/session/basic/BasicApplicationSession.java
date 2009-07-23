@@ -325,7 +325,7 @@ public class BasicApplicationSession implements IApplicationSession {
         for (Map.Entry<String, Object> property : entity
             .straightGetProperties().entrySet()) {
           if (property.getValue() != null
-              && !(property.getValue() instanceof Collection && ((Collection<?>) property
+              && !(property.getValue() instanceof Collection<?> && ((Collection<?>) property
                   .getValue()).isEmpty())) {
             initialDirtyProperties.put(property.getKey(), null);
           }
@@ -454,10 +454,10 @@ public class BasicApplicationSession implements IApplicationSession {
   protected Collection<IComponent> createTransientEntityCollection(
       Collection<?> collection) {
     Collection<IComponent> uowEntityCollection = null;
-    if (collection instanceof Set) {
+    if (collection instanceof Set<?>) {
       uowEntityCollection = collectionFactory
           .createComponentCollection(Set.class);
-    } else if (collection instanceof List) {
+    } else if (collection instanceof List<?>) {
       uowEntityCollection = collectionFactory
           .createComponentCollection(List.class);
     }

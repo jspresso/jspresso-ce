@@ -177,7 +177,7 @@ public class RemoteActionFactory extends
       this.actionHandler = anActionHandler;
       this.sourceComponent = aSourceComponent;
       this.modelDescriptor = aModelDescriptor;
-      if (aModelDescriptor instanceof ICollectionDescriptor) {
+      if (aModelDescriptor instanceof ICollectionDescriptor<?>) {
         this.viewConnector = ((ICollectionConnectorProvider) aViewConnector)
             .getCollectionConnector();
       } else {

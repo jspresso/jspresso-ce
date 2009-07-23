@@ -233,7 +233,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           }
         });
         super.initializePropertyIfNeeded(componentOrEntity, propertyDescriptor);
-        if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+        if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
           if (initializedProperty instanceof PersistentCollection) {
             ((PersistentCollection) initializedProperty).clearDirty();
           }

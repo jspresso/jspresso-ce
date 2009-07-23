@@ -368,7 +368,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
      */
     public void connectorValueChange(final ConnectorValueChangeEvent evt) {
       Collection<?> oldCollection = null;
-      if (evt.getOldValue() instanceof Collection) {
+      if (evt.getOldValue() instanceof Collection<?>) {
         oldCollection = (Collection<?>) evt.getOldValue();
       }
       Collection<?> newCollection = (Collection<?>) evt.getNewValue();

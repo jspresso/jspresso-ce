@@ -128,8 +128,8 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
           } else {
             IRelationshipEndPropertyDescriptor reverseDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
                 .getReverseRelationEnd();
-            if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-              if (!(reverseDescriptor instanceof IReferencePropertyDescriptor)) {
+            if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+              if (!(reverseDescriptor instanceof IReferencePropertyDescriptor<?>)) {
                 if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
                     .isComposition()) {
                   clonedComponent.straightSetProperty(propertyEntry.getKey(),
@@ -138,7 +138,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                 } else {
                   clonedComponent.straightSetProperty(propertyEntry.getKey(),
                       propertyEntry.getValue());
-                  if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
+                  if (reverseDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                     if (isInitialized(propertyEntry.getValue())) {
                       collRelToUpdate.put(propertyEntry.getValue(),
                           (ICollectionPropertyDescriptor<?>) reverseDescriptor);
@@ -146,8 +146,8 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                   }
                 }
               }
-            } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-              if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
+            } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+              if (reverseDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                 // We must force initialization of the collection. So do a get.
                 try {
                   accessorFactory.createPropertyAccessor(
@@ -181,11 +181,11 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
       ICollectionPropertyDescriptor<?> collectionDescriptor = collectionEntry
           .getValue();
       Class<?> masterContract = null;
-      if (collectionDescriptor.getReverseRelationEnd() instanceof IReferencePropertyDescriptor) {
+      if (collectionDescriptor.getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>) {
         masterContract = ((IReferencePropertyDescriptor<?>) collectionDescriptor
             .getReverseRelationEnd()).getReferencedDescriptor()
             .getComponentContract();
-      } else if (collectionDescriptor.getReverseRelationEnd() instanceof ICollectionPropertyDescriptor) {
+      } else if (collectionDescriptor.getReverseRelationEnd() instanceof ICollectionPropertyDescriptor<?>) {
         masterContract = ((ICollectionPropertyDescriptor<?>) collectionDescriptor
             .getReverseRelationEnd()).getReferencedDescriptor()
             .getElementDescriptor().getComponentContract();

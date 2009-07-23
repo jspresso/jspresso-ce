@@ -64,7 +64,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
       for (IGate gate : action.getActionabilityGates()) {
         final IGate clonedGate = gate.clone();
         if (clonedGate instanceof IModelGate) {
-          if (modelDescriptor instanceof IComponentDescriptorProvider) {
+          if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
             ((IModelGate) clonedGate)
                 .setModelProvider(new EmbeddedModelProvider(
                     (IComponentDescriptorProvider<?>) modelDescriptor));
@@ -76,7 +76,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
                         .getModelProvider()).setModel(evt.getNewValue());
                   }
                 });
-          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
+          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             ((ICollectionConnectorProvider) viewConnector)
                 .getCollectionConnector().addConnectorValueChangeListener(
                     new IConnectorValueChangeListener() {

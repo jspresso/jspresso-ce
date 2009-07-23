@@ -127,7 +127,7 @@ public class WingsActionFactory extends
       this.actionHandler = actionHandler;
       this.sourceComponent = sourceComponent;
       this.modelDescriptor = modelDescriptor;
-      if (modelDescriptor instanceof ICollectionDescriptor) {
+      if (modelDescriptor instanceof ICollectionDescriptor<?>) {
         this.viewConnector = ((ICollectionConnectorProvider) viewConnector)
             .getCollectionConnector();
       } else {

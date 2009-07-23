@@ -42,7 +42,6 @@ import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
-
 /**
  * Default implementation of <code>IEntityFactory</code>. It creates standard
  * java proxies which delegate to <code>BasicEntityInvocationHandler</code>s.
@@ -96,7 +95,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
         .generateGUID());
     for (IPropertyDescriptor propertyDescriptor : inlineComponentFactory
         .getComponentDescriptor(entityContract).getPropertyDescriptors()) {
-      if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
         createdEntity
             .straightSetProperty(
                 propertyDescriptor.getName(),
@@ -163,7 +162,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    * Sets the accessorFactory used by this entity factory.
    * 
    * @param accessorFactory
-   *            the accessorFactory to set.
+   *          the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -173,7 +172,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    * Sets the entityCollectionFactory property.
    * 
    * @param entityCollectionFactory
-   *            the entityCollectionFactory to set.
+   *          the entityCollectionFactory to set.
    */
   public void setEntityCollectionFactory(
       IComponentCollectionFactory<IComponent> entityCollectionFactory) {
@@ -184,7 +183,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    * Sets the entityExtensionFactory property.
    * 
    * @param entityExtensionFactory
-   *            the entityCollectionFactory to set.
+   *          the entityCollectionFactory to set.
    */
   public void setEntityExtensionFactory(
       IComponentExtensionFactory entityExtensionFactory) {
@@ -196,17 +195,17 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    * Sets the entityGUIDGenerator.
    * 
    * @param entityGUIDGenerator
-   *            the entityGUIDGenerator to set.
+   *          the entityGUIDGenerator to set.
    */
   public void setEntityGUIDGenerator(IGUIDGenerator entityGUIDGenerator) {
     this.entityGUIDGenerator = entityGUIDGenerator;
   }
-  
+
   /**
    * Sets the inlineComponentFactory.
    * 
    * @param inlineComponentFactory
-   *            the inlineComponentFactory to set.
+   *          the inlineComponentFactory to set.
    */
   public void setInlineComponentFactory(IComponentFactory inlineComponentFactory) {
     this.inlineComponentFactory = inlineComponentFactory;
@@ -216,7 +215,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    * Creates the entity proxy invocation handler.
    * 
    * @param entityDescriptor
-   *            the entity descriptor.
+   *          the entity descriptor.
    * @return the entity proxy invocation handler.
    */
   protected InvocationHandler createEntityInvocationHandler(

@@ -771,13 +771,13 @@ public abstract class AbstractComponentInvocationHandler implements
         IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
             .getReverseRelationEnd();
         if (reversePropertyDescriptor != null) {
-          if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+          if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
             accessorFactory.createPropertyAccessor(
                 reversePropertyDescriptor.getName(),
                 propertyDescriptor.getReferencedDescriptor()
                     .getElementDescriptor().getComponentContract()).setValue(
                 value, null);
-          } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
+          } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             ICollectionAccessor collectionAccessor = accessorFactory
                 .createCollectionPropertyAccessor(
                     reversePropertyDescriptor.getName(),

@@ -234,7 +234,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   public String getIconImageURL() {
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null
-        && getModelDescriptor() instanceof IComponentDescriptor) {
+        && getModelDescriptor() instanceof IComponentDescriptor<?>) {
       iconImageURL = ((IComponentDescriptor<?>) getModelDescriptor())
           .getIconImageURL();
       setIconImageURL(iconImageURL);
