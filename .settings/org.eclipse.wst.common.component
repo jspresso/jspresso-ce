@@ -143,5 +143,9 @@
         <wb-resource deploy-path="/" source-path="/app-template/ulc/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/qooxdoo/server/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/qooxdoo/server/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/qooxdoo/client/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/qooxdoo/server/src/test/java"/>
+        <wb-resource deploy-path="/" source-path="/qooxdoo/server/src/test/resources"/>
+        <wb-resource deploy-path="/" source-path="/archetype/src/main/resources"/>
     </wb-module>
 </project-modules>

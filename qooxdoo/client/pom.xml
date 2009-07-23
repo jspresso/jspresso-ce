@@ -21,6 +21,7 @@
 
   <build>
     <plugins>
+<!-- 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -59,10 +60,12 @@
           </arguments>
         </configuration>
       </plugin>
+-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
+<!-- 
           <execution>
             <id>attach-qooxdoo-web-resources</id>
             <goals>
@@ -75,6 +78,7 @@
               </descriptors>
             </configuration>
           </execution>
+-->
           <execution>
             <id>attach-qooxdoo-sources</id>
             <goals>
