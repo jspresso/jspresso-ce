@@ -945,6 +945,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     __createConstrainedGridContainer : function(remoteConstrainedGridContainer) {
       var constrainedGridContainer = new qx.ui.container.Composite();
       var gridLayout = new qx.ui.layout.Grid();
+      constrainedGridContainer.setLayout(gridLayout);
       
       for(var i = 0; i < remoteConstrainedGridContainer.getCellConstraints().length; i++) {
         /**@type org.jspresso.framework.util.gui.CellConstraints*/
@@ -956,21 +957,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           column : cellConstraint.getColumn(),
           colSpan : cellConstraint.getWidth()
         });
-        for(var i = cellConstraint.getColumn(); i < cellConstraint.getColumn() + cellConstraint.getWidth(); i++) {
+        for(var j = cellConstraint.getColumn(); j < cellConstraint.getColumn() + cellConstraint.getWidth(); j++) {
           if(cellConstraint.isWidthResizable()) {
-            gridLayout.setColumnFlex(i, 1);
+            gridLayout.setColumnFlex(j, 1);
           } else {
-            gridLayout.setColumnFlex(i, 0);
+            gridLayout.setColumnFlex(j, 0);
           }
         }
-        for(var i = cellConstraint.getRow(); i < cellConstraint.getRow() + cellConstraint.getHeight(); i++) {
+        for(var j = cellConstraint.getRow(); j < cellConstraint.getRow() + cellConstraint.getHeight(); j++) {
           if(cellConstraint.isHeightResizable()) {
-            gridLayout.setRowFlex(i, 1);
+            gridLayout.setRowFlex(j, 1);
           } else {
-            gridLayout.setRowFlex(i, 0);
+            gridLayout.setRowFlex(j, 0);
           }
         }
       }
+      return constrainedGridContainer;
     },
 
     /**
