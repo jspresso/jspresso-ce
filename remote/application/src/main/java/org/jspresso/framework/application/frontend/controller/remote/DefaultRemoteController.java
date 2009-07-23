@@ -440,8 +440,8 @@ public class DefaultRemoteController extends
       }
     } else if (command instanceof RemoteLoginCommand) {
       if (performLogin()) {
-        execute(getStartupAction(), getInitialActionContext());
         registerCommand(new RemoteCloseDialogCommand());
+        execute(getStartupAction(), getInitialActionContext());
         List<RemoteCommand> initCommands = createInitCommands();
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
