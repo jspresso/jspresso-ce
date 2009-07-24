@@ -10,7 +10,10 @@ BasicSubviewDescriptor must be changed to BasicPropertyViewDescriptor.
 - Due to introduction of sorting directions in orderingProperties (see 2787655), the API
 has changed on component and collection descriptors. Instead of setting the ordering
 properties as a list, you must now use a map keyed by the ordering properties
-and valued by the sort drections (ESort.ASCENDING or ESort.DESCENDING) 
+and valued by the sort drections (ESort.ASCENDING or ESort.DESCENDING)
+
+- To avoid naming collisions between framework method names and business methods, the component and
+entity getContract() method has been renamed to getComponentContract().
 
 
 3.0.0

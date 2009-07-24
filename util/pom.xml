@@ -20,6 +20,11 @@
 			<optional>true</optional>
 		</dependency>
     <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <optional>true</optional>

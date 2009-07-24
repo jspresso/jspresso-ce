@@ -39,9 +39,10 @@ package org.jspresso.framework.util.resources.server;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections.map.AbstractReferenceMap;
+import org.apache.commons.collections.map.ReferenceMap;
 import org.jspresso.framework.util.resources.IResource;
 
 /**
@@ -57,8 +58,11 @@ public final class ResourceManager {
   private SecureRandom                 random;
   private Map<String, IResource>       resources;
 
+  @SuppressWarnings("unchecked")
   private ResourceManager() {
-    resources = new HashMap<String, IResource>();
+    // resources = new HashMap<String, IResource>();
+    resources = new ReferenceMap(AbstractReferenceMap.SOFT,
+        AbstractReferenceMap.SOFT, true);
     random = new SecureRandom();
   }
 
@@ -80,7 +84,9 @@ public final class ResourceManager {
    */
   public IResource getRegistered(String id) {
     IResource resource = resources.get(id);
-    unregister(id);
+    // Do not unregister resource once retrieved. There might be cases
+    // when the resource must be retrieved multiple times.
+    // unregister(id);
     return resource;
   }
 

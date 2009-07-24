@@ -478,7 +478,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __initApplicationFrame : function(workspaceActions,
                                     actions,
                                     helpActions) {
-      this.__application.getRoot().removeAll();
+      //this.__application.getRoot().removeAll();
 
       var applicationContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox(10));
       
