@@ -62,7 +62,7 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
    * 
    * @return the entity contract.
    */
-  Class<? extends IComponent> getContract();
+  Class<? extends IComponent> getComponentContract();
 
   /**
    * Allows for temporary enabling/disabling property processors for internal

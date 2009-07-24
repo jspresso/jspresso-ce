@@ -133,7 +133,7 @@ public class ApplicationSessionAwareComponentInvocationHandler extends
           && Proxy.getInvocationHandler(propertyValue) instanceof BasicComponentInvocationHandler
           && !(Proxy.getInvocationHandler(propertyValue) instanceof ApplicationSessionAwareComponentInvocationHandler)) {
         IComponent sessionAwareComponent = getInlineComponentFactory()
-            .createComponentInstance(((IComponent) propertyValue).getContract());
+            .createComponentInstance(((IComponent) propertyValue).getComponentContract());
         sessionAwareComponent
             .straightSetProperties(((IComponent) propertyValue)
                 .straightGetProperties());

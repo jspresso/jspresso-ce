@@ -130,7 +130,7 @@ public class BasicEntityInvocationHandler extends
         otherContract = otherInvocationHandler.getComponentContract();
         otherId = otherInvocationHandler.straightGetProperty(IEntity.ID);
       } else {
-        otherContract = ((IEntity) another).getContract();
+        otherContract = ((IEntity) another).getComponentContract();
         otherId = ((IEntity) another).getId();
       }
       return new EqualsBuilder().append(getComponentContract(), otherContract)

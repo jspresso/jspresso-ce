@@ -65,7 +65,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   @Override
   public String getEntityName(Object object) {
     if (object instanceof IEntity) {
-      return ((IEntity) object).getContract().getName();
+      return ((IEntity) object).getComponentContract().getName();
     }
     return null;
   }

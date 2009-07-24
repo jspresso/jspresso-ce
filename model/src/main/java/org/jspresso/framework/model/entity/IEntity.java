@@ -71,7 +71,7 @@ public interface IEntity extends IComponent {
    * 
    * @return the entity contract.
    */
-  Class<? extends IEntity> getContract();
+  Class<? extends IEntity> getComponentContract();
 
   /**
    * Gets the id used to uniquely identify an entity (surrogate key). The id is

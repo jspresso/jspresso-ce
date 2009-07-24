@@ -171,7 +171,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     if (!applicationSession.isUnitOfWorkActive()) {
       if (entity instanceof IEntity
           && applicationSession.getRegisteredEntity(((IEntity) entity)
-              .getContract(), id) == null) {
+              .getComponentContract(), id) == null) {
         applicationSession.registerEntity((IEntity) entity, false);
       }
     }

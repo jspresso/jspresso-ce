@@ -127,7 +127,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
     if (entity.isPersistent()) {
       HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
       getApplicationSession(context).merge(
-          (IEntity) hibernateTemplate.load(entity.getContract().getName(),
+          (IEntity) hibernateTemplate.load(entity.getComponentContract().getName(),
               entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
     }
   }
@@ -154,7 +154,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
     try {
       component.setPropertyProcessorsEnabled(false);
       IComponentDescriptor<?> componentDescriptor = getEntityFactory(context)
-          .getComponentDescriptor(component.getContract());
+          .getComponentDescriptor(component.getComponentContract());
       for (Map.Entry<String, Object> property : component.straightGetProperties()
           .entrySet()) {
         if (property.getValue() != null) {
@@ -163,7 +163,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
           if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
             // force initialization of relationship property.
             getAccessorFactory(context).createPropertyAccessor(
-                property.getKey(), component.getContract()).getValue(component);
+                property.getKey(), component.getComponentContract()).getValue(component);
             if (propertyDescriptor instanceof IReferencePropertyDescriptor
                 && property.getValue() instanceof IEntity) {
               if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
@@ -186,7 +186,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
                       Collection<?> reverseCollection = (Collection<?>) getAccessorFactory(
                           context).createPropertyAccessor(
                           reversePropertyDescriptor.getName(),
-                          ((IComponent) property.getValue()).getContract())
+                          ((IComponent) property.getValue()).getComponentContract())
                           .getValue(property.getValue());
                       ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
                           .preprocessRemover(property.getValue(),
@@ -203,7 +203,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
                           .contains(property.getValue()))) {
                     // set to null to clean reverse relation ends
                     getAccessorFactory(context).createPropertyAccessor(
-                        property.getKey(), component.getContract()).setValue(
+                        property.getKey(), component.getComponentContract()).setValue(
                             component, null);
                     // but technically reset to original value to avoid
                     // Hibernate
@@ -237,7 +237,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
                         Collection<?> reverseCollection = (Collection<?>) getAccessorFactory(
                             context).createPropertyAccessor(
                             reversePropertyDescriptor.getName(),
-                            ((IComponent) collectionElement).getContract())
+                            ((IComponent) collectionElement).getComponentContract())
                             .getValue(collectionElement);
                         ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
                             .preprocessRemover(collectionElement,
@@ -247,7 +247,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
                   }
                 } else {
                   getAccessorFactory(context).createPropertyAccessor(
-                      property.getKey(), component.getContract()).setValue(component,
+                      property.getKey(), component.getComponentContract()).setValue(component,
                       null);
                 }
               }

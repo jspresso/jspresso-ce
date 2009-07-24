@@ -56,7 +56,7 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    */
   public String getCardNameForModel(Object model) {
     if (model instanceof IEntity) {
-      return ((IEntity) model).getContract().getName();
+      return ((IEntity) model).getComponentContract().getName();
     }
     return null;
   }

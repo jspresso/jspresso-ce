@@ -76,8 +76,8 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
    */
   public synchronized Object invoke(@SuppressWarnings("unused")
   Object proxy, Method method, Object[] args) throws Throwable {
-    if ("getContract".equals(method.getName())) {
-      return componentDelegate.getContract();
+    if ("getComponentContract".equals(method.getName())) {
+      return componentDelegate.getComponentContract();
     }
     AccessorInfo accessorInfo = new AccessorInfo(method);
     EAccessorType accessorType = accessorInfo.getAccessorType();

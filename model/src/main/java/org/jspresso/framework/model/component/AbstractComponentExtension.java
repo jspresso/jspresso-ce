@@ -77,7 +77,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    * @return The entity type.
    */
   public String getType() {
-    return getComponent().getContract().getName();
+    return getComponent().getComponentContract().getName();
   }
 
   /**

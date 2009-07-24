@@ -65,7 +65,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
   public <E extends IComponent> E cloneComponent(E componentToClone,
       IEntityFactory entityFactory) {
     E clonedComponent = (E) entityFactory
-        .createComponentInstance(componentToClone.getContract());
+        .createComponentInstance(componentToClone.getComponentContract());
     handleRelationships(componentToClone, clonedComponent, entityFactory);
     return clonedComponent;
   }
@@ -78,7 +78,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
   public <E extends IEntity> E cloneEntity(E entityToClone,
       IEntityFactory entityFactory) {
     E clonedEntity = (E) entityFactory.createEntityInstance(entityToClone
-        .getContract());
+        .getComponentContract());
 
     handleRelationships(entityToClone, clonedEntity, entityFactory);
     return clonedEntity;
@@ -108,7 +108,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
   private <E extends IComponent> void handleRelationships(E componentToClone,
       E clonedComponent, IEntityFactory entityFactory) {
     IComponentDescriptor<?> componentDescriptor = entityFactory
-        .getComponentDescriptor(componentToClone.getContract());
+        .getComponentDescriptor(componentToClone.getComponentContract());
 
     Map<Object, ICollectionPropertyDescriptor<?>> collRelToUpdate = new HashMap<Object, ICollectionPropertyDescriptor<?>>();
     for (Map.Entry<String, Object> propertyEntry : componentToClone
@@ -151,7 +151,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                 // We must force initialization of the collection. So do a get.
                 try {
                   accessorFactory.createPropertyAccessor(
-                      propertyEntry.getKey(), componentToClone.getContract())
+                      propertyEntry.getKey(), componentToClone.getComponentContract())
                       .getValue(componentToClone);
                 } catch (IllegalAccessException ex) {
                   throw new EntityException(ex);
@@ -192,7 +192,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
       }
       ICollectionAccessor collectionAccessor = accessorFactory
           .createCollectionPropertyAccessor(collectionDescriptor.getName(),
-              masterContract, clonedComponent.getContract());
+              masterContract, clonedComponent.getComponentContract());
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(collectionDescriptor);

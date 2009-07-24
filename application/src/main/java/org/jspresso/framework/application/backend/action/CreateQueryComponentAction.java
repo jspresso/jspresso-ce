@@ -109,7 +109,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
                 queryComponent,
                 accessorFactory
                     .createPropertyAccessor(initializedAttribute.getValue(),
-                        masterEntity.getContract()).getValue(masterEntity));
+                        masterEntity.getComponentContract()).getValue(masterEntity));
           } catch (IllegalAccessException ex) {
             throw new ActionException(ex);
           } catch (InvocationTargetException ex) {

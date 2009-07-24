@@ -505,7 +505,7 @@ public class BasicApplicationSession implements IApplicationSession {
     Collection<Object> propertyValue = (Collection<Object>) component
         .straightGetProperty(propertyName);
     ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityFactory
-        .getComponentDescriptor(component.getContract()).getPropertyDescriptor(
+        .getComponentDescriptor(component.getComponentContract()).getPropertyDescriptor(
             propertyName);
     if (propertyValue != null
         && !propertyValue.isEmpty()
@@ -589,11 +589,11 @@ public class BasicApplicationSession implements IApplicationSession {
   private IEntity cloneInUnitOfWork(IEntity entity,
       Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned) {
     Map<Serializable, IEntity> contractBuffer = alreadyCloned.get(entity
-        .getContract());
+        .getComponentContract());
     IEntity uowEntity = null;
     if (contractBuffer == null) {
       contractBuffer = new HashMap<Serializable, IEntity>();
-      alreadyCloned.put(entity.getContract(), contractBuffer);
+      alreadyCloned.put(entity.getComponentContract(), contractBuffer);
     } else {
       uowEntity = contractBuffer.get(entity.getId());
       if (uowEntity != null) {
@@ -675,7 +675,7 @@ public class BasicApplicationSession implements IApplicationSession {
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
       dirtRecorder.setEnabled(false);
-      IEntity registeredEntity = getRegisteredEntity(entity.getContract(),
+      IEntity registeredEntity = getRegisteredEntity(entity.getComponentContract(),
           entity.getId());
       boolean newlyRegistered = false;
       if (registeredEntity == null) {

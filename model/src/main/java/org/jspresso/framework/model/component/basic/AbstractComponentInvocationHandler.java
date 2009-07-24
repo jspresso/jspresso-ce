@@ -154,7 +154,7 @@ public abstract class AbstractComponentInvocationHandler implements
       return new Boolean(computeEquals((IComponent) proxy, args[0]));
     } else if ("toString".equals(methodName)) {
       return toString(proxy);
-    } else if ("getContract".equals(methodName)) {
+    } else if ("getComponentContract".equals(methodName)) {
       return componentDescriptor.getComponentContract();
     } else if ("addPropertyChangeListener".equals(methodName)) {
       if (args.length == 1) {

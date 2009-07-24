@@ -217,7 +217,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     if (getModel() instanceof IEntity
         && !(getModel() instanceof IQueryComponent)) {
       Class<? extends IEntity> entityContract = ((IEntity) getModel())
-          .getContract();
+          .getComponentContract();
       if (!entityContract.equals(registeredModelDescriptor.getModelType())) {
         // we must take care of subclasses (polymorphism)
         return modelConnectorFactory.getDescriptorRegistry()

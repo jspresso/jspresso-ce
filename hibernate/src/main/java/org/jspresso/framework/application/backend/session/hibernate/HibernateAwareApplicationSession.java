@@ -204,7 +204,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
                 try {
                   session.lock(componentOrEntity, LockMode.NONE);
                 } catch (Exception ex) {
-                  session.evict(session.get(componentOrEntity.getContract(),
+                  session.evict(session.get(componentOrEntity.getComponentContract(),
                       ((IEntity) componentOrEntity).getId()));
                   session.lock(componentOrEntity, LockMode.NONE);
                 }
@@ -213,7 +213,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
                   session.lock(initializedProperty, LockMode.NONE);
                 } catch (Exception ex) {
                   session.evict(session.get(((IEntity) initializedProperty)
-                      .getContract(), ((IEntity) initializedProperty).getId()));
+                      .getComponentContract(), ((IEntity) initializedProperty).getId()));
                   session.lock(initializedProperty, LockMode.NONE);
                 }
               }
@@ -223,7 +223,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
                 session.lock(initializedProperty, LockMode.NONE);
               } catch (Exception ex) {
                 session.evict(session.get(((IEntity) initializedProperty)
-                    .getContract(), ((IEntity) initializedProperty).getId()));
+                    .getComponentContract(), ((IEntity) initializedProperty).getId()));
                 session.lock(initializedProperty, LockMode.NONE);
               }
             }
@@ -354,7 +354,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
             snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
           }
           persistentSet.setSnapshot(owner.getId(), getHibernateRoleName(owner
-              .getContract(), role), snapshot);
+              .getComponentContract(), role), snapshot);
           return persistentSet;
         } else if (transientCollection instanceof List) {
           PersistentList persistentList = new PersistentList(null,
@@ -369,7 +369,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
             snapshot.add(snapshotCollectionElement);
           }
           persistentList.setSnapshot(owner.getId(), getHibernateRoleName(owner
-              .getContract(), role), snapshot);
+              .getComponentContract(), role), snapshot);
           return persistentList;
         }
       }
@@ -396,7 +396,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           } catch (Exception ex) {
             // ex.printStackTrace();
             hibernateSession.evict(hibernateSession.get(
-                component.getContract(), ((IEntity) component).getId()));
+                component.getComponentContract(), ((IEntity) component).getId()));
             hibernateSession.lock(component, LockMode.NONE);
           }
         }

@@ -97,7 +97,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
    */
   @SuppressWarnings("unchecked")
   public void register(IEntity entity) {
-    IEntity existingRegisteredEntity = get(entity.getContract(), entity.getId());
+    IEntity existingRegisteredEntity = get(entity.getComponentContract(), entity.getId());
     if (existingRegisteredEntity != null) {
       if (entity != existingRegisteredEntity) {
         throw new EntityRegistryException(
@@ -107,11 +107,11 @@ public class BasicEntityRegistry implements IEntityRegistry {
       // do nothing since the entity is already registered.
     } else {
       Map<Object, IEntity> contractStore = backingStore.get(entity
-          .getContract());
+          .getComponentContract());
       if (contractStore == null) {
         contractStore = new ReferenceMap(AbstractReferenceMap.HARD,
             AbstractReferenceMap.WEAK, true);
-        backingStore.put(entity.getContract(), contractStore);
+        backingStore.put(entity.getComponentContract(), contractStore);
       }
       contractStore.put(entity.getId(), entity);
     }

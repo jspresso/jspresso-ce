@@ -55,6 +55,7 @@ New features
              commons-collection : 3.1 -> 3.2.1
              iText : 2.1.5
 2817947    Extend the scope of the defaultValue property
+2826436    Rename getContract() to getComponentContract()
 
 3.0.0
 =====

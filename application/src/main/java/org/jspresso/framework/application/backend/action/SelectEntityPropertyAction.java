@@ -38,7 +38,7 @@ public class SelectEntityPropertyAction extends AbstractBackendAction {
     if (model != null) {
       try {
         Object propertyValue = getAccessorFactory(context)
-            .createPropertyAccessor(property, model.getContract()).getValue(
+            .createPropertyAccessor(property, model.getComponentContract()).getValue(
                 model);
         context.put(ActionContextConstants.ACTION_PARAM, propertyValue);
       } catch (IllegalAccessException ex) {

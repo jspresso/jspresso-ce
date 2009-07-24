@@ -56,7 +56,7 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
   public <E extends IComponent> E cloneComponent(E componentToClone,
       IEntityFactory entityFactory) {
     E clonedComponent = (E) entityFactory
-        .createComponentInstance(componentToClone.getContract());
+        .createComponentInstance(componentToClone.getComponentContract());
     carbonCopyComponent(componentToClone, clonedComponent, entityFactory);
     return clonedComponent;
   }
@@ -68,7 +68,7 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
   public <E extends IEntity> E cloneEntity(E entityToClone,
       IEntityFactory entityFactory) {
     E clonedEntity = (E) entityFactory.createEntityInstance(entityToClone
-        .getContract(), (Serializable) entityToClone
+        .getComponentContract(), (Serializable) entityToClone
         .straightGetProperty(IEntity.ID));
 
     carbonCopyComponent(entityToClone, clonedEntity, entityFactory);
@@ -78,7 +78,7 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
   private void carbonCopyComponent(IComponent componentToClone,
       IComponent clonedComponent, IEntityFactory entityFactory) {
     IComponentDescriptor<?> componentDescriptor = entityFactory
-        .getComponentDescriptor(componentToClone.getContract());
+        .getComponentDescriptor(componentToClone.getComponentContract());
 
     for (Map.Entry<String, Object> propertyEntry : componentToClone
         .straightGetProperties().entrySet()) {
