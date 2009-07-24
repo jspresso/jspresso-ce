@@ -310,10 +310,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         } else if(rComponent instanceof org.jspresso.framework.gui.remote.RComboBox) {
           var labels = new Object();
           var icons = new Object();
-          for(var i = 0; i < rComponent.getValues().length; i++) {
-            var value = rComponent.getValues()[i];
-            labels[value] = rComponent.getTranslations()[i];
-            icons[value] = rComponent.getIcons()[i];
+          for(var j = 0; j < rComponent.getValues().length; j++) {
+            var value = rComponent.getValues()[j];
+            labels[value] = rComponent.getTranslations()[j];
+            icons[value] = rComponent.getIcons()[j];
           }
           cellRenderer = new org.jspresso.framework.view.qx.EnumerationTableCellRenderer(labels,
                                                                                          icons);
@@ -592,7 +592,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       colorPopup.exclude();
       
       var colorWidget = new qx.ui.basic.Label();
-      colorWidget.setBackgroundColor(remoteColorField.getDefaultColor());
+      colorWidget.setBackgroundColor(org.jspresso.framework.view.qx.DefaultQxViewFactory.__hexColorToQxColor(remoteColorField.getDefaultColor()));
       colorWidget.set({
         decorator : "main",
         textAlign : "center",
@@ -1206,7 +1206,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         textField.setMaxLength(remoteTextField.getMaxLength());
         this.__sizeMaxComponentWidth(textField, remoteTextField.getMaxLength());
       } else {
-        thius.__sizeMaxComponentWidth(textField);
+        this.__sizeMaxComponentWidth(textField);
       }
       var state = remoteTextField.getState();
       var modelController = new qx.data.controller.Object(state);

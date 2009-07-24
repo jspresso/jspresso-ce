@@ -19,6 +19,7 @@
 package org.jspresso.framework.state.remote;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.jspresso.framework.util.remote.RemotePeer;
 
@@ -111,7 +112,9 @@ public class RemoteValueState extends RemotePeer {
    *          the value to set.
    */
   public void setValue(Object value) {
-    if (value instanceof Serializable) {
+    if (value instanceof Date || value instanceof String
+        || value instanceof Boolean || value instanceof Number) {
+      // if (value instanceof Serializable) {
       this.value = (Serializable) value;
     } else if (value != null) {
       this.value = value.toString();

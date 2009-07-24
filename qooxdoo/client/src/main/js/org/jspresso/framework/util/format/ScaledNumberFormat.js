@@ -43,8 +43,8 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat",
      */
     format : function(num) {
       var actualNumberToFormat = num;
-      if(getScale() && num) {
-        actualNumberToFormat = num * getScale();
+      if(this.getScale() && num) {
+        actualNumberToFormat = num * this.getScale();
       }
       return this.base(arguments, actualNumberToFormat);
     },
@@ -58,8 +58,8 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat",
      */
     parse : function(str) {
       var actualParsedNumber = this.base(arguments, str);
-      if(getScale() && actualParsedNumber) {
-        actualParsedNumber = actualParsedNumber / getScale();
+      if(this.getScale() && actualParsedNumber) {
+        actualParsedNumber = actualParsedNumber / this.getScale();
       }
       return actualParsedNumber;
     }
