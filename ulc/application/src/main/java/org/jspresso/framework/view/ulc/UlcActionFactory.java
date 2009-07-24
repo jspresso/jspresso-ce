@@ -83,7 +83,6 @@ public class UlcActionFactory extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void setActionEnabled(IAction action, boolean enabled) {
     action.setEnabled(enabled);
   }
@@ -91,7 +90,6 @@ public class UlcActionFactory extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void setActionName(IAction action, String name) {
     action.putValue(IAction.NAME, name);
   }

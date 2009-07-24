@@ -406,7 +406,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
   public void setConnectorValue(Object aValue) {
     if (aValue instanceof Number) {
       if (getModelDescriptor() != null) {
-        Class<?> expectedType = ((INumberPropertyDescriptor) getModelDescriptor()).getModelType();
+        Class<?> expectedType = ((INumberPropertyDescriptor) getModelDescriptor())
+            .getModelType();
         if (expectedType.equals(aValue.getClass())) {
           setConnecteeValue(aValue);
         } else {
@@ -498,7 +499,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
       if (modelReadabilityListener == null) {
         modelReadabilityListener = new PropertyChangeListener() {
 
-          @Override
           public void propertyChange(
               @SuppressWarnings("unused") PropertyChangeEvent evt) {
             readabilityChange();
@@ -508,7 +508,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
       if (modelWritabilityListener == null) {
         modelWritabilityListener = new PropertyChangeListener() {
 
-          @Override
           public void propertyChange(
               @SuppressWarnings("unused") PropertyChangeEvent evt) {
             writabilityChange();
@@ -687,7 +686,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
-  @Override
   public IModelProvider getModelProvider() {
     if (getModelConnector() != null) {
       return getModelConnector().getModelProvider();

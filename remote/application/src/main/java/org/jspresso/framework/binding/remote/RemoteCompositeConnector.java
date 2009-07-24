@@ -135,7 +135,6 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public void synchRemoteState() {
     RemoteCompositeValueState currentState = getState();
     currentState.setValue(getDisplayValue());
@@ -151,7 +150,6 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public Object actualValue() {
     return getConnectorValue();
   }

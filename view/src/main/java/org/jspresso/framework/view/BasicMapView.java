@@ -91,7 +91,6 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
-  @Override
   public void addToChildrenMap(String key, IView<E> childView) {
     getChildrenMap().put(key, childView);
   }

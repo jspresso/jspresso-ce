@@ -124,7 +124,6 @@ public class RemoteValueConnector extends BasicValueConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public void synchRemoteState() {
     RemoteValueState currentState = getState();
     currentState.setValue(getValueForState());
@@ -161,7 +160,6 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public Object actualValue() {
     return getConnectorValue();
   }

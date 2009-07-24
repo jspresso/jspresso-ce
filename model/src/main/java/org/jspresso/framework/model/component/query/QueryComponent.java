@@ -156,7 +156,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public Integer getPage() {
     return page;
   }
@@ -164,7 +163,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public Integer getPageSize() {
     return pageSize;
   }
@@ -172,7 +170,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public void setPage(Integer page) {
     Integer oldValue = getPage();
     boolean oldPreviousPageEnabled = isPreviousPageEnabled();
@@ -188,7 +185,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public void setPageSize(Integer pageSize) {
     Integer oldValue = getPageSize();
     Integer oldPageCount = getPageCount();
@@ -224,7 +220,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public Integer getPageCount() {
     if (getRecordCount() == null) {
       return null;
@@ -244,7 +239,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public boolean isNextPageEnabled() {
     return getPageCount() != null && getPage() != null
         && getPage().intValue() < getPageCount().intValue() - 1;
@@ -253,7 +247,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public boolean isPreviousPageEnabled() {
     return getPage() != null && getPage().intValue() > 0;
   }

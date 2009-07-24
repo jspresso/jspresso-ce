@@ -50,7 +50,6 @@ public class LifecyclePostLoadEventListener implements PostLoadEventListener {
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public void onPostLoad(PostLoadEvent event) {
     Object entity = event.getEntity();
     if (entity instanceof ILifecycleCapable) {

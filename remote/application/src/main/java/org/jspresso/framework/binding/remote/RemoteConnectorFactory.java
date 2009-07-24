@@ -281,7 +281,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  @Override
   public void clear() {
     remotePeerRegistry.clear();
   }
@@ -346,7 +345,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  @Override
   public RemoteCompositeValueState createRemoteCompositeValueState(String guid) {
     RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
     // connectors are registered with the same guid as their state.
@@ -357,7 +355,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  @Override
   public RemoteValueState createRemoteValueState(String guid) {
     RemoteValueState state = new RemoteValueState(guid);
     // connectors are registered with the same guid as their state.

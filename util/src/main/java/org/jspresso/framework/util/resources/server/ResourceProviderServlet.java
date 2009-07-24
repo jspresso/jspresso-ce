@@ -260,7 +260,6 @@ public class ResourceProviderServlet extends HttpServlet {
     /**
      * {@inheritDoc}
      */
-    @Override
     public InputStream getContent() throws IOException {
       return item.getInputStream();
     }
@@ -268,7 +267,6 @@ public class ResourceProviderServlet extends HttpServlet {
     /**
      * {@inheritDoc}
      */
-    @Override
     public long getSize() {
       return item.getSize();
     }

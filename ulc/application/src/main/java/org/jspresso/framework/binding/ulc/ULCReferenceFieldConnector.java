@@ -187,7 +187,6 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
   /**
    * {@inheritDoc}
    */
-  @Override
   public String getDisplayDescription() {
     return null;
   }
@@ -195,7 +194,6 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
   /**
    * {@inheritDoc}
    */
-  @Override
   public String getDisplayIconImageUrl() {
     return null;
   }
@@ -203,7 +201,6 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
   /**
    * {@inheritDoc}
    */
-  @Override
   public String getDisplayValue() {
     if (getRenderingConnector() != null) {
       return (String) getRenderingConnector().getConnectorValue();
@@ -214,7 +211,6 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
   /**
    * {@inheritDoc}
    */
-  @Override
   public IValueConnector getRenderingConnector() {
     return renderingConnector;
   }

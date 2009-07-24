@@ -70,7 +70,6 @@ public class DialogCallbackHandler implements CallbackHandler {
     try {
       SwingUtilities.invokeAndWait(new Runnable() {
 
-        @Override
         public void run() {
           try {
             Callback[] varCallbacks = callbacks;

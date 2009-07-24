@@ -143,7 +143,6 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   /**
    * {@inheritDoc}
    */
-  @Override
   public void synchRemoteState() {
     RemoteCompositeValueState currentState = getState();
     currentState.setValue(getDisplayValue());
@@ -159,7 +158,6 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public Object actualValue() {
     return getConnectorValue();
   }

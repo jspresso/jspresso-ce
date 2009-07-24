@@ -176,7 +176,6 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayUrl(String urlSpec) {
     try {
       BrowserControl.displayURL(urlSpec);
@@ -569,7 +568,6 @@ public class DefaultSwingController extends
         getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new ActionListener() {
 
-      @Override
       public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         if (performLogin()) {
           dialog.dispose();

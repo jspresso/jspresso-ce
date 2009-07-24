@@ -355,7 +355,6 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
      * <p>
      * {@inheritDoc}
      */
-    @Override
     public void headerClicked(HeaderClickEvent event) {
       int status = getSortingStatus(event.getColumn());
       cancelSorting();

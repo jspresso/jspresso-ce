@@ -103,7 +103,6 @@ public class SaveFileAction extends ChooseFileAction {
     /**
      * {@inheritDoc}
      */
-    @Override
     public InputStream getContent() {
       return new ByteArrayInputStream(content);
     }
@@ -111,7 +110,6 @@ public class SaveFileAction extends ChooseFileAction {
     /**
      * {@inheritDoc}
      */
-    @Override
     public long getSize() {
       return content.length;
     }

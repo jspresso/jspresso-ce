@@ -133,7 +133,6 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayUrl(String urlSpec) {
     try {
       BrowserControl.displayURL(urlSpec);

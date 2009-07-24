@@ -71,7 +71,6 @@ public abstract class RemoteStartup extends
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
     if (!started) {
       // we are on a brand new session instance.
@@ -87,7 +86,6 @@ public abstract class RemoteStartup extends
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public void registerCommand(RemoteCommand command) {
     ((IRemoteCommandHandler) getFrontendController()).registerCommand(command);
   }

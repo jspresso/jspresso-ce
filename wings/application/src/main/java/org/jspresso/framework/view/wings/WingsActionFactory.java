@@ -86,7 +86,6 @@ public class WingsActionFactory extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void setActionEnabled(Action action, boolean enabled) {
     action.setEnabled(enabled);
   }
@@ -94,7 +93,6 @@ public class WingsActionFactory extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void setActionName(Action action, String name) {
     action.putValue(Action.NAME, name);
   }

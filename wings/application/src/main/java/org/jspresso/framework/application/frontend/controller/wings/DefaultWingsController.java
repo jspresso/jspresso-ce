@@ -162,7 +162,6 @@ public class DefaultWingsController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayUrl(String urlSpec) {
     ScriptListener listener = new JavaScriptListener(null, null,
         "wingS.util.openLink('download','" + urlSpec + "',null);");
@@ -424,7 +423,6 @@ public class DefaultWingsController extends
         getIconFactory().getSmallIconSize()));
     loginButton.addActionListener(new ActionListener() {
 
-      @Override
       public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         if (performLogin()) {
           dialog.dispose();

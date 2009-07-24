@@ -92,7 +92,6 @@ public class ActionTableSorter extends AbstractTableSorter {
   /**
    * {@inheritDoc}
    */
-  @Override
   public int modelIndex(int viewIndex) {
     // there is no mapping.
     return viewIndex;
@@ -101,7 +100,6 @@ public class ActionTableSorter extends AbstractTableSorter {
   /**
    * {@inheritDoc}
    */
-  @Override
   public int viewIndex(int modelIndex) {
     // there is no mapping.
     return modelIndex;

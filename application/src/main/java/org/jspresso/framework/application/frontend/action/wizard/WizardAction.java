@@ -49,7 +49,6 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     IValueConnector modelConnector = modelConnectorFactory
@@ -280,7 +279,6 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       this.wrappedCancelAction = wrappedCancelAction;
     }
 
-    @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
       actionHandler.execute(wrappedCancelAction, context);
@@ -323,7 +321,6 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       this.wrappedFinishAction = wrappedFinishAction;
     }
 
-    @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
       if (wizardStep.getOnLeaveAction() == null
@@ -371,7 +368,6 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       this.modelConnector = modelConnector;
     }
 
-    @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
       if (wizardStep.getOnLeaveAction() == null
@@ -399,7 +395,6 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       this.modelConnector = modelConnector;
     }
 
-    @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
       IWizardStepDescriptor previousWizardStep = wizardStep

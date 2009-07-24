@@ -289,7 +289,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public Locale getLocale() {
     if (getBackendController() != null) {
       return getBackendController().getApplicationSession().getLocale();

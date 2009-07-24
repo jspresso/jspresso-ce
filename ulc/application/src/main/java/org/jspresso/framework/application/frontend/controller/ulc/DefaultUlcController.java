@@ -154,7 +154,6 @@ public class DefaultUlcController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayUrl(String urlSpec) {
     ClientContext.showDocument(urlSpec);
   }
@@ -441,7 +440,6 @@ public class DefaultUlcController extends
 
       private static final long serialVersionUID = 2403541025764054935L;
 
-      @Override
       public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         if (performLogin()) {
           dialog.setVisible(false);

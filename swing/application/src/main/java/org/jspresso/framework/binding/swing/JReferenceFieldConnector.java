@@ -186,7 +186,6 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public String getDisplayDescription() {
     return null;
   }
@@ -194,7 +193,6 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public String getDisplayIconImageUrl() {
     return null;
   }
@@ -202,7 +200,6 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public String getDisplayValue() {
     if (getRenderingConnector() != null) {
       return (String) getRenderingConnector().getConnectorValue();
@@ -213,7 +210,6 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public IValueConnector getRenderingConnector() {
     return renderingConnector;
   }

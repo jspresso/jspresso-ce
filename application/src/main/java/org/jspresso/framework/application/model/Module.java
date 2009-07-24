@@ -493,7 +493,6 @@ public class Module extends AbstractPropertyChangeCapable implements
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public IViewDescriptor getViewDescriptor() {
     return getProjectedViewDescriptor();
   }

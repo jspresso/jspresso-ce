@@ -120,7 +120,6 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void clear() {
     remotePeerRegistry.clear();
   }
@@ -145,7 +144,6 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayUrl(String urlSpec) {
     RemoteOpenUrlCommand openUrlCommand = new RemoteOpenUrlCommand();
     openUrlCommand.setUrlSpec(urlSpec);
@@ -231,7 +229,6 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
     try {
       commandRegistrationEnabled = true;
@@ -300,7 +297,6 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void registerCommand(RemoteCommand command) {
     if (commandRegistrationEnabled) {
       if (command instanceof RemoteChildrenCommand) {

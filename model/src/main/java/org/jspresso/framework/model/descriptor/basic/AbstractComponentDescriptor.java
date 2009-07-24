@@ -686,7 +686,6 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void setBeanFactory(BeanFactory beanFactory) {
     this.beanFactory = beanFactory;
   }

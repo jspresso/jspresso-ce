@@ -97,7 +97,6 @@ public class BasicObjectPropertyDescriptor extends
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public IComponentDescriptor<Object> getComponentDescriptor() {
     return null;
   }

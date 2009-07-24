@@ -55,7 +55,6 @@ public class ExitAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public boolean execute(
       @SuppressWarnings("unused") IActionHandler actionHandler,
       Map<String, Object> context) {

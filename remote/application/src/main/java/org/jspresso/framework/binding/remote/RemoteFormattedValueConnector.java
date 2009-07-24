@@ -125,7 +125,6 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   /**
    * {@inheritDoc}
    */
-  @Override
   public void synchRemoteState() {
     RemoteValueState currentState = getState();
     currentState.setValue(getConnectorValueAsString());
@@ -138,7 +137,6 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public Object actualValue() {
     return getConnectorValue();
   }

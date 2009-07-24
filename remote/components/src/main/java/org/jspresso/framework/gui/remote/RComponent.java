@@ -256,7 +256,6 @@ public abstract class RComponent extends RemotePeer implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public Object actualValue() {
     return getState().getValue();
   }

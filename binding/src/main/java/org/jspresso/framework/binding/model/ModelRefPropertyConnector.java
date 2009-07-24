@@ -163,7 +163,6 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public IValueConnector getChildConnector(String connectorKey,
       IModelDescriptor childModelDescriptor) {
     if (childModelDescriptor == null) {

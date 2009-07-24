@@ -58,7 +58,6 @@ public class WorkspaceSelectionAction<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public boolean execute(
       @SuppressWarnings("unused") IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -66,11 +65,11 @@ public class WorkspaceSelectionAction<E, F, G> extends
     return true;
   }
 
-  
   /**
    * Sets the workspaceName.
    * 
-   * @param workspaceName the workspaceName to set.
+   * @param workspaceName
+   *          the workspaceName to set.
    */
   public void setWorkspaceName(String workspaceName) {
     this.workspaceName = workspaceName;

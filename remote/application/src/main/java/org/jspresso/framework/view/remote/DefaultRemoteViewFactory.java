@@ -19,7 +19,6 @@
 package org.jspresso.framework.view.remote;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -1329,13 +1328,17 @@ public class DefaultRemoteViewFactory extends
 
     RCardContainer cardContainer = (RCardContainer) cardView.getPeer();
 
-    RComponent[] newCards = Arrays.copyOf(cardContainer.getCards(),
-        cardContainer.getCards().length + 1);
+    RComponent[] newCards = new RComponent[cardContainer.getCards().length + 1];
+    for (int i = 0; i < cardContainer.getCards().length; i++) {
+      newCards[i] = cardContainer.getCards()[i];
+    }
     newCards[newCards.length - 1] = cardView.getPeer();
     cardContainer.setCards(newCards);
 
-    String[] newCardNames = Arrays.copyOf(cardContainer.getCardNames(),
-        cardContainer.getCardNames().length + 1);
+    String[] newCardNames = new String[cardContainer.getCardNames().length + 1];
+    for (int i = 0; i < cardContainer.getCardNames().length; i++) {
+      newCardNames[i] = cardContainer.getCardNames()[i];
+    }
     newCardNames[newCardNames.length - 1] = cardName;
     cardContainer.setCardNames(newCardNames);
 
