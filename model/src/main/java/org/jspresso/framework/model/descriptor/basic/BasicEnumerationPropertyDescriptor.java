@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,10 +86,24 @@ public class BasicEnumerationPropertyDescriptor extends
    * Sets the valuesAndIconImageUrls property.
    * 
    * @param valuesAndIconImageUrls
-   *            the valuesAndIconImageUrls to set.
+   *          the valuesAndIconImageUrls to set.
    */
   public void setValuesAndIconImageUrls(
       Map<String, String> valuesAndIconImageUrls) {
     this.valuesAndIconImageUrls = valuesAndIconImageUrls;
   }
+
+  /**
+   * Sets the values of the enumeration without icons.
+   * 
+   * @param values
+   *          the values to set.
+   */
+  public void setValues(List<String> values) {
+    valuesAndIconImageUrls = new LinkedHashMap<String, String>();
+    for (String value : values) {
+      valuesAndIconImageUrls.put(value, null);
+    }
+  }
+
 }

@@ -24,6 +24,7 @@ Bugs fixed
 2825811    Scalar properties default values are not correctly handled for components
 2826935    mandatory prevents delete in specific scenario
 
+
 New features
 ------------
 2769159  	 Subview model descriptor should override parent one
@@ -57,6 +58,8 @@ New features
              iText : 2.1.5
 2817947    Extend the scope of the defaultValue property
 2826436    Rename getContract() to getComponentContract()
+2827446    Simplify definition of enumeration props without icons
+
 
 3.0.0
 =====
