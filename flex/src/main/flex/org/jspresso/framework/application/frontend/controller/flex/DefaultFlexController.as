@@ -739,6 +739,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
       // }
       dialogView.percentWidth = 100.0;
       dialogView.percentHeight = 100.0;
+      dialogView.maxWidth = 90.0 * (Application.application as DisplayObject).width / 100.0;
+      dialogView.maxHeight = 90.0 * (Application.application as DisplayObject).height / 100.0;
       var buttonBox:HBox = new HBox();
       buttonBox.setStyle("horizontalAlign","right");
       buttonBox.percentWidth = 100.0;

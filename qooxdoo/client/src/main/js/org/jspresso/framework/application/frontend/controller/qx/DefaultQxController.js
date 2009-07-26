@@ -840,6 +840,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 				});
       }
 
+      if(this.__workspaceContainer) {
+        dialog.setMaxWidth(Math.floor(this.__workspaceContainer.getBounds().width * 90 / 100));
+        dialog.setMaxHeight(Math.floor(this.__workspaceContainer.getBounds().height * 90 / 100));
+      }
       dialog.add(dialogBox);
       dialog.open();
       dialog.center();
