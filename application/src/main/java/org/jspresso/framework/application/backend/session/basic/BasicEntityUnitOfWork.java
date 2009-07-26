@@ -196,6 +196,11 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
       }
       entitiesRegisteredForDeletion.add(entity);
     }
+    if (entitiesRegisteredForUpdate != null) {
+      while (entitiesRegisteredForUpdate.remove(entity)) {
+        // NO-OP.
+      }
+    }
   }
 
   /**

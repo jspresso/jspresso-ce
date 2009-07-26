@@ -108,16 +108,14 @@ public class RemoveFromModuleObjectsAction extends
       public Object doInTransaction(
           @SuppressWarnings("unused") TransactionStatus status) {
         for (IEntity entityToRemove : moduleObjectsToRemove) {
-          if (entityToRemove.isPersistent()) {
-            try {
-              deleteEntity(entityToRemove, context);
-            } catch (IllegalAccessException ex) {
-              throw new ActionException(ex);
-            } catch (InvocationTargetException ex) {
-              throw new ActionException(ex);
-            } catch (NoSuchMethodException ex) {
-              throw new ActionException(ex);
-            }
+          try {
+            deleteEntity(entityToRemove, context);
+          } catch (IllegalAccessException ex) {
+            throw new ActionException(ex);
+          } catch (InvocationTargetException ex) {
+            throw new ActionException(ex);
+          } catch (NoSuchMethodException ex) {
+            throw new ActionException(ex);
           }
         }
         getApplicationSession(context).performPendingOperations();

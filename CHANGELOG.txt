@@ -22,6 +22,7 @@ Bugs fixed
 2810895    Remote value connectors writability wrongly handled
 2813469    Wizard action does not work when triggered from a dialog
 2825811    Scalar properties default values are not correctly handled for components
+2826935    mandatory prevents delete in specific scenario
 
 New features
 ------------
