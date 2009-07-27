@@ -231,11 +231,17 @@ public class DefaultWingsController extends
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof DataIntegrityViolationException) {
-      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
-              "integrity.error.description", getLocale()))),
-          getTranslationProvider().getTranslation("error", getLocale()),
-          SOptionPane.ERROR_MESSAGE);
+      SOptionPane
+          .showMessageDialog(
+              sourceComponent,
+              HtmlHelper
+                  .toHtml(HtmlHelper
+                      .emphasis(getTranslationProvider()
+                          .getTranslation(
+                              refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                              getLocale()))), getTranslationProvider()
+                  .getTranslation("error", getLocale()),
+              SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof ConcurrencyFailureException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(

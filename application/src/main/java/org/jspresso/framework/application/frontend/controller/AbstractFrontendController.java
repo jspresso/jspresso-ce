@@ -31,6 +31,7 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
@@ -65,6 +66,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor;
+import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  * This class serves as base class for frontend (view) controllers.
@@ -852,5 +854,31 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected IViewDescriptor getLoginViewDescriptor() {
     return loginViewDescriptor;
+  }
+
+  /**
+   * Refines the data integrity violation exception to determine the translation
+   * key from which the user message will be constructed.
+   * 
+   * @param exception
+   *          the DataIntegrityViolationException.
+   * @return the translation key to use.
+   */
+  protected String refineIntegrityViolationTranslationKey(
+      DataIntegrityViolationException exception) {
+    if (exception.getCause() instanceof ConstraintViolationException) {
+      ConstraintViolationException cve = (ConstraintViolationException) exception
+          .getCause();
+      if (cve.getSQL() != null && cve.getSQL().toUpperCase().contains("DELETE")) {
+        return "error.fk.delete";
+      } else if (cve.getConstraintName() != null) {
+        if (cve.getConstraintName().toUpperCase().contains("FK")) {
+          return "error.fk.update";
+        }
+        return "error.unicity";
+      }
+      return "error.integrity";
+    }
+    return "error.integrity";
   }
 }

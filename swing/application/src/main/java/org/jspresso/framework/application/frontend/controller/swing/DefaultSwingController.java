@@ -308,12 +308,18 @@ public class DefaultSwingController extends
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
     } else if (ex instanceof DataIntegrityViolationException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
-              "integrity.error.description", getLocale()))),
-          getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+      JOptionPane
+          .showMessageDialog(
+              sourceComponent,
+              HtmlHelper
+                  .toHtml(HtmlHelper
+                      .emphasis(getTranslationProvider()
+                          .getTranslation(
+                              refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                              getLocale()))), getTranslationProvider()
+                  .getTranslation("error", getLocale()),
+              JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
+                  getIconFactory().getLargeIconSize()));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(

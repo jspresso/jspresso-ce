@@ -264,8 +264,11 @@ public class DefaultRemoteController extends
       messageCommand.setMessage(((BusinessException) ex).getI18nMessage(
           getTranslationProvider(), getLocale()));
     } else if (ex instanceof DataIntegrityViolationException) {
-      messageCommand.setMessage(getTranslationProvider().getTranslation(
-          "integrity.error.description", getLocale()));
+      messageCommand
+          .setMessage(getTranslationProvider()
+              .getTranslation(
+                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                  getLocale()));
     } else if (ex instanceof ConcurrencyFailureException) {
       messageCommand.setMessage(getTranslationProvider().getTranslation(
           "concurrency.error.description", getLocale()));

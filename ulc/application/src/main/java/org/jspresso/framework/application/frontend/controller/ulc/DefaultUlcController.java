@@ -240,13 +240,17 @@ public class DefaultUlcController extends
               getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof DataIntegrityViolationException) {
-      ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
+      ULCAlert alert = new ULCAlert(
+          UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(getTranslationProvider()
-              .getTranslation("integrity.error.description", getLocale()))),
-          getTranslationProvider().getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+          HtmlHelper
+              .toHtml(HtmlHelper
+                  .emphasis(getTranslationProvider()
+                      .getTranslation(
+                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                          getLocale()))), getTranslationProvider()
+              .getTranslation("ok", getLocale()), null, null, getIconFactory()
+              .getErrorIcon(getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof ConcurrencyFailureException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
