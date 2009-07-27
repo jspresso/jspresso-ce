@@ -16,7 +16,7 @@
   -->
   <bean
     id="applicationMessageSource"
-    class="org.springframework.context.support.ResourceBundleMessageSource">
+    parent="abstractApplicationMessageSource">
     <property
       name="parentMessageSource"
       ref="commonsMessageSource" />

@@ -47,6 +47,13 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+          </locales>
+          <mergeResourceBundle>true</mergeResourceBundle>
+        </configuration>
       </plugin>
     </plugins>
   </build>

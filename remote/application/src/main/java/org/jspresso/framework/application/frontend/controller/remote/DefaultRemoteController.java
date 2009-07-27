@@ -77,6 +77,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.remote.DefaultRemoteViewFactory;
 import org.jspresso.framework.view.remote.RemoteActionFactory;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  * Default implementation of a remote frontend controller. This implementation
@@ -262,6 +263,9 @@ public class DefaultRemoteController extends
     } else if (ex instanceof BusinessException) {
       messageCommand.setMessage(((BusinessException) ex).getI18nMessage(
           getTranslationProvider(), getLocale()));
+    } else if (ex instanceof DataIntegrityViolationException) {
+      messageCommand.setMessage(getTranslationProvider().getTranslation(
+          "integrity.error.description", getLocale()));
     } else if (ex instanceof ConcurrencyFailureException) {
       messageCommand.setMessage(getTranslationProvider().getTranslation(
           "concurrency.error.description", getLocale()));

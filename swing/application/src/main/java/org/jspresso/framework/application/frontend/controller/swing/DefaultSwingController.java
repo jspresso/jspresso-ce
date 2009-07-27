@@ -85,6 +85,7 @@ import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import foxtrot.Job;
 
@@ -303,6 +304,13 @@ public class DefaultSwingController extends
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale()))),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
+              getIconFactory().getLargeIconSize()));
+    } else if (ex instanceof DataIntegrityViolationException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
+              "integrity.error.description", getLocale()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));

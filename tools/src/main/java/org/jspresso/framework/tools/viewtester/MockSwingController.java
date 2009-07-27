@@ -49,6 +49,7 @@ import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  * Default implementation of a mock swing frontend controller. This
@@ -173,6 +174,13 @@ public class MockSwingController extends
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale()))),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
+              getIconFactory().getLargeIconSize()));
+    } else if (ex instanceof DataIntegrityViolationException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
+              "integrity.error.description", getLocale()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));

@@ -48,6 +48,7 @@ import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
@@ -227,6 +228,12 @@ public class DefaultWingsController extends
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale()))),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          SOptionPane.ERROR_MESSAGE);
+    } else if (ex instanceof DataIntegrityViolationException) {
+      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
+              "integrity.error.description", getLocale()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof ConcurrencyFailureException) {

@@ -13,7 +13,7 @@
 
   <bean id="reportingJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" />
 
-  <bean id="applicationMessageSource" class="org.springframework.context.support.ResourceBundleMessageSource" />
+  <bean id="applicationMessageSource" parent="abstractApplicationMessageSource" />
 
   <bean id="changePasswordBackAction"
     class="org.jspresso.framework.application.backend.action.security.LdapChangePasswordAction" />

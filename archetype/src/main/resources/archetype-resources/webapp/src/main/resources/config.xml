@@ -52,6 +52,8 @@
           key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
         <prop
           key="hibernate.hbm2ddl.auto">update</prop>
+        <prop
+          key="hibernate.jdbc.batch_size">0</prop>
       </props>
     </property>
     <property

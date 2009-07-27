@@ -124,6 +124,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.view.flex.RIconMenuItemRenderer;
   
   
+  [ResourceBundle("Common_messages")]
   public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler, IRemoteCommandHandler {
     
     private static const HANDLE_COMMANDS_METHOD:String = "handleCommands";
@@ -379,7 +380,28 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
         execute(uploadCommand.cancelCallbackAction);
       });
-      _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
+      try {
+        _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
+      } catch(error:Error) {
+        // we are certainly running on FP 10 or above. Need an extra
+        // dialog to initiate the browsing...
+        var alertCloseHandler:Function = function(event:CloseEvent):void {
+          switch(event.detail) {
+            case Alert.YES:
+              _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
+              break;
+            default:
+              break;
+          }
+        };
+        Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
+                   ResourceManager.getInstance().getString("Common_messages", "file.upload"),
+                   Alert.YES|Alert.NO,
+                   null,
+                   alertCloseHandler,
+                   null,
+                   Alert.NO);
+      }
     }
     
     private function handleFileDownload(downloadCommand:RemoteFileDownloadCommand):void {
@@ -387,7 +409,28 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
         execute(downloadCommand.cancelCallbackAction, downloadCommand.resourceId);
       });
-      _fileReference.download(new URLRequest(downloadCommand.fileUrl), downloadCommand.defaultFileName);
+      try {
+        _fileReference.download(new URLRequest(downloadCommand.fileUrl), downloadCommand.defaultFileName);
+      } catch(error:Error) {
+        // we are certainly running on FP 10 or above. Need an extra
+        // dialog to initiate the browsing...
+        var alertCloseHandler:Function = function(event:CloseEvent):void {
+          switch(event.detail) {
+            case Alert.YES:
+              _fileReference.download(new URLRequest(downloadCommand.fileUrl), downloadCommand.defaultFileName);
+              break;
+            default:
+              break;
+          }
+        };
+        Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
+                   ResourceManager.getInstance().getString("Common_messages", "file.download"),
+                   Alert.YES|Alert.NO,
+                   null,
+                   alertCloseHandler,
+                   null,
+                   Alert.NO);
+      }
     }
     
     private function createTypeFilters(filter:Object):Array {
@@ -454,6 +497,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           switch(event.detail) {
             case Alert.OK:
               execute((messageCommand as RemoteOkCancelCommand).okAction);
+              break;
             default:
               execute((messageCommand as RemoteOkCancelCommand).cancelAction);
           }
@@ -470,8 +514,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
           switch(event.detail) {
             case Alert.YES:
               execute((messageCommand as RemoteYesNoCancelCommand).yesAction);
+              break;
             case Alert.NO:
               execute((messageCommand as RemoteYesNoCancelCommand).noAction);
+              break;
             default:
               execute((messageCommand as RemoteYesNoCancelCommand).cancelAction);
           }
@@ -488,6 +534,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
           switch(event.detail) {
             case Alert.YES:
               execute((messageCommand as RemoteYesNoCommand).yesAction);
+              break;
             default:
               execute((messageCommand as RemoteYesNoCommand).noAction);
           }

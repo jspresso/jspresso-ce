@@ -3396,7 +3396,7 @@ public class EmployeePropertyProcessors {
   --&gt;
   &lt;bean
     id="applicationMessageSource"
-    class="org.springframework.context.support.ResourceBundleMessageSource"&gt;
+    parent="abstractApplicationMessageSource"&gt;
     &lt;property
       name="parentMessageSource"
       ref="commonsMessageSource" /&gt; <co id="commonsMessageSource" />
@@ -4904,6 +4904,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       &lt;prop key="hibernate.cache.provider_class"&gt;org.hibernate.cache.HashtableCacheProvider&lt;/prop&gt;
       &lt;prop key="hibernate.hbm2ddl.auto"&gt;update&lt;/prop&gt; <co
               id="hbm2ddl" />
+      &lt;prop key="hibernate.jdbc.batch_size"&gt;0&lt;/prop&gt;
     &lt;/props&gt;
   &lt;/property&gt;
   &lt;property name="mappingLocations"&gt;

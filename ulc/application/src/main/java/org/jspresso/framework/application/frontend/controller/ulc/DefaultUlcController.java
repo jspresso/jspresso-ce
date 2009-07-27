@@ -46,6 +46,7 @@ import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
@@ -234,6 +235,15 @@ public class DefaultUlcController extends
           getTranslationProvider().getTranslation("error", getLocale()),
           HtmlHelper.toHtml(HtmlHelper.emphasis(((BusinessException) ex)
               .getI18nMessage(getTranslationProvider(), getLocale()))),
+          getTranslationProvider().getTranslation("ok", getLocale()), null,
+          null, getIconFactory().getErrorIcon(
+              getIconFactory().getLargeIconSize()));
+      alert.show();
+    } else if (ex instanceof DataIntegrityViolationException) {
+      ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          HtmlHelper.toHtml(HtmlHelper.emphasis(getTranslationProvider()
+              .getTranslation("integrity.error.description", getLocale()))),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
           null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));

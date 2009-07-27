@@ -23,7 +23,8 @@ Bugs fixed
 2813469    Wizard action does not work when triggered from a dialog
 2825811    Scalar properties default values are not correctly handled for components
 2826935    mandatory prevents delete in specific scenario
-2826955    horizontal scrollbar missing in 1-N search (not urgent)
+2826955    horizontal scrollbar missing in 1-N search
+           Flash player 10 security prevents file browsing
 
 
 New features
@@ -60,6 +61,8 @@ New features
 2817947    Extend the scope of the defaultValue property
 2826436    Rename getContract() to getComponentContract()
 2827446    Simplify definition of enumeration props without icons
+           HSQL, DBCP, Pool versions are now fixed in Jspresso root Pom
+           Improve Translation mechanism to handle nested translation keys
 
 
 3.0.0

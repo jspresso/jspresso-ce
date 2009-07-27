@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true">
 
@@ -9,295 +7,176 @@
     Root application context for the Jspresso framework.
   -->
 
-  <bean
-    id="mockMessageSource"
-    class="org.jspresso.framework.util.i18n.mock.MockMessageSource" />
+  <bean id="mockMessageSource" class="org.jspresso.framework.util.i18n.mock.MockMessageSource" />
 
-  <bean
-    id="translationProvider"
-    class="org.jspresso.framework.util.i18n.basic.MessageSourceTranslationProvider">
-    <property
-      name="messageSource"
-      ref="applicationMessageSource" />
+  <bean id="translationProvider" class="org.jspresso.framework.util.i18n.basic.MessageSourceTranslationProvider">
+    <property name="messageSource" ref="applicationMessageSource" />
   </bean>
 
-  <bean
-    id="commonsMessageSource"
-    class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property
-      name="parentMessageSource"
-      ref="mockMessageSource" />
-    <property
-      name="basename"
-      value="org.jspresso.framework.application.i18n.Commons" />
+  <bean id="commonsMessageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="parentMessageSource" ref="mockMessageSource" />
+    <property name="basename" value="org.jspresso.framework.application.i18n.Commons" />
   </bean>
+
+  <bean id="abstractApplicationMessageSource" abstract="true"
+    class="org.jspresso.framework.util.i18n.EnhancedResourceBundleMessageSource" />
 
   <!--
     The implementation used as MvcBinder.
   -->
-  <bean
-    id="mvcBinder"
-    class="org.jspresso.framework.binding.DefaultMvcBinder" />
+  <bean id="mvcBinder" class="org.jspresso.framework.binding.DefaultMvcBinder" />
 
   <!--
     The implementation used as factories.
   -->
-  <bean
-    id="accessorFactory"
-    class="org.jspresso.framework.util.accessor.basic.BasicAccessorFactory">
+  <bean id="accessorFactory" class="org.jspresso.framework.util.accessor.basic.BasicAccessorFactory">
     <property name="beanAccessorFactory">
       <bean class="org.jspresso.framework.util.accessor.bean.BeanAccessorFactory" />
     </property>
     <property name="mapAccessorFactory">
-      <bean
-        class="org.jspresso.framework.model.map.DescriptorAwareMapAccessorFactory" />
+      <bean class="org.jspresso.framework.model.map.DescriptorAwareMapAccessorFactory" />
     </property>
   </bean>
 
-  <bean
-    id="reportFactory"
-    class="org.jspresso.framework.application.printing.model.basic.BasicReportFactory" />
+  <bean id="reportFactory" class="org.jspresso.framework.application.printing.model.basic.BasicReportFactory" />
 
   <!--
     The implementation used as ComponentCollectionFactory.
   -->
-  <bean
-    id="componentCollectionFactory"
-    class="org.jspresso.framework.model.component.DefaultComponentCollectionFactory" />
+  <bean id="componentCollectionFactory" class="org.jspresso.framework.model.component.DefaultComponentCollectionFactory" />
 
   <!--
     The implementation used as ModelConnectorFactory.
   -->
-  <bean
-    id="modelConnectorFactory"
-    class="org.jspresso.framework.binding.model.DefaultModelConnectorFactory">
-    <property
-      name="accessorFactory"
-      ref="accessorFactory" />
-    <property
-      name="descriptorRegistry"
-      ref="componentDescriptorRegistry" />
+  <bean id="modelConnectorFactory" class="org.jspresso.framework.binding.model.DefaultModelConnectorFactory">
+    <property name="accessorFactory" ref="accessorFactory" />
+    <property name="descriptorRegistry" ref="componentDescriptorRegistry" />
   </bean>
 
   <!--
     The implementation used as MvcBinder.
   -->
-  <bean
-    id="modelCascadingBinder"
-    class="org.jspresso.framework.binding.masterdetail.DefaultModelCascadingBinder">
-    <property
-      name="mvcBinder"
-      ref="mvcBinder" />
+  <bean id="modelCascadingBinder" class="org.jspresso.framework.binding.masterdetail.DefaultModelCascadingBinder">
+    <property name="mvcBinder" ref="mvcBinder" />
   </bean>
 
   <!--
-    The GUID generator used to implement entities "synthetic key". The idea was
-    taken from 'maulinshah' post on the hibernate wiki. The implementation of
-    the GUID generator has been written by Marc A. Mnich who published
-    it on http://www.javaexchange.com/aboutRandomGUID.html
+    The GUID generator used to implement entities "synthetic key". The idea was taken from 'maulinshah' post on the
+    hibernate wiki. The implementation of the GUID generator has been written by Marc A. Mnich who published it on
+    http://www.javaexchange.com/aboutRandomGUID.html
   -->
-  <bean
-    id="entityGUIDGenerator"
-    class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
+  <bean id="entityGUIDGenerator" class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
 
-  <bean
-    id="guidGenerator"
-    class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
+  <bean id="guidGenerator" class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
 
   <!--
     The root abstract implementation used as Application Session.
   -->
-  <bean
-    id="abstractApplicationSession"
-    abstract="true"
+  <bean id="abstractApplicationSession" abstract="true"
     class="org.jspresso.framework.application.backend.session.basic.BasicApplicationSession">
-    <property
-      name="collectionFactory"
-      ref="componentCollectionFactory" />
-    <property
-      name="accessorFactory"
-      ref="accessorFactory" />
+    <property name="collectionFactory" ref="componentCollectionFactory" />
+    <property name="accessorFactory" ref="accessorFactory" />
     <property name="entityRegistry">
-      <bean
-        class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry"
-        scope="prototype" />
+      <bean class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry" scope="prototype" />
     </property>
     <property name="unitOfWork">
-      <bean
-        class="org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork"
-        scope="prototype" />
+      <bean class="org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork" scope="prototype" />
     </property>
     <property name="carbonEntityCloneFactory">
-      <bean
-        class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory"
-        scope="prototype" />
+      <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" scope="prototype" />
     </property>
   </bean>
 
   <!--
     The implementation used as ComponentDescriptorRegistry.
   -->
-  <bean
-    id="componentDescriptorRegistry"
-    class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
+  <bean id="componentDescriptorRegistry" class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
   <!--
     The implementation used as ComponentIconImageURLProvider.
   -->
-  <bean
-    id="defaultDomainImageUrlProvider"
-    class="org.jspresso.framework.model.descriptor.ComponentIconImageURLProvider">
-    <property
-      name="componentDescriptorRegistry"
-      ref="componentDescriptorRegistry" />
+  <bean id="defaultDomainImageUrlProvider" class="org.jspresso.framework.model.descriptor.ComponentIconImageURLProvider">
+    <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry" />
   </bean>
 
   <!--
     The implementation used as ComponentFactory.
   -->
-  <bean
-    id="basicComponentFactory"
-    class="org.jspresso.framework.model.component.basic.BasicProxyComponentFactory">
-    <property
-      name="accessorFactory"
-      ref="accessorFactory" />
-    <property
-      name="componentCollectionFactory"
-      ref="componentCollectionFactory" />
+  <bean id="basicComponentFactory" class="org.jspresso.framework.model.component.basic.BasicProxyComponentFactory">
+    <property name="accessorFactory" ref="accessorFactory" />
+    <property name="componentCollectionFactory" ref="componentCollectionFactory" />
     <property name="componentExtensionFactory">
-      <bean
-        class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory">
+      <bean class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory">
       </bean>
     </property>
-    <property
-      name="componentDescriptorRegistry"
-      ref="componentDescriptorRegistry" />
+    <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry" />
   </bean>
 
   <!--
     The implementation used as EntityFactory.
   -->
-  <bean
-    id="basicEntityFactory"
-    class="org.jspresso.framework.model.entity.basic.BasicProxyEntityFactory">
-    <property
-      name="accessorFactory"
-      ref="accessorFactory" />
-    <property
-      name="inlineComponentFactory"
-      ref="basicComponentFactory" />
-    <property
-      name="entityCollectionFactory"
-      ref="componentCollectionFactory" />
-    <property
-      name="entityExtensionFactory">
-      <bean
-        class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory">
+  <bean id="basicEntityFactory" class="org.jspresso.framework.model.entity.basic.BasicProxyEntityFactory">
+    <property name="accessorFactory" ref="accessorFactory" />
+    <property name="inlineComponentFactory" ref="basicComponentFactory" />
+    <property name="entityCollectionFactory" ref="componentCollectionFactory" />
+    <property name="entityExtensionFactory">
+      <bean class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory">
       </bean>
     </property>
-    <property
-      name="entityGUIDGenerator"
-      ref="entityGUIDGenerator" />
+    <property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
   </bean>
 
-  <bean id="sessionAwareComponentFactory"
-    parent="basicComponentFactory"
-    class="org.jspresso.framework.application.backend.component.ApplicationSessionAwareProxyComponentFactory"
-    scope="prototype">
+  <bean id="sessionAwareComponentFactory" parent="basicComponentFactory"
+    class="org.jspresso.framework.application.backend.component.ApplicationSessionAwareProxyComponentFactory" scope="prototype">
   </bean>
 
-  <bean id="sessionAwareEntityFactory"
-    parent="basicEntityFactory"
-    class="org.jspresso.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory"
-    scope="prototype">
-    <property name="inlineComponentFactory" ref="sessionAwareComponentFactory"/>
+  <bean id="sessionAwareEntityFactory" parent="basicEntityFactory"
+    class="org.jspresso.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory" scope="prototype">
+    <property name="inlineComponentFactory" ref="sessionAwareComponentFactory" />
   </bean>
   <!--
     Root action beans.
   -->
 
-  <bean
-    id="createQueryComponentAction"
-    class="org.jspresso.framework.application.backend.action.CreateQueryComponentAction" />
+  <bean id="createQueryComponentAction" class="org.jspresso.framework.application.backend.action.CreateQueryComponentAction" />
 
-  <bean
-    id="initModuleFilterAction"
-    class="org.jspresso.framework.application.backend.action.module.InitModuleFilterAction">
-    <property
-      name="nextAction"
-      ref="createQueryComponentAction" />
+  <bean id="initModuleFilterAction" class="org.jspresso.framework.application.backend.action.module.InitModuleFilterAction">
+    <property name="nextAction" ref="createQueryComponentAction" />
   </bean>
 
   <!--
-    The implementation used as view factory.
-    View factory is not defined as singleton since it can implement some cache a the session level.
+    The implementation used as view factory. View factory is not defined as singleton since it can implement some cache
+    a the session level.
   -->
-  <bean
-    id="abstractViewFactory"
-    class="org.jspresso.framework.view.AbstractViewFactory"
-    abstract="true">
-    <property
-      name="connectorFactory"
-      ref="connectorFactory" />
-    <property
-      name="modelConnectorFactory"
-      ref="modelConnectorFactory" />
-    <property
-      name="mvcBinder"
-      ref="mvcBinder" />
-    <property
-      name="translationProvider"
-      ref="translationProvider" />
-    <property
-      name="modelCascadingBinder"
-      ref="modelCascadingBinder" />
-    <property
-      name="iconFactory"
-      ref="iconFactory" />
-    <property
-      name="actionFactory"
-      ref="actionFactory" />
-    <property
-      name="lovAction"
-      ref="lovAction" />
-    <property
-      name="openFileAsBinaryPropertyAction"
-      ref="openFileAsBinaryPropertyAction" />
-    <property
-      name="saveBinaryPropertyAsFileAction"
-      ref="saveBinaryPropertyAsFileAction" />
-    <property
-      name="resetPropertyAction"
-      ref="resetPropertyFrontAction" />
-    <property
-      name="binaryPropertyInfoAction"
-      ref="binaryPropertyInfoAction" />
+  <bean id="abstractViewFactory" class="org.jspresso.framework.view.AbstractViewFactory" abstract="true">
+    <property name="connectorFactory" ref="connectorFactory" />
+    <property name="modelConnectorFactory" ref="modelConnectorFactory" />
+    <property name="mvcBinder" ref="mvcBinder" />
+    <property name="translationProvider" ref="translationProvider" />
+    <property name="modelCascadingBinder" ref="modelCascadingBinder" />
+    <property name="iconFactory" ref="iconFactory" />
+    <property name="actionFactory" ref="actionFactory" />
+    <property name="lovAction" ref="lovAction" />
+    <property name="openFileAsBinaryPropertyAction" ref="openFileAsBinaryPropertyAction" />
+    <property name="saveBinaryPropertyAsFileAction" ref="saveBinaryPropertyAsFileAction" />
+    <property name="resetPropertyAction" ref="resetPropertyFrontAction" />
+    <property name="binaryPropertyInfoAction" ref="binaryPropertyInfoAction" />
   </bean>
 
-  <bean
-    id="abstractActionFactory"
-    abstract="true">
-    <property
-      name="translationProvider"
-      ref="translationProvider" />
-    <property
-      name="iconFactory"
-      ref="iconFactory" />
+  <bean id="abstractActionFactory" abstract="true">
+    <property name="translationProvider" ref="translationProvider" />
+    <property name="iconFactory" ref="iconFactory" />
   </bean>
 
   <!--
     The scriptHandler.
   -->
-  <bean
-    id="scriptHandler"
-    class="org.jspresso.framework.util.scripting.DefaultScriptHandler" />
+  <bean id="scriptHandler" class="org.jspresso.framework.util.scripting.DefaultScriptHandler" />
 
   <!--
     The query view descriptor factory.
   -->
-  <bean
-    id="queryViewDescriptorFactory"
-    class="org.jspresso.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory" />
+  <bean id="queryViewDescriptorFactory" class="org.jspresso.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory" />
 
   <!--
     The controllers.
@@ -306,87 +185,38 @@
   <!--
     The controllers. Controllers are not singleton since they can hold some session state.
   -->
-  <bean
-    abstract="true"
-    id="abstractFrontController"
-    class="org.jspresso.framework.application.frontend.controller.AbstractFrontendController">
-    <property
-      name="mvcBinder"
-      ref="mvcBinder" />
-    <property
-      name="translationProvider"
-      ref="translationProvider" />
-    <property
-      name="viewFactory"
-      ref="viewFactory" />
-    <property
-      name="workspacesMenuIconImageUrl"
-      value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
-    <property
-      name="loginViewDescriptor"
-      ref="loginViewDescriptor" />
+  <bean abstract="true" id="abstractFrontController" class="org.jspresso.framework.application.frontend.controller.AbstractFrontendController">
+    <property name="mvcBinder" ref="mvcBinder" />
+    <property name="translationProvider" ref="translationProvider" />
+    <property name="viewFactory" ref="viewFactory" />
+    <property name="workspacesMenuIconImageUrl" value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
+    <property name="loginViewDescriptor" ref="loginViewDescriptor" />
   </bean>
 
-  <bean
-    abstract="true"
-    id="abstractIconFactory"
-    class="org.jspresso.framework.view.AbstractIconFactory">
-    <property
-      name="okYesIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/ok-48x48.png" />
-    <property
-      name="noIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/no-48x48.png" />
-    <property
-      name="cancelIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/cancel-48x48.png" />
-    <property
-      name="infoIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
-    <property
-      name="warningIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/warning-48x48.png" />
-    <property
-      name="errorIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/error-48x48.png" />
-    <property
-      name="forbiddenIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/forbidden-48x48.png" />
-    <property
-      name="backwardIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
-    <property
-      name="forwardIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/forward-48x48.png" />
-    <property
-      name="upIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/1uparrow-48x48.png" />
-    <property
-      name="downIconImageURL"
-      value="classpath:org/jspresso/framework/application/images/1downarrow-48x48.png" />
+  <bean abstract="true" id="abstractIconFactory" class="org.jspresso.framework.view.AbstractIconFactory">
+    <property name="okYesIconImageURL" value="classpath:org/jspresso/framework/application/images/ok-48x48.png" />
+    <property name="noIconImageURL" value="classpath:org/jspresso/framework/application/images/no-48x48.png" />
+    <property name="cancelIconImageURL" value="classpath:org/jspresso/framework/application/images/cancel-48x48.png" />
+    <property name="infoIconImageURL" value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
+    <property name="warningIconImageURL" value="classpath:org/jspresso/framework/application/images/warning-48x48.png" />
+    <property name="errorIconImageURL" value="classpath:org/jspresso/framework/application/images/error-48x48.png" />
+    <property name="forbiddenIconImageURL" value="classpath:org/jspresso/framework/application/images/forbidden-48x48.png" />
+    <property name="backwardIconImageURL" value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
+    <property name="forwardIconImageURL" value="classpath:org/jspresso/framework/application/images/forward-48x48.png" />
+    <property name="upIconImageURL" value="classpath:org/jspresso/framework/application/images/1uparrow-48x48.png" />
+    <property name="downIconImageURL" value="classpath:org/jspresso/framework/application/images/1downarrow-48x48.png" />
   </bean>
 
-  <bean
-    abstract="true"
-    id="abstractBackController"
-    class="org.jspresso.framework.application.backend.AbstractBackendController">
-    <property
-      name="entityFactory"
-      ref="sessionAwareEntityFactory"/>
-    <property
-      name="modelConnectorFactory"
-      ref="modelConnectorFactory" />
-    <property
-      name="translationProvider"
-      ref="translationProvider" />
+  <bean abstract="true" id="abstractBackController" class="org.jspresso.framework.application.backend.AbstractBackendController">
+    <property name="entityFactory" ref="sessionAwareEntityFactory" />
+    <property name="modelConnectorFactory" ref="modelConnectorFactory" />
+    <property name="translationProvider" ref="translationProvider" />
   </bean>
 
   <!--
     Utility beans for model.
   -->
-  <bean
-    id="BasicReportDescriptor.INSTANCE"
-    class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+  <bean id="BasicReportDescriptor.INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
         org.jspresso.framework.application.printing.model.descriptor.basic.BasicReportDescriptor.INSTANCE
@@ -397,22 +227,14 @@
   <!--
     Utility beans for views.
   -->
-  <bean
-    id="decoratedView"
-    abstract="true">
-    <property
-      name="borderType"
-      value="TITLED" />
+  <bean id="decoratedView" abstract="true">
+    <property name="borderType" value="TITLED" />
   </bean>
 
   <!--
     Backend action beans
   -->
-  <bean
-    id="doPrintBackendAction"
-    class="org.jspresso.framework.application.printing.backend.action.GenerateJasperReportAction">
-    <property
-      name="jdbcTemplate"
-      ref="reportingJdbcTemplate" />
+  <bean id="doPrintBackendAction" class="org.jspresso.framework.application.printing.backend.action.GenerateJasperReportAction">
+    <property name="jdbcTemplate" ref="reportingJdbcTemplate" />
   </bean>
 </beans>

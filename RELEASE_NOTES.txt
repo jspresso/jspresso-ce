@@ -10,10 +10,35 @@ BasicSubviewDescriptor must be changed to BasicPropertyViewDescriptor.
 - Due to introduction of sorting directions in orderingProperties (see 2787655), the API
 has changed on component and collection descriptors. Instead of setting the ordering
 properties as a list, you must now use a map keyed by the ordering properties
-and valued by the sort drections (ESort.ASCENDING or ESort.DESCENDING)
+and valued by the sort directions (ESort.ASCENDING or ESort.DESCENDING)
 
 - To avoid naming collisions between framework method names and business methods, the component and
 entity getContract() method has been renamed to getComponentContract().
+
+- HSQL, DBCP, Pool versions are now fixed in Jspresso root Pom. You should get rid of these artifacts
+in the dependencyManagement section of your existing projects root Poms.
+
+- HSQL is known not to correctly report SQL error codes during batch update if a failure occurs
+in one of the batched SQL. This prevents Jspresso to cleanly handle these exceptions. HSQL will
+be fixed in the next 1.9 release. Until then, the workaround is to disable jdbc batching when using HSQL
+by completing the context.xml files of existing projects, adding in the hibernateSessionFactory
+definition :
+   <prop key="hibernate.jdbc.batch_size">0</prop>
+  
+- To benefit from the new translation mechanism for nested property names, you should change view.xml
+in the existing Jspresso applications :
+
+original definition :
+  <bean
+    id="applicationMessageSource"
+    class="org.springframework.context.support.ResourceBundleMessageSource">
+
+updated definition :
+  <bean
+    id="applicationMessageSource"
+    parent="abstractApplicationMessageSource">
+
+
 
 
 3.0.0
