@@ -1262,11 +1262,11 @@ public class DefaultUlcViewFactory extends
         column.setHeaderValue(columnName.toString());
         IView<ULCComponent> editorView = createView(columnViewDescriptor,
             actionHandler, locale);
-        if (editorView.getPeer() instanceof ULCActionField) {
-          ULCActionField actionField = (ULCActionField) editorView.getPeer();
-          actionField.setActions(Collections.singletonList(actionField
-              .getActions().get(0)));
-        }
+        // if (editorView.getPeer() instanceof ULCActionField) {
+        // ULCActionField actionField = (ULCActionField) editorView.getPeer();
+        // actionField.setActions(Collections.singletonList(actionField
+        // .getActions().get(0)));
+        // }
         if (editorView.getConnector().getParentConnector() == null) {
           editorView.getConnector().setParentConnector(connector);
         }

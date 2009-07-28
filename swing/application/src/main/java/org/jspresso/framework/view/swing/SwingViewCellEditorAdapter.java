@@ -21,6 +21,7 @@ package org.jspresso.framework.view.swing;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
+import java.util.HashMap;
 
 import javax.swing.AbstractButton;
 import javax.swing.AbstractCellEditor;
@@ -106,7 +107,6 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
           .getConnector().getId(),
           ((IComponentDescriptorProvider<?>) editorView.getDescriptor()
               .getModelDescriptor()).getComponentDescriptor());
-
     } else {
       modelConnector = new BasicValueConnector(editorView.getConnector()
           .getId());
@@ -132,12 +132,18 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
   public Component getTableCellEditorComponent(JTable table, Object value,
       boolean isSelected, int row, int column) {
     IValueConnector editorConnector = editorView.getConnector();
+    Object connectorValue;
     if (value instanceof IValueConnector) {
-      editorConnector.setConnectorValue(((IValueConnector) value)
-          .getConnectorValue());
+      connectorValue = ((IValueConnector) value).getConnectorValue();
     } else {
-      editorConnector.setConnectorValue(value);
+      connectorValue = value;
     }
+    if (connectorValue == null
+        && editorConnector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+      // To prevent the editor to be read-only.
+      connectorValue = new HashMap<String, Object>();
+    }
+    editorConnector.setConnectorValue(connectorValue);
     Component editorComponent = editorView.getPeer();
     if (editorComponent instanceof JTextField) {
       ((JTextField) editorComponent).selectAll();

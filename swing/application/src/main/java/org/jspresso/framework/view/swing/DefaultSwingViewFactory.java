@@ -1499,11 +1499,11 @@ public class DefaultSwingViewFactory extends
 
         IView<JComponent> editorView = createView(columnViewDescriptor,
             actionHandler, locale);
-        if (editorView.getPeer() instanceof JActionField) {
-          JActionField actionField = (JActionField) editorView.getPeer();
-          actionField.setActions(Collections.singletonList(actionField
-              .getActions().get(0)));
-        }
+        // if (editorView.getPeer() instanceof JActionField) {
+        // JActionField actionField = (JActionField) editorView.getPeer();
+        // actionField.setActions(Collections.singletonList(actionField
+        // .getActions().get(0)));
+        // }
         if (editorView.getConnector().getParentConnector() == null) {
           editorView.getConnector().setParentConnector(connector);
         }

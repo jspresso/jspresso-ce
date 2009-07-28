@@ -20,6 +20,7 @@ package org.jspresso.framework.view.wings;
 
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
+import java.util.HashMap;
 
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -144,12 +145,18 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   public SComponent getTableCellEditorComponent(STable table, Object value,
       boolean isSelected, int row, int column) {
     modelConnector.removeConnectorValueChangeListener(this);
+    Object connectorValue;
     if (value instanceof IValueConnector) {
-      modelConnector.setConnectorValue(((IValueConnector) value)
-          .getConnectorValue());
+      connectorValue = ((IValueConnector) value).getConnectorValue();
     } else {
-      modelConnector.setConnectorValue(value);
+      connectorValue = value;
     }
+    if (connectorValue == null
+        && modelConnector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+      // To prevent the editor to be read-only.
+      connectorValue = new HashMap<String, Object>();
+    }
+    modelConnector.setConnectorValue(connectorValue);
     modelConnector.addConnectorValueChangeListener(this);
     if (editorView.getPeer() instanceof SCheckBox) {
       ((SCheckBox) editorView.getPeer()).setSelected(!((SCheckBox) editorView
