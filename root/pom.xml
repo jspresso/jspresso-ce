@@ -727,10 +727,15 @@
               <version>3.2.1</version>
             </dependency>
             <dependency>
-                <groupId>commons-digester</groupId>
-                <artifactId>commons-digester</artifactId>
-                <version>1.7</version>
+              <groupId>commons-digester</groupId>
+              <artifactId>commons-digester</artifactId>
+              <version>1.7</version>
             </dependency> 
+            <dependency>
+              <groupId>com.lowagie</groupId>
+              <artifactId>itext</artifactId>
+              <version>2.1.5</version>
+            </dependency>
           </dependencies>
         </plugin>
         <plugin>

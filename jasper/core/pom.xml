@@ -21,5 +21,9 @@
       <groupId>jasperreports</groupId>
       <artifactId>jasperreports</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+    </dependency>
   </dependencies>
 </project>
