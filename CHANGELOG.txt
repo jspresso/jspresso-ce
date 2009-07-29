@@ -25,6 +25,7 @@ Bugs fixed
 2826935    mandatory prevents delete in specific scenario
 2826955    horizontal scrollbar missing in 1-N search
 2827979    Flash player 10 security prevents file browsing
+2828440    Mandatory fields not visually distinguished
 
 
 New features

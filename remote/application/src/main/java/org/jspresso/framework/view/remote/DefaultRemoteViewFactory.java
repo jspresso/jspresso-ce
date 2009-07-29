@@ -1059,9 +1059,21 @@ public class DefaultRemoteViewFactory extends
             columnConnector.addWritabilityGate(gate.clone());
           }
         }
+        String propertyName = columnViewDescriptor.getModelDescriptor()
+            .getName();
         columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+        IPropertyDescriptor propertyDescriptor = modelDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getPropertyDescriptor(propertyName);
+        if (propertyDescriptor.isMandatory()) {
+          if (column.getPeer().getLabel() != null) {
+            column.getPeer().setLabel(column.getPeer().getLabel() + "*");
+          } else {
+            column.getPeer().setLabel("*");
+          }
+        }
         columns.add(column.getPeer());
-        columnIds.add(columnViewDescriptor.getModelDescriptor().getName());
+        columnIds.add(propertyName);
       } catch (SecurityException ex) {
         // The column simply won't be added.
       }
