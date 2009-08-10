@@ -505,8 +505,8 @@ public class BasicApplicationSession implements IApplicationSession {
     Collection<Object> propertyValue = (Collection<Object>) component
         .straightGetProperty(propertyName);
     ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityFactory
-        .getComponentDescriptor(component.getComponentContract()).getPropertyDescriptor(
-            propertyName);
+        .getComponentDescriptor(component.getComponentContract())
+        .getPropertyDescriptor(propertyName);
     if (propertyValue != null
         && !propertyValue.isEmpty()
         && !List.class.isAssignableFrom(propertyDescriptor
@@ -535,6 +535,45 @@ public class BasicApplicationSession implements IApplicationSession {
       }
     }
   }
+
+  // TODO patch Pierre 1
+  // protected void sortCollectionProperty(IComponent component,
+  // String propertyName) {
+  // Collection<Object> propertyValue = (Collection<Object>) component
+  // .straightGetProperty(propertyName);
+  // ICollectionPropertyDescriptor propertyDescriptor =
+  // (ICollectionPropertyDescriptor) entityFactory
+  // .getComponentDescriptor(component.getComponentContract())
+  // .getPropertyDescriptor(propertyName);
+  // if (propertyValue != null && !propertyValue.isEmpty()) {
+  // Map<String, ESort> orderingProperties = propertyDescriptor
+  // .getOrderingProperties();
+  // if (orderingProperties != null && !orderingProperties.isEmpty()) {
+  // List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
+  // List<ESort> orderingDirections = new ArrayList<ESort>();
+  // Class collectionElementContract = propertyDescriptor
+  // .getCollectionDescriptor().getElementDescriptor()
+  // .getComponentContract();
+  // for (Map.Entry<String, ESort> orderingProperty : orderingProperties
+  // .entrySet()) {
+  // orderingAccessors.add(accessorFactory.createPropertyAccessor(
+  // orderingProperty.getKey(), collectionElementContract));
+  // orderingDirections.add(orderingProperty.getValue());
+  // }
+  // BeanComparator comparator = new BeanComparator(orderingAccessors,
+  // orderingDirections);
+  // if (!List.class.isAssignableFrom(propertyDescriptor
+  // .getCollectionDescriptor().getCollectionInterface())) {
+  // List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
+  // Collections.sort(collectionCopy, comparator);
+  // propertyValue.clear();
+  // propertyValue.addAll(collectionCopy);
+  // } else {
+  // Collections.sort((List<Object>) propertyValue, comparator);
+  // }
+  // }
+  // }
+  // }
 
   /**
    * Gives a chance to the session to wrap a collection before making it part of
@@ -675,8 +714,8 @@ public class BasicApplicationSession implements IApplicationSession {
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
       dirtRecorder.setEnabled(false);
-      IEntity registeredEntity = getRegisteredEntity(entity.getComponentContract(),
-          entity.getId());
+      IEntity registeredEntity = getRegisteredEntity(entity
+          .getComponentContract(), entity.getId());
       boolean newlyRegistered = false;
       if (registeredEntity == null) {
         registeredEntity = carbonEntityCloneFactory.cloneEntity(entity,

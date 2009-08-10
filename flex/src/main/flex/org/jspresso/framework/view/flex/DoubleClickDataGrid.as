@@ -35,6 +35,7 @@ package org.jspresso.framework.view.flex {
     private var lastClickedColumn:int;
     private var _savedSortIndex:int;
     private var _savedSortDirection:String;
+    private var _customSort:Boolean;
   
   	public function DoubleClickDataGrid()	{
   		super();
@@ -42,6 +43,8 @@ package org.jspresso.framework.view.flex {
   		preventEditing = false;
   		lastClickedRow = -1;
   		lastClickedColumn = -1;
+  		_savedSortIndex = -1;
+  		_customSort = false;
   		addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, itemEditBeginning);
   	}
   
@@ -77,6 +80,13 @@ package org.jspresso.framework.view.flex {
   	  }
   	}
   	
+    public function set customSort(value:Boolean):void {
+      _customSort = value;
+    }
+    public function get customSort():Boolean {
+      return _customSort;
+    }
+
   	public function displaySort(sortInd:int, descending:Boolean):void {
       sortDirection = descending ? "DESC" : "ASC";
   
@@ -93,8 +103,10 @@ package org.jspresso.framework.view.flex {
 
     override protected function collectionChangeHandler(event:Event):void {
       super.collectionChangeHandler(event);
-      sortIndex = _savedSortIndex;
-      sortDirection = _savedSortDirection;
+      if(_customSort) {
+        sortIndex = _savedSortIndex;
+        sortDirection = _savedSortDirection;
+      }
     }
   }
 }

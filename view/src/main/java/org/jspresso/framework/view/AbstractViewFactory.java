@@ -24,6 +24,7 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -190,6 +191,23 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
   private ITranslationProvider          translationProvider;
+  private IConnectorValueChangeListener firstRowSelector;
+
+  /**
+   * Constructs a new <code>AbstractViewFactory</code> instance.
+   */
+  protected AbstractViewFactory() {
+    firstRowSelector = new IConnectorValueChangeListener() {
+
+      public void connectorValueChange(ConnectorValueChangeEvent evt) {
+        if (evt.getNewValue() != null
+            && !((Collection<?>) evt.getNewValue()).isEmpty()) {
+          ((ICollectionConnector) evt.getSource())
+              .setSelectedIndices(new int[] {0});
+        }
+      }
+    };
+  }
 
   /**
    * {@inheritDoc}
@@ -2220,5 +2238,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
     this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
+   * Selects the first element of a collection connector when its value changes.
+   * 
+   * @param collectionConnector
+   *          the collection connector to attach the listener to.
+   */
+  protected void attachDefaultCollectionListener(
+      ICollectionConnector collectionConnector) {
+    collectionConnector.addConnectorValueChangeListener(firstRowSelector);
+
   }
 }

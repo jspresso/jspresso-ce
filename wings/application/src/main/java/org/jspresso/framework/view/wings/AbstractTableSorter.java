@@ -351,8 +351,6 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   private class HeaderActionHandler implements HeaderClickListener {
 
     /**
-     * TODO Comment needed.
-     * <p>
      * {@inheritDoc}
      */
     public void headerClicked(HeaderClickEvent event) {

@@ -67,7 +67,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private Map<Coordinates, CellConnectorListener>     cachedCellListeners;
   private Map<Integer, IConnectorValueChangeListener> cachedRowListeners;
   private ICollectionConnector                        collectionConnector;
-  private Map<String, Class<?>>                       columnClassesByIds;
+  private List<Class<?>>                              columnClasses;
   private List<String>                                columnConnectorKeys;
 
   private IExceptionHandler                           exceptionHandler;
@@ -79,12 +79,16 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    *          the collection connector holding the values of this table model.
    * @param columnConnectorKeys
    *          the list of column connector ids.
+   * @param columnClasses
+   *          the column classes.
    */
   public CollectionConnectorTableModel(
-      ICollectionConnector collectionConnector, List<String> columnConnectorKeys) {
+      ICollectionConnector collectionConnector,
+      List<String> columnConnectorKeys, List<Class<?>> columnClasses) {
     super();
     this.collectionConnector = collectionConnector;
     this.columnConnectorKeys = columnConnectorKeys;
+    this.columnClasses = columnClasses;
     bindConnector();
   }
 
@@ -93,8 +97,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    */
   @Override
   public Class<?> getColumnClass(int columnIndex) {
-    if (columnClassesByIds != null) {
-      return columnClassesByIds.get(columnConnectorKeys.get(columnIndex));
+    if (columnClasses != null) {
+      return columnClasses.get(columnIndex);
     }
     return super.getColumnClass(columnIndex);
   }
@@ -143,16 +147,6 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     return collectionConnector.isWritable()
         && collectionConnector.getChildConnector(rowIndex).isWritable()
         && getConnectorAt(rowIndex, columnIndex).isWritable();
-  }
-
-  /**
-   * Sets the columnClassesByIds.
-   * 
-   * @param columnClassesByIds
-   *          the columnClassesByIds to set.
-   */
-  public void setColumnClassesByIds(Map<String, Class<?>> columnClassesByIds) {
-    this.columnClassesByIds = columnClassesByIds;
   }
 
   /**
@@ -352,10 +346,6 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
             }
           } else if (newCollectionSize < oldCollectionSize) {
             fireTableRowsDeleted(newCollectionSize, oldCollectionSize - 1);
-          }
-          if (evt.getNewValue() != null
-              && !((Collection<?>) evt.getNewValue()).isEmpty()) {
-            collectionConnector.setSelectedIndices(new int[] {0});
           }
         }
       });

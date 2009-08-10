@@ -26,6 +26,8 @@ Bugs fixed
 2826955    horizontal scrollbar missing in 1-N search
 2827979    Flash player 10 security prevents file browsing
 2828440    Mandatory fields not visually distinguished
+           Ordering properties are not always applied
+           Flex table sorting only works with strings columns
 
 
 New features
@@ -65,7 +67,10 @@ New features
 2827982    HSQL, DBCP, Pool versions fixed in Jspresso root Pom
 2827395    Improve Translation mechanism to handle nested translation keys
              (was "message not taken for component field")
-2827887    User readable error message for unicity constraint 
+2827887    User readable error message for unicity constraint
+           Default 1st row selection in Flex and Qooxdoo
+           Default 1st row selection on list views
+           Made default icon size bigger
 
 3.0.0
 =====

@@ -345,8 +345,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
           (targetPeer as RAction).enabled =
             (command as RemoteEnablementCommand).enabled;
         } else if(command is RemoteChildrenCommand) {
-          var children:IList = (targetPeer as RemoteCompositeValueState).children; 
-          children.removeAll();
+          var children:IList = (targetPeer as RemoteCompositeValueState).children;
+          //children.removeAll();
+          var childIndex:int = 0;
           if((command as RemoteChildrenCommand).children != null) {
             for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
               if(isRegistered(child.guid)) {
@@ -354,8 +355,18 @@ package org.jspresso.framework.application.frontend.controller.flex {
               } else {
                 register(child);
               }
-              children.addItem(child);
+              if(childIndex < children.length) {
+                if(children.getItemAt(childIndex) != child) {
+                  children.setItemAt(child, childIndex);
+                }
+              } else {
+                children.addItem(child);
+              }
+              childIndex++;
             }
+          }
+          while(childIndex < children.length) {
+            children.removeItemAt(childIndex);
           }
         } else if(command is RemoteAddCardCommand) {
           _viewFactory.addCard(

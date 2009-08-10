@@ -398,7 +398,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public Dimension getTinyIconSize() {
     if (tinyIconSize == null) {
-      tinyIconSize = new Dimension(12, 12);
+      tinyIconSize = new Dimension(16, 16);
     }
     return tinyIconSize;
   }
@@ -420,7 +420,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public Dimension getSmallIconSize() {
     if (smallIconSize == null) {
-      smallIconSize = new Dimension(16, 16);
+      smallIconSize = new Dimension(24, 24);
     }
     return smallIconSize;
   }

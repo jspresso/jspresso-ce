@@ -34,8 +34,8 @@ package org.jspresso.framework.view.flex {
     }
     
     public function compareStrings(obj1:Object, obj2:Object):int {
-      var cell1:String= null;
-      var cell2:String= null;
+      var cell1:String;
+      var cell2:String;
       if(obj1 != null) {
         cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
                             .value as String;
@@ -45,6 +45,53 @@ package org.jspresso.framework.view.flex {
                             .value as String;
       }
       return ObjectUtil.stringCompare(cell1, cell2, true);
+    }
+
+    public function compareBooleans(obj1:Object, obj2:Object):int {
+      var cell1:Boolean;
+      var cell2:Boolean;
+      if(obj1 != null) {
+        cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
+                            .value as Boolean;
+      }
+      if(obj2 != null) {
+        cell2 = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
+                            .value as Boolean;
+      }
+      if(cell1 && !cell2) {
+        return 1;
+      } else if(cell2 && !cell1) {
+        return -1;
+      }
+      return 0;
+    }
+
+    public function compareDates(obj1:Object, obj2:Object):int {
+      var cell1:Date;
+      var cell2:Date;
+      if(obj1 != null) {
+        cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
+                            .value as Date;
+      }
+      if(obj2 != null) {
+        cell2 = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
+                            .value as Date;
+      }
+      return ObjectUtil.dateCompare(cell1, cell2);
+    }
+
+    public function compareNumbers(obj1:Object, obj2:Object):int {
+      var cell1:Number;
+      var cell2:Number;
+      if(obj1 != null) {
+        cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
+                            .value as Number;
+      }
+      if(obj2 != null) {
+        cell2 = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteValueState)
+                            .value as Number;
+      }
+      return ObjectUtil.numericCompare(cell1, cell2);
     }
   }
 }

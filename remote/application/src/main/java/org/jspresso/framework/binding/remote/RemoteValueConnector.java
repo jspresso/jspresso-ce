@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.binding.remote;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -151,6 +153,10 @@ public class RemoteValueConnector extends BasicValueConnector implements
       // changes.
       valueForStateUrl += ("&cs=" + checksumEngine.getValue());
       return valueForStateUrl;
+    } else if (valueForState instanceof BigDecimal) {
+      valueForState = new Double(((BigDecimal) valueForState).doubleValue());
+    } else if (valueForState instanceof BigInteger) {
+      valueForState = new Long(((BigInteger) valueForState).longValue());
     }
     return valueForState;
   }

@@ -25,7 +25,6 @@ import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -846,6 +845,7 @@ public class DefaultWingsViewFactory extends
     // }
     // });
     // }
+    attachDefaultCollectionListener(connector);
     return view;
   }
 
@@ -1384,7 +1384,7 @@ public class DefaultWingsViewFactory extends
     if (viewDescriptor.isReadOnly()) {
       viewComponent.setEditable(false);
     }
-    Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
+    List<Class<?>> columnClasses = new ArrayList<Class<?>>();
     Set<String> forbiddenColumns = new HashSet<String>();
     int tableWidth = 0;
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
@@ -1396,9 +1396,9 @@ public class DefaultWingsViewFactory extends
             columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
                 .getElementDescriptor());
         rowConnectorPrototype.addChildConnector(columnConnector);
-        columnClassesByIds.put(columnId, modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getPropertyDescriptor(columnId).getModelType());
+        columnClasses.add(modelDescriptor.getCollectionDescriptor()
+            .getElementDescriptor().getPropertyDescriptor(columnId)
+            .getModelType());
         if (columnViewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
             columnConnector.addReadabilityGate(gate.clone());
@@ -1420,9 +1420,8 @@ public class DefaultWingsViewFactory extends
     // remove row rendering connector id
     columnConnectorKeys.remove(0);
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
-        connector, columnConnectorKeys);
+        connector, columnConnectorKeys, columnClasses);
     tableModel.setExceptionHandler(actionHandler);
-    tableModel.setColumnClassesByIds(columnClassesByIds);
 
     AbstractTableSorter sorterDecorator;
     if (viewDescriptor.getSortingAction() != null) {
@@ -1533,6 +1532,7 @@ public class DefaultWingsViewFactory extends
     // }
     // });
     // }
+    attachDefaultCollectionListener(connector);
     return view;
   }
 

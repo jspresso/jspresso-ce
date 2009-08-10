@@ -892,6 +892,7 @@ public class DefaultUlcViewFactory extends
           viewDescriptor.getRowAction(), actionHandler, view, locale);
       viewComponent.addActionListener(rowAction);
     }
+    attachDefaultCollectionListener(connector);
     return view;
   }
 
@@ -1161,8 +1162,8 @@ public class DefaultUlcViewFactory extends
     viewComponent
         .setAutoResizeMode(com.ulcjava.base.application.ULCTable.AUTO_RESIZE_OFF);
 
-    Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
-    Map<String, IFormatter> columnFormattersByIds = new HashMap<String, IFormatter>();
+    List<Class<?>> columnClasses = new ArrayList<Class<?>>();
+    List<IFormatter> columnFormatters = new ArrayList<IFormatter>();
     Set<String> forbiddenColumns = new HashSet<String>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
@@ -1177,19 +1178,21 @@ public class DefaultUlcViewFactory extends
             .getCollectionDescriptor().getElementDescriptor()
             .getPropertyDescriptor(columnId);
         if (columnModelDescriptor instanceof IReferencePropertyDescriptor<?>) {
-          columnClassesByIds.put(columnId, String.class);
+          columnClasses.add(String.class);
+          columnFormatters.add(null);
         } else if (columnModelDescriptor instanceof IBooleanPropertyDescriptor) {
-          columnClassesByIds.put(columnId, Boolean.class);
+          columnClasses.add(Boolean.class);
+          columnFormatters.add(null);
         } else {
           if (columnModelDescriptor instanceof IDecimalPropertyDescriptor
               && ((IDecimalPropertyDescriptor) columnModelDescriptor)
                   .isUsingBigDecimal()) {
-            columnClassesByIds.put(columnId, String.class);
-            columnFormattersByIds.put(columnId, createFormatter(
-                columnModelDescriptor, locale));
+            columnClasses.add(String.class);
+            columnFormatters
+                .add(createFormatter(columnModelDescriptor, locale));
           } else {
-            columnClassesByIds.put(columnId, columnModelDescriptor
-                .getModelType());
+            columnClasses.add(columnModelDescriptor.getModelType());
+            columnFormatters.add(null);
           }
         }
         if (columnViewDescriptor.getReadabilityGates() != null) {
@@ -1213,10 +1216,8 @@ public class DefaultUlcViewFactory extends
     // remove row rendering connector id
     columnConnectorKeys.remove(0);
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
-        connector, columnConnectorKeys);
+        connector, columnConnectorKeys, columnClasses, columnFormatters);
     tableModel.setExceptionHandler(actionHandler);
-    tableModel.setColumnClassesByIds(columnClassesByIds);
-    tableModel.setColumnFormattersByIds(columnFormattersByIds);
 
     AbstractTableSorter sorterDecorator;
     if (viewDescriptor.getSortingAction() != null) {
@@ -1325,6 +1326,7 @@ public class DefaultUlcViewFactory extends
     }
     scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
         .getRowHeight() * 7));
+    attachDefaultCollectionListener(connector);
     return view;
   }
 

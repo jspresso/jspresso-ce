@@ -58,6 +58,7 @@ package org.jspresso.framework.view.flex {
   import mx.events.DataGridEvent;
   import mx.events.DataGridEventReason;
   import mx.events.FlexEvent;
+  import mx.events.PropertyChangeEvent;
   import mx.formatters.DateFormatter;
   import mx.formatters.Formatter;
   import mx.formatters.NumberBase;
@@ -1171,11 +1172,24 @@ package org.jspresso.framework.view.flex {
         editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
         column.editorDataField = "state";
         
-        column.sortCompareFunction = _remoteValueSorter.compareStrings;
+        if(!remoteTable.sortingAction) {
+          if(rColumn is RCheckBox) {
+            column.sortCompareFunction = _remoteValueSorter.compareBooleans;
+          } else if(rColumn is RNumericComponent) {
+            column.sortCompareFunction = _remoteValueSorter.compareNumbers;
+          } else if(rColumn is RDateField) {
+            column.sortCompareFunction = _remoteValueSorter.compareDates;
+          } else {
+            column.sortCompareFunction = _remoteValueSorter.compareStrings;
+          }
+        }
         columns.push(column);
       }
       
       table.columns = columns;
+      if(remoteTable.sortingAction) {
+        table.customSort = true;
+      }
       if(remoteTable.selectionMode == "SINGLE_SELECTION") {
         table.allowMultipleSelection = false;
       } else {
@@ -1198,7 +1212,14 @@ package org.jspresso.framework.view.flex {
           for each (item in event.items) {
             tableModel.removeItemAt(tableModel.getItemIndex(item));
           }
-        } else {
+        } else if(event.kind == CollectionEventKind.REPLACE) {
+          for each (item in event.items) {
+            var oldItem:Object = (item as PropertyChangeEvent).oldValue;
+            var newItem:Object = (item as PropertyChangeEvent).newValue;
+            tableModel.setItemAt(newItem,
+                                 tableModel.getItemIndex(oldItem));
+          }
+        } else if(event.kind == CollectionEventKind.RESET) {
           // could be finer.
           tableModel.removeAll();
           for each (item in (event.currentTarget as ArrayCollection).source) {
@@ -1217,8 +1238,8 @@ package org.jspresso.framework.view.flex {
     
     private function bindTable(table:DoubleClickDataGrid, remoteTable:RTable):void {
       var state:RemoteCompositeValueState = remoteTable.state as RemoteCompositeValueState;
-      table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
-        if(remoteTable.sortingAction) {
+      if(remoteTable.sortingAction) {
+        table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
           event.preventDefault();
           var column:DataGridColumn = table.columns[event.columnIndex];
           column.sortDescending = !column.sortDescending;
@@ -1231,10 +1252,12 @@ package org.jspresso.framework.view.flex {
           sortCommand.viewStateGuid = remoteTable.state.guid;
           sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
           _commandHandler.registerCommand(sortCommand);
-        } else {
+        });
+      } else {
+        table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
           _remoteValueSorter.sortColumnIndex = (event.itemRenderer as DgHeaderItemRenderer).index;
-        }
-      });
+        });
+      }
       BindingUtils.bindSetter(function(selectedItems:Array):void {
         if(selectedItems != null && selectedItems.length > 0) {
           // work on items to translate indices independently of table sorting state.

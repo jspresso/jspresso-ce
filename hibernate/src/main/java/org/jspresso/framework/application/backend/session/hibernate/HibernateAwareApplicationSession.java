@@ -204,8 +204,9 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
                 try {
                   session.lock(componentOrEntity, LockMode.NONE);
                 } catch (Exception ex) {
-                  session.evict(session.get(componentOrEntity.getComponentContract(),
-                      ((IEntity) componentOrEntity).getId()));
+                  session.evict(session.get(componentOrEntity
+                      .getComponentContract(), ((IEntity) componentOrEntity)
+                      .getId()));
                   session.lock(componentOrEntity, LockMode.NONE);
                 }
               } else if (initializedProperty instanceof IEntity) {
@@ -213,7 +214,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
                   session.lock(initializedProperty, LockMode.NONE);
                 } catch (Exception ex) {
                   session.evict(session.get(((IEntity) initializedProperty)
-                      .getComponentContract(), ((IEntity) initializedProperty).getId()));
+                      .getComponentContract(), ((IEntity) initializedProperty)
+                      .getId()));
                   session.lock(initializedProperty, LockMode.NONE);
                 }
               }
@@ -223,7 +225,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
                 session.lock(initializedProperty, LockMode.NONE);
               } catch (Exception ex) {
                 session.evict(session.get(((IEntity) initializedProperty)
-                    .getComponentContract(), ((IEntity) initializedProperty).getId()));
+                    .getComponentContract(), ((IEntity) initializedProperty)
+                    .getId()));
                 session.lock(initializedProperty, LockMode.NONE);
               }
             }
@@ -237,6 +240,13 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           if (initializedProperty instanceof PersistentCollection) {
             ((PersistentCollection) initializedProperty).clearDirty();
           }
+        }
+      }
+      // TODO patch Pierre 2. Collection will always be sorted by the
+      // default ordering propeties even if already loaded.
+      else {
+        if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+          sortCollectionProperty(componentOrEntity, propertyName);
         }
       }
     } finally {
@@ -395,8 +405,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
             hibernateSession.lock(component, LockMode.NONE);
           } catch (Exception ex) {
             // ex.printStackTrace();
-            hibernateSession.evict(hibernateSession.get(
-                component.getComponentContract(), ((IEntity) component).getId()));
+            hibernateSession.evict(hibernateSession.get(component
+                .getComponentContract(), ((IEntity) component).getId()));
             hibernateSession.lock(component, LockMode.NONE);
           }
         }
