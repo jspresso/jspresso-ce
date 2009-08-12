@@ -45,9 +45,9 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
    * Creates a new component instance based on the component descriptor.
    * 
    * @param <T>
-   *            the concrete class of the created component.
+   *          the concrete class of the created component.
    * @param componentContract
-   *            the class of the component to create.
+   *          the class of the component to create.
    * @return the component instance.
    */
   <T extends IComponent> T createComponentInstance(Class<T> componentContract);
@@ -57,11 +57,11 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
    * method calls are handled by the component delegate.
    * 
    * @param <T>
-   *            the concrete class of the created component.
+   *          the concrete class of the created component.
    * @param componentContract
-   *            the class of the component to create.
+   *          the class of the component to create.
    * @param delegate
-   *            the component delegate instance.
+   *          the component delegate instance.
    * @return the component instance.
    */
   <T extends IComponent> T createComponentInstance(Class<T> componentContract,
@@ -71,9 +71,19 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
    * Creates a new query component instance based on the component descriptor.
    * 
    * @param componentContract
-   *            the class of the component to create.
+   *          the class of the component to create.
    * @return the query component instance.
    */
   IQueryComponent createQueryComponentInstance(
       Class<? extends IComponent> componentContract);
+
+  /**
+   * Sorts a component collection property.
+   * 
+   * @param component
+   *          the component to sort the collection property of.
+   * @param propertyName
+   *          the name of the collection property to sort.
+   */
+  void sortCollectionProperty(IComponent component, String propertyName);
 }

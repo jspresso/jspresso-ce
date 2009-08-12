@@ -44,11 +44,7 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.security.UserPrincipal;
-import org.jspresso.framework.util.accessor.IAccessor;
-import org.jspresso.framework.util.accessor.IAccessorFactory;
-import org.jspresso.framework.util.bean.BeanComparator;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
-import org.jspresso.framework.util.collection.ESort;
 
 /**
  * Basic implementation of an application session.
@@ -71,7 +67,6 @@ import org.jspresso.framework.util.collection.ESort;
  */
 public class BasicApplicationSession implements IApplicationSession {
 
-  private IAccessorFactory                        accessorFactory;
   private IEntityCloneFactory                     carbonEntityCloneFactory;
   private IComponentCollectionFactory<IComponent> collectionFactory;
   private BeanPropertyChangeRecorder              dirtRecorder;
@@ -203,7 +198,6 @@ public class BasicApplicationSession implements IApplicationSession {
       String propertyName = propertyDescriptor.getName();
       Object propertyValue = componentOrEntity
           .straightGetProperty(propertyName);
-      sortCollectionProperty(componentOrEntity, propertyName);
       for (Iterator<IComponent> ite = ((Collection<IComponent>) propertyValue)
           .iterator(); ite.hasNext();) {
         IComponent collectionElement = ite.next();
@@ -361,16 +355,6 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
-   * Sets the accessorFactory.
-   * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
    * Sets the carbonEntityCloneFactory.
    * 
    * @param carbonEntityCloneFactory
@@ -489,51 +473,6 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   protected Collection<IEntity> getEntitiesRegisteredForUpdate() {
     return unitOfWork.getEntitiesRegisteredForUpdate();
-  }
-
-  /**
-   * Sorts an entity collection property.
-   * 
-   * @param component
-   *          the component to sort the collection property of.
-   * @param propertyName
-   *          the name of the collection property to sort.
-   */
-  @SuppressWarnings("unchecked")
-  protected void sortCollectionProperty(IComponent component,
-      String propertyName) {
-    Collection<Object> propertyValue = (Collection<Object>) component
-        .straightGetProperty(propertyName);
-    ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityFactory
-        .getComponentDescriptor(component.getComponentContract())
-        .getPropertyDescriptor(propertyName);
-    if (propertyValue != null
-        && !propertyValue.isEmpty()
-        && !List.class.isAssignableFrom(propertyDescriptor
-            .getCollectionDescriptor().getCollectionInterface())) {
-      Map<String, ESort> orderingProperties = propertyDescriptor
-          .getOrderingProperties();
-      if (orderingProperties != null && !orderingProperties.isEmpty()) {
-        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
-        List<ESort> orderingDirections = new ArrayList<ESort>();
-        Class collectionElementContract = propertyDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getComponentContract();
-        for (Map.Entry<String, ESort> orderingProperty : orderingProperties
-            .entrySet()) {
-          orderingAccessors.add(accessorFactory.createPropertyAccessor(
-              orderingProperty.getKey(), collectionElementContract));
-          orderingDirections.add(orderingProperty.getValue());
-        }
-        BeanComparator comparator = new BeanComparator(orderingAccessors,
-            orderingDirections);
-        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
-        Collections.sort(collectionCopy, comparator);
-        Collection<Object> collectionProperty = propertyValue;
-        collectionProperty.clear();
-        collectionProperty.addAll(collectionCopy);
-      }
-    }
   }
 
   /**

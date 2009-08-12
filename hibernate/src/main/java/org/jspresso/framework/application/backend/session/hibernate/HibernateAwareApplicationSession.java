@@ -241,12 +241,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
             ((PersistentCollection) initializedProperty).clearDirty();
           }
         }
-      } else {
-        // Collection will always be sorted by the
-        // default ordering properties even if already loaded.
-        if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-          sortCollectionProperty(componentOrEntity, propertyName);
-        }
       }
     } finally {
       getDirtRecorder().setEnabled(dirtRecorderWasEnabled);

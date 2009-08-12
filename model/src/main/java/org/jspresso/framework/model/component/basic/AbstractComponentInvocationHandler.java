@@ -358,6 +358,8 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
     }
+    inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
+        propertyDescriptor.getName());
     return property;
   }
 

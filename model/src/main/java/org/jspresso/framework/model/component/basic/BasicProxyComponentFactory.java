@@ -25,7 +25,6 @@ import java.util.Collection;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
-import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.QueryComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -35,7 +34,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import org.jspresso.framework.security.UserPrincipal;
-import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
  * Default implementation of <code>IComponentFactory</code>. It creates standard
@@ -57,9 +55,8 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicProxyComponentFactory implements IComponentFactory {
+public class BasicProxyComponentFactory extends AbstractComponentFactory {
 
-  private IAccessorFactory                        accessorFactory;
   private IComponentCollectionFactory<IComponent> componentCollectionFactory;
   private IComponentDescriptorRegistry            componentDescriptorRegistry;
   private IComponentExtensionFactory              componentExtensionFactory;
@@ -126,16 +123,6 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   }
 
   /**
-   * Sets the accessorFactory used by this entity factory.
-   * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
    * Sets the componentCollectionFactory property.
    * 
    * @param componentCollectionFactory
@@ -179,16 +166,8 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   protected InvocationHandler createComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor) {
     return new BasicComponentInvocationHandler(componentDescriptor, this,
-        componentCollectionFactory, accessorFactory, componentExtensionFactory);
-  }
-
-  /**
-   * Gets the accessorFactory.
-   * 
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory() {
-    return accessorFactory;
+        componentCollectionFactory, getAccessorFactory(),
+        componentExtensionFactory);
   }
 
   /**
@@ -249,7 +228,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   private InvocationHandler createDelegatingComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
     return new BasicDelegatingComponentInvocationHandler(delegate, this,
-        componentDescriptor, componentCollectionFactory, accessorFactory,
+        componentDescriptor, componentCollectionFactory, getAccessorFactory(),
         componentExtensionFactory);
   }
 }

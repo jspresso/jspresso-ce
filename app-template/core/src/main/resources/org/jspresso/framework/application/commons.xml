@@ -75,7 +75,6 @@
   <bean id="abstractApplicationSession" abstract="true"
     class="org.jspresso.framework.application.backend.session.basic.BasicApplicationSession">
     <property name="collectionFactory" ref="componentCollectionFactory" />
-    <property name="accessorFactory" ref="accessorFactory" />
     <property name="entityRegistry">
       <bean class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry" scope="prototype" />
     </property>

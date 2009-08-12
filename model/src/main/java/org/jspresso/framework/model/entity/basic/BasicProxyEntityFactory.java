@@ -30,6 +30,7 @@ import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.basic.AbstractComponentFactory;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -39,7 +40,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.security.UserPrincipal;
-import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
@@ -62,9 +62,9 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicProxyEntityFactory implements IEntityFactory {
+public class BasicProxyEntityFactory extends AbstractComponentFactory implements
+    IEntityFactory {
 
-  private IAccessorFactory                        accessorFactory;
   private IComponentCollectionFactory<IComponent> entityCollectionFactory;
   private IComponentExtensionFactory              entityExtensionFactory;
   private IGUIDGenerator                          entityGUIDGenerator;
@@ -159,16 +159,6 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   }
 
   /**
-   * Sets the accessorFactory used by this entity factory.
-   * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
    * Sets the entityCollectionFactory property.
    * 
    * @param entityCollectionFactory
@@ -221,17 +211,8 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   protected InvocationHandler createEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor) {
     return new BasicEntityInvocationHandler(entityDescriptor,
-        inlineComponentFactory, entityCollectionFactory, accessorFactory,
+        inlineComponentFactory, entityCollectionFactory, getAccessorFactory(),
         entityExtensionFactory);
-  }
-
-  /**
-   * Gets the accessorFactory.
-   * 
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory() {
-    return accessorFactory;
   }
 
   /**
