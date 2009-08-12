@@ -200,8 +200,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
   @Override
   public IViewDescriptor getViewDescriptor() {
     if (getProjectedViewDescriptor() != null) {
-      BeanModuleDescriptor beanModuleDescriptor = new BeanModuleDescriptor(
-          getComponentDescriptor());
+      BeanModuleDescriptor beanModuleDescriptor = getDescriptor();
       BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
       nestingViewDescriptor
           .setCenterViewDescriptor(getProjectedViewDescriptor());
@@ -213,5 +212,14 @@ public class BeanModule extends Module implements PropertyChangeListener {
       return viewDescriptor;
     }
     return null;
+  }
+
+  /**
+   * Gets the module descriptor.
+   * 
+   * @return the module descriptor.
+   */
+  protected BeanModuleDescriptor getDescriptor() {
+    return new BeanModuleDescriptor(getComponentDescriptor());
   }
 }

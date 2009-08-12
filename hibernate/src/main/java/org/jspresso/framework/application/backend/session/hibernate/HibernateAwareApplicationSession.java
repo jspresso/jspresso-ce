@@ -241,10 +241,9 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
             ((PersistentCollection) initializedProperty).clearDirty();
           }
         }
-      }
-      // TODO patch Pierre 2. Collection will always be sorted by the
-      // default ordering propeties even if already loaded.
-      else {
+      } else {
+        // Collection will always be sorted by the
+        // default ordering properties even if already loaded.
         if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
           sortCollectionProperty(componentOrEntity, propertyName);
         }
