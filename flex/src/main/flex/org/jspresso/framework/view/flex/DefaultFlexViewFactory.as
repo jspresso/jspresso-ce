@@ -788,7 +788,9 @@ package org.jspresso.framework.view.flex {
         labelsRow = new GridRow();
         labelsRow.percentWidth = 100.0;
         form.addChild(labelsRow);
-      } else {
+      } else if(remoteForm.labelsPosition == "ASIDE") {
+        labelsRow = componentsRow;
+      } else if(remoteForm.labelsPosition == "NONE") {
         labelsRow = componentsRow;
       }
       form.addChild(componentsRow);
@@ -797,9 +799,14 @@ package org.jspresso.framework.view.flex {
         var rComponent:RComponent = remoteForm.elements[i] as RComponent;
         var rComponentLabel:RComponent = remoteForm.elementLabels[i] as RComponent;
         var component:UIComponent = createComponent(rComponent);
-        var componentLabel:UIComponent = createComponent(rComponentLabel, false);
-        var labelCell:GridItem = new GridItem();
+        var componentLabel:UIComponent;
+        var labelCell:GridItem;
         
+        if(remoteForm.labelsPosition != "NONE") {
+          componentLabel = createComponent(rComponentLabel, false);
+          labelCell = new GridItem();
+        }
+
         var componentCell:GridItem = new GridItem();
 
         if(elementWidth > remoteForm.columnCount) {
@@ -812,7 +819,9 @@ package org.jspresso.framework.view.flex {
             labelsRow = new GridRow();
             labelsRow.percentWidth = 100.0;
             form.addChild(labelsRow);
-          } else {
+          } else if(remoteForm.labelsPosition == "ASIDE") {
+            labelsRow = componentsRow;
+          } else if(remoteForm.labelsPosition == "NONE") {
             labelsRow = componentsRow;
           }
           form.addChild(componentsRow);
@@ -822,9 +831,11 @@ package org.jspresso.framework.view.flex {
         if(remoteForm.labelsPosition == "ABOVE") {
           labelCell.colSpan = elementWidth;
           componentCell.colSpan = elementWidth;
-        } else {
+        } else if(remoteForm.labelsPosition == "ASIDE") {
           labelCell.setStyle("verticalAlign","middle");
           componentCell.colSpan = (elementWidth * 2) - 1;
+        } else if(remoteForm.labelsPosition == "NONE") {
+          componentCell.colSpan = elementWidth;
         }
 
         if(   rComponent is RTable
@@ -833,14 +844,15 @@ package org.jspresso.framework.view.flex {
           componentsRow.percentHeight = 100.0;         
         }   
 
-        labelsRow.addChild(labelCell);
+        if(remoteForm.labelsPosition != "NONE") {
+          labelsRow.addChild(labelCell);
+          labelCell.addChild(componentLabel);
+        }
 
         componentCell.percentWidth=100.0;
         componentCell.percentHeight=100.0;
         componentsRow.addChild(componentCell);
         
-        labelCell.addChild(componentLabel);
-
         component.percentWidth = 100.0;
         component.percentHeight = 100.0;
         componentCell.addChild(component);

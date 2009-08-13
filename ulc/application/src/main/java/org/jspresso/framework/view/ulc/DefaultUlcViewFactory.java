@@ -105,6 +105,7 @@ import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
@@ -508,10 +509,13 @@ public class DefaultUlcViewFactory extends
           constraints.setGridY(currentY * 2);
           constraints.setGridWidth(propertyWidth);
           break;
+        case NONE:
+          break;
         default:
           break;
       }
-      if (propertyLabel.getText() != null
+      if (viewDescriptor.getLabelsPosition() != ELabelPosition.NONE
+          && propertyLabel.getText() != null
           && propertyLabel.getText().length() > 0) {
         viewComponent.add(propertyLabel, constraints);
       }
@@ -525,6 +529,12 @@ public class DefaultUlcViewFactory extends
           break;
         case ABOVE:
           constraints.setGridY(constraints.getGridY() + 1);
+          constraints.setInsets(new Insets(0, 5, 0, 5));
+          constraints.setGridWidth(propertyWidth);
+          break;
+        case NONE:
+          constraints.setGridX(currentX);
+          constraints.setGridY(currentY);
           constraints.setInsets(new Insets(0, 5, 0, 5));
           constraints.setGridWidth(propertyWidth);
           break;
@@ -572,6 +582,10 @@ public class DefaultUlcViewFactory extends
           break;
         case ABOVE:
           constraints.setGridY((currentY + 1) * 2);
+          constraints.setGridWidth(viewDescriptor.getColumnCount());
+          break;
+        case NONE:
+          constraints.setGridY(currentY + 1);
           constraints.setGridWidth(viewDescriptor.getColumnCount());
           break;
         default:

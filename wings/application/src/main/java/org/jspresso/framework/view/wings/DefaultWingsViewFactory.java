@@ -99,6 +99,7 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
@@ -476,10 +477,13 @@ public class DefaultWingsViewFactory extends
           constraints.gridy = currentY * 2;
           constraints.gridwidth = propertyWidth;
           break;
+        case NONE:
+          break;
         default:
           break;
       }
-      if (propertyLabel.getText() != null
+      if (viewDescriptor.getLabelsPosition() != ELabelPosition.NONE
+          && propertyLabel.getText() != null
           && propertyLabel.getText().length() > 0) {
         viewComponent.add(propertyLabel, constraints);
       }
@@ -493,6 +497,12 @@ public class DefaultWingsViewFactory extends
           break;
         case ABOVE:
           constraints.gridy++;
+          constraints.insets = new Insets(0, 5, 0, 5);
+          constraints.gridwidth = propertyWidth;
+          break;
+        case NONE:
+          constraints.gridx = currentX;
+          constraints.gridy = currentY;
           constraints.insets = new Insets(0, 5, 0, 5);
           constraints.gridwidth = propertyWidth;
           break;
@@ -536,6 +546,10 @@ public class DefaultWingsViewFactory extends
           break;
         case ABOVE:
           constraints.gridy = (currentY + 1) * 2;
+          constraints.gridwidth = viewDescriptor.getColumnCount();
+          break;
+        case NONE:
+          constraints.gridy = currentY + 1;
           constraints.gridwidth = viewDescriptor.getColumnCount();
           break;
         default:

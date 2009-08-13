@@ -1040,7 +1040,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var form = new qx.ui.container.Composite();
       var formLayout = new qx.ui.layout.Grid(5,5);
       form.setLayout(formLayout);
-      var labelsAbove = (remoteForm.getLabelsPosition() == "ABOVE");
       var columnCount = remoteForm.getColumnCount();
       var col = 0;
       var row = 0;
@@ -1049,9 +1048,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       for(var i = 0; i < remoteForm.getElements().length; i++) {
         var elementWidth = remoteForm.getElementWidths()[i];
         var rComponent = remoteForm.getElements()[i];
-        var rComponentLabel = remoteForm.getElementLabels()[i];
         var component = this.createComponent(rComponent);
-        var componentLabel = this.createComponent(rComponentLabel, false);
+        var componentLabel;
+        if(remoteForm.getLabelsPosition() != "NONE") {
+          componentLabel = this.createComponent(remoteForm.getElementLabels()[i], false);
+        }
         
         if(elementWidth > columnCount) {
           elementWidth = columnCount;
@@ -1067,25 +1068,31 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         var compRow;
         var compCol;
         var compColSpan;
-        if(labelsAbove) {
+        if(remoteForm.getLabelsPosition() == "ABOVE") {
           labelRow = row * 2;
           labelCol = col;
           labelColSpan = elementWidth;
           compRow = labelRow + 1;
           compCol = labelCol;
           compColSpan = elementWidth;
-        } else {
+        } else if(remoteForm.getLabelsPosition() == "ASIDE") {
           labelRow = row;
           labelCol = col * 2;
           labelColSpan = 1;
           compRow = labelRow;
           compCol = labelCol + 1;
           compColSpan = elementWidth * 2 - 1;
+        } else if(remoteForm.getLabelsPosition() == "NONE") {
+          compRow = row;
+          compCol = col;
+          compColSpan = elementWidth;
         }
-        form.add(componentLabel, {row : labelRow,
-                                  column : labelCol,
-                                  rowSpan : 1,
-                                  colSpan : labelColSpan});
+        if(remoteForm.getLabelsPosition() != "NONE") {
+	        form.add(componentLabel, {row : labelRow,
+	                                  column : labelCol,
+	                                  rowSpan : 1,
+	                                  colSpan : labelColSpan});
+        }
 
         form.add(component, {row : compRow,
                              column : compCol,

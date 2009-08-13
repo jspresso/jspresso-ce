@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-
 /**
  * Component views label position.
  * <p>
@@ -39,14 +38,19 @@ package org.jspresso.framework.view.descriptor;
  * @author Vincent Vandenschrick
  */
 public enum ELabelPosition {
-  
+
   /**
    * <code>ABOVE</code>.
    */
   ABOVE,
-  
+
   /**
    * <code>ASIDE</code>.
    */
-  ASIDE
+  ASIDE,
+
+  /**
+   * <code>NONE</code>.
+   */
+  NONE
 }
