@@ -19,10 +19,12 @@
 package org.jspresso.framework.application.model;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -49,6 +51,8 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public class BeanCollectionModule extends Module {
+
+  private Map<String, ESort>           orderingProperties;
 
   /**
    * <code>MODULE_OBJECTS</code> is "moduleObjects".
@@ -205,5 +209,27 @@ public class BeanCollectionModule extends Module {
    */
   protected BeanCollectionModuleDescriptor getDescriptor() {
     return new BeanCollectionModuleDescriptor(getElementComponentDescriptor());
+  }
+
+  /**
+   * Gets the orderingProperties.
+   * 
+   * @return the orderingProperties.
+   */
+  public Map<String, ESort> getOrderingProperties() {
+    if (orderingProperties == null) {
+      return getElementComponentDescriptor().getOrderingProperties();
+    }
+    return orderingProperties;
+  }
+
+  /**
+   * Sets the orderingProperties.
+   * 
+   * @param orderingProperties
+   *          the orderingProperties to set.
+   */
+  public void setOrderingProperties(Map<String, ESort> orderingProperties) {
+    this.orderingProperties = orderingProperties;
   }
 }

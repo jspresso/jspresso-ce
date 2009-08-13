@@ -117,6 +117,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
     this.filter = filter;
     if (filter != null) {
       filter.setPageSize(getPageSize());
+      filter.setDefaultOrderingProperties(getOrderingProperties());
     }
     if (filter instanceof IPropertyChangeCapable) {
       ((IPropertyChangeCapable) filter)

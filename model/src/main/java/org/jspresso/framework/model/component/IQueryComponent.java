@@ -21,6 +21,7 @@ package org.jspresso.framework.model.component;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.collection.ISortable;
 
@@ -75,4 +76,12 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    */
   void setQueriedComponents(List<? extends IComponent> queriedComponents);
 
+  /**
+   * Sets the default ordering properties that are used when not changed by the
+   * user.
+   * 
+   * @param defaultOrderingProperties
+   *          the defaultOrderingProperties to set.
+   */
+  void setDefaultOrderingProperties(Map<String, ESort> defaultOrderingProperties);
 }

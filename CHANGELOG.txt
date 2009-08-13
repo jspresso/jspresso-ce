@@ -71,6 +71,7 @@ New features
 2835652    Default 1st row selection in Flex and Qooxdoo
 2835655    Default 1st row selection on list views
 2835657    Make default icon sizes bigger
+2836756    Add orderingProperties on bean collection modules
 
 3.0.0
 =====
