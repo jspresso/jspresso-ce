@@ -57,7 +57,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   private IComponentDescriptor<Object> filterComponentDescriptor;
   private IViewDescriptor              filterViewDescriptor;
   private PropertyChangeListener       filterComponentTracker;
-  private Integer                      pageSize;
 
   private IQueryViewDescriptorFactory  queryViewDescriptorFactory;
   private IViewDescriptor              pagingStatusViewDescriptor;
@@ -157,28 +156,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
       firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
           + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
     }
-  }
-
-  /**
-   * Gets the pageSize.
-   * 
-   * @return the pageSize.
-   */
-  public Integer getPageSize() {
-    if (pageSize == null) {
-      return getFilterComponentDescriptor().getPageSize();
-    }
-    return pageSize;
-  }
-
-  /**
-   * Sets the pageSize.
-   * 
-   * @param pageSize
-   *          the pageSize to set.
-   */
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
   }
 
   /**

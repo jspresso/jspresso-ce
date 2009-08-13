@@ -53,6 +53,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 public class BeanCollectionModule extends Module {
 
   private Map<String, ESort>           orderingProperties;
+  private Integer                      pageSize;
 
   /**
    * <code>MODULE_OBJECTS</code> is "moduleObjects".
@@ -231,5 +232,27 @@ public class BeanCollectionModule extends Module {
    */
   public void setOrderingProperties(Map<String, ESort> orderingProperties) {
     this.orderingProperties = orderingProperties;
+  }
+
+  /**
+   * Gets the pageSize.
+   * 
+   * @return the pageSize.
+   */
+  public Integer getPageSize() {
+    if (pageSize == null) {
+      return getElementComponentDescriptor().getPageSize();
+    }
+    return pageSize;
+  }
+
+  /**
+   * Sets the pageSize.
+   * 
+   * @param pageSize
+   *          the pageSize to set.
+   */
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
   }
 }
