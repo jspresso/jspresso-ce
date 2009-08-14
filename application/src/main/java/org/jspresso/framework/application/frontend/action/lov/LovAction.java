@@ -75,7 +75,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   private IComponentDescriptor<IEntity>         entityDescriptor;
   private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
   private IDisplayableAction                    findAction;
-  private Map<String, String>                   initializationMapping;
+  private Map<String, Object>                   initializationMapping;
   private ILovViewDescriptorFactory             lovViewDescriptorFactory;
   private IDisplayableAction                    okAction;
 
@@ -263,7 +263,7 @@ public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * @param initializationMapping
    *          the initializationMapping to set.
    */
-  public void setInitializationMapping(Map<String, String> initializationMapping) {
+  public void setInitializationMapping(Map<String, Object> initializationMapping) {
     this.initializationMapping = initializationMapping;
   }
 

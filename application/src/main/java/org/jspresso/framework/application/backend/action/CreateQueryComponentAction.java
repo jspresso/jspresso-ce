@@ -34,7 +34,9 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.bean.MissingPropertyException;
 
 /**
  * Creates a query component.
@@ -79,47 +81,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
             erqDescriptor.getReferencedDescriptor().getQueryComponentContract());
     queryComponent.setPageSize(erqDescriptor.getPageSize());
 
-    Map<String, String> initializationMapping = erqDescriptor
-        .getInitializationMapping();
-    if (initializationMapping != null) {
-      IEntity masterEntity = null;
-      // The following relies on a workaround used to determine the bean
-      // model whenever the lov component is used inside a jtable.
-      IConnector parentModelConnector = ((IValueConnector) context
-          .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
-          .getModelConnector();
-      if (parentModelConnector instanceof IModelProvider) {
-        masterEntity = (IEntity) ((IModelProvider) parentModelConnector)
-            .getModel();
-      } else if (parentModelConnector instanceof ICollectionConnector) {
-        int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
-            .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
-            .getSelectedIndices()[0];
-        masterEntity = (IEntity) ((ICollectionConnector) parentModelConnector)
-            .getChildConnector(collectionIndex).getConnectorValue();
-      }
-      if (masterEntity != null) {
-        IAccessorFactory accessorFactory = getAccessorFactory(context);
-        for (Map.Entry<String, String> initializedAttribute : initializationMapping
-            .entrySet()) {
-          try {
-            accessorFactory.createPropertyAccessor(
-                initializedAttribute.getKey(),
-                queryComponent.getQueryContract()).setValue(
-                queryComponent,
-                accessorFactory
-                    .createPropertyAccessor(initializedAttribute.getValue(),
-                        masterEntity.getComponentContract()).getValue(masterEntity));
-          } catch (IllegalAccessException ex) {
-            throw new ActionException(ex);
-          } catch (InvocationTargetException ex) {
-            throw new ActionException(ex);
-          } catch (NoSuchMethodException ex) {
-            throw new ActionException(ex);
-          }
-        }
-      }
-    }
+    completeQueryComponent(queryComponent, erqDescriptor, context);
     ModelRefPropertyConnector modelConnector = (ModelRefPropertyConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
     if (modelConnector == null) {
@@ -146,5 +108,74 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
       }
     }
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Completes the query component before passing it along the chain. This
+   * default implementation handles the reference property descriptor
+   * initialization mapping.
+   * 
+   * @param queryComponent
+   *          the query component.
+   * @param erqDescriptor
+   *          the reference property descriptor from which the initialization
+   *          mappng is taken out.
+   * @param context
+   *          the action context.
+   */
+  protected void completeQueryComponent(IQueryComponent queryComponent,
+      IReferencePropertyDescriptor<?> erqDescriptor, Map<String, Object> context) {
+    Map<String, Object> initializationMapping = erqDescriptor
+        .getInitializationMapping();
+    if (initializationMapping != null) {
+      IEntity masterEntity = null;
+      // The following relies on a workaround used to determine the bean
+      // model whenever the lov component is used inside a jtable.
+      IConnector parentModelConnector = ((IValueConnector) context
+          .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
+          .getModelConnector();
+      if (parentModelConnector instanceof IModelProvider) {
+        masterEntity = (IEntity) ((IModelProvider) parentModelConnector)
+            .getModel();
+      } else if (parentModelConnector instanceof ICollectionConnector) {
+        int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
+            .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
+            .getSelectedIndices()[0];
+        masterEntity = (IEntity) ((ICollectionConnector) parentModelConnector)
+            .getChildConnector(collectionIndex).getConnectorValue();
+      }
+      if (masterEntity != null) {
+        IAccessorFactory accessorFactory = getAccessorFactory(context);
+        for (Map.Entry<String, Object> initializedAttribute : initializationMapping
+            .entrySet()) {
+          IAccessor qCompAccessor = accessorFactory.createPropertyAccessor(
+              initializedAttribute.getKey(), queryComponent.getQueryContract());
+          try {
+            Object initValue;
+            if (initializedAttribute.getValue() instanceof String) {
+              try {
+                IAccessor masterAccessor = accessorFactory
+                    .createPropertyAccessor((String) initializedAttribute
+                        .getValue(), masterEntity.getComponentContract());
+                initValue = masterAccessor.getValue(masterEntity);
+              } catch (MissingPropertyException ex) {
+                // the value in the initialization mapping is not a property.
+                // Handle it as a constant value.
+                initValue = initializedAttribute.getValue();
+              }
+            } else {
+              initValue = initializedAttribute.getValue();
+            }
+            qCompAccessor.setValue(queryComponent, initValue);
+          } catch (IllegalAccessException ex) {
+            throw new ActionException(ex);
+          } catch (InvocationTargetException ex) {
+            throw new ActionException(ex);
+          } catch (NoSuchMethodException ex) {
+            throw new ActionException(ex);
+          }
+        }
+      }
+    }
   }
 }

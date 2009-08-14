@@ -73,6 +73,7 @@ New features
 2835657    Make default icon sizes bigger
 2836756    Add orderingProperties on bean collection modules
 2835679    No label for the whole of a view
+2835776    More possibilities in defining initializationmapping
 
 3.0.0
 =====

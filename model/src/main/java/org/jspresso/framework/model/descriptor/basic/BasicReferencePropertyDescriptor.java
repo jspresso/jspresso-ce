@@ -48,7 +48,7 @@ public class BasicReferencePropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
     IReferencePropertyDescriptor<E> {
 
-  private Map<String, String>     initializationMapping;
+  private Map<String, Object>     initializationMapping;
   private IComponentDescriptor<E> referencedDescriptor;
   private Integer                 pageSize;
 
@@ -72,11 +72,9 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * Gets the initializationMapping.
-   * 
-   * @return the initializationMapping.
+   * {@inheritDoc}
    */
-  public Map<String, String> getInitializationMapping() {
+  public Map<String, Object> getInitializationMapping() {
     if (initializationMapping != null) {
       return initializationMapping;
     }
@@ -123,7 +121,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * @param initializationMapping
    *          the initializationMapping to set.
    */
-  public void setInitializationMapping(Map<String, String> initializationMapping) {
+  public void setInitializationMapping(Map<String, Object> initializationMapping) {
     this.initializationMapping = initializationMapping;
   }
 
