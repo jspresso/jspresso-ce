@@ -74,6 +74,7 @@ New features
 2836756    Add orderingProperties on bean collection modules
 2835679    No label for the whole of a view
 2835776    More possibilities in defining initializationmapping
+2838094    Rework root pom dependencies versions
 
 3.0.0
 =====

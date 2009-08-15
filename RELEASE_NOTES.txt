@@ -38,6 +38,8 @@ updated definition :
     id="applicationMessageSource"
     parent="abstractApplicationMessageSource">
 
+- Project created with the updated archetype require Maven 2.1+ to compile due tothe use
+of the new "prepare-package" phase.
 
 
 

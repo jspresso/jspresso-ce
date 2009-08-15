@@ -33,7 +33,7 @@
         <executions>
           <execution>
             <id>unpack-jspresso-qooxdoo</id>
-            <phase>generate-resources</phase>
+            <phase>compile</phase>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
@@ -44,7 +44,7 @@
           </execution>
           <execution>
             <id>unpack-qooxdoo-sdk</id>
-            <phase>generate-resources</phase>
+            <phase>compile</phase>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
@@ -64,7 +64,7 @@
             <goals>
               <goal>exec</goal>
             </goals>
-            <phase>generate-resources</phase>
+            <phase>compile</phase>
           </execution>
         </executions>
         <configuration>
@@ -85,7 +85,7 @@
             <goals>
               <goal>run</goal>
             </goals>
-            <phase>generate-resources</phase>
+            <phase>compile</phase>
             <configuration>
               <tasks>
                 <property name="web-debug.dir" value="${basedir}/target/web-debug" />
@@ -127,7 +127,7 @@
             <goals>
               <goal>single</goal>
             </goals>
-            <phase>generate-resources</phase>
+            <phase>compile</phase>
             <configuration>
               <descriptors>
                 <descriptor>${basedir}/src/main/assembly/web-resources.xml</descriptor>
@@ -139,7 +139,7 @@
             <goals>
               <goal>single</goal>
             </goals>
-            <phase>generate-resources</phase>
+            <phase>compile</phase>
             <configuration>
               <descriptors>
                 <descriptor>${basedir}/src/main/assembly/sources.xml</descriptor>

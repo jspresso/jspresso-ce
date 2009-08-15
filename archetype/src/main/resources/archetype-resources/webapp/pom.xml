@@ -106,7 +106,7 @@
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
-            <phase>generate-resources</phase>
+            <phase>prepare-package</phase>
             <configuration>
               <outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/flex</outputDirectory>
               <includeArtifactIds>${rootArtifactId}-startup-flex-config</includeArtifactIds>
@@ -119,7 +119,7 @@
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
-            <phase>generate-resources</phase>
+            <phase>prepare-package</phase>
             <configuration>
               <outputDirectory>${project.build.directory}/${project.artifactId}/qooxdoo</outputDirectory>
               <includeArtifactIds>${rootArtifactId}-startup-qooxdoo-client</includeArtifactIds>
@@ -129,7 +129,7 @@
           </execution>
           <execution>
             <id>copy-flex-dependencies</id>
-            <phase>process-resources</phase>
+            <phase>prepare-package</phase>
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
@@ -254,7 +254,7 @@
             <executions>
               <execution>
                 <id>copy-dependencies</id>
-                <phase>process-resources</phase>
+                <phase>prepare-package</phase>
                 <goals>
                   <goal>copy-dependencies</goal>
                 </goals>
@@ -272,7 +272,7 @@
             <executions>
               <execution>
                 <id>sign-dependencies</id>
-                <phase>process-resources</phase>
+                <phase>prepare-package</phase>
                 <configuration>
                   <tasks>
                     <signjar alias="key-alias" keystore="conf/keystore.jks" storepass="keystore-password" keypass="key-password">
