@@ -917,7 +917,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     RAction lovAction = createLovAction(view.getPeer(), view.getConnector(),
-        propertyDescriptor, actionHandler, locale);
+        propertyViewDescriptor, actionHandler, locale);
     lovAction.setName(getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(

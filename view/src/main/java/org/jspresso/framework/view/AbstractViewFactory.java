@@ -89,6 +89,7 @@ import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -343,6 +344,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
+  }
+
+  /**
+   * Gets the lovAction.
+   * 
+   * @return the lovAction.
+   */
+  protected IDisplayableAction getLovAction() {
+    return lovAction;
   }
 
   /**
@@ -1230,8 +1240,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the component these actions will be triggered from.
    * @param connector
    *          the connector these actions will be triggered from.
-   * @param propertyDescriptor
-   *          the binary property descriptor.
+   * @param propertyViewDescriptor
+   *          the reference property view descriptor.
    * @param actionHandler
    *          the action handler.
    * @param locale
@@ -1239,10 +1249,20 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the generic list of value action.
    */
   protected G createLovAction(E viewComponent, IValueConnector connector,
-      IReferencePropertyDescriptor<?> propertyDescriptor,
+      IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    G action = getActionFactory().createAction(lovAction, actionHandler,
-        viewComponent, propertyDescriptor, connector, locale);
+    IDisplayableAction listOfValueAction;
+    if (propertyViewDescriptor instanceof IReferencePropertyViewDescriptor
+        && ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
+            .getLovAction() != null) {
+      listOfValueAction = ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
+          .getLovAction();
+    } else {
+      listOfValueAction = getLovAction();
+    }
+    G action = getActionFactory().createAction(listOfValueAction,
+        actionHandler, viewComponent,
+        propertyViewDescriptor.getModelDescriptor(), connector, locale);
     return action;
   }
 

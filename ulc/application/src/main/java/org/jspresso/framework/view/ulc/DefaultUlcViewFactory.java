@@ -982,7 +982,7 @@ public class DefaultUlcViewFactory extends
     connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
     IAction lovAction = createLovAction(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale);
+        propertyViewDescriptor, actionHandler, locale);
     lovAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(

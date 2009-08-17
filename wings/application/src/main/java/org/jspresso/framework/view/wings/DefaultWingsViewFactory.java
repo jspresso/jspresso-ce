@@ -934,7 +934,7 @@ public class DefaultWingsViewFactory extends
     connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
     Action lovAction = createLovAction(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale);
+        propertyViewDescriptor, actionHandler, locale);
     lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
         "lov.element.name",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
