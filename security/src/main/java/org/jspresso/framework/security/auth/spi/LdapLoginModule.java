@@ -34,7 +34,6 @@ import javax.naming.ldap.InitialLdapContext;
 import org.jboss.security.auth.spi.LdapExtLoginModule;
 import org.jspresso.framework.security.UserPrincipal;
 
-
 /**
  * Extends the JBoss LdapExtLoginModule to keep track of the authenticated
  * ditinguished name.
@@ -181,7 +180,21 @@ public class LdapLoginModule extends LdapExtLoginModule {
     return super.createIdentity(username);
   }
 
-  private String extractSlice(String nameAsString, NameParser nameParser,
+  /**
+   * Extracts a slice from an LDAP name.
+   * 
+   * @param nameAsString
+   *          LDAP name as string.
+   * @param nameParser
+   *          the LDAP JNDI name parser.
+   * @param startIndex
+   *          start index.
+   * @param endIndex
+   *          end index.
+   * @return the LDAP name slice.
+   * @throws NamingException
+   */
+  protected String extractSlice(String nameAsString, NameParser nameParser,
       int startIndex, int endIndex) throws NamingException {
     int startI = startIndex;
     int endI = endIndex;
