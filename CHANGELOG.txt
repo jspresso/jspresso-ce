@@ -28,6 +28,7 @@ Bugs fixed
 2828440    Mandatory fields not visually distinguished
 2835647    Ordering properties are not always applied
 2835648    Flex table sorting only works with strings columns
+2839864    Nested reference properties do not fire change events in LOVs
 
 
 New features

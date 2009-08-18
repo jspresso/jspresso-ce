@@ -34,7 +34,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.basic.BasicEntityInvocationHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-
 /**
  * This entity invocation handler handles initialization of lazy loaded
  * properties like collections an entity references, delegating the
@@ -68,19 +67,19 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    * <code>ApplicationSessionAwareEntityInvocationHandler</code> instance.
    * 
    * @param entityDescriptor
-   *            The descriptor of the proxy entity.
+   *          The descriptor of the proxy entity.
    * @param inlineComponentFactory
-   *            the factory used to create inline components.
+   *          the factory used to create inline components.
    * @param collectionFactory
-   *            The factory used to create empty entity collections from
-   *            collection getters.
+   *          The factory used to create empty entity collections from
+   *          collection getters.
    * @param accessorFactory
-   *            The factory used to access proxy properties.
+   *          The factory used to access proxy properties.
    * @param extensionFactory
-   *            The factory used to create entity extensions based on their
-   *            classes.
+   *          The factory used to create entity extensions based on their
+   *          classes.
    * @param applicationSession
-   *            the current application session.
+   *          the current application session.
    */
   protected ApplicationSessionAwareEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor,
@@ -131,22 +130,28 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    */
   @Override
   protected void storeReferenceProperty(
-      IReferencePropertyDescriptor<?> propertyDescriptor, Object propertyValue) {
-    if (propertyValue != null && isInlineComponentReference(propertyDescriptor)) {
-      if (Proxy.isProxyClass(propertyValue.getClass())
-          && Proxy.getInvocationHandler(propertyValue) instanceof BasicComponentInvocationHandler
-          && !(Proxy.getInvocationHandler(propertyValue) instanceof ApplicationSessionAwareComponentInvocationHandler)) {
+      IReferencePropertyDescriptor<?> propertyDescriptor,
+      Object oldPropertyValue, Object newPropertyValue) {
+    if (newPropertyValue != null
+        && isInlineComponentReference(propertyDescriptor)) {
+      if (Proxy.isProxyClass(newPropertyValue.getClass())
+          && Proxy.getInvocationHandler(newPropertyValue) instanceof BasicComponentInvocationHandler
+          && !(Proxy.getInvocationHandler(newPropertyValue) instanceof ApplicationSessionAwareComponentInvocationHandler)) {
         IComponent sessionAwareComponent = getInlineComponentFactory()
-            .createComponentInstance(((IComponent) propertyValue).getComponentContract());
+            .createComponentInstance(
+                ((IComponent) newPropertyValue).getComponentContract());
         sessionAwareComponent
-            .straightSetProperties(((IComponent) propertyValue)
+            .straightSetProperties(((IComponent) newPropertyValue)
                 .straightGetProperties());
-        super.storeReferenceProperty(propertyDescriptor, sessionAwareComponent);
+        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
+            sessionAwareComponent);
       } else {
-        super.storeReferenceProperty(propertyDescriptor, propertyValue);
+        super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
+            newPropertyValue);
       }
     } else {
-      super.storeReferenceProperty(propertyDescriptor, propertyValue);
+      super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
+          newPropertyValue);
     }
   }
 }

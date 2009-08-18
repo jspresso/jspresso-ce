@@ -413,7 +413,7 @@ public abstract class AbstractComponentInvocationHandler implements
       property = inlineComponentFactory
           .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
               .getComponentContract());
-      storeReferenceProperty(propertyDescriptor, property);
+      storeReferenceProperty(propertyDescriptor, null, property);
     }
     return decorateReferent(property, propertyDescriptor
         .getReferencedDescriptor());
@@ -514,17 +514,25 @@ public abstract class AbstractComponentInvocationHandler implements
    * 
    * @param propertyDescriptor
    *          the reference property descriptor.
-   * @param propertyValue
-   *          the reference property value.
+   * @param oldPropertyValue
+   *          the old reference property value.
+   * @param newPropertyValue
+   *          the new reference property value.
    */
   protected void storeReferenceProperty(
-      IReferencePropertyDescriptor<?> propertyDescriptor, Object propertyValue) {
-    if (propertyValue != null && isInlineComponentReference(propertyDescriptor)) {
-      ((IPropertyChangeCapable) propertyValue)
-          .addPropertyChangeListener(new InlinedComponentTracker(
+      IReferencePropertyDescriptor<?> propertyDescriptor,
+      Object oldPropertyValue, Object newPropertyValue) {
+    if (oldPropertyValue != null) {
+      ((IPropertyChangeCapable) oldPropertyValue)
+          .removePropertyChangeListener(new InlineReferenceTracker(
               propertyDescriptor.getName()));
     }
-    storeProperty(propertyDescriptor.getName(), propertyValue);
+    if (newPropertyValue != null) {
+      ((IPropertyChangeCapable) newPropertyValue)
+          .addPropertyChangeListener(new InlineReferenceTracker(
+              propertyDescriptor.getName()));
+    }
+    storeProperty(propertyDescriptor.getName(), newPropertyValue);
   }
 
   /**
@@ -871,7 +879,7 @@ public abstract class AbstractComponentInvocationHandler implements
         if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
           // It's a 'one' relation end
           storeReferenceProperty(
-              (IReferencePropertyDescriptor) propertyDescriptor,
+              (IReferencePropertyDescriptor) propertyDescriptor, oldProperty,
               actualNewProperty);
           if (reversePropertyDescriptor != null) {
             // It is bidirectionnal, so we are going to update the other end.
@@ -993,7 +1001,7 @@ public abstract class AbstractComponentInvocationHandler implements
         && !ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
       storeReferenceProperty(
           (IReferencePropertyDescriptor<?>) propertyDescriptor,
-          newPropertyValue);
+          currentPropertyValue, newPropertyValue);
     } else {
       storeProperty(propertyName, newPropertyValue);
     }
@@ -1029,9 +1037,10 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private class InlinedComponentTracker implements PropertyChangeListener {
+  private class InlineReferenceTracker implements PropertyChangeListener {
 
-    private String componentName;
+    private String  componentName;
+    private boolean enabled;
 
     /**
      * Constructs a new <code>InnerComponentTracker</code> instance.
@@ -1039,17 +1048,73 @@ public abstract class AbstractComponentInvocationHandler implements
      * @param componentName
      *          the name of the component to track the properties.
      */
-    public InlinedComponentTracker(String componentName) {
+    public InlineReferenceTracker(String componentName) {
       this.componentName = componentName;
+      this.enabled = true;
     }
 
     /**
      * {@inheritDoc}
      */
     public void propertyChange(PropertyChangeEvent evt) {
-      firePropertyChange(componentName, null, evt.getSource());
-      firePropertyChange(componentName + "." + evt.getPropertyName(), evt
-          .getOldValue(), evt.getNewValue());
+      if (enabled) {
+        boolean wasEnabled = enabled;
+        try {
+          enabled = false;
+          firePropertyChange(componentName, null, evt.getSource());
+          firePropertyChange(componentName + "." + evt.getPropertyName(), evt
+              .getOldValue(), evt.getNewValue());
+        } finally {
+          enabled = wasEnabled;
+        }
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + getOuterType().hashCode();
+      result = prime * result;
+      if (componentName != null) {
+        result += componentName.hashCode();
+      }
+      return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if (!(obj instanceof InlineReferenceTracker)) {
+        return false;
+      }
+      InlineReferenceTracker other = (InlineReferenceTracker) obj;
+      if (!getOuterType().equals(other.getOuterType())) {
+        return false;
+      }
+      if (componentName == null) {
+        if (other.componentName != null) {
+          return false;
+        }
+      } else if (!componentName.equals(other.componentName)) {
+        return false;
+      }
+      return true;
+    }
+
+    private AbstractComponentInvocationHandler getOuterType() {
+      return AbstractComponentInvocationHandler.this;
     }
   }
 
