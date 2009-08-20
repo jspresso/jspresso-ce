@@ -525,12 +525,14 @@ public abstract class AbstractComponentInvocationHandler implements
     if (oldPropertyValue != null) {
       ((IPropertyChangeCapable) oldPropertyValue)
           .removePropertyChangeListener(new InlineReferenceTracker(
-              propertyDescriptor.getName()));
+              propertyDescriptor.getName(),
+              isInlineComponentReference(propertyDescriptor)));
     }
     if (newPropertyValue != null) {
       ((IPropertyChangeCapable) newPropertyValue)
           .addPropertyChangeListener(new InlineReferenceTracker(
-              propertyDescriptor.getName()));
+              propertyDescriptor.getName(),
+              isInlineComponentReference(propertyDescriptor)));
     }
     storeProperty(propertyDescriptor.getName(), newPropertyValue);
   }
@@ -1040,6 +1042,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private class InlineReferenceTracker implements PropertyChangeListener {
 
     private String  componentName;
+    private boolean inlinedComponent;
     private boolean enabled;
 
     /**
@@ -1047,9 +1050,12 @@ public abstract class AbstractComponentInvocationHandler implements
      * 
      * @param componentName
      *          the name of the component to track the properties.
+     * @param inlinedComponent
+     *          is it tracking an inlined component or an entity ref ?
      */
-    public InlineReferenceTracker(String componentName) {
+    public InlineReferenceTracker(String componentName, boolean inlinedComponent) {
       this.componentName = componentName;
+      this.inlinedComponent = inlinedComponent;
       this.enabled = true;
     }
 
@@ -1061,7 +1067,11 @@ public abstract class AbstractComponentInvocationHandler implements
         boolean wasEnabled = enabled;
         try {
           enabled = false;
-          firePropertyChange(componentName, null, evt.getSource());
+          if (inlinedComponent) {
+            // for dirtyness notification
+            firePropertyChange(componentName, null, evt.getSource());
+          }
+          // for ui notification
           firePropertyChange(componentName + "." + evt.getPropertyName(), evt
               .getOldValue(), evt.getNewValue());
         } finally {

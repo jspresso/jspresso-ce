@@ -61,8 +61,8 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * Constructs a new <code>BeanPropertyChangeRecorder</code> instance.
    * 
    * @param interceptor
-   *            an optional property change listener which will be notified of
-   *            changed properties.
+   *          an optional property change listener which will be notified of
+   *          changed properties.
    */
   public BeanPropertyChangeRecorder(PropertyChangeListener interceptor) {
     changedPropertiesMap = new WeakHashMap<IPropertyChangeCapable, Map<String, Object>>();
@@ -75,7 +75,7 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * have started on the specified bean.
    * 
    * @param bean
-   *            the bean to get the changed properties of.
+   *          the bean to get the changed properties of.
    * @return the set of changed properties on the bean.
    */
   public Map<String, Object> getChangedProperties(IPropertyChangeCapable bean) {
@@ -95,7 +95,8 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * {@inheritDoc}
    */
   public void propertyChange(PropertyChangeEvent evt) {
-    if (enabled) {
+    // don't store nested property changes
+    if (enabled && evt.getPropertyName().indexOf('.') < 0) {
       Map<String, Object> changedProperties = changedPropertiesMap.get(evt
           .getSource());
       if (!changedProperties.containsKey(evt.getPropertyName())) {
@@ -111,9 +112,9 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * Starts the property change recording on a bean.
    * 
    * @param bean
-   *            the bean to record the property changes of.
+   *          the bean to record the property changes of.
    * @param initialChangedProperties
-   *            the set of initial changed properties.
+   *          the set of initial changed properties.
    */
   public void register(IPropertyChangeCapable bean,
       Map<String, Object> initialChangedProperties) {
@@ -131,9 +132,9 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * specified set of changed properties.
    * 
    * @param bean
-   *            the bean to reset the recording of.
+   *          the bean to reset the recording of.
    * @param changedProperties
-   *            a new set of changed properties.
+   *          a new set of changed properties.
    */
   public void resetChangedProperties(IPropertyChangeCapable bean,
       Map<String, Object> changedProperties) {
@@ -151,7 +152,7 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * Sets the enabled.
    * 
    * @param enabled
-   *            the enabled to set.
+   *          the enabled to set.
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
@@ -161,7 +162,7 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * Stops the recording of property changes on a bean.
    * 
    * @param bean
-   *            the bean to stop the property changes recording on.
+   *          the bean to stop the property changes recording on.
    */
   public void unregister(IPropertyChangeCapable bean) {
     changedPropertiesMap.remove(bean);
