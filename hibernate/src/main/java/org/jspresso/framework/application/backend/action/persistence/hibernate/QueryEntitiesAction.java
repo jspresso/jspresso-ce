@@ -66,6 +66,8 @@ import org.springframework.transaction.support.TransactionCallback;
  */
 public class QueryEntitiesAction extends AbstractHibernateAction {
 
+  private ICriteriaRefiner criteriaRefiner;
+
   /**
    * {@inheritDoc}
    */
@@ -88,6 +90,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           entities = new ArrayList<IEntity>();
           queryComponent.setRecordCount(new Integer(0));
         } else {
+          if (criteriaRefiner != null) {
+            criteriaRefiner.refineCriteria(criteria, context);
+          }
           Integer totalCount = null;
           Integer pageSize = queryComponent.getPageSize();
           Integer page = queryComponent.getPage();
@@ -236,5 +241,15 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     queryComponent.setQueriedComponents(session.merge(queriedEntities,
         EMergeMode.MERGE_KEEP));
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Sets the criteriaRefiner.
+   * 
+   * @param criteriaRefiner
+   *          the criteriaRefiner to set.
+   */
+  public void setCriteriaRefiner(ICriteriaRefiner criteriaRefiner) {
+    this.criteriaRefiner = criteriaRefiner;
   }
 }

@@ -77,6 +77,7 @@ New features
 2835776    More possibilities in defining initializationmapping
 2838094    Rework root pom dependencies versions
 2838836    Allow for a custom LOV action for reference properties
+2841955    Allow for being able to refine filtered queries
 
 3.0.0
 =====
