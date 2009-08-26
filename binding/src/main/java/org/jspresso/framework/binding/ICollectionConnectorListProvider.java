@@ -53,7 +53,7 @@ public interface ICollectionConnectorListProvider extends
    * Clones this connector.
    * 
    * @param newConnectorId
-   *            the identifier of the clone connector
+   *          the identifier of the clone connector
    * @return the connector's clone.
    */
   ICollectionConnectorListProvider clone(String newConnectorId);
@@ -64,4 +64,15 @@ public interface ICollectionConnectorListProvider extends
    * @return the collection connector.
    */
   List<ICollectionConnector> getCollectionConnectors();
+
+  /**
+   * Sets whether this connector should also forward its children selections (a
+   * tree connector for instance).
+   * 
+   * @param tracksChildrenSelection
+   *          true if the connector selector should also forward its children
+   *          selections.
+   */
+  void setTracksChildrenSelection(boolean tracksChildrenSelection);
+
 }

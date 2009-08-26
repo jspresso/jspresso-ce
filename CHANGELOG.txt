@@ -78,6 +78,7 @@ New features
 2838094    Rework root pom dependencies versions
 2838836    Allow for a custom LOV action for reference properties
 2841955    Allow for being able to refine filtered queries
+2843812    Better handle bounds in comparable query structures
 
 3.0.0
 =====

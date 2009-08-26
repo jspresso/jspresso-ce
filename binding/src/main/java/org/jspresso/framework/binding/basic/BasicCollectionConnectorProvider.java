@@ -21,13 +21,12 @@ package org.jspresso.framework.binding.basic;
 import java.util.Collections;
 import java.util.List;
 
-import org.jspresso.framework.binding.ConnectorSelectionEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorSelectionListener;
-import org.jspresso.framework.binding.IConnectorSelector;
-
+import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 
 /**
  * A composite connector holding a reference on a collection connector to easyly
@@ -50,7 +49,7 @@ import org.jspresso.framework.binding.IConnectorSelector;
  * @author Vincent Vandenschrick
  */
 public class BasicCollectionConnectorProvider extends BasicCompositeConnector
-    implements IConfigurableCollectionConnectorProvider, IConnectorSelector {
+    implements IConfigurableCollectionConnectorProvider, IItemSelectable {
 
   private ICollectionConnectorProvider collectionConnectorProvider;
 
@@ -58,7 +57,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
    * Constructs a new <code>BasicCollectionConnectorProvider</code> instance.
    * 
    * @param id
-   *            the connector identifier.
+   *          the connector identifier.
    */
   public BasicCollectionConnectorProvider(String id) {
     super(id);
@@ -67,7 +66,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
-  public void addConnectorSelectionListener(IConnectorSelectionListener listener) {
+  public void addItemSelectionListener(IItemSelectionListener listener) {
     implAddConnectorSelectionListener(listener);
   }
 
@@ -107,8 +106,8 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
-  public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
-    implFireSelectedConnectorChange(evt);
+  public void fireSelectedItemChange(ItemSelectionEvent evt) {
+    implFireSelectedItemChange(evt);
   }
 
   /**
@@ -137,8 +136,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
-  public void removeConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
+  public void removeItemSelectionListener(IItemSelectionListener listener) {
     implRemoveConnectorSelectionListener(listener);
   }
 

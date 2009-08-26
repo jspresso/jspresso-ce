@@ -22,6 +22,10 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
+import org.jspresso.framework.util.event.ItemSelectionSupport;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 
 /**
@@ -49,7 +53,7 @@ public abstract class AbstractCompositeValueConnector extends
     AbstractValueConnector implements IRenderableCompositeValueConnector {
 
   private Map<String, IValueConnector> childConnectors;
-  private ConnectorSelectionSupport    connectorSelectionSupport;
+  private ItemSelectionSupport         itemSelectionSupport;
   private String                       displayDescription;
   private String                       displayIconImageUrl;
   private String                       displayValue;
@@ -65,7 +69,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   public AbstractCompositeValueConnector(String id) {
     super(id);
-    connectorSelectionSupport = new ConnectorSelectionSupport();
+    itemSelectionSupport = new ItemSelectionSupport();
     trackingChildrenSelection = false;
     childConnectors = new LinkedHashMap<String, IValueConnector>();
   }
@@ -110,7 +114,7 @@ public abstract class AbstractCompositeValueConnector extends
     AbstractCompositeValueConnector clonedConnector = (AbstractCompositeValueConnector) super
         .clone(newConnectorId);
     clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
-    clonedConnector.connectorSelectionSupport = new ConnectorSelectionSupport();
+    clonedConnector.itemSelectionSupport = new ItemSelectionSupport();
     for (String connectorKey : getChildConnectorKeys()) {
       clonedConnector
           .addChildConnector(getChildConnector(connectorKey).clone());
@@ -282,28 +286,28 @@ public abstract class AbstractCompositeValueConnector extends
    *          the listener to add.
    */
   protected void implAddConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    connectorSelectionSupport.addConnectorSelectionListener(listener);
+      IItemSelectionListener listener) {
+    itemSelectionSupport.addItemSelectionListener(listener);
   }
 
   /**
    * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
+   * used by subclasses which implement <code>IItemSelectable</code>.
    * 
    * @param evt
-   *          the connector selection event to propagate.
+   *          the item selection event to propagate.
    */
-  protected void implFireSelectedConnectorChange(ConnectorSelectionEvent evt) {
+  protected void implFireSelectedItemChange(ItemSelectionEvent evt) {
     if (evt.getSource() == this || trackingChildrenSelection) {
-      connectorSelectionSupport.fireSelectedConnectorChange(evt);
+      itemSelectionSupport.fireSelectedConnectorChange(evt);
     }
     IValueConnector parentConnector = getParentConnector();
     while (parentConnector != null
-        && !(parentConnector instanceof IConnectorSelector)) {
+        && !(parentConnector instanceof IItemSelectable)) {
       parentConnector = parentConnector.getParentConnector();
     }
     if (parentConnector != null) {
-      ((IConnectorSelector) parentConnector).fireSelectedConnectorChange(evt);
+      ((IItemSelectable) parentConnector).fireSelectedItemChange(evt);
     }
   }
 
@@ -316,8 +320,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   protected void implFireSelectedConnectorChange(
       IValueConnector selectedConnector) {
-    implFireSelectedConnectorChange(new ConnectorSelectionEvent(this,
-        selectedConnector));
+    implFireSelectedItemChange(new ItemSelectionEvent(this, selectedConnector));
   }
 
   /**
@@ -328,8 +331,8 @@ public abstract class AbstractCompositeValueConnector extends
    *          the listener to remove.
    */
   protected void implRemoveConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    connectorSelectionSupport.removeConnectorSelectionListener(listener);
+      IItemSelectionListener listener) {
+    itemSelectionSupport.removeConnectorSelectionListener(listener);
   }
 
   /**

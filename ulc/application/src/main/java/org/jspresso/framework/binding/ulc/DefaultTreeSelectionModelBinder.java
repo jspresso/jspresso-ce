@@ -22,13 +22,13 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.jspresso.framework.binding.ConnectorSelectionEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 
 import com.ulcjava.base.application.ULCTableTree;
@@ -219,10 +219,10 @@ public class DefaultTreeSelectionModelBinder implements
       if (!atLeastOneSelected) {
         IValueConnector rootConnector = (IValueConnector) treePaths[0]
             .getPath()[0];
-        if ((rootConnector instanceof IConnectorSelector)) {
-          ((IConnectorSelector) rootConnector)
-              .fireSelectedConnectorChange(new ConnectorSelectionEvent(
-                  rootConnector, rootConnector));
+        if ((rootConnector instanceof IItemSelectable)) {
+          ((IItemSelectable) rootConnector)
+              .fireSelectedItemChange(new ItemSelectionEvent(rootConnector,
+                  rootConnector));
         }
       }
     }
@@ -237,9 +237,9 @@ public class DefaultTreeSelectionModelBinder implements
      * Constructs a new <code>TreeConnectorsListener</code> instance.
      * 
      * @param rootConnector
-     *            the root connector of the connector hierarchy.
+     *          the root connector of the connector hierarchy.
      * @param selectionModel
-     *            the selection model of the related tree.
+     *          the selection model of the related tree.
      */
     public TableTreeConnectorsListener(IValueConnector rootConnector,
         ULCTreeSelectionModel selectionModel) {
@@ -251,8 +251,8 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
-    public void tableTreeNodesChanged(@SuppressWarnings("unused")
-    TableTreeModelEvent event) {
+    public void tableTreeNodesChanged(
+        @SuppressWarnings("unused") TableTreeModelEvent event) {
       // NO-OP as of now.
     }
 
@@ -267,16 +267,16 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
-    public void tableTreeNodesRemoved(@SuppressWarnings("unused")
-    TableTreeModelEvent event) {
+    public void tableTreeNodesRemoved(
+        @SuppressWarnings("unused") TableTreeModelEvent event) {
       // NO-OP as of now.
     }
 
     /**
      * {@inheritDoc}
      */
-    public void tableTreeNodeStructureChanged(@SuppressWarnings("unused")
-    TableTreeModelEvent event) {
+    public void tableTreeNodeStructureChanged(
+        @SuppressWarnings("unused") TableTreeModelEvent event) {
       // NO-OP as of now.
     }
 
@@ -308,9 +308,9 @@ public class DefaultTreeSelectionModelBinder implements
      * Constructs a new <code>TreeConnectorsListener</code> instance.
      * 
      * @param rootConnector
-     *            the root connector of the connector hierarchy.
+     *          the root connector of the connector hierarchy.
      * @param selectionModel
-     *            the selection model of the related tree.
+     *          the selection model of the related tree.
      */
     public TreeConnectorsListener(IValueConnector rootConnector,
         ULCTreeSelectionModel selectionModel) {
@@ -322,8 +322,8 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
-    public void treeNodesChanged(@SuppressWarnings("unused")
-    TreeModelEvent event) {
+    public void treeNodesChanged(
+        @SuppressWarnings("unused") TreeModelEvent event) {
       // NO-OP as of now.
     }
 
@@ -338,8 +338,8 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
-    public void treeNodesRemoved(@SuppressWarnings("unused")
-    TreeModelEvent event) {
+    public void treeNodesRemoved(
+        @SuppressWarnings("unused") TreeModelEvent event) {
       // NO-OP as of now.
     }
 

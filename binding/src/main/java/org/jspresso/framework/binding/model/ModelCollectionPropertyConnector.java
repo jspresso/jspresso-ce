@@ -332,4 +332,14 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
       removeChildConnector(childConnector);
     }
   }
+
+  /**
+   * Unsupported operation.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void setTracksChildrenSelection(
+      @SuppressWarnings("unused") boolean tracksChildrenSelection) {
+    throw new UnsupportedOperationException();
+  }
 }

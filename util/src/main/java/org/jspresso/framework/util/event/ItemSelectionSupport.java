@@ -16,14 +16,13 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding;
+package org.jspresso.framework.util.event;
 
-import java.util.EventObject;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * An event notifying a connector selection change. It contains the connector at
- * the source of the event (generally a collection connector) and the newly
- * selected connector (or null if none).
+ * Helper class to ease the IItemSelectionListener management.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,45 +40,54 @@ import java.util.EventObject;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ConnectorSelectionEvent extends EventObject {
+public class ItemSelectionSupport {
 
-  private static final long serialVersionUID = -5022556820638206657L;
-
-  /**
-   * New selected connector.
-   */
-  private IValueConnector   selectedConnector;
+  private Set<IItemSelectionListener> listeners;
 
   /**
-   * Constructs a new <code>ConnectorSelectionEvent</code>.
+   * Adds a new listener to this source.
    * 
-   * @param source
-   *            the connector that initiated the event.
-   * @param selectedConnector
-   *            the new connector.
+   * @param listener
+   *          The added listener.
    */
-  public ConnectorSelectionEvent(IValueConnector source,
-      IValueConnector selectedConnector) {
-    super(source);
-    this.selectedConnector = selectedConnector;
+  public synchronized void addItemSelectionListener(
+      IItemSelectionListener listener) {
+    if (listener != null) {
+      if (listeners == null) {
+        listeners = new LinkedHashSet<IItemSelectionListener>();
+      }
+      if (!listeners.contains(listener)) {
+        listeners.add(listener);
+      }
+    }
   }
 
   /**
-   * Gets the selectedConnector.
+   * Propagates the <code>ItemSelectionEvent</code> as is (i.e. whithout
+   * modifying its source) to the listeners.
    * 
-   * @return the selectedConnector.
+   * @param evt
+   *          the propagated <code>ConnectorSelectionEvent</code>
    */
-  public IValueConnector getSelectedConnector() {
-    return selectedConnector;
+  public void fireSelectedConnectorChange(ItemSelectionEvent evt) {
+    if (listeners != null) {
+      for (IItemSelectionListener listener : new LinkedHashSet<IItemSelectionListener>(
+          listeners)) {
+        listener.selectedItemChange(evt);
+      }
+    }
   }
 
   /**
-   * Narrows return type.
-   * <p>
-   * {@inheritDoc}
+   * Removes a new <code>IItemValueChangeListener</code>.
+   * 
+   * @param listener
+   *          The removed listener.
    */
-  @Override
-  public IValueConnector getSource() {
-    return (IValueConnector) source;
+  public synchronized void removeConnectorSelectionListener(
+      IItemSelectionListener listener) {
+    if (listener != null && listeners != null) {
+      listeners.remove(listener);
+    }
   }
 }

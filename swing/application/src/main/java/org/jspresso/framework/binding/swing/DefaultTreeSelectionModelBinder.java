@@ -30,16 +30,15 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.jspresso.framework.binding.ConnectorSelectionEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.swing.SwingUtil;
-
 
 /**
  * Default implementation of <code>ITreeSelectionModelBinder</code>.
@@ -213,10 +212,10 @@ public class DefaultTreeSelectionModelBinder implements
       if (!atLeastOneSelected) {
         IValueConnector rootConnector = (IValueConnector) treePaths[0]
             .getPath()[0];
-        if ((rootConnector instanceof IConnectorSelector)) {
-          ((IConnectorSelector) rootConnector)
-              .fireSelectedConnectorChange(new ConnectorSelectionEvent(
-                  rootConnector, rootConnector));
+        if ((rootConnector instanceof IItemSelectable)) {
+          ((IItemSelectable) rootConnector)
+              .fireSelectedItemChange(new ItemSelectionEvent(rootConnector,
+                  rootConnector));
         }
       }
     }
@@ -230,9 +229,9 @@ public class DefaultTreeSelectionModelBinder implements
      * Constructs a new <code>TreeConnectorsListener</code> instance.
      * 
      * @param rootConnector
-     *            the root connector of the connector hierarchy.
+     *          the root connector of the connector hierarchy.
      * @param selectionModel
-     *            the selection model of the related tree.
+     *          the selection model of the related tree.
      */
     public TreeConnectorsListener(IValueConnector rootConnector,
         TreeSelectionModel selectionModel) {
@@ -244,8 +243,7 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
-    public void treeNodesChanged(@SuppressWarnings("unused")
-    TreeModelEvent e) {
+    public void treeNodesChanged(@SuppressWarnings("unused") TreeModelEvent e) {
       // NO-OP as of now.
     }
 
@@ -260,8 +258,7 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
-    public void treeNodesRemoved(@SuppressWarnings("unused")
-    TreeModelEvent e) {
+    public void treeNodesRemoved(@SuppressWarnings("unused") TreeModelEvent e) {
       // NO-OP as of now.
     }
 

@@ -161,32 +161,34 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 .createPropertyAccessor(
                     ComparableQueryStructureDescriptor.SUP_VALUE,
                     ComparableQueryStructure.class).getValue(aQueryComponent);
-            if (infValue != null) {
+            if (infValue != null || supValue != null) {
+              Object compareValue = infValue;
+              if (compareValue == null) {
+                compareValue = supValue;
+              }
               if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
-                criteria.add(Restrictions.eq(path, infValue));
+                criteria.add(Restrictions.eq(path, compareValue));
               } else if (ComparableQueryStructureDescriptor.GT
                   .equals(comparator)) {
-                criteria.add(Restrictions.gt(path, infValue));
+                criteria.add(Restrictions.gt(path, compareValue));
               } else if (ComparableQueryStructureDescriptor.GE
                   .equals(comparator)) {
-                criteria.add(Restrictions.ge(path, infValue));
+                criteria.add(Restrictions.ge(path, compareValue));
               } else if (ComparableQueryStructureDescriptor.LT
                   .equals(comparator)) {
-                criteria.add(Restrictions.lt(path, infValue));
+                criteria.add(Restrictions.lt(path, compareValue));
               } else if (ComparableQueryStructureDescriptor.LE
                   .equals(comparator)) {
-                criteria.add(Restrictions.le(path, infValue));
+                criteria.add(Restrictions.le(path, compareValue));
               } else if (ComparableQueryStructureDescriptor.BE
                   .equals(comparator)) {
-                if (supValue != null) {
+                if (infValue != null && supValue != null) {
                   criteria.add(Restrictions.between(path, infValue, supValue));
-                } else {
+                } else if (infValue != null) {
                   criteria.add(Restrictions.ge(path, infValue));
+                } else {
+                  criteria.add(Restrictions.le(path, supValue));
                 }
-              }
-            } else if (supValue != null) {
-              if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
-                criteria.add(Restrictions.le(path, supValue));
               }
             }
           } catch (IllegalAccessException ex) {

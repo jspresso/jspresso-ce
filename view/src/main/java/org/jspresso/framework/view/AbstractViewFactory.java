@@ -33,12 +33,12 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorListProvider;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
-import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
@@ -1708,8 +1708,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     }
 
-    if (connector instanceof IConnectorSelector) {
-      ((IConnectorSelector) connector).setTracksChildrenSelection(true);
+    if (connector instanceof ICollectionConnectorListProvider) {
+      ((ICollectionConnectorListProvider) connector)
+          .setTracksChildrenSelection(true);
     }
     return connector;
   }

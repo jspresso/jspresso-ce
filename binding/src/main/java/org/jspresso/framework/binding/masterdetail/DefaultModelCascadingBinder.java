@@ -18,12 +18,12 @@
  */
 package org.jspresso.framework.binding.masterdetail;
 
-import org.jspresso.framework.binding.ConnectorSelectionEvent;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConnectorSelectionListener;
-import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 
 /**
  * Default implementation of <code>IModelCascadingBinder</code>.
@@ -53,9 +53,9 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
    */
   public void bind(IValueConnector masterConnector,
       IValueConnector detailConnector) {
-    if (masterConnector instanceof IConnectorSelector) {
-      ((IConnectorSelector) masterConnector)
-          .addConnectorSelectionListener(new BoundConnectorSelectionListener(
+    if (masterConnector instanceof IItemSelectable) {
+      ((IItemSelectable) masterConnector)
+          .addItemSelectionListener(new BoundConnectorSelectionListener(
               detailConnector));
     } else if (masterConnector instanceof ICompositeValueConnector) {
       ((ICompositeValueConnector) masterConnector)
@@ -67,14 +67,14 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
    * Sets the mvcBinder.
    * 
    * @param mvcBinder
-   *            the mvcBinder to set.
+   *          the mvcBinder to set.
    */
   public void setMvcBinder(IMvcBinder mvcBinder) {
     this.mvcBinder = mvcBinder;
   }
 
   private final class BoundConnectorSelectionListener implements
-      IConnectorSelectionListener {
+      IItemSelectionListener {
 
     private IValueConnector detailConnector;
 
@@ -82,7 +82,7 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
      * Constructs a new <code>BoundConnectorSelectionListener</code> instance.
      * 
      * @param detailConnector
-     *            The detail connector tracking master connector's selection.
+     *          The detail connector tracking master connector's selection.
      */
     public BoundConnectorSelectionListener(IValueConnector detailConnector) {
       this.detailConnector = detailConnector;
@@ -91,10 +91,10 @@ public class DefaultModelCascadingBinder implements IModelCascadingBinder {
     /**
      * {@inheritDoc}
      */
-    public void selectedConnectorChange(ConnectorSelectionEvent event) {
-      if (event.getSelectedConnector() != null) {
-        mvcBinder.bind(detailConnector, event.getSelectedConnector()
-            .getModelConnector());
+    public void selectedItemChange(ItemSelectionEvent event) {
+      if (event.getSelectedItem() != null) {
+        mvcBinder.bind(detailConnector, ((IValueConnector) event
+            .getSelectedItem()).getModelConnector());
       } else {
         mvcBinder.bind(detailConnector, null);
       }

@@ -16,11 +16,10 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding;
+package org.jspresso.framework.util.event;
 
 /**
- * This interface is implemented by listeners willing to be notified of a
- * connector selection change on a connector selector.
+ * This interface is implemented by any structure capable of selecting an item.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -38,15 +37,30 @@ package org.jspresso.framework.binding;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IConnectorSelectionListener {
+public interface IItemSelectable {
 
   /**
-   * This method is called whenever this listener is to be notified that the
-   * selected connector has changed.
+   * Adds an item selection listener to this object.
    * 
-   * @param event
-   *            the event containing the connector at the origin of the event
-   *            and the selected connector inside it.
+   * @param listener
+   *          the listener to add.
    */
-  void selectedConnectorChange(ConnectorSelectionEvent event);
+  void addItemSelectionListener(IItemSelectionListener listener);
+
+  /**
+   * Triggers notification of an item selection event. This method has to be
+   * made public to cope with notification of the children selection events.
+   * 
+   * @param evt
+   *          the event to be propagated.
+   */
+  void fireSelectedItemChange(ItemSelectionEvent evt);
+
+  /**
+   * Removes an item selection listener from this object.
+   * 
+   * @param listener
+   *          the listener to remove.
+   */
+  void removeItemSelectionListener(IItemSelectionListener listener);
 }

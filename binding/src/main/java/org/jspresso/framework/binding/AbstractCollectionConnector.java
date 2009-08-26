@@ -25,10 +25,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.jspresso.framework.util.collection.CollectionHelper;
+import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.event.SelectionChangeSupport;
-
 
 /**
  * This class is the base class of all default collection connectors. It
@@ -53,7 +55,7 @@ import org.jspresso.framework.util.event.SelectionChangeSupport;
  */
 public abstract class AbstractCollectionConnector extends
     AbstractCompositeValueConnector implements ICollectionConnector,
-    IConnectorSelector {
+    IItemSelectable {
 
   private ICompositeValueConnector childConnectorPrototype;
   private IMvcBinder               mvcBinder;
@@ -65,13 +67,13 @@ public abstract class AbstractCollectionConnector extends
    * Creates a new <code>AbstractCollectionConnector</code>.
    * 
    * @param id
-   *            the connector id.
+   *          the connector id.
    * @param binder
-   *            the <code>IMvcBinder</code> used to bind dynamicatlly created
-   *            child connectors.
+   *          the <code>IMvcBinder</code> used to bind dynamicatlly created
+   *          child connectors.
    * @param childConnectorPrototype
-   *            the connector prototype used to create new instances of child
-   *            connectors.
+   *          the connector prototype used to create new instances of child
+   *          connectors.
    */
   public AbstractCollectionConnector(String id, IMvcBinder binder,
       ICompositeValueConnector childConnectorPrototype) {
@@ -95,7 +97,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
-  public void addConnectorSelectionListener(IConnectorSelectionListener listener) {
+  public void addItemSelectionListener(IItemSelectionListener listener) {
     implAddConnectorSelectionListener(listener);
   }
 
@@ -168,8 +170,8 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
-  public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
-    implFireSelectedConnectorChange(evt);
+  public void fireSelectedItemChange(ItemSelectionEvent evt) {
+    implFireSelectedItemChange(evt);
   }
 
   /**
@@ -224,8 +226,7 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
-  public void removeConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
+  public void removeItemSelectionListener(IItemSelectionListener listener) {
     implRemoveConnectorSelectionListener(listener);
   }
 

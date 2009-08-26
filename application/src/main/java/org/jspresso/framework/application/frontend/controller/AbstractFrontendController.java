@@ -43,16 +43,16 @@ import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSel
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
-import org.jspresso.framework.binding.ConnectorSelectionEvent;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConnectorSelectionListener;
-import org.jspresso.framework.binding.IConnectorSelector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
+import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
@@ -589,12 +589,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
     ICompositeView<E> workspaceView = (ICompositeView<E>) viewFactory
         .createView(splitViewDescriptor, this, getLocale());
-    ((IConnectorSelector) workspaceView.getConnector())
-        .addConnectorSelectionListener(new IConnectorSelectionListener() {
+    ((IItemSelectable) workspaceView.getConnector())
+        .addItemSelectionListener(new IItemSelectionListener() {
 
-          public void selectedConnectorChange(ConnectorSelectionEvent event) {
+          public void selectedItemChange(ItemSelectionEvent event) {
             selectedModuleChanged(workspaceName,
-                (ICompositeValueConnector) event.getSelectedConnector());
+                (ICompositeValueConnector) event.getSelectedItem());
           }
 
         });

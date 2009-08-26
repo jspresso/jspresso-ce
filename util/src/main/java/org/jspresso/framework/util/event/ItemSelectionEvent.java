@@ -16,13 +16,13 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding;
+package org.jspresso.framework.util.event;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.EventObject;
 
 /**
- * Helper class to ease the IConnectorSelectionListener management.
+ * An event notifying an item selection change. It contains the object at the
+ * source of the event and the newly selected item (or null if none).
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -40,56 +40,31 @@ import java.util.Set;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ConnectorSelectionSupport {
+public class ItemSelectionEvent extends EventObject {
 
-  private Set<IConnectorSelectionListener> listeners;
+  private static final long serialVersionUID = -5022556820638206657L;
+
+  private Object            selectedItem;
 
   /**
-   * Adds a new listener to this connector.
+   * Constructs a new <code>ItemSelectionEvent</code>.
    * 
-   * @param listener
-   *            The added listener.
-   * @see IConnectorSelector#addConnectorSelectionListener(IConnectorSelectionListener)
+   * @param source
+   *          the object that initiated the event.
+   * @param selectedItem
+   *          the new selected item.
    */
-  public synchronized void addConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    if (listener != null) {
-      if (listeners == null) {
-        listeners = new LinkedHashSet<IConnectorSelectionListener>();
-      }
-      if (!listeners.contains(listener)) {
-        listeners.add(listener);
-      }
-    }
+  public ItemSelectionEvent(Object source, Object selectedItem) {
+    super(source);
+    this.selectedItem = selectedItem;
   }
 
   /**
-   * Propagates the <code>ConnectorSelectionEvent</code> as is (i.e. whithout
-   * modifying its source) to the listeners.
+   * Gets the selectedItem.
    * 
-   * @param evt
-   *            the propagated <code>ConnectorSelectionEvent</code>
+   * @return the selectedItem.
    */
-  public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
-    if (listeners != null) {
-      for (IConnectorSelectionListener listener : new LinkedHashSet<IConnectorSelectionListener>(
-          listeners)) {
-        listener.selectedConnectorChange(evt);
-      }
-    }
-  }
-
-  /**
-   * Removes a new <code>IConnectorValueChangeListener</code>.
-   * 
-   * @param listener
-   *            The removed listener.
-   * @see IConnectorSelector#removeConnectorSelectionListener(IConnectorSelectionListener)
-   */
-  public synchronized void removeConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
-    }
+  public Object getSelectedItem() {
+    return selectedItem;
   }
 }
