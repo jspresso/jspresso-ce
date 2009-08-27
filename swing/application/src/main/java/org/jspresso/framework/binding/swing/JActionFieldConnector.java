@@ -22,9 +22,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 import org.apache.commons.lang.StringUtils;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.gui.swing.components.JActionField;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 
 /**
  * JActionFieldConnector connector.
@@ -60,9 +60,9 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   public JActionFieldConnector(String id, JActionField actionField) {
     super(id, actionField);
     if (!getConnectedJComponent().isShowingTextField()) {
-      addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+      addValueChangeListener(new IValueChangeListener() {
 
-        public void connectorValueChange(ConnectorValueChangeEvent evt) {
+        public void valueChange(ValueChangeEvent evt) {
           if (evt.getNewValue() instanceof byte[]) {
             getConnectedJComponent().setDecorated(
                 ((byte[]) evt.getNewValue()).length > 0);

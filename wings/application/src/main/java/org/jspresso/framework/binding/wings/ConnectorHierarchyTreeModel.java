@@ -26,14 +26,13 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 
 import org.jspresso.framework.binding.CollectionConnectorValueChangeEvent;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IValueConnector;
-
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 
 /**
  * This tree model maps a connector hierarchy.
@@ -64,7 +63,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
    * 
    * @param rootConnector
-   *            the connector being the root node of the tree.
+   *          the connector being the root node of the tree.
    */
   public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector) {
     this.rootConnector = rootConnector;
@@ -151,8 +150,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  public void treeNodesChanged(@SuppressWarnings("unused")
-  TreeModelEvent event) {
+  public void treeNodesChanged(@SuppressWarnings("unused") TreeModelEvent event) {
     // NO-OP as of now.
   }
 
@@ -168,8 +166,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  public void treeNodesRemoved(@SuppressWarnings("unused")
-  TreeModelEvent event) {
+  public void treeNodesRemoved(@SuppressWarnings("unused") TreeModelEvent event) {
     // NO-OP as of now.
   }
 
@@ -185,9 +182,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  public void valueForPathChanged(@SuppressWarnings("unused")
-  TreePath path, @SuppressWarnings("unused")
-  Object newValue) {
+  public void valueForPathChanged(@SuppressWarnings("unused") TreePath path,
+      @SuppressWarnings("unused") Object newValue) {
     // NO-OP. Not used (yet!)
   }
 
@@ -195,7 +191,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     if (connector != null) {
       // we can add the listener many times since the backing store listener
       // collection is a Set.
-      connector.addConnectorValueChangeListener(connectorsListener);
+      connector.addValueChangeListener(connectorsListener);
       if (connector instanceof ICompositeValueConnector) {
         for (String childConnectorId : ((ICompositeValueConnector) connector)
             .getChildConnectorKeys()) {
@@ -211,13 +207,13 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
         .getTreePathForConnector(rootConnector, connector);
   }
 
-  private class TreeConnectorsListener implements IConnectorValueChangeListener {
+  private class TreeConnectorsListener implements IValueChangeListener {
 
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(ConnectorValueChangeEvent evt) {
-      IValueConnector connector = evt.getSource();
+    public void valueChange(ValueChangeEvent evt) {
+      IValueConnector connector = (IValueConnector) evt.getSource();
       if (connector == rootConnector) {
         fireTreeStructureChanged(ConnectorHierarchyTreeModel.this,
             new TreePath(rootConnector));

@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding;
+package org.jspresso.framework.util.event;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -24,9 +24,8 @@ import java.util.Set;
 
 import org.jspresso.framework.util.lang.ObjectUtils;
 
-
 /**
- * Helper class to ease the IConnectorValueChangeListener management.
+ * Helper class to ease the IValueChangeListener management.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -41,43 +40,41 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public class ConnectorValueChangeSupport {
+public class ValueChangeSupport {
 
-  private Set<IConnectorValueChangeListener> inhibitedListeners;
+  private Set<IValueChangeListener> inhibitedListeners;
 
-  private Set<IConnectorValueChangeListener> listeners;
-  private IValueConnector                    source;
+  private Set<IValueChangeListener> listeners;
+  private Object                    source;
 
   /**
-   * Constructs a new Connector change support.
+   * Constructs a new value change support.
    * 
-   * @param sourceConnector
-   *            The connector to which this ConnectorValueChangeSupport is
-   *            attached. sourceConnector will serve as <code>source</code> of
-   *            fired ConnectorValueChangeEvent if no other is provided.
+   * @param source
+   *          The source to which this ValueChangeSupport is attached. source
+   *          will serve as <code>source</code> of fired ValueChangeEvent if no
+   *          other is provided.
    */
-  public ConnectorValueChangeSupport(IValueConnector sourceConnector) {
-    if (sourceConnector == null) {
+  public ValueChangeSupport(Object source) {
+    if (source == null) {
       throw new NullPointerException();
     }
-    source = sourceConnector;
+    this.source = source;
   }
 
   /**
    * Adds a new listener to this connector.
    * 
    * @param listener
-   *            The added listener.
-   * @see IValueConnector#addConnectorValueChangeListener(IConnectorValueChangeListener)
+   *          The added listener.
    */
-  public synchronized void addConnectorValueChangeListener(
-      IConnectorValueChangeListener listener) {
+  public synchronized void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<IConnectorValueChangeListener>(8);
+        listeners = new LinkedHashSet<IValueChangeListener>(8);
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -91,35 +88,35 @@ public class ConnectorValueChangeSupport {
    * collection.
    * 
    * @param listener
-   *            the excluded listener.
+   *          the excluded listener.
    */
-  public void addInhibitedListener(IConnectorValueChangeListener listener) {
+  public void addInhibitedListener(IValueChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<IConnectorValueChangeListener>(4);
+      inhibitedListeners = new HashSet<IValueChangeListener>(4);
     }
     inhibitedListeners.add(listener);
   }
 
   /**
-   * Propagates the <code>ConnectorValueChangeEvent</code> as is (i.e.
-   * whithout modifying its source) to the listeners.
+   * Propagates the <code>ValueChangeEvent</code> as is (i.e. whithout modifying
+   * its source) to the listeners.
    * 
    * @param evt
-   *            the propagated <code>ConnectorValueChangeEvent</code>
+   *          the propagated <code>ValueChangeEvent</code>
    */
-  public void fireConnectorValueChange(ConnectorValueChangeEvent evt) {
+  public void fireConnectorValueChange(ValueChangeEvent evt) {
     if (listeners != null) {
       Object oldValue = evt.getOldValue();
       Object newValue = evt.getNewValue();
       if (ObjectUtils.equals(oldValue, newValue)) {
         return;
       }
-      for (IConnectorValueChangeListener listener : new LinkedHashSet<IConnectorValueChangeListener>(
+      for (IValueChangeListener listener : new LinkedHashSet<IValueChangeListener>(
           listeners)) {
         if (inhibitedListeners == null
             || !inhibitedListeners.contains(listener)) {
           if (listeners.contains(listener)) {
-            listener.connectorValueChange(evt);
+            listener.valueChange(evt);
           }
         }
       }
@@ -127,17 +124,16 @@ public class ConnectorValueChangeSupport {
   }
 
   /**
-   * Fires a new <code>ConnectorValueChangeEvent</code> built with
-   * <code>source</code> as source and parameters as old and new values.
+   * Fires a new <code>ValueChangeEvent</code> built with <code>source</code> as
+   * source and parameters as old and new values.
    * 
    * @param oldValue
-   *            The old connector's value
+   *          The old connector's value
    * @param newValue
-   *            The new connector's value
+   *          The new connector's value
    */
   public void fireConnectorValueChange(Object oldValue, Object newValue) {
-    ConnectorValueChangeEvent evt = new ConnectorValueChangeEvent(source,
-        oldValue, newValue);
+    ValueChangeEvent evt = new ValueChangeEvent(source, oldValue, newValue);
     fireConnectorValueChange(evt);
   }
 
@@ -146,11 +142,11 @@ public class ConnectorValueChangeSupport {
    * 
    * @return the listeners.
    */
-  public Set<IConnectorValueChangeListener> getListeners() {
+  public Set<IValueChangeListener> getListeners() {
     if (listeners != null) {
-      return new HashSet<IConnectorValueChangeListener>(listeners);
+      return new HashSet<IValueChangeListener>(listeners);
     }
-    return new HashSet<IConnectorValueChangeListener>();
+    return new HashSet<IValueChangeListener>();
   }
 
   /**
@@ -163,14 +159,13 @@ public class ConnectorValueChangeSupport {
   }
 
   /**
-   * Removes a new <code>IConnectorValueChangeListener</code>.
+   * Removes a new <code>IValueChangeListener</code>.
    * 
    * @param listener
-   *            The removed listener.
-   * @see IValueConnector#removeConnectorValueChangeListener(IConnectorValueChangeListener)
+   *          The removed listener.
    */
-  public synchronized void removeConnectorValueChangeListener(
-      IConnectorValueChangeListener listener) {
+  public synchronized void removeValueChangeListener(
+      IValueChangeListener listener) {
     if (listener != null && listeners != null) {
       listeners.remove(listener);
     }
@@ -181,9 +176,9 @@ public class ConnectorValueChangeSupport {
    * being re-added to the actual listeners collection.
    * 
    * @param listener
-   *            the previously excluded listener.
+   *          the previously excluded listener.
    */
-  public void removeInhibitedListener(IConnectorValueChangeListener listener) {
+  public void removeInhibitedListener(IValueChangeListener listener) {
     if (inhibitedListeners == null || listener == null) {
       return;
     }

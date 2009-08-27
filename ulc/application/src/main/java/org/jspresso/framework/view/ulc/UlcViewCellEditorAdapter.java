@@ -18,10 +18,10 @@
  */
 package org.jspresso.framework.view.ulc;
 
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.ulc.ULCActionFieldConnector;
 import org.jspresso.framework.gui.ulc.components.server.ULCActionField;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.view.IView;
 
 import com.ulcjava.base.application.DefaultCellEditor;
@@ -53,7 +53,7 @@ public class UlcViewCellEditorAdapter extends DefaultCellEditor {
   private static final long             serialVersionUID = -1439202520153834858L;
 
   private IView<ULCComponent>           editorView;
-  private IConnectorValueChangeListener editorViewConnectorListener;
+  private IValueChangeListener editorViewConnectorListener;
 
   /**
    * Constructs a new <code>UlcViewCellEditorAdapter</code> instance.
@@ -76,7 +76,7 @@ public class UlcViewCellEditorAdapter extends DefaultCellEditor {
       int row) {
     IEditorComponent editorComponent = (IEditorComponent) editorView.getPeer();
     if (editorView.getConnector() instanceof ULCActionFieldConnector) {
-      editorView.getConnector().addConnectorValueChangeListener(
+      editorView.getConnector().addValueChangeListener(
           getEditorViewConnectorListener(table, (ULCActionField) editorView
               .getPeer()));
       ((ULCActionField) editorView.getPeer()).setParent(table.getParent());
@@ -84,7 +84,7 @@ public class UlcViewCellEditorAdapter extends DefaultCellEditor {
     return editorComponent;
   }
 
-  private IConnectorValueChangeListener getEditorViewConnectorListener(
+  private IValueChangeListener getEditorViewConnectorListener(
       ULCTable table, ULCActionField editorPeer) {
     if (editorViewConnectorListener == null) {
       editorViewConnectorListener = new ActionFieldConnectorListener(table,
@@ -94,7 +94,7 @@ public class UlcViewCellEditorAdapter extends DefaultCellEditor {
   }
 
   private class ActionFieldConnectorListener implements
-      IConnectorValueChangeListener {
+      IValueChangeListener {
 
     private ULCActionField editorPeer;
     private ULCTable       table;
@@ -114,7 +114,7 @@ public class UlcViewCellEditorAdapter extends DefaultCellEditor {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(ConnectorValueChangeEvent evt) {
+    public void valueChange(ValueChangeEvent evt) {
       table.setValueAt(evt.getNewValue(), editorPeer.getEditingRow(),
           editorPeer.getEditingColumn());
     }

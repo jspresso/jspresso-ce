@@ -34,8 +34,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeCellEditor;
 
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
@@ -43,6 +41,8 @@ import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JDateField;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.view.IView;
 
 /**
@@ -90,11 +90,11 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
     }
 
     if (!(editorView.getPeer() instanceof JTextComponent)) {
-      editorView.getConnector().addConnectorValueChangeListener(
-          new IConnectorValueChangeListener() {
+      editorView.getConnector().addValueChangeListener(
+          new IValueChangeListener() {
 
-            public void connectorValueChange(
-                @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
+            public void valueChange(
+                @SuppressWarnings("unused") ValueChangeEvent evt) {
               stopCellEditing();
             }
           });

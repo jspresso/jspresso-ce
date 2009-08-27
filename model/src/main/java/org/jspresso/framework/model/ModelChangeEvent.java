@@ -25,7 +25,7 @@ import java.util.EventObject;
  * <code>IModelProvider</code> detects a change of its model. A
  * ModelChangeEvent object is sent as an argument to the
  * <code>IModelChangeListener</code> methods. Normally
- * ConnectorValueChangeEvent are accompanied by the old and new value of the
+ * ValueChangeEvent are accompanied by the old and new value of the
  * changed value. If the new value is a primitive type (such as int or boolean)
  * it must be wrapped as the corresponding java.lang.* Object type (such as
  * Integer or Boolean). Null values may be provided for the old and the new

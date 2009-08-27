@@ -8,16 +8,16 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelGate;
 import org.jspresso.framework.model.EmbeddedModelProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -69,20 +69,20 @@ public abstract class AbstractActionFactory<E, F, G> implements
                 .setModelProvider(new EmbeddedModelProvider(
                     (IComponentDescriptorProvider<?>) modelDescriptor));
             viewConnector
-                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+                .addValueChangeListener(new IValueChangeListener() {
 
-                  public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                  public void valueChange(ValueChangeEvent evt) {
                     ((EmbeddedModelProvider) ((IModelGate) clonedGate)
                         .getModelProvider()).setModel(evt.getNewValue());
                   }
                 });
           } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             ((ICollectionConnectorProvider) viewConnector)
-                .getCollectionConnector().addConnectorValueChangeListener(
-                    new IConnectorValueChangeListener() {
+                .getCollectionConnector().addValueChangeListener(
+                    new IValueChangeListener() {
 
-                      public void connectorValueChange(
-                          ConnectorValueChangeEvent evt) {
+                      public void valueChange(
+                          ValueChangeEvent evt) {
                         ICollectionConnector collectionConnector = (ICollectionConnector) evt
                             .getSource();
                         if (((IModelGate) clonedGate).getModelProvider() == null) {

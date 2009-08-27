@@ -31,7 +31,6 @@ import java.util.Locale;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -39,7 +38,6 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
@@ -70,6 +68,8 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.DurationFormatter;
 import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
@@ -192,15 +192,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
   private ITranslationProvider          translationProvider;
-  private IConnectorValueChangeListener firstRowSelector;
+  private IValueChangeListener firstRowSelector;
 
   /**
    * Constructs a new <code>AbstractViewFactory</code> instance.
    */
   protected AbstractViewFactory() {
-    firstRowSelector = new IConnectorValueChangeListener() {
+    firstRowSelector = new IValueChangeListener() {
 
-      public void connectorValueChange(ConnectorValueChangeEvent evt) {
+      public void valueChange(ValueChangeEvent evt) {
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
@@ -662,9 +662,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
     IValueConnector cardViewConnector = getConnectorFactory()
         .createValueConnector(cardView.getDescriptor().getName());
     cardViewConnector
-        .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+        .addValueChangeListener(new IValueChangeListener() {
 
-          public void connectorValueChange(ConnectorValueChangeEvent evt) {
+          public void valueChange(ValueChangeEvent evt) {
             Object cardModel = evt.getNewValue();
             boolean accessGranted = true;
             if (cardModel instanceof ISecurable && actionHandler != null) {
@@ -2269,7 +2269,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected void attachDefaultCollectionListener(
       ICollectionConnector collectionConnector) {
-    collectionConnector.addConnectorValueChangeListener(firstRowSelector);
+    collectionConnector.addValueChangeListener(firstRowSelector);
 
   }
 }

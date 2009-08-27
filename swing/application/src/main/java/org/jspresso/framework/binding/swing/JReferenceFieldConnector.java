@@ -21,11 +21,11 @@ package org.jspresso.framework.binding.swing;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.swing.components.JActionField;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 
 /**
  * JReferenceFieldConnector connector.
@@ -49,7 +49,7 @@ import org.jspresso.framework.gui.swing.components.JActionField;
 public class JReferenceFieldConnector extends JActionFieldConnector implements
     IRenderableCompositeValueConnector {
 
-  private IConnectorValueChangeListener renderingListener;
+  private IValueChangeListener renderingListener;
   private IValueConnector               renderingConnector;
 
   /**
@@ -148,23 +148,23 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   public void setRenderingConnector(IValueConnector renderingConnector) {
     if (this.renderingConnector != null) {
       this.renderingConnector
-          .removeConnectorValueChangeListener(renderingListener);
+          .removeValueChangeListener(renderingListener);
     }
     this.renderingConnector = renderingConnector;
     if (this.renderingConnector != null) {
       this.renderingConnector
-          .addConnectorValueChangeListener(renderingListener);
+          .addValueChangeListener(renderingListener);
     }
   }
 
   private final class RenderingConnectorListener implements
-      IConnectorValueChangeListener {
+      IValueChangeListener {
 
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(
-        @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
+    public void valueChange(
+        @SuppressWarnings("unused") ValueChangeEvent evt) {
       protectedSetConnecteeValue(getConnecteeValue());
     }
   }

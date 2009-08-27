@@ -22,9 +22,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.apache.commons.lang.StringUtils;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.gui.ulc.components.server.ULCActionField;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 
 /**
  * ULCActionFieldConnector connector.
@@ -61,9 +61,9 @@ public class ULCActionFieldConnector extends
   public ULCActionFieldConnector(String id, ULCActionField actionField) {
     super(id, actionField);
     if (!getConnectedULCComponent().isShowingTextField()) {
-      addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+      addValueChangeListener(new IValueChangeListener() {
 
-        public void connectorValueChange(ConnectorValueChangeEvent evt) {
+        public void valueChange(ValueChangeEvent evt) {
           if (evt.getNewValue() instanceof byte[]) {
             getConnectedULCComponent().setDecorated(
                 ((byte[]) evt.getNewValue()).length > 0);

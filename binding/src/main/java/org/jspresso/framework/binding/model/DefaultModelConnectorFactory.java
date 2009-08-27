@@ -112,9 +112,9 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
     }
     // if (modelConnector != null) {
     // modelConnector
-    // .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+    // .addValueChangeListener(new IValueChangeListener() {
     //
-    // public void connectorValueChange(ConnectorValueChangeEvent evt) {
+    // public void valueChange(ValueChangeEvent evt) {
     // System.out.println(evt.getSource().getConnectorPath());
     // }
     // });

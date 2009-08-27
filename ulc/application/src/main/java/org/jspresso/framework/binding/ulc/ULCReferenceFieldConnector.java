@@ -21,11 +21,11 @@ package org.jspresso.framework.binding.ulc;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.ulc.components.server.ULCActionField;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 
 /**
  * ULCReferenceFieldConnector connector.
@@ -49,7 +49,7 @@ import org.jspresso.framework.gui.ulc.components.server.ULCActionField;
 public class ULCReferenceFieldConnector extends ULCActionFieldConnector
     implements IRenderableCompositeValueConnector {
 
-  private IConnectorValueChangeListener renderingListener;
+  private IValueChangeListener renderingListener;
   private IValueConnector               renderingConnector;
 
   /**
@@ -148,23 +148,23 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
   public void setRenderingConnector(IValueConnector renderingConnector) {
     if (this.renderingConnector != null) {
       this.renderingConnector
-          .removeConnectorValueChangeListener(renderingListener);
+          .removeValueChangeListener(renderingListener);
     }
     this.renderingConnector = renderingConnector;
     if (this.renderingConnector != null) {
       this.renderingConnector
-          .addConnectorValueChangeListener(renderingListener);
+          .addValueChangeListener(renderingListener);
     }
   }
 
   private final class RenderingConnectorListener implements
-      IConnectorValueChangeListener {
+      IValueChangeListener {
 
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(
-        @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
+    public void valueChange(
+        @SuppressWarnings("unused") ValueChangeEvent evt) {
       setConnecteeValue(getConnecteeValue());
     }
 

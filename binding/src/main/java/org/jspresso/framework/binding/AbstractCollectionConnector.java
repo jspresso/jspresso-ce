@@ -31,6 +31,7 @@ import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.event.SelectionChangeSupport;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 
 /**
  * This class is the base class of all default collection connectors. It
@@ -153,9 +154,9 @@ public abstract class AbstractCollectionConnector extends
    * {@inheritDoc}
    */
   @Override
-  public void connectorValueChange(ConnectorValueChangeEvent evt) {
+  public void valueChange(ValueChangeEvent evt) {
     updateChildConnectors();
-    super.connectorValueChange(evt);
+    super.valueChange(evt);
   }
 
   /**
@@ -304,14 +305,13 @@ public abstract class AbstractCollectionConnector extends
   }
 
   /**
-   * Overrides the default to produce
-   * <code>CollectionConnectorValueChangeEvent</code>s.
+   * Overrides the default to produce <code>CollectionConnectorValueChangeEvent</code>s.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  protected ConnectorValueChangeEvent createChangeEvent(
-      Object oldConnectorValue, Object newConnectorValue) {
+  protected ValueChangeEvent createChangeEvent(Object oldConnectorValue,
+      Object newConnectorValue) {
     CollectionConnectorValueChangeEvent changeEvent = new CollectionConnectorValueChangeEvent(
         this, oldConnectorValue, newConnectorValue, removedChildrenConnectors);
     removedChildrenConnectors = null;

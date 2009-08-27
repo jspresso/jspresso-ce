@@ -150,7 +150,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * Detaches <code>this</code> as <code>PropertyChangeListener</code> on the
    * old model instance and attaches as <code>PropertyChangeListener</code> on
    * the new model instance. When this is done, it notifies its
-   * <code>IConnectorValueChangeListener</code> s about a possible change on the
+   * <code>IValueChangeListener</code> s about a possible change on the
    * model property value (the new model property).
    * <p>
    * {@inheritDoc}
@@ -188,7 +188,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Called when the underlying connectee value (the model property) changes.
-   * This implementation notifies its <code>IConnectorValueChangeListener</code>
+   * This implementation notifies its <code>IValueChangeListener</code>
    * s about the change passing the new model property.
    * <p>
    * {@inheritDoc}

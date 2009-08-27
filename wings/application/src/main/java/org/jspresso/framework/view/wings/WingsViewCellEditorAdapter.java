@@ -26,14 +26,14 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
 
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.gui.wings.components.SActionField;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.view.IView;
 import org.wings.SAbstractButton;
 import org.wings.SCheckBox;
@@ -63,7 +63,7 @@ import org.wings.table.STableCellEditor;
  * @author Vincent Vandenschrick
  */
 public class WingsViewCellEditorAdapter implements STableCellEditor,
-    IConnectorValueChangeListener {
+    IValueChangeListener {
 
   private static final long serialVersionUID = 8182961519931949735L;
   private ChangeEvent       changeEvent      = null;
@@ -122,8 +122,8 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   /**
    * {@inheritDoc}
    */
-  public void connectorValueChange(
-      @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
+  public void valueChange(
+      @SuppressWarnings("unused") ValueChangeEvent evt) {
     stopCellEditing();
   }
 
@@ -144,7 +144,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   @SuppressWarnings("unused")
   public SComponent getTableCellEditorComponent(STable table, Object value,
       boolean isSelected, int row, int column) {
-    modelConnector.removeConnectorValueChangeListener(this);
+    modelConnector.removeValueChangeListener(this);
     Object connectorValue;
     if (value instanceof IValueConnector) {
       connectorValue = ((IValueConnector) value).getConnectorValue();
@@ -157,7 +157,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
       connectorValue = new HashMap<String, Object>();
     }
     modelConnector.setConnectorValue(connectorValue);
-    modelConnector.addConnectorValueChangeListener(this);
+    modelConnector.addValueChangeListener(this);
     if (editorView.getPeer() instanceof SCheckBox) {
       ((SCheckBox) editorView.getPeer()).setSelected(!((SCheckBox) editorView
           .getPeer()).isSelected());

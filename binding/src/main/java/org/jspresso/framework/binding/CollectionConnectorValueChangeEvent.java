@@ -20,6 +20,8 @@ package org.jspresso.framework.binding;
 
 import java.util.List;
 
+import org.jspresso.framework.util.event.ValueChangeEvent;
+
 /**
  * This class is a specific connector value change event for collection
  * connectors. It keeps track of the children connectors that were potentially
@@ -41,24 +43,22 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CollectionConnectorValueChangeEvent extends
-    ConnectorValueChangeEvent {
+public class CollectionConnectorValueChangeEvent extends ValueChangeEvent {
 
   private static final long     serialVersionUID = 6547764843701088585L;
   private List<IValueConnector> removedChildrenConnectors;
 
   /**
-   * Constructs a new <code>CollectionConnectorValueChangeEvent</code>
-   * instance.
+   * Constructs a new <code>CollectionConnectorValueChangeEvent</code> instance.
    * 
    * @param source
-   *            the connector that initiated the event.
+   *          the connector that initiated the event.
    * @param oldValue
-   *            the old value of the connector.
+   *          the old value of the connector.
    * @param newValue
-   *            the new value of the connector.
+   *          the new value of the connector.
    * @param removedChildrenConnectors
-   *            the children connectors that have just been removed.
+   *          the children connectors that have just been removed.
    */
   public CollectionConnectorValueChangeEvent(IValueConnector source,
       Object oldValue, Object newValue,

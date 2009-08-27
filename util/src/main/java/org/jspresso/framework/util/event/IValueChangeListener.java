@@ -16,13 +16,13 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding;
+package org.jspresso.framework.util.event;
 
 /**
- * This public interfacehas to be implemented by classes wishing to keep track
- * of of connectors modifications. This is typically used when binding two
- * connectors together (in a MVC relationship for instance) where the 2
- * connectors will listen for eachother value.
+ * This public interface has to be implemented by classes wishing to keep track
+ * of of value modifications. This is typically used when binding two connectors
+ * together (in a MVC relationship for instance) where the 2 connectors will
+ * listen for each other value.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,25 +37,22 @@ package org.jspresso.framework.binding;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public interface IConnectorValueChangeListener {
+public interface IValueChangeListener {
 
   /**
-   * This method is triggered whenever a connector detects that its peer value
-   * changed. Ideally this method will only fire when <code>oldValue</code>
-   * differs from <code>newValue</code>.
+   * This method is triggered whenever a source detects that its value changed.
+   * Ideally this method will only fire when <code>oldValue</code> differs from
+   * <code>newValue</code>.
    * 
    * @param evt
-   *            The event representing the change. This event will have :
-   *            <li><code>source</code> set to the connector which initiated
-   *            the event.
-   *            <li><code>oldValue</code> set to the old value of the source
-   *            connector.
-   *            <li><code>newValue</code> set to the new value of the source
-   *            connector.
+   *          The event representing the change. This event will have : <li>
+   *          <code>source</code> set to the source which initiated the event.
+   *          <li><code>oldValue</code> set to the old value of the source. <li>
+   *          <code>newValue</code> set to the new value of the source.
    */
-  void connectorValueChange(ConnectorValueChangeEvent evt);
+  void valueChange(ValueChangeEvent evt);
 
 }

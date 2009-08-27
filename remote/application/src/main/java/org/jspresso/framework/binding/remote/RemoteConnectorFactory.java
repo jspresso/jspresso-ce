@@ -30,14 +30,12 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteSelectio
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvider;
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IFormattedValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
@@ -48,7 +46,9 @@ import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
+import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
@@ -76,16 +76,16 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     IRemoteValueStateFactory, IRemotePeerRegistry {
 
-  private IConnectorValueChangeListener collectionConnectorValueChangeListener;
-  private IConnectorValueChangeListener connectorValueChangeListener;
-  private IConnectorValueChangeListener formattedConnectorValueChangeListener;
-  private IGUIDGenerator                guidGenerator;
-  private PropertyChangeListener        readabilityListener;
-  private IRemoteCommandHandler         remoteCommandHandler;
-  private IRemotePeerRegistry           remotePeerRegistry;
-  private IConnectorValueChangeListener renderingConnectorValueChangeListener;
-  private ISelectionChangeListener      selectionChangeListener;
-  private PropertyChangeListener        writabilityListener;
+  private IValueChangeListener     collectionConnectorValueChangeListener;
+  private IValueChangeListener     valueChangeListener;
+  private IValueChangeListener     formattedConnectorValueChangeListener;
+  private IGUIDGenerator           guidGenerator;
+  private PropertyChangeListener   readabilityListener;
+  private IRemoteCommandHandler    remoteCommandHandler;
+  private IRemotePeerRegistry      remotePeerRegistry;
+  private IValueChangeListener     renderingConnectorValueChangeListener;
+  private ISelectionChangeListener selectionChangeListener;
+  private PropertyChangeListener   writabilityListener;
 
   /**
    * Constructs a new <code>RemoteConnectorFactory</code> instance.
@@ -144,18 +144,18 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         }
       }
     };
-    connectorValueChangeListener = new IConnectorValueChangeListener() {
+    valueChangeListener = new IValueChangeListener() {
 
-      public void connectorValueChange(ConnectorValueChangeEvent evt) {
-        IValueConnector connector = evt.getSource();
+      public void valueChange(ValueChangeEvent evt) {
+        IValueConnector connector = (IValueConnector) evt.getSource();
         if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
             && ((IRenderableCompositeValueConnector) connector
                 .getParentConnector()).getRenderingConnector() == connector) {
           // don't listen to rendering connectors.
-          connector.removeConnectorValueChangeListener(this);
+          connector.removeValueChangeListener(this);
         } else if (connector.getParentConnector() == null) {
           // don't listen to root connectors.
-          connector.removeConnectorValueChangeListener(this);
+          connector.removeValueChangeListener(this);
         } else {
           ((IRemoteStateOwner) connector).synchRemoteState();
           RemoteValueState state = ((IRemoteStateOwner) evt.getSource())
@@ -167,10 +167,10 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         }
       }
     };
-    formattedConnectorValueChangeListener = new IConnectorValueChangeListener() {
+    formattedConnectorValueChangeListener = new IValueChangeListener() {
 
-      public void connectorValueChange(ConnectorValueChangeEvent evt) {
-        IValueConnector connector = evt.getSource();
+      public void valueChange(ValueChangeEvent evt) {
+        IValueConnector connector = (IValueConnector) evt.getSource();
         ((IRemoteStateOwner) connector).synchRemoteState();
         RemoteValueState state = ((IRemoteStateOwner) connector).getState();
         RemoteValueCommand command = new RemoteValueCommand();
@@ -179,11 +179,11 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         remoteCommandHandler.registerCommand(command);
       }
     };
-    renderingConnectorValueChangeListener = new IConnectorValueChangeListener() {
+    renderingConnectorValueChangeListener = new IValueChangeListener() {
 
-      public void connectorValueChange(ConnectorValueChangeEvent evt) {
-        IRenderableCompositeValueConnector connector = (IRenderableCompositeValueConnector) evt
-            .getSource().getParentConnector();
+      public void valueChange(ValueChangeEvent evt) {
+        IRenderableCompositeValueConnector connector = (IRenderableCompositeValueConnector) ((IValueConnector) evt
+            .getSource()).getParentConnector();
         ((IRemoteStateOwner) connector).synchRemoteState();
         RemoteCompositeValueState state = (RemoteCompositeValueState) ((IRemoteStateOwner) connector)
             .getState();
@@ -195,9 +195,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         remoteCommandHandler.registerCommand(command);
       }
     };
-    collectionConnectorValueChangeListener = new IConnectorValueChangeListener() {
+    collectionConnectorValueChangeListener = new IValueChangeListener() {
 
-      public void connectorValueChange(ConnectorValueChangeEvent evt) {
+      public void valueChange(ValueChangeEvent evt) {
         ICollectionConnector connector = (ICollectionConnector) evt.getSource();
         IValueConnector parentConnector = connector.getParentConnector();
         List<RemoteValueState> children = new ArrayList<RemoteValueState>();
@@ -442,22 +442,20 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     connector.addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY,
         writabilityListener);
     if (connector instanceof ICollectionConnector) {
-      connector
-          .addConnectorValueChangeListener(collectionConnectorValueChangeListener);
+      connector.addValueChangeListener(collectionConnectorValueChangeListener);
       ((ICollectionConnector) connector)
           .addSelectionChangeListener(selectionChangeListener);
     } else if (connector instanceof IRenderableCompositeValueConnector) {
       if (((IRenderableCompositeValueConnector) connector)
           .getRenderingConnector() != null) {
         ((IRenderableCompositeValueConnector) connector)
-            .getRenderingConnector().addConnectorValueChangeListener(
+            .getRenderingConnector().addValueChangeListener(
                 renderingConnectorValueChangeListener);
       }
     } else if (connector instanceof IFormattedValueConnector) {
-      connector
-          .addConnectorValueChangeListener(formattedConnectorValueChangeListener);
+      connector.addValueChangeListener(formattedConnectorValueChangeListener);
     } else {
-      connector.addConnectorValueChangeListener(connectorValueChangeListener);
+      connector.addValueChangeListener(valueChangeListener);
     }
   }
 

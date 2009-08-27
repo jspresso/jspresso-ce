@@ -22,12 +22,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 
 import com.ulcjava.base.application.AbstractListModel;
 
@@ -55,7 +55,7 @@ import com.ulcjava.base.application.AbstractListModel;
 public class CollectionConnectorListModel extends AbstractListModel {
 
   private static final long                           serialVersionUID = -7992011455793793550L;
-  private Map<Integer, IConnectorValueChangeListener> cachedListeners;
+  private Map<Integer, IValueChangeListener> cachedListeners;
   private ICollectionConnector                        collectionConnector;
 
   /**
@@ -101,28 +101,28 @@ public class CollectionConnectorListModel extends AbstractListModel {
         && ((IRenderableCompositeValueConnector) cellConnector)
             .getRenderingConnector() != null) {
       ((IRenderableCompositeValueConnector) cellConnector)
-          .getRenderingConnector().addConnectorValueChangeListener(
+          .getRenderingConnector().addValueChangeListener(
               getChildConnectorListener(index));
     } else {
       cellConnector
-          .addConnectorValueChangeListener(getChildConnectorListener(index));
+          .addValueChangeListener(getChildConnectorListener(index));
     }
   }
 
   private void bindConnector() {
     collectionConnector
-        .addConnectorValueChangeListener(new ListConnectorListener());
+        .addValueChangeListener(new ListConnectorListener());
     for (int index = 0; index < collectionConnector.getChildConnectorKeys()
         .size(); index++) {
       bindChildConnector(index);
     }
   }
 
-  private IConnectorValueChangeListener getChildConnectorListener(int index) {
+  private IValueChangeListener getChildConnectorListener(int index) {
     if (cachedListeners == null) {
-      cachedListeners = new HashMap<Integer, IConnectorValueChangeListener>();
+      cachedListeners = new HashMap<Integer, IValueChangeListener>();
     }
-    IConnectorValueChangeListener cachedListener = cachedListeners
+    IValueChangeListener cachedListener = cachedListeners
         .get(new Integer(index));
     if (cachedListener == null) {
       cachedListener = new CellConnectorListener(index);
@@ -132,7 +132,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
   }
 
   private final class CellConnectorListener implements
-      IConnectorValueChangeListener {
+      IValueChangeListener {
 
     private int index;
 
@@ -143,18 +143,18 @@ public class CollectionConnectorListModel extends AbstractListModel {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused")
+    ValueChangeEvent evt) {
       fireContentsChanged(CollectionConnectorListModel.this, index, index);
     }
   }
 
-  private class ListConnectorListener implements IConnectorValueChangeListener {
+  private class ListConnectorListener implements IValueChangeListener {
 
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(final ConnectorValueChangeEvent evt) {
+    public void valueChange(final ValueChangeEvent evt) {
       Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
       Collection<?> newCollection = (Collection<?>) evt.getNewValue();
       int oldCollectionSize = 0;

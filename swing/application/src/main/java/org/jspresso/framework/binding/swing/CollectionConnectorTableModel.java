@@ -28,12 +28,12 @@ import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.jspresso.framework.binding.ConnectorValueChangeEvent;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gui.Coordinates;
 import org.jspresso.framework.util.swing.SwingUtil;
@@ -65,7 +65,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private static final long                           serialVersionUID = -3323472361980315420L;
 
   private Map<Coordinates, CellConnectorListener>     cachedCellListeners;
-  private Map<Integer, IConnectorValueChangeListener> cachedRowListeners;
+  private Map<Integer, IValueChangeListener> cachedRowListeners;
   private ICollectionConnector                        collectionConnector;
   private List<Class<?>>                              columnClasses;
   private List<String>                                columnConnectorKeys;
@@ -182,7 +182,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     ICompositeValueConnector rowConnector = (ICompositeValueConnector) collectionConnector
         .getChildConnector(row);
     rowConnector
-        .addConnectorValueChangeListener(getChildRowConnectorListener(row));
+        .addValueChangeListener(getChildRowConnectorListener(row));
     for (int col = 0; col < columnConnectorKeys.size(); col++) {
       IValueConnector cellConnector = rowConnector
           .getChildConnector(columnConnectorKeys.get(col));
@@ -190,11 +190,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
           && ((IRenderableCompositeValueConnector) cellConnector)
               .getRenderingConnector() != null) {
         ((IRenderableCompositeValueConnector) cellConnector)
-            .getRenderingConnector().addConnectorValueChangeListener(
+            .getRenderingConnector().addValueChangeListener(
                 getChildCellConnectorListener(row, col));
       } else {
         CellConnectorListener listener = getChildCellConnectorListener(row, col);
-        cellConnector.addConnectorValueChangeListener(listener);
+        cellConnector.addValueChangeListener(listener);
         cellConnector.addPropertyChangeListener(listener);
       }
     }
@@ -202,7 +202,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   private void bindConnector() {
     collectionConnector
-        .addConnectorValueChangeListener(new TableConnectorListener());
+        .addValueChangeListener(new TableConnectorListener());
     for (int row = 0; row < collectionConnector.getChildConnectorCount(); row++) {
       bindChildRowConnector(row);
     }
@@ -221,11 +221,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     return cachedListener;
   }
 
-  private IConnectorValueChangeListener getChildRowConnectorListener(int row) {
+  private IValueChangeListener getChildRowConnectorListener(int row) {
     if (cachedRowListeners == null) {
-      cachedRowListeners = new HashMap<Integer, IConnectorValueChangeListener>();
+      cachedRowListeners = new HashMap<Integer, IValueChangeListener>();
     }
-    IConnectorValueChangeListener cachedListener = cachedRowListeners
+    IValueChangeListener cachedListener = cachedRowListeners
         .get(new Integer(row));
     if (cachedListener == null) {
       cachedListener = new RowConnectorListener(row);
@@ -250,7 +250,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   }
 
   private final class CellConnectorListener implements
-      IConnectorValueChangeListener, PropertyChangeListener {
+      IValueChangeListener, PropertyChangeListener {
 
     private Coordinates cell;
 
@@ -261,8 +261,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(
-        @SuppressWarnings("unused") final ConnectorValueChangeEvent evt) {
+    public void valueChange(
+        @SuppressWarnings("unused") final ValueChangeEvent evt) {
       updateCell();
     }
 
@@ -287,7 +287,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   }
 
   private final class RowConnectorListener implements
-      IConnectorValueChangeListener {
+      IValueChangeListener {
 
     private int row;
 
@@ -298,8 +298,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(
-        @SuppressWarnings("unused") final ConnectorValueChangeEvent evt) {
+    public void valueChange(
+        @SuppressWarnings("unused") final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
         public void run() {
@@ -317,12 +317,12 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     }
   }
 
-  private class TableConnectorListener implements IConnectorValueChangeListener {
+  private class TableConnectorListener implements IValueChangeListener {
 
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(final ConnectorValueChangeEvent evt) {
+    public void valueChange(final ValueChangeEvent evt) {
       SwingUtil.updateSwingGui(new Runnable() {
 
         public void run() {

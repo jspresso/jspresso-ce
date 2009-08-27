@@ -50,7 +50,6 @@ import org.jvnet.lafwidget.preview.DefaultPreviewPainter;
 import org.jvnet.lafwidget.tabbed.DefaultTabPreviewPainter;
 import org.jvnet.lafwidget.utils.LafConstants.TabOverviewKind;
 
-
 import foxtrot.Job;
 import foxtrot.Worker;
 

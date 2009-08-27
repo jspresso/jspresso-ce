@@ -30,6 +30,9 @@ import java.util.List;
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
+import org.jspresso.framework.util.event.ValueChangeSupport;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
@@ -39,9 +42,9 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * This abstract class holds some default implementation for a value connector.
  * All the default value connectors inherit from this default behaviour. It
  * implements the Connector value listener management through the use of the
- * <code>ConnectorValueChangeSupport</code> helper. It can virtually adapt to
- * any peer connectee since the way the value is retrieved by from the connectee
- * is left to the implementor.
+ * <code>ValueChangeSupport</code> helper. It can virtually adapt to any peer
+ * connectee since the way the value is retrieved by from the connectee is left
+ * to the implementor.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -63,28 +66,28 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 public abstract class AbstractValueConnector extends AbstractConnector
     implements IValueConnector {
 
-  private IExceptionHandler           exceptionHandler;
-  private boolean                     locallyReadable;
-  private boolean                     locallyWritable;
+  private IExceptionHandler        exceptionHandler;
+  private boolean                  locallyReadable;
+  private boolean                  locallyWritable;
 
-  private IValueConnector             modelConnector;
-  private PropertyChangeListener      modelReadabilityListener;
-  private PropertyChangeListener      modelWritabilityListener;
-  private Object                      oldConnectorValue;
+  private IValueConnector          modelConnector;
+  private PropertyChangeListener   modelReadabilityListener;
+  private PropertyChangeListener   modelWritabilityListener;
+  private Object                   oldConnectorValue;
 
-  private boolean                     oldReadability;
-  private boolean                     oldWritability;
+  private boolean                  oldReadability;
+  private boolean                  oldWritability;
 
-  private ICompositeValueConnector    parentConnector;
-  private Collection<IGate>           readabilityGates;
+  private ICompositeValueConnector parentConnector;
+  private Collection<IGate>        readabilityGates;
 
-  private PropertyChangeListener      readabilityGatesListener;
-  private ConnectorValueChangeSupport valueChangeSupport;
+  private PropertyChangeListener   readabilityGatesListener;
+  private ValueChangeSupport       valueChangeSupport;
 
-  private Collection<IGate>           writabilityGates;
+  private Collection<IGate>        writabilityGates;
 
-  private PropertyChangeListener      writabilityGatesListener;
-  private IModelDescriptor            modelDescriptor;
+  private PropertyChangeListener   writabilityGatesListener;
+  private IModelDescriptor         modelDescriptor;
 
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
@@ -96,7 +99,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public AbstractValueConnector(String id) {
     super(id);
-    valueChangeSupport = new ConnectorValueChangeSupport(this);
+    valueChangeSupport = new ValueChangeSupport(this);
     locallyReadable = true;
     locallyWritable = true;
     oldReadability = isReadable();
@@ -106,10 +109,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
-  public void addConnectorValueChangeListener(
-      IConnectorValueChangeListener listener) {
+  public void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
-      valueChangeSupport.addConnectorValueChangeListener(listener);
+      valueChangeSupport.addValueChangeListener(listener);
     }
   }
 
@@ -159,9 +161,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void cleanBindings() {
-    for (IConnectorValueChangeListener listener : valueChangeSupport
-        .getListeners()) {
-      removeConnectorValueChangeListener(listener);
+    for (IValueChangeListener listener : valueChangeSupport.getListeners()) {
+      removeValueChangeListener(listener);
     }
   }
 
@@ -181,8 +182,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     AbstractValueConnector clonedConnector = (AbstractValueConnector) super
         .clone(newConnectorId);
     clonedConnector.oldConnectorValue = null;
-    clonedConnector.valueChangeSupport = new ConnectorValueChangeSupport(
-        clonedConnector);
+    clonedConnector.valueChangeSupport = new ValueChangeSupport(clonedConnector);
     clonedConnector.parentConnector = null;
     clonedConnector.modelConnector = null;
     clonedConnector.readabilityGates = null;
@@ -230,9 +230,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * <p>
    * {@inheritDoc}
    */
-  public void connectorValueChange(ConnectorValueChangeEvent evt) {
+  public void valueChange(ValueChangeEvent evt) {
     // we must prevent the event to return back to the sender.
-    valueChangeSupport.addInhibitedListener(evt.getSource());
+    valueChangeSupport.addInhibitedListener((IValueConnector) evt.getSource());
     try {
       setConnectorValue(evt.getNewValue());
       // a model connector should not be updated by the view connector when
@@ -244,11 +244,13 @@ public abstract class AbstractValueConnector extends AbstractConnector
           // connector
           // value resulted in a value changed (a string to uppercase for
           // instance).
-          evt.getSource().setConnectorValue(potentiallyChangedValue);
+          ((IValueConnector) evt.getSource())
+              .setConnectorValue(potentiallyChangedValue);
         }
       }
     } finally {
-      valueChangeSupport.removeInhibitedListener(evt.getSource());
+      valueChangeSupport.removeInhibitedListener((IValueConnector) evt
+          .getSource());
     }
   }
 
@@ -367,10 +369,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
-  public void removeConnectorValueChangeListener(
-      IConnectorValueChangeListener listener) {
+  public void removeValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
-      valueChangeSupport.removeConnectorValueChangeListener(listener);
+      valueChangeSupport.removeValueChangeListener(listener);
     }
   }
 
@@ -478,8 +479,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public void setModelConnector(IValueConnector modelConnector) {
     if (getModelConnector() != null) {
-      getModelConnector().removeConnectorValueChangeListener(this);
-      removeConnectorValueChangeListener(getModelConnector());
+      getModelConnector().removeValueChangeListener(this);
+      removeValueChangeListener(getModelConnector());
       if (modelReadabilityListener != null) {
         getModelConnector().removePropertyChangeListener(
             IValueConnector.READABLE_PROPERTY, modelReadabilityListener);
@@ -492,10 +493,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
     this.modelConnector = modelConnector;
     if (getModelConnector() != null) {
       // manually triggers a connector value change event
-      connectorValueChange(new ConnectorValueChangeEvent(getModelConnector(),
+      valueChange(new ValueChangeEvent(getModelConnector(),
           getConnectorValue(), getModelConnector().getConnectorValue()));
-      getModelConnector().addConnectorValueChangeListener(this);
-      addConnectorValueChangeListener(getModelConnector());
+      getModelConnector().addValueChangeListener(this);
+      addValueChangeListener(getModelConnector());
       if (modelReadabilityListener == null) {
         modelReadabilityListener = new PropertyChangeListener() {
 
@@ -564,9 +565,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *          the new connector value.
    * @return the created change event.
    */
-  protected ConnectorValueChangeEvent createChangeEvent(Object oldValue,
-      Object newValue) {
-    return new ConnectorValueChangeEvent(this, oldValue, newValue);
+  protected ValueChangeEvent createChangeEvent(Object oldValue, Object newValue) {
+    return new ValueChangeEvent(this, oldValue, newValue);
   }
 
   /**
