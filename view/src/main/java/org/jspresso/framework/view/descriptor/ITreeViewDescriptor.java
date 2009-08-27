@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import java.util.List;
+
+import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 
 /**
@@ -73,5 +76,14 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
    * @return the root tree level descriptor of this tree view.
    */
   ITreeLevelDescriptor getRootSubtreeDescriptor();
+
+  /**
+   * Gets the item selection listeners that will be attached to the created tree
+   * view.
+   * 
+   * @return the item selection listeners that will be attached to the created
+   *         tree view.
+   */
+  List<IItemSelectionListener> getItemSelectionListeners();
 
 }

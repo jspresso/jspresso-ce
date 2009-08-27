@@ -18,8 +18,11 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.List;
+
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
@@ -46,8 +49,9 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     implements ICollectionViewDescriptor {
 
-  private ESelectionMode     selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
-  private IDisplayableAction rowAction;
+  private ESelectionMode               selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+  private IDisplayableAction           rowAction;
+  private List<IItemSelectionListener> itemSelectionListeners;
 
   /**
    * {@inheritDoc}
@@ -101,6 +105,24 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    */
   public void setRowAction(IDisplayableAction rowAction) {
     this.rowAction = rowAction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IItemSelectionListener> getItemSelectionListeners() {
+    return itemSelectionListeners;
+  }
+
+  /**
+   * Sets the itemSelectionListeners.
+   * 
+   * @param itemSelectionListeners
+   *          the itemSelectionListeners to set.
+   */
+  public void setItemSelectionListeners(
+      List<IItemSelectionListener> itemSelectionListeners) {
+    this.itemSelectionListeners = itemSelectionListeners;
   }
 
 }

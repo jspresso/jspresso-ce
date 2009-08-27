@@ -41,6 +41,12 @@ updated definition :
 - Project created with the updated archetype require Maven 2.1+ to compile due tothe use
 of the new "prepare-package" phase.
 
+- In order to be able to add item selection listeners to view descriptors, we had to refactor 
+org.jspresso.framework.binding.IConnectorSelectionListener and its peer classes to
+org.jspresso.framework.util.event.IItemSelectionListener. This allows to avoid a circular
+dependency between the view module and the binding module. The same applies for the 
+org.jspresso.framework.binding.IConnectorValueChangeListener and its peer classes that have been
+refactored to org.jspresso.framework.util.event.IValueChangeListener.
 
 
 3.0.0

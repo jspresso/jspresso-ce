@@ -68,6 +68,8 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.DurationFormatter;
@@ -192,7 +194,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
   private ITranslationProvider          translationProvider;
-  private IValueChangeListener firstRowSelector;
+  private IValueChangeListener          firstRowSelector;
 
   /**
    * Constructs a new <code>AbstractViewFactory</code> instance.
@@ -228,6 +230,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
       view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
           actionHandler, locale);
+      if (((ICollectionViewDescriptor) viewDescriptor)
+          .getItemSelectionListeners() != null) {
+        for (IItemSelectionListener itemSelectionListener : ((ICollectionViewDescriptor) viewDescriptor)
+            .getItemSelectionListeners()) {
+          ((IItemSelectable) view.getConnector())
+              .addItemSelectionListener(itemSelectionListener);
+        }
+      }
     } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
       view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
           actionHandler, locale);
@@ -237,6 +247,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else if (viewDescriptor instanceof ITreeViewDescriptor) {
       view = createTreeView((ITreeViewDescriptor) viewDescriptor,
           actionHandler, locale);
+      if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionListeners() != null) {
+        for (IItemSelectionListener itemSelectionListener : ((ITreeViewDescriptor) viewDescriptor)
+            .getItemSelectionListeners()) {
+          ((IItemSelectable) view.getConnector())
+              .addItemSelectionListener(itemSelectionListener);
+        }
+      }
     }
     if (view != null) {
       try {
@@ -661,65 +678,62 @@ public abstract class AbstractViewFactory<E, F, G> implements
       final IActionHandler actionHandler, final Locale locale) {
     IValueConnector cardViewConnector = getConnectorFactory()
         .createValueConnector(cardView.getDescriptor().getName());
-    cardViewConnector
-        .addValueChangeListener(new IValueChangeListener() {
+    cardViewConnector.addValueChangeListener(new IValueChangeListener() {
 
-          public void valueChange(ValueChangeEvent evt) {
-            Object cardModel = evt.getNewValue();
-            boolean accessGranted = true;
-            if (cardModel instanceof ISecurable && actionHandler != null) {
-              try {
-                actionHandler.checkAccess((ISecurable) cardModel);
-              } catch (SecurityException se) {
-                accessGranted = false;
+      public void valueChange(ValueChangeEvent evt) {
+        Object cardModel = evt.getNewValue();
+        boolean accessGranted = true;
+        if (cardModel instanceof ISecurable && actionHandler != null) {
+          try {
+            actionHandler.checkAccess((ISecurable) cardModel);
+          } catch (SecurityException se) {
+            accessGranted = false;
+          }
+        }
+        E cardsPeer = cardView.getPeer();
+        if (accessGranted) {
+          String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
+              .getCardNameForModel(cardModel);
+          if (cardName != null) {
+            IView<E> childCardView = cardView.getChild(cardName);
+            if (childCardView == null
+                && cardModel instanceof IViewDescriptorProvider) {
+              IViewDescriptor providedViewDescriptor = ((IViewDescriptorProvider) cardModel)
+                  .getViewDescriptor();
+              if (providedViewDescriptor != null) {
+                childCardView = createView(providedViewDescriptor,
+                    actionHandler, locale);
+                addCard(cardView, childCardView, cardName);
               }
             }
-            E cardsPeer = cardView.getPeer();
-            if (accessGranted) {
-              String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
-                  .getCardNameForModel(cardModel);
-              if (cardName != null) {
-                IView<E> childCardView = cardView.getChild(cardName);
-                if (childCardView == null
-                    && cardModel instanceof IViewDescriptorProvider) {
-                  IViewDescriptor providedViewDescriptor = ((IViewDescriptorProvider) cardModel)
-                      .getViewDescriptor();
-                  if (providedViewDescriptor != null) {
-                    childCardView = createView(providedViewDescriptor,
-                        actionHandler, locale);
-                    addCard(cardView, childCardView, cardName);
-                  }
+            if (childCardView != null) {
+              showCardInPanel(cardsPeer, cardName);
+              IValueConnector childCardConnector = childCardView.getConnector();
+              if (childCardConnector != null) {
+                // To handle polymorphism, especially for modules, we refine
+                // the model descriptor.
+                if (cardView.getConnector().getModelConnector()
+                    .getModelDescriptor().getModelType().isAssignableFrom(
+                        childCardView.getDescriptor().getModelDescriptor()
+                            .getModelType())) {
+                  cardView.getConnector().getModelConnector()
+                      .setModelDescriptor(
+                          childCardView.getDescriptor().getModelDescriptor());
                 }
-                if (childCardView != null) {
-                  showCardInPanel(cardsPeer, cardName);
-                  IValueConnector childCardConnector = childCardView
-                      .getConnector();
-                  if (childCardConnector != null) {
-                    // To handle polymorphism, especially for modules, we refine
-                    // the model descriptor.
-                    if (cardView.getConnector().getModelConnector()
-                        .getModelDescriptor().getModelType().isAssignableFrom(
-                            childCardView.getDescriptor().getModelDescriptor()
-                                .getModelType())) {
-                      cardView.getConnector().getModelConnector()
-                          .setModelDescriptor(
-                              childCardView.getDescriptor()
-                                  .getModelDescriptor());
-                    }
-                    getMvcBinder().bind(childCardConnector,
-                        cardView.getConnector().getModelConnector());
-                  }
-                } else {
-                  showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
-                }
-              } else {
-                showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
+                getMvcBinder().bind(childCardConnector,
+                    cardView.getConnector().getModelConnector());
               }
             } else {
-              showCardInPanel(cardsPeer, ICardViewDescriptor.SECURITY_CARD);
+              showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
             }
+          } else {
+            showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
           }
-        });
+        } else {
+          showCardInPanel(cardsPeer, ICardViewDescriptor.SECURITY_CARD);
+        }
+      }
+    });
     return cardViewConnector;
   }
 

@@ -79,6 +79,7 @@ New features
 2838836    Allow for a custom LOV action for reference properties
 2841955    Allow for being able to refine filtered queries
 2843812    Better handle bounds in comparable query structures
+2843894    Catch a change of submodule
 
 3.0.0
 =====

@@ -26,6 +26,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -59,42 +60,43 @@ public class Workspace implements ISecurable {
   /**
    * <code>MODULES</code> is "modules".
    */
-  public static final String    MODULES          = "modules";
+  public static final String           MODULES          = "modules";
 
   /**
    * <code>NAME</code> is "name".
    */
-  public static final String    NAME             = "name";
+  public static final String           NAME             = "name";
 
   /**
    * <code>I18N_NAME</code> is "i18nName".
    */
-  public static final String    I18N_NAME        = "i18nName";
+  public static final String           I18N_NAME        = "i18nName";
 
   /**
    * <code>DESCRIPTION</code> is "description".
    */
-  public static final String    DESCRIPTION      = "description";
+  public static final String           DESCRIPTION      = "description";
 
   /**
    * <code>I18N_DESCRIPTION</code> is "i18nDescription".
    */
-  public static final String    I18N_DESCRIPTION = "i18nDescription";
+  public static final String           I18N_DESCRIPTION = "i18nDescription";
 
-  private String                description;
-  private Collection<String>    grantedRoles;
-  private String                i18nDescription;
-  private String                i18nName;
-  private String                iconImageURL;
-  private IIconImageURLProvider iconImageURLProvider;
-  private List<Module>          modules;
+  private String                       description;
+  private Collection<String>           grantedRoles;
+  private String                       i18nDescription;
+  private String                       i18nName;
+  private String                       iconImageURL;
+  private IIconImageURLProvider        iconImageURLProvider;
+  private List<Module>                 modules;
 
-  private boolean               started;
-  private IAction               startupAction;
+  private boolean                      started;
+  private IAction                      startupAction;
 
-  private String                name;
+  private String                       name;
 
-  private IViewDescriptor       viewDescriptor;
+  private IViewDescriptor              viewDescriptor;
+  private List<IItemSelectionListener> itemSelectionListeners;
 
   /**
    * Constructs a new <code>Workspace</code> instance.
@@ -208,6 +210,8 @@ public class Workspace implements ISecurable {
       }
       ((BasicWorkspaceViewDescriptor) viewDescriptor)
           .setIconImageURLProvider(iconImageURLProvider);
+      ((BasicWorkspaceViewDescriptor) viewDescriptor)
+          .setItemSelectionListeners(getItemSelectionListeners());
     }
     return viewDescriptor;
   }
@@ -351,5 +355,27 @@ public class Workspace implements ISecurable {
    */
   public void setStarted(boolean started) {
     this.started = started;
+  }
+
+  /**
+   * Gets the item selection listeners that will be attached to the created view
+   * that displays the workspace.
+   * 
+   * @return the item selection listeners that will be attached to the created
+   *         view that displays the workspace
+   */
+  public List<IItemSelectionListener> getItemSelectionListeners() {
+    return itemSelectionListeners;
+  }
+
+  /**
+   * Sets the itemSelectionListeners.
+   * 
+   * @param itemSelectionListeners
+   *          the itemSelectionListeners to set.
+   */
+  public void setItemSelectionListeners(
+      List<IItemSelectionListener> itemSelectionListeners) {
+    this.itemSelectionListeners = itemSelectionListeners;
   }
 }

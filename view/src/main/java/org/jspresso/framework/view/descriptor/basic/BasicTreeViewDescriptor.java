@@ -18,9 +18,12 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.List;
+
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
+import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -47,12 +50,13 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
     ITreeViewDescriptor {
 
-  private ITreeLevelDescriptor  childDescriptor;
-  private IIconImageURLProvider iconImageURLProvider;
-  private int                   maxDepth = 10;
+  private ITreeLevelDescriptor         childDescriptor;
+  private IIconImageURLProvider        iconImageURLProvider;
+  private int                          maxDepth = 10;
 
-  private String                renderedProperty;
-  private ITreeLevelDescriptor  rootSubtreeDescriptor;
+  private String                       renderedProperty;
+  private ITreeLevelDescriptor         rootSubtreeDescriptor;
+  private List<IItemSelectionListener> itemSelectionListeners;
 
   /**
    * {@inheritDoc}
@@ -166,5 +170,23 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   public void setRootSubtreeDescriptor(
       ITreeLevelDescriptor rootSubtreeDescriptor) {
     this.rootSubtreeDescriptor = rootSubtreeDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IItemSelectionListener> getItemSelectionListeners() {
+    return itemSelectionListeners;
+  }
+
+  /**
+   * Sets the itemSelectionListeners.
+   * 
+   * @param itemSelectionListeners
+   *          the itemSelectionListeners to set.
+   */
+  public void setItemSelectionListeners(
+      List<IItemSelectionListener> itemSelectionListeners) {
+    this.itemSelectionListeners = itemSelectionListeners;
   }
 }
