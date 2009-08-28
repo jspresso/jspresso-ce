@@ -1425,10 +1425,6 @@ package org.jspresso.framework.view.flex {
       }
     }
     
-    private static function isHtml(text:String):Boolean {
-      return text.toUpperCase().indexOf("<HTML>") >= 0;
-    }
-
     private function createTextField(remoteTextField:RTextField):UIComponent {
       var textField:TextInput = new TextInput();
       if(remoteTextField.maxLength > 0) {
@@ -1609,7 +1605,7 @@ package org.jspresso.framework.view.flex {
     
     public function isHtml(content:String):Boolean {
       if(content) {
-        return content.indexOf("<html>") > -1;
+        return content.toLowerCase().indexOf("<html>") > -1;
       }
       return false;
     }

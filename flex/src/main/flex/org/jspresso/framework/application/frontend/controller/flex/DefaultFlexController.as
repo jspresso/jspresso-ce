@@ -501,7 +501,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       	// the textField can be calculated correctly. All HTML tags will be removed and the
       	// <br> and <br/> tag will be replaced by /n (new line).
       	message = message.replace(/<br.*?>/g, "/n");
-      	message = message.replace(/<.*?>/g, "");
+      	//message = message.replace(/<.*?>/g, "");
       }
       if(messageCommand is RemoteOkCancelCommand) {
         alertCloseHandler = function(event:CloseEvent):void {
