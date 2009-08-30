@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
@@ -2303,11 +2304,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
     /**
      * {@inheritDoc}
      */
-    public void selectedItemChange(
-        @SuppressWarnings("unused") ItemSelectionEvent event) {
+    public void selectedItemChange(ItemSelectionEvent event) {
       Map<String, Object> context = getActionFactory().createActionContext(
           actionHandler, view.getDescriptor().getModelDescriptor(),
           view.getPeer(), view.getConnector(), null, view.getPeer());
+      context.put(ActionContextConstants.ACTION_PARAM, event.getSelectedItem());
       actionHandler.execute(actionDelegate, context);
     }
   }
