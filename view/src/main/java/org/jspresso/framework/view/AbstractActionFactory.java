@@ -7,7 +7,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
@@ -68,21 +71,19 @@ public abstract class AbstractActionFactory<E, F, G> implements
             ((IModelGate) clonedGate)
                 .setModelProvider(new EmbeddedModelProvider(
                     (IComponentDescriptorProvider<?>) modelDescriptor));
-            viewConnector
-                .addValueChangeListener(new IValueChangeListener() {
+            viewConnector.addValueChangeListener(new IValueChangeListener() {
 
-                  public void valueChange(ValueChangeEvent evt) {
-                    ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                        .getModelProvider()).setModel(evt.getNewValue());
-                  }
-                });
+              public void valueChange(ValueChangeEvent evt) {
+                ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                    .getModelProvider()).setModel(evt.getNewValue());
+              }
+            });
           } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             ((ICollectionConnectorProvider) viewConnector)
                 .getCollectionConnector().addValueChangeListener(
                     new IValueChangeListener() {
 
-                      public void valueChange(
-                          ValueChangeEvent evt) {
+                      public void valueChange(ValueChangeEvent evt) {
                         ICollectionConnector collectionConnector = (ICollectionConnector) evt
                             .getSource();
                         if (((IModelGate) clonedGate).getModelProvider() == null) {
@@ -176,5 +177,41 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   protected ITranslationProvider getTranslationProvider() {
     return translationProvider;
+  }
+
+  /**
+   * Creates the initial action context.
+   * 
+   * @param actionHandler
+   *          the action handler.
+   * @param modelDescriptor
+   *          the model descriptor.
+   * @param sourceComponent
+   *          the source component.
+   * @param viewConnector
+   *          the view connector.
+   * @param actionCommand
+   *          the action command.
+   * @param actionWidget
+   *          the widget this action was triggered from.
+   * @return the initial action context.
+   */
+  public Map<String, Object> createActionContext(IActionHandler actionHandler,
+      IModelDescriptor modelDescriptor, F sourceComponent,
+      IValueConnector viewConnector, String actionCommand, Object actionWidget) {
+    Map<String, Object> actionContext = actionHandler.createEmptyContext();
+    actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR, modelDescriptor);
+    actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);
+    actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
+    if (viewConnector instanceof ICollectionConnectorProvider
+        && ((ICollectionConnectorProvider) viewConnector)
+            .getCollectionConnector() != null) {
+      actionContext.put(ActionContextConstants.SELECTED_INDICES,
+          ((ICollectionConnectorProvider) viewConnector)
+              .getCollectionConnector().getSelectedIndices());
+    }
+    actionContext.put(ActionContextConstants.ACTION_COMMAND, actionCommand);
+    actionContext.put(ActionContextConstants.ACTION_WIDGET, actionWidget);
+    return actionContext;
   }
 }

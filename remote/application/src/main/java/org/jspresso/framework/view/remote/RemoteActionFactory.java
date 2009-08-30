@@ -21,7 +21,7 @@ package org.jspresso.framework.view.remote;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
@@ -67,8 +67,8 @@ public class RemoteActionFactory extends
   /**
    * {@inheritDoc}
    */
-  public RAction createAction(IDisplayableAction action,
-      IActionHandler actionHandler, IView<RComponent> view, Locale locale) {
+  public RAction createAction(IAction action, IActionHandler actionHandler,
+      IView<RComponent> view, Locale locale) {
     return createAction(action, actionHandler, view.getPeer(), view
         .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
   }
@@ -76,13 +76,15 @@ public class RemoteActionFactory extends
   /**
    * {@inheritDoc}
    */
-  public RAction createAction(IDisplayableAction action,
-      IActionHandler actionHandler, RComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
+  public RAction createAction(IAction action, IActionHandler actionHandler,
+      RComponent sourceComponent, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector, Locale locale) {
     RAction remoteAction = createRAction(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
-    attachActionGates(action, modelDescriptor, viewConnector, remoteAction);
+    if (action instanceof IDisplayableAction) {
+      attachActionGates((IDisplayableAction) action, modelDescriptor,
+          viewConnector, remoteAction);
+    }
     return remoteAction;
   }
 
@@ -135,21 +137,25 @@ public class RemoteActionFactory extends
     this.remotePeerRegistry = remotePeerRegistry;
   }
 
-  private RAction createRAction(IDisplayableAction action,
-      IActionHandler actionHandler, RComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
+  private RAction createRAction(IAction action, IActionHandler actionHandler,
+      RComponent sourceComponent, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector, Locale locale) {
     RAction remoteAction = new RAction(guidGenerator.generateGUID());
-    remoteAction.setName(action.getI18nName(getTranslationProvider(), locale));
-    String i18nDescription = action.getI18nDescription(
-        getTranslationProvider(), locale);
-    if (i18nDescription != null) {
-      remoteAction.setDescription(i18nDescription);
-    }
-    remoteAction.setIcon(getIconFactory().getIcon(action.getIconImageURL(),
-        getIconFactory().getTinyIconSize()));
-    if (action.getMnemonicAsString() != null) {
-      remoteAction.setMnemonicAsString(action.getMnemonicAsString());
+    if (action instanceof IDisplayableAction) {
+      remoteAction.setName(((IDisplayableAction) action).getI18nName(
+          getTranslationProvider(), locale));
+      String i18nDescription = ((IDisplayableAction) action)
+          .getI18nDescription(getTranslationProvider(), locale);
+      if (i18nDescription != null) {
+        remoteAction.setDescription(i18nDescription);
+      }
+      remoteAction.setIcon(getIconFactory().getIcon(
+          ((IDisplayableAction) action).getIconImageURL(),
+          getIconFactory().getTinyIconSize()));
+      if (((IDisplayableAction) action).getMnemonicAsString() != null) {
+        remoteAction.setMnemonicAsString(((IDisplayableAction) action)
+            .getMnemonicAsString());
+      }
     }
     ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction, action,
         actionHandler, sourceComponent, modelDescriptor, viewConnector);
@@ -159,15 +165,15 @@ public class RemoteActionFactory extends
 
   private final class ActionAdapter extends RAction {
 
-    private static final long  serialVersionUID = -922942515333636161L;
+    private static final long serialVersionUID = -922942515333636161L;
 
-    private IDisplayableAction action;
-    private IActionHandler     actionHandler;
-    private IModelDescriptor   modelDescriptor;
-    private RComponent         sourceComponent;
-    private IValueConnector    viewConnector;
+    private IAction           action;
+    private IActionHandler    actionHandler;
+    private IModelDescriptor  modelDescriptor;
+    private RComponent        sourceComponent;
+    private IValueConnector   viewConnector;
 
-    public ActionAdapter(RAction remoteAction, IDisplayableAction anAction,
+    public ActionAdapter(RAction remoteAction, IAction anAction,
         IActionHandler anActionHandler, RComponent aSourceComponent,
         IModelDescriptor aModelDescriptor, IValueConnector aViewConnector) {
       super(remoteAction.getGuid());
@@ -207,10 +213,6 @@ public class RemoteActionFactory extends
         if (context != null) {
           actionContext.putAll(context);
         }
-        actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
-            modelDescriptor);
-        actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
-            sourceComponent);
         IValueConnector contextViewConnector;
         if (viewStateGuid != null) {
           contextViewConnector = (IValueConnector) remotePeerRegistry
@@ -218,18 +220,10 @@ public class RemoteActionFactory extends
         } else {
           contextViewConnector = viewConnector;
         }
-        actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
-            contextViewConnector);
-        if (contextViewConnector instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) contextViewConnector)
-                .getCollectionConnector() != null) {
-          actionContext.put(ActionContextConstants.SELECTED_INDICES,
-              ((ICollectionConnectorProvider) contextViewConnector)
-                  .getCollectionConnector().getSelectedIndices());
-        }
-        actionContext.put(ActionContextConstants.ACTION_COMMAND, parameter);
-        // actionContext.put(ActionContextConstants.ACTION_WIDGET,
-        // e.getSource());
+        Map<String, Object> defaultActionContext = createActionContext(
+            actionHandler, modelDescriptor, sourceComponent,
+            contextViewConnector, parameter, sourceComponent);
+        actionContext.putAll(defaultActionContext);
         actionHandler.execute(action, actionContext);
       }
     }

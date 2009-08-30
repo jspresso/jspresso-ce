@@ -18,12 +18,9 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
-import java.util.List;
-
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.util.event.IItemSelectionListener;
-import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 
@@ -49,9 +46,9 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     implements ICollectionViewDescriptor {
 
-  private ESelectionMode               selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
-  private IDisplayableAction           rowAction;
-  private List<IItemSelectionListener> itemSelectionListeners;
+  private ESelectionMode selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+  private IAction        rowAction;
+  private IAction        itemSelectionAction;
 
   /**
    * {@inheritDoc}
@@ -93,7 +90,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   /**
    * {@inheritDoc}
    */
-  public IDisplayableAction getRowAction() {
+  public IAction getRowAction() {
     return rowAction;
   }
 
@@ -103,26 +100,25 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * @param rowAction
    *          the rowAction to set.
    */
-  public void setRowAction(IDisplayableAction rowAction) {
+  public void setRowAction(IAction rowAction) {
     this.rowAction = rowAction;
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<IItemSelectionListener> getItemSelectionListeners() {
-    return itemSelectionListeners;
+  public IAction getItemSelectionAction() {
+    return itemSelectionAction;
   }
 
   /**
-   * Sets the itemSelectionListeners.
+   * Sets the itemSelectionAction.
    * 
-   * @param itemSelectionListeners
-   *          the itemSelectionListeners to set.
+   * @param itemSelectionAction
+   *          the itemSelectionAction to set.
    */
-  public void setItemSelectionListeners(
-      List<IItemSelectionListener> itemSelectionListeners) {
-    this.itemSelectionListeners = itemSelectionListeners;
+  public void setItemSelectionAction(IAction itemSelectionAction) {
+    this.itemSelectionAction = itemSelectionAction;
   }
 
 }

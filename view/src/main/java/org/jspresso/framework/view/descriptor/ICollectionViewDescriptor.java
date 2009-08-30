@@ -18,10 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-import java.util.List;
-
-import org.jspresso.framework.util.event.IItemSelectionListener;
-import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.action.IAction;
 
 /**
  * This public interface is implemented by any collection view descriptor. For
@@ -57,14 +54,14 @@ public interface ICollectionViewDescriptor extends IViewDescriptor {
    * 
    * @return the action that is registered on the selected collection element.
    */
-  IDisplayableAction getRowAction();
+  IAction getRowAction();
 
   /**
-   * Gets the item selection listeners that will be attached to the created
+   * Gets the item selection action that will be attached to the created
    * collection view.
    * 
-   * @return the item selection listeners that will be attached to the created
+   * @return the item selection action that will be attached to the created
    *         collection view.
    */
-  List<IItemSelectionListener> getItemSelectionListeners();
+  IAction getItemSelectionAction();
 }

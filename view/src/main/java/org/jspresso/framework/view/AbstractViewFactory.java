@@ -28,7 +28,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -71,6 +73,7 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.DurationFormatter;
 import org.jspresso.framework.util.format.FormatAdapter;
@@ -230,13 +233,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
       view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
           actionHandler, locale);
-      if (((ICollectionViewDescriptor) viewDescriptor)
-          .getItemSelectionListeners() != null) {
-        for (IItemSelectionListener itemSelectionListener : ((ICollectionViewDescriptor) viewDescriptor)
-            .getItemSelectionListeners()) {
-          ((IItemSelectable) view.getConnector())
-              .addItemSelectionListener(itemSelectionListener);
-        }
+      if (((ICollectionViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
+        ((IItemSelectable) view.getConnector())
+            .addItemSelectionListener(new ItemSelectionAdapter(
+                ((ICollectionViewDescriptor) viewDescriptor)
+                    .getItemSelectionAction(), actionHandler, view));
       }
     } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
       view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
@@ -247,12 +248,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else if (viewDescriptor instanceof ITreeViewDescriptor) {
       view = createTreeView((ITreeViewDescriptor) viewDescriptor,
           actionHandler, locale);
-      if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionListeners() != null) {
-        for (IItemSelectionListener itemSelectionListener : ((ITreeViewDescriptor) viewDescriptor)
-            .getItemSelectionListeners()) {
-          ((IItemSelectable) view.getConnector())
-              .addItemSelectionListener(itemSelectionListener);
-        }
+      if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
+        ((IItemSelectable) view.getConnector())
+            .addItemSelectionListener(new ItemSelectionAdapter(
+                ((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction(),
+                actionHandler, view));
       }
     }
     if (view != null) {
@@ -2285,5 +2285,30 @@ public abstract class AbstractViewFactory<E, F, G> implements
       ICollectionConnector collectionConnector) {
     collectionConnector.addValueChangeListener(firstRowSelector);
 
+  }
+
+  private class ItemSelectionAdapter implements IItemSelectionListener {
+
+    private IAction        actionDelegate;
+    private IActionHandler actionHandler;
+    private IView<E>       view;
+
+    public ItemSelectionAdapter(IAction actionDelegate,
+        IActionHandler actionHandler, IView<E> view) {
+      this.actionDelegate = actionDelegate;
+      this.actionHandler = actionHandler;
+      this.view = view;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void selectedItemChange(
+        @SuppressWarnings("unused") ItemSelectionEvent event) {
+      Map<String, Object> context = getActionFactory().createActionContext(
+          actionHandler, view.getDescriptor().getModelDescriptor(),
+          view.getPeer(), view.getConnector(), null, view.getPeer());
+      actionHandler.execute(actionDelegate, context);
+    }
   }
 }

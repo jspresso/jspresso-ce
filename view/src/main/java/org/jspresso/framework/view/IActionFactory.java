@@ -19,12 +19,12 @@
 package org.jspresso.framework.view;
 
 import java.util.Locale;
+import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.view.action.IDisplayableAction;
-
 
 /**
  * A factory for actions.
@@ -45,9 +45,9 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual action class created.
+ *          the actual action class created.
  * @param <F>
- *            the actual component class the created actions are installed in.
+ *          the actual component class the created actions are installed in.
  */
 public interface IActionFactory<E, F> {
 
@@ -60,20 +60,20 @@ public interface IActionFactory<E, F> {
    * Creates an action from its descriptor.
    * 
    * @param action
-   *            the action descriptor.
+   *          the action descriptor.
    * @param actionHandler
-   *            the handler responsible for executing the action.
+   *          the handler responsible for executing the action.
    * @param sourceComponent
-   *            the view component which the action is attached to.
+   *          the view component which the action is attached to.
    * @param modelDescriptor
-   *            the model descriptor this action is triggered on.
+   *          the model descriptor this action is triggered on.
    * @param viewConnector
-   *            the view connector this action is created on.
+   *          the view connector this action is created on.
    * @param locale
-   *            the locale the action has to use.
+   *          the locale the action has to use.
    * @return the constructed action.
    */
-  E createAction(IDisplayableAction action, IActionHandler actionHandler,
+  E createAction(IAction action, IActionHandler actionHandler,
       F sourceComponent, IModelDescriptor modelDescriptor,
       IValueConnector viewConnector, Locale locale);
 
@@ -81,31 +81,57 @@ public interface IActionFactory<E, F> {
    * Creates an action from its descriptor.
    * 
    * @param action
-   *            the action descriptor.
+   *          the action descriptor.
    * @param actionHandler
-   *            the handler responsible for executing the action.
+   *          the handler responsible for executing the action.
    * @param view
-   *            the view which the action is attached to.
+   *          the view which the action is attached to.
    * @param locale
-   *            the locale the action has to use.
+   *          the locale the action has to use.
    * @return the constructed action.
    */
-  E createAction(IDisplayableAction action, IActionHandler actionHandler,
-      IView<F> view, Locale locale);
+  E createAction(IAction action, IActionHandler actionHandler, IView<F> view,
+      Locale locale);
 
   /**
    * Enabled or disables an action.
    * 
-   * @param action the action to work on.
-   * @param enabled true to enable, false otherwise.
+   * @param action
+   *          the action to work on.
+   * @param enabled
+   *          true to enable, false otherwise.
    */
   void setActionEnabled(E action, boolean enabled);
 
   /**
    * Sets an action name.
    * 
-   * @param action the action to work on.
-   * @param name the action name.
+   * @param action
+   *          the action to work on.
+   * @param name
+   *          the action name.
    */
   void setActionName(E action, String name);
+
+  /**
+   * Creates the initial action context.
+   * 
+   * @param actionHandler
+   *          the action handler.
+   * @param modelDescriptor
+   *          the model descriptor.
+   * @param sourceComponent
+   *          the source component.
+   * @param viewConnector
+   *          the view connector.
+   * @param actionCommand
+   *          the action command.
+   * @param actionWidget
+   *          the widget this action was triggered from.
+   * @return the initial action context.
+   */
+  Map<String, Object> createActionContext(IActionHandler actionHandler,
+      IModelDescriptor modelDescriptor, F sourceComponent,
+      IValueConnector viewConnector, String actionCommand, Object actionWidget);
+
 }

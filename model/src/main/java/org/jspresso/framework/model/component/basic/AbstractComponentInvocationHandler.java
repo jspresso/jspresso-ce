@@ -95,6 +95,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private IComponentExtensionFactory                                                   extensionFactory;
   private IComponentFactory                                                            inlineComponentFactory;
   private Set<String>                                                                  modifierMonitors;
+  private Map<String, InlineReferenceTracker>                                          referenceTrackers;
 
   private boolean                                                                      propertyProcessorsEnabled;
 
@@ -126,6 +127,7 @@ public abstract class AbstractComponentInvocationHandler implements
     this.accessorFactory = accessorFactory;
     this.extensionFactory = extensionFactory;
     this.propertyProcessorsEnabled = true;
+    this.referenceTrackers = new HashMap<String, InlineReferenceTracker>();
   }
 
   /**
@@ -522,19 +524,22 @@ public abstract class AbstractComponentInvocationHandler implements
   protected void storeReferenceProperty(
       IReferencePropertyDescriptor<?> propertyDescriptor,
       Object oldPropertyValue, Object newPropertyValue) {
+    String propertyName = propertyDescriptor.getName();
     if (oldPropertyValue != null) {
-      ((IPropertyChangeCapable) oldPropertyValue)
-          .removePropertyChangeListener(new InlineReferenceTracker(
-              propertyDescriptor.getName(),
-              isInlineComponentReference(propertyDescriptor)));
+      InlineReferenceTracker tracker = referenceTrackers.get(propertyName);
+      if (tracker != null) {
+        ((IPropertyChangeCapable) oldPropertyValue)
+            .removePropertyChangeListener(tracker);
+      }
     }
     if (newPropertyValue != null) {
+      InlineReferenceTracker tracker = new InlineReferenceTracker(propertyName,
+          isInlineComponentReference(propertyDescriptor));
       ((IPropertyChangeCapable) newPropertyValue)
-          .addPropertyChangeListener(new InlineReferenceTracker(
-              propertyDescriptor.getName(),
-              isInlineComponentReference(propertyDescriptor)));
+          .addPropertyChangeListener(tracker);
+      referenceTrackers.put(propertyName, tracker);
     }
-    storeProperty(propertyDescriptor.getName(), newPropertyValue);
+    storeProperty(propertyName, newPropertyValue);
   }
 
   /**
@@ -1065,6 +1070,7 @@ public abstract class AbstractComponentInvocationHandler implements
     public void propertyChange(PropertyChangeEvent evt) {
       if (enabled) {
         boolean wasEnabled = enabled;
+        String nestedPropertyName = componentName + "." + evt.getPropertyName();
         try {
           enabled = false;
           if (inlinedComponent) {
@@ -1072,59 +1078,14 @@ public abstract class AbstractComponentInvocationHandler implements
             firePropertyChange(componentName, null, evt.getSource());
           }
           // for ui notification
-          firePropertyChange(componentName + "." + evt.getPropertyName(), evt
-              .getOldValue(), evt.getNewValue());
+          if (changeSupport.hasListeners(nestedPropertyName)) {
+            firePropertyChange(nestedPropertyName, evt.getOldValue(), evt
+                .getNewValue());
+          }
         } finally {
           enabled = wasEnabled;
         }
       }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + getOuterType().hashCode();
-      result = prime * result;
-      if (componentName != null) {
-        result += componentName.hashCode();
-      }
-      return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null) {
-        return false;
-      }
-      if (!(obj instanceof InlineReferenceTracker)) {
-        return false;
-      }
-      InlineReferenceTracker other = (InlineReferenceTracker) obj;
-      if (!getOuterType().equals(other.getOuterType())) {
-        return false;
-      }
-      if (componentName == null) {
-        if (other.componentName != null) {
-          return false;
-        }
-      } else if (!componentName.equals(other.componentName)) {
-        return false;
-      }
-      return true;
-    }
-
-    private AbstractComponentInvocationHandler getOuterType() {
-      return AbstractComponentInvocationHandler.this;
     }
   }
 

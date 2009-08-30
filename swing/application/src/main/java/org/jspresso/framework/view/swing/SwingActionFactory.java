@@ -28,7 +28,6 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -64,8 +63,8 @@ public class SwingActionFactory extends
   /**
    * {@inheritDoc}
    */
-  public Action createAction(IDisplayableAction action,
-      IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
+  public Action createAction(IAction action, IActionHandler actionHandler,
+      IView<JComponent> view, Locale locale) {
     return createAction(action, actionHandler, view.getPeer(), view
         .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
   }
@@ -73,13 +72,15 @@ public class SwingActionFactory extends
   /**
    * {@inheritDoc}
    */
-  public Action createAction(IDisplayableAction action,
-      IActionHandler actionHandler, JComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
+  public Action createAction(IAction action, IActionHandler actionHandler,
+      JComponent sourceComponent, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector, Locale locale) {
     Action swingAction = new ActionAdapter(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
-    attachActionGates(action, modelDescriptor, viewConnector, swingAction);
+    if (action instanceof IDisplayableAction) {
+      attachActionGates(((IDisplayableAction) action), modelDescriptor,
+          viewConnector, swingAction);
+    }
     return swingAction;
   }
 
@@ -117,10 +118,9 @@ public class SwingActionFactory extends
      * @param viewConnector
      * @param locale
      */
-    public ActionAdapter(IDisplayableAction action,
-        IActionHandler actionHandler, JComponent sourceComponent,
-        IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-        Locale locale) {
+    public ActionAdapter(IAction action, IActionHandler actionHandler,
+        JComponent sourceComponent, IModelDescriptor modelDescriptor,
+        IValueConnector viewConnector, Locale locale) {
       this.action = action;
       this.actionHandler = actionHandler;
       this.sourceComponent = sourceComponent;
@@ -131,18 +131,23 @@ public class SwingActionFactory extends
       } else {
         this.viewConnector = viewConnector;
       }
-      putValue(Action.NAME, action
-          .getI18nName(getTranslationProvider(), locale));
-      String i18nDescription = action.getI18nDescription(
-          getTranslationProvider(), locale);
-      if (i18nDescription != null) {
-        putValue(Action.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
-      }
-      putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          action.getIconImageURL(), getIconFactory().getTinyIconSize()));
-      if (action.getMnemonicAsString() != null) {
-        putValue(Action.MNEMONIC_KEY, new Integer(KeyStroke.getKeyStroke(
-            action.getMnemonicAsString()).getKeyCode()));
+      if (action instanceof IDisplayableAction) {
+        putValue(Action.NAME, ((IDisplayableAction) action).getI18nName(
+            getTranslationProvider(), locale));
+        String i18nDescription = ((IDisplayableAction) action)
+            .getI18nDescription(getTranslationProvider(), locale);
+        if (i18nDescription != null) {
+          putValue(Action.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
+        }
+        putValue(Action.SMALL_ICON, getIconFactory().getIcon(
+            ((IDisplayableAction) action).getIconImageURL(),
+            getIconFactory().getTinyIconSize()));
+        if (((IDisplayableAction) action).getMnemonicAsString() != null) {
+          putValue(Action.MNEMONIC_KEY,
+              new Integer(KeyStroke.getKeyStroke(
+                  ((IDisplayableAction) action).getMnemonicAsString())
+                  .getKeyCode()));
+        }
       }
     }
 
@@ -160,24 +165,12 @@ public class SwingActionFactory extends
      */
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
-        Map<String, Object> actionContext = actionHandler.createEmptyContext();
-        actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
-            modelDescriptor);
-        actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
-            sourceComponent);
-        actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
-        if (viewConnector instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) viewConnector)
-                .getCollectionConnector() != null) {
-          actionContext.put(ActionContextConstants.SELECTED_INDICES,
-              ((ICollectionConnectorProvider) viewConnector)
-                  .getCollectionConnector().getSelectedIndices());
-        }
-        actionContext.put(ActionContextConstants.ACTION_COMMAND, e
-            .getActionCommand());
-        actionContext.put(ActionContextConstants.ACTION_WIDGET, e.getSource());
+        Map<String, Object> actionContext = createActionContext(actionHandler,
+            modelDescriptor, sourceComponent, viewConnector, e
+                .getActionCommand(), e.getSource());
         actionHandler.execute(action, actionContext);
       }
     }
   }
+
 }

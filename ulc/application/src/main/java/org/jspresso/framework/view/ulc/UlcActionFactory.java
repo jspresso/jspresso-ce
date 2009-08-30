@@ -21,9 +21,7 @@ package org.jspresso.framework.view.ulc;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.view.AbstractActionFactory;
@@ -61,7 +59,7 @@ public class UlcActionFactory extends
   /**
    * {@inheritDoc}
    */
-  public IAction createAction(IDisplayableAction action,
+  public IAction createAction(org.jspresso.framework.action.IAction action,
       IActionHandler actionHandler, IView<ULCComponent> view, Locale locale) {
     return createAction(action, actionHandler, view.getPeer(), view
         .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
@@ -70,13 +68,16 @@ public class UlcActionFactory extends
   /**
    * {@inheritDoc}
    */
-  public IAction createAction(IDisplayableAction action,
+  public IAction createAction(org.jspresso.framework.action.IAction action,
       IActionHandler actionHandler, ULCComponent sourceComponent,
       IModelDescriptor modelDescriptor, IValueConnector viewConnector,
       Locale locale) {
     IAction ulcAction = new ActionAdapter(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
-    attachActionGates(action, modelDescriptor, viewConnector, ulcAction);
+    if (action instanceof IDisplayableAction) {
+      attachActionGates(((IDisplayableAction) action), modelDescriptor,
+          viewConnector, ulcAction);
+    }
     return ulcAction;
   }
 
@@ -115,7 +116,7 @@ public class UlcActionFactory extends
      * @param viewConnector
      * @param locale
      */
-    public ActionAdapter(IDisplayableAction action,
+    public ActionAdapter(org.jspresso.framework.action.IAction action,
         IActionHandler actionHandler, ULCComponent sourceComponent,
         IModelDescriptor modelDescriptor, IValueConnector viewConnector,
         Locale locale) {
@@ -124,18 +125,24 @@ public class UlcActionFactory extends
       this.sourceComponent = sourceComponent;
       this.modelDescriptor = modelDescriptor;
       this.viewConnector = viewConnector;
-      putValue(IAction.NAME, action.getI18nName(getTranslationProvider(),
-          locale));
-      String i18nDescription = action.getI18nDescription(
-          getTranslationProvider(), locale);
-      if (i18nDescription != null) {
-        putValue(IAction.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
-      }
-      putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
-          action.getIconImageURL(), getIconFactory().getTinyIconSize()));
-      if (action.getMnemonicAsString() != null) {
-        putValue(IAction.MNEMONIC_KEY, new Integer(KeyStroke.getKeyStroke(
-            action.getMnemonicAsString()).getKeyCode()));
+      if (action instanceof IDisplayableAction) {
+        putValue(IAction.NAME, ((IDisplayableAction) action).getI18nName(
+            getTranslationProvider(), locale));
+        String i18nDescription = ((IDisplayableAction) action)
+            .getI18nDescription(getTranslationProvider(), locale);
+        if (i18nDescription != null) {
+          putValue(IAction.SHORT_DESCRIPTION, i18nDescription
+              + TOOLTIP_ELLIPSIS);
+        }
+        putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
+            ((IDisplayableAction) action).getIconImageURL(),
+            getIconFactory().getTinyIconSize()));
+        if (((IDisplayableAction) action).getMnemonicAsString() != null) {
+          putValue(IAction.MNEMONIC_KEY,
+              new Integer(KeyStroke.getKeyStroke(
+                  ((IDisplayableAction) action).getMnemonicAsString())
+                  .getKeyCode()));
+        }
       }
     }
 
@@ -153,25 +160,11 @@ public class UlcActionFactory extends
      */
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
-        Map<String, Object> actionContext = actionHandler.createEmptyContext();
-        actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
-            sourceComponent);
-        actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
-        if (viewConnector instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) viewConnector)
-                .getCollectionConnector() != null) {
-          actionContext.put(ActionContextConstants.SELECTED_INDICES,
-              ((ICollectionConnectorProvider) viewConnector)
-                  .getCollectionConnector().getSelectedIndices());
-        }
-        actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
-            modelDescriptor);
-        actionContext.put(ActionContextConstants.ACTION_COMMAND, e
-            .getActionCommand());
-        actionContext.put(ActionContextConstants.ACTION_WIDGET, e.getSource());
+        Map<String, Object> actionContext = createActionContext(actionHandler,
+            modelDescriptor, sourceComponent, viewConnector, e
+                .getActionCommand(), e.getSource());
         actionHandler.execute(action, actionContext);
       }
     }
-
   }
 }
