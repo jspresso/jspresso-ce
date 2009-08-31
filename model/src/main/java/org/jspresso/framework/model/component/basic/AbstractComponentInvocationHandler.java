@@ -1078,7 +1078,8 @@ public abstract class AbstractComponentInvocationHandler implements
             firePropertyChange(componentName, null, evt.getSource());
           }
           // for ui notification
-          if (changeSupport.hasListeners(nestedPropertyName)) {
+          if (changeSupport != null
+              && changeSupport.hasListeners(nestedPropertyName)) {
             firePropertyChange(nestedPropertyName, evt.getOldValue(), evt
                 .getNewValue());
           }
