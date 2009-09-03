@@ -75,6 +75,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
   private IValueConnector          modelConnector;
   private PropertyChangeListener   modelReadabilityListener;
   private PropertyChangeListener   modelWritabilityListener;
+  private PropertyChangeListener   parentReadabilityListener;
+  private PropertyChangeListener   parentWritabilityListener;
   private Object                   oldConnectorValue;
 
   private boolean                  oldReadability;
@@ -629,7 +631,44 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *          the parentConnector to set.
    */
   public void setParentConnector(ICompositeValueConnector parentConnector) {
+    IValueConnector oldParentConnector = getParentConnector();
     this.parentConnector = parentConnector;
+    if (oldParentConnector != parentConnector) {
+      if (oldParentConnector != null) {
+        if (parentReadabilityListener != null) {
+          oldParentConnector.removePropertyChangeListener(READABLE_PROPERTY,
+              parentReadabilityListener);
+        }
+        if (parentWritabilityListener != null) {
+          oldParentConnector.removePropertyChangeListener(WRITABLE_PROPERTY,
+              parentReadabilityListener);
+        }
+      }
+      if (parentConnector != null) {
+        if (parentReadabilityListener == null) {
+          parentReadabilityListener = new PropertyChangeListener() {
+
+            public void propertyChange(
+                @SuppressWarnings("unused") PropertyChangeEvent evt) {
+              readabilityChange();
+            }
+          };
+        }
+        parentConnector.addPropertyChangeListener(READABLE_PROPERTY,
+            parentReadabilityListener);
+        if (parentWritabilityListener == null) {
+          parentWritabilityListener = new PropertyChangeListener() {
+
+            public void propertyChange(
+                @SuppressWarnings("unused") PropertyChangeEvent evt) {
+              writabilityChange();
+            }
+          };
+        }
+        parentConnector.addPropertyChangeListener(WRITABLE_PROPERTY,
+            parentWritabilityListener);
+      }
+    }
   }
 
   /**
