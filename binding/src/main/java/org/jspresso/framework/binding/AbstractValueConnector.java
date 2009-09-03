@@ -478,15 +478,16 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *          the modelConnector to set.
    */
   public void setModelConnector(IValueConnector modelConnector) {
-    if (getModelConnector() != null) {
-      getModelConnector().removeValueChangeListener(this);
-      removeValueChangeListener(getModelConnector());
+    IValueConnector oldModelConnector = getModelConnector();
+    if (oldModelConnector != null) {
+      oldModelConnector.removeValueChangeListener(this);
+      removeValueChangeListener(oldModelConnector);
       if (modelReadabilityListener != null) {
-        getModelConnector().removePropertyChangeListener(
+        oldModelConnector.removePropertyChangeListener(
             IValueConnector.READABLE_PROPERTY, modelReadabilityListener);
       }
       if (modelWritabilityListener != null) {
-        getModelConnector().removePropertyChangeListener(
+        oldModelConnector.removePropertyChangeListener(
             IValueConnector.WRITABLE_PROPERTY, modelWritabilityListener);
       }
     }
@@ -524,6 +525,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     }
     readabilityChange();
     writabilityChange();
+    firePropertyChange("modelConnector", oldModelConnector, getModelConnector());
   }
 
   /**
