@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -56,7 +54,6 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
@@ -74,7 +71,6 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
@@ -85,7 +81,6 @@ import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.gate.IModelGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
@@ -269,14 +264,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
         view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
-            IGate clonedGate = cloneGate(view, gate);
-            view.getConnector().addReadabilityGate(clonedGate);
+            view.getConnector().addReadabilityGate(gate.clone());
           }
         }
         if (viewDescriptor.getWritabilityGates() != null) {
           for (IGate gate : viewDescriptor.getWritabilityGates()) {
-            IGate clonedGate = cloneGate(view, gate);
-            view.getConnector().addWritabilityGate(clonedGate);
+            view.getConnector().addWritabilityGate(gate.clone());
           }
         }
         finishComponentConfiguration(viewDescriptor, locale, view);
@@ -289,45 +282,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       }
     }
     return view;
-  }
-
-  private IGate cloneGate(final IView<E> view, IGate gate) {
-    final IGate clonedGate = gate.clone();
-    if (clonedGate instanceof IModelGate) {
-      view.getConnector().addPropertyChangeListener("modelConnector",
-          new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent pce) {
-              IValueConnector connectorToListenTo = getComponentConnector(view
-                  .getConnector());
-              if (connectorToListenTo != null) {
-                ((IModelGate) clonedGate).setModel(connectorToListenTo
-                    .getConnectorValue());
-                connectorToListenTo
-                    .addValueChangeListener(new IValueChangeListener() {
-
-                      public void valueChange(ValueChangeEvent evt) {
-                        ((IModelGate) clonedGate).setModel(evt.getNewValue());
-                      }
-                    });
-              }
-              // listen only once.
-              ((IPropertyChangeCapable) pce.getSource())
-                  .removePropertyChangeListener("modelConnector", this);
-            }
-          });
-    }
-    return clonedGate;
-  }
-
-  private IValueConnector getComponentConnector(IValueConnector connector) {
-    if (connector == null) {
-      return null;
-    }
-    if (connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
-      return connector;
-    }
-    return connector.getParentConnector();
   }
 
   /**

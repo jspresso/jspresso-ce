@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.jspresso.framework.model.IModelProvider;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.util.event.IValueChangeListener;
@@ -36,6 +37,7 @@ import org.jspresso.framework.util.event.ValueChangeSupport;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.IModelGate;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
 /**
@@ -151,10 +153,102 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Empty implementation. {@inheritDoc}
+   * Binds model gates.
+   * <p>
+   * {@inheritDoc}
    */
   public void boundAsView() {
-    // Empty implementation
+    bindModelGates(getWritabilityGates());
+    bindModelGates(getReadabilityGates());
+  }
+
+  private void bindModelGates(Collection<IGate> gates) {
+    if (gates != null) {
+      IValueConnector connectorToListenTo = getComponentConnector(this);
+      if (connectorToListenTo != null) {
+        for (IGate gate : gates) {
+          if (gate instanceof IModelGate) {
+            ((IModelGate) gate).setModel(connectorToListenTo
+                .getConnectorValue());
+            connectorToListenTo
+                .addValueChangeListener(new InnerGateModelListener(
+                    (IModelGate) gate));
+          }
+        }
+      }
+    }
+  }
+
+  private static class InnerGateModelListener implements IValueChangeListener {
+
+    private IModelGate gate;
+
+    /**
+     * Constructs a new <code>InnerGateModelListener</code> instance.
+     * 
+     * @param gate
+     *          the model gate.
+     */
+    public InnerGateModelListener(IModelGate gate) {
+      this.gate = gate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void valueChange(ValueChangeEvent evt) {
+      gate.setModel(evt.getNewValue());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result;
+      if (gate != null) {
+        result += gate.hashCode();
+      }
+      return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      InnerGateModelListener other = (InnerGateModelListener) obj;
+      if (gate == null) {
+        if (other.gate != null) {
+          return false;
+        }
+      } else if (!gate.equals(other.gate)) {
+        return false;
+      }
+      return true;
+    }
+
+  }
+
+  private IValueConnector getComponentConnector(IValueConnector connector) {
+    if (connector == null) {
+      return null;
+    }
+    if (connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+      return connector;
+    }
+    return getComponentConnector(connector.getParentConnector());
   }
 
   /**
