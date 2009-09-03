@@ -18,11 +18,7 @@
  */
 package org.jspresso.framework.binding.model;
 
-import org.jspresso.framework.model.IModelChangeListener;
-import org.jspresso.framework.model.IModelProvider;
-import org.jspresso.framework.model.ModelChangeEvent;
 import org.jspresso.framework.util.gate.AbstractGate;
-
 
 /**
  * Base implementation of a model based gate.
@@ -44,9 +40,9 @@ import org.jspresso.framework.util.gate.AbstractGate;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractModelGate extends AbstractGate implements
-    IModelGate, IModelChangeListener {
+    IModelGate {
 
-  private IModelProvider modelProvider;
+  private Object model;
 
   /**
    * {@inheritDoc}
@@ -54,49 +50,26 @@ public abstract class AbstractModelGate extends AbstractGate implements
   @Override
   public AbstractModelGate clone() {
     AbstractModelGate clonedGate = (AbstractModelGate) super.clone();
-    clonedGate.modelProvider = null;
+    clonedGate.model = null;
     return clonedGate;
   }
 
   /**
-   * Gets the modelProvider.
+   * Gets the model.
    * 
-   * @return the modelProvider.
+   * @return the model.
    */
-  public IModelProvider getModelProvider() {
-    return modelProvider;
+  public Object getModel() {
+    return model;
   }
 
   /**
-   * Sets the modelProvider.
+   * Sets the model.
    * 
-   * @param modelProvider
-   *            the modelProvider to set.
+   * @param model
+   *          the model to set.
    */
-  public void setModelProvider(IModelProvider modelProvider) {
-    Object oldModel = getModel();
-    if (this.modelProvider != null) {
-      this.modelProvider.removeModelChangeListener(this);
-    }
-    this.modelProvider = modelProvider;
-    Object newModel = getModel();
-    if (this.modelProvider != null) {
-      this.modelProvider.addModelChangeListener(this);
-    }
-    if (getModelProvider() != null) {
-      modelChange(new ModelChangeEvent(getModelProvider(), oldModel, newModel));
-    }
-  }
-
-  /**
-   * Gets the model held by the model provider.
-   * 
-   * @return the model held by the model provider.
-   */
-  protected Object getModel() {
-    if (modelProvider != null) {
-      return modelProvider.getModel();
-    }
-    return null;
+  public void setModel(Object model) {
+    this.model = model;
   }
 }

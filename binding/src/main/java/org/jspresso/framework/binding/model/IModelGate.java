@@ -18,9 +18,7 @@
  */
 package org.jspresso.framework.binding.model;
 
-import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.util.gate.IGate;
-
 
 /**
  * A model based gate.
@@ -44,17 +42,17 @@ import org.jspresso.framework.util.gate.IGate;
 public interface IModelGate extends IGate {
 
   /**
-   * Gets the modelProvider driving this gate.
+   * Gets the model driving this gate.
    * 
-   * @return the modelProvider driving this gate.
+   * @return the model driving this gate.
    */
-  IModelProvider getModelProvider();
+  Object getModel();
 
   /**
-   * Sets the modelProvider driving this gate.
+   * Sets the model driving this gate.
    * 
-   * @param modelProvider
-   *            the modelProvider driving this gate.
+   * @param model
+   *          the model driving this gate.
    */
-  void setModelProvider(IModelProvider modelProvider);
+  void setModel(Object model);
 }

@@ -22,8 +22,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
-import org.jspresso.framework.model.IModelProvider;
-import org.jspresso.framework.model.ModelChangeEvent;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
@@ -52,7 +50,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 public class BooleanPropertyModelGate extends AbstractModelGate implements
     PropertyChangeListener {
 
-  private IAccessor        accessor;
   private IAccessorFactory accessorFactory;
   private String           booleanPropertyName;
   private boolean          open;
@@ -87,34 +84,41 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
   /**
    * {@inheritDoc}
    */
-  public void modelChange(ModelChangeEvent evt) {
-    if (evt.getOldValue() instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) evt.getOldValue())
-          .removePropertyChangeListener(booleanPropertyName, this);
-    }
-    if (evt.getNewValue() instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) evt.getNewValue()).addPropertyChangeListener(
-          booleanPropertyName, this);
-    }
-    boolean oldOpen = isOpen();
-    if (accessor != null && evt.getNewValue() != null) {
-      try {
-        Boolean modelValue = (Boolean) accessor.getValue(getModel());
-        this.open = (modelValue != null && modelValue.booleanValue());
-        if (!openOnTrue) {
-          this.open = !this.open;
-        }
-      } catch (IllegalAccessException ex) {
-        throw new NestedRuntimeException(ex);
-      } catch (InvocationTargetException ex) {
-        throw new NestedRuntimeException(ex);
-      } catch (NoSuchMethodException ex) {
-        throw new NestedRuntimeException(ex);
+  @Override
+  public void setModel(Object model) {
+    Object oldModel = getModel();
+    super.setModel(model);
+    if (oldModel != model) {
+      if (oldModel instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) oldModel).removePropertyChangeListener(
+            booleanPropertyName, this);
       }
-    } else {
-      this.open = !openOnTrue;
+      if (model instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) model).addPropertyChangeListener(
+            booleanPropertyName, this);
+      }
+      boolean oldOpen = isOpen();
+      if (model != null) {
+        try {
+          IAccessor accessor = accessorFactory.createPropertyAccessor(
+              booleanPropertyName, model.getClass());
+          Boolean modelValue = (Boolean) accessor.getValue(model);
+          this.open = (modelValue != null && modelValue.booleanValue());
+          if (!openOnTrue) {
+            this.open = !this.open;
+          }
+        } catch (IllegalAccessException ex) {
+          throw new NestedRuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+          throw new NestedRuntimeException(ex);
+        } catch (NoSuchMethodException ex) {
+          throw new NestedRuntimeException(ex);
+        }
+      } else {
+        this.open = !openOnTrue;
+      }
+      firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
     }
-    firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }
 
   /**
@@ -148,18 +152,6 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    */
   public void setBooleanPropertyName(String booleanPropertyName) {
     this.booleanPropertyName = booleanPropertyName;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setModelProvider(IModelProvider modelProvider) {
-    if (accessor == null && modelProvider != null && accessorFactory != null) {
-      accessor = accessorFactory.createPropertyAccessor(booleanPropertyName,
-          modelProvider.getModelDescriptor().getModelType());
-    }
-    super.setModelProvider(modelProvider);
   }
 
   /**

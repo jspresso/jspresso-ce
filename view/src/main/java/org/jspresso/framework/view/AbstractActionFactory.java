@@ -15,7 +15,6 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelGate;
-import org.jspresso.framework.model.EmbeddedModelProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -68,14 +67,10 @@ public abstract class AbstractActionFactory<E, F, G> implements
         final IGate clonedGate = gate.clone();
         if (clonedGate instanceof IModelGate) {
           if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
-            ((IModelGate) clonedGate)
-                .setModelProvider(new EmbeddedModelProvider(
-                    (IComponentDescriptorProvider<?>) modelDescriptor));
             viewConnector.addValueChangeListener(new IValueChangeListener() {
 
               public void valueChange(ValueChangeEvent evt) {
-                ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                    .getModelProvider()).setModel(evt.getNewValue());
+                ((IModelGate) clonedGate).setModel(evt.getNewValue());
               }
             });
           } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
@@ -86,19 +81,12 @@ public abstract class AbstractActionFactory<E, F, G> implements
                       public void valueChange(ValueChangeEvent evt) {
                         ICollectionConnector collectionConnector = (ICollectionConnector) evt
                             .getSource();
-                        if (((IModelGate) clonedGate).getModelProvider() == null) {
-                          ((IModelGate) clonedGate)
-                              .setModelProvider(new EmbeddedModelProvider(
-                                  collectionConnector.getModelProvider()
-                                      .getModelDescriptor()));
-                        }
                         if (collectionConnector.getModelConnector() != null) {
-                          ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                              .getModelProvider()).setModel(collectionConnector
-                              .getModelProvider().getModel());
+                          ((IModelGate) clonedGate)
+                              .setModel(collectionConnector.getModelProvider()
+                                  .getModel());
                         } else {
-                          ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                              .getModelProvider()).setModel(null);
+                          ((IModelGate) clonedGate).setModel(null);
                         }
                       }
                     });

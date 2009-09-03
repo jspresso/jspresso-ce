@@ -264,12 +264,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
         view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
-            view.getConnector().addReadabilityGate(gate.clone());
+            final IGate clonedGate = gate.clone();
+            view.getConnector().addReadabilityGate(clonedGate);
           }
         }
         if (viewDescriptor.getWritabilityGates() != null) {
           for (IGate gate : viewDescriptor.getWritabilityGates()) {
-            view.getConnector().addWritabilityGate(gate.clone());
+            final IGate clonedGate = gate.clone();
+            view.getConnector().addWritabilityGate(clonedGate);
           }
         }
         finishComponentConfiguration(viewDescriptor, locale, view);

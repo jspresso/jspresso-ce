@@ -82,28 +82,6 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * {@inheritDoc}
    */
   @Override
-  public void addReadabilityGate(IGate gate) {
-    if (gate instanceof IModelGate) {
-      ((IModelGate) gate).setModelProvider(getModelProvider());
-    }
-    super.addReadabilityGate(gate);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addWritabilityGate(IGate gate) {
-    if (gate instanceof IModelGate) {
-      ((IModelGate) gate).setModelProvider(getModelProvider());
-    }
-    super.addWritabilityGate(gate);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public ModelPropertyConnector clone() {
     return clone(getId());
   }
@@ -150,8 +128,8 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * Detaches <code>this</code> as <code>PropertyChangeListener</code> on the
    * old model instance and attaches as <code>PropertyChangeListener</code> on
    * the new model instance. When this is done, it notifies its
-   * <code>IValueChangeListener</code> s about a possible change on the
-   * model property value (the new model property).
+   * <code>IValueChangeListener</code> s about a possible change on the model
+   * property value (the new model property).
    * <p>
    * {@inheritDoc}
    */
@@ -167,6 +145,21 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
           && evt.getNewValue() instanceof IPropertyChangeCapable) {
         ((IPropertyChangeCapable) evt.getNewValue()).addPropertyChangeListener(
             getId(), this);
+      }
+    }
+
+    if (getReadabilityGates() != null) {
+      for (IGate gate : getReadabilityGates()) {
+        if (gate instanceof IModelGate) {
+          ((IModelGate) gate).setModel(evt.getNewValue());
+        }
+      }
+    }
+    if (getWritabilityGates() != null) {
+      for (IGate gate : getWritabilityGates()) {
+        if (gate instanceof IModelGate) {
+          ((IModelGate) gate).setModel(evt.getNewValue());
+        }
       }
     }
 
@@ -188,35 +181,13 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Called when the underlying connectee value (the model property) changes.
-   * This implementation notifies its <code>IValueChangeListener</code>
-   * s about the change passing the new model property.
+   * This implementation notifies its <code>IValueChangeListener</code> s about
+   * the change passing the new model property.
    * <p>
    * {@inheritDoc}
    */
   public void propertyChange(@SuppressWarnings("unused") PropertyChangeEvent evt) {
     fireConnectorValueChange();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void removeReadabilityGate(IGate gate) {
-    if (gate instanceof IModelGate) {
-      ((IModelGate) gate).setModelProvider(null);
-    }
-    super.removeReadabilityGate(gate);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void removeWritabilityGate(IGate gate) {
-    if (gate instanceof IModelGate) {
-      ((IModelGate) gate).setModelProvider(null);
-    }
-    super.removeWritabilityGate(gate);
   }
 
   /**
@@ -303,21 +274,6 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
     // ((IPropertyChangeCapable) newModel).addPropertyChangeListener(getId(),
     // this);
     // }
-
-    if (getReadabilityGates() != null) {
-      for (IGate gate : getReadabilityGates()) {
-        if (gate instanceof IModelGate) {
-          ((IModelGate) gate).setModelProvider(getModelProvider());
-        }
-      }
-    }
-    if (getWritabilityGates() != null) {
-      for (IGate gate : getWritabilityGates()) {
-        if (gate instanceof IModelGate) {
-          ((IModelGate) gate).setModelProvider(getModelProvider());
-        }
-      }
-    }
     // line below is mainly used to initialize oldConnectorValue (the model
     // property connector is not used as model yet since it is just being linked
     // to its parent). We would like to use the commented modelChange line but
