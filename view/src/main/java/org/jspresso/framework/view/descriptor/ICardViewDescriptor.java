@@ -41,7 +41,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICardViewDescriptor extends IViewDescriptor {
+public interface ICardViewDescriptor extends IViewDescriptor, ICardNameSelector {
 
   /**
    * <code>DEFAULT_CARD</code>.
@@ -52,15 +52,6 @@ public interface ICardViewDescriptor extends IViewDescriptor {
    * <code>SECURITY_CARD</code>.
    */
   String SECURITY_CARD = "SECURITY_CARD";
-
-  /**
-   * Gets the card name to use to present the model.
-   * 
-   * @param model
-   *            the model to back the view.
-   * @return the card name to look up the view.
-   */
-  String getCardNameForModel(Object model);
 
   /**
    * Gets the children views registered in the card view and indexed by their

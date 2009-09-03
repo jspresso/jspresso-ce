@@ -87,7 +87,6 @@ import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
-import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
@@ -427,18 +426,19 @@ public class DefaultRemoteViewFactory extends
           propertyView.getPeer(), locale));
       elementWidths.add(new Integer(propertyViewDescriptor.getWidth()));
       connector.addChildConnector(propertyView.getConnector());
-      if (propertyViewDescriptor.getReadabilityGates() != null) {
-        for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
-          propertyView.getConnector().addReadabilityGate(gate.clone());
-        }
-      }
-      if (propertyViewDescriptor.getWritabilityGates() != null) {
-        for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
-          propertyView.getConnector().addWritabilityGate(gate.clone());
-        }
-      }
-      propertyView.getConnector().setLocallyWritable(
-          !propertyViewDescriptor.isReadOnly());
+      // already handled in createView.
+      // if (propertyViewDescriptor.getReadabilityGates() != null) {
+      // for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
+      // propertyView.getConnector().addReadabilityGate(gate.clone());
+      // }
+      // }
+      // if (propertyViewDescriptor.getWritabilityGates() != null) {
+      // for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
+      // propertyView.getConnector().addWritabilityGate(gate.clone());
+      // }
+      // }
+      // propertyView.getConnector().setLocallyWritable(
+      // !propertyViewDescriptor.isReadOnly());
     }
     viewComponent.setElementWidths(elementWidths.toArray(new Integer[0]));
     viewComponent.setElements(elements.toArray(new RComponent[0]));
@@ -1050,16 +1050,17 @@ public class DefaultRemoteViewFactory extends
         // modelDescriptor.getCollectionDescriptor().getElementDescriptor());
         IValueConnector columnConnector = column.getConnector();
         rowConnectorPrototype.addChildConnector(columnConnector);
-        if (columnViewDescriptor.getReadabilityGates() != null) {
-          for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-            columnConnector.addReadabilityGate(gate.clone());
-          }
-        }
-        if (columnViewDescriptor.getWritabilityGates() != null) {
-          for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-            columnConnector.addWritabilityGate(gate.clone());
-          }
-        }
+        // already handled in createView.
+        // if (columnViewDescriptor.getReadabilityGates() != null) {
+        // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+        // columnConnector.addReadabilityGate(gate.clone());
+        // }
+        // }
+        // if (columnViewDescriptor.getWritabilityGates() != null) {
+        // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+        // columnConnector.addWritabilityGate(gate.clone());
+        // }
+        // }
         String propertyName = columnViewDescriptor.getModelDescriptor()
             .getName();
         columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());

@@ -28,6 +28,7 @@ import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
+import org.jspresso.framework.util.gate.IGateAccessible;
 
 /**
  * This interface is implemented by descriptors of components (java bean style).
@@ -53,7 +54,8 @@ import org.jspresso.framework.util.descriptor.IIconDescriptor;
  *          the concrete type of component.
  */
 public interface IComponentDescriptor<E> extends IModelDescriptor,
-    IIconDescriptor, IComponentDescriptorProvider<E>, ISecurable {
+    IIconDescriptor, IComponentDescriptorProvider<E>, ISecurable,
+    IGateAccessible {
 
   /**
    * Gets the interface class defining the component contract.

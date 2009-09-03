@@ -30,6 +30,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.IGateAccessible;
 
 /**
  * Default implementation for model connectors factory.
@@ -92,33 +93,23 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
               (IScalarPropertyDescriptor) modelDescriptor, accessorFactory);
         }
       }
-      if (modelConnector != null) {
-        if (((IPropertyDescriptor) modelDescriptor).isReadOnly()) {
-          modelConnector.setLocallyWritable(false);
+    }
+    if (modelConnector != null && modelDescriptor instanceof IGateAccessible) {
+      modelConnector.setLocallyWritable(!((IGateAccessible) modelDescriptor)
+          .isReadOnly());
+      if (((IGateAccessible) modelDescriptor).getReadabilityGates() != null) {
+        for (IGate gate : ((IGateAccessible) modelDescriptor)
+            .getReadabilityGates()) {
+          modelConnector.addReadabilityGate(gate.clone());
         }
-        if (((IPropertyDescriptor) modelDescriptor).getReadabilityGates() != null) {
-          for (IGate gate : ((IPropertyDescriptor) modelDescriptor)
-              .getReadabilityGates()) {
-            modelConnector.addReadabilityGate(gate.clone());
-          }
-        }
-        if (((IPropertyDescriptor) modelDescriptor).getWritabilityGates() != null) {
-          for (IGate gate : ((IPropertyDescriptor) modelDescriptor)
-              .getWritabilityGates()) {
-            modelConnector.addWritabilityGate(gate.clone());
-          }
+      }
+      if (((IGateAccessible) modelDescriptor).getWritabilityGates() != null) {
+        for (IGate gate : ((IGateAccessible) modelDescriptor)
+            .getWritabilityGates()) {
+          modelConnector.addWritabilityGate(gate.clone());
         }
       }
     }
-    // if (modelConnector != null) {
-    // modelConnector
-    // .addValueChangeListener(new IValueChangeListener() {
-    //
-    // public void valueChange(ValueChangeEvent evt) {
-    // System.out.println(evt.getSource().getConnectorPath());
-    // }
-    // });
-    // }
     return modelConnector;
   }
 

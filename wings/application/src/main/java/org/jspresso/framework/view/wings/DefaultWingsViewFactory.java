@@ -86,7 +86,6 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.format.IFormatter;
-import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.FontHelper;
@@ -429,18 +428,19 @@ public class DefaultWingsViewFactory extends
         propertyView.setPeer(createSecurityComponent());
       }
       connector.addChildConnector(propertyView.getConnector());
-      if (propertyViewDescriptor.getReadabilityGates() != null) {
-        for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
-          propertyView.getConnector().addReadabilityGate(gate.clone());
-        }
-      }
-      if (propertyViewDescriptor.getWritabilityGates() != null) {
-        for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
-          propertyView.getConnector().addWritabilityGate(gate.clone());
-        }
-      }
-      propertyView.getConnector().setLocallyWritable(
-          !propertyViewDescriptor.isReadOnly());
+      // already handled in createView.
+      // if (propertyViewDescriptor.getReadabilityGates() != null) {
+      // for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
+      // propertyView.getConnector().addReadabilityGate(gate.clone());
+      // }
+      // }
+      // if (propertyViewDescriptor.getWritabilityGates() != null) {
+      // for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
+      // propertyView.getConnector().addWritabilityGate(gate.clone());
+      // }
+      // }
+      // propertyView.getConnector().setLocallyWritable(
+      // !propertyViewDescriptor.isReadOnly());
       SLabel propertyLabel = createPropertyLabel(propertyViewDescriptor,
           propertyView.getPeer(), locale);
       if (forbidden) {
@@ -1413,17 +1413,18 @@ public class DefaultWingsViewFactory extends
         columnClasses.add(modelDescriptor.getCollectionDescriptor()
             .getElementDescriptor().getPropertyDescriptor(columnId)
             .getModelType());
-        if (columnViewDescriptor.getReadabilityGates() != null) {
-          for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-            columnConnector.addReadabilityGate(gate.clone());
-          }
-        }
-        if (columnViewDescriptor.getWritabilityGates() != null) {
-          for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-            columnConnector.addWritabilityGate(gate.clone());
-          }
-        }
-        columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+        // already handled in createColumnConnector
+        // if (columnViewDescriptor.getReadabilityGates() != null) {
+        // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+        // columnConnector.addReadabilityGate(gate.clone());
+        // }
+        // }
+        // if (columnViewDescriptor.getWritabilityGates() != null) {
+        // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+        // columnConnector.addWritabilityGate(gate.clone());
+        // }
+        // }
+        // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
       } catch (SecurityException ex) {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);

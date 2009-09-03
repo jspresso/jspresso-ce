@@ -46,6 +46,7 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.gate.IGate;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
@@ -97,6 +98,9 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<IPropertyDescriptor>        tempPropertyBuffer;
   private String                           toStringProperty;
   private Collection<String>               unclonedProperties;
+
+  private Collection<IGate>                readabilityGates;
+  private Collection<IGate>                writabilityGates;
 
   private Integer                          pageSize;
 
@@ -701,5 +705,68 @@ public abstract class AbstractComponentDescriptor<E> extends
   public void setLifecycleInterceptorBeanNames(
       List<String> lifecycleInterceptorBeanNames) {
     this.lifecycleInterceptorBeanNames = lifecycleInterceptorBeanNames;
+  }
+
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  public Collection<IGate> getReadabilityGates() {
+    Set<IGate> gates = new HashSet<IGate>();
+    if (readabilityGates != null) {
+      gates.addAll(readabilityGates);
+    }
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+        gates.addAll(ancestorDescriptor.getReadabilityGates());
+      }
+    }
+    return gates;
+  }
+
+  /**
+   * Sets the readabilityGates.
+   * 
+   * @param readabilityGates
+   *          the readabilityGates to set.
+   */
+  public void setReadabilityGates(Collection<IGate> readabilityGates) {
+    this.readabilityGates = readabilityGates;
+  }
+
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  public Collection<IGate> getWritabilityGates() {
+    Set<IGate> gates = new HashSet<IGate>();
+    if (writabilityGates != null) {
+      gates.addAll(writabilityGates);
+    }
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+        gates.addAll(ancestorDescriptor.getWritabilityGates());
+      }
+    }
+    return gates;
+  }
+
+  /**
+   * Sets the writabilityGates.
+   * 
+   * @param writabilityGates
+   *          the writabilityGates to set.
+   */
+  public void setWritabilityGates(Collection<IGate> writabilityGates) {
+    this.writabilityGates = writabilityGates;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isReadOnly() {
+    return false;
   }
 }

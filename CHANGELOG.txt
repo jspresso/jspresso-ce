@@ -80,6 +80,7 @@ New features
 2841955    Allow for being able to refine filtered queries
 2843812    Better handle bounds in comparable query structures
 2843894    Catch a change of submodule
+           Introduced a BasicCardViewDescriptor that delegates to ICardViewSelector
 
 3.0.0
 =====

@@ -261,9 +261,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (actionHandler != null) {
           actionHandler.checkAccess(viewDescriptor);
         }
-        if (viewDescriptor.isReadOnly()) {
-          view.getConnector().setLocallyWritable(false);
-        }
+        view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
             view.getConnector().addReadabilityGate(gate.clone());
@@ -785,6 +783,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       throw new ViewException("No property " + columnId + " defined for "
           + descriptor.getComponentContract());
     }
+    IValueConnector columnConnector;
     if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       List<String> renderedProperties = columnViewDescriptor
           .getRenderedChildProperties();
@@ -796,11 +795,25 @@ public abstract class AbstractViewFactory<E, F, G> implements
         renderedProperty = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
             .getReferencedDescriptor().getToStringProperty();
       }
-      return getConnectorFactory().createCompositeValueConnector(columnId,
-          renderedProperty);
+      columnConnector = getConnectorFactory().createCompositeValueConnector(
+          columnId, renderedProperty);
+    } else {
+      columnConnector = getConnectorFactory().createValueConnector(
+          propertyDescriptor.getName());
     }
-    return getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
+
+    columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+    if (columnViewDescriptor.getReadabilityGates() != null) {
+      for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+        columnConnector.addReadabilityGate(gate.clone());
+      }
+    }
+    if (columnViewDescriptor.getWritabilityGates() != null) {
+      for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+        columnConnector.addWritabilityGate(gate.clone());
+      }
+    }
+    return columnConnector;
   }
 
   /**
