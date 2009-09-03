@@ -26,6 +26,7 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.gate.AbstractModelGate;
 
 /**
  * This gate opens and closes based on the value of a boolean property of its

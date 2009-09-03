@@ -35,6 +35,7 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.IModelGate;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
 /**

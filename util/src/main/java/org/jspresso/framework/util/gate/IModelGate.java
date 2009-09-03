@@ -16,12 +16,10 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding.model;
-
-import org.jspresso.framework.util.gate.AbstractGate;
+package org.jspresso.framework.util.gate;
 
 /**
- * Base implementation of a model based gate.
+ * A model based gate.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,37 +37,20 @@ import org.jspresso.framework.util.gate.AbstractGate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractModelGate extends AbstractGate implements
-    IModelGate {
-
-  private Object model;
+public interface IModelGate extends IGate {
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public AbstractModelGate clone() {
-    AbstractModelGate clonedGate = (AbstractModelGate) super.clone();
-    clonedGate.model = null;
-    return clonedGate;
-  }
-
-  /**
-   * Gets the model.
+   * Gets the model driving this gate.
    * 
-   * @return the model.
+   * @return the model driving this gate.
    */
-  public Object getModel() {
-    return model;
-  }
+  Object getModel();
 
   /**
-   * Sets the model.
+   * Sets the model driving this gate.
    * 
    * @param model
-   *          the model to set.
+   *          the model driving this gate.
    */
-  public void setModel(Object model) {
-    this.model = model;
-  }
+  void setModel(Object model);
 }
