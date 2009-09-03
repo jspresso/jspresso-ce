@@ -29,6 +29,7 @@ Bugs fixed
 2835647    Ordering properties are not always applied
 2835648    Flex table sorting only works with strings columns
 2839864    Nested reference properties do not fire change events in LOVs
+2850076    View model accessibility gates are not handled correctly
 
 
 New features
@@ -80,7 +81,8 @@ New features
 2841955    Allow for being able to refine filtered queries
 2843812    Better handle bounds in comparable query structures
 2843894    Catch a change of submodule
-           Introduced a BasicCardViewDescriptor that delegates to ICardViewSelector
+2850082    Introduce a BasicCardViewDescriptor
+2850085    Allow for accessibility gates on components globally
 
 3.0.0
 =====
