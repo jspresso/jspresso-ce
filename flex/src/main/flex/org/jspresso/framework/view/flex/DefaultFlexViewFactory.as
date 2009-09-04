@@ -1315,9 +1315,9 @@ package org.jspresso.framework.view.flex {
       }, state, "selectedIndices", true);
       
       table.addEventListener(DataGridEvent.ITEM_EDIT_END, function(event:DataGridEvent):void {
-    	  _actionHandler.setCurrentViewStateGuid(null);
+        var table:DataGrid = event.currentTarget as DataGrid;
+    	  _actionHandler.setCurrentViewStateGuid(table, null);
         if (event.reason != DataGridEventReason.CANCELLED) {
-          var table:DataGrid = event.currentTarget as DataGrid;
           if(table.itemEditorInstance is RemoteValueDgItemEditor) {
             var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
             var state:RemoteValueState = currentEditor.state;
@@ -1344,7 +1344,7 @@ package org.jspresso.framework.view.flex {
         var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
         var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
             .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
-    	  _actionHandler.setCurrentViewStateGuid(cellValueState.guid);
+        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid);
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();

@@ -30,6 +30,7 @@ Bugs fixed
 2835648    Flex table sorting only works with strings columns
 2839864    Nested reference properties do not fire change events in LOVs
 2850076    View model accessibility gates are not handled correctly
+2848679    Error while changing of Module/Entity in the workspace
 
 
 New features

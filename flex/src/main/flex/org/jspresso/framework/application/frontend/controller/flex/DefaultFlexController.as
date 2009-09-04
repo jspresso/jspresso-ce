@@ -831,7 +831,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else {
         var dialogParent:DisplayObject;
         if(_dialogStack && _dialogStack.length > 1) {
-          dialogParent = _dialogStack[_dialogStack.length -1];
+          dialogParent = _dialogStack[_dialogStack.length -1][0];
         } else {
           dialogParent = Application.application as DisplayObject;
         }
@@ -843,8 +843,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
       PopUpManager.centerPopUp(dialog);
     }
     
-    public function setCurrentViewStateGuid(viewStateGuid:String):void {
-      (_dialogStack[_dialogStack.length -1] as Array)[1] = viewStateGuid;
+    public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String):void {
+      if(_dialogStack.length > 1) {
+        // at least a dialog is open
+        for(var i:int = _dialogStack.length -1; i > 0 ; i--) {
+          // Find the owning dialog that may not be the topmost one.
+          var dialog:Array = _dialogStack[_dialogStack.length -i] as Array; 
+          if((dialog[0] as Panel).contains(component)) {
+            dialog[1] = viewStateGuid;
+            return;
+          }
+        }
+      }
+      (_dialogStack[0] as Array)[1] = viewStateGuid;
     }
     
     private function registerRemoteClasses():void {

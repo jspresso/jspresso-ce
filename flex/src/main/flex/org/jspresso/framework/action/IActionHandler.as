@@ -13,6 +13,8 @@
  */
 
 package org.jspresso.framework.action {
+  import mx.core.UIComponent;
+  
   import org.jspresso.framework.gui.remote.RAction;
   
   
@@ -20,7 +22,7 @@ package org.jspresso.framework.action {
     
     function execute(action:RAction, param:String=null):void;
     
-    function setCurrentViewStateGuid(viewStateGuid:String):void;
+    function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String):void;
     
   }
 }
