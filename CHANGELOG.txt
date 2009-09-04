@@ -83,7 +83,7 @@ New features
 2843894    Catch a change of submodule
 2850082    Introduce a BasicCardViewDescriptor
 2850085    Allow for accessibility gates on components globally
-           Trim whitespace and CR in class/bean names
+2850979    Trim whitespace and CR in class/bean names
 
 3.0.0
 =====
