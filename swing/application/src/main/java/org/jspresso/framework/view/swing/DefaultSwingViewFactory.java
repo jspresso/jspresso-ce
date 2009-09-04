@@ -120,6 +120,7 @@ import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
@@ -1626,23 +1627,34 @@ public class DefaultSwingViewFactory extends
         .getModelDescriptor();
     IValueConnector connector;
     JScrollPane scrollPane = createJScrollPane();
-    if (propertyViewDescriptor.isReadOnly()) {
-      JLabel viewComponent = createJLabel(true);
-      viewComponent.setVerticalAlignment(SwingConstants.TOP);
-      viewComponent.setHorizontalAlignment(SwingConstants.LEADING);
-      connector = new JLabelConnector(propertyDescriptor.getName(),
-          viewComponent);
-      ((JLabelConnector) connector).setMultiLine(true);
-      scrollPane.setViewportView(viewComponent);
-    } else {
-      JTextArea viewComponent = createJTextArea();
-      viewComponent.setLineWrap(true);
-      scrollPane.setViewportView(viewComponent);
-      scrollPane
-          .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-      connector = new JTextAreaConnector(propertyDescriptor.getName(),
-          viewComponent);
-    }
+    JTextArea viewComponent = createJTextArea();
+    viewComponent.setLineWrap(true);
+    scrollPane.setViewportView(viewComponent);
+    scrollPane
+        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    connector = new JTextAreaConnector(propertyDescriptor.getName(),
+        viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    return constructView(scrollPane, propertyViewDescriptor, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    IValueConnector connector;
+    JScrollPane scrollPane = createJScrollPane();
+    JLabel viewComponent = createJLabel(true);
+    viewComponent.setVerticalAlignment(SwingConstants.TOP);
+    viewComponent.setHorizontalAlignment(SwingConstants.LEADING);
+    connector = new JLabelConnector(propertyDescriptor.getName(), viewComponent);
+    ((JLabelConnector) connector).setForceHtml(true);
+    scrollPane.setViewportView(viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(scrollPane, propertyViewDescriptor, connector);
   }

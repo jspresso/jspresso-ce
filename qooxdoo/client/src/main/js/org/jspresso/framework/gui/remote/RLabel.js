@@ -18,13 +18,5 @@ qx.Class.define("org.jspresso.framework.gui.remote.RLabel",
   
   construct : function() {
     this.base(arguments);
-  },
-
-  properties :
-  {
-    multiLine :
-    {
-      check : "Boolean"
-    }
   }
 });

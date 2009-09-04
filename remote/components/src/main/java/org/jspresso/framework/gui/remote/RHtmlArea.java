@@ -19,7 +19,7 @@
 package org.jspresso.framework.gui.remote;
 
 /**
- * A remote label component.
+ * A remote html area component.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -37,25 +37,25 @@ package org.jspresso.framework.gui.remote;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RLabel extends RTextComponent {
+public class RHtmlArea extends RTextComponent {
 
-  private static final long serialVersionUID = -7684946402506329656L;
+  private static final long serialVersionUID = 5482012658466216934L;
 
   /**
-   * Constructs a new <code>RLabel</code> instance. Only used for GWT
+   * Constructs a new <code>RHtmlArea</code> instance. Only used for GWT
    * serialization support.
    */
-  protected RLabel() {
+  protected RHtmlArea() {
     // For GWT support
   }
 
   /**
-   * Constructs a new <code>RLabel</code> instance.
+   * Constructs a new <code>RHtmlArea</code> instance.
    * 
    * @param guid
    *          the guid.
    */
-  public RLabel(String guid) {
+  public RHtmlArea(String guid) {
     super(guid);
   }
 }

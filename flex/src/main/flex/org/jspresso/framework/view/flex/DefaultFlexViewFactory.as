@@ -43,6 +43,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Image;
   import mx.controls.Label;
   import mx.controls.List;
+  import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
@@ -85,6 +86,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RDurationField;
   import org.jspresso.framework.gui.remote.REvenGridContainer;
   import org.jspresso.framework.gui.remote.RForm;
+  import org.jspresso.framework.gui.remote.RHtmlArea;
   import org.jspresso.framework.gui.remote.RIcon;
   import org.jspresso.framework.gui.remote.RImageComponent;
   import org.jspresso.framework.gui.remote.RIntegerField;
@@ -110,6 +112,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.format.PercentFormatter;
   import org.jspresso.framework.util.format.PercentParser;
   import org.jspresso.framework.util.gui.CellConstraints;
+  import org.jspresso.framework.util.html.HtmlUtil;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
   
   public class DefaultFlexViewFactory {
@@ -166,8 +169,6 @@ package org.jspresso.framework.view.flex {
         component = createList(remoteComponent as RList);
       } else if(remoteComponent is RNumericComponent) {
         component = createNumericComponent(remoteComponent as RNumericComponent);
-      } else if(remoteComponent is RPasswordField) {
-        component = createPasswordField(remoteComponent as RPasswordField);
       } else if(remoteComponent is RSecurityComponent) {
         component = createSecurityComponent(remoteComponent as RSecurityComponent);
       } else if(remoteComponent is RTable) {
@@ -310,6 +311,10 @@ package org.jspresso.framework.view.flex {
       var textComponent:UIComponent;
       if(remoteTextComponent is RTextArea) {
         textComponent = createTextArea(remoteTextComponent as RTextArea);
+      } else if(remoteTextComponent is RHtmlArea) {
+        textComponent = createHtmlArea(remoteTextComponent as RHtmlArea);
+      } else if(remoteTextComponent is RPasswordField) {
+        textComponent = createPasswordField(remoteTextComponent as RPasswordField);
       } else if(remoteTextComponent is RTextField) {
         textComponent = createTextField(remoteTextComponent as RTextField);
       } else if(remoteTextComponent is RLabel) {
@@ -1355,74 +1360,78 @@ package org.jspresso.framework.view.flex {
       return textArea;
     }
 
-    private function createLabel(remoteLabel:RLabel):UIComponent {
-      var uiComponent:UIComponent;
-      if(remoteLabel.multiLine) {
-        var textArea:TextArea = new TextArea();
-        textArea.editable = false;
-        textArea.wordWrap = false;
-        if(remoteLabel.maxLength > 0) {
-          textArea.maxChars = remoteLabel.maxLength;
-        }
-        uiComponent = textArea;
-      } else {
-        var label:Label = new Label();
-        if(remoteLabel.maxLength > 0) {
-          sizeMaxComponentWidth(label, remoteLabel.maxLength);
-        } else {
-          sizeMaxComponentWidth(label);
-        }
-        if(!remoteLabel.state && remoteLabel.label) {
-          if(isHtml(remoteLabel.label)) {
-              label.text = null;
-              label.htmlText = remoteLabel.label;
-          } else {
-            label.htmlText = null;
-            label.text = remoteLabel.label;
-          }
-        }
-        uiComponent = label;
-      }
-      if(remoteLabel.state) {
-        bindLabel(uiComponent, remoteLabel.state);
-      }
-      return uiComponent;
+    private function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(textArea, "text", remoteState, "value", true);
+      BindingUtils.bindProperty(textArea, "editable", remoteState, "writable");
+      var updateModel:Function = function (event:Event):void {
+        remoteState.value = (event.currentTarget as TextArea).text;
+      };
+      textArea.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
+      textArea.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
     }
 
-    private function bindLabel(label:UIComponent, remoteState:RemoteValueState):void {
-      if(label is Label) {
-        var updateLabel:Function = function (value:Object):void {
-          if(value == null) {
-            (label as Label).text = null;
-            (label as Label).htmlText = null;
+    private function createHtmlArea(remoteHtmlArea:RHtmlArea):UIComponent {
+      var htmlArea:Text = new Text();
+      bindHtmlArea(htmlArea, remoteHtmlArea.state);
+      return htmlArea;
+    }
+
+    private function bindHtmlArea(htmlArea:Text, remoteState:RemoteValueState):void {
+      var updateText:Function = function (value:Object):void {
+        if(value == null) {
+          htmlArea.text = null;
+          htmlArea.htmlText = null;
+        } else {
+          if(HtmlUtil.isHtml(value.toString())) {
+            htmlArea.text = null;
+            htmlArea.htmlText = HtmlUtil.preprocessHtml(value.toString());
           } else {
-            if(isHtml(value.toString())) {
-              (label as Label).text = null;
-              (label as Label).htmlText = value.toString();
-            } else {
-              (label as Label).htmlText = null;
-              (label as Label).text = value.toString();
-            }
+            htmlArea.htmlText = null;
+            htmlArea.text = value.toString();
           }
-        };
-        BindingUtils.bindSetter(updateLabel, remoteState, "value", true);
-      } else if(label is TextArea) {
-        var updateTextArea:Function = function (value:Object):void {
-          if(value == null) {
-            (label as TextArea).text = null;
-            (label as TextArea).htmlText = null;
-          } else {
-            if(isHtml(value.toString())) {
-              (label as TextArea).text = null;
-              (label as TextArea).htmlText = value.toString();
-            } else {
-              (label as TextArea).htmlText = null;
-              (label as TextArea).text = value.toString();
-            }
-          }
-        };
-        BindingUtils.bindSetter(updateTextArea, remoteState, "value", true);
+        }
+      };
+      BindingUtils.bindSetter(updateText, remoteState, "value", true);
+    }
+
+    private function createLabel(remoteLabel:RLabel):UIComponent {
+      var label:Label = new Label();
+      if(remoteLabel.maxLength > 0) {
+        sizeMaxComponentWidth(label, remoteLabel.maxLength);
+      } else {
+        sizeMaxComponentWidth(label);
       }
+      if(!remoteLabel.state && remoteLabel.label) {
+        if(HtmlUtil.isHtml(remoteLabel.label)) {
+          label.text = null;
+          label.htmlText = HtmlUtil.preprocessHtml(remoteLabel.label);
+        } else {
+          label.htmlText = null;
+          label.text = remoteLabel.label;
+        }
+      }
+      if(remoteLabel.state) {
+        bindLabel(label, remoteLabel.state);
+      }
+      return label;
+    }
+
+    private function bindLabel(label:Label, remoteState:RemoteValueState):void {
+      var updateLabel:Function = function (value:Object):void {
+        if(value == null) {
+          label.text = null;
+          label.htmlText = null;
+        } else {
+          if(HtmlUtil.isHtml(value.toString())) {
+            label.text = null;
+            label.htmlText = HtmlUtil.preprocessHtml(value.toString());
+          } else {
+            label.htmlText = null;
+            label.text = value.toString();
+          }
+        }
+      };
+      BindingUtils.bindSetter(updateLabel, remoteState, "value", true);
     }
     
     private function createTextField(remoteTextField:RTextField):UIComponent {
@@ -1509,16 +1518,6 @@ package org.jspresso.framework.view.flex {
       textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
     }
     
-    private function bindTextArea(textArea:TextArea, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(textArea, "text", remoteState, "value", true);
-      BindingUtils.bindProperty(textArea, "editable", remoteState, "writable");
-      var updateModel:Function = function (event:Event):void {
-        remoteState.value = (event.currentTarget as TextArea).text;
-      };
-      textArea.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
-      textArea.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
-    }
-
     private function bindColorPicker(colorPicker:ColorPicker, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(colorPicker, "selectedColor", remoteState, "value", true);
       BindingUtils.bindProperty(colorPicker, "enabled", remoteState, "writable");
@@ -1601,13 +1600,6 @@ package org.jspresso.framework.view.flex {
     
     public function get iconTemplate():Class  {
       return _iconTemplate;
-    }
-    
-    public function isHtml(content:String):Boolean {
-      if(content) {
-        return content.toLowerCase().indexOf("<html>") > -1;
-      }
-      return false;
     }
   }
 }

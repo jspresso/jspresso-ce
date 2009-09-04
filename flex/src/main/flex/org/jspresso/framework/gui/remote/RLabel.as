@@ -19,17 +19,8 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RLabel")]
     public class RLabel extends RTextComponent {
 
-        private var _multiLine:Boolean;
-
         public function RLabel() {
           //default constructor.
-        }
-
-        public function set multiLine(value:Boolean):void {
-            _multiLine = value;
-        }
-        public function get multiLine():Boolean {
-            return _multiLine;
         }
     }
 }

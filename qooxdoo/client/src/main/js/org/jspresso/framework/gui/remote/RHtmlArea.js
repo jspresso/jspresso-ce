@@ -12,15 +12,12 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
+qx.Class.define("org.jspresso.framework.gui.remote.RHtmlArea",
+{
+  extend : org.jspresso.framework.gui.remote.RTextComponent,
 
-package org.jspresso.framework.gui.remote {
+  construct : function() {
+    this.base(arguments);
+  }
 
-		
-    [RemoteClass(alias="org.jspresso.framework.gui.remote.RTextArea")]
-    public class RTextArea extends RTextComponent {
-
-        public function RTextArea() {
-          //default constructor.
-        }
-    }
-}
+});

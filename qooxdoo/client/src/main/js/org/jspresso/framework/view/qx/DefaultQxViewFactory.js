@@ -1168,6 +1168,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var textComponent;
       if(remoteTextComponent instanceof org.jspresso.framework.gui.remote.RTextArea) {
         textComponent = this.__createTextArea(remoteTextComponent);
+      } else if(remoteTextComponent instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
+        textComponent = this.__createHtmlArea(remoteTextComponent);
       } else if(remoteTextComponent instanceof org.jspresso.framework.gui.remote.RPasswordField) {
         textComponent = this.__createPasswordField(remoteTextComponent);
       } else if(remoteTextComponent instanceof org.jspresso.framework.gui.remote.RTextField) {
@@ -1186,7 +1188,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var textArea = new qx.ui.form.TextArea();
       var state = remoteTextArea.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(textArea, "value", "value", true,
+      modelController.addTarget(area, "value", "value", true,
         {
           converter : this.__modelToViewFieldConverter
         },
@@ -1194,7 +1196,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : this.__viewToModelFieldConverter
         }
       );
-      modelController.addTarget(textArea, "readOnly", "writable", false,
+      modelController.addTarget(area, "readOnly", "writable", false,
         {
           converter : this.__readOnlyFieldConverter
         }
@@ -1202,6 +1204,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       return textArea;
     },
 
+    /**
+     * @param {org.jspresso.framework.gui.remote.RHtmlArea} remoteHtmlArea
+     * @return {qx.ui.core.Widget}
+     */
+    __createHtmlArea : function(remoteHtmlArea) {
+      var htmlArea = new qx.ui.basic.Label();
+      htmlArea.setRich(true);
+      var state = remoteTextArea.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(htmlArea, "content", "value", false,
+        {
+          converter : this.__modelToViewFieldConverter
+        }
+      );
+      return htmlArea;
+    },
     /**
      * @param {org.jspresso.framework.gui.remote.RTextField} remoteTextField
      * @return {qx.ui.core.Widget}
@@ -1242,17 +1260,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var state = remoteLabel.getState();
       if(state) {
         var modelController = new qx.data.controller.Object(state);
-        modelController.addTarget(label, "content", "value");
-        if(remoteLabel.isMultiLine()) {
-          label.setRich(true);
-        }
+        modelController.addTarget(label, "content", "value", false,
+          {
+            converter : function(modelValue, model) {
+              if(org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
+                label.setRich(true);
+              } else {
+                label.setRich(false);
+              }
+              return modelValue;
+            }
+          }
+        );
       } else {
         label.setContent(remoteLabel.getLabel());
-        if(remoteLabel.isMultiLine()) {
-          label.setRich(true);
-        } else {
-          label.setRich(this.isHtml(remoteLabel.getLabel()));
-        }
+        label.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(remoteLabel.getLabel()));
       }
       return label;
     },
@@ -1537,17 +1559,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         this.__actionHandler.execute(remoteAction);
       }, this);
       return button;
-    },
-    
-    /**
-     * @param {String} content
-     * @return {Boolean}
-     */
-    isHtml : function(content) {
-      if(content) {
-        return content.indexOf("<html>") > -1;
-      }
-      return false;
     },
     
     /**

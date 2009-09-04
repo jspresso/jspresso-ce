@@ -21,7 +21,7 @@ import org.wings.SLabel;
  */
 public class SLabelConnector extends SComponentConnector<SLabel> {
 
-  private boolean multiLine;
+  private boolean    forceHtml;
   private IFormatter formatter;
 
   /**
@@ -54,7 +54,7 @@ public class SLabelConnector extends SComponentConnector<SLabel> {
     } else {
       if (formatter != null) {
         getConnectedSComponent().setText(formatter.format(aValue));
-      } else if (multiLine) {
+      } else if (forceHtml) {
         if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
           getConnectedSComponent().setText(
               HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
@@ -90,13 +90,13 @@ public class SLabelConnector extends SComponentConnector<SLabel> {
   }
 
   /**
-   * Sets the multiLine.
+   * Sets the forceHtml.
    * 
-   * @param multiLine
-   *          the multiLine to set.
+   * @param forceHtml
+   *          the forceHtml to set.
    */
-  public void setMultiLine(boolean multiLine) {
-    this.multiLine = multiLine;
+  public void setForceHtml(boolean forceHtml) {
+    this.forceHtml = forceHtml;
   }
 
   /**

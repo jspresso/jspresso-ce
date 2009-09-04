@@ -77,6 +77,7 @@ import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
@@ -1389,25 +1390,35 @@ public class DefaultUlcViewFactory extends
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IValueConnector connector;
     ULCScrollPane scrollPane = createULCScrollPane();
-    if (propertyViewDescriptor.isReadOnly()) {
-      ULCLabel viewComponent = createULCLabel(true);
-      viewComponent.setVerticalAlignment(IDefaults.TOP);
-      viewComponent.setHorizontalAlignment(IDefaults.LEADING);
-      connector = new ULCLabelConnector(propertyDescriptor.getName(),
-          viewComponent);
-      ((ULCLabelConnector) connector).setMultiLine(true);
-      scrollPane.setViewPortView(viewComponent);
-    } else {
-      ULCTextArea viewComponent = createULCTextArea();
-      viewComponent.setLineWrap(true);
-      scrollPane.setViewPortView(viewComponent);
-      scrollPane
-          .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-      connector = new ULCTextAreaConnector(propertyDescriptor.getName(),
-          viewComponent);
-    }
+    ULCTextArea viewComponent = createULCTextArea();
+    viewComponent.setLineWrap(true);
+    scrollPane.setViewPortView(viewComponent);
+    scrollPane
+        .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    IValueConnector connector = new ULCTextAreaConnector(propertyDescriptor
+        .getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    return constructView(scrollPane, propertyViewDescriptor, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    ULCScrollPane scrollPane = createULCScrollPane();
+    ULCLabel viewComponent = createULCLabel(true);
+    viewComponent.setVerticalAlignment(IDefaults.TOP);
+    viewComponent.setHorizontalAlignment(IDefaults.LEADING);
+    IValueConnector connector = new ULCLabelConnector(propertyDescriptor
+        .getName(), viewComponent);
+    ((ULCLabelConnector) connector).setMultiLine(true);
+    scrollPane.setViewPortView(viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(scrollPane, propertyViewDescriptor, connector);
   }

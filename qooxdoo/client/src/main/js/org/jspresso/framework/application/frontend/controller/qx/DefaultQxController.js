@@ -615,7 +615,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__application.getRoot().add(messageDialog);
 
       var message = new qx.ui.basic.Atom(messageCommand.getMessage());
-      message.setRich(this.__viewFactory.isHtml(messageCommand.getMessage()));
+      message.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(messageCommand.getMessage()));
       this.__viewFactory.setIcon(message, messageCommand.getMessageIcon());
       messageDialog.add(message);
 
@@ -793,7 +793,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       
       if(message) {
         var messageLabel = new qx.ui.basic.Label(message);
-        messageLabel.setRich(this.__viewFactory.isHtml(message));
+        messageLabel.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
         dialogBox.add(messageLabel);
       }
       dialogBox.add(dialogView, {flex:1});

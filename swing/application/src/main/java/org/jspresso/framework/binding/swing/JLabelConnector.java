@@ -22,7 +22,7 @@ import org.jspresso.framework.util.html.HtmlHelper;
  */
 public class JLabelConnector extends JComponentConnector<JLabel> {
 
-  private boolean    multiLine;
+  private boolean    forceHtml;
   private IFormatter formatter;
 
   /**
@@ -55,7 +55,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
     } else {
       if (formatter != null) {
         getConnectedJComponent().setText(formatter.format(aValue));
-      } else if (multiLine) {
+      } else if (forceHtml) {
         if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
           getConnectedJComponent().setText(
               HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
@@ -91,13 +91,13 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
   }
 
   /**
-   * Sets the multiLine.
+   * Sets the forceHtml.
    * 
-   * @param multiLine
-   *          the multiLine to set.
+   * @param forceHtml
+   *          the forceHtml to set.
    */
-  public void setMultiLine(boolean multiLine) {
-    this.multiLine = multiLine;
+  public void setForceHtml(boolean forceHtml) {
+    this.forceHtml = forceHtml;
   }
 
   /**

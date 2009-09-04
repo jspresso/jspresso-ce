@@ -75,6 +75,7 @@ import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
@@ -1597,26 +1598,36 @@ public class DefaultWingsViewFactory extends
     ITextPropertyDescriptor propertyDescriptor = (ITextPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector;
-    SComponent viewComponent;
-    if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createSLabel(true);
-      viewComponent.setVerticalAlignment(SConstants.TOP);
-      viewComponent.setHorizontalAlignment(SConstants.LEFT);
-      connector = new SLabelConnector(propertyDescriptor.getName(),
-          (SLabel) viewComponent);
-      ((SLabelConnector) connector).setMultiLine(true);
-      SScrollPane scrollPane = createSScrollPane();
-      scrollPane.setViewportView(viewComponent);
-      viewComponent = scrollPane;
-    } else {
-      viewComponent = createSTextArea();
-      ((STextArea) viewComponent).setLineWrap(STextArea.VIRTUAL_WRAP);
-      connector = new STextAreaConnector(propertyDescriptor.getName(),
-          (STextArea) viewComponent);
-    }
+    STextArea viewComponent = createSTextArea();
+    viewComponent.setLineWrap(STextArea.VIRTUAL_WRAP);
+    connector = new STextAreaConnector(propertyDescriptor.getName(),
+        viewComponent);
     connector.setExceptionHandler(actionHandler);
     IView<SComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<SComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    IValueConnector connector;
+    SLabel viewComponent = createSLabel(true);
+    viewComponent.setVerticalAlignment(SConstants.TOP);
+    viewComponent.setHorizontalAlignment(SConstants.LEFT);
+    connector = new SLabelConnector(propertyDescriptor.getName(), viewComponent);
+    ((SLabelConnector) connector).setForceHtml(true);
+    SScrollPane scrollPane = createSScrollPane();
+    scrollPane.setViewportView(viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    IView<SComponent> view = constructView(scrollPane, propertyViewDescriptor,
+        connector);
     return view;
   }
 

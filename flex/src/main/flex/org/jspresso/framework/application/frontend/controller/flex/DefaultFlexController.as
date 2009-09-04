@@ -115,6 +115,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.util.gui.CellConstraints;
   import org.jspresso.framework.util.gui.Dimension;
   import org.jspresso.framework.util.gui.Font;
+  import org.jspresso.framework.util.html.HtmlUtil;
   import org.jspresso.framework.util.remote.IRemotePeer;
   import org.jspresso.framework.util.remote.RemotePeer;
   import org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry;
@@ -495,13 +496,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var alertCloseHandler:Function;
       var message:String = new String(messageCommand.message);
       var isHtml:Boolean = false;
-      if(_viewFactory.isHtml(message)) {
+      if(HtmlUtil.isHtml(message)) {
         isHtml = true;
        	// The HTML string must be passed to the show() method, so the width and height of
       	// the textField can be calculated correctly. All HTML tags will be removed and the
       	// <br> and <br/> tag will be replaced by /n (new line).
+      	message = HtmlUtil.preprocessHtml(message); // to handle <p>
       	message = message.replace(/<br.*?>/g, "/n");
-      	//message = message.replace(/<.*?>/g, "");
+      	message = message.replace(/<.*?>/g, "");
       }
       if(messageCommand is RemoteOkCancelCommand) {
         alertCloseHandler = function(event:CloseEvent):void {
@@ -567,7 +569,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                    Alert.OK);
       }
       if(isHtml) {
-        alert.mx_internal::alertForm.mx_internal::textField.htmlText = messageCommand.message;
+        alert.mx_internal::alertForm.mx_internal::textField.htmlText = HtmlUtil.preprocessHtml(messageCommand.message);
       }
       return alert;
     }

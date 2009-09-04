@@ -47,6 +47,7 @@ import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
 import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RForm;
+import org.jspresso.framework.gui.remote.RHtmlArea;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RIntegerField;
@@ -73,6 +74,7 @@ import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
@@ -1129,13 +1131,25 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RComponent viewComponent;
-    if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createRLabel(connector, true);
-      ((RLabel) viewComponent).setMultiLine(true);
-    } else {
-      viewComponent = createRTextArea(connector);
-    }
+    RTextArea viewComponent = createRTextArea(connector);
+    IView<RComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+    connector.setExceptionHandler(actionHandler);
+    RHtmlArea viewComponent = createRHtmlArea(connector);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     return view;
@@ -1646,6 +1660,21 @@ public class DefaultRemoteViewFactory extends
    */
   protected RTextArea createRTextArea(IValueConnector connector) {
     RTextArea component = new RTextArea(getGuidGenerator().generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  /**
+   * Creates a remote html area.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RHtmlArea createRHtmlArea(IValueConnector connector) {
+    RHtmlArea component = new RHtmlArea(getGuidGenerator().generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());
     }
