@@ -1211,7 +1211,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     __createHtmlArea : function(remoteHtmlArea) {
       var htmlArea = new qx.ui.basic.Label();
       htmlArea.setRich(true);
-      var state = remoteTextArea.getState();
+      var state = remoteHtmlArea.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(htmlArea, "content", "value", false,
         {

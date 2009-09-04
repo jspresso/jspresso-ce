@@ -26,6 +26,20 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil",
         return content.indexOf("<html>") > -1;
       }
       return false;
+    },
+    
+    preformat : function(message) {
+      if (message) {
+        return "<pre>" + message + "</pre>";
+      }
+      return message;
+    },
+  
+    toHtml : function(message) {
+      if (message != null) {
+        return "<html>" + message + "</html>";
+      }
+      return message;
     }
   }
 });
