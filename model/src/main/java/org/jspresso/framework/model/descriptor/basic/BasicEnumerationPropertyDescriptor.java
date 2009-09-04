@@ -23,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.util.lang.StringUtils;
+
 /**
  * Default implementation of an enumerationValues descriptor.
  * <p>
@@ -101,7 +103,7 @@ public class BasicEnumerationPropertyDescriptor extends
    */
   public void setValues(List<String> values) {
     valuesAndIconImageUrls = new LinkedHashMap<String, String>();
-    for (String value : values) {
+    for (String value : StringUtils.ensureSpaceFree(values)) {
       valuesAndIconImageUrls.put(value, null);
     }
   }

@@ -47,6 +47,7 @@ import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.lang.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
@@ -426,7 +427,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
   }
 
   /**
@@ -437,7 +438,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setLifecycleInterceptorClassNames(
       List<String> lifecycleInterceptorClassNames) {
-    this.lifecycleInterceptorClassNames = lifecycleInterceptorClassNames;
+    this.lifecycleInterceptorClassNames = StringUtils
+        .ensureSpaceFree(lifecycleInterceptorClassNames);
   }
 
   /**
@@ -492,7 +494,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    *          the queryableProperties to set.
    */
   public void setQueryableProperties(List<String> queryableProperties) {
-    this.queryableProperties = queryableProperties;
+    this.queryableProperties = StringUtils.ensureSpaceFree(queryableProperties);
   }
 
   /**
@@ -502,7 +504,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    *          the renderedProperties to set.
    */
   public void setRenderedProperties(List<String> renderedProperties) {
-    this.renderedProperties = renderedProperties;
+    this.renderedProperties = StringUtils.ensureSpaceFree(renderedProperties);
   }
 
   /**
@@ -517,7 +519,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setServiceDelegateClassNames(
       Map<String, String> serviceDelegateClassNames) {
-    this.serviceDelegateClassNames = serviceDelegateClassNames;
+    this.serviceDelegateClassNames = StringUtils
+        .ensureSpaceFree(serviceDelegateClassNames);
   }
 
   /**
@@ -537,7 +540,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    *          the unclonedProperties to set.
    */
   public void setUnclonedProperties(Collection<String> unclonedProperties) {
-    this.unclonedProperties = unclonedProperties;
+    this.unclonedProperties = StringUtils.ensureSpaceFree(unclonedProperties);
   }
 
   private List<String> explodeComponentReferences(List<String> propertyNames) {
@@ -684,7 +687,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setServiceDelegateBeanNames(
       Map<String, String> serviceDelegateBeanNames) {
-    this.serviceDelegateBeanNames = serviceDelegateBeanNames;
+    this.serviceDelegateBeanNames = StringUtils
+        .ensureSpaceFree(serviceDelegateBeanNames);
   }
 
   /**
@@ -704,7 +708,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setLifecycleInterceptorBeanNames(
       List<String> lifecycleInterceptorBeanNames) {
-    this.lifecycleInterceptorBeanNames = lifecycleInterceptorBeanNames;
+    this.lifecycleInterceptorBeanNames = StringUtils
+        .ensureSpaceFree(lifecycleInterceptorBeanNames);
   }
 
   /**

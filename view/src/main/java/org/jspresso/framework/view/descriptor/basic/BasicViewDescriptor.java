@@ -28,6 +28,7 @@ import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -128,7 +129,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
   }
 
   /**

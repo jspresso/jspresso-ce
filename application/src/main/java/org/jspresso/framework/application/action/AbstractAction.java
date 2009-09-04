@@ -27,6 +27,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.StringUtils;
 
 /**
  * Base class for all application actions. Takes care of the context reference
@@ -79,7 +80,7 @@ public abstract class AbstractAction implements IAction {
    *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
   }
 
   /**

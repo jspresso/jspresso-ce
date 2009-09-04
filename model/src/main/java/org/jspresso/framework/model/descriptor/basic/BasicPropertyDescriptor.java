@@ -31,6 +31,7 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
@@ -388,7 +389,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
   }
 
   /**
@@ -399,7 +400,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public void setIntegrityProcessorClassNames(
       List<String> integrityProcessorClassNames) {
-    this.integrityProcessorClassNames = integrityProcessorClassNames;
+    this.integrityProcessorClassNames = StringUtils
+        .ensureSpaceFree(integrityProcessorClassNames);
   }
 
   /**
@@ -524,6 +526,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public void setIntegrityProcessorBeanNames(
       List<String> integrityProcessorBeanNames) {
-    this.integrityProcessorBeanNames = integrityProcessorBeanNames;
+    this.integrityProcessorBeanNames = StringUtils
+        .ensureSpaceFree(integrityProcessorBeanNames);
   }
 }

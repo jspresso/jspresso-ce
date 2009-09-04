@@ -27,6 +27,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
+import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -242,7 +243,7 @@ public class Workspace implements ISecurable {
    *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
   }
 
   /**

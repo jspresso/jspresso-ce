@@ -27,6 +27,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 
@@ -321,7 +322,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
   }
 
   /**
