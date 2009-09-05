@@ -167,7 +167,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
     __setupCollectionListeners : function() {
       this.__state.getChildren().addListener("change", function(e) {
         var data = {};
-        this.clearSorting();
+        if(this.__sortingAction == null) {
+        	this.clearSorting();
+        }
         this.fireDataEvent(qx.ui.table.ITableModel.EVENT_TYPE_DATA_CHANGED, data);
       }, this);
       this.__state.getChildren().addListener("changeLength", function(e) {
@@ -177,7 +179,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
           firstColumn : 0,
           lastColumn  : this.getColumnCount() - 1
         };
-        this.clearSorting();
+        if(this.__sortingAction == null) {
+          this.clearSorting();
+        }
         this.fireDataEvent(qx.ui.table.ITableModel.EVENT_TYPE_DATA_CHANGED, data);
       }, this);
     },
