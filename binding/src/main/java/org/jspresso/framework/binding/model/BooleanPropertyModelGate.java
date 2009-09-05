@@ -87,8 +87,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * {@inheritDoc}
    */
   public boolean isOpen() {
-    return SecurityHelper.isSubjectGranted(getSubject(), getGrantedRoles())
-        && open;
+    return open;
   }
 
   /**
@@ -127,6 +126,8 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
       } else {
         this.open = !openOnTrue;
       }
+      this.open = this.open
+          && SecurityHelper.isSubjectGranted(getSubject(), getGrantedRoles());
       firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
     }
   }
@@ -141,6 +142,8 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
     if (!openOnTrue) {
       this.open = !this.open;
     }
+    this.open = this.open
+        && SecurityHelper.isSubjectGranted(getSubject(), getGrantedRoles());
     firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }
 
