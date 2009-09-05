@@ -87,7 +87,8 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * {@inheritDoc}
    */
   public boolean isOpen() {
-    return SecurityHelper.isSubjectGranted(subject, getGrantedRoles()) && open;
+    return SecurityHelper.isSubjectGranted(getSubject(), getGrantedRoles())
+        && open;
   }
 
   /**
