@@ -53,7 +53,8 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       Map<String, Object> context) {
     IValueConnector modelConnector = modelConnectorFactory
         .createModelConnector(ACTION_MODEL_NAME, firstWizardStep
-            .getViewDescriptor().getModelDescriptor());
+            .getViewDescriptor().getModelDescriptor(), actionHandler
+            .getSubject());
     Map<String, Object> wizardModelInit = (Map<String, Object>) context
         .get(IWizardStepDescriptor.INITIAL_WIZARD_MODEL);
     Map<String, Object> wizardModel = new ObjectEqualityMap<String, Object>();

@@ -152,7 +152,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
           .getComponentDescriptor();
       if (componentDescriptor != null) {
         connector = modelConnectorFactory.createModelConnector(connectorKey,
-            componentDescriptor.getPropertyDescriptor(connectorKey));
+            componentDescriptor.getPropertyDescriptor(connectorKey),
+            getSubject());
         connector.setParentConnector(this);
         childConnectors.put(connectorKey, connector);
       }
@@ -174,7 +175,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     IValueConnector connector = childConnectors.get(connectorKey);
     if (connector == null) {
       connector = modelConnectorFactory.createModelConnector(connectorKey,
-          childModelDescriptor);
+          childModelDescriptor, getSubject());
       connector.setParentConnector(this);
       childConnectors.put(connectorKey, connector);
     }

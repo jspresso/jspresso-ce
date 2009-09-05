@@ -1444,7 +1444,7 @@ public class DefaultSwingViewFactory extends
         actionHandler.checkAccess(columnViewDescriptor);
         IValueConnector columnConnector = createColumnConnector(
             columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor());
+                .getElementDescriptor(), actionHandler);
         rowConnectorPrototype.addChildConnector(columnConnector);
         columnClasses.add(modelDescriptor.getCollectionDescriptor()
             .getElementDescriptor().getPropertyDescriptor(columnId)
@@ -1522,7 +1522,7 @@ public class DefaultSwingViewFactory extends
         if (editorView.getConnector().getParentConnector() == null) {
           editorView.getConnector().setParentConnector(connector);
         }
-        column.setCellEditor(createTableCellEditor(editorView));
+        column.setCellEditor(createTableCellEditor(editorView, actionHandler));
         TableCellRenderer cellRenderer = createTableCellRenderer(
             propertyDescriptor, locale);
         if (cellRenderer != null) {
@@ -2043,11 +2043,13 @@ public class DefaultSwingViewFactory extends
     return new FormattedTableCellRenderer(null);
   }
 
-  private TableCellEditor createTableCellEditor(IView<JComponent> editorView) {
+  private TableCellEditor createTableCellEditor(IView<JComponent> editorView,
+      IActionHandler actionHandler) {
     SwingViewCellEditorAdapter editor;
     if (editorView.getPeer() instanceof JActionField) {
       editor = new SwingViewCellEditorAdapter(editorView,
-          getModelConnectorFactory(), getMvcBinder()) {
+          getModelConnectorFactory(), getMvcBinder(), actionHandler
+              .getSubject()) {
 
         private static final long serialVersionUID = -1551909997448473681L;
 
@@ -2064,7 +2066,8 @@ public class DefaultSwingViewFactory extends
       };
     } else {
       editor = new SwingViewCellEditorAdapter(editorView,
-          getModelConnectorFactory(), getMvcBinder());
+          getModelConnectorFactory(), getMvcBinder(), actionHandler
+              .getSubject());
     }
     return editor;
   }

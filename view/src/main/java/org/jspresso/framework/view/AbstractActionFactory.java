@@ -17,6 +17,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
@@ -51,6 +52,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * 
    * @param action
    *          the displayable Jspresso action.
+   * @param actionHandler
+   *          the action handler.
    * @param modelDescriptor
    *          the model descriptor of the view.
    * @param viewConnector
@@ -59,12 +62,15 @@ public abstract class AbstractActionFactory<E, F, G> implements
    *          the created ui specific action.
    */
   protected void attachActionGates(IDisplayableAction action,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      E uiAction) {
+      IActionHandler actionHandler, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector, E uiAction) {
     if (action.getActionabilityGates() != null) {
       Collection<IGate> clonedGates = new HashSet<IGate>();
       for (IGate gate : action.getActionabilityGates()) {
         final IGate clonedGate = gate.clone();
+        if (clonedGate instanceof ISubjectAware) {
+          ((ISubjectAware) clonedGate).setSubject(actionHandler.getSubject());
+        }
         if (clonedGate instanceof IModelGate) {
           if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
             viewConnector.addValueChangeListener(new IValueChangeListener() {

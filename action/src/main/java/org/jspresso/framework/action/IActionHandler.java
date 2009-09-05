@@ -20,9 +20,10 @@ package org.jspresso.framework.action;
 
 import java.util.Map;
 
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.exception.IExceptionHandler;
-
 
 /**
  * This interface establishes the general contract of an object able to axacute
@@ -52,7 +53,7 @@ public interface IActionHandler extends IExceptionHandler {
    * whenever access should not be granted.
    * 
    * @param securable
-   *            the id of the secured access to check.
+   *          the id of the secured access to check.
    */
   void checkAccess(ISecurable securable);
 
@@ -69,9 +70,9 @@ public interface IActionHandler extends IExceptionHandler {
    * context, synchronous or not, transactionality, ...).
    * 
    * @param action
-   *            the action to be executed.
+   *          the action to be executed.
    * @param context
-   *            the action execution context.
+   *          the action execution context.
    * @return true whenever this action completes normally.
    * @see IAction#execute(IActionHandler, Map)
    */
@@ -86,4 +87,11 @@ public interface IActionHandler extends IExceptionHandler {
    *         controller.
    */
   Map<String, Object> getInitialActionContext();
+
+  /**
+   * Returns the JAAS subject attached to this action handler.
+   * 
+   * @return the JAAS subject attached to this action handler.
+   */
+  Subject getSubject();
 }

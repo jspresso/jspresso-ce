@@ -40,7 +40,6 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-
 /**
  * Base class for backend application controllers. It provides the implementor
  * with commonly used accessors as well as a reference to the root model
@@ -85,7 +84,8 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public IValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor) {
-    return modelConnectorFactory.createModelConnector(id, modelDescriptor);
+    return modelConnectorFactory.createModelConnector(id, modelDescriptor,
+        getApplicationSession().getSubject());
   }
 
   /**
@@ -161,8 +161,8 @@ public abstract class AbstractBackendController extends AbstractController
    * Their connectors are.
    * 
    * @param workspaces
-   *            A map containing the workspaces indexed by a well-known key used
-   *            to bind them with their views.
+   *          A map containing the workspaces indexed by a well-known key used
+   *          to bind them with their views.
    */
   public void installWorkspaces(Map<String, Workspace> workspaces) {
     workspaceConnectors = new HashMap<String, IValueConnector>();
@@ -170,7 +170,8 @@ public abstract class AbstractBackendController extends AbstractController
       IModelDescriptor workspaceDescriptor;
       workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
       IValueConnector nextWorkspaceConnector = modelConnectorFactory
-          .createModelConnector(workspaceEntry.getKey(), workspaceDescriptor);
+          .createModelConnector(workspaceEntry.getKey(), workspaceDescriptor,
+              getApplicationSession().getSubject());
       nextWorkspaceConnector.setConnectorValue(workspaceEntry.getValue());
       workspaceConnectors.put(workspaceEntry.getKey(), nextWorkspaceConnector);
     }
@@ -187,7 +188,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the applicationSession.
    * 
    * @param applicationSession
-   *            the applicationSession to set.
+   *          the applicationSession to set.
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
     if (!(applicationSession instanceof BasicApplicationSession)) {
@@ -202,7 +203,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the entityFactory.
    * 
    * @param entityFactory
-   *            the entityFactory to set.
+   *          the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     if (!(entityFactory instanceof ApplicationSessionAwareProxyEntityFactory)) {
@@ -217,7 +218,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the modelConnectorFactory.
    * 
    * @param modelConnectorFactory
-   *            the modelConnectorFactory to set.
+   *          the modelConnectorFactory to set.
    */
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {

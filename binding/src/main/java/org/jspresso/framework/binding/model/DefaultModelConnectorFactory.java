@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.binding.model;
 
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -60,16 +62,16 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    * {@inheritDoc}
    */
   public IValueConnector createModelConnector(String id,
-      Class<?> componentContract) {
+      Class<?> componentContract, Subject subject) {
     return createModelConnector(id, getDescriptorRegistry()
-        .getComponentDescriptor(componentContract));
+        .getComponentDescriptor(componentContract), subject);
   }
 
   /**
    * {@inheritDoc}
    */
   public IValueConnector createModelConnector(String id,
-      IModelDescriptor modelDescriptor) {
+      IModelDescriptor modelDescriptor, Subject subject) {
     IValueConnector modelConnector = null;
     if (modelDescriptor instanceof IComponentDescriptor<?>) {
       modelConnector = new ModelConnector(id,
@@ -94,19 +96,22 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
         }
       }
     }
-    if (modelConnector != null && modelDescriptor instanceof IGateAccessible) {
-      modelConnector.setLocallyWritable(!((IGateAccessible) modelDescriptor)
-          .isReadOnly());
-      if (((IGateAccessible) modelDescriptor).getReadabilityGates() != null) {
-        for (IGate gate : ((IGateAccessible) modelDescriptor)
-            .getReadabilityGates()) {
-          modelConnector.addReadabilityGate(gate.clone());
+    if (modelConnector != null) {
+      modelConnector.setSubject(subject);
+      if (modelDescriptor instanceof IGateAccessible) {
+        modelConnector.setLocallyWritable(!((IGateAccessible) modelDescriptor)
+            .isReadOnly());
+        if (((IGateAccessible) modelDescriptor).getReadabilityGates() != null) {
+          for (IGate gate : ((IGateAccessible) modelDescriptor)
+              .getReadabilityGates()) {
+            modelConnector.addReadabilityGate(gate.clone());
+          }
         }
-      }
-      if (((IGateAccessible) modelDescriptor).getWritabilityGates() != null) {
-        for (IGate gate : ((IGateAccessible) modelDescriptor)
-            .getWritabilityGates()) {
-          modelConnector.addWritabilityGate(gate.clone());
+        if (((IGateAccessible) modelDescriptor).getWritabilityGates() != null) {
+          for (IGate gate : ((IGateAccessible) modelDescriptor)
+              .getWritabilityGates()) {
+            modelConnector.addWritabilityGate(gate.clone());
+          }
         }
       }
     }

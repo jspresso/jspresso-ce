@@ -78,8 +78,8 @@ public class WingsActionFactory extends
     Action wingsAction = new ActionAdapter(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
     if (action instanceof IDisplayableAction) {
-      attachActionGates(((IDisplayableAction) action), modelDescriptor,
-          viewConnector, wingsAction);
+      attachActionGates(((IDisplayableAction) action), actionHandler,
+          modelDescriptor, viewConnector, wingsAction);
     }
     return wingsAction;
   }

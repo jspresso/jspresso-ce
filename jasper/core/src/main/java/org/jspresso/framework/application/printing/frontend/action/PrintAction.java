@@ -35,7 +35,6 @@ import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * Frontend action to select a report.
  * <p>
@@ -55,11 +54,11 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
@@ -77,7 +76,8 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
     IValueConnector reportsConnector = modelConnectorFactory
-        .createModelConnector("ActionModel", modelDescriptor);
+        .createModelConnector("ActionModel", modelDescriptor, actionHandler
+            .getSubject());
     reportsConnector.setConnectorValue(createReportInstances(
         getTranslationProvider(context), getLocale(context)));
     context.put(ActionContextConstants.ACTION_PARAM, reportsConnector);
@@ -88,7 +88,7 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the modelConnectorFactory.
    * 
    * @param modelConnectorFactory
-   *            the modelConnectorFactory to set.
+   *          the modelConnectorFactory to set.
    */
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
@@ -99,7 +99,7 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the reportDescriptors.
    * 
    * @param reportDescriptors
-   *            the reportDescriptors to set.
+   *          the reportDescriptors to set.
    */
   public void setReportDescriptors(List<IReportDescriptor> reportDescriptors) {
     this.reportDescriptors = reportDescriptors;
@@ -109,7 +109,7 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the reportFactory.
    * 
    * @param reportFactory
-   *            the reportFactory to set.
+   *          the reportFactory to set.
    */
   public void setReportFactory(IReportFactory reportFactory) {
     this.reportFactory = reportFactory;

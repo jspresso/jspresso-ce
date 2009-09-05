@@ -22,6 +22,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.security.auth.Subject;
+
+import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
@@ -49,12 +52,13 @@ import org.jspresso.framework.util.gate.AbstractModelGate;
  * @author Vincent Vandenschrick
  */
 public class BooleanPropertyModelGate extends AbstractModelGate implements
-    PropertyChangeListener {
+    PropertyChangeListener, ISubjectAware {
 
   private IAccessorFactory accessorFactory;
   private String           booleanPropertyName;
   private boolean          open;
   private boolean          openOnTrue;
+  private Subject          subject;
 
   /**
    * Constructs a new <code>BooleanPropertyModelGate</code> instance.
@@ -163,5 +167,21 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    */
   public void setOpenOnTrue(boolean openOnTrue) {
     this.openOnTrue = openOnTrue;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSubject(Subject subject) {
+    this.subject = subject;
+  }
+
+  /**
+   * Gets the subject.
+   * 
+   * @return the subject.
+   */
+  protected Subject getSubject() {
+    return subject;
   }
 }

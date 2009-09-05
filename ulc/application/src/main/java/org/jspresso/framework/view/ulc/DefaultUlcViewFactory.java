@@ -1187,7 +1187,7 @@ public class DefaultUlcViewFactory extends
         actionHandler.checkAccess(columnViewDescriptor);
         IValueConnector columnConnector = createColumnConnector(
             columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor());
+                .getElementDescriptor(), actionHandler);
         rowConnectorPrototype.addChildConnector(columnConnector);
         IPropertyDescriptor columnModelDescriptor = modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()

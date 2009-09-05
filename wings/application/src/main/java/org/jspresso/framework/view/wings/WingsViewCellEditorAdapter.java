@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.util.EventObject;
 import java.util.HashMap;
 
+import javax.security.auth.Subject;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
@@ -81,9 +82,12 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    *          the model connector factory.
    * @param mvcBinder
    *          the mvc binder.
+   * @param subject
+   *          the JAAS subject.
    */
   public WingsViewCellEditorAdapter(IView<SComponent> editorView,
-      IModelConnectorFactory modelConnectorFactory, IMvcBinder mvcBinder) {
+      IModelConnectorFactory modelConnectorFactory, IMvcBinder mvcBinder,
+      Subject subject) {
     this.listenerList = new EventListenerList();
     this.editorView = editorView;
     if (editorView.getPeer() instanceof SAbstractButton) {
@@ -96,7 +100,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
       modelConnector = modelConnectorFactory.createModelConnector(editorView
           .getConnector().getId(),
           ((IComponentDescriptorProvider<?>) editorView.getDescriptor()
-              .getModelDescriptor()).getComponentDescriptor());
+              .getModelDescriptor()).getComponentDescriptor(), subject);
 
     } else {
       modelConnector = new BasicValueConnector(editorView.getConnector()
@@ -122,8 +126,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   /**
    * {@inheritDoc}
    */
-  public void valueChange(
-      @SuppressWarnings("unused") ValueChangeEvent evt) {
+  public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
     stopCellEditing();
   }
 

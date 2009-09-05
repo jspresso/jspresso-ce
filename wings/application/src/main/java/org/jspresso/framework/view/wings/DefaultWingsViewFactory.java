@@ -1409,7 +1409,7 @@ public class DefaultWingsViewFactory extends
         actionHandler.checkAccess(columnViewDescriptor);
         IValueConnector columnConnector = createColumnConnector(
             columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor());
+                .getElementDescriptor(), actionHandler);
         rowConnectorPrototype.addChildConnector(columnConnector);
         columnClasses.add(modelDescriptor.getCollectionDescriptor()
             .getElementDescriptor().getPropertyDescriptor(columnId)
@@ -1491,7 +1491,8 @@ public class DefaultWingsViewFactory extends
           if (editorView.getConnector().getParentConnector() == null) {
             editorView.getConnector().setParentConnector(connector);
           }
-          column.setCellEditor(createTableCellEditor(editorView));
+          column
+              .setCellEditor(createTableCellEditor(editorView, actionHandler));
         }
         STableCellRenderer cellRenderer = createTableCellRenderer(
             propertyDescriptor, locale);
@@ -2019,10 +2020,11 @@ public class DefaultWingsViewFactory extends
     return new FormattedTableCellRenderer(null);
   }
 
-  private STableCellEditor createTableCellEditor(IView<SComponent> editorView) {
+  private STableCellEditor createTableCellEditor(IView<SComponent> editorView,
+      IActionHandler actionHandler) {
     WingsViewCellEditorAdapter editor;
     editor = new WingsViewCellEditorAdapter(editorView,
-        getModelConnectorFactory(), getMvcBinder());
+        getModelConnectorFactory(), getMvcBinder(), actionHandler.getSubject());
     return editor;
   }
 

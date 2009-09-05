@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.EventObject;
 import java.util.HashMap;
 
+import javax.security.auth.Subject;
 import javax.swing.AbstractButton;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
@@ -80,9 +81,12 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    *          the model connector factory.
    * @param mvcBinder
    *          the mvc binder.
+   * @param subject
+   *          the JAAS subject.
    */
   public SwingViewCellEditorAdapter(IView<JComponent> editorView,
-      IModelConnectorFactory modelConnectorFactory, IMvcBinder mvcBinder) {
+      IModelConnectorFactory modelConnectorFactory, IMvcBinder mvcBinder,
+      Subject subject) {
     this.editorView = editorView;
     if (editorView.getPeer() instanceof AbstractButton) {
       ((AbstractButton) editorView.getPeer())
@@ -106,7 +110,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       modelConnector = modelConnectorFactory.createModelConnector(editorView
           .getConnector().getId(),
           ((IComponentDescriptorProvider<?>) editorView.getDescriptor()
-              .getModelDescriptor()).getComponentDescriptor());
+              .getModelDescriptor()).getComponentDescriptor(), subject);
     } else {
       modelConnector = new BasicValueConnector(editorView.getConnector()
           .getId());

@@ -21,11 +21,12 @@ package org.jspresso.framework.application;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
-
 
 /**
  * Base class for controllers. It holds a reference to the root connector.
@@ -93,7 +94,7 @@ public abstract class AbstractController implements IController {
    * Sets the customExceptionHandler.
    * 
    * @param customExceptionHandler
-   *            the customExceptionHandler to set.
+   *          the customExceptionHandler to set.
    */
   public void setCustomExceptionHandler(IExceptionHandler customExceptionHandler) {
     this.customExceptionHandler = customExceptionHandler;
@@ -103,10 +104,19 @@ public abstract class AbstractController implements IController {
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *            the translationProvider to set.
+   *          the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
+  }
+
+  /**
+   * Gets the subject out of the application session.
+   * <p>
+   * {@inheritDoc}
+   */
+  public Subject getSubject() {
+    return getApplicationSession().getSubject();
   }
 
 }

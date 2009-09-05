@@ -155,7 +155,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     componentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
         .getCollectionDescriptor().getElementDescriptor();
     IValueConnector elementConnector = modelConnectorFactory
-        .createModelConnector(connectorId, componentDescriptor);
+        .createModelConnector(connectorId, componentDescriptor, getSubject());
     return elementConnector;
   }
 
@@ -227,8 +227,8 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
 
   /**
    * Before invoking the super implementation which fires the
-   * <code>ValueChangeEvent</code>, this implementation reconstructs
-   * the child connectors based on the retrieved collection.
+   * <code>ValueChangeEvent</code>, this implementation reconstructs the child
+   * connectors based on the retrieved collection.
    * <p>
    * {@inheritDoc}
    */

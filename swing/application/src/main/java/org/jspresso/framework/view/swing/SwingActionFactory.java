@@ -78,8 +78,8 @@ public class SwingActionFactory extends
     Action swingAction = new ActionAdapter(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
     if (action instanceof IDisplayableAction) {
-      attachActionGates(((IDisplayableAction) action), modelDescriptor,
-          viewConnector, swingAction);
+      attachActionGates(((IDisplayableAction) action), actionHandler,
+          modelDescriptor, viewConnector, swingAction);
     }
     return swingAction;
   }

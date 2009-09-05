@@ -29,7 +29,6 @@ import org.jboss.security.SimplePrincipal;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * Helper class for security management.
  * <p>
@@ -70,20 +69,42 @@ public final class SecurityHelper {
    * Security exception is thrown.
    * 
    * @param subject
-   *            the subject to check access for.
+   *          the subject to check access for.
    * @param securable
-   *            the secured resource to check access to.
+   *          the secured resource to check access to.
    * @param translationProvider
-   *            the translation provider to translate the potential error
-   *            message.
+   *          the translation provider to translate the potential error message.
    * @param locale
-   *            the locale to translate the potential error message.
+   *          the locale to translate the potential error message.
    */
   public static void checkAccess(Subject subject, ISecurable securable,
       ITranslationProvider translationProvider, Locale locale) {
     Collection<String> grantedRoles = securable.getGrantedRoles();
-    if (grantedRoles == null) {
+    if (isSubjectGranted(subject, grantedRoles)) {
       return;
+    }
+    if (securable instanceof IDescriptor) {
+      throw new SecurityException(translationProvider.getTranslation(
+          "access.denied.object", new Object[] {((IDescriptor) securable)
+              .getI18nName(translationProvider, locale)}, locale));
+    }
+    throw new SecurityException(translationProvider.getTranslation(
+        "access.denied", locale));
+  }
+
+  /**
+   * Do the passed subject has sufficient roles ?
+   * 
+   * @param subject
+   *          the subject to test.
+   * @param grantedRoles
+   *          the roles granted
+   * @return true if the subject has sufficient priviledge.
+   */
+  private static boolean isSubjectGranted(Subject subject,
+      Collection<String> grantedRoles) {
+    if (grantedRoles == null) {
+      return true;
     }
     Group subjectRoles = null;
     for (Principal p : subject.getPrincipals()) {
@@ -94,17 +115,11 @@ public final class SecurityHelper {
     if (subjectRoles != null) {
       for (String grantedRole : grantedRoles) {
         if (subjectRoles.isMember(new SimplePrincipal(grantedRole))) {
-          return;
+          return true;
         }
       }
     }
-    if (securable instanceof IDescriptor) {
-      throw new SecurityException(translationProvider.getTranslation(
-          "access.denied.object", new Object[] {((IDescriptor) securable)
-              .getI18nName(translationProvider, locale)}, locale));
-    }
-    throw new SecurityException(translationProvider.getTranslation(
-        "access.denied", locale));
+    return false;
   }
 
   /**

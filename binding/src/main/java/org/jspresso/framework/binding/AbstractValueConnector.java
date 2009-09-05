@@ -27,10 +27,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
+import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.event.ValueChangeSupport;
@@ -93,6 +96,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
   private PropertyChangeListener   writabilityGatesListener;
   private IModelDescriptor         modelDescriptor;
 
+  private Subject                  subject;
+
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
    * bean connector, this identifier must be the bean property the connector
@@ -123,6 +128,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void addReadabilityGate(IGate gate) {
+    if (gate instanceof ISubjectAware) {
+      ((ISubjectAware) gate).setSubject(getSubject());
+    }
     if (readabilityGates == null) {
       readabilityGates = new HashSet<IGate>(4);
     }
@@ -136,6 +144,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void addWritabilityGate(IGate gate) {
+    if (gate instanceof ISubjectAware) {
+      ((ISubjectAware) gate).setSubject(getSubject());
+    }
     if (writabilityGates == null) {
       writabilityGates = new HashSet<IGate>(4);
     }
@@ -475,6 +486,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void removeReadabilityGate(IGate gate) {
+    if (gate instanceof ISubjectAware) {
+      ((ISubjectAware) gate).setSubject(null);
+    }
     if (readabilityGates == null) {
       return;
     }
@@ -488,6 +502,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void removeWritabilityGate(IGate gate) {
+    if (gate instanceof ISubjectAware) {
+      ((ISubjectAware) gate).setSubject(null);
+    }
     if (writabilityGates == null) {
       return;
     }
@@ -826,5 +843,37 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return getModelConnector().getModelProvider();
     }
     return null;
+  }
+
+  /**
+   * Configures accessibility gates with the subject.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void setSubject(Subject subject) {
+    this.subject = subject;
+    if (getReadabilityGates() != null) {
+      for (IGate gate : getReadabilityGates()) {
+        if (gate instanceof ISubjectAware) {
+          ((ISubjectAware) gate).setSubject(subject);
+        }
+      }
+    }
+    if (getWritabilityGates() != null) {
+      for (IGate gate : getWritabilityGates()) {
+        if (gate instanceof ISubjectAware) {
+          ((ISubjectAware) gate).setSubject(subject);
+        }
+      }
+    }
+  }
+
+  /**
+   * Gets the subject.
+   * 
+   * @return the subject.
+   */
+  protected Subject getSubject() {
+    return subject;
   }
 }

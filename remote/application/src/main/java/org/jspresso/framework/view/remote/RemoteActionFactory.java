@@ -82,8 +82,8 @@ public class RemoteActionFactory extends
     RAction remoteAction = createRAction(action, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
     if (action instanceof IDisplayableAction) {
-      attachActionGates((IDisplayableAction) action, modelDescriptor,
-          viewConnector, remoteAction);
+      attachActionGates((IDisplayableAction) action, actionHandler,
+          modelDescriptor, viewConnector, remoteAction);
     }
     return remoteAction;
   }

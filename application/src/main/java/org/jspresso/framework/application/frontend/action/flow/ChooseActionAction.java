@@ -37,7 +37,6 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
-
 /**
  * Frontend action to select an action and launch it.
  * <p>
@@ -57,11 +56,11 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
@@ -80,7 +79,8 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
     modelDescriptor.setName(ACTION_MODEL_NAME);
     IValueConnector actionsConnector = modelConnectorFactory
-        .createModelConnector(ACTION_MODEL_NAME, modelDescriptor);
+        .createModelConnector(ACTION_MODEL_NAME, modelDescriptor, actionHandler
+            .getSubject());
     actionsConnector.setConnectorValue(createActionProxies(
         getTranslationProvider(context), getLocale(context)));
     context.put(ActionContextConstants.ACTION_PARAM, actionsConnector);
@@ -91,7 +91,7 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
    * Sets the actions.
    * 
    * @param actions
-   *            the actions to set.
+   *          the actions to set.
    */
   public void setActions(List<IDisplayableAction> actions) {
     this.actions = actions;
@@ -101,7 +101,7 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
    * Sets the modelConnectorFactory.
    * 
    * @param modelConnectorFactory
-   *            the beanConnectorFactory to set.
+   *          the beanConnectorFactory to set.
    */
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
@@ -142,8 +142,8 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
     /**
      * {@inheritDoc}
      */
-    public Object invoke(@SuppressWarnings("unused")
-    Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(@SuppressWarnings("unused") Object proxy,
+        Method method, Object[] args) throws Throwable {
       if (method.getName().equals("getName")) {
         return delegate.getI18nName(translationProvider, locale);
       } else if (method.getName().equals("getDescription")) {

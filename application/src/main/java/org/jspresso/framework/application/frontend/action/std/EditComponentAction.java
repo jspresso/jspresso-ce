@@ -93,7 +93,7 @@ public class EditComponentAction<E, F, G> extends
 
     IValueConnector componentConnector = modelConnectorFactory
         .createModelConnector(ACTION_MODEL_NAME, getViewDescriptor(context)
-            .getModelDescriptor());
+            .getModelDescriptor(), actionHandler.getSubject());
     componentConnector.setConnectorValue(component);
 
     getMvcBinder(context)

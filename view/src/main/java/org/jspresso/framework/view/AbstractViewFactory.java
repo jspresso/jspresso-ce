@@ -259,20 +259,21 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     if (view != null) {
       try {
-        if (actionHandler != null) {
-          actionHandler.checkAccess(viewDescriptor);
-        }
+        actionHandler.checkAccess(viewDescriptor);
         view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
-            view.getConnector().addReadabilityGate(gate.clone());
+            IGate clonedGate = gate.clone();
+            view.getConnector().addReadabilityGate(clonedGate);
           }
         }
         if (viewDescriptor.getWritabilityGates() != null) {
           for (IGate gate : viewDescriptor.getWritabilityGates()) {
-            view.getConnector().addWritabilityGate(gate.clone());
+            IGate clonedGate = gate.clone();
+            view.getConnector().addWritabilityGate(clonedGate);
           }
         }
+        view.getConnector().setSubject(actionHandler.getSubject());
         finishComponentConfiguration(viewDescriptor, locale, view);
         decorateWithActions(viewDescriptor, actionHandler, locale, view);
         decorateWithBorder(view, locale);
@@ -772,11 +773,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the column decriptor to create the connector for.
    * @param descriptor
    *          the component descriptor this table relies on.
+   * @param actionHandler
+   *          the action handler.
    * @return the connector for the table column.
    */
   protected IValueConnector createColumnConnector(
       IPropertyViewDescriptor columnViewDescriptor,
-      IComponentDescriptor<?> descriptor) {
+      IComponentDescriptor<?> descriptor, IActionHandler actionHandler) {
     String columnId = columnViewDescriptor.getModelDescriptor().getName();
     IPropertyDescriptor propertyDescriptor = descriptor
         .getPropertyDescriptor(columnId);
@@ -806,14 +809,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
     columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
     if (columnViewDescriptor.getReadabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-        columnConnector.addReadabilityGate(gate.clone());
+        IGate clonedGate = gate.clone();
+        columnConnector.addReadabilityGate(clonedGate);
       }
     }
     if (columnViewDescriptor.getWritabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-        columnConnector.addWritabilityGate(gate.clone());
+        IGate clonedGate = gate.clone();
+        columnConnector.addWritabilityGate(clonedGate);
       }
     }
+    columnConnector.setSubject(actionHandler.getSubject());
     return columnConnector;
   }
 
