@@ -3,6 +3,8 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.view.descriptor.ICardNameSelector;
 
 /**
@@ -23,9 +25,9 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
    * <p>
    * {@inheritDoc}
    */
-  public String getCardNameForModel(Object model) {
+  public String getCardNameForModel(Object model, Subject subject) {
     if (cardNameSelector != null) {
-      return cardNameSelector.getCardNameForModel(model);
+      return cardNameSelector.getCardNameForModel(model, subject);
     }
     return null;
   }

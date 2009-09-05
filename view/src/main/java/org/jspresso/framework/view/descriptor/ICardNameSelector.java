@@ -3,6 +3,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import javax.security.auth.Subject;
+
 /**
  * This interface is implemented by strategies determining a card name based on
  * a model instance.
@@ -20,8 +22,10 @@ public interface ICardNameSelector {
    * 
    * @param model
    *          the model to back the view.
+   * @param subject
+   *          the JAAS subject.
    * @return the card name to look up the view.
    */
-  String getCardNameForModel(Object model);
+  String getCardNameForModel(Object model, Subject subject);
 
 }

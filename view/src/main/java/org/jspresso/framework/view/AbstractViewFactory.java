@@ -694,7 +694,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         E cardsPeer = cardView.getPeer();
         if (accessGranted) {
           String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
-              .getCardNameForModel(cardModel);
+              .getCardNameForModel(cardModel, actionHandler.getSubject());
           if (cardName != null) {
             IView<E> childCardView = cardView.getChild(cardName);
             if (childCardView == null

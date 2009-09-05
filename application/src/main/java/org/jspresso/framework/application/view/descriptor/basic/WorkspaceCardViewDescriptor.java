@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.application.view.descriptor.basic;
 
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
@@ -50,7 +52,8 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
   /**
    * {@inheritDoc}
    */
-  public String getCardNameForModel(Object model) {
+  public String getCardNameForModel(Object model,
+      @SuppressWarnings("unused") Subject subject) {
     if (model instanceof BeanModule
         && (((BeanModule) model).getParent()) instanceof BeanCollectionModule) {
       return (((BeanModule) model).getParent()).getName() + ELEMENT_SUFFIX;

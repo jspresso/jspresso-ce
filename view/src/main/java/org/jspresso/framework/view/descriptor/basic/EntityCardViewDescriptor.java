@@ -22,10 +22,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
 
 /**
  * This class is a card view descriptor that displays entities. Choice of the
@@ -54,7 +55,8 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    * <p>
    * {@inheritDoc}
    */
-  public String getCardNameForModel(Object model) {
+  public String getCardNameForModel(Object model,
+      @SuppressWarnings("unused") Subject subject) {
     if (model instanceof IEntity) {
       return ((IEntity) model).getComponentContract().getName();
     }
@@ -65,7 +67,7 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    * Sets the viewDescriptors.
    * 
    * @param viewDescriptors
-   *            the viewDescriptors to set.
+   *          the viewDescriptors to set.
    */
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     Map<String, IViewDescriptor> classCardMapping = new LinkedHashMap<String, IViewDescriptor>();
