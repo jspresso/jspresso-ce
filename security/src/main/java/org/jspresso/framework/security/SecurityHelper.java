@@ -101,7 +101,7 @@ public final class SecurityHelper {
    *          the roles granted
    * @return true if the subject has sufficient priviledge.
    */
-  private static boolean isSubjectGranted(Subject subject,
+  public static boolean isSubjectGranted(Subject subject,
       Collection<String> grantedRoles) {
     if (grantedRoles == null) {
       return true;
