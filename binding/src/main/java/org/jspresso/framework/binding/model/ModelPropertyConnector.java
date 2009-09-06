@@ -163,20 +163,8 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
         }
       }
     }
-
-    boolean oldWritability;
-    boolean newWritability;
-    if (evt.getOldValue() != null) {
-      oldWritability = super.isWritable();
-    } else {
-      oldWritability = false;
-    }
-    if (evt.getNewValue() != null) {
-      newWritability = super.isWritable();
-    } else {
-      newWritability = isWritable();
-    }
-    firePropertyChange(WRITABLE_PROPERTY, oldWritability, newWritability);
+    writabilityChange();
+    readabilityChange();
     fireConnectorValueChange();
   }
 

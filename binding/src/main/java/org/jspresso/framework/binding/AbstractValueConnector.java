@@ -564,11 +564,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void setLocallyReadable(boolean locallyReadable) {
-    // use isReadable() instead of readable parameter because there may be extra
-    // computing rules.
-    boolean oldReadable = isReadable();
     this.locallyReadable = locallyReadable;
-    firePropertyChange(READABLE_PROPERTY, oldReadable, isReadable());
     readabilityChange();
   }
 
@@ -576,11 +572,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void setLocallyWritable(boolean locallyWritable) {
-    // use isWritable() instead of writable parameter because there may be extra
-    // computing rules.
-    boolean oldWritable = isWritable();
     this.locallyWritable = locallyWritable;
-    firePropertyChange(WRITABLE_PROPERTY, oldWritable, isWritable());
     writabilityChange();
   }
 
