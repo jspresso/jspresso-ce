@@ -21,13 +21,7 @@ package org.jspresso.framework.binding.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
-import javax.security.auth.Subject;
-
-import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.security.ISubjectAware;
-import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
@@ -55,14 +49,12 @@ import org.jspresso.framework.util.gate.AbstractModelGate;
  * @author Vincent Vandenschrick
  */
 public class BooleanPropertyModelGate extends AbstractModelGate implements
-    PropertyChangeListener, ISubjectAware, ISecurable {
+    PropertyChangeListener {
 
   private IAccessorFactory accessorFactory;
   private String           booleanPropertyName;
   private boolean          open;
   private boolean          openOnTrue;
-  private Subject          subject;
-  private List<String>     grantedRoles;
 
   /**
    * Constructs a new <code>BooleanPropertyModelGate</code> instance.
@@ -126,8 +118,6 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
       } else {
         this.open = !openOnTrue;
       }
-      this.open = this.open
-          && SecurityHelper.isSubjectGranted(getSubject(), getGrantedRoles());
       firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
     }
   }
@@ -142,8 +132,6 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
     if (!openOnTrue) {
       this.open = !this.open;
     }
-    this.open = this.open
-        && SecurityHelper.isSubjectGranted(getSubject(), getGrantedRoles());
     firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }
 
@@ -175,40 +163,5 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    */
   public void setOpenOnTrue(boolean openOnTrue) {
     this.openOnTrue = openOnTrue;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setSubject(Subject subject) {
-    this.subject = subject;
-  }
-
-  /**
-   * Gets the subject.
-   * 
-   * @return the subject.
-   */
-  protected Subject getSubject() {
-    return subject;
-  }
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public List<String> getGrantedRoles() {
-    return grantedRoles;
-  }
-
-  /**
-   * Sets the grantedRoles.
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(List<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
   }
 }

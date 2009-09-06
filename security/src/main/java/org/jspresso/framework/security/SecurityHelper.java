@@ -103,8 +103,11 @@ public final class SecurityHelper {
    */
   public static boolean isSubjectGranted(Subject subject,
       Collection<String> grantedRoles) {
-    if (grantedRoles == null || subject == null) {
+    if (grantedRoles == null) {
       return true;
+    }
+    if (subject == null) {
+      return false;
     }
     Group subjectRoles = null;
     for (Principal p : subject.getPrincipals()) {
