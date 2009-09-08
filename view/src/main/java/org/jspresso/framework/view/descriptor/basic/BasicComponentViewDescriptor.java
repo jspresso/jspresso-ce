@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -232,5 +235,37 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       }
     }
     return childProperties;
+  }
+
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  @Override
+  public Collection<IGate> getReadabilityGates() {
+    Collection<IGate> gates = super.getReadabilityGates();
+    if (gates == null && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).getReadabilityGates();
+      }
+    }
+    return gates;
+  }
+
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  @Override
+  public Collection<IGate> getWritabilityGates() {
+    Collection<IGate> gates = super.getWritabilityGates();
+    if (gates == null && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).getWritabilityGates();
+      }
+    }
+    return gates;
   }
 }

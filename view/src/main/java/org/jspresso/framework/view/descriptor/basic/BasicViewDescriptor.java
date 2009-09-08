@@ -61,11 +61,9 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   private String             font;
   private String             foreground;
   private IModelDescriptor   modelDescriptor;
-
   private Collection<String> grantedRoles;
   private Collection<IGate>  readabilityGates;
   private boolean            readOnly;
-
   private Collection<IGate>  writabilityGates;
 
   /**
@@ -88,11 +86,15 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * @return the readabilityGates.
    */
   public Collection<IGate> getReadabilityGates() {
-    if (readabilityGates == null && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof IGateAccessible) {
-        return ((IGateAccessible) getModelDescriptor()).getReadabilityGates();
-      }
-    }
+    // Gates are handled both on model connector and view connector. It is not
+    // necessary to fetch the model gates here. Only component view descriptors
+    // use their model gates since they are often backed by a reference property
+    // connector.
+    // if (readabilityGates == null && getModelDescriptor() != null) {
+    // if (getModelDescriptor() instanceof IGateAccessible) {
+    // return ((IGateAccessible) getModelDescriptor()).getReadabilityGates();
+    // }
+    // }
     return readabilityGates;
   }
 
@@ -102,11 +104,15 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * @return the writabilityGates.
    */
   public Collection<IGate> getWritabilityGates() {
-    if (writabilityGates == null && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof IGateAccessible) {
-        return ((IGateAccessible) getModelDescriptor()).getWritabilityGates();
-      }
-    }
+    // Gates are handled both on model connector and view connector. It is not
+    // necessary to fetch the model gates here. Only component view descriptors
+    // use their model gates since they are often backed by a reference property
+    // connector.
+    // if (writabilityGates == null && getModelDescriptor() != null) {
+    // if (getModelDescriptor() instanceof IGateAccessible) {
+    // return ((IGateAccessible) getModelDescriptor()).getWritabilityGates();
+    // }
+    // }
     return writabilityGates;
   }
 
