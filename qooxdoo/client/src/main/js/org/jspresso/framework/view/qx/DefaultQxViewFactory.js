@@ -645,7 +645,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           }
         }
       );
-      modelController.addTarget(colorWidget, "content", "value");
+      modelController.addTarget(colorWidget, "value", "value");
       modelController.addTarget(colorField, "enabled", "writable", false);
 
       colorField.add(colorWidget, {flex : 1});
@@ -662,7 +662,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var checkBox = new qx.ui.form.CheckBox();
       var state = remoteCheckBox.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(checkBox, "checked", "value", true,
+      modelController.addTarget(checkBox, "value", "value", true,
         {
           converter : function(modelValue, model) {
             if(modelValue == null) {
@@ -685,9 +685,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       comboBox.setAllowStretchY(false, false);
       var iconDim;
       for(var i = 0; i < remoteComboBox.getValues().length; i++) {
-        var li = new qx.ui.form.ListItem(remoteComboBox.getTranslations()[i],
-                                         null,
-                                         remoteComboBox.getValues()[i]);
+        var li = new qx.ui.form.ListItem(remoteComboBox.getTranslations()[i]/*,
+                                         null*/);
+        li.setModel(remoteComboBox.getValues()[i]);
         var rIcon = remoteComboBox.getIcons()[i];
         this.setIcon(li, rIcon);
         comboBox.add(li);
@@ -705,11 +705,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }
       var state = remoteComboBox.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(comboBox, "value", "value", true,
+      modelController.addTarget(comboBox, "modelSelection", "value", true,
         {
           converter : function(modelValue, model) {
-            if(modelValue == null) {
-              return "";
+            return [modelValue];
+          }
+        },
+        {
+          converter : function(viewValue, model) {
+            var modelValue = null;
+            if(viewValue.length > 0) {
+              modelValue = viewValue[0];
+            } else {
+              modelValue = null;
             }
             return modelValue;
           }
@@ -725,40 +733,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return {qx.ui.core.Widget}
      */
     __createDateField : function(remoteDateField) {
-      //TODO notify Qooxdoo get/setDate cannot be used with null values.
       var dateField = new qx.ui.form.DateField();
       dateField.setAllowStretchY(false, false);
       var dateFormat = this.__createFormat(remoteDateField);
       dateField.setDateFormat(dateFormat);
       var state = remoteDateField.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(dateField, "value", "value", true,
-        {
-          converter : function(modelValue, model) {
-            if(modelValue == null) {
-              return "";
-            }
-            return dateFormat.format(modelValue);
-          }
-        },
-        {
-          converter : function(viewValue, model) {
-            var dateValue = null;
-            try {
-              dateValue = dateFormat.parse(viewValue);
-            } catch(ex) {
-              // restore old value.
-              dateValue = state.getValue();
-              if(dateValue) {
-                dateField.setValue(dateFormat.format(dateValue));
-              } else {
-                dateField.setValue("");
-              }
-            }
-            return dateValue;
-          }
-        }
-      );
+      modelController.addTarget(dateField, "value", "value", true);
       modelController.addTarget(dateField, "enabled", "writable", false);
       if(remoteDateField.getType() == "DATE_TIME") {
         this.__sizeMaxComponentWidth(dateField,  org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
@@ -932,7 +913,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           }
         }
         if(selectedCard) {
-          cardContainer.setSelected(selectedCard);
+          cardContainer.setSelection([selectedCard]);
         }
       }, this);
       return cardContainer;
@@ -1188,7 +1169,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var textArea = new qx.ui.form.TextArea();
       var state = remoteTextArea.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(area, "value", "value", true,
+      modelController.addTarget(textArea, "value", "value", true,
         {
           converter : this.__modelToViewFieldConverter
         },
@@ -1196,7 +1177,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : this.__viewToModelFieldConverter
         }
       );
-      modelController.addTarget(area, "readOnly", "writable", false,
+      modelController.addTarget(textArea, "readOnly", "writable", false,
         {
           converter : this.__readOnlyFieldConverter
         }
@@ -1213,7 +1194,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       htmlArea.setRich(true);
       var state = remoteHtmlArea.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(htmlArea, "content", "value", false,
+      modelController.addTarget(htmlArea, "value", "value", false,
         {
           converter : this.__modelToViewFieldConverter
         }
@@ -1260,7 +1241,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var state = remoteLabel.getState();
       if(state) {
         var modelController = new qx.data.controller.Object(state);
-        modelController.addTarget(label, "content", "value", false,
+        modelController.addTarget(label, "value", "value", false,
           {
             converter : function(modelValue, model) {
               if(org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
@@ -1273,7 +1254,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           }
         );
       } else {
-        label.setContent(remoteLabel.getLabel());
+        label.setValue(remoteLabel.getLabel());
         label.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(remoteLabel.getLabel()));
       }
       return label;
@@ -1522,14 +1503,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     
     /**
      * 
-     * @param {} component
+     * @param {qx.ui.core.Widget} component
      * @param {org.jspresso.framework.gui.remote.RIcon} icon
      */
     setIcon : function(component, icon) {
       if(icon) {
+        //force the creation of the icon.
+        var iconControl = component.getChildControl("icon", false);
         component.setIcon(icon.getImageUrlSpec());
         if(icon.getDimension()) {
-          component.getChildControl("icon").set({
+          iconControl.set({
             scale : true,
             width : icon.getDimension().getWidth(),
             height : icon.getDimension().getHeight()

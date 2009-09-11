@@ -661,7 +661,12 @@ public class DefaultRemoteViewFactory extends
     List<RIcon> icons = new ArrayList<RIcon>();
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    for (String value : propertyDescriptor.getEnumerationValues()) {
+    List<String> enumerationValues = new ArrayList<String>(propertyDescriptor
+        .getEnumerationValues());
+    if (!propertyDescriptor.isMandatory()) {
+      enumerationValues.add(0, null);
+    }
+    for (String value : enumerationValues) {
       values.add(value);
       icons.add(getIconFactory().getIcon(
           propertyDescriptor.getIconImageURL(value),

@@ -130,6 +130,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         } else {
           remoteValueState.addListener("changeValue", this.__valueUpdated, this);
         }
+      } catch(err) {
+        this.error(err);
       } finally {
         this.__changeNotificationsEnabled = wasEnabled;
       }
@@ -142,7 +144,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __selectedIndicesUpdated : function(event) {
       var remoteCompositeValueState = event.getTarget();
       if(this.__changeNotificationsEnabled) {
-        this.debug(">>> Selected indices update <<< " + remoteCompositeValueState.getSelectedIndices() + " on " + remoteCompositeValueState.getValue());
+        //this.debug(">>> Selected indices update <<< " + remoteCompositeValueState.getSelectedIndices() + " on " + remoteCompositeValueState.getValue());
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
         command.setTargetPeerGuid(remoteCompositeValueState.getGuid());
         command.setSelectedIndices(remoteCompositeValueState.getSelectedIndices());
@@ -159,7 +161,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __valueUpdated : function(event) {
       var remoteValueState = event.getTarget();
       if(this.__changeNotificationsEnabled) {
-        this.debug(">>> Value update <<< " + remoteValueState.getValue());
+        //this.debug(">>> Value update <<< " + remoteValueState.getValue());
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand();
         command.setTargetPeerGuid(remoteValueState.getGuid());
         command.setValue(remoteValueState.getValue());
@@ -176,7 +178,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     execute : function(action, param) {
       param = (typeof param == 'undefined') ? null : param;
       if(action) {
-        this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
+        //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();
         command.setTargetPeerGuid(action.getGuid());
         command.setParameter(param);
@@ -191,7 +193,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     registerCommand : function(command) {
       if(this.__changeNotificationsEnabled) {
-        this.debug("Command registered for next round trip : " + command);
+        //this.debug("Command registered for next round trip : " + command);
         this.__commandsQueue.push(command);
         this._dispatchCommands();
         this.__commandsQueue.length = 0;
@@ -203,16 +205,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      */
     _handleCommands : function(commands) {
-      this.debug("Recieved commands :");
+      //this.debug("Recieved commands :");
       var wasEnabled = this.__changeNotificationsEnabled;
       try {
         this.__changeNotificationsEnabled = false;
         if (commands) {
           for(var i = 0; i < commands.length; i++) {
-            this.debug("  -> " + commands[i]);
+            //this.debug("  -> " + commands[i]);
             this._handleCommand(commands[i]);
           }
         }
+      } catch(err) {
+        this.error(err);
       } finally {
         this.__changeNotificationsEnabled = wasEnabled;
       }
@@ -252,9 +256,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         if(this.__dialogStack && this.__dialogStack.length > 1) {
           /**@type qx.ui.window.Window*/
           var topDialog = this.__dialogStack.pop()[0]; 
+          this.__application.getRoot().remove(topDialog);
           topDialog.close();
           topDialog.destroy();
-          this.__application.getRoot().remove(topDialog);
         }
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand) {
         this.__initApplicationFrame(command.getWorkspaceActions(),
@@ -437,7 +441,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         workspaceWindow.addListener("changeActive", this.__notifyWorkspaceSelection, this);
         this.__viewFactory.setIcon(workspaceWindow, workspaceView.getIcon());
 
-        var workspace = this.__viewFactory.createComponent(workspaceView);
+        var workspace = this.createComponent(workspaceView);
         workspaceWindow.add(workspace);
         
         this.__workspaceWindows[workspaceName] = workspaceWindow;
@@ -668,9 +672,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       } else {
         var okButton = this.__viewFactory.createOkButton(this.__application);
         okButton.addListener("execute", function(event) {
+          this.__application.getRoot().remove(messageDialog);
           messageDialog.close();
           messageDialog.destroy();
-          this.__application.getRoot().remove(messageDialog);
         }, this);
         buttonBox.add(okButton);
       }
@@ -724,6 +728,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         try {
           var data = result.getData();
           this._handleCommands(org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]).toArray());
+        } catch(err) {
+          this.error(err);
         } finally {
           this.__application.getRoot().setGlobalCursor("default");
           this.__checkPostponedCommandsCompletion();
@@ -783,7 +789,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     __popupDialog : function(title, message, view, buttons, useCurrent) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
-      var dialogView = this.__viewFactory.createComponent(view);
+      var dialogView = this.createComponent(view);
 
       var buttonBox = new qx.ui.container.Composite();
       buttonBox.setLayout(new qx.ui.layout.HBox(10, "right"));

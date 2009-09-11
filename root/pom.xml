@@ -16,7 +16,7 @@
     <hibernate.version>3.3.2.GA</hibernate.version>
     <ulc.version>6.0.5</ulc.version>
     <jboss.version>4.2.2.GA</jboss.version>
-    <qooxdoo.version>0.8.2</qooxdoo.version>
+    <qooxdoo.version>0.8.3</qooxdoo.version>
     <flex.version>3.2.0.3958</flex.version>
   </properties>
   <distributionManagement>

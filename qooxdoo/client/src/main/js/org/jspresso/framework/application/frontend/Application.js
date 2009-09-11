@@ -89,9 +89,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
     {
       this.base(arguments);
       
-      qx.Class.patch(qx.ui.form.AbstractField, org.jspresso.framework.patch.MResetValue);
-      qx.Class.patch(qx.ui.form.DateField, org.jspresso.framework.patch.MResetValue);
-      qx.Class.patch(qx.ui.form.AbstractSelectBox, org.jspresso.framework.patch.MResetValue);
+      qx.Class.patch(qx.ui.form.SelectBox, org.jspresso.framework.patch.MSelectBox);
 
       // Enable logging in debug variant
       if (qx.core.Variant.isSet("qx.debug", "on"))
@@ -102,18 +100,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
         qx.log.appender.Console;
       }
       this.start();
-    },
-    
-    start : function() {
-      var remoteController = new qx.io.remote.Rpc(
-          "http://localhost:8080/qooxdoo-webapp/.qxrpc",
-          "qooxdoo.QooxdooApplicationStartup"
-      );
-      remoteController.setCrossDomain(true);
-      remoteController.setTimeout(600000);
-      
-      var qxController = new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(this, remoteController, "en");
-      qxController.start();
     }
   }
 });

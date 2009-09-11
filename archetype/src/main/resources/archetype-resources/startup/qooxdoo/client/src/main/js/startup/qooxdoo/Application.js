@@ -84,7 +84,7 @@
  */
 qx.Class.define("${package}.startup.qooxdoo.Application",
 {
-  extend : qx.application.Standalone,
+  extend : org.jspresso.framework.application.frontend.Application,
 
 
 
@@ -96,30 +96,6 @@ qx.Class.define("${package}.startup.qooxdoo.Application",
 
   members :
   {
-    /**
-     * This method contains the initial application code and gets called 
-     * during startup of the application
-     */
-    main : function()
-    {
-      // Call super class
-      this.base(arguments);
-      
-      qx.Class.patch(qx.ui.form.AbstractField, org.jspresso.framework.patch.MResetValue);
-      qx.Class.patch(qx.ui.form.DateField, org.jspresso.framework.patch.MResetValue);
-      qx.Class.patch(qx.ui.form.AbstractSelectBox, org.jspresso.framework.patch.MResetValue);
-
-      // Enable logging in debug variant
-      if (qx.core.Variant.isSet("qx.debug", "on"))
-      {
-        // support native logging capabilities, e.g. Firebug for Firefox
-        qx.log.appender.Native;
-        // support additional cross-browser console. Press F7 to toggle visibility
-        qx.log.appender.Console;
-      }
-      this.start();
-    },
-    
     start : function() {
       var remoteController;
       if (qx.core.Variant.isSet("qx.debug", "on")) {
