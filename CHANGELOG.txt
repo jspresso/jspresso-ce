@@ -31,6 +31,7 @@ Bugs fixed
 2839864    Nested reference properties do not fire change events in LOVs
 2850076    View model accessibility gates are not handled correctly
 2848679    Error while changing of Module/Entity in the workspace
+2856844    Nullable enumeration properties in Flex cannot be nulled
 
 
 New features

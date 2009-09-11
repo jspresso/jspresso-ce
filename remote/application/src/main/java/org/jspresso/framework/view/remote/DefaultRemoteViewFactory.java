@@ -664,7 +664,7 @@ public class DefaultRemoteViewFactory extends
     List<String> enumerationValues = new ArrayList<String>(propertyDescriptor
         .getEnumerationValues());
     if (!propertyDescriptor.isMandatory()) {
-      enumerationValues.add(0, null);
+      enumerationValues.add(0, "");
     }
     for (String value : enumerationValues) {
       values.add(value);
@@ -672,9 +672,13 @@ public class DefaultRemoteViewFactory extends
           propertyDescriptor.getIconImageURL(value),
           getIconFactory().getTinyIconSize()));
       if (value != null && propertyDescriptor.isTranslated()) {
-        translations.add(getTranslationProvider().getTranslation(
-            computeEnumerationKey(propertyDescriptor.getEnumerationName(),
-                value), locale));
+        if ("".equals(value)) {
+          translations.add(" ");
+        } else {
+          translations.add(getTranslationProvider().getTranslation(
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  value), locale));
+        }
       } else {
         if (value == null) {
           translations.add(" ");
