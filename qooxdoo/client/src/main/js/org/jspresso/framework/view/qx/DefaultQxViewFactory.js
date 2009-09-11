@@ -685,8 +685,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       comboBox.setAllowStretchY(false, false);
       var iconDim;
       for(var i = 0; i < remoteComboBox.getValues().length; i++) {
-        var li = new qx.ui.form.ListItem(remoteComboBox.getTranslations()[i]/*,
-                                         null*/);
+        var li = new qx.ui.form.ListItem(remoteComboBox.getTranslations()[i]);
         li.setModel(remoteComboBox.getValues()[i]);
         var rIcon = remoteComboBox.getIcons()[i];
         this.setIcon(li, rIcon);
@@ -1508,10 +1507,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      */
     setIcon : function(component, icon) {
       if(icon) {
-        //force the creation of the icon.
-        var iconControl = component.getChildControl("icon", false);
         component.setIcon(icon.getImageUrlSpec());
-        if(icon.getDimension()) {
+        var iconControl = component.getChildControl("icon");
+        if(icon.getDimension() && iconControl != null) {
           iconControl.set({
             scale : true,
             width : icon.getDimension().getWidth(),
