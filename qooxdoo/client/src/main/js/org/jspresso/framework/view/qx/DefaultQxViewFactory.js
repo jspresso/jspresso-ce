@@ -614,14 +614,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       resetButton.setAllowStretchX(false, false);
       resetButton.setAllowStretchY(false, false);
       
-      colorWidget.addListener("resize", function(e) {
-        var dim = e.getData().height;
-        resetButton.getChildControl("icon").set({
-          scale : true,
-          width : dim - resetButton.getPaddingLeft(),
-          height : dim - resetButton.getPaddingLeft()
-        });
-      });
+//      colorWidget.addListener("resize", function(e) {
+//        var dim = e.getData().height;
+//        resetButton.getChildControl("icon").set({
+//          scale : true,
+//          width : dim - resetButton.getPaddingLeft(),
+//          height : dim - resetButton.getPaddingLeft()
+//        });
+//      });
 
       //colorWidget.setWidth(resetButton.getWidth());
       this.__sizeMaxComponentWidth(colorWidget);
