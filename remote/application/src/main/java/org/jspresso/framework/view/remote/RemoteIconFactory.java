@@ -65,7 +65,7 @@ public class RemoteIconFactory extends AbstractIconFactory<RIcon> {
     if (urlSpec != null) {
       RIcon imageIcon = new RIcon(guidGenerator.generateGUID());
       imageIcon.setImageUrlSpec(ResourceProviderServlet
-          .computeLocalResourceDownloadUrl(urlSpec));
+          .computeImageResourceDownloadUrl(urlSpec, iconSize));
       imageIcon.setDimension(iconSize);
       return imageIcon;
     }

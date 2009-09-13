@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCompositeConnector;
+import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
@@ -142,7 +143,8 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
     currentState.setWritable(isWritable());
     currentState.setDescription(getDisplayDescription());
     currentState.setIconImageUrl(ResourceProviderServlet
-        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
+        .computeImageResourceDownloadUrl(getDisplayIconImageUrl(),
+            RIcon.DEFAULT_DIM));
   }
 
   /**

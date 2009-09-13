@@ -18,12 +18,18 @@
  */
 package org.jspresso.framework.util.resources.server;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +40,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.resources.AbstractResource;
@@ -78,6 +85,21 @@ public class ResourceProviderServlet extends HttpServlet {
   private static final String LOCAL_URL_PARAMETER          = "localUrl";
 
   /**
+   * imageUrl.
+   */
+  private static final String IMAGE_URL_PARAMETER          = "imageUrl";
+
+  /**
+   * width.
+   */
+  private static final String IMAGE_WIDTH_PARAMETER        = "width";
+
+  /**
+   * height.
+   */
+  private static final String IMAGE_HEIGHT_PARAMETER       = "height";
+
+  /**
    * the url pattern to activate a resource upload.
    */
   private static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
@@ -120,6 +142,30 @@ public class ResourceProviderServlet extends HttpServlet {
     if (localUrl != null) {
       HttpServletRequest request = HttpRequestHolder.getServletRequest();
       return computeUrl(request, "?" + LOCAL_URL_PARAMETER + "=" + localUrl);
+    }
+    return null;
+  }
+
+  /**
+   * Computes the url where the image is available for download.
+   * 
+   * @param localImageUrl
+   *          the image local url.
+   * @param dimension
+   *          the requested dimension for the image.
+   * @return the resource url.
+   */
+  public static String computeImageResourceDownloadUrl(String localImageUrl,
+      Dimension dimension) {
+    if (localImageUrl != null) {
+      HttpServletRequest request = HttpRequestHolder.getServletRequest();
+      StringBuffer buf = new StringBuffer("?" + IMAGE_URL_PARAMETER + "="
+          + localImageUrl);
+      if (dimension != null) {
+        buf.append("&" + IMAGE_WIDTH_PARAMETER + "=" + dimension.getWidth());
+        buf.append("&" + IMAGE_HEIGHT_PARAMETER + "=" + dimension.getHeight());
+      }
+      return computeUrl(request, buf.toString());
     }
     return null;
   }
@@ -202,15 +248,16 @@ public class ResourceProviderServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
     String localUrl = request.getParameter(LOCAL_URL_PARAMETER);
+    String imageUrl = request.getParameter(IMAGE_URL_PARAMETER);
     String id = request.getParameter(ID_PARAMETER);
 
-    if (id == null && localUrl == null) {
+    if (id == null && localUrl == null && imageUrl == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST,
           "No resource id specified.");
       return;
     }
 
-    BufferedInputStream inputStream;
+    BufferedInputStream inputStream = null;
     if (id != null) {
       IResource resource = ResourceManager.getInstance().getRegistered(id);
       if (resource == null) {
@@ -226,18 +273,43 @@ public class ResourceProviderServlet extends HttpServlet {
       }
 
       inputStream = new BufferedInputStream(resource.getContent());
-    } else {
+    } else if (localUrl != null) {
       inputStream = new BufferedInputStream(UrlHelper.createURL(localUrl)
           .openStream());
+    } else if (imageUrl != null) {
+      String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
+      String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
+      if (width != null && height != null) {
+        inputStream = scaleImage(imageUrl, Integer.parseInt(width), Integer
+            .parseInt(height));
+      } else {
+        inputStream = new BufferedInputStream(UrlHelper.createURL(localUrl)
+            .openStream());
+      }
     }
+    if (inputStream != null) {
+      BufferedOutputStream outputStream = new BufferedOutputStream(response
+          .getOutputStream());
 
-    BufferedOutputStream outputStream = new BufferedOutputStream(response
-        .getOutputStream());
+      IoHelper.copyStream(inputStream, outputStream);
 
-    IoHelper.copyStream(inputStream, outputStream);
+      inputStream.close();
+      outputStream.close();
+    }
+  }
 
-    inputStream.close();
-    outputStream.close();
+  private BufferedInputStream scaleImage(String originalImageUrl, int width,
+      int height) throws IOException {
+    BufferedImage image = ImageIO.read(UrlHelper.createURL(originalImageUrl));
+    BufferedImage scaledImage = new BufferedImage(width, height,
+        BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = scaledImage.createGraphics();
+    AffineTransform at = AffineTransform.getScaleInstance((double) width
+        / image.getWidth(), (double) height / image.getHeight());
+    g.drawRenderedImage(image, at);
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ImageIO.write(scaledImage, "PNG", baos);
+    return new BufferedInputStream(new ByteArrayInputStream(baos.toByteArray()));
   }
 
   private static class UploadResourceAdapter extends AbstractResource {

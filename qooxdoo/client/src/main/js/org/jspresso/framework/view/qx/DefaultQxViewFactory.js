@@ -16,6 +16,7 @@
 #asset(qx/icon/Oxygen/22/actions/dialog-ok.png)
 #asset(qx/icon/Oxygen/22/actions/dialog-close.png)
 #asset(qx/icon/Oxygen/22/actions/dialog-cancel.png)
+#asset(qx/icon/Oxygen/16/actions/dialog-close.png)
 */
 qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
 {
@@ -606,7 +607,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       });
 
       var resetButton = new qx.ui.form.Button();
-      resetButton.setIcon("qx/icon/Oxygen/22/actions/dialog-close.png");
+      resetButton.setIcon("qx/icon/Oxygen/16/actions/dialog-close.png");
       resetButton.addListener("execute", function(e) {
         colorWidget.setBackgroundColor(this.getBackgroundColor());
       });
@@ -685,7 +686,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       comboBox.setAllowStretchY(false, false);
       var iconDim;
       for(var i = 0; i < remoteComboBox.getValues().length; i++) {
-        var li = new qx.ui.form.ListItem(remoteComboBox.getTranslations()[i]);
+        var li = new qx.ui.form.ListItem(remoteComboBox.getTranslations()[i]/*,
+                                         null*/);
         li.setModel(remoteComboBox.getValues()[i]);
         var rIcon = remoteComboBox.getIcons()[i];
         this.setIcon(li, rIcon);
@@ -693,14 +695,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         if(!iconDim && rIcon && rIcon.getDimension()) {
           iconDim = rIcon.getDimension();
         }
-      }
-      if(iconDim) {
-          comboBox.getChildControl("atom")
-                  .getChildControl("icon").set({
-            scale : true,
-            width : iconDim.getWidth(),
-            height : iconDim.getHeight()
-          });
       }
       var state = remoteComboBox.getState();
       var modelController = new qx.data.controller.Object(state);
@@ -1303,14 +1297,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       treeController.setIconPath("iconImageUrl");
       treeController.setDelegate(
         {
-          configureItem : function(item) {
-            item.getChildControl("icon").set({
-              scale : true,
-              width : 24,
-              height : 20
-            });
-          },
-          
           bindItem : function(controller, treeNode, modelNode) {
             controller.bindProperty(controller.getLabelPath(), "label", controller.getLabelOptions(), treeNode, modelNode);
             controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
@@ -1508,14 +1494,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     setIcon : function(component, icon) {
       if(icon) {
         component.setIcon(icon.getImageUrlSpec());
-        var iconControl = component.getChildControl("icon");
-        if(icon.getDimension() && iconControl != null) {
-          iconControl.set({
-            scale : true,
-            width : icon.getDimension().getWidth(),
-            height : icon.getDimension().getHeight()
-          });
-        }
       }
     },
 

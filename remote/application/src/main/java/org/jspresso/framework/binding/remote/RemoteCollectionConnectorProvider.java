@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnectorProvider;
+import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
@@ -139,7 +140,8 @@ public class RemoteCollectionConnectorProvider extends
     currentState.setWritable(isWritable());
     currentState.setDescription(getDisplayDescription());
     currentState.setIconImageUrl(ResourceProviderServlet
-        .computeLocalResourceDownloadUrl(getDisplayIconImageUrl()));
+        .computeImageResourceDownloadUrl(getDisplayIconImageUrl(),
+            RIcon.DEFAULT_DIM));
   }
 
   /**
