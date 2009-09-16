@@ -294,6 +294,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
     clonedConnector.modelConnector = null;
     clonedConnector.readabilityGates = null;
     clonedConnector.writabilityGates = null;
+    clonedConnector.modelReadabilityListener = null;
+    clonedConnector.modelWritabilityListener = null;
+    clonedConnector.parentReadabilityListener = null;
+    clonedConnector.parentWritabilityListener = null;
+    clonedConnector.readabilityGatesListener = null;
+    clonedConnector.writabilityGatesListener = null;
     if (readabilityGates != null) {
       for (IGate gate : readabilityGates) {
         clonedConnector.addReadabilityGate(gate.clone());
@@ -304,6 +310,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
         clonedConnector.addWritabilityGate(gate.clone());
       }
     }
+    clonedConnector.oldReadability = clonedConnector.isReadable();
+    clonedConnector.oldWritability = clonedConnector.isWritable();
     return clonedConnector;
   }
 
