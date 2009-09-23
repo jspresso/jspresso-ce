@@ -90,6 +90,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
       this.base(arguments);
       
       qx.Class.patch(qx.ui.form.SelectBox, org.jspresso.framework.patch.MSelectBox);
+      qx.Class.patch(qx.ui.table.Table, org.jspresso.framework.patch.MTable);
 
       // Enable logging in debug variant
       if (qx.core.Variant.isSet("qx.debug", "on"))
