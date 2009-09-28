@@ -1567,23 +1567,28 @@ public class DefaultWingsViewFactory extends
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
-      IView<SComponent> childView = createView(childViewDescriptor,
-          actionHandler, locale);
-      SIcon childIcon = getIconFactory().getIcon(
-          childViewDescriptor.getIconImageURL(),
-          getIconFactory().getSmallIconSize());
-      SComponent tabView = childView.getPeer();
-      if (childViewDescriptor.getDescription() != null) {
-        viewComponent.addTab(childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale), childIcon, tabView,
-            childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                locale)
-                + TOOLTIP_ELLIPSIS);
-      } else {
-        viewComponent.addTab(childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale), childIcon, tabView);
+      try {
+        actionHandler.checkAccess(childViewDescriptor);
+        IView<SComponent> childView = createView(childViewDescriptor,
+            actionHandler, locale);
+        SIcon childIcon = getIconFactory().getIcon(
+            childViewDescriptor.getIconImageURL(),
+            getIconFactory().getSmallIconSize());
+        SComponent tabView = childView.getPeer();
+        if (childViewDescriptor.getDescription() != null) {
+          viewComponent.addTab(childViewDescriptor.getI18nName(
+              getTranslationProvider(), locale), childIcon, tabView,
+              childViewDescriptor.getI18nDescription(getTranslationProvider(),
+                  locale)
+                  + TOOLTIP_ELLIPSIS);
+        } else {
+          viewComponent.addTab(childViewDescriptor.getI18nName(
+              getTranslationProvider(), locale), childIcon, tabView);
+        }
+        childrenViews.add(childView);
+      } catch (SecurityException ex) {
+        // Just don't add tab.
       }
-      childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
     return view;

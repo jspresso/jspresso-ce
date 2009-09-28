@@ -1118,10 +1118,15 @@ public class DefaultRemoteViewFactory extends
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
-      IView<RComponent> childView = createView(childViewDescriptor,
-          actionHandler, locale);
-      tabs.add(childView.getPeer());
-      childrenViews.add(childView);
+      try {
+        actionHandler.checkAccess(childViewDescriptor);
+        IView<RComponent> childView = createView(childViewDescriptor,
+            actionHandler, locale);
+        tabs.add(childView.getPeer());
+        childrenViews.add(childView);
+      } catch (SecurityException ex) {
+        // Just don't add tab.
+      }
     }
     viewComponent.setTabs(tabs.toArray(new RComponent[0]));
     view.setChildren(childrenViews);

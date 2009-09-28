@@ -1595,22 +1595,28 @@ public class DefaultSwingViewFactory extends
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
-      IView<JComponent> childView = createView(childViewDescriptor,
-          actionHandler, locale);
-      Icon childIcon = getIconFactory().getIcon(
-          childViewDescriptor.getIconImageURL(),
-          getIconFactory().getSmallIconSize());
-      if (childViewDescriptor.getDescription() != null) {
-        viewComponent.addTab(childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale), childIcon, childView.getPeer(),
-            childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                locale)
-                + TOOLTIP_ELLIPSIS);
-      } else {
-        viewComponent.addTab(childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale), childIcon, childView.getPeer());
+      try {
+        actionHandler.checkAccess(childViewDescriptor);
+        IView<JComponent> childView = createView(childViewDescriptor,
+            actionHandler, locale);
+        Icon childIcon = getIconFactory().getIcon(
+            childViewDescriptor.getIconImageURL(),
+            getIconFactory().getSmallIconSize());
+        if (childViewDescriptor.getDescription() != null) {
+          viewComponent.addTab(childViewDescriptor.getI18nName(
+              getTranslationProvider(), locale), childIcon,
+              childView.getPeer(), childViewDescriptor.getI18nDescription(
+                  getTranslationProvider(), locale)
+                  + TOOLTIP_ELLIPSIS);
+        } else {
+          viewComponent
+              .addTab(childViewDescriptor.getI18nName(getTranslationProvider(),
+                  locale), childIcon, childView.getPeer());
+        }
+        childrenViews.add(childView);
+      } catch (SecurityException ex) {
+        // Just don't add tab.
       }
-      childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
     return view;
