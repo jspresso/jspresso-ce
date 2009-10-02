@@ -167,15 +167,17 @@ public abstract class AbstractBackendController extends AbstractController
   public void installWorkspaces(Map<String, Workspace> workspaces) {
     workspaceConnectors = new HashMap<String, IValueConnector>();
     for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
-      if (isAccessGranted(workspaceEntry.getValue())) {
+      String workspaceName = workspaceEntry.getKey();
+      Workspace workspace = workspaceEntry.getValue();
+      if (isAccessGranted(workspace)) {
+        workspace.setSubject(getSubject());
         IModelDescriptor workspaceDescriptor;
         workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
         IValueConnector nextWorkspaceConnector = modelConnectorFactory
-            .createModelConnector(workspaceEntry.getKey(), workspaceDescriptor,
+            .createModelConnector(workspaceName, workspaceDescriptor,
                 getApplicationSession().getSubject());
-        nextWorkspaceConnector.setConnectorValue(workspaceEntry.getValue());
-        workspaceConnectors
-            .put(workspaceEntry.getKey(), nextWorkspaceConnector);
+        nextWorkspaceConnector.setConnectorValue(workspace);
+        workspaceConnectors.put(workspaceName, nextWorkspaceConnector);
       }
     }
   }

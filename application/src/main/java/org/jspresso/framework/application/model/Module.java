@@ -20,11 +20,16 @@ package org.jspresso.framework.application.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.security.auth.Subject;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISubjectAware;
+import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
@@ -52,7 +57,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
  * @author Vincent Vandenschrick
  */
 public class Module extends AbstractPropertyChangeCapable implements
-    ISecurable, IViewDescriptorProvider {
+    ISecurable, IViewDescriptorProvider, ISubjectAware {
 
   /**
    * <code>SUB_MODULES</code> is "subModules".
@@ -96,6 +101,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   private boolean            started;
   private IAction            startupAction;
   private List<Module>       subModules;
+
+  private Subject            subject;
 
   /**
    * Constructs a new <code>Module</code> instance.
@@ -241,6 +248,14 @@ public class Module extends AbstractPropertyChangeCapable implements
    * @return the list of modules modules.
    */
   public List<Module> getSubModules() {
+    if (subModules == null) {
+      return null;
+    }
+    for (Iterator<Module> ite = subModules.iterator(); ite.hasNext();) {
+      if (!SecurityHelper.isSubjectGranted(getSubject(), ite.next())) {
+        ite.remove();
+      }
+    }
     return subModules;
   }
 
@@ -499,5 +514,22 @@ public class Module extends AbstractPropertyChangeCapable implements
    */
   public IViewDescriptor getViewDescriptor() {
     return getProjectedViewDescriptor();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSubject(Subject subject) {
+    this.subject = subject;
+  }
+
+  private Subject getSubject() {
+    if (subject != null) {
+      return subject;
+    }
+    if (getParent() != null) {
+      return getParent().getSubject();
+    }
+    return null;
   }
 }

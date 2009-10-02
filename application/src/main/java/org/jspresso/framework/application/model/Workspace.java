@@ -19,13 +19,18 @@
 package org.jspresso.framework.application.model;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.security.auth.Subject;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISubjectAware;
+import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -55,7 +60,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Workspace implements ISecurable {
+public class Workspace implements ISecurable, ISubjectAware {
 
   /**
    * <code>MODULES</code> is "modules".
@@ -97,6 +102,8 @@ public class Workspace implements ISecurable {
 
   private IViewDescriptor       viewDescriptor;
   private IAction               itemSelectionAction;
+
+  private Subject               subject;
 
   /**
    * Constructs a new <code>Workspace</code> instance.
@@ -179,6 +186,14 @@ public class Workspace implements ISecurable {
    * @return the list of modules belonging to this workspace.
    */
   public List<Module> getModules() {
+    if (modules == null) {
+      return null;
+    }
+    for (Iterator<Module> ite = modules.iterator(); ite.hasNext();) {
+      if (!SecurityHelper.isSubjectGranted(getSubject(), ite.next())) {
+        ite.remove();
+      }
+    }
     return modules;
   }
 
@@ -294,6 +309,11 @@ public class Workspace implements ISecurable {
    */
   public void setModules(List<Module> modules) {
     this.modules = modules;
+    if (this.modules != null) {
+      for (Module module : this.modules) {
+        module.setSubject(getSubject());
+      }
+    }
   }
 
   /**
@@ -376,5 +396,21 @@ public class Workspace implements ISecurable {
    */
   public void setItemSelectionAction(IAction itemSelectionAction) {
     this.itemSelectionAction = itemSelectionAction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSubject(Subject subject) {
+    this.subject = subject;
+    if (this.modules != null) {
+      for (Module module : this.modules) {
+        module.setSubject(getSubject());
+      }
+    }
+  }
+
+  private Subject getSubject() {
+    return subject;
   }
 }
