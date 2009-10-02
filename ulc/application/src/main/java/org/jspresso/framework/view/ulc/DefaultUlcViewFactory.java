@@ -450,9 +450,7 @@ public class DefaultUlcViewFactory extends
       IView<ULCComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
       boolean forbidden = false;
-      try {
-        actionHandler.checkAccess(propertyViewDescriptor);
-      } catch (SecurityException ex) {
+      if (!actionHandler.isAccessGranted(propertyViewDescriptor)) {
         forbidden = true;
         propertyView.setPeer(createSecurityComponent());
       }
@@ -1183,8 +1181,7 @@ public class DefaultUlcViewFactory extends
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
-      try {
-        actionHandler.checkAccess(columnViewDescriptor);
+      if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IValueConnector columnConnector = createColumnConnector(
             columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
                 .getElementDescriptor(), actionHandler);
@@ -1222,7 +1219,7 @@ public class DefaultUlcViewFactory extends
         // }
         // }
         // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
-      } catch (SecurityException ex) {
+      } else {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);
       }
@@ -1360,8 +1357,7 @@ public class DefaultUlcViewFactory extends
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
-      try {
-        actionHandler.checkAccess(childViewDescriptor);
+      if (actionHandler.isAccessGranted(childViewDescriptor)) {
         IView<ULCComponent> childView = createView(childViewDescriptor,
             actionHandler, locale);
         ULCIcon childIcon = getIconFactory().getIcon(
@@ -1379,8 +1375,6 @@ public class DefaultUlcViewFactory extends
                   locale), childIcon, childView.getPeer());
         }
         childrenViews.add(childView);
-      } catch (SecurityException ex) {
-        // Just don't add tab.
       }
     }
     view.setChildren(childrenViews);

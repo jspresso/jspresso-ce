@@ -418,9 +418,7 @@ public class DefaultRemoteViewFactory extends
       }
       IView<RComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
-      try {
-        actionHandler.checkAccess(propertyViewDescriptor);
-      } catch (SecurityException ex) {
+      if (!actionHandler.isAccessGranted(propertyViewDescriptor)) {
         propertyView.setPeer(createSecurityComponent());
       }
       elements.add(propertyView.getPeer());
@@ -1051,8 +1049,7 @@ public class DefaultRemoteViewFactory extends
     List<String> columnIds = new ArrayList<String>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
-      try {
-        actionHandler.checkAccess(columnViewDescriptor);
+      if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IView<RComponent> column = createView(columnViewDescriptor,
             actionHandler, locale);
         // Do not use standard createColumnConnector method to preserve
@@ -1087,8 +1084,6 @@ public class DefaultRemoteViewFactory extends
         }
         columns.add(column.getPeer());
         columnIds.add(propertyName);
-      } catch (SecurityException ex) {
-        // The column simply won't be added.
       }
     }
     viewComponent.setColumns(columns.toArray(new RComponent[0]));
@@ -1118,14 +1113,11 @@ public class DefaultRemoteViewFactory extends
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
-      try {
-        actionHandler.checkAccess(childViewDescriptor);
+      if (actionHandler.isAccessGranted(childViewDescriptor)) {
         IView<RComponent> childView = createView(childViewDescriptor,
             actionHandler, locale);
         tabs.add(childView.getPeer());
         childrenViews.add(childView);
-      } catch (SecurityException ex) {
-        // Just don't add tab.
       }
     }
     viewComponent.setTabs(tabs.toArray(new RComponent[0]));

@@ -36,7 +36,7 @@ public class GrantedRolesGate extends AbstractGate implements ISecurable,
    */
   public void setSubject(Subject subject) {
     boolean oldOpen = isOpen();
-    this.open = SecurityHelper.isSubjectGranted(subject, grantedRoles);
+    this.open = SecurityHelper.isSubjectGranted(subject, this);
     firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }
 

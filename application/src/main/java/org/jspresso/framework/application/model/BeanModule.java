@@ -20,6 +20,7 @@ package org.jspresso.framework.application.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -221,5 +222,17 @@ public class BeanModule extends Module implements PropertyChangeListener {
    */
   protected BeanModuleDescriptor getDescriptor() {
     return new BeanModuleDescriptor(getComponentDescriptor());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Collection<String> getGrantedRoles() {
+    Collection<String> grantedRoles = super.getGrantedRoles();
+    if (grantedRoles == null && componentDescriptor != null) {
+      grantedRoles = componentDescriptor.getGrantedRoles();
+    }
+    return grantedRoles;
   }
 }

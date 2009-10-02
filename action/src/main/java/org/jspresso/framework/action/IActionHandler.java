@@ -58,6 +58,15 @@ public interface IActionHandler extends IExceptionHandler {
   void checkAccess(ISecurable securable);
 
   /**
+   * Checks authorization for secured access.
+   * 
+   * @param securable
+   *          the id of the secured access to check.
+   * @return true if access is granted.
+   */
+  boolean isAccessGranted(ISecurable securable);
+
+  /**
    * Creates an empty action context.
    * 
    * @return an empty action context.

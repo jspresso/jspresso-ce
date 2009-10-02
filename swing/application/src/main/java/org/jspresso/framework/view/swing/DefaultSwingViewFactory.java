@@ -434,9 +434,7 @@ public class DefaultSwingViewFactory extends
       IView<JComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
       boolean forbidden = false;
-      try {
-        actionHandler.checkAccess(propertyViewDescriptor);
-      } catch (SecurityException ex) {
+      if (!actionHandler.isAccessGranted(propertyViewDescriptor)) {
         forbidden = true;
         propertyView.setPeer(createSecurityComponent());
       }
@@ -1440,8 +1438,7 @@ public class DefaultSwingViewFactory extends
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
-      try {
-        actionHandler.checkAccess(columnViewDescriptor);
+      if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IValueConnector columnConnector = createColumnConnector(
             columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
                 .getElementDescriptor(), actionHandler);
@@ -1461,7 +1458,7 @@ public class DefaultSwingViewFactory extends
         // }
         // }
         // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
-      } catch (SecurityException ex) {
+      } else {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);
       }
@@ -1595,8 +1592,7 @@ public class DefaultSwingViewFactory extends
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
-      try {
-        actionHandler.checkAccess(childViewDescriptor);
+      if (actionHandler.isAccessGranted(childViewDescriptor)) {
         IView<JComponent> childView = createView(childViewDescriptor,
             actionHandler, locale);
         Icon childIcon = getIconFactory().getIcon(
@@ -1614,8 +1610,6 @@ public class DefaultSwingViewFactory extends
                   locale), childIcon, childView.getPeer());
         }
         childrenViews.add(childView);
-      } catch (SecurityException ex) {
-        // Just don't add tab.
       }
     }
     view.setChildren(childrenViews);

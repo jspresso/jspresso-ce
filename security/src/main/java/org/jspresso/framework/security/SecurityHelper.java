@@ -79,8 +79,7 @@ public final class SecurityHelper {
    */
   public static void checkAccess(Subject subject, ISecurable securable,
       ITranslationProvider translationProvider, Locale locale) {
-    Collection<String> grantedRoles = securable.getGrantedRoles();
-    if (isSubjectGranted(subject, grantedRoles)) {
+    if (isSubjectGranted(subject, securable)) {
       return;
     }
     if (securable instanceof IDescriptor) {
@@ -97,12 +96,15 @@ public final class SecurityHelper {
    * 
    * @param subject
    *          the subject to test.
-   * @param grantedRoles
-   *          the roles granted
-   * @return true if the subject has sufficient priviledge.
+   * @param securable
+   *          the securable to test.
+   * @return true if the subject has sufficient privilege.
    */
-  public static boolean isSubjectGranted(Subject subject,
-      Collection<String> grantedRoles) {
+  public static boolean isSubjectGranted(Subject subject, ISecurable securable) {
+    if (securable == null) {
+      return true;
+    }
+    Collection<String> grantedRoles = securable.getGrantedRoles();
     if (grantedRoles == null) {
       return true;
     }

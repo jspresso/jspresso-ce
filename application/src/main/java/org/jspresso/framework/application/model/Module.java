@@ -160,6 +160,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * @return the grantedRoles.
    */
   public Collection<String> getGrantedRoles() {
+    if (grantedRoles == null && projectedViewDescriptor != null) {
+      return projectedViewDescriptor.getGrantedRoles();
+    }
     return grantedRoles;
   }
 

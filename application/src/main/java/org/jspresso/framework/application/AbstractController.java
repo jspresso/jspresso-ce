@@ -63,6 +63,14 @@ public abstract class AbstractController implements IController {
   /**
    * {@inheritDoc}
    */
+  public boolean isAccessGranted(ISecurable securable) {
+    return SecurityHelper.isSubjectGranted(
+        getApplicationSession().getSubject(), securable);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Map<String, Object> createEmptyContext() {
     return new HashMap<String, Object>();
   }

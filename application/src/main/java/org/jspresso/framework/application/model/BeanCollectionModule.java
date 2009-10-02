@@ -255,4 +255,19 @@ public class BeanCollectionModule extends Module {
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Collection<String> getGrantedRoles() {
+    Collection<String> grantedRoles = super.getGrantedRoles();
+    if (grantedRoles == null && elementViewDescriptor != null) {
+      grantedRoles = elementViewDescriptor.getGrantedRoles();
+    }
+    if (grantedRoles == null && elementComponentDescriptor != null) {
+      grantedRoles = elementComponentDescriptor.getGrantedRoles();
+    }
+    return grantedRoles;
+  }
 }

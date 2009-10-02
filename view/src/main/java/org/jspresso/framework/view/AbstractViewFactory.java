@@ -258,28 +258,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
       }
     }
     if (view != null) {
-      try {
-        actionHandler.checkAccess(viewDescriptor);
-        view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
-        if (viewDescriptor.getReadabilityGates() != null) {
-          for (IGate gate : viewDescriptor.getReadabilityGates()) {
-            IGate clonedGate = gate.clone();
-            view.getConnector().addReadabilityGate(clonedGate);
-          }
+      view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
+      if (viewDescriptor.getReadabilityGates() != null) {
+        for (IGate gate : viewDescriptor.getReadabilityGates()) {
+          IGate clonedGate = gate.clone();
+          view.getConnector().addReadabilityGate(clonedGate);
         }
-        if (viewDescriptor.getWritabilityGates() != null) {
-          for (IGate gate : viewDescriptor.getWritabilityGates()) {
-            IGate clonedGate = gate.clone();
-            view.getConnector().addWritabilityGate(clonedGate);
-          }
+      }
+      if (viewDescriptor.getWritabilityGates() != null) {
+        for (IGate gate : viewDescriptor.getWritabilityGates()) {
+          IGate clonedGate = gate.clone();
+          view.getConnector().addWritabilityGate(clonedGate);
         }
-        view.getConnector().setSubject(actionHandler.getSubject());
-        finishComponentConfiguration(viewDescriptor, locale, view);
-        decorateWithActions(viewDescriptor, actionHandler, locale, view);
-        decorateWithBorder(view, locale);
-        view.getConnector().setModelDescriptor(
-            viewDescriptor.getModelDescriptor());
-      } catch (SecurityException ex) {
+      }
+      view.getConnector().setSubject(actionHandler.getSubject());
+      finishComponentConfiguration(viewDescriptor, locale, view);
+      decorateWithActions(viewDescriptor, actionHandler, locale, view);
+      decorateWithBorder(view, locale);
+      view.getConnector().setModelDescriptor(
+          viewDescriptor.getModelDescriptor());
+      if (!actionHandler.isAccessGranted(viewDescriptor)) {
         view.setPeer(createSecurityComponent());
       }
     }
@@ -683,55 +681,53 @@ public abstract class AbstractViewFactory<E, F, G> implements
 
       public void valueChange(ValueChangeEvent evt) {
         Object cardModel = evt.getNewValue();
-        boolean accessGranted = true;
-        if (cardModel instanceof ISecurable && actionHandler != null) {
-          try {
-            actionHandler.checkAccess((ISecurable) cardModel);
-          } catch (SecurityException se) {
-            accessGranted = false;
-          }
-        }
         E cardsPeer = cardView.getPeer();
-        if (accessGranted) {
-          String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
-              .getCardNameForModel(cardModel, actionHandler.getSubject());
-          if (cardName != null) {
-            IView<E> childCardView = cardView.getChild(cardName);
-            if (childCardView == null
-                && cardModel instanceof IViewDescriptorProvider) {
-              IViewDescriptor providedViewDescriptor = ((IViewDescriptorProvider) cardModel)
-                  .getViewDescriptor();
-              if (providedViewDescriptor != null) {
-                childCardView = createView(providedViewDescriptor,
-                    actionHandler, locale);
-                addCard(cardView, childCardView, cardName);
-              }
+        String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
+            .getCardNameForModel(cardModel, actionHandler.getSubject());
+        if (cardName != null) {
+          IView<E> childCardView = cardView.getChild(cardName);
+          if (childCardView == null
+              && cardModel instanceof IViewDescriptorProvider) {
+            IViewDescriptor providedViewDescriptor = ((IViewDescriptorProvider) cardModel)
+                .getViewDescriptor();
+            if (providedViewDescriptor != null) {
+              childCardView = createView(providedViewDescriptor, actionHandler,
+                  locale);
+              addCard(cardView, childCardView, cardName);
             }
-            if (childCardView != null) {
+          }
+          if (childCardView != null) {
+            boolean accessGranted = true;
+            accessGranted = accessGranted
+                && actionHandler.isAccessGranted(childCardView.getDescriptor());
+            if (cardModel instanceof ISecurable) {
+              accessGranted = accessGranted
+                  && actionHandler.isAccessGranted((ISecurable) cardModel);
+            }
+            if (accessGranted) {
               showCardInPanel(cardsPeer, cardName);
-              IValueConnector childCardConnector = childCardView.getConnector();
-              if (childCardConnector != null) {
-                // To handle polymorphism, especially for modules, we refine
-                // the model descriptor.
-                if (cardView.getConnector().getModelConnector()
-                    .getModelDescriptor().getModelType().isAssignableFrom(
-                        childCardView.getDescriptor().getModelDescriptor()
-                            .getModelType())) {
-                  cardView.getConnector().getModelConnector()
-                      .setModelDescriptor(
-                          childCardView.getDescriptor().getModelDescriptor());
-                }
-                getMvcBinder().bind(childCardConnector,
-                    cardView.getConnector().getModelConnector());
-              }
             } else {
-              showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
+              showCardInPanel(cardsPeer, ICardViewDescriptor.SECURITY_CARD);
+            }
+            IValueConnector childCardConnector = childCardView.getConnector();
+            if (childCardConnector != null) {
+              // To handle polymorphism, especially for modules, we refine
+              // the model descriptor.
+              if (cardView.getConnector().getModelConnector()
+                  .getModelDescriptor().getModelType().isAssignableFrom(
+                      childCardView.getDescriptor().getModelDescriptor()
+                          .getModelType())) {
+                cardView.getConnector().getModelConnector().setModelDescriptor(
+                    childCardView.getDescriptor().getModelDescriptor());
+              }
+              getMvcBinder().bind(childCardConnector,
+                  cardView.getConnector().getModelConnector());
             }
           } else {
             showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
           }
         } else {
-          showCardInPanel(cardsPeer, ICardViewDescriptor.SECURITY_CARD);
+          showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
         }
       }
     });

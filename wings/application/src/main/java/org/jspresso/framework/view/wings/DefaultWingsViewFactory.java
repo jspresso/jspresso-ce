@@ -422,9 +422,7 @@ public class DefaultWingsViewFactory extends
       IView<SComponent> propertyView = createView(propertyViewDescriptor,
           actionHandler, locale);
       boolean forbidden = false;
-      try {
-        actionHandler.checkAccess(propertyViewDescriptor);
-      } catch (SecurityException ex) {
+      if (!actionHandler.isAccessGranted(propertyViewDescriptor)) {
         forbidden = true;
         propertyView.setPeer(createSecurityComponent());
       }
@@ -1405,8 +1403,7 @@ public class DefaultWingsViewFactory extends
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
-      try {
-        actionHandler.checkAccess(columnViewDescriptor);
+      if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IValueConnector columnConnector = createColumnConnector(
             columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
                 .getElementDescriptor(), actionHandler);
@@ -1426,7 +1423,7 @@ public class DefaultWingsViewFactory extends
         // }
         // }
         // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
-      } catch (SecurityException ex) {
+      } else {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);
       }
@@ -1567,8 +1564,7 @@ public class DefaultWingsViewFactory extends
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
-      try {
-        actionHandler.checkAccess(childViewDescriptor);
+      if (actionHandler.isAccessGranted(childViewDescriptor)) {
         IView<SComponent> childView = createView(childViewDescriptor,
             actionHandler, locale);
         SIcon childIcon = getIconFactory().getIcon(
@@ -1586,8 +1582,6 @@ public class DefaultWingsViewFactory extends
               getTranslationProvider(), locale), childIcon, tabView);
         }
         childrenViews.add(childView);
-      } catch (SecurityException ex) {
-        // Just don't add tab.
       }
     }
     view.setChildren(childrenViews);
