@@ -32,6 +32,7 @@ Bugs fixed
 2850076    View model accessibility gates are not handled correctly
 2848679    Error while changing of Module/Entity in the workspace
 2856844    Nullable enumeration properties in Flex cannot be nulled
+2871793    Granted roles are not handled correctly on modules
 
 
 New features
