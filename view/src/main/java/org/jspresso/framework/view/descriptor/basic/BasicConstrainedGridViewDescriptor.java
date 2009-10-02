@@ -48,14 +48,14 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class BasicConstrainedGridViewDescriptor extends
     BasicCompositeViewDescriptor implements IConstrainedGridViewDescriptor {
 
-  private Map<IViewDescriptor, CellConstraints> constrainedCells;
+  private Map<IViewDescriptor, CellConstraints> cells;
 
   /**
    * {@inheritDoc}
    */
   public CellConstraints getCellConstraints(IViewDescriptor viewDescriptor) {
-    if (constrainedCells != null) {
-      return constrainedCells.get(viewDescriptor);
+    if (cells != null) {
+      return cells.get(viewDescriptor);
     }
     return null;
   }
@@ -65,8 +65,8 @@ public class BasicConstrainedGridViewDescriptor extends
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
     List<IViewDescriptor> childViewDescriptors = new ArrayList<IViewDescriptor>();
-    if (constrainedCells != null) {
-      for (Map.Entry<IViewDescriptor, CellConstraints> constrainedCell : constrainedCells
+    if (cells != null) {
+      for (Map.Entry<IViewDescriptor, CellConstraints> constrainedCell : cells
           .entrySet()) {
         completeChildDescriptor(constrainedCell.getKey());
         childViewDescriptors.add(constrainedCell.getKey());
@@ -80,22 +80,21 @@ public class BasicConstrainedGridViewDescriptor extends
    * 
    * @param constrainedViews
    *          the constrainedViews to set.
-   * @deprecated use setContrainedCells instead.
+   * @deprecated use setCells instead.
    */
   @Deprecated
   public void setConstrainedViews(
       Map<IViewDescriptor, CellConstraints> constrainedViews) {
-    setConstrainedCells(constrainedViews);
+    setCells(constrainedViews);
   }
 
   /**
    * Sets the constrainedCells.
    * 
-   * @param constrainedCells
-   *          the constrainedCells to set.
+   * @param cells
+   *          the cells to set.
    */
-  public void setConstrainedCells(
-      Map<IViewDescriptor, CellConstraints> constrainedCells) {
-    this.constrainedCells = constrainedCells;
+  public void setCells(Map<IViewDescriptor, CellConstraints> cells) {
+    this.cells = cells;
   }
 }
