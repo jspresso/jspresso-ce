@@ -764,6 +764,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     if (workspaces != null) {
       for (Workspace workspace : workspaces.values()) {
+        workspace.setSubject(getSubject());
         translateWorkspace(workspace);
       }
       getBackendController().installWorkspaces(workspaces);

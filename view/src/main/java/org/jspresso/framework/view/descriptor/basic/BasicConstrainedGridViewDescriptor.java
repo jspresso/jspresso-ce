@@ -91,6 +91,19 @@ public class BasicConstrainedGridViewDescriptor extends
   /**
    * Sets the constrainedCells.
    * 
+   * @param constrainedCells
+   *          the constrainedCells to set.
+   * @deprecated use setCells instead.
+   */
+  @Deprecated
+  public void setConstrainedCells(
+      Map<IViewDescriptor, CellConstraints> constrainedCells) {
+    setCells(constrainedCells);
+  }
+
+  /**
+   * Sets the constrainedCells.
+   * 
    * @param cells
    *          the cells to set.
    */

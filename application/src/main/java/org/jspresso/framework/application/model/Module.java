@@ -251,9 +251,12 @@ public class Module extends AbstractPropertyChangeCapable implements
     if (subModules == null) {
       return null;
     }
-    for (Iterator<Module> ite = subModules.iterator(); ite.hasNext();) {
-      if (!SecurityHelper.isSubjectGranted(getSubject(), ite.next())) {
-        ite.remove();
+    Subject subj = getSubject();
+    if (subj != null) {
+      for (Iterator<Module> ite = subModules.iterator(); ite.hasNext();) {
+        if (!SecurityHelper.isSubjectGranted(subj, ite.next())) {
+          ite.remove();
+        }
       }
     }
     return subModules;

@@ -170,7 +170,6 @@ public abstract class AbstractBackendController extends AbstractController
       String workspaceName = workspaceEntry.getKey();
       Workspace workspace = workspaceEntry.getValue();
       if (isAccessGranted(workspace)) {
-        workspace.setSubject(getSubject());
         IModelDescriptor workspaceDescriptor;
         workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
         IValueConnector nextWorkspaceConnector = modelConnectorFactory
