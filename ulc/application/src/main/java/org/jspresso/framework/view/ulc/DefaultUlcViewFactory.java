@@ -1756,27 +1756,29 @@ public class DefaultUlcViewFactory extends
           .getActionLists().iterator(); iter.hasNext();) {
         ActionList nextActionList = iter.next();
         for (IDisplayableAction action : nextActionList.getActions()) {
-          IAction ulcAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          ULCButton actionButton = createULCButton();
-          actionButton.setAction(ulcAction);
+          if (actionHandler.isAccessGranted(action)) {
+            IAction ulcAction = getActionFactory().createAction(action,
+                actionHandler, view, locale);
+            ULCButton actionButton = createULCButton();
+            actionButton.setAction(ulcAction);
 
-          if (action.getAcceleratorAsString() != null) {
-            KeyStroke ks = KeyStroke.getKeyStroke(action
-                .getAcceleratorAsString());
-            view.getPeer().registerKeyboardAction(ulcAction, ks,
-                ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-            String acceleratorString = java.awt.event.KeyEvent
-                .getKeyModifiersText(ks.getModifiers())
-                + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
-            actionButton.setToolTipText("<HTML>"
-                + actionButton.getToolTipText()
-                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                + "</FONT></HTML>");
+            if (action.getAcceleratorAsString() != null) {
+              KeyStroke ks = KeyStroke.getKeyStroke(action
+                  .getAcceleratorAsString());
+              view.getPeer().registerKeyboardAction(ulcAction, ks,
+                  ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+              String acceleratorString = java.awt.event.KeyEvent
+                  .getKeyModifiersText(ks.getModifiers())
+                  + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
+              actionButton.setToolTipText("<HTML>"
+                  + actionButton.getToolTipText()
+                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                  + "</FONT></HTML>");
+            }
+
+            actionButton.setText("");
+            toolBar.add(actionButton);
           }
-
-          actionButton.setText("");
-          toolBar.add(actionButton);
         }
         if (iter.hasNext()) {
           toolBar.addSeparator();
@@ -2139,12 +2141,14 @@ public class DefaultUlcViewFactory extends
         .hasNext();) {
       ActionList nextActionList = iter.next();
       for (IDisplayableAction action : nextActionList.getActions()) {
-        IAction ulcAction = getActionFactory().createAction(action,
-            actionHandler, sourceComponent, modelDescriptor, viewConnector,
-            locale);
-        ULCMenuItem actionItem = createULCMenuItem();
-        actionItem.setAction(ulcAction);
-        popupMenu.add(actionItem);
+        if (actionHandler.isAccessGranted(action)) {
+          IAction ulcAction = getActionFactory().createAction(action,
+              actionHandler, sourceComponent, modelDescriptor, viewConnector,
+              locale);
+          ULCMenuItem actionItem = createULCMenuItem();
+          actionItem.setAction(ulcAction);
+          popupMenu.add(actionItem);
+        }
       }
       if (iter.hasNext()) {
         popupMenu.addSeparator();

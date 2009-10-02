@@ -1248,10 +1248,12 @@ public class DefaultRemoteViewFactory extends
         viewActionLists.add(actionList);
         List<RAction> actions = new ArrayList<RAction>();
         for (IDisplayableAction action : nextActionList.getActions()) {
-          RAction rAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          rAction.setAcceleratorAsString(action.getAcceleratorAsString());
-          actions.add(rAction);
+          if (actionHandler.isAccessGranted(action)) {
+            RAction rAction = getActionFactory().createAction(action,
+                actionHandler, view, locale);
+            rAction.setAcceleratorAsString(action.getAcceleratorAsString());
+            actions.add(rAction);
+          }
         }
         actionList.setActions(actions.toArray(new RAction[0]));
       }

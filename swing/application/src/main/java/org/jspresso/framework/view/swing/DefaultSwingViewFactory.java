@@ -1729,28 +1729,30 @@ public class DefaultSwingViewFactory extends
           .getActionLists().iterator(); iter.hasNext();) {
         ActionList nextActionList = iter.next();
         for (IDisplayableAction action : nextActionList.getActions()) {
-          Action swingAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          JButton actionButton = createJButton();
-          actionButton.setAction(swingAction);
-          if (action.getAcceleratorAsString() != null) {
-            KeyStroke ks = KeyStroke.getKeyStroke(action
-                .getAcceleratorAsString());
-            view.getPeer().getActionMap().put(
-                swingAction.getValue(Action.NAME), swingAction);
-            view.getPeer().getInputMap(
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                swingAction.getValue(Action.NAME));
-            String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                .getModifiers())
-                + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-            actionButton.setToolTipText("<HTML>"
-                + actionButton.getToolTipText()
-                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                + "</FONT></HTML>");
+          if (actionHandler.isAccessGranted(action)) {
+            Action swingAction = getActionFactory().createAction(action,
+                actionHandler, view, locale);
+            JButton actionButton = createJButton();
+            actionButton.setAction(swingAction);
+            if (action.getAcceleratorAsString() != null) {
+              KeyStroke ks = KeyStroke.getKeyStroke(action
+                  .getAcceleratorAsString());
+              view.getPeer().getActionMap().put(
+                  swingAction.getValue(Action.NAME), swingAction);
+              view.getPeer().getInputMap(
+                  JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                  swingAction.getValue(Action.NAME));
+              String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                  .getModifiers())
+                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+              actionButton.setToolTipText("<HTML>"
+                  + actionButton.getToolTipText()
+                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                  + "</FONT></HTML>");
+            }
+            actionButton.setText("");
+            toolBar.add(actionButton);
           }
-          actionButton.setText("");
-          toolBar.add(actionButton);
         }
         if (iter.hasNext()) {
           toolBar.addSeparator();
@@ -1955,12 +1957,14 @@ public class DefaultSwingViewFactory extends
         .hasNext();) {
       ActionList nextActionSet = iter.next();
       for (IDisplayableAction action : nextActionSet.getActions()) {
-        Action swingAction = getActionFactory().createAction(action,
-            actionHandler, sourceComponent, modelDescriptor, viewConnector,
-            locale);
-        JMenuItem actionItem = createJMenuItem();
-        actionItem.setAction(swingAction);
-        popupMenu.add(actionItem);
+        if (actionHandler.isAccessGranted(action)) {
+          Action swingAction = getActionFactory().createAction(action,
+              actionHandler, sourceComponent, modelDescriptor, viewConnector,
+              locale);
+          JMenuItem actionItem = createJMenuItem();
+          actionItem.setAction(swingAction);
+          popupMenu.add(actionItem);
+        }
       }
       if (iter.hasNext()) {
         popupMenu.addSeparator();

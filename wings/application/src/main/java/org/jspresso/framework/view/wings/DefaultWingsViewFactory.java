@@ -1700,30 +1700,32 @@ public class DefaultWingsViewFactory extends
           .getActionLists().iterator(); iter.hasNext();) {
         ActionList nextActionList = iter.next();
         for (IDisplayableAction action : nextActionList.getActions()) {
-          Action wingsAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          SButton actionButton = createSButton();
-          actionButton.setShowAsFormComponent(false);
-          actionButton.setAction(wingsAction);
-          actionButton.setDisabledIcon(actionButton.getIcon());
-          if (action.getAcceleratorAsString() != null) {
-            KeyStroke ks = KeyStroke.getKeyStroke(action
-                .getAcceleratorAsString());
-            view.getPeer().getActionMap().put(
-                wingsAction.getValue(Action.NAME), wingsAction);
-            view.getPeer().getInputMap(
-                SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT).put(
-                ks, wingsAction.getValue(Action.NAME));
-            String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                .getModifiers())
-                + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-            actionButton.setToolTipText("<HTML>"
-                + actionButton.getToolTipText()
-                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                + "</FONT></HTML>");
+          if (actionHandler.isAccessGranted(action)) {
+            Action wingsAction = getActionFactory().createAction(action,
+                actionHandler, view, locale);
+            SButton actionButton = createSButton();
+            actionButton.setShowAsFormComponent(false);
+            actionButton.setAction(wingsAction);
+            actionButton.setDisabledIcon(actionButton.getIcon());
+            if (action.getAcceleratorAsString() != null) {
+              KeyStroke ks = KeyStroke.getKeyStroke(action
+                  .getAcceleratorAsString());
+              view.getPeer().getActionMap().put(
+                  wingsAction.getValue(Action.NAME), wingsAction);
+              view.getPeer().getInputMap(
+                  SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
+                  .put(ks, wingsAction.getValue(Action.NAME));
+              String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                  .getModifiers())
+                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+              actionButton.setToolTipText("<HTML>"
+                  + actionButton.getToolTipText()
+                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                  + "</FONT></HTML>");
+            }
+            actionButton.setText("");
+            toolBar.add(actionButton);
           }
-          actionButton.setText("");
-          toolBar.add(actionButton);
         }
         if (iter.hasNext()) {
           toolBar.add(new SSpacer(10, 0));
