@@ -530,16 +530,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
         .setIconImageURL(getWorkspacesMenuIconImageUrl());
     List<IDisplayableAction> workspaceSelectionActions = new ArrayList<IDisplayableAction>();
     for (String workspaceName : getWorkspaceNames()) {
-      WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
-      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-          .getViewDescriptor();
-      workspaceSelectionAction.setWorkspaceName(workspaceName);
-      workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
-      workspaceSelectionAction.setDescription(workspaceViewDescriptor
-          .getDescription());
-      workspaceSelectionAction.setIconImageURL(workspaceViewDescriptor
-          .getIconImageURL());
-      workspaceSelectionActions.add(workspaceSelectionAction);
+      Workspace workspace = getWorkspace(workspaceName);
+      if (isAccessGranted(workspace)) {
+        WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<E, F, G>();
+        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+            .getViewDescriptor();
+        workspaceSelectionAction.setWorkspaceName(workspaceName);
+        workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
+        workspaceSelectionAction.setDescription(workspaceViewDescriptor
+            .getDescription());
+        workspaceSelectionAction.setIconImageURL(workspaceViewDescriptor
+            .getIconImageURL());
+        workspaceSelectionActions.add(workspaceSelectionAction);
+      }
     }
     workspaceSelectionActionList.setActions(workspaceSelectionActions);
 
