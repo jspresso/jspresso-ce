@@ -1461,7 +1461,7 @@ public class DefaultUlcViewFactory extends
       Locale locale) {
 
     ICompositeValueConnector connector = createTreeViewConnector(
-        viewDescriptor, locale);
+        viewDescriptor, actionHandler, locale);
 
     ULCExtendedTree viewComponent = createULCTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(

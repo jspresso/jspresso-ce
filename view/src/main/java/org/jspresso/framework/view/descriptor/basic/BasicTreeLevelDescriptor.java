@@ -18,6 +18,12 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.Collection;
+
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 
@@ -43,6 +49,7 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
 
   private IListViewDescriptor nodeGroupDescriptor;
+  private Collection<String>  grantedRoles;
 
   /**
    * {@inheritDoc}
@@ -55,9 +62,51 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
    * Sets the nodeGroupDescriptor.
    * 
    * @param nodeGroupDescriptor
-   *            the nodeGroupDescriptor to set.
+   *          the nodeGroupDescriptor to set.
    */
   public void setNodeGroupDescriptor(IListViewDescriptor nodeGroupDescriptor) {
     this.nodeGroupDescriptor = nodeGroupDescriptor;
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    Collection<String> gr = grantedRoles;
+    if (gr == null && getNodeGroupDescriptor() != null) {
+      gr = getNodeGroupDescriptor().getGrantedRoles();
+      if (gr == null) {
+        IModelDescriptor modelDescriptor = getNodeGroupDescriptor()
+            .getModelDescriptor();
+        if (modelDescriptor != null) {
+          if (modelDescriptor instanceof ISecurable) {
+            gr = ((ISecurable) modelDescriptor).getGrantedRoles();
+          }
+          if (gr == null
+              && modelDescriptor instanceof ICollectionDescriptorProvider<?>
+              && ((ICollectionDescriptorProvider<?>) modelDescriptor)
+                  .getCollectionDescriptor() != null
+              && ((ICollectionDescriptorProvider<?>) modelDescriptor)
+                  .getCollectionDescriptor().getElementDescriptor() != null) {
+            gr = ((ICollectionDescriptorProvider<?>) modelDescriptor)
+                .getCollectionDescriptor().getElementDescriptor()
+                .getGrantedRoles();
+          }
+        }
+      }
+    }
+    return gr;
   }
 }

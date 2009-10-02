@@ -1216,10 +1216,10 @@ public class DefaultRemoteViewFactory extends
    */
   @Override
   protected IView<RComponent> createTreeView(
-      ITreeViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler, Locale locale) {
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     ICompositeValueConnector connector = createTreeViewConnector(
-        viewDescriptor, locale);
+        viewDescriptor, actionHandler, locale);
 
     RTree viewComponent = createRTree(connector);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,

@@ -1699,12 +1699,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * 
    * @param viewDescriptor
    *          the tree view descriptor.
+   * @param actionHandler
+   *          the action handler.
    * @param locale
    *          the locale to use.
    * @return the connector for the tree view.
    */
   protected ICompositeValueConnector createTreeViewConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale) {
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     ITreeLevelDescriptor rootDescriptor = viewDescriptor
         .getRootSubtreeDescriptor();
     ICompositeValueConnector connector = null;
@@ -1719,10 +1722,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .getChildrenDescriptors() != null) {
         for (ITreeLevelDescriptor subtreeViewDescriptor : ((ICompositeTreeLevelDescriptor) rootDescriptor)
             .getChildrenDescriptors()) {
-          ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-              viewDescriptor, locale, subtreeViewDescriptor, 1);
-          compositeConnector.addChildConnector(subtreeConnector);
-          subtreeConnectors.add(subtreeConnector);
+          if (actionHandler.isAccessGranted(subtreeViewDescriptor)) {
+            ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
+                viewDescriptor, actionHandler, locale, subtreeViewDescriptor, 1);
+            compositeConnector.addChildConnector(subtreeConnector);
+            subtreeConnectors.add(subtreeConnector);
+          }
         }
       }
       compositeConnector.setCollectionConnectorProviders(subtreeConnectors);
@@ -1733,13 +1738,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
               ModelRefPropertyConnector.THIS_PROPERTY,
               ((ISimpleTreeLevelDescriptor) rootDescriptor)
                   .getNodeGroupDescriptor().getRenderedProperty());
-      if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
-        ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
-            viewDescriptor, locale,
-            ((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor(),
-            1);
-        simpleConnector.addChildConnector(subtreeConnector);
-        simpleConnector.setCollectionConnectorProvider(subtreeConnector);
+      ITreeLevelDescriptor childDescriptor = ((ISimpleTreeLevelDescriptor) rootDescriptor)
+          .getChildDescriptor();
+      if (childDescriptor != null) {
+        if (actionHandler.isAccessGranted(childDescriptor)) {
+          ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
+              viewDescriptor, actionHandler, locale, childDescriptor, 1);
+          simpleConnector.addChildConnector(subtreeConnector);
+          simpleConnector.setCollectionConnectorProvider(subtreeConnector);
+        }
       }
       connector = simpleConnector;
     }
@@ -2163,8 +2170,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   private ICollectionConnectorProvider createCompositeNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ICompositeTreeLevelDescriptor subtreeViewDescriptor, int depth) {
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale, ICompositeTreeLevelDescriptor subtreeViewDescriptor,
+      int depth) {
     ICollectionDescriptorProvider<?> nodeGroupModelDescriptor = ((ICollectionDescriptorProvider<?>) subtreeViewDescriptor
         .getNodeGroupDescriptor().getModelDescriptor());
     IConfigurableCollectionConnectorListProvider nodeGroupPrototypeConnector = connectorFactory
@@ -2177,10 +2185,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
         && depth < viewDescriptor.getMaxDepth()) {
       for (ITreeLevelDescriptor childDescriptor : subtreeViewDescriptor
           .getChildrenDescriptors()) {
-        ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-            viewDescriptor, locale, childDescriptor, depth + 1);
-        nodeGroupPrototypeConnector.addChildConnector(childConnector);
-        subtreeConnectors.add(childConnector);
+        if (actionHandler.isAccessGranted(childDescriptor)) {
+          ICollectionConnectorProvider childConnector = createNodeGroupConnector(
+              viewDescriptor, actionHandler, locale, childDescriptor, depth + 1);
+          nodeGroupPrototypeConnector.addChildConnector(childConnector);
+          subtreeConnectors.add(childConnector);
+        }
       }
     }
     nodeGroupPrototypeConnector
@@ -2206,15 +2216,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   private ICollectionConnectorProvider createNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ITreeLevelDescriptor subtreeViewDescriptor, int depth) {
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale, ITreeLevelDescriptor subtreeViewDescriptor, int depth) {
     ICollectionConnectorProvider connector = null;
     if (subtreeViewDescriptor instanceof ICompositeTreeLevelDescriptor) {
-      connector = createCompositeNodeGroupConnector(viewDescriptor, locale,
+      connector = createCompositeNodeGroupConnector(viewDescriptor,
+          actionHandler, locale,
           (ICompositeTreeLevelDescriptor) subtreeViewDescriptor, depth);
     } else if (subtreeViewDescriptor instanceof ISimpleTreeLevelDescriptor) {
-      connector = createSimpleNodeGroupConnector(viewDescriptor, locale,
-          (ISimpleTreeLevelDescriptor) subtreeViewDescriptor, depth);
+      connector = createSimpleNodeGroupConnector(viewDescriptor, actionHandler,
+          locale, (ISimpleTreeLevelDescriptor) subtreeViewDescriptor, depth);
     }
     if (connector instanceof AbstractCompositeValueConnector) {
       ((AbstractCompositeValueConnector) connector)
@@ -2233,8 +2244,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   private ICollectionConnectorProvider createSimpleNodeGroupConnector(
-      ITreeViewDescriptor viewDescriptor, Locale locale,
-      ISimpleTreeLevelDescriptor subtreeViewDescriptor, int depth) {
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale, ISimpleTreeLevelDescriptor subtreeViewDescriptor, int depth) {
     ICollectionPropertyDescriptor<?> nodeGroupModelDescriptor = (ICollectionPropertyDescriptor<?>) subtreeViewDescriptor
         .getNodeGroupDescriptor().getModelDescriptor();
     IConfigurableCollectionConnectorProvider nodeGroupPrototypeConnector = connectorFactory
@@ -2242,11 +2253,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
             .getName()
             + "Element", subtreeViewDescriptor.getNodeGroupDescriptor()
             .getRenderedProperty());
-    if (subtreeViewDescriptor.getChildDescriptor() != null
-        && depth < viewDescriptor.getMaxDepth()) {
+    ITreeLevelDescriptor childDescriptor = subtreeViewDescriptor
+        .getChildDescriptor();
+    if (childDescriptor != null && depth < viewDescriptor.getMaxDepth()
+        && actionHandler.isAccessGranted(childDescriptor)) {
       ICollectionConnectorProvider childConnector = createNodeGroupConnector(
-          viewDescriptor, locale, subtreeViewDescriptor.getChildDescriptor(),
-          depth + 1);
+          viewDescriptor, actionHandler, locale, childDescriptor, depth + 1);
       nodeGroupPrototypeConnector.addChildConnector(childConnector);
       nodeGroupPrototypeConnector
           .setCollectionConnectorProvider(childConnector);

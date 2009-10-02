@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.security.ISecurable;
+
 /**
  * This interface is implemented by descriptors of a subtree.
  * <p>
@@ -37,7 +39,7 @@ package org.jspresso.framework.view.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ITreeLevelDescriptor {
+public interface ITreeLevelDescriptor extends ISecurable {
 
   /**
    * Gets the list descriptor describing the collection of nodes composing the

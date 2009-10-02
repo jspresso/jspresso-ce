@@ -1664,11 +1664,11 @@ public class DefaultWingsViewFactory extends
    */
   @Override
   protected IView<SComponent> createTreeView(
-      ITreeViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler, Locale locale) {
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
 
     ICompositeValueConnector connector = createTreeViewConnector(
-        viewDescriptor, locale);
+        viewDescriptor, actionHandler, locale);
 
     STree viewComponent = createSTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(

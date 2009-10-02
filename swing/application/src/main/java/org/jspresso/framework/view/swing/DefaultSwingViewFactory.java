@@ -1697,7 +1697,7 @@ public class DefaultSwingViewFactory extends
       Locale locale) {
 
     ICompositeValueConnector connector = createTreeViewConnector(
-        viewDescriptor, locale);
+        viewDescriptor, actionHandler, locale);
 
     JTree viewComponent = createJTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(

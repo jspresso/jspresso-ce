@@ -42,7 +42,7 @@ public final class ClassInvokerUtil {
   /**
    * <code>ARGS_SEPARATOR</code>.
    */
-  static final String ARGS_SEPARATOR = "§";
+  static final String ARGS_SEPARATOR = "#";
 
   /**
    * <code>MESSAGE_ROOT</code>.
@@ -65,11 +65,11 @@ public final class ClassInvokerUtil {
    * Creates a message to be handled by the class invoker.
    * 
    * @param className
-   *            the name of the class to trigger.
+   *          the name of the class to trigger.
    * @param methodName
-   *            the name of the method to trigger.
+   *          the name of the method to trigger.
    * @param arguments
-   *            the arguments to trigger the method.
+   *          the arguments to trigger the method.
    * @return the created message.
    */
   public static String createMessage(String className, String methodName,
