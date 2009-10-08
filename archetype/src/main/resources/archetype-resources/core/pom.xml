@@ -155,7 +155,7 @@
             <element>
               <groupId>org.jspresso.contrib</groupId>
               <artifactId>jspresso-sjs</artifactId>
-              <version>1.0-SNAPSHOT</version>
+              <version>${sjs.version}</version>
             </element>
           </classpath>
         </configuration>
