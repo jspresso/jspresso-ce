@@ -108,13 +108,6 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
-    <!--<repository>
-    	<id>sonatype-repository</id>
-    	<url>http://repository.sonatype.org/content/groups/public</url>
-    	<snapshots>
-    		<enabled>false</enabled>
-    	</snapshots>
-    </repository>-->
   </repositories>
   <dependencyManagement>
     <dependencies>

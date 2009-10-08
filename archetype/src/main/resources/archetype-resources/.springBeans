@@ -14,10 +14,11 @@
 		<config>M2_REPO/org/jspresso/framework/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
     <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-wings-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
     <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-remote-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/remote/commons-remote.xml</config>
-		<config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
-		<config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
+		<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
+		<config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+		<config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
@@ -25,15 +26,16 @@
 			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>
-				<config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
-				<config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
-				<config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
-				<config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
 				<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
 				<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
 				<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
 				<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
 				<config>M2_REPO/org/jspresso/framework/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
+				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
+				<config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
+				<config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
+				<config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+				<config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
 			</configs>
 		</configSet>
     <configSet>
@@ -41,15 +43,16 @@
       <allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
       <incomplete>false</incomplete>
       <configs>
-        <config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
-        <config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
-        <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
-        <config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-wings-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
+				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
+        <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
+        <config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
+        <config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+        <config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
       </configs>
     </configSet>
     <configSet>
@@ -57,15 +60,16 @@
       <allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
       <incomplete>false</incomplete>
       <configs>
-        <config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
-        <config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
-        <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
-        <config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-remote-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/remote/commons-remote.xml</config>
+				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
+        <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
+        <config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
+        <config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+        <config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
       </configs>
     </configSet>
 	</configSets>

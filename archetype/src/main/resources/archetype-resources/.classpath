@@ -25,6 +25,10 @@
     path="core/target/generated-resources/xdoclet" />
   <classpathentry
     kind="src"
+    output="core/target/classes"
+    path="core/target/generated-resources/dsl" />
+  <classpathentry
+    kind="src"
     output="startup/swing/target/classes"
     path="startup/swing/src/main/java" />
   <classpathentry

@@ -121,6 +121,12 @@
             <include>*.xml</include>
           </includes>
         </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>src/main/dsl</directory>
+          <includes>
+            <include>*.groovy</include>
+          </includes>
+        </fileSet>
       </fileSets>
     </module>
     <module id="${rootArtifactId}-startup" dir="startup" name="${rootArtifactId}-startup">

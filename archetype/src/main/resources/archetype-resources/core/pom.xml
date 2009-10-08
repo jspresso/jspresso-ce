@@ -128,30 +128,37 @@
       <resource>
         <directory>${project.build.directory}/generated-resources/jasperreports</directory>
       </resource>
+      <resource>
+        <directory>${project.build.directory}/generated-resources/dsl</directory>
+      </resource>
     </resources>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jasperreports-maven-plugin</artifactId>
-        <configuration>
-           <outputDirectory>${project.build.directory}/generated-resources/jasperreports</outputDirectory>
-        </configuration>
+        <groupId>org.codehaus.groovy.maven</groupId>
+        <artifactId>gmaven-plugin</artifactId>
         <executions>
           <execution>
-            <id>compile-jasper-reports</id>
-            <phase>generate-resources</phase>
+            <id>generate-dsl-model</id>
+            <phase>generate-sources</phase>
             <goals>
-              <goal>compile-reports</goal>
+              <goal>execute</goal>
             </goals>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-          <groupId>commons-collections</groupId>
-          <artifactId>commons-collections</artifactId>
-          <version>3.2.1</version>
-          </dependency>
-        </dependencies>
+        <configuration>
+          <source>${basedir}/src/main/dsl/model.groovy</source>
+          <properties>
+            <outputDir>${project.build.directory}/generated-resources/dsl</outputDir>
+            <outputFileName>dsl-model.xml</outputFileName>
+          </properties>
+          <classpath>
+            <element>
+              <groupId>org.jspresso.contrib</groupId>
+              <artifactId>jspresso-sjs</artifactId>
+              <version>1.0-SNAPSHOT</version>
+            </element>
+          </classpath>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.xdoclet</groupId>
@@ -255,7 +262,7 @@
         <executions>
           <execution>
             <id>add-generated-sources</id>
-            <phase>generate-sources</phase>
+            <phase>process-sources</phase>
             <goals>
               <goal>add-source</goal>
             </goals>
@@ -266,6 +273,29 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jasperreports-maven-plugin</artifactId>
+        <configuration>
+           <outputDirectory>${project.build.directory}/generated-resources/jasperreports</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>compile-jasper-reports</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>compile-reports</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+          <groupId>commons-collections</groupId>
+          <artifactId>commons-collections</artifactId>
+          <version>3.2.1</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
