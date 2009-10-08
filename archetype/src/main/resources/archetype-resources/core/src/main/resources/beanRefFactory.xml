@@ -13,6 +13,7 @@
       <list>
         <value>org/jspresso/framework/application/commons.xml</value>
         <value>org/jspresso/framework/tools/mock.xml</value>
+        <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
       </list>
     </constructor-arg>
