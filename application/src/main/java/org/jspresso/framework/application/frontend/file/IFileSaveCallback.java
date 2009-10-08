@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.file;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
@@ -53,7 +54,9 @@ public interface IFileSaveCallback extends IFileCallback {
    *          the action handler.
    * @param context
    *          the action context.
+   * @throws IOException
+   *           whenever an IOException occurs.
    */
   void fileChosen(OutputStream out, IActionHandler actionHandler,
-      Map<String, Object> context);
+      Map<String, Object> context) throws IOException;
 }

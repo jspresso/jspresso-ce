@@ -4,6 +4,10 @@
         <wb-resource deploy-path="/" source-path="/webapp/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/target/generated-resources/entitygenerator"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/target/generated-resources/jasperreports"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/target/generated-resources/xdoclet"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/core/target/generated-resources/dsl"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/swing/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/swing/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/startup/wings/src/main/java"/>

@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.action.ulc.file;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
@@ -76,7 +77,18 @@ public class SaveFileAction extends ChooseFileAction {
 
         public void prepareFile(OutputStream out) {
           if (fileSaveCallback != null) {
-            fileSaveCallback.fileChosen(out, actionHandler, context);
+            try {
+              fileSaveCallback.fileChosen(out, actionHandler, context);
+              out.flush();
+            } catch (IOException ex) {
+              throw new ActionException(ex);
+            } finally {
+              try {
+                out.close();
+              } catch (IOException ex) {
+                // NO-OP.
+              }
+            }
           }
         }
       }, createFileChooser(context));
@@ -90,7 +102,7 @@ public class SaveFileAction extends ChooseFileAction {
    * Sets the fileSaveCallback.
    * 
    * @param fileSaveCallback
-   *            the fileSaveCallback to set.
+   *          the fileSaveCallback to set.
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
     this.fileSaveCallback = fileSaveCallback;

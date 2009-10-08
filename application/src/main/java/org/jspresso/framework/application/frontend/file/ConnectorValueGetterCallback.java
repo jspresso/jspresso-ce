@@ -24,7 +24,6 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
 
@@ -63,29 +62,19 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
    */
   public void fileChosen(OutputStream out,
       @SuppressWarnings("unused") IActionHandler actionHandler,
-      Map<String, Object> context) {
+      Map<String, Object> context) throws IOException {
     OutputStream os = new BufferedOutputStream(out);
-    try {
-      Object connectorValue = ((IValueConnector) context
-          .get(ActionContextConstants.VIEW_CONNECTOR)).getConnectorValue();
-      byte[] content;
-      if (connectorValue instanceof String) {
-        content = ((String) connectorValue).getBytes();
-      } else {
-        content = (byte[]) connectorValue;
-      }
-      if (connectorValue != null) {
-        os.write(content);
-        os.flush();
-      }
-    } catch (IOException ex) {
-      throw new ActionException(ex);
-    } finally {
-      try {
-        os.close();
-      } catch (IOException ex) {
-        // NO-OP.
-      }
+    Object connectorValue = ((IValueConnector) context
+        .get(ActionContextConstants.VIEW_CONNECTOR)).getConnectorValue();
+    byte[] content;
+    if (connectorValue instanceof String) {
+      content = ((String) connectorValue).getBytes();
+    } else {
+      content = (byte[]) connectorValue;
+    }
+    if (connectorValue != null) {
+      os.write(content);
+      os.flush();
     }
   }
 }

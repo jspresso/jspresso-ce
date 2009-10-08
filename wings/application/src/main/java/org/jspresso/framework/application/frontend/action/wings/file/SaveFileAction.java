@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
 import org.wings.externalizer.AbstractExternalizeManager;
@@ -31,7 +32,6 @@ import org.wings.resource.DynamicResource;
 import org.wings.script.JavaScriptListener;
 import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
-
 
 /**
  * Initiates a file save action.
@@ -68,11 +68,21 @@ public class SaveFileAction extends ChooseFileAction {
 
         private static final long serialVersionUID = 2216910348294774650L;
 
-        public void write(Device device) throws IOException {
+        public void write(Device device) {
           DeviceOutputStream out = new DeviceOutputStream(device);
-          fileSaveCallback.fileChosen(out, actionHandler, context);
-          out.flush();
-          device.close();
+          try {
+            fileSaveCallback.fileChosen(out, actionHandler, context);
+            out.flush();
+          } catch (IOException ex) {
+            throw new ActionException(ex);
+          } finally {
+            try {
+              out.close();
+              device.close();
+            } catch (IOException ex) {
+              // NO-OP.
+            }
+          }
         }
       };
       Map<String, String> headers = new HashMap<String, String>();
@@ -93,7 +103,7 @@ public class SaveFileAction extends ChooseFileAction {
    * Sets the fileSaveCallback.
    * 
    * @param fileSaveCallback
-   *            the fileSaveCallback to set.
+   *          the fileSaveCallback to set.
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
     this.fileSaveCallback = fileSaveCallback;

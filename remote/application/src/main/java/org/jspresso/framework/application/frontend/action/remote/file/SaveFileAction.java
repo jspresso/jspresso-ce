@@ -20,9 +20,11 @@ package org.jspresso.framework.application.frontend.action.remote.file;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
@@ -96,7 +98,18 @@ public class SaveFileAction extends ChooseFileAction {
         IActionHandler actionHandler, Map<String, Object> context) {
       super("application/octet-stream");
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      source.fileChosen(baos, actionHandler, context);
+      try {
+        source.fileChosen(baos, actionHandler, context);
+        baos.flush();
+      } catch (IOException ex) {
+        throw new ActionException(ex);
+      } finally {
+        try {
+          baos.close();
+        } catch (IOException ex) {
+          // NO-OP.
+        }
+      }
       content = baos.toByteArray();
     }
 

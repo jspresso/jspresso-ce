@@ -21,17 +21,18 @@ package org.jspresso.framework.application.frontend.action.swing.file;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
 import org.jspresso.framework.util.i18n.Messages;
 import org.jspresso.framework.util.swing.SwingUtil;
-
 
 /**
  * Initiates a file save action.
@@ -89,7 +90,19 @@ public class SaveFileAction extends ChooseFileAction {
         }
         if (file != null) {
           try {
-            fileSaveCallback.fileChosen(new FileOutputStream(file), actionHandler, context);
+            FileOutputStream fos = new FileOutputStream(file);
+            try {
+              fileSaveCallback.fileChosen(fos, actionHandler, context);
+              fos.flush();
+            } catch (IOException ex) {
+              throw new ActionException(ex);
+            } finally {
+              try {
+                fos.close();
+              } catch (IOException ex) {
+                // NO-OP.
+              }
+            }
           } catch (FileNotFoundException ex) {
             fileSaveCallback.cancel(actionHandler, context);
           }
@@ -109,7 +122,7 @@ public class SaveFileAction extends ChooseFileAction {
    * Sets the fileSaveCallback.
    * 
    * @param fileSaveCallback
-   *            the fileSaveCallback to set.
+   *          the fileSaveCallback to set.
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
     this.fileSaveCallback = fileSaveCallback;
