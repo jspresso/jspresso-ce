@@ -18,13 +18,11 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
-import java.util.List;
-
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
@@ -95,8 +93,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
       IComponentDescriptor<Object> entityDescriptor, IDisplayableAction okAction) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
-    BasicCollectionDescriptor<Object> queriedEntitiesListDescriptor = new BasicCollectionDescriptor<Object>();
-    queriedEntitiesListDescriptor.setCollectionInterface(List.class);
+    BasicListDescriptor<Object> queriedEntitiesListDescriptor = new BasicListDescriptor<Object>();
     queriedEntitiesListDescriptor.setElementDescriptor(entityDescriptor);
 
     BasicCollectionPropertyDescriptor<Object> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<Object>();

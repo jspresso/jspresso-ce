@@ -31,8 +31,8 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
-import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicDescriptorDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -74,8 +74,7 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    BasicCollectionDescriptor<IDescriptor> modelDescriptor = new BasicCollectionDescriptor<IDescriptor>();
-    modelDescriptor.setCollectionInterface(List.class);
+    BasicListDescriptor<IDescriptor> modelDescriptor = new BasicListDescriptor<IDescriptor>();
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
     modelDescriptor.setName(ACTION_MODEL_NAME);
     IValueConnector actionsConnector = modelConnectorFactory

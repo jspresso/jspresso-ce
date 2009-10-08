@@ -20,8 +20,8 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -102,7 +102,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   @SuppressWarnings("unchecked")
   public ITreeLevelDescriptor getRootSubtreeDescriptor() {
     if (rootSubtreeDescriptor == null) {
-      BasicCollectionDescriptor<Object> fakeCollDescriptor = new BasicCollectionDescriptor<Object>();
+      BasicListDescriptor<Object> fakeCollDescriptor = new BasicListDescriptor<Object>();
       fakeCollDescriptor
           .setElementDescriptor((IComponentDescriptor<Object>) getModelDescriptor());
       BasicCollectionPropertyDescriptor<Object> fakeCollPropDescriptor = new BasicCollectionPropertyDescriptor<Object>();

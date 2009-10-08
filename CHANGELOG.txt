@@ -90,6 +90,7 @@ New features
 2851134    Create an HTML property descriptor
 2868616    Force Hibernate to use LinkedHashSet in every situation
 2868617    Don't add forbidden tab in tab view
+2874777    Introduce BasicSet|ListDescriptor to hide implementation details
 
 3.0.0
 =====

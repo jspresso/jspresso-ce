@@ -24,8 +24,8 @@ import java.util.List;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 
 /**
  * The model descriptor for bean collection modules.
@@ -71,8 +71,7 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
       IComponentDescriptor<Object> moduleObjectReferencedDescriptor) {
     super(name);
 
-    BasicCollectionDescriptor<Object> moduleObjectsListDescriptor = new BasicCollectionDescriptor<Object>();
-    moduleObjectsListDescriptor.setCollectionInterface(List.class);
+    BasicListDescriptor<Object> moduleObjectsListDescriptor = new BasicListDescriptor<Object>();
     moduleObjectsListDescriptor
         .setElementDescriptor(moduleObjectReferencedDescriptor);
 

@@ -24,9 +24,9 @@ import java.util.List;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 
@@ -73,8 +73,7 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
     parentDescriptor.setName(Module.PARENT);
     parentDescriptor.setReferencedDescriptor(this);
 
-    BasicCollectionDescriptor<Module> moduleListDescriptor = new BasicCollectionDescriptor<Module>();
-    moduleListDescriptor.setCollectionInterface(List.class);
+    BasicListDescriptor<Module> moduleListDescriptor = new BasicListDescriptor<Module>();
     moduleListDescriptor.setElementDescriptor(this);
 
     BasicCollectionPropertyDescriptor<Module> subModulesDescriptor = new BasicCollectionPropertyDescriptor<Module>();

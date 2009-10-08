@@ -68,8 +68,7 @@ public class BasicQueryComponentDescriptor extends
         .getPropertyDescriptors()) {
       propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
     }
-    BasicCollectionDescriptor<Object> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<Object>();
-    queriedEntitiesCollectionDescriptor.setCollectionInterface(List.class);
+    BasicListDescriptor<Object> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<Object>();
     queriedEntitiesCollectionDescriptor
         .setElementDescriptor(componentDescriptor);
     queriedEntitiesCollectionDescriptor

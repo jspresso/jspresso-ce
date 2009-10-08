@@ -32,7 +32,7 @@ import org.jspresso.framework.application.printing.model.descriptor.IReportDescr
 import org.jspresso.framework.application.printing.model.descriptor.basic.BasicReportDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
-import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -72,8 +72,7 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    BasicCollectionDescriptor<IReport> modelDescriptor = new BasicCollectionDescriptor<IReport>();
-    modelDescriptor.setCollectionInterface(List.class);
+    BasicListDescriptor<IReport> modelDescriptor = new BasicListDescriptor<IReport>();
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
     IValueConnector reportsConnector = modelConnectorFactory
         .createModelConnector("ActionModel", modelDescriptor, actionHandler
