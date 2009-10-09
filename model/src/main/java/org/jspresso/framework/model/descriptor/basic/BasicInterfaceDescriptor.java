@@ -37,29 +37,19 @@ package org.jspresso.framework.model.descriptor.basic;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete type of components.
+ *          the concrete type of components.
  */
 public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> {
-
-  private boolean computed;
 
   /**
    * Constructs a new <code>BasicInterfaceDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor which has to be the fully-qualified
-   *            class name of its contract.
+   *          the name of the descriptor which has to be the fully-qualified
+   *          class name of its contract.
    */
   public BasicInterfaceDescriptor(String name) {
     super(name);
-    this.computed = false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isComputed() {
-    return computed;
   }
 
   /**
@@ -76,15 +66,5 @@ public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> 
    */
   public boolean isPurelyAbstract() {
     return true;
-  }
-
-  /**
-   * Sets the computed.
-   * 
-   * @param computed
-   *            the computed to set.
-   */
-  public void setComputed(boolean computed) {
-    this.computed = computed;
   }
 }

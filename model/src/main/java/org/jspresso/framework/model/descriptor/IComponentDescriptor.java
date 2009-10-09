@@ -172,15 +172,6 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
   Collection<String> getUnclonedProperties();
 
   /**
-   * Gets wether this component descriptor is itself persistent or if it is only
-   * an interface for other entities.
-   * 
-   * @return false if the interface defines a representation in the persistent
-   *         storage.
-   */
-  boolean isComputed();
-
-  /**
    * Gets wether the component described is an entity.
    * 
    * @return true if the component described is an entity.

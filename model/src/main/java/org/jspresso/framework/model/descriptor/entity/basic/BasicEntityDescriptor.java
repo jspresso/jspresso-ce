@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
-
 /**
  * Default implementation of entity descriptors.
  * <p>
@@ -59,8 +58,8 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
    * Constructs a new <code>BasicEntityDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor which has to be the fully-qualified
-   *            class name of its contract.
+   *          the name of the descriptor which has to be the fully-qualified
+   *          class name of its contract.
    */
   public BasicEntityDescriptor(String name) {
     super(name);
@@ -121,13 +120,6 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
   /**
    * {@inheritDoc}
    */
-  public boolean isComputed() {
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public boolean isEntity() {
     return true;
   }
@@ -145,7 +137,7 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
    * Sets the purelyAbstract.
    * 
    * @param purelyAbstract
-   *            the purelyAbstract to set.
+   *          the purelyAbstract to set.
    */
   public void setPurelyAbstract(boolean purelyAbstract) {
     this.purelyAbstract = purelyAbstract;

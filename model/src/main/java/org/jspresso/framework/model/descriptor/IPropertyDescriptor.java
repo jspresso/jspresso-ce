@@ -156,4 +156,13 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    *          the property new value.
    */
   void preprocessSetter(Object component, Object newValue);
+
+  /**
+   * Gets wether this property is computed (derived). Most of the time a
+   * property is computed whenever it has a delegate to compute its value by
+   * opposition to properties handled by the ORM.
+   * 
+   * @return true if the property is computed.
+   */
+  boolean isComputed();
 }

@@ -24,7 +24,6 @@ import java.util.List;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 
-
 /**
  * Default implementation of an inlined component descriptor.
  * <p>
@@ -44,7 +43,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the concrete type of components.
+ *          the concrete type of components.
  */
 public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> {
 
@@ -61,8 +60,8 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
    * Constructs a new <code>BasicComponentDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor which has to be the fully-qualified
-   *            class name of its contract.
+   *          the name of the descriptor which has to be the fully-qualified
+   *          class name of its contract.
    */
   public BasicComponentDescriptor(String name) {
     super(name);
@@ -89,13 +88,6 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
       ancestorDescriptors.add(COMPONENT_DESCRIPTOR);
     }
     return ancestorDescriptors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isComputed() {
-    return false;
   }
 
   /**

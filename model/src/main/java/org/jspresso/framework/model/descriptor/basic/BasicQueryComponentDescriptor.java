@@ -148,13 +148,6 @@ public class BasicQueryComponentDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public boolean isComputed() {
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public boolean isEntity() {
     return false;
   }

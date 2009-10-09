@@ -76,6 +76,14 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private String                         unicityScope;
 
   private Collection<IGate>              writabilityGates;
+  private boolean                        computed;
+
+  /**
+   * Constructs a new <code>BasicPropertyDescriptor</code> instance.
+   */
+  public BasicPropertyDescriptor() {
+    computed = false;
+  }
 
   /**
    * {@inheritDoc}
@@ -528,5 +536,27 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
       List<String> integrityProcessorBeanNames) {
     this.integrityProcessorBeanNames = StringUtils
         .ensureSpaceFree(integrityProcessorBeanNames);
+  }
+
+  /**
+   * Returns true if a delegate class is registered to compute the property
+   * value. A property can be made <code>computed</code> even if its delegate
+   * class is null by calling <code>setComputed(true)</code>. This way, the
+   * property should be ignored by the ORM.
+   * <p>
+   * {@inheritDoc}
+   */
+  public boolean isComputed() {
+    return getDelegateClassName() != null || computed;
+  }
+
+  /**
+   * Sets the computed.
+   * 
+   * @param computed
+   *          the computed to set.
+   */
+  public void setComputed(boolean computed) {
+    this.computed = computed;
   }
 }

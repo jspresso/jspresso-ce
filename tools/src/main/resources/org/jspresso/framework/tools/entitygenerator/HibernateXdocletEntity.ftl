@@ -102,7 +102,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    *
-  <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
+  <#if !propertyDescriptor.computed>
    * @hibernate.property
     <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDatePropertyDescriptor")>
       <#if propertyDescriptor.type = "DATE">
@@ -254,7 +254,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    *
-   <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
+   <#if !propertyDescriptor.computed>
    * @hibernate.${hibernateCollectionType}
      <#if manyToMany && inverse>
    *           cascade = "none"
@@ -378,7 +378,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    *
-  <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
+  <#if !propertyDescriptor.computed>
     <#if isEntity>
       <#if reverseOneToOne>
    * @hibernate.one-to-one
