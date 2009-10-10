@@ -625,12 +625,6 @@
       </dependency>
       <dependency>
         <groupId>org.qooxdoo</groupId>
-        <artifactId>qooxdoo-sdk</artifactId>
-        <version>${qooxdoo.version}</version>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>org.qooxdoo</groupId>
         <artifactId>qooxdoo-java-rpc</artifactId>
         <version>0.5</version>
       </dependency>
@@ -893,6 +887,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.1.1</version>
         <configuration>
           <!--
             Speeds-up dependency report
