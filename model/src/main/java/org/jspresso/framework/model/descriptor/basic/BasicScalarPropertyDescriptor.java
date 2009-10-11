@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 
 /**
@@ -76,9 +79,28 @@ public abstract class BasicScalarPropertyDescriptor extends
    * Sets the defaultValue.
    * 
    * @param defaultValue
-   *            the defaultValue to set.
+   *          the defaultValue to set.
    */
   public void setDefaultValue(Object defaultValue) {
-    this.defaultValue = defaultValue;
+    if (defaultValue.getClass().isAssignableFrom(getModelType())) {
+      this.defaultValue = defaultValue;
+    } else if (defaultValue instanceof String) {
+      try {
+        this.defaultValue = getModelType().getConstructor(String.class)
+            .newInstance(defaultValue);
+      } catch (IllegalArgumentException ex) {
+        throw new DescriptorException(ex);
+      } catch (SecurityException ex) {
+        throw new DescriptorException(ex);
+      } catch (InstantiationException ex) {
+        throw new DescriptorException(ex);
+      } catch (IllegalAccessException ex) {
+        throw new DescriptorException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new DescriptorException(ex);
+      } catch (NoSuchMethodException ex) {
+        throw new DescriptorException(ex);
+      }
+    }
   }
 }
