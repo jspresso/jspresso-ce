@@ -11,8 +11,6 @@
 
   <bean id="hibernateSessionFactory" parent="abstractHibernateSessionFactory" />
 
-  <bean id="reportingJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" />
-
   <bean id="applicationMessageSource" parent="abstractApplicationMessageSource" />
 
   <bean id="changePasswordBackAction"

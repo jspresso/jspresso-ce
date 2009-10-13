@@ -24,10 +24,13 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.application.printing.model.descriptor.IReportDescriptor;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * Frontend action to generate a report selected among the model collection
- * connector holding a list of report descriptors.
+ * Frontend action to generate a report. The report is injected statically into
+ * the action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -42,7 +45,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1332 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -51,7 +54,9 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * @param <G>
  *          the actual action type used.
  */
-public class ReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
+public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
+
+  private IReportDescriptor reportDescriptor;
 
   /**
    * Gets the report to execute out of the model connector.
@@ -62,26 +67,51 @@ public class ReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
   protected IReport getReportToExecute(
       @SuppressWarnings("unused") IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector viewConnector = (ICollectionConnector) getViewConnector(context);
-    int[] selectedIndices = viewConnector.getSelectedIndices();
-    ICollectionConnector collectionConnector = (ICollectionConnector) viewConnector
-        .getModelConnector();
-    if (selectedIndices == null || selectedIndices.length == 0
-        || collectionConnector == null) {
-      return null;
-    }
-
-    Object reportDescriptorOrReport = collectionConnector.getChildConnector(
-        selectedIndices[0]).getConnectorValue();
-    IReport report = null;
-    if (reportDescriptorOrReport instanceof IReport) {
-      report = (IReport) reportDescriptorOrReport;
-    } else if (reportDescriptorOrReport instanceof IReportDescriptor) {
-      report = getReportFactory().createReportInstance(
-          (IReportDescriptor) reportDescriptorOrReport,
-          getTranslationProvider(context), getLocale(context));
-    }
+    IReport report = getReportFactory().createReportInstance(reportDescriptor,
+        getTranslationProvider(context), getLocale(context));
     return report;
   }
 
+  /**
+   * Sets the reportDescriptor.
+   * 
+   * @param reportDescriptor
+   *          the reportDescriptor to set.
+   */
+  public void setReportDescriptor(IReportDescriptor reportDescriptor) {
+    this.reportDescriptor = reportDescriptor;
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Map<String, Object> getInitialReportContext(
+      IActionHandler actionHandler, Map<String, Object> context) {
+    Map<String, Object> initialReportContext = super.getInitialReportContext(
+        actionHandler, context);
+    IValueConnector viewConnector = getViewConnector(context);
+    Object model = null;
+    if (viewConnector instanceof ICollectionConnectorProvider) {
+      int[] selectedIndices = ((ICollectionConnectorProvider) viewConnector)
+          .getCollectionConnector().getSelectedIndices();
+      ICollectionConnector collectionConnector = (ICollectionConnector) ((ICollectionConnectorProvider) viewConnector)
+          .getCollectionConnector().getModelConnector();
+      if (selectedIndices == null || selectedIndices.length == 0
+          || collectionConnector == null) {
+        return null;
+      }
+      model = collectionConnector.getChildConnector(selectedIndices[0])
+          .getConnectorValue();
+    } else {
+      model = viewConnector.getModelConnector().getConnectorValue();
+    }
+    if (model instanceof IEntity) {
+      initialReportContext.put(IReportDescriptor.ENTITY_ID, ((IEntity) model)
+          .getId());
+    }
+    return initialReportContext;
+  }
 }

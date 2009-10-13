@@ -41,7 +41,6 @@ import org.jspresso.framework.util.url.UrlHelper;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-
 /**
  * Generates a jasper report.
  * <p>
@@ -69,10 +68,10 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     try {
-      IReport reportDesign = (IReport) context
-          .get(ActionContextConstants.ACTION_PARAM);
+      IReport reportDesign = (IReport) context.get(IReport.REPORT_ACTION_PARAM);
       String urlSpec = reportDesign.getReportDescriptor().getReportDesignUrl();
       final JasperReport jasperReport;
       if (urlSpec.endsWith("xml")) {
@@ -120,7 +119,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
    * Sets the jdbcTemplate.
    * 
    * @param jdbcTemplate
-   *            the jdbcTemplate to set.
+   *          the jdbcTemplate to set.
    */
   public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;

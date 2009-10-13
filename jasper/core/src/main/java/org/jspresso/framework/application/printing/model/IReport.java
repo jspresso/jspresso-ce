@@ -22,7 +22,6 @@ import org.jspresso.framework.application.printing.model.descriptor.IReportDescr
 import org.jspresso.framework.util.context.IContextAware;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 
-
 /**
  * Defines the contract of a report instance.
  * <p>
@@ -43,6 +42,11 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
  * @author Vincent Vandenschrick
  */
 public interface IReport extends IContextAware, IDescriptor {
+
+  /**
+   * <code>REPORT_ACTION_PARAM</code>.
+   */
+  String REPORT_ACTION_PARAM = "REPORT_ACTION_PARAM";
 
   /**
    * Gets the descriptor of this report.

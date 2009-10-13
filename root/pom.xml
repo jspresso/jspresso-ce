@@ -18,6 +18,10 @@
     <jboss.version>4.2.2.GA</jboss.version>
     <qooxdoo.version>0.8.3</qooxdoo.version>
     <flex.version>3.2.0.3958</flex.version>
+    <jasper.version>3.5.3</jasper.version>
+    <jfree.version>1.0.13</jfree.version>
+    <commons-collections.version>3.2.1</commons-collections.version>
+    <wings.version>3.2.1</wings.version>
     <sjs.version>1.0-SNAPSHOT</sjs.version>
   </properties>
   <distributionManagement>
@@ -478,7 +482,7 @@
       <dependency>
         <groupId>commons-collections</groupId>
         <artifactId>commons-collections</artifactId>
-        <version>3.2.1</version>
+        <version>${commons-collections.version}</version>
       </dependency>
       <dependency>
         <groupId>freemarker</groupId>
@@ -543,7 +547,7 @@
       <dependency>
         <groupId>jasperreports</groupId>
         <artifactId>jasperreports</artifactId>
-        <version>1.3.2</version>
+        <version>${jasper.version}</version>
       </dependency>
       <dependency>
         <groupId>com.lowagie</groupId>
@@ -553,7 +557,7 @@
       <dependency>
         <groupId>jfree</groupId>
         <artifactId>jfreechart</artifactId>
-        <version>1.0.1</version>
+        <version>${jfree.version}</version>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
@@ -564,17 +568,17 @@
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wings</artifactId>
-        <version>3.2.1</version>
+        <version>${wings.version}</version>
       </dependency>
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wingx</artifactId>
-        <version>3.2.1</version>
+        <version>${wings.version}</version>
       </dependency>
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wings-experimental</artifactId>
-        <version>3.2.1</version>
+        <version>${wings.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jvnet.substance</groupId>
@@ -712,22 +716,22 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>jasperreports-maven-plugin</artifactId>
-          <version>1.0-beta-1</version>
+          <version>1.0-beta-2</version>
           <dependencies>
             <dependency>
               <groupId>jasperreports</groupId>
               <artifactId>jasperreports</artifactId>
-              <version>1.3.2</version>
+              <version>${jasper.version}</version>
             </dependency>
-             <dependency>
-               <groupId>jfree</groupId>
-               <artifactId>jfreechart</artifactId>
-               <version>1.0.1</version>
+            <dependency>
+              <groupId>jfree</groupId>
+              <artifactId>jfreechart</artifactId>
+              <version>${jfree.version}</version>
             </dependency>
             <dependency>
               <groupId>commons-collections</groupId>
               <artifactId>commons-collections</artifactId>
-              <version>3.2.1</version>
+              <version>${commons-collections.version}</version>
             </dependency>
             <dependency>
               <groupId>commons-digester</groupId>
@@ -738,6 +742,11 @@
               <groupId>com.lowagie</groupId>
               <artifactId>itext</artifactId>
               <version>2.1.5</version>
+            </dependency>
+            <dependency>
+              <groupId>log4j</groupId>
+              <artifactId>log4j</artifactId>
+              <version>1.2.14</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -796,7 +805,7 @@
             <dependency>
               <groupId>jfree</groupId>
               <artifactId>jfreechart</artifactId>
-              <version>1.0.1</version>
+              <version>${jfree.version}</version>
             </dependency>
           </dependencies> 
         </plugin>

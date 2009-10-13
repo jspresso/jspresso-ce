@@ -233,6 +233,10 @@
   <!--
     Backend action beans
   -->
+  <bean id="reportingJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+
   <bean id="doPrintBackendAction" class="org.jspresso.framework.application.printing.backend.action.GenerateJasperReportAction">
     <property name="jdbcTemplate" ref="reportingJdbcTemplate" />
   </bean>

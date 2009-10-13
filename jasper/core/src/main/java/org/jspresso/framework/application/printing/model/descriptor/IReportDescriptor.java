@@ -22,7 +22,6 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 
-
 /**
  * The descriptor of a report. It points to the report design resource as well a
  * the definition of the contextual report parameters.
@@ -44,6 +43,11 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * @author Vincent Vandenschrick
  */
 public interface IReportDescriptor extends IComponentDescriptor<IReport> {
+
+  /**
+   * <code>ENTITY_ID</code> is "entity_id".
+   */
+  String ENTITY_ID = "entity_id";
 
   /**
    * Gets the action, if any, launched before the report gets executed. This

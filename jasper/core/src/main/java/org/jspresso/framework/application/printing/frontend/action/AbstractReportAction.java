@@ -18,16 +18,16 @@
  */
 package org.jspresso.framework.application.printing.frontend.action;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
 import org.jspresso.framework.application.printing.model.IReport;
-import org.jspresso.framework.application.printing.model.descriptor.IReportDescriptor;
-import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.application.printing.model.IReportFactory;
 
 /**
- * Frontend action to generate a report selected among the model collection
- * connector holding a list of report descriptors.
+ * Abstract base class of report actions.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -42,7 +42,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1332 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -51,37 +51,68 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * @param <G>
  *          the actual action type used.
  */
-public class ReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
+public abstract class AbstractReportAction<E, F, G> extends
+    AbstractChainedAction<E, F, G> {
+
+  private IReportFactory reportFactory;
 
   /**
-   * Gets the report to execute out of the model connector.
-   * <p>
+   * Sets the reportFactory.
+   * 
+   * @param reportFactory
+   *          the reportFactory to set.
+   */
+  public void setReportFactory(IReportFactory reportFactory) {
+    this.reportFactory = reportFactory;
+  }
+
+  /**
+   * Gets the reportFactory.
+   * 
+   * @return the reportFactory.
+   */
+  protected IReportFactory getReportFactory() {
+    return reportFactory;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
-  protected IReport getReportToExecute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector viewConnector = (ICollectionConnector) getViewConnector(context);
-    int[] selectedIndices = viewConnector.getSelectedIndices();
-    ICollectionConnector collectionConnector = (ICollectionConnector) viewConnector
-        .getModelConnector();
-    if (selectedIndices == null || selectedIndices.length == 0
-        || collectionConnector == null) {
-      return null;
+    IReport report = getReportToExecute(actionHandler, context);
+    if (report == null) {
+      return false;
     }
-
-    Object reportDescriptorOrReport = collectionConnector.getChildConnector(
-        selectedIndices[0]).getConnectorValue();
-    IReport report = null;
-    if (reportDescriptorOrReport instanceof IReport) {
-      report = (IReport) reportDescriptorOrReport;
-    } else if (reportDescriptorOrReport instanceof IReportDescriptor) {
-      report = getReportFactory().createReportInstance(
-          (IReportDescriptor) reportDescriptorOrReport,
-          getTranslationProvider(context), getLocale(context));
-    }
-    return report;
+    report.getContext().putAll(getInitialReportContext(actionHandler, context));
+    context.put(IReport.REPORT_ACTION_PARAM, report);
+    return super.execute(actionHandler, context);
   }
 
+  /**
+   * Construct a contextual initial report context.
+   * 
+   * @param actionHandler
+   *          the action handler.
+   * @param context
+   *          the action context.
+   * @return the initial report context.
+   */
+  protected Map<String, Object> getInitialReportContext(
+      IActionHandler actionHandler, Map<String, Object> context) {
+    return new HashMap<String, Object>();
+  }
+
+  /**
+   * Returns the report to execute out of the action context.
+   * 
+   * @param actionHandler
+   *          the action handler.
+   * @param context
+   *          the action context.
+   * @return the report to execute.
+   */
+  protected abstract IReport getReportToExecute(IActionHandler actionHandler,
+      Map<String, Object> context);
 }

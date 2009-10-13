@@ -20,7 +20,6 @@ package org.jspresso.framework.application.printing.frontend.action;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -59,7 +58,7 @@ public class EditReportParametersAction<E, F, G> extends
    */
   @Override
   protected Object getModel(Map<String, Object> context) {
-    IReport report = (IReport) context.get(ActionContextConstants.ACTION_PARAM);
+    IReport report = (IReport) context.get(IReport.REPORT_ACTION_PARAM);
     if (report != null) {
       return report.getContext();
     }
@@ -71,7 +70,7 @@ public class EditReportParametersAction<E, F, G> extends
    */
   @Override
   protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {
-    IReport report = (IReport) context.get(ActionContextConstants.ACTION_PARAM);
+    IReport report = (IReport) context.get(IReport.REPORT_ACTION_PARAM);
     BasicComponentViewDescriptor reportContextViewDescriptor = new BasicComponentViewDescriptor();
     reportContextViewDescriptor
         .setModelDescriptor(report.getReportDescriptor());
