@@ -25,7 +25,6 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * Default implementation of a duration descriptor.
  * <p>
@@ -49,7 +48,7 @@ public class BasicDurationPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IDurationPropertyDescriptor {
 
   private Long maxMillis;
-  
+
   /**
    * {@inheritDoc}
    */
@@ -76,13 +75,6 @@ public class BasicDurationPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Long getMaxMillis() {
-    if (maxMillis != null) {
-      return maxMillis;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IDurationPropertyDescriptor) getParentDescriptor())
-          .getMaxMillis();
-    }
     return maxMillis;
   }
 
@@ -129,7 +121,7 @@ public class BasicDurationPropertyDescriptor extends
    * Sets the maxMillis property.
    * 
    * @param maxMillis
-   *            the maxMillis to set.
+   *          the maxMillis to set.
    */
   public void setMaxMillis(Long maxMillis) {
     this.maxMillis = maxMillis;

@@ -59,4 +59,14 @@ public class BasicBooleanPropertyDescriptor extends
   public Class<?> getModelType() {
     return Boolean.TYPE;
   }
+
+  /**
+   * Handles Boolean.TYPE cleanly.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object parseStringValue(String valueAsString) {
+    return Boolean.valueOf(valueAsString);
+  }
 }

@@ -60,13 +60,6 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * {@inheritDoc}
    */
   public IRelationshipEndPropertyDescriptor getReverseRelationEnd() {
-    if (reverseRelationEnd != null) {
-      return reverseRelationEnd;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IRelationshipEndPropertyDescriptor) getParentDescriptor())
-          .getReverseRelationEnd();
-    }
     return reverseRelationEnd;
   }
 
@@ -77,10 +70,6 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
     if (composition != null) {
       return composition.booleanValue();
     }
-    if (getParentDescriptor() != null) {
-      return ((IRelationshipEndPropertyDescriptor) getParentDescriptor())
-          .isComposition();
-    }
     return getDefaultComposition();
   }
 
@@ -88,7 +77,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * Sets the composition.
    * 
    * @param composition
-   *            the composition to set.
+   *          the composition to set.
    */
   public void setComposition(boolean composition) {
     this.composition = new Boolean(composition);
@@ -98,7 +87,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * Sets the reverseRelationEnd property.
    * 
    * @param reverseRelationEnd
-   *            the reverseRelationEnd to set.
+   *          the reverseRelationEnd to set.
    */
   public void setReverseRelationEnd(
       IRelationshipEndPropertyDescriptor reverseRelationEnd) {

@@ -478,11 +478,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#if componentDescriptor.declaredPropertyDescriptors?exists>
   <#assign empty=true/>
   <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-    <#if !(instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor")
-           && propertyDescriptor.overload)>
-      <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-      <#assign empty=false/>
-    </#if>
+    <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+    <#assign empty=false/>
   </#list>
   <#if empty>
   // THIS IS JUST A MARKER INTERFACE.

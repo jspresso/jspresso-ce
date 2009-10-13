@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 
-
 /**
  * Default implementation of a text descriptor.
  * <p>
@@ -63,12 +62,6 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    * {@inheritDoc}
    */
   public Map<String, List<String>> getFileFilter() {
-    if (fileFilter != null) {
-      return fileFilter;
-    }
-    if (getParentDescriptor() != null) {
-      return ((ITextPropertyDescriptor) getParentDescriptor()).getFileFilter();
-    }
     return fileFilter;
   }
 
@@ -76,7 +69,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    * Sets the fileFilter.
    * 
    * @param fileFilter
-   *            the fileFilter to set.
+   *          the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;

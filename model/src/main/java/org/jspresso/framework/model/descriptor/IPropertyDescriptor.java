@@ -122,13 +122,6 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
   boolean isModifiable();
 
   /**
-   * Gets wether this descriptor is an overload of a parent one.
-   * 
-   * @return true if this descriptor is an overload of a parent one.
-   */
-  boolean isOverload();
-
-  /**
    * Gets wether this kind of property descriptor is queryable.
    * 
    * @return true if this kind of property descriptor is queryable.

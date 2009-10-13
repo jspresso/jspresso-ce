@@ -70,7 +70,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   private List<IPropertyProcessor<?, ?>> integrityProcessors;
   private Boolean                        mandatory;
-  private IPropertyDescriptor            parentDescriptor;
   private Collection<IGate>              readabilityGates;
   private Boolean                        readOnly;
   private String                         unicityScope;
@@ -140,12 +139,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    *         property.
    */
   public String getDelegateClassName() {
-    if (delegateClassName != null) {
-      return delegateClassName;
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().getDelegateClassName();
-    }
     return delegateClassName;
   }
 
@@ -154,12 +147,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   @Override
   public String getDescription() {
-    if (super.getDescription() != null) {
-      return super.getDescription();
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().getDescription();
-    }
     return super.getDescription();
   }
 
@@ -177,27 +164,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public List<IPropertyProcessor<?, ?>> getIntegrityProcessors() {
     registerIntegrityProcessorsIfNecessary();
-    if (integrityProcessors != null) {
-      return integrityProcessors;
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().getIntegrityProcessors();
-    }
     return integrityProcessors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getName() {
-    if (super.getName() != null) {
-      return super.getName();
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().getName();
-    }
-    return super.getName();
   }
 
   /**
@@ -206,12 +173,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * @return the readabilityGates.
    */
   public Collection<IGate> getReadabilityGates() {
-    if (readabilityGates != null) {
-      return readabilityGates;
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().getReadabilityGates();
-    }
     return readabilityGates;
   }
 
@@ -219,12 +180,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   public String getUnicityScope() {
-    if (unicityScope != null) {
-      return unicityScope;
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().getUnicityScope();
-    }
     return unicityScope;
   }
 
@@ -234,12 +189,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * @return the writabilityGates.
    */
   public Collection<IGate> getWritabilityGates() {
-    if (writabilityGates != null) {
-      return writabilityGates;
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().getWritabilityGates();
-    }
     return writabilityGates;
   }
 
@@ -275,9 +224,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     if (mandatory != null) {
       return mandatory.booleanValue();
     }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().isMandatory();
-    }
     return false;
   }
 
@@ -297,13 +243,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
-  public boolean isOverload() {
-    return parentDescriptor != null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public boolean isQueryable() {
     return false;
   }
@@ -314,9 +253,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   public boolean isReadOnly() {
     if (readOnly != null) {
       return readOnly.booleanValue();
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().isReadOnly();
     }
     return false;
   }
@@ -423,16 +359,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
-   * Sets the parentDescriptor.
-   * 
-   * @param parentDescriptor
-   *          the parentDescriptor to set.
-   */
-  public void setParentDescriptor(IPropertyDescriptor parentDescriptor) {
-    this.parentDescriptor = parentDescriptor;
-  }
-
-  /**
    * Sets the readabilityGates.
    * 
    * @param readabilityGates
@@ -470,15 +396,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public void setWritabilityGates(Collection<IGate> writabilityGates) {
     this.writabilityGates = writabilityGates;
-  }
-
-  /**
-   * Gets the parentDescriptor.
-   * 
-   * @return the parentDescriptor.
-   */
-  protected IPropertyDescriptor getParentDescriptor() {
-    return parentDescriptor;
   }
 
   private synchronized void registerIntegrityProcessorsIfNecessary() {

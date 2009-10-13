@@ -24,7 +24,6 @@ import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
-
 /**
  * Default implementation of a date descriptor.
  * <p>
@@ -86,20 +85,14 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    * {@inheritDoc}
    */
   public EDateType getType() {
-    if (type != null) {
-      return type;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IDatePropertyDescriptor) getParentDescriptor()).getType();
-    }
     return type;
   }
-  
+
   /**
    * Sets the type.
    * 
    * @param type
-   *            the type to set.
+   *          the type to set.
    */
   public void setType(EDateType type) {
     this.type = type;

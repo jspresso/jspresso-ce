@@ -75,13 +75,6 @@ public class BasicReferencePropertyDescriptor<E> extends
    * {@inheritDoc}
    */
   public Map<String, Object> getInitializationMapping() {
-    if (initializationMapping != null) {
-      return initializationMapping;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IReferencePropertyDescriptor<?>) getParentDescriptor())
-          .getInitializationMapping();
-    }
     return initializationMapping;
   }
 
@@ -95,15 +88,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   public IComponentDescriptor<E> getReferencedDescriptor() {
-    if (referencedDescriptor != null) {
-      return referencedDescriptor;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IReferencePropertyDescriptor<E>) getParentDescriptor())
-          .getReferencedDescriptor();
-    }
     return referencedDescriptor;
   }
 

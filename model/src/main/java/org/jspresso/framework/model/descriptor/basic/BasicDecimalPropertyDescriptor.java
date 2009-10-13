@@ -62,13 +62,6 @@ public class BasicDecimalPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Integer getMaxFractionDigit() {
-    if (maxFractionDigit != null) {
-      return maxFractionDigit;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IDecimalPropertyDescriptor) getParentDescriptor())
-          .getMaxFractionDigit();
-    }
     return maxFractionDigit;
   }
 
@@ -90,10 +83,6 @@ public class BasicDecimalPropertyDescriptor extends
   public boolean isUsingBigDecimal() {
     if (usingBigDecimal != null) {
       return usingBigDecimal.booleanValue();
-    }
-    if (getParentDescriptor() != null) {
-      return ((IDecimalPropertyDescriptor) getParentDescriptor())
-          .isUsingBigDecimal();
     }
     return false;
   }

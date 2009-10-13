@@ -60,13 +60,6 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * {@inheritDoc}
    */
   public String getEnumerationName() {
-    if (enumerationName != null) {
-      return enumerationName;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IEnumerationPropertyDescriptor) getParentDescriptor())
-          .getEnumerationName();
-    }
     return enumerationName;
   }
 
@@ -76,13 +69,6 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * @return the maxLength.
    */
   public Integer getMaxLength() {
-    if (maxLength != null) {
-      return maxLength;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IEnumerationPropertyDescriptor) getParentDescriptor())
-          .getMaxLength();
-    }
     return maxLength;
   }
 
@@ -97,7 +83,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * Sets the enumerationName.
    * 
    * @param enumerationName
-   *            the enumerationName to set.
+   *          the enumerationName to set.
    */
   public void setEnumerationName(String enumerationName) {
     this.enumerationName = enumerationName;
@@ -107,7 +93,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * Sets the maxLength.
    * 
    * @param maxLength
-   *            the maxLength to set.
+   *          the maxLength to set.
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;

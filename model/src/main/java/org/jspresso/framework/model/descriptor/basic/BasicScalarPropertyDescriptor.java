@@ -86,8 +86,7 @@ public abstract class BasicScalarPropertyDescriptor extends
       this.defaultValue = defaultValue;
     } else if (defaultValue instanceof String) {
       try {
-        this.defaultValue = getModelType().getConstructor(String.class)
-            .newInstance(defaultValue);
+        this.defaultValue = parseStringValue((String) defaultValue);
       } catch (IllegalArgumentException ex) {
         throw new DescriptorException(ex);
       } catch (SecurityException ex) {
@@ -102,5 +101,28 @@ public abstract class BasicScalarPropertyDescriptor extends
         throw new DescriptorException(ex);
       }
     }
+  }
+
+  /**
+   * Parses a value given as String. Calls the modet type constructor using the
+   * String parameter.
+   * 
+   * @param valueAsString
+   *          the value to set as String.
+   * @return the parsed value.
+   * @throws InstantiationException
+   *           whenever an exception occurs.
+   * @throws IllegalAccessException
+   *           whenever an exception occurs.
+   * @throws InvocationTargetException
+   *           whenever an exception occurs.
+   * @throws NoSuchMethodException
+   *           whenever an exception occurs.
+   */
+  protected Object parseStringValue(String valueAsString)
+      throws InstantiationException, IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
+    return getModelType().getConstructor(String.class).newInstance(
+        valueAsString);
   }
 }

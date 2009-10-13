@@ -25,7 +25,6 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * Default implementation of a string descriptor.
  * <p>
@@ -71,7 +70,7 @@ public class BasicStringPropertyDescriptor extends
   public BasicStringPropertyDescriptor createQueryDescriptor() {
     BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super
         .createQueryDescriptor();
-    //queryDescriptor.setMaxLength(null);
+    // queryDescriptor.setMaxLength(null);
     queryDescriptor.setRegexpPattern(null);
     return queryDescriptor;
   }
@@ -80,12 +79,6 @@ public class BasicStringPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Integer getMaxLength() {
-    if (maxLength != null) {
-      return maxLength;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IStringPropertyDescriptor) getParentDescriptor()).getMaxLength();
-    }
     return maxLength;
   }
 
@@ -102,13 +95,6 @@ public class BasicStringPropertyDescriptor extends
    * @return the regexpPattern.
    */
   public String getRegexpPattern() {
-    if (regexpPattern != null) {
-      return regexpPattern;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IStringPropertyDescriptor) getParentDescriptor())
-          .getRegexpPattern();
-    }
     return regexpPattern;
   }
 
@@ -118,13 +104,6 @@ public class BasicStringPropertyDescriptor extends
    * @return the regexpPatternSample.
    */
   public String getRegexpPatternSample() {
-    if (regexpPatternSample != null) {
-      return regexpPatternSample;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IStringPropertyDescriptor) getParentDescriptor())
-          .getRegexpPatternSample();
-    }
     return regexpPatternSample;
   }
 
@@ -146,9 +125,6 @@ public class BasicStringPropertyDescriptor extends
   public boolean isUpperCase() {
     if (upperCase != null) {
       return upperCase.booleanValue();
-    }
-    if (getParentDescriptor() != null) {
-      return ((IStringPropertyDescriptor) getParentDescriptor()).isUpperCase();
     }
     return false;
   }
@@ -210,7 +186,7 @@ public class BasicStringPropertyDescriptor extends
    * Sets the maxLength property.
    * 
    * @param maxLength
-   *            the maxLength to set.
+   *          the maxLength to set.
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
@@ -220,7 +196,7 @@ public class BasicStringPropertyDescriptor extends
    * Sets the regexpPattern.
    * 
    * @param regexpPattern
-   *            the regexpPattern to set.
+   *          the regexpPattern to set.
    */
   public void setRegexpPattern(String regexpPattern) {
     this.regexpPattern = regexpPattern;
@@ -230,7 +206,7 @@ public class BasicStringPropertyDescriptor extends
    * Sets the regexpPatternSample.
    * 
    * @param regexpPatternSample
-   *            the regexpPatternSample to set.
+   *          the regexpPatternSample to set.
    */
   public void setRegexpPatternSample(String regexpPatternSample) {
     this.regexpPatternSample = regexpPatternSample;
@@ -240,7 +216,7 @@ public class BasicStringPropertyDescriptor extends
    * Sets the upperCase.
    * 
    * @param upperCase
-   *            the upperCase to set.
+   *          the upperCase to set.
    */
   public void setUpperCase(boolean upperCase) {
     this.upperCase = new Boolean(upperCase);
@@ -251,7 +227,7 @@ public class BasicStringPropertyDescriptor extends
    * value.
    * 
    * @param value
-   *            the raw property value.
+   *          the raw property value.
    * @return the resulting string.
    */
   protected String getValueAsString(Object value) {

@@ -93,10 +93,6 @@ public class BasicCollectionPropertyDescriptor<E> extends
     if (orderingProperties != null) {
       return orderingProperties;
     }
-    if (getParentDescriptor() != null) {
-      return ((ICollectionPropertyDescriptor<?>) getParentDescriptor())
-          .getOrderingProperties();
-    }
     if (getReferencedDescriptor() != null) {
       return getReferencedDescriptor().getOrderingProperties();
     }
@@ -108,15 +104,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * 
    * @return the referencedDescriptor.
    */
-  @SuppressWarnings("unchecked")
   public ICollectionDescriptor<E> getReferencedDescriptor() {
-    if (referencedDescriptor != null) {
-      return referencedDescriptor;
-    }
-    if (getParentDescriptor() != null) {
-      return ((ICollectionPropertyDescriptor<E>) getParentDescriptor())
-          .getReferencedDescriptor();
-    }
     return referencedDescriptor;
   }
 
@@ -132,10 +120,6 @@ public class BasicCollectionPropertyDescriptor<E> extends
     }
     if (manyToMany != null) {
       return manyToMany.booleanValue();
-    }
-    if (getParentDescriptor() != null) {
-      return ((ICollectionPropertyDescriptor<?>) getParentDescriptor())
-          .isManyToMany();
     }
     return false;
   }

@@ -88,8 +88,7 @@ public class RangeEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public String getIconImageURL(@SuppressWarnings("unused")
-  String value) {
+  public String getIconImageURL(@SuppressWarnings("unused") String value) {
     return null;
   }
 
@@ -99,13 +98,6 @@ public class RangeEnumerationPropertyDescriptor extends
    * @return the maxValue.
    */
   public Integer getMaxValue() {
-    if (maxValue != null) {
-      return maxValue;
-    }
-    if (getParentDescriptor() != null) {
-      return ((RangeEnumerationPropertyDescriptor) getParentDescriptor())
-          .getMaxValue();
-    }
     return maxValue;
   }
 
@@ -115,13 +107,6 @@ public class RangeEnumerationPropertyDescriptor extends
    * @return the minValue.
    */
   public Integer getMinValue() {
-    if (minValue != null) {
-      return minValue;
-    }
-    if (getParentDescriptor() != null) {
-      return ((RangeEnumerationPropertyDescriptor) getParentDescriptor())
-          .getMinValue();
-    }
     return minValue;
   }
 
@@ -131,13 +116,6 @@ public class RangeEnumerationPropertyDescriptor extends
    * @return the rangeStep.
    */
   public Integer getRangeStep() {
-    if (rangeStep != null) {
-      return rangeStep;
-    }
-    if (getParentDescriptor() != null) {
-      return ((RangeEnumerationPropertyDescriptor) getParentDescriptor())
-          .getRangeStep();
-    }
     return rangeStep;
   }
 
@@ -152,7 +130,7 @@ public class RangeEnumerationPropertyDescriptor extends
    * Sets the maxValue.
    * 
    * @param maxValue
-   *            the maxValue to set.
+   *          the maxValue to set.
    */
   public void setMaxValue(Integer maxValue) {
     this.maxValue = maxValue;
@@ -162,7 +140,7 @@ public class RangeEnumerationPropertyDescriptor extends
    * Sets the minValue.
    * 
    * @param minValue
-   *            the minValue to set.
+   *          the minValue to set.
    */
   public void setMinValue(Integer minValue) {
     this.minValue = minValue;
@@ -172,7 +150,7 @@ public class RangeEnumerationPropertyDescriptor extends
    * Sets the rangeStep.
    * 
    * @param rangeStep
-   *            the rangeStep to set.
+   *          the rangeStep to set.
    */
   public void setRangeStep(Integer rangeStep) {
     this.rangeStep = rangeStep;

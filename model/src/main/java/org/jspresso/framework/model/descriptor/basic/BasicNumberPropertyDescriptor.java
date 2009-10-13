@@ -78,12 +78,6 @@ public abstract class BasicNumberPropertyDescriptor extends
    * {@inheritDoc}
    */
   public BigDecimal getMaxValue() {
-    if (maxValue != null) {
-      return maxValue;
-    }
-    if (getParentDescriptor() != null) {
-      return ((INumberPropertyDescriptor) getParentDescriptor()).getMaxValue();
-    }
     return maxValue;
   }
 
@@ -91,12 +85,6 @@ public abstract class BasicNumberPropertyDescriptor extends
    * {@inheritDoc}
    */
   public BigDecimal getMinValue() {
-    if (minValue != null) {
-      return minValue;
-    }
-    if (getParentDescriptor() != null) {
-      return ((INumberPropertyDescriptor) getParentDescriptor()).getMinValue();
-    }
     return minValue;
   }
 
