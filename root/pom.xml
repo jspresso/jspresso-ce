@@ -71,17 +71,6 @@
       </snapshots>
     </repository>
     <repository>
-      <id>codehaus-legacy-repository</id>
-      <url>http://dist.codehaus.org</url>
-      <layout>legacy</layout>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-    <repository>
       <id>jspresso-repository</id>
       <url>http://repository.jspresso.org/maven2</url>
       <releases>
@@ -697,16 +686,16 @@
           <version>2.0.6</version>
           <dependencies>
             <dependency>
-              <groupId>xdoclet-plugins</groupId>
+              <groupId>org.codehaus.xdoclet</groupId>
               <artifactId>xdoclet-plugin-hibernate</artifactId>
-              <version>1.0.4</version>
+              <version>1.0.5</version>
             </dependency>
           </dependencies>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>1.1</version>
+          <version>1.4</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>

@@ -143,22 +143,34 @@
             <goals>
               <goal>execute</goal>
             </goals>
+            <configuration>
+              <source>${basedir}/src/main/dsl/model.groovy</source>
+              <properties>
+                <outputDir>${project.build.directory}/generated-resources/dsl</outputDir>
+                <outputFileName>dsl-model.xml</outputFileName>
+              </properties>
+              <classpath>
+                <element>
+                  <groupId>org.jspresso.contrib</groupId>
+                  <artifactId>jspresso-sjs</artifactId>
+                  <version>${sjs.version}</version>
+                </element>
+              </classpath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>compile-groovy-classes</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>generateStubs</goal>
+              <goal>compile</goal>
+              <!--
+              <goal>generateTestStubs</goal>
+              <goal>testCompile</goal>
+              -->
+            </goals>
           </execution>
         </executions>
-        <configuration>
-          <source>${basedir}/src/main/dsl/model.groovy</source>
-          <properties>
-            <outputDir>${project.build.directory}/generated-resources/dsl</outputDir>
-            <outputFileName>dsl-model.xml</outputFileName>
-          </properties>
-          <classpath>
-            <element>
-              <groupId>org.jspresso.contrib</groupId>
-              <artifactId>jspresso-sjs</artifactId>
-              <version>${sjs.version}</version>
-            </element>
-          </classpath>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.xdoclet</groupId>

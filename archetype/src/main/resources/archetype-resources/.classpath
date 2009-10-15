@@ -10,6 +10,10 @@
   <classpathentry
     kind="src"
     output="core/target/classes"
+    path="core/src/main/groovy" />
+  <classpathentry
+    kind="src"
+    output="core/target/classes"
     path="core/src/main/resources" />
   <classpathentry
     kind="src"
