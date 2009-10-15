@@ -586,9 +586,13 @@ public abstract class AbstractComponentDescriptor<E> extends
       for (Entry<String, String> nextPair : serviceDelegateClassNames
           .entrySet()) {
         try {
-          registerService(Class.forName(nextPair.getKey()),
-              (IComponentService) Class.forName(nextPair.getValue())
-                  .newInstance());
+          IComponentService delegate = null;
+          if (!("".equals(nextPair.getValue()) || "null"
+              .equalsIgnoreCase(nextPair.getValue()))) {
+            delegate = (IComponentService) Class.forName(nextPair.getValue())
+                .newInstance();
+          }
+          registerService(Class.forName(nextPair.getKey()), delegate);
         } catch (ClassNotFoundException ex) {
           throw new DescriptorException(ex);
         } catch (InstantiationException ex) {
