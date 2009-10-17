@@ -18,10 +18,8 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-import org.jspresso.framework.gui.remote.RComponent;
-
 /**
- * A command to trigger a modal remote dialog pop-up.
+ * A command to trigger a modal remote dialog pop-up to display a flash movie.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -36,32 +34,71 @@ import org.jspresso.framework.gui.remote.RComponent;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1873 $
  * @author Vincent Vandenschrick
  */
-public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
+public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
-  private static final long serialVersionUID = 7993231946633084545L;
+  private static final long serialVersionUID = -5032857814132356840L;
 
-  private RComponent        view;
+  private String            swfUrl;
+  private String[]          paramNames;
+  private String[]          paramValues;
 
   /**
-   * Gets the view.
+   * Gets the swfUrl.
    * 
-   * @return the view.
+   * @return the swfUrl.
    */
-  public RComponent getView() {
-    return view;
+  public String getSwfUrl() {
+    return swfUrl;
   }
 
   /**
-   * Sets the view.
+   * Sets the swfUrl.
    * 
-   * @param view
-   *          the view to set.
+   * @param swfUrl
+   *          the swfUrl to set.
    */
-  public void setView(RComponent view) {
-    this.view = view;
+  public void setSwfUrl(String swfUrl) {
+    this.swfUrl = swfUrl;
   }
 
+  /**
+   * Gets the paramNames.
+   * 
+   * @return the paramNames.
+   */
+  public String[] getParamNames() {
+    return paramNames;
+  }
+
+  /**
+   * Sets the paramNames.
+   * 
+   * @param paramNames
+   *          the paramNames to set.
+   */
+  public void setParamNames(String[] paramNames) {
+    this.paramNames = paramNames;
+  }
+
+  /**
+   * Gets the paramValues.
+   * 
+   * @return the paramValues.
+   */
+  public String[] getParamValues() {
+    return paramValues;
+  }
+
+  /**
+   * Sets the paramValues.
+   * 
+   * @param paramValues
+   *          the paramValues to set.
+   */
+  public void setParamValues(String[] paramValues) {
+    this.paramValues = paramValues;
+  }
 }

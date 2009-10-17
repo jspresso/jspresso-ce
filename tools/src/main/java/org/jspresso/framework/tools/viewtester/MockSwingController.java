@@ -77,12 +77,10 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayModalDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, dimension, reuseCurrent);
+    super.displayModalDialog(context, reuseCurrent);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     if (window instanceof JDialog) {
@@ -218,5 +216,16 @@ public class MockSwingController extends
   protected Workspace getWorkspace(
       @SuppressWarnings("unused") String workspaceName) {
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext, List<Action> actions, String title,
+      JComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
+    // TODO Auto-generated method stub
+
   }
 }

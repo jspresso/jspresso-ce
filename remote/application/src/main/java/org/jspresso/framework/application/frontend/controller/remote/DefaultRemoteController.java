@@ -34,6 +34,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteChildren
 import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
@@ -128,17 +129,16 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
-      String title, RComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, dimension, reuseCurrent);
+      String title, @SuppressWarnings("unused") RComponent sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
+    super.displayModalDialog(context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
     dialogCommand.setView(mainView);
     dialogCommand.setActions(actions.toArray(new RAction[0]));
     dialogCommand.setUseCurrent(reuseCurrent);
+    dialogCommand.setDimension(dimension);
     registerCommand(dialogCommand);
   }
 
@@ -550,4 +550,28 @@ public class DefaultRemoteController extends
     return actionLists.toArray(new RActionList[0]);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext, List<RAction> actions, String title,
+      @SuppressWarnings("unused") RComponent sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
+    super.displayModalDialog(context, reuseCurrent);
+    RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
+    flashCommand.setSwfUrl(swfUrl);
+    flashCommand.setTitle(title);
+    flashCommand.setActions(actions.toArray(new RAction[0]));
+    flashCommand.setUseCurrent(reuseCurrent);
+    List<String> paramNames = new ArrayList<String>();
+    List<String> paramValues = new ArrayList<String>();
+    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
+      paramNames.add(flashVar.getKey());
+      paramValues.add(flashVar.getValue());
+    }
+    flashCommand.setParamNames(paramNames.toArray(new String[0]));
+    flashCommand.setParamValues(paramValues.toArray(new String[0]));
+    flashCommand.setDimension(dimension);
+    registerCommand(flashCommand);
+  }
 }

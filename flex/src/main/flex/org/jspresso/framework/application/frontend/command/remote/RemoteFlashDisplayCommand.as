@@ -15,22 +15,33 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
-    import org.jspresso.framework.gui.remote.RComponent;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand")]
-    public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
+    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand")]
+    public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
-        private var _view:RComponent;
+        private var _swfUrl:String;
+        private var _paramNames:Array;
+        private var _paramValues:Array;
 
-        public function RemoteDialogCommand() {
-          //default constructor.
+        public function set swfUrl(value:String):void {
+            _swfUrl = value;
+        }
+        public function get swfUrl():String {
+            return _swfUrl;
         }
 
-        public function set view(value:RComponent):void {
-            _view = value;
+        public function set paramNames(value:Array):void {
+            _paramNames = value;
         }
-        public function get view():RComponent {
-            return _view;
+        public function get paramNames():Array {
+            return _actions;
         }
+
+        public function set paramValues(value:Array):void {
+            _paramValues = value;
+        }
+        public function get paramValues():Array {
+            return _actions;
+        }
+
     }
 }

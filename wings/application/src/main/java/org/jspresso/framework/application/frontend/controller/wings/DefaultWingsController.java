@@ -109,12 +109,10 @@ public class DefaultWingsController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayModalDialog(SComponent mainView, List<Action> actions,
       String title, SComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, dimension, reuseCurrent);
+    super.displayModalDialog(context, reuseCurrent);
     final SDialog dialog;
     SContainer actionWindow = WingsUtil.getVisibleWindow(sourceComponent);
     if (reuseCurrent && actionWindow instanceof SDialog) {
@@ -490,5 +488,16 @@ public class DefaultWingsController extends
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
           getLocale()));
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext, List<Action> actions, String title,
+      SComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
+    // TODO Auto-generated method stub
+
   }
 }

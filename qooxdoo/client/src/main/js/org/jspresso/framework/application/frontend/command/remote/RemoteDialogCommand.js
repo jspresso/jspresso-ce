@@ -12,9 +12,9 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand",
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand",
 {
-  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+  extend : org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand,
   
   construct : function() {
     this.base(arguments);
@@ -22,18 +22,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
 
   properties :
   {
-    actions :
-    {
-      check : "Array"
-    },
-    title :
-    {
-      check : "String"
-    },
-    useCurrent :
-    {
-      check : "Boolean"
-    },
     view :
     {
       check : "org.jspresso.framework.gui.remote.RComponent"

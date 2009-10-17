@@ -18,10 +18,11 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.util.gui.Dimension;
 
 /**
- * A command to trigger a modal remote dialog pop-up.
+ * Base class to dialog pop-up based commands.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -36,32 +37,91 @@ import org.jspresso.framework.gui.remote.RComponent;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1873 $
  * @author Vincent Vandenschrick
  */
-public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
+public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
-  private static final long serialVersionUID = 7993231946633084545L;
+  private static final long serialVersionUID = -5918787333137992725L;
 
-  private RComponent        view;
+  private RAction[]         actions;
+  private String            title;
+  private boolean           useCurrent;
+  private Dimension         dimension;
 
   /**
-   * Gets the view.
+   * Gets the actions.
    * 
-   * @return the view.
+   * @return the actions.
    */
-  public RComponent getView() {
-    return view;
+  public RAction[] getActions() {
+    return actions;
   }
 
   /**
-   * Sets the view.
+   * Gets the title.
    * 
-   * @param view
-   *          the view to set.
+   * @return the title.
    */
-  public void setView(RComponent view) {
-    this.view = view;
+  public String getTitle() {
+    return title;
   }
 
+  /**
+   * Gets the useCurrent.
+   * 
+   * @return the useCurrent.
+   */
+  public boolean isUseCurrent() {
+    return useCurrent;
+  }
+
+  /**
+   * Sets the actions.
+   * 
+   * @param actions
+   *          the actions to set.
+   */
+  public void setActions(RAction[] actions) {
+    this.actions = actions;
+  }
+
+  /**
+   * Sets the title.
+   * 
+   * @param title
+   *          the title to set.
+   */
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  /**
+   * Sets the useCurrent.
+   * 
+   * @param useCurrent
+   *          the useCurrent to set.
+   */
+  public void setUseCurrent(boolean useCurrent) {
+    this.useCurrent = useCurrent;
+  }
+
+  /**
+   * Gets the dimension.
+   * 
+   * @return the dimension.
+   */
+  public Dimension getDimension() {
+    return dimension;
+  }
+
+  /**
+   * Sets the dimension.
+   * 
+   * @param dimension
+   *          the dimension to set.
+   */
+  public void setDimension(Dimension dimension) {
+    this.dimension = dimension;
+  }
 }

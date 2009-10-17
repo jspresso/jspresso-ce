@@ -151,4 +151,29 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale clientLocale);
+
+  /**
+   * Displays a flash object on the client in a modal dialog.
+   * 
+   * @param swfUrl
+   *          the URL of the swf to load.
+   * @param flashContext
+   *          the flash context from which the flashVars is computed.
+   * @param actions
+   *          the actions available in the dialog.
+   * @param title
+   *          the dialog title.
+   * @param sourceComponent
+   *          the source component.
+   * @param context
+   *          the context to store on the context stack.
+   * @param dimension
+   *          the dimension to set the dialog to. If null, the dialog will be
+   *          sized to the preferred size of the contained view.
+   * @param reuseCurrent
+   *          set to true to reuse an existing modal dialog.
+   */
+  void displayFlashObject(String swfUrl, Map<String, String> flashContext,
+      List<G> actions, String title, E sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent);
 }

@@ -12,25 +12,31 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand",
+{
+  extend : org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
+  
+  construct : function() {
+    this.base(arguments);
+  },
 
-package org.jspresso.framework.application.frontend.command.remote {
-
-    import org.jspresso.framework.gui.remote.RComponent;
-		
-    [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand")]
-    public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
-
-        private var _view:RComponent;
-
-        public function RemoteDialogCommand() {
-          //default constructor.
-        }
-
-        public function set view(value:RComponent):void {
-            _view = value;
-        }
-        public function get view():RComponent {
-            return _view;
-        }
+  properties :
+  {
+    actions :
+    {
+      check : "Array"
+    },
+    title :
+    {
+      check : "String"
+    },
+    useCurrent :
+    {
+      check : "Boolean"
+    },
+    dimension :
+    {
+      check : "org.jspresso.framework.util.gui.Dimension"
     }
-}
+  }
+});

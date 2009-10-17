@@ -104,12 +104,10 @@ public class DefaultUlcController extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public void displayModalDialog(ULCComponent mainView, List<IAction> actions,
       String title, ULCComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
-    super.displayModalDialog(mainView, actions, title, sourceComponent,
-        context, dimension, reuseCurrent);
+    super.displayModalDialog(context, reuseCurrent);
     final ULCDialog dialog;
     ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
     if (reuseCurrent && window instanceof ULCDialog) {
@@ -581,6 +579,17 @@ public class DefaultUlcController extends
         @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
       displayWorkspace(workspaceName);
     }
+
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext, List<IAction> actions, String title,
+      ULCComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
+    // TODO Auto-generated method stub
 
   }
 }

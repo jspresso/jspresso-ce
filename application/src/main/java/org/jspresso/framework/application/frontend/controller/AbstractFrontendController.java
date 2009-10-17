@@ -53,7 +53,6 @@ import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
-import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
@@ -138,14 +137,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * {@inheritDoc}
+   * Must be called when a modal dialog is displayed.
+   * 
+   * @param context
+   *          the context to store on the context stack.
+   * @param reuseCurrent
+   *          set to true to reuse an existing modal dialog.
    */
-  public void displayModalDialog(@SuppressWarnings("unused") E mainView,
-      @SuppressWarnings("unused") java.util.List<G> actions,
-      @SuppressWarnings("unused") String title,
-      @SuppressWarnings("unused") E sourceComponent,
-      Map<String, Object> context,
-      @SuppressWarnings("unused") Dimension dimension, boolean reuseCurrent) {
+  protected void displayModalDialog(Map<String, Object> context,
+      boolean reuseCurrent) {
     if (!reuseCurrent || dialogContextStack.size() == 0) {
       dialogContextStack.add(0, context);
     }
