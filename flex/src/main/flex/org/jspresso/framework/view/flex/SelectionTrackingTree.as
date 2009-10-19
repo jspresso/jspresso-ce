@@ -34,22 +34,23 @@ package org.jspresso.framework.view.flex {
           if(collEvent.items) {
             if(collEvent.items.length > 0 && collEvent.items[0] is PropertyChangeEvent) {
               var pcEvent:PropertyChangeEvent = collEvent.items[0] as PropertyChangeEvent;
-              if(pcEvent.kind == PropertyChangeEventKind.UPDATE
-                 && pcEvent.property == "selectedIndices"
-                 && pcEvent.source is RemoteCompositeValueState) {
-                var changedState:RemoteCompositeValueState = pcEvent.source as RemoteCompositeValueState;
-                var newlySelectedItems:Array = new Array();
-                if(changedState.selectedIndices) {
-                  for each(var index:int in changedState.selectedIndices) {
-                    newlySelectedItems.push(changedState.children[index]);
+              if(pcEvent.kind == PropertyChangeEventKind.UPDATE) {
+                if(pcEvent.property == "selectedIndices"
+                    && pcEvent.source is RemoteCompositeValueState) {
+                  var changedState:RemoteCompositeValueState = pcEvent.source as RemoteCompositeValueState;
+                  var newlySelectedItems:Array = new Array();
+                  if(changedState.selectedIndices) {
+                    for each(var index:int in changedState.selectedIndices) {
+                      newlySelectedItems.push(changedState.children[index]);
+                    }
                   }
-                }
-                if(!ArrayUtil.areUnorderedArraysEqual(selectedItems, newlySelectedItems)) {
-                  selectedItems = newlySelectedItems;
-                  if(newlySelectedItems.length > 0 && !isItemOpen(changedState)) {
-                    var newOpenItems:Array = new Array().concat(openItems);
-                    newOpenItems.push(changedState);
-                    openItems = newOpenItems;
+                  if(!ArrayUtil.areUnorderedArraysEqual(selectedItems, newlySelectedItems)) {
+                    selectedItems = newlySelectedItems;
+                    if(newlySelectedItems.length > 0 && !isItemOpen(changedState)) {
+                      var newOpenItems:Array = new Array().concat(openItems);
+                      newOpenItems.push(changedState);
+                      openItems = newOpenItems;
+                    }
                   }
                 }
               }

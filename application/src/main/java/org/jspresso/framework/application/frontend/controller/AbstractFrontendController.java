@@ -547,7 +547,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     workspaceSelectionActionList.setActions(workspaceSelectionActions);
 
     ActionList exitActionList = new ActionList();
-    exitActionList.setName("QUIT");
+    exitActionList.setName("file");
+    exitActionList.setIconImageURL(getWorkspacesMenuIconImageUrl());
     List<IDisplayableAction> exitActions = new ArrayList<IDisplayableAction>();
     ExitAction<E, F, G> exitAction = new ExitAction<E, F, G>();
     exitAction.setName("quit.name");

@@ -333,6 +333,9 @@ package org.jspresso.framework.view.flex {
       tree.horizontalScrollPolicy = ScrollPolicy.AUTO;
       tree.verticalScrollPolicy = ScrollPolicy.AUTO;
       bindTree(tree, remoteTree.state as RemoteCompositeValueState);
+      tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+          tree.expandChildrenOf(remoteTree.state, true);
+        });
       return tree;
     }
 
@@ -345,6 +348,9 @@ package org.jspresso.framework.view.flex {
         for(i=0; i < selectedItems.length; i++) {
           node = selectedItems[i];
           parentNode = tree.getParentItem(node);
+          if(parentNode == null && !tree.showRoot) {
+            parentNode = rootState
+          }
           if(parentNode != null && parentsOfSelectedNodes.indexOf(parentNode) == -1) {
             parentsOfSelectedNodes.push(parentNode);
           }
@@ -353,6 +359,9 @@ package org.jspresso.framework.view.flex {
         for(i=0; i < selectedItems.length; i++) {
           node = selectedItems[i];
           parentNode = tree.getParentItem(node);
+          if(parentNode == null && !tree.showRoot) {
+            parentNode = rootState
+          }
           if(parentNode != null) {
             var selectedIndices:Array = new Array();
             if(parentNode.selectedIndices != null) {

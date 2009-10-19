@@ -3,6 +3,7 @@
   <includeClasses>
     <classEntry path="org.jspresso.framework.action.IActionHandler"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand"/>
@@ -13,6 +14,7 @@
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand"/>
     <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand"/>
@@ -49,6 +51,7 @@
     <classEntry path="org.jspresso.framework.gui.remote.RDurationField"/>
     <classEntry path="org.jspresso.framework.gui.remote.REvenGridContainer"/>
     <classEntry path="org.jspresso.framework.gui.remote.RForm"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RHtmlArea"/>
     <classEntry path="org.jspresso.framework.gui.remote.RIcon"/>
     <classEntry path="org.jspresso.framework.gui.remote.RImageComponent"/>
     <classEntry path="org.jspresso.framework.gui.remote.RIntegerField"/>
@@ -77,6 +80,7 @@
     <classEntry path="org.jspresso.framework.util.gui.CellConstraints"/>
     <classEntry path="org.jspresso.framework.util.gui.Dimension"/>
     <classEntry path="org.jspresso.framework.util.gui.Font"/>
+    <classEntry path="org.jspresso.framework.util.html.HtmlUtil"/>
     <classEntry path="org.jspresso.framework.util.remote.IRemotePeer"/>
     <classEntry path="org.jspresso.framework.util.remote.RemotePeer"/>
     <classEntry path="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry"/>

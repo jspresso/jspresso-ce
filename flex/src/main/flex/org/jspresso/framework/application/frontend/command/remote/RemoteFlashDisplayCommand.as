@@ -22,6 +22,10 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _paramNames:Array;
         private var _paramValues:Array;
 
+        public function RemoteFlashDisplayCommand() {
+          //default constructor.
+        }
+
         public function set swfUrl(value:String):void {
             _swfUrl = value;
         }

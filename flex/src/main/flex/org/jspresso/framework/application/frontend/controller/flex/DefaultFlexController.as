@@ -27,9 +27,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
+  import mx.containers.Accordion;
   import mx.containers.ApplicationControlBar;
   import mx.containers.Canvas;
   import mx.containers.HBox;
+  import mx.containers.HDividedBox;
   import mx.containers.Panel;
   import mx.containers.VBox;
   import mx.containers.ViewStack;
@@ -39,13 +41,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.controls.Label;
   import mx.controls.MenuBar;
   import mx.controls.SWFLoader;
+  import mx.controls.Tree;
   import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
   import mx.core.IFlexDisplayObject;
+  import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
   import mx.core.mx_internal;
   import mx.events.CloseEvent;
+  import mx.events.IndexChangedEvent;
   import mx.events.MenuEvent;
   import mx.managers.PopUpManager;
   import mx.resources.Locale;
@@ -138,6 +143,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _changeNotificationsEnabled:Boolean;
     private var _commandsQueue:IList;
+    private var _workspaceAccordion:Accordion;
     private var _workspaceViewStack:ViewStack;
     private var _postponedCommands:Object;
     private var _dialogStack:Array;
@@ -330,6 +336,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
         initApplicationFrame(initCommand.workspaceActions,
                              initCommand.actions,
                              initCommand.helpActions);
+          if(initCommand.workspaceActions.length > 1
+            && (initCommand.workspaceActions[0] as RActionList).actions.length > 0) {
+          var wasEnabled:Boolean = _changeNotificationsEnabled;
+          try {
+            _changeNotificationsEnabled = true;
+            execute((initCommand.workspaceActions[0] as RActionList).actions[0] as RAction);
+          } finally {
+            _changeNotificationsEnabled = wasEnabled;
+          }
+        }
       } else if(command is RemoteWorkspaceDisplayCommand) {
         var workspaceDisplayCommand:RemoteWorkspaceDisplayCommand = command as RemoteWorkspaceDisplayCommand;
         displayWorkspace(workspaceDisplayCommand.workspaceName,
@@ -691,12 +707,38 @@ package org.jspresso.framework.application.frontend.controller.flex {
         applicationFrame.addChild(controlBar);
       }
       controlBar.addChild(createApplicationMenuBar(workspaceActions, actions, helpActions));
+      
+      _workspaceAccordion = new Accordion();
+      for(var i:int = 0; i < (workspaceActions[0] as RActionList).actions.length; i++) {
+        var workspaceAction:RAction = (workspaceActions[0] as RActionList).actions[i];
+        var cardCanvas:Canvas = new Canvas();
+        cardCanvas.percentWidth = 100.0;
+        cardCanvas.percentHeight = 100.0;
+        cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
+        cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
+        cardCanvas.label = workspaceAction.name;
+        _workspaceAccordion.addChild(cardCanvas);
+        cardCanvas.icon = _viewFactory.getIconForComponent(_workspaceAccordion.getHeaderAt(i), workspaceAction.icon);
+      }
+      _workspaceAccordion.percentWidth = 20.0;
+      _workspaceAccordion.percentHeight = 100.0;
+      var accordionHandler:Function = function(event:IndexChangedEvent):void {
+        var workspaceIndex:int = event.newIndex;
+        execute((workspaceActions[0] as RActionList).actions[workspaceIndex]);
+      };
+      _workspaceAccordion.addEventListener(IndexChangedEvent.CHANGE, accordionHandler);
+      
       _workspaceViewStack = new ViewStack();
-      //_workspaceViewStack.resizeToContent = true;
       _workspaceViewStack.percentWidth = 100.0;
       _workspaceViewStack.percentHeight = 100.0;
       
-      applicationFrame.addChild(_workspaceViewStack);
+      var split:HDividedBox = new HDividedBox();
+      split.addChild(_workspaceAccordion);
+      split.addChild(_workspaceViewStack);
+      split.percentWidth = 100.0;
+      split.percentHeight = 100.0;
+      
+      applicationFrame.addChild(split);
     }
     
     private function createApplicationMenuBar(workspaceActions:Array,
@@ -704,7 +746,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                               helpActions:Array):MenuBar {
       var menuBarModel:Object = new Object();
       var menus:Array = new Array();
-      menus = menus.concat(createMenus(workspaceActions, true));
+      var actualWorkspaceActions:Array;
+      if(workspaceActions.length > 1) {
+        actualWorkspaceActions = new Array();
+        for(var waIndex:int = 1; waIndex < workspaceActions.length; waIndex++) {
+          actualWorkspaceActions[waIndex-1] = workspaceActions[waIndex];
+        }
+      } else {
+        actualWorkspaceActions = workspaceActions;
+      }
+      menus = menus.concat(createMenus(actualWorkspaceActions, true));
       menus = menus.concat(createMenus(actions, false));
       menus = menus.concat(createMenus(helpActions, true));
       menuBarModel["children"] = menus;
@@ -797,16 +848,31 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     private function displayWorkspace(workspaceName:String, workspaceView:RComponent):void {
       if(workspaceView) {
+        var workspaceNavigator:RComponent = null;
+        if(workspaceView is RSplitContainer) {
+          workspaceNavigator = (workspaceView as RSplitContainer).leftTop;
+          workspaceView = (workspaceView as RSplitContainer).rightBottom;
+        }
         var cardCanvas:Canvas = new Canvas();
         cardCanvas.percentWidth = 100.0;
         cardCanvas.percentHeight = 100.0;
         cardCanvas.name = workspaceName;
         _workspaceViewStack.addChild(cardCanvas);
 
-        var workspace:UIComponent = _viewFactory.createComponent(workspaceView);
-        workspace.percentWidth = 100.0;
-        workspace.percentHeight = 100.0;
-        cardCanvas.addChild(workspace) ;
+        var workspaceViewUI:UIComponent = _viewFactory.createComponent(workspaceView);
+        workspaceViewUI.percentWidth = 100.0;
+        workspaceViewUI.percentHeight = 100.0;
+        cardCanvas.addChild(workspaceViewUI);
+        
+        if(workspaceNavigator) {
+          var workspaceNavigatorUI:UIComponent = _viewFactory.createComponent(workspaceNavigator);
+          workspaceNavigatorUI.percentWidth = 100.0;
+          workspaceNavigatorUI.percentHeight = 100.0;
+          if(workspaceNavigatorUI is Tree) {
+            (workspaceNavigatorUI as Tree).showRoot = false;
+          }
+          _workspaceAccordion.selectedChild.addChild(workspaceNavigatorUI);
+        }
       }
       _workspaceViewStack.selectedChild = _workspaceViewStack.getChildByName(workspaceName) as Container;
     }
