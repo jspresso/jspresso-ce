@@ -23,9 +23,6 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.application.printing.model.descriptor.IReportDescriptor;
-import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -83,8 +80,6 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   @Override
@@ -92,22 +87,7 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
       IActionHandler actionHandler, Map<String, Object> context) {
     Map<String, Object> initialReportContext = super.getInitialReportContext(
         actionHandler, context);
-    IValueConnector viewConnector = getViewConnector(context);
-    Object model = null;
-    if (viewConnector instanceof ICollectionConnectorProvider) {
-      int[] selectedIndices = ((ICollectionConnectorProvider) viewConnector)
-          .getCollectionConnector().getSelectedIndices();
-      ICollectionConnector collectionConnector = (ICollectionConnector) ((ICollectionConnectorProvider) viewConnector)
-          .getCollectionConnector().getModelConnector();
-      if (selectedIndices == null || selectedIndices.length == 0
-          || collectionConnector == null) {
-        return null;
-      }
-      model = collectionConnector.getChildConnector(selectedIndices[0])
-          .getConnectorValue();
-    } else {
-      model = viewConnector.getModelConnector().getConnectorValue();
-    }
+    Object model = getModel(context);
     if (model instanceof IEntity) {
       initialReportContext.put(IReportDescriptor.ENTITY_ID, ((IEntity) model)
           .getId());

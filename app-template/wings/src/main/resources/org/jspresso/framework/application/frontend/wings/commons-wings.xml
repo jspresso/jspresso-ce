@@ -68,6 +68,9 @@
     parent="yesNoFrontAction"
     class="org.jspresso.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
 
+  <bean id="chartAction" abstract="true" parent="abstractChartAction"
+    class="org.jspresso.framework.application.charting.frontend.action.server.DisplayChartAction" />
+
   <!--
     The implementation used as view factory.
   -->

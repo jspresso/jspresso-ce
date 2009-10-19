@@ -267,6 +267,19 @@
               </tasks>
             </configuration>
           </execution>
+          <execution>
+            <id>groovy-path-fix</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <property name="groovy.generated.sources" value="${project.build.directory}/generated-sources/groovy-stubs/main" />
+                <mkdir dir="${groovy.generated.sources}" />
+              </tasks>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>

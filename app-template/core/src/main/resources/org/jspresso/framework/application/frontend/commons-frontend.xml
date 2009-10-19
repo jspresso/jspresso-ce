@@ -217,7 +217,7 @@
   </bean>
 
   <bean id="abstractReportAction" class="org.jspresso.framework.application.printing.frontend.action.AbstractReportAction">
-    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/execute-48x48.png" />
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/report-48x48.png" />
     <property name="name" value="report.name" />
     <property name="description" value="report.description" />
     <property name="reportFactory" ref="reportFactory" />
@@ -231,10 +231,6 @@
 
   <bean id="doPrintAction" parent="okDialogFrontAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/print-48x48.png" />
-    <!--
-      <property name="wrappedAction" ref="doPrintBackendAction" /> <property name="nextAction" ref="displayReportAction"
-      />
-    -->
     <property name="nextAction">
       <bean class="org.jspresso.framework.application.frontend.action.WrappingAction">
         <property name="wrappedAction" ref="doPrintBackendAction" />
@@ -519,6 +515,18 @@
     <property name="wrappedAction" ref="reloadModuleObjectBackAction" />
   </bean>
 
+  <bean abstract="true" id="abstractChartAction" class="org.jspresso.framework.application.charting.frontend.action.AbstractChartAction">
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/chart-48x48.png" />
+    <property name="name" value="chart.name" />
+    <property name="description" value="chart.description" />
+    <property name="jdbcTemplate" ref="reportingJdbcTemplate"/>
+    <property name="actions">
+      <list>
+        <ref bean="okDialogFrontAction" />
+      </list>
+    </property>
+  </bean>
+
   <!--
     Action maps.
   -->
@@ -696,6 +704,7 @@
    -->
   <bean id="loginViewDescriptor" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
     <property name="name" value="login.name" />
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/password-48x48.png" />
     <property name="propertyViewDescriptors">
       <list>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
