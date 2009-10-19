@@ -146,6 +146,7 @@
     <module>flex</module>
     <module>qooxdoo</module>
     <module>jasper</module>
+    <module>fusioncharts</module>
     <module>app-launch</module>
     <module>app-template</module>
     <module>archetype</module>

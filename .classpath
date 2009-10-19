@@ -71,6 +71,10 @@
 	<classpathentry excluding="**" kind="src" output="qooxdoo/server/target/test-classes" path="qooxdoo/server/src/test/resources"/>
 	<classpathentry kind="src" output="jasper/core/target/classes" path="jasper/core/src/main/java"/>
 	<classpathentry excluding="**" kind="src" output="jasper/core/target/classes" path="jasper/core/src/main/resources"/>
+	<classpathentry kind="src" output="fusioncharts/target/classes" path="fusioncharts/src/main/java"/>
+	<classpathentry kind="src" output="fusioncharts/target/classes" path="fusioncharts/src/main/resources"/>
+	<classpathentry kind="src" output="fusioncharts/target/classes" path="fusioncharts/src/test/java"/>
+	<classpathentry kind="src" output="fusioncharts/target/classes" path="fusioncharts/src/test/resources"/>
 	<classpathentry kind="src" output="jasper/core/target/test-classes" path="jasper/core/src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="jasper/core/target/test-classes" path="jasper/core/src/test/resources"/>
 	<classpathentry kind="src" output="jasper/swing/target/classes" path="jasper/swing/src/main/java"/>

@@ -18,10 +18,11 @@
  */
 package org.jspresso.framework.binding.model;
 
+import java.util.regex.Pattern;
 
 /**
- * This gate opens and closes based on the value of a boolean property of its
- * model.
+ * This gate opens and closes based on the value of a string property matching a
+ * regular expression.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,24 +40,26 @@ package org.jspresso.framework.binding.model;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BooleanPropertyModelGate extends
-    AbstractPropertyModelGate<Boolean> {
+public class RegexPropertyModelGate extends AbstractPropertyModelGate<String> {
+
+  private String regexpPattern;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected boolean shouldOpen(Boolean propertyValue) {
-    return propertyValue != null && propertyValue.booleanValue();
+  protected boolean shouldOpen(String propertyValue) {
+    return propertyValue != null && regexpPattern != null
+        && Pattern.matches(regexpPattern, propertyValue);
   }
 
   /**
-   * Sets the booleanPropertyName.
+   * Sets the regexpPattern.
    * 
-   * @param booleanPropertyName
-   *          the booleanPropertyName to set.
+   * @param regexpPattern
+   *          the regexpPattern to set.
    */
-  public void setBooleanPropertyName(String booleanPropertyName) {
-    super.setPropertyName(booleanPropertyName);
+  public void setRegexpPattern(String regexpPattern) {
+    this.regexpPattern = regexpPattern;
   }
 }

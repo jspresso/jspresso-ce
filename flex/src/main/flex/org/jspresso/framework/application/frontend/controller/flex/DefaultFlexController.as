@@ -38,6 +38,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.controls.HRule;
   import mx.controls.Label;
   import mx.controls.MenuBar;
+  import mx.controls.SWFLoader;
   import mx.core.Application;
   import mx.core.ClassFactory;
   import mx.core.Container;
@@ -56,6 +57,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
@@ -65,6 +67,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
@@ -289,14 +292,35 @@ package org.jspresso.framework.application.frontend.controller.flex {
         });
         var loginButtons:Array = new Array();
         loginButtons.push(loginButton);
-        popupDialog(initLoginCommand.title, initLoginCommand.message, initLoginCommand.loginView, loginButtons);
-      } else if(command is RemoteDialogCommand) {
-        var dialogCommand:RemoteDialogCommand = command as RemoteDialogCommand;
+        var loginView:UIComponent = _viewFactory.createComponent(initLoginCommand.loginView);
+        popupDialog(initLoginCommand.title, initLoginCommand.message, loginView, loginButtons);
+      } else if(command is RemoteAbstractDialogCommand) {
+        var dialogCommand:RemoteAbstractDialogCommand = command as RemoteAbstractDialogCommand;
         var dialogButtons:Array = new Array();
         for each(var action:RAction in dialogCommand.actions) {
           dialogButtons.push(_viewFactory.createAction(action, true));
         }
-        popupDialog(dialogCommand.title, null, dialogCommand.view, dialogButtons, dialogCommand.useCurrent);
+        var dialogView:UIComponent = null;
+        if(dialogCommand is RemoteDialogCommand) {
+          dialogView = _viewFactory.createComponent((dialogCommand as RemoteDialogCommand).view);
+        } else if(dialogCommand is RemoteFlashDisplayCommand) {
+          var url:String = new String((dialogCommand as RemoteFlashDisplayCommand).swfUrl);
+          if((dialogCommand as RemoteFlashDisplayCommand).paramNames.length > 0) {
+            url = url+"?"
+            for(var i:int = 0; i < (dialogCommand as RemoteFlashDisplayCommand).paramNames.length; i++) {
+              if(i > 0) {
+                url  = url+"&"
+              }
+              url = url+(dialogCommand as RemoteFlashDisplayCommand).paramNames[i]+"="+ 
+                (dialogCommand as RemoteFlashDisplayCommand).paramValues[i];
+            }
+          }
+          var swfLoader:SWFLoader = new SWFLoader();
+          swfLoader.source = url;
+          swfLoader.scaleContent = false;
+          dialogView = swfLoader;
+        }
+        popupDialog(dialogCommand.title, null, dialogView, dialogButtons, dialogCommand.useCurrent, dialogCommand.dimension);
       } else if(command is RemoteCloseDialogCommand) {
         if(_dialogStack && _dialogStack.length > 1) {
           PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as IFlexDisplayObject);
@@ -792,13 +816,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerCommand(loginCommand);
     }
     
-    private function popupDialog(title:String, message:String, view:RComponent, buttons:Array, useCurrent:Boolean=false):void {
-      var dialogView:UIComponent = _viewFactory.createComponent(view);
-      // if(dialogView is Panel) {
-      //   dialogView = dialogView.getChildAt(0) as UIComponent;
-      // }
-      dialogView.percentWidth = 100.0;
-      dialogView.percentHeight = 100.0;
+    private function popupDialog(title:String, message:String, dialogView:UIComponent, buttons:Array, useCurrent:Boolean=false, dimension:Dimension=null):void {
+      if(dimension != null) {
+        dialogView.width = dimension.width;
+        dialogView.height = dimension.height;
+      } else {
+        dialogView.percentWidth = 100.0;
+        dialogView.percentHeight = 100.0;
+      }
       dialogView.maxWidth = 90.0 * (Application.application as DisplayObject).width / 100.0;
       dialogView.maxHeight = 90.0 * (Application.application as DisplayObject).height / 100.0;
       var buttonBox:HBox = new HBox();

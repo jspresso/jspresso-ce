@@ -110,6 +110,10 @@
       </init-param>
     -->
   </servlet>
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>ApplicationWingsServlet</servlet-name>
+  </filter-mapping>
   <servlet-mapping>
     <servlet-name>ApplicationWingsServlet</servlet-name>
     <url-pattern>/wings/*</url-pattern>

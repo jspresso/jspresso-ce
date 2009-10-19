@@ -245,13 +245,27 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         }, this);
         var loginButtons = new Array();
         loginButtons.push(loginButton);
-        this.__popupDialog(command.getTitle(), command.getMessage(), command.getLoginView(), loginButtons);
-      } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand) {
+        var dialogView = this.createComponent(command.getLoginView());
+        this.__popupDialog(command.getTitle(), command.getMessage(), dialogView, command.getLoginView().getIcon(), loginButtons);
+      } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand) {
         var dialogButtons = new Array();
         for(var i = 0; i < command.getActions().length; i++) {
           dialogButtons.push(this.__viewFactory.createAction(command.getActions()[i], true));
         }
-        this.__popupDialog(command.getTitle(), null, command.getView(), dialogButtons, command.isUseCurrent());
+        var dialogView;
+        var icon;
+        if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand) {
+          dialogView = this.createComponent(command.getView());
+          icon = command.getView().getIcon();
+        } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand) {
+          dialogView = new qx.ui.embed.Flash(command.getSwfUrl());
+          var flashVars = new Object();
+          for(var i = 0; i < command.getParamNames().length; i++) {
+            flashVars[command.getParamNames()[i]] = command.getParamValues()[i];
+          }
+          dialogView.setVariables(flashVars);
+        }
+        this.__popupDialog(command.getTitle(), null, dialogView, icon, dialogButtons, command.isUseCurrent(), command.getDimension());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand) {
         if(this.__dialogStack && this.__dialogStack.length > 1) {
           /**@type qx.ui.window.Window*/
@@ -782,14 +796,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * 
      * @param {String} title
      * @param {String} message
-     * @param {org.jspresso.framework.gui.remote.RComponent} view
+     * @param {qx.ui.core.Widget} dialogView
+     * @param {org.jspresso.framework.gui.remote.RIcon} icon
      * @param {qx.ui.form.Button[]} buttons
      * @param {Boolean} useCurrent
+     * @param {org.jspresso.framework.util.gui.Dimension} Dimension
      * @return void
      */
-    __popupDialog : function(title, message, view, buttons, useCurrent) {
+    __popupDialog : function(title, message, dialogView, icon, buttons, useCurrent, dimension) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
-      var dialogView = this.createComponent(view);
 
       var buttonBox = new qx.ui.container.Composite();
       buttonBox.setLayout(new qx.ui.layout.HBox(10, "right"));
@@ -801,6 +816,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         var messageLabel = new qx.ui.basic.Label(message);
         messageLabel.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
         dialogBox.add(messageLabel);
+      }
+      if(dimension != null) {
+        dialogView.setWidth(dimension.getWidth());
+        dialogView.setHeight(dimension.getHeight());
       }
       dialogBox.add(dialogView, {flex:1});
       for(var i = 0; i < buttons.length; i++) {
@@ -835,7 +854,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         this.__dialogStack.push([dialog, null]);
       }
       dialog.setCaption(title);
-      this.__viewFactory.setIcon(dialog, view.getIcon());
+      this.__viewFactory.setIcon(dialog, icon);
       if(buttons.length > 0) {
 				dialog.addListener("keypress", function(e) {
 					if(   e.getKeyIdentifier() == "Enter"

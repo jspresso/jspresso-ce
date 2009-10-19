@@ -33,5 +33,9 @@
 			<groupId>foxtrot</groupId>
 			<artifactId>foxtrot</artifactId>
 		</dependency>
+    <dependency>
+      <groupId>chrriis</groupId>
+      <artifactId>dj-nativeswing</artifactId>
+    </dependency>
 	</dependencies>
 </project>

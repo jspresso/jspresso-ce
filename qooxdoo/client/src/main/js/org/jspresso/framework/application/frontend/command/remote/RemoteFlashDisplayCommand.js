@@ -12,7 +12,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand",
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand",
 {
   extend : org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand,
   

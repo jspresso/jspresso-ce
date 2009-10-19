@@ -70,6 +70,10 @@
       <param-value>${package}.startup.ulc.UlcApplicationStartup</param-value>
     </init-param>
   </servlet>
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>ApplicationUlcServlet</servlet-name>
+  </filter-mapping>
   <servlet-mapping>
     <servlet-name>ApplicationUlcServlet</servlet-name>
     <url-pattern>/${parentArtifactId}-ulc</url-pattern>
@@ -138,6 +142,10 @@
       </init-param>
     -->
   </servlet>
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>ApplicationWingsServlet</servlet-name>
+  </filter-mapping>
   <servlet-mapping>
     <servlet-name>ApplicationWingsServlet</servlet-name>
     <url-pattern>/wings/*</url-pattern>

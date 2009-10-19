@@ -33,14 +33,14 @@ package org.jspresso.framework.application.frontend.command.remote {
             _paramNames = value;
         }
         public function get paramNames():Array {
-            return _actions;
+            return _paramNames;
         }
 
         public function set paramValues(value:Array):void {
             _paramValues = value;
         }
         public function get paramValues():Array {
-            return _actions;
+            return _paramValues;
         }
 
     }

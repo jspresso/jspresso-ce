@@ -147,5 +147,9 @@
         <wb-resource deploy-path="/" source-path="/qooxdoo/server/src/test/java"/>
         <wb-resource deploy-path="/" source-path="/qooxdoo/server/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/archetype/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/fusioncharts/src/test/resources"/>
+        <wb-resource deploy-path="/" source-path="/fusioncharts/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/fusioncharts/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/fusioncharts/src/test/java"/>
     </wb-module>
 </project-modules>

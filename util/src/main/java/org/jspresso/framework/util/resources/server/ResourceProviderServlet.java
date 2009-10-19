@@ -115,7 +115,7 @@ public class ResourceProviderServlet extends HttpServlet {
    *          the resource id.
    * @return the resource url.
    */
-  public static String computeDownloadUrl(HttpServletRequest request, String id) {
+  private static String computeDownloadUrl(HttpServletRequest request, String id) {
     return computeUrl(request, "?" + ID_PARAMETER + "=" + id);
   }
 
@@ -187,7 +187,7 @@ public class ResourceProviderServlet extends HttpServlet {
    *          the incomming HTTP request.
    * @return the resource url.
    */
-  public static String computeUploadUrl(HttpServletRequest request) {
+  private static String computeUploadUrl(HttpServletRequest request) {
     String baseUrl = request.getScheme() + "://" + request.getServerName()
         + ":" + request.getServerPort() + request.getContextPath()
         + UPLOAD_SERVLET_URL_PATTERN;
@@ -274,6 +274,14 @@ public class ResourceProviderServlet extends HttpServlet {
 
       inputStream = new BufferedInputStream(resource.getContent());
     } else if (localUrl != null) {
+      if (!UrlHelper.isClasspathUrl(localUrl)) {
+        // we must append parameters that are passed AFTER the localUrl
+        // parameter as they must be considered as part of the localUrl.
+        String queryString = request.getQueryString();
+        localUrl = queryString.substring(queryString
+            .indexOf(LOCAL_URL_PARAMETER)
+            + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
+      }
       inputStream = new BufferedInputStream(UrlHelper.createURL(localUrl)
           .openStream());
     } else if (imageUrl != null) {
@@ -343,5 +351,32 @@ public class ResourceProviderServlet extends HttpServlet {
       return item.getSize();
     }
 
+  }
+
+  /**
+   * Computes a static URL based on servlet request.
+   * 
+   * @param relativePath
+   *          the relative path.
+   * @return the absolute static URL.
+   */
+  public static String computeStaticUrl(String relativePath) {
+    return computeStaticUrl(HttpRequestHolder.getServletRequest(), relativePath);
+  }
+
+  /**
+   * Computes a static URL based on servlet request.
+   * 
+   * @param request
+   *          the servlet request.
+   * @param relativePath
+   *          the relative path.
+   * @return the absolute static URL.
+   */
+  private static String computeStaticUrl(HttpServletRequest request,
+      String relativePath) {
+    return request.getScheme() + "://" + request.getServerName() + ":"
+        + request.getServerPort() + request.getContextPath() + "/"
+        + relativePath;
   }
 }

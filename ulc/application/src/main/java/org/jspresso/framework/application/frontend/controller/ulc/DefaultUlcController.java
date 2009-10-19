@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.controller.ulc;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,11 +35,16 @@ import org.jspresso.framework.gui.ulc.components.server.ULCExtendedInternalFrame
 import org.jspresso.framework.gui.ulc.components.server.event.ExtendedInternalFrameEvent;
 import org.jspresso.framework.gui.ulc.components.server.event.IExtendedInternalFrameListener;
 import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.MemoryResource;
+import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.ulc.UlcUtil;
+import org.jspresso.framework.util.ulc.resource.DocumentHelper;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.ActionList;
@@ -586,10 +592,54 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   public void displayFlashObject(String swfUrl,
-      Map<String, String> flashContext, List<IAction> actions, String title,
-      ULCComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
-    // TODO Auto-generated method stub
-
+      Map<String, String> flashContext,
+      @SuppressWarnings("unused") List<IAction> actions,
+      @SuppressWarnings("unused") String title,
+      @SuppressWarnings("unused") ULCComponent sourceComponent,
+      @SuppressWarnings("unused") Map<String, Object> context,
+      Dimension dimension, @SuppressWarnings("unused") boolean reuseCurrent) {
+    StringBuffer flashVars = new StringBuffer();
+    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
+      flashVars.append("&").append(flashVar.getKey()).append("=").append(
+          flashVar.getValue());
+    }
+    int width = 600;
+    int height = 600;
+    if (dimension != null) {
+      width = dimension.getWidth();
+      height = dimension.getHeight();
+    }
+    final String htmlText = "<html>"
+        + "<body bgcolor=\"#ffffff\">"
+        + "<OBJECT classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" "
+        + "codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\" width=\""
+        + width
+        + "\" height=\""
+        + height
+        + "\" id=\"Column3D\" >"
+        + "<param name=\"movie\" value=\""
+        + swfUrl
+        + "\" />"
+        + "<param name=\"FlashVars\" value=\""
+        + flashVars.toString()
+        + "\">"
+        + "<embed src=\""
+        + swfUrl
+        + "\" flashVars=\""
+        + flashVars.toString()
+        + "\" quality=\"high\" width=\""
+        + width
+        + "\" height=\""
+        + height
+        + "\" name=\"Column3D\" type=\"application/x-shockwave-flash\" "
+        + "pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"
+        + "</object>" + "</body>" + "</html>";
+    IResource resource = new MemoryResource("text/html", htmlText.getBytes());
+    String resourceId = ResourceManager.getInstance().register(resource);
+    try {
+      DocumentHelper.showDocument(resourceId);
+    } catch (IOException ex) {
+      throw new NestedRuntimeException(ex);
+    }
   }
 }

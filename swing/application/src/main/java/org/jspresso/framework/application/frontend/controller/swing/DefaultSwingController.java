@@ -78,6 +78,7 @@ import org.jspresso.framework.util.swing.BrowserControl;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.swing.WaitCursorEventQueue;
 import org.jspresso.framework.util.swing.WaitCursorTimer;
+import org.jspresso.framework.util.url.UrlHelper;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.ActionList;
@@ -87,6 +88,9 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
+import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
 import foxtrot.Job;
 
 /**
@@ -155,6 +159,10 @@ public class DefaultSwingController extends
     actionPanel.setLayout(new BorderLayout());
     actionPanel.add(buttonBox, BorderLayout.EAST);
 
+    if (dimension != null) {
+      mainView.setPreferredSize(new java.awt.Dimension(dimension.getWidth(),
+          dimension.getHeight()));
+    }
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BorderLayout());
     mainPanel.add(mainView, BorderLayout.CENTER);
@@ -165,9 +173,6 @@ public class DefaultSwingController extends
       dialog.getRootPane().setDefaultButton(defaultButton);
     }
     dialog.pack();
-    if (dimension != null) {
-      dialog.setSize(dimension.getWidth(), dimension.getHeight());
-    }
     SwingUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }
@@ -360,6 +365,8 @@ public class DefaultSwingController extends
       Toolkit.getDefaultToolkit().getSystemEventQueue().push(
           new WaitCursorEventQueue(500));
       initLoginProcess();
+      NativeInterface.open();
+      NativeInterface.runEventPump();
       return true;
     }
     return false;
@@ -719,7 +726,14 @@ public class DefaultSwingController extends
       Map<String, String> flashContext, List<Action> actions, String title,
       JComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
-    // TODO Auto-generated method stub
 
+    JFlashPlayer flashPlayer = new JFlashPlayer();
+    FlashPluginOptions options = new FlashPluginOptions();
+    options.setVariables(flashContext);
+    flashPlayer.load(getClass(), UrlHelper.getResourcePathOrUrl(swfUrl, true),
+        options);
+
+    displayModalDialog(flashPlayer, actions, title, sourceComponent, context,
+        dimension, reuseCurrent);
   }
 }

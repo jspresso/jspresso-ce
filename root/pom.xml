@@ -271,6 +271,11 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-fusioncharts</artifactId>
+        <version>${jspresso.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-jasper-swing</artifactId>
         <version>${jspresso.version}</version>
       </dependency>
@@ -454,6 +459,16 @@
         <version>2.0</version>
       </dependency>
       <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>swt</artifactId>
+        <version>3.5.1</version>
+      </dependency>
+      <dependency>
+        <groupId>chrriis</groupId>
+        <artifactId>dj-nativeswing</artifactId>
+        <version>0.9.8</version>
+      </dependency>
+      <dependency>
         <groupId>net.sf.nachocalendar</groupId>
         <artifactId>nachocalendar</artifactId>
         <version>0.23</version>
@@ -537,6 +552,11 @@
         <groupId>jasperreports</groupId>
         <artifactId>jasperreports</artifactId>
         <version>${jasper.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fusioncharts</groupId>
+        <artifactId>fusioncharts-free</artifactId>
+        <version>2.2</version>
       </dependency>
       <dependency>
         <groupId>com.lowagie</groupId>

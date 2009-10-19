@@ -43,15 +43,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 import com.ulcjava.base.application.ClientContext;
-import com.ulcjava.container.servlet.application.ServletContainerContext;
 
 /**
  * This class allows to register a resource provider by a unique id and to
@@ -69,9 +66,9 @@ public final class DocumentHelper {
    * Shows the document for which a resource entry has been registered.
    * 
    * @param id
-   *            the identifier under which the resource has been registered.
+   *          the identifier under which the resource has been registered.
    * @throws IOException
-   *             whenever an IO exception occurs.
+   *           whenever an IO exception occurs.
    */
   public static void showDocument(String id) throws IOException {
     showDocument(id, null);
@@ -81,11 +78,11 @@ public final class DocumentHelper {
    * Shows the document for which a resource entry has been registered.
    * 
    * @param id
-   *            the identifier under which the resource has been registered.
+   *          the identifier under which the resource has been registered.
    * @param target
-   *            the target browser id.
+   *          the target browser id.
    * @throws IOException
-   *             whenever an IO exception occurs.
+   *           whenever an IO exception occurs.
    */
   public static void showDocument(String id, String target) throws IOException {
     if (inDevelopmentEnvironment()) {
@@ -102,8 +99,7 @@ public final class DocumentHelper {
           fileExtension).toURI().toURL().toString();
       ClientContext.showDocument(url, target);
     } else if (inServletContainerEnvironment()) {
-      HttpServletRequest request = ServletContainerContext.getRequest();
-      String url = ResourceProviderServlet.computeDownloadUrl(request, id);
+      String url = ResourceProviderServlet.computeDownloadUrl(id);
       ClientContext.showDocument(url, target);
     } else {
       throw new IllegalStateException(

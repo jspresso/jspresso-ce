@@ -18,10 +18,11 @@
  */
 package org.jspresso.framework.binding.model;
 
+import java.util.Collection;
 
 /**
- * This gate opens and closes based on the value of a boolean property of its
- * model.
+ * This gate opens and closes based on the value of an enumeration property
+ * matching a set of allowed values.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -39,24 +40,28 @@ package org.jspresso.framework.binding.model;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BooleanPropertyModelGate extends
-    AbstractPropertyModelGate<Boolean> {
+public class EnumerationPropertyModelGate extends
+    AbstractPropertyModelGate<String> {
+
+  private Collection<String> openingValues;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected boolean shouldOpen(Boolean propertyValue) {
-    return propertyValue != null && propertyValue.booleanValue();
+  protected boolean shouldOpen(String propertyValue) {
+    return propertyValue != null && openingValues != null
+        && openingValues.contains(propertyValue);
   }
 
   /**
-   * Sets the booleanPropertyName.
+   * Sets the openingValues.
    * 
-   * @param booleanPropertyName
-   *          the booleanPropertyName to set.
+   * @param openingValues
+   *          the openingValues to set.
    */
-  public void setBooleanPropertyName(String booleanPropertyName) {
-    super.setPropertyName(booleanPropertyName);
+  public void setOpeningValues(Collection<String> openingValues) {
+    this.openingValues = openingValues;
   }
+
 }

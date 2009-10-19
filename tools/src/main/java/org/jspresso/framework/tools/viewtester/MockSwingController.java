@@ -51,6 +51,9 @@ import org.jspresso.framework.util.swing.SwingUtil;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
+import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
+
 /**
  * Default implementation of a mock swing frontend controller. This
  * implementation is usable "as-is".
@@ -225,7 +228,13 @@ public class MockSwingController extends
       Map<String, String> flashContext, List<Action> actions, String title,
       JComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
-    // TODO Auto-generated method stub
 
+    JFlashPlayer flashPlayer = new JFlashPlayer();
+    FlashPluginOptions options = new FlashPluginOptions();
+    options.setVariables(flashContext);
+    flashPlayer.load(swfUrl, options);
+
+    displayModalDialog(flashPlayer, actions, title, sourceComponent, context,
+        dimension, reuseCurrent);
   }
 }

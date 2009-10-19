@@ -33,7 +33,6 @@ import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.MemoryResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
-import org.wings.session.SessionManager;
 
 /**
  * A simple action to display a Jasper report.
@@ -73,8 +72,7 @@ public class DisplayJasperReportAction extends AbstractWingsAction {
           .toByteArray());
       String resourceId = ResourceManager.getInstance().register(resource);
       getController(context).displayUrl(
-          ResourceProviderServlet.computeDownloadUrl(SessionManager.getSession()
-              .getServletRequest(), resourceId));
+          ResourceProviderServlet.computeDownloadUrl(resourceId));
       return super.execute(actionHandler, context);
     } catch (JRException ex) {
       throw new ActionException(ex);

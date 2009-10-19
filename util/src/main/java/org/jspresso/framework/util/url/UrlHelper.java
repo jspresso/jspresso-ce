@@ -90,8 +90,9 @@ public final class UrlHelper {
       } catch (MalformedURLException ex) {
         throw new NestedRuntimeException(ex);
       }
-    } else if (urlSpec.startsWith(CLASSPATH_URL)) {
-      returnedURL = cl.getResource(urlSpec.substring(CLASSPATH_URL.length()));
+    } else if (isClasspathUrl(urlSpec)) {
+      String resourcePath = getResourcePathOrUrl(urlSpec, false);
+      returnedURL = cl.getResource(resourcePath);
     } else {
       try {
         returnedURL = new URL(urlSpec);
@@ -100,5 +101,41 @@ public final class UrlHelper {
       }
     }
     return returnedURL;
+  }
+
+  /**
+   * Extracts the resource path from a "classpath:" URL or return the original
+   * one if it is not a "classpath:" URL.
+   * 
+   * @param urlSpec
+   *          the string representation of the URL.
+   * @param makeAbsolute
+   *          if true, ensure that resource path are made absolute.
+   * @return the extracted resource path or the original URL.
+   */
+  public static String getResourcePathOrUrl(String urlSpec, boolean makeAbsolute) {
+    if (isClasspathUrl(urlSpec)) {
+      String resourcePath = urlSpec.substring(CLASSPATH_URL.length());
+      int paramIndex = resourcePath.indexOf("?");
+      if (paramIndex > 0) {
+        resourcePath = resourcePath.substring(0, paramIndex);
+      }
+      if (makeAbsolute && !resourcePath.startsWith("/")) {
+        resourcePath = "/" + resourcePath;
+      }
+      return resourcePath;
+    }
+    return urlSpec;
+  }
+
+  /**
+   * Wether this url is a "classpath:" pseudo URL.
+   * 
+   * @param urlSpec
+   *          the string representation of the URL.
+   * @return true if this url is a "classpath:" pseudo URL.
+   */
+  public static boolean isClasspathUrl(String urlSpec) {
+    return urlSpec.startsWith(CLASSPATH_URL);
   }
 }

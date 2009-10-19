@@ -143,14 +143,14 @@ public class DefaultWingsController extends
     actionPanel.add(buttonBox, SBorderLayout.EAST);
 
     SPanel mainPanel = new SPanel(new SBorderLayout());
-    mainPanel.add(mainView, SBorderLayout.CENTER);
-    mainPanel.add(actionPanel, SBorderLayout.SOUTH);
     if (dimension != null) {
-      mainPanel.setPreferredSize(new SDimension(dimension.getWidth() + "px",
+      mainView.setPreferredSize(new SDimension(dimension.getWidth() + "px",
           dimension.getHeight() + "px"));
     } else {
-      mainPanel.setPreferredSize(DIALOG_DIMENSION);
+      mainView.setPreferredSize(DIALOG_DIMENSION);
     }
+    mainPanel.add(mainView, SBorderLayout.CENTER);
+    mainPanel.add(actionPanel, SBorderLayout.SOUTH);
     dialog.add(mainPanel);
     if (defaultButton != null) {
       dialog.setDefaultButton(defaultButton);
@@ -497,7 +497,46 @@ public class DefaultWingsController extends
       Map<String, String> flashContext, List<Action> actions, String title,
       SComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
-    // TODO Auto-generated method stub
 
+    StringBuffer flashVars = new StringBuffer();
+    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
+      flashVars.append("&").append(flashVar.getKey()).append("=").append(
+          flashVar.getValue());
+    }
+    int width = 600;
+    int height = 600;
+    if (dimension != null) {
+      width = dimension.getWidth();
+      height = dimension.getHeight();
+    }
+    String htmlText = "<html>"
+        + "<body bgcolor=\"#ffffff\">"
+        + "<OBJECT classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" "
+        + "codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\" width=\""
+        + width
+        + "\" height=\""
+        + height
+        + "\" id=\"Column3D\" >"
+        + "<param name=\"movie\" value=\""
+        + swfUrl
+        + "\" />"
+        + "<param name=\"FlashVars\" value=\""
+        + flashVars.toString()
+        + "\">"
+        + "<embed src=\""
+        + swfUrl
+        + "\" flashVars=\""
+        + flashVars.toString()
+        + "\" quality=\"high\" width=\""
+        + width
+        + "\" height=\""
+        + height
+        + "\" name=\"Column3D\" type=\"application/x-shockwave-flash\" "
+        + "pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"
+        + "</object>" + "</body>" + "</html>";
+    SLabel embedder = new SLabel();
+    embedder.setText(htmlText);
+    displayModalDialog(embedder, actions, title, sourceComponent, context,
+        dimension, reuseCurrent);
   }
 }
