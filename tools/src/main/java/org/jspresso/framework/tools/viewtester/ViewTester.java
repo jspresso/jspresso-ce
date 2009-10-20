@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -51,7 +51,7 @@ import org.springframework.context.ApplicationContext;
 /**
  * Generates Jspresso powered component java code based on its descriptor.
  * <p>
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -211,7 +211,7 @@ public class ViewTester {
   /**
    * Specialized exception handler for the tester event dispatch thread.
    * <p>
-   * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+   * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
    * <p>
    * 
    * @version $LastChangedRevision$

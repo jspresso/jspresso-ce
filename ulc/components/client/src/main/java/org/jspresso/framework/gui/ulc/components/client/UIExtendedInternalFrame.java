@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.framework.gui.ulc.components.client;
 
@@ -15,7 +15,7 @@ import com.ulcjava.base.shared.internal.Anything;
 /**
  * UI internal frame extended to take care of activation events.
  * <p>
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

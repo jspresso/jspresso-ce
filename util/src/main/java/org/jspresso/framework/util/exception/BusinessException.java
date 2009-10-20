@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.framework.util.exception;
 
@@ -12,7 +12,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * A "normal" business exception. Whenever a contextual translated message is
  * needed, the method "getI18nMessage" might be overriden.
  * <p>
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$
