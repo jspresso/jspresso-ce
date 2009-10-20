@@ -93,6 +93,7 @@ New features
 2868616    Force Hibernate to use LinkedHashSet in every situation
 2868617    Don't add forbidden tab in tab view
 2874777    Introduce BasicSet|ListDescriptor to hide implementation details
+2880635    WritabilityGate based on enumerated type
 
 3.0.0
 =====
