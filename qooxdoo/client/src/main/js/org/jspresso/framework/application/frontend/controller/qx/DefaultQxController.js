@@ -512,14 +512,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         workspacePanel.addListener("changeValue", function(event) {
           this.execute(event.getTarget().getUserData("rAction"));
         }, this);
+        this.__viewFactory.setIcon(workspacePanel.getChildControl("bar"),
+                             workspaceActions[0].getActions()[i].getIcon());
         workspaceAccordion.add(workspacePanel, {flex:1});
       }
 
       this.__workspaceStack = new qx.ui.container.Stack();
       
       var splitContainer = new qx.ui.splitpane.Pane("horizontal");
-      splitContainer.add(workspaceAccordion, 0);
-      splitContainer.add(this.__workspaceStack, 1);
+      splitContainer.add(workspaceAccordion, 0.15);
+      splitContainer.add(this.__workspaceStack, 0.85);
       
       applicationContainer.add(splitContainer, {flex:1});
 
