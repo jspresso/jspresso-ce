@@ -30,5 +30,13 @@
       <groupId>freemarker</groupId>
       <artifactId>freemarker</artifactId>
     </dependency>
+    <dependency>
+      <groupId>foxtrot</groupId>
+      <artifactId>foxtrot</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>chrriis</groupId>
+      <artifactId>dj-nativeswing</artifactId>
+    </dependency>
 	</dependencies>
 </project>

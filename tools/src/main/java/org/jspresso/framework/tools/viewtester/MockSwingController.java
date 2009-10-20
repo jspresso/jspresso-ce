@@ -115,6 +115,10 @@ public class MockSwingController extends
     actionPanel.setLayout(new BorderLayout());
     actionPanel.add(buttonBox, BorderLayout.EAST);
 
+    if (dimension != null) {
+      mainView.setPreferredSize(new java.awt.Dimension(dimension.getWidth(),
+          dimension.getHeight()));
+    }
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BorderLayout());
     mainPanel.add(mainView, BorderLayout.CENTER);
@@ -125,9 +129,6 @@ public class MockSwingController extends
       dialog.getRootPane().setDefaultButton(defaultButton);
     }
     dialog.pack();
-    if (dimension != null) {
-      dialog.setSize(dimension.getWidth(), dimension.getHeight());
-    }
     SwingUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }

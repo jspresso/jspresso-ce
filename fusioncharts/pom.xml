@@ -11,8 +11,16 @@
   
   <dependencies>
     <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-application</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.fusioncharts</groupId>
       <artifactId>fusioncharts-free</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
     </dependency>
   </dependencies>
 </project>
