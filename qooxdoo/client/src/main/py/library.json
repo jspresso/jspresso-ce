@@ -9,6 +9,9 @@
       [
         {
           "manifest" : "contrib://UploadWidget/trunk/Manifest.json"
+        },
+        {
+          "manifest" : "contrib://CollapsablePanel/trunk/Manifest.json"
         }
       ]
     }

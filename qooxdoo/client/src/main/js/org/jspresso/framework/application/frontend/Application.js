@@ -92,6 +92,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application",
       qx.Class.patch(qx.ui.form.SelectBox, org.jspresso.framework.patch.MSelectBox);
       qx.Class.patch(qx.ui.table.Table, org.jspresso.framework.patch.MTable);
 
+      qx.Theme.include(qx.theme.modern.Appearance, collapsablepanel.theme.modern.Appearance);
+      qx.Theme.include(qx.theme.classic.Appearance, collapsablepanel.theme.classic.Appearance);
+
       // Enable logging in debug variant
       if (qx.core.Variant.isSet("qx.debug", "on"))
       {

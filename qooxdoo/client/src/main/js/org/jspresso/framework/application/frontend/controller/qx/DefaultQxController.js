@@ -38,7 +38,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     this.__commandsQueue = new Array();
     this.__dialogStack = new Array();
     this.__dialogStack.push([null, null]);
-    this.__workspaceWindows = new Object();
     this.__userLanguage = userLanguage;
     qx.locale.Manager.getInstance().setLocale(this.__userLanguage);
     this.__initRemoteController();
@@ -50,8 +49,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __application : null,
     /**@type qx.ui.embed.Iframe*/
     __dlFrame : null,
-    /**@type qx.ui.window.Desktop*/
-    __workspaceContainer : null,
     /**@type qx.io.remote.Rpc*/
     __remoteController : null,
     /**@type org.jspresso.framework.view.qx.DefaultQxViewFactory*/
@@ -62,8 +59,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __changeNotificationsEnabled : null,
     /**@type org.jspresso.framework.application.frontend.command.remote.RemoteCommand[]*/
     __commandsQueue : null,
-    /**@type Object*/
-    __workspaceWindows : null,
+    /**@type qx.ui.form.RadioGroup*/
+    __workspaceAccordionGroup : null,
+    /**@type qx.ui.container.Stack*/
+    __workspaceStack : null,
     /**@type Object*/
     __postponedCommands : null,
     /**@type Array*/
@@ -90,10 +89,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           this.__bindRemoteValueState(remotePeer);
           if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
             if(remotePeer.getChildren()) {
-	            var children = remotePeer.getChildren().toArray();
-	            for (var i = 0; i < children.length; i++) {
-	              this.register(children[i]);
-	            }
+              var children = remotePeer.getChildren().toArray();
+              for (var i = 0; i < children.length; i++) {
+                this.register(children[i]);
+              }
             }
           }
         }
@@ -278,6 +277,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         this.__initApplicationFrame(command.getWorkspaceActions(),
                              command.getActions(),
                              command.getHelpActions());
+        if(command.getWorkspaceActions().length > 1
+            && command.getWorkspaceActions()[0].getActions().length > 0) {
+          var wasEnabled = this.__changeNotificationsEnabled;
+          try {
+            this.__changeNotificationsEnabled = true;
+            this.execute(command.getWorkspaceActions()[0].getActions()[0]);
+          } finally {
+            this.__changeNotificationsEnabled = wasEnabled;
+          }
+        }
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand) {
         this.__displayWorkspace(command.getWorkspaceName(),
                          command.getWorkspaceView());
@@ -440,54 +449,39 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      */
     __displayWorkspace : function(workspaceName, workspaceView) {
-      /**@type qx.ui.window.Window*/
-      var workspaceWindow = this.__workspaceWindows[workspaceName];
-      if(!workspaceWindow && workspaceView) {
-        workspaceWindow = new qx.ui.window.Window();
-	      workspaceWindow.set({
-	        modal : false,
-	        showClose : false,
-	        showMaximize : true,
-	        showMinimize : false
-	      });
-        workspaceWindow.setLayout(new qx.ui.layout.Grow());
-        workspaceWindow.setCaption(workspaceView.getLabel());
-        workspaceWindow.addListener("changeActive", this.__notifyWorkspaceSelection, this);
-        this.__viewFactory.setIcon(workspaceWindow, workspaceView.getIcon());
-
-        var workspace = this.createComponent(workspaceView);
-        workspaceWindow.add(workspace);
-        
-        this.__workspaceWindows[workspaceName] = workspaceWindow;
-        this.__workspaceContainer.add(workspaceWindow);
-        workspaceWindow.open();
-        workspaceWindow.center();
+      if(workspaceView) {
+        var workspaceNavigator = null;
+        if(workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
+          workspaceNavigator = workspaceView.getLeftTop();
+          workspaceView = workspaceView.getRightBottom();
+        }
+        var workspaceViewUI = this.createComponent(workspaceView);
+        workspaceViewUI.setUserData("cardName", workspaceName);
+        this.__workspaceStack.add(workspaceViewUI);
+        if(workspaceNavigator) {
+          var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
+          if(workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
+            workspaceNavigatorUI.setHideRoot(true);
+          }
+          this.__workspaceAccordionGroup.getSelection()[0].add(workspaceNavigatorUI);
+        }
       }
-      this.__workspaceContainer.setActiveWindow(workspaceWindow);
-      workspaceWindow.maximize();
-    },
-    
-    __notifyWorkspaceSelection : function(e) {
-      /**@type qx.ui.window.Window*/
-      var workspaceWindow = e.getTarget();
-      if(workspaceWindow.isActive()) {
-	      var selectedWorkspaceName;
-	      for(var workspaceName in this.__workspaceWindows) {
-	        if(workspaceWindow === this.__workspaceWindows[workspaceName]) {
-	          selectedWorkspaceName = workspaceName;
-	        }
-	      }
-	      if(selectedWorkspaceName) {
-	        var workspaceSelectAction = new org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand();
-	        workspaceSelectAction.setWorkspaceName(selectedWorkspaceName);
-	        this.registerCommand(workspaceSelectAction);
-	      }
+      var children = this.__workspaceStack.getChildren();
+      var selectedCard;
+      for(var i = 0; i < children.length; i++) {
+        var child = children[i];
+        if(child.getUserData("cardName") == workspaceName) {
+          selectedCard = child;
+        }
+      }
+      if(selectedCard) {
+        this.__workspaceStack.setSelection([selectedCard]);
       }
     },
     
     /**
      * 
-     * @param {org.jspresso.framework.gui.remote.RAction[]} workspaceActions
+     * @param {org.jspresso.framework.gui.remote.RActionList[]} workspaceActions
      * @param {org.jspresso.framework.gui.remote.RAction[]} actions
      * @param {org.jspresso.framework.gui.remote.RAction[]} helpActions
      * @return void
@@ -503,8 +497,31 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       var menuBar = this.__createApplicationMenuBar(workspaceActions, actions, helpActions);
       applicationContainer.add(menuBar);
       
-      this.__workspaceContainer = new qx.ui.window.Desktop(new qx.ui.window.Manager());
-      applicationContainer.add(this.__workspaceContainer, {flex:1});
+      var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
+      this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
+      this.__workspaceAccordionGroup.setAllowEmptySelection(false);
+      for(var i = 0; i < workspaceActions[0].getActions().length; i++) {
+        var workspacePanel = new collapsablepanel.Panel(workspaceActions[0].getActions()[i].getName());
+        if(i == 0) {
+          workspacePanel.setValue(true);
+        } else {
+          workspacePanel.setValue(false);
+        }
+        workspacePanel.setGroup(this.__workspaceAccordionGroup);
+        workspacePanel.setUserData("rAction", workspaceActions[0].getActions()[i]);
+        workspacePanel.addListener("changeValue", function(event) {
+          this.execute(event.getTarget().getUserData("rAction"));
+        }, this);
+        workspaceAccordion.add(workspacePanel, {flex:1});
+      }
+
+      this.__workspaceStack = new qx.ui.container.Stack();
+      
+      var splitContainer = new qx.ui.splitpane.Pane("horizontal");
+      splitContainer.add(workspaceAccordion, 0);
+      splitContainer.add(this.__workspaceStack, 1);
+      
+      applicationContainer.add(splitContainer, {flex:1});
 
       this.__application.getRoot().add(applicationContainer, {edge:0})
     },
@@ -521,8 +538,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                                               actions,
                                               helpActions) {
       var menuBar = new qx.ui.menubar.MenuBar();
-      
-      this.__completeMenuBar(menuBar, workspaceActions, true);
+      var actualWorkspaceActions;
+      if(workspaceActions.length > 1) {
+        actualWorkspaceActions = new Array();
+        for(var waIndex = 1; waIndex < workspaceActions.length; waIndex++) {
+          actualWorkspaceActions[waIndex-1] = workspaceActions[waIndex];
+        }
+      } else {
+        actualWorkspaceActions = workspaceActions;
+      }
+
+      this.__completeMenuBar(menuBar, actualWorkspaceActions, true);
       this.__completeMenuBar(menuBar, actions, false);
       menuBar.addSpacer();
       this.__completeMenuBar(menuBar, helpActions, true);
@@ -599,8 +625,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
       this.__changeNotificationsEnabled = true;
       this.__commandsQueue = new Array();
-      this.__workspaceContainer = null;
-      this.__workspaceWindows = new Object();
       this.__dialogStack = new Array();
       this.__dialogStack.push([null, null]);
       this.start();
@@ -836,38 +860,38 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         dialog.removeAll();
       } else {
         var dialogParent;
-				//        if(this.__dialogStack && this.__dialogStack.length > 1) {
-				//          dialogParent = this.__dialogStack[__dialogStack.length -1];
-				//        } else {
-				//          dialogParent = this.__application.getRoot();
-				//        }
+        //        if(this.__dialogStack && this.__dialogStack.length > 1) {
+        //          dialogParent = this.__dialogStack[__dialogStack.length -1];
+        //        } else {
+        //          dialogParent = this.__application.getRoot();
+        //        }
         dialogParent = this.__application.getRoot();
         dialog = new qx.ui.window.Window();
         dialog.setLayout(new qx.ui.layout.Grow());
-	      dialog.set({
-	        modal : true,
-	        showClose : false,
-	        showMaximize : false,
-	        showMinimize : false
-	      });
+        dialog.set({
+          modal : true,
+          showClose : false,
+          showMaximize : false,
+          showMinimize : false
+        });
         dialogParent.add(dialog);
         this.__dialogStack.push([dialog, null]);
       }
       dialog.setCaption(title);
       this.__viewFactory.setIcon(dialog, icon);
       if(buttons.length > 0) {
-				dialog.addListener("keypress", function(e) {
-					if(   e.getKeyIdentifier() == "Enter"
+        dialog.addListener("keypress", function(e) {
+          if(   e.getKeyIdentifier() == "Enter"
              && !qx.ui.core.FocusHandler.getInstance().isFocused(buttons[0])) {
-						buttons[0].focus();
-						buttons[0].execute(); // and call the default button's
-					}
-				});
+            buttons[0].focus();
+            buttons[0].execute(); // and call the default button's
+          }
+        });
       }
 
-      if(this.__workspaceContainer) {
-        dialog.setMaxWidth(Math.floor(this.__workspaceContainer.getBounds().width * 90 / 100));
-        dialog.setMaxHeight(Math.floor(this.__workspaceContainer.getBounds().height * 90 / 100));
+      if(this.__workspaceStack) {
+        dialog.setMaxWidth(Math.floor(this.__workspaceStack.getBounds().width * 90 / 100));
+        dialog.setMaxHeight(Math.floor(this.__workspaceStack.getBounds().height * 90 / 100));
       }
       dialog.add(dialogBox);
       dialog.open();

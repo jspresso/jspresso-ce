@@ -336,7 +336,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         initApplicationFrame(initCommand.workspaceActions,
                              initCommand.actions,
                              initCommand.helpActions);
-          if(initCommand.workspaceActions.length > 1
+        if(initCommand.workspaceActions.length > 1
             && (initCommand.workspaceActions[0] as RActionList).actions.length > 0) {
           var wasEnabled:Boolean = _changeNotificationsEnabled;
           try {

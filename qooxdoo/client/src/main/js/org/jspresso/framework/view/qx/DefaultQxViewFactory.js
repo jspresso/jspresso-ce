@@ -1062,10 +1062,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           compColSpan = elementWidth;
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
-	        form.add(componentLabel, {row : labelRow,
-	                                  column : labelCol,
-	                                  rowSpan : 1,
-	                                  colSpan : labelColSpan});
+          form.add(componentLabel, {row : labelRow,
+                                    column : labelCol,
+                                    rowSpan : 1,
+                                    colSpan : labelColSpan});
         }
 
         form.add(component, {row : compRow,
@@ -1327,7 +1327,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       );
       treeController.setModel(state);
       treeController.setTarget(tree);
-      tree.getRoot().setOpen(true);
+      this.__expandAllChildren(tree, tree.getRoot());
       
       treeController.addListener("changeSelection", function(e) {
         /**@type qx.data.Array*/
@@ -1349,6 +1349,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
       }, this);
       return tree;
+    },
+    
+    /**
+     * 
+     * @param {qx.ui.tree.Tree} tree
+     * @param {qx.ui.tree.AbstractTreeItem} selectedItems
+     */
+    __expandAllChildren : function(tree, treeItem) {
+      treeItem.setOpen(true);
+      if(treeItem.getChildren() != null) {
+        for (var i = 0; i < treeItem.getChildren().length; i++) {
+          this.__expandAllChildren(tree, treeItem.getChildren()[i]);
+        }
+      }
     },
     
     /**
