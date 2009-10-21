@@ -69,7 +69,7 @@ public abstract class AbstractAction implements IAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     if (actionHandler.execute(getWrappedAction(context), context)) {
-      return actionHandler.execute(getWrappedAction(context), context);
+      return actionHandler.execute(getNextAction(context), context);
     }
     return false;
   }
