@@ -10,7 +10,7 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.AbstractBackendAction;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractChangePasswordAction extends
-    AbstractBackendAction {
+    BackendAction {
 
   /**
    * <code>PASSWD_CHANGE_DESCRIPTOR</code> is a unique reference to the model

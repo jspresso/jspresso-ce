@@ -46,7 +46,7 @@ import org.jspresso.framework.binding.IValueConnector;
  * @version $LastChangedRevision: 1671 $
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractPolymorphicAction extends AbstractBackendAction {
+public abstract class AbstractPolymorphicAction extends BackendAction {
 
   /**
    * Gets the selected indices from the context. it uses the
@@ -56,7 +56,7 @@ public abstract class AbstractPolymorphicAction extends AbstractBackendAction {
    *          the action context.
    * @return the selected indices if any.
    */
-  public int[] getSelectedIndices(Map<String, Object> context) {
+  protected int[] getSelectedIndices(Map<String, Object> context) {
     return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
   }
 
@@ -71,7 +71,7 @@ public abstract class AbstractPolymorphicAction extends AbstractBackendAction {
    *          the action context.
    * @return the list of selected objects.
    */
-  public List<?> getSelectedObjects(Map<String, Object> context) {
+  protected List<?> getSelectedObjects(Map<String, Object> context) {
     IValueConnector modelConnector = getModelConnector(context);
     List<Object> selectedObjects;
     if (modelConnector == null) {

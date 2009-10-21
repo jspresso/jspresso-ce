@@ -53,7 +53,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @param <G>
  *          the actual action type used.
  */
-public class ModalDialogAction<E, F, G> extends WrappingAction<E, F, G> {
+public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Shows a modal dialog containig a main view and a button panel with the list

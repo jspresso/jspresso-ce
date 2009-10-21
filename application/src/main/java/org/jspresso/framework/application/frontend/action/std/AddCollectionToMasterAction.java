@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -55,7 +55,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  *          the actual action type used.
  */
 public class AddCollectionToMasterAction<E, F, G> extends
-    WrappingAction<E, F, G> {
+    FrontendAction<E, F, G> {
 
   private IComponentDescriptor<IEntity> elementEntityDescriptor;
 

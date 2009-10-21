@@ -21,7 +21,7 @@ package org.jspresso.framework.application.frontend.action.workspace;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractFrontendAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
  * Application exit action.
@@ -48,17 +48,20 @@ import org.jspresso.framework.application.frontend.action.AbstractFrontendAction
  * @param <G>
  *          the actual action type used.
  */
-public class ExitAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
+public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Stops the frontend controller.
    * <p>
    * {@inheritDoc}
    */
-  public boolean execute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  @Override
+  public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    return getController(context).stop();
+    if (super.execute(actionHandler, context)) {
+      return getController(context).stop();
+    }
+    return false;
   }
 
 }

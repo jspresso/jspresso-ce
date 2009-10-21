@@ -42,7 +42,7 @@ import org.jspresso.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ResetConnectorValueAction extends AbstractBackendAction {
+public class ResetConnectorValueAction extends BackendAction {
 
   /**
    * Resets the model connector value to null.

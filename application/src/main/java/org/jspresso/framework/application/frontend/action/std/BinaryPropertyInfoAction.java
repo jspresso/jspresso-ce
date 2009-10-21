@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
  * A frontend action to display all usefull informations about a binary
@@ -50,7 +50,7 @@ import org.jspresso.framework.application.frontend.action.WrappingAction;
  * @param <G>
  *          the actual action type used.
  */
-public class BinaryPropertyInfoAction<E, F, G> extends WrappingAction<E, F, G> {
+public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Displays the size of the binary property.

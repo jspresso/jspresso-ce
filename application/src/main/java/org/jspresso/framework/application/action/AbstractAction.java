@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -58,6 +59,68 @@ public abstract class AbstractAction implements IAction {
   private Collection<String>    grantedRoles;
 
   private boolean               longOperation;
+
+  private IAction               nextAction;
+  private IAction               wrappedAction;
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    if (actionHandler.execute(getWrappedAction(context), context)) {
+      return actionHandler.execute(getWrappedAction(context), context);
+    }
+    return false;
+  }
+
+  /**
+   * Sets the wrappedAction.
+   * 
+   * @param wrappedAction
+   *          the wrappedAction to set.
+   */
+  public void setWrappedAction(IAction wrappedAction) {
+    this.wrappedAction = wrappedAction;
+  }
+
+  /**
+   * Gets the wrapped action reference. If the wrapped action has been
+   * configured strongly through the setter method, it is directly returned. If
+   * not, it is looked up into the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the wrapped action to execute.
+   * @see #setWrappedAction(IAction)
+   */
+  protected IAction getWrappedAction(Map<String, Object> context) {
+    return wrappedAction;
+  }
+
+  /**
+   * Gets the next action reference. If the next action has been configured
+   * strongly through the setter method, it is directly returned. If not, it is
+   * looked up into the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the next action to execute.
+   * @see #setNextAction(IAction)
+   */
+  protected IAction getNextAction(Map<String, Object> context) {
+    return nextAction;
+  }
+
+  /**
+   * Sets the nextAction.
+   * 
+   * @param nextAction
+   *          the next action to execute.
+   */
+  public void setNextAction(IAction nextAction) {
+    this.nextAction = nextAction;
+  }
 
   /**
    * {@inheritDoc}
@@ -103,16 +166,6 @@ public abstract class AbstractAction implements IAction {
   protected abstract IController getController(Map<String, Object> context);
 
   /**
-   * Retrieves the locale the action has to use to execute from its context
-   * using a well-known key.
-   * 
-   * @param context
-   *          the action context.
-   * @return the locale the action executes in.
-   */
-  protected abstract Locale getLocale(Map<String, Object> context);
-
-  /**
    * This is a utility method which is able to retrieve the model descriptor
    * this action has been executed on from its context. It uses well-known
    * context keys of the action context which are:
@@ -140,5 +193,17 @@ public abstract class AbstractAction implements IAction {
   protected ITranslationProvider getTranslationProvider(
       Map<String, Object> context) {
     return getController(context).getTranslationProvider();
+  }
+
+  /**
+   * Retrieves the locale the action has to use to execute from its context
+   * using a well-known key.
+   * 
+   * @param context
+   *          the action context.
+   * @return the locale the action executes in.
+   */
+  protected Locale getLocale(Map<String, Object> context) {
+    return getController(context).getLocale();
   }
 }

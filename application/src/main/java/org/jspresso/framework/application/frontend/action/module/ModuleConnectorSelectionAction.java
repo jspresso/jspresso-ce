@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -54,7 +54,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
  *            the actual action type used.
  */
 public class ModuleConnectorSelectionAction<E, F, G> extends
-    AbstractChainedAction<E, F, G> {
+    FrontendAction<E, F, G> {
 
   /**
    * Selects indices on the module view collection connector based on the

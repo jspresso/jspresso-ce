@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -57,7 +57,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * @param <G>
  *          the actual action type used.
  */
-public class ChooseComponentAction<E, F, G> extends AbstractChainedAction<E, F, G> {
+public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private IDisplayableAction cancelAction;
   private IDisplayableAction okAction;

@@ -14,7 +14,7 @@ import org.springframework.ldap.core.LdapTemplate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractLdapAction extends AbstractBackendAction
+public abstract class AbstractLdapAction extends BackendAction
     implements ILdapAction {
 
   private LdapTemplate ldapTemplate;

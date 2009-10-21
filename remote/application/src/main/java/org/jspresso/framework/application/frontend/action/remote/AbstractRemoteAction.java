@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.action.remote;
 
 import java.util.Map;
 
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.gui.remote.RAction;
@@ -48,7 +48,7 @@ import org.jspresso.framework.gui.remote.RIcon;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractRemoteAction extends
-    WrappingAction<RComponent, RIcon, RAction> {
+    FrontendAction<RComponent, RIcon, RAction> {
 
   /**
    * Registers a command for remote execution.

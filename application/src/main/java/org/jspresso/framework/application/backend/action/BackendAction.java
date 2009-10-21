@@ -18,11 +18,9 @@
  */
 package org.jspresso.framework.application.backend.action;
 
-import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
@@ -53,30 +51,7 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractBackendAction extends AbstractAction {
-
-  private AbstractBackendAction nextAction;
-
-  /**
-   * Executes the next action.
-   * <p>
-   * {@inheritDoc}
-   */
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    if (getNextAction() != null) {
-      return actionHandler.execute(getNextAction(), context);
-    }
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Locale getLocale(Map<String, Object> context) {
-    return getController(context).getLocale();
-  }
+public class BackendAction extends AbstractAction {
 
   /**
    * This is a utility method which is able to retrieve the model connector this
@@ -94,7 +69,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    *          the action context.
    * @return the value connector this model action was triggered on.
    */
-  public IValueConnector getModelConnector(Map<String, Object> context) {
+  protected IValueConnector getModelConnector(Map<String, Object> context) {
     return ((IValueConnector) context
         .get(ActionContextConstants.VIEW_CONNECTOR)).getModelConnector();
   }
@@ -111,7 +86,8 @@ public abstract class AbstractBackendAction extends AbstractAction {
    *          the action context.
    * @return the module model connector this action executes on.
    */
-  public ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
+  protected ICompositeValueConnector getModuleConnector(
+      Map<String, Object> context) {
     return (ICompositeValueConnector) ((ICompositeValueConnector) context
         .get(ActionContextConstants.MODULE_VIEW_CONNECTOR)).getModelConnector();
   }
@@ -121,16 +97,6 @@ public abstract class AbstractBackendAction extends AbstractAction {
    */
   public boolean isBackend() {
     return true;
-  }
-
-  /**
-   * Sets the nextAction.
-   * 
-   * @param nextAction
-   *          the nextAction to set.
-   */
-  public void setNextAction(AbstractBackendAction nextAction) {
-    this.nextAction = nextAction;
   }
 
   /**
@@ -178,14 +144,5 @@ public abstract class AbstractBackendAction extends AbstractAction {
    */
   protected IEntityFactory getEntityFactory(Map<String, Object> context) {
     return getController(context).getEntityFactory();
-  }
-
-  /**
-   * Gets the nextAction.
-   * 
-   * @return the nextAction.
-   */
-  protected AbstractBackendAction getNextAction() {
-    return nextAction;
   }
 }

@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.action.wings;
 
 import javax.swing.Action;
 
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.wings.SComponent;
 import org.wings.SIcon;
 
@@ -45,7 +45,7 @@ import org.wings.SIcon;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractWingsAction extends
-    WrappingAction<SComponent, SIcon, Action> {
+    FrontendAction<SComponent, SIcon, Action> {
 
   // NO-OP
 }

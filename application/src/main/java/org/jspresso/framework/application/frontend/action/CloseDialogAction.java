@@ -48,7 +48,7 @@ import org.jspresso.framework.action.IActionHandler;
  * @param <G>
  *          the actual action type used.
  */
-public class CloseDialogAction<E, F, G> extends WrappingAction<E, F, G> {
+public class CloseDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * {@inheritDoc}
@@ -59,7 +59,7 @@ public class CloseDialogAction<E, F, G> extends WrappingAction<E, F, G> {
     // do not call super since dialog must be closed between wrapped and next
     // action.
     // return super.execute(actionHandler, context);
-    if (actionHandler.execute(getWrappedAction(), context)) {
+    if (actionHandler.execute(getWrappedAction(context), context)) {
       getController(context).disposeModalDialog(getActionWidget(context),
           context);
       if (getNextAction(context) != null) {

@@ -57,7 +57,7 @@ import org.jspresso.framework.util.bean.MissingPropertyException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CreateQueryComponentAction extends AbstractBackendAction {
+public class CreateQueryComponentAction extends BackendAction {
 
   /**
    * Creates a query component using the model descriptor passed in the context.

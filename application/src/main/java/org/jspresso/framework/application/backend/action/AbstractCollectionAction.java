@@ -45,7 +45,7 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractCollectionAction extends AbstractBackendAction {
+public abstract class AbstractCollectionAction extends BackendAction {
 
   /**
    * refined to return a collection connector.
@@ -53,7 +53,7 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public ICollectionConnector getModelConnector(Map<String, Object> context) {
+  protected ICollectionConnector getModelConnector(Map<String, Object> context) {
     return (ICollectionConnector) super.getModelConnector(context);
   }
 
@@ -63,7 +63,7 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public ICollectionDescriptorProvider<?> getModelDescriptor(
+  protected ICollectionDescriptorProvider<?> getModelDescriptor(
       Map<String, Object> context) {
     return (ICollectionDescriptorProvider<?>) super.getModelDescriptor(context);
   }
@@ -76,7 +76,7 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
    *          the action context.
    * @return the selected indices if any.
    */
-  public int[] getSelectedIndices(Map<String, Object> context) {
+  protected int[] getSelectedIndices(Map<String, Object> context) {
     return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
   }
 
@@ -88,7 +88,7 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
    *          the action context.
    * @return the list of selected objects.
    */
-  public List<?> getSelectedObjects(Map<String, Object> context) {
+  protected List<?> getSelectedObjects(Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (selectedIndices == null || selectedIndices.length == 0

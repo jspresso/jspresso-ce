@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.action.ulc;
 
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCComponent;
@@ -45,7 +45,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractUlcAction extends
-    WrappingAction<ULCComponent, ULCIcon, IAction> {
+    FrontendAction<ULCComponent, ULCIcon, IAction> {
 
   // NO-OP
 }

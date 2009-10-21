@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractFrontendAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -38,7 +38,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @param <G>
  *          the actual action type used.
  */
-public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
+public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private IDisplayableAction     cancelAction;
   private IDisplayableAction     finishAction;
@@ -48,6 +48,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -65,7 +66,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
     modelConnector.setConnectorValue(wizardModel);
     displayWizardStep(firstWizardStep, modelConnector, actionHandler, context,
         false);
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**
@@ -268,7 +269,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
         getSourceComponent(context), context, dialogSize, reuseCurrent);
   }
 
-  private class CancelAction extends AbstractFrontendAction<E, F, G> {
+  private class CancelAction extends FrontendAction<E, F, G> {
 
     @SuppressWarnings("unused")
     private IWizardStepDescriptor wizardStep;
@@ -280,10 +281,11 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       this.wrappedCancelAction = wrappedCancelAction;
     }
 
+    @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
       actionHandler.execute(wrappedCancelAction, context);
-      return true;
+      return super.execute(actionHandler, context);
     }
 
     /**
@@ -311,7 +313,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
     }
   }
 
-  private class FinishAction extends AbstractFrontendAction<E, F, G> {
+  private class FinishAction extends FrontendAction<E, F, G> {
 
     private IWizardStepDescriptor wizardStep;
     private IDisplayableAction    wrappedFinishAction;
@@ -322,6 +324,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       this.wrappedFinishAction = wrappedFinishAction;
     }
 
+    @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
       if (wizardStep.getOnLeaveAction() == null
@@ -330,7 +333,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
             context).getConnectorValue());
         actionHandler.execute(wrappedFinishAction, context);
       }
-      return true;
+      return super.execute(actionHandler, context);
     }
 
     /**
@@ -358,7 +361,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
     }
   }
 
-  private class NextAction extends AbstractFrontendAction<E, F, G> {
+  private class NextAction extends FrontendAction<E, F, G> {
 
     private IValueConnector       modelConnector;
     private IWizardStepDescriptor wizardStep;
@@ -369,6 +372,7 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       this.modelConnector = modelConnector;
     }
 
+    @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
       if (wizardStep.getOnLeaveAction() == null
@@ -381,11 +385,11 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
           actionHandler.execute(nextWizardStep.getOnEnterAction(), context);
         }
       }
-      return true;
+      return super.execute(actionHandler, context);
     }
   }
 
-  private class PreviousAction extends AbstractFrontendAction<E, F, G> {
+  private class PreviousAction extends FrontendAction<E, F, G> {
 
     private IValueConnector       modelConnector;
     private IWizardStepDescriptor wizardStep;
@@ -396,13 +400,14 @@ public class WizardAction<E, F, G> extends AbstractFrontendAction<E, F, G> {
       this.modelConnector = modelConnector;
     }
 
+    @Override
     public boolean execute(IActionHandler actionHandler,
         Map<String, Object> context) {
       IWizardStepDescriptor previousWizardStep = wizardStep
           .getPreviousStepDescriptor(context);
       displayWizardStep(previousWizardStep, modelConnector, actionHandler,
           context, true);
-      return true;
+      return super.execute(actionHandler, context);
     }
   }
 }

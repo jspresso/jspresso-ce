@@ -232,7 +232,7 @@
   <bean id="doPrintAction" parent="okDialogFrontAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/print-48x48.png" />
     <property name="nextAction">
-      <bean class="org.jspresso.framework.application.frontend.action.WrappingAction">
+      <bean class="org.jspresso.framework.application.frontend.action.FrontendAction">
         <property name="wrappedAction" ref="doPrintBackendAction" />
         <property name="nextAction" ref="displayReportAction" />
       </bean>
@@ -283,7 +283,7 @@
 
   <bean id="moduleConnectorSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.module.ModuleConnectorSelectionAction" />
 
-  <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
         <property name="queryAction" ref="queryEntitiesBackAction" />
@@ -317,7 +317,7 @@
     <property name="scriptHandler" ref="scriptHandler" />
   </bean>
 
-  <bean id="abstractCollectionAction" abstract="true" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="abstractCollectionAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.SetActionParamFromSelectedComponentsAction" />
     </property>
@@ -347,7 +347,7 @@
     </property>
   </bean>
 
-  <bean id="cloneEntityCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="cloneEntityCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_clone-48x48.png" />
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
@@ -360,7 +360,7 @@
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
 
-  <bean id="cloneMapCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="cloneMapCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_clone-48x48.png" />
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
@@ -371,7 +371,7 @@
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
 
-  <bean id="copyCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="copyCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_copy-48x48.png" />
     <property name="name" value="copy.name" />
     <property name="description" value="copy.description" />
@@ -383,7 +383,7 @@
     </property>
   </bean>
 
-  <bean id="cutCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="cutCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_cut-48x48.png" />
     <property name="name" value="cut.name" />
     <property name="description" value="cut.description" />
@@ -399,7 +399,7 @@
     <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
   </bean>
 
-  <bean id="pasteCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="pasteCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_paste-48x48.png" />
     <property name="name" value="paste.name" />
     <property name="description" value="paste.description" />
@@ -444,7 +444,7 @@
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
 
-  <bean id="addAsChildModuleFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="addAsChildModuleFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/view-48x48.png" />
     <property name="name" value="installInTree.name" />
     <property name="description" value="installInTree.description" />
@@ -460,7 +460,7 @@
     <property name="description" value="module.restart.description" />
   </bean>
 
-  <bean id="moveUpFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="moveUpFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
     <property name="name" value="moveUp.name" />
     <property name="description" value="moveUp.description" />
@@ -472,7 +472,7 @@
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
 
-  <bean id="moveDownFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="moveDownFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/down-48x48.png" />
     <property name="name" value="moveDown.name" />
     <property name="description" value="moveDown.description" />
@@ -484,7 +484,7 @@
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
 
-  <bean id="resetPropertyFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="resetPropertyFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/reset-48x48.png" />
     <property name="name" value="reset.name" />
     <property name="description" value="reset.description" />
@@ -496,7 +496,7 @@
   <!--
     Persistence action beans.
   -->
-  <bean id="saveModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="saveModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/save-48x48.png" />
     <property name="name" value="save.name" />
     <property name="description" value="save.description" />
@@ -508,7 +508,7 @@
     </property>
   </bean>
 
-  <bean id="reloadModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.WrappingAction">
+  <bean id="reloadModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/reload-48x48.png" />
     <property name="name" value="reload.name" />
     <property name="description" value="reload.description" />

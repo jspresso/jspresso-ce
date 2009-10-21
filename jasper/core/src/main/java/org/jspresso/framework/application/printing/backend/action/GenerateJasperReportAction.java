@@ -34,7 +34,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.AbstractBackendAction;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.url.UrlHelper;
@@ -60,7 +60,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class GenerateJasperReportAction extends AbstractBackendAction {
+public class GenerateJasperReportAction extends BackendAction {
 
   private JdbcTemplate jdbcTemplate;
 

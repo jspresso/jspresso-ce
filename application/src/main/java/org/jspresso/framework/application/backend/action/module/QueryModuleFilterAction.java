@@ -23,7 +23,7 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.AbstractBackendAction;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
@@ -50,7 +50,7 @@ import org.jspresso.framework.util.collection.ESort;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class QueryModuleFilterAction extends AbstractBackendAction {
+public class QueryModuleFilterAction extends BackendAction {
 
   private IAction queryAction;
 

@@ -24,7 +24,6 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
-
 /**
  * Base class for backend actions acting on collections.
  * <p>
@@ -53,7 +52,7 @@ public abstract class AbstractHibernateCollectionAction extends
    * {@inheritDoc}
    */
   @Override
-  public ICollectionConnector getModelConnector(Map<String, Object> context) {
+  protected ICollectionConnector getModelConnector(Map<String, Object> context) {
     return (ICollectionConnector) super.getModelConnector(context);
   }
 
@@ -63,7 +62,7 @@ public abstract class AbstractHibernateCollectionAction extends
    * {@inheritDoc}
    */
   @Override
-  public ICollectionDescriptorProvider<?> getModelDescriptor(
+  protected ICollectionDescriptorProvider<?> getModelDescriptor(
       Map<String, Object> context) {
     return (ICollectionDescriptorProvider<?>) super.getModelDescriptor(context);
   }
@@ -73,10 +72,10 @@ public abstract class AbstractHibernateCollectionAction extends
    * <code>ActionContextConstants.SELECTED_INDICES</code> key.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the selected indices if any.
    */
-  public int[] getSelectedIndices(Map<String, Object> context) {
+  protected int[] getSelectedIndices(Map<String, Object> context) {
     return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
   }
 }

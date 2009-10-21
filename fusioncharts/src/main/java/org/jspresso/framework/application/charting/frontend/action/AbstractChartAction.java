@@ -21,7 +21,7 @@ package org.jspresso.framework.application.charting.frontend.action;
 import java.util.List;
 
 import org.jspresso.framework.application.charting.descriptor.IChartDescriptor;
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -40,7 +40,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @param <G>
  *          the actual action type used.
  */
-public class AbstractChartAction<E, F, G> extends WrappingAction<E, F, G> {
+public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private JdbcTemplate             jdbcTemplate;
   private IChartDescriptor         chartDescriptor;

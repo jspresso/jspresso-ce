@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.AbstractBackendAction;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
@@ -46,7 +46,7 @@ import org.jspresso.framework.binding.IValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class InitModuleFilterAction extends AbstractBackendAction {
+public class InitModuleFilterAction extends BackendAction {
 
   /**
    * Fills the context with the filter reference descriptor.

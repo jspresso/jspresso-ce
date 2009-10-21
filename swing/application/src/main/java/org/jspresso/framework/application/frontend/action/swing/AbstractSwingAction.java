@@ -22,7 +22,7 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
  * This class serves as base class for swing actions. It provides accessors on
@@ -45,7 +45,7 @@ import org.jspresso.framework.application.frontend.action.WrappingAction;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractSwingAction extends
-    WrappingAction<JComponent, Icon, Action> {
+    FrontendAction<JComponent, Icon, Action> {
 
   // NO-OP
 }

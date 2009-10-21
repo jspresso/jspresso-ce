@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 
@@ -53,7 +53,7 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
  * @param <G>
  *          the actual action type used.
  */
-public class OkChooseComponentAction<E, F, G> extends WrappingAction<E, F, G> {
+public class OkChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * {@inheritDoc}

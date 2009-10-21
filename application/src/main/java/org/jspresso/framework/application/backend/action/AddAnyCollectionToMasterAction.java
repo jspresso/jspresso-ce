@@ -54,7 +54,7 @@ public class AddAnyCollectionToMasterAction extends
    * {@inheritDoc}
    */
   @Override
-  public ModelCollectionPropertyConnector getModelConnector(
+  protected ModelCollectionPropertyConnector getModelConnector(
       Map<String, Object> context) {
     return (ModelCollectionPropertyConnector) super.getModelConnector(context);
   }
@@ -63,7 +63,7 @@ public class AddAnyCollectionToMasterAction extends
    * {@inheritDoc}
    */
   @Override
-  public ICollectionDescriptorProvider<?> getModelDescriptor(
+  protected ICollectionDescriptorProvider<?> getModelDescriptor(
       Map<String, Object> context) {
     return (ICollectionDescriptorProvider<?>) getModelConnector(context)
         .getModelDescriptor();

@@ -28,7 +28,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.descriptor.basic.BasicDescriptorDescriptor;
@@ -62,7 +62,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @param <G>
  *          the actual action type used.
  */
-public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> {
+public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private List<IDisplayableAction> actions;
 

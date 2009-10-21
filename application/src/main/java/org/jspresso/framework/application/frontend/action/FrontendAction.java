@@ -63,8 +63,8 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @param <G>
  *          the actual action type used.
  */
-public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
-    implements IDisplayableAction {
+public class FrontendAction<E, F, G> extends AbstractAction implements
+    IDisplayableAction {
 
   private String                acceleratorAsString;
   private Collection<IGate>     actionabilityGates;
@@ -74,7 +74,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
    */
-  public AbstractFrontendAction() {
+  public FrontendAction() {
     actionDescriptor = new DefaultIconDescriptor();
   }
 
@@ -295,14 +295,6 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   protected IIconFactory<F> getIconFactory(Map<String, Object> context) {
     return getViewFactory(context).getIconFactory();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Locale getLocale(Map<String, Object> context) {
-    return getController(context).getLocale();
   }
 
   /**

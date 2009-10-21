@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.application.printing.model.IReportFactory;
 import org.jspresso.framework.application.printing.model.descriptor.IReportDescriptor;
@@ -60,7 +60,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * @param <G>
  *          the actual action type used.
  */
-public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
+public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private IModelConnectorFactory  modelConnectorFactory;
   private List<IReportDescriptor> reportDescriptors;

@@ -27,7 +27,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
-import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -67,7 +67,7 @@ import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
  * @param <G>
  *          the actual action type used.
  */
-public class LovAction<E, F, G> extends AbstractChainedAction<E, F, G> {
+public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private boolean                               autoquery;
   private IDisplayableAction                    cancelAction;

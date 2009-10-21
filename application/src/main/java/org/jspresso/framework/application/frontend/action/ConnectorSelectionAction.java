@@ -50,7 +50,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
  *          the actual action type used.
  */
 public class ConnectorSelectionAction<E, F, G> extends
-    AbstractChainedAction<E, F, G> {
+    FrontendAction<E, F, G> {
 
   /**
    * Selects indices on the view collection connector based on the

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
  * A standard action to fill the contaxt with a page offset.
@@ -49,7 +49,7 @@ import org.jspresso.framework.application.frontend.action.WrappingAction;
  * @param <G>
  *          the actual action type used.
  */
-public class PageOffsetAction<E, F, G> extends WrappingAction<E, F, G> {
+public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private Integer pageOffset;
 

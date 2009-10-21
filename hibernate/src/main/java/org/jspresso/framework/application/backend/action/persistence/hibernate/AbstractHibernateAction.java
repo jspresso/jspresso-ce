@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.proxy.HibernateProxy;
-import org.jspresso.framework.application.backend.action.AbstractBackendAction;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
@@ -58,7 +58,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractHibernateAction extends AbstractBackendAction {
+public abstract class AbstractHibernateAction extends BackendAction {
 
   /**
    * Performs necessary cleanings when an entity or component is deleted.

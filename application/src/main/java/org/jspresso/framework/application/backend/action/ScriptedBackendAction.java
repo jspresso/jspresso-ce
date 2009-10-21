@@ -45,7 +45,7 @@ import org.jspresso.framework.util.scripting.IScriptHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ScriptedBackendAction extends AbstractBackendAction {
+public class ScriptedBackendAction extends BackendAction {
 
   private IScriptHandler scriptHandler;
 

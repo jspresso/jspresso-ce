@@ -21,7 +21,7 @@ import org.jspresso.framework.model.entity.IEntity;
  * @version $LastChangedRevision: 475 $
  * @author Vincent Vandenschrick
  */
-public class SelectEntityPropertyAction extends AbstractBackendAction {
+public class SelectEntityPropertyAction extends BackendAction {
 
   private String property;
 

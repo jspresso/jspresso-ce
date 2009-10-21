@@ -21,7 +21,7 @@ package org.jspresso.framework.application.frontend.action.workspace;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractFrontendAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
  * Workspace selection action.
@@ -48,8 +48,7 @@ import org.jspresso.framework.application.frontend.action.AbstractFrontendAction
  * @param <G>
  *          the actual action type used.
  */
-public class WorkspaceSelectionAction<E, F, G> extends
-    AbstractFrontendAction<E, F, G> {
+public class WorkspaceSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private String workspaceName;
 
@@ -58,11 +57,11 @@ public class WorkspaceSelectionAction<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
-  public boolean execute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
+  @Override
+  public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     getController(context).displayWorkspace(workspaceName);
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**

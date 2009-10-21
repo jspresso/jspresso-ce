@@ -22,9 +22,8 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractFrontendAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
-
 
 /**
  * Sets the object registered as ACTION_RESULT in the action context as the
@@ -47,22 +46,22 @@ import org.jspresso.framework.binding.IValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
-public class SetConnectorValueAction<E, F, G> extends
-    AbstractFrontendAction<E, F, G> {
+public class SetConnectorValueAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private String connectorActionContextKey;
 
   /**
    * {@inheritDoc}
    */
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     Object previousActionResult = context
         .get(ActionContextConstants.ACTION_PARAM);
     IValueConnector connector = (IValueConnector) context
@@ -70,14 +69,14 @@ public class SetConnectorValueAction<E, F, G> extends
     // the following will force a connector value change event.
     // connector.setConnectorValue(null);
     connector.setConnectorValue(previousActionResult);
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**
    * Sets the connectorActionContextKey.
    * 
    * @param connectorActionContextKey
-   *            the connectorActionContextKey to set.
+   *          the connectorActionContextKey to set.
    */
   public void setConnectorActionContextKey(String connectorActionContextKey) {
     this.connectorActionContextKey = connectorActionContextKey;

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
@@ -56,7 +56,7 @@ import org.jspresso.framework.application.model.Module;
  *            the actual action type used.
  */
 public class ModuleRestartAction<E, F, G> extends
-    AbstractChainedAction<E, F, G> {
+    FrontendAction<E, F, G> {
 
   /**
    * Gets the current module and restarts it. {@inheritDoc}

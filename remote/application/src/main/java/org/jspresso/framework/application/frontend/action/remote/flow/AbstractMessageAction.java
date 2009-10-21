@@ -23,7 +23,7 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.WrappingAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.binding.IValueConnector;
@@ -127,7 +127,7 @@ public abstract class AbstractMessageAction extends AbstractRemoteAction {
     if (action instanceof IDisplayableAction) {
       return (IDisplayableAction) action;
     }
-    WrappingAction<RComponent, RIcon, RAction> displayableAction = new WrappingAction<RComponent, RIcon, RAction>();
+    FrontendAction<RComponent, RIcon, RAction> displayableAction = new FrontendAction<RComponent, RIcon, RAction>();
     displayableAction.setWrappedAction(action);
     return displayableAction;
   }

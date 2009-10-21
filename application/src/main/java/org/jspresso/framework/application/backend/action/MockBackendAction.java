@@ -37,6 +37,6 @@ package org.jspresso.framework.application.backend.action;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MockBackendAction extends AbstractBackendAction {
+public class MockBackendAction extends BackendAction {
   // Empty implementation.
 }

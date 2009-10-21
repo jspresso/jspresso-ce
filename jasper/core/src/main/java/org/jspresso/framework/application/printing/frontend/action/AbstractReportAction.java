@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.application.printing.model.IReportFactory;
 
@@ -52,7 +52,7 @@ import org.jspresso.framework.application.printing.model.IReportFactory;
  *          the actual action type used.
  */
 public abstract class AbstractReportAction<E, F, G> extends
-    AbstractChainedAction<E, F, G> {
+    FrontendAction<E, F, G> {
 
   private IReportFactory reportFactory;
 
