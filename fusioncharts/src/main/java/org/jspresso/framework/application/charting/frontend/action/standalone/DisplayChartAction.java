@@ -21,7 +21,7 @@ package org.jspresso.framework.application.charting.frontend.action.standalone;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +64,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
           }
         });
 
-    Map<String, String> flashContext = new HashMap<String, String>();
+    Map<String, String> flashContext = new LinkedHashMap<String, String>();
     flashContext.put("dataXml", chartData);
     Dimension d = getChartDescriptor().getDimension();
     flashContext.put("chartWidth", Integer.toString(d.getWidth()));
