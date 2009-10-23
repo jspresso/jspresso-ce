@@ -71,6 +71,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -78,6 +80,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -1699,7 +1702,7 @@ public class DefaultSwingViewFactory extends
     ICompositeValueConnector connector = createTreeViewConnector(
         viewDescriptor, actionHandler, locale);
 
-    JTree viewComponent = createJTree();
+    final JTree viewComponent = createJTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
         connector);
     viewComponent.getSelectionModel().setSelectionMode(
@@ -1707,6 +1710,28 @@ public class DefaultSwingViewFactory extends
     viewComponent.setModel(treeModel);
     viewComponent.setCellRenderer(new ConnectorTreeCellRenderer());
     treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
+    if (viewDescriptor.isExpanded()) {
+      viewComponent.getModel().addTreeModelListener(new TreeModelListener() {
+
+        public void treeStructureChanged(TreeModelEvent e) {
+          expandAll(viewComponent, e.getTreePath());
+        }
+
+        public void treeNodesRemoved(
+            @SuppressWarnings("unused") TreeModelEvent e) {
+          // NO-OP.
+        }
+
+        public void treeNodesInserted(TreeModelEvent e) {
+          expandAll(viewComponent, e.getTreePath());
+        }
+
+        public void treeNodesChanged(
+            @SuppressWarnings("unused") TreeModelEvent e) {
+          // NO-OP.
+        }
+      });
+    }
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
@@ -1715,6 +1740,25 @@ public class DefaultSwingViewFactory extends
         actionHandler, locale));
     scrollPane.setMinimumSize(TREE_PREFERRED_SIZE);
     return view;
+  }
+
+  private void expandAll(final JTree tree, final TreePath tp) {
+    SwingUtilities.invokeLater(new Runnable() {
+
+      public void run() {
+        if (tp == null) {
+          return;
+        }
+        Object node = tp.getLastPathComponent();
+        TreeModel model = tree.getModel();
+        if (!model.isLeaf(node)) {
+          tree.expandPath(tp);
+          for (int i = 0; i < model.getChildCount(node); i++) {
+            expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
+          }
+        }
+      }
+    });
   }
 
   /**

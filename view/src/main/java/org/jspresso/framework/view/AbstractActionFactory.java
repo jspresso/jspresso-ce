@@ -207,7 +207,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   public Map<String, Object> createActionContext(IActionHandler actionHandler,
       IModelDescriptor modelDescriptor, F sourceComponent,
-      IValueConnector viewConnector, String actionCommand, Object actionWidget) {
+      IValueConnector viewConnector, String actionCommand, F actionWidget) {
     Map<String, Object> actionContext = actionHandler.createEmptyContext();
     actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR, modelDescriptor);
     actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);

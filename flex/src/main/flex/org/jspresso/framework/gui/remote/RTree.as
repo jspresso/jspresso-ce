@@ -19,9 +19,17 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RTree")]
     public class RTree extends RComponent {
 
+        private var _expanded:Boolean;
+
         public function RTree() {
           //default constructor.
         }
 
+        public function set expanded(value:Boolean):void {
+            _expanded = value;
+        }
+        public function get expanded():Boolean {
+            return _expanded;
+        }
     }
 }

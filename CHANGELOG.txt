@@ -94,6 +94,10 @@ New features
 2868617    Don't add forbidden tab in tab view
 2874777    Introduce BasicSet|ListDescriptor to hide implementation details
 2880635    WritabilityGate based on enumerated type
+2883781    FusionCharts-free integration
+2883783    Easier JasperReports integration
+2885049    "childrenDescriptors" list of subtrees on BasicTreeViewDescriptor
+2885050    "expanded" property on BasicTreeViewDescriptor
 
 3.0.0
 =====

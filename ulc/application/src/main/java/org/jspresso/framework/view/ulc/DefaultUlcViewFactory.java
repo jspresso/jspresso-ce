@@ -155,10 +155,13 @@ import com.ulcjava.base.application.ULCTree;
 import com.ulcjava.base.application.datatype.ULCDateDataType;
 import com.ulcjava.base.application.datatype.ULCNumberDataType;
 import com.ulcjava.base.application.datatype.ULCPercentDataType;
+import com.ulcjava.base.application.event.TreeModelEvent;
+import com.ulcjava.base.application.event.serializable.ITreeModelListener;
 import com.ulcjava.base.application.table.DefaultTableCellRenderer;
 import com.ulcjava.base.application.table.ITableCellRenderer;
 import com.ulcjava.base.application.table.ULCTableColumn;
 import com.ulcjava.base.application.tree.DefaultTreeCellRenderer;
+import com.ulcjava.base.application.tree.ITreeModel;
 import com.ulcjava.base.application.tree.TreePath;
 import com.ulcjava.base.application.tree.ULCTreeSelectionModel;
 import com.ulcjava.base.application.util.Color;
@@ -1463,7 +1466,7 @@ public class DefaultUlcViewFactory extends
     ICompositeValueConnector connector = createTreeViewConnector(
         viewDescriptor, actionHandler, locale);
 
-    ULCExtendedTree viewComponent = createULCTree();
+    final ULCExtendedTree viewComponent = createULCTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
         connector);
 
@@ -1485,6 +1488,30 @@ public class DefaultUlcViewFactory extends
     viewComponent.setModel(treeModel);
     viewComponent.setCellRenderer(new ConnectorTreeCellRenderer());
     treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
+    if (viewDescriptor.isExpanded()) {
+      viewComponent.getModel().addTreeModelListener(new ITreeModelListener() {
+
+        private static final long serialVersionUID = 6875911618418554499L;
+
+        public void treeStructureChanged(TreeModelEvent e) {
+          expandAll(viewComponent, e.getTreePath());
+        }
+
+        public void treeNodesInserted(TreeModelEvent e) {
+          expandAll(viewComponent, e.getTreePath());
+        }
+
+        public void treeNodesRemoved(
+            @SuppressWarnings("unused") TreeModelEvent e) {
+          // NO-OP
+        }
+
+        public void treeNodesChanged(
+            @SuppressWarnings("unused") TreeModelEvent e) {
+          // NO-OP
+        }
+      });
+    }
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
     IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
@@ -1493,6 +1520,20 @@ public class DefaultUlcViewFactory extends
         actionHandler, locale));
     scrollPane.setMinimumSize(TREE_PREFERRED_SIZE);
     return view;
+  }
+
+  private void expandAll(ULCTree tree, TreePath tp) {
+    if (tp == null) {
+      return;
+    }
+    Object node = tp.getLastPathComponent();
+    ITreeModel model = tree.getModel();
+    if (!model.isLeaf(node)) {
+      tree.expandPath(tp);
+      for (int i = 0; i < model.getChildCount(node); i++) {
+        expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
+      }
+    }
   }
 
   /**

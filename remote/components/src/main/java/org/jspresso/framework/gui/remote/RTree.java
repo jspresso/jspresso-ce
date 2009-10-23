@@ -41,6 +41,8 @@ public class RTree extends RComponent {
 
   private static final long serialVersionUID = 7886711955466326634L;
 
+  private boolean           expanded;
+
   /**
    * Constructs a new <code>RTree</code> instance. Only used for GWT
    * serialization support.
@@ -57,5 +59,24 @@ public class RTree extends RComponent {
    */
   public RTree(String guid) {
     super(guid);
+  }
+
+  /**
+   * Gets the expanded.
+   * 
+   * @return the expanded.
+   */
+  public boolean isExpanded() {
+    return expanded;
+  }
+
+  /**
+   * Sets the expanded.
+   * 
+   * @param expanded
+   *          the expanded to set.
+   */
+  public void setExpanded(boolean expanded) {
+    this.expanded = expanded;
   }
 }

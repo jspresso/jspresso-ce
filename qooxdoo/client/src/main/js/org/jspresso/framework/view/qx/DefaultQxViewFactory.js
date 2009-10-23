@@ -1327,7 +1327,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       );
       treeController.setModel(state);
       treeController.setTarget(tree);
-      this.__expandAllChildren(tree, tree.getRoot());
+      if(remoteTree.isExpanded()) {
+        this.__expandAllChildren(tree, tree.getRoot());
+      }
       
       treeController.addListener("changeSelection", function(e) {
         /**@type qx.data.Array*/

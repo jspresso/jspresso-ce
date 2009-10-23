@@ -167,7 +167,7 @@ public class SwingActionFactory extends
       if (actionHandler != null) {
         Map<String, Object> actionContext = createActionContext(actionHandler,
             modelDescriptor, sourceComponent, viewConnector, e
-                .getActionCommand(), e.getSource());
+                .getActionCommand(), (JComponent) e.getSource());
         actionHandler.execute(action, actionContext);
       }
     }

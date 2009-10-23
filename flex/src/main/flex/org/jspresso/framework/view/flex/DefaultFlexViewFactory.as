@@ -333,9 +333,11 @@ package org.jspresso.framework.view.flex {
       tree.horizontalScrollPolicy = ScrollPolicy.AUTO;
       tree.verticalScrollPolicy = ScrollPolicy.AUTO;
       bindTree(tree, remoteTree.state as RemoteCompositeValueState);
-      tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-          tree.expandChildrenOf(remoteTree.state, true);
-        });
+      if(remoteTree.expanded) {
+        tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+            tree.expandChildrenOf(remoteTree.state, true);
+          });
+      }
       return tree;
     }
 

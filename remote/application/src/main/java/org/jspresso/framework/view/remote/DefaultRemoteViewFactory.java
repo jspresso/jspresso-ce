@@ -1222,6 +1222,7 @@ public class DefaultRemoteViewFactory extends
         viewDescriptor, actionHandler, locale);
 
     RTree viewComponent = createRTree(connector);
+    viewComponent.setExpanded(viewDescriptor.isExpanded());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     return view;

@@ -169,7 +169,7 @@ public class WingsActionFactory extends
       if (actionHandler != null && !"".equals(e.getActionCommand())) {
         Map<String, Object> actionContext = createActionContext(actionHandler,
             modelDescriptor, sourceComponent, viewConnector, e
-                .getActionCommand(), e.getSource());
+                .getActionCommand(), (SComponent) e.getSource());
         actionHandler.execute(action, actionContext);
       }
     }

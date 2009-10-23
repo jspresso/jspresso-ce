@@ -84,4 +84,11 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
    */
   IAction getItemSelectionAction();
 
+  /**
+   * Gets wether the tree view should be created expanded.
+   * 
+   * @return true if the tree view should be created expanded.
+   */
+  boolean isExpanded();
+
 }

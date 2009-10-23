@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.List;
+
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
@@ -48,13 +50,22 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
     ITreeViewDescriptor {
 
-  private ITreeLevelDescriptor  childDescriptor;
-  private IIconImageURLProvider iconImageURLProvider;
-  private int                   maxDepth = 10;
+  private ITreeLevelDescriptor       childDescriptor;
+  private List<ITreeLevelDescriptor> childrenDescriptors;
+  private IIconImageURLProvider      iconImageURLProvider;
+  private int                        maxDepth = 10;
 
-  private String                renderedProperty;
-  private ITreeLevelDescriptor  rootSubtreeDescriptor;
-  private IAction               itemSelectionAction;
+  private String                     renderedProperty;
+  private ITreeLevelDescriptor       rootSubtreeDescriptor;
+  private IAction                    itemSelectionAction;
+  private boolean                    expanded;
+
+  /**
+   * Constructs a new <code>BasicTreeViewDescriptor</code> instance.
+   */
+  public BasicTreeViewDescriptor() {
+    expanded = false;
+  }
 
   /**
    * {@inheritDoc}
@@ -110,11 +121,19 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
       BasicListViewDescriptor fakeListViewDescriptor = new BasicListViewDescriptor();
       fakeListViewDescriptor.setRenderedProperty(renderedProperty);
       fakeListViewDescriptor.setModelDescriptor(fakeCollPropDescriptor);
-      rootSubtreeDescriptor = new BasicSimpleTreeLevelDescriptor();
-      ((BasicSimpleTreeLevelDescriptor) rootSubtreeDescriptor)
-          .setNodeGroupDescriptor(fakeListViewDescriptor);
-      ((BasicSimpleTreeLevelDescriptor) rootSubtreeDescriptor)
-          .setChildDescriptor(childDescriptor);
+      if (childDescriptor != null) {
+        rootSubtreeDescriptor = new BasicSimpleTreeLevelDescriptor();
+        ((BasicSimpleTreeLevelDescriptor) rootSubtreeDescriptor)
+            .setNodeGroupDescriptor(fakeListViewDescriptor);
+        ((BasicSimpleTreeLevelDescriptor) rootSubtreeDescriptor)
+            .setChildDescriptor(childDescriptor);
+      } else if (childrenDescriptors != null) {
+        rootSubtreeDescriptor = new BasicCompositeTreeLevelDescriptor();
+        ((BasicCompositeTreeLevelDescriptor) rootSubtreeDescriptor)
+            .setNodeGroupDescriptor(fakeListViewDescriptor);
+        ((BasicCompositeTreeLevelDescriptor) rootSubtreeDescriptor)
+            .setChildrenDescriptors(childrenDescriptors);
+      }
     }
     return rootSubtreeDescriptor;
   }
@@ -127,6 +146,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    */
   public void setChildDescriptor(ITreeLevelDescriptor childDescriptor) {
     this.childDescriptor = childDescriptor;
+    this.childrenDescriptors = null;
   }
 
   /**
@@ -185,5 +205,36 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    */
   public void setItemSelectionAction(IAction itemSelectionAction) {
     this.itemSelectionAction = itemSelectionAction;
+  }
+
+  /**
+   * Gets the expanded.
+   * 
+   * @return the expanded.
+   */
+  public boolean isExpanded() {
+    return expanded;
+  }
+
+  /**
+   * Sets the expanded.
+   * 
+   * @param expanded
+   *          the expanded to set.
+   */
+  public void setExpanded(boolean expanded) {
+    this.expanded = expanded;
+  }
+
+  /**
+   * Sets the childrenDescriptor.
+   * 
+   * @param childrenDescriptors
+   *          the childrenDescriptor to set.
+   */
+  public void setChildrenDescriptors(
+      List<ITreeLevelDescriptor> childrenDescriptors) {
+    this.childrenDescriptors = childrenDescriptors;
+    this.childDescriptor = null;
   }
 }

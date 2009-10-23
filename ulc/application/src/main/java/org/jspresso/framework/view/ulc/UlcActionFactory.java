@@ -162,7 +162,7 @@ public class UlcActionFactory extends
       if (actionHandler != null) {
         Map<String, Object> actionContext = createActionContext(actionHandler,
             modelDescriptor, sourceComponent, viewConnector, e
-                .getActionCommand(), e.getSource());
+                .getActionCommand(), (ULCComponent) e.getSource());
         actionHandler.execute(action, actionContext);
       }
     }

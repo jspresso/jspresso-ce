@@ -18,6 +18,14 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTree",
 
   construct : function() {
     this.base(arguments);
+  },
+  
+  properties :
+  {
+    expanded :
+    {
+      check : "Boolean"
+    }
   }
 
 });

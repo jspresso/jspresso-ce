@@ -132,6 +132,6 @@ public interface IActionFactory<E, F> {
    */
   Map<String, Object> createActionContext(IActionHandler actionHandler,
       IModelDescriptor modelDescriptor, F sourceComponent,
-      IValueConnector viewConnector, String actionCommand, Object actionWidget);
+      IValueConnector viewConnector, String actionCommand, F actionWidget);
 
 }
