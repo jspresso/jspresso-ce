@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.collection.ESort;
 
 import com.ulcjava.base.application.event.TableModelEvent;
@@ -96,8 +96,7 @@ public class ActionTableSorter extends AbstractTableSorter {
         orderingProperties.put(property, direction);
       }
     }
-    actionContext.put(ActionContextConstants.ORDERING_PROPERTIES,
-        orderingProperties);
+    actionContext.put(IQueryComponent.ORDERING_PROPERTIES, orderingProperties);
     actionHandler.execute(sortingAction, actionContext);
   }
 

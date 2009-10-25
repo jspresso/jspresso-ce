@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.action.remote.file;
 import java.io.IOException;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
@@ -70,8 +69,7 @@ public class FileOpenCallbackAction extends AbstractRemoteAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    String resourceId = (String) context
-        .get(ActionContextConstants.ACTION_COMMAND);
+    String resourceId = getActionCommand(context);
     IResource uploadedResource = ResourceManager.getInstance().getRegistered(
         resourceId);
     if (uploadedResource != null) {

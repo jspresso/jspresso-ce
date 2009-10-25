@@ -20,10 +20,8 @@ package org.jspresso.framework.application.backend.action;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.scripting.ScriptMixin;
-
 
 /**
  * A scripted backend action.
@@ -60,7 +58,7 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
     ScriptMixin scriptMixin = new ScriptMixin(this);
     scriptMixin.setLanguage(scriptLanguage);
     scriptMixin.setScript(script);
-    context.put(ActionContextConstants.ACTION_PARAM, scriptMixin);
+    setActionParameter(scriptMixin, context);
     return super.execute(actionHandler, context);
   }
 
@@ -68,7 +66,7 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
    * Sets the script source code.
    * 
    * @param script
-   *            the script source code.
+   *          the script source code.
    */
   public void setScript(String script) {
     this.script = script;
@@ -78,7 +76,7 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
    * Sets the script language this scripted action is written in.
    * 
    * @param scriptLanguage
-   *            the scripting language.
+   *          the scripting language.
    */
   public void setScriptLanguage(String scriptLanguage) {
     this.scriptLanguage = scriptLanguage;

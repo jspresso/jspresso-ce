@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action.wings.flow;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction;
 import org.jspresso.framework.util.html.HtmlHelper;
 
@@ -54,7 +53,7 @@ public abstract class AbstractMessageAction extends AbstractWingsAction {
    * @return the message.
    */
   protected String getMessage(Map<String, Object> context) {
-    return HtmlHelper.toHtml(HtmlHelper.emphasis((String) context
-        .get(ActionContextConstants.ACTION_PARAM)));
+    return HtmlHelper.toHtml(HtmlHelper
+        .emphasis((String) getActionParameter(context)));
   }
 }

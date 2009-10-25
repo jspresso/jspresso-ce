@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
@@ -62,8 +61,7 @@ public class SetConnectorValueAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    Object previousActionResult = context
-        .get(ActionContextConstants.ACTION_PARAM);
+    Object previousActionResult = getActionParameter(context);
     IValueConnector connector = (IValueConnector) context
         .get(connectorActionContextKey);
     // the following will force a connector value change event.

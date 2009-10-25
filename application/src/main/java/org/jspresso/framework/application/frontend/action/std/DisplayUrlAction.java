@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
@@ -64,7 +63,7 @@ public class DisplayUrlAction<E, F, G> extends FrontendAction<E, F, G> {
     if (baseUrl != null) {
       urlSpec.append(baseUrl);
     }
-    urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
+    urlSpec.append((String) getActionParameter(context));
 
     if (urlSpec.length() > 0) {
       getController(context).displayUrl(urlSpec.toString());

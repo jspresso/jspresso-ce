@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -52,6 +51,12 @@ public class AddComponentCollectionToMasterAction extends
     AbstractAddCollectionToMasterAction {
 
   /**
+   * The the descriptor of the model collection element domain object the action
+   * was triggered on.
+   */
+  public static final String ELEMENT_DESCRIPTOR = "ELEMENT_DESCRIPTOR";
+
+  /**
    * Gets the new entity to add. It is created using the informations contained
    * in the context.
    * 
@@ -63,13 +68,14 @@ public class AddComponentCollectionToMasterAction extends
   @SuppressWarnings("unchecked")
   protected List<?> getAddedComponents(Map<String, Object> context) {
     IComponentDescriptor elementDescriptor = (IComponentDescriptor) context
-        .get(ActionContextConstants.ELEMENT_DESCRIPTOR);
+        .get(ELEMENT_DESCRIPTOR);
     if (elementDescriptor == null) {
       elementDescriptor = ((ICollectionPropertyDescriptor) getModelDescriptor(context))
           .getReferencedDescriptor().getElementDescriptor();
     }
     IComponent newElement;
-    if (IEntity.class.isAssignableFrom(elementDescriptor.getComponentContract())) {
+    if (IEntity.class
+        .isAssignableFrom(elementDescriptor.getComponentContract())) {
       newElement = getEntityFactory(context).createEntityInstance(
           (Class<? extends IEntity>) elementDescriptor.getComponentContract());
     } else {

@@ -5,9 +5,7 @@ package org.jspresso.framework.application.frontend.action.ulc.flow;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-
 
 /**
  * Action with a static i18nalized message.
@@ -28,8 +26,8 @@ public class StaticInfoAction extends InfoAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
-        context).getTranslation(messageCode, getLocale(context)));
+    setActionParameter(getTranslationProvider(context).getTranslation(
+        messageCode, getLocale(context)), context);
     return super.execute(actionHandler, context);
   }
 
@@ -37,7 +35,7 @@ public class StaticInfoAction extends InfoAction {
    * Sets the messageCode.
    * 
    * @param messageCode
-   *            the messageCode to set.
+   *          the messageCode to set.
    */
   public void setMessageCode(String messageCode) {
     this.messageCode = messageCode;

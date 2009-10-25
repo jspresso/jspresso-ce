@@ -121,7 +121,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
       } catch (NoSuchMethodException ex) {
         throw new ActionException(ex);
       }
-      context.put(ActionContextConstants.ACTION_PARAM, newComponents);
+      setActionParameter(newComponents, context);
       context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
           .getIndicesOf(collectionConnector, newComponents));
     }

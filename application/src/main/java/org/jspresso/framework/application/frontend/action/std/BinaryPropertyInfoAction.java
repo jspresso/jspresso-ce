@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
@@ -66,22 +65,26 @@ public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
     if (content != null) {
       if (content.length < 1024) {
         size = new Integer(content.length);
-        unit = getTranslationProvider(context).getTranslation("bytes", getLocale(context));
+        unit = getTranslationProvider(context).getTranslation("bytes",
+            getLocale(context));
       } else if (content.length >= 1024 && content.length < 1024 * 1024) {
         size = new Integer(content.length / 1024);
-        unit = getTranslationProvider(context).getTranslation("kbytes", getLocale(context));
+        unit = getTranslationProvider(context).getTranslation("kbytes",
+            getLocale(context));
       } else if (content.length >= 1024 * 1024
           && content.length < 1024 * 1024 * 1024) {
         size = new Integer(content.length / (1024 * 1024));
-        unit = getTranslationProvider(context).getTranslation("mbytes", getLocale(context));
+        unit = getTranslationProvider(context).getTranslation("mbytes",
+            getLocale(context));
       } else if (content.length >= 1024 * 1024 * 1024) {
         size = new Integer(content.length / (1024 * 1024 * 1024));
-        unit = getTranslationProvider(context).getTranslation("gbytes", getLocale(context));
+        unit = getTranslationProvider(context).getTranslation("gbytes",
+            getLocale(context));
       }
     }
-    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
-        context).getTranslation("binary.info.message",
-        new Object[] {size, unit}, getLocale(context)));
+    setActionParameter(getTranslationProvider(context).getTranslation(
+        "binary.info.message", new Object[] {size, unit}, getLocale(context)),
+        context);
     return super.execute(actionHandler, context);
   }
 

@@ -206,4 +206,40 @@ public abstract class AbstractAction implements IAction {
   protected Locale getLocale(Map<String, Object> context) {
     return getController(context).getLocale();
   }
+
+  /**
+   * Gets the action parameter out of the context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the action parameter if it exists in the action context or null.
+   */
+  protected Object getActionParameter(Map<String, Object> context) {
+    return context.get(ActionContextConstants.ACTION_PARAM);
+  }
+
+  /**
+   * Sets the action parameter to the context.
+   * 
+   * @param actionParam
+   *          the action parameter to set to the context.
+   * @param context
+   *          the action context.
+   */
+  protected void setActionParameter(Object actionParam,
+      Map<String, Object> context) {
+    context.put(ActionContextConstants.ACTION_PARAM, actionParam);
+  }
+
+  /**
+   * Gets the (string) action command out of the context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the (string) action command if it exists in the action context or
+   *         null.
+   */
+  protected String getActionCommand(Map<String, Object> context) {
+    return (String) context.get(ActionContextConstants.ACTION_COMMAND);
+  }
 }

@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
@@ -33,7 +32,6 @@ import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.MemoryResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
-
 
 /**
  * A simple action to display a Jasper report.
@@ -60,9 +58,9 @@ public class DisplayJasperReportAction extends AbstractRemoteAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-    JasperPrint report = (JasperPrint) context
-        .get(ActionContextConstants.ACTION_PARAM);
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    JasperPrint report = (JasperPrint) getActionParameter(context);
 
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();

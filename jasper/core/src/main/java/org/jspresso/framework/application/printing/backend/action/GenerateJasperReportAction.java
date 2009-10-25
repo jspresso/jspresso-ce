@@ -31,7 +31,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
@@ -106,7 +105,7 @@ public class GenerateJasperReportAction extends BackendAction {
               }
             }
           });
-      context.put(ActionContextConstants.ACTION_PARAM, jasperPrint);
+      setActionParameter(jasperPrint, context);
     } catch (JRException ex) {
       throw new ActionException(ex);
     } catch (IOException ex) {

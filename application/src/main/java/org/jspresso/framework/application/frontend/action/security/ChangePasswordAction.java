@@ -6,7 +6,6 @@ package org.jspresso.framework.application.frontend.action.security;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.security.AbstractChangePasswordAction;
 import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
@@ -45,8 +44,7 @@ public class ChangePasswordAction<E, F, G> extends EditComponentAction<E, F, G> 
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    context.put(ActionContextConstants.ACTION_PARAM,
-        new HashMap<String, Object>());
+    setActionParameter(new HashMap<String, Object>(), context);
     return super.execute(actionHandler, context);
   }
 }

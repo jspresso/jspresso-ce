@@ -20,10 +20,11 @@ package org.jspresso.framework.application.backend.action.module;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
+import org.jspresso.framework.application.frontend.action.std.PageOffsetAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
@@ -66,15 +67,14 @@ public class QueryModuleFilterAction extends BackendAction {
           context).getConnectorValue();
       IValueConnector filterConnector = getModuleConnector(context)
           .getChildConnector(FilterableBeanCollectionModuleDescriptor.FILTER);
-      context
-          .put(ActionContextConstants.QUERY_MODEL_CONNECTOR, filterConnector);
+      context.put(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR,
+          filterConnector);
       IQueryComponent queryComponent = module.getFilter();
-      if (context.containsKey(ActionContextConstants.ORDERING_PROPERTIES)) {
+      if (context.containsKey(IQueryComponent.ORDERING_PROPERTIES)) {
         queryComponent.setOrderingProperties((Map<String, ESort>) context
-            .get(ActionContextConstants.ORDERING_PROPERTIES));
+            .get(IQueryComponent.ORDERING_PROPERTIES));
       }
-      Integer pageOffset = (Integer) context
-          .get(ActionContextConstants.PAGE_OFFSET);
+      Integer pageOffset = (Integer) context.get(PageOffsetAction.PAGE_OFFSET);
       if (pageOffset == null || pageOffset.intValue() == 0) {
         // This is a plain first query.
         queryComponent.setPage(null);

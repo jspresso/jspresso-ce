@@ -6,7 +6,6 @@ package org.jspresso.framework.application.backend.action;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
@@ -38,9 +37,9 @@ public class SelectEntityPropertyAction extends BackendAction {
     if (model != null) {
       try {
         Object propertyValue = getAccessorFactory(context)
-            .createPropertyAccessor(property, model.getComponentContract()).getValue(
-                model);
-        context.put(ActionContextConstants.ACTION_PARAM, propertyValue);
+            .createPropertyAccessor(property, model.getComponentContract())
+            .getValue(model);
+        setActionParameter(propertyValue, context);
       } catch (IllegalAccessException ex) {
         throw new ActionException(ex);
       } catch (InvocationTargetException ex) {

@@ -20,11 +20,9 @@ package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
-
 
 /**
  * Executes the action set in the context using the key ACTION_PARAM.
@@ -45,14 +43,13 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
-public class ExecuteActionAction<E, F, G> extends
-    FrontendAction<E, F, G> {
+public class ExecuteActionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * {@inheritDoc}
@@ -60,7 +57,7 @@ public class ExecuteActionAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IAction action = (IAction) context.get(ActionContextConstants.ACTION_PARAM);
+    IAction action = (IAction) getActionParameter(context);
     return actionHandler.execute(action, context)
         && super.execute(actionHandler, context);
   }

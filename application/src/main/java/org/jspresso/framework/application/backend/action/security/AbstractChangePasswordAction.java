@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionBusinessException;
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -27,8 +26,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractChangePasswordAction extends
-    BackendAction {
+public abstract class AbstractChangePasswordAction extends BackendAction {
 
   /**
    * <code>PASSWD_CHANGE_DESCRIPTOR</code> is a unique reference to the model
@@ -88,9 +86,8 @@ public abstract class AbstractChangePasswordAction extends
     UserPrincipal principal = getApplicationSession(context).getPrincipal();
     if (changePassword(principal, (String) actionParam.get(PASSWD_CURRENT),
         typedPasswd)) {
-      context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
-          context)
-          .getTranslation("password.change.success", getLocale(context)));
+      setActionParameter(getTranslationProvider(context).getTranslation(
+          "password.change.success", getLocale(context)), context);
       return super.execute(actionHandler, context);
     }
     return false;

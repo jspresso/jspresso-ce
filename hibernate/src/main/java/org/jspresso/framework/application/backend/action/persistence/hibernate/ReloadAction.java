@@ -21,12 +21,10 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
-
 
 /**
  * Reloads the object(s) provided by the action context.
@@ -55,7 +53,8 @@ public class ReloadAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      final Map<String, Object> context) {
     getApplicationSession(context).clearPendingOperations();
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
@@ -75,11 +74,11 @@ public class ReloadAction extends AbstractHibernateAction {
    * Gets the list of entities to reload.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the list of entities to save.
    */
   @SuppressWarnings("unchecked")
   protected List<IEntity> getEntitiesToReload(Map<String, Object> context) {
-    return (List<IEntity>) context.get(ActionContextConstants.ACTION_PARAM);
+    return (List<IEntity>) getActionParameter(context);
   }
 }

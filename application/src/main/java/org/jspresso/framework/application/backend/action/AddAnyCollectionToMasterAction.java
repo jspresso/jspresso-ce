@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.binding.model.ModelCollectionPropertyConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
@@ -79,7 +78,7 @@ public class AddAnyCollectionToMasterAction extends
    */
   @Override
   protected List<?> getAddedComponents(Map<String, Object> context) {
-    Object detailOrList = context.get(ActionContextConstants.ACTION_PARAM);
+    Object detailOrList = getActionParameter(context);
     if (detailOrList instanceof List<?>) {
       return (List<?>) detailOrList;
     }

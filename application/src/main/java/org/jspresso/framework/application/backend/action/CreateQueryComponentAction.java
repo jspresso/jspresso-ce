@@ -60,6 +60,16 @@ import org.jspresso.framework.util.bean.MissingPropertyException;
 public class CreateQueryComponentAction extends BackendAction {
 
   /**
+   * A parametrized entity reference descriptor.
+   */
+  public static final String COMPONENT_REF_DESCRIPTOR = "COMPONENT_REF_DESCRIPTOR";
+
+  /**
+   * the connector of the query model.
+   */
+  public static final String QUERY_MODEL_CONNECTOR    = "QUERY_MODEL_CONNECTOR";
+
+  /**
    * Creates a query component using the model descriptor passed in the context.
    * The action result contains the model connector holding the created query
    * entity with the key <code>ActionContextConstants.MODEL_CONNECTOR</code>.
@@ -71,7 +81,7 @@ public class CreateQueryComponentAction extends BackendAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     IReferencePropertyDescriptor erqDescriptor = (IReferencePropertyDescriptor) context
-        .get(ActionContextConstants.COMPONENT_REF_DESCRIPTOR);
+        .get(COMPONENT_REF_DESCRIPTOR);
     IModelDescriptor modelDescriptor = getModelDescriptor(context);
     if (erqDescriptor == null) {
       erqDescriptor = (IReferencePropertyDescriptor) modelDescriptor;
@@ -83,21 +93,19 @@ public class CreateQueryComponentAction extends BackendAction {
 
     completeQueryComponent(queryComponent, erqDescriptor, context);
     ModelRefPropertyConnector modelConnector = (ModelRefPropertyConnector) context
-        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
+        .get(QUERY_MODEL_CONNECTOR);
     if (modelConnector == null) {
       modelConnector = (ModelRefPropertyConnector) getController(context)
           .createModelConnector(
               ACTION_MODEL_NAME,
               new BasicQueryComponentDescriptor(erqDescriptor
                   .getReferencedDescriptor()));
-      context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
+      context.put(QUERY_MODEL_CONNECTOR, modelConnector);
     }
     modelConnector.setConnectorValue(queryComponent);
-    Object queryPropertyValue = context
-        .get(ActionContextConstants.ACTION_COMMAND);
+    String queryPropertyValue = getActionCommand(context);
     if (queryPropertyValue != null && !queryPropertyValue.equals("*")) {
-      String propertyName = (String) context
-          .get(ActionContextConstants.ACTION_PARAM);
+      String propertyName = (String) getActionParameter(context);
       if (propertyName != null) {
         modelConnector.getChildConnector(propertyName).setConnectorValue(
             queryPropertyValue);

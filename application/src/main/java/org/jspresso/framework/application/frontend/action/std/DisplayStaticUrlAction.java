@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 
 /**
@@ -58,8 +57,8 @@ public class DisplayStaticUrlAction<E, F, G> extends DisplayUrlAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
-        context).getTranslation(urlKey, getLocale(context)));
+    setActionParameter(getTranslationProvider(context).getTranslation(urlKey,
+        getLocale(context)), context);
     return super.execute(actionHandler, context);
   }
 

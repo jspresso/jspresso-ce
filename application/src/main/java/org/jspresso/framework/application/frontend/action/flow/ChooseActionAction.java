@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
@@ -82,7 +81,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
             .getSubject());
     actionsConnector.setConnectorValue(createActionProxies(
         getTranslationProvider(context), getLocale(context)));
-    context.put(ActionContextConstants.ACTION_PARAM, actionsConnector);
+    setActionParameter(actionsConnector, context);
     return super.execute(actionHandler, context);
   }
 

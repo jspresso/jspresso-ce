@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -94,22 +94,21 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       Map<String, Object> context) {
 
     IReferencePropertyDescriptor<IEntity> erqDescriptor = getEntityRefQueryDescriptor(context);
-    context.put(ActionContextConstants.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
+    context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
+        erqDescriptor);
 
     IValueConnector viewConnector = getViewConnector(context);
     if (viewConnector instanceof IRenderableCompositeValueConnector
         && ((IRenderableCompositeValueConnector) viewConnector)
             .getRenderingConnector() != null) {
-      context.put(ActionContextConstants.ACTION_PARAM,
-          ((IRenderableCompositeValueConnector) viewConnector)
-              .getRenderingConnector().getId());
+      setActionParameter(((IRenderableCompositeValueConnector) viewConnector)
+          .getRenderingConnector().getId(), context);
     }
     actionHandler.execute(createQueryComponentAction, context);
 
-    String queryPropertyValue = (String) context
-        .get(ActionContextConstants.ACTION_COMMAND);
+    String queryPropertyValue = getActionCommand(context);
     IValueConnector queryEntityConnector = (IValueConnector) context
-        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
+        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     if (autoquery && queryPropertyValue != null
         && queryPropertyValue.length() > 0 && !queryPropertyValue.equals("*")) {
       actionHandler.execute(findAction, context);
@@ -132,13 +131,13 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     actions.add(findAction);
     actions.add(okAction);
     actions.add(cancelAction);
-    context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
+    context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
     IView<E> lovView = getViewFactory(context).createView(
         lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
             okAction), actionHandler, getLocale(context));
-    context.put(ActionContextConstants.DIALOG_TITLE, getI18nName(
+    context.put(ModalDialogAction.DIALOG_TITLE, getI18nName(
         getTranslationProvider(context), getLocale(context)));
-    context.put(ActionContextConstants.DIALOG_VIEW, lovView);
+    context.put(ModalDialogAction.DIALOG_VIEW, lovView);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
 
     return super.execute(actionHandler, context);

@@ -52,7 +52,12 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   /**
    * "queriedComponents" string constant.
    */
-  String QUERIED_COMPONENTS = "queriedComponents";
+  String QUERIED_COMPONENTS  = "queriedComponents";
+
+  /**
+   * Ordering properties action constant.
+   */
+  String ORDERING_PROPERTIES = "ORDERING_PROPERTIES";
 
   /**
    * Gets the list of components result of the query.

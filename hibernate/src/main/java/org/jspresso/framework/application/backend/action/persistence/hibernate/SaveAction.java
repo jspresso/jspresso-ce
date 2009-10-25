@@ -21,7 +21,6 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
@@ -80,6 +79,6 @@ public class SaveAction extends AbstractHibernateAction {
    */
   @SuppressWarnings("unchecked")
   protected List<IEntity> getEntitiesToSave(Map<String, Object> context) {
-    return (List<IEntity>) context.get(ActionContextConstants.ACTION_PARAM);
+    return (List<IEntity>) getActionParameter(context);
   }
 }

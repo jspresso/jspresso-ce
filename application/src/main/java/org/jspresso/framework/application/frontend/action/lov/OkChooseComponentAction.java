@@ -20,12 +20,10 @@ package org.jspresso.framework.application.frontend.action.lov;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
-
 
 /**
  * Sets the selected component as the value of the source view connector (which
@@ -67,7 +65,7 @@ public class OkChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
     if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
       Object selectedComponent = resultConnector.getChildConnector(
           resultSelectedIndices[0]).getConnectorValue();
-      context.put(ActionContextConstants.ACTION_PARAM, selectedComponent);
+      setActionParameter(selectedComponent, context);
     }
     return super.execute(actionHandler, context);
   }

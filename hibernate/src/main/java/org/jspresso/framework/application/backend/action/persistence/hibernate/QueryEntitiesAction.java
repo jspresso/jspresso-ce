@@ -31,9 +31,9 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.IValueConnector;
@@ -76,7 +76,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
     final IQueryComponent queryComponent = (IQueryComponent) ((IValueConnector) context
-        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR)).getConnectorValue();
+        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR))
+        .getConnectorValue();
 
     List<IEntity> queriedEntities = (List<IEntity>) getTransactionTemplate(
         context).execute(new TransactionCallback() {

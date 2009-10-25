@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.AddComponentCollectionToMasterAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -88,7 +88,7 @@ public class AddCollectionToMasterAction<E, F, G> extends
     if (varContext == null) {
       varContext = new HashMap<String, Object>();
     }
-    varContext.put(ActionContextConstants.ELEMENT_DESCRIPTOR,
+    varContext.put(AddComponentCollectionToMasterAction.ELEMENT_DESCRIPTOR,
         getElementEntityDescriptor(context));
     return super.execute(actionHandler, varContext);
   }

@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateCollectionAction;
@@ -128,7 +127,7 @@ public class RemoveFromModuleObjectsAction extends
     }
     module.setModuleObjects(projectedCollection);
     collectionConnector.setConnectorValue(projectedCollection);
-    context.put(ActionContextConstants.ACTION_PARAM, moduleObjectsToRemove);
+    setActionParameter(moduleObjectsToRemove, context);
     return super.execute(actionHandler, context);
   }
 

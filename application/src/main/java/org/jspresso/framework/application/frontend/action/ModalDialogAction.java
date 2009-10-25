@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
@@ -54,6 +53,26 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  *          the actual action type used.
  */
 public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
+
+  /**
+   * The dialog actions.
+   */
+  public static final String DIALOG_ACTIONS = "DIALOG_ACTIONS";
+
+  /**
+   * The dialog title.
+   */
+  public static final String DIALOG_TITLE   = "DIALOG_TITLE";
+
+  /**
+   * The dialog view.
+   */
+  public static final String DIALOG_VIEW    = "DIALOG_VIEW";
+
+  /**
+   * The dialog size.
+   */
+  public static final String DIALOG_SIZE    = "DIALOG_SIZE";
 
   /**
    * Shows a modal dialog containig a main view and a button panel with the list
@@ -91,8 +110,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   @SuppressWarnings("unchecked")
   public List<IDisplayableAction> getActions(Map<String, Object> context) {
-    return (List<IDisplayableAction>) context
-        .get(ActionContextConstants.DIALOG_ACTIONS);
+    return (List<IDisplayableAction>) context.get(DIALOG_ACTIONS);
   }
 
   /**
@@ -104,7 +122,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   @SuppressWarnings("unchecked")
   public IView<E> getMainView(Map<String, Object> context) {
-    return (IView<E>) context.get(ActionContextConstants.DIALOG_VIEW);
+    return (IView<E>) context.get(DIALOG_VIEW);
   }
 
   /**
@@ -115,7 +133,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    * @return the dialog size.
    */
   public Dimension getDialogSize(Map<String, Object> context) {
-    return (Dimension) context.get(ActionContextConstants.DIALOG_SIZE);
+    return (Dimension) context.get(DIALOG_SIZE);
   }
 
   /**
@@ -126,7 +144,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    * @return the dialog title.
    */
   public String getTitle(Map<String, Object> context) {
-    return (String) context.get(ActionContextConstants.DIALOG_TITLE);
+    return (String) context.get(DIALOG_TITLE);
   }
 
 }

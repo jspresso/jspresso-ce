@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action.remote.flow;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
@@ -113,7 +112,7 @@ public abstract class AbstractMessageAction extends AbstractRemoteAction {
    * @return the message.
    */
   protected String getMessage(Map<String, Object> context) {
-    return (String) context.get(ActionContextConstants.ACTION_PARAM);
+    return (String) getActionParameter(context);
   }
 
   /**

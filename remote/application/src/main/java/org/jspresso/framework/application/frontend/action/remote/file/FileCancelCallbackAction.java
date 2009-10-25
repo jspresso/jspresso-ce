@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action.remote.file;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
 import org.jspresso.framework.application.frontend.file.IFileCallback;
@@ -67,8 +66,7 @@ public class FileCancelCallbackAction extends AbstractRemoteAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    String resourceId = (String) context
-        .get(ActionContextConstants.ACTION_COMMAND);
+    String resourceId = getActionCommand(context);
     fileCallback.cancel(actionHandler, context);
     if (resourceId != null) {
       ResourceManager.getInstance().unregister(resourceId);

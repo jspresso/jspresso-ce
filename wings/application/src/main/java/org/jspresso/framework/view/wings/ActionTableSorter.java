@@ -26,10 +26,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.gui.wings.components.ClickableHeaderSTable;
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.collection.ESort;
 import org.wings.table.STableColumnModel;
 
@@ -99,8 +99,7 @@ public class ActionTableSorter extends AbstractTableSorter {
         orderingProperties.put(property, direction);
       }
     }
-    actionContext.put(ActionContextConstants.ORDERING_PROPERTIES,
-        orderingProperties);
+    actionContext.put(IQueryComponent.ORDERING_PROPERTIES, orderingProperties);
     actionHandler.execute(sortingAction, actionContext);
   }
 

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -261,7 +261,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
     String title = getI18nName(translationProvider, locale) + " - "
         + wizardStep.getI18nName(translationProvider, locale);
     Dimension dialogSize = (Dimension) context
-        .get(ActionContextConstants.DIALOG_SIZE);
+        .get(ModalDialogAction.DIALOG_SIZE);
     getController(context).displayModalDialog(
         view.getPeer(),
         createWizardStepActions(wizardStep, view, actionHandler,
@@ -329,8 +329,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
         Map<String, Object> context) {
       if (wizardStep.getOnLeaveAction() == null
           || actionHandler.execute(wizardStep.getOnLeaveAction(), context)) {
-        context.put(ActionContextConstants.ACTION_PARAM, getViewConnector(
-            context).getConnectorValue());
+        setActionParameter(getViewConnector(context).getConnectorValue(),
+            context);
         actionHandler.execute(wrappedFinishAction, context);
       }
       return super.execute(actionHandler, context);

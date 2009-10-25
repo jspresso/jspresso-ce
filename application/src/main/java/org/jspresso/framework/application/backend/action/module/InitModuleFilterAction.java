@@ -20,9 +20,9 @@ package org.jspresso.framework.application.backend.action.module;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
@@ -58,9 +58,9 @@ public class InitModuleFilterAction extends BackendAction {
       Map<String, Object> context) {
     IValueConnector filterModelConnector = getModuleConnector(context)
         .getChildConnector(FilterableBeanCollectionModuleDescriptor.FILTER);
-    context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR,
+    context.put(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR,
         filterModelConnector);
-    context.put(ActionContextConstants.COMPONENT_REF_DESCRIPTOR,
+    context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
         filterModelConnector.getModelDescriptor());
     BeanCollectionModule beanCollectionModule = (BeanCollectionModule) getModuleConnector(
         context).getConnectorValue();

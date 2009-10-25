@@ -20,7 +20,6 @@ package org.jspresso.framework.application.backend.action;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 
 /**
@@ -56,7 +55,7 @@ public class SetActionParamFromSelectedComponentsAction extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    context.put(ActionContextConstants.ACTION_PARAM, getSelectedObjects(context));
+    setActionParameter(getSelectedObjects(context), context);
     return super.execute(actionHandler, context);
   }
 }

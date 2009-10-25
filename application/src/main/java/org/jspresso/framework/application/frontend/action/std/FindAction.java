@@ -20,8 +20,8 @@ package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -63,7 +63,7 @@ public class FindAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     IValueConnector queryEntityConnector = (IValueConnector) context
-        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
+        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     if (queryEntityConnector == null) {
       queryEntityConnector = getViewConnector(context).getModelConnector();
       while (queryEntityConnector != null
@@ -72,19 +72,18 @@ public class FindAction<E, F, G> extends FrontendAction<E, F, G> {
         // connector.
         queryEntityConnector = queryEntityConnector.getParentConnector();
       }
-      context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR,
+      context.put(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR,
           queryEntityConnector);
     }
     if (queryEntityConnector != null
         && queryEntityConnector.getConnectorValue() != null) {
       IQueryComponent queryComponent = ((IQueryComponent) queryEntityConnector
           .getConnectorValue());
-      if (context.containsKey(ActionContextConstants.ORDERING_PROPERTIES)) {
+      if (context.containsKey(IQueryComponent.ORDERING_PROPERTIES)) {
         queryComponent.setOrderingProperties((Map<String, ESort>) context
-            .get(ActionContextConstants.ORDERING_PROPERTIES));
+            .get(IQueryComponent.ORDERING_PROPERTIES));
       }
-      Integer pageOffset = (Integer) context
-          .get(ActionContextConstants.PAGE_OFFSET);
+      Integer pageOffset = (Integer) context.get(PageOffsetAction.PAGE_OFFSET);
       if (pageOffset == null || pageOffset.intValue() == 0) {
         // This is a plain first query.
         queryComponent.setPage(null);

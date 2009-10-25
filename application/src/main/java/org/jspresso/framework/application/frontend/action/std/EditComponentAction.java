@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.view.IView;
@@ -82,13 +82,13 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
     if (cancelAction != null) {
       actions.add(cancelAction);
     }
-    context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
+    context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
 
     IView<E> componentView = getViewFactory(context).createView(
         getViewDescriptor(context), actionHandler, getLocale(context));
-    context.put(ActionContextConstants.DIALOG_TITLE, getI18nName(
+    context.put(ModalDialogAction.DIALOG_TITLE, getI18nName(
         getTranslationProvider(context), getLocale(context)));
-    context.put(ActionContextConstants.DIALOG_VIEW, componentView);
+    context.put(ModalDialogAction.DIALOG_VIEW, componentView);
 
     IValueConnector componentConnector = modelConnectorFactory
         .createModelConnector(ACTION_MODEL_NAME, getViewDescriptor(context)
@@ -151,7 +151,7 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   @Override
   protected Object getModel(Map<String, Object> context) {
-    Object model = context.get(ActionContextConstants.ACTION_PARAM);
+    Object model = getActionParameter(context);
     if (model instanceof Collection<?>) {
       if (((Collection<?>) model).isEmpty()) {
         return null;

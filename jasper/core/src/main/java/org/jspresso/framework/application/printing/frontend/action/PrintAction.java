@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.printing.model.IReport;
@@ -79,7 +78,7 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
             .getSubject());
     reportsConnector.setConnectorValue(createReportInstances(
         getTranslationProvider(context), getLocale(context)));
-    context.put(ActionContextConstants.ACTION_PARAM, reportsConnector);
+    setActionParameter(reportsConnector, context);
     return super.execute(actionHandler, context);
   }
 

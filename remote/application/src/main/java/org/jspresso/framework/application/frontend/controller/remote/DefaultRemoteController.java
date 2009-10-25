@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
@@ -59,6 +58,7 @@ import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -500,7 +500,7 @@ public class DefaultRemoteController extends
           }
         }
         Map<String, Object> context = new HashMap<String, Object>();
-        context.put(ActionContextConstants.ORDERING_PROPERTIES,
+        context.put(IQueryComponent.ORDERING_PROPERTIES,
             typedOrderingProperties);
         sortAction.actionPerformed(null, ((RemoteSortCommand) command)
             .getViewStateGuid(), context);

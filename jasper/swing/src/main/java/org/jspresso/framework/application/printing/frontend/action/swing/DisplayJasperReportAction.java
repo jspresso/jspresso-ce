@@ -23,10 +23,8 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction;
-
 
 /**
  * A simple action to display a Jasper report.
@@ -53,10 +51,10 @@ public class DisplayJasperReportAction extends AbstractSwingAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
-    JasperPrint report = (JasperPrint) context
-        .get(ActionContextConstants.ACTION_PARAM);
+  public boolean execute(
+      @SuppressWarnings("unused") IActionHandler actionHandler,
+      Map<String, Object> context) {
+    JasperPrint report = (JasperPrint) getActionParameter(context);
     if (report != null) {
       JasperViewer.viewReport(report, false);
     }
