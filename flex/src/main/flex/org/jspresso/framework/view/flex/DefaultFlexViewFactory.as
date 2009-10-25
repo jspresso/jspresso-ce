@@ -337,6 +337,10 @@ package org.jspresso.framework.view.flex {
         tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
             tree.expandChildrenOf(remoteTree.state, true);
           });
+      } else {
+        tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+            tree.expandItem(remoteTree.state, true);
+          });
       }
       return tree;
     }
