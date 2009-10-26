@@ -18,13 +18,8 @@
  */
 package org.jspresso.framework.application.backend.action;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.IValueConnector;
 
 /**
  * This class can be used as parent class for actions that can be registered
@@ -49,18 +44,6 @@ import org.jspresso.framework.binding.IValueConnector;
 public abstract class AbstractPolymorphicAction extends BackendAction {
 
   /**
-   * Gets the selected indices from the context. it uses the
-   * <code>ActionContextConstants.SELECTED_INDICES</code> key.
-   * 
-   * @param context
-   *          the action context.
-   * @return the selected indices if any.
-   */
-  protected int[] getSelectedIndices(Map<String, Object> context) {
-    return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
-  }
-
-  /**
    * Gets the selected objects from the backend connector and the context. If
    * the action is backed by a collection connector the method will use the
    * context selected indices to compute the selected objects collection.
@@ -70,28 +53,10 @@ public abstract class AbstractPolymorphicAction extends BackendAction {
    * @param context
    *          the action context.
    * @return the list of selected objects.
+   * @deprecated use getSelectedModels(Map<String, Object>) instead.
    */
+  @Deprecated
   protected List<?> getSelectedObjects(Map<String, Object> context) {
-    IValueConnector modelConnector = getModelConnector(context);
-    List<Object> selectedObjects;
-    if (modelConnector == null) {
-      return null;
-    } else if (modelConnector instanceof ICollectionConnector) {
-      int[] selectedIndices = getSelectedIndices(context);
-      ICollectionConnector collectionConnector = (ICollectionConnector) modelConnector;
-      if (selectedIndices == null || selectedIndices.length == 0) {
-        return null;
-      }
-      selectedObjects = new ArrayList<Object>();
-      for (int i = 0; i < selectedIndices.length; i++) {
-        Object element = collectionConnector.getChildConnector(
-            selectedIndices[i]).getConnectorValue();
-        selectedObjects.add(element);
-      }
-    } else {
-      selectedObjects = new ArrayList<Object>();
-      selectedObjects.add(modelConnector.getConnectorValue());
-    }
-    return selectedObjects;
+    return getSelectedModels(context);
   }
 }

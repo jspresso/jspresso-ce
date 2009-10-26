@@ -25,7 +25,6 @@ import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
@@ -52,27 +51,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * @author Vincent Vandenschrick
  */
 public class BackendAction extends AbstractAction {
-
-  /**
-   * This is a utility method which is able to retrieve the model connector this
-   * action has been executed on from its context. It uses well-known context
-   * keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the model
-   * value connector of the connector hierarchy.
-   * </ul>
-   * <p>
-   * The returned connector mainly serves for retrieving the domain object the
-   * action has to be triggered on.
-   * 
-   * @param context
-   *          the action context.
-   * @return the value connector this model action was triggered on.
-   */
-  protected IValueConnector getModelConnector(Map<String, Object> context) {
-    return ((IValueConnector) context
-        .get(ActionContextConstants.VIEW_CONNECTOR)).getModelConnector();
-  }
 
   /**
    * This is a utility method which is able to retrieve the module model

@@ -20,7 +20,6 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
@@ -65,17 +64,5 @@ public abstract class AbstractHibernateCollectionAction extends
   protected ICollectionDescriptorProvider<?> getModelDescriptor(
       Map<String, Object> context) {
     return (ICollectionDescriptorProvider<?>) super.getModelDescriptor(context);
-  }
-
-  /**
-   * Gets the selected indices from the context. it uses the
-   * <code>ActionContextConstants.SELECTED_INDICES</code> key.
-   * 
-   * @param context
-   *          the action context.
-   * @return the selected indices if any.
-   */
-  protected int[] getSelectedIndices(Map<String, Object> context) {
-    return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
   }
 }

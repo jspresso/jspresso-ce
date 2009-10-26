@@ -18,11 +18,9 @@
  */
 package org.jspresso.framework.application.backend.action;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
@@ -69,38 +67,16 @@ public abstract class AbstractCollectionAction extends BackendAction {
   }
 
   /**
-   * Gets the selected indices from the context. it uses the
-   * <code>ActionContextConstants.SELECTED_INDICES</code> key.
-   * 
-   * @param context
-   *          the action context.
-   * @return the selected indices if any.
-   */
-  protected int[] getSelectedIndices(Map<String, Object> context) {
-    return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
-  }
-
-  /**
    * Gets the selected objects from the backend collection connector and the
    * selected indices.
    * 
    * @param context
    *          the action context.
    * @return the list of selected objects.
+   * @deprecated use getSelectedModels instead.
    */
+  @Deprecated
   protected List<?> getSelectedObjects(Map<String, Object> context) {
-    int[] selectedIndices = getSelectedIndices(context);
-    ICollectionConnector collectionConnector = getModelConnector(context);
-    if (selectedIndices == null || selectedIndices.length == 0
-        || collectionConnector == null) {
-      return null;
-    }
-    List<Object> selectedObjects = new ArrayList<Object>();
-    for (int i = 0; i < selectedIndices.length; i++) {
-      Object element = collectionConnector
-          .getChildConnector(selectedIndices[i]).getConnectorValue();
-      selectedObjects.add(element);
-    }
-    return selectedObjects;
+    return getSelectedModels(context);
   }
 }
