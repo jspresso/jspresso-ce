@@ -22,12 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
-
 
 /**
  * An action used in list components to move a detail up and down.
@@ -60,24 +58,31 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-    int[] indicesToMove = getSelectedIndices(context);
-    ICollectionConnector collectionConnector = getModelConnector(context);
-    if (indicesToMove == null || indicesToMove.length == 0
-        || collectionConnector == null) {
-      return false;
-    }
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+
     if (!List.class.isAssignableFrom(getModelDescriptor(context)
         .getCollectionDescriptor().getCollectionInterface())) {
       return false;
     }
 
+    ICollectionConnector collectionConnector = getModelConnector(context);
+    if (collectionConnector == null) {
+      return false;
+    }
+
+    int[] indicesToMove = getSelectedIndices(context);
+    if (indicesToMove == null || indicesToMove.length == 0) {
+      return false;
+    }
+
+    List<?> elementsToMove = getSelectedModels(context);
+    if (elementsToMove == null || elementsToMove.size() == 0) {
+      return false;
+    }
+
     List originalList = (List) collectionConnector.getConnectorValue();
     List targetList = new ArrayList<Object>(originalList);
-    List<Object> elementsToMove = new ArrayList<Object>();
-    for (int indexToMove : indicesToMove) {
-      elementsToMove.add(targetList.get(indexToMove));
-    }
 
     int[] targetIndices = new int[indicesToMove.length];
     for (int i = indicesToMove.length - 1; i >= 0; i--) {
@@ -91,14 +96,14 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       for (int i = 0; i < indicesToMove.length; i++) {
         targetList.add(targetIndices[i], elementsToMove.get(i));
       }
-      ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
-          .straightSetProperty(collectionConnector.getId(), null);
+      ((IComponent) collectionConnector.getParentConnector()
+          .getConnectorValue()).straightSetProperty(
+          collectionConnector.getId(), null);
       originalList.clear();
       originalList.addAll(targetList);
       ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
           .straightSetProperty(collectionConnector.getId(), originalList);
-      context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-          .getIndicesOf(collectionConnector, elementsToMove));
+      setSelectedModels(elementsToMove, context);
     }
     return super.execute(actionHandler, context);
   }
@@ -107,7 +112,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * Sets the offset.
    * 
    * @param offset
-   *            the offset to set.
+   *          the offset to set.
    */
   public void setOffset(int offset) {
     this.offset = offset;

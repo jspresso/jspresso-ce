@@ -20,18 +20,16 @@ package org.jspresso.framework.application.backend.action.module;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
-import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
-
 
 /**
  * This action clones the selected objects in the projected collection.
@@ -51,7 +49,9 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @deprecated use CloneComponentCollectionAction
  */
+@Deprecated
 public class CloneModuleObjectsAction extends AbstractCollectionAction {
 
   private IEntityCloneFactory entityCloneFactory;
@@ -62,7 +62,8 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
 
@@ -75,7 +76,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
     BeanCollectionModule module = (BeanCollectionModule) moduleConnector
         .getConnectorValue();
 
-    Collection<Object> projectedCollection;
+    List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<Object>();
     } else {
@@ -90,10 +91,8 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
     projectedCollection.addAll(entityClones);
     module.setModuleObjects(projectedCollection);
 
-    getModelConnector(context).setConnectorValue(projectedCollection);
+    setSelectedModels(entityClones, context);
 
-    context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-        .getIndicesOf(collectionConnector, entityClones));
     return super.execute(actionHandler, context);
   }
 
@@ -101,7 +100,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
    * Sets the entityCloneFactory.
    * 
    * @param entityCloneFactory
-   *            the entityCloneFactory to set.
+   *          the entityCloneFactory to set.
    */
   public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
     this.entityCloneFactory = entityCloneFactory;

@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
@@ -69,15 +68,13 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
     Module parentModule = (Module) moduleConnector.getConnectorValue();
-    List<Module> children;
-    if (parentModule.getSubModules() == null) {
-      children = new ArrayList<Module>(selectedIndices.length);
-    } else {
-      children = new ArrayList<Module>(parentModule.getSubModules());
+    List<Module> childModules = parentModule.getSubModules();
+    if (childModules == null) {
+      childModules = new ArrayList<Module>(selectedIndices.length);
     }
     int[] childSelectedIndices = new int[selectedIndices.length];
     for (int i = 0; i < selectedIndices.length; i++) {
-      IPropertyChangeCapable nextselectedModuleObject = (IPropertyChangeCapable) collectionConnector
+      IPropertyChangeCapable nextSelectedModuleObject = (IPropertyChangeCapable) collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue();
       BeanModule nextSubModule = new BeanModule();
       if (parentModule instanceof BeanCollectionModule) {
@@ -88,18 +85,18 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
             .setComponentDescriptor(((BeanCollectionModule) parentModule)
                 .getElementComponentDescriptor());
       }
-      nextSubModule.setModuleObject(nextselectedModuleObject);
-      nextSubModule.setName(String.valueOf(nextselectedModuleObject));
-      int nextSubModuleIndex = children.indexOf(nextSubModule);
+      nextSubModule.setModuleObject(nextSelectedModuleObject);
+      nextSubModule.setName(String.valueOf(nextSelectedModuleObject));
+      int nextSubModuleIndex = childModules.indexOf(nextSubModule);
       if (nextSubModuleIndex < 0) {
-        childSelectedIndices[i] = children.size();
-        children.add(nextSubModule);
+        childSelectedIndices[i] = childModules.size();
+        childModules.add(nextSubModule);
       } else {
         childSelectedIndices[i] = nextSubModuleIndex;
       }
     }
-    parentModule.setSubModules(children);
-    context.put(ActionContextConstants.SELECTED_INDICES, childSelectedIndices);
+    parentModule.setSubModules(childModules);
+    setSelectedIndices(childSelectedIndices, context);
     return super.execute(actionHandler, context);
   }
 }

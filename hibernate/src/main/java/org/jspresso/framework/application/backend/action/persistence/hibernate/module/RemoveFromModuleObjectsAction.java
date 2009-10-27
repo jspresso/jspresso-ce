@@ -20,7 +20,6 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate.
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +89,7 @@ public class RemoveFromModuleObjectsAction extends
     BeanCollectionModule module = (BeanCollectionModule) moduleConnector
         .getConnectorValue();
 
-    Collection<Object> projectedCollection;
+    List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<Object>();
     } else {

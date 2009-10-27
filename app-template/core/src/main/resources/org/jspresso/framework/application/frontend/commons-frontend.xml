@@ -408,13 +408,6 @@
     </property>
   </bean>
 
-  <bean id="addToModuleObjectFrontAction" parent="addToMasterFrontAction">
-    <property name="wrappedAction">
-      <bean class="org.jspresso.framework.application.backend.action.module.AddToModuleObjectsAction" />
-    </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
-  </bean>
-
   <bean id="abstractRemoveCollectionFromMasterFrontAction" abstract="true">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_remove-48x48.png" />
     <property name="name" value="remove.name" />
@@ -435,13 +428,22 @@
     <property name="yesAction" ref="removeFromModuleObjectsAction" />
   </bean>
 
-  <bean id="cloneModuleObjectFrontAction" parent="cloneEntityCollectionFrontAction">
+  <bean id="addToModuleObjectFrontAction" parent="addToMasterFrontAction">
+    <!--
     <property name="wrappedAction">
+      <bean class="org.jspresso.framework.application.backend.action.module.AddToModuleObjectsAction" />
+    </property>
+    <property name="nextAction" ref="connectorSelectionFrontAction" />
+    -->
+  </bean>
+
+  <bean id="cloneModuleObjectFrontAction" parent="cloneEntityCollectionFrontAction">
+    <!--<property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.module.CloneModuleObjectsAction">
         <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
       </bean>
     </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
+    <property name="nextAction" ref="connectorSelectionFrontAction" />-->
   </bean>
 
   <bean id="addAsChildModuleFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
@@ -616,8 +618,8 @@
           <property name="name" value="ACTION" />
           <property name="actions">
             <list>
-              <ref local="addToModuleObjectFrontAction" />
-              <ref local="cloneModuleObjectFrontAction" />
+              <ref bean="addToMasterFrontAction"/>
+              <ref bean="cloneEntityCollectionFrontAction"/>
               <ref local="removeFromModuleObjectFrontAction" />
             </list>
           </property>

@@ -55,7 +55,7 @@ public class SetActionParamFromSelectedComponentsAction extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    setActionParameter(getSelectedObjects(context), context);
+    setActionParameter(getSelectedModels(context), context);
     return super.execute(actionHandler, context);
   }
 }

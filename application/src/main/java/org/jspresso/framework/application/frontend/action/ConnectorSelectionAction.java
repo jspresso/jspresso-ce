@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 
@@ -49,8 +48,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * @param <G>
  *          the actual action type used.
  */
-public class ConnectorSelectionAction<E, F, G> extends
-    FrontendAction<E, F, G> {
+public class ConnectorSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Selects indices on the view collection connector based on the
@@ -63,8 +61,7 @@ public class ConnectorSelectionAction<E, F, G> extends
       Map<String, Object> context) {
     ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
     if (collectionConnector != null) {
-      int[] connectorSelection = (int[]) context
-          .get(ActionContextConstants.SELECTED_INDICES);
+      int[] connectorSelection = getSelectedIndices(context);
       collectionConnector.setSelectedIndices(connectorSelection);
     }
     return super.execute(actionHandler, context);

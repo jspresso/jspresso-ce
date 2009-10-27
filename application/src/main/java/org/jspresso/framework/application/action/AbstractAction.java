@@ -29,6 +29,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.IController;
+import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -347,5 +348,24 @@ public abstract class AbstractAction implements IAction {
       models = Collections.singletonList(modelConnector.getConnectorValue());
     }
     return models;
+  }
+
+  /**
+   * Retrieves the selectedModels indices out of the model connector if it's a
+   * collection connector and set them as selected indices in the action
+   * context.
+   * 
+   * @param selectedModels
+   *          the list of models to select in the view connector.
+   * @param context
+   *          the action context.
+   */
+  protected void setSelectedModels(Collection<?> selectedModels,
+      Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(context);
+    if (modelConnector instanceof ICollectionConnector) {
+      setSelectedIndices(ConnectorHelper.getIndicesOf(
+          (ICollectionConnector) modelConnector, selectedModels), context);
+    }
   }
 }

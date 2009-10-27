@@ -23,10 +23,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.model.ModelPropertyConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
@@ -122,8 +120,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
         throw new ActionException(ex);
       }
       setActionParameter(newComponents, context);
-      context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-          .getIndicesOf(collectionConnector, newComponents));
+      setSelectedModels(newComponents, context);
     }
     return super.execute(actionHandler, context);
   }

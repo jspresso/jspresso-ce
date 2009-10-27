@@ -20,13 +20,11 @@ package org.jspresso.framework.application.frontend.action.module;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-
 
 /**
  * A simple action which selects indices on a module view connector.
@@ -47,11 +45,11 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public class ModuleConnectorSelectionAction<E, F, G> extends
     FrontendAction<E, F, G> {
@@ -69,8 +67,7 @@ public class ModuleConnectorSelectionAction<E, F, G> extends
     ICollectionConnector parentModuleCollectionConnector = ((ICollectionConnectorProvider) moduleConnector
         .getParentConnector().getParentConnector()).getCollectionConnector();
     parentModuleCollectionConnector.setSelectedIndices(new int[0]);
-    int[] connectorSelection = (int[]) context
-        .get(ActionContextConstants.SELECTED_INDICES);
+    int[] connectorSelection = getSelectedIndices(context);
     if (moduleConnector instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) moduleConnector)
           .getCollectionConnector();

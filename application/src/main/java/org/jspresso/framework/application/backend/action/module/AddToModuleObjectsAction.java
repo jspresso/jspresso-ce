@@ -19,16 +19,13 @@
 package org.jspresso.framework.application.backend.action.module;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
-import org.jspresso.framework.binding.ConnectorHelper;
-import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -52,7 +49,9 @@ import org.jspresso.framework.model.entity.IEntity;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @deprecated use AddComponentCollectionToMasterAction instead
  */
+@Deprecated
 public class AddToModuleObjectsAction extends AbstractCollectionAction {
 
   /**
@@ -67,7 +66,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     BeanCollectionModule module = (BeanCollectionModule) moduleConnector
         .getConnectorValue();
 
-    Collection<Object> projectedCollection;
+    List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<Object>();
     } else {
@@ -78,16 +77,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     projectedCollection.add(newModuleObject);
     module.setModuleObjects(projectedCollection);
 
-    ICollectionConnector moduleObjectsConnector = getModelConnector(context);
-    if (moduleObjectsConnector == null) {
-      moduleObjectsConnector = getModelConnector(context);
-    }
-
-    moduleObjectsConnector.setConnectorValue(projectedCollection);
-
-    context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-        .getIndicesOf(moduleObjectsConnector, Collections
-            .singleton(newModuleObject)));
+    setSelectedModels(Collections.singleton(newModuleObject), context);
     return super.execute(actionHandler, context);
   }
 

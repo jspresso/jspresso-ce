@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.application.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
@@ -62,34 +64,7 @@ public class BeanCollectionModule extends Module {
 
   private IComponentDescriptor<Object> elementComponentDescriptor;
   private IViewDescriptor              elementViewDescriptor;
-  private Collection<?>                moduleObjects;
-
-  // /**
-  // * Equality based on projected object.
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public boolean equals(Object obj) {
-  // if (!(obj instanceof BeanCollectionModule)) {
-  // return false;
-  // }
-  // if (this == obj) {
-  // return true;
-  // }
-  // // BeanCollectionModule rhs = (BeanCollectionModule) obj;
-  //
-  // // do not rely on object equality (null lists would make it equal)
-  // // return new EqualsBuilder().append(getModuleObjects(),
-  // // rhs.getModuleObjects()).isEquals();
-  //
-  // // Do not rely on names since 2 modules with the same name would make theme
-  // // equal.
-  // // return ObjectUtils.equals(getName(), rhs.getName());
-  // // see [ 2194861 ] Bean collection modules equality should not rely on
-  // names
-  // //Just rely on object identity.
-  // }
+  private List<?>                      moduleObjects;
 
   /**
    * Gets the elementComponentDescriptor.
@@ -131,23 +106,12 @@ public class BeanCollectionModule extends Module {
     return iconImageUrl;
   }
 
-  // /**
-  // * Hash code based on projected object.
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public int hashCode() {
-  // return new HashCodeBuilder(23, 53).append(getName()).toHashCode();
-  // see the equals comment.
-  // }
-
   /**
    * Gets the module's projected objects.
    * 
    * @return the projected objects.
    */
-  public Collection<?> getModuleObjects() {
+  public List<?> getModuleObjects() {
     return moduleObjects;
   }
 
@@ -178,13 +142,72 @@ public class BeanCollectionModule extends Module {
    * @param moduleObjects
    *          the projected object collection.
    */
-  public void setModuleObjects(Collection<?> moduleObjects) {
+  public void setModuleObjects(List<?> moduleObjects) {
     if (ObjectUtils.equals(this.moduleObjects, moduleObjects)) {
       return;
     }
     Object oldValue = getModuleObjects();
     this.moduleObjects = moduleObjects;
     firePropertyChange(MODULE_OBJECTS, oldValue, getModuleObjects());
+  }
+
+  /**
+   * Adds an element to the module's projected object collection.
+   * 
+   * @param element
+   *          the element to add.
+   */
+  public void addToModuleObjects(Object element) {
+    List<Object> newModuleObjects;
+    if (getModuleObjects() != null) {
+      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+    } else {
+      newModuleObjects = new ArrayList<Object>();
+    }
+    newModuleObjects.add(element);
+    setModuleObjects(newModuleObjects);
+  }
+
+  /**
+   * Adds an element to the module's projected object collection at the
+   * specified index. If the index is out of the list bounds, the element is
+   * simply added at the end of the list.
+   * 
+   * @param index
+   *          the index to add the events element at.
+   * @param element
+   *          the element to add.
+   */
+  public void addToModuleObjects(int index, Object element) {
+    List<Object> newModuleObjects;
+    if (getModuleObjects() != null) {
+      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+    } else {
+      newModuleObjects = new ArrayList<Object>();
+    }
+    if (index < 0) {
+      newModuleObjects.add(0, element);
+    } else if (index >= newModuleObjects.size()) {
+      newModuleObjects.add(element);
+    } else {
+      newModuleObjects.add(index, element);
+    }
+    setModuleObjects(newModuleObjects);
+  }
+
+  /**
+   * Removes an element from the the module's projected object collection.
+   * 
+   * @param element
+   *          the element to remove.
+   */
+  public void removeFromModuleObjects(Object element) {
+    if (getModuleObjects() != null) {
+      List<Object> newModuleObjects;
+      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+      newModuleObjects.remove(element);
+      setModuleObjects(newModuleObjects);
+    }
   }
 
   /**
