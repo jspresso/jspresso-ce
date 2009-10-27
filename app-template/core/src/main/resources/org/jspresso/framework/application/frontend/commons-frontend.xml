@@ -521,7 +521,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/chart-48x48.png" />
     <property name="name" value="chart.name" />
     <property name="description" value="chart.description" />
-    <property name="jdbcTemplate" ref="reportingJdbcTemplate"/>
+    <property name="jdbcTemplate" ref="jdbcTemplate"/>
     <property name="actions">
       <list>
         <ref bean="okDialogFrontAction" />

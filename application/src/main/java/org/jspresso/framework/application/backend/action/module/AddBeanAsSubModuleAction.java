@@ -69,9 +69,8 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
     ICollectionConnector collectionConnector = getModelConnector(context);
     Module parentModule = (Module) moduleConnector.getConnectorValue();
     List<Module> childModules = parentModule.getSubModules();
-    if (childModules == null) {
-      childModules = new ArrayList<Module>(selectedIndices.length);
-    }
+    List<Module> newSubModules = new ArrayList<Module>();
+
     int[] childSelectedIndices = new int[selectedIndices.length];
     for (int i = 0; i < selectedIndices.length; i++) {
       IPropertyChangeCapable nextSelectedModuleObject = (IPropertyChangeCapable) collectionConnector
@@ -87,15 +86,22 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
       }
       nextSubModule.setModuleObject(nextSelectedModuleObject);
       nextSubModule.setName(String.valueOf(nextSelectedModuleObject));
-      int nextSubModuleIndex = childModules.indexOf(nextSubModule);
+      int nextSubModuleIndex = -1;
+      if (childModules != null) {
+        nextSubModuleIndex = childModules.indexOf(nextSubModule);
+      }
       if (nextSubModuleIndex < 0) {
-        childSelectedIndices[i] = childModules.size();
-        childModules.add(nextSubModule);
+        int newSelectedIndex = newSubModules.size();
+        if (childModules != null) {
+          newSelectedIndex += childModules.size();
+        }
+        childSelectedIndices[i] = newSelectedIndex;
+        newSubModules.add(nextSubModule);
       } else {
         childSelectedIndices[i] = nextSubModuleIndex;
       }
     }
-    parentModule.setSubModules(childModules);
+    parentModule.addSubModules(newSubModules);
     setSelectedIndices(childSelectedIndices, context);
     return super.execute(actionHandler, context);
   }
