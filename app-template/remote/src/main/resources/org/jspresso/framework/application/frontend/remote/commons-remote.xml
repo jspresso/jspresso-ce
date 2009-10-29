@@ -67,6 +67,16 @@
     parent="yesNoFrontAction"
     class="org.jspresso.framework.application.frontend.action.remote.flow.StaticYesNoAction" />
 
+  <bean id="yesNoCancelFrontAction" class="org.jspresso.framework.application.frontend.action.remote.flow.YesNoCancelAction" />
+
+  <bean id="staticYesNoCancelFrontAction" abstract="true" parent="yesNoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.flow.StaticYesNoCancelAction" />
+
+  <bean id="okCancelFrontAction" class="org.jspresso.framework.application.frontend.action.remote.flow.OkCancelAction" />
+
+  <bean id="staticOkCancelFrontAction" abstract="true" parent="yesNoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.remote.flow.StaticOkCancelAction" />
+
   <bean id="chartAction" abstract="true" parent="abstractChartAction"
     class="org.jspresso.framework.application.charting.frontend.action.server.DisplayChartAction" />
 

@@ -156,13 +156,13 @@
     <property name="nextAction" ref="editReportParametersAction" />
   </bean>
 
+  <bean id="executeActionAction" class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
+
   <bean id="chooseActionOkFrontAction" parent="okDialogFrontAction">
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.frontend.action.lov.OkChooseComponentAction" />
     </property>
-    <property name="nextAction">
-      <bean class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
-    </property>
+    <property name="nextAction" ref="executeActionAction" />
   </bean>
 
   <bean id="chooseComponentAction" class="org.jspresso.framework.application.frontend.action.lov.ChooseComponentAction">
@@ -313,9 +313,12 @@
     </property>
   </bean>
 
-  <bean id="scriptedBackAction" class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction">
+  <bean id="scriptedBackAction" class="org.jspresso.framework.application.backend.action.ScriptedBackendAction">
     <property name="scriptHandler" ref="scriptHandler" />
   </bean>
+
+  <bean id="staticScriptedBackAction" abstract="true" parent="scriptedBackAction"
+    class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction"/>
 
   <bean id="abstractCollectionAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="wrappedAction">
@@ -340,6 +343,8 @@
     -->
     <property name="acceleratorAsString" value="alt A" />
   </bean>
+
+  <bean id="addAnyToMasterFrontAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
 
   <bean id="addMapToMasterFrontAction" parent="addToMasterFrontAction">
     <property name="wrappedAction">
@@ -430,20 +435,19 @@
 
   <bean id="addToModuleObjectFrontAction" parent="addToMasterFrontAction">
     <!--
-    <property name="wrappedAction">
-      <bean class="org.jspresso.framework.application.backend.action.module.AddToModuleObjectsAction" />
-    </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
+      <property name="wrappedAction"> <bean
+      class="org.jspresso.framework.application.backend.action.module.AddToModuleObjectsAction" /> </property> <property
+      name="nextAction" ref="connectorSelectionFrontAction" />
     -->
   </bean>
 
   <bean id="cloneModuleObjectFrontAction" parent="cloneEntityCollectionFrontAction">
-    <!--<property name="wrappedAction">
-      <bean class="org.jspresso.framework.application.backend.action.module.CloneModuleObjectsAction">
-        <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
-      </bean>
-    </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />-->
+    <!--
+      <property name="wrappedAction"> <bean
+      class="org.jspresso.framework.application.backend.action.module.CloneModuleObjectsAction"> <property
+      name="entityCloneFactory" ref="smartEntityCloneFactory" /> </bean> </property> <property name="nextAction"
+      ref="connectorSelectionFrontAction" />
+    -->
   </bean>
 
   <bean id="addAsChildModuleFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
@@ -521,7 +525,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/chart-48x48.png" />
     <property name="name" value="chart.name" />
     <property name="description" value="chart.description" />
-    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    <property name="jdbcTemplate" ref="jdbcTemplate" />
     <property name="actions">
       <list>
         <ref bean="okDialogFrontAction" />
@@ -618,8 +622,8 @@
           <property name="name" value="ACTION" />
           <property name="actions">
             <list>
-              <ref bean="addToMasterFrontAction"/>
-              <ref bean="cloneEntityCollectionFrontAction"/>
+              <ref bean="addToMasterFrontAction" />
+              <ref bean="cloneEntityCollectionFrontAction" />
               <ref local="removeFromModuleObjectFrontAction" />
             </list>
           </property>
