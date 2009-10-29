@@ -39,7 +39,6 @@ import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.security.LoginUtils;
 
-
 /**
  * A development login module with configuration parametrized user, password,
  * roles and custom properties.
@@ -62,7 +61,7 @@ import org.jspresso.framework.util.security.LoginUtils;
  */
 public class DevelopmentLoginModule implements LoginModule {
 
-  private static final String CUSTOM_PROPERTY_OPT = "custom.";
+  private static final String CUSTOM_PROPERTY_OPT = "custom";
   private static final String PASSWORD_OPT        = "password";
   private static final String ROLES_OPT           = "roles";
   private static final String USER_OPT            = "user";
@@ -74,6 +73,7 @@ public class DevelopmentLoginModule implements LoginModule {
   private Subject             subject;
   private boolean             succeeded           = false;
   private String              username;
+  private String              suffix;
   private UserPrincipal       userPrincipal;
 
   /**
@@ -84,8 +84,8 @@ public class DevelopmentLoginModule implements LoginModule {
    * <p>
    * If this LoginModule's own authentication attempt succeeded (checked by
    * retrieving the private state saved by the <code>login</code> and
-   * <code>commit</code> methods), then this method cleans up any state that
-   * was originally saved.
+   * <code>commit</code> methods), then this method cleans up any state that was
+   * originally saved.
    * <p>
    * 
    * @return false if this LoginModule's own login and/or commit attempts
@@ -94,7 +94,8 @@ public class DevelopmentLoginModule implements LoginModule {
   public boolean abort() {
     if (!succeeded) {
       Callback[] callbacks = new Callback[1];
-      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, LoginUtils.LOGIN_FAILED);
+      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR,
+          LoginUtils.LOGIN_FAILED);
       try {
         callbackHandler.handle(callbacks);
       } catch (IOException ex) {
@@ -107,6 +108,7 @@ public class DevelopmentLoginModule implements LoginModule {
       // login succeeded but overall authentication failed
       succeeded = false;
       username = null;
+      suffix = "";
       if (password != null) {
         for (int i = 0; i < password.length; i++) {
           password[i] = ' ';
@@ -129,8 +131,8 @@ public class DevelopmentLoginModule implements LoginModule {
    * LoginModules succeeded).
    * <p>
    * If this LoginModule's own authentication attempt succeeded (checked by
-   * retrieving the private state saved by the <code>login</code> method),
-   * then this method associates a <code>UserPrincipal</code> with the
+   * retrieving the private state saved by the <code>login</code> method), then
+   * this method associates a <code>UserPrincipal</code> with the
    * <code>Subject</code> located in the <code>LoginModule</code>. If this
    * LoginModule's own authentication attempted failed, then this method removes
    * any state that was originally saved.
@@ -146,16 +148,16 @@ public class DevelopmentLoginModule implements LoginModule {
     // assume the user we authenticated is the DemoPrincipal
     userPrincipal = new UserPrincipal(username);
     for (Map.Entry<String, ?> option : options.entrySet()) {
-      if (option.getKey().startsWith(CUSTOM_PROPERTY_OPT)) {
+      if (option.getKey().startsWith(CUSTOM_PROPERTY_OPT + suffix)) {
         userPrincipal.putCustomProperty(option.getKey().substring(
-            CUSTOM_PROPERTY_OPT.length()), option.getValue());
+            (CUSTOM_PROPERTY_OPT + suffix).length() + 1), option.getValue());
       }
     }
     if (!subject.getPrincipals().contains(userPrincipal)) {
       subject.getPrincipals().add(userPrincipal);
     }
 
-    String roles = (String) options.get(ROLES_OPT);
+    String roles = (String) options.get(ROLES_OPT + suffix);
     if (roles != null) {
       Group rolesGroup = new SimpleGroup(SecurityHelper.ROLES_GROUP_NAME);
       String[] rolesArray = roles.split(",");
@@ -167,6 +169,7 @@ public class DevelopmentLoginModule implements LoginModule {
 
     // in any case, clean out state
     username = null;
+    suffix = "";
     for (int i = 0; i < password.length; i++) {
       password[i] = ' ';
     }
@@ -181,18 +184,18 @@ public class DevelopmentLoginModule implements LoginModule {
    * <p>
    * 
    * @param aSubject
-   *            the <code>Subject</code> to be authenticated.
-   *            <p>
+   *          the <code>Subject</code> to be authenticated.
+   *          <p>
    * @param aCallbackHandler
-   *            a <code>CallbackHandler</code> for communicating with the end
-   *            user (prompting for user names and passwords, for example).
-   *            <p>
+   *          a <code>CallbackHandler</code> for communicating with the end user
+   *          (prompting for user names and passwords, for example).
+   *          <p>
    * @param aSharedState
-   *            shared <code>LoginModule</code> state.
-   *            <p>
+   *          shared <code>LoginModule</code> state.
+   *          <p>
    * @param aOptions
-   *            options specified in the login <code>Configuration</code> for
-   *            this particular <code>LoginModule</code>.
+   *          options specified in the login <code>Configuration</code> for this
+   *          particular <code>LoginModule</code>.
    */
   public void initialize(Subject aSubject, CallbackHandler aCallbackHandler,
       Map<String, ?> aSharedState, Map<String, ?> aOptions) {
@@ -206,14 +209,14 @@ public class DevelopmentLoginModule implements LoginModule {
    * Authenticate the user by prompting for a user name and password.
    * <p>
    * 
-   * @return true in all cases since this <code>LoginModule</code> should not
-   *         be ignored.
+   * @return true in all cases since this <code>LoginModule</code> should not be
+   *         ignored.
    * @exception LoginException
-   *                if the authentication fails.
-   *                <p>
+   *              if the authentication fails.
+   *              <p>
    * @exception LoginException
-   *                if this <code>LoginModule</code> is unable to perform the
-   *                authentication.
+   *              if this <code>LoginModule</code> is unable to perform the
+   *              authentication.
    */
   public boolean login() throws LoginException {
 
@@ -225,8 +228,7 @@ public class DevelopmentLoginModule implements LoginModule {
 
     Callback[] callbacks = new Callback[3];
     callbacks[0] = new NameCallback(LoginUtils.USER);
-    callbacks[1] = new PasswordCallback(LoginUtils.PASSWORD,
-        false);
+    callbacks[1] = new PasswordCallback(LoginUtils.PASSWORD, false);
     callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION,
         LoginUtils.CRED_MESSAGE);
 
@@ -251,12 +253,8 @@ public class DevelopmentLoginModule implements LoginModule {
     }
 
     // verify the username/password
-    boolean usernameCorrect = false;
-    String moduleUserName = (String) options.get(USER_OPT);
-    if (moduleUserName == null || moduleUserName.equals(username)) {
-      usernameCorrect = true;
-    }
-    String modulePassword = (String) options.get(PASSWORD_OPT);
+    boolean usernameCorrect = checkUserName();
+    String modulePassword = (String) options.get(PASSWORD_OPT + suffix);
     if (usernameCorrect) {
       if (modulePassword == null) {
         succeeded = true;
@@ -274,6 +272,7 @@ public class DevelopmentLoginModule implements LoginModule {
     }
     succeeded = false;
     username = null;
+    suffix = "";
     for (int i = 0; i < password.length; i++) {
       password[i] = ' ';
     }
@@ -284,6 +283,24 @@ public class DevelopmentLoginModule implements LoginModule {
     throw new FailedLoginException(LoginUtils.PASSWORD_FAILED);
   }
 
+  private boolean checkUserName() {
+    boolean usernameCorrect = false;
+    boolean atLeastOneUserEntryFound = false;
+    for (Map.Entry<String, ?> optionEntry : options.entrySet()) {
+      if (optionEntry.getKey().startsWith(USER_OPT)) {
+        atLeastOneUserEntryFound = true;
+        if (optionEntry.getValue().equals(username)) {
+          usernameCorrect = true;
+          suffix = optionEntry.getKey().substring(USER_OPT.length());
+        }
+      }
+    }
+    if (atLeastOneUserEntryFound) {
+      return usernameCorrect;
+    }
+    return true;
+  }
+
   /**
    * Logout the user.
    * <p>
@@ -291,14 +308,15 @@ public class DevelopmentLoginModule implements LoginModule {
    * <code>commit</code> method.
    * <p>
    * 
-   * @return true in all cases since this <code>LoginModule</code> should not
-   *         be ignored.
+   * @return true in all cases since this <code>LoginModule</code> should not be
+   *         ignored.
    */
   public boolean logout() {
     subject.getPrincipals().remove(userPrincipal);
     succeeded = false;
     succeeded = commitSucceeded;
     username = null;
+    suffix = "";
     if (password != null) {
       for (int i = 0; i < password.length; i++) {
         password[i] = ' ';

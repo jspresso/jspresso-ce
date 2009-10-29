@@ -18,9 +18,12 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.Map;
+
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.view.descriptor.ICardNameSelector;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * The basic implementation of a card view descriptor.
@@ -57,4 +60,15 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
     this.cardNameSelector = cardNameSelector;
   }
 
+  /**
+   * Sets the childViewDescriptors. Overriden for visibility purpose.
+   * 
+   * @param cardViewDescriptors
+   *          the cardViewDescriptors to set.
+   */
+  @Override
+  public void setCardViewDescriptors(
+      Map<String, IViewDescriptor> cardViewDescriptors) {
+    super.setCardViewDescriptors(cardViewDescriptors);
+  }
 }
