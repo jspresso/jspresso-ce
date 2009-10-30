@@ -10,6 +10,7 @@
   <xsl:import href="html-titlepages.xsl" />
 
   <xsl:param name="graphicsize.extension">1</xsl:param>
+  <xsl:param name="tablecolumns.extension">1</xsl:param>
   <xsl:param name="use.extensions">1</xsl:param>
   <xsl:param name="ignore.image.scaling">1</xsl:param>
   <xsl:param name="formal.title.placement">figure after</xsl:param>
