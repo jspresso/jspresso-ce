@@ -98,7 +98,7 @@ New features
 2883783    Easier JasperReports integration
 2885049    "childrenDescriptors" list of subtrees on BasicTreeViewDescriptor
 2885050    "expanded" property on BasicTreeViewDescriptor
-           Improved dev login module to support mutiple users
+2889514    Improved dev login module to support mutiple users
 
 3.0.0
 =====
