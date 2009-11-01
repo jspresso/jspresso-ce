@@ -99,6 +99,7 @@ New features
 2885049    "childrenDescriptors" list of subtrees on BasicTreeViewDescriptor
 2885050    "expanded" property on BasicTreeViewDescriptor
 2889514    Improved dev login module to support mutiple users
+2890235    Flex visualisation of enumeration
 
 3.0.0
 =====

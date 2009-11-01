@@ -685,8 +685,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var comboBox = new qx.ui.form.SelectBox();
       comboBox.setAllowStretchY(false, false);
       var iconDim;
+      var width = 0;
       for(var i = 0; i < remoteComboBox.getValues().length; i++) {
-        var li = new qx.ui.form.ListItem(remoteComboBox.getTranslations()[i]/*,
+        var tr = remoteComboBox.getTranslations()[i];
+        var li = new qx.ui.form.ListItem(tr/*,
                                          null*/);
         li.setModel(remoteComboBox.getValues()[i]);
         var rIcon = remoteComboBox.getIcons()[i];
@@ -695,7 +697,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         if(!iconDim && rIcon && rIcon.getDimension()) {
           iconDim = rIcon.getDimension();
         }
+        if(tr.length > width) {
+          width = tr.length;
+        }
       }
+      width += 7;
       var state = remoteComboBox.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(comboBox, "modelSelection", "value", true,
@@ -717,7 +723,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
       );
       modelController.addTarget(comboBox, "enabled", "writable", false);
-      this.__sizeMaxComponentWidth(comboBox, 10);
+      this.__sizeMaxComponentWidth(comboBox, width);
       return comboBox;
     },
 
