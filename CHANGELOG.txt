@@ -33,6 +33,8 @@ Bugs fixed
 2848679    Error while changing of Module/Entity in the workspace
 2856844    Nullable enumeration properties in Flex cannot be nulled
 2871793    Granted roles are not handled correctly on modules
+2890409    Combo box rendering in flex
+
 
 
 New features

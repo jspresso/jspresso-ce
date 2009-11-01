@@ -13,8 +13,9 @@
  */
 
 package org.jspresso.framework.view.flex {
+  import mx.collections.ArrayCollection;
   import mx.controls.Image;
-  import mx.controls.listClasses.BaseListData;
+  import mx.controls.List;
   import mx.controls.listClasses.ListData;
   import mx.controls.listClasses.ListItemRenderer;
   
@@ -27,6 +28,7 @@ package org.jspresso.framework.view.flex {
 		private var _labels:Array;
 		private var _icons:Array;
 		private var _iconTemplate:Class;
+		private var _index:int;
 
 		public function RIconListItemRenderer() {
 		  _image = new Image();
@@ -45,23 +47,27 @@ package org.jspresso.framework.view.flex {
       _iconTemplate = value;
     }
 
-  	override public function set listData(value:BaseListData):void {
-  	  value.label = _labels[value.rowIndex];
-  	  (value as ListData).icon = _iconTemplate;
-  	  super.listData = value;
-  	}
-
+    override public function set data(value:Object):void {
+   	  //cannot rely on listData.rowIndex.
+  	  _index = ((owner as List).dataProvider as ArrayCollection).getItemIndex(value);
+      //trace(">>> List index <<< " + _index);
+      listData.label = _labels[_index];
+      if(!(listData as ListData).icon) {
+        (listData as ListData).icon = _iconTemplate;
+      }
+			var _selectedIcon:RIcon = _icons[_index] as RIcon;
+			if(_selectedIcon != null) {
+			  _image.source = _selectedIcon.imageUrlSpec;
+			}
+      super.data = value;
+    }
+    
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			_image.x = icon.x;
 			_image.y = icon.y;
 			_image.width = icon.width;
 			_image.height = icon.height;
-			
-			var _selectedIcon:RIcon = _icons[listData.rowIndex] as RIcon;
-			if(_selectedIcon != null) {
-			  _image.source = _selectedIcon.imageUrlSpec;
-			}
 			icon.visible = false;
 		}
   }
