@@ -339,11 +339,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                                                tableFont.getStyles()).width
                                * org.jspresso.framework.view.qx.DefaultQxViewFactory.__COLUMN_MAX_CHAR_COUNT;
           var editorComponent = this.createComponent(rComponent, false);
-          var columnWidth = Math.max(
-                           Math.min(maxColumnWidth,
-                                    editorComponent.getMaxWidth()),
-                           headerWidth + 16
-                         );
+          var columnWidth = maxColumnWidth;
+          if(editorComponent.getMaxWidth()) {
+          	columnWidth = Math.min(maxColumnWidth, editorComponent.getMaxWidth());
+          }
+          columnWidth = Math.max(columnWidth, headerWidth + 16);
           columnModel.setColumnWidth(i, columnWidth);
         }
       }
