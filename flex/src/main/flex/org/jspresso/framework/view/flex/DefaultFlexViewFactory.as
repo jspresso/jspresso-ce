@@ -520,7 +520,14 @@ package org.jspresso.framework.view.flex {
       itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate};
       comboBox.itemRenderer = itemRenderer;
       
-      sizeMaxComponentWidth(comboBox, 10);
+      var width:int = 0;
+      for each(var tr:String in remoteComboBox.translations) {
+        if(tr.length > width) {
+          width = tr.length;
+        }
+      }
+      width += 7;
+      sizeMaxComponentWidth(comboBox, width);
       return comboBox;
     }
 
