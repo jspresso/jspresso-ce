@@ -224,9 +224,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the peer model controller.
-   * 
-   * @return the backend controller this frontend controller is attached to.
+   * {@inheritDoc}
    */
   public IBackendController getBackendController() {
     return backendController;

@@ -77,7 +77,7 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
       for (ILifecycleInterceptor<?> interceptor : interceptors) {
         ((ILifecycleInterceptor<Map<String, Object>>) interceptor).onCreate(
             newMap, getEntityFactory(context), getApplicationSession(context)
-                .getPrincipal(), getApplicationSession(context));
+                .getPrincipal(), getController(context));
       }
     }
     return Collections.singletonList(newMap);

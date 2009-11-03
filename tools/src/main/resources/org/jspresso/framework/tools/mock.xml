@@ -5,14 +5,6 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true">
 
-  <!--
-    Mock definitions for the tools.
-  -->
-  <bean
-    id="applicationSession"
-    parent="abstractApplicationSession"
-    class="org.jspresso.framework.application.backend.session.basic.BasicApplicationSession" />
-
   <bean
     id="queryEntitiesBackAction"
     class="org.jspresso.framework.application.backend.action.MockBackendAction" />

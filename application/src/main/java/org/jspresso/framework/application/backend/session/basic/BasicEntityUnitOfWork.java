@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.application.backend.session.basic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import java.util.Set;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
+import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * An implementation helps an application session in managing unit of works. It
@@ -218,6 +221,24 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   public void rollback() {
     cleanup();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities() {
+    Map<Class<?>, Map<Serializable, IEntity>> registeredEntities = new HashMap<Class<?>, Map<Serializable, IEntity>>();
+    for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
+      Class<?> entityContract = ((IEntity) entity).getComponentContract();
+      Map<Serializable, IEntity> contractBuffer = registeredEntities
+          .get(entityContract);
+      if (contractBuffer == null) {
+        contractBuffer = new HashMap<Serializable, IEntity>();
+        registeredEntities.put(entityContract, contractBuffer);
+      }
+      contractBuffer.put(((IEntity) entity).getId(), (IEntity) entity);
+    }
+    return registeredEntities;
   }
 
   private void cleanup() {

@@ -96,7 +96,7 @@ public class RemoveCollectionFromMasterAction extends
             collectionAccessor.removeFromValue(master, nextDetailToRemove);
           }
           if (nextDetailToRemove instanceof IEntity) {
-            getApplicationSession(context).registerForDeletion(
+            getController(context).registerForDeletion(
                 (IEntity) nextDetailToRemove);
           }
         }

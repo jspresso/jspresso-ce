@@ -33,9 +33,9 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
-import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
@@ -235,13 +235,13 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         return abort;
       }
     });
-    IApplicationSession session = getApplicationSession(context);
+    IBackendController controller = getController(context);
     for (Iterator<IEntity> ite = queriedEntities.iterator(); ite.hasNext();) {
-      if (session.isEntityRegisteredForDeletion(ite.next())) {
+      if (controller.isEntityRegisteredForDeletion(ite.next())) {
         ite.remove();
       }
     }
-    queryComponent.setQueriedComponents(session.merge(queriedEntities,
+    queryComponent.setQueriedComponents(controller.merge(queriedEntities,
         EMergeMode.MERGE_KEEP));
     return super.execute(actionHandler, context);
   }

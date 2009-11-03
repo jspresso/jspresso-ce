@@ -16,12 +16,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.entity;
+package org.jspresso.framework.application.backend.component;
 
 import java.lang.reflect.Proxy;
 
-import org.jspresso.framework.application.backend.component.ApplicationSessionAwareComponentInvocationHandler;
-import org.jspresso.framework.application.backend.session.IApplicationSession;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
@@ -30,14 +29,12 @@ import org.jspresso.framework.model.component.basic.BasicComponentInvocationHand
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.entity.basic.BasicEntityInvocationHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
- * This entity invocation handler handles initialization of lazy loaded
+ * This component invocation handler handles initialization of lazy loaded
  * properties like collections an entity references, delegating the
- * initialization job to the application session.
+ * initialization job to the backend controller.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -55,18 +52,18 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ApplicationSessionAwareEntityInvocationHandler extends
-    BasicEntityInvocationHandler {
+public class ControllerAwareComponentInvocationHandler extends
+    BasicComponentInvocationHandler {
 
-  private static final long   serialVersionUID = 3663517052427878204L;
+  private static final long  serialVersionUID = -3613223267370638150L;
 
-  private IApplicationSession applicationSession;
+  private IBackendController backendController;
 
   /**
    * Constructs a new
-   * <code>ApplicationSessionAwareEntityInvocationHandler</code> instance.
+   * <code>ControllerAwareEntityInvocationHandler</code> instance.
    * 
-   * @param entityDescriptor
+   * @param componentDescriptor
    *          The descriptor of the proxy entity.
    * @param inlineComponentFactory
    *          the factory used to create inline components.
@@ -78,19 +75,19 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    * @param extensionFactory
    *          The factory used to create entity extensions based on their
    *          classes.
-   * @param applicationSession
-   *          the current application session.
+   * @param backendController
+   *          the current backend controller.
    */
-  protected ApplicationSessionAwareEntityInvocationHandler(
-      IComponentDescriptor<IComponent> entityDescriptor,
+  protected ControllerAwareComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor,
       IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory,
-      IApplicationSession applicationSession) {
-    super(entityDescriptor, inlineComponentFactory, collectionFactory,
+      IBackendController backendController) {
+    super(componentDescriptor, inlineComponentFactory, collectionFactory,
         accessorFactory, extensionFactory);
-    this.applicationSession = applicationSession;
+    this.backendController = backendController;
   }
 
   /**
@@ -100,7 +97,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+    backendController.initializePropertyIfNeeded((IComponent) proxy,
         propertyDescriptor);
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
@@ -111,8 +108,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
-
-    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+    backendController.initializePropertyIfNeeded((IComponent) proxy,
         propertyDescriptor);
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
@@ -122,7 +118,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    */
   @Override
   protected boolean isInitialized(Object objectOrProxy) {
-    return applicationSession.isInitialized(objectOrProxy);
+    return backendController.isInitialized(objectOrProxy);
   }
 
   /**
@@ -136,7 +132,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
         && isInlineComponentReference(propertyDescriptor)) {
       if (Proxy.isProxyClass(newPropertyValue.getClass())
           && Proxy.getInvocationHandler(newPropertyValue) instanceof BasicComponentInvocationHandler
-          && !(Proxy.getInvocationHandler(newPropertyValue) instanceof ApplicationSessionAwareComponentInvocationHandler)) {
+          && !(Proxy.getInvocationHandler(newPropertyValue) instanceof ControllerAwareComponentInvocationHandler)) {
         IComponent sessionAwareComponent = getInlineComponentFactory()
             .createComponentInstance(
                 ((IComponent) newPropertyValue).getComponentContract());

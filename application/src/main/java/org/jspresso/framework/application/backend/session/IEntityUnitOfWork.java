@@ -18,13 +18,13 @@
  */
 package org.jspresso.framework.application.backend.session;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityDirtAware;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
-
 
 /**
  * This interface is implemented by unit of works on entities. A uneit of work
@@ -49,12 +49,14 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntityUnitOfWork extends IEntityDirtAware, IEntityLifecycleHandler {
+public interface IEntityUnitOfWork extends IEntityDirtAware,
+    IEntityLifecycleHandler {
 
   /**
    * Registers an entity as being updated.
    * 
-   * @param entity the entity to register.
+   * @param entity
+   *          the entity to register.
    */
   void addUpdatedEntity(IEntity entity);
 
@@ -67,7 +69,7 @@ public interface IEntityUnitOfWork extends IEntityDirtAware, IEntityLifecycleHan
    * Clears the dirty state of the entity in this unit of work.
    * 
    * @param flushedEntity
-   *            the entity that was flushed and cleaned.
+   *          the entity that was flushed and cleaned.
    */
   void clearDirtyState(IEntity flushedEntity);
 
@@ -97,40 +99,48 @@ public interface IEntityUnitOfWork extends IEntityDirtAware, IEntityLifecycleHan
    * @return the entitiesToMergeBack.
    */
   Collection<IEntity> getUpdatedEntities();
-  
+
   /**
    * Tests wether this unit of work is currently in use.
    * 
    * @return true if the unit of work is active.
    */
   boolean isActive();
-  
+
   /**
    * Is the passed entity already updated in the current unit of work and waits
    * for commit ?
    * 
    * @param entity
-   *            the entity to test.
+   *          the entity to test.
    * @return true if the passed entity already updated in the current unit of
    *         work and waits for commit.
    */
   boolean isUpdated(IEntity entity);
-  
+
   /**
    * Registers an entity in the unit of work.
    * 
    * @param entity
-   *            the entity to register.
+   *          the entity to register.
    * @param initialChangedProperties
-   *            the map of dirty properties the entity has before entering the
-   *            unit of work along with their original values.
+   *          the map of dirty properties the entity has before entering the
+   *          unit of work along with their original values.
    */
   void register(IEntity entity, Map<String, Object> initialChangedProperties);
-  
+
   /**
    * Rollbacks the unit of work. It should clear it state, restore the entity
    * states to the one before the unit of work begining and be ready for another
    * work.
    */
   void rollback();
+
+  /**
+   * Gets a map of entities already part of the unit of work. Entities are first
+   * keyed by their contract, then their id.
+   * 
+   * @return a map of entities already part of the unit of work
+   */
+  Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities();
 }

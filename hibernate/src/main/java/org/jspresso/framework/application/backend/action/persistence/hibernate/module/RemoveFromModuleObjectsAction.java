@@ -116,7 +116,7 @@ public class RemoveFromModuleObjectsAction extends
             throw new ActionException(ex);
           }
         }
-        getApplicationSession(context).performPendingOperations();
+        getController(context).performPendingOperations();
         return null;
       }
     });
@@ -149,6 +149,6 @@ public class RemoveFromModuleObjectsAction extends
       NoSuchMethodException {
     cleanRelationshipsOnDeletion(entity, context, true);
     cleanRelationshipsOnDeletion(entity, context, false);
-    getApplicationSession(context).registerForDeletion(entity);
+    getController(context).registerForDeletion(entity);
   }
 }

@@ -126,17 +126,17 @@ public abstract class AbstractHibernateAction extends BackendAction {
   protected void reloadEntity(IEntity entity, Map<String, Object> context) {
     if (entity.isPersistent()) {
       HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
-      getApplicationSession(context).merge(
-          (IEntity) hibernateTemplate.load(entity.getComponentContract().getName(),
-              entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
+      getController(context).merge(
+          (IEntity) hibernateTemplate.load(entity.getComponentContract()
+              .getName(), entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
     }
   }
 
   @SuppressWarnings("unchecked")
   private void cleanRelationshipsOnDeletion(IComponent componentOrProxy,
-      Map<String, Object> context, boolean dryRun, Set<IComponent> clearedEntities)
-      throws IllegalAccessException, InvocationTargetException,
-      NoSuchMethodException {
+      Map<String, Object> context, boolean dryRun,
+      Set<IComponent> clearedEntities) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
     IComponent component;
     if (componentOrProxy instanceof HibernateProxy) {
       // we must unwrap the proxy to avoid class cast exceptions.
@@ -155,15 +155,16 @@ public abstract class AbstractHibernateAction extends BackendAction {
       component.setPropertyProcessorsEnabled(false);
       IComponentDescriptor<?> componentDescriptor = getEntityFactory(context)
           .getComponentDescriptor(component.getComponentContract());
-      for (Map.Entry<String, Object> property : component.straightGetProperties()
-          .entrySet()) {
+      for (Map.Entry<String, Object> property : component
+          .straightGetProperties().entrySet()) {
         if (property.getValue() != null) {
           IPropertyDescriptor propertyDescriptor = componentDescriptor
               .getPropertyDescriptor(property.getKey());
           if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
             // force initialization of relationship property.
             getAccessorFactory(context).createPropertyAccessor(
-                property.getKey(), component.getComponentContract()).getValue(component);
+                property.getKey(), component.getComponentContract()).getValue(
+                component);
             if (propertyDescriptor instanceof IReferencePropertyDescriptor
                 && property.getValue() instanceof IEntity) {
               if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
@@ -186,8 +187,9 @@ public abstract class AbstractHibernateAction extends BackendAction {
                       Collection<?> reverseCollection = (Collection<?>) getAccessorFactory(
                           context).createPropertyAccessor(
                           reversePropertyDescriptor.getName(),
-                          ((IComponent) property.getValue()).getComponentContract())
-                          .getValue(property.getValue());
+                          ((IComponent) property.getValue())
+                              .getComponentContract()).getValue(
+                          property.getValue());
                       ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
                           .preprocessRemover(property.getValue(),
                               reverseCollection, component);
@@ -203,8 +205,8 @@ public abstract class AbstractHibernateAction extends BackendAction {
                           .contains(property.getValue()))) {
                     // set to null to clean reverse relation ends
                     getAccessorFactory(context).createPropertyAccessor(
-                        property.getKey(), component.getComponentContract()).setValue(
-                            component, null);
+                        property.getKey(), component.getComponentContract())
+                        .setValue(component, null);
                     // but technically reset to original value to avoid
                     // Hibernate
                     // not-null checks
@@ -237,8 +239,9 @@ public abstract class AbstractHibernateAction extends BackendAction {
                         Collection<?> reverseCollection = (Collection<?>) getAccessorFactory(
                             context).createPropertyAccessor(
                             reversePropertyDescriptor.getName(),
-                            ((IComponent) collectionElement).getComponentContract())
-                            .getValue(collectionElement);
+                            ((IComponent) collectionElement)
+                                .getComponentContract()).getValue(
+                            collectionElement);
                         ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
                             .preprocessRemover(collectionElement,
                                 reverseCollection, component);
@@ -247,8 +250,8 @@ public abstract class AbstractHibernateAction extends BackendAction {
                   }
                 } else {
                   getAccessorFactory(context).createPropertyAccessor(
-                      property.getKey(), component.getComponentContract()).setValue(component,
-                      null);
+                      property.getKey(), component.getComponentContract())
+                      .setValue(component, null);
                 }
               }
             }

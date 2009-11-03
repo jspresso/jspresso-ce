@@ -22,6 +22,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
@@ -166,5 +167,14 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    */
   public void unregister(IPropertyChangeCapable bean) {
     changedPropertiesMap.remove(bean);
+  }
+
+  /**
+   * Gets the set of beans registered in this recorder.
+   * 
+   * @return the set of beans registered in this recorder.
+   */
+  public Set<IPropertyChangeCapable> getRegistered() {
+    return changedPropertiesMap.keySet();
   }
 }

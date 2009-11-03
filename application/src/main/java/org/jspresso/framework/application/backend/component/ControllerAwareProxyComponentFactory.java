@@ -20,16 +20,15 @@ package org.jspresso.framework.application.backend.component;
 
 import java.lang.reflect.InvocationHandler;
 
-import org.jspresso.framework.application.backend.session.IApplicationSession;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.basic.BasicProxyComponentFactory;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.security.UserPrincipal;
 
-
 /**
- * Proxy entity factory aware of an application session to deal with uniqueness
- * of entity instances across the JVM.
+ * Proxy component factory aware of a backend controller to deal with uniqueness
+ * of component instances across the JVM.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -47,19 +46,19 @@ import org.jspresso.framework.security.UserPrincipal;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ApplicationSessionAwareProxyComponentFactory extends
+public class ControllerAwareProxyComponentFactory extends
     BasicProxyComponentFactory {
 
-  private IApplicationSession applicationSession;
+  private IBackendController backendController;
 
   /**
-   * Sets the applicationSession.
+   * Sets the backendController.
    * 
-   * @param applicationSession
-   *            the applicationSession to set.
+   * @param backendController
+   *          the backendController to set.
    */
-  public void setApplicationSession(IApplicationSession applicationSession) {
-    this.applicationSession = applicationSession;
+  public void setBackendController(IBackendController backendController) {
+    this.backendController = backendController;
   }
 
   /**
@@ -68,10 +67,9 @@ public class ApplicationSessionAwareProxyComponentFactory extends
   @Override
   protected InvocationHandler createComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor) {
-    return new ApplicationSessionAwareComponentInvocationHandler(
+    return new ControllerAwareComponentInvocationHandler(
         componentDescriptor, this, getComponentCollectionFactory(),
-        getAccessorFactory(), getComponentExtensionFactory(),
-        applicationSession);
+        getAccessorFactory(), getComponentExtensionFactory(), backendController);
   }
 
   /**
@@ -79,6 +77,6 @@ public class ApplicationSessionAwareProxyComponentFactory extends
    */
   @Override
   protected UserPrincipal getPrincipal() {
-    return applicationSession.getPrincipal();
+    return backendController.getApplicationSession().getPrincipal();
   }
 }

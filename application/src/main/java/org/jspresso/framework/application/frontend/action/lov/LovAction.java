@@ -116,7 +116,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           .getConnectorValue();
       if (queryComponent.getQueriedComponents() != null
           && queryComponent.getQueriedComponents().size() == 1) {
-        IEntity selectedEntity = getController(context).getApplicationSession()
+        IEntity selectedEntity = getController(context).getBackendController()
             .merge((IEntity) queryComponent.getQueriedComponents().get(0),
                 EMergeMode.MERGE_KEEP);
         viewConnector.setConnectorValue(selectedEntity);

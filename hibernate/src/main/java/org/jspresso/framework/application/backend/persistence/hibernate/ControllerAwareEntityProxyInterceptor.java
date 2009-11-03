@@ -26,15 +26,14 @@ import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
-import org.jspresso.framework.application.backend.session.IApplicationSession;
-import org.jspresso.framework.application.backend.session.hibernate.HibernateAwareApplicationSession;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.jspresso.framework.security.UserPrincipal;
 
 /**
- * Hibernate session interceptor aware of an application session to deal with
+ * Hibernate session interceptor aware of a backend controller to deal with
  * uniqueness of entity instances across the JVM.
  * <p>
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
@@ -53,42 +52,41 @@ import org.jspresso.framework.security.UserPrincipal;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ApplicationSessionAwareEntityProxyInterceptor extends
+public class ControllerAwareEntityProxyInterceptor extends
     EntityProxyInterceptor {
 
-  private static final long   serialVersionUID = -6834992000307471098L;
+  private static final long  serialVersionUID = -6834992000307471098L;
 
-  private IApplicationSession applicationSession;
+  private IBackendController backendController;
 
   /**
-   * Begins the application session current unit of work.
+   * Begins the backend controller current unit of work.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public void afterTransactionBegin(Transaction tx) {
-    applicationSession.beginUnitOfWork();
+    backendController.beginUnitOfWork();
     super.afterTransactionBegin(tx);
   }
 
   /**
-   * Either commits or rollbacks the application session current unit of work.
+   * Either commits or rollbacks the backend controller current unit of work.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public void afterTransactionCompletion(Transaction tx) {
     if (tx.wasCommitted()) {
-      applicationSession.commitUnitOfWork();
+      backendController.commitUnitOfWork();
     } else {
-      applicationSession.rollbackUnitOfWork();
+      backendController.rollbackUnitOfWork();
     }
     super.afterTransactionCompletion(tx);
   }
 
   /**
-   * Uses the application session to retrieve the dirty properties of the
-   * entity.
+   * Uses the backend controller to retrieve the dirty properties of the entity.
    * <p>
    * {@inheritDoc}
    */
@@ -96,7 +94,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   public int[] findDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
-      Map<String, Object> dirtyProperties = applicationSession
+      Map<String, Object> dirtyProperties = backendController
           .getDirtyProperties((IEntity) entity);
       if (dirtyProperties != null) {
         dirtyProperties.remove(IEntity.VERSION);
@@ -119,7 +117,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
       if (((IEntity) entity).isPersistent()
           && /* ((IEntity) entity).onUpdate(getEntityFactory()) */onFlushDirty(
               entity, id, currentState, previousState, propertyNames, types)) {
-        dirtyProperties = applicationSession
+        dirtyProperties = backendController
             .getDirtyProperties((IEntity) entity);
       }
       int[] indices = new int[dirtyProperties.size()];
@@ -142,9 +140,9 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   @SuppressWarnings("unchecked")
   @Override
   public Object getEntity(String entityName, Serializable id) {
-    if (!applicationSession.isUnitOfWorkActive()) {
+    if (!backendController.isUnitOfWorkActive()) {
       try {
-        IEntity registeredEntity = applicationSession.getRegisteredEntity(
+        IEntity registeredEntity = backendController.getRegisteredEntity(
             (Class<? extends IEntity>) Class.forName(entityName), id);
         if (registeredEntity instanceof HibernateProxy) {
           HibernateProxy proxy = (HibernateProxy) registeredEntity;
@@ -152,7 +150,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
           registeredEntity = (IEntity) li.getImplementation();
         }
 
-        HibernateAwareApplicationSession
+        HibernateBackendController
             .cleanPersistentCollectionDirtyState(registeredEntity);
         return registeredEntity;
       } catch (ClassNotFoundException ex) {
@@ -168,11 +166,11 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   @Override
   public boolean onLoad(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
-    if (!applicationSession.isUnitOfWorkActive()) {
+    if (!backendController.isUnitOfWorkActive()) {
       if (entity instanceof IEntity
-          && applicationSession.getRegisteredEntity(((IEntity) entity)
+          && backendController.getRegisteredEntity(((IEntity) entity)
               .getComponentContract(), id) == null) {
-        applicationSession.registerEntity((IEntity) entity, false);
+        backendController.registerEntity((IEntity) entity, false);
       }
     }
     return super.onLoad(entity, id, state, propertyNames, types);
@@ -190,20 +188,20 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     while (entities.hasNext()) {
       Object entity = entities.next();
       if (entity instanceof IEntity) {
-        applicationSession.recordAsSynchronized((IEntity) entity);
+        backendController.recordAsSynchronized((IEntity) entity);
       }
     }
     super.postFlush(entities);
   }
 
   /**
-   * Sets the applicationSession.
+   * Sets the backendController.
    * 
-   * @param applicationSession
-   *          the applicationSession to set.
+   * @param backendController
+   *          the backendController to set.
    */
-  public void setApplicationSession(IApplicationSession applicationSession) {
-    this.applicationSession = applicationSession;
+  public void setBackendController(IBackendController backendController) {
+    this.backendController = backendController;
   }
 
   /**
@@ -211,7 +209,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    */
   @Override
   protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return applicationSession;
+    return backendController;
   }
 
   /**
@@ -221,6 +219,6 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    */
   @Override
   protected UserPrincipal getPrincipal() {
-    return applicationSession.getPrincipal();
+    return backendController.getApplicationSession().getPrincipal();
   }
 }

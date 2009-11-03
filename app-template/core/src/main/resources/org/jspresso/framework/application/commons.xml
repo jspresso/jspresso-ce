@@ -72,19 +72,8 @@
   <!--
     The root abstract implementation used as Application Session.
   -->
-  <bean id="abstractApplicationSession" abstract="true"
-    class="org.jspresso.framework.application.backend.session.basic.BasicApplicationSession">
-    <property name="collectionFactory" ref="componentCollectionFactory" />
-    <property name="entityRegistry">
-      <bean class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry" scope="prototype" />
-    </property>
-    <property name="unitOfWork">
-      <bean class="org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork" scope="prototype" />
-    </property>
-    <property name="carbonEntityCloneFactory">
-      <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" scope="prototype" />
-    </property>
-  </bean>
+  <bean id="applicationSession" scope="prototype"
+    class="org.jspresso.framework.application.backend.session.basic.BasicApplicationSession" />
 
   <!--
     The implementation used as ComponentDescriptorRegistry.
@@ -126,11 +115,11 @@
   </bean>
 
   <bean id="sessionAwareComponentFactory" parent="basicComponentFactory"
-    class="org.jspresso.framework.application.backend.component.ApplicationSessionAwareProxyComponentFactory" scope="prototype">
+    class="org.jspresso.framework.application.backend.component.ControllerAwareProxyComponentFactory" scope="prototype">
   </bean>
 
   <bean id="sessionAwareEntityFactory" parent="basicEntityFactory"
-    class="org.jspresso.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory" scope="prototype">
+    class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory" scope="prototype">
     <property name="inlineComponentFactory" ref="sessionAwareComponentFactory" />
   </bean>
   <!--
@@ -210,6 +199,17 @@
     <property name="entityFactory" ref="sessionAwareEntityFactory" />
     <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="translationProvider" ref="translationProvider" />
+    <property name="applicationSession" ref="applicationSession" />
+    <property name="collectionFactory" ref="componentCollectionFactory" />
+    <property name="entityRegistry">
+      <bean class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry" />
+    </property>
+    <property name="unitOfWork">
+      <bean class="org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork" />
+    </property>
+    <property name="carbonEntityCloneFactory">
+      <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" />
+    </property>
   </bean>
 
   <!--

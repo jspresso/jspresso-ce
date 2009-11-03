@@ -128,13 +128,6 @@
     parent="abstractBackController"
     class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController">
     <property
-      name="applicationSession">
-      <bean
-        parent="abstractApplicationSession"
-        class="org.jspresso.framework.application.backend.session.hibernate.HibernateAwareApplicationSession"
-        scope="prototype" />
-    </property>
-    <property
       name="hibernateTemplate"
       ref="hibernateTemplate" />
     <property

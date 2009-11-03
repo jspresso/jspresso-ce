@@ -61,6 +61,13 @@ public interface IFrontendController<E, F, G> extends IController,
     IIconDescriptor, IActionable {
 
   /**
+   * Gets the peer model controller.
+   * 
+   * @return the backend controller this frontend controller is attached to.
+   */
+  IBackendController getBackendController();
+
+  /**
    * Displays a modal dialog.
    * 
    * @param mainView
