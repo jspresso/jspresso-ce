@@ -96,7 +96,7 @@ in ulc-web.xml, add :
     <servlet-name>ApplicationWingsServlet</servlet-name>
   </filter-mapping>
 
-- the action class hierarchy has been refactored (simplified). Now, all actions inheriting from
+- The action class hierarchy has been refactored (simplified). Now, all actions inheriting from
 AbstractAction handle a "wrapped" and a "next" action for chaining. The following map
 indicates how classes should be changed if used in your existing projects :
   WrappingAction         -> FrontendAction
@@ -104,7 +104,18 @@ indicates how classes should be changed if used in your existing projects :
   AbstractFrontendAction -> FrontendAction
   AbstractBackendAction  -> BackendAction
 
-
+- We have re-designed the articulation between the backend controller and the application session.
+Formerly, the session object was responsible for holding the Unit of Work and the merging of the
+in-memory state back and forth during transactions. This behaviour has been transferred back to
+the backend controller (it is how it should have been from the start) using the same API.
+The application session object is then very lightweight and does not adhere anymore to the
+persistence layer. All this coupling is now handled directly in the backend controller.
+This has the following impact on the codebase :
+  * All classes named "ApplicationSessionAwarexxx" have been renamed to "ControllerAwarexxx"
+  * All IApplicationSession methods except getLocale(), getPrincipal() and getSubject()
+    have been moved to the IBackendController interface. Whenever you use them in your actions code,
+    the change should be as simple as changing getApplicationSession(actionContext) to
+    getController(actionContext).
 
 
 3.0.0

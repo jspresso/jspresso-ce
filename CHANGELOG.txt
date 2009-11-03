@@ -102,6 +102,8 @@ New features
 2885050    "expanded" property on BasicTreeViewDescriptor
 2889514    Improved dev login module to support mutiple users
 2890235    Flex visualisation of enumeration
+2891297    Refactor IApplicationSession and IBackendController
+2891302    Refactor IAction hierarchy
 
 3.0.0
 =====
