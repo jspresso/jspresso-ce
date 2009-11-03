@@ -10,9 +10,6 @@ import java.util.Map;
  * This interface is implemented by descriptors of properties which can be
  * filled using files. Typically, binary property descriptors and text property
  * descriptors implement this interface.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

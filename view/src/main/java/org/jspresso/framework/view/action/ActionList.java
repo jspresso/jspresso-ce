@@ -11,9 +11,6 @@ import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 
 /**
  * A describeable list of actions.
- * <p>
- * Copyright (c) 2005-2007 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

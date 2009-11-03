@@ -7,9 +7,6 @@ import org.wings.SPasswordField;
 
 /**
  * SPasswordField connector.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

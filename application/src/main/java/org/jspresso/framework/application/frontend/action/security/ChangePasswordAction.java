@@ -13,9 +13,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
 
 /**
  * The frontend action to initiate the password change.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

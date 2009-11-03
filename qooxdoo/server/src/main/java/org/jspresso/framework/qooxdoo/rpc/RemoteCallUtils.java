@@ -30,9 +30,6 @@ import org.json.JSONObject;
 
 /**
  * Refines the way Qooxdoo rpc handles JSON types.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

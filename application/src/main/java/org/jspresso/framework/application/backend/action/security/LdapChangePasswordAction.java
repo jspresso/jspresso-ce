@@ -26,9 +26,6 @@ import org.springframework.ldap.core.support.DirContextSource;
 
 /**
  * Changes a user password in an ldap directory.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

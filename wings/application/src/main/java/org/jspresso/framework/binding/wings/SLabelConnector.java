@@ -27,9 +27,6 @@ import org.wings.SLabel;
 
 /**
  * A connector for label.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

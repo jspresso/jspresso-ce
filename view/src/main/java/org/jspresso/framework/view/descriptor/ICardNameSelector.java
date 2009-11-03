@@ -23,9 +23,6 @@ import javax.security.auth.Subject;
 /**
  * This interface is implemented by strategies determining a card name based on
  * a model instance.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -10,9 +10,6 @@ import com.ulcjava.base.client.UISession;
 
 /**
  * A message handler that alows to test for the existence of a file.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -25,9 +25,6 @@ import org.hibernate.criterion.DetachedCriteria;
 /**
  * This interface is used to refine hibernate queries and can be injected in
  * <code>QueryEntitiesAction</code>.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

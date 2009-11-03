@@ -9,9 +9,6 @@ import org.jspresso.framework.action.IActionHandler;
 
 /**
  * Action with a static i18nalized message.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

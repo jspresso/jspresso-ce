@@ -26,9 +26,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * Abstract class for property accessors.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

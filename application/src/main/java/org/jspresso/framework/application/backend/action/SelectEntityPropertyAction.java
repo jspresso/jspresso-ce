@@ -13,9 +13,6 @@ import org.jspresso.framework.model.entity.IEntity;
 /**
  * A generic action to fill-in the context ACTION_PARAM with the value of an
  * entity property.
- * <p>
- * Copyright 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision: 475 $
  * @author Vincent Vandenschrick

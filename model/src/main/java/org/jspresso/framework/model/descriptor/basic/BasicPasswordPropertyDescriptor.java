@@ -7,9 +7,6 @@ import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 
 /**
  * Default implementation of a password descriptor.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

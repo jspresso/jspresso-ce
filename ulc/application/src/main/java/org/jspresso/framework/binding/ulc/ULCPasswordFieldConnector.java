@@ -7,9 +7,6 @@ import com.ulcjava.base.application.ULCPasswordField;
 
 /**
  * ULCPasswordField connector.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

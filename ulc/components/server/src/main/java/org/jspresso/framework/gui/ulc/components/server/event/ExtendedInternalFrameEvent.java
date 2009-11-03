@@ -10,9 +10,6 @@ import com.ulcjava.base.application.event.UlcEvent;
 
 /**
  * Event for ExtendedInternalFrame.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

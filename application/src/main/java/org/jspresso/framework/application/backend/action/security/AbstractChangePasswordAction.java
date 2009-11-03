@@ -19,9 +19,6 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 
 /**
  * Changes a user password asking for the current and new password.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

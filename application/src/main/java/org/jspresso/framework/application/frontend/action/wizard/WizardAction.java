@@ -25,9 +25,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * A Wizard action.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision: 1302 $
  * @author Vincent Vandenschrick

@@ -50,9 +50,6 @@ import org.wings.table.STableColumnModel;
  * A clickable header table CG. Since default TableCG is final, it can't be
  * overriden, so I had to copy the code to override the
  * <code>writeHeaderCell()</code> method.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

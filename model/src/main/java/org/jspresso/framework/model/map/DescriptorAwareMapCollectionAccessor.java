@@ -14,9 +14,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 /**
  * A map collection property accessor that receives a model descriptor to handle
  * the model integrity.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

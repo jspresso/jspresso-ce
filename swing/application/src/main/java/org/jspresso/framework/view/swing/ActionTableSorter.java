@@ -35,9 +35,6 @@ import org.jspresso.framework.util.collection.ESort;
 
 /**
  * A table sorter that triggers an action whenever the sorting state changes.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -12,9 +12,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * Abstract class to build a property change capable bean.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -17,9 +17,6 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 
 /**
  * a map which equality is based on object identity.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

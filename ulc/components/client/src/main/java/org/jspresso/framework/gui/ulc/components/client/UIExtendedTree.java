@@ -18,9 +18,6 @@ import com.ulcjava.base.shared.internal.Anything;
 
 /**
  * UI tree extended to take care of will events
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

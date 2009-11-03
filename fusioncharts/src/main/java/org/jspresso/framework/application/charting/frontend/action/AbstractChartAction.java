@@ -27,9 +27,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * Abstract base class for chart display action.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

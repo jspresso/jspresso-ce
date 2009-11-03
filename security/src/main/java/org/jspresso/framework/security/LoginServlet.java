@@ -1,3 +1,21 @@
+/*
+ * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ *
+ *  This file is part of the Jspresso framework.
+ *
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.jspresso.framework.security;
 
 import java.io.IOException;
@@ -13,8 +31,8 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet that performs a JAAS login. The name of the JAAS configuration is
  * read from the servlet config. After succesful login, username and password
  * are put in the session. Note that, in contrast to the
- * <code>SecurityContextFilter</code>, the login module used here is supposed
- * to perform a real authentication. With JBoss, you could use the
+ * <code>SecurityContextFilter</code>, the login module used here is supposed to
+ * perform a real authentication. With JBoss, you could use the
  * <code>UsersRolesLoginModule</code> for example. <br>
  * Note that this is sample implementation, and is written only in order to demo
  * the use of the {@link SecurityContextFilter} class. In a real life

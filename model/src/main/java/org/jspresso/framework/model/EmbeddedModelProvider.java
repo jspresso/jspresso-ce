@@ -7,9 +7,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 
 /**
  * A simple standalone model provider.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

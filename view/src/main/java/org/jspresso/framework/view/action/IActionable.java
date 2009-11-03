@@ -5,9 +5,6 @@ package org.jspresso.framework.view.action;
 
 /**
  * An actionable object.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

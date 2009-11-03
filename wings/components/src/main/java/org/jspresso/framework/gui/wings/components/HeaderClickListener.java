@@ -22,9 +22,6 @@ import java.util.EventListener;
 
 /**
  * The listener inteface for table header click listeners.
- * <p>
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
- * <p>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
