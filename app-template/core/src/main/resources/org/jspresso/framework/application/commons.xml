@@ -244,4 +244,6 @@
   <bean id="doPrintBackendAction" class="org.jspresso.framework.application.printing.backend.action.GenerateJasperReportAction">
     <property name="jdbcTemplate" ref="reportingJdbcTemplate" />
   </bean>
+
+  <bean id="abstractBackendAction" abstract="true" class="org.jspresso.framework.application.backend.action.BackendAction" />
 </beans>

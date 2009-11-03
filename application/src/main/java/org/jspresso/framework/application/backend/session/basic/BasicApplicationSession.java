@@ -107,6 +107,10 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public IEntity cloneInUnitOfWork(IEntity entity) {
+    if (!unitOfWork.isActive()) {
+      throw new ApplicationSessionException(
+          "Cannot use a unit of work that has not begun.");
+    }
     return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
   }
 
@@ -114,6 +118,10 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
+    if (!unitOfWork.isActive()) {
+      throw new ApplicationSessionException(
+          "Cannot use a unit of work that has not begun.");
+    }
     List<IEntity> uowEntities = new ArrayList<IEntity>();
     Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = new HashMap<Class<?>, Map<Serializable, IEntity>>();
     for (IEntity entity : entities) {

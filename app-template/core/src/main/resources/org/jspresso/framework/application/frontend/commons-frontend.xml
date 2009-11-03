@@ -320,6 +320,8 @@
   <bean id="staticScriptedBackAction" abstract="true" parent="scriptedBackAction"
     class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction"/>
 
+  <bean id="abstractFrontendAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction"/>
+  
   <bean id="abstractCollectionAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.SetActionParamFromSelectedComponentsAction" />
