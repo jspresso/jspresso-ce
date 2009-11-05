@@ -21,6 +21,13 @@
       </mediaobject>
     </figure>
   </section>
+  <section>
+    <title>Reference</title>
+
+    <para></para>
+
+    <xi:include href="../generated/AbstractComponentDescriptor.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  </section>
 
   <section>
     <title>Properties</title>
@@ -38,5 +45,12 @@
         </imageobject>
       </mediaobject>
     </figure>
+  </section>
+  <section>
+    <title>Reference</title>
+
+    <para></para>
+
+    <xi:include href="../generated/BasicPropertyDescriptor.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
   </section>
 </chapter>

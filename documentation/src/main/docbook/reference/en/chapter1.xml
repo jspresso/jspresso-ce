@@ -4859,7 +4859,8 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 &lt;beans
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true"&gt;
 
 &lt;/beans&gt;</programlisting>
@@ -5487,73 +5488,73 @@ INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : 
         screenshots below captures some of the actions we have just talked
         about.</para>
 
-        <para><table>
-            <title>Some screenshots of the master data management
-            workspace</title>
+        <table>
+          <title>Some screenshots of the master data management
+          workspace</title>
 
-            <tgroup cols="2">
-              <tbody>
-                <row>
-                  <entry>1- We have just lauched the module.<mediaobject>
-                      <imageobject>
-                        <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module.jpg"
-                                   scalefit="1" width="100%" />
-                      </imageobject>
-                    </mediaobject></entry>
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry>1- We have just lauched the module.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata-module.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
 
-                  <entry>2- We are saving 3 cities we've just
-                  created.<mediaobject>
-                      <imageobject>
-                        <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-3cities.jpg"
-                                   scalefit="1" width="100%" />
-                      </imageobject>
-                    </mediaobject></entry>
-                </row>
+                <entry>2- We are saving 3 cities we've just
+                created.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata-module-3cities.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
 
-                <row>
-                  <entry>3- We are querying the database applying a
-                  filter.<mediaobject>
-                      <imageobject>
-                        <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-filter.jpg"
-                                   scalefit="1" width="100%" />
-                      </imageobject>
-                    </mediaobject></entry>
+              <row>
+                <entry>3- We are querying the database applying a
+                filter.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata-module-filter.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
 
-                  <entry>4- We are going to edit one of the cities
-                  individually in a form.<mediaobject>
-                      <imageobject>
-                        <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-open.jpg"
-                                   scalefit="1" width="100%" />
-                      </imageobject>
-                    </mediaobject></entry>
-                </row>
+                <entry>4- We are going to edit one of the cities individually
+                in a form.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata-module-open.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
 
-                <row>
-                  <entry>5- We have installed one of the city in the module
-                  tree and we edit it.<mediaobject>
-                      <imageobject>
-                        <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-single.jpg"
-                                   scalefit="1" width="100%" />
-                      </imageobject>
-                    </mediaobject></entry>
+              <row>
+                <entry>5- We have installed one of the city in the module tree
+                and we edit it.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata-module-single.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
 
-                  <entry>6- We reset the module content (the database, of
-                  course, still contains the data).<mediaobject>
-                      <imageobject>
-                        <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-reloaded.jpg"
-                                   scalefit="1" width="100%" />
-                      </imageobject>
-                    </mediaobject></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table></para>
+                <entry>6- We reset the module content (the database, of
+                course, still contains the data).<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata-module-reloaded.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
 
         <para>Next step will consist in structuring a little bit more the
         module tree.</para>
@@ -6470,54 +6471,56 @@ public class OrganizationalUnitPropertyProcessors {
           employee and we will try to use this new employee as the manager in
           one of the sample departments.</para>
 
-          <para><table>
-              <title>Some screenshots to show the manager business rule
-              enforcement</title>
+          <table>
+            <title>Some screenshots to show the manager business rule
+            enforcement</title>
 
-              <tgroup cols="2">
-                <tbody>
-                  <row>
-                    <entry>1- We will trigger the list of value to change the
-                    department manager.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-manager-lov.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
+            <tgroup cols="2">
+              <tbody>
+                <row>
+                  <entry>1- We will trigger the list of value to change the
+                  department manager.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="45%"
+                                   fileref="../images/Companies-module-single-manager-lov.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
 
-                    <entry>2- The LOV dialog opens with a pre-initialized
-                    filter containing the department company.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="35%"
-                                     fileref="../images/Companies-module-single-manager-lov-open.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
-                  </row>
+                  <entry>2- The LOV dialog opens with a pre-initialized filter
+                  containing the department company.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="35%"
+                                   fileref="../images/Companies-module-single-manager-lov-open.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
 
-                  <row>
-                    <entry>3- Let's reset the filter, and search for the
-                    employee of the other company.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="35%"
-                                     fileref="../images/Companies-module-single-manager-lov-search.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
+                <row>
+                  <entry>3- Let's reset the filter, and search for the
+                  employee of the other company.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="35%"
+                                   fileref="../images/Companies-module-single-manager-lov-search.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
 
-                    <entry>4- Select it as the new manager; the business rule
-                    is violated and the end-user is notified.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="50%"
-                                     fileref="../images/Companies-module-single-manager-lov-error.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
-                  </row>
-                </tbody>
-              </tgroup>
-            </table></para>
+                  <entry>4- Select it as the new manager; the business rule is
+                  violated and the end-user is notified.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="50%"
+                                   fileref="../images/Companies-module-single-manager-lov-error.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para></para>
         </section>
 
         <section>
@@ -6736,74 +6739,74 @@ public class OrganizationalUnitPropertyProcessors {
 
           <para>The following screenshots shows the result :</para>
 
-          <para><table>
-              <title>Some screenshots to show the team members
-              management</title>
+          <table>
+            <title>Some screenshots to show the team members
+            management</title>
 
-              <tgroup cols="2">
-                <tbody>
-                  <row>
-                    <entry>1- We display a company organization. notice our
-                    new team members view.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-team-members.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
+            <tgroup cols="2">
+              <tbody>
+                <row>
+                  <entry>1- We display a company organization. notice our new
+                  team members view.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="45%"
+                                   fileref="../images/Companies-module-single-team-members.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
 
-                    <entry>2- Notice how the 2 actions have been installed and
-                    configured (e.g. icons and tooltips).<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-team-members-2.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
-                  </row>
+                  <entry>2- Notice how the 2 actions have been installed and
+                  configured (e.g. icons and tooltips).<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="45%"
+                                   fileref="../images/Companies-module-single-team-members-2.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
 
-                  <row>
-                    <entry>3- Let's trigger the employee selection. The filter
-                    is pre-initialized.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="35%"
-                                     fileref="../images/Companies-module-single-team-members-lov.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
+                <row>
+                  <entry>3- Let's trigger the employee selection. The filter
+                  is pre-initialized.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="35%"
+                                   fileref="../images/Companies-module-single-team-members-lov.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
 
-                    <entry>4- Search for employees filtering on
-                    name.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="35%"
-                                     fileref="../images/Companies-module-single-team-members-lov-search.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
-                  </row>
+                  <entry>4- Search for employees filtering on
+                  name.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="35%"
+                                   fileref="../images/Companies-module-single-team-members-lov-search.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
 
-                  <row>
-                    <entry>5- Select one of the employee. The team members is
-                    updated.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-team-members-3.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
+                <row>
+                  <entry>5- Select one of the employee. The team members is
+                  updated.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="45%"
+                                   fileref="../images/Companies-module-single-team-members-3.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
 
-                    <entry>4- Since it is a N-N relationship, the added
-                    employee still belongs to its former teams.<mediaobject>
-                        <imageobject>
-                          <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-team-members-4.jpg"
-                                     scalefit="1" width="100%" />
-                        </imageobject>
-                      </mediaobject></entry>
-                  </row>
-                </tbody>
-              </tgroup>
-            </table></para>
+                  <entry>4- Since it is a N-N relationship, the added employee
+                  still belongs to its former teams.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="45%"
+                                   fileref="../images/Companies-module-single-team-members-4.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
 
           <para>Jspresso comes with tens of configurable built-in actions like
           the ones we've just used (wizards, user decisions through pop-ups to
