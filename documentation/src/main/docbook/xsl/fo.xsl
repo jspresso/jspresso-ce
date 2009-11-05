@@ -14,7 +14,14 @@
   <xsl:param name="tablecolumns.extension">1</xsl:param>
   <xsl:param name="graphicsize.extension">1</xsl:param>
   <xsl:param name="use.extensions">1</xsl:param>
-  <xsl:param name="formal.title.placement">figure after</xsl:param>
+  <xsl:param name="formal.title.placement">
+    figure after
+    example after
+    equation after
+    table after
+    procedure after
+    task after
+  </xsl:param>
   <xsl:param name="generate.index">1</xsl:param>
   <xsl:param name="ulink.show">0</xsl:param>
   <xsl:param name="shade.verbatim">1</xsl:param>
@@ -31,32 +38,37 @@
   <xsl:param name="section.label.includes.component.label">1</xsl:param>
 
   <xsl:attribute-set name="monospace.properties">
-    <xsl:attribute name="font-family">
-      <xsl:value-of select="$monospace.font.family"></xsl:value-of>
-    </xsl:attribute>
     <xsl:attribute name="font-size">8</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set
-    name="monospace.verbatim.properties"
-    use-attribute-sets="verbatim.properties monospace.properties">
+    name="monospace.verbatim.properties">
     <xsl:attribute name="font-size">6</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set
-    name="formal.title.properties"
-    use-attribute-sets="normal.para.spacing">
-    <xsl:attribute name="font-weight">bold</xsl:attribute>
-    <xsl:attribute name="hyphenate">false</xsl:attribute>
-    <xsl:attribute name="space-after.minimum">0.4em</xsl:attribute>
-    <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
-    <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
+    name="formal.title.properties">
     <xsl:attribute name="text-align">center</xsl:attribute>
+    <xsl:attribute name="font-size">
+      <xsl:value-of select="$body.font.master * 0.8"></xsl:value-of>
+      <xsl:text>pt</xsl:text>
+    </xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="section.title.properties">
+    <xsl:attribute name="space-before.minimum">2em</xsl:attribute>
+    <xsl:attribute name="space-before.optimum">4em</xsl:attribute>
+    <xsl:attribute name="space-before.maximum">4em</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.level1.properties">
     <xsl:attribute name="break-after">page</xsl:attribute>
   </xsl:attribute-set>
+
+  <xsl:attribute-set name="xref.properties">
+    <xsl:attribute name="text-decoration">underline</xsl:attribute>
+    <xsl:attribute name="color">blue</xsl:attribute>
+  </xsl:attribute-set> 
 
   <xsl:attribute-set name="table.properties">
     <xsl:attribute name="keep-together.within-column">
@@ -66,6 +78,7 @@
       </xsl:choose>
     </xsl:attribute>
   </xsl:attribute-set>
+  
   <xsl:template name="table.row.properties">
       <xsl:if test="ancestor::thead">
           <xsl:attribute name="background-color">#EEEEEE</xsl:attribute>

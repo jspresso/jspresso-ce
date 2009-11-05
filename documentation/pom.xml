@@ -33,6 +33,7 @@
               <additionalparam>
                 -outputDir ${project.build.directory}/staging/reference/generated
                 -rootClassName org.jspresso.framework.util.descriptor.DefaultDescriptor
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
               </additionalparam>
               <subpackages>org.jspresso.framework.util.descriptor</subpackages>
               <sourcepath>${basedir}/../util/src/main/java</sourcepath>
@@ -63,6 +64,7 @@
               <additionalparam>
                 -outputDir ${project.build.directory}/staging/reference/generated
                 -rootClassName org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
               </additionalparam>
               <subpackages>org.jspresso.framework.model</subpackages>
               <sourcepath>${basedir}/../model/src/main/java</sourcepath>
@@ -78,6 +80,7 @@
               <additionalparam>
                 -outputDir ${project.build.directory}/staging/reference/generated
                 -rootClassName org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
               </additionalparam>
               <subpackages>org.jspresso.framework.model</subpackages>
               <sourcepath>${basedir}/../model/src/main/java</sourcepath>
