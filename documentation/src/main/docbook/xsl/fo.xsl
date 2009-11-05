@@ -62,7 +62,7 @@
     <xsl:attribute name="keep-together.within-column">
       <xsl:choose>
         <xsl:when test="@tabstyle='splitable'">auto</xsl:when>
-        <xsl:otherwise>inherit</xsl:otherwise>
+        <xsl:otherwise>always</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
   </xsl:attribute-set>
@@ -72,18 +72,45 @@
       </xsl:if>
   </xsl:template>
 
-  <xsl:template name="hyphenate-dot">
+  
+  <!-- 
+  <xsl:template name="hyphenate-url">
+    <xsl:param name="url" select="''"/>
+    <xsl:choose>
+      <xsl:when test="$ulink.hyphenate = ''">
+        <xsl:value-of select="$url"/>
+      </xsl:when>
+      <xsl:when test="string-length($url) &gt; 1">
+        <xsl:variable name="char" select="substring($url, 1, 1)"/>
+        <xsl:value-of select="$char"/>
+        <xsl:if test="contains($ulink.hyphenate.chars, $char)">
+          <xsl:if test="not($char = '/' and substring($url,2,1) = '/')">
+            <xsl:copy-of select="$ulink.hyphenate"/>
+          </xsl:if>
+        </xsl:if>
+        <xsl:call-template name="hyphenate-url">
+          <xsl:with-param name="url" select="substring($url, 2)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$url"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  -->
+  
+  <xsl:param name="cell.hyphenate.chars">.,-&gt;&lt;</xsl:param>
+  <xsl:template name="hyphenate-cell">
     <xsl:param name="content" select="''"/>
     <xsl:choose>
       <xsl:when test="string-length($content) &gt; 2">
         <xsl:variable name="char" select="substring($content, 1, 1)"/>
         <xsl:variable name="nextChar" select="substring($content, 2, 2)"/>
-        <xsl:if test="'.' = $char and not(' ' = $nextChar)">
+        <xsl:if test="contains($cell.hyphenate.chars, $char) and not(' ' = $nextChar)">
           <xsl:text>&#x200B;</xsl:text>
         </xsl:if>
         <xsl:value-of select="$char"/>
-        <!-- recurse to the next character -->
-        <xsl:call-template name="hyphenate-dot">
+        <xsl:call-template name="hyphenate-cell">
           <xsl:with-param name="content" select="substring($content, 2)"/>
         </xsl:call-template>
       </xsl:when>
@@ -94,7 +121,7 @@
   </xsl:template>
 
   <xsl:template match="entry//text()">
-    <xsl:call-template name="hyphenate-dot">
+    <xsl:call-template name="hyphenate-cell">
       <xsl:with-param name="content" select="."/>
     </xsl:call-template>
   </xsl:template>

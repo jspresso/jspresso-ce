@@ -10,8 +10,94 @@
   <packaging>pom</packaging>
   <name>Documentation</name>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-view</artifactId>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>DefaultDescriptor-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.util.descriptor.DefaultDescriptor
+              </additionalparam>
+              <subpackages>org.jspresso.framework.util.descriptor</subpackages>
+              <sourcepath>${basedir}/../util/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>BasicViewDescriptor-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor
+              </additionalparam>
+              <subpackages>org.jspresso.framework.view</subpackages>
+              <sourcepath>${basedir}/../view/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>AbstractComponentDescriptor-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor
+              </additionalparam>
+              <subpackages>org.jspresso.framework.model</subpackages>
+              <sourcepath>${basedir}/../model/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>BasicPropertyDescriptor-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor
+              </additionalparam>
+              <subpackages>org.jspresso.framework.model</subpackages>
+              <sourcepath>${basedir}/../model/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <doclet>org.jspresso.beandocbook.BeanDocbookDoclet</doclet>
+          <docletArtifact>
+            <groupId>org.jspresso.tools</groupId>
+            <artifactId>jspresso-beandocbook</artifactId>
+            <version>1.0-SNAPSHOT</version>
+          </docletArtifact>
+          <useStandardDocletOptions>false</useStandardDocletOptions>
+          <debug>false</debug>
+          <outputDirectory>${project.build.directory}/staging/reference</outputDirectory>
+          <reportOutputDirectory>${project.build.directory}/staging/reference</reportOutputDirectory>
+          <destDir>generated</destDir>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>com.agilejava.docbkx</groupId>
         <artifactId>docbkx-maven-plugin</artifactId>
@@ -23,9 +109,9 @@
             <id>doc-html-chunked</id>
             <phase>verify</phase>
             <configuration>
-              <targetDirectory>${basedir}/target/reference/html-chunked</targetDirectory>
+              <targetDirectory>${project.build.directory}/reference/html-chunked</targetDirectory>
               <chunkedOutput>true</chunkedOutput>
-              <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization>
+              <htmlCustomization>${project.build.directory}/staging/xsl/html.xsl</htmlCustomization>
               <htmlStylesheet>../css/docbook.css</htmlStylesheet>
               <admonGraphicsPath>../style-images/</admonGraphicsPath>
               <calloutGraphicsPath>../style-images/callouts/</calloutGraphicsPath>
@@ -36,7 +122,7 @@
                     <include name="images/*.*" />
                   </fileset>
                   <fileset dir="target/staging">
-                    <include name="**/*.css" />
+                    <include name="**/css/*.*" />
                   </fileset>
                 </copy>
                 <copy todir="target/reference/html-chunked/style-images">
@@ -54,9 +140,9 @@
             <id>doc-html-single</id>
             <phase>verify</phase>
             <configuration>
-              <targetDirectory>${basedir}/target/reference/html-single</targetDirectory>
+              <targetDirectory>${project.build.directory}/reference/html-single</targetDirectory>
               <chunkedOutput>false</chunkedOutput>
-              <htmlCustomization>${basedir}/target/staging/xsl/html.xsl</htmlCustomization>
+              <htmlCustomization>${project.build.directory}/staging/xsl/html.xsl</htmlCustomization>
               <htmlStylesheet>../css/docbook.css</htmlStylesheet>
               <admonGraphicsPath>../style-images/</admonGraphicsPath>
               <calloutGraphicsPath>../style-images/callouts/</calloutGraphicsPath>
@@ -67,7 +153,7 @@
                     <include name="images/*.*" />
                   </fileset>
                   <fileset dir="target/staging">
-                    <include name="**/*.css" />
+                    <include name="**/css/*.*" />
                   </fileset>
                 </copy>
                 <copy todir="target/reference/html-single/style-images">
@@ -85,21 +171,21 @@
             <id>doc-pdf</id>
             <phase>verify</phase>
             <configuration>
-              <targetDirectory>${basedir}/target/reference/pdf/en</targetDirectory>
-              <foCustomization>${basedir}/target/staging/xsl/fo.xsl</foCustomization>
-              <imgSrcPath>${basedir}/target/staging/reference/en/</imgSrcPath>
+              <targetDirectory>${project.build.directory}/reference/pdf/en</targetDirectory>
+              <foCustomization>${project.build.directory}/staging/xsl/fo.xsl</foCustomization>
+              <imgSrcPath>${project.build.directory}/staging/reference/en/</imgSrcPath>
               <keepRelativeImageUris>0</keepRelativeImageUris>
-              <admonGraphicsPath>${basedir}/target/staging/images/</admonGraphicsPath>
-              <calloutGraphicsPath>${basedir}/target/staging/images/callouts/</calloutGraphicsPath>
-              <navigGraphicsPath>${basedir}/target/staging/images/</navigGraphicsPath>
+              <admonGraphicsPath>${project.build.directory}/staging/images/</admonGraphicsPath>
+              <calloutGraphicsPath>${project.build.directory}/staging/images/callouts/</calloutGraphicsPath>
+              <navigGraphicsPath>${project.build.directory}/staging/images/</navigGraphicsPath>
               <postProcess>
-                <delete dir="${basedir}/target/reference/pdf/en/en" />
+                <delete dir="${project.build.directory}/reference/pdf/en/en" />
               </postProcess>
             </configuration>
           </execution>
         </executions>
         <configuration>
-          <sourceDirectory>${basedir}/target/staging/reference</sourceDirectory>
+          <sourceDirectory>${project.build.directory}/staging/reference</sourceDirectory>
           <includes>**/reference-guide.xml</includes>
           <xincludeSupported>true</xincludeSupported>
           <preProcess>
@@ -117,6 +203,7 @@
               </filterset>
               <fileset dir="src/main/docbook">
                 <include name="**/reference/**/*.xml" />
+                <exclude name="**/generated/**/*.xml" />
               </fileset>
             </copy>
             <xslt style="src/main/docbook/xsl/titlepage.xsl" extension=".xsl" basedir="src/main/docbook/xsl" destdir="target/staging/xsl" includes="**/fo-titlepages.xml **/html-titlepages.xml">

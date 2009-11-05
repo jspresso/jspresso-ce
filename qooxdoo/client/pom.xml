@@ -55,7 +55,7 @@
           <executable>python</executable>
           <workingDirectory>src/main/py</workingDirectory>
           <arguments>
-            <argument>${basedir}/target/qooxdoo-sdk/tool/bin/generator.py</argument>
+            <argument>${project.build.directory}/qooxdoo-sdk/tool/bin/generator.py</argument>
             <argument>build</argument>
           </arguments>
         </configuration>

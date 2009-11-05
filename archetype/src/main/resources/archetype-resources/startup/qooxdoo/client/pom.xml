@@ -71,7 +71,7 @@
           <executable>python</executable>
           <workingDirectory>src/main/py</workingDirectory>
           <arguments>
-            <argument>${basedir}/target/qooxdoo-sdk/tool/bin/generator.py</argument>
+            <argument>${project.build.directory}/qooxdoo-sdk/tool/bin/generator.py</argument>
             <argument>source-all,build</argument>
           </arguments>
         </configuration>
@@ -88,7 +88,7 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
-                <property name="web-debug.dir" value="${basedir}/target/web-debug" />
+                <property name="web-debug.dir" value="${project.build.directory}/web-debug" />
                 <property name="js.source.dir" value="${basedir}/src/main/source" />
                 <property name="html.source.dir" value="${basedir}/src/main/html" />
                 <mkdir dir="" />
@@ -100,7 +100,7 @@
                     <include name="**/*.html" />
                   </fileset>
                 </copy>
-                <replace dir="${web-debug.dir}" token="../../../../target" value="file:///${basedir}/target">
+                <replace dir="${web-debug.dir}" token="../../../../target" value="file:///${project.build.directory}">
                   <include name="**/*.js"/>
                 </replace>
                 <replace dir="${web-debug.dir}" token="../../" value="file:///${basedir}/src/main/">
