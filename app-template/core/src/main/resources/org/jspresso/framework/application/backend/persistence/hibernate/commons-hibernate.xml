@@ -130,9 +130,6 @@
     <property
       name="hibernateTemplate"
       ref="hibernateTemplate" />
-    <property
-      name="transactionTemplate"
-      ref="transactionTemplate" />
   </bean>
 
   <bean

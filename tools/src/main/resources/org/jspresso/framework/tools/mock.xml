@@ -41,4 +41,8 @@
       ref="applicationSession" />
   </bean>
 
+  <bean
+    id="transactionTemplate"
+    class="org.springframework.transaction.support.TransactionTemplate">
+  </bean>
 </beans>

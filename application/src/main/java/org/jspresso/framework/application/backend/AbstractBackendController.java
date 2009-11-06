@@ -32,6 +32,7 @@ import java.util.Set;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
+import org.jspresso.framework.application.backend.action.Transactional;
 import org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory;
 import org.jspresso.framework.application.backend.session.ApplicationSessionException;
 import org.jspresso.framework.application.backend.session.EMergeMode;
@@ -55,6 +56,9 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * Base class for backend application controllers. It provides the implementor
@@ -79,6 +83,8 @@ public abstract class AbstractBackendController extends AbstractController
   private BeanPropertyChangeRecorder                       dirtRecorder;
   private IEntityRegistry                                  entityRegistry;
   private IEntityUnitOfWork                                unitOfWork;
+
+  private TransactionTemplate                              transactionTemplate;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -110,7 +116,7 @@ public abstract class AbstractBackendController extends AbstractController
    * <p>
    * {@inheritDoc}
    */
-  public boolean execute(IAction action, Map<String, Object> context) {
+  public boolean execute(final IAction action, final Map<String, Object> context) {
     if (action == null) {
       return true;
     }
@@ -119,6 +125,21 @@ public abstract class AbstractBackendController extends AbstractController
     Map<String, Object> actionContext = getInitialActionContext();
     if (context != null) {
       context.putAll(actionContext);
+    }
+    if (action.getClass().isAnnotationPresent(Transactional.class)) {
+      Boolean ret = (Boolean) getTransactionTemplate().execute(
+          new TransactionCallback() {
+
+            public Object doInTransaction(TransactionStatus status) {
+              boolean executionStatus = action.execute(
+                  AbstractBackendController.this, context);
+              if (!executionStatus) {
+                status.setRollbackOnly();
+              }
+              return new Boolean(executionStatus);
+            }
+          });
+      return ret.booleanValue();
     }
     return action.execute(this, context);
   }
@@ -902,5 +923,24 @@ public abstract class AbstractBackendController extends AbstractController
       varRegisteredComponent.straightSetProperties(mergedProperties);
     }
     return varRegisteredComponent;
+  }
+
+  /**
+   * Gets the transactionTemplate.
+   * 
+   * @return the transactionTemplate.
+   */
+  public TransactionTemplate getTransactionTemplate() {
+    return transactionTemplate;
+  }
+
+  /**
+   * Sets the transactionTemplate.
+   * 
+   * @param transactionTemplate
+   *          the transactionTemplate to set.
+   */
+  public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+    this.transactionTemplate = transactionTemplate;
   }
 }

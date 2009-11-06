@@ -35,6 +35,7 @@ import org.jspresso.framework.model.entity.IEntityDirtAware;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * This interface establishes the contract of the backend controllers. Backend
@@ -282,4 +283,11 @@ public interface IBackendController extends IController, IEntityDirtAware,
    */
   IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
       Object entityId);
+
+  /**
+   * Gets the transactionTemplate.
+   * 
+   * @return the transactionTemplate.
+   */
+  TransactionTemplate getTransactionTemplate();
 }

@@ -210,6 +210,9 @@
     <property name="carbonEntityCloneFactory">
       <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" />
     </property>
+    <property
+      name="transactionTemplate"
+      ref="transactionTemplate" />
   </bean>
 
   <!--

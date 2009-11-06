@@ -37,7 +37,6 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.orm.hibernate3.HibernateTemplate;
-import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * This the root abstract class of all hibernate related persistence actions.
@@ -88,18 +87,6 @@ public abstract class AbstractHibernateAction extends BackendAction {
    */
   protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
     return getController(context).getHibernateTemplate();
-  }
-
-  /**
-   * Gets the transactionTemplate.
-   * 
-   * @param context
-   *          the action context.
-   * @return the transactionTemplate.
-   */
-  protected TransactionTemplate getTransactionTemplate(
-      Map<String, Object> context) {
-    return getController(context).getTransactionTemplate();
   }
 
   /**

@@ -16,36 +16,21 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.util.gate;
+package org.jspresso.framework.application.backend.action;
 
-import java.util.Collection;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Accessible using gates.
+ * Make a backend action transactional.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IGateAccessible {
-
-  /**
-   * Gets the collection of gates determining the readability state.
-   * 
-   * @return the collection of gates determining the readability state.
-   */
-  Collection<IGate> getReadabilityGates();
-
-  /**
-   * Gets the collection of gates determining the writability state.
-   * 
-   * @return the collection of gates determining the writability state.
-   */
-  Collection<IGate> getWritabilityGates();
-
-  /**
-   * Wether read-only is forced.
-   * 
-   * @return true if read-only.
-   */
-  boolean isReadOnly();
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Transactional {
+  // This is just a marker annotation.
 }

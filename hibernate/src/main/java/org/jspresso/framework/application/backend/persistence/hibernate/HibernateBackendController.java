@@ -55,9 +55,8 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class HibernateBackendController extends AbstractBackendController {
 
-  private HibernateTemplate   hibernateTemplate;
-  private TransactionTemplate transactionTemplate;
-  private boolean             traversedPendingOperations = false;
+  private HibernateTemplate hibernateTemplate;
+  private boolean           traversedPendingOperations = false;
 
   /**
    * Gets the hibernateTemplate.
@@ -66,15 +65,6 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   public HibernateTemplate getHibernateTemplate() {
     return hibernateTemplate;
-  }
-
-  /**
-   * Gets the transactionTemplate.
-   * 
-   * @return the transactionTemplate.
-   */
-  public TransactionTemplate getTransactionTemplate() {
-    return transactionTemplate;
   }
 
   /**
@@ -98,13 +88,11 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
-   * Sets the transactionTemplate.
-   * 
-   * @param transactionTemplate
-   *          the transactionTemplate to set.
+   * {@inheritDoc}
    */
+  @Override
   public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
-    this.transactionTemplate = transactionTemplate;
+    super.setTransactionTemplate(transactionTemplate);
     linkHibernateArtifacts();
   }
 

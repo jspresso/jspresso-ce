@@ -17,7 +17,7 @@ import com.ulcjava.base.client.UITree;
 import com.ulcjava.base.shared.internal.Anything;
 
 /**
- * UI tree extended to take care of will events
+ * UI tree extended to take care of will events.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

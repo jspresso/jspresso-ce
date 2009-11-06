@@ -19,7 +19,7 @@
 package org.jspresso.framework.application.frontend.command.remote;
 
 /**
- * Starts the application
+ * Starts the application.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

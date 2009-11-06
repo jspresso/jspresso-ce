@@ -27,6 +27,7 @@ import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * This class should serve as base class for implementing a action which
@@ -109,5 +110,17 @@ public class BackendAction extends AbstractAction {
    */
   protected IEntityFactory getEntityFactory(Map<String, Object> context) {
     return getController(context).getEntityFactory();
+  }
+
+  /**
+   * Gets the transactionTemplate.
+   * 
+   * @param context
+   *          the action context.
+   * @return the transactionTemplate.
+   */
+  protected TransactionTemplate getTransactionTemplate(
+      Map<String, Object> context) {
+    return getController(context).getTransactionTemplate();
   }
 }
