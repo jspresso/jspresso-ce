@@ -104,6 +104,7 @@ New features
 2890235    Flex visualisation of enumeration
 2891297    Refactor IApplicationSession and IBackendController
 2891302    Refactor IAction hierarchy
+2893235    Introduce @Transactional on BackendActions
 
 3.0.0
 =====
