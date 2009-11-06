@@ -200,6 +200,11 @@
                 <include name="**/html.xsl" />
               </fileset>
             </copy>
+            <copy todir="target/staging/reference/images">
+              <fileset dir="src/main/uml">
+                <include name="**/*.PNG" />
+              </fileset>
+            </copy>
             <copy todir="target/staging">
               <filterset>
                 <filter token="version" value="${project.version}" />

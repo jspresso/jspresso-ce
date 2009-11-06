@@ -1,0 +1,126 @@
+<class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.Workspace" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
+    binary="false">    
+    <position x="149" y="189" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.Module" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    binary="false">    
+    <position x="574" y="229" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.BeanModule" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanModule.java" 
+    binary="false">    
+    <position x="574" y="693" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.model.BeanCollectionModule" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
+    binary="false">    
+    <position x="185" y="600" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.application.model.FilterableBeanCollectionModule" project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/FilterableBeanCollectionModule.java" 
+    binary="false">    
+    <position x="184" y="892" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Workspace" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
+      binary="false" navigable="false">      
+      <attribute name="modules"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </source>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.FilterableBeanCollectionModule" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/FilterableBeanCollectionModule.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.BeanCollectionModule" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.BeanCollectionModule" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.BeanModule" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanModule.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false"/>  
+  </generalization>  
+  <association>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false" navigable="false">      
+      <attribute name="parent">        
+        <position x="755" y="527" width="35" height="14"/>      
+      </attribute>      
+      <multiplicity minimum="0" maximum="1">        
+        <position x="762" y="515" width="20" height="13"/>      
+      </multiplicity>    
+    </source>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false" navigable="false">      
+      <attribute name="subModules">        
+        <position x="742" y="542" width="62" height="14"/>      
+      </attribute>      
+      <multiplicity minimum="0" maximum="2147483647">        
+        <position x="703" y="521" width="20" height="13"/>      
+      </multiplicity>    
+    </source>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

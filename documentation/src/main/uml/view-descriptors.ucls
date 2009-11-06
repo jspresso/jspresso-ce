@@ -1,185 +1,179 @@
-<class-diagram icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
-  associations="true" dependencies="false" nesting-relationships="true" version="0.9.65">  
-  <classifier-display autosize="true" package="true" attributes="true" operations="true" initial-value="false" 
-    signature="true" visibility="true">    
-    <attributes public="true" package="true" protected="true" private="true"/>    
-    <operations public="true" package="true" protected="true" private="true"/>  
-  </classifier-display>  
-  <association-display labels="true" multiplicity="true"/>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IViewDescriptor" project="jspresso-framework" 
+<class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+    project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="308" y="-285" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="308" y="-285" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="506" y="64" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="593" y="2" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
-    project="jspresso-framework" 
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="543" y="-278" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="543" y="-278" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="586" y="-148" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="661" y="-192" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.ITableViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ITableViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITableViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="560" y="-56" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="590" y="-119" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" 
-    project="jspresso-framework" 
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IComponentViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="23" y="-85" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="23" y="-102" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
-    project="jspresso-framework" 
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="308" y="165" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="308" y="165" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IBorderViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="548" y="335" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="548" y="335" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="307" y="254" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="307" y="254" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor" 
-    project="jspresso-framework" 
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IConstrainedGridViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="24" y="351" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="24" y="351" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IEvenGridViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="308" y="359" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="308" y="359" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.ISplitViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ISplitViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISplitViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="601" y="199" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="601" y="199" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.ITabViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ITabViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITabViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="23" y="254" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="23" y="254" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IImageViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IImageViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IImageViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="208" y="75" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="422" y="91" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="-15" y="115" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="24" y="115" width="-1" height="-1"/>  
+    </display>  
   </interface>  
-  <interface language="java" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+    binary="false">    
+    <position x="24" y="-239" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
-    </display>    
-    <position x="24" y="-239" width="-1" height="-1"/>  
+    </display>  
   </interface>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
-      binary="false"/>    
-    <bendpoint x="400" y="-83"/>  
+      binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITabViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITabViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
@@ -191,44 +185,39 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
+    <bendpoint x="474" y="-121"/>    
+    <bendpoint x="474" y="-174"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITableViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITableViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <bendpoint x="389" y="-6"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
-      binary="false"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IConstrainedGridViewDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IEvenGridViewDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITableViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITableViewDescriptor.java" 
+    <bendpoint x="190" y="-30"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
-      binary="false"/>    
-    <bendpoint x="507" y="-195"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITabViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITabViewDescriptor.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
@@ -248,20 +237,11 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
-      binary="false"/>    
-    <bendpoint x="199" y="-46"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IEvenGridViewDescriptor.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
@@ -273,20 +253,41 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <bendpoint x="186" y="-142"/>    
     <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IComponentViewDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
-      binary="false"/>    
-    <bendpoint x="179" y="-175"/>  
+      binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IConstrainedGridViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
       binary="false"/>  
-  </generalization>
+  </generalization>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
 </class-diagram>

@@ -1,0 +1,128 @@
+<class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.action.IAction" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false">    
+    <position x="301" y="19" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.action.IDisplayableAction" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
+    binary="false">    
+    <position x="134" y="203" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </interface>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.backend.action.BackendAction" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/action/BackendAction.java" 
+    binary="false">    
+    <position x="509" y="729" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.action.AbstractAction" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+    binary="false">    
+    <position x="509" y="355" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.frontend.action.FrontendAction" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
+    binary="false">    
+    <position x="132" y="561" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <association>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false" navigable="false">      
+      <attribute name="wrappedAction">        
+        <position x="256" y="129" width="79" height="14"/>      
+      </attribute>      
+      <multiplicity minimum="0" maximum="1">        
+        <position x="285" y="72" width="20" height="13"/>      
+      </multiplicity>    
+    </source>    
+    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
+      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.action.FrontendAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false"/>  
+  </generalization>  
+  <realization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.action.FrontendAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.action.IDisplayableAction" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
+      binary="false"/>  
+  </realization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.action.BackendAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/action/BackendAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false"/>  
+  </generalization>  
+  <realization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
+      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>  
+  </realization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.action.IDisplayableAction" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
+      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>  
+  </generalization>  
+  <association>    
+    <bendpoint x="389" y="111"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false" navigable="false">      
+      <attribute name="nextAction">        
+        <position x="405" y="123" width="56" height="14"/>      
+      </attribute>      
+      <multiplicity minimum="0" maximum="1">        
+        <position x="375" y="72" width="20" height="13"/>      
+      </multiplicity>    
+    </source>    
+    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
+      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false"/>    
+    <operations public="true" package="false" protected="true" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
