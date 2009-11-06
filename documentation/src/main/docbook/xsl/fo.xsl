@@ -29,7 +29,7 @@
   looses callouts
   <xsl:param name="highlight.source">1</xsl:param>
   -->
-  <xsl:param name="body.start.indent">0pt</xsl:param>
+  <xsl:param name="body.start.indent">1em</xsl:param>
   <xsl:param name="alignment">left</xsl:param>
   <xsl:param name="body.font.master">11</xsl:param>
   <xsl:param name="body.font.family">sans-serif</xsl:param>
@@ -37,13 +37,25 @@
   <xsl:param name="section.autolabel">1</xsl:param>
   <xsl:param name="section.label.includes.component.label">1</xsl:param>
 
-  <xsl:attribute-set name="monospace.properties">
-    <xsl:attribute name="font-size">8</xsl:attribute>
-  </xsl:attribute-set>
+  <xsl:param name="page.margin.inner">
+    <xsl:choose>
+      <xsl:when test="$double.sided != 0">0.75in</xsl:when>
+      <xsl:otherwise>0.5in</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="page.margin.outer">
+    <xsl:choose>
+      <xsl:when test="$double.sided != 0">0.75in</xsl:when>
+      <xsl:otherwise>0.5in</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
 
   <xsl:attribute-set
     name="monospace.verbatim.properties">
-    <xsl:attribute name="font-size">6</xsl:attribute>
+    <xsl:attribute name="font-size">
+      <xsl:value-of select="$body.font.master * 0.8"></xsl:value-of>
+      <xsl:text>pt</xsl:text>
+    </xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set
@@ -59,6 +71,7 @@
     <xsl:attribute name="space-before.minimum">2em</xsl:attribute>
     <xsl:attribute name="space-before.optimum">4em</xsl:attribute>
     <xsl:attribute name="space-before.maximum">4em</xsl:attribute>
+    <xsl:attribute name="hyphenate">false</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.level1.properties">
