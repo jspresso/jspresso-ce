@@ -13,7 +13,7 @@
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>
-      <artifactId>jspresso-view</artifactId>
+      <artifactId>jspresso-app-template-remote</artifactId>
     </dependency>
   </dependencies>
 
@@ -49,6 +49,7 @@
               <additionalparam>
                 -outputDir ${project.build.directory}/staging/reference/generated
                 -rootClassName org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
               </additionalparam>
               <subpackages>org.jspresso.framework.view</subpackages>
               <sourcepath>${basedir}/../view/src/main/java</sourcepath>
@@ -84,6 +85,22 @@
               </additionalparam>
               <subpackages>org.jspresso.framework.model</subpackages>
               <sourcepath>${basedir}/../model/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>AbstractAction-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.application.action.AbstractAction
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+              </additionalparam>
+              <subpackages>org.jspresso.framework.application</subpackages>
+              <sourcepath>${basedir}/../application/src/main/java${path.separator}${basedir}/../remote/application/src/main/java${path.separator}${basedir}/../jasper/core/src/main/java${path.separator}${basedir}/../jasper/remote/src/main/java${path.separator}${basedir}/../fusioncharts/src/main/java</sourcepath>
             </configuration>
           </execution>
         </executions>

@@ -659,5 +659,7 @@
 
   <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
-  <index/>
+  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  
+  <!--<index/>-->
 </book>

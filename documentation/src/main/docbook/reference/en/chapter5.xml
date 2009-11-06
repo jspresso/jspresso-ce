@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<chapter id="chapter5">
+  <title>Application flow</title>
+
+  <section>
+    <title>Controllers</title>
+
+    <figure>
+      <title>Controllers class diagram</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="50%"
+                     fileref="../images/controllers.PNG" scalefit="1"
+                     width="100%" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>Startup</title>
+
+    <para><figure>
+        <title>Startup class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../images/startup.PNG" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+  </section>
+
+  <section>
+    <title>Modules</title>
+
+    <para><figure>
+        <title>Modules class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../images/modules.PNG" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+  </section>
+
+  <section>
+    <title>Enabling/Disabling</title>
+
+    <para><figure>
+        <title>Gates class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../images/enablement.PNG" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+  </section>
+</chapter>
