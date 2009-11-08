@@ -97,8 +97,7 @@ public class BackendAction extends AbstractAction {
    */
   @Override
   protected IBackendController getController(Map<String, Object> context) {
-    return (IBackendController) context
-        .get(ActionContextConstants.BACK_CONTROLLER);
+    return getBackendController(context);
   }
 
   /**
