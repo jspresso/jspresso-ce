@@ -3550,7 +3550,7 @@ public class EmployeePropertyProcessors {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-pane.jpg" scalefit="1"
+                           fileref="../screenshots/Company-pane.jpg" scalefit="1"
                            width="100%" />
               </imageobject>
             </mediaobject>
@@ -3590,7 +3590,7 @@ public class EmployeePropertyProcessors {
                 <mediaobject>
                   <imageobject>
                     <imagedata align="center" contentdepth="60%"
-                               fileref="../screenshotsLov.jpg" scalefit="1"
+                               fileref="../screenshots/Lov.jpg" scalefit="1"
                                width="100%" />
                   </imageobject>
                 </mediaobject>
@@ -3616,7 +3616,7 @@ public class EmployeePropertyProcessors {
                 <mediaobject>
                   <imageobject>
                     <imagedata align="center" contentdepth="60%"
-                               fileref="../screenshotsregexp_error.jpg"
+                               fileref="../screenshots/regexp_error.jpg"
                                scalefit="1" width="100%" />
                   </imageobject>
                 </mediaobject>
@@ -3694,7 +3694,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-pane_en.jpg"
+                           fileref="../screenshots/Company-pane_en.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -3706,7 +3706,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-pane_fr.jpg"
+                           fileref="../screenshots/Company-pane_fr.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -3799,7 +3799,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-pane_reworked.jpg"
+                           fileref="../screenshots/Company-pane_reworked.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -3931,7 +3931,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-tab-pane.jpg"
+                           fileref="../screenshots/Company-tab-pane.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4029,7 +4029,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-tab-pane_reworked.jpg"
+                           fileref="../screenshots/Company-tab-pane_reworked.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4233,7 +4233,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-organization-view.jpg"
+                           fileref="../screenshots/Company-organization-view.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4283,7 +4283,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-organization-view_reworked.jpg"
+                           fileref="../screenshots/Company-organization-view_reworked.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4340,7 +4340,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-organization-view_reworked_2.jpg"
+                           fileref="../screenshots/Company-organization-view_reworked_2.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4526,7 +4526,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-organization-view_reworked_3.jpg"
+                           fileref="../screenshots/Company-organization-view_reworked_3.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4724,7 +4724,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsCompany-organization-view_tree.jpg"
+                           fileref="../screenshots/Company-organization-view_tree.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -5275,7 +5275,7 @@ public class SwingApplicationStartup extends SwingStartup { <co
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsLoginDialog.jpg" scalefit="1"
+                           fileref="../screenshots/LoginDialog.jpg" scalefit="1"
                            width="100%" />
               </imageobject>
             </mediaobject>
@@ -5286,7 +5286,7 @@ public class SwingApplicationStartup extends SwingStartup { <co
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsAppLaunch_en.jpg" scalefit="1"
+                           fileref="../screenshots/AppLaunch_en.jpg" scalefit="1"
                            width="100%" />
               </imageobject>
             </mediaobject>
@@ -5297,7 +5297,7 @@ public class SwingApplicationStartup extends SwingStartup { <co
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsAppLaunch.jpg" scalefit="1"
+                           fileref="../screenshots/AppLaunch.jpg" scalefit="1"
                            width="100%" />
               </imageobject>
             </mediaobject>
@@ -5501,7 +5501,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
                 <entry>1- We have just lauched the module.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="60%"
-                                 fileref="../screenshotsMasterdata-module.jpg"
+                                 fileref="../screenshots/Masterdata-module.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -5510,7 +5510,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
                 created.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="60%"
-                                 fileref="../screenshotsMasterdata-module-3cities.jpg"
+                                 fileref="../screenshots/Masterdata-module-3cities.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -5521,7 +5521,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
                 filter.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="60%"
-                                 fileref="../screenshotsMasterdata-module-filter.jpg"
+                                 fileref="../screenshots/Masterdata-module-filter.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -5530,7 +5530,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
                 in a form.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="60%"
-                                 fileref="../screenshotsMasterdata-module-open.jpg"
+                                 fileref="../screenshots/Masterdata-module-open.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -5541,7 +5541,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
                 and we edit it.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="60%"
-                                 fileref="../screenshotsMasterdata-module-single.jpg"
+                                 fileref="../screenshots/Masterdata-module-single.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -5550,7 +5550,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
                 course, still contains the data).<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="60%"
-                                 fileref="../screenshotsMasterdata-module-reloaded.jpg"
+                                 fileref="../screenshots/Masterdata-module-reloaded.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -5630,7 +5630,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsMasterdata-module-structured.jpg"
+                           fileref="../screenshots/Masterdata-module-structured.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -5756,7 +5756,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsMasterdata-module-single-customized.jpg"
+                           fileref="../screenshots/Masterdata-module-single-customized.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -6086,7 +6086,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>1- We have just launched the module.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../screenshotsEmployees-module.jpg"
+                                 fileref="../screenshots/Employees-module.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6095,7 +6095,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 city and birth date.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../screenshotsEmployees-module-filter.jpg"
+                                 fileref="../screenshots/Employees-module-filter.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6106,7 +6106,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 form.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../screenshotsEmployees-module-single.jpg"
+                                 fileref="../screenshots/Employees-module-single.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6115,7 +6115,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 employee.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../screenshotsEmployees-module-single-events.jpg"
+                                 fileref="../screenshots/Employees-module-single-events.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6125,7 +6125,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>5- We can copy an event entity.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../screenshotsEmployees-module-single-event-copy.jpg"
+                                 fileref="../screenshots/Employees-module-single-event-copy.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6133,7 +6133,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>6- And paste it to another employee.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../screenshotsEmployees-module-single-event-paste.jpg"
+                                 fileref="../screenshots/Employees-module-single-event-paste.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6143,7 +6143,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>7- Or maybe read an event text from a file.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../screenshotsEmployees-module-single-event-read.jpg"
+                                 fileref="../screenshots/Employees-module-single-event-read.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6151,7 +6151,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>8- And even save the event text to a file.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../screenshotsEmployees-module-single-event-save.jpg"
+                                 fileref="../screenshots/Employees-module-single-event-save.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6191,7 +6191,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                   <entry>1- We have just launched the module.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="40%"
-                                   fileref="../screenshotsCompanies-module.jpg"
+                                   fileref="../screenshots/Companies-module.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6200,7 +6200,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                   filter.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="40%"
-                                   fileref="../screenshotsCompanies-module-filter.jpg"
+                                   fileref="../screenshots/Companies-module-filter.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6211,7 +6211,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                   form.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="40%"
-                                   fileref="../screenshotsCompanies-module-single.jpg"
+                                   fileref="../screenshots/Companies-module-single.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6220,7 +6220,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                   overview of the current company structure.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="40%"
-                                   fileref="../screenshotsCompanies-module-single_tree.jpg"
+                                   fileref="../screenshots/Companies-module-single_tree.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6486,7 +6486,7 @@ public class OrganizationalUnitPropertyProcessors {
                   department manager.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="45%"
-                                   fileref="../screenshotsCompanies-module-single-manager-lov.jpg"
+                                   fileref="../screenshots/Companies-module-single-manager-lov.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6495,7 +6495,7 @@ public class OrganizationalUnitPropertyProcessors {
                   containing the department company.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="35%"
-                                   fileref="../screenshotsCompanies-module-single-manager-lov-open.jpg"
+                                   fileref="../screenshots/Companies-module-single-manager-lov-open.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6506,7 +6506,7 @@ public class OrganizationalUnitPropertyProcessors {
                   employee of the other company.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="35%"
-                                   fileref="../screenshotsCompanies-module-single-manager-lov-search.jpg"
+                                   fileref="../screenshots/Companies-module-single-manager-lov-search.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6515,7 +6515,7 @@ public class OrganizationalUnitPropertyProcessors {
                   violated and the end-user is notified.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="50%"
-                                   fileref="../screenshotsCompanies-module-single-manager-lov-error.jpg"
+                                   fileref="../screenshots/Companies-module-single-manager-lov-error.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6753,7 +6753,7 @@ public class OrganizationalUnitPropertyProcessors {
                   team members view.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="45%"
-                                   fileref="../screenshotsCompanies-module-single-team-members.jpg"
+                                   fileref="../screenshots/Companies-module-single-team-members.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6762,7 +6762,7 @@ public class OrganizationalUnitPropertyProcessors {
                   configured (e.g. icons and tooltips).<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="45%"
-                                   fileref="../screenshotsCompanies-module-single-team-members-2.jpg"
+                                   fileref="../screenshots/Companies-module-single-team-members-2.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6773,7 +6773,7 @@ public class OrganizationalUnitPropertyProcessors {
                   is pre-initialized.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="35%"
-                                   fileref="../screenshotsCompanies-module-single-team-members-lov.jpg"
+                                   fileref="../screenshots/Companies-module-single-team-members-lov.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6782,7 +6782,7 @@ public class OrganizationalUnitPropertyProcessors {
                   name.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="35%"
-                                   fileref="../screenshotsCompanies-module-single-team-members-lov-search.jpg"
+                                   fileref="../screenshots/Companies-module-single-team-members-lov-search.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6793,7 +6793,7 @@ public class OrganizationalUnitPropertyProcessors {
                   updated.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="45%"
-                                   fileref="../screenshotsCompanies-module-single-team-members-3.jpg"
+                                   fileref="../screenshots/Companies-module-single-team-members-3.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6802,7 +6802,7 @@ public class OrganizationalUnitPropertyProcessors {
                   still belongs to its former teams.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="45%"
-                                   fileref="../screenshotsCompanies-module-single-team-members-4.jpg"
+                                   fileref="../screenshots/Companies-module-single-team-members-4.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6988,7 +6988,7 @@ hrsample {
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="60%"
-                         fileref="../screenshotsAccess-denied.jpg" scalefit="1"
+                         fileref="../screenshots/Access-denied.jpg" scalefit="1"
                          width="100%" />
             </imageobject>
           </mediaobject>
@@ -7233,7 +7233,7 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsJWS_download.jpg" scalefit="1"
+                           fileref="../screenshots/JWS_download.jpg" scalefit="1"
                            width="100%" />
               </imageobject>
             </mediaobject>
@@ -7244,7 +7244,7 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsJWS_certificate.jpg"
+                           fileref="../screenshots/JWS_certificate.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -7271,7 +7271,7 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsWings_login.jpg" scalefit="1"
+                           fileref="../screenshots/Wings_login.jpg" scalefit="1"
                            width="100%" />
               </imageobject>
             </mediaobject>
@@ -7284,7 +7284,7 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsWings_application.jpg"
+                           fileref="../screenshots/Wings_application.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -7308,7 +7308,7 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsFlex_login.jpg" scalefit="1"
+                           fileref="../screenshots/Flex_login.jpg" scalefit="1"
                            width="100%" />
               </imageobject>
             </mediaobject>
@@ -7321,7 +7321,7 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshotsFlex_application.jpg"
+                           fileref="../screenshots/Flex_application.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>

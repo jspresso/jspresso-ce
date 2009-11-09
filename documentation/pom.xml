@@ -301,6 +301,7 @@
                   <fileset dir="target/staging/reference">
                     <include name="images/*.*" />
                     <include name="uml/*.*" />
+                    <include name="screenshots/*.*" />
                   </fileset>
                   <fileset dir="target/staging">
                     <include name="**/css/*.*" />
@@ -333,6 +334,7 @@
                   <fileset dir="target/staging/reference">
                     <include name="images/*.*" />
                     <include name="uml/*.*" />
+                    <include name="screenshots/*.*" />
                   </fileset>
                   <fileset dir="target/staging">
                     <include name="**/css/*.*" />
@@ -374,6 +376,7 @@
             <copy todir="target/staging">
               <fileset dir="src/main/docbook">
                 <include name="**/images/**/*.*" />
+                <include name="**/screenshots/**/*.*" />
                 <include name="**/css/*.*" />
                 <include name="**/fo.xsl" />
                 <include name="**/html.xsl" />
