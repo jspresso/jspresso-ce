@@ -22,12 +22,6 @@
     </figure>
   </section>
 
-  <section>
-    <title>Reference</title>
-
-    <para></para>
-
-    <xi:include href="../generated/BasicViewDescriptor.xml"
-                xmlns:xi="http://www.w3.org/2001/XInclude" />
-  </section>
+  <xi:include href="../generated/BasicViewDescriptor.xml"
+              xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>

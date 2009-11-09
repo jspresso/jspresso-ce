@@ -42,11 +42,6 @@ public final class ActionContextConstants {
   public static final String ACTION_WIDGET         = "ACTION_WIDGET";
 
   /**
-   * the backend controller.
-   */
-  public static final String BACK_CONTROLLER       = "BACK_CONTROLLER";
-
-  /**
    * the frontend controller.
    */
   public static final String FRONT_CONTROLLER      = "FRONT_CONTROLLER";

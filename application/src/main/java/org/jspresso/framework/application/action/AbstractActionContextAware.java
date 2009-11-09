@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IValueConnector;
@@ -61,15 +62,27 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
+   * Gets the backend controller out of the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the backend controller.
+   */
+  protected IBackendController getBackendController(Map<String, Object> context) {
+    return getFrontendController(context).getBackendController();
+  }
+
+  /**
    * Gets the frontend controller out of the action context.
    * 
    * @param context
    *          the action context.
    * @return the frontend controller.
    */
-  protected IBackendController getBackendController(Map<String, Object> context) {
-    return (IBackendController) context
-        .get(ActionContextConstants.BACK_CONTROLLER);
+  protected IFrontendController<?, ?, ?> getFrontendController(
+      Map<String, Object> context) {
+    return (IFrontendController<?, ?, ?>) context
+        .get(ActionContextConstants.FRONT_CONTROLLER);
   }
 
   /**

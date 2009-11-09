@@ -22,14 +22,8 @@
     </figure>
   </section>
 
-  <section>
-    <title>Reference</title>
-
-    <para></para>
-
-    <xi:include href="../generated/AbstractComponentDescriptor.xml"
-                xmlns:xi="http://www.w3.org/2001/XInclude" />
-  </section>
+  <xi:include href="../generated/AbstractComponentDescriptor.xml"
+              xmlns:xi="http://www.w3.org/2001/XInclude" />
 
   <section>
     <title>Properties</title>
@@ -49,12 +43,6 @@
     </figure>
   </section>
 
-  <section>
-    <title>Reference</title>
-
-    <para></para>
-
-    <xi:include href="../generated/BasicPropertyDescriptor.xml"
-                xmlns:xi="http://www.w3.org/2001/XInclude" />
-  </section>
+  <xi:include href="../generated/BasicPropertyDescriptor.xml"
+              xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>

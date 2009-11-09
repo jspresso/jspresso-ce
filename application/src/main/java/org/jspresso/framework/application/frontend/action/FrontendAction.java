@@ -269,8 +269,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   @SuppressWarnings("unchecked")
   protected IFrontendController<E, F, G> getController(
       Map<String, Object> context) {
-    return (IFrontendController<E, F, G>) context
-        .get(ActionContextConstants.FRONT_CONTROLLER);
+    return (IFrontendController<E, F, G>) getFrontendController(context);
   }
 
   /**
