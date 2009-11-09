@@ -300,6 +300,7 @@
                 <copy todir="target/reference/html-chunked">
                   <fileset dir="target/staging/reference">
                     <include name="images/*.*" />
+                    <include name="uml/*.*" />
                   </fileset>
                   <fileset dir="target/staging">
                     <include name="**/css/*.*" />
@@ -331,6 +332,7 @@
                 <copy todir="target/reference/html-single">
                   <fileset dir="target/staging/reference">
                     <include name="images/*.*" />
+                    <include name="uml/*.*" />
                   </fileset>
                   <fileset dir="target/staging">
                     <include name="**/css/*.*" />
@@ -375,11 +377,7 @@
                 <include name="**/css/*.*" />
                 <include name="**/fo.xsl" />
                 <include name="**/html.xsl" />
-              </fileset>
-            </copy>
-            <copy todir="target/staging/reference/images">
-              <fileset dir="src/main/uml">
-                <include name="**/*.PNG" />
+                <include name="**/uml/*.PNG" />
               </fileset>
             </copy>
             <copy todir="target/staging">

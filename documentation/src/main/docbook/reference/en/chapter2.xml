@@ -9,22 +9,27 @@
 
     <section>
       <title>Overview</title>
+
       <para></para>
+
       <figure>
         <title>Component descriptors diagram</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
-                       fileref="../images/component-descriptors.PNG"
+                       fileref="../uml/component-descriptors.PNG"
                        scalefit="1" width="100%" />
           </imageobject>
         </mediaobject>
       </figure>
     </section>
+
     <section>
       <title>Reference</title>
+
       <para></para>
+
       <xi:include href="../generated/AbstractComponentDescriptor.xml"
                   xmlns:xi="http://www.w3.org/2001/XInclude" />
     </section>
@@ -35,14 +40,16 @@
 
     <section>
       <title>Overview</title>
+
       <para></para>
+
       <figure>
         <title>Relationship property descriptors diagram</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
-                       fileref="../images/relation-property-descriptors.PNG"
+                       fileref="../uml/relation-property-descriptors.PNG"
                        scalefit="1" width="100%" />
           </imageobject>
         </mediaobject>
@@ -54,19 +61,24 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
-                       fileref="../images/scalar-property-descriptors.PNG"
+                       fileref="../uml/scalar-property-descriptors.PNG"
                        scalefit="1" width="100%" />
           </imageobject>
         </mediaobject>
       </figure>
     </section>
+
     <section>
       <title>Reference</title>
+
       <para></para>
+
       <xi:include href="../generated/BasicPropertyDescriptor.xml"
                   xmlns:xi="http://www.w3.org/2001/XInclude" />
+
       <xi:include href="../generated/BasicRelationshipEndPropertyDescriptor.xml"
                   xmlns:xi="http://www.w3.org/2001/XInclude" />
+
       <xi:include href="../generated/BasicScalarPropertyDescriptor.xml"
                   xmlns:xi="http://www.w3.org/2001/XInclude" />
     </section>

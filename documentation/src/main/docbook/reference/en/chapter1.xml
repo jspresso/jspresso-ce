@@ -387,7 +387,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
-                       fileref="../images/commons-cd.png" scalefit="1"
+                       fileref="../uml/commons-cd.PNG" scalefit="1"
                        width="100%" />
           </imageobject>
         </mediaobject>
@@ -450,7 +450,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
-                       fileref="../images/employees-cd.png" scalefit="1"
+                       fileref="../uml/employees-cd.PNG" scalefit="1"
                        width="100%" />
           </imageobject>
         </mediaobject>
@@ -498,7 +498,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
-                       fileref="../images/organization-cd.png" scalefit="1"
+                       fileref="../uml/organization-cd.PNG" scalefit="1"
                        width="100%" />
           </imageobject>
         </mediaobject>
@@ -616,7 +616,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata contentdepth="60%" fileref="../images/general-cod.png"
+          <imagedata contentdepth="60%" fileref="../uml/general-cod.PNG"
                      scalefit="1" width="100%" />
         </imageobject>
       </mediaobject>
