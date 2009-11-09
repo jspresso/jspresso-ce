@@ -7,41 +7,43 @@
   <section>
     <title>Controllers</title>
 
-    <figure>
-      <title>Controllers class diagram</title>
-
-      <mediaobject>
-        <imageobject>
-          <imagedata align="center" contentdepth="50%"
-                     fileref="../images/controllers.PNG" scalefit="1"
-                     width="100%" />
-        </imageobject>
-      </mediaobject>
-    </figure>
-  </section>
-
-  <section>
-    <title>Startup</title>
-
-    <para><figure>
-        <title>Startup class diagram</title>
-
+    <section>
+      <title>Overview</title>
+  
+      <para></para>
+  
+      <figure>
+        <title>Controllers class diagram</title>
+  
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="60%"
-                       fileref="../images/startup.PNG" scalefit="1"
+            <imagedata align="center" contentdepth="50%"
+                       fileref="../images/controllers.PNG" scalefit="1"
                        width="100%" />
           </imageobject>
         </mediaobject>
-      </figure></para>
+      </figure>
+    </section>
+    <section>
+      <title>Reference</title>
+      <para></para>
+      
+      <xi:include href="../generated/AbstractController.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
   </section>
 
   <section>
     <title>Modules</title>
 
-    <para><figure>
+    <section>
+      <title>Overview</title>
+  
+      <para></para>
+  
+      <figure>
         <title>Modules class diagram</title>
-
+  
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
@@ -49,15 +51,31 @@
                        width="100%" />
           </imageobject>
         </mediaobject>
-      </figure></para>
+      </figure>
+    </section>
+    
+    <section>
+      <title>Reference</title>
+      <para></para>
+      
+      <xi:include href="../generated/Workspace.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+      <xi:include href="../generated/Module.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
   </section>
 
   <section>
     <title>Enabling/Disabling</title>
 
-    <para><figure>
+    <section>
+      <title>Overview</title>
+  
+      <para></para>
+  
+      <figure>
         <title>Gates class diagram</title>
-
+  
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
@@ -65,6 +83,37 @@
                        width="100%" />
           </imageobject>
         </mediaobject>
-      </figure></para>
+      </figure>
+    </section>
+    
+    <section>
+      <title>Reference</title>
+      <para></para>
+      
+      <xi:include href="../generated/AbstractGate.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
+
+  <section>
+    <title>Startup</title>
+
+    <section>
+      <title>Overview</title>
+  
+      <para></para>
+  
+      <figure>
+        <title>Startup class diagram</title>
+  
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../images/startup.PNG" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
   </section>
 </chapter>

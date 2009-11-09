@@ -10,17 +10,29 @@
 
     <para></para>
 
-    <para><figure>
-        <title>Actions class diagram</title>
+    <figure>
+      <title>Actions class diagram</title>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata align="center" contentdepth="60%"
-                       fileref="../images/actions.PNG" scalefit="1"
-                       width="100%" />
-          </imageobject>
-        </mediaobject>
-      </figure></para>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="60%"
+                     fileref="../images/actions.PNG" scalefit="1"
+                     width="100%" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+  
+  <section>
+    <title>Reference</title>
+    <para></para>
+    
+    <xi:include href="../generated/AbstractAction.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude" />
+    <xi:include href="../generated/BackendAction.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude" />
+    <xi:include href="../generated/FrontendAction.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude" />
   </section>
   
   <section>
@@ -729,7 +741,4 @@
       </tgroup>
     </table>
   </section>
-  
-  <xi:include href="../generated/AbstractAction.xml"
-              xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>

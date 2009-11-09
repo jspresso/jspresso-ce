@@ -15,6 +15,18 @@
       <groupId>org.jspresso.framework</groupId>
       <artifactId>jspresso-app-template-remote</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-app-template-swing</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-app-template-wings</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-app-template-ulc</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -50,6 +62,24 @@
                 -outputDir ${project.build.directory}/staging/reference/generated
                 -rootClassName org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor
                 -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+                -excludeSubtrees org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
+              </additionalparam>
+              <subpackages>org.jspresso.framework.view</subpackages>
+              <sourcepath>${basedir}/../view/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>BasicCompositeViewDescriptor-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+                -excludeSubtrees org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
               </additionalparam>
               <subpackages>org.jspresso.framework.view</subpackages>
               <sourcepath>${basedir}/../view/src/main/java</sourcepath>
@@ -82,6 +112,39 @@
                 -outputDir ${project.build.directory}/staging/reference/generated
                 -rootClassName org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor
                 -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+                -maxDepth 0
+              </additionalparam>
+              <subpackages>org.jspresso.framework.model</subpackages>
+              <sourcepath>${basedir}/../model/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>BasicRelationshipEndPropertyDescriptor-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.model.descriptor.basic.BasicRelationshipEndPropertyDescriptor
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+              </additionalparam>
+              <subpackages>org.jspresso.framework.model</subpackages>
+              <sourcepath>${basedir}/../model/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>BasicScalarPropertyDescriptor-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.model.descriptor.basic.BasicScalarPropertyDescriptor
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
               </additionalparam>
               <subpackages>org.jspresso.framework.model</subpackages>
               <sourcepath>${basedir}/../model/src/main/java</sourcepath>
@@ -98,9 +161,106 @@
                 -outputDir ${project.build.directory}/staging/reference/generated
                 -rootClassName org.jspresso.framework.application.action.AbstractAction
                 -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+                -maxDepth 0
+              </additionalparam>
+              <subpackages>org.jspresso.framework.application</subpackages>
+              <sourcepath>${basedir}/../application/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>FrontendAction-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.application.frontend.action.FrontendAction
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
               </additionalparam>
               <subpackages>org.jspresso.framework.application</subpackages>
               <sourcepath>${basedir}/../application/src/main/java${path.separator}${basedir}/../remote/application/src/main/java${path.separator}${basedir}/../jasper/core/src/main/java${path.separator}${basedir}/../jasper/remote/src/main/java${path.separator}${basedir}/../fusioncharts/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>BackendAction-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.application.backend.action.BackendAction
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+              </additionalparam>
+              <subpackages>org.jspresso.framework.application</subpackages>
+              <sourcepath>${basedir}/../application/src/main/java${path.separator}${basedir}/../jasper/core/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>AbstractGate-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.util.gate.AbstractGate
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+              </additionalparam>
+              <subpackages>org.jspresso.framework.util.gate:org.jspresso.framework.binding.model:org.jspresso.framework.security</subpackages>
+              <sourcepath>${basedir}/../util/src/main/java${path.separator}${basedir}/../security/src/main/java${path.separator}${basedir}/../binding/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>AbstractController-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.application.AbstractController
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+              </additionalparam>
+              <subpackages>org.jspresso.framework.application</subpackages>
+              <sourcepath>${basedir}/../application/src/main/java${path.separator}${basedir}/../hibernate/src/main/java${path.separator}${basedir}/../remote/application/src/main/java${path.separator}${basedir}/../remote/application/src/main/java${path.separator}${basedir}/../swing/application/src/main/java${path.separator}${basedir}/../wings/application/src/main/java${path.separator}${basedir}/../ulc/application/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>Workspace-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.application.model.Workspace
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+              </additionalparam>
+              <subpackages>org.jspresso.framework.application.model</subpackages>
+              <sourcepath>${basedir}/../application/src/main/java</sourcepath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>Module-ref</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <additionalparam>
+                -outputDir ${project.build.directory}/staging/reference/generated
+                -rootClassName org.jspresso.framework.application.model.Module
+                -apidocUrl http://www.jspresso.org/external/maven-site/apidocs
+              </additionalparam>
+              <subpackages>org.jspresso.framework.application.model</subpackages>
+              <sourcepath>${basedir}/../application/src/main/java</sourcepath>
             </configuration>
           </execution>
         </executions>

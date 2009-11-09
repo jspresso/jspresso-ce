@@ -25,10 +25,6 @@
 			<groupId>org.jspresso.framework</groupId>
 			<artifactId>jspresso-application</artifactId>
 		</dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-    </dependency>
   	<dependency>
 			<groupId>foxtrot</groupId>
 			<artifactId>foxtrot</artifactId>

@@ -21,5 +21,9 @@
 			<groupId>org.jspresso.framework</groupId>
 			<artifactId>jspresso-model</artifactId>
 		</dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
 	</dependencies>
 </project>
