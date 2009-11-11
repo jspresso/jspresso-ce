@@ -23,5 +23,6 @@
   <xsl:param name="chapter.autolabel">I</xsl:param>
   <xsl:param name="section.autolabel">1</xsl:param>
   <xsl:param name="section.label.includes.component.label">1</xsl:param>
+  <xsl:param name="html.cellpadding">5</xsl:param>
 
 </xsl:stylesheet>

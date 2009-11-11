@@ -97,6 +97,12 @@
           <xsl:attribute name="background-color">#EEEEEE</xsl:attribute>
       </xsl:if>
   </xsl:template>
+  <xsl:attribute-set name="table.cell.padding">
+    <xsl:attribute name="padding-left">0pt</xsl:attribute>
+    <xsl:attribute name="padding-right">5pt</xsl:attribute>
+    <xsl:attribute name="padding-top">2pt</xsl:attribute>
+    <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
+  </xsl:attribute-set>
 
   
   <!-- 

@@ -2,7 +2,6 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <chapter id="chapter4">
-
   <title>Actions</title>
 
   <section>
@@ -16,32 +15,34 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="60%"
-                     fileref="../uml/actions.PNG" scalefit="1"
-                     width="100%" />
+                     fileref="../uml/actions.PNG" scalefit="1" width="100%" />
         </imageobject>
       </mediaobject>
     </figure>
   </section>
-  
+
   <section>
     <title>Reference</title>
+
     <para></para>
-    
+
     <xi:include href="../generated/AbstractAction.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
+
     <xi:include href="../generated/BackendAction.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
+
     <xi:include href="../generated/FrontendAction.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
   </section>
-  
+
   <section>
     <title>Built-in actions</title>
 
     <para>You will find here the complete list of Jspresso built-in actions
     along with their Spring id and a short description.</para>
 
-    <table colsep="1" rowsep="1" tabstyle="splitable">
+    <table colsep="0" frame="topbot" rowsep="1" tabstyle="splitable">
       <?dbfo keep-together='auto'?>
 
       <title>Built-in actions</title>
@@ -55,11 +56,11 @@
 
         <thead>
           <row>
-            <entry align="center">Spring Id</entry>
+            <entry align="left">Spring Id</entry>
 
-            <entry align="center">SJS Id</entry>
+            <entry align="left">SJS Id</entry>
 
-            <entry align="center">Description</entry>
+            <entry align="left">Description</entry>
           </row>
         </thead>
 
