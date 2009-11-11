@@ -211,6 +211,19 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <configuration>
+          <webApp>${project.build.directory}/${project.artifactId}</webApp>
+          <systemProperties>
+            <systemProperty>
+              <name>java.security.auth.login.config</name>
+              <value>../conf/jaas.config</value>
+            </systemProperty>
+          </systemProperties>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <profiles>
