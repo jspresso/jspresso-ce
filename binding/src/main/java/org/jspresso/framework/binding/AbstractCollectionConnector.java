@@ -165,6 +165,13 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  public Object getSelectedItem() {
+    return implGetSelectedItem();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IValueConnector getChildConnector(int index) {
     return getChildConnector(computeConnectorId(index));
   }
@@ -292,7 +299,8 @@ public abstract class AbstractCollectionConnector extends
   }
 
   /**
-   * Overrides the default to produce <code>CollectionConnectorValueChangeEvent</code>s.
+   * Overrides the default to produce
+   * <code>CollectionConnectorValueChangeEvent</code>s.
    * <p>
    * {@inheritDoc}
    */

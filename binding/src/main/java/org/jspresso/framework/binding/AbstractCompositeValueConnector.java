@@ -47,6 +47,7 @@ public abstract class AbstractCompositeValueConnector extends
   private IIconImageURLProvider        iconImageURLProvider;
   private String                       renderingChildConnectorId;
   private boolean                      trackingChildrenSelection;
+  private Object                       selectedItem;
 
   /**
    * Constructs a new <code>AbstractCompositeValueConnector</code>.
@@ -285,6 +286,7 @@ public abstract class AbstractCompositeValueConnector extends
    *          the item selection event to propagate.
    */
   protected void implFireSelectedItemChange(ItemSelectionEvent evt) {
+    selectedItem = evt.getSelectedItem();
     if (evt.getSource() == this || trackingChildrenSelection) {
       itemSelectionSupport.fireSelectedConnectorChange(evt);
     }
@@ -296,6 +298,16 @@ public abstract class AbstractCompositeValueConnector extends
     if (parentConnector != null) {
       ((IItemSelectable) parentConnector).fireSelectedItemChange(evt);
     }
+  }
+
+  /**
+   * Utility implementation to factorize method support. This should only be
+   * used by subclasses which implement <code>IItemSelectable</code>.
+   * 
+   * @return the selected item.
+   */
+  protected Object implGetSelectedItem() {
+    return selectedItem;
   }
 
   /**

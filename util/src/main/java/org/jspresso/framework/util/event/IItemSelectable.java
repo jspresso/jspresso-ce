@@ -50,4 +50,11 @@ public interface IItemSelectable {
    *          the listener to remove.
    */
   void removeItemSelectionListener(IItemSelectionListener listener);
+
+  /**
+   * Retrieves the selected item out of this item selectable or null if none.
+   * 
+   * @return the selected item out of this item selectable.
+   */
+  Object getSelectedItem();
 }
