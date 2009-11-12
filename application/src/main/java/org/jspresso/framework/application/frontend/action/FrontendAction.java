@@ -25,8 +25,6 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.frontend.IFrontendController;
-import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
@@ -360,34 +358,5 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
-  }
-
-  /**
-   * Returns the view connector value. If the connector this action is assigned
-   * to is a collection connector, the returned model is the 1st selected
-   * element or null if none is selected.
-   * 
-   * @param context
-   *          the action context.
-   * @return the view connector value.
-   */
-  protected Object getModel(Map<String, Object> context) {
-    IValueConnector viewConnector = getViewConnector(context);
-    Object model;
-    if (viewConnector instanceof ICollectionConnectorProvider) {
-      int[] selectedIndices = ((ICollectionConnectorProvider) viewConnector)
-          .getCollectionConnector().getSelectedIndices();
-      ICollectionConnector collectionConnector = (ICollectionConnector) ((ICollectionConnectorProvider) viewConnector)
-          .getCollectionConnector().getModelConnector();
-      if (selectedIndices == null || selectedIndices.length == 0
-          || collectionConnector == null) {
-        return null;
-      }
-      model = collectionConnector.getChildConnector(selectedIndices[0])
-          .getConnectorValue();
-    } else {
-      model = viewConnector.getModelConnector().getConnectorValue();
-    }
-    return model;
   }
 }

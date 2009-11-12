@@ -74,7 +74,7 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
       IActionHandler actionHandler, Map<String, Object> context) {
     Map<String, Object> initialReportContext = super.getInitialReportContext(
         actionHandler, context);
-    Object model = getModel(context);
+    Object model = getSelectedModel(context);
     if (model instanceof IEntity) {
       initialReportContext.put(IReportDescriptor.ENTITY_ID, ((IEntity) model)
           .getId());

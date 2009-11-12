@@ -61,7 +61,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
         new ConnectionCallback() {
 
           public Object doInConnection(Connection con) throws SQLException {
-            return getChartDescriptor().getData(getModel(context), con,
+            return getChartDescriptor().getData(getSelectedModel(context), con,
                 getTranslationProvider(context), getLocale(context));
           }
         });
