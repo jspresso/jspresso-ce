@@ -193,6 +193,21 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
+   * Retrieves the model being the model connector value.
+   * 
+   * @param context
+   *          the action context.
+   * @return the model.
+   */
+  protected Object getModel(Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(context);
+    if (modelConnector != null) {
+      return modelConnector.getConnectorValue();
+    }
+    return null;
+  }
+
+  /**
    * This is a versatile helper method that retrieves the selected model either
    * from the 1st selected child connector if the action was trigerred on a
    * collection connector or the connector itself.
@@ -202,16 +217,12 @@ public abstract class AbstractActionContextAware {
    * @return the selected model.
    */
   protected Object getSelectedModel(Map<String, Object> context) {
-    IValueConnector modelConnector = getModelConnector(context);
     Object model = null;
-    if (modelConnector instanceof ICollectionConnector) {
-      int[] selectedIndices = getSelectedIndices(context);
-      if (selectedIndices != null && selectedIndices.length > 0) {
-        model = ((ICollectionConnector) modelConnector).getChildConnector(
-            selectedIndices[0]).getConnectorValue();
-      }
+    if (context.containsKey(ActionContextConstants.SELECTED_MODEL)) {
+      // we are on a IItemSelectable.
+      model = context.get(ActionContextConstants.SELECTED_MODEL);
     } else {
-      model = modelConnector.getConnectorValue();
+      model = getModel(context);
     }
     return model;
   }
@@ -241,7 +252,7 @@ public abstract class AbstractActionContextAware {
         }
       }
     } else {
-      models = Collections.singletonList(modelConnector.getConnectorValue());
+      models = Collections.singletonList(getSelectedModel(context));
     }
     return models;
   }

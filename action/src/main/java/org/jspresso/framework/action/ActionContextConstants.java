@@ -73,6 +73,12 @@ public final class ActionContextConstants {
    */
   public static final String VIEW_CONNECTOR        = "VIEW_CONNECTOR";
 
+  /**
+   * If the view connector implements IItemSelectable, the selected model is put
+   * under this key.
+   */
+  public static final String SELECTED_MODEL        = "SELECTED_MODEL";
+
   private ActionContextConstants() {
     // to prevent this class from being instanciated.
   }
