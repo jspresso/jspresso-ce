@@ -18,15 +18,12 @@
  */
 package org.jspresso.framework.application.backend.action;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.datatransfer.ETransferMode;
-
 
 /**
  * An action used register a collection of domain objects into the controller's
@@ -35,7 +32,7 @@ import org.jspresso.framework.model.datatransfer.ETransferMode;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class TransferCollectionAction extends AbstractCollectionAction {
+public class TransferCollectionAction extends BackendAction {
 
   private ETransferMode transferMode;
 
@@ -47,22 +44,11 @@ public class TransferCollectionAction extends AbstractCollectionAction {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-    int[] selectedIndices = getSelectedIndices(context);
-    ICollectionConnector collectionConnector = getModelConnector(context);
-    if (selectedIndices == null || selectedIndices.length == 0
-        || collectionConnector == null) {
-      return false;
-    }
-    List<Object> transferedComponents = new ArrayList<Object>();
-    for (int i = 0; i < selectedIndices.length; i++) {
-      transferedComponents.add(collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue());
-    }
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    List<?> transferedComponents = getSelectedModels(context);
     getController(context).storeComponents(
-        new ComponentTransferStructure(getModelDescriptor(context)
-            .getCollectionDescriptor().getElementDescriptor(),
-            transferedComponents, transferMode));
+        new ComponentTransferStructure(transferedComponents, transferMode));
     return super.execute(actionHandler, context);
   }
 
@@ -70,7 +56,7 @@ public class TransferCollectionAction extends AbstractCollectionAction {
    * Sets the transferMode.
    * 
    * @param transferMode
-   *            the transferMode to set.
+   *          the transferMode to set.
    */
   public void setTransferMode(ETransferMode transferMode) {
     this.transferMode = transferMode;
