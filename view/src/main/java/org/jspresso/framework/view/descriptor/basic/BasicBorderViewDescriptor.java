@@ -43,7 +43,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getCenterViewDescriptor() {
-    completeChildDescriptor(centerViewDescriptor);
+    completeChildDescriptor(centerViewDescriptor,
+        (eastViewDescriptor == null && northViewDescriptor == null));
     return centerViewDescriptor;
   }
 
@@ -74,7 +75,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getEastViewDescriptor() {
-    completeChildDescriptor(eastViewDescriptor);
+    completeChildDescriptor(eastViewDescriptor, true);
     return eastViewDescriptor;
   }
 
@@ -82,7 +83,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getNorthViewDescriptor() {
-    completeChildDescriptor(northViewDescriptor);
+    completeChildDescriptor(northViewDescriptor, (eastViewDescriptor == null));
     return northViewDescriptor;
   }
 
@@ -90,7 +91,9 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getSouthViewDescriptor() {
-    completeChildDescriptor(southViewDescriptor);
+    completeChildDescriptor(southViewDescriptor,
+        (eastViewDescriptor == null && northViewDescriptor == null
+            && centerViewDescriptor == null && westViewDescriptor == null));
     return southViewDescriptor;
   }
 
@@ -98,7 +101,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getWestViewDescriptor() {
-    completeChildDescriptor(westViewDescriptor);
+    completeChildDescriptor(westViewDescriptor, (eastViewDescriptor == null
+        && northViewDescriptor == null && centerViewDescriptor == null));
     return westViewDescriptor;
   }
 

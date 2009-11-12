@@ -43,7 +43,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   public List<IViewDescriptor> getChildViewDescriptors() {
     if (cells != null) {
       for (IViewDescriptor cell : cells) {
-        completeChildDescriptor(cell);
+        completeChildDescriptor(cell, cell == cells.get(0));
       }
     }
     return cells;

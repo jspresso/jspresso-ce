@@ -80,25 +80,34 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
    * 
    * @param childViewDescriptor
    *          the child view descriptor to initialize.
+   * @param isLeading
+   *          is it the leading child descriptor (e.g. the 1st one not null) ?
    */
-  protected void completeChildDescriptor(IViewDescriptor childViewDescriptor) {
-    if (childViewDescriptor != null) {
-      if (!isCascadingModels()
-          && childViewDescriptor.getModelDescriptor() == null
-          && childViewDescriptor instanceof BasicViewDescriptor) {
+  protected void completeChildDescriptor(IViewDescriptor childViewDescriptor,
+      boolean isLeading) {
+    IModelDescriptor modelDescriptor = super.getModelDescriptor();
+    if (modelDescriptor != null
+        && childViewDescriptor instanceof BasicViewDescriptor
+        && childViewDescriptor.getModelDescriptor() == null) {
+      if (isCascadingModels()) {
+        if (isLeading) {
+          ((BasicViewDescriptor) childViewDescriptor)
+              .setModelDescriptor(modelDescriptor);
+        }
+      } else {
         if (childViewDescriptor instanceof IPropertyViewDescriptor
             || childViewDescriptor instanceof ICollectionViewDescriptor) {
-          if (getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+          if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
             // we can complete this property view descriptor model based on the
             // surrounding model.
             ((BasicViewDescriptor) childViewDescriptor)
-                .setModelDescriptor(((IComponentDescriptorProvider<?>) getModelDescriptor())
+                .setModelDescriptor(((IComponentDescriptorProvider<?>) modelDescriptor)
                     .getComponentDescriptor().getPropertyDescriptor(
                         childViewDescriptor.getName()));
           }
         } else {
           ((BasicViewDescriptor) childViewDescriptor)
-              .setModelDescriptor(getModelDescriptor());
+              .setModelDescriptor(modelDescriptor);
         }
       }
     }

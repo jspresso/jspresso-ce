@@ -40,7 +40,8 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   public List<IViewDescriptor> getChildViewDescriptors() {
     if (tabs != null) {
       for (IViewDescriptor childViewDescriptor : tabs) {
-        completeChildDescriptor(childViewDescriptor);
+        completeChildDescriptor(childViewDescriptor,
+            childViewDescriptor == tabs.get(0));
       }
     }
     return tabs;

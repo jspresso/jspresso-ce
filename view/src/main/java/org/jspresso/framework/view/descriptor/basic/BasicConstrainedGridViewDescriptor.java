@@ -53,9 +53,11 @@ public class BasicConstrainedGridViewDescriptor extends
   public List<IViewDescriptor> getChildViewDescriptors() {
     List<IViewDescriptor> childViewDescriptors = new ArrayList<IViewDescriptor>();
     if (cells != null) {
+      boolean leading = true;
       for (Map.Entry<IViewDescriptor, CellConstraints> constrainedCell : cells
           .entrySet()) {
-        completeChildDescriptor(constrainedCell.getKey());
+        completeChildDescriptor(constrainedCell.getKey(), leading);
+        leading = false;
         childViewDescriptors.add(constrainedCell.getKey());
       }
     }
