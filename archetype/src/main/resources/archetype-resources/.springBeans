@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.2.0.v200809261800]]></pluginVersion>
+	<pluginVersion><![CDATA[2.2.6.200908051215-RELEASE]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
@@ -16,8 +16,10 @@
     <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-remote-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/remote/commons-remote.xml</config>
 		<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
+    <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+    <config>core/target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
 	</configs>
 	<configSets>
@@ -33,8 +35,10 @@
 				<config>M2_REPO/org/jspresso/framework/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
 				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
 				<config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
 				<config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
 				<config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
 				<config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
 			</configs>
 		</configSet>
@@ -50,8 +54,10 @@
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-wings-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
 				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
       </configs>
     </configSet>
@@ -67,8 +73,10 @@
         <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-remote-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/remote/commons-remote.xml</config>
 				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
       </configs>
     </configSet>
