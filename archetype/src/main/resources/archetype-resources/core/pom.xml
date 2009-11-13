@@ -144,10 +144,12 @@
               <goal>execute</goal>
             </goals>
             <configuration>
-              <source>${basedir}/src/main/dsl/model.groovy</source>
+              <source>${basedir}/src/main/dsl/application.groovy</source>
               <properties>
                 <outputDir>${project.build.directory}/generated-resources/dsl</outputDir>
-                <outputFileName>dsl-model.xml</outputFileName>
+                <modelOutputFileName>dsl-model.xml</modelOutputFileName>
+                <viewOutputFileName>dsl-view.xml</viewOutputFileName>
+                <frontOutputFileName>dsl-frontend.xml</frontOutputFileName>
               </properties>
               <classpath>
                 <element>

@@ -31,6 +31,7 @@
         <value>org/jspresso/framework/application/frontend/swing/commons-swing.xml</value>
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
+        <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>
       </list>
     </constructor-arg>
@@ -49,7 +50,9 @@
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
+        <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>
+        <value>${packageInPathFormat}/frontend/dsl-frontend.xml</value>
         <value>${packageInPathFormat}/frontend/frontend.xml</value>
         <value>${packageInPathFormat}/config.xml</value>
       </list>
@@ -69,7 +72,9 @@
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
+        <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>
+        <value>${packageInPathFormat}/frontend/dsl-frontend.xml</value>
         <value>${packageInPathFormat}/frontend/frontend.xml</value>
         <value>${packageInPathFormat}/config.xml</value>
       </list>
@@ -89,7 +94,9 @@
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
+        <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>
+        <value>${packageInPathFormat}/frontend/dsl-frontend.xml</value>
         <value>${packageInPathFormat}/frontend/frontend.xml</value>
         <value>${packageInPathFormat}/config.xml</value>
       </list>
@@ -109,7 +116,9 @@
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
+        <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>
+        <value>${packageInPathFormat}/frontend/dsl-frontend.xml</value>
         <value>${packageInPathFormat}/frontend/frontend.xml</value>
         <value>${packageInPathFormat}/config.xml</value>
       </list>
