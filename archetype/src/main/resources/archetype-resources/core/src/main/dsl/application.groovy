@@ -5,7 +5,7 @@ def domainBuilder = new Domain()
 domainBuilder.Project('${parentArtifactId}', mute:true) {
   namespace('${package}') {
     Domain {
-      include('src/main/dsl/model.groovy')
+      include(project.properties['srcDir']+'/src/main/dsl/model.groovy')
       // Implement your domain here using the SJS DSL.
     }
   }
@@ -15,8 +15,8 @@ if(!domainBuilder.isOK()) return -1;
 def frontendBuilder = new Front(domainBuilder.getReferenceDomain())
 frontendBuilder.Front(){
   namespace('${package}'){
-    include('src/main/dsl/view.groovy')
-    include('src/main/dsl/frontend.groovy')
+    include(project.properties['srcDir']+'/src/main/dsl/view.groovy')
+    include(project.properties['srcDir']+'/src/main/dsl/frontend.groovy')
   }
 }
 if(frontendBuilder.getNbrError() != 0) {

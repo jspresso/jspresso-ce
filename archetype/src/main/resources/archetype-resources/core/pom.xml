@@ -146,6 +146,7 @@
             <configuration>
               <source>${basedir}/src/main/dsl/application.groovy</source>
               <properties>
+                <srcDir>${basedir}/src/main/dsl</srcDir>
                 <outputDir>${project.build.directory}/generated-resources/dsl</outputDir>
                 <modelOutputFileName>dsl-model.xml</modelOutputFileName>
                 <viewOutputFileName>dsl-view.xml</viewOutputFileName>
