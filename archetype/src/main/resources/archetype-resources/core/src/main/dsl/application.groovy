@@ -12,7 +12,7 @@ domainBuilder.Project('${parentArtifactId}', mute:true) {
 }
 if(!domainBuilder.isOK()) {
   println domainBuilder.getErrorDomain()
-  return -1;
+  fail('SJS defined domain is invalid.')
 }
 
 def frontendBuilder = new Front(domainBuilder.getReferenceDomain())
@@ -24,7 +24,7 @@ frontendBuilder.Front(){
 }
 if(frontendBuilder.getNbrError() != 0) {
   println frontendBuilder.getError()
-  return -1;
+  fail('SJS defined frontend / views is invalid.')
 }
 
 domainBuilder.writeDomainFile(project.properties['outputDir'],project.properties['modelOutputFileName'])
