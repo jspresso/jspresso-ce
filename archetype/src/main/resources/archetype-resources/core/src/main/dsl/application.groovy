@@ -10,7 +10,10 @@ domainBuilder.Project('${parentArtifactId}', mute:true) {
     }
   }
 }
-if(!domainBuilder.isOK()) return -1;
+if(!domainBuilder.isOK()) {
+  println domainBuilder.getErrorDomain()
+  return -1;
+}
 
 def frontendBuilder = new Front(domainBuilder.getReferenceDomain())
 frontendBuilder.Front(){
@@ -20,8 +23,8 @@ frontendBuilder.Front(){
   }
 }
 if(frontendBuilder.getNbrError() != 0) {
-  return -1;
   println frontendBuilder.getError()
+  return -1;
 }
 
 domainBuilder.writeDomainFile(project.properties['outputDir'],project.properties['modelOutputFileName'])
