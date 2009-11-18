@@ -218,7 +218,7 @@
   <!--
     Utility beans for model.
   -->
-  <bean id="BasicReportDescriptor.INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+  <bean id="BasicReportDescriptor_INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
         org.jspresso.framework.application.printing.model.descriptor.basic.BasicReportDescriptor.INSTANCE
