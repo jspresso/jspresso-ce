@@ -336,6 +336,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Sets the i18nDescription.
    * 
+   * @internal
    * @param i18nDescription
    *          the i18nDescription to set.
    */
@@ -351,6 +352,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Sets the i18nName.
    * 
+   * @internal
    * @param i18nName
    *          the i18nName to set.
    */
@@ -393,6 +395,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * 
    * @param parent
    *          the parent module to set or null if none.
+   * @internal
    */
   public void setParent(Module parent) {
     if (ObjectUtils.equals(this.parent, parent)) {
@@ -422,6 +425,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Sets the started.
    * 
+   * @internal
    * @param started
    *          the started to set.
    */
@@ -445,6 +449,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * 
    * @param children
    *          the modules modules to set.
+   * @internal
    */
   public void setSubModules(List<Module> children) {
     List<Module> oldValue = null;
@@ -508,6 +513,8 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * {@inheritDoc}
+   * 
+   * @internal
    */
   public void setSubject(Subject subject) {
     this.subject = subject;
