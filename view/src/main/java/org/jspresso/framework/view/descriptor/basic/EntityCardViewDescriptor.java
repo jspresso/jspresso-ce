@@ -26,6 +26,7 @@ import javax.security.auth.Subject;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -59,6 +60,11 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     Map<String, IViewDescriptor> classCardMapping = new LinkedHashMap<String, IViewDescriptor>();
     for (IViewDescriptor entityViewDescriptor : viewDescriptors) {
+      if (!(entityViewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>)) {
+        throw new ViewException(
+            "Entity card view does not support cards without model"
+                + " descriptor or with a model descriptor that is not a component descriptor.");
+      }
       classCardMapping.put(((IComponentDescriptor<?>) entityViewDescriptor
           .getModelDescriptor()).getComponentContract().getName(),
           entityViewDescriptor);
