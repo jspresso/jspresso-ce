@@ -103,7 +103,12 @@ public class RemoveFromModuleObjectsAction extends
             throw new ActionException(ex);
           }
         }
-        getController(context).performPendingOperations();
+        try {
+          getController(context).performPendingOperations();
+        } catch (RuntimeException ex) {
+          getController(context).clearPendingOperations();
+          throw ex;
+        }
         return null;
       }
     });
