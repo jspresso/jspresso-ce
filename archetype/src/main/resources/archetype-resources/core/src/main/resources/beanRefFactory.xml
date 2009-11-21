@@ -49,6 +49,7 @@
         <value>org/jspresso/framework/application/frontend/swing/commons-swing.xml</value>
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
+        <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
         <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>
@@ -71,6 +72,7 @@
         <value>org/jspresso/framework/application/frontend/ulc/commons-ulc.xml</value>
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
+        <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
         <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>
@@ -115,6 +117,8 @@
         <value>org/jspresso/framework/application/frontend/remote/commons-remote.xml</value>
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
+        <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
+        <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
         <value>${packageInPathFormat}/view/dsl-view.xml</value>
         <value>${packageInPathFormat}/view/view.xml</value>

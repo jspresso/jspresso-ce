@@ -18,6 +18,7 @@
 		<config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
     <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
+    <config>core/target/generated-resources/dsl/${packageInPathFormat}/backend/dsl-backend.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
     <config>core/target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
 		<config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
@@ -37,6 +38,7 @@
 				<config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
 				<config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/backend/dsl-backend.xml</config>
 				<config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
 				<config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
@@ -56,6 +58,7 @@
         <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/backend/dsl-backend.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>
@@ -75,6 +78,7 @@
         <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/view/view.xml</config>
+        <config>core/target/generated-resources/dsl/${packageInPathFormat}/backend/dsl-backend.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/backend/backend.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/frontend/dsl-frontend.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/frontend/frontend.xml</config>

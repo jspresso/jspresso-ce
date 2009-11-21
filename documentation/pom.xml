@@ -41,7 +41,7 @@
         <executions>
           <execution>
             <id>Generate-docbook-ref</id>
-            <phase>generate-resources</phase>
+            <phase>verify</phase>
             <goals>
               <goal>javadoc</goal>
             </goals>

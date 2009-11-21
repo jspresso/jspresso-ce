@@ -151,6 +151,7 @@
                 <modelOutputFileName>dsl-model.xml</modelOutputFileName>
                 <viewOutputFileName>dsl-view.xml</viewOutputFileName>
                 <frontOutputFileName>dsl-frontend.xml</frontOutputFileName>
+                <backOutputFileName>dsl-backend.xml</backOutputFileName>
               </properties>
               <classpath>
                 <element>

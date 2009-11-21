@@ -18,8 +18,15 @@ if(!domainBuilder.isOK()) {
 def frontendBuilder = new Front(domainBuilder.getReferenceDomain())
 frontendBuilder.Front(){
   namespace('${package}'){
-    include(project.properties['srcDir']+'/src/main/dsl/view.groovy')
-    include(project.properties['srcDir']+'/src/main/dsl/frontend.groovy')
+    view {
+      include(project.properties['srcDir']+'/view.groovy')
+    }
+    frontend {
+      include(project.properties['srcDir']+'/frontend.groovy')
+    }
+    backend {
+      include(project.properties['srcDir']+'/backend.groovy')
+    }
   }
 }
 if(frontendBuilder.getNbrError() != 0) {
@@ -28,5 +35,6 @@ if(frontendBuilder.getNbrError() != 0) {
 }
 
 domainBuilder.writeDomainFile(project.properties['outputDir'],project.properties['modelOutputFileName'])
+frontendBuilder.writeBackendFile(project.properties['outputDir'],project.properties['backOutputFileName'])
 frontendBuilder.writeViewFile(project.properties['outputDir'],project.properties['viewOutputFileName'])
 frontendBuilder.writeFrontEndFile(project.properties['outputDir'],project.properties['frontOutputFileName'])
