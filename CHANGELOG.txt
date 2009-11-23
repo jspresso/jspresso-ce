@@ -105,6 +105,7 @@ New features
 2891297    Refactor IApplicationSession and IBackendController
 2891302    Refactor IAction hierarchy
 2893235    Introduce @Transactional on BackendActions
+2902298    Entity beans annotations
 
 3.0.0
 =====
