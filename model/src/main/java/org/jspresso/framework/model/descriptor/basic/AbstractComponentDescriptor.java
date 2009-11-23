@@ -92,6 +92,8 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   private Integer                          pageSize;
 
+  private String                           sqlName;
+
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
    * 
@@ -765,4 +767,24 @@ public abstract class AbstractComponentDescriptor<E> extends
   public boolean isReadOnly() {
     return false;
   }
+
+  /**
+   * Sets the sqlName.
+   * 
+   * @param sqlName
+   *          the sqlName to set.
+   */
+  public void setSqlName(String sqlName) {
+    this.sqlName = sqlName;
+  }
+
+  /**
+   * Gets the sqlName.
+   * 
+   * @return the sqlName.
+   */
+  public String getSqlName() {
+    return sqlName;
+  }
+
 }
