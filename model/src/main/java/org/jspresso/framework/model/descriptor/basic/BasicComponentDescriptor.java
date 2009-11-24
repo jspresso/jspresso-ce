@@ -92,4 +92,24 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
   public boolean isPurelyAbstract() {
     return false;
   }
+
+  /**
+   * Relax ClassNotFoundException since component descriptors can be used
+   * without actual java class.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public Class<? extends E> getComponentContract() {
+    try {
+      return super.getComponentContract();
+    } catch (RuntimeException ex) {
+      if (ex.getCause() instanceof ClassNotFoundException) {
+        // might be normal. Surely indicates a component descriptor used without
+        // an actual java class.
+        return null;
+      }
+      throw ex;
+    }
+  }
 }
