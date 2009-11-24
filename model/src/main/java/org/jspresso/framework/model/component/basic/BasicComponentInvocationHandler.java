@@ -21,13 +21,14 @@ package org.jspresso.framework.model.component.basic;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
-
 
 /**
  * This is the core implementation of all inlined components in the application.
@@ -48,17 +49,17 @@ public class BasicComponentInvocationHandler extends
    * Constructs a new <code>BasiccomponentInvocationHandler</code> instance.
    * 
    * @param componentDescriptor
-   *            The descriptor of the proxy component.
+   *          The descriptor of the proxy component.
    * @param inlineComponentFactory
-   *            the factory used to create inline components.
+   *          the factory used to create inline components.
    * @param collectionFactory
-   *            The factory used to create empty component collections from
-   *            collection getters.
+   *          The factory used to create empty component collections from
+   *          collection getters.
    * @param accessorFactory
-   *            The factory used to access proxy properties.
+   *          The factory used to access proxy properties.
    * @param extensionFactory
-   *            The factory used to create component extensions based on their
-   *            classes.
+   *          The factory used to create component extensions based on their
+   *          classes.
    */
   protected BasicComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor,
@@ -76,27 +77,34 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected boolean computeEquals(IComponent proxy, Object another) {
+    if (!(another instanceof IComponent)) {
+      return false;
+    }
     if (proxy == another) {
       return true;
     }
-    return false;
+    return new EqualsBuilder().append(proxy.getComponentContract(),
+        ((IComponent) another).getComponentContract()).append(
+        proxy.straightGetProperties(),
+        ((IComponent) another).straightGetProperties()).isEquals();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected int computeHashCode() {
-    return super.hashCode();
+  protected int computeHashCode(IComponent proxy) {
+    return new HashCodeBuilder(7, 13).append(proxy.getComponentContract())
+        .append(proxy.straightGetProperties()).toHashCode();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected IComponent decorateReferent(IComponent referent,
-      @SuppressWarnings("unused")
-      IComponentDescriptor<? extends IComponent> referentDescriptor) {
+  protected IComponent decorateReferent(
+      IComponent referent,
+      @SuppressWarnings("unused") IComponentDescriptor<? extends IComponent> referentDescriptor) {
     return referent;
   }
 

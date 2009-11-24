@@ -31,7 +31,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.basic.BasicEntityInvocationHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-
 /**
  * This is the core implementation of all entities in the application. Instances
  * of this class serve as handlers for proxies representing the entities.
@@ -51,19 +50,19 @@ public class BasicDelegatingComponentInvocationHandler extends
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
    * 
    * @param delegate
-   *            the delegate to which getters and setters are delegated.
+   *          the delegate to which getters and setters are delegated.
    * @param componentFactory
-   *            the factory used to decorate referenced components.
+   *          the factory used to decorate referenced components.
    * @param componentDescriptor
-   *            The descriptor of the proxy component.
+   *          The descriptor of the proxy component.
    * @param collectionFactory
-   *            The factory used to create empty component collections from
-   *            collection getters.
+   *          The factory used to create empty component collections from
+   *          collection getters.
    * @param accessorFactory
-   *            The factory used to access proxy properties.
+   *          The factory used to access proxy properties.
    * @param extensionFactory
-   *            The factory used to create component extensions based on their
-   *            classes.
+   *          The factory used to create component extensions based on their
+   *          classes.
    */
   protected BasicDelegatingComponentInvocationHandler(Object delegate,
       IComponentFactory componentFactory,
@@ -101,7 +100,7 @@ public class BasicDelegatingComponentInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected int computeHashCode() {
+  protected int computeHashCode(@SuppressWarnings("unused") IComponent proxy) {
     return delegate.hashCode();
   }
 

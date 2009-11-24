@@ -138,7 +138,7 @@ public abstract class AbstractComponentInvocationHandler implements
       throws Throwable {
     String methodName = method.getName();
     if ("hashCode".equals(methodName)) {
-      return new Integer(computeHashCode());
+      return new Integer(computeHashCode((IComponent) proxy));
     } else if ("equals".equals(methodName)) {
       return new Boolean(computeEquals((IComponent) proxy, args[0]));
     } else if ("toString".equals(methodName)) {
@@ -281,9 +281,11 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Delegate method to compute hashcode.
    * 
+   * @param proxy
+   *          the target component to compute hashcode for.
    * @return the computed hashcode.
    */
-  protected abstract int computeHashCode();
+  protected abstract int computeHashCode(IComponent proxy);
 
   /**
    * Gives a chance to the implementor to decorate a component reference before

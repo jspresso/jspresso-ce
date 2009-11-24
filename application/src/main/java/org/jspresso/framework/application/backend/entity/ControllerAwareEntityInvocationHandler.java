@@ -50,8 +50,8 @@ public class ControllerAwareEntityInvocationHandler extends
   private IBackendController backendController;
 
   /**
-   * Constructs a new
-   * <code>ControllerAwareEntityInvocationHandler</code> instance.
+   * Constructs a new <code>ControllerAwareEntityInvocationHandler</code>
+   * instance.
    * 
    * @param entityDescriptor
    *          The descriptor of the proxy entity.
@@ -140,5 +140,14 @@ public class ControllerAwareEntityInvocationHandler extends
       super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
           newPropertyValue);
     }
+  }
+
+  /**
+   * Gets the backendController.
+   * 
+   * @return the backendController.
+   */
+  protected IBackendController getBackendController() {
+    return backendController;
   }
 }

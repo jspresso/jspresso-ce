@@ -47,8 +47,8 @@ public class ControllerAwareComponentInvocationHandler extends
   private IBackendController backendController;
 
   /**
-   * Constructs a new
-   * <code>ControllerAwareEntityInvocationHandler</code> instance.
+   * Constructs a new <code>ControllerAwareEntityInvocationHandler</code>
+   * instance.
    * 
    * @param componentDescriptor
    *          The descriptor of the proxy entity.
@@ -136,5 +136,14 @@ public class ControllerAwareComponentInvocationHandler extends
       super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
           newPropertyValue);
     }
+  }
+
+  /**
+   * Gets the backendController.
+   * 
+   * @return the backendController.
+   */
+  protected IBackendController getBackendController() {
+    return backendController;
   }
 }

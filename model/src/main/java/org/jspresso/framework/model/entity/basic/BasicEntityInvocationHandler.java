@@ -34,7 +34,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-
 /**
  * This is the core implementation of all entities in the application. Instances
  * of this class serve as handlers for proxies representing the entities.
@@ -53,17 +52,17 @@ public class BasicEntityInvocationHandler extends
    * Constructs a new <code>BasicEntityInvocationHandler</code> instance.
    * 
    * @param entityDescriptor
-   *            The descriptor of the proxy entity.
+   *          The descriptor of the proxy entity.
    * @param inlineComponentFactory
-   *            the factory used to create inline components.
+   *          the factory used to create inline components.
    * @param collectionFactory
-   *            The factory used to create empty entity collections from
-   *            collection getters.
+   *          The factory used to create empty entity collections from
+   *          collection getters.
    * @param accessorFactory
-   *            The factory used to access proxy properties.
+   *          The factory used to access proxy properties.
    * @param extensionFactory
-   *            The factory used to create entity extensions based on their
-   *            classes.
+   *          The factory used to create entity extensions based on their
+   *          classes.
    */
   protected BasicEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor,
@@ -77,10 +76,9 @@ public class BasicEntityInvocationHandler extends
   }
 
   /**
-   * Handles methods invocations on the entity proxy. Either :
-   * <li>delegates to one of its extension if the accessed property is
-   * registered as being part of an extension
-   * <li>handles property access internally
+   * Handles methods invocations on the entity proxy. Either : <li>delegates to
+   * one of its extension if the accessed property is registered as being part
+   * of an extension <li>handles property access internally
    * <p>
    * {@inheritDoc}
    */
@@ -130,7 +128,7 @@ public class BasicEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected int computeHashCode() {
+  protected int computeHashCode(@SuppressWarnings("unused") IComponent proxy) {
     Object id = straightGetProperty(IEntity.ID);
     if (id == null) {
       throw new NullPointerException(
@@ -143,9 +141,9 @@ public class BasicEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected IComponent decorateReferent(IComponent referent,
-      @SuppressWarnings("unused")
-      IComponentDescriptor<? extends IComponent> referentDescriptor) {
+  protected IComponent decorateReferent(
+      IComponent referent,
+      @SuppressWarnings("unused") IComponentDescriptor<? extends IComponent> referentDescriptor) {
     return referent;
   }
 

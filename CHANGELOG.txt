@@ -35,7 +35,7 @@ Bugs fixed
 2871793    Granted roles are not handled correctly on modules
 2890409    Combo box rendering in flex
 2901675    Session stucked with error message
-
+2903272    Component equals/hashcode
 
 New features
 ------------
