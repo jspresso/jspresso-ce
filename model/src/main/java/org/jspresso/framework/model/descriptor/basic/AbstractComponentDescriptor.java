@@ -52,7 +52,19 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
- * Abstract implementation of a component descriptor.
+ * This is the abstract base descriptor for all component-like part of the
+ * domain model. All the properties included in this base descriptor can of
+ * course be used in concrete sub-types.
+ * <p>
+ * These sub-types include :
+ * <ul>
+ * <li><i>BasicEntityDescriptor</i> for defining a persistent entity</li>
+ * <li><i>BasicInterfaceDescriptor</i> for defining a common interface that will
+ * be implemented by other entities, components or even sub-interfaces.</li>
+ * <li><i>BasicComponentDescriptor</i> for defining reusable structures that can
+ * be inlined in an entity. It also allows to describe an arbitrary POJO and
+ * make use of it in Jspresso UIs.</li>
+ * </ul>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -398,7 +410,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * translates the components inheritance hierarchy since the component
    * property descriptors are the union of the declared property descriptors of
    * the component and of its ancestors one. A component may have multiple
-   * ancestors which means that complex multi-inheritance hierarchy can be
+   * ancestors which means that complex multiple-inheritance hierarchy can be
    * mapped.
    * 
    * @param ancestorDescriptors
@@ -410,7 +422,10 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the grantedRoles.
+   * Assigns the roles that are authorized to manipulate components backed by
+   * this descriptor. This will directly influence the UI behaviour and even
+   * composition. Setting the collection of granted roles to <code>null</code>
+   * (default value) disables role based authorization on this component level.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.
@@ -686,13 +701,30 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * {@inheritDoc}
+   * 
+   * @internal
    */
   public void setBeanFactory(BeanFactory beanFactory) {
     this.beanFactory = beanFactory;
   }
 
   /**
-   * Sets the lifecycleInterceptorBeanNames.
+   * Registers a list of lifecycle interceptor instances that will be triggered
+   * on the different phases of tha component lifecycle, i.e. :
+   * <ul>
+   * <li>when the component is <i>instanciated in memory</i></li>
+   * <li>when the component is <i>created in the data store</i></li>
+   * <li>when the component is <i>updated in the data store</i></li>
+   * <li>when the component is <i>loaded from the data store</i></li>
+   * <li>when the component is <i>deleted from the data store</i></li>
+   * </ul>
+   * This property must be set with Spring bean names (i.e. Spring ids). When
+   * needed, Jspresso will query the Spring application context to retrieve the
+   * interceptors instances. This property is equivalent to setting
+   * <code>lifecycleInterceptorClassNames</code> except that it allows to
+   * register interceptor instances that are configured externally in the Spring
+   * context. lifecycle interceptor instances must implement the
+   * <code>ILifecycleInterceptor</code> interface.
    * 
    * @param lifecycleInterceptorBeanNames
    *          the lifecycleInterceptorBeanNames to set. They are used to

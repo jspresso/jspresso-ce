@@ -32,6 +32,7 @@ import org.jspresso.framework.util.collection.IPageable;
 /**
  * An implementation used for query components.
  * 
+ * @internal
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
