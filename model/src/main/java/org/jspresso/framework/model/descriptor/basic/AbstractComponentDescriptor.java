@@ -435,7 +435,14 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the lifecycleInterceptorClassNames.
+   * Much the same as <code>lifecycleInterceptorBeanNames</code> except that
+   * instead of providing a list of Spring bean names, you provide a list of
+   * fully qualified class names. Those class must :
+   * <ul>
+   * <li>provide a default constructor</li>
+   * <li>implement the <code>ILifecycleInterceptor</code> interface.
+   * </ul>
+   * When needed, Jspresso will create lifecycle interceptor instances.
    * 
    * @param lifecycleInterceptorClassNames
    *          the lifecycleInterceptorClassNames to set.
@@ -447,7 +454,19 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the orderingProperties.
+   * Ordering properties are used to sort un-indexed collections of instances of
+   * components backed by this descriptor. This sort order can be overridden on
+   * the finer collection property level to change the way a specific collection
+   * is sorted. This property consist of a <code>Map</code> whose entries are
+   * composed with :
+   * <ul>
+   * <li>the property name as key</li>
+   * <li>the sort order for this property as value. This is either a value of
+   * the <code>ESort</code> enum or their equivalent string representation.</li>
+   * <ul>
+   * Ordering properties are considered following their order in the map
+   * iterator. A <code>null</code> value (default) will not give any indication
+   * for the collection sort order.
    * 
    * @param untypedOrderingProperties
    *          the orderingProperties to set.
@@ -474,7 +493,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the propertyDescriptors property.
+   * This property allows to set a collection of property descriptors
    * 
    * @param descriptors
    *          the propertyDescriptors to set.
@@ -676,7 +695,10 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the pageSize.
+   * Whenever a collection of this component type is presented in a pageable UI,
+   * this property gives the size (number of componet instances) of one page.
+   * This size can usually be refined at a finer level. A <code>null</code>
+   * value (default) disables general paging for this component.
    * 
    * @param pageSize
    *          the pageSize to set.
