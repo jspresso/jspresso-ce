@@ -18,7 +18,7 @@
     <hibernate.version>3.3.2.GA</hibernate.version>
     <ulc.version>6.0.5</ulc.version>
     <jboss.version>4.2.2.GA</jboss.version>
-    <qooxdoo.version>0.8.3</qooxdoo.version>
+    <qooxdoo.version>1.0-beta1</qooxdoo.version>
     <flex.version>3.2.0.3958</flex.version>
     <jasper.version>3.5.3</jasper.version>
     <jfree.version>1.0.13</jfree.version>
@@ -641,7 +641,7 @@
       <dependency>
         <groupId>org.qooxdoo</groupId>
         <artifactId>qooxdoo-java-rpc</artifactId>
-        <version>0.5</version>
+        <version>0.6</version>
       </dependency>
       <dependency>
         <groupId>commons-pool</groupId>

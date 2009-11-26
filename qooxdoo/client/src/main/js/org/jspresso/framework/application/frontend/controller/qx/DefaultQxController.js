@@ -129,8 +129,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         } else {
           remoteValueState.addListener("changeValue", this.__valueUpdated, this);
         }
-      } catch(err) {
-        this.error(err);
+//      } catch(err) {
+//        this.error(err);
       } finally {
         this.__changeNotificationsEnabled = wasEnabled;
       }
@@ -214,8 +214,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             this._handleCommand(commands[i]);
           }
         }
-      } catch(err) {
-        this.error(err);
+//      } catch(err) {
+//        this.error(err);
       } finally {
         this.__changeNotificationsEnabled = wasEnabled;
       }
@@ -326,10 +326,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           var oldLength = children.getLength();
           var newLength = commandChildren.length;
           
-          children.removeAll();
-          //fix for the event not being fired.
+          //children.removeAll();
           if(commandChildren != null) {
-            var buffer = new Array();
             for(var i = 0; i < commandChildren.length; i++) {
               /**@type org.jspresso.framework.state.remote.RemoteValueState */
               var child = commandChildren[i];
@@ -338,20 +336,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
               } else {
                 this.register(child);
               }
-              buffer.push(child);
+              children.setItem(i, child);
             }
-            children.append(buffer);
           }
-          //fix for event not being notified
-          //TODO notify Qooxdoo 
-          if(newLength > oldLength) {
-            children.fireDataEvent("change", 
-              {start: oldLength, end: newLength - 1, type: "add"}, null
-            );
-          } else if(newLength < oldLength) {
-            children.fireDataEvent("change", 
-              {start: newLength, end: oldLength - 1, type: "remove"}, null
-            );
+          if(oldLength > newLength) {
+          	for(var i = oldLength - 1; i >= newLength; i--) {
+          		children.removeAt(i);
+          	}
           }
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
           this.__viewFactory.addCard(targetPeer, command.getCard(), command.getCardName());
@@ -768,8 +759,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         try {
           var data = result.getData();
           this._handleCommands(org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]).toArray());
-        } catch(err) {
-          this.error(err);
+//        } catch(err) {
+//          this.error(err);
         } finally {
           this.__application.getRoot().setGlobalCursor("default");
           this.__checkPostponedCommandsCompletion();

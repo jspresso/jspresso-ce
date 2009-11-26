@@ -412,7 +412,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         if(   !qx.lang.Array.equals(selectedIndices, stateSelection)
            || leadingIndex != stateLeadingIndex) {
           selectionModel.setBatchMode(true);
-          selectionModel.clearSelection();
+          selectionModel.resetSelection();
           if(stateSelection.length > 0) {
             var minIndex = -1;
             var maxIndex;
@@ -1308,9 +1308,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
             controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
             if(modelNode) {
               modelNode.addListener("changeSelectedIndices", function(e) {
+              	/**@type qx.data.Array */
                 var viewSelection = controller.getSelection();
                 var stateSelection = e.getTarget().getSelectedIndices();
                 var stateChildren = e.getTarget().getChildren();
+                var selIndex = 0;
                 for(var i = 0; i < stateChildren.length; i++) {
                   var child = stateChildren.getItem(i);
                   if(stateSelection && qx.lang.Array.contains(stateSelection, i)) {
@@ -1318,7 +1320,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                       if(!treeNode.isOpen()) {
                         treeNode.setOpen(true);
                       }
-                      viewSelection.push(child);
+                      //viewSelection.push(child);
+                      if(selIndex == 0/* || tree.getSelectionMode() == "multi" || tree.getSelectionMode() == "additive"*/) {
+                        viewSelection.setItem(i, child);
+                        selIndex++;
+                      }
                     }
                   } else {
                     if(viewSelection.contains(child)) {
@@ -1412,10 +1418,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     /**
      * 
      * @param {org.jspresso.framework.gui.remote.RAction} remoteAction
-     * @return {qx.event.Command}
+     * @return {qx.ui.core.Command}
      */
     createCommand : function(remoteAction) {
-      var command = new qx.event.Command(remoteAction.getAcceleratorAsString());
+      var command = new qx.ui.core.Command(remoteAction.getAcceleratorAsString());
       command.addListener("execute", function(e) {
         this.__actionHandler.execute(remoteAction);
       }, this);
