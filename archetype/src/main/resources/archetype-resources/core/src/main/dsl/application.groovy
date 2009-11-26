@@ -5,8 +5,7 @@ def domainBuilder = new Domain()
 domainBuilder.Project('${parentArtifactId}', mute:true) {
   namespace('${package}') {
     Domain {
-      include(project.properties['srcDir']+'/src/main/dsl/model.groovy')
-      // Implement your domain here using the SJS DSL.
+      include(project.properties['srcDir']+'/model.groovy')
     }
   }
 }
