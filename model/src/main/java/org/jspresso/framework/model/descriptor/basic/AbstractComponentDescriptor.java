@@ -437,7 +437,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * Much the same as <code>lifecycleInterceptorBeanNames</code> except that
    * instead of providing a list of Spring bean names, you provide a list of
-   * fully qualified class names. Those class must :
+   * fully qualified class names. These class must :
    * <ul>
    * <li>provide a default constructor</li>
    * <li>implement the <code>ILifecycleInterceptor</code> interface.</li>
@@ -493,7 +493,14 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * This property allows to set a collection of property descriptors
+   * This property allows to describe the properties of the components backed by
+   * this descriptor. Like in classic OO programming, the actual set of
+   * properties available to a component is the union of its properties and of
+   * its ancestors' ones. Jspresso also alows you to refine a property
+   * descriptor in a child component descriptor exactly as you would do it in a
+   * subclass. In that case, the atributes of the property defined in the child
+   * descriptor prevails over the definition of its ancestors. Naturally,
+   * properties are keyed by their names.
    * 
    * @param descriptors
    *          the propertyDescriptors to set.
@@ -511,7 +518,21 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the queryableProperties.
+   * This property allows to define which of the component properties are to be
+   * used in the filter UIs that are based on this component family (a QBE
+   * screen for instance). Since this is a <code>List</code> queriable
+   * properties are rendered in the same order.
+   * <p>
+   * Whenever this this property is <code>null</code> (default value), Jspresso
+   * chooses the default set of queryable properties based on their type. For
+   * instance, collection properties and binary properties are not used but
+   * string, numeric, reference, ... properties are. A computed property cannot
+   * be used since it has no data store existance and thus cannot be queried
+   * upon.
+   * <p>
+   * Note that this property is not inherited by children descriptors, i.e. even
+   * if an ancestor defines an explicit set of queryable properties, its
+   * children ignore this setting.
    * 
    * @param queryableProperties
    *          the queryableProperties to set.
@@ -521,7 +542,20 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the renderedProperties.
+   * This property allows to define which of the component properties are to be
+   * rendered by default when displaying a UI based on this component family.
+   * For instance, a table will render 1 column per rendered property of the
+   * component. Any type of property can be used except collection properties.
+   * Since this is a <code>List</code> queriable properties are rendered in the
+   * same order.
+   * <p>
+   * Whenever this property is <code>null</code> (default value) Jspresso
+   * determines the default set of properties to render based on their types,
+   * e.g. ignores collection properties.
+   * <p>
+   * Note that this property is not inherited by children descriptors, i.e. even
+   * if an ancestor defines an explicit set of rendered properties, its children
+   * ignore this setting.
    * 
    * @param renderedProperties
    *          the renderedProperties to set.
@@ -531,8 +565,14 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Registers the service delegates which help the component to implement the
-   * services defined by its contract.
+   * Much the same as <code>serviceDelegateBeanNames</code> except that instead
+   * of providing a map valued with Spring bean names, you provide a map valued
+   * with fully qualified class names. These class must :
+   * <ul>
+   * <li>provide a default constructor</li>
+   * <li>implement the <code>IComponentService</code> marker interface.</li>
+   * </ul>
+   * When needed, Jspresso will create service delegate instances.
    * 
    * @param serviceDelegateClassNames
    *          the component services to be registered keyed by their contract. A
@@ -547,7 +587,20 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the toStringProperty.
+   * Allows to customize the string representation of a component instance. The
+   * property name assigned will be used when displaying the component instance
+   * as a string. It may be a computed property that composes several other
+   * properties in a human friendly format.
+   * <p>
+   * Whenever this property is <code>null</code>, the following rule apply to
+   * determine the <i>toString</i> property :
+   * <ol>
+   * <li>the first string property from the rendered property</li>
+   * <li>the first rendered property if no string property is found among them</li>
+   * </ol>
+   * Note that this property is not inherited by children descriptors, i.e. even
+   * if an ancestor defines an explicit <i>toString</i> property, its children
+   * ignore this setting.
    * 
    * @param toStringProperty
    *          the toStringProperty to set.
@@ -557,7 +610,12 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the unclonedProperties.
+   * Configures the properties that must not be cloned when this component is
+   * duplicated. For instance, tracing informations like a created timestamp
+   * should not be cloned; a SSN neither. For a given component, the uncloned
+   * properties are the ones it defines augmented by the ones its ancestors
+   * define. There is no mean to make a component property clonable if one of
+   * the ancestor declares it un-clonable.
    * 
    * @param unclonedProperties
    *          the unclonedProperties to set.
@@ -708,7 +766,32 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the serviceDelegateBeanNames.
+   * Registers the collection of service delegate instances attached to this
+   * component. These delegate instances will automatically be triggered
+   * whenever a method of the service interface it implements get executed. For
+   * instance :
+   * <ul>
+   * <li>the component interface is <code>MyBeanClass</code>. It implements the
+   * service interface <code>MyService</code>.</li>
+   * <li>the service interface <code>MyService</code> contains method
+   * <code>int foo(String)</code>.</li>
+   * <li>the service delegate class, e.g. <code>MyServiceImpl</code> must
+   * implement the method <code>int foo(MyBeanClass,String)</code>. Note that
+   * the parameter list is augmented with the owing component type as 1st
+   * parameter. This allows to have stateless implementation for delegates, thus
+   * sharing instances of delegates among instances of components.</li>
+   * <li>when <code>foo(String)</code> is executed on an instance of
+   * <code>MyBeanClass</code>, the framework will trigger the delegate
+   * implementation, passing the instance of the component itself as parameter.</li>
+   * </ul>
+   * This property must be set with a map keyed by service interfaces and valued
+   * by Spring bean names (i.e. Spring ids). Each bean name corresponds to an
+   * instance of service delegate. When needed, Jspresso will query the Spring
+   * application context to retrieve the delegate instances. This property is
+   * equivalent to setting <code>serviceDelegateClassNames</code> except that it
+   * allows to register delegate instances that are configured externally in the
+   * Spring context. lifecycle interceptor instances must implement the
+   * <code>IComponentService</code> marker interface.
    * 
    * @param serviceDelegateBeanNames
    *          the serviceDelegateBeanNames to set. They are used to retrieve
@@ -734,11 +817,11 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Registers a list of lifecycle interceptor instances that will be triggered
    * on the different phases of tha component lifecycle, i.e. :
    * <ul>
-   * <li>when the component is <i>instanciated in memory</i></li>
-   * <li>when the component is <i>created in the data store</i></li>
-   * <li>when the component is <i>updated in the data store</i></li>
-   * <li>when the component is <i>loaded from the data store</i></li>
-   * <li>when the component is <i>deleted from the data store</i></li>
+   * <li>when the component is <i>instanciated</i> in memory</li>
+   * <li>when the component is <i>created</i> in the data store</li>
+   * <li>when the component is <i>updated</i> in the data store</li>
+   * <li>when the component is <i>loaded</i> from the data store</li>
+   * <li>when the component is <i>deleted</i> from the data store</li>
    * </ul>
    * This property must be set with Spring bean names (i.e. Spring ids). When
    * needed, Jspresso will query the Spring application context to retrieve the
@@ -782,6 +865,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * 
    * @param readabilityGates
    *          the readabilityGates to set.
+   * @internal
    */
   public void setReadabilityGates(Collection<IGate> readabilityGates) {
     this.readabilityGates = readabilityGates;
@@ -806,7 +890,22 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the writabilityGates.
+   * Assigns a collection of gates to determine component <i>writability</i>. A
+   * component will be considered writable if and only if all gates are open.
+   * This mecanism is mainly used for dynamic UI authorization based on model
+   * state, e.g. a validated invoice should not be editable anymore.
+   * <p>
+   * Descriptor assigned gates will be cloned for each component instance
+   * created and backed by this descriptor. So basically, each component
+   * instance will have its own, unshared collection of writability gates.
+   * <p>
+   * Jspresso provides a useful set of gate types, like the binary property gate
+   * that open/close based on the value of a boolean property of owning
+   * component.
+   * <p>
+   * By default, component descriptors are not assigned any gates collection,
+   * i.e. there is no writability restriction. Note that gates do not enforce
+   * programatic writability of a component; only UI is impacted.
    * 
    * @param writabilityGates
    *          the writabilityGates to set.
@@ -823,7 +922,11 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
-   * Sets the sqlName.
+   * Instructs Jspresso to use this name when translating this component type
+   * name to the data store namespace. This includes , but is not limited to,
+   * database table names. A counter example is a component that can be inlined
+   * in an entity, thus not assigned a table individually. In that case, the
+   * component SQL name serves for composing the component column names.
    * 
    * @param sqlName
    *          the sqlName to set.
