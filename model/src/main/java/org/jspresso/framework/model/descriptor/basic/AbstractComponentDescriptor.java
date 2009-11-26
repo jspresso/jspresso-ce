@@ -440,7 +440,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * fully qualified class names. Those class must :
    * <ul>
    * <li>provide a default constructor</li>
-   * <li>implement the <code>ILifecycleInterceptor</code> interface.
+   * <li>implement the <code>ILifecycleInterceptor</code> interface.</li>
    * </ul>
    * When needed, Jspresso will create lifecycle interceptor instances.
    * 
@@ -463,7 +463,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * <li>the property name as key</li>
    * <li>the sort order for this property as value. This is either a value of
    * the <code>ESort</code> enum or their equivalent string representation.</li>
-   * <ul>
+   * </ul>
    * Ordering properties are considered following their order in the map
    * iterator. A <code>null</code> value (default) will not give any indication
    * for the collection sort order.
