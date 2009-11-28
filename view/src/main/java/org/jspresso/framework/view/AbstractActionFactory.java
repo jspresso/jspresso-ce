@@ -22,9 +22,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -39,6 +41,7 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IModelGate;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -59,6 +62,38 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   private IIconFactory<G>      iconFactory;
   private ITranslationProvider translationProvider;
+
+  /**
+   * {@inheritDoc}
+   */
+  public E createAction(IAction action, IActionHandler actionHandler,
+      IView<F> view, Locale locale) {
+    return createAction(action, actionHandler, view.getPeer(), view
+        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E createAction(IAction action, Dimension dimension,
+      IActionHandler actionHandler, IView<F> view, Locale locale) {
+    Dimension d = dimension;
+    if (d == null) {
+      d = getIconFactory().getTinyIconSize();
+    }
+    return createAction(action, d, actionHandler, view.getPeer(), view
+        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E createAction(IAction action, IActionHandler actionHandler,
+      F sourceComponent, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector, Locale locale) {
+    return createAction(action, getIconFactory().getTinyIconSize(),
+        actionHandler, sourceComponent, modelDescriptor, viewConnector, locale);
+  }
 
   /**
    * Creates and attach the necessary action gates.

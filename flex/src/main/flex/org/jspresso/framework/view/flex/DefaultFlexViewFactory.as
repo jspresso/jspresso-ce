@@ -70,6 +70,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
   import org.jspresso.framework.gui.remote.RAction;
+  import org.jspresso.framework.gui.remote.RActionComponent;
   import org.jspresso.framework.gui.remote.RActionField;
   import org.jspresso.framework.gui.remote.RActionList;
   import org.jspresso.framework.gui.remote.RBorderContainer;
@@ -151,6 +152,8 @@ package org.jspresso.framework.view.flex {
       var component:UIComponent;
       if(remoteComponent is RActionField) {
         component = createActionField(remoteComponent as RActionField);
+      } else if(remoteComponent is RActionComponent) {
+        component = createActionComponent(remoteComponent as RActionComponent);
       } else if(remoteComponent is RCheckBox) {
         component = createCheckBox(remoteComponent as RCheckBox);
       } else if(remoteComponent is RComboBox) {
@@ -408,6 +411,11 @@ package org.jspresso.framework.view.flex {
         imageComponent.source = value;
       };
       BindingUtils.bindSetter(updateView, remoteState, "value", true);
+    }
+    
+    private function createActionComponent(remoteActionComponent:RActionComponent):UIComponent {
+      var actionComponent:Button = createAction(remoteActionComponent.action, false);
+      return actionComponent;
     }
     
     private function createActionField(remoteActionField:RActionField):UIComponent {

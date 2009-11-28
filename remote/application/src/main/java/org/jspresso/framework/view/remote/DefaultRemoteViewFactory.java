@@ -31,7 +31,9 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteValueCom
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionComponent;
 import org.jspresso.framework.gui.remote.RActionField;
 import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RBorderContainer;
@@ -102,6 +104,7 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
@@ -704,6 +707,25 @@ public class DefaultRemoteViewFactory extends
     }
     viewComponent.setCells(cells.toArray(new RComponent[0]));
     view.setChildren(childrenViews);
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createActionView(
+      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        ModelRefPropertyConnector.THIS_PROPERTY);
+    connector.setExceptionHandler(actionHandler);
+    RActionComponent viewComponent = createRActionComponent(connector);
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    viewComponent.setAction(getActionFactory().createAction(
+        viewDescriptor.getAction(), viewDescriptor.getDimension(),
+        actionHandler, view, locale));
     return view;
   }
 
@@ -1544,6 +1566,22 @@ public class DefaultRemoteViewFactory extends
    */
   protected RImageComponent createRImageComponent(IValueConnector connector) {
     RImageComponent component = new RImageComponent(getGuidGenerator()
+        .generateGUID());
+    if (connector instanceof IRemoteStateOwner) {
+      component.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return component;
+  }
+
+  /**
+   * Creates a remote button component.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RActionComponent createRActionComponent(IValueConnector connector) {
+    RActionComponent component = new RActionComponent(getGuidGenerator()
         .generateGUID());
     if (connector instanceof IRemoteStateOwner) {
       component.setState(((IRemoteStateOwner) connector).getState());

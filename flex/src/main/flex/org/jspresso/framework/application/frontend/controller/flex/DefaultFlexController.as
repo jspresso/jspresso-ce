@@ -89,6 +89,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand;
   import org.jspresso.framework.gui.remote.RAction;
+  import org.jspresso.framework.gui.remote.RActionComponent;
   import org.jspresso.framework.gui.remote.RActionField;
   import org.jspresso.framework.gui.remote.RActionList;
   import org.jspresso.framework.gui.remote.RBorderContainer;
@@ -971,6 +972,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.util.remote.RemotePeer", RemotePeer);
   
       registerClassAlias("org.jspresso.framework.gui.remote.RAction", RAction);
+      registerClassAlias("org.jspresso.framework.gui.remote.RActionComponent", RActionComponent);
       registerClassAlias("org.jspresso.framework.gui.remote.RActionField", RActionField);
       registerClassAlias("org.jspresso.framework.gui.remote.RBorderContainer", RBorderContainer);
       registerClassAlias("org.jspresso.framework.gui.remote.RCardContainer", RCardContainer);

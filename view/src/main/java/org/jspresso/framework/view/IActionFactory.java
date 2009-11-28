@@ -25,6 +25,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * A factory for actions.
@@ -69,6 +70,30 @@ public interface IActionFactory<E, F> {
    * 
    * @param action
    *          the action descriptor.
+   * @param dimension
+   *          the icon dimension.
+   * @param actionHandler
+   *          the handler responsible for executing the action.
+   * @param sourceComponent
+   *          the view component which the action is attached to.
+   * @param modelDescriptor
+   *          the model descriptor this action is triggered on.
+   * @param viewConnector
+   *          the view connector this action is created on.
+   * @param locale
+   *          the locale the action has to use.
+   * @return the constructed action.
+   */
+  E createAction(IAction action, Dimension dimension,
+      IActionHandler actionHandler, F sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale);
+
+  /**
+   * Creates an action from its descriptor.
+   * 
+   * @param action
+   *          the action descriptor.
    * @param actionHandler
    *          the handler responsible for executing the action.
    * @param view
@@ -79,6 +104,24 @@ public interface IActionFactory<E, F> {
    */
   E createAction(IAction action, IActionHandler actionHandler, IView<F> view,
       Locale locale);
+
+  /**
+   * Creates an action from its descriptor.
+   * 
+   * @param action
+   *          the action descriptor.
+   * @param dimension
+   *          the icon dimension.
+   * @param actionHandler
+   *          the handler responsible for executing the action.
+   * @param view
+   *          the view which the action is attached to.
+   * @param locale
+   *          the locale the action has to use.
+   * @return the constructed action.
+   */
+  E createAction(IAction action, Dimension dimension,
+      IActionHandler actionHandler, IView<F> view, Locale locale);
 
   /**
    * Enabled or disables an action.

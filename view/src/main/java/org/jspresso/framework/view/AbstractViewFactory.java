@@ -84,6 +84,7 @@ import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
@@ -215,6 +216,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
           actionHandler, locale);
     } else if (viewDescriptor instanceof IImageViewDescriptor) {
       view = createImageView((IImageViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IActionViewDescriptor) {
+      view = createActionView((IActionViewDescriptor) viewDescriptor,
           actionHandler, locale);
     } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
       view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
@@ -1191,6 +1195,21 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected abstract IView<E> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
+
+  /**
+   * Creates an action view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created action view.
+   */
+  protected abstract IView<E> createActionView(
+      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale);
 
   /**

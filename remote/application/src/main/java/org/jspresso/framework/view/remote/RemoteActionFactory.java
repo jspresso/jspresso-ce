@@ -32,10 +32,10 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractActionFactory;
-import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -54,19 +54,15 @@ public class RemoteActionFactory extends
   /**
    * {@inheritDoc}
    */
-  public RAction createAction(IAction action, IActionHandler actionHandler,
-      IView<RComponent> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public RAction createAction(IAction action, IActionHandler actionHandler,
-      RComponent sourceComponent, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, Locale locale) {
-    RAction remoteAction = createRAction(action, actionHandler,
+  public RAction createAction(IAction action, Dimension dimension,
+      IActionHandler actionHandler, RComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
+    Dimension d = dimension;
+    if (d == null) {
+      d = getIconFactory().getTinyIconSize();
+    }
+    RAction remoteAction = createRAction(action, d, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
     if (action instanceof IDisplayableAction) {
       attachActionGates((IDisplayableAction) action, actionHandler,
@@ -124,9 +120,10 @@ public class RemoteActionFactory extends
     this.remotePeerRegistry = remotePeerRegistry;
   }
 
-  private RAction createRAction(IAction action, IActionHandler actionHandler,
-      RComponent sourceComponent, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, Locale locale) {
+  private RAction createRAction(IAction action, Dimension dimension,
+      IActionHandler actionHandler, RComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
     RAction remoteAction = new RAction(guidGenerator.generateGUID());
     if (action instanceof IDisplayableAction) {
       remoteAction.setName(((IDisplayableAction) action).getI18nName(
@@ -137,8 +134,7 @@ public class RemoteActionFactory extends
         remoteAction.setDescription(i18nDescription);
       }
       remoteAction.setIcon(getIconFactory().getIcon(
-          ((IDisplayableAction) action).getIconImageURL(),
-          getIconFactory().getTinyIconSize()));
+          ((IDisplayableAction) action).getIconImageURL(), dimension));
       if (((IDisplayableAction) action).getMnemonicAsString() != null) {
         remoteAction.setMnemonicAsString(((IDisplayableAction) action)
             .getMnemonicAsString());

@@ -80,6 +80,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var component = null;
       if(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
         component = this.__createActionField(remoteComponent);
+      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionComponent) {
+        component = this.__createActionComponent(remoteComponent);
       } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
         component = this.__createCheckBox(remoteComponent);
       } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RComboBox) {
@@ -747,6 +749,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         this.__sizeMaxComponentWidth(dateField, org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT);
       }
       return dateField;
+    },
+    
+    /**
+     * @param {org.jspresso.framework.gui.remote.RActionComponent} remoteActionComponent
+     * @return {qx.ui.core.Widget}
+     */
+    __createActionComponent : function(remoteActionComponent) {
+    	var actionComponent = this.createAction(remoteActionComponent.getAction(), false);
+    	return actionComponent;
     },
 
     /**

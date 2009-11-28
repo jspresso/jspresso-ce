@@ -34,8 +34,8 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.AbstractActionFactory;
-import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -50,19 +50,15 @@ public class SwingActionFactory extends
   /**
    * {@inheritDoc}
    */
-  public Action createAction(IAction action, IActionHandler actionHandler,
-      IView<JComponent> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Action createAction(IAction action, IActionHandler actionHandler,
-      JComponent sourceComponent, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, Locale locale) {
-    Action swingAction = new ActionAdapter(action, actionHandler,
+  public Action createAction(IAction action, Dimension dimension,
+      IActionHandler actionHandler, JComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
+    Dimension d = dimension;
+    if (d == null) {
+      d = getIconFactory().getTinyIconSize();
+    }
+    Action swingAction = new ActionAdapter(action, d, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
     if (action instanceof IDisplayableAction) {
       attachActionGates(((IDisplayableAction) action), actionHandler,
@@ -99,15 +95,17 @@ public class SwingActionFactory extends
      * Constructs a new <code>ActionAdapter</code> instance.
      * 
      * @param action
+     * @param dimension
      * @param actionHandler
      * @param sourceComponent
      * @param modelDescriptor
      * @param viewConnector
      * @param locale
      */
-    public ActionAdapter(IAction action, IActionHandler actionHandler,
-        JComponent sourceComponent, IModelDescriptor modelDescriptor,
-        IValueConnector viewConnector, Locale locale) {
+    public ActionAdapter(IAction action, Dimension dimension,
+        IActionHandler actionHandler, JComponent sourceComponent,
+        IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+        Locale locale) {
       this.action = action;
       this.actionHandler = actionHandler;
       this.sourceComponent = sourceComponent;
@@ -127,8 +125,7 @@ public class SwingActionFactory extends
           putValue(Action.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
         }
         putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-            ((IDisplayableAction) action).getIconImageURL(),
-            getIconFactory().getTinyIconSize()));
+            ((IDisplayableAction) action).getIconImageURL(), dimension));
         if (((IDisplayableAction) action).getMnemonicAsString() != null) {
           putValue(Action.MNEMONIC_KEY,
               new Integer(KeyStroke.getKeyStroke(

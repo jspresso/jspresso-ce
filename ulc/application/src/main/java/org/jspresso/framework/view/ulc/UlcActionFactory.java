@@ -24,8 +24,8 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.AbstractActionFactory;
-import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 import com.ulcjava.base.application.IAction;
@@ -47,19 +47,14 @@ public class UlcActionFactory extends
    * {@inheritDoc}
    */
   public IAction createAction(org.jspresso.framework.action.IAction action,
-      IActionHandler actionHandler, IView<ULCComponent> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction createAction(org.jspresso.framework.action.IAction action,
-      IActionHandler actionHandler, ULCComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
-    IAction ulcAction = new ActionAdapter(action, actionHandler,
+      Dimension dimension, IActionHandler actionHandler,
+      ULCComponent sourceComponent, IModelDescriptor modelDescriptor,
+      IValueConnector viewConnector, Locale locale) {
+    Dimension d = dimension;
+    if (d == null) {
+      d = getIconFactory().getTinyIconSize();
+    }
+    IAction ulcAction = new ActionAdapter(action, d, actionHandler,
         sourceComponent, modelDescriptor, viewConnector, locale);
     if (action instanceof IDisplayableAction) {
       attachActionGates(((IDisplayableAction) action), actionHandler,
@@ -97,6 +92,7 @@ public class UlcActionFactory extends
      * Constructs a new <code>ActionAdapter</code> instance.
      * 
      * @param action
+     * @param dimension
      * @param actionHandler
      * @param sourceComponent
      * @param modelDescriptor
@@ -104,9 +100,9 @@ public class UlcActionFactory extends
      * @param locale
      */
     public ActionAdapter(org.jspresso.framework.action.IAction action,
-        IActionHandler actionHandler, ULCComponent sourceComponent,
-        IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-        Locale locale) {
+        Dimension dimension, IActionHandler actionHandler,
+        ULCComponent sourceComponent, IModelDescriptor modelDescriptor,
+        IValueConnector viewConnector, Locale locale) {
       this.action = action;
       this.actionHandler = actionHandler;
       this.sourceComponent = sourceComponent;
@@ -122,8 +118,7 @@ public class UlcActionFactory extends
               + TOOLTIP_ELLIPSIS);
         }
         putValue(IAction.SMALL_ICON, getIconFactory().getIcon(
-            ((IDisplayableAction) action).getIconImageURL(),
-            getIconFactory().getTinyIconSize()));
+            ((IDisplayableAction) action).getIconImageURL(), dimension));
         if (((IDisplayableAction) action).getMnemonicAsString() != null) {
           putValue(IAction.MNEMONIC_KEY,
               new Integer(KeyStroke.getKeyStroke(
