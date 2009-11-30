@@ -107,6 +107,7 @@ New features
 2893235    Introduce @Transactional on BackendActions
 2902298    Entity beans annotations
 2905225    Create action view descriptor
+2905856    Fixed size for wizard action
 
 3.0.0
 =====

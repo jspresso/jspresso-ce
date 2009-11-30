@@ -41,6 +41,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   private IDisplayableAction     finishAction;
   private IWizardStepDescriptor  firstWizardStep;
   private IModelConnectorFactory modelConnectorFactory;
+  private Integer                width;
+  private Integer                height;
 
   /**
    * {@inheritDoc}
@@ -257,13 +259,21 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
     String title = getI18nName(translationProvider, locale) + " - "
         + wizardStep.getI18nName(translationProvider, locale);
-    Dimension dialogSize = (Dimension) context
-        .get(ModalDialogAction.DIALOG_SIZE);
+    Dimension dialogSize = getDialogSize(context);
     getController(context).displayModalDialog(
         view.getPeer(),
         createWizardStepActions(wizardStep, view, actionHandler,
             translationProvider, locale, modelConnector, context), title,
         getSourceComponent(context), context, dialogSize, reuseCurrent);
+  }
+
+  private Dimension getDialogSize(Map<String, Object> context) {
+    Dimension dialogSize = (Dimension) context
+        .get(ModalDialogAction.DIALOG_SIZE);
+    if (width != null && height != null) {
+      dialogSize = new Dimension(width.intValue(), height.intValue());
+    }
+    return dialogSize;
   }
 
   private class CancelAction extends FrontendAction<E, F, G> {
@@ -406,5 +416,25 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
           context, true);
       return super.execute(actionHandler, context);
     }
+  }
+
+  /**
+   * Sets the width.
+   * 
+   * @param width
+   *          the width to set.
+   */
+  public void setWidth(Integer width) {
+    this.width = width;
+  }
+
+  /**
+   * Sets the height.
+   * 
+   * @param height
+   *          the height to set.
+   */
+  public void setHeight(Integer height) {
+    this.height = height;
   }
 }
