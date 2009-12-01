@@ -30,7 +30,8 @@ import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
 import org.jspresso.framework.util.collection.ESort;
 
 /**
- * Default implementation of a collection descriptor.
+ * This descriptor is used to describe collection properties that are used
+ * either as &quot;1-N&quot; or &quot;N-N&quot; &quot;N&quot; relationship end.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -72,7 +73,20 @@ public class BasicCollectionPropertyDescriptor<E> extends
   }
 
   /**
-   * Gets the orderingProperties.
+   * Ordering properties are used to sort this collection property if and only
+   * if it is un-indexed (not a <code>List</code>). The sort order set on the
+   * collection property can refine the default one that might have been set on
+   * the element type level. This property consist of a <code>Map</code> whose
+   * entries are composed with :
+   * <ul>
+   * <li>the property name as key</li>
+   * <li>the sort order for this property as value. This is either a value of
+   * the <code>ESort</code> enum or their equivalent string representation.</li>
+   * </ul>
+   * Ordering properties are considered following their order in the map
+   * iterator. A <code>null</code> value (default) will not give any indication
+   * for the collection sort order and thus, will delegate to higher
+   * specification levels (e.g. the element type sort order).
    * 
    * @return the orderingProperties.
    */
@@ -180,7 +194,14 @@ public class BasicCollectionPropertyDescriptor<E> extends
   }
 
   /**
-   * Sets the manyToMany.
+   * Forces the collection property to be considered as a many to many
+   * (&quot;N-N&quot;) end. When a relationship is bi-directional, setting both
+   * ends as being collection properties turns <code>manyToMany=true</code>
+   * automatically. But when the relationship is not bi-directional, Jspresso
+   * has no mean to determine if the collection property is &quot;1-N&quot; or
+   * &quot;N-N&quot;. Setting this property allows to inform Jspresso about it.
+   * <p>
+   * Default value is <code>false</code>.
    * 
    * @param manyToMany
    *          the manyToMany to set.
@@ -217,7 +238,15 @@ public class BasicCollectionPropertyDescriptor<E> extends
   }
 
   /**
-   * Sets the referencedDescriptor.
+   * Qualifies the type of collection this property refers to. As of now,
+   * Jspresso supports :
+   * <ul>
+   * <li>collections with <code>Set</code> semantic: do not allow for duplicates
+   * and do not preserve the order of the elements in the datastore</li>
+   * <li>collections with <code>List</code> semantic: allows for duplicates and
+   * preserves the order of the elements in the datastore through an implicit
+   * index column</li>
+   * </ul>
    * 
    * @param referencedDescriptor
    *          the referencedDescriptor to set.

@@ -89,7 +89,23 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * Sets the initializationMapping.
+   * This property allows to pre-initialize UI filters that are based on this
+   * reference property. This includes :
+   * <ul>
+   * <li>explicit filters that are dispayed for &quot;list of values&quot;</li>
+   * <li>implicit filters thet are use behind the scene for UI auto-completion</li>
+   * </ul>
+   * <p>
+   * The initialization mapping property is a <code>Map</code> keyed by
+   * referenced type property names (the properties to be initialized).
+   * <p>
+   * Values in this map can be either :
+   * <ul>
+   * <li>a <b>constant value</b>. In that case, the filter property is
+   * initialize with this constant value.</li>
+   * <li>a owning component <b>property name</b>. In that case, the filter
+   * property is initialize with the value of the owning component property.</li>
+   * </ul>
    * 
    * @param initializationMapping
    *          the initializationMapping to set.
@@ -99,7 +115,9 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * Sets the referencedDescriptor property.
+   * Qualifies the type of element this property refers to. It may point to any
+   * type of component descriptor, i.e. entity, interface or component
+   * descriptor.
    * 
    * @param referencedDescriptor
    *          the referencedDescriptor to set.
@@ -136,7 +154,11 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * Sets the pageSize.
+   * This property allows for defining the page size of &quot;lists of
+   * values&quot; that are built by the UI for this reference property. Whenever
+   * the <code>pageSize</code> property is set to <code>null</code> on the
+   * reference property level, Jspresso falls back to the element type default
+   * page size or turns off paging if the former is also not set.
    * 
    * @param pageSize
    *          the pageSize to set.
@@ -146,7 +168,14 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * Sets the oneToOne.
+   * Forces the reference property to be considered as a one to one
+   * (&quot;1-1&quot;) end. When a relationship is bi-directional, setting both
+   * ends as being reference properties turns <code>oneToOne=true</code>
+   * automatically. But when the relationship is not bi-directional, Jspresso
+   * has no mean to determine if the reference property is &quot;N-1&quot; or
+   * &quot;1-1&quot;. Setting this property allows to inform Jspresso about it.
+   * <p>
+   * Default value is <code>false</code>.
    * 
    * @param oneToOne
    *          the oneToOne to set.

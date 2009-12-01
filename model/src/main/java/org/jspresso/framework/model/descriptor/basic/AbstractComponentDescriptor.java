@@ -756,9 +756,10 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Whenever a collection of this component type is presented in a pageable UI,
-   * this property gives the size (number of componet instances) of one page.
-   * This size can usually be refined at a finer level. A <code>null</code>
-   * value (default) disables general paging for this component.
+   * this property gives the size (number of component instances) of one page.
+   * This size can usually be refined at a lower level (e.g. at reference
+   * property descriptor for &quot;lists of values&quot;). A <code>null</code>
+   * value (default) disables paging for this component.
    * 
    * @param pageSize
    *          the pageSize to set.
