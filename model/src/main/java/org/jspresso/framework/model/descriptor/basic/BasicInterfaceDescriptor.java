@@ -19,7 +19,16 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 /**
- * Default implementation of an interface component descriptor.
+ * This descriptor is a mean of factorizing state/behaviour among components,
+ * entities or even sub-interfaces. This is a much less coupling mecanism than
+ * actual entity inheritance and can be used across entities that don't belong
+ * the the same inheritance hierarchy, or even accross types (entities,
+ * components, interfaces).
+ * <p>
+ * Please note that interface descriptor is not a way for domain elements to
+ * implement arbitrary interfaces coming from external libraries unless they
+ * only contain property accessors. The latter can be achieved using service
+ * delegates and the <code>serviceDelegates[Bean|Class]Names</code> property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

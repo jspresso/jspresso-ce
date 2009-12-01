@@ -25,7 +25,26 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 
 /**
- * Default implementation of an inlined component descriptor.
+ * This type of descriptor is used to describe :
+ * <ul>
+ * <li>structures that are to be reused but don't have enough focus for being
+ * considered as entities. For instance <code>MoneyAmount</code> component could
+ * be composed of a decimal and a reference to a <code>Money</code> entity. This
+ * structure could then be reused in other elements of the domain like an
+ * <code>Invoice</code> or an <code>Article</code>. Jspresso terminology for
+ * these type of structures is <i>&quot;Inlined Component&quot;</i>.</li>
+ * <li>arbitrary models, that even come from outside of Jspresso (an external
+ * library for instance). Describing an arbitrary component allows for seamless
+ * usage in the Jspresso view binding architecture. Note that in that case, all
+ * behavioural properties like lifecycle interceptors or service delegates are
+ * ignored since none of the model behaviour is handled by Jspresso.</li>
+ * </ul>
+ * Both types of components described above must conform to the <i>Java
+ * Beans</i> standard so that its property changes can be followed by the
+ * classic <code>add/removePropertyChangeListener</code> methods since Jspresso
+ * binding architecture leverages this behaviour. Jspresso managed components
+ * implement it automatically but the developer must ensure it for other types
+ * of components.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

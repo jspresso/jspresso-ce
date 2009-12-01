@@ -426,6 +426,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    * this descriptor. This will directly influence the UI behaviour and even
    * composition. Setting the collection of granted roles to <code>null</code>
    * (default value) disables role based authorization on this component level.
+   * Note that this authorization enforcement does not prevent programatic
+   * access that is of the developer responsbility.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.
@@ -437,12 +439,12 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * Much the same as <code>lifecycleInterceptorBeanNames</code> except that
    * instead of providing a list of Spring bean names, you provide a list of
-   * fully qualified class names. These class must :
+   * fully qualified class names. These classes must :
    * <ul>
    * <li>provide a default constructor</li>
-   * <li>implement the <code>ILifecycleInterceptor</code> interface.</li>
+   * <li>implement the <code>IPropertyProcessor&lt;E, F&gt;</code> interface.</li>
    * </ul>
-   * When needed, Jspresso will create lifecycle interceptor instances.
+   * When needed, Jspresso will create the property processor instances.
    * 
    * @param lifecycleInterceptorClassNames
    *          the lifecycleInterceptorClassNames to set.
@@ -815,7 +817,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Registers a list of lifecycle interceptor instances that will be triggered
-   * on the different phases of tha component lifecycle, i.e. :
+   * on the different phases of the component lifecycle, i.e. :
    * <ul>
    * <li>when the component is <i>instanciated</i> in memory</li>
    * <li>when the component is <i>created</i> in the data store</li>
@@ -829,7 +831,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    * <code>lifecycleInterceptorClassNames</code> except that it allows to
    * register interceptor instances that are configured externally in the Spring
    * context. lifecycle interceptor instances must implement the
-   * <code>ILifecycleInterceptor</code> interface.
+   * <code>ILifecycleInterceptor&lt;E&gt;</code> interface where &lt;E&gt; is a
+   * type assignable from the component type.
    * 
    * @param lifecycleInterceptorBeanNames
    *          the lifecycleInterceptorBeanNames to set. They are used to
@@ -924,9 +927,10 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * Instructs Jspresso to use this name when translating this component type
    * name to the data store namespace. This includes , but is not limited to,
-   * database table names. A counter example is a component that can be inlined
-   * in an entity, thus not assigned a table individually. In that case, the
-   * component SQL name serves for composing the component column names.
+   * database table names.
+   * <p>
+   * Default value is <code>null</code> so that Jspresso uses its default naming
+   * policy.
    * 
    * @param sqlName
    *          the sqlName to set.

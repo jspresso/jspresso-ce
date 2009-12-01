@@ -278,6 +278,15 @@
           </row>
 
           <row>
+            <entry>abstractAddToMasterFrontAction</entry>
+
+            <entry>front.component.add.abstract</entry>
+
+            <entry>Creates a new entity/component and adds it to the master
+            managed collection. No icon nor accelerator set.</entry>
+          </row>
+
+          <row>
             <entry>addToMasterFrontAction</entry>
 
             <entry>front.component.add</entry>
@@ -358,6 +367,22 @@
 
             <entry>Retrieves an arbitrary value from the context and assigns
             it to the view connector value.</entry>
+          </row>
+
+          <row>
+            <entry>okDialogFrontAction</entry>
+
+            <entry>front.dialog.ok</entry>
+
+            <entry>Closes the top most dialog. Icon and name set.</entry>
+          </row>
+
+          <row>
+            <entry>cancelDialogFrontAction</entry>
+
+            <entry>front.dialog.cancel</entry>
+
+            <entry>Closes the top most dialog. Icon and name set.</entry>
           </row>
 
           <row>

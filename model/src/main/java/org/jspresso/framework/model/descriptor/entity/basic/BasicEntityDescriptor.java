@@ -30,7 +30,13 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * Default implementation of entity descriptors.
+ * This descriptor key to the description of the application model. It is used
+ * to describe a model entity. A Jspresso managed entity has a synthetic
+ * identifier (<i>id</i>) and is versioned (<i>version</i>) to ccope with
+ * concurent access conflicts through optimistic locking. It conforms to the
+ * <i>Java Beans</i> standard so that its property changes can be followed by
+ * the classic <code>add/removePropertyChangeListener</code> methods; Jspresso
+ * binding architecture leverages this behaviour.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -112,19 +118,32 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
   }
 
   /**
-   * Gets the purelyAbstract.
+   * Gets wether this entity is purely abstract.
    * 
-   * @return the purelyAbstract.
+   * @return wether this entity is purely abstract.
    */
   public boolean isPurelyAbstract() {
     return purelyAbstract;
   }
 
   /**
-   * Sets the purelyAbstract.
+   * This property is used to indicate that the entity type described is to be
+   * considered <b>abstract</b>. Jspresso will prevent any instanciation through
+   * its generic actions or internal mecanisms. Trying to do so will result in a
+   * low level exception and reveals a coding (assembling) error.
+   * <p>
+   * However, an abstract entity will have a concrete representation in the data
+   * store that depends on the inheritance mapping strategy used. As of now,
+   * Jspresso uses the <i>join-subclass</i> inheritance mapping strategy when
+   * generating the Hibernate mapping so an abstract entity will end up as a
+   * table in the data store.
+   * <p>
+   * An abstract entity descriptor differs from an interface descriptor mainly
+   * because of its concrete representation in the data store as formerly
+   * described.
    * 
    * @param purelyAbstract
-   *          the purelyAbstract to set.
+   *          Wether this entity is purely abstract.
    */
   public void setPurelyAbstract(boolean purelyAbstract) {
     this.purelyAbstract = purelyAbstract;

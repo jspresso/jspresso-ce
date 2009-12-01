@@ -21,7 +21,15 @@ package org.jspresso.framework.model.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 
 /**
- * Default implementation of a relationship descriptor.
+ * This is the abstract base descriptor for all relationship properties.
+ * relationship properties include :
+ * <ul>
+ * <li><i>reference</i> properties, i.e. &qot;N to 1&qot; or &qot;1 to 1&qot;
+ * properties</li>
+ * <li><i>collection</i> properties, i.e. &qot;1 to N&qot; or &qot;N to N&qot;
+ * properties</li>
+ * </ul>
+ * Other type of properties are named <i>scalar</i> properties.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -61,7 +69,22 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   }
 
   /**
-   * Sets the composition.
+   * Instructs the framework that this property has to be treated as a
+   * <i>composition</i>, in the UML terminology. This implies that reachable
+   * entities that are referenced by this property follow the owning entity
+   * lifecycle. For instance, when the owning entity is deleted, the referenced
+   * entities in composition properties are also deleted.
+   * <p>
+   * Whenever this property is not explicitely set by the developer, Jspresso
+   * uses sensible defaults :
+   * <ul>
+   * <li><i>collection properties</i> are compositions <b>unless</b> they are
+   * bidirectional &qot;N to N&qot;</li>
+   * <li><i>reference properties</i> are not composition</li>
+   * </ul>
+   * <p>
+   * This property is strictly behavioural and does not impact the domain state
+   * itself.
    * 
    * @param composition
    *          the composition to set.
