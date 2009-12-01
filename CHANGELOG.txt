@@ -109,6 +109,7 @@ New features
 2905225    Create action view descriptor
 2905856    Fixed size for wizard action
 2906653    Allow to force oneToOne on reference property descriptors.
+2906877    Auto compute maxLength for enumerations
 
 3.0.0
 =====

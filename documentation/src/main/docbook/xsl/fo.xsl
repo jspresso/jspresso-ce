@@ -68,7 +68,7 @@
   </xsl:attribute-set>
 
   <xsl:attribute-set name="component.title.properties">
-    <xsl:attribute name="color">#5555AA</xsl:attribute>
+    <xsl:attribute name="color">#884444</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.title.properties">
@@ -76,7 +76,7 @@
     <xsl:attribute name="space-before.optimum">4em</xsl:attribute>
     <xsl:attribute name="space-before.maximum">4em</xsl:attribute>
     <xsl:attribute name="hyphenate">false</xsl:attribute>
-    <xsl:attribute name="color">#5555AA</xsl:attribute>
+    <xsl:attribute name="color">#884444</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.level1.properties">

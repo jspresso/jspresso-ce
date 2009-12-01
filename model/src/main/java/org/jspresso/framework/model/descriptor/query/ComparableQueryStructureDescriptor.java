@@ -104,7 +104,6 @@ public class ComparableQueryStructureDescriptor extends
 
     BasicEnumerationPropertyDescriptor comparatorPropertyDescriptor = new BasicEnumerationPropertyDescriptor();
     comparatorPropertyDescriptor.setName(COMPARATOR);
-    comparatorPropertyDescriptor.setMaxLength(new Integer(2));
     comparatorPropertyDescriptor.setEnumerationName("OP");
     Map<String, String> values = new LinkedHashMap<String, String>();
     values.put(EQ, null);

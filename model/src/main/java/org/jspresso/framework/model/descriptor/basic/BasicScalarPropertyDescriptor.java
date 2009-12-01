@@ -24,7 +24,9 @@ import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 
 /**
- * Default implementation of a property descriptor.
+ * This is the root abstract descriptor for all property descriptors that are
+ * not relationship end properties. This includes, for instance, strings,
+ * numbers, dates, binary content, and so on.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -63,7 +65,13 @@ public abstract class BasicScalarPropertyDescriptor extends
   }
 
   /**
-   * Sets the defaultValue.
+   * Sets the property default value. When a component owning this property is
+   * instanciated, its properties are initialized using their default values. By
+   * default, a property default value is <code>null</code>.
+   * <p>
+   * This incoming value can be either the actual property default value (as an
+   * <code>Object</code>) or its string representation whose parsing will be
+   * delegated to the property descriptor.
    * 
    * @param defaultValue
    *          the defaultValue to set.

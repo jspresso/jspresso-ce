@@ -21,7 +21,11 @@ package org.jspresso.framework.model.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 
 /**
- * Abstract implementation of an enumeration descriptor.
+ * Describes a property whose value is enumerated. An example of such a property
+ * is <i>gender</i> whose value can be <i>M</i> (for &quot;Male&quot;) or
+ * <i>F</i> (for &quot;Female&quot;). Actual property values can be codes that
+ * are translated for inclusion in the UI. Such properties are usually rendered
+ * as combo-boxes.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -29,8 +33,7 @@ import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 public abstract class AbstractEnumerationPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IEnumerationPropertyDescriptor {
 
-  private String  enumerationName;
-  private Integer maxLength;
+  private String enumerationName;
 
   /**
    * {@inheritDoc}
@@ -56,7 +59,13 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * @return the maxLength.
    */
   public Integer getMaxLength() {
-    return maxLength;
+    int max = 1;
+    for (String value : getEnumerationValues()) {
+      if (value != null && value.length() > max) {
+        max = value.length();
+      }
+    }
+    return new Integer(max);
   }
 
   /**
@@ -67,7 +76,14 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the enumerationName.
+   * This property allows to customize the i18n keys used to translate the
+   * enumeration values, thus keeping the actual values shorter. For instance
+   * consider the <i>gender</i> enumeration, composed of the <i>M</i> (for
+   * &quot;Male&quot;) and <i>F</i> (for &quot;Female&quot;) values. Setting an
+   * enumeration name to &quot;GENDER&quot; will instruct Jspresso to look for
+   * translations named &quot;GENDER_M&quot; and &quot;GENDER_F&quot;. This
+   * would allow for using <i>M</i> and <i>F</i> in other enumeration domains
+   * with different semantics and translations.
    * 
    * @param enumerationName
    *          the enumerationName to set.
@@ -81,8 +97,10 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * 
    * @param maxLength
    *          the maxLength to set.
+   * @deprecated maxlength is automatically determined from allowed values.
    */
+  @Deprecated
   public void setMaxLength(Integer maxLength) {
-    this.maxLength = maxLength;
+    // this.maxLength = maxLength;
   }
 }
