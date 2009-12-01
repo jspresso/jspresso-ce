@@ -88,7 +88,7 @@ public class BasicBinaryPropertyDescriptor extends
    * Jspresso provides built-in actions that do the above and configure their UI
    * automatically based on the <code>fileFilter</code> property.
    * <p>
-   * The incoming <code>Map</code> mus be structured like thhe following :
+   * The incoming <code>Map</code> must be structured like following :
    * <ul>
    * <li>keys are translation keys that will be translated by Jspresso i18n
    * layer and presented to the user as the group name of the associated

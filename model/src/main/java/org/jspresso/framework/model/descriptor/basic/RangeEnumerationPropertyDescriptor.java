@@ -116,7 +116,7 @@ public class RangeEnumerationPropertyDescriptor extends
   }
 
   /**
-   * The enumeration maximum bound.
+   * The enumeration maximum bound. Default value is <i>10</i>.
    * 
    * @param maxValue
    *          the maxValue to set.
@@ -126,7 +126,7 @@ public class RangeEnumerationPropertyDescriptor extends
   }
 
   /**
-   * The enumeration minimum bound.
+   * The enumeration minimum bound. Default value is <i>0</i>.
    * 
    * @param minValue
    *          the minValue to set.
@@ -137,7 +137,8 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * The step to use for constructing the enumeration values, starting from
-   * <code>minValue</code> up to <code>maxValue</code>.
+   * <code>minValue</code> up to <code>maxValue</code>. Default value is
+   * <i>1</i>.
    * 
    * @param rangeStep
    *          the rangeStep to set.

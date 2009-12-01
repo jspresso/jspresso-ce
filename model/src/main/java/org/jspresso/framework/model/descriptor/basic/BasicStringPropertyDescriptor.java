@@ -26,7 +26,7 @@ import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
- * Default implementation of a string descriptor.
+ * Describes a string based property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -100,7 +100,7 @@ public class BasicStringPropertyDescriptor extends
   @Override
   public Object interceptSetter(Object component, Object newValue) {
     String actualNewValue = (String) newValue;
-    if (isUpperCase()) {
+    if (actualNewValue != null && isUpperCase()) {
       actualNewValue = actualNewValue.toUpperCase();
     }
     return super.interceptSetter(component, actualNewValue);
@@ -170,7 +170,8 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
-   * Sets the maxLength property.
+   * Configures the maximum string length this property allows. Default value is
+   * <code>null</code> which means unlimited.
    * 
    * @param maxLength
    *          the maxLength to set.
@@ -180,7 +181,8 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
-   * Sets the regexpPattern.
+   * Configures the regular expression pattern this string property allows.
+   * Default is <code>null</code> which means constraint free.
    * 
    * @param regexpPattern
    *          the regexpPattern to set.
@@ -190,7 +192,10 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
-   * Sets the regexpPatternSample.
+   * Allows for providing a conforming sample for the regular expression
+   * pattern. This human-readable example is used when the end-user has to be
+   * notified that the incoming property value does not match the pattern
+   * constraint.
    * 
    * @param regexpPatternSample
    *          the regexpPatternSample to set.
@@ -200,7 +205,9 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
-   * Sets the upperCase.
+   * This is a shortcut to implement the common use-case of handling upper-case
+   * only properties. all incoming values will be transformed to uppercase as if
+   * a property processor was registered to perform the transformation.
    * 
    * @param upperCase
    *          the upperCase to set.

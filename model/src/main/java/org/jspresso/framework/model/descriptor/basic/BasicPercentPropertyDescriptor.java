@@ -21,7 +21,10 @@ package org.jspresso.framework.model.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
 
 /**
- * Default implementation of a percent descriptor.
+ * This is a specialization of decimal descriptor to handle percentage values.
+ * The impact of using this descriptor is only on the UI level that will be
+ * configured accordingly, i.e. displaying/editing properties as percentage
+ * instead of their raw decimal values.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

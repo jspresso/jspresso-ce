@@ -25,6 +25,7 @@ import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 /**
  * Default implementation of an arbitrary object property descriptor.
  * 
+ * @internal
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

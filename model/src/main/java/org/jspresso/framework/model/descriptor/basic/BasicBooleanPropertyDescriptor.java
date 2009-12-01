@@ -21,7 +21,7 @@ package org.jspresso.framework.model.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 
 /**
- * Default implementation of a boolean descriptor.
+ * Describes a boolean property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

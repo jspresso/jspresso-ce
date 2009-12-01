@@ -24,7 +24,9 @@ import java.util.Map;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 
 /**
- * Default implementation of a text descriptor.
+ * Describes a multi-line text property. This type of descriptor instructs
+ * Jspresso to use a multi-line text component to interact with this type of
+ * property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -53,7 +55,25 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   }
 
   /**
-   * Sets the fileFilter.
+   * This property allows to configure the file filter that has to be displayed
+   * whenever a file system operation is initiated from the UI to operate on
+   * this property. This includes :
+   * <ul>
+   * <li>setting the property value from a text file loaded from the file system
+   * </li>
+   * <li>saving the property text value to a file on the file system</li>
+   * </ul>
+   * Jspresso provides built-in actions that do the above and configure their UI
+   * automatically based on the <code>fileFilter</code> property.
+   * <p>
+   * The incoming <code>Map</code> must be structured like following :
+   * <ul>
+   * <li>keys are translation keys that will be translated by Jspresso i18n
+   * layer and presented to the user as the group name of the associated
+   * extensions, e.g. <i>&quot;HTML files&quot;</i></li>
+   * <li>values are the extension list associated to a certain group name, e.g.
+   * a list containing <i>[&quot;.html&quot;,&quot;.htm&quot;]</i></li>
+   * </ul>
    * 
    * @param fileFilter
    *          the fileFilter to set.

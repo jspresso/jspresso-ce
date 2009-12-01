@@ -21,7 +21,7 @@ package org.jspresso.framework.model.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 
 /**
- * Default implementation of an integer descriptor.
+ * Describes an integer property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

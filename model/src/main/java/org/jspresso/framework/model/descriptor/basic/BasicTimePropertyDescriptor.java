@@ -23,9 +23,10 @@ import java.util.Date;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
-
 /**
- * Default implementation of a time descriptor.
+ * Describes a property used to hold time only values. These properties use a
+ * <code>Date</code> to store their value but only the time part of the value is
+ * relevant.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

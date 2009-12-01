@@ -27,7 +27,7 @@ import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
- * Default implementation of a number descriptor.
+ * This is the abstract base descriptor of all numeric based properties.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -120,7 +120,8 @@ public abstract class BasicNumberPropertyDescriptor extends
   }
 
   /**
-   * Sets the maxValue property.
+   * Configures the upper bound of the allowed values. Default value is
+   * <code>null</code>, meaning unbound.
    * 
    * @param maxValue
    *          the maxValue to set.
@@ -130,7 +131,8 @@ public abstract class BasicNumberPropertyDescriptor extends
   }
 
   /**
-   * Sets the minValue property.
+   * Configures the lower bound of the allowed values. Default value is
+   * <code>null</code>, meaning unbound.
    * 
    * @param minValue
    *          the minValue to set.

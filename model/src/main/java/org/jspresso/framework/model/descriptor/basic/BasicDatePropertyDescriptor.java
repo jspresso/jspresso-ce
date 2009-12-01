@@ -25,7 +25,8 @@ import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
 /**
- * Default implementation of a date descriptor.
+ * Describes a date based property. Wether the date property should include time
+ * information or not, can be configured using the type property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -76,7 +77,15 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   }
 
   /**
-   * Sets the type.
+   * Sets wether this property should contain time information or not. The
+   * incoming value must be part of the <code>EDateType</code> enum, i.e. :
+   * <ul>
+   * <li><code>DATE</code> if the property should only contain the date
+   * information</li>
+   * <li><code>DATE_TIME</code> if the property should contain both date and
+   * time information</li>
+   * </ul>
+   * Default value is <code>EDateType.DATE</code>.
    * 
    * @param type
    *          the type to set.

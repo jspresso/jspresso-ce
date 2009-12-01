@@ -6,7 +6,11 @@ package org.jspresso.framework.model.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 
 /**
- * Default implementation of a password descriptor.
+ * Describes a property used for password values. For obvious security reasons,
+ * this type of properties will hardly be part of a persistent entity. However
+ * it is useful for defining transient view models, e.g. for implementing a
+ * change password action. Jspresso will automatically adapt view fields
+ * accordingly, using password fields, to interact with password properties.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -26,7 +26,10 @@ import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
- * Default implementation of a duration descriptor.
+ * Describes a property used to store a duration value. Duration is stored in
+ * the form of a number of milliseconds. duration properties are cleanly handled
+ * by Jspresso UI layer for both displaying / editing duration properties in a
+ * convenient human format.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -105,7 +108,8 @@ public class BasicDurationPropertyDescriptor extends
   }
 
   /**
-   * Sets the maxMillis property.
+   * Configures the maximum duration value this property accepts in
+   * milliseconds. Default value is <code>null</code>, meaning unbound.
    * 
    * @param maxMillis
    *          the maxMillis to set.
