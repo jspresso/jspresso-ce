@@ -35,6 +35,7 @@ public class BasicReferencePropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
     IReferencePropertyDescriptor<E> {
 
+  private Boolean                 oneToOne;
   private Map<String, Object>     initializationMapping;
   private IComponentDescriptor<E> referencedDescriptor;
   private Integer                 pageSize;
@@ -142,5 +143,31 @@ public class BasicReferencePropertyDescriptor<E> extends
    */
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  /**
+   * Sets the oneToOne.
+   * 
+   * @param oneToOne
+   *          the oneToOne to set.
+   */
+  public void setOneToOne(boolean oneToOne) {
+    this.oneToOne = new Boolean(oneToOne);
+  }
+
+  /**
+   * Gets the oneToOne.
+   * 
+   * @return the oneToOne.
+   */
+  public boolean isOneToOne() {
+    if (getReverseRelationEnd() != null) {
+      // priory ty is given to the reverse relation end.
+      return getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>;
+    }
+    if (oneToOne != null) {
+      return oneToOne.booleanValue();
+    }
+    return false;
   }
 }

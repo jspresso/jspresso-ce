@@ -59,4 +59,10 @@ public interface IReferencePropertyDescriptor<E> extends
    */
   Integer getPageSize();
 
+  /**
+   * Gets whether this reference property descriptor is a one-to-one end.
+   * 
+   * @return true if this reference property descriptor is a one-to-one end.
+   */
+  boolean isOneToOne();
 }

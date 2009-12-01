@@ -387,15 +387,15 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local propertyType=propertyDescriptor.referencedDescriptor.name/>
   <#local isEntity=propertyDescriptor.referencedDescriptor.entity/>
   <#local isPurelyAbstract=propertyDescriptor.referencedDescriptor.purelyAbstract/>
+  <#local oneToOne=propertyDescriptor.oneToOne/>
+  <#local composition=propertyDescriptor.composition/>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#local bidirectional=true/>
     <#if instanceof(propertyDescriptor.reverseRelationEnd, "org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor")>
-      <#local oneToOne=true/>
       <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
       <#local elementName=propertyType[propertyType?last_index_of(".")+1..]/>
       <#local reverseOneToOne=(compareStrings(elementName, componentName) < 0)/>
     <#else>
-      <#local oneToOne=false/>
       <#local reverseOneToOne=false/>
       <#if propertyDescriptor.reverseRelationEnd.modelType.name="java.util.List">
         <#local managesPersistence=false/>
@@ -405,9 +405,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     </#if>
   <#else>
     <#local bidirectional=false/>
-    <#local oneToOne=false/>
     <#local reverseOneToOne=false/>
-    <#local composition=propertyDescriptor.composition/>
   </#if>
   <#if propertyDescriptor.sqlName?exists>
     <#local propSqlName=propertyDescriptor.sqlName/>
