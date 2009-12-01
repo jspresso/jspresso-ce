@@ -19,8 +19,8 @@
 package org.jspresso.framework.util.descriptor;
 
 /**
- * Default implementation of IIconDescriptor. It handles a icon image URL
- * reference.
+ * This is a utility class from which most displayable descriptors inherit for
+ * factorization purpose. It provides an icon image URL.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -48,10 +48,16 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
   }
 
   /**
-   * Sets the iconImageURL.
+   * Sets the icon image URL of this descriptor. Supported URL protocols include
+   * :
+   * <ul>
+   * <li>all JVM supported protocols</li>
+   * <li>the <b>jar:/</b> pseudo URL protocol</li>
+   * <li>the <b>classpath:/</b> pseudo URL protocol</li>
+   * </ul>
    * 
    * @param iconImageURL
-   *            the iconImageURL to set.
+   *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     this.iconImageURL = iconImageURL;

@@ -22,10 +22,9 @@ import java.util.Locale;
 
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
- * This class is a default convennience implementation of
- * <code>IDescriptor</code>.
+ * This is a utility class from which most named descriptors inherit for
+ * factorization purpose. It provides translatable name and description.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -87,10 +86,15 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
   }
 
   /**
-   * The description setter.
+   * Sets the description of this descriptor. Most of the descriptor
+   * descriptions are used in conjunction with the Jspresso i18n layer so that
+   * the description property set here is actually an i18n key used for
+   * translation. Description is mainly used for UI (in tooltips for instance)
+   * but may also be used for project technical documentation, contextual help,
+   * ...
    * 
    * @param description
-   *            the description to set.
+   *          the description to set.
    */
   public void setDescription(String description) {
     this.description = description;
@@ -100,17 +104,23 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    * Sets the i18nNameKey.
    * 
    * @param nameKey
-   *            the i18nNameKey to set.
+   *          the i18nNameKey to set.
+   * @internal
    */
   public void setI18nNameKey(String nameKey) {
     i18nNameKey = nameKey;
   }
 
   /**
-   * The name setter.
+   * Sets the name of this descriptor. Most of the descriptor names are used in
+   * conjunction with the Jspresso i18n layer so that the name property set here
+   * is actually an i18n key used for translation. The descriptor name property
+   * semantic may vary depending on the actual descriptor type. For instance, a
+   * property descriptor name is the name of the property and a component
+   * descriptor name is the fully qualified name of the underlying class.
    * 
    * @param name
-   *            the name to set.
+   *          the name to set.
    */
   public void setName(String name) {
     this.name = name;

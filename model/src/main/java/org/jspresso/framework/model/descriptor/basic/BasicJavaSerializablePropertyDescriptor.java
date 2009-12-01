@@ -22,9 +22,10 @@ import java.io.Serializable;
 
 import org.jspresso.framework.model.descriptor.IJavaSerializablePropertyDescriptor;
 
-
 /**
- * Default implementation of a java serialized property descriptor.
+ * Describes a property used to store any java <code>Serializable</code> object.
+ * The property value is serialized/de-serialized to/from the datastore. The
+ * operation is completely transparent to the developer.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

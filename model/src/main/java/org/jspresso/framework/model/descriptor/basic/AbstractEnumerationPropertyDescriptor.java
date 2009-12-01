@@ -21,11 +21,11 @@ package org.jspresso.framework.model.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 
 /**
- * Describes a property whose value is enumerated. An example of such a property
- * is <i>gender</i> whose value can be <i>M</i> (for &quot;Male&quot;) or
- * <i>F</i> (for &quot;Female&quot;). Actual property values can be codes that
- * are translated for inclusion in the UI. Such properties are usually rendered
- * as combo-boxes.
+ * Abstract base descriptor for properties whose values are enumerated strings.
+ * An example of such a property is <i>gender</i> whose value can be <i>M</i>
+ * (for &quot;Male&quot;) or <i>F</i> (for &quot;Female&quot;). Actual property
+ * values can be codes that are translated for inclusion in the UI. Such
+ * properties are usually rendered as combo-boxes.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

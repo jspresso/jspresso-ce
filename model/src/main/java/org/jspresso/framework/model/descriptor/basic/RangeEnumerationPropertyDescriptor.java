@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Default implementation of an enumerationValues descriptor.
+ * This is a special enumeration descriptor that allows to build the enumeration
+ * values out of a list of integer values. Obviously, no icon is provided for a
+ * given value.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -114,7 +116,7 @@ public class RangeEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the maxValue.
+   * The enumeration maximum bound.
    * 
    * @param maxValue
    *          the maxValue to set.
@@ -124,7 +126,7 @@ public class RangeEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the minValue.
+   * The enumeration minimum bound.
    * 
    * @param minValue
    *          the minValue to set.
@@ -134,7 +136,8 @@ public class RangeEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the rangeStep.
+   * The step to use for constructing the enumeration values, starting from
+   * <code>minValue</code> up to <code>maxValue</code>.
    * 
    * @param rangeStep
    *          the rangeStep to set.

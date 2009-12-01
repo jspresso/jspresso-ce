@@ -26,7 +26,7 @@ import java.util.Map;
 import org.jspresso.framework.util.lang.StringUtils;
 
 /**
- * Default implementation of an enumerationValues descriptor.
+ * Describes an enumerated property containing arbitrary values.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -72,7 +72,12 @@ public class BasicEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the valuesAndIconImageUrls property.
+   * Defines the list of values as well as an icon image URL per value this
+   * enumeration contains. The incoming <code>Map</code> is keyed by the actual
+   * enumeration values and valued by the icon image URLs.
+   * <p>
+   * Enumeration values are translated in the UI using the following scheme :
+   * <i>[enumerationName]_[value]</i>.
    * 
    * @param valuesAndIconImageUrls
    *          the valuesAndIconImageUrls to set.
@@ -83,7 +88,10 @@ public class BasicEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the values of the enumeration without icons.
+   * Defines the list of values this enumeration contains.
+   * <p>
+   * Enumeration values are translated in the UI using the following scheme :
+   * <i>[enumerationName]_[value]</i>.
    * 
    * @param values
    *          the values to set.

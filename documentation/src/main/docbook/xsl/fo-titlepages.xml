@@ -132,6 +132,7 @@
 	     text-align="center"
 	     font-size="&hsize5;"
 	     space-before="&hsize5space;"
+       color="{$title.color}"
 	     font-weight="bold"
 	     font-family="{$title.fontset}"/>
 
@@ -142,6 +143,7 @@
 		text-align="center"
 		font-size="&hsize4;"
 		space-before="&hsize4space;"
+    color="{$title.color}"
 		font-family="{$title.fontset}"/>
       <releaseinfo text-align="center" space-before="0.5em"/>
       <corpauthor font-size="&hsize3;"

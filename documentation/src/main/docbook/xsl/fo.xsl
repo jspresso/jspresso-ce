@@ -36,6 +36,7 @@
   <xsl:param name="chapter.autolabel">I</xsl:param>
   <xsl:param name="section.autolabel">1</xsl:param>
   <xsl:param name="section.label.includes.component.label">1</xsl:param>
+  <xsl:param name="title.color">#884444</xsl:param>
 
   <xsl:param name="page.margin.inner">
     <xsl:choose>
@@ -68,7 +69,7 @@
   </xsl:attribute-set>
 
   <xsl:attribute-set name="component.title.properties">
-    <xsl:attribute name="color">#884444</xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$title.color"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.title.properties">
@@ -76,7 +77,7 @@
     <xsl:attribute name="space-before.optimum">4em</xsl:attribute>
     <xsl:attribute name="space-before.maximum">4em</xsl:attribute>
     <xsl:attribute name="hyphenate">false</xsl:attribute>
-    <xsl:attribute name="color">#884444</xsl:attribute>
+    <xsl:attribute name="color"><xsl:value-of select="$title.color"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.level1.properties">

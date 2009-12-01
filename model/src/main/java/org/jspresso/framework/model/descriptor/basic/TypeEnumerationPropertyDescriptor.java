@@ -24,9 +24,12 @@ import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 
-
 /**
- * Implementation of enumeration based on types of components registered.
+ * This is a special enumeration descriptor that allows to build the enumeration
+ * out of a list of component descriptors. Enumeration values and icons are the
+ * names and icons of the registered component descriptors. For instance, this
+ * can be useful in the UI if you want to visually indicate the actual type of a
+ * element contained in a polymorphic collection.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -46,10 +49,11 @@ public class TypeEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the componentDescriptorList property.
+   * Registers the list of component descriptors to build the enumeration
+   * values/icons from their names and icons.
    * 
    * @param componentDescriptorList
-   *            the componentDescriptorList to set.
+   *          the componentDescriptorList to set.
    */
   public void setComponentDescriptors(
       List<IComponentDescriptor<?>> componentDescriptorList) {
