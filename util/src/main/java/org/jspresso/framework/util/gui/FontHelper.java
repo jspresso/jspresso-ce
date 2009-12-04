@@ -40,10 +40,13 @@ public final class FontHelper {
    * 
    * @param fontString
    *          the font string representation. The font is coded
-   *          <code>[name];[style];[size]</code>. <li>[name] is the name of the
-   *          font. <li>[style] is PLAIN, BOLD, ITALIC or a union of BOLD and
-   *          ITALIC combined with the '|' character, i.e. BOLD|ITALIC. <li>
-   *          [size] is the size of the font.
+   *          <code>[name];[style];[size]</code>.
+   *          <ul>
+   *          <li>[name] is the name of the font.</li>
+   *          <li>[style] is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC
+   *          combined with the '|' character, i.e. BOLD|ITALIC.</li>
+   *          <li>[size] is the size of the font.</li>
+   *          </ul>
    * @return the font represented by the string.
    */
   public static Font fromString(String fontString) {

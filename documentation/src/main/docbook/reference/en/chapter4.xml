@@ -22,18 +22,39 @@
   </section>
 
   <section>
-    <title>Reference</title>
+    <title>Common part</title>
+    <section>
+      <title>Reference</title>
+  
+      <para></para>
+  
+      <xi:include href="../generated/AbstractAction.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
 
-    <para></para>
+  <section>
+    <title>Backend actions</title>
+    <section>
+      <title>Reference</title>
+  
+      <para></para>
+  
+      <xi:include href="../generated/BackendAction.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
 
-    <xi:include href="../generated/AbstractAction.xml"
-                xmlns:xi="http://www.w3.org/2001/XInclude" />
-
-    <xi:include href="../generated/BackendAction.xml"
-                xmlns:xi="http://www.w3.org/2001/XInclude" />
-
-    <xi:include href="../generated/FrontendAction.xml"
-                xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <section>
+    <title>Frontend actions</title>
+    <section>
+      <title>Reference</title>
+  
+      <para></para>
+  
+      <xi:include href="../generated/FrontendAction.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
   </section>
 
   <section>

@@ -73,23 +73,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   }
 
   /**
-   * Ordering properties are used to sort this collection property if and only
-   * if it is un-indexed (not a <code>List</code>). The sort order set on the
-   * collection property can refine the default one that might have been set on
-   * the referenced collection level. This property consist of a
-   * <code>Map</code> whose entries are composed with :
-   * <ul>
-   * <li>the property name as key</li>
-   * <li>the sort order for this property as value. This is either a value of
-   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or
-   * their equivalent string representation.</li>
-   * </ul>
-   * Ordering properties are considered following their order in the map
-   * iterator. A <code>null</code> value (default) will not give any indication
-   * for the collection property sort order and thus, will delegate to higher
-   * specification levels (i.e. the referenced collection sort order).
-   * 
-   * @return the orderingProperties.
+   * {@inheritDoc}
    */
   public Map<String, ESort> getOrderingProperties() {
     if (orderingProperties != null) {
@@ -212,7 +196,21 @@ public class BasicCollectionPropertyDescriptor<E> extends
   }
 
   /**
-   * Sets the orderingProperties.
+   * Ordering properties are used to sort this collection property if and only
+   * if it is un-indexed (not a <code>List</code>). The sort order set on the
+   * collection property can refine the default one that might have been set on
+   * the referenced collection level. This property consist of a
+   * <code>Map</code> whose entries are composed with :
+   * <ul>
+   * <li>the property name as key</li>
+   * <li>the sort order for this property as value. This is either a value of
+   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
+   * equivalent string representation.</li>
+   * </ul>
+   * Ordering properties are considered following their order in the map
+   * iterator. A <code>null</code> value (default) will not give any indication
+   * for the collection property sort order and thus, will delegate to higher
+   * specification levels (i.e. the referenced collection sort order).
    * 
    * @param untypedOrderingProperties
    *          the orderingProperties to set.

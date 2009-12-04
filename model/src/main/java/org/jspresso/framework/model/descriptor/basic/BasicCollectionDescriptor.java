@@ -141,8 +141,8 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * <ul>
    * <li>the property name as key</li>
    * <li>the sort order for this property as value. This is either a value of
-   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or
-   * their equivalent string representation.</li>
+   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
+   * equivalent string representation.</li>
    * </ul>
    * Ordering properties are considered following their order in the map
    * iterator. A <code>null</code> value (default) will not give any indication
