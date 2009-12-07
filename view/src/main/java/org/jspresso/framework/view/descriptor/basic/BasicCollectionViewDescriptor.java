@@ -25,7 +25,11 @@ import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 
 /**
- * Default implementation of a collection view descriptor.
+ * This is the abstract base descriptor of all views used to display a
+ * collection of elements. A collection view must be backed by a collection
+ * descriptor model. Most of the time, the model will be a collection property
+ * descriptor so that the collecion to display is directly inferred from the
+ * collection property value through the binding layer.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -65,7 +69,20 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Sets the selectionMode.
+   * Sets the selection mode of the collection view. This is either a value of
+   * the <code>ESelectionMode</code> enum or its equivalent string
+   * representation :
+   * <ul>
+   * <li><code>MULTIPLE_INTERVAL_SELECTION</code> for allowing any type of
+   * selection</li>
+   * <li><code>SINGLE_INTERVAL_SELECTION</code> for allowing only contiguous
+   * interval selection</li>
+   * <li><code>SINGLE_SELECTION</code> for allowing only a single item selection
+   * </li>
+   * </ul>
+   * <p>
+   * Default value is <code>ESelectionMode.MULTIPLE_INTERVAL_SELECTION</code>,
+   * i.e. any type of selection allowed.
    * 
    * @param selectionMode
    *          the selectionMode to set.
@@ -82,7 +99,10 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Sets the rowAction.
+   * Registers an action that is implicitely triggered everytime a row is
+   * activated (e.g. double-clicked for current UI channels) on the collection
+   * view UI peer. The context of the action execution is the same as if the
+   * action was registered in the view action map.
    * 
    * @param rowAction
    *          the rowAction to set.
@@ -99,7 +119,9 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Sets the itemSelectionAction.
+   * Registers an action that is implicitely triggered everytime the selection
+   * changes on the collection view UI peer. The context of the action execution
+   * is the same as if the action was registered in the view action map.
    * 
    * @param itemSelectionAction
    *          the itemSelectionAction to set.

@@ -315,7 +315,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   }
 
   /**
-   * Sets the border typ of the view. This is either a value of the
+   * Sets the border type of the view. This is either a value of the
    * <code>EBorderType</code> enum or its equivalent string representation :
    * <ul>
    * <li><code>NONE</code> for no border</li>

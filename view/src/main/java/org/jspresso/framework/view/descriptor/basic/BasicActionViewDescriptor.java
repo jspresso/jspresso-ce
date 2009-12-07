@@ -18,11 +18,15 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
-import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 
 /**
- * Basic implementation of an action view descriptor.
+ * This type of view allows to make an action available as a view and thus
+ * participate in the UI composition as a visual component. An action view can
+ * then be embedded in surrounding a composite view. It litterally takes the
+ * action away from the toolbar/context menu it is located when registered in an
+ * action map and makes it a primary citizen of the UI.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -30,22 +34,25 @@ import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 public class BasicActionViewDescriptor extends BasicViewDescriptor implements
     IActionViewDescriptor {
 
-  private IAction action;
+  private IDisplayableAction action;
 
   /**
-   * Sets the action.
+   * Assigns the action to display as a view. The action will typically be
+   * rendered as a button in the UI. whenever you want to size the icon used to
+   * display the action (and thus the button peer), you might use the
+   * <code>preferredWidth</code> / <code>preferredHeight</code> properties.
    * 
    * @param action
    *          the action to set.
    */
-  public void setAction(IAction action) {
+  public void setAction(IDisplayableAction action) {
     this.action = action;
   }
 
   /**
    * {@inheritDoc}
    */
-  public IAction getAction() {
+  public IDisplayableAction getAction() {
     return action;
   }
 

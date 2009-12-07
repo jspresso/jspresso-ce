@@ -21,9 +21,19 @@ package org.jspresso.framework.view.descriptor.basic;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 
-
 /**
- * Default implementation of a list view descriptor.
+ * This type of descriptor is used to implement a list view. A list view is a
+ * single column, uneditable collection view used to display a collection of
+ * components. Each item is displayed using a string representation that can be
+ * customized using the <code>renderedProperty</code> property. List views are
+ * rarely used since one might prefer its much more advanced cousin, i.e. the
+ * table view.
+ * <p>
+ * Despite its low usage as an individual UI component, the list view is also
+ * used by Jspresso to describe tree parts. A collection of sibling tree nodes
+ * can actually be considered as being a list view and can be described as such.
+ * In the latter case, the <code>renderedProperty</code> property will be used
+ * to label the tree nodes.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -46,10 +56,12 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * Sets the renderedProperty.
+   * Configures the model property to be rendered in the list. Whenever this
+   * property is left to <code>null</code> (default value), the
+   * <code>toStringProperty</code> of the element component descriptor is used.
    * 
    * @param renderedProperty
-   *            the renderedProperty to set.
+   *          the renderedProperty to set.
    */
   public void setRenderedProperty(String renderedProperty) {
     this.renderedProperty = renderedProperty;

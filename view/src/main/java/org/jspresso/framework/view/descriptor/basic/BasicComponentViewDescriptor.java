@@ -37,7 +37,16 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
 /**
- * Default implementation of a component view descriptor.
+ * Component view descriptors are surely one of the most commonly used view
+ * descriptors in Jspresso. It allows to implement advanced form-like views to
+ * interact with a single component model. Component properties that are
+ * displayed in the view are organized in an invisible grid. Each field
+ * component is labelled with the property name it displays and labels can be
+ * configured to be displayed aside or above their peer field. Property fields
+ * can be configured to span multiple form columns. Component view offer various
+ * straightforward customizations, but the most advanced and prowerful one is
+ * definitely the <code>propertyViewDescriptors</code> property tat allows to
+ * fine-tune each component UI field individually.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -66,7 +75,16 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the renderedProperties.
+   * This is somehow a shortcut to using the
+   * <code>propertyViewDescriptors</code> property. Instead of providing a
+   * full-blown list of property view descriptors to configure the component
+   * view fields, you just pass-in a list of property names. view fields are
+   * then created from this list, keeping model defaults for all fields
+   * characteristics.
+   * <p>
+   * Whenever the property value is <code>null</code> (default), the fields list
+   * is determined from the component descriptor <code>renderedProperties</code>
+   * property.
    * 
    * @param renderedProperties
    *          the renderedProperties to set.
@@ -134,7 +152,23 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the columnCount.
+   * Configures the number of columns on this component view. Property fields
+   * that are to be displayed in the view are spread across columns and rows
+   * following their defined order. Whenever a row does not contain enough empty
+   * cells to recieve the next field (either because the last column has been
+   * reached or the next field has been configured to span multiple columns and
+   * there is not enough cells left in the current row to satisfty the span), a
+   * new row is created and the next field is added to the first column on the
+   * new row.
+   * <p>
+   * Note that column count and span are defined in fields coordinates (the
+   * <i>field</i> including the property UI component + its label). The
+   * underlying grid is actually finer since it has to cope with the labels; but
+   * this is internal implementation details and Jspresso takes care of it,
+   * without the developer having to cope with labels placements.
+   * <p>
+   * Default value is 1, meaning that all rendered fields will be stacked in a
+   * single column.
    * 
    * @param columnCount
    *          the columnCount to set.
@@ -144,7 +178,20 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the labelsPosition.
+   * Instructs Jspresso where to place the fields label. This is either a value
+   * of the <code>ELabelPosition</code> enum or its equivalent string
+   * representation :
+   * <ul>
+   * <li><code>ABOVE</code> for placing each field label above the property UI
+   * component</li>
+   * <li><code>ASIDE</code> for placing each field label aside the property UI
+   * component</li>
+   * <li><code>NONE</code> for completely disabling fields labelling on the view
+   * </li>
+   * </ul>
+   * <p>
+   * Default value is <code>ESelectionMode.ASIDE</code>, i.e. fields label next
+   * to the property UI component.
    * 
    * @param labelsPosition
    *          the labelsPosition to set.
@@ -154,7 +201,29 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the propertyViewDescriptors.
+   * This property allows for configuring the fields of the component view in a
+   * very customizable manner, thus overriding the model descriptor defaults.
+   * Each property view descriptor copntained in the list describes a form field
+   * that will be rendered in the UI accordingly.
+   * <p>
+   * For instance, a writable property can be made specifically read-only on
+   * this component view by specifying its property view descriptor read-only.
+   * In that case, the model remains untouched and only the view is impacted.
+   * <p>
+   * Following the same scheme, you can assign a list of writability gates on a
+   * field to introduce dynamic field editability on the view without modifying
+   * the model.
+   * <p>
+   * A last, yet important, example of column view descriptor usage is the
+   * role-based field set configuration. Whenever you want a field to be
+   * available only for certain user roles (profiles), you can configure a field
+   * property view descriptor with a list of granted roles. If the user doesn't
+   * have the field(s)required role, the forbidden field(s) simply won't be
+   * displayed. This allows for high authorization-based versatility.
+   * <p>
+   * There are many other usages of defining field property view descriptors
+   * (like individual labels color and fonts), all of them being linked to
+   * customizing the form fields without impacting the model.
    * 
    * @param propertyViewDescriptors
    *          the propertyViewDescriptors to set.
@@ -165,7 +234,19 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the propertyWidths.
+   * This property allows to simply define property spans in the underlying grid
+   * without having to extensively define the
+   * <code>propertyViewDescriptors</code> property. It must be configued with a
+   * <code>Map</code> containing only the properties that need to span more than
+   * 1 column. The other properties will follow the default span of 1.
+   * <p>
+   * The <code>Map</code> is :
+   * <ul>
+   * <li>keyed by the name of the property</li>
+   * <li>valued by the number of columns of the property span</li>
+   * </ul>
+   * Default value is <code>null</code>, meaning all property fields have a span
+   * of 1.
    * 
    * @param propertyWidths
    *          the propertyWidths to set.
@@ -194,7 +275,27 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the renderedChildProperties.
+   * Whenever a rendered property is not scalar, this property allows to
+   * override which of the referenced component fields should be displayed :
+   * <ul>
+   * <li>as columns when the rendered property is a collection property</li>
+   * <li>as fields when the rendered property is a reference property</li>
+   * </ul>
+   * The property must be configured with a <code>Map</code> which is :
+   * <ul>
+   * <li>keyed by the non-scalar property name</li>
+   * <li>valued by the list of the property names to render for the child
+   * element(s)</li>
+   * </ul>
+   * <p>
+   * A <code>null</code> value (default), means that all non-scalar properties
+   * will be rendered using default rendered properties as specified in their
+   * referenced model descriptor.
+   * <p>
+   * Please note that this is quite unusual to embed non-scalar properties
+   * directly in a component view. Although permitted, you won't have as much
+   * flexibility in the content layouting as you would have when using composite
+   * views; so the latter is by far recommended.
    * 
    * @param renderedChildProperties
    *          the renderedChildProperties to set.

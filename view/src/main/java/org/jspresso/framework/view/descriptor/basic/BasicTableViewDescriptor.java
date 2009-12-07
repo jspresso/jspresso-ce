@@ -29,7 +29,28 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 
 /**
- * Default implementation of a table view descriptor.
+ * This descriptor is used to implement a table view. This is certainly the most
+ * commonly used collection descriptor in Jspresso. A table view displays a
+ * collection of components (one row per component in the collection) detailed
+ * by a set of properties (one column per displayed component property).
+ * <p>
+ * The table view will automatically adapt its columuns depending on the
+ * underlying property descriptors, e.g. :
+ * <ul>
+ * <li>columns for read-only properties won't be editable</li>
+ * <li>columns that are assigned writability gates will compute the editability
+ * of their cells based on each cell's gates</li>
+ * <li>columns will adapt their renderer/editor based on the underlying property
+ * type, e.g. a calendar component will be used for dates</li>
+ * <li>column titles will be filled with property names translations based on
+ * the user locale</li>
+ * <li>mandatory properties will be visually indicated</li>
+ * <li>...</li>
+ * </ul>
+ * A table view provides sensible defaults regarding its configuration, but it
+ * can be refined using either the simple <code>renderedProperties</code> or the
+ * more advanced yet lot more powerful <code>columnViewDescriptors</code>
+ * properties.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -56,7 +77,15 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * Sets the renderedProperties.
+   * This is somehow a shortcut to using the <code>columnViewDescriptors</code>
+   * property. Instead of providing a full-blown list of property view
+   * descriptors to configure the table columns, you just pass-in a list of
+   * property names. Table columns are then created from this list, keeping
+   * model defaults for all column characteristics.
+   * <p>
+   * Whenever the property value is <code>null</code> (default), the column list
+   * is determined from the collection element component descriptor
+   * <code>renderedProperties</code> property.
    * 
    * @param renderedProperties
    *          the renderedProperties to set.
@@ -101,7 +130,30 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * Sets the columnViewDescriptors.
+   * This property allows for configuring the columns of the table view in a
+   * very customizable manner, thus overriding the model descriptor defaults.
+   * Each property view descriptor copntained in the list describes a table
+   * column that will be rendered in the UI accordingly.
+   * <p>
+   * For instance, a writable property can be made specifically read-only on
+   * this table view by specifying its column property view descriptor
+   * read-only. In that case, the model remains untouched and only the view is
+   * impacted.
+   * <p>
+   * Following the same scheme, you can assign a list of writability gates on a
+   * column to introduce dynamic cell editability on the view without modifying
+   * the model.
+   * <p>
+   * A last, yet important, example of column view descriptor usage is the
+   * role-based column set configuration. Whenever you want a column to be
+   * available only for certain user roles (profiles), you can configure a
+   * column property view descriptor with a list of granted roles. If the user
+   * doesn't have the column(s)required role, the forbidden columns simply won't
+   * be displayed. This allows for high authorization-based versatility.
+   * <p>
+   * There are many other usages of defining column property view descriptors
+   * all of them being linked to customizing the table columns without impacting
+   * the model.
    * 
    * @param columnViewDescriptors
    *          the columnViewDescriptors to set.
@@ -125,6 +177,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * 
    * @param sortingAction
    *          the sortingAction to set.
+   * @internal
    */
   public void setSortingAction(IDisplayableAction sortingAction) {
     this.sortingAction = sortingAction;
