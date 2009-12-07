@@ -82,6 +82,7 @@ import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
@@ -271,6 +272,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       if (!actionHandler.isAccessGranted(viewDescriptor)) {
         view.setPeer(createSecurityComponent());
       }
+      applyPreferredSize(view.getPeer(), viewDescriptor.getPreferredSize());
     }
     return view;
   }
@@ -2364,4 +2366,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
       actionHandler.execute(actionDelegate, context);
     }
   }
+
+  /**
+   * Applies a component preferred size.
+   * 
+   * @param component
+   *          the component to apply the preferred sze on.
+   * @param preferredSize
+   *          vthe preferred size to apply (might be null).
+   */
+  protected abstract void applyPreferredSize(E component,
+      Dimension preferredSize);
 }

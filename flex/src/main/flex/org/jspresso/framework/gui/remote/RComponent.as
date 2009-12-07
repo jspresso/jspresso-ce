@@ -17,6 +17,7 @@ package org.jspresso.framework.gui.remote {
 
     import org.jspresso.framework.state.remote.IRemoteStateOwner;
     import org.jspresso.framework.state.remote.RemoteValueState;
+    import org.jspresso.framework.util.gui.Dimension;
     import org.jspresso.framework.util.gui.Font;
     import org.jspresso.framework.util.remote.RemotePeer;
 		
@@ -32,6 +33,7 @@ package org.jspresso.framework.gui.remote {
         private var _label:String;
         private var _state:RemoteValueState;
         private var _tooltip:String;
+        private var _preferredSize:Dimension;
 
         public function RComponent() {
           //default constructor.
@@ -98,6 +100,13 @@ package org.jspresso.framework.gui.remote {
         }
         public function get tooltip():String {
             return _tooltip;
+        }
+
+        public function set preferredSize(value:Dimension):void {
+            _preferredSize = value;
+        }
+        public function get preferredSize():Dimension {
+            return _preferredSize;
         }
     }
 }

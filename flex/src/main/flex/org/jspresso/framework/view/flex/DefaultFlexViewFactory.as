@@ -258,6 +258,10 @@ package org.jspresso.framework.view.flex {
           component.setStyle("fontWeight", "bold");
         }
       }
+      if(remoteComponent.preferredSize) {
+        component.explicitWidth = remoteComponent.preferredSize.width;
+        component.explicitHeight = remoteComponent.preferredSize.height;
+      }
       if(registerState) {
         _remotePeerRegistry.register(remoteComponent.state);
       }

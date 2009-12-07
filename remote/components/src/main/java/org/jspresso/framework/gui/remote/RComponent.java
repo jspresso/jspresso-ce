@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.remote.RemotePeer;
 
@@ -43,6 +44,7 @@ public abstract class RComponent extends RemotePeer implements
   private String            label;
   private RemoteValueState  state;
   private String            tooltip;
+  private Dimension         preferredSize;
 
   /**
    * Constructs a new <code>RComponent</code> instance. Only used for GWT
@@ -245,5 +247,24 @@ public abstract class RComponent extends RemotePeer implements
    */
   public Object actualValue() {
     return getState().getValue();
+  }
+
+  /**
+   * Gets the preferredSize.
+   * 
+   * @return the preferredSize.
+   */
+  public Dimension getPreferredSize() {
+    return preferredSize;
+  }
+
+  /**
+   * Sets the preferredSize.
+   * 
+   * @param preferredSize
+   *          the preferredSize to set.
+   */
+  public void setPreferredSize(Dimension preferredSize) {
+    this.preferredSize = preferredSize;
   }
 }

@@ -173,6 +173,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
         component.setFont(font);
       }
+      var preferredSize = remoteComponent.getPreferredSize();
+      if(preferredSize) {
+      	component.setWidth(preferredSize.getWidth());
+      	component.setHeight(preferredSize.getHeight());
+      }
       if(registerState) {
         this.__remotePeerRegistry.register(remoteComponent.getState());
       }

@@ -27,6 +27,7 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IGateAccessible;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.action.ActionMap;
@@ -53,6 +54,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   private Collection<IGate>  readabilityGates;
   private boolean            readOnly;
   private Collection<IGate>  writabilityGates;
+  private Integer            preferredWidth;
+  private Integer            preferredHeight;
 
   /**
    * Gets the grantedRoles.
@@ -396,4 +399,38 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     this.modelDescriptor = modelDescriptor;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public Dimension getPreferredSize() {
+    if (preferredWidth != null && preferredHeight != null) {
+      return new Dimension(preferredWidth.intValue(), preferredHeight
+          .intValue());
+    }
+    return null;
+  }
+
+  /**
+   * Allows to set a preferred width (in pixels) for the created peer UI
+   * component. This will override default and give hints to the UI layouting
+   * system.
+   * 
+   * @param preferredWidth
+   *          the preferredWidth to set.
+   */
+  protected void setPreferredWidth(Integer preferredWidth) {
+    this.preferredWidth = preferredWidth;
+  }
+
+  /**
+   * Allows to set a preferred height (in pixels) for the created peer UI
+   * component. This will override default and give hints to the UI layouting
+   * system.
+   * 
+   * @param preferedHeight
+   *          the preferedHeight to set.
+   */
+  protected void setPreferredHeight(Integer preferedHeight) {
+    this.preferredHeight = preferedHeight;
+  }
 }

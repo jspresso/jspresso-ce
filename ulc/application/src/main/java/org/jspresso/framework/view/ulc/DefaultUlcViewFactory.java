@@ -843,7 +843,7 @@ public class DefaultUlcViewFactory extends
     IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     viewComponent.setAction(getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getDimension(),
+        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
         actionHandler, view, locale));
     return view;
   }
@@ -2488,6 +2488,18 @@ public class DefaultUlcViewFactory extends
      */
     public ULCPopupMenu createPopupForTreepath(TreePath path) {
       return createULCTreePopupMenu(tree, view, path, actionHandler, locale);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void applyPreferredSize(ULCComponent component,
+      org.jspresso.framework.util.gui.Dimension preferredSize) {
+    if (preferredSize != null) {
+      component.setPreferredSize(new Dimension(preferredSize.getWidth(),
+          preferredSize.getHeight()));
     }
   }
 }

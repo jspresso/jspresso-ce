@@ -19,7 +19,6 @@
 package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * An action view descriptor.
@@ -35,11 +34,4 @@ public interface IActionViewDescriptor extends IViewDescriptor {
    * @return the action that is presented to the user through this view.
    */
   IAction getAction();
-
-  /**
-   * Gets the preferred dimension of the icon used for the action.
-   * 
-   * @return preferred dimension of the icon used for the action.
-   */
-  Dimension getDimension();
 }

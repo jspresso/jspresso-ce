@@ -92,6 +92,7 @@ import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
@@ -724,7 +725,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     viewComponent.setAction(getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getDimension(),
+        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
         actionHandler, view, locale));
     return view;
   }
@@ -1798,5 +1799,16 @@ public class DefaultRemoteViewFactory extends
    */
   protected IRemoteCommandHandler getRemoteCommandHandler() {
     return remoteCommandHandler;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void applyPreferredSize(RComponent component,
+      Dimension preferredSize) {
+    if (preferredSize != null) {
+      component.setPreferredSize(preferredSize);
+    }
   }
 }

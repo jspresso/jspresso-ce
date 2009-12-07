@@ -812,7 +812,7 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     viewComponent.setAction(getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getDimension(),
+        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
         actionHandler, view, locale));
     return view;
   }
@@ -2491,6 +2491,18 @@ public class DefaultSwingViewFactory extends
           }
         }
       }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void applyPreferredSize(JComponent component,
+      org.jspresso.framework.util.gui.Dimension preferredSize) {
+    if (preferredSize != null) {
+      component.setPreferredSize(new Dimension(preferredSize.getWidth(),
+          preferredSize.getHeight()));
     }
   }
 }

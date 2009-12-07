@@ -22,6 +22,7 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGateAccessible;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.action.IActionable;
 
 /**
@@ -75,4 +76,11 @@ public interface IViewDescriptor extends IIconDescriptor, ISecurable,
    * @return the view model descriptor.
    */
   IModelDescriptor getModelDescriptor();
+
+  /**
+   * Gets the preferred dimension of the view peer component.
+   * 
+   * @return the preferred dimension of the view peer component.
+   */
+  Dimension getPreferredSize();
 }

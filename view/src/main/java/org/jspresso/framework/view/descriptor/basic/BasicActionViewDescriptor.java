@@ -19,7 +19,6 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 
 /**
@@ -32,8 +31,6 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
     IActionViewDescriptor {
 
   private IAction action;
-  private Integer width;
-  private Integer height;
 
   /**
    * Sets the action.
@@ -50,36 +47,6 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
    */
   public IAction getAction() {
     return action;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Dimension getDimension() {
-    if (width != null && height != null) {
-      return new Dimension(width.intValue(), height.intValue());
-    }
-    return null;
-  }
-
-  /**
-   * Sets the width.
-   * 
-   * @param width
-   *          the width to set.
-   */
-  protected void setWidth(Integer width) {
-    this.width = width;
-  }
-
-  /**
-   * Sets the height.
-   * 
-   * @param height
-   *          the height to set.
-   */
-  protected void setHeight(Integer height) {
-    this.height = height;
   }
 
 }
