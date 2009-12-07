@@ -418,7 +418,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * @param preferredWidth
    *          the preferredWidth to set.
    */
-  protected void setPreferredWidth(Integer preferredWidth) {
+  public void setPreferredWidth(Integer preferredWidth) {
     this.preferredWidth = preferredWidth;
   }
 
@@ -430,7 +430,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * @param preferedHeight
    *          the preferedHeight to set.
    */
-  protected void setPreferredHeight(Integer preferedHeight) {
+  public void setPreferredHeight(Integer preferedHeight) {
     this.preferredHeight = preferedHeight;
   }
 }
