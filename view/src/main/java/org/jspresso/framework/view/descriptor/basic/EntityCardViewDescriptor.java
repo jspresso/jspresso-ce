@@ -24,14 +24,15 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * This class is a card view descriptor that displays entities. Choice of the
- * card to display is based on the model entity contract.
+ * This card view provides a simple card determination strategy that is based on
+ * the bound model type. This strategy pulls up the card whose model descriptor
+ * matches the type of the bound model.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -39,35 +40,41 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
 
   /**
-   * Uses the entity contract name as card name.
+   * Uses the component contract name as card name.
    * <p>
    * {@inheritDoc}
    */
   public String getCardNameForModel(Object model,
       @SuppressWarnings("unused") Subject subject) {
-    if (model instanceof IEntity) {
-      return ((IEntity) model).getComponentContract().getName();
+    if (model != null) {
+      if (model instanceof IComponent) {
+        return ((IComponent) model).getComponentContract().getName();
+      }
+      return model.getClass().getName();
     }
     return null;
   }
 
   /**
-   * Sets the viewDescriptors.
+   * Registers the list of card view descriptors. Every time the bound model
+   * changes, this list is iterated until a card with a matching model is found.
+   * The first matching card is displayed. Whenever no registered card matches,
+   * an empty view is displayed.
    * 
    * @param viewDescriptors
    *          the viewDescriptors to set.
    */
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     Map<String, IViewDescriptor> classCardMapping = new LinkedHashMap<String, IViewDescriptor>();
-    for (IViewDescriptor entityViewDescriptor : viewDescriptors) {
-      if (!(entityViewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>)) {
+    for (IViewDescriptor componentViewDescriptor : viewDescriptors) {
+      if (!(componentViewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>)) {
         throw new ViewException(
             "Entity card view does not support cards without model"
                 + " descriptor or with a model descriptor that is not a component descriptor.");
       }
-      classCardMapping.put(((IComponentDescriptor<?>) entityViewDescriptor
+      classCardMapping.put(((IComponentDescriptor<?>) componentViewDescriptor
           .getModelDescriptor()).getComponentContract().getName(),
-          entityViewDescriptor);
+          componentViewDescriptor);
     }
     setCardViewDescriptors(classCardMapping);
   }

@@ -25,7 +25,24 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * Abstract root implementation of a card view descriptor.
+ * This descriptor serves as abstract base implementation for card view
+ * descriptor. A card view is a view stack made of children views (the cards)
+ * where only the view (card) at the top of the stack is visible. The actual
+ * child view to place on the top of the stack is dynamically determined based
+ * on the bound model. This card determination strategy depends on the concrete
+ * descriptor sub-types.
+ * <p>
+ * One might wonder why a card view is not considered as (and actually does not
+ * inherit from) a composite view. The difference is that composite views are
+ * used agregate views that displays - hopefully - different parts (the children
+ * views) of the <b>same</b> model. A card view descriptor is rather used to
+ * make the same UI region display different views depending on different models
+ * (or different model states). Once the model is fixed, the card view behaves
+ * exactly as its top card.
+ * <p>
+ * One of the most important usage of card views is when it is combine as the
+ * detail in a master-detail view. The detail view may then change dynamically
+ * based on the selected master.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

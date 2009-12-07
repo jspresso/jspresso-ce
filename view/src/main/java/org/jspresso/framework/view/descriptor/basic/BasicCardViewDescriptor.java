@@ -26,7 +26,9 @@ import org.jspresso.framework.view.descriptor.ICardNameSelector;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * The basic implementation of a card view descriptor.
+ * Describes a multi-purpose card view that is configurable with a custom card
+ * determination strategy. Cards are registered with a name key that is used to
+ * retrieve the card to display based on the card selector selected name key.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -48,7 +50,12 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
   }
 
   /**
-   * Sets the cardNameSelector.
+   * Configures the card determination strategy. This delegate is responsible
+   * for selecting the card name key based on the model bound to the view.
+   * Everytime the bound model changes, the card name selector is triggered to
+   * select a new card. The names returned by the card name selector must match
+   * the names under which the cards are registered. Whenever the card name
+   * selector returns an unknown name, the card view displays an empty view.
    * 
    * @param cardNameSelector
    *          the cardNameSelector to set.
@@ -58,7 +65,9 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
   }
 
   /**
-   * Sets the childViewDescriptors. Overriden for visibility purpose.
+   * Registers the card views keyed by their name keys. The names used as key of
+   * the <code>Map</code> must match the names that are returned by the
+   * registered card name selector.
    * 
    * @param cardViewDescriptors
    *          the cardViewDescriptors to set.
