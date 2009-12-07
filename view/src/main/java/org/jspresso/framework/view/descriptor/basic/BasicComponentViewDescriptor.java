@@ -222,7 +222,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * displayed. This allows for high authorization-based versatility.
    * <p>
    * There are many other usages of defining field property view descriptors
-   * (like individual labels color and fonts), all of them being linked to
+   * (like individual labels color and font), all of them being linked to
    * customizing the form fields without impacting the model.
    * 
    * @param propertyViewDescriptors
