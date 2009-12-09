@@ -71,7 +71,8 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
     },
     preferredSize :
     {
-      check : "org.jspresso.framework.util.gui.Dimension"
+      check : "org.jspresso.framework.util.gui.Dimension",
+      nullable : true
     }
   }
 });

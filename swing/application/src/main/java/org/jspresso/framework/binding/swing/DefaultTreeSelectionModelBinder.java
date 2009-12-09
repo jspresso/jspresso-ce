@@ -263,6 +263,10 @@ public class DefaultTreeSelectionModelBinder implements
           .getCollectionConnectors()) {
         childNodeConnector
             .addSelectionChangeListener(connectorsSelectionListener);
+        for (int i = 0; i < childNodeConnector.getChildConnectorCount(); i++) {
+          checkListenerRegistrationForConnector((ICollectionConnectorListProvider) childNodeConnector
+              .getChildConnector(i));
+        }
       }
     }
 

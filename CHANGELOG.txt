@@ -36,6 +36,7 @@ Bugs fixed
 2890409    Combo box rendering in flex
 2901675    Session stucked with error message
 2903272    Component equals/hashcode
+2910710    Selection may be wrongly reflected in trees
 
 New features
 ------------

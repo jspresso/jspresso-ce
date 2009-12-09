@@ -44,7 +44,7 @@
   <pluginRepositories>
     <pluginRepository>
     	<id>sonatype-repository</id>
-    	<url>http://repository.sonatype.org/content/groups/public</url>
+    	<url>http://repository.sonatype.org/content/groups/flexgroup</url>
     	<snapshots>
     		<enabled>false</enabled>
     	</snapshots>
@@ -94,7 +94,7 @@
     </repository>
     <repository>
     	<id>sonatype-repository</id>
-    	<url>http://repository.sonatype.org/content/groups/public</url>
+    	<url>http://repository.sonatype.org/content/groups/flexgroup</url>
     	<snapshots>
     		<enabled>false</enabled>
     	</snapshots>

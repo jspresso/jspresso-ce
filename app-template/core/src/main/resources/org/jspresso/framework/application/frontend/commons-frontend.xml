@@ -283,6 +283,12 @@
 
   <bean id="moduleConnectorSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.module.ModuleConnectorSelectionAction" />
 
+  <bean id="parentModuleConnectorSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.module.ParentModuleConnectorSelectionAction">
+    <property name="name" value="module.parent.select.name"/>
+    <property name="description" value="module.parent.select.description"/>
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
+  </bean>
+
   <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
@@ -663,8 +669,16 @@
           <property name="name" value="FILE" />
           <property name="actions">
             <list>
-              <ref local="saveModuleObjectFrontAction" />
+              <bean parent="saveModuleObjectFrontAction">
+                <property name="nextAction">
+                  <bean parent="staticInfoFrontAction">
+                    <property name="messageCode" value="save.successful" />
+                    <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction"/>
+                  </bean>
+                </property>
+              </bean>
               <ref local="reloadModuleObjectFrontAction" />
+              <ref local="parentModuleConnectorSelectionFrontAction" />
             </list>
           </property>
         </bean>

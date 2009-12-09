@@ -121,6 +121,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.gui.remote.RTree;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
+  import org.jspresso.framework.util.array.ArrayUtil;
   import org.jspresso.framework.util.gui.CellConstraints;
   import org.jspresso.framework.util.gui.Dimension;
   import org.jspresso.framework.util.gui.Font;
@@ -870,7 +871,25 @@ package org.jspresso.framework.application.frontend.controller.flex {
           workspaceNavigatorUI.percentWidth = 100.0;
           workspaceNavigatorUI.percentHeight = 100.0;
           if(workspaceNavigatorUI is Tree) {
-            (workspaceNavigatorUI as Tree).showRoot = false;
+            var tree:Tree = workspaceNavigatorUI as Tree;
+            tree.showRoot = false;
+            // workaround since top collection is not monitored
+            // when showRoot=false
+            var state:RemoteCompositeValueState = workspaceNavigator.state as RemoteCompositeValueState;
+            BindingUtils.bindSetter(function(selectedIndices:Array):void {
+              if(selectedIndices != null && selectedIndices.length > 0) {
+                // work on items to translate indices independently of table sorting state.
+                var selectedItems:Array = new Array(selectedIndices.length);
+                for(var i:int = 0; i < selectedIndices.length; i++) {
+                  selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
+                }
+                if(!ArrayUtil.areUnorderedArraysEqual(tree.selectedItems, selectedItems)) {
+                  tree.selectedItems = selectedItems;
+                }
+              } else {
+                tree.selectedItems = [];
+              }
+            }, state, "selectedIndices", true);
           }
           _workspaceAccordion.selectedChild.addChild(workspaceNavigatorUI);
         }
