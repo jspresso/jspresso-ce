@@ -522,6 +522,15 @@
     </property>
   </bean>
 
+  <bean id="saveModuleObjectAndGoBackFrontAction" parent="saveModuleObjectFrontAction">
+    <property name="nextAction">
+      <bean parent="staticInfoFrontAction">
+        <property name="messageCode" value="save.successful" />
+        <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction"/>
+      </bean>
+    </property>
+  </bean>
+
   <bean id="reloadModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/reload-48x48.png" />
     <property name="name" value="reload.name" />
@@ -669,14 +678,7 @@
           <property name="name" value="FILE" />
           <property name="actions">
             <list>
-              <bean parent="saveModuleObjectFrontAction">
-                <property name="nextAction">
-                  <bean parent="staticInfoFrontAction">
-                    <property name="messageCode" value="save.successful" />
-                    <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction"/>
-                  </bean>
-                </property>
-              </bean>
+              <ref local="saveModuleObjectAndGoBackFrontAction"/>
               <ref local="reloadModuleObjectFrontAction" />
               <ref local="parentModuleConnectorSelectionFrontAction" />
             </list>

@@ -604,6 +604,25 @@
           </row>
 
           <row>
+            <entry>saveModuleObjectAndGoBackFrontAction</entry>
+
+            <entry>front.module.save.back</entry>
+
+            <entry>Saves the module selected entities/components to the
+            persistent store and performs deletion of previously "marked for
+            deletion" entities/components. If successful, returns back
+            to the parent module.</entry>
+          </row>
+
+          <row>
+            <entry>parentModuleConnectorSelectionFrontAction</entry>
+
+            <entry>front.module.back</entry>
+
+            <entry>Returns back to the parent module.</entry>
+          </row>
+
+          <row>
             <entry>moduleConnectorSelectionFrontAction</entry>
 
             <entry>front.module.select</entry>
