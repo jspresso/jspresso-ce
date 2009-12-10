@@ -53,6 +53,20 @@
               <outputDirectory>${project.build.directory}/qooxdoo-sdk</outputDirectory>
             </configuration>
           </execution>
+          <execution>
+            <id>unpack-qooxdoo-contribs</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <includeGroupIds>org.qooxdoo</includeGroupIds>
+              <excludeArtifactIds>qooxdoo-sdk</excludeArtifactIds>
+              <useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
+              <stripVersion>true</stripVersion>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>

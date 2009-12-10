@@ -21,13 +21,11 @@
       <groupId>org.qooxdoo</groupId>
       <artifactId>qooxdoo-collapsable-panel</artifactId>
       <type>zip</type>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.qooxdoo</groupId>
       <artifactId>qooxdoo-upload-widget</artifactId>
       <type>zip</type>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -47,6 +45,20 @@
             <configuration>
               <includeArtifactIds>qooxdoo-sdk</includeArtifactIds>
               <outputDirectory>${project.build.directory}/qooxdoo-sdk</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-qooxdoo-contribs</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <includeGroupIds>org.qooxdoo</includeGroupIds>
+              <excludeArtifactIds>qooxdoo-sdk</excludeArtifactIds>
+              <useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
+              <stripVersion>true</stripVersion>
             </configuration>
           </execution>
         </executions>

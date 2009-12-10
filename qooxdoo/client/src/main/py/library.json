@@ -8,10 +8,10 @@
       "library" :
       [
         {
-          "manifest" : "contrib://UploadWidget/trunk/Manifest.json"
+          "manifest" : "../../../target/qooxdoo-collapsable-panel-zip/Manifest.json"
         },
         {
-          "manifest" : "contrib://CollapsablePanel/trunk/Manifest.json"
+          "manifest" : "../../../target/qooxdoo-upload-widget-zip/Manifest.json"
         }
       ]
     }
