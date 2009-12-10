@@ -22,7 +22,11 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 
 /**
- * Basic implemenation of a reference property view descriptor.
+ * This specialized property view descriptor is used in order to be able to
+ * refine the &quot;List of values&quot; action that gets automatically
+ * installed by Jspresso when a reference property is displayed. You can then
+ * customize this action when defining the corresponding column in a table view
+ * or field in a component view.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -40,7 +44,10 @@ public class BasicReferencePropertyViewDescriptor extends
   }
 
   /**
-   * Sets the lovAction.
+   * Allows to override the default &quot;List of values&quot; action attached
+   * to this reference property view.
+   * <p>
+   * A <code>null</code> value (default) keeps the standard action.
    * 
    * @param lovAction
    *          the lovAction to set.

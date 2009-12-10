@@ -30,8 +30,6 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <!-- don't know why but it doesn't take plugins management in m2eclipse -->
-        <version>3.0.0</version>
         <executions>
           <execution>
             <id>generate-asdoc</id>

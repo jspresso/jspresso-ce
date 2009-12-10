@@ -68,11 +68,11 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
     IResource resource = new MemoryResource("text/xml", chartData.getBytes());
     String resourceId = ResourceManager.getInstance().register(resource);
     Map<String, String> flashContext = new LinkedHashMap<String, String>();
-    flashContext.put("dataURL", ResourceProviderServlet
-        .computeDownloadUrl(resourceId));
     Dimension d = getChartDescriptor().getDimension();
     flashContext.put("chartWidth", Integer.toString(d.getWidth()));
     flashContext.put("chartHeight", Integer.toString(d.getHeight()));
+    flashContext.put("dataURL", ResourceProviderServlet
+        .computeDownloadUrl(resourceId));
     List<G> chartActions = new ArrayList<G>();
     for (IDisplayableAction action : getActions()) {
       chartActions.add(getActionFactory(context).createAction(action,

@@ -314,7 +314,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         } else if(dialogCommand is RemoteFlashDisplayCommand) {
           var url:String = new String((dialogCommand as RemoteFlashDisplayCommand).swfUrl);
           if((dialogCommand as RemoteFlashDisplayCommand).paramNames.length > 0) {
-            url = url+"?"
+            url = url+"?&"
             for(var i:int = 0; i < (dialogCommand as RemoteFlashDisplayCommand).paramNames.length; i++) {
               if(i > 0) {
                 url  = url+"&"

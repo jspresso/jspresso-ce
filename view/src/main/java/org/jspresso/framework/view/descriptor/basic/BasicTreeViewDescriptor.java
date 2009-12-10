@@ -29,7 +29,10 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 
 /**
- * Default implementation of a tree view descriptor.
+ * This descriptor is use to design a tree view. The way to define a tree view
+ * in Jspresso is a matter of assembling <i>tree level descriptors</i>
+ * hierarchically. A <i>tree level descriptor</i> is a group of sibling nodes
+ * that represent a collection property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -21,7 +21,14 @@ package org.jspresso.framework.view.descriptor.basic;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 
 /**
- * Default implementation of an image view descriptor.
+ * This type of view descriptor is used to display a binary property as an
+ * image. By default, binary properties are rendered as button fields that allow
+ * to upload, download and query size of the binary content. This button field
+ * visually indicate whether the binary property is empty or not. Whenever you
+ * know that the underlying property is used to store image content, you can
+ * explicitely define an image view backed by the binary property descriptor and
+ * use it in your UI. Jspresso will then display the image whose content is
+ * stored in the binary property directly in the UI.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

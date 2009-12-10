@@ -19,7 +19,8 @@
     <ulc.version>6.0.5</ulc.version>
     <jboss.version>4.2.2.GA</jboss.version>
     <qooxdoo.version>1.0-beta1</qooxdoo.version>
-    <flex.version>3.2.0.3958</flex.version>
+    <!--<flex.version>3.2.0.3958</flex.version>-->
+    <flex.version>3.4.0.9271</flex.version>
     <jasper.version>3.5.3</jasper.version>
     <jfree.version>1.0.13</jfree.version>
     <commons-collections.version>3.2.1</commons-collections.version>
@@ -73,6 +74,21 @@
       </snapshots>
     </repository>
     <repository>
+      <id>sonatype-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>codehaus-legacy-repository</id>
+      <url>http://dist.codehaus.org</url>
+      <layout>legacy</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
       <id>jspresso-repository</id>
       <url>http://repository.jspresso.org/maven2</url>
       <releases>
@@ -91,13 +107,6 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-    </repository>
-    <repository>
-    	<id>sonatype-repository</id>
-    	<url>http://repository.sonatype.org/content/groups/flexgroup</url>
-    	<snapshots>
-    		<enabled>false</enabled>
-    	</snapshots>
     </repository>
   </repositories>
   <dependencyManagement>
@@ -666,6 +675,14 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.adobe.flexunit</groupId>
+      <artifactId>flexunit</artifactId>
+      <version>0.90</version> <!-- or 0.90 to conventional Flexunit tests -->
+      <!-- <version>4.x</version> like 4.0-beta-2 to enable Flexunit4 tests -->
+      <type>swc</type>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <pluginManagement>
@@ -828,8 +845,16 @@
         <plugin>
         	<groupId>org.sonatype.flexmojos</groupId>
         	<artifactId>flexmojos-maven-plugin</artifactId>
-        	<version>3.0.0</version>
-        	<extensions>true</extensions>
+        	<version>3.2.0</version>
+          <extensions>true</extensions>
+          <dependencies>
+            <dependency>
+              <groupId>com.adobe.flex</groupId>
+              <artifactId>compiler</artifactId>
+              <version>3.4.0.9271</version>
+              <type>pom</type>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>

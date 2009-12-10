@@ -264,14 +264,11 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     }
   }
 
-  private int getPropertyWidth(String propertyName) {
+  private Integer getPropertyWidth(String propertyName) {
     if (propertyWidths != null) {
-      Integer width = propertyWidths.get(propertyName);
-      if (width != null) {
-        return width.intValue();
-      }
+      return propertyWidths.get(propertyName);
     }
-    return 1;
+    return new Integer(1);
   }
 
   /**
