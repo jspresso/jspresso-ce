@@ -17,6 +17,18 @@
       <type>zip</type>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.qooxdoo</groupId>
+      <artifactId>qooxdoo-collapsable-panel</artifactId>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.qooxdoo</groupId>
+      <artifactId>qooxdoo-upload-widget</artifactId>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
