@@ -231,7 +231,6 @@
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-qooxdoo-client</artifactId>
         <version>${jspresso.version}</version>
-        <classifier>sources</classifier>
         <type>zip</type>
         <scope>provided</scope>
       </dependency>

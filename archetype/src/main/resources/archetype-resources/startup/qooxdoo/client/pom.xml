@@ -19,7 +19,6 @@
     <dependency>
       <groupId>org.jspresso.framework</groupId>
       <artifactId>jspresso-qooxdoo-client</artifactId>
-      <classifier>sources</classifier>
       <type>zip</type>
       <scope>provided</scope>
     </dependency>
