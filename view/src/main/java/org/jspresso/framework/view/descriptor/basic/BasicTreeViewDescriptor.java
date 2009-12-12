@@ -129,7 +129,23 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the childDescriptor.
+   * Configures the first tree level as being a single collection of sibling
+   * nodes. For instance, if the child tree level is mapped to a collection
+   * (collA) containing 5 elements (collA_Elt-1 to 5), the tree would look like
+   * :
+   * 
+   * <pre>
+   * rootItem
+   *   coll<b>A</b>_Elt-<b>1</b>
+   *   coll<b>A</b>_Elt-<b>2</b>
+   *   coll<b>A</b>_Elt-<b>3</b>
+   *   coll<b>A</b>_Elt-<b>4</b>
+   *   coll<b>A</b>_Elt-<b>5</b>
+   * </pre>
+   * 
+   * In the example above, you should notice that there is no need for the tree
+   * to install an intermediary node to visually group the collection elements
+   * since the collection is alone on its level.
    * 
    * @param childDescriptor
    *          the childDescriptor to set.
@@ -217,7 +233,26 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the childrenDescriptor.
+   * Configures the first tree level as being a list of collections of sibling
+   * nodes. For instance, if the children tree levels are mapped to 2 collection
+   * properties (collA, collB) each containing 3 elements (collA_Elt-1 to 3 and
+   * collB_Elt-1 to 3), the tree would look like :
+   * 
+   * <pre>
+   * rootItem
+   *   <i>collA</i>
+   *     coll<b>A</b>_Elt-<b>1</b>
+   *     coll<b>A</b>_Elt-<b>2</b>
+   *     coll<b>A</b>_Elt-<b>3</b>
+   *   <i>collB</i>
+   *     coll<b>B</b>_Elt-<b>1</b>
+   *     coll<b>B</b>_Elt-<b>2</b>
+   *     coll<b>B</b>_Elt-<b>3</b>
+   * </pre>
+   * 
+   * In the example above, you should notice intermediate collection property
+   * grouping nodes (collA and collB in italic). They automatically appeared to
+   * clearly group the tree nodes belonging to the different collections.
    * 
    * @param childrenDescriptors
    *          the childrenDescriptor to set.

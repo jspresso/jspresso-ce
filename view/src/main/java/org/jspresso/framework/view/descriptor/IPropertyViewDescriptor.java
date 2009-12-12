@@ -42,7 +42,7 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
    * 
    * @return the spanned column count.
    */
-  int getWidth();
+  Integer getWidth();
 
   /**
    * Gets the label background.

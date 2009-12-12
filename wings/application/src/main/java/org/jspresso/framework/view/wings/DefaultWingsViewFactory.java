@@ -439,7 +439,7 @@ public class DefaultWingsViewFactory extends
         propertyLabel.setText(" ");
       }
 
-      int propertyWidth = propertyViewDescriptor.getWidth();
+      int propertyWidth = propertyViewDescriptor.getWidth().intValue();
       if (propertyWidth > viewDescriptor.getColumnCount()) {
         propertyWidth = viewDescriptor.getColumnCount();
       }

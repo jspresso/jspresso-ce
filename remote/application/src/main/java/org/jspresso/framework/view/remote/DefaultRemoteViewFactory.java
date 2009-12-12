@@ -415,7 +415,7 @@ public class DefaultRemoteViewFactory extends
       elements.add(propertyView.getPeer());
       elementLabels.add(createPropertyLabel(propertyViewDescriptor,
           propertyView.getPeer(), locale));
-      elementWidths.add(new Integer(propertyViewDescriptor.getWidth()));
+      elementWidths.add(propertyViewDescriptor.getWidth());
       connector.addChildConnector(propertyView.getConnector());
       // already handled in createView.
       // if (propertyViewDescriptor.getReadabilityGates() != null) {

@@ -107,11 +107,11 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * 
    * @return the width.
    */
-  public int getWidth() {
+  public Integer getWidth() {
     if (width != null) {
-      return width.intValue();
+      return width;
     }
-    return 1;
+    return new Integer(1);
   }
 
   /**
