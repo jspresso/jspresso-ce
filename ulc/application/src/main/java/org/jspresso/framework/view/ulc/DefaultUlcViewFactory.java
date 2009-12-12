@@ -816,16 +816,23 @@ public class DefaultUlcViewFactory extends
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     ULCLabel imageLabel = createULCLabel(false);
-    imageLabel.setHorizontalAlignment(IDefaults.CENTER);
     ULCImageConnector connector = new ULCImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
     connector.setExceptionHandler(actionHandler);
     ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
     IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-    ULCScrollPane scrollPane = createULCScrollPane();
-    scrollPane.setViewPortView(imageLabel);
-    viewComponent.add(scrollPane, ULCBorderLayoutPane.CENTER);
+    if (viewDescriptor.isScrollable()) {
+      imageLabel.setHorizontalAlignment(IDefaults.LEFT);
+      imageLabel.setVerticalAlignment(IDefaults.TOP);
+      ULCScrollPane scrollPane = createULCScrollPane();
+      scrollPane.setViewPortView(imageLabel);
+      viewComponent.add(scrollPane, ULCBorderLayoutPane.CENTER);
+    } else {
+      imageLabel.setHorizontalAlignment(IDefaults.CENTER);
+      imageLabel.setVerticalAlignment(IDefaults.CENTER);
+      viewComponent.add(imageLabel, ULCBorderLayoutPane.CENTER);
+    }
     return view;
   }
 

@@ -758,7 +758,6 @@ public class DefaultWingsViewFactory extends
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     SLabel imageLabel = createSLabel(false);
-    imageLabel.setHorizontalAlignment(SConstants.CENTER);
     SImageConnector connector = new SImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
     connector.setExceptionHandler(actionHandler);
@@ -766,9 +765,16 @@ public class DefaultWingsViewFactory extends
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     viewComponent.add(imageLabel, SBorderLayout.CENTER);
-    SScrollPane scrollPane = createSScrollPane();
-    scrollPane.setViewportView(viewComponent);
-    view.setPeer(scrollPane);
+    if (viewDescriptor.isScrollable()) {
+      imageLabel.setHorizontalAlignment(SConstants.LEFT);
+      imageLabel.setVerticalAlignment(SConstants.TOP);
+      SScrollPane scrollPane = createSScrollPane();
+      scrollPane.setViewportView(viewComponent);
+      view.setPeer(scrollPane);
+    } else {
+      imageLabel.setHorizontalAlignment(SConstants.CENTER);
+      imageLabel.setVerticalAlignment(SConstants.CENTER);
+    }
     return view;
   }
 

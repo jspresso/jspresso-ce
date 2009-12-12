@@ -19,9 +19,17 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RImageComponent")]
     public class RImageComponent extends RComponent {
 
+        private var _scrollable:Boolean;
+
         public function RImageComponent() {
           //default constructor.
         }
 
+        public function set scrollable(value:Boolean):void {
+            _scrollable = value;
+        }
+        public function get scrollable():Boolean {
+            return _scrollable;
+        }
     }
 }

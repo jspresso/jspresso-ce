@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.binding.ulc;
 
+import org.jspresso.framework.util.url.UrlHelper;
+
 import com.ulcjava.base.application.ULCLabel;
 import com.ulcjava.base.application.util.ULCIcon;
 
@@ -30,15 +32,15 @@ import com.ulcjava.base.application.util.ULCIcon;
  */
 public class ULCImageConnector extends ULCComponentConnector<ULCLabel> {
 
-  private byte[] binaryValue;
+  private Object imageSource;
 
   /**
    * Constructs a new <code>ULCImageConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param connectedULCComponent
-   *            the connected ULCLabel.
+   *          the connected ULCLabel.
    */
   public ULCImageConnector(String id, ULCLabel connectedULCComponent) {
     super(id, connectedULCComponent);
@@ -57,7 +59,7 @@ public class ULCImageConnector extends ULCComponentConnector<ULCLabel> {
    */
   @Override
   protected Object getConnecteeValue() {
-    return binaryValue;
+    return imageSource;
   }
 
   /**
@@ -65,9 +67,14 @@ public class ULCImageConnector extends ULCComponentConnector<ULCLabel> {
    */
   @Override
   protected void setConnecteeValue(Object connecteeValue) {
-    this.binaryValue = (byte[]) connecteeValue;
-    if (binaryValue != null) {
-      getConnectedULCComponent().setIcon(new ULCIcon(binaryValue));
+    this.imageSource = connecteeValue;
+    if (imageSource != null) {
+      if (imageSource instanceof byte[]) {
+        getConnectedULCComponent().setIcon(new ULCIcon((byte[]) imageSource));
+      } else if (imageSource instanceof String) {
+        getConnectedULCComponent().setIcon(
+            new ULCIcon(UrlHelper.createURL((String) imageSource)));
+      }
     } else {
       getConnectedULCComponent().setIcon(null);
     }

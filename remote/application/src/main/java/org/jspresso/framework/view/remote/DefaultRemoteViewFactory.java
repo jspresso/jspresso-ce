@@ -32,6 +32,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
+import org.jspresso.framework.binding.remote.RemoteValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionComponent;
 import org.jspresso.framework.gui.remote.RActionField;
@@ -740,7 +741,11 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector = getConnectorFactory().createValueConnector(
         viewDescriptor.getModelDescriptor().getName());
     connector.setExceptionHandler(actionHandler);
+    if (connector instanceof RemoteValueConnector) {
+      ((RemoteValueConnector) connector).setEnableUrlProxying(true);
+    }
     RImageComponent viewComponent = createRImageComponent(connector);
+    viewComponent.setScrollable(viewDescriptor.isScrollable());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     return view;

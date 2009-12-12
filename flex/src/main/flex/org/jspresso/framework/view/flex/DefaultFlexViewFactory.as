@@ -407,6 +407,16 @@ package org.jspresso.framework.view.flex {
     private function createImageComponent(remoteImageComponent:RImageComponent):UIComponent {
       var imageComponent:Image = new Image();
       bindImage(imageComponent, remoteImageComponent.state);
+      if(remoteImageComponent.scrollable) {
+        imageComponent.setStyle("horizontalAlign","left");
+        imageComponent.setStyle("verticalAlign","top");
+        var scrollPane:Canvas = new Canvas();
+        scrollPane.addChild(imageComponent);
+        return scrollPane;
+      } else {
+        imageComponent.setStyle("horizontalAlign","center");
+        imageComponent.setStyle("verticalAlign","middle");
+      }
       return imageComponent;
     }
     

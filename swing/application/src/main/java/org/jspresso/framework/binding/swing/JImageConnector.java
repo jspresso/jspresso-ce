@@ -21,24 +21,26 @@ package org.jspresso.framework.binding.swing;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import org.jspresso.framework.util.url.UrlHelper;
+
 /**
  * A connector on a label whose role is to render an image based on its binary
- * representation taken out of the connector value.
+ * representation taken out of the connector value or the image URL.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JImageConnector extends JComponentConnector<JLabel> {
 
-  private byte[] binaryValue;
+  private Object imageSource;
 
   /**
    * Constructs a new <code>JImageConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param connectedJComponent
-   *            the connected JLabel.
+   *          the connected JLabel.
    */
   public JImageConnector(String id, JLabel connectedJComponent) {
     super(id, connectedJComponent);
@@ -57,7 +59,7 @@ public class JImageConnector extends JComponentConnector<JLabel> {
    */
   @Override
   protected Object getConnecteeValue() {
-    return binaryValue;
+    return imageSource;
   }
 
   /**
@@ -65,9 +67,14 @@ public class JImageConnector extends JComponentConnector<JLabel> {
    */
   @Override
   protected void protectedSetConnecteeValue(Object connecteeValue) {
-    this.binaryValue = (byte[]) connecteeValue;
-    if (binaryValue != null) {
-      getConnectedJComponent().setIcon(new ImageIcon(binaryValue));
+    this.imageSource = connecteeValue;
+    if (imageSource != null) {
+      if (imageSource instanceof byte[]) {
+        getConnectedJComponent().setIcon(new ImageIcon((byte[]) imageSource));
+      } else if (imageSource instanceof String) {
+        getConnectedJComponent().setIcon(
+            new ImageIcon(UrlHelper.createURL((String) imageSource)));
+      }
     } else {
       getConnectedJComponent().setIcon(null);
     }

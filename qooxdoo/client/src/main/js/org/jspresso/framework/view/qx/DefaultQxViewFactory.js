@@ -277,6 +277,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      */
     __createImageComponent : function(remoteImageComponent) {
       var imageComponent = new qx.ui.basic.Image();
+    	imageComponent.setScale(false);
+    	if(remoteImageComponent.scrollable) {
+	    	imageComponent.setAlignX("center");
+	    	imageComponent.setAlignY("middle");
+    	} else {
+	    	imageComponent.setAlignX("left");
+	    	imageComponent.setAlignY("top");
+    	}
+    	imageComponent.setScale(false);
       
       var state = remoteImageComponent.getState();
       var modelController = new qx.data.controller.Object(state);

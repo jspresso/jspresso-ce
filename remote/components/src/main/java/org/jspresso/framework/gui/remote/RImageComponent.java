@@ -28,6 +28,8 @@ public class RImageComponent extends RComponent {
 
   private static final long serialVersionUID = 7583953076670140848L;
 
+  private boolean           scrollable;
+
   /**
    * Constructs a new <code>RImageComponent</code> instance. Only used for GWT
    * serialization support.
@@ -44,5 +46,24 @@ public class RImageComponent extends RComponent {
    */
   public RImageComponent(String guid) {
     super(guid);
+  }
+
+  /**
+   * Sets the scrollable.
+   * 
+   * @param scrollable
+   *          the scrollable to set.
+   */
+  public void setScrollable(boolean scrollable) {
+    this.scrollable = scrollable;
+  }
+
+  /**
+   * Gets the scrollable.
+   * 
+   * @return the scrollable.
+   */
+  public boolean isScrollable() {
+    return scrollable;
   }
 }

@@ -783,7 +783,6 @@ public class DefaultSwingViewFactory extends
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
     JLabel imageLabel = createJLabel(false);
-    imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
     JImageConnector connector = new JImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
     connector.setExceptionHandler(actionHandler);
@@ -792,9 +791,17 @@ public class DefaultSwingViewFactory extends
     viewComponent.setLayout(layout);
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-    JScrollPane scrollPane = createJScrollPane();
-    scrollPane.setViewportView(imageLabel);
-    viewComponent.add(scrollPane, BorderLayout.CENTER);
+    if (viewDescriptor.isScrollable()) {
+      imageLabel.setHorizontalAlignment(SwingConstants.LEFT);
+      imageLabel.setVerticalAlignment(SwingConstants.TOP);
+      JScrollPane scrollPane = createJScrollPane();
+      scrollPane.setViewportView(imageLabel);
+      viewComponent.add(scrollPane, BorderLayout.CENTER);
+    } else {
+      imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+      viewComponent.add(imageLabel, BorderLayout.CENTER);
+    }
     return view;
   }
 

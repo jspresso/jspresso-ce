@@ -18,8 +18,10 @@
  */
 package org.jspresso.framework.binding.wings;
 
+import org.jspresso.framework.util.url.UrlHelper;
 import org.wings.SByteArrayIcon;
 import org.wings.SLabel;
+import org.wings.SURLIcon;
 
 /**
  * A connector on a label whose role is to render an image based on its binary
@@ -30,15 +32,15 @@ import org.wings.SLabel;
  */
 public class SImageConnector extends SComponentConnector<SLabel> {
 
-  private byte[] binaryValue;
+  private Object imageSource;
 
   /**
    * Constructs a new <code>JImageConnector</code> instance.
    * 
    * @param id
-   *            the id of the connector.
+   *          the id of the connector.
    * @param label
-   *            the connected SLabel.
+   *          the connected SLabel.
    */
   public SImageConnector(String id, SLabel label) {
     super(id, label);
@@ -57,7 +59,7 @@ public class SImageConnector extends SComponentConnector<SLabel> {
    */
   @Override
   protected Object getConnecteeValue() {
-    return binaryValue;
+    return imageSource;
   }
 
   /**
@@ -65,9 +67,15 @@ public class SImageConnector extends SComponentConnector<SLabel> {
    */
   @Override
   protected void setConnecteeValue(Object connecteeValue) {
-    this.binaryValue = (byte[]) connecteeValue;
-    if (binaryValue != null) {
-      getConnectedSComponent().setIcon(new SByteArrayIcon(binaryValue));
+    this.imageSource = connecteeValue;
+    if (imageSource != null) {
+      if (imageSource instanceof byte[]) {
+        getConnectedSComponent().setIcon(
+            new SByteArrayIcon((byte[]) imageSource));
+      } else {
+        getConnectedSComponent().setIcon(
+            new SURLIcon(UrlHelper.createURL((String) imageSource)));
+      }
     } else {
       getConnectedSComponent().setIcon(null);
     }

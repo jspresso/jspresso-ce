@@ -18,6 +18,13 @@ qx.Class.define("org.jspresso.framework.gui.remote.RImageComponent",
 
   construct : function() {
     this.base(arguments);
-  }
+  },
 
+  properties :
+  {
+    scrollable :
+    {
+      check : "Boolean"
+    }
+  }
 });

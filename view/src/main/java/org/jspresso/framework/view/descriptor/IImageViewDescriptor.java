@@ -20,11 +20,18 @@ package org.jspresso.framework.view.descriptor;
 
 /**
  * This public interface is implemented by view descriptors which are just
- * presenting an image based on its binary representation.
+ * presenting an image based on its binary representation or its URL.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IImageViewDescriptor extends IViewDescriptor {
-  // Empty implementation as of now.
+
+  /**
+   * Configures the image view to be either scaled or scrollable when the
+   * display area is too small to display it.
+   * 
+   * @return true if scaled.
+   */
+  boolean isScrollable();
 }
