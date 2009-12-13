@@ -28,11 +28,13 @@ package org.jspresso.framework.util.gui;
 public interface IIconImageURLProvider {
 
   /**
-   * Gets the image url for the user object passed as parameter.
+   * Given a user object, this method gives the ability to the tree view
+   * descriptor to return the url of an image used to render the user object.
+   * This method may return null.
    * 
    * @param userObject
-   *            the user object to get the image url for.
-   * @return the looked up image url or null if none.
+   *          the user object to render.
+   * @return the url of the image to use for the renderer or null.
    */
   String getIconImageURLForObject(Object userObject);
 }

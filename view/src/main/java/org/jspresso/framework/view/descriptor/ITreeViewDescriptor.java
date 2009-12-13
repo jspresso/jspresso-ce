@@ -30,17 +30,6 @@ import org.jspresso.framework.util.gui.IIconImageURLProvider;
 public interface ITreeViewDescriptor extends IViewDescriptor {
 
   /**
-   * Given a user object, this method qives the ability to the tree view
-   * descriptor to return the url of an image used to render the user object.
-   * This method may return null.
-   * 
-   * @param userObject
-   *          the user object to render.
-   * @return the url of the image to use for the renderer or null.
-   */
-  String getIconImageURLForUserObject(Object userObject);
-
-  /**
    * Gets the iconImageURLProvider.
    * 
    * @return the iconImageURLProvider.

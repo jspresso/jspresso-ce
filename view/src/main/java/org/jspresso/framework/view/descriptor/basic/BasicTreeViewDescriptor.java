@@ -72,16 +72,6 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public String getIconImageURLForUserObject(Object userObject) {
-    if (iconImageURLProvider != null) {
-      return iconImageURLProvider.getIconImageURLForObject(userObject);
-    }
-    return null;
-  }
-
-  /**
    * Gets the iconImageURLProvider.
    * 
    * @return the iconImageURLProvider.
