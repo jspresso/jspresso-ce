@@ -259,8 +259,8 @@ package org.jspresso.framework.view.flex {
         }
       }
       if(remoteComponent.preferredSize) {
-        component.explicitWidth = remoteComponent.preferredSize.width;
-        component.explicitHeight = remoteComponent.preferredSize.height;
+        component.minWidth= remoteComponent.preferredSize.width;
+        component.minHeight = remoteComponent.preferredSize.height;
       }
       if(registerState) {
         _remotePeerRegistry.register(remoteComponent.state);
@@ -406,6 +406,7 @@ package org.jspresso.framework.view.flex {
 
     private function createImageComponent(remoteImageComponent:RImageComponent):UIComponent {
       var imageComponent:Image = new Image();
+      imageComponent.scaleContent = false;
       bindImage(imageComponent, remoteImageComponent.state);
       if(remoteImageComponent.scrollable) {
         imageComponent.setStyle("horizontalAlign","left");

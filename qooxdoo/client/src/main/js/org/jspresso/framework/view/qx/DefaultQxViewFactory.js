@@ -278,19 +278,25 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     __createImageComponent : function(remoteImageComponent) {
       var imageComponent = new qx.ui.basic.Image();
     	imageComponent.setScale(false);
-    	if(remoteImageComponent.scrollable) {
-	    	imageComponent.setAlignX("center");
-	    	imageComponent.setAlignY("middle");
-    	} else {
-	    	imageComponent.setAlignX("left");
-	    	imageComponent.setAlignY("top");
-    	}
-    	imageComponent.setScale(false);
+    	imageComponent.setAlignX("center");
+    	imageComponent.setAlignY("middle");
       
       var state = remoteImageComponent.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(imageComponent, "source", "value");
-      return imageComponent;
+      
+			if(remoteImageComponent.isScrollable()) {
+	      var scrollContainer = new qx.ui.container.Scroll();
+	      scrollContainer.add(imageComponent);
+        return scrollContainer;
+			} else {
+	      var borderContainer = new qx.ui.container.Composite();
+	      var borderLayout = new qx.ui.layout.Dock();
+	      borderLayout.setSort("y");
+	      borderContainer.setLayout(borderLayout);
+	      borderContainer.add(imageComponent, {edge:"center"});
+        return borderContainer;
+			}
     },
 
     /**
