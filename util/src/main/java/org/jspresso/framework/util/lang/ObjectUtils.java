@@ -63,4 +63,20 @@ public final class ObjectUtils {
     }
     return object1.equals(object2);
   }
+
+  /**
+   * Extracts the raw classname from a potentially generic one.
+   * 
+   * @param sourceClassName
+   *          the source class name, potentially containing generics
+   *          informations.
+   * @return the raw class name.
+   */
+  public static String extractRawClassName(String sourceClassName) {
+    int genericIndex = sourceClassName.indexOf("<");
+    if (genericIndex > 0) {
+      return sourceClassName.substring(0, genericIndex);
+    }
+    return sourceClassName;
+  }
 }

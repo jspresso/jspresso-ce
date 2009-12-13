@@ -47,6 +47,7 @@ import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -676,7 +677,8 @@ public abstract class AbstractComponentDescriptor<E> extends
             delegate = (IComponentService) Class.forName(nextPair.getValue())
                 .newInstance();
           }
-          registerService(Class.forName(nextPair.getKey()), delegate);
+          registerService(Class.forName(ObjectUtils
+              .extractRawClassName(nextPair.getKey())), delegate);
         } catch (ClassNotFoundException ex) {
           throw new DescriptorException(ex);
         } catch (InstantiationException ex) {
