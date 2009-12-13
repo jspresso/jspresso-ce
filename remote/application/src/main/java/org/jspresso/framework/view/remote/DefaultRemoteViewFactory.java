@@ -18,11 +18,15 @@
  */
 package org.jspresso.framework.view.remote;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -87,7 +91,9 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
+import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
@@ -96,6 +102,7 @@ import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -247,6 +254,27 @@ public class DefaultRemoteViewFactory extends
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyDescriptor.getName());
+    if (connector instanceof RemoteValueConnector) {
+      final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
+      rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+
+        public Object getValueForState(Object originalValue) {
+          if (originalValue instanceof byte[]) {
+            String valueForStateUrl = RemotePeerRegistryServlet
+                .computeDownloadUrl(rConnector.getGuid());
+            Checksum checksumEngine = new CRC32();
+            checksumEngine.update((byte[]) originalValue, 0,
+                ((byte[]) originalValue).length);
+            // we must add a check sum so that the client nows when the url
+            // content
+            // changes.
+            valueForStateUrl += ("&cs=" + checksumEngine.getValue());
+            return valueForStateUrl;
+          }
+          return originalValue;
+        }
+      });
+    }
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(false, connector);
     IView<RComponent> view = constructView(viewComponent,
@@ -742,7 +770,28 @@ public class DefaultRemoteViewFactory extends
         viewDescriptor.getModelDescriptor().getName());
     connector.setExceptionHandler(actionHandler);
     if (connector instanceof RemoteValueConnector) {
-      ((RemoteValueConnector) connector).setEnableUrlProxying(true);
+      final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
+      rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+
+        public Object getValueForState(Object originalValue) {
+          if (originalValue instanceof byte[]) {
+            String valueForStateUrl = RemotePeerRegistryServlet
+                .computeDownloadUrl(rConnector.getGuid());
+            Checksum checksumEngine = new CRC32();
+            checksumEngine.update((byte[]) originalValue, 0,
+                ((byte[]) originalValue).length);
+            // we must add a check sum so that the client nows when the url
+            // content
+            // changes.
+            valueForStateUrl += ("&cs=" + checksumEngine.getValue());
+            return valueForStateUrl;
+          } else if (originalValue instanceof String) {
+            return ResourceProviderServlet
+                .computeLocalResourceDownloadUrl((String) originalValue);
+          }
+          return originalValue;
+        }
+      });
     }
     RImageComponent viewComponent = createRImageComponent(connector);
     viewComponent.setScrollable(viewDescriptor.isScrollable());
@@ -832,6 +881,21 @@ public class DefaultRemoteViewFactory extends
           .getMaxValue());
       ((RNumericComponent) view.getPeer()).setMinValue(propertyDescriptor
           .getMinValue());
+    }
+    if (view.getConnector() instanceof RemoteValueConnector) {
+      final RemoteValueConnector rConnector = (RemoteValueConnector) view
+          .getConnector();
+      rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+
+        public Object getValueForState(Object originalValue) {
+          if (originalValue instanceof BigDecimal) {
+            return new Double(((BigDecimal) originalValue).doubleValue());
+          } else if (originalValue instanceof BigInteger) {
+            return new Long(((BigInteger) originalValue).longValue());
+          }
+          return originalValue;
+        }
+      });
     }
     return view;
   }

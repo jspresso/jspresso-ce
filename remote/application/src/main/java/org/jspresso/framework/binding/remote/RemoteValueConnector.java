@@ -18,17 +18,11 @@
  */
 package org.jspresso.framework.binding.remote;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.zip.CRC32;
-import java.util.zip.Checksum;
-
 import org.jspresso.framework.binding.basic.BasicValueConnector;
-import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 /**
  * The server peer of a remote value connector.
@@ -39,10 +33,10 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 public class RemoteValueConnector extends BasicValueConnector implements
     IRemotePeer, IRemoteStateOwner {
 
-  private RemoteConnectorFactory connectorFactory;
-  private String                 guid;
-  private RemoteValueState       state;
-  private boolean                enableUrlProxying;
+  private RemoteConnectorFactory  connectorFactory;
+  private String                  guid;
+  private RemoteValueState        state;
+  private IRemoteStateValueMapper remoteStateValueMapper;
 
   /**
    * Constructs a new <code>RemoteValueConnector</code> instance.
@@ -56,7 +50,6 @@ public class RemoteValueConnector extends BasicValueConnector implements
     super(id);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
-    this.enableUrlProxying = false;
     connectorFactory.register(this);
   }
 
@@ -133,23 +126,9 @@ public class RemoteValueConnector extends BasicValueConnector implements
    */
   protected Object getValueForState() {
     Object valueForState = getConnectorValue();
-    if (valueForState instanceof byte[]) {
-      String valueForStateUrl = RemotePeerRegistryServlet
-          .computeDownloadUrl(getGuid());
-      Checksum checksumEngine = new CRC32();
-      checksumEngine.update((byte[]) valueForState, 0,
-          ((byte[]) valueForState).length);
-      // we must add a check sum so that the client nows when the url content
-      // changes.
-      valueForStateUrl += ("&cs=" + checksumEngine.getValue());
-      return valueForStateUrl;
-    } else if (isEnableUrlProxying() && valueForState instanceof String) {
-      valueForState = ResourceProviderServlet
-          .computeLocalResourceDownloadUrl((String) valueForState);
-    } else if (valueForState instanceof BigDecimal) {
-      valueForState = new Double(((BigDecimal) valueForState).doubleValue());
-    } else if (valueForState instanceof BigInteger) {
-      valueForState = new Long(((BigInteger) valueForState).longValue());
+    if (getRemoteStateValueMapper() != null) {
+      valueForState = getRemoteStateValueMapper().getValueForState(
+          valueForState);
     }
     return valueForState;
   }
@@ -172,21 +151,22 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
-   * Gets the enableUrlProxying.
+   * Gets the remoteStateValueMapper.
    * 
-   * @return the enableUrlProxying.
+   * @return the remoteStateValueMapper.
    */
-  protected boolean isEnableUrlProxying() {
-    return enableUrlProxying;
+  protected IRemoteStateValueMapper getRemoteStateValueMapper() {
+    return remoteStateValueMapper;
   }
 
   /**
-   * Sets the enableUrlProxying.
+   * Sets the remoteStateValueMapper.
    * 
-   * @param enableUrlProxying
-   *          the enableUrlProxying to set.
+   * @param remoteStateValueMapper
+   *          the remoteStateValueMapper to set.
    */
-  public void setEnableUrlProxying(boolean enableUrlProxying) {
-    this.enableUrlProxying = enableUrlProxying;
+  public void setRemoteStateValueMapper(
+      IRemoteStateValueMapper remoteStateValueMapper) {
+    this.remoteStateValueMapper = remoteStateValueMapper;
   }
 }
