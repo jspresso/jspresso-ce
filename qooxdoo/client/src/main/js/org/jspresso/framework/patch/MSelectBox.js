@@ -6,12 +6,12 @@ qx.Mixin.define("org.jspresso.framework.patch.MSelectBox",
      {
        var sel = e.getData();
        this.fireDataEvent("changeModelSelection",
-                          [(sel && sel.length) ? sel[0].getModel()
-                                               : null]);
+                          new qx.data.Array([(sel && sel.length) ? sel[0].getModel()
+                                               : null]));
      }, this);
    },
    events :
    {
-     "changeModelSelection" : "qx.event.type.Data"
+     changeModelSelection : "qx.event.type.Data"
    }
 }); 
