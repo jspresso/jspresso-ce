@@ -1000,8 +1000,10 @@ public abstract class AbstractComponentInvocationHandler implements
     Map<String, Object> allProperties = new HashMap<String, Object>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
-      allProperties.put(propertyDescriptor.getName(),
-          retrievePropertyValue(propertyDescriptor.getName()));
+      if (!propertyDescriptor.isComputed()) {
+        allProperties.put(propertyDescriptor.getName(),
+            retrievePropertyValue(propertyDescriptor.getName()));
+      }
     }
     return allProperties;
   }

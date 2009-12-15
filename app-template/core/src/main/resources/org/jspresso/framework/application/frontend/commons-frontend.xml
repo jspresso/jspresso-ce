@@ -678,7 +678,7 @@
           <property name="name" value="FILE" />
           <property name="actions">
             <list>
-              <ref local="saveModuleObjectAndGoBackFrontAction"/>
+              <ref local="saveModuleObjectFrontAction"/>
               <ref local="reloadModuleObjectFrontAction" />
               <ref local="parentModuleConnectorSelectionFrontAction" />
             </list>

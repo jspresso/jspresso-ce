@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
 import org.jspresso.framework.model.descriptor.DescriptorException;
@@ -75,37 +76,42 @@ import org.springframework.beans.factory.BeanFactoryAware;
 public abstract class AbstractComponentDescriptor<E> extends
     DefaultIconDescriptor implements IComponentDescriptor<E>, BeanFactoryAware {
 
-  private BeanFactory                      beanFactory;
+  /**
+   * IInterface descriptor for IComponent <code>COMPONENT_DESCRIPTOR</code>.
+   */
+  protected static final IComponentDescriptor<IComponent> COMPONENT_DESCRIPTOR = createComponentDescriptor();
 
-  private List<IComponentDescriptor<?>>    ancestorDescriptors;
-  private Class<?>                         componentContract;
+  private BeanFactory                                     beanFactory;
 
-  private Collection<String>               grantedRoles;
-  private List<String>                     lifecycleInterceptorClassNames;
-  private List<String>                     lifecycleInterceptorBeanNames;
+  private List<IComponentDescriptor<?>>                   ancestorDescriptors;
+  private Class<?>                                        componentContract;
 
-  private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
-  private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
-  private Map<String, ESort>               orderingProperties;
-  private Map<String, IPropertyDescriptor> propertyDescriptorsMap;
-  private List<String>                     queryableProperties;
+  private Collection<String>                              grantedRoles;
+  private List<String>                                    lifecycleInterceptorClassNames;
+  private List<String>                                    lifecycleInterceptorBeanNames;
 
-  private List<String>                     renderedProperties;
-  private Set<Class<?>>                    serviceContracts;
-  private Map<String, String>              serviceDelegateClassNames;
-  private Map<String, String>              serviceDelegateBeanNames;
+  private List<ILifecycleInterceptor<?>>                  lifecycleInterceptors;
+  private Map<String, IPropertyDescriptor>                nestedPropertyDescriptors;
+  private Map<String, ESort>                              orderingProperties;
+  private Map<String, IPropertyDescriptor>                propertyDescriptorsMap;
+  private List<String>                                    queryableProperties;
 
-  private Map<Method, IComponentService>   serviceDelegates;
-  private List<IPropertyDescriptor>        tempPropertyBuffer;
-  private String                           toStringProperty;
-  private Collection<String>               unclonedProperties;
+  private List<String>                                    renderedProperties;
+  private Set<Class<?>>                                   serviceContracts;
+  private Map<String, String>                             serviceDelegateClassNames;
+  private Map<String, String>                             serviceDelegateBeanNames;
 
-  private Collection<IGate>                readabilityGates;
-  private Collection<IGate>                writabilityGates;
+  private Map<Method, IComponentService>                  serviceDelegates;
+  private List<IPropertyDescriptor>                       tempPropertyBuffer;
+  private String                                          toStringProperty;
+  private Collection<String>                              unclonedProperties;
 
-  private Integer                          pageSize;
+  private Collection<IGate>                               readabilityGates;
+  private Collection<IGate>                               writabilityGates;
 
-  private String                           sqlName;
+  private Integer                                         pageSize;
+
+  private String                                          sqlName;
 
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
@@ -952,4 +958,10 @@ public abstract class AbstractComponentDescriptor<E> extends
     return sqlName;
   }
 
+  private static IComponentDescriptor<IComponent> createComponentDescriptor() {
+    BasicInterfaceDescriptor<IComponent> componentDescriptor = new BasicInterfaceDescriptor<IComponent>(
+        IComponent.class.getName());
+
+    return componentDescriptor;
+  }
 }

@@ -20,7 +20,9 @@ package org.jspresso.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
@@ -211,8 +213,12 @@ public class ControllerAwareEntityProxyInterceptor extends
   @SuppressWarnings("unchecked")
   @Override
   public void preFlush(Iterator entities) {
+    // To avoid concurrent access modifications
+    Set<Object> cloneSet = new LinkedHashSet<Object>();
     while (entities.hasNext()) {
-      Object entity = entities.next();
+      cloneSet.add(entities.next());
+    }
+    for (Object entity : cloneSet) {
       if (entity instanceof IEntity && ((IEntity) entity).isPersistent()) {
         boolean isClean = false;
         Map<String, Object> dirtyProperties = backendController

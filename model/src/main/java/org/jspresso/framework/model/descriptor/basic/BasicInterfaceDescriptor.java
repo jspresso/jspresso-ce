@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+
 /**
  * This descriptor is a mean of factorizing state/behaviour among components,
  * entities or even sub-interfaces. This is a much less coupling mecanism than
@@ -63,4 +64,20 @@ public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> 
   public boolean isPurelyAbstract() {
     return true;
   }
+
+  // /**
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public List<IComponentDescriptor<?>> getAncestorDescriptors() {
+  // List<IComponentDescriptor<?>> ancestorDescriptors = super
+  // .getAncestorDescriptors();
+  // if (ancestorDescriptors == null) {
+  // ancestorDescriptors = new ArrayList<IComponentDescriptor<?>>(1);
+  // }
+  // if (!ancestorDescriptors.contains(COMPONENT_DESCRIPTOR)) {
+  // ancestorDescriptors.add(COMPONENT_DESCRIPTOR);
+  // }
+  // return ancestorDescriptors;
+  // }
 }

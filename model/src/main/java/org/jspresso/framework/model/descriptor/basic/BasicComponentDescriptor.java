@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 
 /**
@@ -53,8 +52,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  */
 public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> {
 
-  private static final IComponentDescriptor<IComponent> COMPONENT_DESCRIPTOR = createComponentDescriptor();
-
   /**
    * Constructs a new <code>BasicComponentDescriptor</code> instance.
    */
@@ -71,13 +68,6 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
    */
   public BasicComponentDescriptor(String name) {
     super(name);
-  }
-
-  private static IComponentDescriptor<IComponent> createComponentDescriptor() {
-    BasicInterfaceDescriptor<IComponent> componentDescriptor = new BasicInterfaceDescriptor<IComponent>(
-        IComponent.class.getName());
-
-    return componentDescriptor;
   }
 
   /**
