@@ -736,7 +736,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : function(viewValue, model) {
             var modelValue = null;
             if(viewValue.length > 0) {
-              modelValue = viewValue[0];
+            	if(viewValue instanceof qx.data.Array) {
+              	modelValue = viewValue.getItem(0);
+            	} else {
+              	modelValue = viewValue[0];
+            	}
             } else {
               modelValue = null;
             }
