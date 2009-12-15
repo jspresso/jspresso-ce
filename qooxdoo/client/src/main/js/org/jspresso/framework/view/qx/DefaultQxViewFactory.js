@@ -726,28 +726,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       width += 7;
       var state = remoteComboBox.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(comboBox, "modelSelection", "value", true,
+      modelController.addTarget(comboBox, "modelSelection", "value", false,
         {
           converter : function(modelValue, model) {
             return [modelValue];
           }
-        },
-        {
-          converter : function(viewValue, model) {
-            var modelValue = null;
-            if(viewValue.length > 0) {
-            	if(viewValue instanceof qx.data.Array) {
-              	modelValue = viewValue.getItem(0);
-            	} else {
-              	modelValue = viewValue[0];
-            	}
-            } else {
-              modelValue = null;
-            }
-            return modelValue;
-          }
         }
       );
+      comboBox.getModelSelection().addListener("change", function(e) {
+      	var modelSelection = e.getTarget();
+      	if(modelSelection.length > 0) {
+      		state.setValue(modelSelection.getItem(0));
+      	} else {
+      		state.setValue(null);
+      	}
+      });
       modelController.addTarget(comboBox, "enabled", "writable", false);
       this.__sizeMaxComponentWidth(comboBox, width);
       return comboBox;
