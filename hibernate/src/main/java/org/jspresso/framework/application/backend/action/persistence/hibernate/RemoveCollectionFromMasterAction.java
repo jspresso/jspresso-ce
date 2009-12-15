@@ -90,7 +90,10 @@ public class RemoveCollectionFromMasterAction extends
       } catch (IllegalAccessException ex) {
         throw new ActionException(ex);
       } catch (InvocationTargetException ex) {
-        throw new ActionException(ex);
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ActionException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new ActionException(ex);
       }

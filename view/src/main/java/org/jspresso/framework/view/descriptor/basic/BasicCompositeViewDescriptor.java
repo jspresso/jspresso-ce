@@ -28,7 +28,16 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * Default implementation of a composite view descriptor.
+ * This is the abstract base class for all composite views. A composite view is
+ * a view that arranges a collection of nested views in a predefined layout.
+ * Nested views can also be composite views which makes it possible to build
+ * complex UIs out of simple combinations. Composite views are also the
+ * foundation of master-detail views by allowing a nested view to take its model
+ * out of the selection of the previous one. This behaviour can be activated
+ * using the <code>cascadingModels</code> property that &quot;cascades&quot; the
+ * view models based on the selected elements. Whenever this behaviour is not
+ * activated, all nested views share the same model than their parent composite
+ * unless specified otherwise.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -65,7 +74,17 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Sets the cascadingModels.
+   * Enables the model &quot;cascading&quot; behaviour. This allows for instance
+   * to link 2 nested tables where the 2nd table model is the selected row of
+   * the first table (or <code>null</code> if selection is empty). Using
+   * <code>cascadingModel=true</code> is only necessary when tracking view
+   * selection on the master nested view. You don't need it if, for instance,
+   * the master nested view is a single model view like a omponent view. In the
+   * latter case, you can bind a table detail view just by adding it to the same
+   * composite without having to set <code>cascadingModel=true</code>.
+   * <p>
+   * Default value is <code>false</code>, i.e. al nested views share the same
+   * model than the outer composite unless explicitely specified differently.
    * 
    * @param cascadingModels
    *          true if this descriptor is cascading its models based on a master

@@ -316,17 +316,17 @@ public class DefaultRemoteViewFactory extends
         viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
 
-    if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<RComponent> eastView = createView(viewDescriptor
-          .getEastViewDescriptor(), actionHandler, locale);
-      viewComponent.setEast(eastView.getPeer());
-      childrenViews.add(eastView);
-    }
     if (viewDescriptor.getNorthViewDescriptor() != null) {
       IView<RComponent> northView = createView(viewDescriptor
           .getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.setNorth(northView.getPeer());
       childrenViews.add(northView);
+    }
+    if (viewDescriptor.getWestViewDescriptor() != null) {
+      IView<RComponent> westView = createView(viewDescriptor
+          .getWestViewDescriptor(), actionHandler, locale);
+      viewComponent.setWest(westView.getPeer());
+      childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
       IView<RComponent> centerView = createView(viewDescriptor
@@ -334,11 +334,11 @@ public class DefaultRemoteViewFactory extends
       viewComponent.setCenter(centerView.getPeer());
       childrenViews.add(centerView);
     }
-    if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<RComponent> westView = createView(viewDescriptor
-          .getWestViewDescriptor(), actionHandler, locale);
-      viewComponent.setWest(westView.getPeer());
-      childrenViews.add(westView);
+    if (viewDescriptor.getEastViewDescriptor() != null) {
+      IView<RComponent> eastView = createView(viewDescriptor
+          .getEastViewDescriptor(), actionHandler, locale);
+      viewComponent.setEast(eastView.getPeer());
+      childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
       IView<RComponent> southView = createView(viewDescriptor

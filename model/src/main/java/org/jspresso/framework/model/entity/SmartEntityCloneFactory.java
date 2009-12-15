@@ -138,12 +138,16 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
                 // We must force initialization of the collection. So do a get.
                 try {
                   accessorFactory.createPropertyAccessor(
-                      propertyEntry.getKey(), componentToClone.getComponentContract())
-                      .getValue(componentToClone);
+                      propertyEntry.getKey(),
+                      componentToClone.getComponentContract()).getValue(
+                      componentToClone);
                 } catch (IllegalAccessException ex) {
                   throw new EntityException(ex);
                 } catch (InvocationTargetException ex) {
-                  throw new EntityException(ex);
+                  if (ex.getCause() instanceof RuntimeException) {
+                    throw (RuntimeException) ex.getCause();
+                  }
+                  throw new EntityException(ex.getCause());
                 } catch (NoSuchMethodException ex) {
                   throw new EntityException(ex);
                 }
@@ -190,7 +194,10 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
       } catch (IllegalAccessException ex) {
         throw new EntityException(ex);
       } catch (InvocationTargetException ex) {
-        throw new EntityException(ex);
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new EntityException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new EntityException(ex);
       }

@@ -1,0 +1,2011 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE chapter PUBLIC '-//OASIS//DTD DocBook XML V4.4//EN'
+  'http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd'>
+<section>
+  <title>Reference for SJS Front</title>
+  <section>
+    <title>Root</title>
+    <section>
+      <title>Front</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView,treeNode,tree,actionMap,action,next,wrapped,workspace,controller,messageSource,external,template,list,set,map</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>Front properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>Common</title>
+    <section>
+      <title>Security</title>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>Security properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>grantedRoles</emphasis><code>: ListOfString</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>writability</emphasis><code>: MapOfBoolean</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>common</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>Security</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>grantedRoles,writability</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>common properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>model</emphasis><code>: RefDomain</code></para><para><code>modelDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>icon</emphasis><code>: String</code></para><para><code>iconImageURL</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>name</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>description</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>actionMap</emphasis><code>: RefActionMap</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>readOnly</emphasis><code>: Boolean</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>background</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>foreground</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>font</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>borderType</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>preferredWidth</emphasis><code>: Integer</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>preferredHeight</emphasis><code>: Integer</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>View</title>
+    <section>
+      <title>form</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>fields,actionMap</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicComponentViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>form properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>labelsPosition</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>columnCount</emphasis><code>: Integer</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>model</emphasis><code>: RefDomain</code></para><para><code>modelDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>fields</emphasis><code>: ListOfField</code></para><para><code>renderedProperties</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>widths</emphasis><code>: Map</code></para><para><code>propertyWidths</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+      <section>
+        <title>fields</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>form</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>propertyView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>fields properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+    </section>
+    <section>
+      <title>table</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>columns,actionMap</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicTableViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>table properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>columns</emphasis><code>: ListOfField</code></para><para><code>renderedProperties</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+      <section>
+        <title>columns</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>table</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>propertyView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>columns properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+    </section>
+    <section>
+      <title>propertyView</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views,cells,columns,fields</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>actionMap</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicPropertyViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>propertyView properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>image</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>actionMap</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicImageViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>image properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>scrollable</emphasis><code>: Boolean</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>actionView</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>action,next,wrapped</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicActionViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>actionView properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>action</emphasis><code>: RefAction</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>View container</title>
+    <section>
+      <title>tabs</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>views,actionMap</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicTabViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>tabs properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>views</emphasis><code>: ListOfView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>cascadingModels</emphasis><code>: Boolean</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>views</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>tabs,entityCardView,basicCardView</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>views properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>split</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>left,right,top,bottom,actionMap</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicSplitViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>split properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>orientation</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>left</emphasis><code>: RefView</code></para><para><code>leftTopViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>right</emphasis><code>: RefView</code></para><para><code>rightBottomViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>top</emphasis><code>: RefView</code></para><para><code>leftTopViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>bottom</emphasis><code>: RefView</code></para><para><code>rightBottomViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>cascadingModels</emphasis><code>: Boolean</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+      <section>
+        <title>left</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>split</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>left properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>right</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>split</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>right properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>top</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>split</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>top properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>bottom</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>split</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>bottom properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+    </section>
+    <section>
+      <title>border</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>east,west,south,north,center</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicBorderViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>border properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>east</emphasis><code>: RefView</code></para><para><code>eastViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>west</emphasis><code>: RefView</code></para><para><code>westViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>south</emphasis><code>: RefView</code></para><para><code>southViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>north</emphasis><code>: RefView</code></para><para><code>northViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>center</emphasis><code>: RefView</code></para><para><code>centerViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>cascadingModels</emphasis><code>: Boolean</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+      <section>
+        <title>east</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>border</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>east properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>west</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>border</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>west properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>south</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>border</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>south properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>north</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>border</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>north properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>center</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>border</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>center properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+    </section>
+    <section>
+      <title>grid</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>cells,actionMap</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicConstrainedGridViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>grid properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>cascadingModels</emphasis><code>: Boolean</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+      <section>
+        <title>cells</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>grid</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>propertyView,cell</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>cells properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>cell</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>cells</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>form,table,propertyView,image,actionView,tabs,split,border,grid,entityCardView,basicCardView</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>cell properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>view</emphasis><code>: RefView</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>row</emphasis><code>: Integer</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>column</emphasis><code>: Integer</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>height</emphasis><code>: Integer</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>width</emphasis><code>: Integer</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>widthResizable</emphasis><code>: Boolean</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>heightResizable</emphasis><code>: Boolean</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+    </section>
+    <section>
+      <title>entityCardView</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>views</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>EntityCardViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>entityCardView properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>views</emphasis><code>: ListOfView</code></para><para><code>viewDescriptors</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>basicCardView</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>selector</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,left,right,top,bottom,east,west,south,north,center,cell,views</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>views</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicCardViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>basicCardView properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>selector</emphasis><code>: String</code></para><para><code>cardNameSelector</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>views</emphasis><code>: MapOfView</code></para><para><code>cardViewDescriptors</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>Tree</title>
+    <section>
+      <title>treeNode</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>actionMap</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>treeNode properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>render</emphasis><code>: RefField</code></para><para><code>renderedProperty</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>tree</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>subTree</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicTreeViewDescriptor</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>tree properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>render</emphasis><code>: RefField</code></para><para><code>renderedProperty</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>iconProvider</emphasis><code>: RefBean</code></para><para><code>iconImageURLProvider</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+      <section>
+        <title>subTree</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
+          <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>model,icon,name,description,actionMap,readOnly,background,foreground,font,borderType,preferredWidth,preferredHeight,grantedRoles,writability</code></listitem>
+          <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>tree,subTree</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>subTree</code></listitem>
+          <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicSimpleTreeLevelDescriptor</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>subTree properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>parent</emphasis><code>: RefView</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+    </section>
+  </section>
+  <section>
+    <title>Action</title>
+    <section>
+      <title>actionMap</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front,form,table,treeNode,split,propertyView,image,tabs,grid,controller</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>actionList</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>ActionMap</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>actionMap properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parents</emphasis><code>: ListOfActionMaps</code></para><para><code>parentActionMaps</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+      <section>
+        <title>actionList</title>
+        <itemizedlist>
+          <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+          <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>actionMap</code></listitem>
+          <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>action,next,wrapped</code></listitem>
+          <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>ActionList</code></listitem>
+        </itemizedlist>
+        <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+          <?dbfo keep-together='auto'?>
+            <title>actionList properties</title>
+            <tgroup cols='2'>
+              <colspec colname='property' colwidth='1*' />
+              <colspec colname='description' colwidth='2*' />
+              <thead>
+                <row>
+                  <entry align='left'>Property</entry>
+                  <entry align='left'>Description</entry>
+                </row>
+              </thead>
+              <tbody>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>description</emphasis><code>: String</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>icon</emphasis><code>: String</code></para><para><code>iconImageURL</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+            <row>
+              <entry>
+                <para><emphasis role='bold'>actions</emphasis><code>: ListOfAction</code></para>
+              </entry>
+              <entry><para></para></entry>
+            </row>
+              </tbody>
+            </tgroup>
+        </table>
+      </section>
+    </section>
+    <section>
+      <title>action</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>actionList,Front,controller,actionView</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>next,wrapped</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>action properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: RefAction</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>class</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>ref</emphasis><code>: RefAction</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>next</emphasis><code>: RefAction</code></para><para><code>nextAction</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>wrapped</emphasis><code>: RefAction</code></para><para><code>wrappedAction</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>custom</emphasis><code>: Map</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>name</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>description</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>icon</emphasis><code>: String</code></para><para><code>iconImageURL</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>grantedRoles</emphasis><code>: ListOfString</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>actionability</emphasis><code>: MapOfBoolean</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>next</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>action</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>parent,class,ref,next,wrapped,custom,name,description,icon,grantedRoles,actionability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>action,next,wrapped,actionList,Front,controller,actionView</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>next,wrapped</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>next properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>wrapped</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>next</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>parent,class,ref,next,wrapped,custom,name,description,icon,grantedRoles,actionability</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>action,next,wrapped,actionList,Front,controller,actionView</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>next,wrapped</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>wrapped properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>workspace</title>
+    <section>
+      <title>workspace</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>Security</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>grantedRoles,writability</code></listitem>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>nodeModule,module,collectionModule,filterModule,beanModule</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>workspace properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>name</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>description</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>icon</emphasis><code>: String</code></para><para><code>iconImageURL</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>Module</title>
+    <section>
+      <title>nodeModule</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>workspace,module,nodeModule</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>nodeModule,module,collectionModule,filterModule,beanModule</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>nodeModule properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>name</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>description</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>icon</emphasis><code>: String</code></para><para><code>iconImageURL</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>module</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>workspace,nodeModule</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>nodeModule</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>module properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>name</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>description</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>icon</emphasis><code>: String</code></para><para><code>iconImageURL</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>grantedRoles</emphasis><code>: ListOfString</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>component</emphasis><code>: RefDomain</code></para><para><code>componentDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>moduleView</emphasis><code>: RefView</code></para><para><code>projectedViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>startup</emphasis><code>: RefAction</code></para><para><code>startupAction</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>collectionModule</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>module</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>name,description,icon,grantedRoles,moduleView,startup</code></listitem>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement,nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>workspace,nodeModule,workspace,nodeModule</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BeanCollectionModule</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>collectionModule properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>component</emphasis><code>: RefDomain</code></para><para><code>elementComponentDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>detailView</emphasis><code>: RefView</code></para><para><code>elementViewDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>ordering</emphasis><code>: Map</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>pageSize</emphasis><code>: Integer</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>filterModule</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>collectionModule</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>component,detailView,ordering,pageSize,name,description,icon,grantedRoles,moduleView,startup</code></listitem>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement,nameElement,nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>workspace,nodeModule,workspace,nodeModule,workspace,nodeModule</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>filterModule properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>filterComponent</emphasis><code>: RefDomain</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>filterView</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>pagingStatus</emphasis><code>: RefView</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>beanModule</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>extend</emphasis> : <code>module</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>name,description,icon,grantedRoles,moduleView,startup</code></listitem>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement,nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>workspace,nodeModule,workspace,nodeModule</code></listitem>
+        <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BeanModule</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>beanModule properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>component</emphasis><code>: RefDomain</code></para><para><code>componentDescriptor</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>Controller</title>
+    <section>
+      <title>controller</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>actionMap,action,next,wrapped</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>controller properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>icon</emphasis><code>: String</code></para><para><code>iconImageURL</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>workspaceIcon</emphasis><code>: String</code></para><para><code>workspacesMenuIconImageUrl</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>actionMap</emphasis><code>: RefActionMap</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>helpActionMap</emphasis><code>: RefActionMap</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>context</emphasis><code>: String</code></para><para><code>loginContextName</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>language</emphasis><code>: String</code></para><para><code>forcedStartingLocale</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>startup</emphasis><code>: RefAction</code></para><para><code>startupAction</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>workspaces</emphasis><code>: ListOfWorkspace</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>Message</title>
+    <section>
+      <title>messageSource</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>basenames</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>messageSource properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>basenames</emphasis><code>: ListOfString</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>Support</title>
+    <section>
+      <title>external</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>external properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>id</emphasis><code>: ListOfString</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>template</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Front</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>template properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>SJSAll</emphasis><code>: *</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>Generic</title>
+    <section>
+      <title>bean</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>*</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>bean properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>parent</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>class</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>ref</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>name</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>description</emphasis><code>: String</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>custom</emphasis><code>: Map</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>list</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>*,Front</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>list properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>values</emphasis><code>: ListOfString</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>set</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>*,Front</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>set properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>values</emphasis><code>: ListOfString</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>map</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>mandatory</emphasis> : <code>nameElement</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>*,Front</code></listitem>
+      </itemizedlist>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>map properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+          <row>
+            <entry>
+              <para><emphasis role='bold'>values</emphasis><code>: Map</code></para>
+            </entry>
+            <entry><para></para></entry>
+          </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+</section>

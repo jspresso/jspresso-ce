@@ -192,7 +192,10 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
     } catch (IllegalAccessException ex) {
       throw new ConnectorBindingException(ex);
     } catch (InvocationTargetException ex) {
-      throw new ConnectorBindingException(ex);
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new ConnectorBindingException(ex.getCause());
     } catch (NoSuchMethodException ex) {
       // this may be a normal behaviour in case of polymorphism.
       // don't throw any exception.
@@ -272,7 +275,10 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
       } catch (IllegalAccessException ex) {
         throw new ConnectorBindingException(ex);
       } catch (InvocationTargetException ex) {
-        throw new ConnectorBindingException(ex);
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ConnectorBindingException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new ConnectorBindingException(ex);
       }

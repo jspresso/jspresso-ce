@@ -25,7 +25,24 @@ import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * Default implementation of an even grid view descriptor.
+ * This composite view arranges its children in a grid where cells are
+ * distributed evenly. All cells are resized horizontally and vertically to fill
+ * its available space.
+ * <p>
+ * The number of cells in a row / column is determined by the combination of the
+ * <code>drivingDimension</code> and <code>drivingDimensionCellCount</code>
+ * properties. the cells are spread along the driving dimension (row or column)
+ * until the maximum number of cells in the dimension has been reached. Then a
+ * new row (or column) is added. The process repeats until all the cells have
+ * been added.
+ * <p>
+ * This container does not allow for individual cell configuration like
+ * row/column spanning. Whenever cell disposition has to be customized more
+ * finely, a <code>BasicConstrainedGridViewDescriptor</code> should be used
+ * instead.
+ * <p>
+ * Default cascading order follows the order of nested view registrations in the
+ * container.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -34,8 +51,8 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
     implements IEvenGridViewDescriptor {
 
   private List<IViewDescriptor> cells;
-  private EAxis                 drivingDimension = EAxis.ROW;
-  private int                   drivingDimensionCellCount;
+  private EAxis                 drivingDimension          = EAxis.ROW;
+  private int                   drivingDimensionCellCount = 2;
 
   /**
    * {@inheritDoc}
@@ -76,7 +93,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the cells.
+   * Registers the nested views to display as grid cells.
    * 
    * @param cells
    *          the cells to set.
@@ -86,7 +103,14 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the drivingDimension.
+   * Configures the driving dimension of the grid. This is either a value of the
+   * <code>EAxis</code> enum or its equivalent string representation :
+   * <ul>
+   * <li><code>ROW</code> for distributing cells along rows then columns</li>
+   * <li><code>COLUMN</code> for distributing cells along columns then rows</li>
+   * </ul>
+   * Default value is <code>EAxis.ROW</code>, i.e. distribute cells along rows
+   * then columns.
    * 
    * @param drivingDimension
    *          the drivingDimension to set.
@@ -96,7 +120,10 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the drivingDimensionCellCount.
+   * This property configures the maximum number of cells in the driving
+   * dimension (row or column). Nested views are distributed along the driving
+   * axis until this maximum number has been reached. A new row or column is
+   * then created to host the remaining cells.
    * 
    * @param drivingDimensionCellCount
    *          the drivingDimensionCellCount to set.

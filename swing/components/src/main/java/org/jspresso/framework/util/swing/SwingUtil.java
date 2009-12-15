@@ -80,14 +80,14 @@ public final class SwingUtil {
    * component (table, list, ...).
    * 
    * @param renderer
-   *            the renderer to work on.
+   *          the renderer to work on.
    * @param collectionComponent
-   *            the collection component (table, list, ...) on which this
-   *            renderer is used.
+   *          the collection component (table, list, ...) on which this renderer
+   *          is used.
    * @param isSelected
-   *            is the row selected ?
+   *          is the row selected ?
    * @param row
-   *            the row to render.
+   *          the row to render.
    */
   public static void alternateEvenOddBackground(Component renderer,
       Component collectionComponent, boolean isSelected, int row) {
@@ -105,7 +105,7 @@ public final class SwingUtil {
    * Center a window on screen.
    * 
    * @param w
-   *            the window to center on screen.
+   *          the window to center on screen.
    */
   public static void centerInParent(Window w) {
     Container parent = w.getParent();
@@ -120,7 +120,7 @@ public final class SwingUtil {
    * Center a window on screen.
    * 
    * @param w
-   *            the window to center on screen.
+   *          the window to center on screen.
    */
   public static void centerOnScreen(Window w) {
     Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -132,7 +132,7 @@ public final class SwingUtil {
    * Configures a jbutton with default behaviour like the multi-click treshold.
    * 
    * @param button
-   *            the button to work on.
+   *          the button to work on.
    */
   public static void configureButton(JButton button) {
     button.setMultiClickThreshhold(500);
@@ -143,7 +143,7 @@ public final class SwingUtil {
    * another mean than the mouse.
    * 
    * @param textField
-   *            the textfield to work on.
+   *          the textfield to work on.
    */
   public static void enableSelectionOnFocusGained(final JTextField textField) {
 
@@ -180,9 +180,9 @@ public final class SwingUtil {
    * Retrieves the first contained component of a certain type.
    * 
    * @param component
-   *            the component to start from.
+   *          the component to start from.
    * @param childComponentType
-   *            the type of the component to look for.
+   *          the type of the component to look for.
    * @return the first contained component of the looked for type or null if
    *         none.
    */
@@ -207,9 +207,9 @@ public final class SwingUtil {
    * Make a color scaled using a defined factor.
    * 
    * @param color
-   *            the color to scale.
+   *          the color to scale.
    * @param factor
-   *            the factor to use.
+   *          the factor to use.
    * @return the scaled color.
    */
   public static Color getScaledColor(Color color, double factor) {
@@ -248,7 +248,7 @@ public final class SwingUtil {
    * Gets the visible parent window.
    * 
    * @param component
-   *            the component to start from
+   *          the component to start from
    * @return the visible parent window or null.
    */
   public static Window getVisibleWindow(Component component) {
@@ -266,7 +266,7 @@ public final class SwingUtil {
    * Gets the window or the internal frame holding the component.
    * 
    * @param component
-   *            the component to look the window or internal frame for.
+   *          the component to look the window or internal frame for.
    * @return the window (frame or dialog) or the internal frame in the component
    *         hierarchy.
    */
@@ -312,8 +312,8 @@ public final class SwingUtil {
              * {@inheritDoc}
              */
             @Override
-            public TabOverviewKind getOverviewKind(@SuppressWarnings("unused")
-            JTabbedPane tabPane) {
+            public TabOverviewKind getOverviewKind(
+                @SuppressWarnings("unused") JTabbedPane tabPane) {
               return TabOverviewKind.ROUND_CAROUSEL;
               // return TabOverviewKind.MENU_CAROUSEL;
             }
@@ -321,7 +321,7 @@ public final class SwingUtil {
       UIManager.put(LafWidget.COMPONENT_PREVIEW_PAINTER,
           new DefaultPreviewPainter());
       UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU, Boolean.TRUE);
-      //UIManager.put(LafWidget.COMBO_BOX_NO_AUTOCOMPLETION, Boolean.TRUE);
+      // UIManager.put(LafWidget.COMBO_BOX_NO_AUTOCOMPLETION, Boolean.TRUE);
     } catch (Throwable ignored) {
       // substance may not be available.
     }
@@ -331,7 +331,7 @@ public final class SwingUtil {
    * Is the component passed in parameter used as an editor ?
    * 
    * @param comp
-   *            the component to test.
+   *          the component to test.
    * @return true if the component is currently used as an editor.
    */
   public static boolean isUsedAsEditor(Component comp) {
@@ -350,7 +350,7 @@ public final class SwingUtil {
    * Executes a job avoiding the common swing UI freeze.
    * 
    * @param foxtrotJob
-   *            the potentially long running job to execute.
+   *          the potentially long running job to execute.
    * @return the job execution result.
    */
   public static Object performLongOperation(Job foxtrotJob) {
@@ -365,7 +365,7 @@ public final class SwingUtil {
    * invoke runnable and wait.
    * 
    * @param runnable
-   *            the runnable operation which updates the GUI.
+   *          the runnable operation which updates the GUI.
    */
   public static void updateSwingGui(Runnable runnable) {
     if (DISABLE_THREADING) {
@@ -379,7 +379,10 @@ public final class SwingUtil {
         } catch (InterruptedException ex) {
           throw new NestedRuntimeException(ex);
         } catch (InvocationTargetException ex) {
-          throw new NestedRuntimeException(ex);
+          if (ex.getCause() instanceof RuntimeException) {
+            throw (RuntimeException) ex.getCause();
+          }
+          throw new NestedRuntimeException(ex.getCause());
         }
         // SwingUtilities.invokeLater(runnable);
       }
@@ -394,7 +397,7 @@ public final class SwingUtil {
      * Constructs a new <code>FocusGainedTask</code> instance.
      * 
      * @param textField
-     *            the text field to run on.
+     *          the text field to run on.
      */
     public FocusGainedTask(JTextField textField) {
       this.textField = textField;
@@ -422,7 +425,7 @@ public final class SwingUtil {
      * Constructs a new <code>FocusLostTask</code> instance.
      * 
      * @param textField
-     *            the text field to run on.
+     *          the text field to run on.
      */
     public FocusLostTask(JTextField textField) {
       this.textField = textField;
@@ -449,7 +452,7 @@ public final class SwingUtil {
      * Constructs a new <code>TfDocumentListener</code> instance.
      * 
      * @param textField
-     *            the text field to run on.
+     *          the text field to run on.
      */
     protected TfDocumentListener(JTextField textField) {
       this.textField = textField;
@@ -458,8 +461,7 @@ public final class SwingUtil {
     /**
      * {@inheritDoc}
      */
-    public void changedUpdate(@SuppressWarnings("unused")
-    DocumentEvent e) {
+    public void changedUpdate(@SuppressWarnings("unused") DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));
       }
@@ -468,8 +470,7 @@ public final class SwingUtil {
     /**
      * {@inheritDoc}
      */
-    public void insertUpdate(@SuppressWarnings("unused")
-    DocumentEvent e) {
+    public void insertUpdate(@SuppressWarnings("unused") DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));
       }
@@ -478,8 +479,7 @@ public final class SwingUtil {
     /**
      * {@inheritDoc}
      */
-    public void removeUpdate(@SuppressWarnings("unused")
-    DocumentEvent e) {
+    public void removeUpdate(@SuppressWarnings("unused") DocumentEvent e) {
       if (!textField.hasFocus()) {
         SwingUtilities.invokeLater(new FocusLostTask(textField));
       }

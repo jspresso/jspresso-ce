@@ -76,7 +76,10 @@ public class BeanComparator implements Comparator<Object> {
       } catch (IllegalAccessException ex) {
         throw new MissingPropertyException(ex.getMessage());
       } catch (InvocationTargetException ex) {
-        throw new MissingPropertyException(ex.getMessage());
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new RuntimeException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new MissingPropertyException(ex.getMessage());
       }

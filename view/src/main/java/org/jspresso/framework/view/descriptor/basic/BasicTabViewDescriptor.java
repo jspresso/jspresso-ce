@@ -24,7 +24,13 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * Default implementation of a tab view descriptor.
+ * This composite view arranges its children in tabs. Each tab potentially
+ * displays a label (that is translated based on the name of the view in the
+ * tab), an icon (based on the icon of the view in the tab) and a tooltip (based
+ * on the description of the view in the tab).
+ * <p>
+ * Default cascading order follows the order of nested view registrations in the
+ * container.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -60,7 +66,8 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the tabs.
+   * Registers the list of views to be displayed as tabs. The tabs order follows
+   * the children views order of this list.
    * 
    * @param tabs
    *          the tabs to set.

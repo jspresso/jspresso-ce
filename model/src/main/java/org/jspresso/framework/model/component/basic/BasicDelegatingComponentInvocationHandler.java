@@ -139,8 +139,10 @@ public class BasicDelegatingComponentInvocationHandler extends
         throw new ComponentException(method.toString()
             + " is not supported on the component " + getComponentContract());
       } catch (InvocationTargetException ex1) {
-        throw new ComponentException(method.toString()
-            + " is not supported on the component " + getComponentContract());
+        if (ex1.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex1.getCause();
+        }
+        throw new ComponentException(ex1.getCause());
       }
     }
   }
@@ -156,7 +158,10 @@ public class BasicDelegatingComponentInvocationHandler extends
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex);
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
@@ -173,7 +178,10 @@ public class BasicDelegatingComponentInvocationHandler extends
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex);
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }

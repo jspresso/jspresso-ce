@@ -444,6 +444,9 @@ public abstract class AbstractComponentInvocationHandler implements
       } catch (IllegalAccessException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
         throw new ComponentException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new ComponentException(ex);
@@ -626,6 +629,9 @@ public abstract class AbstractComponentInvocationHandler implements
       // This cannot happen but throw anyway.
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
       // This cannot happen but throw anyway.
       throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
@@ -688,6 +694,9 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
       throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
@@ -727,6 +736,9 @@ public abstract class AbstractComponentInvocationHandler implements
       } catch (IllegalAccessException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
         throw new ComponentException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new ComponentException(ex);
@@ -752,7 +764,10 @@ public abstract class AbstractComponentInvocationHandler implements
           } catch (IllegalAccessException ex) {
             throw new ComponentException(ex);
           } catch (InvocationTargetException ex) {
-            throw new ComponentException(ex);
+            if (ex.getCause() instanceof RuntimeException) {
+              throw (RuntimeException) ex.getCause();
+            }
+            throw new ComponentException(ex.getCause());
           }
         }
       }
@@ -814,6 +829,9 @@ public abstract class AbstractComponentInvocationHandler implements
       // This cannot happen but throw anyway.
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
       // This cannot happen but throw anyway.
       throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
@@ -850,6 +868,9 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
       throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
@@ -958,6 +979,9 @@ public abstract class AbstractComponentInvocationHandler implements
       } catch (IllegalAccessException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
         throw new ComponentException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new ComponentException(ex);
@@ -1027,7 +1051,10 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex);
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new ComponentException(ex.getCause());
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }

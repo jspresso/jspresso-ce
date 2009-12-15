@@ -66,8 +66,8 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
       adderAtMethod.invoke(getLastNestedTarget(target, getProperty()),
           new Object[] {new Integer(index), value});
     } catch (InvocationTargetException ex) {
-      if (ex.getTargetException() instanceof RuntimeException) {
-        throw (RuntimeException) ex.getTargetException();
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
       }
       throw ex;
     } catch (IllegalArgumentException ex) {

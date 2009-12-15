@@ -306,17 +306,17 @@ public class DefaultUlcViewFactory extends
         viewComponent, viewDescriptor);
     List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
 
-    if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<ULCComponent> eastView = createView(viewDescriptor
-          .getEastViewDescriptor(), actionHandler, locale);
-      viewComponent.add(eastView.getPeer(), ULCBorderLayoutPane.EAST);
-      childrenViews.add(eastView);
-    }
     if (viewDescriptor.getNorthViewDescriptor() != null) {
       IView<ULCComponent> northView = createView(viewDescriptor
           .getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.add(northView.getPeer(), ULCBorderLayoutPane.NORTH);
       childrenViews.add(northView);
+    }
+    if (viewDescriptor.getWestViewDescriptor() != null) {
+      IView<ULCComponent> westView = createView(viewDescriptor
+          .getWestViewDescriptor(), actionHandler, locale);
+      viewComponent.add(westView.getPeer(), ULCBorderLayoutPane.WEST);
+      childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
       IView<ULCComponent> centerView = createView(viewDescriptor
@@ -324,11 +324,11 @@ public class DefaultUlcViewFactory extends
       viewComponent.add(centerView.getPeer(), ULCBorderLayoutPane.CENTER);
       childrenViews.add(centerView);
     }
-    if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<ULCComponent> westView = createView(viewDescriptor
-          .getWestViewDescriptor(), actionHandler, locale);
-      viewComponent.add(westView.getPeer(), ULCBorderLayoutPane.WEST);
-      childrenViews.add(westView);
+    if (viewDescriptor.getEastViewDescriptor() != null) {
+      IView<ULCComponent> eastView = createView(viewDescriptor
+          .getEastViewDescriptor(), actionHandler, locale);
+      viewComponent.add(eastView.getPeer(), ULCBorderLayoutPane.EAST);
+      childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
       IView<ULCComponent> southView = createView(viewDescriptor

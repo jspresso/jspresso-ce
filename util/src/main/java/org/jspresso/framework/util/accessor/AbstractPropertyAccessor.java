@@ -119,8 +119,8 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
     } catch (InvocationTargetException ex) {
       // unnest invocation target exceptions so that the original
       // one can be correctly handled by the exception handlers.
-      if (ex.getTargetException() instanceof RuntimeException) {
-        throw (RuntimeException) ex.getTargetException();
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
       }
       throw ex;
     }

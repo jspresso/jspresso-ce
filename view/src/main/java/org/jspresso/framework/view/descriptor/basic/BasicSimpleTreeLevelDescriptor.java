@@ -22,7 +22,24 @@ import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 
 /**
- * Basic implementation of a simple subtree view descriptor.
+ * This descriptor is used to describe a collection of sibling nodes that only
+ * nest a single subtree. The child subtree is directly placed under each node
+ * without any intermediary grouping node. For instance, given a simple tree
+ * level mapping a collection of <i>A</i>s and whose child is a tree level
+ * maping a collection of <i>B</i>s, the tree would look like :
+ * 
+ * <pre>
+ * parent
+ *   <b>A</b>-1
+ *     <b>B</b>-1.1
+ *     <b>B</b>-1.2
+ *     <b>B</b>-1.3
+ *   <b>A</b>-2
+ *     <b>B</b>-2.1
+ *   <b>A</b>-3
+ *     <b>B</b>-3.1
+ *     <b>B</b>-3.2
+ * </pre>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -40,10 +57,12 @@ public class BasicSimpleTreeLevelDescriptor extends BasicTreeLevelDescriptor
   }
 
   /**
-   * Sets the childDescriptor.
+   * Assigns the single child tree level descriptor. A <code>null</code> value
+   * (default) makes this tree level a leaf tree level and is strictly
+   * equivalent to declaring a <code>BasicTreeLevelDescriptor</code> instead.
    * 
    * @param childDescriptor
-   *            the childDescriptor to set.
+   *          the childDescriptor to set.
    */
   public void setChildDescriptor(ITreeLevelDescriptor childDescriptor) {
     this.childDescriptor = childDescriptor;

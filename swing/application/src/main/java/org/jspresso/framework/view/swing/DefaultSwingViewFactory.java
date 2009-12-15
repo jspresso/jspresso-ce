@@ -293,17 +293,17 @@ public class DefaultSwingViewFactory extends
     BorderLayout layout = new BorderLayout();
     viewComponent.setLayout(layout);
 
-    if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<JComponent> eastView = createView(viewDescriptor
-          .getEastViewDescriptor(), actionHandler, locale);
-      viewComponent.add(eastView.getPeer(), BorderLayout.EAST);
-      childrenViews.add(eastView);
-    }
     if (viewDescriptor.getNorthViewDescriptor() != null) {
       IView<JComponent> northView = createView(viewDescriptor
           .getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.add(northView.getPeer(), BorderLayout.NORTH);
       childrenViews.add(northView);
+    }
+    if (viewDescriptor.getWestViewDescriptor() != null) {
+      IView<JComponent> westView = createView(viewDescriptor
+          .getWestViewDescriptor(), actionHandler, locale);
+      viewComponent.add(westView.getPeer(), BorderLayout.WEST);
+      childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
       IView<JComponent> centerView = createView(viewDescriptor
@@ -311,11 +311,11 @@ public class DefaultSwingViewFactory extends
       viewComponent.add(centerView.getPeer(), BorderLayout.CENTER);
       childrenViews.add(centerView);
     }
-    if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<JComponent> westView = createView(viewDescriptor
-          .getWestViewDescriptor(), actionHandler, locale);
-      viewComponent.add(westView.getPeer(), BorderLayout.WEST);
-      childrenViews.add(westView);
+    if (viewDescriptor.getEastViewDescriptor() != null) {
+      IView<JComponent> eastView = createView(viewDescriptor
+          .getEastViewDescriptor(), actionHandler, locale);
+      viewComponent.add(eastView.getPeer(), BorderLayout.EAST);
+      childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
       IView<JComponent> southView = createView(viewDescriptor

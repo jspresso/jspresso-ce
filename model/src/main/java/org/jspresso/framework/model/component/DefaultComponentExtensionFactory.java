@@ -23,8 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.ConstructorUtils;
 
 /**
- * This is the default implementation of <code>IComponentExtensionFactory</code>.
- * This implementation relies on Jakarta's <code>ConstructorUtils</code> to
+ * This is the default implementation of <code>IComponentExtensionFactory</code>
+ * . This implementation relies on Jakarta's <code>ConstructorUtils</code> to
  * build extension instances calling their constructors using reflection.
  * 
  * @version $LastChangedRevision$
@@ -56,7 +56,10 @@ public class DefaultComponentExtensionFactory implements
     } catch (IllegalAccessException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex);
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new ComponentException(ex.getCause());
     } catch (InstantiationException ex) {
       throw new ComponentException(ex);
     }
@@ -66,7 +69,7 @@ public class DefaultComponentExtensionFactory implements
    * Sets the componentFactory.
    * 
    * @param componentFactory
-   *            the componentFactory to set.
+   *          the componentFactory to set.
    */
   public void setComponentFactory(IComponentFactory componentFactory) {
     this.componentFactory = componentFactory;

@@ -69,8 +69,8 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
       adderMethod.invoke(getLastNestedTarget(target, getProperty()),
           new Object[] {value});
     } catch (InvocationTargetException ex) {
-      if (ex.getTargetException() instanceof RuntimeException) {
-        throw (RuntimeException) ex.getTargetException();
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
       }
       throw ex;
     } catch (IllegalArgumentException ex) {
@@ -103,8 +103,8 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
       removerMethod.invoke(getLastNestedTarget(target, getProperty()),
           new Object[] {value});
     } catch (InvocationTargetException ex) {
-      if (ex.getTargetException() instanceof RuntimeException) {
-        throw (RuntimeException) ex.getTargetException();
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
       }
       throw ex;
     } catch (IllegalArgumentException ex) {

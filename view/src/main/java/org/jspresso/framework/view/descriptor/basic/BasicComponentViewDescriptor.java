@@ -189,8 +189,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * <li><code>NONE</code> for completely disabling fields labelling on the view
    * </li>
    * </ul>
-   * <p>
-   * Default value is <code>ESelectionMode.ASIDE</code>, i.e. fields label next
+   * Default value is <code>ELabelPosition.ASIDE</code>, i.e. fields label next
    * to the property UI component.
    * 
    * @param labelsPosition

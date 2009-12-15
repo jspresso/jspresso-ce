@@ -34,6 +34,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescript
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
     implements IIconDescriptor {

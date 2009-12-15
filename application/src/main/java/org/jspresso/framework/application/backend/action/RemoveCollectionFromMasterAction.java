@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
-
 /**
  * An action used in master/detail views to remove selected details from a
  * master domain object.
@@ -46,7 +45,8 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
       return false;
@@ -61,9 +61,9 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
       ICollectionAccessor collectionAccessor = getAccessorFactory(context)
           .createCollectionPropertyAccessor(
               collectionConnector.getId(),
-              collectionConnector.getModelProvider()
-                  .getModelDescriptor().getComponentDescriptor()
-                  .getComponentContract(), elementComponentContract);
+              collectionConnector.getModelProvider().getModelDescriptor()
+                  .getComponentDescriptor().getComponentContract(),
+              elementComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(getModelDescriptor(context));
@@ -78,7 +78,10 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
         } catch (IllegalAccessException ex) {
           throw new ActionException(ex);
         } catch (InvocationTargetException ex) {
-          throw new ActionException(ex);
+          if (ex.getCause() instanceof RuntimeException) {
+            throw (RuntimeException) ex.getCause();
+          }
+          throw new ActionException(ex.getCause());
         } catch (NoSuchMethodException ex) {
           throw new ActionException(ex);
         }

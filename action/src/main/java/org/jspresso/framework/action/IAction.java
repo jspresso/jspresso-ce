@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.jspresso.framework.security.ISecurable;
 
-
 /**
  * This interface establishes the contract of any action in the application.
  * 
@@ -37,12 +36,12 @@ public interface IAction extends ISecurable {
    * <code>IContextAware</code> interface.
    * 
    * @param actionHandler
-   *            the action handler this action has been told to execute by. It
-   *            may be used to post another actio execution upon completion of
-   *            this one.
+   *          the action handler this action has been told to execute by. It may
+   *          be used to post another actio execution upon completion of this
+   *          one.
    * @param context
-   *            the execution context. The action should update it depending on
-   *            its result.
+   *          the execution context. The action should update it depending on
+   *          its result.
    * @return true whenever this action completes normally.
    */
   boolean execute(IActionHandler actionHandler, Map<String, Object> context);
@@ -52,16 +51,9 @@ public interface IAction extends ISecurable {
    * if it is a pure frontend action. this is aimed at distributing the action
    * execution correctly to the different controllers of the application.
    * 
-   * @return <code>true</code> if the action needs the application model
-   *         (domain model objects).
+   * @return <code>true</code> if the action needs the application model (domain
+   *         model objects).
    */
   boolean isBackend();
-
-  /**
-   * Wether the action take a long time.
-   * 
-   * @return true if the action may take a long time.
-   */
-  boolean isLongOperation();
 
 }

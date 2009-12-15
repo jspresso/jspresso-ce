@@ -25,7 +25,20 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * Default implementation of a border view descriptor.
+ * A border view is a composite view that arranges its children to the
+ * <i>north</i>, <i>west</i>, <i>east</i>, <i>south</i> and <i>center</i>.
+ * Depending its position in the container, the resizing rules apply differently
+ * :
+ * <ul>
+ * <li><i>north</i> and <i>south</i> are resized horizontally and kept to their
+ * preferred size vertically</li>
+ * <li><i>west</i> and <i>east</i> are resized vertically and kept to their
+ * preferred size horizontally</li>
+ * <li><i>center</i> is resized both horizontally and vertically</li>
+ * </ul>
+ * Default cascading order for master-detail is :
+ * <p>
+ * north -> west -> center -> east -> south
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -107,7 +120,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the centerViewDescriptor.
+   * Sets the child view to layout in the <i>center</i> zone. The child view
+   * will be resized both horizontally and vertically.
    * 
    * @param centerViewDescriptor
    *          the centerViewDescriptor to set.
@@ -117,7 +131,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the eastViewDescriptor.
+   * Sets the child view to layout in the <i>east</i> zone. The child view will
+   * be resized vertically.
    * 
    * @param eastViewDescriptor
    *          the eastViewDescriptor to set.
@@ -127,7 +142,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the northViewDescriptor.
+   * Sets the child view to layout in the <i>north</i> zone. The child view will
+   * be resized horizontally.
    * 
    * @param northViewDescriptor
    *          the northViewDescriptor to set.
@@ -137,7 +153,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the southViewDescriptor.
+   * Sets the child view to layout in the <i>south</i> zone. The child view will
+   * be resized horizontally.
    * 
    * @param southViewDescriptor
    *          the southViewDescriptor to set.
@@ -147,7 +164,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the westViewDescriptor.
+   * Sets the child view to layout in the <i>west</i> zone. The child view will
+   * be resized vertically.
    * 
    * @param westViewDescriptor
    *          the westViewDescriptor to set.

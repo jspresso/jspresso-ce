@@ -26,7 +26,15 @@ import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * Default implementation of a split view descriptor.
+ * This composite view arranges its children in a container splitted either
+ * horizontally or vertically. An horizontal split disposes its 2 children
+ * <i>left</i> and <i>right</i> whereas a vertical split disposes its 2 children
+ * <i>top</i> and <i>bottom</i>. The dividing bar can typically be moved by the
+ * user to distribute the available space.
+ * <p>
+ * Default cascading order for master-detail is :
+ * <p>
+ * left -> right or top -> bottom depending on the split orientation.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -77,7 +85,8 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the leftTopViewDescriptor.
+   * Sets the <i>left</i> (horizontal split) of <i>top</i> (vertical split)
+   * nested view.
    * 
    * @param leftTopViewDescriptor
    *          the leftTopViewDescriptor to set.
@@ -87,7 +96,17 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the orientation.
+   * Configures the split orientation of the container. This is either a value
+   * of the <code>EOrientation</code> enum or its equivalent string
+   * representation :
+   * <ul>
+   * <li><code>VERTICAL</code> for splitting the container vertically and
+   * arranging the views top and bottom</li>
+   * <li><code>HORIZONTAL</code> for splitting the container horizontally and
+   * arranging the views left and right</li>
+   * </ul>
+   * Default value is <code>EOrientation.VERTICAL</code>, i.e. the ontainer is
+   * splitted vertically.
    * 
    * @param orientation
    *          the orientation to set.
@@ -97,7 +116,8 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
-   * Sets the rightBottomViewDescriptor.
+   * Sets the <i>right</i> (horizontal split) of <i>bottom</i> (vertical split)
+   * nested view.
    * 
    * @param rightBottomViewDescriptor
    *          the rightBottomViewDescriptor to set.

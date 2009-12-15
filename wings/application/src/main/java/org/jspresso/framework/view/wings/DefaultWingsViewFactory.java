@@ -286,17 +286,17 @@ public class DefaultWingsViewFactory extends
         viewDescriptor);
     List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
 
-    if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<SComponent> eastView = createView(viewDescriptor
-          .getEastViewDescriptor(), actionHandler, locale);
-      viewComponent.add(eastView.getPeer(), SBorderLayout.EAST);
-      childrenViews.add(eastView);
-    }
     if (viewDescriptor.getNorthViewDescriptor() != null) {
       IView<SComponent> northView = createView(viewDescriptor
           .getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.add(northView.getPeer(), SBorderLayout.NORTH);
       childrenViews.add(northView);
+    }
+    if (viewDescriptor.getWestViewDescriptor() != null) {
+      IView<SComponent> westView = createView(viewDescriptor
+          .getWestViewDescriptor(), actionHandler, locale);
+      viewComponent.add(westView.getPeer(), SBorderLayout.WEST);
+      childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
       IView<SComponent> centerView = createView(viewDescriptor
@@ -304,11 +304,11 @@ public class DefaultWingsViewFactory extends
       viewComponent.add(centerView.getPeer(), SBorderLayout.CENTER);
       childrenViews.add(centerView);
     }
-    if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<SComponent> westView = createView(viewDescriptor
-          .getWestViewDescriptor(), actionHandler, locale);
-      viewComponent.add(westView.getPeer(), SBorderLayout.WEST);
-      childrenViews.add(westView);
+    if (viewDescriptor.getEastViewDescriptor() != null) {
+      IView<SComponent> eastView = createView(viewDescriptor
+          .getEastViewDescriptor(), actionHandler, locale);
+      viewComponent.add(eastView.getPeer(), SBorderLayout.EAST);
+      childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
       IView<SComponent> southView = createView(viewDescriptor

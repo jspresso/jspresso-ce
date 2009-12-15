@@ -26,9 +26,42 @@ import java.util.Map;
 import org.jspresso.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 
-
 /**
- * Basic implementation of a composite subtree view descriptor.
+ * This descriptor is used to describe a collection of sibling nodes that each
+ * nest multiple subtrees. The children subtrees are each placed under an
+ * intermediary grouping node. For instance, given a composite tree level
+ * mapping a collection of <i>A</i>s and whose children are 2 tree levels
+ * mapping respectively a collection <i>Y</i>s and <i>Z</i>s, the tree would
+ * look like :
+ * 
+ * <pre>
+ * parent
+ *   <b>A</b>-1
+ *     <b>collY</b>
+ *       <b>Y</b>-1.1
+ *       <b>Y</b>-1.2
+ *     <b>collZ</b>
+ *       <b>Z</b>-1.1
+ *       <b>Z</b>-1.2
+ *       <b>Z</b>-1.3
+ *   <b>A</b>-2
+ *     <b>collY</b>
+ *       <b>Y</b>-2.1
+ *       <b>Y</b>-2.2
+ *       <b>Y</b>-2.3
+ *     <b>collZ</b>
+ *       <b>Z</b>-2.1
+ *   <b>A</b>-3
+ *     <b>collY</b>
+ *       <b>Y</b>-3.1
+ *       <b>Y</b>-3.2
+ *     <b>collZ</b>
+ *       <b>Z</b>-3.1
+ *       <b>Z</b>-3.2
+ * </pre>
+ * 
+ * You can notice the intermediary grouping nodes that are installed to visually
+ * separate the 2 collection families (<i>Y</i> and <i>Z</i>).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -53,27 +86,26 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
    */
   public List<ITreeLevelDescriptor> getChildrenDescriptors() {
     if (childrenDescriptorsMap != null) {
-      return new ArrayList<ITreeLevelDescriptor>(childrenDescriptorsMap.values());
+      return new ArrayList<ITreeLevelDescriptor>(childrenDescriptorsMap
+          .values());
     }
     return null;
   }
 
   /**
-   * Sets the childrenDescriptors.
+   * Assigns the list children tree level descriptors. A <code>null</code> value
+   * (default) makes this tree level a leaf tree level and is strictly
+   * equivalent to declaring a <code>BasicTreeLevelDescriptor</code> instead.
    * 
    * @param childrenDescriptors
-   *            the childrenDescriptors to set.
+   *          the childrenDescriptors to set.
    */
   public void setChildrenDescriptors(
       List<ITreeLevelDescriptor> childrenDescriptors) {
     this.childrenDescriptorsMap = new LinkedHashMap<String, ITreeLevelDescriptor>();
     for (ITreeLevelDescriptor descriptor : childrenDescriptors) {
-      // String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
-      // .getName();
-      // if (nodeGroupDescriptorName == null) {
       String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
           .getModelDescriptor().getName();
-      // }
       this.childrenDescriptorsMap.put(nodeGroupDescriptorName, descriptor);
     }
   }

@@ -28,7 +28,21 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 
 /**
- * Default implementation of a tree level descriptor.
+ * This is the base descriptor for all tree levels. A tree level is a collection
+ * of sibling nodes that belong to the same formal collection (usually a
+ * component collection property). This base descriptor does not accept nested
+ * subtrees so it is only used to describe a collection of leaf nodes. If you
+ * need to describe intermediary tree levels, yous will use one of the 2
+ * subtypes :
+ * <ul>
+ * <li><i>BasicSimpleTreeLevelDescriptor</i> to define a collection of tree
+ * nodes that accept a single subtree</li>
+ * <li><i>BasicCompositeTreeLevelDescriptor</i> to define a collection of tree
+ * nodes that accept a list of subtrees</li>
+ * </ul>
+ * Defining a tree level is mainly a matter of defining its representation as an
+ * individal list of components (i.e. the <code>nodeGroupDescriptor</code>
+ * property).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -46,7 +60,14 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
   }
 
   /**
-   * Sets the nodeGroupDescriptor.
+   * Describes the collection of sibling nodes (node group) as a if it were a
+   * list view. This is how you instruct Jspresso the type of the components
+   * that are used as model behind the tree nodes and which model property is
+   * used to compute the node labels. Most of the other properties defined on
+   * the node group descriptor itself are ignored (font, color, selection
+   * action, ...) since a tree group is not a "real" view but just a mean of
+   * defining a subtree. All these properties that are ignored on the tree group
+   * can be defined on the tree view itself.
    * 
    * @param nodeGroupDescriptor
    *          the nodeGroupDescriptor to set.
@@ -56,7 +77,13 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
   }
 
   /**
-   * Sets the grantedRoles.
+   * Assigns the roles that are authorized to use this subtree. Whenever the
+   * user is not granted sufficient privileges, the subtree is simply hidden.
+   * Setting the collection of granted roles to <code>null</code> (default
+   * value) disables role based authorization on the node group level. The
+   * framework then checks for the model roles authorizations and will apply the
+   * same restrictions. If both view and model granted roles collections are
+   * <code>null</code>, then access is granted to anyone.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.

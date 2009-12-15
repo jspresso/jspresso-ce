@@ -91,7 +91,10 @@ public abstract class BasicScalarPropertyDescriptor extends
       } catch (IllegalAccessException ex) {
         throw new DescriptorException(ex);
       } catch (InvocationTargetException ex) {
-        throw new DescriptorException(ex);
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new DescriptorException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new DescriptorException(ex);
       }

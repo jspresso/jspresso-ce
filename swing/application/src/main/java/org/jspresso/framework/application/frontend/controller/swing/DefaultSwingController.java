@@ -91,7 +91,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
 import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
-import foxtrot.Job;
 
 /**
  * Default implementation of a swing frontend controller. This implementation is
@@ -374,41 +373,43 @@ public class DefaultSwingController extends
     return false;
   }
 
-  /**
-   * This method has been overriden to take care of long-running operations not
-   * to have the swing gui blocked. It uses the foxtrot library to achieve this.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected final boolean executeBackend(final IAction action,
-      final Map<String, Object> context) {
-    if (action.isLongOperation()) {
-      Boolean success = (Boolean) SwingUtil.performLongOperation(new Job() {
+  // /**
+  // * This method has been overriden to take care of long-running operations
+  // not
+  // * to have the swing gui blocked. It uses the foxtrot library to achieve
+  // this.
+  // * <p>
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // protected final boolean executeBackend(final IAction action,
+  // final Map<String, Object> context) {
+  // if (action.isLongOperation()) {
+  // Boolean success = (Boolean) SwingUtil.performLongOperation(new Job() {
+  //
+  // /**
+  // * Decorates the super implementation with the foxtrot job.
+  // * <p>
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public Object run() {
+  // return new Boolean(protectedExecuteBackend(action, context));
+  // }
+  // });
+  // return success.booleanValue();
+  // }
+  // return protectedExecuteBackend(action, context);
+  // }
 
-        /**
-         * Decorates the super implementation with the foxtrot job.
-         * <p>
-         * {@inheritDoc}
-         */
-        @Override
-        public Object run() {
-          return new Boolean(protectedExecuteBackend(action, context));
-        }
-      });
-      return success.booleanValue();
-    }
-    return protectedExecuteBackend(action, context);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected final boolean executeFrontend(final IAction action,
-      final Map<String, Object> context) {
-    return protectedExecuteFrontend(action, context);
-  }
+  // /**
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // protected final boolean executeFrontend(final IAction action,
+  // final Map<String, Object> context) {
+  // return protectedExecuteFrontend(action, context);
+  // }
 
   private List<JMenu> createActionMenus() {
     return createMenus(getActionMap(), false);
@@ -537,15 +538,15 @@ public class DefaultSwingController extends
     return createMenus(createWorkspaceActionMap(), true);
   }
 
-  private boolean protectedExecuteBackend(IAction action,
-      Map<String, Object> context) {
-    return super.executeBackend(action, context);
-  }
+  // private boolean protectedExecuteBackend(IAction action,
+  // Map<String, Object> context) {
+  // return super.executeBackend(action, context);
+  // }
 
-  private boolean protectedExecuteFrontend(IAction action,
-      Map<String, Object> context) {
-    return super.executeFrontend(action, context);
-  }
+  // private boolean protectedExecuteFrontend(IAction action,
+  // Map<String, Object> context) {
+  // return super.executeFrontend(action, context);
+  // }
 
   private void initLoginProcess() {
     createControllerFrame();

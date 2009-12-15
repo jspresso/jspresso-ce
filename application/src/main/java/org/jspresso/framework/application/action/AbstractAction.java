@@ -27,8 +27,35 @@ import org.jspresso.framework.application.IController;
 import org.jspresso.framework.util.lang.StringUtils;
 
 /**
- * Base class for all application actions. Takes care of the context reference
- * as well as the input context keys reference.
+ * This is the base class for all application actions. It establishes the
+ * foundation of the Jspresso action framework, i.e. each action can link :
+ * <ul>
+ * <li>a <i>wrapped</i> action that will execute a return back to the caller
+ * action</li>
+ * <li>a <i>next</i> action that will execute after the caller</li>
+ * </ul>
+ * The action chaining described above supports the separation of concerns that
+ * consists in splitting the actions in two distinct categrories :
+ * <ul>
+ * <li><i>frontend</i> actions that deal with user interaction. They are
+ * typically used to bootstrap a service request from th UI, update the UI
+ * state, trigger the display of informations, errors, ...</li>
+ * <li><i>backend</i> actions that are faceless, UI agnostic and deal with the
+ * manipulation of the domain model, backend services, ...</li>
+ * </ul>
+ * Conceptually, a frontend action can call a backend action or another frontend
+ * action but a backend action should stay on the backend, thus should only
+ * reference another backend action. In other words, the backend layer should
+ * never explicitely reference the frontend layer.
+ * <p>
+ * That's the main reason for having a <i>wrapped</i> and a <i>next</i> action
+ * in the action chain. The <i>wrapped</i> action is perfectly suited to call
+ * the backend layer (a backend action) and give the flow back to the frontend
+ * layer. The <i>next</i> action is perfectly suited to chain 2 actions of the
+ * same type (i.e. 2 frontend actions or 2 backend actions). Using this scheme
+ * helps keeping layer dependencies clear. Of course, this dual chaining
+ * mechanism is completely recursive thus allowing to compose small (generic)
+ * actions into larger composite ones and promoting reusability.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -41,8 +68,6 @@ public abstract class AbstractAction extends AbstractActionContextAware
    */
   protected static final String ACTION_MODEL_NAME = "ActionModel";
   private Collection<String>    grantedRoles;
-
-  private boolean               longOperation;
 
   private IAction               nextAction;
   private IAction               wrappedAction;
@@ -59,7 +84,10 @@ public abstract class AbstractAction extends AbstractActionContextAware
   }
 
   /**
-   * Sets the wrappedAction.
+   * Registers an action to be executed after this action but before the
+   * <i>next</i> one. This is perfectly suited to chain a backend action from a
+   * frontend action since the control flow will return back to the calling
+   * layer (the frontend).
    * 
    * @param wrappedAction
    *          the wrappedAction to set.
@@ -97,7 +125,9 @@ public abstract class AbstractAction extends AbstractActionContextAware
   }
 
   /**
-   * Sets the nextAction.
+   * Registers an action to be executed after this action and after the
+   * <i>wrapped</i> one. This is perfectly suited to chain an action of the same
+   * type (frontend or backend) as this one.
    * 
    * @param nextAction
    *          the next action to execute.
@@ -114,13 +144,6 @@ public abstract class AbstractAction extends AbstractActionContextAware
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public boolean isLongOperation() {
-    return longOperation;
-  }
-
-  /**
    * Sets the grantedRoles.
    * 
    * @param grantedRoles
@@ -128,16 +151,6 @@ public abstract class AbstractAction extends AbstractActionContextAware
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
-  }
-
-  /**
-   * Sets the longOperation.
-   * 
-   * @param longOperation
-   *          the longOperation to set.
-   */
-  public void setLongOperation(boolean longOperation) {
-    this.longOperation = longOperation;
   }
 
   /**

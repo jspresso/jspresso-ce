@@ -27,7 +27,23 @@ import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * Default implementation of a constrained grid view descriptor.
+ * This composite view arranges its children in a grid where cell behaviour and
+ * dimensions are configured using cell constraints. A cell constraint is a
+ * simple data structure holding the following properties :
+ * <ul>
+ * <li><code>row</code>: the row to which the cell belongs</li>
+ * <li><code>column</code>: the column to which the cell belongs</li>
+ * <li><code>width</code>: the number of columns the cell spans horizontally
+ * (default value is 1)</li>
+ * <li><code>height</code>: the number of rows the cell spans vertically
+ * (default value is 1)</li>
+ * <li><code>heightResizable</code>: wether the cell should be resized to take
+ * all the available space vertically</li>
+ * <li><code>widthResizable</code>: wether the cell should be resized to take
+ * all the available space horizontally</li>
+ * </ul>
+ * Default cascading order follows the order of nested view registrations in the
+ * container.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -65,7 +81,7 @@ public class BasicConstrainedGridViewDescriptor extends
   }
 
   /**
-   * Sets the constrainedViews.
+   * Deprecated. Use <code>cells</code> instead.
    * 
    * @param constrainedViews
    *          the constrainedViews to set.
@@ -78,7 +94,7 @@ public class BasicConstrainedGridViewDescriptor extends
   }
 
   /**
-   * Sets the constrainedCells.
+   * Deprecated. Use <code>cells</code> instead.
    * 
    * @param constrainedCells
    *          the constrainedCells to set.
@@ -91,7 +107,12 @@ public class BasicConstrainedGridViewDescriptor extends
   }
 
   /**
-   * Sets the constrainedCells.
+   * Registers the nested children views along with their cell constaints. They
+   * are set as a <code>Map</code> that is :
+   * <ul>
+   * <li>keyed by the children views</li>
+   * <li>valued by the cell constraints to apply to each nested view</li>
+   * </ul>
    * 
    * @param cells
    *          the cells to set.

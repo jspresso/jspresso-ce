@@ -102,7 +102,10 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
         } catch (IllegalAccessException ex) {
           throw new NestedRuntimeException(ex);
         } catch (InvocationTargetException ex) {
-          throw new NestedRuntimeException(ex);
+          if (ex.getCause() instanceof RuntimeException) {
+            throw (RuntimeException) ex.getCause();
+          }
+          throw new NestedRuntimeException(ex.getCause());
         } catch (NoSuchMethodException ex) {
           throw new NestedRuntimeException(ex);
         }

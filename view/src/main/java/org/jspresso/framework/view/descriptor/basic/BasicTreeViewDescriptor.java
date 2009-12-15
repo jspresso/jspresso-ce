@@ -32,7 +32,9 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
  * This descriptor is use to design a tree view. The way to define a tree view
  * in Jspresso is a matter of assembling <i>tree level descriptors</i>
  * hierarchically. A <i>tree level descriptor</i> is a group of sibling nodes
- * that represent a collection property.
+ * that usually represent a component collection property. Each individual tree
+ * node collection can be secured by using role-based authorization (i.e.
+ * <code>grantedRoles</code>) on its descriptor.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -136,6 +138,10 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * In the example above, you should notice that there is no need for the tree
    * to install an intermediary node to visually group the collection elements
    * since the collection is alone on its level.
+   * <p>
+   * This property is only used if the <code>rootSubtreeDescriptor</code> is not
+   * explicitely set. In the latter case, nested subtrees are determined from
+   * the <code>rootSubtreeDescriptor</code>.
    * 
    * @param childDescriptor
    *          the childDescriptor to set.
@@ -146,7 +152,15 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the iconImageURLProvider.
+   * The icon image URL provider is the delegate responsible for inferring a
+   * tree node icon based on its underlying model. By default (i.e. when
+   * <code>iconImageURLProvider</code> is <code>null</code>), Jspresso will use
+   * the underlying component descriptor icon, if any. Using a custom icon image
+   * URL provider allows to implement finer rules like using different icons
+   * based on the underlying object state. There is a single method to implement
+   * to achieve this :
+   * <p>
+   * <code>String getIconImageURLForObject(Object userObject);</code>
    * 
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
@@ -156,7 +170,10 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the maxDepth.
+   * This property is used only when the tree (or sub-tree) is declared
+   * recursively, i.e. a tree level belongs to its own children hierarchy.
+   * Default value is <i>10</i>, meaning that a maximum number of 10 levels can
+   * be nested.
    * 
    * @param maxDepth
    *          the maxDepth to set.
@@ -166,7 +183,12 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the renderedProperty.
+   * This property allows to define the model property used to label the root
+   * node.
+   * <p>
+   * This property is only used if the <code>rootSubtreeDescriptor</code> is not
+   * explicitely set. In the latter case, <code>renderedProperty</code> is
+   * determined from the <code>rootSubtreeDescriptor</code>.
    * 
    * @param renderedProperty
    *          the renderedProperty to set.
@@ -176,7 +198,17 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the rootSubtreeDescriptor.
+   * This property allows to explicitely define the tree root level as any other
+   * level. Most of the time, you will prefer using the following shortcut
+   * properties :
+   * <ul>
+   * <li><code>childDescriptor</code></li>
+   * <li><code>childrenDescriptors</code></li>
+   * <li><code>renderedProperty</code></li>
+   * </ul>
+   * Whenever <code>rootSubtreeDescriptor</code> is explicitely set, the
+   * properties above are simply ignored since all values are determined from
+   * <code>rootSubtreeDescriptor</code>.
    * 
    * @param rootSubtreeDescriptor
    *          the rootSubtreeDescriptor to set.
@@ -194,7 +226,10 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the itemSelectionAction.
+   * This property alows to bind an action that gets triggered every time the
+   * selection changes on the tree view. The action context passed to the action
+   * when it is executed is the same as if it had been registered on the tree
+   * view.
    * 
    * @param itemSelectionAction
    *          the itemSelectionAction to set.
@@ -213,7 +248,9 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the expanded.
+   * Setting this property to <code>true</code> configures the created tree to
+   * appear with its node expanded. A value of <code>false</code> (default)
+   * means that the tree nodes are initially collapsed.
    * 
    * @param expanded
    *          the expanded to set.
@@ -224,9 +261,9 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Configures the first tree level as being a list of collections of sibling
-   * nodes. For instance, if the children tree levels are mapped to 2 collection
-   * properties (collA, collB) each containing 3 elements (collA_Elt-1 to 3 and
-   * collB_Elt-1 to 3), the tree would look like :
+   * nodes (subtrees). For instance, if the children tree levels are mapped to 2
+   * collection properties (collA, collB) each containing 3 elements
+   * (collA_Elt-1 to 3 and collB_Elt-1 to 3), the tree would look like :
    * 
    * <pre>
    * rootItem
@@ -243,6 +280,10 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * In the example above, you should notice intermediate collection property
    * grouping nodes (collA and collB in italic). They automatically appeared to
    * clearly group the tree nodes belonging to the different collections.
+   * <p>
+   * This property is only used if the <code>rootSubtreeDescriptor</code> is not
+   * explicitely set. In the latter case, nested subtrees are determined from
+   * the <code>rootSubtreeDescriptor</code>.
    * 
    * @param childrenDescriptors
    *          the childrenDescriptor to set.
