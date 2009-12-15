@@ -57,6 +57,7 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private HibernateTemplate hibernateTemplate;
   private boolean           traversedPendingOperations = false;
+  private boolean           pendingOperationsExecuting = false;
 
   /**
    * Gets the hibernateTemplate.
@@ -297,43 +298,56 @@ public class HibernateBackendController extends AbstractBackendController {
          * {@inheritDoc}
          */
         public Object doInHibernate(Session session) {
-          boolean flushIsNecessary = false;
-          Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
-          Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
-          List<IEntity> entitiesToClone = new ArrayList<IEntity>();
-          if (entitiesToUpdate != null) {
-            entitiesToClone.addAll(entitiesToUpdate);
-          }
-          if (entitiesToDelete != null) {
-            entitiesToClone.addAll(entitiesToDelete);
-          }
-          List<IEntity> sessionEntities = cloneInUnitOfWork(entitiesToClone);
-          Map<IEntity, IEntity> entityMap = new HashMap<IEntity, IEntity>();
-          for (int i = 0; i < entitiesToClone.size(); i++) {
-            entityMap.put(entitiesToClone.get(i), sessionEntities.get(i));
-          }
-          if (entitiesToUpdate != null) {
-            for (IEntity entityToUpdate : entitiesToUpdate) {
-              IEntity sessionEntity = entityMap.get(entityToUpdate);
-              session.saveOrUpdate(sessionEntity);
-              flushIsNecessary = true;
+          try {
+            pendingOperationsExecuting = true;
+            boolean flushIsNecessary = false;
+            Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
+            Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
+            List<IEntity> entitiesToClone = new ArrayList<IEntity>();
+            if (entitiesToUpdate != null) {
+              entitiesToClone.addAll(entitiesToUpdate);
             }
-          }
-          if (flushIsNecessary) {
-            session.flush();
-          }
-          flushIsNecessary = false;
-          if (entitiesToDelete != null) {
-            for (IEntity entityToDelete : entitiesToDelete) {
-              IEntity sessionEntity = entityMap.get(entityToDelete);
-              session.delete(sessionEntity);
-              flushIsNecessary = true;
+            if (entitiesToDelete != null) {
+              entitiesToClone.addAll(entitiesToDelete);
             }
+            List<IEntity> sessionEntities = cloneInUnitOfWork(entitiesToClone);
+            Map<IEntity, IEntity> entityMap = new HashMap<IEntity, IEntity>();
+            for (int i = 0; i < entitiesToClone.size(); i++) {
+              entityMap.put(entitiesToClone.get(i), sessionEntities.get(i));
+            }
+            if (entitiesToUpdate != null) {
+              for (IEntity entityToUpdate : entitiesToUpdate) {
+                IEntity sessionEntity = entityMap.get(entityToUpdate);
+                if (sessionEntity == null) {
+                  sessionEntity = entityToUpdate;
+                }
+                session.saveOrUpdate(sessionEntity);
+                flushIsNecessary = true;
+              }
+            }
+            if (flushIsNecessary) {
+              session.flush();
+            }
+            flushIsNecessary = false;
+            // there might have been new entities to delete
+            entitiesToDelete = getEntitiesRegisteredForDeletion();
+            if (entitiesToDelete != null) {
+              for (IEntity entityToDelete : entitiesToDelete) {
+                IEntity sessionEntity = entityMap.get(entityToDelete);
+                if (sessionEntity == null) {
+                  sessionEntity = entityToDelete;
+                }
+                session.delete(sessionEntity);
+                flushIsNecessary = true;
+              }
+            }
+            if (flushIsNecessary) {
+              session.flush();
+            }
+            return null;
+          } finally {
+            pendingOperationsExecuting = false;
           }
-          if (flushIsNecessary) {
-            session.flush();
-          }
-          return null;
         }
       });
     }
@@ -440,4 +454,28 @@ public class HibernateBackendController extends AbstractBackendController {
       }
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void registerForUpdate(IEntity entity) {
+    if (pendingOperationsExecuting) {
+      getHibernateTemplate().saveOrUpdate(entity);
+    } else {
+      super.registerForUpdate(entity);
+    }
+  }
+
+  // /**
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public void registerForDeletion(IEntity entity) {
+  // if (pendingOperationsExecuting) {
+  // getHibernateTemplate().delete(entity);
+  // } else {
+  // super.registerForDeletion(entity);
+  // }
+  // }
 }
