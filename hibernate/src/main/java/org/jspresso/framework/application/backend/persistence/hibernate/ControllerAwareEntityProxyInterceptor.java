@@ -99,14 +99,6 @@ public class ControllerAwareEntityProxyInterceptor extends
         // Those just saved entities must not be considered dirty.
         return new int[0];
       }
-      // the entity is dirty and is going to be flushed.
-      // To workaround a bug, the update lifecycle hook is handeled here.
-      if (((IEntity) entity).isPersistent()
-          && /* ((IEntity) entity).onUpdate(getEntityFactory()) */onFlushDirty(
-              entity, id, currentState, previousState, propertyNames, types)) {
-        dirtyProperties = backendController
-            .getDirtyProperties((IEntity) entity);
-      }
       int[] indices = new int[dirtyProperties.size()];
       int n = 0;
       for (int i = 0; i < propertyNames.length; i++) {
@@ -207,5 +199,47 @@ public class ControllerAwareEntityProxyInterceptor extends
   @Override
   protected UserPrincipal getPrincipal() {
     return backendController.getApplicationSession().getPrincipal();
+  }
+
+  /**
+   * This is the place to trigger the update lifecycle handler. onFlushDirty is
+   * not the right place since it cannot deal with transient new instances that
+   * might be added to the object tree.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public void preFlush(Iterator entities) {
+    while (entities.hasNext()) {
+      Object entity = entities.next();
+      if (entity instanceof IEntity && ((IEntity) entity).isPersistent()) {
+        boolean isClean = false;
+        Map<String, Object> dirtyProperties = backendController
+            .getDirtyProperties((IEntity) entity);
+        if (dirtyProperties != null) {
+          dirtyProperties.remove(IEntity.VERSION);
+        }
+        if (dirtyProperties == null) {
+          isClean = true;
+        } else if (dirtyProperties.isEmpty()) {
+          isClean = true;
+        } else if (dirtyProperties.containsKey(IEntity.ID)) {
+          // whenever an entity has just been saved, its state is in the dirty
+          // store.
+          // hibernate might ask to check dirtyness especially for collection
+          // members.
+          // Those just saved entities must not be considered dirty.
+          isClean = true;
+        } else {
+          isClean = false;
+        }
+        if (!isClean) {
+          // the entity is dirty and is going to be flushed.
+          ((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal(),
+              getEntityLifecycleHandler());
+        }
+      }
+    }
   }
 }

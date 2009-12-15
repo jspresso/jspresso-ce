@@ -66,7 +66,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings({ "unused", "unchecked" })
+  @SuppressWarnings({"unused", "unchecked" })
   public Object instantiate(String entityName, EntityMode entityMode,
       Serializable id) {
     try {
@@ -88,26 +88,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
           getEntityLifecycleHandler());
     }
     super.onDelete(entity, id, state, propertyNames, types);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean onFlushDirty(Object entity, Serializable id,
-      Object[] currentState, Object[] previousState, String[] propertyNames,
-      Type[] types) {
-    boolean stateUpdated = false;
-    if (entity instanceof IEntity) {
-      if (((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal(),
-          getEntityLifecycleHandler())) {
-        extractState((IEntity) entity, propertyNames, currentState);
-        stateUpdated = true;
-      }
-    }
-    return stateUpdated
-        || super.onFlushDirty(entity, id, currentState, previousState,
-            propertyNames, types);
   }
 
   /**
