@@ -573,79 +573,74 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.east != null) {
         nbCols++;
       }
+
+      // NORTH
+      row = new GridRow();
+      row.percentWidth = 100.0;
+      borderContainer.addChild(row);
       
+      cell = new GridItem();
+      cell.colSpan = nbCols;
+      cell.percentWidth = 100.0;
       if(remoteBorderContainer.north != null) {
-        row = new GridRow();
-        row.percentWidth = 100.0;
-        borderContainer.addChild(row);
-        
-        cell = new GridItem();
-        cell.colSpan = nbCols;
-        cell.percentWidth = 100.0;
-        cell.percentHeight = 100.0;
-        row.addChild(cell);
-        
         cellComponent = createComponent(remoteBorderContainer.north);
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
       }
-      if(   remoteBorderContainer.west != null
-         || remoteBorderContainer.center != null
-         || remoteBorderContainer.east != null) {
-        row = new GridRow();
-        row.percentWidth = 100.0;
-        row.percentHeight = 100.0;
-        borderContainer.addChild(row);
-        if(remoteBorderContainer.west != null) {
-          cell = new GridItem();
-          cell.percentHeight = 100.0;
-          row.addChild(cell);
-          
-          cellComponent = createComponent(remoteBorderContainer.west);
-          cellComponent.percentWidth = 100.0;
-          cellComponent.percentHeight = 100.0;
-          cell.addChild(cellComponent);
-        }
-        if(remoteBorderContainer.center != null) {
-          cell = new GridItem();
-          cell.percentHeight = 100.0;
-          cell.percentWidth = 100.0;
-          row.addChild(cell);
-          
-          cellComponent = createComponent(remoteBorderContainer.center);
-          cellComponent.percentWidth = 100.0;
-          cellComponent.percentHeight = 100.0;
-          cell.addChild(cellComponent);
-        }
-        if(remoteBorderContainer.east != null) {
-          cell = new GridItem();
-          cell.percentHeight = 100.0;
-          row.addChild(cell);
-          
-          cellComponent = createComponent(remoteBorderContainer.east);
-          cellComponent.percentWidth = 100.0;
-          cellComponent.percentHeight = 100.0;
-          cell.addChild(cellComponent);
-        }
-      }
-      if(remoteBorderContainer.south != null) {
-        
-        row = new GridRow();
-        row.percentWidth = 100.0;
-        borderContainer.addChild(row);
-        
+      row.addChild(cell);
+
+      // WEST, CENTER, EAST
+      row = new GridRow();
+      row.percentWidth = 100.0;
+      row.percentHeight = 100.0;
+      borderContainer.addChild(row);
+
+      if(remoteBorderContainer.west != null) {
         cell = new GridItem();
-        cell.colSpan = nbCols;
-        cell.percentWidth = 100.0;
+        cell.setStyle("horizontalAlign", "left");
         cell.percentHeight = 100.0;
+        cellComponent = createComponent(remoteBorderContainer.west);
+        cellComponent.percentHeight = 100.0;
+        cell.addChild(cellComponent);
         row.addChild(cell);
-        
+      }
+
+      cell = new GridItem();
+      cell.percentHeight = 100.0;
+      cell.percentWidth = 100.0;
+      if(remoteBorderContainer.center != null) {
+        cellComponent = createComponent(remoteBorderContainer.center);
+        cellComponent.percentWidth = 100.0;
+        cellComponent.percentHeight = 100.0;
+        cell.addChild(cellComponent);
+      }
+      row.addChild(cell);
+
+      if(remoteBorderContainer.east != null) {
+        cell = new GridItem();
+        cell.setStyle("horizontalAlign", "right");
+        cell.percentHeight = 100.0;
+        cellComponent = createComponent(remoteBorderContainer.east);
+        cellComponent.percentHeight = 100.0;
+        cell.addChild(cellComponent);
+        row.addChild(cell);
+      }
+      
+      // SOUTH
+      row = new GridRow();
+      row.percentWidth = 100.0;
+      borderContainer.addChild(row);
+      cell = new GridItem();
+      cell.colSpan = nbCols;
+      cell.percentWidth = 100.0;
+      if(remoteBorderContainer.south != null) {
         cellComponent = createComponent(remoteBorderContainer.south);
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
       }
+      row.addChild(cell);
 
       return borderContainer;
     }
