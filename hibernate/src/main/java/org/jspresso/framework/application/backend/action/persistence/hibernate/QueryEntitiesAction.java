@@ -218,9 +218,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             } else if (property.getValue() instanceof IQueryComponent) {
               IQueryComponent joinedComponent = ((IQueryComponent) property
                   .getValue());
-              if (joinedComponent.isInlineComponent()) {
+              if (joinedComponent.isInlineComponent() || path != null) {
                 // the joined component is an inlined component so we must use
-                // dot nested properties.
+                // dot nested properties. Same applies if we are in a nested
+                // path i.e. already on an inline component.
                 abort = abort
                     || completeCriteria(criteria, prefixedProperty,
                         (IQueryComponent) property.getValue());
