@@ -21,6 +21,7 @@ package org.jspresso.framework.util.i18n;
 import java.text.MessageFormat;
 import java.util.Locale;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
@@ -36,7 +37,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 public class EnhancedResourceBundleMessageSource extends
     ResourceBundleMessageSource {
 
-  private static final char DOT = '.';
+  private static final char DOT           = '.';
+  private boolean           resolveNested = true;
 
   /**
    * Overriden so that we can explore the nested key chain for a translation
@@ -48,14 +50,41 @@ public class EnhancedResourceBundleMessageSource extends
   protected MessageFormat resolveCode(String code, Locale locale) {
     String codePart = code;
     MessageFormat res = super.resolveCode(codePart, locale);
+    if (res == null) {
+      MessageSource parent = getParentMessageSource();
+      if (parent instanceof EnhancedResourceBundleMessageSource) {
+        res = ((EnhancedResourceBundleMessageSource) parent).baseResolveCode(
+            code, locale);
+      }
+    }
     int dotIndex = codePart.indexOf(DOT);
 
-    while (res == null && dotIndex > 0) {
+    while (resolveNested && res == null && dotIndex > 0) {
       codePart = codePart.substring(dotIndex + 1);
       res = super.resolveCode(codePart, locale);
+      if (res == null) {
+        MessageSource parent = getParentMessageSource();
+        if (parent instanceof EnhancedResourceBundleMessageSource) {
+          res = ((EnhancedResourceBundleMessageSource) parent).baseResolveCode(
+              code, locale);
+        }
+      }
       dotIndex = codePart.indexOf(DOT);
     }
     return res;
+  }
+
+  /**
+   * Delegates to super implementation (do not search for nested translations).
+   * 
+   * @param code
+   *          the translation code.
+   * @param locale
+   *          the locale.
+   * @return the translation.
+   */
+  protected final MessageFormat baseResolveCode(String code, Locale locale) {
+    return super.resolveCode(code, locale);
   }
 
   /**
@@ -68,13 +97,51 @@ public class EnhancedResourceBundleMessageSource extends
   protected String resolveCodeWithoutArguments(String code, Locale locale) {
     String codePart = code;
     String res = super.resolveCodeWithoutArguments(codePart, locale);
+    if (res == null) {
+      MessageSource parent = getParentMessageSource();
+      if (parent instanceof EnhancedResourceBundleMessageSource) {
+        res = ((EnhancedResourceBundleMessageSource) parent)
+            .baseResolveCodeWithoutArguments(code, locale);
+      }
+    }
     int dotIndex = codePart.indexOf(DOT);
 
-    while (res == null && dotIndex > 0) {
+    while (resolveNested && res == null && dotIndex > 0) {
       codePart = codePart.substring(dotIndex + 1);
       res = super.resolveCodeWithoutArguments(codePart, locale);
+      if (res == null) {
+        MessageSource parent = getParentMessageSource();
+        if (parent instanceof EnhancedResourceBundleMessageSource) {
+          res = ((EnhancedResourceBundleMessageSource) parent)
+              .baseResolveCodeWithoutArguments(code, locale);
+        }
+      }
       dotIndex = codePart.indexOf(DOT);
     }
     return res;
+  }
+
+  /**
+   * Delegates to super implementation (do not search for nested translations).
+   * 
+   * @param code
+   *          the translation code.
+   * @param locale
+   *          the locale.
+   * @return the translation.
+   */
+  protected final String baseResolveCodeWithoutArguments(String code,
+      Locale locale) {
+    return super.resolveCodeWithoutArguments(code, locale);
+  }
+
+  /**
+   * Sets the resolveNested.
+   * 
+   * @param resolveNested
+   *          the resolveNested to set.
+   */
+  public void setResolveNested(boolean resolveNested) {
+    this.resolveNested = resolveNested;
   }
 }

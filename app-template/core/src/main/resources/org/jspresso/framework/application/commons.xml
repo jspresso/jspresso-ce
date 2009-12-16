@@ -13,9 +13,10 @@
     <property name="messageSource" ref="applicationMessageSource" />
   </bean>
 
-  <bean id="commonsMessageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+  <bean id="commonsMessageSource" class="org.jspresso.framework.util.i18n.EnhancedResourceBundleMessageSource">
     <property name="parentMessageSource" ref="mockMessageSource" />
     <property name="basename" value="org.jspresso.framework.application.i18n.Commons" />
+    <property name="resolveNested" value="false"/>
   </bean>
 
   <bean id="abstractApplicationMessageSource" abstract="true"
