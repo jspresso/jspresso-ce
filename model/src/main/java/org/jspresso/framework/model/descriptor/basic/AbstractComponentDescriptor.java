@@ -698,7 +698,8 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (serviceDelegateBeanNames != null && beanFactory != null) {
       for (Entry<String, String> nextPair : serviceDelegateBeanNames.entrySet()) {
         try {
-          registerService(Class.forName(nextPair.getKey()),
+          registerService(Class.forName(ObjectUtils
+              .extractRawClassName(nextPair.getKey())),
               (IComponentService) beanFactory.getBean(nextPair.getValue(),
                   IComponentService.class));
         } catch (ClassNotFoundException ex) {
