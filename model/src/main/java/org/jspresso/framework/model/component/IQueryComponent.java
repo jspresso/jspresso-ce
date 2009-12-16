@@ -76,4 +76,11 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    *          the defaultOrderingProperties to set.
    */
   void setDefaultOrderingProperties(Map<String, ESort> defaultOrderingProperties);
+
+  /**
+   * Does this query component map an inline component or an entity ?
+   * 
+   * @return true if this query component map an inline component ?
+   */
+  boolean isInlineComponent();
 }

@@ -216,9 +216,22 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               criteria.add(Restrictions.eq(prefixedProperty, property
                   .getValue()));
             } else if (property.getValue() instanceof IQueryComponent) {
-              abort = abort
-                  || completeCriteria(criteria, prefixedProperty,
-                      (IQueryComponent) property.getValue());
+              IQueryComponent joinedComponent = ((IQueryComponent) property
+                  .getValue());
+              if (joinedComponent.isInlineComponent()) {
+                // the joined component is an inlined component so we must use
+                // dot nested properties.
+                abort = abort
+                    || completeCriteria(criteria, prefixedProperty,
+                        (IQueryComponent) property.getValue());
+              } else {
+                // the joined component is an entity so we must use
+                // nested criteria.
+                DetachedCriteria joinCriteria = criteria
+                    .createCriteria(property.getKey());
+                abort = abort
+                    || completeCriteria(joinCriteria, null, joinedComponent);
+              }
             }
           }
         }

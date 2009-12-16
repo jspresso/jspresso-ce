@@ -72,15 +72,13 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         && propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
-      if (isInlineComponentDescriptor(referencedDescriptor)) {
-        QueryComponent referencedQueryComponent = new QueryComponent(
-            referencedDescriptor);
-        referencedQueryComponent
-            .addPropertyChangeListener(new InlinedComponentTracker(
-                propertyDescriptor.getName()));
-        put((String) key, referencedQueryComponent);
-        return referencedQueryComponent;
-      }
+      QueryComponent referencedQueryComponent = new QueryComponent(
+          referencedDescriptor);
+      referencedQueryComponent
+          .addPropertyChangeListener(new InlinedComponentTracker(
+              propertyDescriptor.getName()));
+      put((String) key, referencedQueryComponent);
+      return referencedQueryComponent;
     }
     return actualValue;
   }
@@ -105,13 +103,6 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   public void setQueriedComponents(List<? extends IComponent> queriedComponents) {
     put(QUERIED_COMPONENTS, queriedComponents);
-  }
-
-  private boolean isInlineComponentDescriptor(
-      IComponentDescriptor<?> referencedComponentDescriptor) {
-    return !IEntity.class.isAssignableFrom(referencedComponentDescriptor
-        .getComponentContract())
-        && !referencedComponentDescriptor.isPurelyAbstract();
   }
 
   private class InlinedComponentTracker implements PropertyChangeListener {
@@ -264,14 +255,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     this.orderingProperties = orderingProperties;
   }
 
-  /**
-   * Gets the componentDescriptor.
-   * 
-   * @return the componentDescriptor.
-   */
-  public IComponentDescriptor<?> getComponentDescriptor() {
-    return componentDescriptor;
-  }
+  // /**
+  // * Gets the componentDescriptor.
+  // *
+  // * @return the componentDescriptor.
+  // */
+  // public IComponentDescriptor<?> getComponentDescriptor() {
+  // return componentDescriptor;
+  // }
 
   /**
    * {@inheritDoc}
@@ -281,4 +272,12 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     this.defaultOrderingProperties = defaultOrderingProperties;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isInlineComponent() {
+    return !IEntity.class.isAssignableFrom(componentDescriptor
+        .getComponentContract())
+        && !componentDescriptor.isPurelyAbstract();
+  }
 }
