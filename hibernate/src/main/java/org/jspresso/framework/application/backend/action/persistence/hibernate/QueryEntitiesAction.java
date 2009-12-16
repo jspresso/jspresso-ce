@@ -53,7 +53,8 @@ import org.springframework.transaction.support.TransactionCallback;
  */
 public class QueryEntitiesAction extends AbstractHibernateAction {
 
-  private ICriteriaRefiner criteriaRefiner;
+  private ICriteriaRefiner       criteriaRefiner;
+  private IQueryComponentRefiner queryComponentRefiner;
 
   /**
    * {@inheritDoc}
@@ -62,9 +63,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
-    final IQueryComponent queryComponent = (IQueryComponent) ((IValueConnector) context
-        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR))
-        .getConnectorValue();
+    final IQueryComponent queryComponent = getQueryComponent(context);
+    if (queryComponentRefiner != null) {
+      queryComponentRefiner.refineQueryComponent(queryComponent, context);
+    }
 
     List<IEntity> queriedEntities = (List<IEntity>) getTransactionTemplate(
         context).execute(new TransactionCallback() {
@@ -251,6 +253,20 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
+   * Retrieves the query component from the context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the query component.
+   */
+  protected IQueryComponent getQueryComponent(final Map<String, Object> context) {
+    final IQueryComponent queryComponent = (IQueryComponent) ((IValueConnector) context
+        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR))
+        .getConnectorValue();
+    return queryComponent;
+  }
+
+  /**
    * Sets the criteriaRefiner.
    * 
    * @param criteriaRefiner
@@ -258,5 +274,16 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   public void setCriteriaRefiner(ICriteriaRefiner criteriaRefiner) {
     this.criteriaRefiner = criteriaRefiner;
+  }
+
+  /**
+   * Sets the queryComponentRefiner.
+   * 
+   * @param queryComponentRefiner
+   *          the queryComponentRefiner to set.
+   */
+  public void setQueryComponentRefiner(
+      IQueryComponentRefiner queryComponentRefiner) {
+    this.queryComponentRefiner = queryComponentRefiner;
   }
 }
