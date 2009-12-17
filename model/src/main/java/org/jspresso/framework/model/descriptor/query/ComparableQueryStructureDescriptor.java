@@ -136,4 +136,12 @@ public class ComparableQueryStructureDescriptor extends
 
     setReferencedDescriptor(refDescriptor);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicReferencePropertyDescriptor<ComparableQueryStructure> createQueryDescriptor() {
+    return this;
+  }
 }

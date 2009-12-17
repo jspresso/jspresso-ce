@@ -113,6 +113,8 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   private String                                          sqlName;
 
+  private IComponentDescriptor<E>                         queryDescriptor;
+
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
    * 
@@ -964,5 +966,22 @@ public abstract class AbstractComponentDescriptor<E> extends
         IComponent.class.getName());
 
     return componentDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public IComponentDescriptor<E> createQueryDescriptor() {
+    if (queryDescriptor == null) {
+      queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
+      Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+      for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
+        propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
+      }
+      ((AbstractComponentDescriptor<E>) queryDescriptor)
+          .setPropertyDescriptors(propertyDescriptors);
+    }
+    return queryDescriptor;
   }
 }

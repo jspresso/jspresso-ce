@@ -199,4 +199,20 @@ public class BasicReferencePropertyDescriptor<E> extends
     }
     return false;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public BasicReferencePropertyDescriptor<E> createQueryDescriptor() {
+    BasicReferencePropertyDescriptor<E> queryDescriptor = (BasicReferencePropertyDescriptor<E>) super
+        .createQueryDescriptor();
+    IComponentDescriptor<E> realReferencedDescriptor = queryDescriptor
+        .getReferencedDescriptor();
+    IComponentDescriptor<E> queryReferencedDescriptor = realReferencedDescriptor
+        .createQueryDescriptor();
+    queryDescriptor.setReferencedDescriptor(queryReferencedDescriptor);
+    return queryDescriptor;
+  }
 }

@@ -180,4 +180,12 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * @return the page size for the query when used as query filter.
    */
   Integer getPageSize();
+
+  /**
+   * Creates a new component descriptor to allow for querying.
+   * 
+   * @return a new component descriptor that allows for expressing constraints
+   *         on this component.
+   */
+  IComponentDescriptor<E> createQueryDescriptor();
 }
