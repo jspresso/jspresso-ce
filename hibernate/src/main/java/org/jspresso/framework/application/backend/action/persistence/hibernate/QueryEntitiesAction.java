@@ -220,20 +220,22 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             } else if (property.getValue() instanceof IQueryComponent) {
               IQueryComponent joinedComponent = ((IQueryComponent) property
                   .getValue());
-              if (joinedComponent.isInlineComponent() || path != null) {
-                // the joined component is an inlined component so we must use
-                // dot nested properties. Same applies if we are in a nested
-                // path i.e. already on an inline component.
-                abort = abort
-                    || completeCriteria(criteria, prefixedProperty,
-                        (IQueryComponent) property.getValue());
-              } else {
-                // the joined component is an entity so we must use
-                // nested criteria.
-                DetachedCriteria joinCriteria = criteria
-                    .createCriteria(property.getKey());
-                abort = abort
-                    || completeCriteria(joinCriteria, null, joinedComponent);
+              if (!joinedComponent.isEmpty()) {
+                if (joinedComponent.isInlineComponent() || path != null) {
+                  // the joined component is an inlined component so we must use
+                  // dot nested properties. Same applies if we are in a nested
+                  // path i.e. already on an inline component.
+                  abort = abort
+                      || completeCriteria(criteria, prefixedProperty,
+                          (IQueryComponent) property.getValue());
+                } else {
+                  // the joined component is an entity so we must use
+                  // nested criteria.
+                  DetachedCriteria joinCriteria = criteria
+                      .createCriteria(property.getKey());
+                  abort = abort
+                      || completeCriteria(joinCriteria, null, joinedComponent);
+                }
               }
             }
           }
