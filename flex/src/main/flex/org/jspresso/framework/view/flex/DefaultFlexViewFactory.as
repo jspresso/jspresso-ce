@@ -1301,14 +1301,16 @@ package org.jspresso.framework.view.flex {
           var column:DataGridColumn = table.columns[event.columnIndex];
           column.sortDescending = !column.sortDescending;
           table.displaySort(event.columnIndex, column.sortDescending);
-          var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
-          var orderingProperties:Object = new Object();
-          orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
-          var sortCommand:RemoteSortCommand = new RemoteSortCommand();
-          sortCommand.orderingProperties = orderingProperties;
-          sortCommand.viewStateGuid = remoteTable.state.guid;
-          sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
-          _commandHandler.registerCommand(sortCommand);
+          if(state.children.length > 1) {
+            var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
+            var orderingProperties:Object = new Object();
+            orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
+            var sortCommand:RemoteSortCommand = new RemoteSortCommand();
+            sortCommand.orderingProperties = orderingProperties;
+            sortCommand.viewStateGuid = remoteTable.state.guid;
+            sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
+            _commandHandler.registerCommand(sortCommand);
+          }
         });
       } else {
         table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {

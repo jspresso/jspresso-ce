@@ -217,7 +217,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
+  public synchronized List<RemoteCommand> handleCommands(
+      List<RemoteCommand> commands) {
     try {
       commandRegistrationEnabled = true;
       commandQueue = new ArrayList<RemoteCommand>();

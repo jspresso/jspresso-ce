@@ -122,13 +122,15 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
       this.__sortColumnIndex = columnIndex;
       this.__sortAscending = ascending;
       if(this.__sortingAction) {
-        var orderingProperties = new Object();
-        orderingProperties[this.getColumnId(columnIndex)] = ascending ? "ASCENDING": "DESCENDING";
-        var sortCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand();
-        sortCommand.setOrderingProperties(orderingProperties);
-        sortCommand.setViewStateGuid(this.__state.getGuid());
-        sortCommand.setTargetPeerGuid(this.__sortingAction.getGuid());
-        this.__commandHandler.registerCommand(sortCommand);
+      	if(this.getRowCount() > 1) {
+	        var orderingProperties = new Object();
+	        orderingProperties[this.getColumnId(columnIndex)] = ascending ? "ASCENDING": "DESCENDING";
+	        var sortCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand();
+	        sortCommand.setOrderingProperties(orderingProperties);
+	        sortCommand.setViewStateGuid(this.__state.getGuid());
+	        sortCommand.setTargetPeerGuid(this.__sortingAction.getGuid());
+	        this.__commandHandler.registerCommand(sortCommand);
+      	}
       } else {
         if(this.__state.getChildren()) {
           var comparator =
@@ -142,7 +144,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
           this.__sortedRows.sort(comparator);
         }
       }
-      this.fireEvent(qx.ui.table.ITableModel.EVENT_TYPE_META_DATA_CHANGED);
+      this.fireEvent("metaDataChanged");
     },
 
     // overridden
@@ -160,17 +162,22 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
         this.__sortColumnIndex = -1;
         this.__sortAscending = null;
         this.__sortedRows = null;
-        this.fireEvent(qx.ui.table.ITableModel.EVENT_TYPE_META_DATA_CHANGED);
+        this.fireEvent("metaDataChanged");
       }
     },
 
     __setupCollectionListeners : function() {
       this.__state.getChildren().addListener("change", function(e) {
-        var data = {};
+        var data = {
+          firstRow    : e.getData().start,
+          lastRow     : e.getData().end,
+          firstColumn : 0,
+          lastColumn  : this.getColumnCount() - 1
+        };
         if(this.__sortingAction == null) {
         	this.clearSorting();
         }
-        this.fireDataEvent(qx.ui.table.ITableModel.EVENT_TYPE_DATA_CHANGED, data);
+        this.fireDataEvent("dataChanged", data);
       }, this);
       this.__state.getChildren().addListener("changeLength", function(e) {
         var data = {
@@ -182,7 +189,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
         if(this.__sortingAction == null) {
           this.clearSorting();
         }
-        this.fireDataEvent(qx.ui.table.ITableModel.EVENT_TYPE_DATA_CHANGED, data);
+        this.fireDataEvent("dataChanged", data);
       }, this);
     },
     
@@ -202,7 +209,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
             firstColumn : columnIndex,
             lastColumn  : columnIndex
           };
-          this.fireDataEvent(qx.ui.table.ITableModel.EVENT_TYPE_DATA_CHANGED, data);
+          this.fireDataEvent("dataChanged", data);
         }, this);
         cellState.setUserData(this.toHashCode(), true)
       }

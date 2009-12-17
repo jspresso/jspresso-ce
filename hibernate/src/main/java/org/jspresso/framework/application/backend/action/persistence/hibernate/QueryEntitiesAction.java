@@ -40,6 +40,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -240,26 +241,38 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         String[] propElts = orderingProperty.getKey().split("\\.");
         DetachedCriteria orderingCriteria = criteria;
         String propertyName = orderingProperty.getKey();
+        boolean isComputed = false;
         if (propElts.length > 1) {
           IComponentDescriptor<?> currentCompDesc = aQueryComponent
               .getComponentDescriptor();
           int i = 0;
           StringBuffer path = new StringBuffer();
-          for (; i < propElts.length - 1; i++) {
-            currentCompDesc = ((IReferencePropertyDescriptor<?>) currentCompDesc
-                .getPropertyDescriptor(propElts[i])).getReferencedDescriptor();
-            if (!IEntity.class.isAssignableFrom(currentCompDesc
+          for (; !isComputed && i < propElts.length - 1; i++) {
+            IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
+                .getPropertyDescriptor(propElts[i]));
+            isComputed = isComputed || refPropDescriptor.isComputed();
+            IComponentDescriptor<?> referencedDesc = refPropDescriptor
+                .getReferencedDescriptor();
+            if (!IEntity.class.isAssignableFrom(referencedDesc
                 .getComponentContract())
-                && !currentCompDesc.isPurelyAbstract()) {
+                && !referencedDesc.isPurelyAbstract()) {
               break;
             }
+            currentCompDesc = referencedDesc;
             if (i > 0) {
               path.append(".");
             }
             path.append(propElts[i]);
           }
           StringBuffer name = new StringBuffer();
-          for (int j = i; j < propElts.length; j++) {
+          for (int j = i; !isComputed && j < propElts.length; j++) {
+            IPropertyDescriptor propDescriptor = currentCompDesc
+                .getPropertyDescriptor(propElts[j]);
+            isComputed = isComputed || propDescriptor.isComputed();
+            if (j < propElts.length - 1) {
+              currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor)
+                  .getReferencedDescriptor();
+            }
             if (j > i) {
               name.append(".");
             }
@@ -270,17 +283,25 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 CriteriaSpecification.LEFT_JOIN);
           }
           propertyName = name.toString();
+        } else {
+          isComputed = aQueryComponent.getComponentDescriptor()
+              .getPropertyDescriptor(propertyName).isComputed();
         }
-        Order order;
-        switch (orderingProperty.getValue()) {
-          case DESCENDING:
-            order = Order.desc(propertyName);
-            break;
-          case ASCENDING:
-          default:
-            order = Order.asc(propertyName);
+        if (!isComputed) {
+          // computed properties must be ignored
+          // since they can't be sorted
+          // by the DB.
+          Order order;
+          switch (orderingProperty.getValue()) {
+            case DESCENDING:
+              order = Order.desc(propertyName);
+              break;
+            case ASCENDING:
+            default:
+              order = Order.asc(propertyName);
+          }
+          orderingCriteria.addOrder(order);
         }
-        orderingCriteria.addOrder(order);
       }
     }
   }

@@ -76,25 +76,28 @@ public class ActionTableSorter extends AbstractTableSorter {
    */
   @Override
   protected void sortingStatusChanged() {
-    Map<String, Object> actionContext = new HashMap<String, Object>();
-    Map<String, ESort> orderingProperties = new LinkedHashMap<String, ESort>();
-    for (Directive directive : getSortingColumns()) {
-      String property = String.valueOf(getSortedColumn(directive.getColumn())
-          .getIdentifier());
-      ESort direction;
-      if (directive.getDirection() == ASCENDING) {
-        direction = ESort.ASCENDING;
-      } else if (directive.getDirection() == DESCENDING) {
-        direction = ESort.DESCENDING;
-      } else {
-        direction = null;
+    if (getTableModel().getRowCount() > 1) {
+      Map<String, Object> actionContext = new HashMap<String, Object>();
+      Map<String, ESort> orderingProperties = new LinkedHashMap<String, ESort>();
+      for (Directive directive : getSortingColumns()) {
+        String property = String.valueOf(getSortedColumn(directive.getColumn())
+            .getIdentifier());
+        ESort direction;
+        if (directive.getDirection() == ASCENDING) {
+          direction = ESort.ASCENDING;
+        } else if (directive.getDirection() == DESCENDING) {
+          direction = ESort.DESCENDING;
+        } else {
+          direction = null;
+        }
+        if (direction != null) {
+          orderingProperties.put(property, direction);
+        }
       }
-      if (direction != null) {
-        orderingProperties.put(property, direction);
-      }
+      actionContext
+          .put(IQueryComponent.ORDERING_PROPERTIES, orderingProperties);
+      actionHandler.execute(sortingAction, actionContext);
     }
-    actionContext.put(IQueryComponent.ORDERING_PROPERTIES, orderingProperties);
-    actionHandler.execute(sortingAction, actionContext);
   }
 
   /**
