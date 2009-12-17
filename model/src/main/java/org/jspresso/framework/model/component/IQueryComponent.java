@@ -21,6 +21,7 @@ package org.jspresso.framework.model.component;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.collection.ISortable;
@@ -83,4 +84,11 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
    * @return true if this query component map an inline component ?
    */
   boolean isInlineComponent();
+
+  /**
+   * Gets the descriptor of the queried components.
+   * 
+   * @return the descriptor of the queried components.
+   */
+  IComponentDescriptor<?> getComponentDescriptor();
 }

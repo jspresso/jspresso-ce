@@ -255,14 +255,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     this.orderingProperties = orderingProperties;
   }
 
-  // /**
-  // * Gets the componentDescriptor.
-  // *
-  // * @return the componentDescriptor.
-  // */
-  // public IComponentDescriptor<?> getComponentDescriptor() {
-  // return componentDescriptor;
-  // }
+  /**
+   * Gets the componentDescriptor.
+   * 
+   * @return the componentDescriptor.
+   */
+  public IComponentDescriptor<?> getComponentDescriptor() {
+    return componentDescriptor;
+  }
 
   /**
    * {@inheritDoc}

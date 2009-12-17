@@ -39,6 +39,8 @@ import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
@@ -74,7 +76,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       public Object doInTransaction(TransactionStatus status) {
         DetachedCriteria criteria = DetachedCriteria
             .forEntityName(queryComponent.getQueryContract().getName());
-        boolean abort = completeCriteria(criteria, null, queryComponent);
+        boolean abort = completeCriteria(criteria, null, queryComponent,
+            context);
         List entities;
         if (abort) {
           entities = new ArrayList<IEntity>();
@@ -96,11 +99,11 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               totalCount = (Integer) getHibernateTemplate(context)
                   .findByCriteria(criteria).get(0);
             }
-            completeCriteriaWithOrdering(criteria);
+            completeCriteriaWithOrdering(criteria, queryComponent);
             entities = getHibernateTemplate(context).findByCriteria(criteria,
                 page.intValue() * pageSize.intValue(), pageSize.intValue());
           } else {
-            completeCriteriaWithOrdering(criteria);
+            completeCriteriaWithOrdering(criteria, queryComponent);
             entities = getHibernateTemplate(context).findByCriteria(criteria);
             totalCount = new Integer(entities.size());
           }
@@ -112,136 +115,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         return entities;
       }
 
-      private void completeCriteriaWithOrdering(DetachedCriteria criteria) {
-        criteria.setProjection(null);
-        criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
-        // complete sorting properties
-        if (queryComponent.getOrderingProperties() != null) {
-          for (Map.Entry<String, ESort> orderingProperty : queryComponent
-              .getOrderingProperties().entrySet()) {
-            Order order;
-            switch (orderingProperty.getValue()) {
-              case DESCENDING:
-                order = Order.desc(orderingProperty.getKey());
-                break;
-              case ASCENDING:
-              default:
-                order = Order.asc(orderingProperty.getKey());
-            }
-            criteria.addOrder(order);
-          }
-        }
-      }
-
-      private boolean completeCriteria(DetachedCriteria criteria, String path,
-          IQueryComponent aQueryComponent) {
-        boolean abort = false;
-        if (ComparableQueryStructure.class.isAssignableFrom(aQueryComponent
-            .getQueryContract())) {
-          try {
-            String comparator = (String) getAccessorFactory(context)
-                .createPropertyAccessor(
-                    ComparableQueryStructureDescriptor.COMPARATOR,
-                    ComparableQueryStructure.class).getValue(aQueryComponent);
-            Object infValue = getAccessorFactory(context)
-                .createPropertyAccessor(
-                    ComparableQueryStructureDescriptor.INF_VALUE,
-                    ComparableQueryStructure.class).getValue(aQueryComponent);
-            Object supValue = getAccessorFactory(context)
-                .createPropertyAccessor(
-                    ComparableQueryStructureDescriptor.SUP_VALUE,
-                    ComparableQueryStructure.class).getValue(aQueryComponent);
-            if (infValue != null || supValue != null) {
-              Object compareValue = infValue;
-              if (compareValue == null) {
-                compareValue = supValue;
-              }
-              if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
-                criteria.add(Restrictions.eq(path, compareValue));
-              } else if (ComparableQueryStructureDescriptor.GT
-                  .equals(comparator)) {
-                criteria.add(Restrictions.gt(path, compareValue));
-              } else if (ComparableQueryStructureDescriptor.GE
-                  .equals(comparator)) {
-                criteria.add(Restrictions.ge(path, compareValue));
-              } else if (ComparableQueryStructureDescriptor.LT
-                  .equals(comparator)) {
-                criteria.add(Restrictions.lt(path, compareValue));
-              } else if (ComparableQueryStructureDescriptor.LE
-                  .equals(comparator)) {
-                criteria.add(Restrictions.le(path, compareValue));
-              } else if (ComparableQueryStructureDescriptor.BE
-                  .equals(comparator)) {
-                if (infValue != null && supValue != null) {
-                  criteria.add(Restrictions.between(path, infValue, supValue));
-                } else if (infValue != null) {
-                  criteria.add(Restrictions.ge(path, infValue));
-                } else {
-                  criteria.add(Restrictions.le(path, supValue));
-                }
-              }
-            }
-          } catch (IllegalAccessException ex) {
-            throw new ActionException(ex);
-          } catch (InvocationTargetException ex) {
-            if (ex.getCause() instanceof RuntimeException) {
-              throw (RuntimeException) ex.getCause();
-            }
-            throw new ActionException(ex.getCause());
-          } catch (NoSuchMethodException ex) {
-            throw new ActionException(ex);
-          }
-        } else {
-          for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-            String prefixedProperty;
-            if (path != null) {
-              prefixedProperty = path + "." + property.getKey();
-            } else {
-              prefixedProperty = property.getKey();
-            }
-            if (property.getValue() instanceof IEntity) {
-              if (!((IEntity) property.getValue()).isPersistent()) {
-                abort = true;
-              } else {
-                criteria.add(Restrictions.eq(prefixedProperty, property
-                    .getValue()));
-              }
-            } else if (property.getValue() instanceof Boolean
-                && ((Boolean) property.getValue()).booleanValue()) {
-              criteria.add(Restrictions.eq(prefixedProperty, property
-                  .getValue()));
-            } else if (property.getValue() instanceof String) {
-              criteria.add(Restrictions.like(prefixedProperty,
-                  (String) property.getValue(), MatchMode.START).ignoreCase());
-            } else if (property.getValue() instanceof Number
-                || property.getValue() instanceof Date) {
-              criteria.add(Restrictions.eq(prefixedProperty, property
-                  .getValue()));
-            } else if (property.getValue() instanceof IQueryComponent) {
-              IQueryComponent joinedComponent = ((IQueryComponent) property
-                  .getValue());
-              if (!joinedComponent.isEmpty()) {
-                if (joinedComponent.isInlineComponent() || path != null) {
-                  // the joined component is an inlined component so we must use
-                  // dot nested properties. Same applies if we are in a nested
-                  // path i.e. already on an inline component.
-                  abort = abort
-                      || completeCriteria(criteria, prefixedProperty,
-                          (IQueryComponent) property.getValue());
-                } else {
-                  // the joined component is an entity so we must use
-                  // nested criteria.
-                  DetachedCriteria joinCriteria = criteria
-                      .createCriteria(property.getKey());
-                  abort = abort
-                      || completeCriteria(joinCriteria, null, joinedComponent);
-                }
-              }
-            }
-          }
-        }
-        return abort;
-      }
     });
     IBackendController controller = getController(context);
     for (Iterator<IEntity> ite = queriedEntities.iterator(); ite.hasNext();) {
@@ -252,6 +125,164 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     queryComponent.setQueriedComponents(controller.merge(queriedEntities,
         EMergeMode.MERGE_KEEP));
     return super.execute(actionHandler, context);
+  }
+
+  private boolean completeCriteria(DetachedCriteria criteria, String path,
+      IQueryComponent aQueryComponent, Map<String, Object> context) {
+    boolean abort = false;
+    if (ComparableQueryStructure.class.isAssignableFrom(aQueryComponent
+        .getQueryContract())) {
+      try {
+        String comparator = (String) getAccessorFactory(context)
+            .createPropertyAccessor(
+                ComparableQueryStructureDescriptor.COMPARATOR,
+                ComparableQueryStructure.class).getValue(aQueryComponent);
+        Object infValue = getAccessorFactory(context).createPropertyAccessor(
+            ComparableQueryStructureDescriptor.INF_VALUE,
+            ComparableQueryStructure.class).getValue(aQueryComponent);
+        Object supValue = getAccessorFactory(context).createPropertyAccessor(
+            ComparableQueryStructureDescriptor.SUP_VALUE,
+            ComparableQueryStructure.class).getValue(aQueryComponent);
+        if (infValue != null || supValue != null) {
+          Object compareValue = infValue;
+          if (compareValue == null) {
+            compareValue = supValue;
+          }
+          if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
+            criteria.add(Restrictions.eq(path, compareValue));
+          } else if (ComparableQueryStructureDescriptor.GT.equals(comparator)) {
+            criteria.add(Restrictions.gt(path, compareValue));
+          } else if (ComparableQueryStructureDescriptor.GE.equals(comparator)) {
+            criteria.add(Restrictions.ge(path, compareValue));
+          } else if (ComparableQueryStructureDescriptor.LT.equals(comparator)) {
+            criteria.add(Restrictions.lt(path, compareValue));
+          } else if (ComparableQueryStructureDescriptor.LE.equals(comparator)) {
+            criteria.add(Restrictions.le(path, compareValue));
+          } else if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
+            if (infValue != null && supValue != null) {
+              criteria.add(Restrictions.between(path, infValue, supValue));
+            } else if (infValue != null) {
+              criteria.add(Restrictions.ge(path, infValue));
+            } else {
+              criteria.add(Restrictions.le(path, supValue));
+            }
+          }
+        }
+      } catch (IllegalAccessException ex) {
+        throw new ActionException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ActionException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ActionException(ex);
+      }
+    } else {
+      for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
+        String prefixedProperty;
+        if (path != null) {
+          prefixedProperty = path + "." + property.getKey();
+        } else {
+          prefixedProperty = property.getKey();
+        }
+        if (property.getValue() instanceof IEntity) {
+          if (!((IEntity) property.getValue()).isPersistent()) {
+            abort = true;
+          } else {
+            criteria
+                .add(Restrictions.eq(prefixedProperty, property.getValue()));
+          }
+        } else if (property.getValue() instanceof Boolean
+            && ((Boolean) property.getValue()).booleanValue()) {
+          criteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
+        } else if (property.getValue() instanceof String) {
+          criteria.add(Restrictions.like(prefixedProperty,
+              (String) property.getValue(), MatchMode.START).ignoreCase());
+        } else if (property.getValue() instanceof Number
+            || property.getValue() instanceof Date) {
+          criteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
+        } else if (property.getValue() instanceof IQueryComponent) {
+          IQueryComponent joinedComponent = ((IQueryComponent) property
+              .getValue());
+          if (!joinedComponent.isEmpty()) {
+            if (joinedComponent.isInlineComponent() || path != null) {
+              // the joined component is an inlined component so we must use
+              // dot nested properties. Same applies if we are in a nested
+              // path i.e. already on an inline component.
+              abort = abort
+                  || completeCriteria(criteria, prefixedProperty,
+                      (IQueryComponent) property.getValue(), context);
+            } else {
+              // the joined component is an entity so we must use
+              // nested criteria.
+              DetachedCriteria joinCriteria = criteria.createCriteria(property
+                  .getKey());
+              abort = abort
+                  || completeCriteria(joinCriteria, null, joinedComponent,
+                      context);
+            }
+          }
+        }
+      }
+    }
+    return abort;
+  }
+
+  private void completeCriteriaWithOrdering(DetachedCriteria criteria,
+      IQueryComponent aQueryComponent) {
+    criteria.setProjection(null);
+    criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
+    // complete sorting properties
+    if (aQueryComponent.getOrderingProperties() != null) {
+      for (Map.Entry<String, ESort> orderingProperty : aQueryComponent
+          .getOrderingProperties().entrySet()) {
+        String[] propElts = orderingProperty.getKey().split("\\.");
+        DetachedCriteria orderingCriteria = criteria;
+        String propertyName = orderingProperty.getKey();
+        if (propElts.length > 1) {
+          IComponentDescriptor<?> currentCompDesc = aQueryComponent
+              .getComponentDescriptor();
+          int i = 0;
+          StringBuffer path = new StringBuffer();
+          for (; i < propElts.length - 1; i++) {
+            currentCompDesc = ((IReferencePropertyDescriptor<?>) currentCompDesc
+                .getPropertyDescriptor(propElts[i])).getReferencedDescriptor();
+            if (!IEntity.class.isAssignableFrom(currentCompDesc
+                .getComponentContract())
+                && !currentCompDesc.isPurelyAbstract()) {
+              break;
+            }
+            if (i > 0) {
+              path.append(".");
+            }
+            path.append(propElts[i]);
+          }
+          StringBuffer name = new StringBuffer();
+          for (int j = i; j < propElts.length; j++) {
+            if (j > i) {
+              name.append(".");
+            }
+            name.append(propElts[j]);
+          }
+          if (path.length() > 0) {
+            orderingCriteria = criteria.createCriteria(path.toString(),
+                CriteriaSpecification.LEFT_JOIN);
+          }
+          propertyName = name.toString();
+        }
+        Order order;
+        switch (orderingProperty.getValue()) {
+          case DESCENDING:
+            order = Order.desc(propertyName);
+            break;
+          case ASCENDING:
+          default:
+            order = Order.asc(propertyName);
+        }
+        orderingCriteria.addOrder(order);
+      }
+    }
   }
 
   /**
