@@ -56,6 +56,16 @@ public final class ExtendedInternalFrameConstants {
    */
   public static final int EXTENDED_INTERNAL_FRAME_OPENED      = 5;
 
+  /**
+   * <code>EXTENDED_INTERNAL_FRAME_CLOSING</code>.
+   */
+  public static final int EXTENDED_INTERNAL_FRAME_CLOSING     = 6;
+
+  /**
+   * <code>EXTENDED_INTERNAL_FRAME_CLOSED</code>.
+   */
+  public static final int EXTENDED_INTERNAL_FRAME_CLOSED      = 7;
+
   private ExtendedInternalFrameConstants() {
     // Empty constructor for utility class
   }

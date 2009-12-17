@@ -34,8 +34,8 @@ public class UIExtendedInternalFrame extends UIInternalFrame {
        * {@inheritDoc}
        */
       @Override
-      public void internalFrameActivated(@SuppressWarnings("unused")
-      javax.swing.event.InternalFrameEvent e) {
+      public void internalFrameActivated(
+          @SuppressWarnings("unused") javax.swing.event.InternalFrameEvent e) {
         sendOptionalEventULC(
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_ACTIVATED);
@@ -45,8 +45,8 @@ public class UIExtendedInternalFrame extends UIInternalFrame {
        * {@inheritDoc}
        */
       @Override
-      public void internalFrameDeactivated(@SuppressWarnings("unused")
-      javax.swing.event.InternalFrameEvent e) {
+      public void internalFrameDeactivated(
+          @SuppressWarnings("unused") javax.swing.event.InternalFrameEvent e) {
         sendOptionalEventULC(
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_DEACTIVATED);
@@ -56,8 +56,8 @@ public class UIExtendedInternalFrame extends UIInternalFrame {
        * {@inheritDoc}
        */
       @Override
-      public void internalFrameDeiconified(@SuppressWarnings("unused")
-      InternalFrameEvent e) {
+      public void internalFrameDeiconified(
+          @SuppressWarnings("unused") InternalFrameEvent e) {
         sendOptionalEventULC(
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_DEICONIFIED);
@@ -67,8 +67,8 @@ public class UIExtendedInternalFrame extends UIInternalFrame {
        * {@inheritDoc}
        */
       @Override
-      public void internalFrameIconified(@SuppressWarnings("unused")
-      InternalFrameEvent e) {
+      public void internalFrameIconified(
+          @SuppressWarnings("unused") InternalFrameEvent e) {
         sendOptionalEventULC(
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_ICONIFIED);
@@ -78,11 +78,33 @@ public class UIExtendedInternalFrame extends UIInternalFrame {
        * {@inheritDoc}
        */
       @Override
-      public void internalFrameOpened(@SuppressWarnings("unused")
-      InternalFrameEvent e) {
+      public void internalFrameOpened(
+          @SuppressWarnings("unused") InternalFrameEvent e) {
         sendOptionalEventULC(
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_OPENED);
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void internalFrameClosing(
+          @SuppressWarnings("unused") InternalFrameEvent e) {
+        sendOptionalEventULC(
+            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
+            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_CLOSING);
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void internalFrameClosed(
+          @SuppressWarnings("unused") InternalFrameEvent e) {
+        sendOptionalEventULC(
+            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
+            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_CLOSED);
       }
     });
   }

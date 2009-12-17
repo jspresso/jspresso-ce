@@ -157,38 +157,40 @@ public class DefaultUlcController extends
   public void displayWorkspace(String workspaceName) {
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
       super.displayWorkspace(workspaceName);
-      if (workspaceInternalFrames == null) {
-        workspaceInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
+      if (workspaceName != null) {
+        if (workspaceInternalFrames == null) {
+          workspaceInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
+        }
+        ULCExtendedInternalFrame workspaceInternalFrame = workspaceInternalFrames
+            .get(workspaceName);
+        if (workspaceInternalFrame == null) {
+          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+              .getViewDescriptor();
+          IValueConnector workspaceConnector = getBackendController()
+              .getWorkspaceConnector(workspaceName);
+          IView<ULCComponent> workspaceView = createWorkspaceView(
+              workspaceName, workspaceViewDescriptor,
+              (Workspace) workspaceConnector.getConnectorValue());
+          workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
+          workspaceInternalFrame
+              .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
+                  workspaceName));
+          workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
+          controllerFrame.getContentPane().add(workspaceInternalFrame);
+          getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+          workspaceInternalFrame.pack();
+          workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
+              controllerFrame.getHeight() - 50);
+          workspaceInternalFrame.setMaximum(true);
+        }
+        workspaceInternalFrame.setVisible(true);
+        if (workspaceInternalFrame.isIcon()) {
+          workspaceInternalFrame.setIcon(false);
+        }
+        workspaceInternalFrame.moveToFront();
       }
-      ULCExtendedInternalFrame workspaceInternalFrame = workspaceInternalFrames
-          .get(workspaceName);
-      if (workspaceInternalFrame == null) {
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController()
-            .getWorkspaceConnector(workspaceName);
-        IView<ULCComponent> workspaceView = createWorkspaceView(workspaceName,
-            workspaceViewDescriptor, (Workspace) workspaceConnector
-                .getConnectorValue());
-        workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
-        workspaceInternalFrame
-            .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
-                workspaceName));
-        workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
-        controllerFrame.getContentPane().add(workspaceInternalFrame);
-        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-        workspaceInternalFrame.pack();
-        workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
-            controllerFrame.getHeight() - 50);
-        workspaceInternalFrame.setMaximum(true);
-      }
-      workspaceInternalFrame.setVisible(true);
-      if (workspaceInternalFrame.isIcon()) {
-        workspaceInternalFrame.setIcon(false);
-      }
-      workspaceInternalFrame.moveToFront();
-      updateFrameTitle();
     }
+    updateFrameTitle();
   }
 
   /**
@@ -573,6 +575,21 @@ public class DefaultUlcController extends
       displayWorkspace(workspaceName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void internalFrameClosing(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
+      displayWorkspace(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void internalFrameClosed(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
+      displayWorkspace(null);
+    }
   }
 
   /**

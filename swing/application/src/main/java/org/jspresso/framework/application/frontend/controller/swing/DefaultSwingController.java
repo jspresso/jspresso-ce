@@ -181,46 +181,48 @@ public class DefaultSwingController extends
   public void displayWorkspace(String workspaceName) {
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
       super.displayWorkspace(workspaceName);
-      if (workspaceInternalFrames == null) {
-        workspaceInternalFrames = new HashMap<String, JInternalFrame>();
-      }
-      JInternalFrame workspaceInternalFrame = workspaceInternalFrames
-          .get(workspaceName);
-      if (workspaceInternalFrame == null) {
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController()
-            .getWorkspaceConnector(workspaceName);
-        IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
-            workspaceViewDescriptor, (Workspace) workspaceConnector
-                .getConnectorValue());
-        workspaceInternalFrame = createJInternalFrame(workspaceView);
-        workspaceInternalFrame
-            .addInternalFrameListener(new WorkspaceInternalFrameListener(
-                workspaceName));
-        workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
-        controllerFrame.getContentPane().add(workspaceInternalFrame);
-        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-        workspaceInternalFrame.pack();
-        workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
-            controllerFrame.getHeight() - 50);
-        try {
-          workspaceInternalFrame.setMaximum(true);
-        } catch (PropertyVetoException ex) {
-          throw new ControllerException(ex);
+      if (workspaceName != null) {
+        if (workspaceInternalFrames == null) {
+          workspaceInternalFrames = new HashMap<String, JInternalFrame>();
         }
-      }
-      workspaceInternalFrame.setVisible(true);
-      if (workspaceInternalFrame.isIcon()) {
-        try {
-          workspaceInternalFrame.setIcon(false);
-        } catch (PropertyVetoException ex) {
-          throw new ControllerException(ex);
+        JInternalFrame workspaceInternalFrame = workspaceInternalFrames
+            .get(workspaceName);
+        if (workspaceInternalFrame == null) {
+          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+              .getViewDescriptor();
+          IValueConnector workspaceConnector = getBackendController()
+              .getWorkspaceConnector(workspaceName);
+          IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
+              workspaceViewDescriptor, (Workspace) workspaceConnector
+                  .getConnectorValue());
+          workspaceInternalFrame = createJInternalFrame(workspaceView);
+          workspaceInternalFrame
+              .addInternalFrameListener(new WorkspaceInternalFrameListener(
+                  workspaceName));
+          workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
+          controllerFrame.getContentPane().add(workspaceInternalFrame);
+          getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+          workspaceInternalFrame.pack();
+          workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
+              controllerFrame.getHeight() - 50);
+          try {
+            workspaceInternalFrame.setMaximum(true);
+          } catch (PropertyVetoException ex) {
+            throw new ControllerException(ex);
+          }
         }
+        workspaceInternalFrame.setVisible(true);
+        if (workspaceInternalFrame.isIcon()) {
+          try {
+            workspaceInternalFrame.setIcon(false);
+          } catch (PropertyVetoException ex) {
+            throw new ControllerException(ex);
+          }
+        }
+        workspaceInternalFrame.toFront();
       }
-      workspaceInternalFrame.toFront();
-      updateFrameTitle();
     }
+    updateFrameTitle();
   }
 
   /**
@@ -704,6 +706,24 @@ public class DefaultSwingController extends
     public void internalFrameOpened(
         @SuppressWarnings("unused") InternalFrameEvent e) {
       displayWorkspace(workspaceName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameClosed(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameClosing(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(null);
     }
   }
 

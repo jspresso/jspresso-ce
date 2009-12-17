@@ -17,7 +17,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
    * Whenever the internal frame gets activated.
    * 
    * @param event
-   *            the event.
+   *          the event.
    */
   void internalFrameActivated(ExtendedInternalFrameEvent event);
 
@@ -25,7 +25,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
    * Whenever the internal frame gets deactivated.
    * 
    * @param event
-   *            the event.
+   *          the event.
    */
   void internalFrameDeactivated(ExtendedInternalFrameEvent event);
 
@@ -33,7 +33,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
    * Whenever the internal frame gets deiconified.
    * 
    * @param event
-   *            the event.
+   *          the event.
    */
   void internalFrameDeiconified(ExtendedInternalFrameEvent event);
 
@@ -41,7 +41,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
    * Whenever the internal frame gets iconified.
    * 
    * @param event
-   *            the event.
+   *          the event.
    */
   void internalFrameIconified(ExtendedInternalFrameEvent event);
 
@@ -49,7 +49,23 @@ public interface IExtendedInternalFrameListener extends IEventListener {
    * Whenever the internal frame gets opened.
    * 
    * @param event
-   *            the event.
+   *          the event.
    */
   void internalFrameOpened(ExtendedInternalFrameEvent event);
+
+  /**
+   * Whenever the internal frame gets closed.
+   * 
+   * @param event
+   *          the event.
+   */
+  void internalFrameClosed(ExtendedInternalFrameEvent event);
+
+  /**
+   * Whenever the internal frame is closing.
+   * 
+   * @param event
+   *          the event.
+   */
+  void internalFrameClosing(ExtendedInternalFrameEvent event);
 }

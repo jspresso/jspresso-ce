@@ -24,9 +24,9 @@ public class ExtendedInternalFrameEvent extends UlcEvent {
    * Constructs a new <code>ExtendedInternalFrameEvent</code> instance.
    * 
    * @param source
-   *            the event source.
+   *          the event source.
    * @param id
-   *            the event id.
+   *          the event id.
    */
   public ExtendedInternalFrameEvent(Object source, int id) {
     super(source);
@@ -56,6 +56,12 @@ public class ExtendedInternalFrameEvent extends UlcEvent {
       } else if (fId == ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_OPENED) {
 
         extendedInternalFrameListener.internalFrameOpened(this);
+      } else if (fId == ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_CLOSED) {
+
+        extendedInternalFrameListener.internalFrameClosed(this);
+      } else if (fId == ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_CLOSING) {
+
+        extendedInternalFrameListener.internalFrameClosing(this);
       } else {
         throw new IllegalArgumentException("Illegal event id : " + fId);
       }
