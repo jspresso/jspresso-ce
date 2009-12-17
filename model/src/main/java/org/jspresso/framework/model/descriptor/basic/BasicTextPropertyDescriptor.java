@@ -81,4 +81,35 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;
   }
+
+  /**
+   * Overriden since textarea are useless in query screens.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicStringPropertyDescriptor createQueryDescriptor() {
+    BasicStringPropertyDescriptor defaultQueryDecriptor = super
+        .createQueryDescriptor();
+
+    BasicStringPropertyDescriptor queryDescriptor = new BasicStringPropertyDescriptor();
+    queryDescriptor.setName(defaultQueryDecriptor.getName());
+    queryDescriptor.setDescription(defaultQueryDecriptor.getDescription());
+    queryDescriptor.setGrantedRoles(defaultQueryDecriptor.getGrantedRoles());
+    queryDescriptor.setMandatory(defaultQueryDecriptor.isMandatory());
+    queryDescriptor.setMaxLength(defaultQueryDecriptor.getMaxLength());
+    queryDescriptor.setReadabilityGates(defaultQueryDecriptor
+        .getReadabilityGates());
+    queryDescriptor.setReadOnly(defaultQueryDecriptor.isReadOnly());
+    queryDescriptor.setRegexpPattern(defaultQueryDecriptor.getRegexpPattern());
+    queryDescriptor.setRegexpPatternSample(defaultQueryDecriptor
+        .getRegexpPatternSample());
+    queryDescriptor.setSqlName(defaultQueryDecriptor.getSqlName());
+    queryDescriptor.setUpperCase(defaultQueryDecriptor.isUpperCase());
+    queryDescriptor.setUpperCase(defaultQueryDecriptor.isUpperCase());
+    queryDescriptor.setWritabilityGates(defaultQueryDecriptor
+        .getWritabilityGates());
+
+    return queryDescriptor;
+  }
 }
