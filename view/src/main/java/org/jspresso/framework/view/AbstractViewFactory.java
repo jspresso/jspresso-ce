@@ -885,7 +885,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (view != null) {
       if (viewDescriptor.isCascadingModels()) {
         IView<E> masterView = view.getChildren().get(0);
-        view.setConnector(masterView.getConnector());
+        IValueConnector viewConnector;
+        if (masterView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
+          IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
+              .createConfigurableCollectionConnectorProvider(
+                  ModelRefPropertyConnector.THIS_PROPERTY, null);
+          mainConnector.addChildConnector(masterView.getConnector());
+          if (masterView.getConnector() instanceof ICollectionConnector) {
+            mainConnector
+                .setCollectionConnectorProvider((ICollectionConnector) masterView
+                    .getConnector());
+          }
+          viewConnector = mainConnector;
+        } else {
+          ICompositeValueConnector mainConnector = getConnectorFactory()
+              .createCompositeValueConnector(
+                  ModelRefPropertyConnector.THIS_PROPERTY, null);
+          mainConnector.addChildConnector(masterView.getConnector());
+          viewConnector = mainConnector;
+        }
+        view.setConnector(viewConnector);
         for (int i = 1; i < view.getChildren().size(); i++) {
           IView<E> detailView = view.getChildren().get(i);
 

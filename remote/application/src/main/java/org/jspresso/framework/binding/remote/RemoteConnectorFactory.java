@@ -462,9 +462,13 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   }
 
   private boolean isCascadingModelWrapperConnector(IValueConnector connector) {
-    return ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
-        && connector.getParentConnector() == null
-        && !(connector instanceof IRenderableCompositeValueConnector && ((IRenderableCompositeValueConnector) connector)
-            .getRenderingConnector() != null);
+    return (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
+        && connector.getParentConnector() == null && !(connector instanceof IRenderableCompositeValueConnector && ((IRenderableCompositeValueConnector) connector)
+        .getRenderingConnector() != null))
+        || (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
+            && connector.getParentConnector() != null
+            && ModelRefPropertyConnector.THIS_PROPERTY.equals(connector
+                .getParentConnector().getId()) && !(connector instanceof IRenderableCompositeValueConnector && ((IRenderableCompositeValueConnector) connector)
+            .getRenderingConnector() != null));
   }
 }

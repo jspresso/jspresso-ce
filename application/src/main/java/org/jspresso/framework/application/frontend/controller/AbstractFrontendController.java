@@ -46,6 +46,7 @@ import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardVie
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.security.UsernamePasswordHandler;
@@ -580,15 +581,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
     ICompositeView<E> workspaceView = (ICompositeView<E>) viewFactory
         .createView(splitViewDescriptor, this, getLocale());
-    ((IItemSelectable) workspaceView.getConnector())
-        .addItemSelectionListener(new IItemSelectionListener() {
+    IItemSelectable workspaceNavigator;
+    if (workspaceView.getConnector() instanceof IItemSelectable) {
+      workspaceNavigator = (IItemSelectable) workspaceView.getConnector();
+    } else {
+      workspaceNavigator = (IItemSelectable) ((ICompositeValueConnector) workspaceView
+          .getConnector())
+          .getChildConnector(ModelRefPropertyConnector.THIS_PROPERTY);
+    }
+    workspaceNavigator.addItemSelectionListener(new IItemSelectionListener() {
 
-          public void selectedItemChange(ItemSelectionEvent event) {
-            selectedModuleChanged(workspaceName,
-                (ICompositeValueConnector) event.getSelectedItem());
-          }
+      public void selectedItemChange(ItemSelectionEvent event) {
+        selectedModuleChanged(workspaceName, (ICompositeValueConnector) event
+            .getSelectedItem());
+      }
 
-        });
+    });
     for (IView<E> childView : workspaceView.getChildren()) {
       if (childView instanceof IMapView<?>) {
         for (Map.Entry<String, IView<E>> grandChildView : ((IMapView<E>) childView)
