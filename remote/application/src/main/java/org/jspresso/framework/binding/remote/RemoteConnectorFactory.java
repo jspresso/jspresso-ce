@@ -226,8 +226,11 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           }
           remoteCommandHandler.registerCommand(command);
         }
-        // reset selection to force details refresh if any.
-        connector.setSelectedIndices(null, -1);
+        if (connector.getSelectedIndices() != null
+            && connector.getSelectedIndices().length > 0) {
+          // reset selection to force details refresh if any.
+          connector.setSelectedIndices(null, -1);
+        }
       }
     };
     selectionChangeListener = new ISelectionChangeListener() {
