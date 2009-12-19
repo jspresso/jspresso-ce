@@ -35,10 +35,10 @@ public class IntegrityException extends BusinessException {
    * Constructs a new <code>IntegrityException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    * @param staticI18nKey
-   *            the static i18n key if any. It will be used by default to get
-   *            the internationalized message.
+   *          the static i18n key if any. It will be used by default to get the
+   *          internationalized message.
    */
   public IntegrityException(String message, String staticI18nKey) {
     super(message, staticI18nKey);
@@ -48,9 +48,25 @@ public class IntegrityException extends BusinessException {
    * Constructs a new <code>IntegrityException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   protected IntegrityException(String message) {
     super(message);
+  }
+
+  /**
+   * Constructs a new <code>IntegrityException</code> instance.
+   * 
+   * @param message
+   *          the exception message.
+   * @param staticI18nKey
+   *          the static i18n key if any. It will be used by default to get the
+   *          internationalized message.
+   * @param i18nParams
+   *          the parameters of the translated message or null.
+   */
+  public IntegrityException(String message, String staticI18nKey,
+      Object[] i18nParams) {
+    super(message, staticI18nKey, i18nParams);
   }
 }

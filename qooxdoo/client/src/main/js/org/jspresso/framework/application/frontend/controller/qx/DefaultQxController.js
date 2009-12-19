@@ -321,29 +321,34 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           /**@type qx.data.Array */
           var children = targetPeer.getChildren();
           /**@type Array*/
+          var childrenContent = children.toArray();
+          /**@type Array*/
           var commandChildren = command.getChildren().toArray();
 
-          var oldLength = children.getLength();
+          var oldLength = childrenContent.length;
           var newLength = commandChildren.length;
           
-          //children.removeAll();
-          if(commandChildren != null) {
-            for(var i = 0; i < commandChildren.length; i++) {
-              /**@type org.jspresso.framework.state.remote.RemoteValueState */
-              var child = commandChildren[i];
-              if(this.isRegistered(child.getGuid())) {
-                child = this.getRegistered(child.getGuid());
-              } else {
-                this.register(child);
-              }
-              children.setItem(i, child);
+          for(var i = 0; i < commandChildren.length; i++) {
+            /**@type org.jspresso.framework.state.remote.RemoteValueState */
+            var child = commandChildren[i];
+            if(this.isRegistered(child.getGuid())) {
+              child = this.getRegistered(child.getGuid());
+            } else {
+              this.register(child);
             }
+            childrenContent[i] = child;
           }
-          if(oldLength > newLength) {
-          	for(var i = oldLength - 1; i >= newLength; i--) {
-          		children.removeAt(i);
-          	}
-          }
+        	childrenContent.length = newLength;
+        	children.length = newLength;
+          children.fireEvent("changeLength", qx.event.type.Event);
+	        children.fireDataEvent("change",
+	          {
+	            start: 0,
+	            end: newLength,
+	            type: "add",
+	            items: childrenContent
+	          }, null
+	        );
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
           this.__viewFactory.addCard(targetPeer, command.getCard(), command.getCardName());
         }

@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * A "normal" business exception. Whenever a contextual translated message is
  * needed, the method "getI18nMessage" might be overriden.
@@ -19,45 +18,67 @@ public abstract class BusinessException extends RuntimeException {
 
   private static final long serialVersionUID = -5422600831610337684L;
 
-  private String staticI18nKey;
+  private String            staticI18nKey;
+  private Object[]          i18nParams;
 
   /**
    * Constructs a new <code>BusinessException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public BusinessException(String message) {
-    super(message);
+    this(message, null, null);
   }
 
   /**
    * Constructs a new <code>BusinessException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    * @param staticI18nKey
-   *            the static i18n key if any. It will be used by default to get
-   *            the internationalized message.
+   *          the static i18n key if any. It will be used by default to get the
+   *          internationalized message.
    */
   public BusinessException(String message, String staticI18nKey) {
+    this(message, staticI18nKey, null);
+  }
+
+  /**
+   * Constructs a new <code>BusinessException</code> instance.
+   * 
+   * @param message
+   *          the exception message.
+   * @param staticI18nKey
+   *          the static i18n key if any. It will be used by default to get the
+   *          internationalized message.
+   * @param i18nParams
+   *          the parameters of the translated message or null.
+   */
+  public BusinessException(String message, String staticI18nKey,
+      Object[] i18nParams) {
     super(message);
     this.staticI18nKey = staticI18nKey;
+    this.i18nParams = i18nParams;
   }
 
   /**
    * Gets the exception localized message using a translation provider.
    * 
    * @param translationProvider
-   *            the translation provider used to translate the exception
-   *            message.
+   *          the translation provider used to translate the exception message.
    * @param locale
-   *            the locale to translate the exception to.
+   *          the locale to translate the exception to.
    * @return the translated message.
    */
   public String getI18nMessage(ITranslationProvider translationProvider,
       Locale locale) {
-    return translationProvider.getTranslation(staticI18nKey, locale);
+    if (i18nParams != null) {
+      return translationProvider.getTranslation(staticI18nKey, i18nParams,
+          locale);
+    }
+    return translationProvider
+        .getTranslation(staticI18nKey, i18nParams, locale);
   }
 
 }
