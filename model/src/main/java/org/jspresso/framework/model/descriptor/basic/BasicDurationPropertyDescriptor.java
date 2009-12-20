@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
@@ -54,11 +53,11 @@ public class BasicDurationPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public ComparableQueryStructureDescriptor createQueryDescriptor() {
+  public BasicPropertyDescriptor createQueryDescriptor() {
     BasicDurationPropertyDescriptor queryDescriptor = (BasicDurationPropertyDescriptor) super
         .createQueryDescriptor();
     queryDescriptor.setMaxMillis(null);
-    return new ComparableQueryStructureDescriptor(queryDescriptor);
+    return queryDescriptor;
   }
 
   /**

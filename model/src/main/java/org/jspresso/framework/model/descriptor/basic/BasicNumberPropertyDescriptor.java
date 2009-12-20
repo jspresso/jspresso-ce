@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
@@ -53,12 +52,12 @@ public abstract class BasicNumberPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public ComparableQueryStructureDescriptor createQueryDescriptor() {
+  public BasicPropertyDescriptor createQueryDescriptor() {
     BasicNumberPropertyDescriptor queryDescriptor = (BasicNumberPropertyDescriptor) super
         .createQueryDescriptor();
     queryDescriptor.setMinValue(null);
     queryDescriptor.setMaxValue(null);
-    return new ComparableQueryStructureDescriptor(queryDescriptor);
+    return queryDescriptor;
   }
 
   /**

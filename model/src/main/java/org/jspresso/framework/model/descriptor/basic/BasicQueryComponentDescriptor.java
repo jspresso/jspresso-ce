@@ -24,8 +24,12 @@ import java.util.List;
 
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.util.collection.IPageable;
 
@@ -54,7 +58,14 @@ public class BasicQueryComponentDescriptor extends
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
-      propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
+      if (propertyDescriptor instanceof BasicPropertyDescriptor
+          && isPropertyFilterComparable(propertyDescriptor)) {
+        propertyDescriptors.add(new ComparableQueryStructureDescriptor(
+            ((BasicPropertyDescriptor) propertyDescriptor)
+                .createQueryDescriptor()));
+      } else {
+        propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
+      }
     }
     BasicListDescriptor<Object> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<Object>();
     queriedEntitiesCollectionDescriptor
@@ -145,5 +156,21 @@ public class BasicQueryComponentDescriptor extends
    */
   public boolean isPurelyAbstract() {
     return false;
+  }
+
+  /**
+   * Wether we need to create a comparable query structure for this property.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor to test.
+   * @return true if we need to create a comparable query structure for this
+   *         property.
+   */
+  protected boolean isPropertyFilterComparable(
+      IPropertyDescriptor propertyDescriptor) {
+    return propertyDescriptor instanceof INumberPropertyDescriptor
+        || propertyDescriptor instanceof IDatePropertyDescriptor
+        || propertyDescriptor instanceof ITimePropertyDescriptor
+        || propertyDescriptor instanceof IDurationPropertyDescriptor;
   }
 }

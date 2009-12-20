@@ -975,6 +975,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public IComponentDescriptor<E> createQueryDescriptor() {
     if (queryDescriptor == null) {
       queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
+      // queryDescriptor = new BasicComponentDescriptor<E>();
       Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
       for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
         propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());

@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.util.Date;
 
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
 /**
  * Describes a property used to hold time only values. These properties use a
@@ -43,14 +42,6 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
         .clone();
 
     return clonedDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ComparableQueryStructureDescriptor createQueryDescriptor() {
-    return new ComparableQueryStructureDescriptor(super.createQueryDescriptor());
   }
 
   /**

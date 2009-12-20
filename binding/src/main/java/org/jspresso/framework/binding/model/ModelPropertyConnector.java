@@ -227,8 +227,12 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
     if (isValueAccessedAsProperty() && getModelProvider() != null
         && accessor == null && accessorFactory != null) {
-      accessor = accessorFactory.createPropertyAccessor(getId(),
-          getModelProvider().getModelDescriptor().getModelType());
+      try {
+        accessor = accessorFactory.createPropertyAccessor(getId(),
+            getModelProvider().getModelDescriptor().getModelType());
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
       if (accessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) accessor)
             .setModelDescriptor(getModelDescriptor());

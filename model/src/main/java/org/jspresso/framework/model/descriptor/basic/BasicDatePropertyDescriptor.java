@@ -22,7 +22,6 @@ import java.util.Date;
 
 import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
 /**
  * Describes a date based property. Wether the date property should include time
@@ -52,14 +51,6 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
         .clone();
 
     return clonedDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ComparableQueryStructureDescriptor createQueryDescriptor() {
-    return new ComparableQueryStructureDescriptor(super.createQueryDescriptor());
   }
 
   /**
