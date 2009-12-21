@@ -26,7 +26,6 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
-import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -49,9 +48,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICompositeValueConnector moduleConnector = getModuleConnector(context);
-    BeanCollectionModule module = (BeanCollectionModule) moduleConnector
-        .getConnectorValue();
+    BeanCollectionModule module = (BeanCollectionModule) getModule(context);
 
     List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {

@@ -28,7 +28,6 @@ import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
@@ -52,9 +51,8 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
     if (selectedIndices == null || selectedIndices.length == 0) {
       return false;
     }
-    ICompositeValueConnector moduleConnector = getModuleConnector(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
-    Module parentModule = (Module) moduleConnector.getConnectorValue();
+    Module parentModule = getModule(context);
     List<Module> childModules = parentModule.getSubModules();
     List<Module> newSubModules = new ArrayList<Module>();
 

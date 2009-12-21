@@ -30,7 +30,6 @@ import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -72,9 +71,7 @@ public class RemoveFromModuleObjectsAction extends
       return false;
     }
 
-    ICompositeValueConnector moduleConnector = getModuleConnector(context);
-    BeanCollectionModule module = (BeanCollectionModule) moduleConnector
-        .getConnectorValue();
+    BeanCollectionModule module = (BeanCollectionModule) getModule(context);
 
     List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {

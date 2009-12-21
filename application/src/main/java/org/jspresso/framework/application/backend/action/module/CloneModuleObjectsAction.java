@@ -27,7 +27,6 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
@@ -59,9 +58,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
       return false;
     }
 
-    ICompositeValueConnector moduleConnector = getModuleConnector(context);
-    BeanCollectionModule module = (BeanCollectionModule) moduleConnector
-        .getConnectorValue();
+    BeanCollectionModule module = (BeanCollectionModule) getModule(context);
 
     List<Object> projectedCollection;
     if (module.getModuleObjects() == null) {

@@ -50,8 +50,7 @@ public class QueryModuleFilterAction extends BackendAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     if (queryAction != null) {
-      FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModuleConnector(
-          context).getConnectorValue();
+      FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModule(context);
       IValueConnector filterConnector = getModuleConnector(context)
           .getChildConnector(FilterableBeanCollectionModuleDescriptor.FILTER);
       context.put(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR,
