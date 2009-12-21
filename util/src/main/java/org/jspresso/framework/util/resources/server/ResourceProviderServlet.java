@@ -27,9 +27,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -233,24 +235,20 @@ public class ResourceProviderServlet extends HttpServlet {
    */
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
-    String localUrl = request.getParameter(LOCAL_URL_PARAMETER);
-    String imageUrl = request.getParameter(IMAGE_URL_PARAMETER);
+      throws IOException, ServletException {
+    String localUrlSpec = request.getParameter(LOCAL_URL_PARAMETER);
+    String imageUrlSpec = request.getParameter(IMAGE_URL_PARAMETER);
     String id = request.getParameter(ID_PARAMETER);
 
-    if (id == null && localUrl == null && imageUrl == null) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-          "No resource id specified.");
-      return;
+    if (id == null && localUrlSpec == null && imageUrlSpec == null) {
+      throw new ServletException("No resource id nor local URL specified.");
     }
 
     BufferedInputStream inputStream = null;
     if (id != null) {
       IResource resource = ResourceManager.getInstance().getRegistered(id);
       if (resource == null) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-            "Could not find specified resource id.");
-        return;
+        throw new ServletException("Bad resource id : " + id);
       }
 
       response.setContentType(resource.getMimeType());
@@ -260,26 +258,32 @@ public class ResourceProviderServlet extends HttpServlet {
       }
 
       inputStream = new BufferedInputStream(resource.getContent());
-    } else if (localUrl != null) {
-      if (!UrlHelper.isClasspathUrl(localUrl)) {
+    } else if (localUrlSpec != null) {
+      if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
         // we must append parameters that are passed AFTER the localUrl
         // parameter as they must be considered as part of the localUrl.
         String queryString = request.getQueryString();
-        localUrl = queryString.substring(queryString
+        localUrlSpec = queryString.substring(queryString
             .indexOf(LOCAL_URL_PARAMETER)
             + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
       }
-      inputStream = new BufferedInputStream(UrlHelper.createURL(localUrl)
-          .openStream());
-    } else if (imageUrl != null) {
+      URL localUrl = UrlHelper.createURL(localUrlSpec);
+      if (localUrl == null) {
+        throw new ServletException("Bad local URL : " + localUrlSpec);
+      }
+      inputStream = new BufferedInputStream(localUrl.openStream());
+    } else if (imageUrlSpec != null) {
+      URL imageUrl = UrlHelper.createURL(imageUrlSpec);
+      if (imageUrl == null) {
+        throw new ServletException("Bad image URL : " + imageUrlSpec);
+      }
       String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
       String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
       if (width != null && height != null) {
         inputStream = scaleImage(imageUrl, Integer.parseInt(width), Integer
             .parseInt(height));
       } else {
-        inputStream = new BufferedInputStream(UrlHelper.createURL(localUrl)
-            .openStream());
+        inputStream = new BufferedInputStream(imageUrl.openStream());
       }
     }
     if (inputStream != null) {
@@ -293,9 +297,9 @@ public class ResourceProviderServlet extends HttpServlet {
     }
   }
 
-  private BufferedInputStream scaleImage(String originalImageUrl, int width,
+  private BufferedInputStream scaleImage(URL originalImageUrl, int width,
       int height) throws IOException {
-    BufferedImage image = ImageIO.read(UrlHelper.createURL(originalImageUrl));
+    BufferedImage image = ImageIO.read(originalImageUrl);
     BufferedImage scaledImage = new BufferedImage(width, height,
         BufferedImage.TYPE_INT_ARGB);
     Graphics2D g = scaledImage.createGraphics();
