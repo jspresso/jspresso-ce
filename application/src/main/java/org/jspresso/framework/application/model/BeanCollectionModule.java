@@ -210,6 +210,18 @@ public class BeanCollectionModule extends Module {
     BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
     moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
+
+    // TEST
+    // BasicListViewDescriptor subModulesListViewDescriptor = new
+    // BasicListViewDescriptor();
+    // subModulesListViewDescriptor.setRenderedProperty("name");
+    // subModulesListViewDescriptor.setModelDescriptor(moduleDescriptor
+    // .getPropertyDescriptor(Module.SUB_MODULES));
+    // subModulesListViewDescriptor.setPreferredWidth(new Integer(300));
+    // subModulesListViewDescriptor.setPreferredHeight(new Integer(0));
+    // moduleViewDescriptor.setEastViewDescriptor(subModulesListViewDescriptor);
+    // TEST
+
     return moduleViewDescriptor;
   }
 

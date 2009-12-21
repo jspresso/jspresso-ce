@@ -235,6 +235,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }, this);
       
       state.addListener("changeSelectedIndices", function(e) {
+        /**@type Array*/
         var stateSelection = e.getTarget().getSelectedIndices();
         if(!stateSelection) {
           stateSelection = new Array();
@@ -246,23 +247,32 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           stateSelectedItems.push(items.getItem(stateSelection[i]));
         }
 
+        /**@type qx.data.Array*/
         var controllerSelection = listController.getSelection();
-        if(!qx.lang.Array.equals(stateSelectedItems, controllerSelection)) {
-          var oldLength = controllerSelection.getLength();
+        var controllerSelectionContent = controllerSelection.toArray();
+
+        if(!qx.lang.Array.equals(stateSelectedItems, controllerSelectionContent)) {
+
+          var oldLength = controllerSelectionContent.length;
           var newLength = stateSelectedItems.length;
-          controllerSelection.removeAll();
-          controllerSelection.append(stateSelectedItems);
-          if(newLength > oldLength) {
-            controllerSelection.fireDataEvent("change", 
-              {start: oldLength, end: newLength - 1, type: "add"}, null
-            );
-          } else if(newLength < oldLength) {
-            controllerSelection.fireDataEvent("change", 
-              {start: newLength, end: oldLength - 1, type: "remove"}, null
-            );
+          
+          for(var i = 0; i < stateSelectedItems.length; i++) {
+            controllerSelectionContent[i] = stateSelectedItems[i];
           }
+        	controllerSelectionContent.length = newLength;
+        	controllerSelection.length = newLength;
+          controllerSelection.fireEvent("changeLength", qx.event.type.Event);
+	        controllerSelection.fireDataEvent("change",
+	          {
+	            start: 0,
+	            end: newLength,
+	            type: "add",
+	            items: controllerSelectionContent
+	          }, null
+	        );
         }
       }, this);
+      
       if(remoteList.getRowAction()) {
         list.addListener("dblclick", function(e){
           this.__actionHandler.execute(remoteList.getRowAction());
