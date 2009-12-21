@@ -60,8 +60,6 @@ public class FindAction<E, F, G> extends FrontendAction<E, F, G> {
         // connector.
         queryEntityConnector = queryEntityConnector.getParentConnector();
       }
-      context.put(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR,
-          queryEntityConnector);
     }
     if (queryEntityConnector != null
         && queryEntityConnector.getConnectorValue() != null) {

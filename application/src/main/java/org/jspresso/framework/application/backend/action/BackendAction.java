@@ -25,7 +25,6 @@ import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.model.Module;
-import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
@@ -41,24 +40,6 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @author Vincent Vandenschrick
  */
 public class BackendAction extends AbstractAction {
-
-  /**
-   * This is a utility method which is able to retrieve the module model
-   * connector this action has been executed on from its context. It uses
-   * well-known context keys of the action context which is :
-   * <ul>
-   * <li> <code>ActionContextConstants.MODULE_MODEL_CONNECTOR</code>.
-   * </ul>
-   * 
-   * @param context
-   *          the action context.
-   * @return the module model connector this action executes on.
-   */
-  protected ICompositeValueConnector getModuleConnector(
-      Map<String, Object> context) {
-    return (ICompositeValueConnector) ((ICompositeValueConnector) context
-        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR)).getModelConnector();
-  }
 
   /**
    * This is a utility method which is able to retrieve the module this action
