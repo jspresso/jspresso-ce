@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
+import org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
@@ -94,13 +95,11 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     actionHandler.execute(createQueryComponentAction, context);
 
     String queryPropertyValue = getActionCommand(context);
-    IValueConnector queryEntityConnector = (IValueConnector) context
-        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     if (autoquery && queryPropertyValue != null
         && queryPropertyValue.length() > 0 && !queryPropertyValue.equals("*")) {
       actionHandler.execute(findAction, context);
-      IQueryComponent queryComponent = (IQueryComponent) queryEntityConnector
-          .getConnectorValue();
+      IQueryComponent queryComponent = (IQueryComponent) context
+          .get(QueryEntitiesAction.QUERY_FILTER);
       if (queryComponent.getQueriedComponents() != null
           && queryComponent.getQueriedComponents().size() == 1) {
         IEntity selectedEntity = getController(context).getBackendController()
@@ -125,6 +124,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     context.put(ModalDialogAction.DIALOG_TITLE, getI18nName(
         getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
+    IValueConnector queryEntityConnector = (IValueConnector) context
+        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
 
     return super.execute(actionHandler, context);

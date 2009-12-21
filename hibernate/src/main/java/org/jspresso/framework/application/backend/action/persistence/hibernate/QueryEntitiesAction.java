@@ -34,9 +34,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
-import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -58,6 +56,11 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
 
   private ICriteriaRefiner       criteriaRefiner;
   private IQueryComponentRefiner queryComponentRefiner;
+
+  /**
+   * the query component filter.
+   */
+  public static final String     QUERY_FILTER = "QUERY_FILTER";
 
   /**
    * {@inheritDoc}
@@ -313,10 +316,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    *          the action context.
    * @return the query component.
    */
-  protected IQueryComponent getQueryComponent(final Map<String, Object> context) {
-    final IQueryComponent queryComponent = (IQueryComponent) ((IValueConnector) context
-        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR))
-        .getConnectorValue();
+  protected IQueryComponent getQueryComponent(Map<String, Object> context) {
+    IQueryComponent queryComponent = (IQueryComponent) context
+        .get(QUERY_FILTER);
     return queryComponent;
   }
 

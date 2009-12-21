@@ -22,10 +22,8 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
-import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
-import org.jspresso.framework.application.model.BeanCollectionModule;
-import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
-import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
+import org.jspresso.framework.model.component.IComponent;
 
 /**
  * Initialize a module filter with a query entity.
@@ -36,21 +34,19 @@ import org.jspresso.framework.binding.IValueConnector;
 public class InitModuleFilterAction extends BackendAction {
 
   /**
-   * Fills the context with the filter reference descriptor.
+   * Initializes the module filter and resets the bean collection.
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IValueConnector filterModelConnector = getModuleConnector(context)
-        .getChildConnector(FilterableBeanCollectionModuleDescriptor.FILTER);
-    context.put(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR,
-        filterModelConnector);
-    context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
-        filterModelConnector.getModelDescriptor());
-    BeanCollectionModule beanCollectionModule = (BeanCollectionModule) getModuleConnector(
-        context).getConnectorValue();
+    FilterableBeanCollectionModule beanCollectionModule = (FilterableBeanCollectionModule) getModule(context);
+    beanCollectionModule.setFilter(getEntityFactory(context)
+        .createQueryComponentInstance(
+            (Class<? extends IComponent>) beanCollectionModule
+                .getElementComponentDescriptor().getComponentContract()));
     beanCollectionModule.setModuleObjects(null);
     return super.execute(actionHandler, context);
   }
