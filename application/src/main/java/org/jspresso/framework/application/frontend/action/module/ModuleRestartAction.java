@@ -28,7 +28,6 @@ import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 
-
 /**
  * A simple action which restarts the current module executing the module
  * startup action.
@@ -36,14 +35,13 @@ import org.jspresso.framework.application.model.Module;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
-public class ModuleRestartAction<E, F, G> extends
-    FrontendAction<E, F, G> {
+public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the current module and restarts it. {@inheritDoc}
@@ -51,7 +49,7 @@ public class ModuleRestartAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    Module module = (Module) getModuleConnector(context).getConnectorValue();
+    Module module = getModule(context);
     if (module instanceof BeanCollectionModule
         && module.getSubModules() != null) {
       List<Module> beanModulesToRemove = new ArrayList<Module>();

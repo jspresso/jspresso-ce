@@ -272,6 +272,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (selectedModuleViewConnector != null) {
       initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
           selectedModuleViewConnector);
+      initialActionContext.put(ActionContextConstants.MODULE,
+          selectedModuleViewConnector.getConnectorValue());
     }
     return initialActionContext;
   }

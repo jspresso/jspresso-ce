@@ -28,6 +28,7 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
+import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IValueConnector;
@@ -190,6 +191,18 @@ public abstract class AbstractActionContextAware {
   protected void setSelectedIndices(int[] selectedIndices,
       Map<String, Object> context) {
     context.put(ActionContextConstants.SELECTED_INDICES, selectedIndices);
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the module this action
+   * has been executed on from its context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the module this action executes on.
+   */
+  protected Module getModule(Map<String, Object> context) {
+    return (Module) context.get(ActionContextConstants.MODULE);
   }
 
   /**

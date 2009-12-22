@@ -57,6 +57,11 @@ public final class ActionContextConstants {
   public static final String MODULE_VIEW_CONNECTOR = "MODULE_VIEW_CONNECTOR";
 
   /**
+   * The module the action was triggered on.
+   */
+  public static final String MODULE                = "MODULE";
+
+  /**
    * The selected indices of the view connector in case of a collection
    * connector. It may serve as storage key for a return value whenever an
    * action must be chained with selection update on the view.

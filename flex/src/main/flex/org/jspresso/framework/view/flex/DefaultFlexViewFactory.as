@@ -584,6 +584,7 @@ package org.jspresso.framework.view.flex {
       cell.percentWidth = 100.0;
       if(remoteBorderContainer.north != null) {
         cellComponent = createComponent(remoteBorderContainer.north);
+        cell.minHeight = cellComponent.minHeight;
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
@@ -597,10 +598,12 @@ package org.jspresso.framework.view.flex {
       borderContainer.addChild(row);
 
       if(remoteBorderContainer.west != null) {
+        cellComponent = createComponent(remoteBorderContainer.west);
         cell = new GridItem();
         cell.setStyle("horizontalAlign", "left");
         cell.percentHeight = 100.0;
-        cellComponent = createComponent(remoteBorderContainer.west);
+        cell.minWidth = cellComponent.minWidth;
+        cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
         row.addChild(cell);
@@ -618,10 +621,12 @@ package org.jspresso.framework.view.flex {
       row.addChild(cell);
 
       if(remoteBorderContainer.east != null) {
+        cellComponent = createComponent(remoteBorderContainer.east);
         cell = new GridItem();
         cell.setStyle("horizontalAlign", "right");
         cell.percentHeight = 100.0;
-        cellComponent = createComponent(remoteBorderContainer.east);
+        cell.minWidth = cellComponent.minWidth;
+        cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
         row.addChild(cell);
@@ -636,6 +641,7 @@ package org.jspresso.framework.view.flex {
       cell.percentWidth = 100.0;
       if(remoteBorderContainer.south != null) {
         cellComponent = createComponent(remoteBorderContainer.south);
+        cell.minHeight = cellComponent.minHeight;
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
