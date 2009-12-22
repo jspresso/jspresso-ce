@@ -209,6 +209,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       /**@type org.jspresso.framework.state.remote.RemoteCompositeValueState*/
       var state = remoteList.getState();
       var listController = new qx.data.controller.List(state.getChildren(), list, "value");
+      listController.setIconPath("iconImageUrl");
       
       listController.addListener("changeSelection", function(e) {
         /**@type qx.data.Array*/

@@ -132,6 +132,7 @@ import com.ulcjava.base.application.DefaultListCellRenderer;
 import com.ulcjava.base.application.GridBagConstraints;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.IEditorComponent;
+import com.ulcjava.base.application.IListModel;
 import com.ulcjava.base.application.IRendererComponent;
 import com.ulcjava.base.application.ULCAbstractButton;
 import com.ulcjava.base.application.ULCBorderLayoutPane;
@@ -2396,16 +2397,19 @@ public class DefaultUlcViewFactory extends
         Object value, boolean isSelected, boolean hasFocus, int row) {
       ULCLabel renderer = (ULCLabel) super.getListCellRendererComponent(list,
           value, isSelected, hasFocus, row);
-      if (value instanceof IValueConnector) {
-        if (value instanceof IRenderableCompositeValueConnector) {
+      IListModel listModel = list.getModel();
+      if (listModel instanceof CollectionConnectorListModel) {
+        IValueConnector cellConnector = ((CollectionConnectorListModel) listModel)
+            .getCellConnector(row);
+        if (cellConnector instanceof IRenderableCompositeValueConnector) {
           renderer.setIcon(getIconFactory().getIcon(
-              ((IRenderableCompositeValueConnector) value)
+              ((IRenderableCompositeValueConnector) cellConnector)
                   .getDisplayIconImageUrl(),
               getIconFactory().getSmallIconSize()));
         }
-        renderer.setOpaque(false);
-        renderer.setBackground(null);
       }
+      renderer.setOpaque(false);
+      renderer.setBackground(null);
       UlcUtil.alternateEvenOddBackground(renderer, list, isSelected, row);
       return renderer;
     }

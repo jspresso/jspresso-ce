@@ -160,4 +160,15 @@ public class CollectionConnectorListModel extends AbstractListModel {
       }
     }
   }
+
+  /**
+   * return the underlying cell connetor.
+   * 
+   * @param row
+   *          the row to get the connector for.
+   * @return the underlying cell connetor.
+   */
+  public IValueConnector getCellConnector(int row) {
+    return collectionConnector.getChildConnector(row);
+  }
 }

@@ -1109,7 +1109,9 @@ package org.jspresso.framework.view.flex {
         list.allowMultipleSelection = true;
       }
       
-      var itemRenderer:ClassFactory = new ClassFactory(RemoteValueDgItemRenderer);
+      var itemRenderer:ClassFactory = new ClassFactory(RemoteValueListItemRenderer);
+      itemRenderer.properties = {iconTemplate:_iconTemplate};
+      //new ClassFactory(RemoteValueDgItemRenderer);
       list.itemRenderer = itemRenderer;
 
       list.dataProvider = (remoteList.state as RemoteCompositeValueState).children;
