@@ -218,7 +218,7 @@ public class BeanCollectionModule extends Module {
     // subModulesListViewDescriptor.setModelDescriptor(moduleDescriptor
     // .getPropertyDescriptor(Module.SUB_MODULES));
     // subModulesListViewDescriptor.setPreferredWidth(new Integer(300));
-    // subModulesListViewDescriptor.setPreferredHeight(new Integer(0));
+    // subModulesListViewDescriptor.setPreferredHeight(new Integer(300));
     // moduleViewDescriptor.setEastViewDescriptor(subModulesListViewDescriptor);
     // TEST
 

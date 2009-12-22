@@ -32,6 +32,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
+import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
@@ -842,6 +843,12 @@ public class DefaultRemoteViewFactory extends
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             viewDescriptor.getRenderedProperty());
+    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
+    }
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);

@@ -30,7 +30,6 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 
-
 /**
  * This class implements a list model backed by a collection connector. As
  * expected, this list model will fire necessary events depending on connectors
@@ -41,15 +40,15 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
  */
 public class CollectionConnectorListModel extends AbstractListModel {
 
-  private static final long                           serialVersionUID = -7992011455793793550L;
+  private static final long                  serialVersionUID = -7992011455793793550L;
   private Map<Integer, IValueChangeListener> cachedListeners;
-  private ICollectionConnector                        collectionConnector;
+  private ICollectionConnector               collectionConnector;
 
   /**
    * Constructs a new <code>CollectionConnectorListModel</code> instance.
    * 
    * @param collectionConnector
-   *            the collection connector holding the values of this list model.
+   *          the collection connector holding the values of this list model.
    */
   public CollectionConnectorListModel(ICollectionConnector collectionConnector) {
     super();
@@ -58,13 +57,13 @@ public class CollectionConnectorListModel extends AbstractListModel {
   }
 
   /**
-   * Returns the connector value of the connector at <code>index</code> in the
-   * child connectors collection contained in the backed collection connector.
+   * Returns the connector at <code>index</code> in the child connectors
+   * collection contained in the backed collection connector.
    * <p>
    * {@inheritDoc}
    */
   public Object getElementAt(int index) {
-    return collectionConnector.getChildConnector(index).getConnectorValue();
+    return collectionConnector.getChildConnector(index);
   }
 
   /**
@@ -86,14 +85,12 @@ public class CollectionConnectorListModel extends AbstractListModel {
           .getRenderingConnector().addValueChangeListener(
               getChildConnectorListener(index));
     } else {
-      cellConnector
-          .addValueChangeListener(getChildConnectorListener(index));
+      cellConnector.addValueChangeListener(getChildConnectorListener(index));
     }
   }
 
   private void bindConnector() {
-    collectionConnector
-        .addValueChangeListener(new ListConnectorListener());
+    collectionConnector.addValueChangeListener(new ListConnectorListener());
     for (int index = 0; index < collectionConnector.getChildConnectorKeys()
         .size(); index++) {
       bindChildConnector(index);
@@ -113,8 +110,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
     return cachedListener;
   }
 
-  private final class CellConnectorListener implements
-      IValueChangeListener {
+  private final class CellConnectorListener implements IValueChangeListener {
 
     private int index;
 
@@ -125,8 +121,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
     /**
      * {@inheritDoc}
      */
-    public void valueChange(@SuppressWarnings("unused")
-    ValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
       fireContentsChanged(CollectionConnectorListModel.this, index, index);
     }
   }

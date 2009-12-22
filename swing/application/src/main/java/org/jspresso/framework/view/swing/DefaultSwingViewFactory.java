@@ -85,6 +85,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -1146,6 +1147,12 @@ public class DefaultSwingViewFactory extends
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             viewDescriptor.getRenderedProperty());
+    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
+    }
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -2294,6 +2301,43 @@ public class DefaultSwingViewFactory extends
       }
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row, column);
+    }
+  }
+
+  private final class EvenOddListCellRenderer extends DefaultListCellRenderer {
+
+    private static final long serialVersionUID = 2051850807889065438L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getListCellRendererComponent(JList list, Object value,
+        int index, boolean isSelected, boolean cellHasFocus) {
+      JLabel renderer = (JLabel) super.getListCellRendererComponent(list,
+          value, index, isSelected, cellHasFocus);
+      if (value instanceof IValueConnector) {
+        if (value instanceof IRenderableCompositeValueConnector) {
+          renderer.setText(((IRenderableCompositeValueConnector) value)
+              .getDisplayValue());
+          renderer.setIcon(getIconFactory().getIcon(
+              ((IRenderableCompositeValueConnector) value)
+                  .getDisplayIconImageUrl(),
+              getIconFactory().getSmallIconSize()));
+          if (((IRenderableCompositeValueConnector) value)
+              .getDisplayDescription() != null) {
+            ToolTipManager.sharedInstance().registerComponent(list);
+            renderer
+                .setToolTipText(((IRenderableCompositeValueConnector) value)
+                    .getDisplayDescription()
+                    + TOOLTIP_ELLIPSIS);
+          }
+        } else {
+          renderer.setText(value.toString());
+        }
+      }
+      SwingUtil.alternateEvenOddBackground(renderer, list, isSelected, index);
+      return renderer;
     }
   }
 

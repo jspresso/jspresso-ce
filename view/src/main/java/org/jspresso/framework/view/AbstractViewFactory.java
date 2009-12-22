@@ -813,7 +813,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Creates a table column connector.
+   * Creates a list column connector.
    * 
    * @param renderedProperty
    *          the list rendered property.

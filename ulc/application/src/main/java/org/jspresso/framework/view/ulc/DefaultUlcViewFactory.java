@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -127,6 +128,7 @@ import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
 import com.ulcjava.base.application.BorderFactory;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.DefaultComboBoxCellRenderer;
+import com.ulcjava.base.application.DefaultListCellRenderer;
 import com.ulcjava.base.application.GridBagConstraints;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.IEditorComponent;
@@ -149,6 +151,7 @@ import com.ulcjava.base.application.ULCPopupMenu;
 import com.ulcjava.base.application.ULCScrollPane;
 import com.ulcjava.base.application.ULCSplitPane;
 import com.ulcjava.base.application.ULCTabbedPane;
+import com.ulcjava.base.application.ULCTable;
 import com.ulcjava.base.application.ULCTableTree;
 import com.ulcjava.base.application.ULCTextArea;
 import com.ulcjava.base.application.ULCTextField;
@@ -895,6 +898,12 @@ public class DefaultUlcViewFactory extends
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             viewDescriptor.getRenderedProperty());
+    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
+    }
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -1190,8 +1199,7 @@ public class DefaultUlcViewFactory extends
     scrollPane.setCorner(ULCScrollPane.UPPER_RIGHT_CORNER, iconLabel);
     IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    viewComponent
-        .setAutoResizeMode(com.ulcjava.base.application.ULCTable.AUTO_RESIZE_OFF);
+    viewComponent.setAutoResizeMode(ULCTable.AUTO_RESIZE_OFF);
 
     List<Class<?>> columnClasses = new ArrayList<Class<?>>();
     List<IFormatter> columnFormatters = new ArrayList<IFormatter>();
@@ -2336,9 +2344,8 @@ public class DefaultUlcViewFactory extends
      * {@inheritDoc}
      */
     @Override
-    public IRendererComponent getTableCellRendererComponent(
-        com.ulcjava.base.application.ULCTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row) {
+    public IRendererComponent getTableCellRendererComponent(ULCTable table,
+        Object value, boolean isSelected, boolean hasFocus, int row) {
       if (value != null) {
         int[] rgba = ColorHelper.fromHexString((String) value);
         setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
@@ -2358,9 +2365,9 @@ public class DefaultUlcViewFactory extends
      * {@inheritDoc}
      */
     @Override
-    public IRendererComponent getTreeCellRendererComponent(
-        com.ulcjava.base.application.ULCTree tree, Object value, boolean sel,
-        boolean expanded, boolean leaf, boolean nodeHasFocus) {
+    public IRendererComponent getTreeCellRendererComponent(ULCTree tree,
+        Object value, boolean sel, boolean expanded, boolean leaf,
+        boolean nodeHasFocus) {
       ULCLabel renderer = (ULCLabel) super.getTreeCellRendererComponent(tree,
           value, sel, expanded, leaf, nodeHasFocus);
       if (value instanceof IValueConnector) {
@@ -2373,6 +2380,33 @@ public class DefaultUlcViewFactory extends
         renderer.setOpaque(false);
         renderer.setBackground(null);
       }
+      return renderer;
+    }
+  }
+
+  private final class EvenOddListCellRenderer extends DefaultListCellRenderer {
+
+    private static final long serialVersionUID = 3450896483325205907L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IRendererComponent getListCellRendererComponent(ULCList list,
+        Object value, boolean isSelected, boolean hasFocus, int row) {
+      ULCLabel renderer = (ULCLabel) super.getListCellRendererComponent(list,
+          value, isSelected, hasFocus, row);
+      if (value instanceof IValueConnector) {
+        if (value instanceof IRenderableCompositeValueConnector) {
+          renderer.setIcon(getIconFactory().getIcon(
+              ((IRenderableCompositeValueConnector) value)
+                  .getDisplayIconImageUrl(),
+              getIconFactory().getSmallIconSize()));
+        }
+        renderer.setOpaque(false);
+        renderer.setBackground(null);
+      }
+      UlcUtil.alternateEvenOddBackground(renderer, list, isSelected, row);
       return renderer;
     }
   }
@@ -2450,9 +2484,8 @@ public class DefaultUlcViewFactory extends
      * {@inheritDoc}
      */
     @Override
-    public IRendererComponent getTableCellRendererComponent(
-        com.ulcjava.base.application.ULCTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row) {
+    public IRendererComponent getTableCellRendererComponent(ULCTable table,
+        Object value, boolean isSelected, boolean hasFocus, int row) {
       if (propertyDescriptor.isTranslated()) {
         setDataType(translationDataTypeFactory.getTranslationDataType(
             propertyDescriptor.getEnumerationName(), locale,

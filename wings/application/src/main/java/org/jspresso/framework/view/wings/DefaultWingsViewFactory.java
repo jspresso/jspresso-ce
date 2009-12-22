@@ -42,6 +42,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
@@ -95,6 +96,7 @@ import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.FontHelper;
+import org.jspresso.framework.util.wings.WingsUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
@@ -838,6 +840,12 @@ public class DefaultWingsViewFactory extends
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
             viewDescriptor.getRenderedProperty());
+    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setDisplayIconImageUrl(viewDescriptor.getIconImageURL());
+      ((AbstractCompositeValueConnector) rowConnectorPrototype)
+          .setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
+    }
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -2207,6 +2215,43 @@ public class DefaultWingsViewFactory extends
           renderer.setText(value.toString());
         }
       }
+      return renderer;
+    }
+  }
+
+  private final class EvenOddListCellRenderer extends SDefaultListCellRenderer {
+
+    private static final long serialVersionUID = 2051850807889065438L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SComponent getListCellRendererComponent(SComponent list,
+        Object value, boolean isSelected, int index) {
+      SLabel renderer = (SLabel) super.getListCellRendererComponent(list,
+          value, isSelected, index);
+      if (value instanceof IValueConnector) {
+        if (value instanceof IRenderableCompositeValueConnector) {
+          renderer.setText(((IRenderableCompositeValueConnector) value)
+              .getDisplayValue());
+          renderer.setIcon(getIconFactory().getIcon(
+              ((IRenderableCompositeValueConnector) value)
+                  .getDisplayIconImageUrl(),
+              getIconFactory().getSmallIconSize()));
+          if (((IRenderableCompositeValueConnector) value)
+              .getDisplayDescription() != null) {
+            // SToolTipManager.sharedInstance().registerComponent(tree);
+            renderer
+                .setToolTipText(((IRenderableCompositeValueConnector) value)
+                    .getDisplayDescription()
+                    + TOOLTIP_ELLIPSIS);
+          }
+        } else {
+          renderer.setText(value.toString());
+        }
+      }
+      WingsUtil.alternateEvenOddBackground(renderer, list, isSelected, index);
       return renderer;
     }
   }

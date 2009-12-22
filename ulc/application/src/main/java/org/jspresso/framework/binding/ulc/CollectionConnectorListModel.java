@@ -41,15 +41,15 @@ import com.ulcjava.base.application.AbstractListModel;
  */
 public class CollectionConnectorListModel extends AbstractListModel {
 
-  private static final long                           serialVersionUID = -7992011455793793550L;
+  private static final long                  serialVersionUID = -7992011455793793550L;
   private Map<Integer, IValueChangeListener> cachedListeners;
-  private ICollectionConnector                        collectionConnector;
+  private ICollectionConnector               collectionConnector;
 
   /**
    * Constructs a new <code>CollectionConnectorListModel</code> instance.
    * 
    * @param collectionConnector
-   *            the collection connector holding the values of this list model.
+   *          the collection connector holding the values of this list model.
    */
   public CollectionConnectorListModel(ICollectionConnector collectionConnector) {
     super();
@@ -91,14 +91,12 @@ public class CollectionConnectorListModel extends AbstractListModel {
           .getRenderingConnector().addValueChangeListener(
               getChildConnectorListener(index));
     } else {
-      cellConnector
-          .addValueChangeListener(getChildConnectorListener(index));
+      cellConnector.addValueChangeListener(getChildConnectorListener(index));
     }
   }
 
   private void bindConnector() {
-    collectionConnector
-        .addValueChangeListener(new ListConnectorListener());
+    collectionConnector.addValueChangeListener(new ListConnectorListener());
     for (int index = 0; index < collectionConnector.getChildConnectorKeys()
         .size(); index++) {
       bindChildConnector(index);
@@ -118,8 +116,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
     return cachedListener;
   }
 
-  private final class CellConnectorListener implements
-      IValueChangeListener {
+  private final class CellConnectorListener implements IValueChangeListener {
 
     private int index;
 
@@ -130,8 +127,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
     /**
      * {@inheritDoc}
      */
-    public void valueChange(@SuppressWarnings("unused")
-    ValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
       fireContentsChanged(CollectionConnectorListModel.this, index, index);
     }
   }

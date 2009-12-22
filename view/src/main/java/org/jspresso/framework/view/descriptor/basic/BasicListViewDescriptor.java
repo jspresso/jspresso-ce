@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.util.gui.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 
 /**
@@ -41,7 +42,8 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
     implements IListViewDescriptor {
 
-  private String renderedProperty;
+  private String                renderedProperty;
+  private IIconImageURLProvider iconImageURLProvider;
 
   /**
    * {@inheritDoc}
@@ -67,4 +69,30 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
     this.renderedProperty = renderedProperty;
   }
 
+  /**
+   * Gets the iconImageURLProvider.
+   * 
+   * @return the iconImageURLProvider.
+   */
+  public IIconImageURLProvider getIconImageURLProvider() {
+    return iconImageURLProvider;
+  }
+
+  /**
+   * The icon image URL provider is the delegate responsible for inferring a
+   * tree node icon based on its underlying model. By default (i.e. when
+   * <code>iconImageURLProvider</code> is <code>null</code>), Jspresso will use
+   * the underlying component descriptor icon, if any. Using a custom icon image
+   * URL provider allows to implement finer rules like using different icons
+   * based on the underlying object state. There is a single method to implement
+   * to achieve this :
+   * <p>
+   * <code>String getIconImageURLForObject(Object userObject);</code>
+   * 
+   * @param iconImageURLProvider
+   *          the iconImageURLProvider to set.
+   */
+  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
+    this.iconImageURLProvider = iconImageURLProvider;
+  }
 }
