@@ -1148,12 +1148,10 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(function(selectedIndices:Array):void {
         if(selectedIndices != null && selectedIndices.length > 0) {
           if(!ArrayUtil.areUnorderedArraysEqual(selectedIndices, list.selectedIndices)) {
-            list.selectedIndex = selectedIndices[0];
-            list.selectedIndices = selectedIndices;
+            list.selectedIndices = selectedIndices.concat(); // to get a copy.
           }
         } else {
           if(list.selectedIndices.length > 0) {
-            list.selectedIndex = -1;
             list.selectedIndices = [];
           }
         }
@@ -1163,7 +1161,7 @@ package org.jspresso.framework.view.flex {
         if(selectedIndices != null && selectedIndices.length > 0) {
           if(!ArrayUtil.areUnorderedArraysEqual(selectedIndices, state.selectedIndices)) {
             state.leadingIndex = selectedIndices[0];
-            state.selectedIndices = selectedIndices;
+            state.selectedIndices = selectedIndices.concat(); // to get a copy.
           }
         } else {
           if(state.selectedIndices != null && state.selectedIndices.length > 0) {

@@ -262,9 +262,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       try {
         _changeNotificationsEnabled = false;
         if (commands != null) {
-          for each(var command:RemoteCommand in commands) {
+          for(var i:int = 0; i < commands.length; i++) {
             //trace("  -> " + command);
-            handleCommand(command);
+            handleCommand(commands.getItemAt(i) as RemoteCommand);
           }
         }
       } finally {
