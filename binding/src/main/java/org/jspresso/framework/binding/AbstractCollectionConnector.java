@@ -19,6 +19,7 @@
 package org.jspresso.framework.binding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -265,11 +266,18 @@ public abstract class AbstractCollectionConnector extends
    * {@inheritDoc}
    */
   public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
+    int[] oldSelectedIndices = getSelectedIndices();
     selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
-    if (newSelectedIndices == null || newSelectedIndices.length == 0) {
-      implFireSelectedConnectorChange((IValueConnector) null);
-    } else {
-      implFireSelectedConnectorChange(getChildConnector(leadingIndex));
+
+    if ((oldSelectedIndices == null && newSelectedIndices != null)
+        || (oldSelectedIndices != null && newSelectedIndices == null)
+        || (oldSelectedIndices != null && newSelectedIndices != null && !Arrays
+            .equals(oldSelectedIndices, newSelectedIndices))) {
+      if (newSelectedIndices == null || newSelectedIndices.length == 0) {
+        implFireSelectedConnectorChange((IValueConnector) null);
+      } else {
+        implFireSelectedConnectorChange(getChildConnector(leadingIndex));
+      }
     }
   }
 

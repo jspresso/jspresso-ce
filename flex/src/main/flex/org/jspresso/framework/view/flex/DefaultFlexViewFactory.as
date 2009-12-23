@@ -1147,39 +1147,31 @@ package org.jspresso.framework.view.flex {
     private function bindList(list:List, state:RemoteCompositeValueState):void {
       BindingUtils.bindSetter(function(selectedIndices:Array):void {
         if(selectedIndices != null && selectedIndices.length > 0) {
-          // work on items to translate indices independently of table sorting state.
-          var selectedItems:Array = new Array(selectedIndices.length);
-          for(var i:int = 0; i < selectedIndices.length; i++) {
-            selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
-          }
-          if(!ArrayUtil.areUnorderedArraysEqual(list.selectedItems, selectedItems)) {
-            list.selectedItems = selectedItems;
+          if(!ArrayUtil.areUnorderedArraysEqual(selectedIndices, list.selectedIndices)) {
+            list.selectedIndex = selectedIndices[0];
+            list.selectedIndices = selectedIndices;
           }
         } else {
-          list.selectedIndex = -1;
-          list.selectedIndices = [];
+          if(list.selectedIndices.length > 0) {
+            list.selectedIndex = -1;
+            list.selectedIndices = [];
+          }
         }
       }, state, "selectedIndices", true);
 
-      BindingUtils.bindSetter(function(selectedItems:Array):void {
-        if(selectedItems != null && selectedItems.length > 0) {
-          // work on items to translate indices independently of table sorting state.
-          var translatedSelectedIndices:Array = new Array(selectedItems.length);
-          for(var i:int = 0; i < selectedItems.length; i++) {
-            translatedSelectedIndices[i] = state.children.getItemIndex(selectedItems[i]);
+      BindingUtils.bindSetter(function(selectedIndices:Array):void {
+        if(selectedIndices != null && selectedIndices.length > 0) {
+          if(!ArrayUtil.areUnorderedArraysEqual(selectedIndices, state.selectedIndices)) {
+            state.leadingIndex = selectedIndices[0];
+            state.selectedIndices = selectedIndices;
           }
-          if(translatedSelectedIndices.length > 0) {
-            state.leadingIndex = translatedSelectedIndices[0];
-          } else {
-            state.leadingIndex = -1;
-          }
-          translatedSelectedIndices.sort(Array.NUMERIC);
-          state.selectedIndices = translatedSelectedIndices;
         } else {
-          state.leadingIndex = -1;
-          state.selectedIndices = null;
+          if(state.selectedIndices != null && state.selectedIndices.length > 0) {
+            state.leadingIndex = -1;
+            state.selectedIndices = null;
+          }
         }
-      }, list, "selectedItems", true);
+      }, list, "selectedIndices", true);
     }
 
     private function createPasswordField(remotePasswordField:RPasswordField):UIComponent {

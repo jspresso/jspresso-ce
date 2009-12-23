@@ -44,6 +44,8 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.application.model.descriptor.ModuleDescriptor;
 import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorListProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
@@ -56,6 +58,7 @@ import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -871,6 +874,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   public void displayModule(String workspaceName, Module module) {
+    Module currentModule = selectedModules.get(workspaceName);
+    if ((currentModule == null && module == null)
+        || ObjectUtils.equals(currentModule, module)) {
+      return;
+    }
     IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
         .get(workspaceName);
     if (moduleAreaViewConnector != null) {
@@ -894,5 +902,47 @@ public abstract class AbstractFrontendController<E, F, G> extends
         module.setStarted(true);
       }
     }
+    ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors
+        .get(workspaceName);
+    if (workspaceNavigatorConnector instanceof ICollectionConnectorListProvider) {
+      Object[] result = synchWorkspaceNavigatorSelection(
+          (ICollectionConnectorListProvider) workspaceNavigatorConnector,
+          module);
+      if (result != null) {
+        int moduleModelIndex = ((Integer) result[1]).intValue();
+        ((ICollectionConnector) result[0]).setSelectedIndices(
+            new int[] {moduleModelIndex}, moduleModelIndex);
+      }
+    }
+  }
+
+  private Object[] synchWorkspaceNavigatorSelection(
+      ICollectionConnectorListProvider navigatorConnector, Module module) {
+    Object[] result = null;
+    int moduleModelIndex = -1;
+    for (ICollectionConnector childCollectionConnector : navigatorConnector
+        .getCollectionConnectors()) {
+      for (int i = 0; i < childCollectionConnector.getChildConnectorCount(); i++) {
+        IValueConnector childConnector = childCollectionConnector
+            .getChildConnector(i);
+        if (module != null && module.equals(childConnector.getConnectorValue())) {
+          moduleModelIndex = i;
+        }
+        if (childConnector instanceof ICollectionConnectorListProvider) {
+          Object[] subResult = synchWorkspaceNavigatorSelection(
+              (ICollectionConnectorListProvider) childConnector, module);
+          if (subResult != null) {
+            result = subResult;
+          }
+        }
+      }
+      if (moduleModelIndex >= 0) {
+        result = new Object[] {childCollectionConnector,
+            new Integer(moduleModelIndex)};
+      } else {
+        childCollectionConnector.setSelectedIndices(null, -1);
+      }
+    }
+    return result;
   }
 }
