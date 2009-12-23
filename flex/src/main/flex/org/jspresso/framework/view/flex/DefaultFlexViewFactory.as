@@ -353,13 +353,17 @@ package org.jspresso.framework.view.flex {
     }
     
     private function expandItem(tree:Tree, remoteState:RemoteCompositeValueState, recurse:Boolean):void {
-      tree.expandItem(remoteState, true, true, false);
+      tree.expandItem(remoteState, true, true, true);
       if(recurse) {
         if(remoteState.children != null) {
-          for(var i:int = 0; i < remoteState.children.length; i++) {
-            if(remoteState.children[i] is RemoteCompositeValueState) {
-              expandItem(tree,remoteState.children[i], recurse); 
+          if(remoteState.children.length > 0) {
+            for(var i:int = 0; i < remoteState.children.length; i++) {
+              if(remoteState.children[i] is RemoteCompositeValueState) {
+                expandItem(tree,remoteState.children[i], recurse); 
+              }
             }
+          } else {
+            (tree as SelectionTrackingTree).fixListeners(remoteState.children);
           }
         }
       }

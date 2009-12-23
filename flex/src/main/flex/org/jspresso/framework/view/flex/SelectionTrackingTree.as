@@ -15,7 +15,9 @@
 package org.jspresso.framework.view.flex {
   import flash.events.Event;
   
+  import mx.collections.ICollectionView;
   import mx.controls.Tree;
+  import mx.controls.treeClasses.HierarchicalCollectionView;
   import mx.events.CollectionEvent;
   import mx.events.CollectionEventKind;
   import mx.events.PropertyChangeEvent;
@@ -59,6 +61,11 @@ package org.jspresso.framework.view.flex {
         }
       }
       super.collectionChangeHandler(event);
+    }
+    
+    public function fixListeners(nestedCollection:ICollectionView):void {
+      nestedCollection.addEventListener(CollectionEvent.COLLECTION_CHANGE,
+    										  (collection as HierarchicalCollectionView).nestedCollectionChangeHandler, false, 0, true);
     }
   }
 }
