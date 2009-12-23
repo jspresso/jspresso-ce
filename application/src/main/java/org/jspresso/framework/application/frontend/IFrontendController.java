@@ -25,6 +25,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
@@ -170,4 +171,22 @@ public interface IFrontendController<E, F, G> extends IController,
   void displayFlashObject(String swfUrl, Map<String, String> flashContext,
       List<G> actions, String title, E sourceComponent,
       Map<String, Object> context, Dimension dimension, boolean reuseCurrent);
+
+  /**
+   * Sets the selected module in the current workspace.
+   * 
+   * @param module
+   *          the module to display to the user.
+   */
+  void displayModule(Module module);
+
+  /**
+   * Sets the selected module in the given workspace.
+   * 
+   * @param workspaceName
+   *          the workspace name for which to display the module.
+   * @param module
+   *          the module to display to the user.
+   */
+  void displayModule(String workspaceName, Module module);
 }

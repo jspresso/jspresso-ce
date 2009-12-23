@@ -47,7 +47,6 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteStartCom
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
-import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
@@ -58,6 +57,7 @@ import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
@@ -74,6 +74,7 @@ import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.remote.DefaultRemoteViewFactory;
 import org.jspresso.framework.view.remote.RemoteActionFactory;
@@ -174,22 +175,27 @@ public class DefaultRemoteController extends
       if (workspaceViews == null) {
         workspaceViews = new HashSet<String>();
       }
-      IView<RComponent> workspaceView = null;
+      RSplitContainer workspaceView = null;
       if (!workspaceViews.contains(workspaceName)) {
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
+        workspaceView = new RSplitContainer(workspaceName + "_split");
+        workspaceView.setOrientation(EOrientation.HORIZONTAL.toString());
+        IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(
+            workspaceName).getViewDescriptor();
         IValueConnector workspaceConnector = getBackendController()
             .getWorkspaceConnector(workspaceName);
-        workspaceView = createWorkspaceView(workspaceName,
-            workspaceViewDescriptor, (Workspace) workspaceConnector
-                .getConnectorValue());
+        IView<RComponent> workspaceNavigator = createWorkspaceNavigator(
+            workspaceName, workspaceNavigatorViewDescriptor);
+        IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
+        workspaceView.setLeftTop(workspaceNavigator.getPeer());
+        workspaceView.setRightBottom(moduleAreaView.getPeer());
         workspaceViews.add(workspaceName);
-        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+        getMvcBinder().bind(workspaceNavigator.getConnector(),
+            workspaceConnector);
       }
       if (notifyRemote) {
         RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
         if (workspaceView != null) {
-          workspaceDisplayCommand.setWorkspaceView(workspaceView.getPeer());
+          workspaceDisplayCommand.setWorkspaceView(workspaceView);
         }
         workspaceDisplayCommand.setWorkspaceName(workspaceName);
         registerCommand(workspaceDisplayCommand);

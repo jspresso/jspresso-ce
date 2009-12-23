@@ -55,6 +55,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.InternalFrameAdapter;
@@ -66,7 +67,6 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.ControllerException;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
-import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.swing.components.JErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -188,20 +188,28 @@ public class DefaultSwingController extends
         JInternalFrame workspaceInternalFrame = workspaceInternalFrames
             .get(workspaceName);
         if (workspaceInternalFrame == null) {
-          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-              .getViewDescriptor();
+          IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(
+              workspaceName).getViewDescriptor();
           IValueConnector workspaceConnector = getBackendController()
               .getWorkspaceConnector(workspaceName);
-          IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
-              workspaceViewDescriptor, (Workspace) workspaceConnector
-                  .getConnectorValue());
-          workspaceInternalFrame = createJInternalFrame(workspaceView);
+          IView<JComponent> workspaceNavigator = createWorkspaceNavigator(
+              workspaceName, workspaceNavigatorViewDescriptor);
+          IView<JComponent> moduleAreaView = createModuleAreaView(workspaceName);
+          JSplitPane workspaceView = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+          workspaceView.add(workspaceNavigator.getPeer());
+          workspaceView.add(moduleAreaView.getPeer());
+          workspaceInternalFrame = createJInternalFrame(workspaceView,
+              workspaceNavigatorViewDescriptor.getI18nName(
+                  getTranslationProvider(), getLocale()), getIconFactory()
+                  .getIcon(workspaceNavigatorViewDescriptor.getIconImageURL(),
+                      getIconFactory().getSmallIconSize()));
           workspaceInternalFrame
               .addInternalFrameListener(new WorkspaceInternalFrameListener(
                   workspaceName));
           workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
           controllerFrame.getContentPane().add(workspaceInternalFrame);
-          getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+          getMvcBinder().bind(workspaceNavigator.getConnector(),
+              workspaceConnector);
           workspaceInternalFrame.pack();
           workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
               controllerFrame.getHeight() - 50);
@@ -471,17 +479,15 @@ public class DefaultSwingController extends
    *          the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
-  private JInternalFrame createJInternalFrame(IView<JComponent> view) {
-    JInternalFrame internalFrame = new JInternalFrame(view.getDescriptor()
-        .getI18nName(getTranslationProvider(), getLocale()));
-    internalFrame.setFrameIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(),
-        getIconFactory().getSmallIconSize()));
+  private JInternalFrame createJInternalFrame(JComponent view, String title,
+      Icon frameIcon) {
+    JInternalFrame internalFrame = new JInternalFrame(title);
+    internalFrame.setFrameIcon(frameIcon);
     internalFrame.setResizable(true);
     internalFrame.setClosable(true);
     internalFrame.setMaximizable(true);
     internalFrame.setIconifiable(true);
-    internalFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);
+    internalFrame.getContentPane().add(view, BorderLayout.CENTER);
     internalFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     internalFrame.setGlassPane(createHermeticGlassPane());
     return internalFrame;

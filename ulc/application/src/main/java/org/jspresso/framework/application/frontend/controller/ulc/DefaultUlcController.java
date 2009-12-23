@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
-import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.ulc.components.server.ULCErrorDialog;
 import org.jspresso.framework.gui.ulc.components.server.ULCExtendedButton;
@@ -70,6 +69,7 @@ import com.ulcjava.base.application.ULCLabel;
 import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
+import com.ulcjava.base.application.ULCSplitPane;
 import com.ulcjava.base.application.ULCWindow;
 import com.ulcjava.base.application.border.ULCEmptyBorder;
 import com.ulcjava.base.application.event.ActionEvent;
@@ -164,20 +164,29 @@ public class DefaultUlcController extends
         ULCExtendedInternalFrame workspaceInternalFrame = workspaceInternalFrames
             .get(workspaceName);
         if (workspaceInternalFrame == null) {
-          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-              .getViewDescriptor();
+          IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(
+              workspaceName).getViewDescriptor();
           IValueConnector workspaceConnector = getBackendController()
               .getWorkspaceConnector(workspaceName);
-          IView<ULCComponent> workspaceView = createWorkspaceView(
-              workspaceName, workspaceViewDescriptor,
-              (Workspace) workspaceConnector.getConnectorValue());
-          workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
+          IView<ULCComponent> workspaceNavigator = createWorkspaceNavigator(
+              workspaceName, workspaceNavigatorViewDescriptor);
+          IView<ULCComponent> moduleAreaView = createModuleAreaView(workspaceName);
+          ULCSplitPane workspaceView = new ULCSplitPane(
+              ULCSplitPane.HORIZONTAL_SPLIT);
+          workspaceView.add(workspaceNavigator.getPeer());
+          workspaceView.add(moduleAreaView.getPeer());
+          workspaceInternalFrame = createULCExtendedInternalFrame(
+              workspaceView, workspaceNavigatorViewDescriptor.getI18nName(
+                  getTranslationProvider(), getLocale()), getIconFactory()
+                  .getIcon(workspaceNavigatorViewDescriptor.getIconImageURL(),
+                      getIconFactory().getSmallIconSize()));
           workspaceInternalFrame
               .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
                   workspaceName));
           workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
           controllerFrame.getContentPane().add(workspaceInternalFrame);
-          getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+          getMvcBinder().bind(workspaceNavigator.getConnector(),
+              workspaceConnector);
           workspaceInternalFrame.pack();
           workspaceInternalFrame.setSize(controllerFrame.getWidth() - 50,
               controllerFrame.getHeight() - 50);
@@ -399,17 +408,14 @@ public class DefaultUlcController extends
    * @return the constructed internal frame.
    */
   private ULCExtendedInternalFrame createULCExtendedInternalFrame(
-      IView<ULCComponent> view) {
-    ULCExtendedInternalFrame internalFrame = new ULCExtendedInternalFrame(view
-        .getDescriptor().getI18nName(getTranslationProvider(), getLocale()));
-    internalFrame.setFrameIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(),
-        getIconFactory().getSmallIconSize()));
+      ULCComponent view, String title, ULCIcon frameIcon) {
+    ULCExtendedInternalFrame internalFrame = new ULCExtendedInternalFrame(title);
+    internalFrame.setFrameIcon(frameIcon);
     internalFrame.setResizable(true);
     internalFrame.setClosable(true);
     internalFrame.setMaximizable(true);
     internalFrame.setIconifiable(true);
-    internalFrame.getContentPane().add(view.getPeer());
+    internalFrame.getContentPane().add(view);
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;
   }

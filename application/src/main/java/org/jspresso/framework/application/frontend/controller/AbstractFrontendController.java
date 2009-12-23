@@ -42,6 +42,7 @@ import org.jspresso.framework.application.frontend.action.workspace.ExitAction;
 import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.application.model.descriptor.ModuleDescriptor;
 import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
@@ -55,7 +56,6 @@ import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
-import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -63,9 +63,7 @@ import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
@@ -103,7 +101,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private IMvcBinder                            mvcBinder;
 
-  private Map<String, ICompositeValueConnector> selectedModuleConnectors;
+  private Map<String, Module>                   selectedModules;
 
   private String                                selectedWorkspaceName;
   private IAction                               startupAction;
@@ -115,13 +113,18 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private IViewDescriptor                       loginViewDescriptor;
 
+  private Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
+  private Map<String, IValueConnector>          moduleAreaViewConnectors;
+
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
    */
   public AbstractFrontendController() {
     controllerDescriptor = new DefaultIconDescriptor();
-    selectedModuleConnectors = new HashMap<String, ICompositeValueConnector>();
+    selectedModules = new HashMap<String, Module>();
     dialogContextStack = new ArrayList<Map<String, Object>>();
+    workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
+    moduleAreaViewConnectors = new HashMap<String, IValueConnector>();
   }
 
   /**
@@ -267,14 +270,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
-    ICompositeValueConnector selectedModuleViewConnector = selectedModuleConnectors
-        .get(getSelectedWorkspaceName());
-    if (selectedModuleViewConnector != null) {
-      initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
-          selectedModuleViewConnector);
-      initialActionContext.put(ActionContextConstants.MODULE,
-          selectedModuleViewConnector.getConnectorValue());
-    }
+    initialActionContext.put(ActionContextConstants.MODULE, selectedModules
+        .get(getSelectedWorkspaceName()));
     return initialActionContext;
   }
 
@@ -476,7 +473,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   public boolean stop() {
-    selectedModuleConnectors = new HashMap<String, ICompositeValueConnector>();
+    selectedModules = new HashMap<String, Module>();
+    workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
+    moduleAreaViewConnectors = new HashMap<String, IValueConnector>();
     selectedWorkspaceName = null;
     return getBackendController().stop();
   }
@@ -556,38 +555,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Creates a root workspace view.
+   * Creates a workspace navigator based on the workspace definition.
    * 
    * @param workspaceName
-   *          the identifier of the workspace to create the view for.
-   * @param workspaceViewDescriptor
-   *          the view descriptor of the workspace to render.
-   * @param workspace
-   *          the workspace to create the view for.
-   * @return a view rendering the workspace.
+   *          the workspace to create the navigator for.
+   * @param workspaceNavigatorViewDescriptor
+   *          the view descriptor of the navigator.
+   * @return the workspace navigator view.
    */
-  protected IView<E> createWorkspaceView(final String workspaceName,
-      IViewDescriptor workspaceViewDescriptor, Workspace workspace) {
-    BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
-    splitViewDescriptor.setOrientation(EOrientation.HORIZONTAL);
-    splitViewDescriptor.setName(workspaceViewDescriptor.getName());
-    // splitViewDescriptor.setDescription(workspaceViewDescriptor.getDescription(
-    // ));
-    splitViewDescriptor.setIconImageURL(workspaceViewDescriptor
-        .getIconImageURL());
-    splitViewDescriptor.setCascadingModels(true);
-
-    splitViewDescriptor.setLeftTopViewDescriptor(workspaceViewDescriptor);
-    splitViewDescriptor
-        .setRightBottomViewDescriptor(new WorkspaceCardViewDescriptor());
-
-    ICompositeView<E> workspaceView = (ICompositeView<E>) viewFactory
-        .createView(splitViewDescriptor, this, getLocale());
+  protected IView<E> createWorkspaceNavigator(final String workspaceName,
+      IViewDescriptor workspaceNavigatorViewDescriptor) {
+    IView<E> workspaceNavigatorView = viewFactory.createView(
+        workspaceNavigatorViewDescriptor, this, getLocale());
     IItemSelectable workspaceNavigator;
-    if (workspaceView.getConnector() instanceof IItemSelectable) {
-      workspaceNavigator = (IItemSelectable) workspaceView.getConnector();
+    if (workspaceNavigatorView.getConnector() instanceof IItemSelectable) {
+      workspaceNavigator = (IItemSelectable) workspaceNavigatorView
+          .getConnector();
     } else {
-      workspaceNavigator = (IItemSelectable) ((ICompositeValueConnector) workspaceView
+      workspaceNavigator = (IItemSelectable) ((ICompositeValueConnector) workspaceNavigatorView
           .getConnector())
           .getChildConnector(ModelRefPropertyConnector.THIS_PROPERTY);
     }
@@ -597,21 +582,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
         selectedModuleChanged(workspaceName, (ICompositeValueConnector) event
             .getSelectedItem());
       }
-
     });
-    for (IView<E> childView : workspaceView.getChildren()) {
-      if (childView instanceof IMapView<?>) {
-        for (Map.Entry<String, IView<E>> grandChildView : ((IMapView<E>) childView)
-            .getChildrenMap().entrySet()) {
-          mvcBinder.bind(grandChildView.getValue().getConnector(),
-              getBackendController().createModelConnector(
-                  workspaceName + "_" + grandChildView.getKey(),
-                  grandChildView.getValue().getDescriptor()
-                      .getModelDescriptor()));
-        }
-      }
-    }
-    return workspaceView;
+    workspaceNavigatorConnectors.put(workspaceName,
+        (ICompositeValueConnector) workspaceNavigatorView.getConnector());
+    return workspaceNavigatorView;
+  }
+
+  /**
+   * Creates the module area view to display the modules content.
+   * 
+   * @param workspaceName
+   *          the workspace to create the module area view for.
+   * @return the the module area view to display the modules content.
+   */
+  protected IView<E> createModuleAreaView(String workspaceName) {
+    IMapView<E> moduleAreaView = (IMapView<E>) viewFactory.createView(
+        new WorkspaceCardViewDescriptor(), this, getLocale());
+    moduleAreaViewConnectors.put(workspaceName, moduleAreaView.getConnector());
+    return moduleAreaView;
   }
 
   /**
@@ -686,15 +674,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected String getLoginContextName() {
     return loginContextName;
-  }
-
-  /**
-   * Gets the selectedModuleConnectors.
-   * 
-   * @return the selectedModuleConnectors.
-   */
-  protected Map<String, ICompositeValueConnector> getSelectedModuleConnectors() {
-    return selectedModuleConnectors;
   }
 
   /**
@@ -813,15 +792,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private void selectedModuleChanged(String workspaceName,
       ICompositeValueConnector selectedConnector) {
-    selectedModuleConnectors.put(workspaceName, selectedConnector);
     if (selectedConnector != null
         && selectedConnector.getConnectorValue() instanceof Module) {
       Module selectedModule = (Module) selectedConnector.getConnectorValue();
-      if (!selectedModule.isStarted()
-          && selectedModule.getStartupAction() != null) {
-        execute(selectedModule.getStartupAction(), createEmptyContext());
-        selectedModule.setStarted(true);
-      }
+      displayModule(workspaceName, selectedModule);
     }
   }
 
@@ -882,5 +856,39 @@ public abstract class AbstractFrontendController<E, F, G> extends
       return "error.integrity";
     }
     return "error.integrity";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayModule(Module module) {
+    displayModule(getSelectedWorkspaceName(), module);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayModule(String workspaceName, Module module) {
+    IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
+        .get(workspaceName);
+    if (moduleAreaViewConnector != null) {
+
+      IValueConnector oldModuleModelConnector = moduleAreaViewConnector
+          .getModelConnector();
+      if (oldModuleModelConnector != null) {
+        oldModuleModelConnector.setConnectorValue(null);
+      }
+
+      IValueConnector moduleModelConnector = getBackendController()
+          .createModelConnector(workspaceName,
+              ModuleDescriptor.MODULE_DESCRIPTOR);
+      moduleModelConnector.setConnectorValue(module);
+      mvcBinder.bind(moduleAreaViewConnector, moduleModelConnector);
+    }
+    selectedModules.put(workspaceName, module);
+    if (!module.isStarted() && module.getStartupAction() != null) {
+      execute(module.getStartupAction(), createEmptyContext());
+      module.setStarted(true);
+    }
   }
 }

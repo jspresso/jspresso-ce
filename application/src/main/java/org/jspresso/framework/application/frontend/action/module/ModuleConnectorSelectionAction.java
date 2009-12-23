@@ -22,9 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
-import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
-import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.application.model.Module;
 
 /**
  * A simple action which selects indices on a module view connector.
@@ -50,15 +48,15 @@ public class ModuleConnectorSelectionAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IValueConnector moduleConnector = getModuleConnector(context);
-    ICollectionConnector parentModuleCollectionConnector = ((ICollectionConnectorProvider) moduleConnector
-        .getParentConnector().getParentConnector()).getCollectionConnector();
-    parentModuleCollectionConnector.setSelectedIndices(new int[0]);
-    int[] connectorSelection = getSelectedIndices(context);
-    if (moduleConnector instanceof ICollectionConnectorProvider) {
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) moduleConnector)
-          .getCollectionConnector();
-      collectionConnector.setSelectedIndices(connectorSelection);
+    Module module = getModule(context);
+    int[] selectedIndices = getSelectedIndices(context);
+    if (selectedIndices.length > 0 && module != null) {
+      int selectedModuleIndex = selectedIndices[0];
+      if (module.getSubModules() != null
+          && module.getSubModules().size() > selectedModuleIndex) {
+        getController(context).displayModule(
+            module.getSubModules().get(selectedModuleIndex));
+      }
     }
     return super.execute(actionHandler, context);
   }

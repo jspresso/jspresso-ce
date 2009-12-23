@@ -19,6 +19,8 @@
 package org.jspresso.framework.application.frontend.controller.wings;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -32,7 +34,6 @@ import javax.swing.Action;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
-import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.wings.components.SErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -59,6 +60,7 @@ import org.wings.SContainer;
 import org.wings.SDialog;
 import org.wings.SDimension;
 import org.wings.SFrame;
+import org.wings.SGridBagLayout;
 import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.SMenu;
@@ -165,17 +167,41 @@ public class DefaultWingsController extends
         workspaceViews = new HashSet<String>();
       }
       if (!workspaceViews.contains(workspaceName)) {
-        IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-            .getViewDescriptor();
+        IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(
+            workspaceName).getViewDescriptor();
         IValueConnector workspaceConnector = getBackendController()
             .getWorkspaceConnector(workspaceName);
-        IView<SComponent> workspaceView = createWorkspaceView(workspaceName,
-            workspaceViewDescriptor, (Workspace) workspaceConnector
-                .getConnectorValue());
-        // getViewFactory().decorateWithTitle(moduleView, getLocale());
+        IView<SComponent> workspaceNavigator = createWorkspaceNavigator(
+            workspaceName, workspaceNavigatorViewDescriptor);
+        IView<SComponent> moduleAreaView = createModuleAreaView(workspaceName);
+
+        // Split pane definition !!!
+        SPanel workspaceView = new SPanel(new SGridBagLayout());
+        Insets insets = new Insets(0, 0, 0, 0);
+
+        workspaceNavigator.getPeer().setHorizontalAlignment(
+            SConstants.LEFT_ALIGN);
+        workspaceNavigator.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
+        double weightx = 0.0d;
+        workspaceView.add(workspaceNavigator.getPeer(), new GridBagConstraints(
+            0, 0, 1, 1, weightx, 1.0d, GridBagConstraints.NORTHWEST,
+            GridBagConstraints.BOTH, insets, 0, 0));
+
+        moduleAreaView.getPeer().setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        moduleAreaView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
+        int gridx = 1;
+        int gridy = 0;
+        workspaceView.add(moduleAreaView.getPeer(),
+            new GridBagConstraints(gridx, gridy, GridBagConstraints.REMAINDER,
+                GridBagConstraints.REMAINDER, 1.0d, 1.0d,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, insets,
+                0, 0));
+        // End split pane definition !!!
+
         workspaceViews.add(workspaceName);
-        cardPanel.add(workspaceView.getPeer(), workspaceName);
-        getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+        cardPanel.add(workspaceView, workspaceName);
+        getMvcBinder().bind(workspaceNavigator.getConnector(),
+            workspaceConnector);
       }
       ((SCardLayout) cardPanel.getLayout()).show(workspaceName);
       updateFrameTitle();
