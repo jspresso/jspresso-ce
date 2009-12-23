@@ -796,6 +796,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
         && selectedConnector.getConnectorValue() instanceof Module) {
       Module selectedModule = (Module) selectedConnector.getConnectorValue();
       displayModule(workspaceName, selectedModule);
+    } else {
+      displayModule(workspaceName, null);
     }
   }
 
@@ -886,9 +888,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
       mvcBinder.bind(moduleAreaViewConnector, moduleModelConnector);
     }
     selectedModules.put(workspaceName, module);
-    if (!module.isStarted() && module.getStartupAction() != null) {
-      execute(module.getStartupAction(), createEmptyContext());
-      module.setStarted(true);
+    if (module != null) {
+      if (!module.isStarted() && module.getStartupAction() != null) {
+        execute(module.getStartupAction(), createEmptyContext());
+        module.setStarted(true);
+      }
     }
   }
 }

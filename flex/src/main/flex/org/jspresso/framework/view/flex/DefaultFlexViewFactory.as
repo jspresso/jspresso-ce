@@ -342,14 +342,27 @@ package org.jspresso.framework.view.flex {
       bindTree(tree, remoteTree.state as RemoteCompositeValueState);
       if(remoteTree.expanded) {
         tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-            tree.expandChildrenOf(remoteTree.state, true);
+            expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
           });
       } else {
         tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-            tree.expandItem(remoteTree.state, true);
+            expandItem(tree, remoteTree.state as RemoteCompositeValueState, false);
           });
       }
       return tree;
+    }
+    
+    private function expandItem(tree:Tree, remoteState:RemoteCompositeValueState, recurse:Boolean):void {
+      tree.expandItem(remoteState, true, true, false);
+      if(recurse) {
+        if(remoteState.children != null) {
+          for(var i:int = 0; i < remoteState.children.length; i++) {
+            if(remoteState.children[i] is RemoteCompositeValueState) {
+              expandItem(tree,remoteState.children[i], recurse); 
+            }
+          }
+        }
+      }
     }
 
     private function bindTree(tree:Tree, rootState:RemoteCompositeValueState):void {
