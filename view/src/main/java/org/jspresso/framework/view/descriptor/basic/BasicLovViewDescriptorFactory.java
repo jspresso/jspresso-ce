@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -41,6 +42,8 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   private ActionMap                   resultViewActionMap;
   private IViewDescriptor             pagingStatusViewDescriptor;
   private IDisplayableAction          sortingAction;
+  private FrontendAction<?, ?, ?>     previousPageAction;
+  private FrontendAction<?, ?, ?>     nextPageAction;
 
   /**
    * {@inheritDoc}
@@ -59,7 +62,28 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     if (pagingStatusViewDescriptor != null) {
       BasicBorderViewDescriptor pagingViewDescriptor = new BasicBorderViewDescriptor();
       pagingViewDescriptor.setWestViewDescriptor(pagingStatusViewDescriptor);
-      lovViewDescriptor.setSouthViewDescriptor(pagingViewDescriptor);
+      if (previousPageAction != null || nextPageAction != null) {
+        BasicBorderViewDescriptor pageNavigationViewDescriptor = new BasicBorderViewDescriptor();
+        pageNavigationViewDescriptor
+            .setCenterViewDescriptor(pagingViewDescriptor);
+
+        if (previousPageAction != null) {
+          BasicActionViewDescriptor previousActionViewDescriptor = new BasicActionViewDescriptor();
+          previousActionViewDescriptor.setAction(previousPageAction);
+          pageNavigationViewDescriptor
+              .setWestViewDescriptor(previousActionViewDescriptor);
+        }
+
+        if (nextPageAction != null) {
+          BasicActionViewDescriptor nextActionViewDescriptor = new BasicActionViewDescriptor();
+          nextActionViewDescriptor.setAction(nextPageAction);
+          pageNavigationViewDescriptor
+              .setEastViewDescriptor(nextActionViewDescriptor);
+        }
+        lovViewDescriptor.setSouthViewDescriptor(pageNavigationViewDescriptor);
+      } else {
+        lovViewDescriptor.setSouthViewDescriptor(pagingViewDescriptor);
+      }
     }
     return lovViewDescriptor;
 
@@ -127,5 +151,25 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    */
   public void setSortingAction(IDisplayableAction sortingAction) {
     this.sortingAction = sortingAction;
+  }
+
+  /**
+   * Sets the previousPageAction.
+   * 
+   * @param previousPageAction
+   *          the previousPageAction to set.
+   */
+  public void setPreviousPageAction(FrontendAction<?, ?, ?> previousPageAction) {
+    this.previousPageAction = previousPageAction;
+  }
+
+  /**
+   * Sets the nextPageAction.
+   * 
+   * @param nextPageAction
+   *          the nextPageAction to set.
+   */
+  public void setNextPageAction(FrontendAction<?, ?, ?> nextPageAction) {
+    this.nextPageAction = nextPageAction;
   }
 }

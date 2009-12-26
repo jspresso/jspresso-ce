@@ -9,24 +9,9 @@
   <bean id="lovViewDescriptorFactory" class="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="sortingAction" ref="lovFindFrontAction" />
-    <property name="resultViewActionMap">
-      <bean class="org.jspresso.framework.view.action.ActionMap">
-        <property name="actionLists">
-          <list>
-            <bean class="org.jspresso.framework.view.action.ActionList">
-              <property name="name" value="FILE" />
-              <property name="actions">
-                <list>
-                  <ref local="previousLovPageFrontAction" />
-                  <ref local="nextLovPageFrontAction" />
-                </list>
-              </property>
-            </bean>
-          </list>
-        </property>
-      </bean>
-    </property>
     <property name="pagingStatusViewDescriptor" ref="pageableStatusView" />
+    <property name="previousPageAction" ref="previousLovPageFrontAction"/>
+    <property name="nextPageAction" ref="nextLovPageFrontAction"/>
   </bean>
 
   <!--
@@ -618,8 +603,6 @@
           <property name="actions">
             <list>
               <ref local="queryModuleFilterAction" />
-              <ref local="previousModuleFilterPageAction" />
-              <ref local="nextModuleFilterPageAction" />
             </list>
           </property>
         </bean>
@@ -662,8 +645,6 @@
           <property name="actions">
             <list>
               <ref local="queryModuleFilterAction" />
-              <ref local="previousModuleFilterPageAction" />
-              <ref local="nextModuleFilterPageAction" />
             </list>
           </property>
         </bean>
@@ -786,6 +767,8 @@
   <bean abstract="true" id="abstractFilterableBeanCollectionModule" class="org.jspresso.framework.application.model.FilterableBeanCollectionModule">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="pagingStatusViewDescriptor" ref="pageableStatusView" />
+    <property name="previousPageAction" ref="previousModuleFilterPageAction"/>
+    <property name="nextPageAction" ref="nextModuleFilterPageAction"/>
     <property name="projectedViewDescriptor" ref="filterableBeanCollectionModuleView" />
     <property name="startupAction" ref="initModuleFilterAction" />
   </bean>

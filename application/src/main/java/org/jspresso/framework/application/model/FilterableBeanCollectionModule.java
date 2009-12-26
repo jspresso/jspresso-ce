@@ -21,14 +21,17 @@ package org.jspresso.framework.application.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
@@ -47,6 +50,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
 
   private IQueryViewDescriptorFactory  queryViewDescriptorFactory;
   private IViewDescriptor              pagingStatusViewDescriptor;
+  private FrontendAction<?, ?, ?>      previousPageAction;
+  private FrontendAction<?, ?, ?>      nextPageAction;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -194,8 +199,31 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
       nestingViewDescriptor
           .setModelDescriptor(moduleDescriptor
               .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
-      nestingViewDescriptor.setWestViewDescriptor(pagingStatusViewDescriptor);
-      decorator.setSouthViewDescriptor(nestingViewDescriptor);
+      nestingViewDescriptor.setCenterViewDescriptor(pagingStatusViewDescriptor);
+      nestingViewDescriptor.setBorderType(EBorderType.SIMPLE);
+
+      if (previousPageAction != null || nextPageAction != null) {
+        BasicBorderViewDescriptor pageNavigationViewDescriptor = new BasicBorderViewDescriptor();
+        pageNavigationViewDescriptor
+            .setCenterViewDescriptor(nestingViewDescriptor);
+
+        if (previousPageAction != null) {
+          BasicActionViewDescriptor previousActionViewDescriptor = new BasicActionViewDescriptor();
+          previousActionViewDescriptor.setAction(previousPageAction);
+          pageNavigationViewDescriptor
+              .setWestViewDescriptor(previousActionViewDescriptor);
+        }
+
+        if (nextPageAction != null) {
+          BasicActionViewDescriptor nextActionViewDescriptor = new BasicActionViewDescriptor();
+          nextActionViewDescriptor.setAction(nextPageAction);
+          pageNavigationViewDescriptor
+              .setEastViewDescriptor(nextActionViewDescriptor);
+        }
+        decorator.setSouthViewDescriptor(pageNavigationViewDescriptor);
+      } else {
+        decorator.setSouthViewDescriptor(nestingViewDescriptor);
+      }
     }
     decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());
     return decorator;
@@ -210,5 +238,25 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   protected BeanCollectionModuleDescriptor getDescriptor() {
     return new FilterableBeanCollectionModuleDescriptor(
         getElementComponentDescriptor(), getFilterComponentDescriptor());
+  }
+
+  /**
+   * Sets the previousPageAction.
+   * 
+   * @param previousPageAction
+   *          the previousPageAction to set.
+   */
+  public void setPreviousPageAction(FrontendAction<?, ?, ?> previousPageAction) {
+    this.previousPageAction = previousPageAction;
+  }
+
+  /**
+   * Sets the nextPageAction.
+   * 
+   * @param nextPageAction
+   *          the nextPageAction to set.
+   */
+  public void setNextPageAction(FrontendAction<?, ?, ?> nextPageAction) {
+    this.nextPageAction = nextPageAction;
   }
 }

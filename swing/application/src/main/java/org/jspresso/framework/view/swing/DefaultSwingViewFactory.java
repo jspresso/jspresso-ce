@@ -822,6 +822,8 @@ public class DefaultSwingViewFactory extends
     viewComponent.setAction(getActionFactory().createAction(
         viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
         actionHandler, view, locale));
+    viewComponent.setBorderPainted(false);
+    viewComponent.setText(null);
     return view;
   }
 
