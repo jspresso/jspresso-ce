@@ -40,7 +40,7 @@ import org.jspresso.framework.util.event.ValueChangeSupport;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.gate.IModelGate;
+import org.jspresso.framework.util.lang.IModelAware;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
 /**
@@ -167,12 +167,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
       IValueConnector connectorToListenTo = getComponentConnector(this);
       if (connectorToListenTo != null) {
         for (IGate gate : gates) {
-          if (gate instanceof IModelGate) {
-            ((IModelGate) gate).setModel(connectorToListenTo
+          if (gate instanceof IModelAware) {
+            ((IModelAware) gate).setModel(connectorToListenTo
                 .getConnectorValue());
             connectorToListenTo
                 .addValueChangeListener(new InnerGateModelListener(
-                    (IModelGate) gate));
+                    (IModelAware) gate));
           }
         }
       }
@@ -181,7 +181,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   private static class InnerGateModelListener implements IValueChangeListener {
 
-    private IModelGate gate;
+    private IModelAware gate;
 
     /**
      * Constructs a new <code>InnerGateModelListener</code> instance.
@@ -189,7 +189,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
      * @param gate
      *          the model gate.
      */
-    public InnerGateModelListener(IModelGate gate) {
+    public InnerGateModelListener(IModelAware gate) {
       this.gate = gate;
     }
 

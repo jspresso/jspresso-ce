@@ -35,7 +35,7 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.gate.IModelGate;
+import org.jspresso.framework.util.lang.IModelAware;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
 /**
@@ -138,15 +138,15 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
     if (getReadabilityGates() != null) {
       for (IGate gate : getReadabilityGates()) {
-        if (gate instanceof IModelGate) {
-          ((IModelGate) gate).setModel(evt.getNewValue());
+        if (gate instanceof IModelAware) {
+          ((IModelAware) gate).setModel(evt.getNewValue());
         }
       }
     }
     if (getWritabilityGates() != null) {
       for (IGate gate : getWritabilityGates()) {
-        if (gate instanceof IModelGate) {
-          ((IModelGate) gate).setModel(evt.getNewValue());
+        if (gate instanceof IModelAware) {
+          ((IModelAware) gate).setModel(evt.getNewValue());
         }
       }
     }

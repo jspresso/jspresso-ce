@@ -18,8 +18,9 @@
  */
 package org.jspresso.framework.application.printing.model;
 
+import java.util.Map;
+
 import org.jspresso.framework.application.printing.model.descriptor.IReportDescriptor;
-import org.jspresso.framework.util.context.IContextAware;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 
 /**
@@ -28,7 +29,7 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IReport extends IContextAware, IDescriptor {
+public interface IReport extends IDescriptor {
 
   /**
    * <code>REPORT_ACTION_PARAM</code>.
@@ -41,4 +42,11 @@ public interface IReport extends IContextAware, IDescriptor {
    * @return the descriptor of this report.
    */
   IReportDescriptor getReportDescriptor();
+
+  /**
+   * Gets the report context.
+   * 
+   * @return the context key/value pairs.
+   */
+  Map<String, Object> getContext();
 }

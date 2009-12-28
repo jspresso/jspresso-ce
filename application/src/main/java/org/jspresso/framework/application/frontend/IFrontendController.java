@@ -189,4 +189,23 @@ public interface IFrontendController<E, F, G> extends IController,
    *          the module to display to the user.
    */
   void displayModule(String workspaceName, Module module);
+
+  /**
+   * Pins a module in the history navigation thus allowing the user to navigate
+   * back.
+   * 
+   * @param module
+   *          the module to pin.
+   */
+  void pinModule(Module module);
+
+  /**
+   * Navigates forward in the pinned modules.
+   */
+  void displayNextPinnedModule();
+
+  /**
+   * Navigates backward in the pinned modules.
+   */
+  void displayPreviousPinnedModule();
 }

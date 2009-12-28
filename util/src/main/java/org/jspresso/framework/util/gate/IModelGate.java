@@ -18,26 +18,15 @@
  */
 package org.jspresso.framework.util.gate;
 
+import org.jspresso.framework.util.lang.IModelAware;
+
 /**
  * A model based gate.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IModelGate extends IGate {
+public interface IModelGate extends IGate, IModelAware {
 
-  /**
-   * Gets the model driving this gate.
-   * 
-   * @return the model driving this gate.
-   */
-  Object getModel();
-
-  /**
-   * Sets the model driving this gate.
-   * 
-   * @param model
-   *          the model driving this gate.
-   */
-  void setModel(Object model);
+  // EMPTY AS OF NOW
 }

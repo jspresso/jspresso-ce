@@ -18,12 +18,12 @@
  */
 package org.jspresso.framework.application.printing.model.basic;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.application.printing.model.descriptor.IReportDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
-
 
 /**
  * A basic report execution instance.
@@ -35,6 +35,13 @@ public class BasicReport extends DefaultDescriptor implements IReport {
 
   private Map<String, Object> context;
   private IReportDescriptor   reportDescriptor;
+
+  /**
+   * Constructs a new <code>BasicReport</code> instance.
+   */
+  public BasicReport() {
+    this.context = new HashMap<String, Object>();
+  }
 
   /**
    * {@inheritDoc}
@@ -51,17 +58,10 @@ public class BasicReport extends DefaultDescriptor implements IReport {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public void setContext(Map<String, Object> context) {
-    this.context = context;
-  }
-
-  /**
    * Sets the reportDescriptor.
    * 
    * @param reportDescriptor
-   *            the reportDescriptor to set.
+   *          the reportDescriptor to set.
    */
   public void setReportDescriptor(IReportDescriptor reportDescriptor) {
     this.reportDescriptor = reportDescriptor;

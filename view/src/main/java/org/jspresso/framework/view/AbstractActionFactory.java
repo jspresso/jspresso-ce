@@ -40,9 +40,9 @@ import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
-import org.jspresso.framework.util.gate.IModelGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.IModelAware;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -119,12 +119,12 @@ public abstract class AbstractActionFactory<E, F, G> implements
         if (clonedGate instanceof ISubjectAware) {
           ((ISubjectAware) clonedGate).setSubject(actionHandler.getSubject());
         }
-        if (clonedGate instanceof IModelGate) {
+        if (clonedGate instanceof IModelAware) {
           if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
             viewConnector.addValueChangeListener(new IValueChangeListener() {
 
               public void valueChange(ValueChangeEvent evt) {
-                ((IModelGate) clonedGate).setModel(evt.getNewValue());
+                ((IModelAware) clonedGate).setModel(evt.getNewValue());
               }
             });
           } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
@@ -136,11 +136,11 @@ public abstract class AbstractActionFactory<E, F, G> implements
                         ICollectionConnector collectionConnector = (ICollectionConnector) evt
                             .getSource();
                         if (collectionConnector.getModelConnector() != null) {
-                          ((IModelGate) clonedGate)
+                          ((IModelAware) clonedGate)
                               .setModel(collectionConnector.getModelProvider()
                                   .getModel());
                         } else {
-                          ((IModelGate) clonedGate).setModel(null);
+                          ((IModelAware) clonedGate).setModel(null);
                         }
                       }
                     });

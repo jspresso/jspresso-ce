@@ -44,7 +44,7 @@ public abstract class AbstractModelGate extends AbstractGate implements
    * 
    * @return the model.
    */
-  public Object getModel() {
+  protected Object getModel() {
     return model;
   }
 

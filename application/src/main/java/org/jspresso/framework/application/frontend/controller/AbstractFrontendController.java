@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -119,6 +120,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
   private Map<String, IValueConnector>          moduleAreaViewConnectors;
 
+  private List<ModuleHistoryEntry>              backwardHistoryEntries;
+  private List<ModuleHistoryEntry>              forwardHistoryEntries;
+
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
    */
@@ -128,6 +132,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     dialogContextStack = new ArrayList<Map<String, Object>>();
     workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
     moduleAreaViewConnectors = new HashMap<String, IValueConnector>();
+    backwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
+    forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
   }
 
   /**
@@ -689,6 +695,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Gets the selected module.
+   * 
+   * @param workspaceName
+   *          the workspace name to query the selected module for.
+   * @return the selected module.
+   */
+  protected Module getSelectedModule(String workspaceName) {
+    IValueConnector moduleConnector = (IValueConnector) selectedModules
+        .get(workspaceName);
+    if (moduleConnector != null) {
+      return (Module) moduleConnector.getConnectorValue();
+    }
+    return null;
+  }
+
+  /**
    * Given a workspace name, this method returns the associated workspace.
    * 
    * @param workspaceName
@@ -879,6 +901,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
         || ObjectUtils.equals(currentModule, module)) {
       return;
     }
+    displayWorkspace(workspaceName);
     IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
         .get(workspaceName);
     if (moduleAreaViewConnector != null) {
@@ -944,5 +967,74 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void pinModule(Module module) {
+    pinModule(getSelectedWorkspaceName(), module);
+  }
+
+  /**
+   * Pins a module in the history navigation thus allowing the user to navigate
+   * back.
+   * 
+   * @param workspaceName
+   *          the workspace to pin the module for.
+   * @param module
+   *          the module to pin.
+   */
+  protected void pinModule(String workspaceName, Module module) {
+    if (module != null) {
+      backwardHistoryEntries.add(new ModuleHistoryEntry(workspaceName, module));
+      forwardHistoryEntries.clear();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayNextPinnedModule() {
+    if (forwardHistoryEntries.size() > 0) {
+      ModuleHistoryEntry nextEntry = forwardHistoryEntries.remove(0);
+      String nextWorkspaceName = nextEntry.getWorkspaceName();
+      Module nextModule = nextEntry.getModule();
+      if (nextWorkspaceName != null && nextModule != null) {
+        if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName())
+            && ObjectUtils.equals(nextModule,
+                getSelectedModule(getSelectedWorkspaceName()))) {
+          displayNextPinnedModule();
+        }
+        backwardHistoryEntries.add(nextEntry);
+        displayModule(nextWorkspaceName, nextModule);
+      } else {
+        displayNextPinnedModule();
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayPreviousPinnedModule() {
+    if (backwardHistoryEntries.size() > 0) {
+      ModuleHistoryEntry previousEntry = backwardHistoryEntries
+          .remove(backwardHistoryEntries.size() - 1);
+      String previousWorkspaceName = previousEntry.getWorkspaceName();
+      Module previousModule = previousEntry.getModule();
+      if (previousWorkspaceName != null && previousModule != null) {
+        if (ObjectUtils.equals(previousWorkspaceName,
+            getSelectedWorkspaceName())
+            && ObjectUtils.equals(previousModule,
+                getSelectedModule(getSelectedWorkspaceName()))) {
+          displayPreviousPinnedModule();
+        }
+        forwardHistoryEntries.add(0, previousEntry);
+        displayModule(previousWorkspaceName, previousModule);
+      } else {
+        displayPreviousPinnedModule();
+      }
+    }
   }
 }
