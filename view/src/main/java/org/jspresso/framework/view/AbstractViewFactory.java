@@ -33,6 +33,7 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.action.IActionHandlerAware;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
@@ -254,12 +255,18 @@ public abstract class AbstractViewFactory<E, F, G> implements
       if (viewDescriptor.getReadabilityGates() != null) {
         for (IGate gate : viewDescriptor.getReadabilityGates()) {
           IGate clonedGate = gate.clone();
+          if (clonedGate instanceof IActionHandlerAware) {
+            ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+          }
           view.getConnector().addReadabilityGate(clonedGate);
         }
       }
       if (viewDescriptor.getWritabilityGates() != null) {
         for (IGate gate : viewDescriptor.getWritabilityGates()) {
           IGate clonedGate = gate.clone();
+          if (clonedGate instanceof IActionHandlerAware) {
+            ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+          }
           view.getConnector().addWritabilityGate(clonedGate);
         }
       }
@@ -799,12 +806,18 @@ public abstract class AbstractViewFactory<E, F, G> implements
     if (columnViewDescriptor.getReadabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
         IGate clonedGate = gate.clone();
+        if (clonedGate instanceof IActionHandlerAware) {
+          ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+        }
         columnConnector.addReadabilityGate(clonedGate);
       }
     }
     if (columnViewDescriptor.getWritabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
         IGate clonedGate = gate.clone();
+        if (clonedGate instanceof IActionHandlerAware) {
+          ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+        }
         columnConnector.addWritabilityGate(clonedGate);
       }
     }

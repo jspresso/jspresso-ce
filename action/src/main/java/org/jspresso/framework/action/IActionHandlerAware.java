@@ -34,5 +34,5 @@ public interface IActionHandlerAware {
    * @param actionHandler
    *          the frontend controller to assign.
    */
-  void setController(IActionHandler actionHandler);
+  void setActionHandler(IActionHandler actionHandler);
 }

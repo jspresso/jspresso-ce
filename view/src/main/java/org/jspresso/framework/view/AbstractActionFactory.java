@@ -28,6 +28,7 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.action.IActionHandlerAware;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
@@ -118,6 +119,9 @@ public abstract class AbstractActionFactory<E, F, G> implements
         final IGate clonedGate = gate.clone();
         if (clonedGate instanceof ISubjectAware) {
           ((ISubjectAware) clonedGate).setSubject(actionHandler.getSubject());
+        }
+        if (clonedGate instanceof IActionHandlerAware) {
+          ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
         }
         if (clonedGate instanceof IModelAware) {
           if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
