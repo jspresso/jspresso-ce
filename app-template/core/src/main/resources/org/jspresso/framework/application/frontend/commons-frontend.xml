@@ -498,7 +498,7 @@
       <list>
         <bean class="org.jspresso.framework.view.action.ActionList">
           <property name="name" value="navigation.menu" />
-          <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/folder_list-48x48.png"/>
+          <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/home-48x48.png"/>
           <property name="actions">
             <list>
               <ref local="previousPinnedModuleAction" />
