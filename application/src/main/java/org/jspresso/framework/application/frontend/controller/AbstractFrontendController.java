@@ -702,12 +702,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the selected module.
    */
   protected Module getSelectedModule(String workspaceName) {
-    IValueConnector moduleConnector = (IValueConnector) selectedModules
-        .get(workspaceName);
-    if (moduleConnector != null) {
-      return (Module) moduleConnector.getConnectorValue();
-    }
-    return null;
+    return selectedModules.get(workspaceName);
   }
 
   /**
@@ -937,6 +932,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
             new int[] {moduleModelIndex}, moduleModelIndex);
       }
     }
+    pinModule(workspaceName, module);
   }
 
   private Object[] synchWorkspaceNavigatorSelection(
@@ -1005,9 +1001,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
             && ObjectUtils.equals(nextModule,
                 getSelectedModule(getSelectedWorkspaceName()))) {
           displayNextPinnedModule();
+        } else {
+          backwardHistoryEntries.add(nextEntry);
+          displayModule(nextWorkspaceName, nextModule);
         }
-        backwardHistoryEntries.add(nextEntry);
-        displayModule(nextWorkspaceName, nextModule);
       } else {
         displayNextPinnedModule();
       }
@@ -1029,9 +1026,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
             && ObjectUtils.equals(previousModule,
                 getSelectedModule(getSelectedWorkspaceName()))) {
           displayPreviousPinnedModule();
+        } else {
+          forwardHistoryEntries.add(0, previousEntry);
+          displayModule(previousWorkspaceName, previousModule);
         }
-        forwardHistoryEntries.add(0, previousEntry);
-        displayModule(previousWorkspaceName, previousModule);
       } else {
         displayPreviousPinnedModule();
       }

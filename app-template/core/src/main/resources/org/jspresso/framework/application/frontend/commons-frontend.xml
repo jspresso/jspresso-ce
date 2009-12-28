@@ -10,8 +10,8 @@
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="sortingAction" ref="lovFindFrontAction" />
     <property name="pagingStatusViewDescriptor" ref="pageableStatusView" />
-    <property name="previousPageAction" ref="previousLovPageFrontAction"/>
-    <property name="nextPageAction" ref="nextLovPageFrontAction"/>
+    <property name="previousPageAction" ref="previousLovPageFrontAction" />
+    <property name="nextPageAction" ref="nextLovPageFrontAction" />
   </bean>
 
   <!--
@@ -269,8 +269,8 @@
   <bean id="moduleConnectorSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.module.ModuleConnectorSelectionAction" />
 
   <bean id="parentModuleConnectorSelectionFrontAction" class="org.jspresso.framework.application.frontend.action.module.ParentModuleConnectorSelectionAction">
-    <property name="name" value="module.parent.select.name"/>
-    <property name="description" value="module.parent.select.description"/>
+    <property name="name" value="module.parent.select.name" />
+    <property name="description" value="module.parent.select.description" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
   </bean>
 
@@ -309,10 +309,10 @@
   </bean>
 
   <bean id="staticScriptedBackAction" abstract="true" parent="scriptedBackAction"
-    class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction"/>
+    class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction" />
 
-  <bean id="abstractFrontendAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction"/>
-  
+  <bean id="abstractFrontendAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
+
   <bean id="abstractCollectionAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.SetActionParamFromSelectedComponentsAction" />
@@ -426,22 +426,9 @@
     <property name="yesAction" ref="removeFromModuleObjectsAction" />
   </bean>
 
-  <bean id="addToModuleObjectFrontAction" parent="addToMasterFrontAction">
-    <!--
-      <property name="wrappedAction"> <bean
-      class="org.jspresso.framework.application.backend.action.module.AddToModuleObjectsAction" /> </property> <property
-      name="nextAction" ref="connectorSelectionFrontAction" />
-    -->
-  </bean>
+  <bean id="addToModuleObjectFrontAction" parent="addToMasterFrontAction" />
 
-  <bean id="cloneModuleObjectFrontAction" parent="cloneEntityCollectionFrontAction">
-    <!--
-      <property name="wrappedAction"> <bean
-      class="org.jspresso.framework.application.backend.action.module.CloneModuleObjectsAction"> <property
-      name="entityCloneFactory" ref="smartEntityCloneFactory" /> </bean> </property> <property name="nextAction"
-      ref="connectorSelectionFrontAction" />
-    -->
-  </bean>
+  <bean id="cloneModuleObjectFrontAction" parent="cloneEntityCollectionFrontAction" />
 
   <bean id="addAsChildModuleFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/view-48x48.png" />
@@ -493,6 +480,37 @@
   </bean>
 
   <!--
+    Module history navigation action beans.
+  -->
+  <bean id="nextPinnedModuleAction" class="org.jspresso.framework.application.frontend.action.module.DisplayNextPinnedModuleAction">
+    <property name="name" value="module.next"/>
+    <property name="description" value="module.next.description"/>
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/forward-48x48.png"/>
+  </bean>
+  <bean id="previousPinnedModuleAction" class="org.jspresso.framework.application.frontend.action.module.DisplayPreviousPinnedModuleAction">
+    <property name="name" value="module.previous"/>
+    <property name="description" value="module.previous.description"/>
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/backward-48x48.png"/>
+  </bean>
+
+  <bean id="moduleHistoryNavigationActionMap" class="org.jspresso.framework.view.action.ActionMap">
+    <property name="actionLists">
+      <list>
+        <bean class="org.jspresso.framework.view.action.ActionList">
+          <property name="name" value="navigation.menu" />
+          <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/folder_list-48x48.png"/>
+          <property name="actions">
+            <list>
+              <ref local="previousPinnedModuleAction" />
+              <ref local="nextPinnedModuleAction" />
+            </list>
+          </property>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <!--
     Persistence action beans.
   -->
   <bean id="saveModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
@@ -511,7 +529,7 @@
     <property name="nextAction">
       <bean parent="staticInfoFrontAction">
         <property name="messageCode" value="save.successful" />
-        <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction"/>
+        <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction" />
       </bean>
     </property>
   </bean>
@@ -659,7 +677,7 @@
           <property name="name" value="FILE" />
           <property name="actions">
             <list>
-              <ref local="saveModuleObjectFrontAction"/>
+              <ref local="saveModuleObjectFrontAction" />
               <ref local="reloadModuleObjectFrontAction" />
               <ref local="parentModuleConnectorSelectionFrontAction" />
             </list>
@@ -767,8 +785,8 @@
   <bean abstract="true" id="abstractFilterableBeanCollectionModule" class="org.jspresso.framework.application.model.FilterableBeanCollectionModule">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="pagingStatusViewDescriptor" ref="pageableStatusView" />
-    <property name="previousPageAction" ref="previousModuleFilterPageAction"/>
-    <property name="nextPageAction" ref="nextModuleFilterPageAction"/>
+    <property name="previousPageAction" ref="previousModuleFilterPageAction" />
+    <property name="nextPageAction" ref="nextModuleFilterPageAction" />
     <property name="projectedViewDescriptor" ref="filterableBeanCollectionModuleView" />
     <property name="startupAction" ref="initModuleFilterAction" />
   </bean>

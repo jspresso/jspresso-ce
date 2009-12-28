@@ -178,6 +178,7 @@
     <property name="viewFactory" ref="viewFactory" />
     <property name="workspacesMenuIconImageUrl" value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
     <property name="loginViewDescriptor" ref="loginViewDescriptor" />
+    <property name="actionMap" ref="moduleHistoryNavigationActionMap"/>
   </bean>
 
   <bean abstract="true" id="abstractIconFactory" class="org.jspresso.framework.view.AbstractIconFactory">
