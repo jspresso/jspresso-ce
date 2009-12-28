@@ -892,9 +892,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
             }, state, "selectedIndices", true);
           }
           _workspaceAccordion.selectedChild.addChild(workspaceNavigatorUI);
+          _workspaceAccordion.selectedChild.name = workspaceName;
         }
       }
       _workspaceViewStack.selectedChild = _workspaceViewStack.getChildByName(workspaceName) as Container;
+      _workspaceAccordion.selectedChild = _workspaceAccordion.getChildByName(workspaceName) as Container;
     }
     
     private function performLogin():void {
