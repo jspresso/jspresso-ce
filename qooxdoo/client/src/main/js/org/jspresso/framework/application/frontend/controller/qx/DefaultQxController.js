@@ -452,26 +452,39 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           workspaceView = workspaceView.getRightBottom();
         }
         var workspaceViewUI = this.createComponent(workspaceView);
-        workspaceViewUI.setUserData("cardName", workspaceName);
+        workspaceViewUI.setUserData("workspaceName", workspaceName);
         this.__workspaceStack.add(workspaceViewUI);
         if(workspaceNavigator) {
           var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
           if(workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
             workspaceNavigatorUI.setHideRoot(true);
           }
+          this.__workspaceAccordionGroup.getSelection()[0].setUserData("workspaceName", workspaceName);
           this.__workspaceAccordionGroup.getSelection()[0].add(workspaceNavigatorUI);
         }
       }
       var children = this.__workspaceStack.getChildren();
-      var selectedCard;
+      var selectedChild;
       for(var i = 0; i < children.length; i++) {
         var child = children[i];
-        if(child.getUserData("cardName") == workspaceName) {
-          selectedCard = child;
+        if(child.getUserData("workspaceName") == workspaceName) {
+          selectedChild = child;
         }
       }
-      if(selectedCard) {
-        this.__workspaceStack.setSelection([selectedCard]);
+      if(selectedChild) {
+        this.__workspaceStack.setSelection([selectedChild]);
+      }
+
+      children = this.__workspaceAccordionGroup.getChildren();
+      var selectedChild;
+      for(var i = 0; i < children.length; i++) {
+        var child = children[i];
+        if(child.getUserData("workspaceName") == workspaceName) {
+          selectedChild = child;
+        }
+      }
+      if(selectedChild) {
+        this.__workspaceAccordionGroup.setSelection([selectedChild]);
       }
     },
     
