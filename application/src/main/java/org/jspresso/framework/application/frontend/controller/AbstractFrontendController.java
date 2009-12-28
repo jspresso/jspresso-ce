@@ -122,6 +122,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private List<ModuleHistoryEntry>              backwardHistoryEntries;
   private List<ModuleHistoryEntry>              forwardHistoryEntries;
+  private boolean                               moduleAutoPinEnabled;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -134,6 +135,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     moduleAreaViewConnectors = new HashMap<String, IValueConnector>();
     backwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
+    moduleAutoPinEnabled = true;
   }
 
   /**
@@ -485,6 +487,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     selectedModules = new HashMap<String, Module>();
     workspaceNavigatorConnectors = new HashMap<String, ICompositeValueConnector>();
     moduleAreaViewConnectors = new HashMap<String, IValueConnector>();
+    backwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
+    forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     selectedWorkspaceName = null;
     return getBackendController().stop();
   }
@@ -891,12 +895,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   public void displayModule(String workspaceName, Module module) {
+    displayWorkspace(workspaceName);
     Module currentModule = selectedModules.get(workspaceName);
     if ((currentModule == null && module == null)
         || ObjectUtils.equals(currentModule, module)) {
       return;
     }
-    displayWorkspace(workspaceName);
     IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
         .get(workspaceName);
     if (moduleAreaViewConnector != null) {
@@ -932,7 +936,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
             new int[] {moduleModelIndex}, moduleModelIndex);
       }
     }
-    pinModule(workspaceName, module);
+    if (moduleAutoPinEnabled) {
+      pinModule(workspaceName, module);
+    }
   }
 
   private Object[] synchWorkspaceNavigatorSelection(
@@ -992,22 +998,28 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   public void displayNextPinnedModule() {
-    if (forwardHistoryEntries.size() > 0) {
-      ModuleHistoryEntry nextEntry = forwardHistoryEntries.remove(0);
-      String nextWorkspaceName = nextEntry.getWorkspaceName();
-      Module nextModule = nextEntry.getModule();
-      if (nextWorkspaceName != null && nextModule != null) {
-        if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName())
-            && ObjectUtils.equals(nextModule,
-                getSelectedModule(getSelectedWorkspaceName()))) {
-          displayNextPinnedModule();
-        } else {
+    boolean wasAutoPinEnabled = moduleAutoPinEnabled;
+    try {
+      moduleAutoPinEnabled = false;
+      if (forwardHistoryEntries.size() > 0) {
+        ModuleHistoryEntry nextEntry = forwardHistoryEntries.remove(0);
+        String nextWorkspaceName = nextEntry.getWorkspaceName();
+        Module nextModule = nextEntry.getModule();
+        if (nextWorkspaceName != null && nextModule != null) {
           backwardHistoryEntries.add(nextEntry);
-          displayModule(nextWorkspaceName, nextModule);
+          if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName())
+              && ObjectUtils.equals(nextModule,
+                  getSelectedModule(getSelectedWorkspaceName()))) {
+            displayNextPinnedModule();
+          } else {
+            displayModule(nextWorkspaceName, nextModule);
+          }
+        } else {
+          displayNextPinnedModule();
         }
-      } else {
-        displayNextPinnedModule();
       }
+    } finally {
+      moduleAutoPinEnabled = wasAutoPinEnabled;
     }
   }
 
@@ -1015,24 +1027,30 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   public void displayPreviousPinnedModule() {
-    if (backwardHistoryEntries.size() > 0) {
-      ModuleHistoryEntry previousEntry = backwardHistoryEntries
-          .remove(backwardHistoryEntries.size() - 1);
-      String previousWorkspaceName = previousEntry.getWorkspaceName();
-      Module previousModule = previousEntry.getModule();
-      if (previousWorkspaceName != null && previousModule != null) {
-        if (ObjectUtils.equals(previousWorkspaceName,
-            getSelectedWorkspaceName())
-            && ObjectUtils.equals(previousModule,
-                getSelectedModule(getSelectedWorkspaceName()))) {
-          displayPreviousPinnedModule();
-        } else {
+    boolean wasAutoPinEnabled = moduleAutoPinEnabled;
+    try {
+      moduleAutoPinEnabled = false;
+      if (backwardHistoryEntries.size() > 0) {
+        ModuleHistoryEntry previousEntry = backwardHistoryEntries
+            .remove(backwardHistoryEntries.size() - 1);
+        String previousWorkspaceName = previousEntry.getWorkspaceName();
+        Module previousModule = previousEntry.getModule();
+        if (previousWorkspaceName != null && previousModule != null) {
           forwardHistoryEntries.add(0, previousEntry);
-          displayModule(previousWorkspaceName, previousModule);
+          if (ObjectUtils.equals(previousWorkspaceName,
+              getSelectedWorkspaceName())
+              && ObjectUtils.equals(previousModule,
+                  getSelectedModule(getSelectedWorkspaceName()))) {
+            displayPreviousPinnedModule();
+          } else {
+            displayModule(previousWorkspaceName, previousModule);
+          }
+        } else {
+          displayPreviousPinnedModule();
         }
-      } else {
-        displayPreviousPinnedModule();
       }
+    } finally {
+      moduleAutoPinEnabled = wasAutoPinEnabled;
     }
   }
 }
