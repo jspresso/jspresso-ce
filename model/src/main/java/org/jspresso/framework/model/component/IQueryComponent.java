@@ -50,7 +50,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   /**
    * Query component action constant.
    */
-  String QUERY_COMPONENT     = "QUERY_COMPONENT";
+  String QUERY_COMPONENT     = "QUERY_FILTER";
 
   /**
    * Gets the list of components result of the query.
