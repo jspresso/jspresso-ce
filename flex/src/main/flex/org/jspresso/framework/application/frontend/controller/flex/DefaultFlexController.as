@@ -199,16 +199,16 @@ package org.jspresso.framework.application.frontend.controller.flex {
       try {
         _changeNotificationsEnabled = false;
 
+        var valueListener:Function = function(value:Object):void {
+          valueUpdated(remoteValueState);
+        };
+        BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
+
         if(remoteValueState is RemoteCompositeValueState) {
           var selectedIndicesListener:Function = function(selectedIndices:Array):void {
             selectedIndicesUpdated(remoteValueState as RemoteCompositeValueState);
           };
           BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
-        } else {
-          var valueListener:Function = function(value:Object):void {
-            valueUpdated(remoteValueState);
-          };
-          BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
         }
       } finally {
         _changeNotificationsEnabled = wasEnabled;

@@ -124,10 +124,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       var wasEnabled = this.__changeNotificationsEnabled;
       try {
         this.__changeNotificationsEnabled = false;
+        remoteValueState.addListener("changeValue", this.__valueUpdated, this);
         if(remoteValueState instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
           remoteValueState.addListener("changeSelectedIndices", this.__selectedIndicesUpdated, this);
-        } else {
-          remoteValueState.addListener("changeValue", this.__valueUpdated, this);
         }
 //      } catch(err) {
 //        this.error(err);
