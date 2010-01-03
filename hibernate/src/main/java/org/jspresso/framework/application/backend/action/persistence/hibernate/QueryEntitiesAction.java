@@ -58,11 +58,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   private IQueryComponentRefiner queryComponentRefiner;
 
   /**
-   * the query component filter.
-   */
-  public static final String     QUERY_FILTER = "QUERY_FILTER";
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -318,7 +313,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   protected IQueryComponent getQueryComponent(Map<String, Object> context) {
     IQueryComponent queryComponent = (IQueryComponent) context
-        .get(QUERY_FILTER);
+        .get(IQueryComponent.QUERY_COMPONENT);
     return queryComponent;
   }
 

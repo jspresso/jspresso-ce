@@ -23,7 +23,6 @@ import java.util.Map;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
-import org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction;
 import org.jspresso.framework.application.frontend.action.std.PageOffsetAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -49,7 +48,7 @@ public class QueryModuleFilterAction extends BackendAction {
       Map<String, Object> context) {
     if (queryAction != null) {
       FilterableBeanCollectionModule module = (FilterableBeanCollectionModule) getModule(context);
-      context.put(QueryEntitiesAction.QUERY_FILTER, module.getFilter());
+      context.put(IQueryComponent.QUERY_COMPONENT, module.getFilter());
       IQueryComponent queryComponent = module.getFilter();
       if (context.containsKey(IQueryComponent.ORDERING_PROPERTIES)) {
         queryComponent.setOrderingProperties((Map<String, ESort>) context

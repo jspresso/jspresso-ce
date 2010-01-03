@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
-import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -42,8 +41,8 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   private ActionMap                   resultViewActionMap;
   private IViewDescriptor             pagingStatusViewDescriptor;
   private IDisplayableAction          sortingAction;
-  private FrontendAction<?, ?, ?>     previousPageAction;
-  private FrontendAction<?, ?, ?>     nextPageAction;
+  private IDisplayableAction          previousPageAction;
+  private IDisplayableAction          nextPageAction;
 
   /**
    * {@inheritDoc}
@@ -159,7 +158,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    * @param previousPageAction
    *          the previousPageAction to set.
    */
-  public void setPreviousPageAction(FrontendAction<?, ?, ?> previousPageAction) {
+  public void setPreviousPageAction(IDisplayableAction previousPageAction) {
     this.previousPageAction = previousPageAction;
   }
 
@@ -169,7 +168,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    * @param nextPageAction
    *          the nextPageAction to set.
    */
-  public void setNextPageAction(FrontendAction<?, ?, ?> nextPageAction) {
+  public void setNextPageAction(IDisplayableAction nextPageAction) {
     this.nextPageAction = nextPageAction;
   }
 }

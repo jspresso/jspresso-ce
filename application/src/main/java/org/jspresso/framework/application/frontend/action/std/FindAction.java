@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
-import org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -65,7 +64,7 @@ public class FindAction<E, F, G> extends FrontendAction<E, F, G> {
         && queryEntityConnector.getConnectorValue() != null) {
       IQueryComponent queryComponent = ((IQueryComponent) queryEntityConnector
           .getConnectorValue());
-      context.put(QueryEntitiesAction.QUERY_FILTER, queryComponent);
+      context.put(IQueryComponent.QUERY_COMPONENT, queryComponent);
       if (context.containsKey(IQueryComponent.ORDERING_PROPERTIES)) {
         queryComponent.setOrderingProperties((Map<String, ESort>) context
             .get(IQueryComponent.ORDERING_PROPERTIES));

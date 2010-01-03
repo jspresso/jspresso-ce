@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
-import org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
@@ -99,7 +98,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         && queryPropertyValue.length() > 0 && !queryPropertyValue.equals("*")) {
       actionHandler.execute(findAction, context);
       IQueryComponent queryComponent = (IQueryComponent) context
-          .get(QueryEntitiesAction.QUERY_FILTER);
+          .get(IQueryComponent.QUERY_COMPONENT);
       if (queryComponent.getQueriedComponents() != null
           && queryComponent.getQueriedComponents().size() == 1) {
         IEntity selectedEntity = getController(context).getBackendController()

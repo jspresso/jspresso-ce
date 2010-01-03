@@ -24,7 +24,6 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IConnector;
 import org.jspresso.framework.binding.IValueConnector;
@@ -103,7 +102,7 @@ public class CreateQueryComponentAction extends BackendAction {
             .setConnectorValue(queryPropertyValue);
       }
     }
-    context.put(QueryEntitiesAction.QUERY_FILTER, queryComponent);
+    context.put(IQueryComponent.QUERY_COMPONENT, queryComponent);
     return super.execute(actionHandler, context);
   }
 
