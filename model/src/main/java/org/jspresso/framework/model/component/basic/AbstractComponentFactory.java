@@ -47,7 +47,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
    * 
    * @return the accessorFactory.
    */
-  protected IAccessorFactory getAccessorFactory() {
+  public IAccessorFactory getAccessorFactory() {
     return accessorFactory;
   }
 

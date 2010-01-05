@@ -44,7 +44,7 @@ public class EditReportParametersAction<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  protected Object getModel(Map<String, Object> context) {
+  protected Object getComponentToEdit(Map<String, Object> context) {
     IReport report = (IReport) context.get(IReport.REPORT_ACTION_PARAM);
     if (report != null) {
       return report.getContext();

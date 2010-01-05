@@ -61,7 +61,7 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
       Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
 
-    Object component = getModel(context);
+    Object component = getComponentToEdit(context);
 
     if (okAction != null) {
       actions.add(okAction);
@@ -136,8 +136,7 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the model.
    */
-  @Override
-  protected Object getModel(Map<String, Object> context) {
+  protected Object getComponentToEdit(Map<String, Object> context) {
     Object model = getActionParameter(context);
     if (model instanceof Collection<?>) {
       if (((Collection<?>) model).isEmpty()) {

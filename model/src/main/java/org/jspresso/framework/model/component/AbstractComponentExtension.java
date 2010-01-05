@@ -20,8 +20,10 @@ package org.jspresso.framework.model.component;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * This abstract class is a helper base class for components extensions.
@@ -91,9 +93,24 @@ public abstract class AbstractComponentExtension<T extends IComponent>
     sourceBean.addPropertyChangeListener(sourceProperty,
         new PropertyChangeListener() {
 
-          public void propertyChange(PropertyChangeEvent evt) {
-            getComponent().firePropertyChange(forwardedProperty,
-                evt.getOldValue(), evt.getNewValue());
+          public void propertyChange(
+              @SuppressWarnings("unused") PropertyChangeEvent evt) {
+            if (getComponentFactory().getAccessorFactory() != null) {
+              try {
+                Object newValue = getComponentFactory().getAccessorFactory()
+                    .createPropertyAccessor(forwardedProperty,
+                        getComponent().getComponentContract()).getValue(
+                        getComponent());
+                getComponent().firePropertyChange(forwardedProperty,
+                    new Object(), newValue);
+              } catch (IllegalAccessException ex) {
+                throw new NestedRuntimeException(ex);
+              } catch (InvocationTargetException ex) {
+                throw new NestedRuntimeException(ex);
+              } catch (NoSuchMethodException ex) {
+                throw new NestedRuntimeException(ex);
+              }
+            }
           }
         });
   }

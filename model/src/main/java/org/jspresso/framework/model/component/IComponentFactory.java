@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.component;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
+import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
  * This interface defines the contract of a component factory.
@@ -73,4 +74,11 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
    *          the name of the collection property to sort.
    */
   void sortCollectionProperty(IComponent component, String propertyName);
+
+  /**
+   * Gets the accessor factory used by this component factory.
+   * 
+   * @return the accessor factory used by this component factory.
+   */
+  IAccessorFactory getAccessorFactory();
 }

@@ -668,7 +668,16 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private synchronized IComponentExtension<? extends IComponent> getExtensionInstance(
+  /**
+   * Creates and registers an extension instance.
+   * 
+   * @param extensionClass
+   *          the extension class.
+   * @param proxy
+   *          the proxy to register the extension on.
+   * @return the component extension.
+   */
+  protected synchronized IComponentExtension<? extends IComponent> getExtensionInstance(
       Class<IComponentExtension<IComponent>> extensionClass, IComponent proxy) {
     IComponentExtension<IComponent> extension;
     if (componentExtensions == null) {
@@ -680,9 +689,20 @@ public abstract class AbstractComponentInvocationHandler implements
     if (extension == null) {
       extension = extensionFactory.createComponentExtension(extensionClass,
           componentDescriptor.getComponentContract(), proxy);
+      configureExtension(extension);
       componentExtensions.put(extensionClass, extension);
     }
     return extension;
+  }
+
+  /**
+   * Gives a chance to configure created extensions.
+   * 
+   * @param extension
+   *          the extension to configure.
+   */
+  protected void configureExtension(IComponentExtension<IComponent> extension) {
+    // Empty by default.
   }
 
   private Object invokeExtensionMethod(

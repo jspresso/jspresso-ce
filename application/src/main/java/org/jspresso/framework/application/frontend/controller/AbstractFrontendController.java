@@ -197,6 +197,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       return true;
     }
     Map<String, Object> actionContext = getInitialActionContext();
+    // Retain only entries from the initial action context that are not in the
+    // action context.
+    actionContext.putAll(context);
     context.putAll(actionContext);
     try {
       SecurityHelper.checkAccess(getBackendController().getApplicationSession()
@@ -280,6 +283,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
+    if (dialogContextStack != null) {
+      for (int i = dialogContextStack.size() - 1; i >= 0; i--) {
+        initialActionContext.putAll(dialogContextStack.get(i));
+      }
+    }
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
     initialActionContext.put(ActionContextConstants.MODULE, selectedModules
         .get(getSelectedWorkspaceName()));

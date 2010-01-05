@@ -23,12 +23,14 @@ import java.lang.reflect.Proxy;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
+import org.jspresso.framework.model.component.IComponentExtension;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.basic.BasicComponentInvocationHandler;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
@@ -135,6 +137,20 @@ public class ControllerAwareComponentInvocationHandler extends
     } else {
       super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
           newPropertyValue);
+    }
+  }
+
+  /**
+   * Sets the JAAS subject to subject aware extensions.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void configureExtension(IComponentExtension<IComponent> extension) {
+    super.configureExtension(extension);
+    if (extension instanceof ISubjectAware && getBackendController() != null) {
+      ((ISubjectAware) extension).setSubject(getBackendController()
+          .getSubject());
     }
   }
 
