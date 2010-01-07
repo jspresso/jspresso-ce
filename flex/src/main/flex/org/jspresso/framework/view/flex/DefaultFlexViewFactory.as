@@ -460,21 +460,22 @@ package org.jspresso.framework.view.flex {
         actionField.addChild(textField);
         sizeMaxComponentWidth(textField);
       }
+      var actionComponents:Array = new Array();
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
           var actionComponent:UIComponent = createAction(actionList.actions[j])
           actionField.addChild(actionComponent);
+          actionComponents.push(actionComponent)
         }
       }
-      bindActionField(actionField, textField, remoteActionField.state, (remoteActionField.actionLists[0] as RActionList).actions[0]);
+      bindActionField(actionField, textField, remoteActionField.state, (remoteActionField.actionLists[0] as RActionList).actions[0], actionComponents);
       return actionField;
     }
     
     private function bindActionField(actionField:UIComponent, textInput:TextInput
-                                     , remoteState:RemoteValueState, action:RAction):void {
-      
-      BindingUtils.bindProperty(actionField, "enabled", remoteState, "writable");
+                                     , remoteState:RemoteValueState, action:RAction
+                                     , actionComponents:Array):void {
       
       var updateView:Function = function (value:Object):void {
         if(textInput) {
@@ -496,6 +497,7 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(updateView, remoteState, "value", true);
   
       if(textInput) {
+        BindingUtils.bindProperty(textInput, "editable", remoteState, "writable");
         var triggerAction:Function = function (event:Event):void {
           var inputText:String = (event.currentTarget as TextInput).text;
           if(!inputText || inputText.length == 0) {
@@ -508,6 +510,9 @@ package org.jspresso.framework.view.flex {
         textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,triggerAction);
         textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,triggerAction);
       }
+      for each (var actionComponent:UIComponent in actionComponents) {
+        BindingUtils.bindProperty(actionComponent, "enabled", remoteState, "writable");
+      }
     }
     
     private function createColorField(remoteColorField:RColorField):UIComponent {
@@ -516,7 +521,7 @@ package org.jspresso.framework.view.flex {
       colorPicker.name = "cc";
       bindColorPicker(colorPicker, remoteColorField.state);
       colorField.addChild(colorPicker);
-      var resetButton:Button = new Button();
+      var resetButton:Button = new EnhancedButton();
       resetButton.setStyle("icon", _resetIcon);
       colorField.addChild(resetButton);
       resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
@@ -1524,7 +1529,7 @@ package org.jspresso.framework.view.flex {
     }
     
     public function createButton(label:String, tooltip:String, icon:RIcon):Button {
-      var button:Button = new Button();
+      var button:Button = new EnhancedButton();
       if(icon) {
 	      button.setStyle("icon", getIconForComponent(button, icon));
 	    }

@@ -829,6 +829,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         
         this.__sizeMaxComponentWidth(textField);
       }
+
+      var state = remoteActionField.getState();
+      var modelController = new qx.data.controller.Object(state);
+
       for(var i = 0; i < remoteActionField.getActionLists().length; i++) {
         var actionList = remoteActionField.getActionLists()[i];
         for(var j = 0; j < actionList.getActions().length; j++) {
@@ -837,14 +841,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           if(!mainAction) {
             mainAction = actionList.getActions()[j];
           }
+          modelController.addTarget(actionComponent, "enabled", "writable", false);
         }
       }
 
-      var state = remoteActionField.getState();
-      
-      var modelController = new qx.data.controller.Object(state);
-
-      modelController.addTarget(actionField, "enabled", "writable", false);
       if(textField) {
         modelController.addTarget(textField, "readOnly", "writable", false,
           {
