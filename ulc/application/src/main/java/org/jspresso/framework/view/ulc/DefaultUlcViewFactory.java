@@ -1200,7 +1200,12 @@ public class DefaultUlcViewFactory extends
     scrollPane.setCorner(ULCScrollPane.UPPER_RIGHT_CORNER, iconLabel);
     IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    viewComponent.setAutoResizeMode(ULCTable.AUTO_RESIZE_OFF);
+    if (viewDescriptor.isHorizontallyScrollable()) {
+      viewComponent.setAutoResizeMode(ULCTable.AUTO_RESIZE_OFF);
+    } else {
+      scrollPane
+          .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    }
 
     List<Class<?>> columnClasses = new ArrayList<Class<?>>();
     List<IFormatter> columnFormatters = new ArrayList<IFormatter>();

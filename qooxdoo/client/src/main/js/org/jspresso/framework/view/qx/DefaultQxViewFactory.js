@@ -327,7 +327,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         columnNames[i] = remoteTable.getColumns()[i].getLabel();
       }
       tableModel.setColumns(columnNames, columnIds);
-      var table = new qx.ui.table.Table(tableModel);
+      var table;
+      if(remoteTable.isHorizontallyScrollable()) {
+      	table = new qx.ui.table.Table(tableModel);
+      } else {
+	      // Customize the table column model.  We want one that automatically
+	      // resizes columns.
+	      var custom =
+	      {
+	        tableColumnModel : function(obj) {
+	          return new qx.ui.table.columnmodel.Resize(obj);
+	        }
+	      };
+	      table = new qx.ui.table.Table(tableModel, custom);
+      }
 
       var columnModel = table.getTableColumnModel();
       for(var i=0; i < remoteTable.getColumnIds().length; i++) {

@@ -35,6 +35,7 @@ import java.util.Set;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
@@ -1549,6 +1550,10 @@ public class DefaultWingsViewFactory extends
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
+    if (!viewDescriptor.isHorizontallyScrollable()) {
+      scrollPane
+          .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    }
     // if (viewDescriptor.getColumnViewDescriptors().size() < 4) {
     // scrollPane.setPreferredSize(new SDimension((tableWidth * 3 / 2) + "px",
     // scrollPane.getPreferredSize().getHeight()));

@@ -1458,7 +1458,12 @@ public class DefaultSwingViewFactory extends
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    viewComponent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    if (viewDescriptor.isHorizontallyScrollable()) {
+      viewComponent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    } else {
+      scrollPane
+          .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    }
 
     List<Class<?>> columnClasses = new ArrayList<Class<?>>();
     Set<String> forbiddenColumns = new HashSet<String>();

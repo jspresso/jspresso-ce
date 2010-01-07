@@ -34,6 +34,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTable",
     {
       check : "org.jspresso.framework.gui.remote.RAction",
       nullable : true
+    },
+    horizontallyScrollable :
+    {
+      check : "Boolean"
     }
   }
 });

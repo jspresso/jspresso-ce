@@ -1131,6 +1131,8 @@ public class DefaultRemoteViewFactory extends
       viewComponent.setSortingAction(getActionFactory().createAction(
           viewDescriptor.getSortingAction(), actionHandler, view, locale));
     }
+    viewComponent.setHorizontallyScrollable(viewDescriptor
+        .isHorizontallyScrollable());
     List<RComponent> columns = new ArrayList<RComponent>();
     List<String> columnIds = new ArrayList<String>();
     for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor

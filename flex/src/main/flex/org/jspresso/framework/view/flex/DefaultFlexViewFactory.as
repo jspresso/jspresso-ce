@@ -1266,7 +1266,11 @@ package org.jspresso.framework.view.flex {
         table.allowMultipleSelection = true;
       }
       table.editable = remoteTable.state.writable;
-      table.horizontalScrollPolicy = ScrollPolicy.AUTO;
+      if(remoteTable.horizontallyScrollable) {
+        table.horizontalScrollPolicy = ScrollPolicy.AUTO;
+      } else {
+        table.horizontalScrollPolicy = ScrollPolicy.OFF;
+      }
       table.verticalScrollPolicy = ScrollPolicy.AUTO;
       
       // Clone array collection to avoid re-ordering items in original collection when sorting.

@@ -40,11 +40,20 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
   List<IPropertyViewDescriptor> getColumnViewDescriptors();
 
   /**
-   * Gest the action triggered when sorting is triggered by the used (if
+   * Gets the action triggered when sorting is triggered by the used (if
    * supported by the UI).
    * 
    * @return the action triggered when sorting is triggered by the used (if
    *         supported by the UI).
    */
   IDisplayableAction getSortingAction();
+
+  /**
+   * Gets wether this table will adapt it width according the available
+   * horizontal space or install a scrollbar.
+   * 
+   * @return wether this table will adapt it width according the available
+   *         horizontal space or install a scrollbar.
+   */
+  boolean isHorizontallyScrollable();
 }
