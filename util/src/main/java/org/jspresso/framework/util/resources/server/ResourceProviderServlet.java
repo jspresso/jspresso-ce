@@ -18,8 +18,9 @@
  */
 package org.jspresso.framework.util.resources.server;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -302,10 +303,17 @@ public class ResourceProviderServlet extends HttpServlet {
     BufferedImage image = ImageIO.read(originalImageUrl);
     BufferedImage scaledImage = new BufferedImage(width, height,
         BufferedImage.TYPE_INT_ARGB);
+    // BufferedImage.TYPE_INT_RGB);
     Graphics2D g = scaledImage.createGraphics();
-    AffineTransform at = AffineTransform.getScaleInstance((double) width
-        / image.getWidth(), (double) height / image.getHeight());
-    g.drawRenderedImage(image, at);
+    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+        RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+        RenderingHints.VALUE_ANTIALIAS_ON);
+    g.setRenderingHint(RenderingHints.KEY_RENDERING,
+        RenderingHints.VALUE_RENDER_QUALITY);
+    g.setComposite(AlphaComposite.Src);
+    g.drawImage(image, 0, 0, width, height, null);
+    g.dispose();
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     ImageIO.write(scaledImage, "PNG", baos);
     return new BufferedInputStream(new ByteArrayInputStream(baos.toByteArray()));
