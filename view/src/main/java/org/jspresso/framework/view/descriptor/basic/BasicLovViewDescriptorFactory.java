@@ -59,12 +59,10 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     lovViewDescriptor.setCenterViewDescriptor(createResultViewDescriptor(
         entityRefDescriptor.getComponentDescriptor(), okAction));
     if (pagingStatusViewDescriptor != null) {
-      BasicBorderViewDescriptor pagingViewDescriptor = new BasicBorderViewDescriptor();
-      pagingViewDescriptor.setWestViewDescriptor(pagingStatusViewDescriptor);
       if (previousPageAction != null || nextPageAction != null) {
         BasicBorderViewDescriptor pageNavigationViewDescriptor = new BasicBorderViewDescriptor();
         pageNavigationViewDescriptor
-            .setCenterViewDescriptor(pagingViewDescriptor);
+            .setCenterViewDescriptor(pagingStatusViewDescriptor);
 
         if (previousPageAction != null) {
           BasicActionViewDescriptor previousActionViewDescriptor = new BasicActionViewDescriptor();
@@ -81,7 +79,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
         }
         lovViewDescriptor.setSouthViewDescriptor(pageNavigationViewDescriptor);
       } else {
-        lovViewDescriptor.setSouthViewDescriptor(pagingViewDescriptor);
+        lovViewDescriptor.setSouthViewDescriptor(pagingStatusViewDescriptor);
       }
     }
     return lovViewDescriptor;

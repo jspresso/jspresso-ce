@@ -26,6 +26,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
@@ -208,4 +209,20 @@ public interface IFrontendController<E, F, G> extends IController,
    * Navigates backward in the pinned modules.
    */
   void displayPreviousPinnedModule();
+
+  /**
+   * Given a workspace name, this method returns the associated workspace.
+   * 
+   * @param workspaceName
+   *          the name of the workspace.
+   * @return the selected workspace.
+   */
+  Workspace getWorkspace(String workspaceName);
+
+  /**
+   * Gets the selectedWorkspaceName.
+   * 
+   * @return the selectedWorkspaceName.
+   */
+  String getSelectedWorkspaceName();
 }

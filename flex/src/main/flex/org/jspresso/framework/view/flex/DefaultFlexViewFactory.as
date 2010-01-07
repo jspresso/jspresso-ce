@@ -228,15 +228,15 @@ package org.jspresso.framework.view.flex {
         decorator.addChild(component);
         decorator.title = remoteComponent.label;
         decorator.titleIcon = getIconForComponent(decorator, remoteComponent.icon);
-        decorator.setStyle("borderAlpha",1);
-        decorator.setStyle("borderThicknessLeft", 3);
-        decorator.setStyle("borderThicknessRight", 3);
+        decorator.setStyle("borderAlpha", 1);
+        decorator.setStyle("borderThicknessLeft", 2);
+        decorator.setStyle("borderThicknessRight", 2);
+        decorator.setStyle("borderThicknessBottom", 2);
         decorator.horizontalScrollPolicy = ScrollPolicy.OFF;
         decorator.verticalScrollPolicy = ScrollPolicy.OFF;
         component = decorator;
       } else if(remoteComponent.borderType == "SIMPLE") {
         component.setStyle("borderStyle","solid");
-        component.setStyle("borderThickness", 3);
       }
       if(remoteComponent.foreground) {
         component.setStyle("color", remoteComponent.foreground);
@@ -517,9 +517,6 @@ package org.jspresso.framework.view.flex {
       bindColorPicker(colorPicker, remoteColorField.state);
       colorField.addChild(colorPicker);
       var resetButton:Button = new Button();
-//	    resetButton.setStyle("icon", IconFactory.getClass(resetButton
-//	                               , computeUrl("classpath:org/jspresso/framework/application/images/reset-48x48.png") 
-//                                 , 16, 16));
       resetButton.setStyle("icon", _resetIcon);
       colorField.addChild(resetButton);
       resetButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
@@ -924,6 +921,10 @@ package org.jspresso.framework.view.flex {
         
         col += elementWidth;
       }
+      form.setStyle("paddingLeft", 10);
+      form.setStyle("paddingRight", 10);
+      form.setStyle("paddingTop", 10);
+      form.setStyle("paddingBottom", 10);
       return form;
     }
 

@@ -204,8 +204,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected Workspace getWorkspace(
-      @SuppressWarnings("unused") String workspaceName) {
+  public Workspace getWorkspace(@SuppressWarnings("unused") String workspaceName) {
     return null;
   }
 

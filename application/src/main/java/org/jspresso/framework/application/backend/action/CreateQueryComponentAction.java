@@ -69,8 +69,8 @@ public class CreateQueryComponentAction extends BackendAction {
       Map<String, Object> context) {
     IReferencePropertyDescriptor erqDescriptor = (IReferencePropertyDescriptor) context
         .get(COMPONENT_REF_DESCRIPTOR);
-    IModelDescriptor modelDescriptor = getModelDescriptor(context);
     if (erqDescriptor == null) {
+      IModelDescriptor modelDescriptor = getModelDescriptor(context);
       erqDescriptor = (IReferencePropertyDescriptor) modelDescriptor;
     }
     IQueryComponent queryComponent = getEntityFactory(context)
@@ -79,16 +79,12 @@ public class CreateQueryComponentAction extends BackendAction {
     queryComponent.setPageSize(erqDescriptor.getPageSize());
 
     completeQueryComponent(queryComponent, erqDescriptor, context);
-    ModelRefPropertyConnector modelConnector = (ModelRefPropertyConnector) context
-        .get(QUERY_MODEL_CONNECTOR);
-    if (modelConnector == null) {
-      modelConnector = (ModelRefPropertyConnector) getController(context)
-          .createModelConnector(
-              ACTION_MODEL_NAME,
-              new BasicQueryComponentDescriptor(erqDescriptor
-                  .getReferencedDescriptor()));
-      context.put(QUERY_MODEL_CONNECTOR, modelConnector);
-    }
+    ModelRefPropertyConnector modelConnector = (ModelRefPropertyConnector) getController(
+        context).createModelConnector(
+        ACTION_MODEL_NAME,
+        new BasicQueryComponentDescriptor(erqDescriptor
+            .getReferencedDescriptor()));
+    context.put(QUERY_MODEL_CONNECTOR, modelConnector);
     modelConnector.setConnectorValue(queryComponent);
     String queryPropertyValue = getActionCommand(context);
     if (queryPropertyValue != null && !queryPropertyValue.equals("*")) {

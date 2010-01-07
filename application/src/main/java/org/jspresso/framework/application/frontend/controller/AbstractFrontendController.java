@@ -702,7 +702,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the selectedWorkspaceName.
    */
-  protected String getSelectedWorkspaceName() {
+  public String getSelectedWorkspaceName() {
     return selectedWorkspaceName;
   }
 
@@ -724,7 +724,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the name of the workspace.
    * @return the selected workspace.
    */
-  protected Workspace getWorkspace(String workspaceName) {
+  public Workspace getWorkspace(String workspaceName) {
     if (workspaces != null) {
       return workspaces.get(workspaceName);
     }

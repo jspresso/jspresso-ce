@@ -39,6 +39,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.controls.Button;
   import mx.controls.HRule;
   import mx.controls.Label;
+  import mx.controls.Menu;
   import mx.controls.MenuBar;
   import mx.controls.SWFLoader;
   import mx.controls.Tree;
@@ -763,6 +764,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       menuBarModel["children"] = menus;
       
       var menuBar:MenuBar = new MenuBar();
+      menuBar.setStyle("cornerRadius", 5);
       menuBar.percentWidth = 100.0;
       menuBar.showRoot = false;
       
@@ -771,7 +773,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
       menuBar.dataProvider = menus;
       
       for(var i:int = 0; i < menus.length; i++) {
-        menuBar.getMenuAt(i).itemRenderer = new ClassFactory(RIconMenuItemRenderer);
+        var menu:Menu = menuBar.getMenuAt(i); 
+        menu.itemRenderer = new ClassFactory(RIconMenuItemRenderer);
       }
       
       var menuHandler:Function = function(event:MenuEvent):void  {
@@ -916,11 +919,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialogView.maxHeight = 90.0 * (Application.application as DisplayObject).height / 100.0;
       var buttonBox:HBox = new HBox();
       buttonBox.setStyle("horizontalAlign","right");
+      buttonBox.setStyle("paddingLeft", 5);
+      buttonBox.setStyle("paddingRight", 5);
+      buttonBox.setStyle("paddingTop", 0);
+      buttonBox.setStyle("paddingBottom", 5);
       buttonBox.percentWidth = 100.0;
       
       var dialogBox:VBox = new VBox();
       if(message) {
         var messageLabel:Label = new Label();
+        messageLabel.setStyle("paddingLeft", 10);
+        messageLabel.setStyle("paddingRight", 10);
+        messageLabel.setStyle("paddingTop", 10);
+        messageLabel.setStyle("paddingBottom", 0);
         messageLabel.percentWidth = 100.0;
         messageLabel.text = message;
         dialogBox.addChild(messageLabel);
@@ -949,6 +960,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
           dialogParent = Application.application as DisplayObject;
         }
         dialog = PopUpManager.createPopUp(dialogParent,Panel,true) as Panel;
+        dialog.setStyle("borderAlpha", 1);
+        dialog.setStyle("borderThicknessLeft", 5);
+        dialog.setStyle("borderThicknessRight", 5);
+        dialog.setStyle("borderThicknessBottom", 5);
         _dialogStack.push([dialog, null]);
       }
       dialog.title = title;
