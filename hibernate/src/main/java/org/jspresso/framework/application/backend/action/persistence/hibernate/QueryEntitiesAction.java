@@ -262,25 +262,29 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             }
             path.append(propElts[i]);
           }
-          StringBuffer name = new StringBuffer();
-          for (int j = i; !isComputed && j < propElts.length; j++) {
-            IPropertyDescriptor propDescriptor = currentCompDesc
-                .getPropertyDescriptor(propElts[j]);
-            isComputed = isComputed || propDescriptor.isComputed();
-            if (j < propElts.length - 1) {
-              currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor)
-                  .getReferencedDescriptor();
+          if (!isComputed) {
+            StringBuffer name = new StringBuffer();
+            for (int j = i; !isComputed && j < propElts.length; j++) {
+              IPropertyDescriptor propDescriptor = currentCompDesc
+                  .getPropertyDescriptor(propElts[j]);
+              isComputed = isComputed || propDescriptor.isComputed();
+              if (j < propElts.length - 1) {
+                currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor)
+                    .getReferencedDescriptor();
+              }
+              if (j > i) {
+                name.append(".");
+              }
+              name.append(propElts[j]);
             }
-            if (j > i) {
-              name.append(".");
+            if (!isComputed) {
+              if (path.length() > 0) {
+                orderingCriteria = criteria.createCriteria(path.toString(),
+                    CriteriaSpecification.LEFT_JOIN);
+              }
+              propertyName = name.toString();
             }
-            name.append(propElts[j]);
           }
-          if (path.length() > 0) {
-            orderingCriteria = criteria.createCriteria(path.toString(),
-                CriteriaSpecification.LEFT_JOIN);
-          }
-          propertyName = name.toString();
         } else {
           isComputed = aQueryComponent.getComponentDescriptor()
               .getPropertyDescriptor(propertyName).isComputed();

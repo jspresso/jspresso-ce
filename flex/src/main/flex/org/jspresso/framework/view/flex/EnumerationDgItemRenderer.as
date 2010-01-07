@@ -17,7 +17,6 @@ package org.jspresso.framework.view.flex {
   import mx.controls.listClasses.BaseListData;
   
   import org.jspresso.framework.gui.remote.RIcon;
-  import org.jspresso.framework.state.remote.RemoteValueState;
 
   public class EnumerationDgItemRenderer extends RemoteValueDgItemRenderer  {
 
@@ -53,14 +52,24 @@ package org.jspresso.framework.view.flex {
   	  value.label = _labels[value.rowIndex];
   	  super.listData = value;
   	  listDataIcon = _iconTemplate;
+  	  computeIcon(value.rowIndex);
   	}
 
   	override protected function computeLabel(cellValue:Object):String {
+  	  var valIndex:int = _values.indexOf(cellValue);
+  	  computeIcon(valIndex);
 	    if(cellValue != null) {
-  	    return _labels[_values.indexOf(cellValue)];
+  	    return _labels[valIndex];
   	  } else {
         return super.computeLabel(cellValue);
       }
+  	}
+  	
+  	private function computeIcon(iconIndex:int):void {
+			var _selectedIcon:RIcon = _icons[iconIndex] as RIcon;
+			if(_selectedIcon != null) {
+			  _image.source = _selectedIcon.imageUrlSpec;
+			}
   	}
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
@@ -69,11 +78,6 @@ package org.jspresso.framework.view.flex {
 			_image.y = icon.y;
 			_image.width = icon.width;
 			_image.height = icon.height;
-			
-			var _selectedIcon:RIcon = _icons[_labels.indexOf(listData.label)] as RIcon;
-			if(_selectedIcon != null) {
-			  _image.source = _selectedIcon.imageUrlSpec;
-			}
 			icon.visible = false;
 		}
 
