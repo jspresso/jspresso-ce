@@ -1348,6 +1348,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     __createTree : function(remoteTree) {
       //TODO notify qooxdoo that tree controller doesn't support null children.
       var tree = new qx.ui.tree.Tree();
+      // to prevent errors with async events
+      tree.setSelectionMode("multi");
       var state = remoteTree.getState();
       var treeController = new qx.data.controller.Tree();
       treeController.setChildPath("children");
