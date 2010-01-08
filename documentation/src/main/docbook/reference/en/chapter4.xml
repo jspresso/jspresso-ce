@@ -641,6 +641,22 @@
           </row>
 
           <row>
+            <entry>nextPinnedModuleAction</entry>
+
+            <entry>front.module.next</entry>
+
+            <entry>Navigates to the next pinned module in history.</entry>
+          </row>
+
+          <row>
+            <entry>previousPinnedModuleAction</entry>
+
+            <entry>front.module.previous</entry>
+
+            <entry>Navigates to the previous pinned module in history.</entry>
+          </row>
+
+          <row>
             <entry>okCancelFrontAction</entry>
 
             <entry>front.okcancel.dynamic</entry>
