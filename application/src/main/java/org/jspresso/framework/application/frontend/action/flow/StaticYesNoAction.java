@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  */
-package org.jspresso.framework.application.frontend.action.wings.flow;
+package org.jspresso.framework.application.frontend.action.flow;
 
 import java.util.Map;
 
@@ -10,10 +10,16 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * Action with a static i18nalized message.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class StaticYesNoAction extends YesNoAction {
+public class StaticYesNoAction<E, F, G> extends YesNoAction<E, F, G> {
 
   private String messageCode;
 

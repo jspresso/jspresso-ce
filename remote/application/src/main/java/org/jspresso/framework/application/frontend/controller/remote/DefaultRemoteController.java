@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
@@ -39,6 +42,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteInitLogi
 import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
@@ -46,6 +50,8 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteSortComm
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -59,6 +65,7 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -567,5 +574,141 @@ public class DefaultRemoteController extends
     flashCommand.setParamValues(paramValues.toArray(new String[0]));
     flashCommand.setDimension(dimension);
     registerCommand(flashCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent,
+      String title, String iconImageUrl, String message) {
+    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
+    messageCommand.setTitle(title);
+    messageCommand.setMessage(message);
+    messageCommand.setTitleIcon(getIconFactory().getInfoIcon(
+        getIconFactory().getTinyIconSize()));
+    if (iconImageUrl != null) {
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
+          getIconFactory().getLargeIconSize()));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory().getInfoIcon(
+          getIconFactory().getLargeIconSize()));
+    }
+    registerCommand(messageCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupOkCancel(RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction okAction,
+      IAction cancelAction, Map<String, Object> context) {
+    RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
+    messageCommand.setTitle(title);
+    messageCommand.setMessage(message);
+
+    messageCommand.setTitleIcon(getIconFactory().getWarningIcon(
+        getIconFactory().getTinyIconSize()));
+    if (iconImageUrl != null) {
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
+          getIconFactory().getLargeIconSize()));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory().getWarningIcon(
+          getIconFactory().getLargeIconSize()));
+    }
+    if (okAction != null) {
+      messageCommand.setOkAction(createRAction(okAction, sourceComponent,
+          context));
+    }
+    if (cancelAction != null) {
+      messageCommand.setCancelAction(createRAction(cancelAction,
+          sourceComponent, context));
+    }
+    registerCommand(messageCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNo(RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
+      Map<String, Object> context) {
+    RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
+    messageCommand.setTitle(title);
+    messageCommand.setMessage(message);
+
+    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(
+        getIconFactory().getTinyIconSize()));
+    if (iconImageUrl != null) {
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
+          getIconFactory().getLargeIconSize()));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(
+          getIconFactory().getLargeIconSize()));
+    }
+    if (yesAction != null) {
+      messageCommand.setYesAction(createRAction(yesAction, sourceComponent,
+          context));
+    }
+    if (noAction != null) {
+      messageCommand.setNoAction(createRAction(noAction, sourceComponent,
+          context));
+    }
+    registerCommand(messageCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNoCancel(RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
+      IAction cancelAction, Map<String, Object> context) {
+    RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
+    messageCommand.setTitle(title);
+    messageCommand.setMessage(message);
+
+    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(
+        getIconFactory().getTinyIconSize()));
+    if (iconImageUrl != null) {
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
+          getIconFactory().getLargeIconSize()));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(
+          getIconFactory().getLargeIconSize()));
+    }
+    if (yesAction != null) {
+      messageCommand.setYesAction(createRAction(yesAction, sourceComponent,
+          context));
+    }
+    if (noAction != null) {
+      messageCommand.setNoAction(createRAction(noAction, sourceComponent,
+          context));
+    }
+    if (cancelAction != null) {
+      messageCommand.setCancelAction(createRAction(cancelAction,
+          sourceComponent, context));
+    }
+    registerCommand(messageCommand);
+  }
+
+  private RAction createRAction(IAction action, RComponent sourceComponent,
+      Map<String, Object> context) {
+    return getViewFactory().getActionFactory()
+        .createAction(
+            wrapAction(action),
+            this,
+            sourceComponent,
+            (IModelDescriptor) context
+                .get(ActionContextConstants.MODEL_DESCRIPTOR),
+            (IValueConnector) context
+                .get(ActionContextConstants.VIEW_CONNECTOR), getLocale());
+  }
+
+  private IDisplayableAction wrapAction(IAction action) {
+    if (action instanceof IDisplayableAction) {
+      return (IDisplayableAction) action;
+    }
+    FrontendAction<RComponent, RIcon, RAction> displayableAction = new FrontendAction<RComponent, RIcon, RAction>();
+    displayableAction.setWrappedAction(action);
+    return displayableAction;
   }
 }

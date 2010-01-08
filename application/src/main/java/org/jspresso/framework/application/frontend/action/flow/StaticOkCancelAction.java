@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  */
-package org.jspresso.framework.application.frontend.action.ulc.flow;
+package org.jspresso.framework.application.frontend.action.flow;
 
 import java.util.Map;
 
@@ -10,10 +10,16 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * Action with a static i18nalized message.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class StaticOkCancelAction extends OkCancelAction {
+public class StaticOkCancelAction<E, F, G> extends OkCancelAction<E, F, G> {
 
   private String messageCode;
 

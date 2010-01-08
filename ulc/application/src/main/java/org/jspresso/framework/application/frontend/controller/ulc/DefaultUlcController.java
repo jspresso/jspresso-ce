@@ -37,6 +37,7 @@ import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.MemoryResource;
@@ -651,5 +652,104 @@ public class DefaultUlcController extends
     } catch (IOException ex) {
       throw new NestedRuntimeException(ex);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupInfo(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message) {
+    displayPopup(sourceComponent, title, iconImageUrl, message, null,
+        OK_OPTION, null, null, null, null, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupOkCancel(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message,
+      org.jspresso.framework.action.IAction okAction,
+      org.jspresso.framework.action.IAction cancelAction,
+      Map<String, Object> context) {
+    displayPopup(sourceComponent, title, iconImageUrl, message, context,
+        OK_OPTION, CANCEL_OPTION, null, okAction, cancelAction, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNo(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message,
+      org.jspresso.framework.action.IAction yesAction,
+      org.jspresso.framework.action.IAction noAction,
+      Map<String, Object> context) {
+    displayPopup(sourceComponent, title, iconImageUrl, message, context,
+        YES_OPTION, NO_OPTION, null, yesAction, noAction, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNoCancel(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message,
+      org.jspresso.framework.action.IAction yesAction,
+      org.jspresso.framework.action.IAction noAction,
+      org.jspresso.framework.action.IAction cancelAction,
+      Map<String, Object> context) {
+    displayPopup(sourceComponent, title, iconImageUrl, message, context,
+        YES_OPTION, NO_OPTION, CANCEL_OPTION, yesAction, noAction, cancelAction);
+  }
+
+  private static final String CANCEL_OPTION = "cancel";
+  private static final String NO_OPTION     = "no";
+  private static final String OK_OPTION     = "ok";
+  private static final String YES_OPTION    = "yes";
+
+  private void displayPopup(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message, final Map<String, Object> context,
+      String firstOption, String secondOption, String thirdOption,
+      final org.jspresso.framework.action.IAction firstAction,
+      final org.jspresso.framework.action.IAction secondAction,
+      final org.jspresso.framework.action.IAction thirdAction) {
+    ITranslationProvider translationProvider = getTranslationProvider();
+    Locale locale = getLocale();
+    final Map<String, org.jspresso.framework.action.IAction> optionReverseDictionary;
+    optionReverseDictionary = new HashMap<String, org.jspresso.framework.action.IAction>();
+    String translatedFirstOption = null;
+    if (firstOption != null) {
+      translatedFirstOption = translationProvider.getTranslation(firstOption,
+          locale);
+      optionReverseDictionary.put(translatedFirstOption, firstAction);
+    }
+    String translatedSecondOption = null;
+    if (secondOption != null) {
+      translatedSecondOption = translationProvider.getTranslation(secondOption,
+          locale);
+      optionReverseDictionary.put(translatedSecondOption, secondAction);
+    }
+    String translatedThirdOption = null;
+    if (thirdOption != null) {
+      translatedThirdOption = translationProvider.getTranslation(thirdOption,
+          locale);
+      optionReverseDictionary.put(translatedThirdOption, thirdAction);
+    }
+    final ULCAlert alert = new ULCAlert(UlcUtil
+        .getVisibleWindow(sourceComponent), title, message,
+        translatedFirstOption, translatedSecondOption, translatedThirdOption,
+        getIconFactory().getIcon(iconImageUrl,
+            getIconFactory().getLargeIconSize()));
+    alert.addWindowListener(new IWindowListener() {
+
+      private static final long serialVersionUID = -6049928144066455758L;
+
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
+        org.jspresso.framework.action.IAction nextAction = optionReverseDictionary
+            .get(alert.getValue());
+        if (nextAction != null) {
+          execute(nextAction, context);
+        }
+      }
+    });
+    alert.show();
   }
 }

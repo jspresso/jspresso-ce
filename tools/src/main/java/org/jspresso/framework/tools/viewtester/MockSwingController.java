@@ -41,6 +41,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -223,5 +224,84 @@ public class MockSwingController extends
 
     displayModalDialog(flashPlayer, actions, title, sourceComponent, context,
         dimension, reuseCurrent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupInfo(JComponent sourceComponent, String title,
+      String iconImageUrl, String message) {
+    JOptionPane.showMessageDialog(SwingUtil
+        .getWindowOrInternalFrame(sourceComponent), message, title,
+        JOptionPane.INFORMATION_MESSAGE, getIconFactory().getIcon(iconImageUrl,
+            getIconFactory().getLargeIconSize()));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupOkCancel(JComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction okAction,
+      IAction cancelAction, Map<String, Object> context) {
+    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
+        .getWindowOrInternalFrame(sourceComponent), message, title,
+        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+        getIconFactory().getIcon(iconImageUrl,
+            getIconFactory().getLargeIconSize()));
+    IAction nextAction = null;
+    if (selectedOption == JOptionPane.OK_OPTION) {
+      nextAction = okAction;
+    } else {
+      nextAction = cancelAction;
+    }
+    if (nextAction != null) {
+      execute(nextAction, context);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNo(JComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
+      Map<String, Object> context) {
+    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
+        .getWindowOrInternalFrame(sourceComponent), message, title,
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+        getIconFactory().getIcon(iconImageUrl,
+            getIconFactory().getLargeIconSize()));
+    IAction nextAction = null;
+    if (selectedOption == JOptionPane.YES_OPTION) {
+      nextAction = yesAction;
+    } else {
+      nextAction = noAction;
+    }
+    if (nextAction != null) {
+      execute(nextAction, context);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNoCancel(JComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
+      IAction cancelAction, Map<String, Object> context) {
+    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
+        .getWindowOrInternalFrame(sourceComponent), message, title,
+        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+        getIconFactory().getIcon(iconImageUrl,
+            getIconFactory().getLargeIconSize()));
+    IAction nextAction = null;
+    if (selectedOption == JOptionPane.YES_OPTION) {
+      nextAction = yesAction;
+    } else if (selectedOption == JOptionPane.NO_OPTION) {
+      nextAction = noAction;
+    } else {
+      nextAction = cancelAction;
+    }
+    if (nextAction != null) {
+      execute(nextAction, context);
+    }
   }
 }

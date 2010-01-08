@@ -196,6 +196,23 @@ public interface IIconFactory<E> {
   String getWarningIconImageURL();
 
   /**
+   * Gets the standard question icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getQuestionIcon(Dimension iconSize);
+
+  /**
+   * Gets the questionIconImageURL.
+   * 
+   * @return the questionIconImageURL.
+   */
+  String getQuestionIconImageURL();
+
+  /**
    * Gets the standard up icon.
    * 
    * @param iconSize

@@ -16,50 +16,43 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.swing.flow;
+package org.jspresso.framework.application.frontend.action.flow;
 
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
  * Action to ask a user validation.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class OkCancelAction extends AbstractMessageAction {
+public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
 
   private IAction cancelAction;
   private IAction okAction;
 
   /**
-   * Displays the message using a <code>JOptionPane.OK_CANCEL_OPTION</code>.
+   * Displays an ok cancel dialog
    * <p>
    * {@inheritDoc}
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(getSourceComponent(context)),
-        getMessage(context), getI18nName(getTranslationProvider(context),
-            getLocale(context)), JOptionPane.OK_CANCEL_OPTION,
-        JOptionPane.WARNING_MESSAGE, getIconFactory(context).getIcon(
-            getIconImageURL(), getIconFactory(context).getLargeIconSize()));
-    IAction nextAction = null;
-    if (selectedOption == JOptionPane.OK_OPTION) {
-      nextAction = okAction;
-    } else {
-      nextAction = cancelAction;
-    }
-    if (nextAction != null) {
-      actionHandler.execute(nextAction, context);
-    }
+    getController(context)
+        .popupOkCancel(getSourceComponent(context),
+            getI18nName(getTranslationProvider(context), getLocale(context)),
+            getIconImageURL(), getMessage(context), okAction, cancelAction,
+            context);
     return super.execute(actionHandler, context);
   }
 

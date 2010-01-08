@@ -225,4 +225,87 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return the selectedWorkspaceName.
    */
   String getSelectedWorkspaceName();
+
+  /**
+   * Pops up an information message.
+   * 
+   * @param sourceComponent
+   *          the source component to base the dialog on.
+   * @param title
+   *          the dialog title.
+   * @param iconImageUrl
+   *          the icon to use.
+   * @param message
+   *          the message to display.
+   */
+  void popupInfo(E sourceComponent, String title, String iconImageUrl,
+      String message);
+
+  /**
+   * Pops up an OK Cancel message.
+   * 
+   * @param sourceComponent
+   *          the source component to base the dialog on.
+   * @param title
+   *          the dialog title.
+   * @param iconImageUrl
+   *          the icon to use.
+   * @param message
+   *          the message to display.
+   * @param okAction
+   *          the action to execute on ok.
+   * @param cancelAction
+   *          the action to execute on cancel.
+   * @param context
+   *          the context to execute the selected action.
+   */
+  void popupOkCancel(E sourceComponent, String title, String iconImageUrl,
+      String message, IAction okAction, IAction cancelAction,
+      Map<String, Object> context);
+
+  /**
+   * Pops up an Yes No message.
+   * 
+   * @param sourceComponent
+   *          the source component to base the dialog on.
+   * @param title
+   *          the dialog title.
+   * @param iconImageUrl
+   *          the icon to use.
+   * @param message
+   *          the message to display.
+   * @param yesAction
+   *          the action to execute on yes.
+   * @param noAction
+   *          the action to execute on no.
+   * @param context
+   *          the context to execute the selected action.
+   */
+  void popupYesNo(E sourceComponent, String title, String iconImageUrl,
+      String message, IAction yesAction, IAction noAction,
+      Map<String, Object> context);
+
+  /**
+   * Pops up an Yes No Cancel message.
+   * 
+   * @param sourceComponent
+   *          the source component to base the dialog on.
+   * @param title
+   *          the dialog title.
+   * @param iconImageUrl
+   *          the icon to use.
+   * @param message
+   *          the message to display.
+   * @param yesAction
+   *          the action to execute on yes.
+   * @param noAction
+   *          the action to execute on no.
+   * @param cancelAction
+   *          the action to execute on cancel.
+   * @param context
+   *          the context to execute the selected action.
+   */
+  void popupYesNoCancel(E sourceComponent, String title, String iconImageUrl,
+      String message, IAction yesAction, IAction noAction,
+      IAction cancelAction, Map<String, Object> context);
 }

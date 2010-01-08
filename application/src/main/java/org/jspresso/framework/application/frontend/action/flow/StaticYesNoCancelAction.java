@@ -1,19 +1,26 @@
 /*
  * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
  */
-package org.jspresso.framework.application.frontend.action.swing.flow;
+package org.jspresso.framework.application.frontend.action.flow;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 
 /**
- * Info action with a static i18nalized message.
+ * Action with a static i18nalized message.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class StaticInfoAction extends InfoAction {
+public class StaticYesNoCancelAction<E, F, G> extends
+    YesNoCancelAction<E, F, G> {
 
   private String messageCode;
 

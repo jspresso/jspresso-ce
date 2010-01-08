@@ -25,35 +25,6 @@
   <!--
     Action beans
   -->
-  <bean id="removeEntityCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.flow.StaticYesNoAction" />
-
-  <bean id="removeAnyCollectionFromMasterFrontAction" parent="abstractRemoveAnyCollectionFromMasterFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.flow.StaticYesNoAction" />
-
-  <bean id="infoFrontAction" class="org.jspresso.framework.application.frontend.action.swing.flow.InfoAction">
-    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
-  </bean>
-
-  <bean id="staticInfoFrontAction" abstract="true" parent="infoFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.flow.StaticInfoAction">
-  </bean>
-
-  <bean id="yesNoFrontAction" class="org.jspresso.framework.application.frontend.action.swing.flow.YesNoAction" />
-
-  <bean id="staticYesNoFrontAction" abstract="true" parent="yesNoFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.flow.StaticYesNoAction" />
-
-  <bean id="yesNoCancelFrontAction" class="org.jspresso.framework.application.frontend.action.swing.flow.YesNoCancelAction" />
-
-  <bean id="staticYesNoCancelFrontAction" abstract="true" parent="yesNoFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.flow.StaticYesNoCancelAction" />
-
-  <bean id="okCancelFrontAction" class="org.jspresso.framework.application.frontend.action.swing.flow.OkCancelAction" />
-
-  <bean id="staticOkCancelFrontAction" abstract="true" parent="yesNoFrontAction"
-    class="org.jspresso.framework.application.frontend.action.swing.flow.StaticOkCancelAction" />
-
   <bean id="chartAction" abstract="true" parent="abstractChartAction"
     class="org.jspresso.framework.application.charting.frontend.action.standalone.DisplayChartAction" />
 

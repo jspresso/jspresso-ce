@@ -50,6 +50,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   private String                         okYesIconImageURL;
   private String                         warningIconImageURL;
+  private String                         questionIconImageURL;
 
   private Dimension                      tinyIconSize;
   private Dimension                      smallIconSize;
@@ -239,6 +240,22 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public E getQuestionIcon(Dimension iconSize) {
+    return getIcon(questionIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the questionIconImageURL.
+   * 
+   * @return the questionIconImageURL.
+   */
+  public String getQuestionIconImageURL() {
+    return questionIconImageURL;
+  }
+
+  /**
    * Sets the backwardIconImageURL.
    * 
    * @param backwardIconImageURL
@@ -326,6 +343,16 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public void setWarningIconImageURL(String warningIconImageURL) {
     this.warningIconImageURL = warningIconImageURL;
+  }
+
+  /**
+   * Sets the questionIconImageURL.
+   * 
+   * @param questionIconImageURL
+   *          the questionIconImageURL to set.
+   */
+  public void setQuestionIconImageURL(String questionIconImageURL) {
+    this.questionIconImageURL = questionIconImageURL;
   }
 
   /**

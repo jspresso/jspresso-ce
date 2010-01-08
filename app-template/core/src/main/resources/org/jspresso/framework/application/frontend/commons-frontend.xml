@@ -406,7 +406,7 @@
     </property>
   </bean>
 
-  <bean id="abstractRemoveCollectionFromMasterFrontAction" abstract="true">
+  <bean id="removeEntityCollectionFromMasterFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/edit_remove-48x48.png" />
     <property name="name" value="remove.name" />
     <property name="description" value="remove.description" />
@@ -415,8 +415,8 @@
     <property name="yesAction" ref="removeCollectionFromMasterBackAction" />
   </bean>
 
-  <bean id="abstractRemoveAnyCollectionFromMasterFrontAction" abstract="true"
-    parent="abstractRemoveCollectionFromMasterFrontAction">
+  <bean id="removeAnyCollectionFromMasterFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction"
+    parent="removeEntityCollectionFromMasterFrontAction">
     <property name="yesAction">
       <bean class="org.jspresso.framework.application.backend.action.RemoveCollectionFromMasterAction" />
     </property>
@@ -801,4 +801,41 @@
   <bean abstract="true" id="abstractWorkspace" class="org.jspresso.framework.application.model.Workspace">
     <property name="iconImageURLProvider" ref="defaultModuleIconImageURLProvider" />
   </bean>
+  
+  <!-- Flow actions -->
+  <bean
+    id="infoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.flow.InfoAction">
+    <property
+      name="iconImageURL"
+      value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
+  </bean>
+
+  <bean
+    id="staticInfoFrontAction"
+    abstract="true"
+    parent="infoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.flow.StaticInfoAction">
+  </bean>
+
+  <bean
+    id="yesNoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.flow.YesNoAction" />
+
+  <bean
+    id="staticYesNoFrontAction"
+    abstract="true"
+    parent="yesNoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction" />
+
+  <bean id="yesNoCancelFrontAction" class="org.jspresso.framework.application.frontend.action.flow.YesNoCancelAction" />
+
+  <bean id="staticYesNoCancelFrontAction" abstract="true" parent="yesNoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoCancelAction" />
+
+  <bean id="okCancelFrontAction" class="org.jspresso.framework.application.frontend.action.flow.OkCancelAction" />
+
+  <bean id="staticOkCancelFrontAction" abstract="true" parent="yesNoFrontAction"
+    class="org.jspresso.framework.application.frontend.action.flow.StaticOkCancelAction" />
+  
 </beans>

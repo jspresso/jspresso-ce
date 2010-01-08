@@ -31,7 +31,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
@@ -551,5 +553,90 @@ public class DefaultWingsController extends
     embedder.setText(htmlText);
     displayModalDialog(embedder, actions, title, sourceComponent, context,
         dimension, reuseCurrent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupInfo(SComponent sourceComponent, String title,
+      @SuppressWarnings("unused") String iconImageUrl, String message) {
+    SOptionPane.showMessageDialog(sourceComponent, message, title,
+        SOptionPane.INFORMATION_MESSAGE);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupOkCancel(SComponent sourceComponent, String title,
+      @SuppressWarnings("unused") String iconImageUrl, String message,
+      final IAction okAction, final IAction cancelAction,
+      final Map<String, Object> context) {
+    SOptionPane.showConfirmDialog(sourceComponent, message, title,
+        JOptionPane.WARNING_MESSAGE, new ActionListener() {
+
+          public void actionPerformed(ActionEvent e) {
+            IAction nextAction = null;
+            if (SOptionPane.OK_ACTION.equals(e.getActionCommand())) {
+              nextAction = okAction;
+            } else if (SOptionPane.CANCEL_ACTION.equals(e.getActionCommand())) {
+              nextAction = cancelAction;
+            }
+            if (nextAction != null) {
+              execute(nextAction, context);
+            }
+          }
+        });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNo(SComponent sourceComponent, String title,
+      @SuppressWarnings("unused") String iconImageUrl, String message,
+      final IAction yesAction, final IAction noAction,
+      final Map<String, Object> context) {
+    SOptionPane.showYesNoDialog(sourceComponent, message, title,
+        new ActionListener() {
+
+          public void actionPerformed(ActionEvent e) {
+            IAction nextAction = null;
+            if (SOptionPane.YES_ACTION.equals(e.getActionCommand())) {
+              nextAction = yesAction;
+            } else if (SOptionPane.NO_ACTION.equals(e.getActionCommand())) {
+              nextAction = noAction;
+            }
+            if (nextAction != null) {
+              execute(nextAction, context);
+            }
+          }
+
+        });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNoCancel(SComponent sourceComponent, String title,
+      @SuppressWarnings("unused") String iconImageUrl, String message,
+      final IAction yesAction, final IAction noAction,
+      final IAction cancelAction, final Map<String, Object> context) {
+    SOptionPane.showConfirmDialog(sourceComponent, message, title,
+        SOptionPane.YES_NO_CANCEL_OPTION, new ActionListener() {
+
+          public void actionPerformed(ActionEvent e) {
+            IAction nextAction = null;
+            if (SOptionPane.YES_ACTION.equals(e.getActionCommand())) {
+              nextAction = yesAction;
+            } else if (SOptionPane.NO_ACTION.equals(e.getActionCommand())) {
+              nextAction = noAction;
+            } else if (SOptionPane.CANCEL_ACTION.equals(e.getActionCommand())) {
+              nextAction = cancelAction;
+            }
+            if (nextAction != null) {
+              execute(nextAction, context);
+            }
+          }
+
+        }, null);
   }
 }

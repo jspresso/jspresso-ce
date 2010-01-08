@@ -16,33 +16,37 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.wings.flow;
+package org.jspresso.framework.application.frontend.action.flow;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
-import org.wings.SOptionPane;
-
 
 /**
  * Action to present a message to the user.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class InfoAction extends AbstractMessageAction {
+public class InfoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
 
   /**
-   * Displays the message using a <code>SOptionPane.INFORMATION_MESSAGE</code>.
+   * Displays the message using a <code>JOptionPane.INFORMATION_MESSAGE</code>.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    SOptionPane.showMessageDialog(getSourceComponent(context),
-        getMessage(context), getI18nName(getTranslationProvider(context),
-            getLocale(context)), SOptionPane.INFORMATION_MESSAGE);
+    getController(context).popupInfo(getSourceComponent(context),
+        getI18nName(getTranslationProvider(context), getLocale(context)),
+        getIconImageURL(), getMessage(context));
     return super.execute(actionHandler, context);
   }
 }

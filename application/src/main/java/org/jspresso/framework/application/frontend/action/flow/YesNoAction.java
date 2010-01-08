@@ -16,64 +16,42 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.swing.flow;
+package org.jspresso.framework.application.frontend.action.flow;
 
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
- * Action to ask a binary question to the user with a cancel option.
+ * Action to ask a binary question to the user.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class YesNoCancelAction extends AbstractMessageAction {
+public class YesNoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
 
-  private IAction cancelAction;
   private IAction noAction;
   private IAction yesAction;
 
   /**
-   * Displays the message using a <code>JOptionPane.YES_NO_CANCEL_OPTION</code>.
+   * Displays the message using a <code>JOptionPane.YES_NO_OPTION</code>.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(getSourceComponent(context)),
-        getMessage(context), getI18nName(getTranslationProvider(context),
-            getLocale(context)), JOptionPane.YES_NO_CANCEL_OPTION,
-        JOptionPane.QUESTION_MESSAGE, getIconFactory(context).getIcon(
-            getIconImageURL(), getIconFactory(context).getLargeIconSize()));
-    IAction nextAction = null;
-    if (selectedOption == JOptionPane.YES_OPTION) {
-      nextAction = yesAction;
-    } else if (selectedOption == JOptionPane.NO_OPTION) {
-      nextAction = noAction;
-    } else {
-      nextAction = cancelAction;
-    }
-    if (nextAction != null) {
-      actionHandler.execute(nextAction, context);
-    }
+    getController(context).popupYesNo(getSourceComponent(context),
+        getI18nName(getTranslationProvider(context), getLocale(context)),
+        getIconImageURL(), getMessage(context), yesAction, noAction, context);
     return super.execute(actionHandler, context);
-  }
-
-  /**
-   * Sets the cancelAction.
-   * 
-   * @param cancelAction
-   *          the cancelAction to set.
-   */
-  public void setCancelAction(IAction cancelAction) {
-    this.cancelAction = cancelAction;
   }
 
   /**
@@ -95,4 +73,5 @@ public class YesNoCancelAction extends AbstractMessageAction {
   public void setYesAction(IAction yesAction) {
     this.yesAction = yesAction;
   }
+
 }

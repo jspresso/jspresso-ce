@@ -16,21 +16,28 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.wings.flow;
+package org.jspresso.framework.application.frontend.action.flow;
 
 import java.util.Map;
 
-import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.util.html.HtmlHelper;
 
 /**
- * Base class for all message wings actions. It just keeps a reference on the
+ * Base class for all message swing actions. It just keeps a reference on the
  * message to be displayed.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public abstract class AbstractMessageAction extends AbstractWingsAction {
+public abstract class AbstractMessageAction<E, F, G> extends
+    FrontendAction<E, F, G> {
 
   /**
    * Gets the message.

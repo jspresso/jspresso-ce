@@ -23,7 +23,7 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil",
      */
     isHtml : function(content) {
       if(content) {
-        return content.indexOf("<html>") > -1;
+        return content.toLowerCase().indexOf("<html>") > -1;
       }
       return false;
     },
