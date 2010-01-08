@@ -123,6 +123,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private List<ModuleHistoryEntry>              backwardHistoryEntries;
   private List<ModuleHistoryEntry>              forwardHistoryEntries;
   private boolean                               moduleAutoPinEnabled;
+  private boolean                               tracksWorkspaceNavigator;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -136,6 +137,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     backwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     moduleAutoPinEnabled = true;
+    tracksWorkspaceNavigator = true;
   }
 
   /**
@@ -600,8 +602,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     workspaceNavigator.addItemSelectionListener(new IItemSelectionListener() {
 
       public void selectedItemChange(ItemSelectionEvent event) {
-        selectedModuleChanged(workspaceName, (ICompositeValueConnector) event
-            .getSelectedItem());
+        navigatorSelectionChanged(workspaceName,
+            (ICompositeValueConnector) event.getSelectedItem());
       }
     });
     workspaceNavigatorConnectors.put(workspaceName,
@@ -822,14 +824,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
     this.backendController = backendController;
   }
 
-  private void selectedModuleChanged(String workspaceName,
+  private void navigatorSelectionChanged(String workspaceName,
       ICompositeValueConnector selectedConnector) {
-    if (selectedConnector != null
-        && selectedConnector.getConnectorValue() instanceof Module) {
-      Module selectedModule = (Module) selectedConnector.getConnectorValue();
-      displayModule(workspaceName, selectedModule);
-    } else {
-      displayModule(workspaceName, null);
+    if (tracksWorkspaceNavigator) {
+      if (selectedConnector != null
+          && selectedConnector.getConnectorValue() instanceof Module) {
+        Module selectedModule = (Module) selectedConnector.getConnectorValue();
+        displayModule(workspaceName, selectedModule);
+      } else {
+        displayModule(workspaceName, null);
+      }
     }
   }
 
@@ -932,21 +936,25 @@ public abstract class AbstractFrontendController<E, F, G> extends
         module.setStarted(true);
       }
     }
-    ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors
-        .get(workspaceName);
-    if (workspaceNavigatorConnector instanceof ICollectionConnectorListProvider) {
-      Object[] result = synchWorkspaceNavigatorSelection(
-          (ICollectionConnectorListProvider) workspaceNavigatorConnector,
-          module);
-      if (result != null) {
-        int moduleModelIndex = ((Integer) result[1]).intValue();
-        ((ICollectionConnector) result[0]).setSelectedIndices(
-            new int[] {moduleModelIndex}, moduleModelIndex);
+    boolean wasTracksWorkspaceNavigator = tracksWorkspaceNavigator;
+    try {
+      tracksWorkspaceNavigator = false;
+      ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors
+          .get(workspaceName);
+      if (workspaceNavigatorConnector instanceof ICollectionConnectorListProvider) {
+        Object[] result = synchWorkspaceNavigatorSelection(
+            (ICollectionConnectorListProvider) workspaceNavigatorConnector,
+            module);
+        if (result != null) {
+          int moduleModelIndex = ((Integer) result[1]).intValue();
+          ((ICollectionConnector) result[0]).setSelectedIndices(
+              new int[] {moduleModelIndex}, moduleModelIndex);
+        }
       }
+    } finally {
+      tracksWorkspaceNavigator = wasTracksWorkspaceNavigator;
     }
-    if (moduleAutoPinEnabled) {
-      pinModule(workspaceName, module);
-    }
+    pinModule(workspaceName, module);
   }
 
   private Object[] synchWorkspaceNavigatorSelection(
@@ -996,7 +1004,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the module to pin.
    */
   protected void pinModule(String workspaceName, Module module) {
-    if (module != null) {
+    if (moduleAutoPinEnabled && module != null) {
       backwardHistoryEntries.add(new ModuleHistoryEntry(workspaceName, module));
       forwardHistoryEntries.clear();
     }
