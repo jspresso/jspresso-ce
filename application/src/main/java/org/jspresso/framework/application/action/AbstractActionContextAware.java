@@ -221,6 +221,23 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
+   * Retrieves the model being the parent model connector value.
+   * 
+   * @param context
+   *          the action context.
+   * @return the parent model.
+   */
+  protected Object getParentModel(Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(context);
+    if (modelConnector != null) {
+      if (modelConnector.getParentConnector() != null) {
+        return modelConnector.getParentConnector().getConnectorValue();
+      }
+    }
+    return null;
+  }
+
+  /**
    * This is a versatile helper method that retrieves the selected model either
    * from the 1st selected child connector if the action was trigerred on a
    * collection connector or the connector itself.
