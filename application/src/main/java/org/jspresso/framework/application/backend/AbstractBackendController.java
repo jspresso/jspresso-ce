@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -402,6 +403,42 @@ public abstract class AbstractBackendController extends AbstractController
     }
     Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
     return (entityDirtyProperties != null && entityDirtyProperties.size() > 0);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isDirtyInDepth(IEntity entity) {
+    return isDirtyInDepth(entity, new HashSet<IEntity>());
+  }
+
+  private boolean isDirtyInDepth(IEntity entity, Set<IEntity> alreadyTraversed) {
+    alreadyTraversed.add(entity);
+    if (isDirty(entity)) {
+      return true;
+    }
+    Map<String, Object> entityProps = entity.straightGetProperties();
+    for (Map.Entry<String, Object> property : entityProps.entrySet()) {
+      if (property.getValue() instanceof IEntity) {
+        if (isInitialized(property.getValue())
+            && !alreadyTraversed.contains(property.getValue())) {
+          if (isDirtyInDepth((IEntity) property.getValue(), alreadyTraversed)) {
+            return true;
+          }
+        }
+      } else if (property.getValue() instanceof Collection<?>) {
+        if (isInitialized(property.getValue())) {
+          for (Object elt : ((Collection<?>) property.getValue())) {
+            if (elt instanceof IEntity && !alreadyTraversed.contains(elt)) {
+              if (isDirtyInDepth((IEntity) elt, alreadyTraversed)) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
   }
 
   /**

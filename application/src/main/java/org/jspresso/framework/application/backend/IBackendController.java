@@ -290,4 +290,14 @@ public interface IBackendController extends IController, IEntityDirtAware,
    * @return the transactionTemplate.
    */
   TransactionTemplate getTransactionTemplate();
+
+  /**
+   * Gets wether the entity or if one of the entities it can reach is dirty (has
+   * changes that need to be updated to the persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @return true if the entity is dirty in depth.
+   */
+  boolean isDirtyInDepth(IEntity entity);
 }
