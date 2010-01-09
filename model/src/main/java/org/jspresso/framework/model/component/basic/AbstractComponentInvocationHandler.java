@@ -517,21 +517,46 @@ public abstract class AbstractComponentInvocationHandler implements
       IReferencePropertyDescriptor<?> propertyDescriptor,
       Object oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
+    InlineReferenceTracker oldTracker = null;
     if (oldPropertyValue != null) {
-      InlineReferenceTracker tracker = referenceTrackers.get(propertyName);
-      if (tracker != null) {
+      oldTracker = referenceTrackers.get(propertyName);
+      if (oldTracker != null) {
         ((IPropertyChangeCapable) oldPropertyValue)
-            .removePropertyChangeListener(tracker);
+            .removePropertyChangeListener(oldTracker);
       }
+      referenceTrackers.remove(propertyName);
     }
+    InlineReferenceTracker newTracker = null;
     if (newPropertyValue != null) {
-      InlineReferenceTracker tracker = new InlineReferenceTracker(propertyName,
+      newTracker = new InlineReferenceTracker(propertyName,
           isInlineComponentReference(propertyDescriptor));
       ((IPropertyChangeCapable) newPropertyValue)
-          .addPropertyChangeListener(tracker);
-      referenceTrackers.put(propertyName, tracker);
+          .addPropertyChangeListener(newTracker);
+      referenceTrackers.put(propertyName, newTracker);
     }
     storeProperty(propertyName, newPropertyValue);
+    if (newTracker != null) {
+      if (newPropertyValue instanceof IComponent) {
+        for (Map.Entry<String, Object> property : ((IComponent) newPropertyValue)
+            .straightGetProperties().entrySet()) {
+          if (oldPropertyValue instanceof IComponent) {
+            newTracker.propertyChange(new PropertyChangeEvent(newPropertyValue,
+                property.getKey(), null, property.getValue()));
+          } else {
+            newTracker.propertyChange(new PropertyChangeEvent(newPropertyValue,
+                property.getKey(), null, property.getValue()));
+          }
+        }
+      }
+    } else if (oldTracker != null) {
+      if (oldPropertyValue instanceof IComponent) {
+        for (Map.Entry<String, Object> property : ((IComponent) oldPropertyValue)
+            .straightGetProperties().entrySet()) {
+          oldTracker.propertyChange(new PropertyChangeEvent(oldPropertyValue,
+              property.getKey(), property.getValue(), null));
+        }
+      }
+    }
   }
 
   /**
