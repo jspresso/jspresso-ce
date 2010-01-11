@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -300,4 +301,14 @@ public interface IBackendController extends IController, IEntityDirtAware,
    * @return true if the entity is dirty in depth.
    */
   boolean isDirtyInDepth(IEntity entity);
+
+  /**
+   * Gets wether any of the entities or if any of the entities they can reach
+   * are dirty (has changes that need to be updated to the persistent store).
+   * 
+   * @param entities
+   *          the entities to test.
+   * @return true if any of the entities is dirty in depth.
+   */
+  boolean isAnyDirtyInDepth(Collection<IEntity> entities);
 }

@@ -82,14 +82,14 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/cancel-48x48.png" />
   </bean>
 
-  <bean id="lovOkFrontAction" parent="okDialogFrontAction" scope="prototype">
+  <bean id="lovOkFrontAction" parent="okDialogFrontAction">
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.frontend.action.lov.OkLovAction" />
     </property>
     <property name="nextAction" ref="viewConnectorSetAction" />
   </bean>
 
-  <bean id="lovAction" class="org.jspresso.framework.application.frontend.action.lov.LovAction" scope="prototype">
+  <bean id="lovAction" class="org.jspresso.framework.application.frontend.action.lov.LovAction">
     <property name="lovViewDescriptorFactory" ref="lovViewDescriptorFactory" />
     <property name="createQueryComponentAction" ref="createQueryComponentAction" />
     <property name="okAction" ref="lovOkFrontAction" />
@@ -98,14 +98,13 @@
     <property name="nextAction" ref="modalDialogAction" />
   </bean>
 
-  <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.std.FindAction" scope="prototype">
+  <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.std.FindAction">
     <property name="name" value="find.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
     <property name="wrappedAction" ref="queryEntitiesBackAction" />
   </bean>
 
-  <bean id="nextLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction"
-    scope="prototype">
+  <bean id="nextLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction">
     <property name="name" value="next.page.name" />
     <property name="description" value="next.page.description" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/forward-48x48.png" />
@@ -119,8 +118,7 @@
     </property>
   </bean>
 
-  <bean id="previousLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction"
-    scope="prototype">
+  <bean id="previousLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction">
     <property name="name" value="previous.page.name" />
     <property name="description" value="previous.page.description" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
@@ -284,7 +282,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
   </bean>
 
-  <bean id="nextModuleFilterPageAction" parent="nextLovPageFrontAction" scope="prototype">
+  <bean id="nextModuleFilterPageAction" parent="nextLovPageFrontAction">
     <property name="nextAction" ref="queryModuleFilterAction" />
     <property name="actionabilityGates">
       <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
@@ -294,7 +292,7 @@
     </property>
   </bean>
 
-  <bean id="previousModuleFilterPageAction" parent="previousLovPageFrontAction" scope="prototype">
+  <bean id="previousModuleFilterPageAction" parent="previousLovPageFrontAction">
     <property name="nextAction" ref="queryModuleFilterAction" />
     <property name="actionabilityGates">
       <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">

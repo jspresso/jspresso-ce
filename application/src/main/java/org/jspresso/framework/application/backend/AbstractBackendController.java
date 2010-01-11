@@ -408,8 +408,23 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  public boolean isAnyDirtyInDepth(Collection<IEntity> entities) {
+    Set<IEntity> alreadyTraversed = new HashSet<IEntity>();
+    if (entities != null) {
+      for (IEntity entity : entities) {
+        if (isDirtyInDepth(entity, alreadyTraversed)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean isDirtyInDepth(IEntity entity) {
-    return isDirtyInDepth(entity, new HashSet<IEntity>());
+    return isAnyDirtyInDepth(Collections.singleton(entity));
   }
 
   private boolean isDirtyInDepth(IEntity entity, Set<IEntity> alreadyTraversed) {
