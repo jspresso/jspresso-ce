@@ -87,6 +87,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   private IViewDescriptor    projectedViewDescriptor;
   private boolean            started;
   private IAction            startupAction;
+  private IAction            entryAction;
+  private IAction            exitAction;
   private List<Module>       subModules;
 
   private Subject            subject;
@@ -528,5 +530,43 @@ public class Module extends AbstractPropertyChangeCapable implements
       return getParent().getSubject();
     }
     return null;
+  }
+
+  /**
+   * Gets the entryAction.
+   * 
+   * @return the entryAction.
+   */
+  public IAction getEntryAction() {
+    return entryAction;
+  }
+
+  /**
+   * Sets the entryAction.
+   * 
+   * @param entryAction
+   *          the entryAction to set.
+   */
+  public void setEntryAction(IAction entryAction) {
+    this.entryAction = entryAction;
+  }
+
+  /**
+   * Gets the exitAction.
+   * 
+   * @return the exitAction.
+   */
+  public IAction getExitAction() {
+    return exitAction;
+  }
+
+  /**
+   * Sets the exitAction.
+   * 
+   * @param exitAction
+   *          the exitAction to set.
+   */
+  public void setExitAction(IAction exitAction) {
+    this.exitAction = exitAction;
   }
 }

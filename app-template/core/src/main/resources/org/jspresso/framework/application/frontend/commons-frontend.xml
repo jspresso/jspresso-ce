@@ -481,14 +481,14 @@
     Module history navigation action beans.
   -->
   <bean id="nextPinnedModuleAction" class="org.jspresso.framework.application.frontend.action.module.DisplayNextPinnedModuleAction">
-    <property name="name" value="module.next"/>
-    <property name="description" value="module.next.description"/>
-    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/forward-48x48.png"/>
+    <property name="name" value="module.next" />
+    <property name="description" value="module.next.description" />
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/forward-48x48.png" />
   </bean>
   <bean id="previousPinnedModuleAction" class="org.jspresso.framework.application.frontend.action.module.DisplayPreviousPinnedModuleAction">
-    <property name="name" value="module.previous"/>
-    <property name="description" value="module.previous.description"/>
-    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/backward-48x48.png"/>
+    <property name="name" value="module.previous" />
+    <property name="description" value="module.previous.description" />
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
   </bean>
 
   <bean id="moduleHistoryNavigationActionMap" class="org.jspresso.framework.view.action.ActionMap">
@@ -496,7 +496,7 @@
       <list>
         <bean class="org.jspresso.framework.view.action.ActionList">
           <property name="name" value="navigation.menu" />
-          <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/home-48x48.png"/>
+          <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/home-48x48.png" />
           <property name="actions">
             <list>
               <ref local="previousPinnedModuleAction" />
@@ -799,31 +799,19 @@
   <bean abstract="true" id="abstractWorkspace" class="org.jspresso.framework.application.model.Workspace">
     <property name="iconImageURLProvider" ref="defaultModuleIconImageURLProvider" />
   </bean>
-  
+
   <!-- Flow actions -->
-  <bean
-    id="infoFrontAction"
-    class="org.jspresso.framework.application.frontend.action.flow.InfoAction">
-    <property
-      name="iconImageURL"
-      value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
+  <bean id="infoFrontAction" class="org.jspresso.framework.application.frontend.action.flow.InfoAction">
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
   </bean>
 
-  <bean
-    id="staticInfoFrontAction"
-    abstract="true"
-    parent="infoFrontAction"
+  <bean id="staticInfoFrontAction" abstract="true" parent="infoFrontAction"
     class="org.jspresso.framework.application.frontend.action.flow.StaticInfoAction">
   </bean>
 
-  <bean
-    id="yesNoFrontAction"
-    class="org.jspresso.framework.application.frontend.action.flow.YesNoAction" />
+  <bean id="yesNoFrontAction" class="org.jspresso.framework.application.frontend.action.flow.YesNoAction" />
 
-  <bean
-    id="staticYesNoFrontAction"
-    abstract="true"
-    parent="yesNoFrontAction"
+  <bean id="staticYesNoFrontAction" abstract="true" parent="yesNoFrontAction"
     class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction" />
 
   <bean id="yesNoCancelFrontAction" class="org.jspresso.framework.application.frontend.action.flow.YesNoCancelAction" />
@@ -835,5 +823,6 @@
 
   <bean id="staticOkCancelFrontAction" abstract="true" parent="yesNoFrontAction"
     class="org.jspresso.framework.application.frontend.action.flow.StaticOkCancelAction" />
-  
+
+  <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
 </beans>

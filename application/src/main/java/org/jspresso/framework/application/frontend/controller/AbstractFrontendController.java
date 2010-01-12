@@ -109,6 +109,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private String                                selectedWorkspaceName;
   private IAction                               startupAction;
+  private IAction                               onModuleExitAction;
+  private IAction                               onModuleEnterAction;
 
   private IViewFactory<E, F, G>                 viewFactory;
   private Map<String, Workspace>                workspaces;
@@ -913,6 +915,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
         || ObjectUtils.equals(currentModule, module)) {
       return;
     }
+    if (currentModule != null) {
+      execute(currentModule.getExitAction(), createEmptyContext());
+      execute(getOnModuleExitAction(), createEmptyContext());
+    }
     IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
         .get(workspaceName);
     if (moduleAreaViewConnector != null) {
@@ -935,6 +941,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
         execute(module.getStartupAction(), createEmptyContext());
         module.setStarted(true);
       }
+      execute(module.getEntryAction(), createEmptyContext());
+      execute(getOnModuleEnterAction(), createEmptyContext());
     }
     boolean wasTracksWorkspaceNavigator = tracksWorkspaceNavigator;
     try {
@@ -1068,5 +1076,43 @@ public abstract class AbstractFrontendController<E, F, G> extends
     } finally {
       moduleAutoPinEnabled = wasAutoPinEnabled;
     }
+  }
+
+  /**
+   * Gets the onModuleExitAction.
+   * 
+   * @return the onModuleExitAction.
+   */
+  protected IAction getOnModuleExitAction() {
+    return onModuleExitAction;
+  }
+
+  /**
+   * Sets the onModuleExitAction.
+   * 
+   * @param onModuleExitAction
+   *          the onModuleExitAction to set.
+   */
+  public void setOnModuleExitAction(IAction onModuleExitAction) {
+    this.onModuleExitAction = onModuleExitAction;
+  }
+
+  /**
+   * Gets the onModuleEnterAction.
+   * 
+   * @return the onModuleEnterAction.
+   */
+  protected IAction getOnModuleEnterAction() {
+    return onModuleEnterAction;
+  }
+
+  /**
+   * Sets the onModuleEnterAction.
+   * 
+   * @param onModuleEnterAction
+   *          the onModuleEnterAction to set.
+   */
+  public void setOnModuleEnterAction(IAction onModuleEnterAction) {
+    this.onModuleEnterAction = onModuleEnterAction;
   }
 }

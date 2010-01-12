@@ -306,9 +306,9 @@ public interface IBackendController extends IController, IEntityDirtAware,
    * Gets wether any of the entities or if any of the entities they can reach
    * are dirty (has changes that need to be updated to the persistent store).
    * 
-   * @param entities
-   *          the entities to test.
+   * @param elements
+   *          the elements to test. Only entities are actually tested.
    * @return true if any of the entities is dirty in depth.
    */
-  boolean isAnyDirtyInDepth(Collection<IEntity> entities);
+  boolean isAnyDirtyInDepth(Collection<?> elements);
 }

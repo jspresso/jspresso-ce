@@ -408,12 +408,14 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public boolean isAnyDirtyInDepth(Collection<IEntity> entities) {
+  public boolean isAnyDirtyInDepth(Collection<?> elements) {
     Set<IEntity> alreadyTraversed = new HashSet<IEntity>();
-    if (entities != null) {
-      for (IEntity entity : entities) {
-        if (isDirtyInDepth(entity, alreadyTraversed)) {
-          return true;
+    if (elements != null) {
+      for (Object element : elements) {
+        if (element instanceof IEntity) {
+          if (isDirtyInDepth((IEntity) element, alreadyTraversed)) {
+            return true;
+          }
         }
       }
     }
