@@ -93,11 +93,14 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   private Subject            subject;
 
+  private boolean            dirty;
+
   /**
    * Constructs a new <code>Module</code> instance.
    */
   public Module() {
     started = false;
+    dirty = false;
   }
 
   /**
@@ -180,8 +183,12 @@ public class Module extends AbstractPropertyChangeCapable implements
    * @return the i18nName.
    */
   public String getI18nName() {
+    String dirtyMarker = "";
+    if (isDirty()) {
+      dirtyMarker = "(*)";
+    }
     if (i18nName != null) {
-      return i18nName;
+      return dirtyMarker + i18nName;
     }
     return getName();
   }
@@ -201,7 +208,11 @@ public class Module extends AbstractPropertyChangeCapable implements
    * @return the module's name.
    */
   public String getName() {
-    return name;
+    String dirtyMarker = "";
+    if (isDirty()) {
+      dirtyMarker = "(*)";
+    }
+    return dirtyMarker + name;
   }
 
   /**
@@ -568,5 +579,28 @@ public class Module extends AbstractPropertyChangeCapable implements
    */
   public void setExitAction(IAction exitAction) {
     this.exitAction = exitAction;
+  }
+
+  /**
+   * Gets the dirty.
+   * 
+   * @return the dirty.
+   */
+  public boolean isDirty() {
+    return dirty;
+  }
+
+  /**
+   * Sets the dirty.
+   * 
+   * @param dirty
+   *          the dirty to set.
+   */
+  public void setDirty(boolean dirty) {
+    String oldName = getName();
+    String oldI18nName = getI18nName();
+    this.dirty = dirty;
+    firePropertyChange(NAME, oldName, getName());
+    firePropertyChange(I18N_NAME, oldI18nName, getI18nName());
   }
 }

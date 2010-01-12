@@ -52,13 +52,6 @@ public class BeanModule extends Module implements PropertyChangeListener {
   private Object                       moduleObject;
 
   /**
-   * Constructs a new <code>BeanModule</code> instance.
-   */
-  public BeanModule() {
-    // TODO Auto-generated constructor stub
-  }
-
-  /**
    * Equality based on projected object.
    * <p>
    * {@inheritDoc}

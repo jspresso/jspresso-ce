@@ -76,6 +76,7 @@ public class CheckModuleDirtyStateAction<E, F, G> extends
       // getTranslationProvider(context).getTranslation(
       // "module.content.dirty.message", getLocale(context)));
     }
+    currentModule.setDirty(dirty);
     return super.execute(actionHandler, context);
   }
 }

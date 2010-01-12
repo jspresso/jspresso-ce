@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
@@ -53,6 +54,19 @@ public class SaveModuleObjectAction extends SaveAction {
       entitiesToSave.add((IEntity) ((BeanModule) module).getModuleObject());
     }
     return entitiesToSave;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    boolean ret = super.execute(actionHandler, context);
+    if (ret) {
+      getModule(context).setDirty(false);
+    }
+    return ret;
   }
 
 }
