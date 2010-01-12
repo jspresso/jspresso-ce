@@ -68,13 +68,13 @@ public class CheckModuleDirtyStateAction<E, F, G> extends
       }
     }
     if (dirty) {
-      getController(context).popupInfo(
-          getSourceComponent(context),
-          getTranslationProvider(context).getTranslation(
-              "module.content.dirty.title", getLocale(context)),
-          getIconFactory(context).getInfoIconImageURL(),
-          getTranslationProvider(context).getTranslation(
-              "module.content.dirty.message", getLocale(context)));
+      // getController(context).popupInfo(
+      // getSourceComponent(context),
+      // getTranslationProvider(context).getTranslation(
+      // "module.content.dirty.title", getLocale(context)),
+      // getIconFactory(context).getInfoIconImageURL(),
+      // getTranslationProvider(context).getTranslation(
+      // "module.content.dirty.message", getLocale(context)));
     }
     return super.execute(actionHandler, context);
   }
