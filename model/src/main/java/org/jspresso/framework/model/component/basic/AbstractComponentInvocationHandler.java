@@ -650,17 +650,14 @@ public abstract class AbstractComponentInvocationHandler implements
           propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
         }
       }
-    } catch (IllegalAccessException ex) {
-      // This cannot happen but throw anyway.
-      throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
-      // This cannot happen but throw anyway.
       throw new ComponentException(ex.getCause());
+    } catch (IllegalAccessException ex) {
+      throw new ComponentException(ex);
     } catch (NoSuchMethodException ex) {
-      // This cannot happen but throw anyway.
       throw new ComponentException(ex);
     }
   }
@@ -1021,13 +1018,17 @@ public abstract class AbstractComponentInvocationHandler implements
             }
           }
         }
-      } catch (IllegalAccessException ex) {
-        throw new ComponentException(ex);
+      } catch (RuntimeException ex) {
+        rollbackProperty(proxy, propertyDescriptor, oldProperty);
+        throw ex;
       } catch (InvocationTargetException ex) {
+        rollbackProperty(proxy, propertyDescriptor, oldProperty);
         if (ex.getCause() instanceof RuntimeException) {
           throw (RuntimeException) ex.getCause();
         }
         throw new ComponentException(ex.getCause());
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
       } catch (NoSuchMethodException ex) {
         throw new ComponentException(ex);
       }
@@ -1038,6 +1039,17 @@ public abstract class AbstractComponentInvocationHandler implements
     if (propertyProcessorsEnabled) {
       propertyDescriptor.postprocessSetter(proxy, oldProperty,
           actualNewProperty);
+    }
+  }
+
+  private void rollbackProperty(Object proxy,
+      IPropertyDescriptor propertyDescriptor, Object oldProperty) {
+    boolean wasPropertyProcessorsEnabled = propertyProcessorsEnabled;
+    try {
+      propertyProcessorsEnabled = false;
+      setProperty(proxy, propertyDescriptor, oldProperty);
+    } finally {
+      propertyProcessorsEnabled = wasPropertyProcessorsEnabled;
     }
   }
 
