@@ -329,6 +329,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
           var swfLoader:SWFLoader = new SWFLoader();
           swfLoader.source = url;
           swfLoader.scaleContent = false;
+          swfLoader.addEventListener(Event.ADDED_TO_STAGE, function(event:Event):void {
+            event.currentTarget.stage.frameRate=96;
+          });
+          
           dialogView = swfLoader;
         }
         popupDialog(dialogCommand.title, null, dialogView, icon, dialogButtons, dialogCommand.useCurrent, dialogCommand.dimension);
