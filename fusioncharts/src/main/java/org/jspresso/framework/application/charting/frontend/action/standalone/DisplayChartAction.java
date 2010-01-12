@@ -56,7 +56,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
         new ConnectionCallback() {
 
           public Object doInConnection(Connection con) throws SQLException {
-            return getChartDescriptor().getData(getSelectedModel(context), con,
+            return getChartDescriptor().getData(getChartModel(context), con,
                 getTranslationProvider(context), getLocale(context));
           }
         });
@@ -81,5 +81,16 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
             getChartDescriptor().getTitle(), getLocale(context)),
         getSourceComponent(context), context, d, false);
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Gets the domain entry point for the chart.
+   * 
+   * @param context
+   *          the action context.
+   * @return the domain entry point for the chart.
+   */
+  protected Object getChartModel(Map<String, Object> context) {
+    return getSelectedModel(context);
   }
 }
