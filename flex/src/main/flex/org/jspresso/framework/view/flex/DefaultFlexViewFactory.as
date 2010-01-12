@@ -959,15 +959,22 @@ package org.jspresso.framework.view.flex {
         component = createComponent(remoteSplitContainer.leftTop);
         if(remoteSplitContainer.orientation == "VERTICAL") {
           component.percentWidth = 100.0;
+          component.percentHeight = 50.0;
         } else {
+          component.percentWidth = 50.0;
           component.percentHeight = 100.0;
         }
         splitContainer.addChild(component);
       }
       if(remoteSplitContainer.rightBottom != null) {
         component = createComponent(remoteSplitContainer.rightBottom);
-        component.percentWidth = 100.0;
-        component.percentHeight = 100.0;
+        if(remoteSplitContainer.orientation == "VERTICAL") {
+          component.percentWidth = 100.0;
+          component.percentHeight = 50.0;
+        } else {
+          component.percentWidth = 50.0;
+          component.percentHeight = 100.0;
+        }
 
         splitContainer.addChild(component);
       }
