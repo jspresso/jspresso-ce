@@ -578,6 +578,9 @@ package org.jspresso.framework.view.flex {
 
     private function createBorderContainer(remoteBorderContainer:RBorderContainer):Container {
       var borderContainer:Grid = new Grid();
+      borderContainer.setStyle("horizontalGap",2);
+      borderContainer.setStyle("verticalGap",2);
+
       var row:GridRow;
       var cell:GridItem;
       var cellComponent:UIComponent;
@@ -728,6 +731,8 @@ package org.jspresso.framework.view.flex {
 
     private function createConstrainedGridContainer(remoteConstrainedGridContainer:RConstrainedGridContainer):Container {
       var constrainedGridContainer:Grid = new Grid();
+      constrainedGridContainer.setStyle("horizontalGap",2);
+      constrainedGridContainer.setStyle("verticalGap",2);
       
       var i:int;
       var j:int;
@@ -797,6 +802,8 @@ package org.jspresso.framework.view.flex {
 
     private function createEvenGridContainer(remoteEvenGridContainer:REvenGridContainer):Container {
       var evenGridContainer:Grid = new Grid();
+      evenGridContainer.setStyle("horizontalGap",2);
+      evenGridContainer.setStyle("verticalGap",2);
       
       var nbRows:int;
       var nbCols:int;
@@ -938,10 +945,10 @@ package org.jspresso.framework.view.flex {
         
         col += elementWidth;
       }
-      form.setStyle("paddingLeft", 10);
-      form.setStyle("paddingRight", 10);
-      form.setStyle("paddingTop", 10);
-      form.setStyle("paddingBottom", 10);
+      form.setStyle("paddingLeft", 2);
+      form.setStyle("paddingRight", 2);
+      form.setStyle("paddingTop", 2);
+      form.setStyle("paddingBottom", 2);
       return form;
     }
 
