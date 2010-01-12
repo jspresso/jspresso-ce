@@ -69,6 +69,8 @@ package org.jspresso.framework.view.flex {
 			var _selectedIcon:RIcon = _icons[iconIndex] as RIcon;
 			if(_selectedIcon != null) {
 			  _image.source = _selectedIcon.imageUrlSpec;
+			} else {
+			  _image.source = null;
 			}
   	}
 
