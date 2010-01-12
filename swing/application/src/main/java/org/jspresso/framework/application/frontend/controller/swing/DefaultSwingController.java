@@ -56,6 +56,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.InternalFrameAdapter;
@@ -754,79 +755,105 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void popupInfo(JComponent sourceComponent, String title,
-      String iconImageUrl, String message) {
-    JOptionPane.showMessageDialog(SwingUtil
-        .getWindowOrInternalFrame(sourceComponent), message, title,
-        JOptionPane.INFORMATION_MESSAGE, getIconFactory().getIcon(iconImageUrl,
-            getIconFactory().getLargeIconSize()));
+  public void popupInfo(final JComponent sourceComponent, final String title,
+      final String iconImageUrl, final String message) {
+    // To have the same threading model than the other UI channels
+    SwingUtilities.invokeLater(new Runnable() {
+
+      public void run() {
+        JOptionPane.showMessageDialog(SwingUtil
+            .getWindowOrInternalFrame(sourceComponent), message, title,
+            JOptionPane.INFORMATION_MESSAGE, getIconFactory().getIcon(
+                iconImageUrl, getIconFactory().getLargeIconSize()));
+      }
+    });
   }
 
   /**
    * {@inheritDoc}
    */
-  public void popupOkCancel(JComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction okAction,
-      IAction cancelAction, Map<String, Object> context) {
-    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(sourceComponent), message, title,
-        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-        getIconFactory().getIcon(iconImageUrl,
-            getIconFactory().getLargeIconSize()));
-    IAction nextAction = null;
-    if (selectedOption == JOptionPane.OK_OPTION) {
-      nextAction = okAction;
-    } else {
-      nextAction = cancelAction;
-    }
-    if (nextAction != null) {
-      execute(nextAction, context);
-    }
+  public void popupOkCancel(final JComponent sourceComponent,
+      final String title, final String iconImageUrl, final String message,
+      final IAction okAction, final IAction cancelAction,
+      final Map<String, Object> context) {
+    // To have the same threading model than the other UI channels
+    SwingUtilities.invokeLater(new Runnable() {
+
+      public void run() {
+        int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
+            .getWindowOrInternalFrame(sourceComponent), message, title,
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+            getIconFactory().getIcon(iconImageUrl,
+                getIconFactory().getLargeIconSize()));
+        IAction nextAction = null;
+        if (selectedOption == JOptionPane.OK_OPTION) {
+          nextAction = okAction;
+        } else {
+          nextAction = cancelAction;
+        }
+        if (nextAction != null) {
+          execute(nextAction, context);
+        }
+      }
+    });
   }
 
   /**
    * {@inheritDoc}
    */
-  public void popupYesNo(JComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction yesAction, IAction noAction,
-      Map<String, Object> context) {
-    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(sourceComponent), message, title,
-        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-        getIconFactory().getIcon(iconImageUrl,
-            getIconFactory().getLargeIconSize()));
-    IAction nextAction = null;
-    if (selectedOption == JOptionPane.YES_OPTION) {
-      nextAction = yesAction;
-    } else {
-      nextAction = noAction;
-    }
-    if (nextAction != null) {
-      execute(nextAction, context);
-    }
+  public void popupYesNo(final JComponent sourceComponent, final String title,
+      final String iconImageUrl, final String message, final IAction yesAction,
+      final IAction noAction, final Map<String, Object> context) {
+    // To have the same threading model than the other UI channels
+    SwingUtilities.invokeLater(new Runnable() {
+
+      public void run() {
+        int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
+            .getWindowOrInternalFrame(sourceComponent), message, title,
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+            getIconFactory().getIcon(iconImageUrl,
+                getIconFactory().getLargeIconSize()));
+        IAction nextAction = null;
+        if (selectedOption == JOptionPane.YES_OPTION) {
+          nextAction = yesAction;
+        } else {
+          nextAction = noAction;
+        }
+        if (nextAction != null) {
+          execute(nextAction, context);
+        }
+      }
+    });
   }
 
   /**
    * {@inheritDoc}
    */
-  public void popupYesNoCancel(JComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction yesAction, IAction noAction,
-      IAction cancelAction, Map<String, Object> context) {
-    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(sourceComponent), message, title,
-        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-        getIconFactory().getIcon(iconImageUrl,
-            getIconFactory().getLargeIconSize()));
-    IAction nextAction = null;
-    if (selectedOption == JOptionPane.YES_OPTION) {
-      nextAction = yesAction;
-    } else if (selectedOption == JOptionPane.NO_OPTION) {
-      nextAction = noAction;
-    } else {
-      nextAction = cancelAction;
-    }
-    if (nextAction != null) {
-      execute(nextAction, context);
-    }
+  public void popupYesNoCancel(final JComponent sourceComponent,
+      final String title, final String iconImageUrl, final String message,
+      final IAction yesAction, final IAction noAction,
+      final IAction cancelAction, final Map<String, Object> context) {
+    // To have the same threading model than the other UI channels
+    SwingUtilities.invokeLater(new Runnable() {
+
+      public void run() {
+        int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
+            .getWindowOrInternalFrame(sourceComponent), message, title,
+            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+            getIconFactory().getIcon(iconImageUrl,
+                getIconFactory().getLargeIconSize()));
+        IAction nextAction = null;
+        if (selectedOption == JOptionPane.YES_OPTION) {
+          nextAction = yesAction;
+        } else if (selectedOption == JOptionPane.NO_OPTION) {
+          nextAction = noAction;
+        } else {
+          nextAction = cancelAction;
+        }
+        if (nextAction != null) {
+          execute(nextAction, context);
+        }
+      }
+    });
   }
 }

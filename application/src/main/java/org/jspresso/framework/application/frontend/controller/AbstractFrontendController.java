@@ -913,13 +913,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
         || ObjectUtils.equals(currentModule, module)) {
       return;
     }
-    // TODO implementation dirty check
-    // if (currentModule instanceof BeanModule) {
-    // if (getBackendController().isDirtyInDepth(
-    // (IEntity) ((BeanModule) currentModule).getModuleObject())) {
-    // popupInfo(null, "dirty", null, "Dirty !");
-    // }
-    // }
     IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
         .get(workspaceName);
     if (moduleAreaViewConnector != null) {
