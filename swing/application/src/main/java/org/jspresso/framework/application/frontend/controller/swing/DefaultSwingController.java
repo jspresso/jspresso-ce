@@ -628,7 +628,7 @@ public class DefaultSwingController extends
        */
       @Override
       public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
-        stop();
+        execute(getExitAction(), createEmptyContext());
       }
     });
     controllerFrame.pack();

@@ -156,7 +156,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
-      _viewFactory = new DefaultFlexViewFactory(this, this, this);
+      _viewFactory = createViewFactory();
       _changeNotificationsEnabled = true;
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
@@ -169,6 +169,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       registerRemoteClasses();
       initRemoteController();
+    }
+    
+    protected function createViewFactory():DefaultFlexViewFactory {
+      return new DefaultFlexViewFactory(this, this, this);
     }
     
     public function createComponent(remoteComponent:RComponent):UIComponent {
@@ -195,7 +199,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function bindRemoteValueState(remoteValueState:RemoteValueState):void {
+    protected function bindRemoteValueState(remoteValueState:RemoteValueState):void {
       var wasEnabled:Boolean = _changeNotificationsEnabled;
       try {
         _changeNotificationsEnabled = false;
@@ -216,7 +220,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function valueUpdated(remoteValueState:RemoteValueState):void {
+    protected function valueUpdated(remoteValueState:RemoteValueState):void {
       if(_changeNotificationsEnabled) {
         //trace(">>> Value update <<< " + remoteValueState.value);
         var command:RemoteValueCommand = new RemoteValueCommand();
@@ -226,7 +230,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function selectedIndicesUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
+    protected function selectedIndicesUpdated(remoteCompositeValueState:RemoteCompositeValueState):void {
       if(_changeNotificationsEnabled) {
         //trace(">>> Selected indices update <<< " + remoteCompositeValueState.selectedIndices + " on " + remoteCompositeValueState.value);
         var command:RemoteSelectionCommand = new RemoteSelectionCommand();
@@ -427,7 +431,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function handleFileUpload(uploadCommand:RemoteFileUploadCommand):void {
+    protected function handleFileUpload(uploadCommand:RemoteFileUploadCommand):void {
       _fileReference = new  FileReference();
       _fileReference.addEventListener(Event.SELECT, function(event:Event):void {
         var request:URLRequest = new URLRequest(uploadCommand.fileUrl);
@@ -465,7 +469,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function handleFileDownload(downloadCommand:RemoteFileDownloadCommand):void {
+    protected function handleFileDownload(downloadCommand:RemoteFileDownloadCommand):void {
       _fileReference = new  FileReference();
       _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
         execute(downloadCommand.cancelCallbackAction, downloadCommand.resourceId);
@@ -494,7 +498,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function createTypeFilters(filter:Object):Array {
+    protected function createTypeFilters(filter:Object):Array {
       var typeFilters:Array = null;
       if(filter) {
         typeFilters = new Array();
@@ -517,7 +521,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return typeFilters;
     }
 
-    private function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
+    protected function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
       var alert:Alert = createAlert(messageCommand);
   
       if(messageCommand.messageIcon) {
@@ -540,7 +544,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function createAlert(messageCommand:RemoteMessageCommand):Alert {
+    protected function createAlert(messageCommand:RemoteMessageCommand):Alert {
       var alert:Alert;
       var alertCloseHandler:Function;
       var message:String = new String(messageCommand.message);
@@ -623,7 +627,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return alert;
     }
 
-    private function restart():void {
+    protected function restart():void {
       var applicationFrame:Application = Application.application as Application;
       applicationFrame.removeAllChildren();
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -634,7 +638,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       start();
     }
 
-    private function stop():void {
+    protected function stop():void {
       _remoteController.channelSet.disconnectAll();
     }
 
@@ -660,7 +664,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _commandsQueue.removeAll();
     }
     
-    private function initRemoteController():void {
+    protected function initRemoteController():void {
       _remoteController.showBusyCursor = true;
       var commandsHandler:Function = function(resultEvent:ResultEvent):void {
         _postponedCommands = new Object();
@@ -683,7 +687,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       operation.addEventListener(FaultEvent.FAULT, errorHandler);
     }
     
-    private function checkPostponedCommandsCompletion():void {
+    protected function checkPostponedCommandsCompletion():void {
       for(var guid:String in _postponedCommands) {
         var commands:IList = _postponedCommands[guid] as IList;
         for each(var command:RemoteCommand in commands) {
@@ -703,7 +707,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    private function initApplicationFrame(workspaceActions:Array,
+    protected function initApplicationFrame(workspaceActions:Array,
                                           actions:Array,
                                           helpActions:Array):void {
       var applicationFrame:Application = Application.application as Application; 
@@ -750,7 +754,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       applicationFrame.addChild(split);
     }
     
-    private function createApplicationMenuBar(workspaceActions:Array,
+    protected function createApplicationMenuBar(workspaceActions:Array,
                                               actions:Array,
                                               helpActions:Array):MenuBar {
       var menuBarModel:Object = new Object();
@@ -793,7 +797,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return menuBar;                                            
     }
     
-    private function createMenus(actionLists:Array, useSeparator:Boolean):Array {
+    protected function createMenus(actionLists:Array, useSeparator:Boolean):Array {
       var menus:Array = new Array();
       if(actionLists != null) {
         var menu:Object;
@@ -814,7 +818,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return menus;
     }
     
-    private function createMenu(actionList:RActionList):Object {
+    protected function createMenu(actionList:RActionList):Object {
       var menu:Object = new Object();
       menu["label"] = actionList.name;
       menu["description"] = actionList.description;
@@ -832,7 +836,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return menu;
     }
   
-    private function createMenuItems(actionList:RActionList):Array {
+    protected function createMenuItems(actionList:RActionList):Array {
       var menuItems:Array = new Array();
       for each(var action:RAction in actionList.actions) {
         menuItems.push(createMenuItem(action));
@@ -840,7 +844,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return menuItems;
     }
   
-    private function createMenuItem(action:RAction):Object {
+    protected function createMenuItem(action:RAction):Object {
       var menuItem:Object = new Object();
       menuItem["label"] = action.name;
       menuItem["description"] = action.description;
@@ -857,7 +861,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       operation.send(_userLanguage);
     }
     
-    private function displayWorkspace(workspaceName:String, workspaceView:RComponent):void {
+    protected function displayWorkspace(workspaceName:String, workspaceView:RComponent):void {
       if(workspaceView) {
         var workspaceNavigator:RComponent = null;
         if(workspaceView is RSplitContainer) {
@@ -908,12 +912,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _workspaceAccordion.selectedChild = _workspaceAccordion.getChildByName(workspaceName) as Container;
     }
     
-    private function performLogin():void {
+    protected function performLogin():void {
       var loginCommand:RemoteLoginCommand = new RemoteLoginCommand();
       registerCommand(loginCommand);
     }
     
-    private function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, buttons:Array, useCurrent:Boolean=false, dimension:Dimension=null):void {
+    protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, buttons:Array, useCurrent:Boolean=false, dimension:Dimension=null):void {
       if(dimension != null) {
         dialogView.width = dimension.width;
         dialogView.height = dimension.height;
@@ -995,7 +999,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       (_dialogStack[0] as Array)[1] = viewStateGuid;
     }
     
-    private function registerRemoteClasses():void {
+    protected function registerRemoteClasses():void {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCommand",RemoteCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand",RemoteReadabilityCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand",RemoteWritabilityCommand);

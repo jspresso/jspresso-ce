@@ -18,10 +18,15 @@
  */
 package org.jspresso.framework.application.frontend.action.workspace;
 
+import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.application.model.Workspace;
 
 /**
  * Application exit action.
@@ -37,6 +42,25 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  */
 public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
 
+  private IAction actualExitAction;
+  private IAction checkCurrentModuleDirtyStateAction;
+
+  /**
+   * Constructs a new <code>ExitAction</code> instance.
+   */
+  public ExitAction() {
+    actualExitAction = new FrontendAction<E, F, G>() {
+
+      @Override
+      public boolean execute(
+          @SuppressWarnings("unused") IActionHandler actionHandler,
+          Map<String, Object> context) {
+        return getController(context).stop();
+      }
+    };
+    checkCurrentModuleDirtyStateAction = new CheckModuleDirtyStateAction<E, F, G>();
+  }
+
   /**
    * Stops the frontend controller.
    * <p>
@@ -45,8 +69,49 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    if (super.execute(actionHandler, context)) {
-      return getController(context).stop();
+    checkCurrentModuleDirtyStateAction.execute(actionHandler, context);
+    boolean hasDirtyModules = false;
+    for (String workspaceName : getController(context).getWorkspaceNames()) {
+      Workspace ws = getController(context).getWorkspace(workspaceName);
+      List<Module> modules = ws.getModules();
+      if (modules != null) {
+        for (Module m : modules) {
+          if (isDirtyInDepth(m)) {
+            hasDirtyModules = true;
+            break;
+          }
+        }
+      }
+      if (hasDirtyModules) {
+        break;
+      }
+    }
+    if (hasDirtyModules) {
+      getController(context).popupYesNo(
+          getSourceComponent(context),
+          getTranslationProvider(context).getTranslation(
+              "module.content.dirty.title", getLocale(context)),
+          getIconFactory(context).getQuestionIconImageURL(),
+          getTranslationProvider(context).getTranslation(
+              "module.content.dirty.message", getLocale(context)),
+          actualExitAction, null, context);
+    } else {
+      return actualExitAction.execute(actionHandler, context);
+    }
+    return false;
+  }
+
+  private boolean isDirtyInDepth(Module module) {
+    if (module.isDirty()) {
+      return true;
+    }
+    List<Module> subModules = module.getSubModules();
+    if (subModules != null) {
+      for (Module subModule : subModules) {
+        if (isDirtyInDepth(subModule)) {
+          return true;
+        }
+      }
     }
     return false;
   }

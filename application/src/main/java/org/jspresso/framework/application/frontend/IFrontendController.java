@@ -211,6 +211,14 @@ public interface IFrontendController<E, F, G> extends IController,
   void displayPreviousPinnedModule();
 
   /**
+   * Returns the list of workspace names. This list defines the set of
+   * workspaces the user has access to.
+   * 
+   * @return the list of workspace names.
+   */
+  List<String> getWorkspaceNames();
+
+  /**
    * Given a workspace name, this method returns the associated workspace.
    * 
    * @param workspaceName

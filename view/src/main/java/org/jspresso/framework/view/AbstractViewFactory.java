@@ -280,8 +280,32 @@ public abstract class AbstractViewFactory<E, F, G> implements
         view.setPeer(createSecurityComponent());
       }
       applyPreferredSize(view.getPeer(), viewDescriptor.getPreferredSize());
+    } else {
+      view = createEmptyView(viewDescriptor, actionHandler, locale);
     }
     return view;
+  }
+
+  /**
+   * Creates an empty view whenever this specific view descriptor is not
+   * supported.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor being the root of the view hierarchy to be
+   *          constructed.
+   * @param actionHandler
+   *          the object responsible for executing the view actions (generally
+   *          the frontend controller itself).
+   * @param locale
+   *          the locale the view must use for I18N.
+   * @return the empty view.
+   */
+  private IView<E> createEmptyView(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        ModelRefPropertyConnector.THIS_PROPERTY);
+    E viewComponent = createEmptyComponent();
+    return constructView(viewComponent, viewDescriptor, connector);
   }
 
   /**

@@ -125,4 +125,13 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
   public void setName(String name) {
     this.name = name;
   }
+
+  /**
+   * Gets the i18nNameKey.
+   * 
+   * @return the i18nNameKey.
+   */
+  protected String getI18nNameKey() {
+    return i18nNameKey;
+  }
 }

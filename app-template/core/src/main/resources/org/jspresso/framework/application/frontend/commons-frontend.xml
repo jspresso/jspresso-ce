@@ -280,6 +280,7 @@
     </property>
     <property name="name" value="query.filter.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
+    <property name="nextAction" ref="checkModuleDirtyStateFrontAction"/>
   </bean>
 
   <bean id="nextModuleFilterPageAction" parent="nextLovPageFrontAction">
@@ -511,23 +512,34 @@
   <!--
     Persistence action beans.
   -->
+  <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction"/>
+  <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
+  
   <bean id="saveModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/save-48x48.png" />
     <property name="name" value="save.name" />
     <property name="description" value="save.description" />
     <property name="wrappedAction" ref="saveModuleObjectBackAction" />
     <property name="nextAction">
-      <bean parent="staticInfoFrontAction">
-        <property name="messageCode" value="save.successful" />
+      <bean parent="checkAllModulesDirtyStateFrontAction">
+        <property name="nextAction">
+          <bean parent="staticInfoFrontAction">
+            <property name="messageCode" value="save.successful" />
+          </bean>
+        </property>
       </bean>
     </property>
   </bean>
 
   <bean id="saveModuleObjectAndGoBackFrontAction" parent="saveModuleObjectFrontAction">
     <property name="nextAction">
-      <bean parent="staticInfoFrontAction">
-        <property name="messageCode" value="save.successful" />
-        <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction" />
+      <bean parent="checkAllModulesDirtyStateFrontAction">
+        <property name="nextAction">
+          <bean parent="staticInfoFrontAction">
+            <property name="messageCode" value="save.successful" />
+            <property name="nextAction" ref="parentModuleConnectorSelectionFrontAction" />
+          </bean>
+        </property>
       </bean>
     </property>
   </bean>
@@ -537,6 +549,7 @@
     <property name="name" value="reload.name" />
     <property name="description" value="reload.description" />
     <property name="wrappedAction" ref="reloadModuleObjectBackAction" />
+    <property name="nextAction" ref="checkAllModulesDirtyStateFrontAction"/>
   </bean>
 
   <bean abstract="true" id="abstractChartAction" class="org.jspresso.framework.application.charting.frontend.action.AbstractChartAction">
@@ -823,6 +836,4 @@
 
   <bean id="staticOkCancelFrontAction" abstract="true" parent="yesNoFrontAction"
     class="org.jspresso.framework.application.frontend.action.flow.StaticOkCancelAction" />
-
-  <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
 </beans>

@@ -18,15 +18,16 @@
  */
 package org.jspresso.framework.application.backend.action.module;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.application.model.Workspace;
 
 /**
- * This action informs the user of module content dirty state. It is meant to
- * operate on bean (collection) modules that handle entities.
+ * This action recomputes all modules dirty state.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -37,16 +38,38 @@ import org.jspresso.framework.application.model.Module;
  * @param <G>
  *          the actual action type used.
  */
-public class CheckModuleDirtyStateAction<E, F, G> extends
+public class CheckAllModulesDirtyStateAction<E, F, G> extends
     AbstractModuleDirtyStateAction<E, F, G> {
 
   /**
-   * Returns current module.
+   * Returns all application modules that have been marked dirty.
    * <p>
    * {@inheritDoc}
    */
   @Override
   protected Collection<Module> getModulesToCheck(Map<String, Object> context) {
-    return Collections.singleton(getModule(context));
+    Collection<Module> modulesToCheck = new ArrayList<Module>();
+    for (String workspaceName : getController(context).getWorkspaceNames()) {
+      Workspace ws = getController(context).getWorkspace(workspaceName);
+      List<Module> modules = ws.getModules();
+      if (modules != null) {
+        for (Module m : modules) {
+          registerModule(m, modulesToCheck);
+        }
+      }
+    }
+    return modulesToCheck;
+  }
+
+  private void registerModule(Module module, Collection<Module> modulesToCheck) {
+    if (module.isStarted()) {
+      modulesToCheck.add(module);
+      List<Module> subModules = module.getSubModules();
+      if (subModules != null) {
+        for (Module subModule : subModules) {
+          registerModule(subModule, modulesToCheck);
+        }
+      }
+    }
   }
 }

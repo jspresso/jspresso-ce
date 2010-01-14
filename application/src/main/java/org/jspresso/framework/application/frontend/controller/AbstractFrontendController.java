@@ -126,6 +126,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private List<ModuleHistoryEntry>              forwardHistoryEntries;
   private boolean                               moduleAutoPinEnabled;
   private boolean                               tracksWorkspaceNavigator;
+  private IDisplayableAction                    exitAction;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -140,6 +141,23 @@ public abstract class AbstractFrontendController<E, F, G> extends
     forwardHistoryEntries = new LinkedList<ModuleHistoryEntry>();
     moduleAutoPinEnabled = true;
     tracksWorkspaceNavigator = true;
+  }
+
+  /**
+   * Creates the exit action.
+   * 
+   * @return the exit action.
+   */
+  protected IDisplayableAction getExitAction() {
+    if (exitAction == null) {
+      ExitAction<E, F, G> action = new ExitAction<E, F, G>();
+      action.setName("quit.name");
+      action.setDescription("quit.description");
+      action.setIconImageURL(getViewFactory().getIconFactory()
+          .getCancelIconImageURL());
+      exitAction = action;
+    }
+    return exitAction;
   }
 
   /**
@@ -564,12 +582,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     exitActionList.setName("file");
     exitActionList.setIconImageURL(getWorkspacesMenuIconImageUrl());
     List<IDisplayableAction> exitActions = new ArrayList<IDisplayableAction>();
-    ExitAction<E, F, G> exitAction = new ExitAction<E, F, G>();
-    exitAction.setName("quit.name");
-    exitAction.setDescription("quit.description");
-    exitAction.setIconImageURL(getViewFactory().getIconFactory()
-        .getCancelIconImageURL());
-    exitActions.add(exitAction);
+    exitActions.add(getExitAction());
     exitActionList.setActions(exitActions);
 
     workspaceActionLists.add(workspaceSelectionActionList);
@@ -737,11 +750,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Returns the list of workspace names. This list defines the set of
-   * workspaces the user have access to.
+   * workspaces the user has access to.
    * 
    * @return the list of workspace names.
    */
-  protected List<String> getWorkspaceNames() {
+  public List<String> getWorkspaceNames() {
     if (workspaces != null) {
       return new ArrayList<String>(workspaces.keySet());
     }
@@ -939,8 +952,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (module != null) {
       if (!module.isStarted() && module.getStartupAction() != null) {
         execute(module.getStartupAction(), createEmptyContext());
-        module.setStarted(true);
       }
+      module.setStarted(true);
       execute(module.getEntryAction(), createEmptyContext());
       execute(getOnModuleEnterAction(), createEmptyContext());
     }
