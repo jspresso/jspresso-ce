@@ -77,39 +77,41 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       /**
        * @type {qx.ui.core.Widget}
        */
-      var component = null;
-      if(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
-        component = this.__createActionField(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionComponent) {
-        component = this.__createActionComponent(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
-        component = this.__createCheckBox(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RComboBox) {
-        component = this.__createComboBox(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RColorField) {
-        component = this.__createColorField(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RContainer) {
-        component = this.__createContainer(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
-        component = this.__createDateField(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RDurationField) {
-        component = this.__createDurationField(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RImageComponent) {
-        component = this.__createImageComponent(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RList) {
-        component = this.__createList(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
-        component = this.__createNumericComponent(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RSecurityComponent) {
-        component = this.__createSecurityComponent(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTable) {
-        component = this.__createTable(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTextComponent) {
-        component = this.__createTextComponent(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
-        component = this.__createTimeField(remoteComponent);
-      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTree) {
-        component = this.__createTree(remoteComponent);
+      var component = this._createCustomComponent(remoteComponent);
+      if(component == null) {
+	      if(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
+	        component = this.__createActionField(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionComponent) {
+	        component = this.__createActionComponent(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+	        component = this.__createCheckBox(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RComboBox) {
+	        component = this.__createComboBox(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RColorField) {
+	        component = this.__createColorField(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RContainer) {
+	        component = this.__createContainer(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
+	        component = this.__createDateField(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RDurationField) {
+	        component = this.__createDurationField(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RImageComponent) {
+	        component = this.__createImageComponent(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RList) {
+	        component = this.__createList(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
+	        component = this.__createNumericComponent(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RSecurityComponent) {
+	        component = this.__createSecurityComponent(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTable) {
+	        component = this.__createTable(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTextComponent) {
+	        component = this.__createTextComponent(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
+	        component = this.__createTimeField(remoteComponent);
+	      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTree) {
+	        component = this.__createTree(remoteComponent);
+	      }
       }
       if(remoteComponent.getTooltip() != null) {
         component.setToolTip(new qx.ui.tooltip.ToolTip(remoteComponent.getTooltip()));
@@ -182,6 +184,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         this.__remotePeerRegistry.register(remoteComponent.getState());
       }
       return component;
+    },
+
+    _createCustomComponent : function(remoteComponent) {
+    	return null;
     },
     
     /**

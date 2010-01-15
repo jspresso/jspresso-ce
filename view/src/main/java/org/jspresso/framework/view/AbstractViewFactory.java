@@ -212,42 +212,45 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   public IView<E> createView(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IView<E> view = null;
-    if (viewDescriptor instanceof IComponentViewDescriptor) {
-      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IImageViewDescriptor) {
-      view = createImageView((IImageViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IActionViewDescriptor) {
-      view = createActionView((IActionViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
-      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
-      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-      if (((ICollectionViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
-        ((IItemSelectable) view.getConnector())
-            .addItemSelectionListener(new ItemSelectionAdapter(
-                ((ICollectionViewDescriptor) viewDescriptor)
-                    .getItemSelectionAction(), actionHandler, view));
-      }
-    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICardViewDescriptor) {
-      view = createCardView((ICardViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
-      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-      if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
-        ((IItemSelectable) view.getConnector())
-            .addItemSelectionListener(new ItemSelectionAdapter(
-                ((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction(),
-                actionHandler, view));
+    IView<E> view = createCustomView(viewDescriptor, actionHandler, locale);
+    if (view == null) {
+      if (viewDescriptor instanceof IComponentViewDescriptor) {
+        view = createComponentView((IComponentViewDescriptor) viewDescriptor,
+            actionHandler, locale);
+      } else if (viewDescriptor instanceof IImageViewDescriptor) {
+        view = createImageView((IImageViewDescriptor) viewDescriptor,
+            actionHandler, locale);
+      } else if (viewDescriptor instanceof IActionViewDescriptor) {
+        view = createActionView((IActionViewDescriptor) viewDescriptor,
+            actionHandler, locale);
+      } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
+        view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
+            actionHandler, locale);
+      } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
+        view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
+            actionHandler, locale);
+        if (((ICollectionViewDescriptor) viewDescriptor)
+            .getItemSelectionAction() != null) {
+          ((IItemSelectable) view.getConnector())
+              .addItemSelectionListener(new ItemSelectionAdapter(
+                  ((ICollectionViewDescriptor) viewDescriptor)
+                      .getItemSelectionAction(), actionHandler, view));
+        }
+      } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
+        view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
+            actionHandler, locale);
+      } else if (viewDescriptor instanceof ICardViewDescriptor) {
+        view = createCardView((ICardViewDescriptor) viewDescriptor,
+            actionHandler, locale);
+      } else if (viewDescriptor instanceof ITreeViewDescriptor) {
+        view = createTreeView((ITreeViewDescriptor) viewDescriptor,
+            actionHandler, locale);
+        if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
+          ((IItemSelectable) view.getConnector())
+              .addItemSelectionListener(new ItemSelectionAdapter(
+                  ((ITreeViewDescriptor) viewDescriptor)
+                      .getItemSelectionAction(), actionHandler, view));
+        }
       }
     }
     if (view != null) {
@@ -284,6 +287,25 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createEmptyView(viewDescriptor, actionHandler, locale);
     }
     return view;
+  }
+
+  /**
+   * Gives a chance to subclasses to create custom views. Returns null by
+   * default.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor being the root of the view hierarchy to be
+   *          constructed.
+   * @param actionHandler
+   *          the object responsible for executing the view actions (generally
+   *          the frontend controller itself).
+   * @param locale
+   *          the locale the view must use for I18N.
+   * @return the created view or null.
+   */
+  protected IView<E> createCustomView(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return null;
   }
 
   /**

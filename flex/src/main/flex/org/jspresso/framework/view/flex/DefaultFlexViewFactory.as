@@ -149,39 +149,41 @@ package org.jspresso.framework.view.flex {
     }
     
     public function createComponent(remoteComponent:RComponent, registerState:Boolean=true):UIComponent {
-      var component:UIComponent;
-      if(remoteComponent is RActionField) {
-        component = createActionField(remoteComponent as RActionField);
-      } else if(remoteComponent is RActionComponent) {
-        component = createActionComponent(remoteComponent as RActionComponent);
-      } else if(remoteComponent is RCheckBox) {
-        component = createCheckBox(remoteComponent as RCheckBox);
-      } else if(remoteComponent is RComboBox) {
-        component = createComboBox(remoteComponent as RComboBox);
-      } else if(remoteComponent is RColorField) {
-        component = createColorField(remoteComponent as RColorField);
-      } else if(remoteComponent is RContainer) {
-        component = createContainer(remoteComponent as RContainer);
-      } else if(remoteComponent is RDateField) {
-        component = createDateComponent(remoteComponent as RDateField);
-      } else if(remoteComponent is RDurationField) {
-        component = createDurationField(remoteComponent as RDurationField);
-      } else if(remoteComponent is RImageComponent) {
-        component = createImageComponent(remoteComponent as RImageComponent);
-      } else if(remoteComponent is RList) {
-        component = createList(remoteComponent as RList);
-      } else if(remoteComponent is RNumericComponent) {
-        component = createNumericComponent(remoteComponent as RNumericComponent);
-      } else if(remoteComponent is RSecurityComponent) {
-        component = createSecurityComponent(remoteComponent as RSecurityComponent);
-      } else if(remoteComponent is RTable) {
-        component = createTable(remoteComponent as RTable);
-      } else if(remoteComponent is RTextComponent) {
-        component = createTextComponent(remoteComponent as RTextComponent);
-      } else if(remoteComponent is RTimeField) {
-        component = createTimeField(remoteComponent as RTimeField);
-      } else if(remoteComponent is RTree) {
-        component = createTree(remoteComponent as RTree);
+      var component:UIComponent = createCustomComponent(remoteComponent);
+      if(component == null) {
+        if(remoteComponent is RActionField) {
+          component = createActionField(remoteComponent as RActionField);
+        } else if(remoteComponent is RActionComponent) {
+          component = createActionComponent(remoteComponent as RActionComponent);
+        } else if(remoteComponent is RCheckBox) {
+          component = createCheckBox(remoteComponent as RCheckBox);
+        } else if(remoteComponent is RComboBox) {
+          component = createComboBox(remoteComponent as RComboBox);
+        } else if(remoteComponent is RColorField) {
+          component = createColorField(remoteComponent as RColorField);
+        } else if(remoteComponent is RContainer) {
+          component = createContainer(remoteComponent as RContainer);
+        } else if(remoteComponent is RDateField) {
+          component = createDateComponent(remoteComponent as RDateField);
+        } else if(remoteComponent is RDurationField) {
+          component = createDurationField(remoteComponent as RDurationField);
+        } else if(remoteComponent is RImageComponent) {
+          component = createImageComponent(remoteComponent as RImageComponent);
+        } else if(remoteComponent is RList) {
+          component = createList(remoteComponent as RList);
+        } else if(remoteComponent is RNumericComponent) {
+          component = createNumericComponent(remoteComponent as RNumericComponent);
+        } else if(remoteComponent is RSecurityComponent) {
+          component = createSecurityComponent(remoteComponent as RSecurityComponent);
+        } else if(remoteComponent is RTable) {
+          component = createTable(remoteComponent as RTable);
+        } else if(remoteComponent is RTextComponent) {
+          component = createTextComponent(remoteComponent as RTextComponent);
+        } else if(remoteComponent is RTimeField) {
+          component = createTimeField(remoteComponent as RTimeField);
+        } else if(remoteComponent is RTree) {
+          component = createTree(remoteComponent as RTree);
+        }
       }
       if(!(component is Tree)) {
         component.minWidth = 0;
@@ -266,6 +268,10 @@ package org.jspresso.framework.view.flex {
         _remotePeerRegistry.register(remoteComponent.state);
       }
       return component;
+    }
+    
+    protected function createCustomComponent(remoteComponent:RComponent):UIComponent {
+      return null;
     }
     
     protected function createContainer(remoteContainer:RContainer):UIComponent {
