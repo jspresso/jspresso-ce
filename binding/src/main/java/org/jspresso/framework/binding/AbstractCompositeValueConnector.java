@@ -287,7 +287,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   protected void implFireSelectedItemChange(ItemSelectionEvent evt) {
     selectedItem = evt.getSelectedItem();
-    if (evt.getSource() == this || trackingChildrenSelection) {
+    if (evt.getSource() == this || isTrackingChildrenSelection()) {
       itemSelectionSupport.fireSelectedConnectorChange(evt);
     }
     IValueConnector parentConnector = getParentConnector();

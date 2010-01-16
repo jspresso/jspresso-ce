@@ -268,9 +268,13 @@ package org.jspresso.framework.view.flex {
         component.minHeight = remoteComponent.preferredSize.height;
       }
       if(registerState) {
-        _remotePeerRegistry.register(remoteComponent.state);
+        getRemotePeerRegistry().register(remoteComponent.state);
       }
       return component;
+    }
+    
+    protected function getRemotePeerRegistry():IRemotePeerRegistry {
+      return _remotePeerRegistry;
     }
     
     protected function createCustomComponent(remoteComponent:RComponent):UIComponent {
@@ -728,7 +732,7 @@ package org.jspresso.framework.view.flex {
     protected function createCardContainer(remoteCardContainer:RCardContainer):Container {
       var cardContainer:RViewStack = new RViewStack(remoteCardContainer.guid);
       // view stack may have to be retrieved for late update of cards.
-      _remotePeerRegistry.register(cardContainer);
+      getRemotePeerRegistry().register(cardContainer);
       //cardContainer.resizeToContent = true;
       
       for(var i:int = 0; i < remoteCardContainer.cardNames.length; i++) {
@@ -1591,7 +1595,7 @@ package org.jspresso.framework.view.flex {
         button.enabled = enabled;
       };
       BindingUtils.bindSetter(updateButtonState, remoteAction, "enabled", true);
-		  _remotePeerRegistry.register(remoteAction);
+		  getRemotePeerRegistry().register(remoteAction);
 		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
 		    _actionHandler.execute(remoteAction);
 		  });

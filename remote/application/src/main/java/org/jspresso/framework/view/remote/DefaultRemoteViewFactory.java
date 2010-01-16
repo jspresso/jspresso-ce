@@ -165,8 +165,10 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> view = super.createView(viewDescriptor, actionHandler,
         locale);
-    view.getPeer().setState(
-        ((IRemoteStateOwner) view.getConnector()).getState());
+    if (view.getPeer().getState() == null) {
+      view.getPeer().setState(
+          ((IRemoteStateOwner) view.getConnector()).getState());
+    }
     return view;
   }
 

@@ -941,7 +941,20 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createTabView((ITabViewDescriptor) viewDescriptor, actionHandler,
           locale);
     }
+    bindCompositeView(view);
+    return view;
+  }
+
+  /**
+   * Performs all the necessary connectors binding among the composite view and
+   * its children.
+   * 
+   * @param view
+   *          the composite view to bind.
+   */
+  protected void bindCompositeView(ICompositeView<E> view) {
     if (view != null) {
+      ICompositeViewDescriptor viewDescriptor = view.getDescriptor();
       if (viewDescriptor.isCascadingModels()) {
         IView<E> masterView = view.getChildren().get(0);
         IValueConnector viewConnector;
@@ -1001,7 +1014,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
         }
       }
     }
-    return view;
   }
 
   /**

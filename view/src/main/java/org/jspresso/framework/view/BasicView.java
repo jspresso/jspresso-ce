@@ -21,14 +21,13 @@ package org.jspresso.framework.view;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * The basic implementation of the IView interface.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the type of component this view uses.
+ *          the type of component this view uses.
  */
 public class BasicView<E> implements IView<E> {
 
@@ -40,14 +39,14 @@ public class BasicView<E> implements IView<E> {
    * Constructs a new <code>BasicView</code> instance.
    * 
    * @param peer
-   *            the peer component.
+   *          the peer component.
    */
   public BasicView(E peer) {
     this.peer = peer;
   }
 
   /**
-   * Returns the <code>IValueConnector</code> connected to the swing view.
+   * Returns the <code>IValueConnector</code> connected to the view.
    * <p>
    * {@inheritDoc}
    */
@@ -86,7 +85,7 @@ public class BasicView<E> implements IView<E> {
    * Sets the connector.
    * 
    * @param connector
-   *            the connector to set.
+   *          the connector to set.
    */
   public void setConnector(IValueConnector connector) {
     this.connector = connector;
@@ -96,7 +95,7 @@ public class BasicView<E> implements IView<E> {
    * Sets the descriptor.
    * 
    * @param descriptor
-   *            the descriptor to set.
+   *          the descriptor to set.
    */
   public void setDescriptor(IViewDescriptor descriptor) {
     this.descriptor = descriptor;
@@ -106,7 +105,7 @@ public class BasicView<E> implements IView<E> {
    * Sets the peer.
    * 
    * @param peer
-   *            the peer to set.
+   *          the peer to set.
    */
   public void setPeer(E peer) {
     this.peer = peer;

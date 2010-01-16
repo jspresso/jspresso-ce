@@ -18,9 +18,7 @@
  */
 package org.jspresso.framework.view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,16 +51,6 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
       return null;
     }
     return childrenMap.get(key);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IView<E>> getChildren() {
-    if (childrenMap == null) {
-      return null;
-    }
-    return new ArrayList<IView<E>>(childrenMap.values());
   }
 
   /**
