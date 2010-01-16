@@ -113,6 +113,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
 	        component = this.__createTree(remoteComponent);
 	      }
       }
+      if(component == null) {
+      	component = new qx.ui.core.Widget();
+      }
       if(remoteComponent.getTooltip() != null) {
         component.setToolTip(new qx.ui.tooltip.ToolTip(remoteComponent.getTooltip()));
       }

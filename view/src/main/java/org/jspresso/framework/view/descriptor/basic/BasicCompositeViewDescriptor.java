@@ -125,8 +125,14 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
                         childViewDescriptor.getName()));
           }
         } else {
-          ((BasicViewDescriptor) childViewDescriptor)
-              .setModelDescriptor(modelDescriptor);
+          if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
+            ((BasicViewDescriptor) childViewDescriptor)
+                .setModelDescriptor(((IComponentDescriptorProvider<?>) modelDescriptor)
+                    .getComponentDescriptor());
+          } else {
+            ((BasicViewDescriptor) childViewDescriptor)
+                .setModelDescriptor(modelDescriptor);
+          }
         }
       }
     }

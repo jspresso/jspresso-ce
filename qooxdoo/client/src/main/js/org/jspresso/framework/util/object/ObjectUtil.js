@@ -82,15 +82,17 @@ qx.Class.define("org.jspresso.framework.util.object.ObjectUtil",
           var className = root["class"];
           if(className) {
             var typedClass = qx.Class.getByName(className);
-            typedRoot = new typedClass();
-            var a = root["array"];
-            if(a) {
-              typedRoot.append(this.typeObjectGraph(a));
-            } else {
-              delete root["class"];
-              for (var propertyName in root) {
-                typedRoot.set(propertyName, this.typeObjectGraph(root[propertyName]));
-              }
+            if(typedClass) {
+	            typedRoot = new typedClass();
+	            var a = root["array"];
+	            if(a) {
+	              typedRoot.append(this.typeObjectGraph(a));
+	            } else {
+	              delete root["class"];
+	              for (var propertyName in root) {
+	                typedRoot.set(propertyName, this.typeObjectGraph(root[propertyName]));
+	              }
+	            }
             }
           } else if(root instanceof Date) {
 	          typedRoot = root;

@@ -13,6 +13,8 @@
  */
 
 package org.jspresso.framework.util.array {
+  import mx.utils.ObjectUtil;
+  
   public class ArrayUtil {
     
     public static function areUnorderedArraysEqual(a1:Array, a2:Array):Boolean {
@@ -22,12 +24,25 @@ package org.jspresso.framework.util.array {
         return false;
       } else {
         for each (var e:Object in a1) {
-          if(a2.indexOf(e) < 0) {
+          if(arrayIndexOf(a2,e) < 0) {
             return false;
           }
         }
       }
       return true;
+    }
+
+    public static function arrayContains(arr:Array, element:Object):Boolean {
+      return arrayIndexOf(arr, element) >= 0;
+    }
+    
+    public static function arrayIndexOf(arr:Array, element:Object):int {
+      for(var i:int = 0; i < arr.length; i++) {
+        if(ObjectUtil.compare(element, arr[i]) == 0) {
+          return i;
+        }
+      }
+      return -1;
     }
   }
 }

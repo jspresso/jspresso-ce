@@ -127,9 +127,9 @@ package org.jspresso.framework.view.flex {
     private static const TOOLTIP_ELLIPSIS:String = "...";
     private static const TEMPLATE_CHAR:String = "O";
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
-    private static const COLUMN_MAX_CHAR_COUNT:int = 12;
-    private static const DATE_CHAR_COUNT:int = 12;
-    private static const TIME_CHAR_COUNT:int = 6;
+    private static const COLUMN_MAX_CHAR_COUNT:int = 20;
+    private static const DATE_CHAR_COUNT:int = 10;
+    private static const TIME_CHAR_COUNT:int = 8;
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
@@ -184,6 +184,9 @@ package org.jspresso.framework.view.flex {
         } else if(remoteComponent is RTree) {
           component = createTree(remoteComponent as RTree);
         }
+      }
+      if(component == null) {
+        component = new Canvas();
       }
       if(!(component is Tree)) {
         component.minWidth = 0;
@@ -610,12 +613,21 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.north != null) {
         cellComponent = createComponent(remoteBorderContainer.north);
         cell.minHeight = cellComponent.minHeight;
-        if(cellComponent.height > 0) {
+        if(cellComponent.minHeight > 0) {
+          cell.maxHeight = cellComponent.minHeight;
+        } else if(cellComponent.height > 0) {
           cell.maxHeight = cellComponent.height;
+        } else if(cellComponent.maxHeight > 0) {
+          cell.maxHeight = cellComponent.maxHeight;
         }
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
+      }
+      if(cell.maxHeight > 0) {
+        cell.setStyle("paddingLeft",2);
+        cell.setStyle("paddingRight",2);
+        cell.maxHeight += 4;
       }
       row.addChild(cell);
 
@@ -628,15 +640,23 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.west != null) {
         cellComponent = createComponent(remoteBorderContainer.west);
         cell = new GridItem();
-        cell.setStyle("horizontalAlign", "left");
+        //cell.setStyle("horizontalAlign", "left");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
-        if(cellComponent.width > 0) {
+        if(cellComponent.minWidth > 0) {
+          cell.maxWidth = cellComponent.minWidth;
+        } else if(cellComponent.width > 0) {
           cell.maxWidth = cellComponent.width;
+        } else if(cellComponent.maxWidth > 0) {
+          cell.maxWidth = cellComponent.maxWidth;
         }
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
+        if(cell.maxWidth > 0) {
+          cell.setStyle("paddingLeft",2);
+          cell.maxWidth += 2;
+        }
         row.addChild(cell);
       }
 
@@ -654,15 +674,23 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.east != null) {
         cellComponent = createComponent(remoteBorderContainer.east);
         cell = new GridItem();
-        cell.setStyle("horizontalAlign", "right");
+        //cell.setStyle("horizontalAlign", "right");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
-        if(cellComponent.width > 0) {
+        if(cellComponent.minWidth > 0) {
+          cell.maxWidth = cellComponent.minWidth;
+        } else if(cellComponent.width > 0) {
           cell.maxWidth = cellComponent.width;
+        } else if(cellComponent.maxWidth > 0) {
+          cell.maxWidth = cellComponent.maxWidth;
         }
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
+        if(cell.maxWidth > 0) {
+          cell.setStyle("paddingRight",2);
+          cell.maxWidth += 2;
+        }
         row.addChild(cell);
       }
       
@@ -676,12 +704,21 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.south != null) {
         cellComponent = createComponent(remoteBorderContainer.south);
         cell.minHeight = cellComponent.minHeight;
-        if(cellComponent.height > 0) {
+        if(cellComponent.minHeight > 0) {
+          cell.maxHeight = cellComponent.minHeight;
+        } else if(cellComponent.height > 0) {
           cell.maxHeight = cellComponent.height;
+        } else if(cellComponent.maxHeight > 0) {
+          cell.maxHeight = cellComponent.maxHeight;
         }
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
+      }
+      if(cell.maxHeight > 0) {
+        cell.setStyle("paddingLeft",2);
+        cell.setStyle("paddingRight",2);
+        cell.maxHeight += 4;
       }
       row.addChild(cell);
 
@@ -1073,7 +1110,7 @@ package org.jspresso.framework.view.flex {
       var dateTimeField:DateTimeField = new DateTimeField();
       dateTimeField.editable = true;
       dateTimeField.showTime = true;
-      sizeMaxComponentWidth(dateTimeField, DATE_CHAR_COUNT + TIME_CHAR_COUNT);
+      sizeMaxComponentWidth(dateTimeField, DATE_CHAR_COUNT + TIME_CHAR_COUNT +1);
       bindDateTimeField(dateTimeField, remoteDateField.state);
       return dateTimeField;
     }
@@ -1081,6 +1118,7 @@ package org.jspresso.framework.view.flex {
     protected function bindDateTimeField(dateTimeField:DateTimeField, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(dateTimeField, "selectedDateTime", remoteState, "value", true);
       BindingUtils.bindProperty(dateTimeField, "enabled", remoteState, "writable");
+      BindingUtils.bindProperty(remoteState, "value", dateTimeField, "selectedDateTime", true);
       var updateModel:Function = function (event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
