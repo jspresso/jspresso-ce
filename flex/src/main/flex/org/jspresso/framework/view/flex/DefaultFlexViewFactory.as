@@ -277,6 +277,10 @@ package org.jspresso.framework.view.flex {
       return _remotePeerRegistry;
     }
     
+    protected function getActionHandler():IActionHandler {
+      return _actionHandler;
+    }
+    
     protected function createCustomComponent(remoteComponent:RComponent):UIComponent {
       return null;
     }
