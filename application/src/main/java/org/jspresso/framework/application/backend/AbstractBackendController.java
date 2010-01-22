@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.action.Transactional;
@@ -172,6 +173,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
+    initialActionContext.put(ActionContextConstants.BACK_CONTROLLER, this);
     return initialActionContext;
   }
 

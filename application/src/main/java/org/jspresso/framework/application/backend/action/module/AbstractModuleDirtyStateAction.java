@@ -56,21 +56,24 @@ public abstract class AbstractModuleDirtyStateAction<E, F, G> extends
     Collection<Module> modulesToCheck = getModulesToCheck(context);
     if (modulesToCheck != null) {
       for (Module module : modulesToCheck) {
-        boolean dirty = false;
-        if (module instanceof BeanModule) {
-          Object moduleContent = ((BeanModule) module).getModuleObject();
-          if (moduleContent instanceof IEntity
-              && getController(context).getBackendController().isDirtyInDepth(
-                  (IEntity) moduleContent)) {
-            dirty = true;
+        if (module != null) {
+          boolean dirty = false;
+          if (module instanceof BeanModule) {
+            Object moduleContent = ((BeanModule) module).getModuleObject();
+            if (moduleContent instanceof IEntity
+                && getController(context).getBackendController()
+                    .isDirtyInDepth((IEntity) moduleContent)) {
+              dirty = true;
+            }
+          } else if (module instanceof BeanCollectionModule) {
+            if (getController(context).getBackendController()
+                .isAnyDirtyInDepth(
+                    ((BeanCollectionModule) module).getModuleObjects())) {
+              dirty = true;
+            }
           }
-        } else if (module instanceof BeanCollectionModule) {
-          if (getController(context).getBackendController().isAnyDirtyInDepth(
-              ((BeanCollectionModule) module).getModuleObjects())) {
-            dirty = true;
-          }
+          module.setDirty(dirty);
         }
-        module.setDirty(dirty);
       }
     }
     return super.execute(actionHandler, context);

@@ -70,7 +70,12 @@ public abstract class AbstractActionContextAware {
    * @return the backend controller.
    */
   protected IBackendController getBackendController(Map<String, Object> context) {
-    return getFrontendController(context).getBackendController();
+    IFrontendController<?, ?, ?> frontController = getFrontendController(context);
+    if (frontController != null) {
+      return frontController.getBackendController();
+    }
+    return (IBackendController) context
+        .get(ActionContextConstants.BACK_CONTROLLER);
   }
 
   /**

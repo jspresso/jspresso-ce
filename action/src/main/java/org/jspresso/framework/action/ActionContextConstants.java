@@ -47,6 +47,11 @@ public final class ActionContextConstants {
   public static final String FRONT_CONTROLLER = "FRONT_CONTROLLER";
 
   /**
+   * the backend controller.
+   */
+  public static final String BACK_CONTROLLER  = "BACK_CONTROLLER";
+
+  /**
    * The the descriptor of the model domain object the action was triggered on.
    */
   public static final String MODEL_DESCRIPTOR = "MODEL_DESCRIPTOR";

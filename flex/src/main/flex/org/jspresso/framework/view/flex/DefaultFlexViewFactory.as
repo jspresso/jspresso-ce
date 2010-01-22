@@ -195,35 +195,7 @@ package org.jspresso.framework.view.flex {
       if(remoteComponent.tooltip != null) {
         component.toolTip = remoteComponent.tooltip;
       }
-      if(!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
-        var toolBar:ApplicationControlBar = new ApplicationControlBar();
-        toolBar.percentWidth = 100.0;
-        toolBar.setStyle("fillAlphas",[0.5,0.5]);
-        toolBar.setStyle("fillColors",[0xBBBBBB,0x666666]);
-        toolBar.setStyle("horizontalGap",2);
-        for(var i:int = 0; i < remoteComponent.actionLists.length; i++) {
-          var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
-          if(actionList.actions != null) {
-            for(var j:int = 0; j < actionList.actions.length; j++) {
-              toolBar.addChild(createAction(actionList.actions[j]));
-            }
-            if(i < remoteComponent.actionLists.length - 1) {
-              var separator:VRule = new VRule();
-              separator.height = 20;
-              separator.maxHeight = 20;
-              toolBar.addChild(separator);
-            }
-          }
-        }
-        var surroundingBox:VBox = new VBox();
-        component.percentWidth = 100.0;
-        component.percentHeight = 100.0;
-        surroundingBox.addChild(toolBar);
-        surroundingBox.addChild(component);
-        surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
-        surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;
-        component = surroundingBox;
-      }
+      component = decorateWithActions(remoteComponent, component);
       if(remoteComponent.borderType == "TITLED") {
         var decorator:Panel = new Panel();
         decorator.percentWidth = component.percentWidth;
@@ -273,6 +245,55 @@ package org.jspresso.framework.view.flex {
       return component;
     }
     
+    protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
+      var toolBar:ApplicationControlBar;
+      if(!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
+        toolBar = createToolBar(remoteComponent, component);
+      } else {
+        toolBar = createDefaultToolBar(remoteComponent, component);
+      }
+      if(toolBar) {
+        var surroundingBox:VBox = new VBox();
+        component.percentWidth = 100.0;
+        component.percentHeight = 100.0;
+        surroundingBox.addChild(toolBar);
+        surroundingBox.addChild(component);
+        surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
+        surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;
+        return surroundingBox;
+      }
+      return component;
+    }
+
+    protected function createDefaultToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
+      return null;
+    }
+    
+    protected function createToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
+      var toolBar:ApplicationControlBar = new ApplicationControlBar();
+      toolBar.percentWidth = 100.0;
+      toolBar.setStyle("fillAlphas",[0.5,0.5]);
+      toolBar.setStyle("fillColors",[0xBBBBBB,0x666666]);
+      toolBar.setStyle("horizontalGap",2);
+      if(remoteComponent.actionLists != null) {
+        for(var i:int = 0; i < remoteComponent.actionLists.length; i++) {
+          var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
+          if(actionList.actions != null) {
+            for(var j:int = 0; j < actionList.actions.length; j++) {
+              toolBar.addChild(createAction(actionList.actions[j]));
+            }
+            if(i < remoteComponent.actionLists.length - 1) {
+              var separator:VRule = new VRule();
+              separator.height = 20;
+              separator.maxHeight = 20;
+              toolBar.addChild(separator);
+            }
+          }
+        }
+      }
+      return toolBar;
+    }
+
     protected function getRemotePeerRegistry():IRemotePeerRegistry {
       return _remotePeerRegistry;
     }

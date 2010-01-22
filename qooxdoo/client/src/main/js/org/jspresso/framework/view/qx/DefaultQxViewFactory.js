@@ -119,24 +119,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       if(remoteComponent.getTooltip() != null) {
         component.setToolTip(new qx.ui.tooltip.ToolTip(remoteComponent.getTooltip()));
       }
-      if(!(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField) && remoteComponent.getActionLists() != null) {
-        var toolBar = new qx.ui.toolbar.ToolBar();
-        for(var i = 0; i < remoteComponent.getActionLists().length; i++) {
-          var actionList = remoteComponent.getActionLists()[i];
-          if(actionList.getActions() != null) {
-            var part = new qx.ui.toolbar.Part();
-            for(var j = 0; j < actionList.getActions().length; j++) {
-              part.add(this.createAction(actionList.getActions()[j]));
-            }
-            toolBar.add(part);
-          }
-        }
-        var surroundingBox = new qx.ui.container.Composite();
-        surroundingBox.setLayout(new qx.ui.layout.VBox(2));
-        surroundingBox.add(toolBar);
-        surroundingBox.add(component, {flex:1});
-        component = surroundingBox;
-      }
+      component = _decorateWithActions(remoteComponent, component);
       if(remoteComponent.getBorderType() && remoteComponent.getBorderType() != "NONE") {
         var decorator = new qx.ui.groupbox.GroupBox();
         decorator.setLayout(new qx.ui.layout.Grow());
@@ -189,6 +172,40 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       return component;
     },
 
+    _decorateWithActions:function(remoteComponent, component) {
+      if(!(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField) && remoteComponent.getActionLists() != null) {
+        var toolBar = _createToolBar(remoteComponent, component);
+        var surroundingBox = new qx.ui.container.Composite();
+        surroundingBox.setLayout(new qx.ui.layout.VBox(2));
+        surroundingBox.add(toolBar);
+        surroundingBox.add(component, {flex:1});
+        component = surroundingBox;
+      }
+    },
+    
+    _createToolBar:function(remoteComponent, component) {
+      var toolBar = new qx.ui.toolbar.ToolBar();
+      for(var i = 0; i < remoteComponent.getActionLists().length; i++) {
+        var actionList = remoteComponent.getActionLists()[i];
+        if(actionList.getActions() != null) {
+          var part = new qx.ui.toolbar.Part();
+          for(var j = 0; j < actionList.getActions().length; j++) {
+            part.add(this.createAction(actionList.getActions()[j]));
+          }
+          toolBar.add(part);
+        }
+      }
+      return toolBar;
+    },
+    
+    _getRemotePeerRegistry:function() {
+      return this.__remotePeerRegistry;
+    },
+    
+    _getActionHandler:function() {
+      return this.__actionHandler;
+    },
+    
     _createCustomComponent : function(remoteComponent) {
     	return null;
     },
