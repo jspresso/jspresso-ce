@@ -22,11 +22,10 @@ import java.util.Locale;
 
 import javax.swing.Action;
 
-import org.jspresso.framework.application.startup.AbstractStartup;
+import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.session.SessionManager;
-
 
 /**
  * Default wings startup class.
@@ -35,7 +34,7 @@ import org.wings.session.SessionManager;
  * @author Vincent Vandenschrick
  */
 public abstract class WingsStartup extends
-    AbstractStartup<SComponent, SIcon, Action> {
+    AbstractFrontendStartup<SComponent, SIcon, Action> {
 
   /**
    * Constructs a new <code>WingsStartup</code> instance.

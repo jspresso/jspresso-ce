@@ -24,8 +24,7 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import org.jspresso.framework.application.startup.AbstractStartup;
-
+import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 
 /**
  * Default swing startup class.
@@ -34,7 +33,7 @@ import org.jspresso.framework.application.startup.AbstractStartup;
  * @author Vincent Vandenschrick
  */
 public abstract class SwingStartup extends
-    AbstractStartup<JComponent, Icon, Action> {
+    AbstractFrontendStartup<JComponent, Icon, Action> {
 
   /**
    * Returns the client context default locale.

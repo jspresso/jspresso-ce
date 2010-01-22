@@ -20,44 +20,20 @@ package org.jspresso.framework.application.startup;
 
 import java.util.Locale;
 
-import org.jspresso.framework.application.backend.IBackendController;
-import org.jspresso.framework.application.frontend.IFrontendController;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
-
 
 /**
  * Abstract class for application startup.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
- * @param <E>
- *            the actual gui component type used.
- * @param <F>
- *            the actual icon type used.
- * @param <G>
- *            the actual action type used.
  */
-public abstract class AbstractStartup<E, F, G> implements IStartup {
+public abstract class AbstractStartup implements IStartup {
 
-  private BeanFactory                  applicationContext;
-  private IBackendController           backendController;
-  private IFrontendController<E, F, G> frontendController;
-
-  /**
-   * Both front and back controllers are retrieved from the spring context,
-   * associated and started.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void start() {
-    // start on brand new instances.
-    frontendController = null;
-    backendController = null;
-    getFrontendController().start(getBackendController(), getStartupLocale());
-  }
+  private BeanFactory applicationContext;
 
   /**
    * Gets the applicationContext.
@@ -80,34 +56,6 @@ public abstract class AbstractStartup<E, F, G> implements IStartup {
    * @return the used application context key.
    */
   protected abstract String getApplicationContextKey();
-
-  /**
-   * Gets the application backend controller.
-   * 
-   * @return the application backend controller.
-   */
-  protected IBackendController getBackendController() {
-    if (backendController == null) {
-      backendController = (IBackendController) getApplicationContext().getBean(
-          "applicationBackController");
-    }
-    return backendController;
-
-  }
-
-  /**
-   * Gets the application frontend controller.
-   * 
-   * @return the application frontend controller.
-   */
-  @SuppressWarnings("unchecked")
-  protected IFrontendController<E, F, G> getFrontendController() {
-    if (frontendController == null) {
-      frontendController = (IFrontendController<E, F, G>) getApplicationContext()
-          .getBean("applicationFrontController");
-    }
-    return frontendController;
-  }
 
   /**
    * Gets the startup locale.

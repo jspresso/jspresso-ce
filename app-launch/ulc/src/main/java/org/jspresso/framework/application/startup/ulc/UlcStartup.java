@@ -20,7 +20,7 @@ package org.jspresso.framework.application.startup.ulc;
 
 import java.util.Locale;
 
-import org.jspresso.framework.application.startup.AbstractStartup;
+import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IAction;
@@ -35,7 +35,8 @@ import com.ulcjava.base.application.util.ULCIcon;
  * @author Vincent Vandenschrick
  */
 public abstract class UlcStartup extends
-    AbstractStartup<ULCComponent, ULCIcon, IAction> implements IApplication {
+    AbstractFrontendStartup<ULCComponent, ULCIcon, IAction> implements
+    IApplication {
 
   /**
    * {@inheritDoc}
@@ -47,8 +48,7 @@ public abstract class UlcStartup extends
   /**
    * {@inheritDoc}
    */
-  public void handleMessage(@SuppressWarnings("unused")
-  String message) {
+  public void handleMessage(@SuppressWarnings("unused") String message) {
     // NO-OP
   }
 

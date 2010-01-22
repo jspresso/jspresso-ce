@@ -28,7 +28,7 @@ import org.jspresso.framework.application.frontend.command.remote.IRemoteCommand
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
-import org.jspresso.framework.application.startup.AbstractStartup;
+import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.util.http.HttpRequestHolder;
@@ -40,7 +40,8 @@ import org.jspresso.framework.util.http.HttpRequestHolder;
  * @author Vincent Vandenschrick
  */
 public abstract class RemoteStartup extends
-    AbstractStartup<RComponent, RIcon, Action> implements IRemoteCommandHandler {
+    AbstractFrontendStartup<RComponent, RIcon, Action> implements
+    IRemoteCommandHandler {
 
   private Locale  startupLocale;
   private boolean started;
