@@ -109,7 +109,9 @@ public class ControllerAwareEntityProxyInterceptor extends
           n++;
         }
       }
-      return indices;
+      int[] shrinkedArray = new int[n];
+      System.arraycopy(indices, 0, shrinkedArray, 0, n);
+      return shrinkedArray;
     }
     return super.findDirty(entity, id, currentState, previousState,
         propertyNames, types);

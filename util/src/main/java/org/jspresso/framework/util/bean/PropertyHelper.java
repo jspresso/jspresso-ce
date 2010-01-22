@@ -62,7 +62,11 @@ public final class PropertyHelper {
       PropertyDescriptor[] descriptors = PropertyUtils
           .getPropertyDescriptors(beanClass);
       for (PropertyDescriptor descriptor : descriptors) {
-        if (property.equals(descriptor.getName())) {
+        if (property.substring(0, 1).equalsIgnoreCase(
+            descriptor.getName().substring(0, 1))
+            && property.substring(1).equals(descriptor.getName().substring(1))) {
+          // 1st letter might be uppercase in descriptor and lowercase in
+          // property when property name is like 'tEst'.
           descriptorToReturn = descriptor;
         }
       }

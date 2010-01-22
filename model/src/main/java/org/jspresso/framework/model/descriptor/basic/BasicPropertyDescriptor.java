@@ -72,12 +72,14 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private boolean                        computed;
 
   private String                         sqlName;
+  private boolean                        versionControl;
 
   /**
    * Constructs a new <code>BasicPropertyDescriptor</code> instance.
    */
   public BasicPropertyDescriptor() {
     computed = false;
+    versionControl = true;
   }
 
   /**
@@ -618,5 +620,32 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public String getSqlName() {
     return sqlName;
+  }
+
+  /**
+   * Gets the versionControl.
+   * 
+   * @return the versionControl.
+   */
+  public boolean isVersionControl() {
+    return versionControl;
+  }
+
+  /**
+   * This property allows to fine tune wether this component property
+   * participates in optimistic versioning. It mainly allows to declare some
+   * properties that should be ignored regarding optimistic versioning thus
+   * lowering the risk of version conflicts between concurrent users. Of course,
+   * this feature has to be used with care since it may generate phantom updates
+   * to the data store.
+   * <p>
+   * Default value is <code>true</code> so that any change in the described
+   * property increases the owning component version.
+   * 
+   * @param versionControl
+   *          the versionControl to set.
+   */
+  public void setVersionControl(boolean versionControl) {
+    this.versionControl = versionControl;
   }
 }

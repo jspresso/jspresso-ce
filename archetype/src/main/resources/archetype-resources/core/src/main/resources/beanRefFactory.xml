@@ -38,6 +38,23 @@
   </bean>
 
   <bean
+    id="${parentArtifactId}-backend-context"
+    class="org.springframework.context.support.ClassPathXmlApplicationContext"
+    lazy-init="true">
+    <constructor-arg>
+      <list>
+        <value>org/jspresso/framework/application/commons.xml</value>
+        <value>org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
+        <value>${packageInPathFormat}/model/dsl-model.xml</value>
+        <value>${packageInPathFormat}/model/model.xml</value>
+        <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
+        <value>${packageInPathFormat}/backend/backend.xml</value>
+        <value>${packageInPathFormat}/config.xml</value>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean
     id="${parentArtifactId}-swing-context"
     class="org.springframework.context.support.ClassPathXmlApplicationContext"
     lazy-init="true">

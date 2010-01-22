@@ -10,4 +10,21 @@
     The domain model
   -->
   <!-- Describe your application domain model here. -->
+
+  <!--
+    The application I18N resources. 
+  -->
+  <bean
+    id="applicationMessageSource"
+    parent="abstractApplicationMessageSource">
+    <property
+      name="parentMessageSource"
+      ref="commonsMessageSource" />
+    <property
+      name="basenames">
+      <list>
+        <value>${package}.i18n.Messages</value>
+      </list>
+    </property>
+  </bean>
 </beans>

@@ -114,6 +114,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *
   <#if !propertyDescriptor.computed>
    * @hibernate.property
+    <#if !propertyDescriptor.versionControl>
+   *           optimistic-lock = "false"
+    </#if>
     <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDatePropertyDescriptor")>
       <#if propertyDescriptor.type = "DATE">
    *           type = "date"
@@ -288,80 +291,83 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    *
-   <#if !propertyDescriptor.computed>
+  <#if !propertyDescriptor.computed>
    * @hibernate.${hibernateCollectionType}
-     <#if manyToMany && inverse>
+    <#if !propertyDescriptor.versionControl>
+   *           optimistic-lock = "false"
+    </#if>
+      <#if manyToMany && inverse>
    *           cascade = "none"
-       <#else>
-         <#if propertyDescriptor.composition>
+        <#else>
+          <#if propertyDescriptor.composition>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate,delete"
-         <#else>
+          <#else>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
-         </#if>
-       </#if>
-     <#if manyToMany>
-       <#if inverse>
+          </#if>
+        </#if>
+      <#if manyToMany>
+        <#if inverse>
    *           table = "${eltSqlName}_${revSqlName}"
-       <#else>
+        <#else>
    *           table = "${compSqlName}_${propSqlName}"
-       </#if>
-     </#if>
-     <#if inverse>
+        </#if>
+      </#if>
+      <#if inverse>
    *           inverse = "true"
-     </#if>
+      </#if>
 <#--
   The following replaces the previous block wich makes hibernate fail... Ordering is now handled in the entity itself.
   But hibernate must be provided with an ordering attribute so that a Linked HashSet is used instead of a set.
 -->
-     <#if (!manyToMany && !(hibernateCollectionType="list"))>
+      <#if (!manyToMany && !(hibernateCollectionType="list"))>
    *           order-by="ID"
-     </#if>
-     <#if manyToMany>
+      </#if>
+      <#if manyToMany>
    * @hibernate.key
-       <#if componentName=elementName>
-         <#if inverse>
+        <#if componentName=elementName>
+          <#if inverse>
    *           column = "${compSqlName}_ID2"
-         <#else>
+          <#else>
    *           column = "${compSqlName}_ID1"
-         </#if>
-       <#else>
+          </#if>
+        <#else>
    *           column = "${compSqlName}_ID"
-       </#if>
+        </#if>
    * @hibernate.many-to-many
    *           class = "${elementType}"
-       <#if componentName=elementName>
-         <#if inverse>
+        <#if componentName=elementName>
+          <#if inverse>
    *           column = "${eltSqlName}_ID1"
-         <#else>
+          <#else>
    *           column = "${eltSqlName}_ID2"
-         </#if>
-       <#else>
+          </#if>
+        <#else>
    *           column = "${eltSqlName}_ID"
-       </#if>
-     <#else>
+        </#if>
+      <#else>
    * @hibernate.key
    *           column = "${revSqlName}_ID"
-       <#if bidirectional>
-         <#if reverseMandatory>
+      <#if bidirectional>
+        <#if reverseMandatory>
    *           not-null = "true"
-         </#if>
-       </#if>
-   <#if !isEntity>
+        </#if>
+      </#if>
+      <#if !isEntity>
    *           foreign-key = "none"
-   </#if>
-   <#if isElementEntity>
+      </#if>
+      <#if isElementEntity>
    * @hibernate.one-to-many
    *           class = "${elementType}"
-   <#else>
+      <#else>
    * @hibernate.composite-element
    *           class = "${elementType}"
-   </#if>
-   </#if>
-     <#if hibernateCollectionType="list">
+      </#if>
+    </#if>
+    <#if hibernateCollectionType="list">
    * @hibernate.list-index
    *           column = "${propSqlName}_SEQ"
-     </#if>
-   </#if>
+    </#if>
+  </#if>
    * @return the ${propertyName}.
    */
   <#if generateAnnotations>
@@ -421,8 +427,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.one-to-one
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
    *           property-ref = "${propertyDescriptor.reverseRelationEnd.name}"
+        <#if !propertyDescriptor.versionControl>
+   *           optimistic-lock = "false"
+        </#if>
       <#else>
    * @hibernate.many-to-one
+        <#if !propertyDescriptor.versionControl>
+   *           optimistic-lock = "false"
+        </#if>
         <#if oneToOne>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
    *           unique = "true"
@@ -451,9 +463,15 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#elseif !isPurelyAbstract>
    * @hibernate.component
    *           prefix = "${propSqlName}_"
+      <#if !propertyDescriptor.versionControl>
+   *           optimistic-lock = "false"
+      </#if>
     <#else>
    * @hibernate.any
    *           id-type = "string"
+      <#if !propertyDescriptor.versionControl>
+   *           optimistic-lock = "false"
+      </#if>
    * @hibernate.any-column
    *           name = "${propSqlName}_NAME"
    * @hibernate.any-column
