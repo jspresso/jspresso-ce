@@ -10,6 +10,7 @@
   <name>App - launch</name>
   <modules>
     <module>core</module>
+    <module>batch</module>
     <module>swing</module>
     <module>wings</module>
     <module>remote</module>

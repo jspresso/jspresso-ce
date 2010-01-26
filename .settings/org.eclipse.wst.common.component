@@ -151,5 +151,9 @@
         <wb-resource deploy-path="/" source-path="/fusioncharts/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/fusioncharts/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/fusioncharts/src/test/java"/>
+        <wb-resource deploy-path="/" source-path="/app-launch/batch/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/app-launch/batch/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/app-launch/batch/src/test/java"/>
+        <wb-resource deploy-path="/" source-path="/app-launch/batch/src/test/resources"/>
     </wb-module>
 </project-modules>

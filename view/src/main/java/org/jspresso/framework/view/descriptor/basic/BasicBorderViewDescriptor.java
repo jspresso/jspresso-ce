@@ -66,17 +66,17 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
     List<IViewDescriptor> children = new ArrayList<IViewDescriptor>();
-    if (getEastViewDescriptor() != null) {
-      children.add(getEastViewDescriptor());
-    }
     if (getNorthViewDescriptor() != null) {
       children.add(getNorthViewDescriptor());
+    }
+    if (getWestViewDescriptor() != null) {
+      children.add(getWestViewDescriptor());
     }
     if (getCenterViewDescriptor() != null) {
       children.add(getCenterViewDescriptor());
     }
-    if (getWestViewDescriptor() != null) {
-      children.add(getWestViewDescriptor());
+    if (getEastViewDescriptor() != null) {
+      children.add(getEastViewDescriptor());
     }
     if (getSouthViewDescriptor() != null) {
       children.add(getSouthViewDescriptor());
