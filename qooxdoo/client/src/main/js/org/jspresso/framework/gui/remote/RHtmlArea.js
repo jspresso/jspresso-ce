@@ -18,6 +18,14 @@ qx.Class.define("org.jspresso.framework.gui.remote.RHtmlArea",
 
   construct : function() {
     this.base(arguments);
-  }
+  },
 
+  properties :
+  {
+    readOnly :
+    {
+      check : "Boolean"
+    }
+  }
+  
 });

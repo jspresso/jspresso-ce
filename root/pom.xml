@@ -311,6 +311,11 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-app-launch-batch</artifactId>
+        <version>${jspresso.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-app-launch-swing</artifactId>
         <version>${jspresso.version}</version>
       </dependency>

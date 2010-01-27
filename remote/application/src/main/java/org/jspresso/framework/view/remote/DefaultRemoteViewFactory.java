@@ -1246,6 +1246,7 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RHtmlArea viewComponent = createRHtmlArea(connector);
+    viewComponent.setReadOnly(propertyViewDescriptor.isReadOnly());
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     return view;

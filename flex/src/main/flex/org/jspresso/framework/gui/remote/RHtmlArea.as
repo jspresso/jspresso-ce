@@ -18,9 +18,18 @@ package org.jspresso.framework.gui.remote {
 		
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RHtmlArea")]
     public class RHtmlArea extends RTextComponent {
+      
+        private var _readOnly:Boolean;
 
         public function RHtmlArea() {
           //default constructor.
+        }
+
+        public function set readOnly(value:Boolean):void {
+            _readOnly = value;
+        }
+        public function get readOnly():Boolean {
+            return _readOnly;
         }
     }
 }

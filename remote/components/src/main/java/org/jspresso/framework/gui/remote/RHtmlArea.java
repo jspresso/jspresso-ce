@@ -28,6 +28,8 @@ public class RHtmlArea extends RTextComponent {
 
   private static final long serialVersionUID = 5482012658466216934L;
 
+  private boolean           readOnly;
+
   /**
    * Constructs a new <code>RHtmlArea</code> instance. Only used for GWT
    * serialization support.
@@ -44,5 +46,24 @@ public class RHtmlArea extends RTextComponent {
    */
   public RHtmlArea(String guid) {
     super(guid);
+  }
+
+  /**
+   * Gets the readOnly.
+   * 
+   * @return the readOnly.
+   */
+  public boolean isReadOnly() {
+    return readOnly;
+  }
+
+  /**
+   * Sets the readOnly.
+   * 
+   * @param readOnly
+   *          the readOnly to set.
+   */
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = readOnly;
   }
 }

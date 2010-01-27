@@ -43,6 +43,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Image;
   import mx.controls.Label;
   import mx.controls.List;
+  import mx.controls.RichTextEditor;
   import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
@@ -901,7 +902,10 @@ package org.jspresso.framework.view.flex {
         }
       }
       for(i = 0; i < nbRows; i++) {
-        evenGridContainer.addChild(new GridRow());
+        var gr:GridRow = new GridRow();
+        gr.percentHeight = 100.0;
+        gr.percentWidth = 100.0;
+        evenGridContainer.addChild(gr);
       }
       for(i = 0; i < remoteEvenGridContainer.cells.length; i++) {
 
@@ -1534,23 +1538,50 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createHtmlArea(remoteHtmlArea:RHtmlArea):UIComponent {
-      var htmlArea:Text = new Text();
-      bindHtmlArea(htmlArea, remoteHtmlArea.state);
-      return htmlArea;
+      var htmlComponent:UIComponent;
+      if(remoteHtmlArea.readOnly) {
+        htmlComponent = createHtmlText(remoteHtmlArea);
+      } else {
+        htmlComponent = createHtmlEditor(remoteHtmlArea);
+      }
+      return htmlComponent;
     }
 
-    protected function bindHtmlArea(htmlArea:Text, remoteState:RemoteValueState):void {
+    protected function createHtmlEditor(remoteHtmlArea:RHtmlArea):UIComponent {
+      var htmlEditor:RichTextEditor = new RichTextEditor();
+      bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
+      return htmlEditor;
+    }
+    
+    protected function bindHtmlEditor(htmlEditor:RichTextEditor, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(htmlEditor, "htmlText", remoteState, "value", true);
+      BindingUtils.bindProperty(htmlEditor, "enabled", remoteState, "writable");
+      var updateModel:Function = function (event:Event):void {
+        remoteState.value = (event.currentTarget as RichTextEditor).htmlText;
+      };
+      htmlEditor.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
+      htmlEditor.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
+      //htmlEditor.addEventListener(Event.CHANGE,updateModel);
+    }
+
+    protected function createHtmlText(remoteHtmlArea:RHtmlArea):UIComponent {
+      var htmlText:Text = new Text();
+      bindHtmlText(htmlText, remoteHtmlArea.state);
+      return htmlText;
+    }
+
+    protected function bindHtmlText(htmlText:Text, remoteState:RemoteValueState):void {
       var updateText:Function = function (value:Object):void {
         if(value == null) {
-          htmlArea.text = null;
-          htmlArea.htmlText = null;
+          htmlText.text = null;
+          htmlText.htmlText = null;
         } else {
           if(HtmlUtil.isHtml(value.toString())) {
-            htmlArea.text = null;
-            htmlArea.htmlText = HtmlUtil.preprocessHtml(value.toString());
+            htmlText.text = null;
+            htmlText.htmlText = HtmlUtil.preprocessHtml(value.toString());
           } else {
-            htmlArea.htmlText = null;
-            htmlArea.text = value.toString();
+            htmlText.htmlText = null;
+            htmlText.text = value.toString();
           }
         }
       };
