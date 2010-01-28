@@ -90,11 +90,16 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
         }
         BeanComparator comparator = new BeanComparator(orderingAccessors,
             orderingDirections);
+        List<Object> collectionOrigin = new ArrayList<Object>(propertyValue);
         List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
         Collections.sort(collectionCopy, comparator);
-        Collection<Object> collectionProperty = propertyValue;
-        collectionProperty.clear();
-        collectionProperty.addAll(collectionCopy);
+        if (!collectionCopy.equals(collectionOrigin)) {
+          Collection<Object> collectionProperty = propertyValue;
+          collectionProperty.clear();
+          collectionProperty.addAll(collectionCopy);
+          // component.firePropertyChange(propertyName, collectionOrigin,
+          // collectionProperty);
+        }
       }
     }
   }

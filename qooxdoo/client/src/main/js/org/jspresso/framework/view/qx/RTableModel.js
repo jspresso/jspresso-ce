@@ -17,10 +17,11 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
   extend : qx.ui.table.model.Abstract,
   //extend : qx.ui.table.model.Simple,
   
-  construct : function(remoteCompositeValueState, sortingAction, commandHandler)
+  construct : function(remoteCompositeValueState, sortable, sortingAction, commandHandler)
   {
     this.base(arguments);
     this.__state = remoteCompositeValueState;
+    this.__sortable = sortable;
     this.__sortingAction = sortingAction;
     this.__commandHandler = commandHandler;
     this.__setupCollectionListeners();
@@ -114,11 +115,14 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
     // overridden
     isColumnSortable : function(columnIndex) {
       // sorting is handled on server side.
-      return true;
+      return this.__sortable;
     },
     
     // overridden
     sortByColumn : function(columnIndex, ascending) {
+    	if(!this.__sortable) {
+    		return;
+    	}
       this.__sortColumnIndex = columnIndex;
       this.__sortAscending = ascending;
       if(this.__sortingAction) {

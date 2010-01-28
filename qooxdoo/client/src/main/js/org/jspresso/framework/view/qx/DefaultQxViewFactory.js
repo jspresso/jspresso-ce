@@ -364,6 +364,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       /**@type org.jspresso.framework.state.remote.RemoteCompositeValueState*/
       var state = remoteTable.getState();
       var tableModel = new org.jspresso.framework.view.qx.RTableModel(state,
+                                                                      remoteTable.isSortable(),
                                                                       remoteTable.getSortingAction(),
                                                                       this.__commandHandler);
       tableModel.setEditable(state.isWritable());
@@ -373,6 +374,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         columnNames[i] = remoteTable.getColumns()[i].getLabel();
       }
       tableModel.setColumns(columnNames, columnIds);
+      
+      /**@type qx.ui.table.Table*/
       var table;
       if(remoteTable.isHorizontallyScrollable()) {
       	table = new qx.ui.table.Table(tableModel);

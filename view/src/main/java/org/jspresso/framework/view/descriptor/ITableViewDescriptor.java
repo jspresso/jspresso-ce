@@ -56,4 +56,11 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
    *         horizontal space or install a scrollbar.
    */
   boolean isHorizontallyScrollable();
+
+  /**
+   * Gets wether this table rows should be sorted manually.
+   * 
+   * @return wether this table rows should be sorted manually.
+   */
+  boolean isSortable();
 }

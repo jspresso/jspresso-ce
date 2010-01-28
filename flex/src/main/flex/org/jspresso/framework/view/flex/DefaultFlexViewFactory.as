@@ -1350,7 +1350,7 @@ package org.jspresso.framework.view.flex {
         editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
         column.editorDataField = "state";
         
-        if(!remoteTable.sortingAction) {
+        if(remoteTable.sortable && !remoteTable.sortingAction) {
           if(rColumn is RCheckBox) {
             column.sortCompareFunction = _remoteValueSorter.compareBooleans;
           } else if(rColumn is RNumericComponent) {
@@ -1363,11 +1363,15 @@ package org.jspresso.framework.view.flex {
         }
         columns.push(column);
       }
-      
-      table.columns = columns;
-      if(remoteTable.sortingAction) {
-        table.customSort = true;
+      if(remoteTable.sortable) {
+        if(remoteTable.sortingAction) {
+          table.customSort = true;
+        }
+      } else {
+        table.sortableColumns = false;
       }
+
+      table.columns = columns;
       if(remoteTable.selectionMode == "SINGLE_SELECTION") {
         table.allowMultipleSelection = false;
       } else {
@@ -1420,27 +1424,29 @@ package org.jspresso.framework.view.flex {
     
     protected function bindTable(table:DoubleClickDataGrid, remoteTable:RTable):void {
       var state:RemoteCompositeValueState = remoteTable.state as RemoteCompositeValueState;
-      if(remoteTable.sortingAction) {
-        table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
-          event.preventDefault();
-          var column:DataGridColumn = table.columns[event.columnIndex];
-          column.sortDescending = !column.sortDescending;
-          table.displaySort(event.columnIndex, column.sortDescending);
-          if(state.children.length > 1) {
-            var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
-            var orderingProperties:Object = new Object();
-            orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
-            var sortCommand:RemoteSortCommand = new RemoteSortCommand();
-            sortCommand.orderingProperties = orderingProperties;
-            sortCommand.viewStateGuid = remoteTable.state.guid;
-            sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
-            _commandHandler.registerCommand(sortCommand);
-          }
-        });
-      } else {
-        table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
-          _remoteValueSorter.sortColumnIndex = (event.itemRenderer as DgHeaderItemRenderer).index;
-        });
+      if(remoteTable.sortable) {
+        if(remoteTable.sortingAction) {
+          table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
+            event.preventDefault();
+            var column:DataGridColumn = table.columns[event.columnIndex];
+            column.sortDescending = !column.sortDescending;
+            table.displaySort(event.columnIndex, column.sortDescending);
+            if(state.children.length > 1) {
+              var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
+              var orderingProperties:Object = new Object();
+              orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
+              var sortCommand:RemoteSortCommand = new RemoteSortCommand();
+              sortCommand.orderingProperties = orderingProperties;
+              sortCommand.viewStateGuid = remoteTable.state.guid;
+              sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
+              _commandHandler.registerCommand(sortCommand);
+            }
+          });
+        } else {
+          table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
+            _remoteValueSorter.sortColumnIndex = (event.itemRenderer as DgHeaderItemRenderer).index;
+          });
+        }
       }
       BindingUtils.bindSetter(function(selectedItems:Array):void {
         if(selectedItems != null && selectedItems.length > 0) {

@@ -644,6 +644,8 @@ public abstract class AbstractComponentInvocationHandler implements
         inserted = collectionProperty.add(value);
       }
       if (inserted) {
+        inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
+            propertyName);
         firePropertyChange(propertyName, oldCollectionSnapshot,
             collectionProperty);
         if (propertyProcessorsEnabled) {

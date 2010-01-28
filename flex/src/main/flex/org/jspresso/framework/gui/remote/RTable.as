@@ -23,6 +23,7 @@ package org.jspresso.framework.gui.remote {
         private var _columnIds:Array;
         private var _sortingAction:RAction;
         private var _horizontallyScrollable:Boolean;
+        private var _sortable:Boolean;
 
         public function RTable() {
           //default constructor.
@@ -54,6 +55,13 @@ package org.jspresso.framework.gui.remote {
         }
         public function get horizontallyScrollable():Boolean {
             return _horizontallyScrollable;
+        }
+
+        public function set sortable(value:Boolean):void {
+            _sortable = value;
+        }
+        public function get sortable():Boolean {
+            return _sortable;
         }
     }
 }

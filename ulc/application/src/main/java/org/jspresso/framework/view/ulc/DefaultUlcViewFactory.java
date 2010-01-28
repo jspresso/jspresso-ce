@@ -1241,14 +1241,9 @@ public class DefaultUlcViewFactory extends
         }
         // already handled in createColumnConnector
         // if (columnViewDescriptor.getReadabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-        // columnConnector.addReadabilityGate(gate.clone());
-        // }
-        // }
+        // ...
         // if (columnViewDescriptor.getWritabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-        // columnConnector.addWritabilityGate(gate.clone());
-        // }
+        // ...
         // }
         // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
       } else {
@@ -1264,28 +1259,36 @@ public class DefaultUlcViewFactory extends
         connector, columnConnectorKeys, columnClasses, columnFormatters);
     tableModel.setExceptionHandler(actionHandler);
 
-    AbstractTableSorter sorterDecorator;
-    if (viewDescriptor.getSortingAction() != null) {
-      sorterDecorator = new ActionTableSorter(tableModel, viewComponent
-          .getTableHeader(), actionHandler, viewDescriptor.getSortingAction());
+    if (viewDescriptor.isSortable()) {
+      AbstractTableSorter sorterDecorator;
+      if (viewDescriptor.getSortingAction() != null) {
+        sorterDecorator = new ActionTableSorter(tableModel, viewComponent
+            .getTableHeader(), actionHandler, viewDescriptor.getSortingAction());
+      } else {
+        sorterDecorator = new TableSorter(tableModel, viewComponent
+            .getTableHeader());
+        ((TableSorter) sorterDecorator).setColumnComparator(String.class,
+            String.CASE_INSENSITIVE_ORDER);
+      }
+      org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
+          viewComponent.getTableHeader().getFont().getSize(), viewComponent
+              .getTableHeader().getFont().getSize());
+      sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
+      sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
+      ClientContext.setModelUpdateMode(sorterDecorator,
+          IUlcEventConstants.ASYNCHRONOUS_MODE);
+      viewComponent.setModel(sorterDecorator);
+      listSelectionModelBinder.bindSelectionModel(connector, viewComponent
+          .getSelectionModel(), sorterDecorator);
     } else {
-      sorterDecorator = new TableSorter(tableModel, viewComponent
-          .getTableHeader());
-      ((TableSorter) sorterDecorator).setColumnComparator(String.class,
-          String.CASE_INSENSITIVE_ORDER);
+      ClientContext.setModelUpdateMode(tableModel,
+          IUlcEventConstants.ASYNCHRONOUS_MODE);
+      viewComponent.setModel(tableModel);
+      listSelectionModelBinder.bindSelectionModel(connector, viewComponent
+          .getSelectionModel(), null);
     }
-    org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
-        viewComponent.getTableHeader().getFont().getSize(), viewComponent
-            .getTableHeader().getFont().getSize());
-    sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
-    sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
-    ClientContext.setModelUpdateMode(sorterDecorator,
-        IUlcEventConstants.ASYNCHRONOUS_MODE);
-    viewComponent.setModel(sorterDecorator);
-    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel(), sorterDecorator);
 
+    viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());
     int columnIndex = 0;

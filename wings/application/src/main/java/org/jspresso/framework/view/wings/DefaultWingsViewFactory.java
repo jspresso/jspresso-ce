@@ -1463,26 +1463,30 @@ public class DefaultWingsViewFactory extends
         connector, columnConnectorKeys, columnClasses);
     tableModel.setExceptionHandler(actionHandler);
 
-    AbstractTableSorter sorterDecorator;
-    if (viewDescriptor.getSortingAction() != null) {
-      sorterDecorator = new ActionTableSorter(tableModel, viewComponent,
-          actionHandler, viewDescriptor.getSortingAction());
+    if (viewDescriptor.isSortable()) {
+      AbstractTableSorter sorterDecorator;
+      if (viewDescriptor.getSortingAction() != null) {
+        sorterDecorator = new ActionTableSorter(tableModel, viewComponent,
+            actionHandler, viewDescriptor.getSortingAction());
+      } else {
+        sorterDecorator = new TableSorter(tableModel, viewComponent);
+        ((TableSorter) sorterDecorator).setColumnComparator(String.class,
+            String.CASE_INSENSITIVE_ORDER);
+      }
+
+      org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
+          12, 12);
+      sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
+      sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
+      viewComponent.setModel(sorterDecorator);
+      listSelectionModelBinder.bindSelectionModel(connector, viewComponent
+          .getSelectionModel(), sorterDecorator);
     } else {
-      sorterDecorator = new TableSorter(tableModel, viewComponent);
-      ((TableSorter) sorterDecorator).setColumnComparator(String.class,
-          String.CASE_INSENSITIVE_ORDER);
+      viewComponent.setModel(tableModel);
+      listSelectionModelBinder.bindSelectionModel(connector, viewComponent
+          .getSelectionModel(), null);
     }
-
-    org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
-        12, 12);
-    sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
-    sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
-    viewComponent.setModel(sorterDecorator);
-
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-
-    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel(), sorterDecorator);
 
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());

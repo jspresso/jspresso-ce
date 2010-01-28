@@ -32,6 +32,7 @@ public class RTable extends RCollectionComponent {
   private String[]          columnIds;
   private RAction           sortingAction;
   private boolean           horizontallyScrollable;
+  private boolean           sortable;
 
   /**
    * Constructs a new <code>RTable</code> instance. Only used for GWT
@@ -125,5 +126,24 @@ public class RTable extends RCollectionComponent {
    */
   public void setHorizontallyScrollable(boolean horizontallyScrollable) {
     this.horizontallyScrollable = horizontallyScrollable;
+  }
+
+  /**
+   * Gets the sortable.
+   * 
+   * @return the sortable.
+   */
+  public boolean isSortable() {
+    return sortable;
+  }
+
+  /**
+   * Sets the sortable.
+   * 
+   * @param sortable
+   *          the sortable to set.
+   */
+  public void setSortable(boolean sortable) {
+    this.sortable = sortable;
   }
 }

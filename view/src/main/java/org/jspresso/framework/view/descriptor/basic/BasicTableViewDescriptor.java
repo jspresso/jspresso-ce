@@ -62,12 +62,14 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   private List<String>                  renderedProperties;
   private IDisplayableAction            sortingAction;
   private boolean                       horizontallyScrollable;
+  private boolean                       sortable;
 
   /**
    * Constructs a new <code>BasicTableViewDescriptor</code> instance.
    */
   public BasicTableViewDescriptor() {
     horizontallyScrollable = true;
+    sortable = true;
   }
 
   /**
@@ -201,7 +203,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * This property allows to define the table horizontal scroll behaviour.
+   * This property allows to define the table horizontal scrolling behaviour.
    * Whenever it is set to false, the corresponding table UI component will
    * adapt its columns to fit the available horizontal space.
    * <p>
@@ -213,6 +215,30 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    */
   public void setHorizontallyScrollable(boolean horizontallyScrollable) {
     this.horizontallyScrollable = horizontallyScrollable;
+  }
+
+  /**
+   * Gets the sortable.
+   * 
+   * @return the sortable.
+   */
+  public boolean isSortable() {
+    return sortable;
+  }
+
+  /**
+   * This property allows to define the table horizontal sorting behaviour.
+   * Whenever it is set to false, the corresponding table UI component will not
+   * allow manual sorting of its rows.
+   * <p>
+   * Default value is <code>true</code>, i.e. table allows for its rows to be
+   * sorted.
+   * 
+   * @param sortable
+   *          the sortable to set.
+   */
+  public void setSortable(boolean sortable) {
+    this.sortable = sortable;
   }
 
 }

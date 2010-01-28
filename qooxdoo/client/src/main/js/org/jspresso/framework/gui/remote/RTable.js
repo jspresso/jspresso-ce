@@ -38,6 +38,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTable",
     horizontallyScrollable :
     {
       check : "Boolean"
+    },
+    sortable :
+    {
+      check : "Boolean"
     }
   }
 });

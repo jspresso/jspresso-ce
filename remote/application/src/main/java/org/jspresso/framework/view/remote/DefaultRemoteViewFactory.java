@@ -1129,6 +1129,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
+    viewComponent.setSortable(viewDescriptor.isSortable());
     if (viewDescriptor.getSortingAction() != null) {
       viewComponent.setSortingAction(getActionFactory().createAction(
           viewDescriptor.getSortingAction(), actionHandler, view, locale));
