@@ -207,7 +207,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
     });
   }
 
-  private void protectedFireConnectorValueChange() {
+  protected void protectedFireConnectorValueChange() {
     super.fireConnectorValueChange();
   }
 }

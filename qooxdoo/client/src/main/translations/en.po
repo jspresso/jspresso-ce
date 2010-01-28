@@ -2,27 +2,95 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"Report-Msgid-Bugs-To: you@your.org\n"
+"Report-Msgid-Bugs-To: support@jspresso.org\n"
 "POT-Creation-Date: 2009-05-15 19:33+0100\n"
 "PO-Revision-Date: 2009-05-15 19:33+0100\n"
-"Last-Translator: you <you@your.org>\n"
-"Language-Team: Team <yourteam@your.org>\n"
+"Last-Translator: vvandens <support@jspresso.org>\n"
+"Language-Team: vvandens <support@jspresso.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:65
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1288
+msgid "change_font_family"
+msgstr "Change font family"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1331
+msgid "change_font_size"
+msgstr "Change font size"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1363
+msgid "format_bold"
+msgstr "Bold"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1364
+msgid "format_italic"
+msgstr "Italic"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1365
+msgid "format_underline"
+msgstr "Underline"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1366
+msgid "format_strikethrough"
+msgstr "Strikethrough"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1367
+msgid "remove_format"
+msgstr "Remove Format"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1371
+msgid "align_left"
+msgstr "Align Left"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1372
+msgid "align_center"
+msgstr "Align Center"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1373
+msgid "align_right"
+msgstr "Align Right"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1374
+msgid "align_justify"
+msgstr "Align Justify"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1386
+msgid "indent_more"
+msgstr "Indent"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1387
+msgid "indent_less"
+msgstr "Outdent"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1397
+msgid "insert_ordered_list"
+msgstr "Insert Ordered List"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1398
+msgid "insert_unordered_list"
+msgstr "Insert Unordered List"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1402
+msgid "undo"
+msgstr "Undo"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1403
+msgid "redo"
+msgstr "Redo"
+
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1689
 msgid "Ok"
 msgstr "Ok"
 
-#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:73
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1699
 msgid "Cancel"
 msgstr "Cancel"
 
-#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:81
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1709
 msgid "Yes"
 msgstr "Yes"
 
-#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:89
+#: org/jspresso/framework/view/qx/DefaultQxViewFactory.js:1719
 msgid "No"
 msgstr "No"

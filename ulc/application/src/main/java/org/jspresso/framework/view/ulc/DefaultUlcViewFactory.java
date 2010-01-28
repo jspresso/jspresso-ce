@@ -1440,19 +1440,22 @@ public class DefaultUlcViewFactory extends
   @Override
   protected IView<ULCComponent> createHtmlPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
-    ULCScrollPane scrollPane = createULCScrollPane();
-    ULCLabel viewComponent = createULCLabel(true);
-    viewComponent.setVerticalAlignment(IDefaults.TOP);
-    viewComponent.setHorizontalAlignment(IDefaults.LEADING);
-    IValueConnector connector = new ULCLabelConnector(propertyDescriptor
-        .getName(), viewComponent);
-    ((ULCLabelConnector) connector).setMultiLine(true);
-    scrollPane.setViewPortView(viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    return constructView(scrollPane, propertyViewDescriptor, connector);
+      IActionHandler actionHandler, Locale locale) {
+    if (propertyViewDescriptor.isReadOnly()) {
+      IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      ULCScrollPane scrollPane = createULCScrollPane();
+      ULCLabel viewComponent = createULCLabel(true);
+      viewComponent.setVerticalAlignment(IDefaults.TOP);
+      viewComponent.setHorizontalAlignment(IDefaults.LEADING);
+      IValueConnector connector = new ULCLabelConnector(propertyDescriptor
+          .getName(), viewComponent);
+      ((ULCLabelConnector) connector).setMultiLine(true);
+      scrollPane.setViewPortView(viewComponent);
+      connector.setExceptionHandler(actionHandler);
+      return constructView(scrollPane, propertyViewDescriptor, connector);
+    }
+    return createTextPropertyView(propertyViewDescriptor, actionHandler, locale);
   }
 
   /**

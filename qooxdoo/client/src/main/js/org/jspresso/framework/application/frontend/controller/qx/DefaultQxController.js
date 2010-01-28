@@ -399,13 +399,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }, this);
 
 
-      var okButton = this.__viewFactory.createOkButton(this.__application);
+      var okButton = this.__viewFactory.createOkButton();
       okButton.addListener("execute", function(event) {
         uploadForm.send();
       }, this);
       buttonBox.add(okButton);
 
-      var cancelButton = this.__viewFactory.createCancelButton(this.__application);
+      var cancelButton = this.__viewFactory.createCancelButton();
       cancelButton.addListener("execute", function(event) {
         uploadDialog.close();
         uploadDialog.destroy();
@@ -676,7 +676,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       messageDialog.add(buttonBox);
 
       if(messageCommand instanceof org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand) {
-        var yesButton = this.__viewFactory.createYesButton(this.__application);
+        var yesButton = this.__viewFactory.createYesButton();
         yesButton.addListener("execute", function(event) {
           messageDialog.close();
           messageDialog.destroy();
@@ -684,7 +684,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         }, this);
         buttonBox.add(yesButton);
 
-        var noButton = this.__viewFactory.createNoButton(this.__application);
+        var noButton = this.__viewFactory.createNoButton();
         noButton.addListener("execute", function(event) {
           messageDialog.close();
           messageDialog.destroy();
@@ -693,7 +693,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         buttonBox.add(noButton);
 
         if(messageCommand instanceof org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand) {
-          var cancelButton = this.__viewFactory.createCancelButton(this.__application);
+          var cancelButton = this.__viewFactory.createCancelButton();
           cancelButton.addListener("execute", function(event) {
             messageDialog.close();
             messageDialog.destroy();
@@ -702,7 +702,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           buttonBox.add(cancelButton);
         }
       } else if (messageCommand instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand) {
-        var okButton = this.__viewFactory.createOkButton(this.__application);
+        var okButton = this.__viewFactory.createOkButton();
         okButton.addListener("execute", function(event) {
           messageDialog.close();
           messageDialog.destroy();
@@ -710,7 +710,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         }, this);
         buttonBox.add(okButton);
 
-        var cancelButton = this.__viewFactory.createCancelButton(this.__application);
+        var cancelButton = this.__viewFactory.createCancelButton();
         cancelButton.addListener("execute", function(event) {
           messageDialog.close();
           messageDialog.destroy();
@@ -718,7 +718,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         }, this);
         buttonBox.add(cancelButton);
       } else {
-        var okButton = this.__viewFactory.createOkButton(this.__application);
+        var okButton = this.__viewFactory.createOkButton();
         okButton.addListener("execute", function(event) {
           this.__application.getRoot().remove(messageDialog);
           messageDialog.close();

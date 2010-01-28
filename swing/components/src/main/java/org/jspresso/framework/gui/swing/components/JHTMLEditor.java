@@ -1,0 +1,292 @@
+/*
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
+ *
+ *  This file is part of the Jspresso framework.
+ *
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.jspresso.framework.gui.swing.components;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.JToolBar;
+import javax.swing.text.html.HTMLEditorKit;
+
+/**
+ * A rich HTML text editor based on Swing JEditorPane.
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class JHTMLEditor extends JPanel {
+
+  private static final long serialVersionUID = 2630154668370585110L;
+
+  private JTextPane         editorPane;
+  private JToolBar          toolBar;
+  private ResourceBundle    bundle;
+
+  /**
+   * Constructs a new <code>JHTMLEditor</code> instance.
+   * 
+   * @param locale
+   *          the locale to create the JHTMLEditor for.
+   */
+  public JHTMLEditor(Locale locale) {
+    setFocusable(true);
+    bundle = ResourceBundle.getBundle(getClass().getName(), locale);
+    setLayout(new BorderLayout());
+    editorPane = new JTextPane();
+    editorPane.setEditorKit(new HTMLEditorKit());
+
+    Action[] actions = editorPane.getActions();
+    Map<String, Action> editorActions = new LinkedHashMap<String, Action>();
+    for (int i = 0; i < actions.length; i++) {
+      editorActions.put((String) actions[i].getValue(Action.NAME), actions[i]);
+    }
+
+    toolBar = createToolBar(editorActions);
+
+    JScrollPane scrollPane = new JScrollPane();
+    scrollPane.setViewportView(editorPane);
+    add(scrollPane, BorderLayout.CENTER);
+    add(toolBar, BorderLayout.SOUTH);
+  }
+
+  private JToolBar createToolBar(Map<String, Action> editorActions) {
+    JToolBar tb = new JToolBar();
+
+    tb.add(createActionButton(editorActions, "font-bold", "bold.gif"));
+    tb.add(createActionButton(editorActions, "font-italic", "italic.gif"));
+    tb
+        .add(createActionButton(editorActions, "font-underline",
+            "underline.gif"));
+
+    tb.addSeparator();
+
+    tb.add(createActionButton(editorActions, "left-justify", "left.gif"));
+    tb.add(createActionButton(editorActions, "center-justify", "center.gif"));
+    tb.add(createActionButton(editorActions, "right-justify", "right.gif"));
+
+    tb.addSeparator();
+
+    tb.add(createActionButton(editorActions, "InsertUnorderedList",
+        "unsortedList.png"));
+    tb.add(createActionButton(editorActions, "InsertUnorderedListItem",
+        "unsortedList.png"));
+    tb.add(createActionButton(editorActions, "InsertOrderedList",
+        "enumList.png"));
+    tb.add(createActionButton(editorActions, "InsertOrderedListItem",
+        "enumList.png"));
+
+    tb.addSeparator();
+
+    List<Action> fontActions = new ArrayList<Action>();
+    fontActions.add(createDisplayableAction(editorActions,
+        "font-family-SansSerif"));
+    fontActions.add(createDisplayableAction(editorActions,
+        "font-family-Monospaced"));
+    fontActions
+        .add(createDisplayableAction(editorActions, "font-family-Serif"));
+    JComboBox fontCb = new JComboBox(fontActions.toArray(new Action[0]));
+    tb.add(fontCb);
+    fontCb.addActionListener(new ActionListener() {
+
+      public void actionPerformed(ActionEvent e) {
+        ((Action) ((JComboBox) e.getSource()).getSelectedItem())
+            .actionPerformed(e);
+      }
+    });
+
+    List<Action> fontSizeActions = new ArrayList<Action>();
+    fontSizeActions.add(createDisplayableAction(editorActions, "font-size-10"));
+    fontSizeActions.add(createDisplayableAction(editorActions, "font-size-12"));
+    fontSizeActions.add(createDisplayableAction(editorActions, "font-size-18"));
+    fontSizeActions.add(createDisplayableAction(editorActions, "font-size-24"));
+    fontSizeActions.add(createDisplayableAction(editorActions, "font-size-48"));
+    JComboBox fontSizeCb = new JComboBox(fontSizeActions.toArray(new Action[0]));
+    fontSizeCb.addActionListener(new ActionListener() {
+
+      public void actionPerformed(ActionEvent e) {
+        ((Action) ((JComboBox) e.getSource()).getSelectedItem())
+            .actionPerformed(e);
+      }
+    });
+    tb.add(fontSizeCb);
+
+    return tb;
+  }
+
+  private Action createDisplayableAction(Map<String, Action> editorActions,
+      String actionName) {
+    return createDisplayableAction(editorActions, actionName, null);
+  }
+
+  private Action createDisplayableAction(Map<String, Action> editorActions,
+      String actionName, String iconImage) {
+    Action actionAdapter = new DisplayableActionAdapter(editorActions
+        .get(actionName));
+    if (iconImage != null) {
+      actionAdapter.putValue(Action.SMALL_ICON, new ImageIcon(getClass()
+          .getResource(iconImage)));
+    }
+    actionAdapter.putValue(Action.SHORT_DESCRIPTION, bundle
+        .getString(actionName));
+    return actionAdapter;
+  }
+
+  private static class DisplayableActionAdapter implements Action {
+
+    private Action delegate;
+
+    /**
+     * Constructs a new <code>DisplayableAction</code> instance.
+     * 
+     * @param delegate
+     *          the action delegate.
+     */
+    public DisplayableActionAdapter(Action delegate) {
+      this.delegate = delegate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+      delegate.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getValue(String key) {
+      return delegate.getValue(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isEnabled() {
+      return delegate.isEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void putValue(String key, Object value) {
+      delegate.putValue(key, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+      delegate.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setEnabled(boolean b) {
+      delegate.setEnabled(b);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void actionPerformed(ActionEvent e) {
+      delegate.actionPerformed(e);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+      return (String) getValue(Action.SHORT_DESCRIPTION);
+    }
+  }
+
+  private JButton createActionButton(Map<String, Action> editorActions,
+      String actionName, String iconImage) {
+    Action action = createDisplayableAction(editorActions, actionName,
+        iconImage);
+    JButton b = new JButton();
+    b.setAction(action);
+    b.setText(null);
+    b.setPreferredSize(new Dimension(22, 22));
+    return b;
+  }
+
+  /**
+   * @return the HTML text.
+   * @see javax.swing.JEditorPane#getText()
+   */
+  public String getText() {
+    return editorPane.getText();
+  }
+
+  /**
+   * @param htmlText
+   *          the HTML text.
+   * @see javax.swing.JEditorPane#setText(java.lang.String)
+   */
+  public void setText(String htmlText) {
+    editorPane.setText(htmlText);
+  }
+
+  /**
+   * @return true if the component is editable.
+   * @see javax.swing.text.JTextComponent#isEditable()
+   */
+  public boolean isEditable() {
+    return editorPane.isEditable();
+  }
+
+  /**
+   * @param b
+   *          editable.
+   * @see javax.swing.text.JTextComponent#setEditable(boolean)
+   */
+  public void setEditable(boolean b) {
+    editorPane.setEditable(b);
+    toolBar.setEnabled(b);
+  }
+
+  /**
+   * Gets the editorPane.
+   * 
+   * @return the editorPane.
+   */
+  public JTextPane getEditorPane() {
+    return editorPane;
+  }
+}

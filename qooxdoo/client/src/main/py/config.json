@@ -34,7 +34,7 @@
   "let" :
   {
     "TARGET"       : "../../../target",
-    "APPLICATION"  : "org.jspresso.framework.qooxdoo",
+    "APPLICATION"  : "org.jspresso.framework",
     "APPLICATION_CLASS_NAME" : "org.jspresso.framework.application.frontend.Application",
     "QOOXDOO_PATH" : "../../../target/qooxdoo-sdk",
     "API_EXCLUDE"  : ["qx.legacy.*","qx.test.*"],

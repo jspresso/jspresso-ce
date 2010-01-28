@@ -1645,21 +1645,25 @@ public class DefaultWingsViewFactory extends
   @Override
   protected IView<SComponent> createHtmlPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
-    IValueConnector connector;
-    SLabel viewComponent = createSLabel(true);
-    viewComponent.setVerticalAlignment(SConstants.TOP);
-    viewComponent.setHorizontalAlignment(SConstants.LEFT);
-    connector = new SLabelConnector(propertyDescriptor.getName(), viewComponent);
-    ((SLabelConnector) connector).setForceHtml(true);
-    SScrollPane scrollPane = createSScrollPane();
-    scrollPane.setViewportView(viewComponent);
-    connector.setExceptionHandler(actionHandler);
-    IView<SComponent> view = constructView(scrollPane, propertyViewDescriptor,
-        connector);
-    return view;
+      IActionHandler actionHandler, Locale locale) {
+    if (propertyViewDescriptor.isReadOnly()) {
+      IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      IValueConnector connector;
+      SLabel viewComponent = createSLabel(true);
+      viewComponent.setVerticalAlignment(SConstants.TOP);
+      viewComponent.setHorizontalAlignment(SConstants.LEFT);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          viewComponent);
+      ((SLabelConnector) connector).setForceHtml(true);
+      SScrollPane scrollPane = createSScrollPane();
+      scrollPane.setViewportView(viewComponent);
+      connector.setExceptionHandler(actionHandler);
+      IView<SComponent> view = constructView(scrollPane,
+          propertyViewDescriptor, connector);
+      return view;
+    }
+    return createTextPropertyView(propertyViewDescriptor, actionHandler, locale);
   }
 
   /**

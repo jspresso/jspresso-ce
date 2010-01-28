@@ -104,6 +104,7 @@ import org.jspresso.framework.binding.swing.JComboBoxConnector;
 import org.jspresso.framework.binding.swing.JDateFieldConnector;
 import org.jspresso.framework.binding.swing.JEditTextAreaConnector;
 import org.jspresso.framework.binding.swing.JFormattedFieldConnector;
+import org.jspresso.framework.binding.swing.JHTMLEditorConnector;
 import org.jspresso.framework.binding.swing.JImageConnector;
 import org.jspresso.framework.binding.swing.JLabelConnector;
 import org.jspresso.framework.binding.swing.JPasswordFieldConnector;
@@ -115,6 +116,7 @@ import org.jspresso.framework.binding.swing.JToggleButtonConnector;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JColorPicker;
 import org.jspresso.framework.gui.swing.components.JDateField;
+import org.jspresso.framework.gui.swing.components.JHTMLEditor;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -986,6 +988,18 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
+   * Creates an HTML editor.
+   * 
+   * @param locale
+   *          the locale to create the HTML editor for.
+   * @return the created HTML editor.
+   */
+  protected JHTMLEditor createJHTMLEditor(Locale locale) {
+    JHTMLEditor htmlEditor = new JHTMLEditor(locale);
+    return htmlEditor;
+  }
+
+  /**
    * Creates a password field.
    * 
    * @return the created password field.
@@ -1676,19 +1690,31 @@ public class DefaultSwingViewFactory extends
   @Override
   protected IView<JComponent> createHtmlPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, Locale locale) {
     IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
+    JComponent viewComponent;
     IValueConnector connector;
-    JScrollPane scrollPane = createJScrollPane();
-    JLabel viewComponent = createJLabel(true);
-    viewComponent.setVerticalAlignment(SwingConstants.TOP);
-    viewComponent.setHorizontalAlignment(SwingConstants.LEADING);
-    connector = new JLabelConnector(propertyDescriptor.getName(), viewComponent);
-    ((JLabelConnector) connector).setForceHtml(true);
-    scrollPane.setViewportView(viewComponent);
+    if (propertyViewDescriptor.isReadOnly()) {
+      JScrollPane scrollPane = createJScrollPane();
+      JLabel htmlLabel = createJLabel(true);
+      htmlLabel.setVerticalAlignment(SwingConstants.TOP);
+      htmlLabel.setHorizontalAlignment(SwingConstants.LEADING);
+      JLabelConnector labelConnector = new JLabelConnector(propertyDescriptor
+          .getName(), htmlLabel);
+      labelConnector.setForceHtml(true);
+      scrollPane.setViewportView(htmlLabel);
+      viewComponent = scrollPane;
+      connector = labelConnector;
+    } else {
+      JHTMLEditor htmlEditor = createJHTMLEditor(locale);
+      JHTMLEditorConnector htmlEditorConnector = new JHTMLEditorConnector(
+          propertyDescriptor.getName(), htmlEditor);
+      viewComponent = htmlEditor;
+      connector = htmlEditorConnector;
+    }
     connector.setExceptionHandler(actionHandler);
-    return constructView(scrollPane, propertyViewDescriptor, connector);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
   }
 
   /**
