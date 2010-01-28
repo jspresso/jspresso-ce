@@ -97,8 +97,6 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
           Collection<Object> collectionProperty = propertyValue;
           collectionProperty.clear();
           collectionProperty.addAll(collectionCopy);
-          // component.firePropertyChange(propertyName, collectionOrigin,
-          // collectionProperty);
         }
       }
     }
