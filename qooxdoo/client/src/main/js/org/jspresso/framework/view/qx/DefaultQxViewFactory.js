@@ -1184,7 +1184,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         col += elementWidth;
         if(   rComponent instanceof org.jspresso.framework.gui.remote.RTable
            || rComponent instanceof org.jspresso.framework.gui.remote.RTextArea
-           || rComponent instanceof org.jspresso.framework.gui.remote.RList) {
+           || rComponent instanceof org.jspresso.framework.gui.remote.RList
+           || rComponent instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
           formLayout.setRowFlex(compRow, 1);
         }
         formLayout.setColumnFlex(compCol, 1);

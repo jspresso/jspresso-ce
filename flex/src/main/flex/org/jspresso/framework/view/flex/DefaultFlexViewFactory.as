@@ -1002,7 +1002,8 @@ package org.jspresso.framework.view.flex {
 
         if(   rComponent is RTable
            || rComponent is RTextArea
-           || rComponent is RList) {
+           || rComponent is RList
+           || rComponent is RHtmlArea) {
           componentsRow.percentHeight = 100.0;         
         }   
 
