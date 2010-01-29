@@ -47,8 +47,10 @@ public class SaveAction extends AbstractHibernateAction {
       public Object doInTransaction(
           @SuppressWarnings("unused") TransactionStatus status) {
         List<IEntity> entitiesToSave = getEntitiesToSave(context);
-        for (IEntity entityToSave : entitiesToSave) {
-          getController(context).registerForUpdate(entityToSave);
+        if (entitiesToSave != null) {
+          for (IEntity entityToSave : entitiesToSave) {
+            getController(context).registerForUpdate(entityToSave);
+          }
         }
         getController(context).performPendingOperations();
         return null;
