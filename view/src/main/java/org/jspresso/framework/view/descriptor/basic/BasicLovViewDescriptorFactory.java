@@ -52,10 +52,11 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
       IReferencePropertyDescriptor entityRefDescriptor,
       IDisplayableAction okAction) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
-    lovViewDescriptor
-        .setNorthViewDescriptor(queryViewDescriptorFactory
-            .createQueryViewDescriptor(entityRefDescriptor
-                .getComponentDescriptor()));
+    IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory
+        .createQueryViewDescriptor(entityRefDescriptor.getComponentDescriptor());
+    lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
+    lovViewDescriptor.setModelDescriptor(filterViewDescriptor
+        .getModelDescriptor());
     lovViewDescriptor.setCenterViewDescriptor(createResultViewDescriptor(
         entityRefDescriptor.getComponentDescriptor(), okAction));
     if (pagingStatusViewDescriptor != null) {
