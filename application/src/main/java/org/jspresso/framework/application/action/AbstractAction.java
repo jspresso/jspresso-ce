@@ -56,6 +56,35 @@ import org.jspresso.framework.util.lang.StringUtils;
  * helps keeping layer dependencies clear. Of course, this dual chaining
  * mechanism is completely recursive thus allowing to compose small (generic)
  * actions into larger composite ones and promoting reusability.
+ * <p>
+ * Actions execute on a context (an arbitrary map of objects keyed by
+ * "well-known" character strings) that is initialized by the controller when
+ * the action is triggered. The context passes along the action chain and is
+ * thus the perfect medium for actions to loosely communicate between each
+ * other. There are some framework standard elements placed in the action
+ * context that depend on the application state, but nothing prevents action
+ * developers to synchronize on arbitrary custom context elements that would be
+ * produced/consumed to/from the context.
+ * <p>
+ * Regarding framework-standard context elements, an action developer can
+ * (should) leverage the utility methods declared in the
+ * <code>AbstractActionContextAware</code> super class instead of relying on the
+ * element keys in the map. Take a look to the
+ * <code>AbstractActionContextAware</code> documentation to get your hands on
+ * action context exploration.
+ * <p>
+ * Last but not least, you should be aware that actions should be coded with
+ * thread-safety in mind. Actual action instances are generally singleton-like
+ * (unless explicitely stated wichis extremely rare) and thus, might be used by
+ * multiple sessions (threads) at once. You should <b>never</b> use action class
+ * attributes for argument passing along the action chain, but use the
+ * thread-owned action execution context instead. The action context is a data
+ * structure that is local to an action chain execution thus not shared across
+ * threads (users). It is the perfect place for exchanging data between actions.
+ * Of course, different instances of the same action can be used and configured
+ * differently through their class attributes (refer to it as static
+ * configuration), but this is all for using in different places in the
+ * application.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

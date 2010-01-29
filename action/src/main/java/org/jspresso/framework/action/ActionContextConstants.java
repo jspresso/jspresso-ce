@@ -19,7 +19,7 @@
 package org.jspresso.framework.action;
 
 /**
- * well-known action context keys.
+ * Well-known action context keys.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -27,60 +27,57 @@ package org.jspresso.framework.action;
 public final class ActionContextConstants {
 
   /**
-   * An arbitrary action command.
+   * ACTION_COMMAND context key.
    */
   public static final String ACTION_COMMAND   = "ACTION_COMMAND";
 
   /**
-   * An arbitrary action param.
+   * ACTION_PARAM context key.
    */
   public static final String ACTION_PARAM     = "ACTION_PARAM";
 
   /**
-   * The widget at the origin of the action.
+   * ACTION_WIDGET context key.
    */
   public static final String ACTION_WIDGET    = "ACTION_WIDGET";
 
   /**
-   * the frontend controller.
+   * FRONT_CONTROLLER context key.
    */
   public static final String FRONT_CONTROLLER = "FRONT_CONTROLLER";
 
   /**
-   * the backend controller.
+   * BACK_CONTROLLER context key.
    */
   public static final String BACK_CONTROLLER  = "BACK_CONTROLLER";
 
   /**
-   * The the descriptor of the model domain object the action was triggered on.
+   * MODEL_DESCRIPTOR context key.
    */
   public static final String MODEL_DESCRIPTOR = "MODEL_DESCRIPTOR";
 
   /**
-   * The module the action was triggered on.
+   * MODULE context key.
    */
   public static final String MODULE           = "MODULE";
 
   /**
-   * The selected indices of the view connector in case of a collection
-   * connector. It may serve as storage key for a return value whenever an
-   * action must be chained with selection update on the view.
+   * SELECTED_INDICES context key.
    */
   public static final String SELECTED_INDICES = "SELECTED_INDICES";
 
   /**
-   * The source widget.
+   * SOURCE_COMPONENT context key.
    */
   public static final String SOURCE_COMPONENT = "SOURCE_COMPONENT";
 
   /**
-   * The view connector the action was triggered on.
+   * VIEW_CONNECTOR context key.
    */
   public static final String VIEW_CONNECTOR   = "VIEW_CONNECTOR";
 
   /**
-   * If the view connector implements IItemSelectable, the selected model is put
-   * under this key.
+   * SELECTED_MODEL context key.
    */
   public static final String SELECTED_MODEL   = "SELECTED_MODEL";
 

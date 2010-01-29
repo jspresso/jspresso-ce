@@ -71,8 +71,8 @@
 
                 -rootClassName_7 org.jspresso.framework.model.descriptor.basic.BasicScalarPropertyDescriptor
 
-                -rootClassName_8 org.jspresso.framework.application.action.AbstractAction
-                -maxDepth_8 0
+                -rootClassName_8 org.jspresso.framework.application.action.AbstractActionContextAware
+                -maxDepth_8 1
 
                 -rootClassName_9 org.jspresso.framework.application.frontend.action.FrontendAction
                 -excludedSubtrees_9 org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction:org.jspresso.framework.application.frontend.action.swing.AbstractWingsAction:org.jspresso.framework.application.frontend.action.swing.AbstractUlcAction

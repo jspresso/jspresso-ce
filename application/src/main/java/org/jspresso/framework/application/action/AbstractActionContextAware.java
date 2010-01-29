@@ -37,7 +37,9 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * Abstract class for all objects that need to manipulate an action context. It
- * contains helper methods.
+ * contains helper methods that takes the developer away from the standard
+ * context internal knowledge. Action developers can (should) use these helper
+ * methods (for reference manual readers, give an eye to the linked javadoc).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -45,13 +47,10 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public abstract class AbstractActionContextAware {
 
   /**
-   * This is a utility method which is able to retrieve the model descriptor
-   * this action has been executed on from its context. It uses well-known
-   * context keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code> to get the the
-   * view model descriptor the action executes on.
-   * </ul>
+   * Retrieves the model descriptor from the context using the
+   * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> standard key. The
+   * model descriptor is registered in the action context based on the model of
+   * the view to which the action is attached.
    * 
    * @param context
    *          the action context.
@@ -63,7 +62,13 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the backend controller out of the action context.
+   * Gets the backend controller out of the action context using either :
+   * <ul>
+   * <li>the context frontend controller if it exists</li>
+   * <li>the <code>ActionContextConstants.BACK_CONTROLLER</code> standard key if
+   * the action was triggered without going through a frontend controller (a
+   * batch action for instance).</li>
+   * </ul>
    * 
    * @param context
    *          the action context.
@@ -79,7 +84,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the frontend controller out of the action context.
+   * Gets the frontend controller out of the action context using the
+   * <code>ActionContextConstants.FRONT_CONTROLLER</code> standard key. If the
+   * action was triggered without going through a frontend controller (a batch
+   * action for instance), this method might return null.
    * 
    * @param context
    *          the action context.
@@ -92,7 +100,8 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets a translation provider out of the action context.
+   * Gets he application translation provider out of the action context. This
+   * method simply delegates to the context backend controller.
    * 
    * @param context
    *          the action context.
@@ -104,8 +113,9 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Retrieves the locale the action has to use to execute from its context
-   * using a well-known key.
+   * Retrieves the locale the action has to use to execute. This method
+   * delegates to the context backend controller that in turn will delegate to
+   * the session.
    * 
    * @param context
    *          the action context.
@@ -116,7 +126,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the action parameter out of the context.
+   * Gets the action parameter out of the context. The action parameter is a
+   * general purpose context entry that can be used to pass an arbitrary
+   * parameter along the action chain. It is stored using the
+   * <code>ActionContextConstants.ACTION_PARAM</code> standard key.
    * 
    * @param context
    *          the action context.
@@ -127,7 +140,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Sets the action parameter to the context.
+   * Sets the action parameter out of the context. The action parameter is a
+   * general purpose context entry that can be used to pass an arbitrary
+   * parameter along the action chain. It is stored using the
+   * <code>ActionContextConstants.ACTION_PARAM</code> standard key.
    * 
    * @param actionParam
    *          the action parameter to set to the context.
@@ -140,7 +156,10 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the (string) action command out of the context.
+   * Gets the (string) action command out of the context. The action command is
+   * an arbitrary character string that can be set by the UI component
+   * triggering the action. It is stored using the
+   * <code>ActionContextConstants.ACTION_COMMAND</code> standard key.
    * 
    * @param context
    *          the action context.
@@ -152,20 +171,16 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * This is a utility method which is able to retrieve the model connector this
-   * action has been executed on from its context. It uses well-known context
-   * keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the model
-   * value connector of the connector hierarchy.
-   * </ul>
-   * <p>
-   * The returned connector mainly serves for retrieving the domain object the
-   * action has to be triggered on.
+   * Gets the model connector this action was triggered on. The model connector
+   * is the versatile binding structure that adapts the actual model to the
+   * Jspresso binding architecture. The actual model is stored in the model
+   * connector value. Unless developing very generic actions, this method will
+   * rarely be used in favor of the more concrete <code>getXXXModel</code>
+   * context accessors.
    * 
    * @param context
    *          the action context.
-   * @return the value connector this model action was triggered on.
+   * @return the model connector this action was triggered on.
    */
   protected IValueConnector getModelConnector(Map<String, Object> context) {
     return ((IValueConnector) context
@@ -173,8 +188,12 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the selected indices out of the action context. the value is stored
-   * with the key <code>ActionContextConstants.SELECTED_INDICES</code>.
+   * Gets the selected indices out of the action context. The value is stored
+   * with the key <code>ActionContextConstants.SELECTED_INDICES</code>. The
+   * context is initialized with the array of selected indices of the UI
+   * component if it is a collection component (table, list, ...). More
+   * acurately, the selected indices are taken from the view connector that
+   * adapts the UI component to the Jspresso binding architecture.
    * 
    * @param context
    *          the action context.
@@ -185,8 +204,8 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Sets the selected indices to the action context. the value is stored with
-   * the key <code>ActionContextConstants.SELECTED_INDICES</code>.
+   * Sets the selected indices to the action context. The value is stored using
+   * the <code>ActionContextConstants.SELECTED_INDICES</code> key.
    * 
    * @param selectedIndices
    *          the selected indices to store in the action context.
@@ -199,8 +218,8 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * This is a utility method which is able to retrieve the module this action
-   * has been executed on from its context.
+   * Gets the module this action has been executed on. The value is stored using
+   * the <code>ActionContextConstants.MODULE</code> key.
    * 
    * @param context
    *          the action context.
@@ -211,7 +230,7 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Retrieves the model being the model connector value.
+   * Gets the model this action was triggered on.
    * 
    * @param context
    *          the action context.
@@ -226,7 +245,7 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Retrieves the model being the parent model connector value.
+   * Gets the parent model this action was triggered on.
    * 
    * @param context
    *          the action context.
@@ -245,7 +264,7 @@ public abstract class AbstractActionContextAware {
   /**
    * This is a versatile helper method that retrieves the selected model either
    * from the 1st selected child connector if the action was trigerred on a
-   * collection connector or the connector itself.
+   * collection connector or from the connector itself.
    * 
    * @param context
    *          the action context.
@@ -265,7 +284,7 @@ public abstract class AbstractActionContextAware {
   /**
    * This is a versatile helper method that retrieves the selected models model
    * either from the selected child connectors if the action was trigerred on a
-   * collection connector or the connector itself.
+   * collection connector or from the connector itself.
    * 
    * @param context
    *          the action context.
@@ -293,7 +312,7 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Retrieves the selectedModels indices out of the model connector if it's a
+   * Retrieves the selected models indices out of the model connector if it's a
    * collection connector and set them as selected indices in the action
    * context.
    * 
