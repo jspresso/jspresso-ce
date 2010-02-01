@@ -20,8 +20,10 @@ package org.jspresso.framework.view.swing;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.security.auth.Subject;
 import javax.swing.AbstractButton;
@@ -56,8 +58,10 @@ import org.jspresso.framework.view.IView;
 public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
     TableCellEditor, TreeCellEditor {
 
-  private static final long serialVersionUID = 8182961519931949735L;
-  private IView<JComponent> editorView;
+  private static final long                serialVersionUID = 8182961519931949735L;
+  private static final Map<String, Object> NULLMAP          = Collections
+                                                                .unmodifiableMap(new HashMap<String, Object>());
+  private IView<JComponent>                editorView;
 
   /**
    * Constructs a new <code>SwingViewCellEditorAdapter</code> instance.
@@ -111,7 +115,11 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    * {@inheritDoc}
    */
   public Object getCellEditorValue() {
-    return editorView.getConnector().getConnectorValue();
+    Object cellEditorValue = editorView.getConnector().getConnectorValue();
+    if (cellEditorValue == NULLMAP) {
+      return null;
+    }
+    return cellEditorValue;
   }
 
   /**
@@ -132,7 +140,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
     if (connectorValue == null
         && editorConnector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
       // To prevent the editor to be read-only.
-      connectorValue = new HashMap<String, Object>();
+      connectorValue = NULLMAP;
     }
     editorConnector.setConnectorValue(connectorValue);
     Component editorComponent = editorView.getPeer();

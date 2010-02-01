@@ -19,8 +19,10 @@
 package org.jspresso.framework.view.wings;
 
 import java.awt.event.MouseEvent;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.security.auth.Subject;
 import javax.swing.event.CellEditorListener;
@@ -53,12 +55,14 @@ import org.wings.table.STableCellEditor;
 public class WingsViewCellEditorAdapter implements STableCellEditor,
     IValueChangeListener {
 
-  private static final long serialVersionUID = 8182961519931949735L;
-  private ChangeEvent       changeEvent      = null;
-  private IView<SComponent> editorView;
-  private EventListenerList listenerList;
+  private static final long                serialVersionUID = 8182961519931949735L;
+  private static final Map<String, Object> NULLMAP          = Collections
+                                                                .unmodifiableMap(new HashMap<String, Object>());
+  private ChangeEvent                      changeEvent      = null;
+  private IView<SComponent>                editorView;
+  private EventListenerList                listenerList;
 
-  private IValueConnector   modelConnector;
+  private IValueConnector                  modelConnector;
 
   /**
    * Constructs a new <code>WingsViewCellEditorAdapter</code> instance.
@@ -123,7 +127,11 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    * {@inheritDoc}
    */
   public Object getCellEditorValue() {
-    return editorView.getConnector().getConnectorValue();
+    Object cellEditorValue = editorView.getConnector().getConnectorValue();
+    if (cellEditorValue == NULLMAP) {
+      return null;
+    }
+    return cellEditorValue;
   }
 
   /**
@@ -144,7 +152,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
     if (connectorValue == null
         && modelConnector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
       // To prevent the editor to be read-only.
-      connectorValue = new HashMap<String, Object>();
+      connectorValue = NULLMAP;
     }
     modelConnector.setConnectorValue(connectorValue);
     modelConnector.addValueChangeListener(this);
