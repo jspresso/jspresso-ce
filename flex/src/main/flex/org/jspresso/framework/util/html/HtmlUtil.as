@@ -17,7 +17,7 @@ package org.jspresso.framework.util.html {
     
     public static function isHtml(content:String):Boolean {
       if(content) {
-        return content.toLowerCase().indexOf("<html>") > -1;
+        return content.toLowerCase().indexOf("<html>") > -1 || content.toLowerCase().indexOf("<textformat") > -1;
       }
       return false;
     }

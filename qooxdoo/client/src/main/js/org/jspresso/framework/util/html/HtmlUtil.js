@@ -22,8 +22,8 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil",
      * @return {Boolean}
      */
     isHtml : function(content) {
-      if(content) {
-        return content.toLowerCase().indexOf("<html>") > -1;
+      if(typeof content === "string" || content instanceof String) {
+        return content.toLowerCase().indexOf("<html>") > -1 || content.toLowerCase().indexOf("<p") > -1;
       }
       return false;
     },

@@ -36,6 +36,14 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer",
         return this.__format.format(cellInfo.value);
       }
       return this.base(arguments, cellInfo);
+    },
+    
+    _getContentHtml : function(cellInfo) {
+    	if(org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
+    		return cellInfo.value;
+    	}
+      return this.base(arguments, cellInfo);
     }
+
   }
 });

@@ -24,6 +24,7 @@ package org.jspresso.framework.view.flex {
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
+  import org.jspresso.framework.util.html.HtmlUtil;
 
   public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColumnIndexProvider {
     
@@ -121,6 +122,14 @@ package org.jspresso.framework.view.flex {
   	    super.listData.label = listData.label;
   	  }
       invalidateProperties();
+  	}
+  	
+  	protected override function commitProperties():void {
+  	  super.commitProperties();
+  	  var cellText:String = label.text;
+  	  if(HtmlUtil.isHtml(cellText)) {
+  	    label.htmlText = cellText;
+  	  }
   	}
   }
 }
