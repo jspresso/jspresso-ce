@@ -207,6 +207,11 @@ public abstract class JComponentConnector<E extends JComponent> extends
     });
   }
 
+  /**
+   * This method can be overriden by subclasses in lieu of
+   * <code>fireConnectorValueChange</code> that has been made final to take care
+   * of the swing EDT.
+   */
   protected void protectedFireConnectorValueChange() {
     super.fireConnectorValueChange();
   }

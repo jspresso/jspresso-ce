@@ -635,8 +635,11 @@ public class DefaultSwingController extends
     int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
     controllerFrame.setSize(12 * screenRes, 8 * screenRes);
     // controllerFrame.setSize(1100, 800);
-    controllerFrame.setIconImage(((ImageIcon) getIconFactory().getIcon(
-        getIconImageURL(), getIconFactory().getSmallIconSize())).getImage());
+    ImageIcon frameIcon = ((ImageIcon) getIconFactory().getIcon(
+        getIconImageURL(), getIconFactory().getSmallIconSize()));
+    if (frameIcon != null) {
+      controllerFrame.setIconImage(frameIcon.getImage());
+    }
     SwingUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
     controllerFrame.setVisible(true);
