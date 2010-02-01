@@ -278,6 +278,10 @@ public class JHTMLEditor extends JPanel {
    */
   public void setEditable(boolean b) {
     editorPane.setEditable(b);
+    int scCount = toolBar.getComponentCount();
+    for (int i = 0; i < scCount; i++) {
+      toolBar.getComponentAtIndex(i).setEnabled(b);
+    }
     toolBar.setEnabled(b);
   }
 

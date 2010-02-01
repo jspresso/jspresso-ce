@@ -63,6 +63,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
@@ -112,6 +113,7 @@ import org.jspresso.framework.binding.swing.JPercentFieldConnector;
 import org.jspresso.framework.binding.swing.JReferenceFieldConnector;
 import org.jspresso.framework.binding.swing.JTextAreaConnector;
 import org.jspresso.framework.binding.swing.JTextFieldConnector;
+import org.jspresso.framework.binding.swing.JTextPaneConnector;
 import org.jspresso.framework.binding.swing.JToggleButtonConnector;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JColorPicker;
@@ -1105,6 +1107,17 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
+   * Creates a text pane.
+   * 
+   * @return the created text pane.
+   */
+  protected JTextPane createJTextPane() {
+    JTextPane textPane = new JTextPane();
+    textPane.setDragEnabled(true);
+    return textPane;
+  }
+
+  /**
    * Creates a text area.
    * 
    * @return the created text area.
@@ -1703,15 +1716,12 @@ public class DefaultSwingViewFactory extends
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
       JScrollPane scrollPane = createJScrollPane();
-      JLabel htmlLabel = createJLabel(true);
-      htmlLabel.setVerticalAlignment(SwingConstants.TOP);
-      htmlLabel.setHorizontalAlignment(SwingConstants.LEADING);
-      JLabelConnector labelConnector = new JLabelConnector(propertyDescriptor
-          .getName(), htmlLabel);
-      labelConnector.setForceHtml(true);
-      scrollPane.setViewportView(htmlLabel);
+      JTextPane htmlPane = createJTextPane();
+      JTextPaneConnector textPaneConnector = new JTextPaneConnector(
+          propertyDescriptor.getName(), htmlPane);
+      scrollPane.setViewportView(htmlPane);
       viewComponent = scrollPane;
-      connector = labelConnector;
+      connector = textPaneConnector;
     } else {
       JHTMLEditor htmlEditor = createJHTMLEditor(locale);
       JHTMLEditorConnector htmlEditorConnector = new JHTMLEditorConnector(
