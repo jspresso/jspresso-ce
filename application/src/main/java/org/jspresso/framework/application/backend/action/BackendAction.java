@@ -28,9 +28,9 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
- * This class should serve as base class for implementing a action which
- * executes on the backend (domain model) of the application. It provides
- * accessors on components which are generally used through the action execution
+ * This class should serve as base class for implementing actions that execute
+ * on the backend (domain model) of the application. It provides accessors on
+ * the context elements that are generally used through the action execution
  * process.
  * 
  * @version $LastChangedRevision$
