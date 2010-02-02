@@ -132,9 +132,13 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors = new ArrayList<IPropertyViewDescriptor>();
     for (IPropertyViewDescriptor propertyViewDescriptor : declaredPropertyViewDescriptors) {
-      actualPropertyViewDescriptors.addAll(PropertyDescriptorHelper
-          .explodeComponentReferences(propertyViewDescriptor,
-              rowModelDescriptor));
+      // Collection properties are not supported as columns
+      if (!(rowModelDescriptor.getPropertyDescriptor(propertyViewDescriptor
+          .getName()) instanceof ICollectionPropertyDescriptor<?>)) {
+        actualPropertyViewDescriptors.addAll(PropertyDescriptorHelper
+            .explodeComponentReferences(propertyViewDescriptor,
+                rowModelDescriptor));
+      }
     }
     return actualPropertyViewDescriptors;
   }
