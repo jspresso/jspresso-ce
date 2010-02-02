@@ -403,9 +403,15 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   public Dimension getPreferredSize() {
-    if (preferredWidth != null && preferredHeight != null) {
-      return new Dimension(preferredWidth.intValue(), preferredHeight
-          .intValue());
+    if (preferredWidth != null || preferredHeight != null) {
+      Dimension dim = new Dimension();
+      if (preferredWidth != null) {
+        dim.setWidth(preferredWidth.intValue());
+      }
+      if (preferredHeight != null) {
+        dim.setHeight(preferredHeight.intValue());
+      }
+      return dim;
     }
     return null;
   }

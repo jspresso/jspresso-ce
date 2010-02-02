@@ -38,6 +38,8 @@ public class Dimension implements Serializable {
    */
   public Dimension() {
     super();
+    width = 0;
+    height = 0;
   }
 
   /**
