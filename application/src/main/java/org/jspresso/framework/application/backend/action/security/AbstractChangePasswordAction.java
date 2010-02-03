@@ -18,7 +18,30 @@ import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
 /**
- * Changes a user password asking for the current and new password.
+ * This is the base class for implementing an action that performs actual
+ * modification of a logged-in user password. This implementation delegates to
+ * subclasses the actual change in the concrete JAAS store. This backend action
+ * expects a Map&lt;String,Object&gt; in as action parameter in the context.
+ * This map must contain :
+ * <p>
+ * <ul>
+ * <li><code>password_current</code> entry containing current password. Entry
+ * key can be referred to as PASSWD_CURRENT static constant.</li>
+ * <li><code>password_typed</code> entry containing the new password. Entry key
+ * can be referred to as PASSWD_TYPED static constant.</li>
+ * <li><code>password_retyped</code> entry containing the new password retyped.
+ * Entry key can be referred to as PASSWD_RETYPED static constant.</li>
+ * </ul>
+ * For the action to succeed, <code>current_password</code> must match the
+ * logged-in user current password and <code>password_typed</code> and
+ * <code>password_retyped</code> mut match between eachother. The only method to
+ * be implemented by concrete subcasses is :
+ * <p>
+ * 
+ * <pre>
+ * protected abstract boolean changePassword(UserPrincipal userPrincipal,
+ *       String currentPassword, String newPassword)
+ * </pre>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
