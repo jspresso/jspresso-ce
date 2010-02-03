@@ -28,13 +28,13 @@ public abstract class AbstractModelGate extends AbstractGate implements
     IModelGate {
 
   private Object  model;
-  private boolean trackingCollection;
+  private boolean collectionBased;
 
   /**
    * Constructs a new <code>AbstractModelGate</code> instance.
    */
   public AbstractModelGate() {
-    trackingCollection = false;
+    collectionBased = false;
   }
 
   /**
@@ -67,22 +67,22 @@ public abstract class AbstractModelGate extends AbstractGate implements
   }
 
   /**
-   * Gets the trackingCollection.
+   * Gets the collectionBased.
    * 
-   * @return the trackingCollection.
+   * @return the collectionBased.
    */
-  public boolean isTrackingCollection() {
-    return trackingCollection;
+  public boolean isCollectionBased() {
+    return collectionBased;
   }
 
   /**
-   * Sets the trackingCollection.
+   * Sets the collectionBased.
    * 
-   * @param trackingCollection
-   *          the trackingCollection to set.
+   * @param collectionBased
+   *          the collectionBased to set.
    */
-  public void setTrackingCollection(boolean trackingCollection) {
-    this.trackingCollection = trackingCollection;
+  public void setCollectionBased(boolean collectionBased) {
+    this.collectionBased = collectionBased;
   }
 
 }

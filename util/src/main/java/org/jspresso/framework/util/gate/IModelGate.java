@@ -35,5 +35,5 @@ public interface IModelGate extends IGate, IModelAware {
    * @return true if the gate should be provided with a collection of components
    *         instead of a single one if possible.
    */
-  boolean isTrackingCollection();
+  boolean isCollectionBased();
 }

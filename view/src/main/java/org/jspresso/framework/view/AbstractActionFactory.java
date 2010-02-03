@@ -135,7 +135,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
               }
             });
           } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-            if (((IModelGate) clonedGate).isTrackingCollection()) {
+            if (((IModelGate) clonedGate).isCollectionBased()) {
               ((ICollectionConnectorProvider) viewConnector)
                   .getCollectionConnector().addSelectionChangeListener(
                       new ISelectionChangeListener() {

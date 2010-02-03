@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.application.frontend.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -28,6 +30,7 @@ import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
+import org.jspresso.framework.util.gate.CollectionSelectionTrackingGate;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IActionFactory;
@@ -54,6 +57,9 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private Collection<IGate>     actionabilityGates;
   private DefaultIconDescriptor actionDescriptor;
   private String                mnemonicAsString;
+  private boolean               collectionBased;
+
+  private static final IGate    COLLECTION_TRACKING_GATE = new CollectionSelectionTrackingGate();
 
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
@@ -98,7 +104,14 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * @return the actionabilityGates.
    */
   public Collection<IGate> getActionabilityGates() {
-    return actionabilityGates;
+    List<IGate> gates = new ArrayList<IGate>();
+    if (isCollectionBased()) {
+      gates.add(COLLECTION_TRACKING_GATE);
+    }
+    if (actionabilityGates != null) {
+      gates.addAll(actionabilityGates);
+    }
+    return gates;
   }
 
   /**
@@ -335,5 +348,24 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
+  }
+
+  /**
+   * Sets the collectionBased.
+   * 
+   * @param collectionBased
+   *          the collectionBased to set.
+   */
+  public void setCollectionBased(boolean collectionBased) {
+    this.collectionBased = collectionBased;
+  }
+
+  /**
+   * Gets the collectionBased.
+   * 
+   * @return the collectionBased.
+   */
+  public boolean isCollectionBased() {
+    return collectionBased;
   }
 }

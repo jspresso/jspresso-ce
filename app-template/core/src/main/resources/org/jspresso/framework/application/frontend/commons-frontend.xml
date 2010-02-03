@@ -349,6 +349,7 @@
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
     <property name="acceleratorAsString" value="alt C" />
+    <property name="collectionBased" value="true"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CloneComponentCollectionAction">
         <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
@@ -362,6 +363,7 @@
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
     <property name="acceleratorAsString" value="alt C" />
+    <property name="collectionBased" value="true"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CloneMapCollectionAction" />
     </property>
@@ -373,6 +375,7 @@
     <property name="name" value="copy.name" />
     <property name="description" value="copy.description" />
     <property name="acceleratorAsString" value="ctrl C" />
+    <property name="collectionBased" value="true"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property name="transferMode" value="COPY" />
@@ -385,6 +388,7 @@
     <property name="name" value="cut.name" />
     <property name="description" value="cut.description" />
     <property name="acceleratorAsString" value="ctrl X" />
+    <property name="collectionBased" value="true"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property name="transferMode" value="MOVE" />
@@ -410,6 +414,7 @@
     <property name="name" value="remove.name" />
     <property name="description" value="remove.description" />
     <property name="acceleratorAsString" value="alt D" />
+    <property name="collectionBased" value="true"/>
     <property name="messageCode" value="remove.selected.message" />
     <property name="yesAction" ref="removeCollectionFromMasterBackAction" />
   </bean>
@@ -433,6 +438,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/view-48x48.png" />
     <property name="name" value="installInTree.name" />
     <property name="description" value="installInTree.description" />
+    <property name="collectionBased" value="true"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction" />
     </property>
@@ -449,6 +455,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/up-48x48.png" />
     <property name="name" value="moveUp.name" />
     <property name="description" value="moveUp.description" />
+    <property name="collectionBased" value="true"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property name="offset" value="-1" />
@@ -461,6 +468,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/down-48x48.png" />
     <property name="name" value="moveDown.name" />
     <property name="description" value="moveDown.description" />
+    <property name="collectionBased" value="true"/>
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property name="offset" value="1" />
