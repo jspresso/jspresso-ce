@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
@@ -37,13 +38,15 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.IModelGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
-import org.jspresso.framework.util.lang.IModelAware;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -123,31 +126,54 @@ public abstract class AbstractActionFactory<E, F, G> implements
         if (clonedGate instanceof IActionHandlerAware) {
           ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
         }
-        if (clonedGate instanceof IModelAware) {
+        if (clonedGate instanceof IModelGate) {
           if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
             viewConnector.addValueChangeListener(new IValueChangeListener() {
 
               public void valueChange(ValueChangeEvent evt) {
-                ((IModelAware) clonedGate).setModel(evt.getNewValue());
+                ((IModelGate) clonedGate).setModel(evt.getNewValue());
               }
             });
           } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-            ((ICollectionConnectorProvider) viewConnector)
-                .getCollectionConnector().addValueChangeListener(
-                    new IValueChangeListener() {
+            if (((IModelGate) clonedGate).isTrackingCollection()) {
+              ((ICollectionConnectorProvider) viewConnector)
+                  .getCollectionConnector().addSelectionChangeListener(
+                      new ISelectionChangeListener() {
 
-                      public void valueChange(ValueChangeEvent evt) {
-                        ICollectionConnector collectionConnector = (ICollectionConnector) evt
-                            .getSource();
-                        if (collectionConnector.getModelConnector() != null) {
-                          ((IModelAware) clonedGate)
-                              .setModel(collectionConnector.getModelProvider()
-                                  .getModel());
-                        } else {
-                          ((IModelAware) clonedGate).setModel(null);
+                        public void selectionChange(SelectionChangeEvent evt) {
+                          ICollectionConnector collConnector = (ICollectionConnector) evt
+                              .getSource();
+                          int[] newSelection = evt.getNewSelection();
+                          Set<Object> selectedModels = null;
+                          if (newSelection != null && newSelection.length > 0) {
+                            selectedModels = new HashSet<Object>();
+                            for (int i = 0; i < newSelection.length; i++) {
+                              selectedModels.add(collConnector
+                                  .getChildConnector(newSelection[i])
+                                  .getConnectorValue());
+                            }
+                          }
+                          ((IModelGate) clonedGate).setModel(selectedModels);
                         }
-                      }
-                    });
+                      });
+            } else {
+              ((ICollectionConnectorProvider) viewConnector)
+                  .getCollectionConnector().addValueChangeListener(
+                      new IValueChangeListener() {
+
+                        public void valueChange(ValueChangeEvent evt) {
+                          ICollectionConnector collectionConnector = (ICollectionConnector) evt
+                              .getSource();
+                          if (collectionConnector.getModelConnector() != null) {
+                            ((IModelGate) clonedGate)
+                                .setModel(collectionConnector
+                                    .getModelProvider().getModel());
+                          } else {
+                            ((IModelGate) clonedGate).setModel(null);
+                          }
+                        }
+                      });
+            }
           }
         }
         clonedGates.add(clonedGate);

@@ -21,6 +21,7 @@ package org.jspresso.framework.binding.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
@@ -84,20 +85,38 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
       if (oldModel instanceof IPropertyChangeCapable) {
         ((IPropertyChangeCapable) oldModel).removePropertyChangeListener(
             propertyName, this);
+      } else if (oldModel instanceof Collection<?>) {
+        for (Object elt : (Collection<?>) oldModel) {
+          if (elt instanceof IPropertyChangeCapable) {
+            ((IPropertyChangeCapable) elt).removePropertyChangeListener(
+                propertyName, this);
+          }
+        }
       }
       if (model instanceof IPropertyChangeCapable) {
         ((IPropertyChangeCapable) model).addPropertyChangeListener(
             propertyName, this);
+      } else if (model instanceof Collection<?>) {
+        for (Object elt : (Collection<?>) model) {
+          if (elt instanceof IPropertyChangeCapable) {
+            ((IPropertyChangeCapable) elt).addPropertyChangeListener(
+                propertyName, this);
+          }
+        }
       }
       boolean oldOpen = isOpen();
       if (model != null) {
         try {
-          IAccessor accessor = accessorFactory.createPropertyAccessor(
-              propertyName, model.getClass());
-          E modelValue = (E) accessor.getValue(model);
-          this.open = shouldOpen(modelValue);
-          if (!openOnTrue) {
-            this.open = !this.open;
+          if (model instanceof Collection<?>) {
+            this.open = computeCollectionOpenState((Collection<?>) model);
+          } else {
+            IAccessor accessor = accessorFactory.createPropertyAccessor(
+                propertyName, model.getClass());
+            E modelValue = (E) accessor.getValue(model);
+            this.open = shouldOpen(modelValue);
+            if (!openOnTrue) {
+              this.open = !this.open;
+            }
           }
         } catch (IllegalAccessException ex) {
           throw new NestedRuntimeException(ex);
@@ -116,17 +135,54 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
     }
   }
 
+  @SuppressWarnings("unchecked")
+  private boolean computeCollectionOpenState(Collection<?> model)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    if (model.isEmpty()) {
+      return !openOnTrue;
+    }
+    for (Object elt : (Collection<?>) model) {
+      IAccessor accessor = accessorFactory.createPropertyAccessor(propertyName,
+          elt.getClass());
+      E modelValue = (E) accessor.getValue(elt);
+      boolean eltOpen = shouldOpen(modelValue);
+      if (!openOnTrue) {
+        eltOpen = !eltOpen;
+      }
+      if (!eltOpen) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
   public void propertyChange(PropertyChangeEvent evt) {
-    boolean oldOpen = isOpen();
-    this.open = shouldOpen((E) evt.getNewValue());
-    if (!openOnTrue) {
-      this.open = !this.open;
+    try {
+      boolean oldOpen = isOpen();
+      if (getModel() instanceof Collection<?>) {
+        this.open = computeCollectionOpenState((Collection<?>) getModel());
+      } else {
+        this.open = shouldOpen((E) evt.getNewValue());
+        if (!openOnTrue) {
+          this.open = !this.open;
+        }
+      }
+      firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
+    } catch (IllegalAccessException ex) {
+      throw new NestedRuntimeException(ex);
+    } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new NestedRuntimeException(ex.getCause());
+    } catch (NoSuchMethodException ex) {
+      throw new NestedRuntimeException(ex);
     }
-    firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }
 
   /**

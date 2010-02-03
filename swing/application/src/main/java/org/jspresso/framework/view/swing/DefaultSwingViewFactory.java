@@ -80,6 +80,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -1113,6 +1114,7 @@ public class DefaultSwingViewFactory extends
    */
   protected JTextPane createJTextPane() {
     JTextPane textPane = new JTextPane();
+    textPane.setEditorKit(new HTMLEditorKit());
     textPane.setDragEnabled(true);
     return textPane;
   }

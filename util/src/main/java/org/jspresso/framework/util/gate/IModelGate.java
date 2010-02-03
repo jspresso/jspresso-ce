@@ -28,5 +28,12 @@ import org.jspresso.framework.util.lang.IModelAware;
  */
 public interface IModelGate extends IGate, IModelAware {
 
-  // EMPTY AS OF NOW
+  /**
+   * Gets wether the gate should be provided with a collection of components
+   * instead of a single one if possible.
+   * 
+   * @return true if the gate should be provided with a collection of components
+   *         instead of a single one if possible.
+   */
+  boolean isTrackingCollection();
 }

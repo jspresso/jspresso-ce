@@ -27,7 +27,15 @@ package org.jspresso.framework.util.gate;
 public abstract class AbstractModelGate extends AbstractGate implements
     IModelGate {
 
-  private Object model;
+  private Object  model;
+  private boolean trackingCollection;
+
+  /**
+   * Constructs a new <code>AbstractModelGate</code> instance.
+   */
+  public AbstractModelGate() {
+    trackingCollection = false;
+  }
 
   /**
    * {@inheritDoc}
@@ -57,4 +65,24 @@ public abstract class AbstractModelGate extends AbstractGate implements
   public void setModel(Object model) {
     this.model = model;
   }
+
+  /**
+   * Gets the trackingCollection.
+   * 
+   * @return the trackingCollection.
+   */
+  public boolean isTrackingCollection() {
+    return trackingCollection;
+  }
+
+  /**
+   * Sets the trackingCollection.
+   * 
+   * @param trackingCollection
+   *          the trackingCollection to set.
+   */
+  public void setTrackingCollection(boolean trackingCollection) {
+    this.trackingCollection = trackingCollection;
+  }
+
 }
