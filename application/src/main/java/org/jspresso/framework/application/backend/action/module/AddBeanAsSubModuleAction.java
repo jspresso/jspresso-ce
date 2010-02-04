@@ -28,7 +28,9 @@ import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.util.bean.IPropertyChangeCapable;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This action adds the selected objects as child modules.
@@ -37,6 +39,8 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * @author Vincent Vandenschrick
  */
 public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
+
+  private IViewDescriptor childModuleProjectedViewDescriptor;
 
   /**
    * Adds the selected objects as child modules.
@@ -56,21 +60,15 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
     List<Module> childModules = parentModule.getSubModules();
     List<Module> newSubModules = new ArrayList<Module>();
 
+    IComponentDescriptor<?> childComponentDescriptor = ((ICollectionDescriptorProvider<?>) collectionConnector
+        .getModelDescriptor()).getCollectionDescriptor().getElementDescriptor();
+
     int[] childSelectedIndices = new int[selectedIndices.length];
     for (int i = 0; i < selectedIndices.length; i++) {
-      IPropertyChangeCapable nextSelectedModuleObject = (IPropertyChangeCapable) collectionConnector
-          .getChildConnector(selectedIndices[i]).getConnectorValue();
-      BeanModule nextSubModule = new BeanModule();
-      if (parentModule instanceof BeanCollectionModule) {
-        nextSubModule
-            .setProjectedViewDescriptor(((BeanCollectionModule) parentModule)
-                .getElementViewDescriptor());
-        nextSubModule
-            .setComponentDescriptor(((BeanCollectionModule) parentModule)
-                .getElementComponentDescriptor());
-      }
-      nextSubModule.setModuleObject(nextSelectedModuleObject);
-      nextSubModule.setName(String.valueOf(nextSelectedModuleObject));
+      Object nextSelectedModuleObject = collectionConnector.getChildConnector(
+          selectedIndices[i]).getConnectorValue();
+      Module nextSubModule = createChildModule(parentModule,
+          childComponentDescriptor, nextSelectedModuleObject, context);
       int nextSubModuleIndex = -1;
       if (childModules != null) {
         nextSubModuleIndex = childModules.indexOf(nextSubModule);
@@ -90,4 +88,58 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
     setSelectedIndices(childSelectedIndices, context);
     return super.execute(actionHandler, context);
   }
+
+  /**
+   * Creates a module to be added to the currently selected module as child.
+   * 
+   * @param parentModule
+   *          the parent module.
+   * @param childComponentDescriptor
+   *          the child component descriptor.
+   * @param childModuleObject
+   *          the child module object to create the child module for.
+   * @param context
+   *          the action context.
+   * @return the created child module.
+   */
+  @SuppressWarnings("unchecked")
+  protected Module createChildModule(Module parentModule,
+      IComponentDescriptor<?> childComponentDescriptor,
+      Object childModuleObject, Map<String, Object> context) {
+    BeanModule childModule = new BeanModule();
+    IViewDescriptor projectedViewDescriptor = getChildModuleProjectedViewDescriptor();
+    if (projectedViewDescriptor != null) {
+      childModule.setProjectedViewDescriptor(projectedViewDescriptor);
+    } else if (parentModule instanceof BeanCollectionModule) {
+      childModule
+          .setProjectedViewDescriptor(((BeanCollectionModule) parentModule)
+              .getElementViewDescriptor());
+    }
+    childModule
+        .setComponentDescriptor((IComponentDescriptor<Object>) childComponentDescriptor);
+    childModule.setModuleObject(childModuleObject);
+    childModule.setName(String.valueOf(childModuleObject));
+    return childModule;
+  }
+
+  /**
+   * Gets the childModuleProjectedViewDescriptor.
+   * 
+   * @return the childModuleProjectedViewDescriptor.
+   */
+  protected IViewDescriptor getChildModuleProjectedViewDescriptor() {
+    return childModuleProjectedViewDescriptor;
+  }
+
+  /**
+   * Sets the childModuleProjectedViewDescriptor.
+   * 
+   * @param childModuleProjectedViewDescriptor
+   *          the childModuleProjectedViewDescriptor to set.
+   */
+  public void setChildModuleProjectedViewDescriptor(
+      IViewDescriptor childModuleProjectedViewDescriptor) {
+    this.childModuleProjectedViewDescriptor = childModuleProjectedViewDescriptor;
+  }
+
 }
