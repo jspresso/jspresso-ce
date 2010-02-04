@@ -21,6 +21,7 @@ package org.jspresso.framework.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -38,8 +39,10 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
@@ -127,14 +130,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
           ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
         }
         if (clonedGate instanceof IModelGate) {
-          if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
-            viewConnector.addValueChangeListener(new IValueChangeListener() {
-
-              public void valueChange(ValueChangeEvent evt) {
-                ((IModelGate) clonedGate).setModel(evt.getNewValue());
-              }
-            });
-          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+          if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             if (((IModelGate) clonedGate).isCollectionBased()) {
               ((ICollectionConnectorProvider) viewConnector)
                   .getCollectionConnector().addSelectionChangeListener(
@@ -174,6 +170,42 @@ public abstract class AbstractActionFactory<E, F, G> implements
                         }
                       });
             }
+          } else if (((IModelGate) clonedGate).isCollectionBased()
+              && viewConnector instanceof IItemSelectable) {
+            ((IItemSelectable) viewConnector)
+                .addItemSelectionListener(new IItemSelectionListener() {
+
+                  public void selectedItemChange(ItemSelectionEvent event) {
+                    Object selectedItem = event.getSelectedItem();
+                    if (selectedItem == event.getSource()) {
+                      return;
+                    }
+                    if (selectedItem != null) {
+                      if (selectedItem instanceof IValueConnector) {
+                        Object connectorValue = ((IValueConnector) selectedItem)
+                            .getConnectorValue();
+                        if (connectorValue != null) {
+                          ((IModelGate) clonedGate).setModel(Collections
+                              .singleton(connectorValue));
+                        } else {
+                          ((IModelGate) clonedGate).setModel(null);
+                        }
+                      } else {
+                        ((IModelGate) clonedGate).setModel(Collections
+                            .singleton(event.getSelectedItem()));
+                      }
+                    } else {
+                      ((IModelGate) clonedGate).setModel(null);
+                    }
+                  }
+                });
+          } else if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
+            viewConnector.addValueChangeListener(new IValueChangeListener() {
+
+              public void valueChange(ValueChangeEvent evt) {
+                ((IModelGate) clonedGate).setModel(evt.getNewValue());
+              }
+            });
           }
         }
         clonedGates.add(clonedGate);
