@@ -46,5 +46,11 @@ public enum EMergeMode {
    * <code>MERGE_KEEP</code> means that the registered instance will be kept
    * whatever its state is.
    */
-  MERGE_KEEP
+  MERGE_KEEP,
+
+  /**
+   * <code>MERGE_EAGER</code> means that the registered instance properties will
+   * be overriden and its dirty state kept.
+   */
+  MERGE_EAGER
 }

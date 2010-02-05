@@ -30,7 +30,6 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityDirtAware;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -175,11 +174,11 @@ public interface IBackendController extends IController, IEntityDirtAware,
    * 
    * @param componentOrEntity
    *          the component or entity holding the property.
-   * @param propertyDescriptor
-   *          the property descriptor.
+   * @param propertyName
+   *          the name of the property to initialize.
    */
   void initializePropertyIfNeeded(IComponent componentOrEntity,
-      IPropertyDescriptor propertyDescriptor);
+      String propertyName);
 
   /**
    * Wether the object is fully initialized.

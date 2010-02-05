@@ -46,9 +46,7 @@ import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -377,16 +375,13 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   public void initializePropertyIfNeeded(IComponent componentOrEntity,
-      IPropertyDescriptor propertyDescriptor) {
-    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      String propertyName = propertyDescriptor.getName();
-      Object propertyValue = componentOrEntity
-          .straightGetProperty(propertyName);
-      for (Iterator<IComponent> ite = ((Collection<IComponent>) propertyValue)
-          .iterator(); ite.hasNext();) {
-        IComponent collectionElement = ite.next();
+      String propertyName) {
+    Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
+    if (propertyValue instanceof Collection<?>) {
+      for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite
+          .hasNext();) {
+        Object collectionElement = ite.next();
         if (collectionElement instanceof IEntity) {
           if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
             ite.remove();
@@ -812,7 +807,7 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   @SuppressWarnings("unchecked")
-  private IEntity merge(IEntity entity, EMergeMode mergeMode,
+  private IEntity merge(IEntity entity, final EMergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
     if (entity == null) {
       return null;
@@ -822,7 +817,9 @@ public abstract class AbstractBackendController extends AbstractController
     }
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
-      dirtRecorder.setEnabled(false);
+      if (mergeMode != EMergeMode.MERGE_EAGER) {
+        dirtRecorder.setEnabled(false);
+      }
       IEntity registeredEntity = getRegisteredEntity(entity
           .getComponentContract(), entity.getId());
       boolean newlyRegistered = false;
@@ -855,6 +852,7 @@ public abstract class AbstractBackendController extends AbstractController
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (property.getValue() instanceof IEntity) {
             if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
+                && mergeMode != EMergeMode.MERGE_EAGER
                 && !isInitialized(property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
@@ -862,6 +860,9 @@ public abstract class AbstractBackendController extends AbstractController
             } else {
               Object registeredProperty = registeredEntityProperties
                   .get(property.getKey());
+              if (mergeMode == EMergeMode.MERGE_EAGER) {
+                initializePropertyIfNeeded(registeredEntity, property.getKey());
+              }
               if (isInitialized(registeredProperty)) {
                 mergedProperties.put(property.getKey(), merge(
                     (IEntity) property.getValue(), mergeMode, alreadyMerged));
@@ -869,6 +870,7 @@ public abstract class AbstractBackendController extends AbstractController
             }
           } else if (property.getValue() instanceof Collection) {
             if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
+                && mergeMode != EMergeMode.MERGE_EAGER
                 && !isInitialized(property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
@@ -876,6 +878,9 @@ public abstract class AbstractBackendController extends AbstractController
             } else {
               Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                   .get(property.getKey());
+              if (mergeMode == EMergeMode.MERGE_EAGER) {
+                initializePropertyIfNeeded(registeredEntity, property.getKey());
+              }
               if (isInitialized(registeredCollection)) {
                 if (property.getValue() instanceof Set) {
                   registeredCollection = collectionFactory
@@ -952,6 +957,7 @@ public abstract class AbstractBackendController extends AbstractController
           .entrySet()) {
         if (property.getValue() instanceof IEntity) {
           if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
+              && mergeMode != EMergeMode.MERGE_EAGER
               && !isInitialized(property.getValue())) {
             if (registeredComponentProperties.get(property.getKey()) == null) {
               mergedProperties.put(property.getKey(), property.getValue());
@@ -959,6 +965,9 @@ public abstract class AbstractBackendController extends AbstractController
           } else {
             Object registeredProperty = registeredComponentProperties
                 .get(property.getKey());
+            if (mergeMode == EMergeMode.MERGE_EAGER) {
+              initializePropertyIfNeeded(registeredComponent, property.getKey());
+            }
             if (isInitialized(registeredProperty)) {
               mergedProperties.put(property.getKey(), merge((IEntity) property
                   .getValue(), mergeMode, alreadyMerged));

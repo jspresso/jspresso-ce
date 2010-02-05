@@ -36,8 +36,6 @@ import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.model.component.IComponent;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.bean.PropertyHelper;
@@ -199,11 +197,10 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void initializePropertyIfNeeded(final IComponent componentOrEntity,
-      IPropertyDescriptor propertyDescriptor) {
+      final String propertyName) {
     boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
     try {
       getDirtRecorder().setEnabled(false);
-      final String propertyName = propertyDescriptor.getName();
       final Object initializedProperty = componentOrEntity
           .straightGetProperty(propertyName);
       if (!Hibernate.isInitialized(initializedProperty)) {
@@ -265,11 +262,9 @@ public class HibernateBackendController extends AbstractBackendController {
             return null;
           }
         });
-        super.initializePropertyIfNeeded(componentOrEntity, propertyDescriptor);
-        if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-          if (initializedProperty instanceof PersistentCollection) {
-            ((PersistentCollection) initializedProperty).clearDirty();
-          }
+        super.initializePropertyIfNeeded(componentOrEntity, propertyName);
+        if (initializedProperty instanceof PersistentCollection) {
+          ((PersistentCollection) initializedProperty).clearDirty();
         }
       }
     } finally {

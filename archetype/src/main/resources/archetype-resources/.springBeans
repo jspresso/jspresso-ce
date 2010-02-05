@@ -7,11 +7,11 @@
 	</configSuffixes>
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
-		<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
-		<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
-		<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
-		<config>M2_REPO/org/jspresso/framework/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
+		<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
+		<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
+		<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+		<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
+		<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
     <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-wings-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
     <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-remote-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/remote/commons-remote.xml</config>
 		<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
@@ -29,11 +29,11 @@
 			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>
-				<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
-				<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
-				<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
-				<config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
-				<config>M2_REPO/org/jspresso/framework/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
+				<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+				<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
+				<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
+				<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
+				<config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-swing/${jspressoVersion}/jspresso-app-template-swing-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
 				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
 				<config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
@@ -49,11 +49,11 @@
       <allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
       <incomplete>false</incomplete>
       <configs>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-wings-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-wings/${jspressoVersion}/jspresso-app-template-wings-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
 				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>
@@ -69,11 +69,11 @@
       <allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
       <incomplete>false</incomplete>
       <configs>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
-        <config>webapp/src/main/webapp/WEB-INF/lib/jspresso-app-template-remote-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/remote/commons-remote.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/commons.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-core/${jspressoVersion}/jspresso-app-template-core-${jspressoVersion}.jar!/org/jspresso/framework/application/mock-config.xml</config>
+        <config>external:/M2_REPO/org/jspresso/framework/jspresso-app-template-remote/${jspressoVersion}/jspresso-app-template-remote-${jspressoVersion}.jar!/org/jspresso/framework/application/frontend/remote/commons-remote.xml</config>
 				<config>core/target/generated-resources/dsl/${packageInPathFormat}/model/dsl-model.xml</config>
         <config>core/src/main/resources/${packageInPathFormat}/model/model.xml</config>
         <config>core/target/generated-resources/dsl/${packageInPathFormat}/view/dsl-view.xml</config>

@@ -90,7 +90,7 @@ public class ControllerAwareEntityInvocationHandler extends
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
     backendController.initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor);
+        propertyDescriptor.getName());
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
 
@@ -102,7 +102,7 @@ public class ControllerAwareEntityInvocationHandler extends
       IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
 
     backendController.initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor);
+        propertyDescriptor.getName());
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 
