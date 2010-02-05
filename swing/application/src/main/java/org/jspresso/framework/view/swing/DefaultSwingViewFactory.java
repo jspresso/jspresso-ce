@@ -1813,6 +1813,22 @@ public class DefaultSwingViewFactory extends
     viewComponent.addMouseListener(new PopupListener(viewComponent, view,
         actionHandler, locale));
     scrollPane.setMinimumSize(TREE_PREFERRED_SIZE);
+    if (viewDescriptor.getRowAction() != null) {
+      final Action rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
+      viewComponent.addMouseListener(new MouseAdapter() {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            ActionEvent ae = new ActionEvent(e.getSource(),
+                ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e
+                    .getModifiers());
+            rowAction.actionPerformed(ae);
+          }
+        }
+      });
+    }
     return view;
   }
 

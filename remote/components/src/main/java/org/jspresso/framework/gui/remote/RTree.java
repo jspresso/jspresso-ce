@@ -29,6 +29,7 @@ public class RTree extends RComponent {
   private static final long serialVersionUID = 7886711955466326634L;
 
   private boolean           expanded;
+  private RAction           rowAction;
 
   /**
    * Constructs a new <code>RTree</code> instance. Only used for GWT
@@ -65,5 +66,24 @@ public class RTree extends RComponent {
    */
   public void setExpanded(boolean expanded) {
     this.expanded = expanded;
+  }
+
+  /**
+   * Gets the rowAction.
+   * 
+   * @return the rowAction.
+   */
+  public RAction getRowAction() {
+    return rowAction;
+  }
+
+  /**
+   * Sets the rowAction.
+   * 
+   * @param rowAction
+   *          the rowAction to set.
+   */
+  public void setRowAction(RAction rowAction) {
+    this.rowAction = rowAction;
   }
 }

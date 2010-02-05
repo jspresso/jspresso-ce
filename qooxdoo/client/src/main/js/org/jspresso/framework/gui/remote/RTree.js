@@ -25,6 +25,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTree",
     expanded :
     {
       check : "Boolean"
+    },
+    rowAction :
+    {
+      check : "org.jspresso.framework.gui.remote.RAction",
+      nullable : true
     }
   }
 

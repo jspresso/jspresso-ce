@@ -1556,6 +1556,11 @@ public class DefaultUlcViewFactory extends
     viewComponent.setPopupFactory(new TreeNodePopupFactory(viewComponent, view,
         actionHandler, locale));
     scrollPane.setMinimumSize(TREE_PREFERRED_SIZE);
+    if (viewDescriptor.getRowAction() != null) {
+      final IAction rowAction = getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale);
+      viewComponent.addActionListener(rowAction);
+    }
     return view;
   }
 

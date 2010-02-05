@@ -50,6 +50,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   private String                     renderedProperty;
   private ITreeLevelDescriptor       rootSubtreeDescriptor;
   private IAction                    itemSelectionAction;
+  private IAction                    rowAction;
   private boolean                    expanded;
 
   /**
@@ -292,5 +293,25 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
       List<ITreeLevelDescriptor> childrenDescriptors) {
     this.childrenDescriptors = childrenDescriptors;
     this.childDescriptor = null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IAction getRowAction() {
+    return rowAction;
+  }
+
+  /**
+   * Registers an action that is implicitely triggered everytime a row is
+   * activated (e.g. double-clicked for current UI channels) on the collection
+   * view UI peer. The context of the action execution is the same as if the
+   * action was registered in the view action map.
+   * 
+   * @param rowAction
+   *          the rowAction to set.
+   */
+  public void setRowAction(IAction rowAction) {
+    this.rowAction = rowAction;
   }
 }

@@ -1670,6 +1670,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           selectedState.setSelectedIndices(selectedStates[i+2]);
         }
       }, this);
+      if(remoteTree.getRowAction()) {
+        tree.addListener("dblclick", function(e){
+          this.__actionHandler.execute(remoteTree.getRowAction());
+        }, this);
+      }
       return tree;
     },
     

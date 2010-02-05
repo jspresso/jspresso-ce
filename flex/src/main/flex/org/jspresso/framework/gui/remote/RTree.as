@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
     public class RTree extends RComponent {
 
         private var _expanded:Boolean;
+        private var _rowAction:RAction;
 
         public function RTree() {
           //default constructor.
@@ -30,6 +31,13 @@ package org.jspresso.framework.gui.remote {
         }
         public function get expanded():Boolean {
             return _expanded;
+        }
+
+        public function set rowAction(value:RAction):void {
+            _rowAction = value;
+        }
+        public function get rowAction():RAction {
+            return _rowAction;
         }
     }
 }

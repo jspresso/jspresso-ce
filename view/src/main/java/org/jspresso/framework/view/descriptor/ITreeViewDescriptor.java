@@ -61,6 +61,13 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
   IAction getItemSelectionAction();
 
   /**
+   * Gets the row action that will be attached to the created tree view.
+   * 
+   * @return the row action that will be attached to the created tree view.
+   */
+  IAction getRowAction();
+
+  /**
    * Gets wether the tree view should be created expanded.
    * 
    * @return true if the tree view should be created expanded.

@@ -474,16 +474,23 @@ public class DefaultRemoteController extends
               .setConnectorValue(((RemoteValueCommand) command).getValue());
         }
       } else if (command instanceof RemoteSelectionCommand) {
-        ISelectable selectable;
+        ISelectable selectable = null;
         if (targetPeer instanceof ICollectionConnectorProvider) {
           selectable = ((ICollectionConnectorProvider) targetPeer)
               .getCollectionConnector();
-        } else {
+          // } else if (targetPeer instanceof ICollectionConnectorListProvider)
+          // {
+          // selectable = (ISelectable) ((ICollectionConnectorListProvider)
+          // targetPeer)
+          // .getParentConnector();
+        } else if (targetPeer instanceof ISelectable) {
           selectable = (ISelectable) targetPeer;
         }
-        selectable.setSelectedIndices(((RemoteSelectionCommand) command)
-            .getSelectedIndices(), ((RemoteSelectionCommand) command)
-            .getLeadingIndex());
+        if (selectable != null) {
+          selectable.setSelectedIndices(((RemoteSelectionCommand) command)
+              .getSelectedIndices(), ((RemoteSelectionCommand) command)
+              .getLeadingIndex());
+        }
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
         action.actionPerformed(((RemoteActionCommand) command).getParameter(),

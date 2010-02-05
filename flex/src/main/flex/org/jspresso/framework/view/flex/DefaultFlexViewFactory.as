@@ -60,6 +60,7 @@ package org.jspresso.framework.view.flex {
   import mx.events.DataGridEvent;
   import mx.events.DataGridEventReason;
   import mx.events.FlexEvent;
+  import mx.events.ListEvent;
   import mx.events.PropertyChangeEvent;
   import mx.formatters.DateFormatter;
   import mx.formatters.Formatter;
@@ -390,6 +391,12 @@ package org.jspresso.framework.view.flex {
         tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
             expandItem(tree, remoteTree.state as RemoteCompositeValueState, false);
           });
+      }
+      if(remoteTree.rowAction) {
+        tree.doubleClickEnabled = true;
+        tree.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, function(event:ListEvent):void {
+          _actionHandler.execute(remoteTree.rowAction);
+        });
       }
       return tree;
     }
@@ -1250,7 +1257,8 @@ package org.jspresso.framework.view.flex {
       list.dataProvider = (remoteList.state as RemoteCompositeValueState).children;
       bindList(list, remoteList.state as RemoteCompositeValueState);
       if(remoteList.rowAction) {
-        list.addEventListener(MouseEvent.DOUBLE_CLICK, function(event:MouseEvent):void {
+        list.doubleClickEnabled = true;
+        list.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, function(event:ListEvent):void {
           _actionHandler.execute(remoteList.rowAction);
         });
       }
@@ -1419,7 +1427,8 @@ package org.jspresso.framework.view.flex {
       });
       bindTable(table, remoteTable);
       if(remoteTable.rowAction) {
-        table.addEventListener(MouseEvent.DOUBLE_CLICK, function(event:MouseEvent):void {
+        table.doubleClickEnabled = true;
+        table.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, function(event:ListEvent):void {
           _actionHandler.execute(remoteTable.rowAction);
         });
       }

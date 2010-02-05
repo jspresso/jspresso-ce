@@ -1317,6 +1317,10 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setExpanded(viewDescriptor.isExpanded());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
+    if (viewDescriptor.getRowAction() != null) {
+      viewComponent.setRowAction(getActionFactory().createAction(
+          viewDescriptor.getRowAction(), actionHandler, view, locale));
+    }
     return view;
   }
 
