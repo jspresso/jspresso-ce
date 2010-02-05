@@ -45,7 +45,7 @@ package org.jspresso.framework.view.flex {
 			} else {
 				image.visible = false;
 				if(icon) {
-				  icon.visible = true;
+				  icon.visible = false;
 				}
 			}
 		}

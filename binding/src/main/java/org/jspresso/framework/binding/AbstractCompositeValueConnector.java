@@ -151,8 +151,7 @@ public abstract class AbstractCompositeValueConnector extends
     if (iconImageURLProvider != null) {
       iconImageUrl = iconImageURLProvider
           .getIconImageURLForObject(getConnectorValue());
-    }
-    if (iconImageUrl == null) {
+    } else {
       iconImageUrl = displayIconImageUrl;
     }
     return iconImageUrl;
