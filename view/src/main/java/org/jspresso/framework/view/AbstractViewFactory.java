@@ -641,6 +641,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
     G infoAction = getActionFactory().createAction(binaryPropertyInfoAction,
         actionHandler, viewComponent, propertyDescriptor, connector, locale);
     List<G> binaryActions = new ArrayList<G>();
+    getActionFactory().setActionName(openAction, null);
+    getActionFactory().setActionName(saveAction, null);
+    getActionFactory().setActionName(resetAction, null);
+    getActionFactory().setActionName(infoAction, null);
     binaryActions.add(openAction);
     binaryActions.add(saveAction);
     binaryActions.add(resetAction);
@@ -1392,6 +1396,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     G action = getActionFactory().createAction(listOfValueAction,
         actionHandler, viewComponent,
         propertyViewDescriptor.getModelDescriptor(), connector, locale);
+    getActionFactory().setActionName(action, null);
     return action;
   }
 

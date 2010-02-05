@@ -846,7 +846,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return {qx.ui.core.Widget}
      */
     __createActionComponent : function(remoteActionComponent) {
-    	var actionComponent = this.createAction(remoteActionComponent.getAction(), false);
+    	var actionComponent = this.createAction(remoteActionComponent.getAction());
     	return actionComponent;
     },
 
@@ -1852,15 +1852,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {Boolean} useLabel
      * @return {qx.ui.form.Button}
      */
-    createAction : function (remoteAction, useLabel) {
-      if(useLabel == null) {
-        useLabel = false;
-      }
-      var label = null;
-      if(useLabel) {
-        label = remoteAction.getName();
-      }
-      var button = this.createButton(label, remoteAction.getDescription(), remoteAction.getIcon());
+    createAction : function (remoteAction) {
+      var button = this.createButton(remoteAction.getName(), remoteAction.getDescription(), remoteAction.getIcon());
       remoteAction.bind("enabled", button, "enabled");
       this.__remotePeerRegistry.register(remoteAction);
       button.addListener("execute", function(event) {

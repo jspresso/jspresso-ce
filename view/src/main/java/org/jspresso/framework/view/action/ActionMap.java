@@ -23,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.util.gui.ERenderingOptions;
+
 /**
  * This class implements a hierachical structure for holding action maps. An
  * action map is a map of action sets keyed by their grouping goal (like 'EDIT',
@@ -33,8 +35,10 @@ import java.util.Map;
  */
 public class ActionMap {
 
-  private List<ActionList> actionLists;
-  private List<ActionMap>  parentActionMaps;
+  private List<ActionList>  actionLists;
+  private List<ActionMap>   parentActionMaps;
+
+  private ERenderingOptions renderingOptions;
 
   private static void completeActionMap(
       Map<String, ActionList> bufferActionMap, List<ActionList> actionLists) {
@@ -89,7 +93,7 @@ public class ActionMap {
    * Sets the action lists list.
    * 
    * @param actionLists
-   *            the action lists list to set.
+   *          the action lists list to set.
    */
   public void setActionLists(List<ActionList> actionLists) {
     this.actionLists = actionLists;
@@ -99,9 +103,28 @@ public class ActionMap {
    * Sets the parentActionMaps.
    * 
    * @param parentActionMaps
-   *            the parentActionMaps to set.
+   *          the parentActionMaps to set.
    */
   public void setParentActionMaps(List<ActionMap> parentActionMaps) {
     this.parentActionMaps = parentActionMaps;
+  }
+
+  /**
+   * Sets the renderingOptions.
+   * 
+   * @param renderingOptions
+   *          the renderingOptions to set.
+   */
+  public void setRenderingOptions(ERenderingOptions renderingOptions) {
+    this.renderingOptions = renderingOptions;
+  }
+
+  /**
+   * Gets the renderingOptions.
+   * 
+   * @return the renderingOptions.
+   */
+  public ERenderingOptions getRenderingOptions() {
+    return renderingOptions;
   }
 }

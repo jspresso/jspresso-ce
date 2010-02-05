@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 
@@ -35,6 +36,7 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
     IActionViewDescriptor {
 
   private IDisplayableAction action;
+  private ERenderingOptions  renderingOptions = ERenderingOptions.ICON;
 
   /**
    * Assigns the action to display as a view. The action will typically be
@@ -54,6 +56,32 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
    */
   public IDisplayableAction getAction() {
     return action;
+  }
+
+  /**
+   * Indicates how the action should be rendered. This is either a value of the
+   * <code>ERenderingOptions</code> enum or its equivalent string representation
+   * :
+   * <ul>
+   * <li><code>LABEL_ICON</code> for label and icon</li>
+   * <li><code>LABEL</code> for label only</li>
+   * <li><code>ICON</code> for icon only.</li>
+   * </ul>
+   * <p>
+   * Default value is <code>ERenderingOptions.ICON</code>, i.e. icon only.
+   * 
+   * @param renderingOptions
+   *          the renderingOptions to set.
+   */
+  public void setRenderingOptions(ERenderingOptions renderingOptions) {
+    this.renderingOptions = renderingOptions;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ERenderingOptions getRenderingOptions() {
+    return renderingOptions;
   }
 
 }

@@ -101,6 +101,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
@@ -113,6 +114,7 @@ import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
+import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
@@ -283,8 +285,9 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
-    actionList.setActions(createBinaryActions(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale).toArray(new RAction[0]));
+    List<RAction> binaryActions = createBinaryActions(viewComponent, connector,
+        propertyDescriptor, actionHandler, locale);
+    actionList.setActions(binaryActions.toArray(new RAction[0]));
     viewComponent.setActionLists(new RActionList[] {actionList});
     return view;
   }
@@ -756,9 +759,20 @@ public class DefaultRemoteViewFactory extends
     RActionComponent viewComponent = createRActionComponent(connector);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-    viewComponent.setAction(getActionFactory().createAction(
+    RAction action = getActionFactory().createAction(
         viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
-        actionHandler, view, locale));
+        actionHandler, view, locale);
+    switch (viewDescriptor.getRenderingOptions()) {
+      case ICON:
+        action.setName(null);
+        break;
+      case LABEL:
+        action.setIcon(null);
+        break;
+      default:
+        break;
+    }
+    viewComponent.setAction(action);
     return view;
   }
 
@@ -1015,10 +1029,10 @@ public class DefaultRemoteViewFactory extends
         propertyViewDescriptor, connector);
     RAction lovAction = createLovAction(view.getPeer(), view.getConnector(),
         propertyViewDescriptor, actionHandler, locale);
-    lovAction.setName(getTranslationProvider().getTranslation(
-        "lov.element.name",
-        new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            getTranslationProvider(), locale)}, locale));
+    // lovAction.setName(getTranslationProvider().getTranslation(
+    // "lov.element.name",
+    // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
+    // getTranslationProvider(), locale)}, locale));
     lovAction.setDescription(getTranslationProvider().getTranslation(
         "lov.element.description",
         new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
@@ -1207,7 +1221,18 @@ public class DefaultRemoteViewFactory extends
       if (actionHandler.isAccessGranted(childViewDescriptor)) {
         IView<RComponent> childView = createView(childViewDescriptor,
             actionHandler, locale);
-        tabs.add(childView.getPeer());
+        RComponent tab = childView.getPeer();
+        switch (viewDescriptor.getRenderingOptions()) {
+          case ICON:
+            tab.setLabel(null);
+            break;
+          case LABEL:
+            tab.setIcon(null);
+            break;
+          default:
+            break;
+        }
+        tabs.add(tab);
         childrenViews.add(childView);
       }
     }
@@ -1330,11 +1355,18 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected void decorateWithActions(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale, IView<RComponent> view) {
-    if (viewDescriptor.getActionMap() != null) {
+    ActionMap actionMap = viewDescriptor.getActionMap();
+    if (actionMap != null) {
       List<RActionList> viewActionLists = new ArrayList<RActionList>();
-      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
-          .getActionLists().iterator(); iter.hasNext();) {
+      for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
+          .hasNext();) {
         ActionList nextActionList = iter.next();
+        ERenderingOptions renderingOptions = ERenderingOptions.ICON;
+        if (nextActionList.getRenderingOptions() != null) {
+          renderingOptions = nextActionList.getRenderingOptions();
+        } else if (actionMap.getRenderingOptions() != null) {
+          renderingOptions = actionMap.getRenderingOptions();
+        }
         RActionList actionList = new RActionList(getGuidGenerator()
             .generateGUID());
         actionList.setName(nextActionList.getName());
@@ -1350,6 +1382,16 @@ public class DefaultRemoteViewFactory extends
                 actionHandler, view, locale);
             rAction.setAcceleratorAsString(action.getAcceleratorAsString());
             actions.add(rAction);
+            switch (renderingOptions) {
+              case ICON:
+                rAction.setName(null);
+                break;
+              case LABEL:
+                rAction.setIcon(null);
+                break;
+              default:
+                break;
+            }
           }
         }
         actionList.setActions(actions.toArray(new RAction[0]));

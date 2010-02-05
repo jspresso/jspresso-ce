@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
-
+import org.jspresso.framework.util.gui.ERenderingOptions;
 
 /**
  * A describeable list of actions.
@@ -18,6 +18,7 @@ import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 public class ActionList extends DefaultIconDescriptor {
 
   private List<IDisplayableAction> actions;
+  private ERenderingOptions        renderingOptions;
 
   /**
    * {@inheritDoc}
@@ -43,10 +44,29 @@ public class ActionList extends DefaultIconDescriptor {
    * Sets the actions.
    * 
    * @param actions
-   *            the actions to set.
+   *          the actions to set.
    */
   public void setActions(List<IDisplayableAction> actions) {
     this.actions = actions;
+  }
+
+  /**
+   * Sets the renderingOptions.
+   * 
+   * @param renderingOptions
+   *          the renderingOptions to set.
+   */
+  public void setRenderingOptions(ERenderingOptions renderingOptions) {
+    this.renderingOptions = renderingOptions;
+  }
+
+  /**
+   * Gets the renderingOptions.
+   * 
+   * @return the renderingOptions.
+   */
+  public ERenderingOptions getRenderingOptions() {
+    return renderingOptions;
   }
 
 }

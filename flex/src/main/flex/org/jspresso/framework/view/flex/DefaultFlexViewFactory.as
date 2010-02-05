@@ -492,7 +492,7 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createActionComponent(remoteActionComponent:RActionComponent):UIComponent {
-      var actionComponent:Button = createAction(remoteActionComponent.action, false);
+      var actionComponent:Button = createAction(remoteActionComponent.action);
       return actionComponent;
     }
     
@@ -1659,12 +1659,8 @@ package org.jspresso.framework.view.flex {
       return textField;
     }
 
-    public function createAction(remoteAction:RAction, useLabel:Boolean=false):Button {
-      var label:String = null;
-      if(useLabel) {
-        label = remoteAction.name;
-      }
-      var button:Button = createButton(label, remoteAction.description, remoteAction.icon);
+    public function createAction(remoteAction:RAction):Button {
+      var button:Button = createButton(remoteAction.name, remoteAction.description, remoteAction.icon);
 		  //BindingUtils.bindProperty(button, "enabled", remoteAction, "enabled", true);
       var updateButtonState:Function = function (enabled:Boolean):void {
         button.enabled = enabled;

@@ -97,6 +97,7 @@ import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.PasswordFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
+import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.wings.WingsUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
@@ -107,6 +108,7 @@ import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
+import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
@@ -798,6 +800,16 @@ public class DefaultWingsViewFactory extends
     viewComponent.setAction(getActionFactory().createAction(
         viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
         actionHandler, view, locale));
+    switch (viewDescriptor.getRenderingOptions()) {
+      case ICON:
+        viewComponent.setText(null);
+        break;
+      case LABEL:
+        viewComponent.setIcon(null);
+        break;
+      default:
+        break;
+    }
     return view;
   }
 
@@ -962,10 +974,10 @@ public class DefaultWingsViewFactory extends
     connector.setExceptionHandler(actionHandler);
     Action lovAction = createLovAction(viewComponent, connector,
         propertyViewDescriptor, actionHandler, locale);
-    lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
-        "lov.element.name",
-        new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            getTranslationProvider(), locale)}, locale));
+    // lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
+    // "lov.element.name",
+    // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
+    // getTranslationProvider(), locale)}, locale));
     lovAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
@@ -1606,16 +1618,25 @@ public class DefaultWingsViewFactory extends
         SIcon childIcon = getIconFactory().getIcon(
             childViewDescriptor.getIconImageURL(),
             getIconFactory().getSmallIconSize());
+        String tabText = childViewDescriptor.getI18nName(
+            getTranslationProvider(), locale);
+        switch (viewDescriptor.getRenderingOptions()) {
+          case ICON:
+            tabText = null;
+            break;
+          case LABEL:
+            childIcon = null;
+            break;
+          default:
+            break;
+        }
         SComponent tabView = childView.getPeer();
         if (childViewDescriptor.getDescription() != null) {
-          viewComponent.addTab(childViewDescriptor.getI18nName(
-              getTranslationProvider(), locale), childIcon, tabView,
-              childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                  locale)
-                  + TOOLTIP_ELLIPSIS);
+          viewComponent.addTab(tabText, childIcon, tabView, childViewDescriptor
+              .getI18nDescription(getTranslationProvider(), locale)
+              + TOOLTIP_ELLIPSIS);
         } else {
-          viewComponent.addTab(childViewDescriptor.getI18nName(
-              getTranslationProvider(), locale), childIcon, tabView);
+          viewComponent.addTab(tabText, childIcon, tabView);
         }
         childrenViews.add(childView);
       }
@@ -1771,11 +1792,18 @@ public class DefaultWingsViewFactory extends
   @Override
   protected void decorateWithActions(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale, IView<SComponent> view) {
-    if (viewDescriptor.getActionMap() != null) {
+    ActionMap actionMap = viewDescriptor.getActionMap();
+    if (actionMap != null) {
       SToolBar toolBar = createSToolBar();
-      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
-          .getActionLists().iterator(); iter.hasNext();) {
+      for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
+          .hasNext();) {
         ActionList nextActionList = iter.next();
+        ERenderingOptions renderingOptions = ERenderingOptions.ICON;
+        if (nextActionList.getRenderingOptions() != null) {
+          renderingOptions = nextActionList.getRenderingOptions();
+        } else if (actionMap.getRenderingOptions() != null) {
+          renderingOptions = actionMap.getRenderingOptions();
+        }
         for (IDisplayableAction action : nextActionList.getActions()) {
           if (actionHandler.isAccessGranted(action)) {
             Action wingsAction = getActionFactory().createAction(action,
@@ -1800,7 +1828,16 @@ public class DefaultWingsViewFactory extends
                   + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
                   + "</FONT></HTML>");
             }
-            actionButton.setText("");
+            switch (renderingOptions) {
+              case ICON:
+                actionButton.setText("");
+                break;
+              case LABEL:
+                actionButton.setIcon(null);
+                break;
+              default:
+                break;
+            }
             toolBar.add(actionButton);
           }
         }

@@ -96,6 +96,7 @@ import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
+import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
@@ -858,6 +859,16 @@ public class DefaultUlcViewFactory extends
     viewComponent.setAction(getActionFactory().createAction(
         viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
         actionHandler, view, locale));
+    switch (viewDescriptor.getRenderingOptions()) {
+      case ICON:
+        viewComponent.setText(null);
+        break;
+      case LABEL:
+        viewComponent.setIcon(null);
+        break;
+      default:
+        break;
+    }
     return view;
   }
 
@@ -1012,10 +1023,10 @@ public class DefaultUlcViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IAction lovAction = createLovAction(viewComponent, connector,
         propertyViewDescriptor, actionHandler, locale);
-    lovAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
-        "lov.element.name",
-        new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            getTranslationProvider(), locale)}, locale));
+    // lovAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
+    // "lov.element.name",
+    // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
+    // getTranslationProvider(), locale)}, locale));
     lovAction.putValue(IAction.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
@@ -1400,16 +1411,25 @@ public class DefaultUlcViewFactory extends
         ULCIcon childIcon = getIconFactory().getIcon(
             childViewDescriptor.getIconImageURL(),
             getIconFactory().getSmallIconSize());
+        String tabText = childViewDescriptor.getI18nName(
+            getTranslationProvider(), locale);
+        switch (viewDescriptor.getRenderingOptions()) {
+          case ICON:
+            tabText = null;
+            break;
+          case LABEL:
+            childIcon = null;
+            break;
+          default:
+            break;
+        }
         if (childViewDescriptor.getDescription() != null) {
-          viewComponent.addTab(childViewDescriptor.getI18nName(
-              getTranslationProvider(), locale), childIcon,
-              childView.getPeer(), childViewDescriptor.getI18nDescription(
-                  getTranslationProvider(), locale)
+          viewComponent.addTab(tabText, childIcon, childView.getPeer(),
+              childViewDescriptor.getI18nDescription(getTranslationProvider(),
+                  locale)
                   + TOOLTIP_ELLIPSIS);
         } else {
-          viewComponent
-              .addTab(childViewDescriptor.getI18nName(getTranslationProvider(),
-                  locale), childIcon, childView.getPeer());
+          viewComponent.addTab(tabText, childIcon, childView.getPeer());
         }
         childrenViews.add(childView);
       }
@@ -1833,11 +1853,18 @@ public class DefaultUlcViewFactory extends
   @Override
   protected void decorateWithActions(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale, IView<ULCComponent> view) {
-    if (viewDescriptor.getActionMap() != null) {
+    ActionMap actionMap = viewDescriptor.getActionMap();
+    if (actionMap != null) {
       ULCToolBar toolBar = createULCToolBar();
-      for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
-          .getActionLists().iterator(); iter.hasNext();) {
+      for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
+          .hasNext();) {
         ActionList nextActionList = iter.next();
+        ERenderingOptions renderingOptions = ERenderingOptions.ICON;
+        if (nextActionList.getRenderingOptions() != null) {
+          renderingOptions = nextActionList.getRenderingOptions();
+        } else if (actionMap.getRenderingOptions() != null) {
+          renderingOptions = actionMap.getRenderingOptions();
+        }
         for (IDisplayableAction action : nextActionList.getActions()) {
           if (actionHandler.isAccessGranted(action)) {
             IAction ulcAction = getActionFactory().createAction(action,
@@ -1858,8 +1885,16 @@ public class DefaultUlcViewFactory extends
                   + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
                   + "</FONT></HTML>");
             }
-
-            actionButton.setText("");
+            switch (renderingOptions) {
+              case ICON:
+                actionButton.setText("");
+                break;
+              case LABEL:
+                actionButton.setIcon(null);
+                break;
+              default:
+                break;
+            }
             toolBar.add(actionButton);
           }
         }

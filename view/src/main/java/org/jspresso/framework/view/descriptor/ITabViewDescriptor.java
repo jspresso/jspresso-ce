@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.util.gui.ERenderingOptions;
+
 /**
  * This public interface is implemented by "Tab" view descriptors. A typical
  * implementation of the described view could be a swing JTabPane.
@@ -27,5 +29,10 @@ package org.jspresso.framework.view.descriptor;
  */
 public interface ITabViewDescriptor extends ICompositeViewDescriptor {
 
-  // EMPTY AS OF NOW
+  /**
+   * Gets the renderingOptions.
+   * 
+   * @return the renderingOptions.
+   */
+  ERenderingOptions getRenderingOptions();
 }

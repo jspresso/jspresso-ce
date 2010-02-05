@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,30 +16,28 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
-
-import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.util.gui.ERenderingOptions;
+package org.jspresso.framework.util.gui;
 
 /**
- * An action view descriptor.
+ * Enumeration to define various rendering options.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IActionViewDescriptor extends IViewDescriptor {
+public enum ERenderingOptions {
 
   /**
-   * Gets the action that is presented to the user through this view.
-   * 
-   * @return the action that is presented to the user through this view.
+   * <code>LABEL_ICON</code> is the option to render label and icon.
    */
-  IAction getAction();
+  LABEL_ICON,
 
   /**
-   * Gets the renderingOptions.
-   * 
-   * @return the renderingOptions.
+   * <code>LABEL</code> is the option to render label only.
    */
-  ERenderingOptions getRenderingOptions();
+  LABEL,
+
+  /**
+   * <code>ICON</code> is the option to render icon only.
+   */
+  ICON
 }

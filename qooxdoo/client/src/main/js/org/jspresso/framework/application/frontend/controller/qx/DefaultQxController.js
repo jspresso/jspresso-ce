@@ -248,7 +248,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand) {
         var dialogButtons = new Array();
         for(var i = 0; i < command.getActions().length; i++) {
-          dialogButtons.push(this.__viewFactory.createAction(command.getActions()[i], true));
+          dialogButtons.push(this.__viewFactory.createAction(command.getActions()[i]));
         }
         var dialogView;
         var icon;

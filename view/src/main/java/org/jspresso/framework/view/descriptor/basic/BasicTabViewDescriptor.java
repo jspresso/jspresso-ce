@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.List;
 
+import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -39,6 +40,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
     implements ITabViewDescriptor {
 
   private List<IViewDescriptor> tabs;
+  private ERenderingOptions     renderingOptions = ERenderingOptions.LABEL_ICON;
 
   /**
    * {@inheritDoc}
@@ -74,5 +76,34 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
    */
   public void setTabs(List<IViewDescriptor> tabs) {
     this.tabs = tabs;
+  }
+
+  /**
+   * Gets the renderingOptions.
+   * 
+   * @return the renderingOptions.
+   */
+  public ERenderingOptions getRenderingOptions() {
+    return renderingOptions;
+  }
+
+  /**
+   * Indicates how the tabs should be rendered. This is either a value of the
+   * <code>ERenderingOptions</code> enum or its equivalent string representation
+   * :
+   * <ul>
+   * <li><code>LABEL_ICON</code> for label and icon</li>
+   * <li><code>LABEL</code> for label only</li>
+   * <li><code>ICON</code> for icon only.</li>
+   * </ul>
+   * <p>
+   * Default value is <code>ERenderingOptions.LABEL_ICON</code>, i.e. label and
+   * icon.
+   * 
+   * @param renderingOptions
+   *          the renderingOptions to set.
+   */
+  public void setRenderingOptions(ERenderingOptions renderingOptions) {
+    this.renderingOptions = renderingOptions;
   }
 }
