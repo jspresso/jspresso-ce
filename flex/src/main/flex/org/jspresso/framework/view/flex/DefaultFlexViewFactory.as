@@ -111,6 +111,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.array.ArrayUtil;
   import org.jspresso.framework.util.format.NumberParser;
   import org.jspresso.framework.util.format.Parser;
+  import org.jspresso.framework.util.format.PasswordFormatter;
   import org.jspresso.framework.util.format.PercentFormatter;
   import org.jspresso.framework.util.format.PercentParser;
   import org.jspresso.framework.util.gui.CellConstraints;
@@ -137,6 +138,7 @@ package org.jspresso.framework.view.flex {
     private var _commandHandler:IRemoteCommandHandler;
     private var _remoteValueSorter:RemoteValueSorter;
     private var _timeFormatter:DateFormatter;
+    private var _passwordFormatter:PasswordFormatter;
 
     public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry,
                                            actionHandler:IActionHandler,
@@ -146,6 +148,7 @@ package org.jspresso.framework.view.flex {
       _commandHandler = commandHandler;
       _remoteValueSorter = new RemoteValueSorter();
       _timeFormatter = new DateFormatter();
+      _passwordFormatter = new PasswordFormatter();
       _timeFormatter.formatString = "JJ:NN:SS"
     }
     
@@ -1752,6 +1755,8 @@ package org.jspresso.framework.view.flex {
         return dateFormatter;
       } else if(remoteComponent is RTimeField) {
         return _timeFormatter;
+      } else if(remoteComponent is RPasswordField) {
+        return _passwordFormatter;
       } else if(remoteComponent is RNumericComponent) {
         var numberFormatter:NumberFormatter
         if(remoteComponent is RPercentField) {

@@ -68,6 +68,7 @@ import org.jspresso.framework.gui.ulc.components.server.ULCExtendedTable;
 import org.jspresso.framework.gui.ulc.components.server.ULCExtendedTree;
 import org.jspresso.framework.gui.ulc.components.server.ULCJEditTextArea;
 import org.jspresso.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
+import org.jspresso.framework.gui.ulc.components.server.ULCPasswordDataType;
 import org.jspresso.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
@@ -194,6 +195,7 @@ public class DefaultUlcViewFactory extends
   private IListSelectionModelBinder     listSelectionModelBinder;
 
   private ULCTranslationDataTypeFactory translationDataTypeFactory = new ULCTranslationDataTypeFactory();
+  private ULCPasswordDataType           passwordDataType           = new ULCPasswordDataType();
 
   private ITreeSelectionModelBinder     treeSelectionModelBinder;
 
@@ -2182,9 +2184,16 @@ public class DefaultUlcViewFactory extends
   }
 
   private ITableCellRenderer createStringTableCellRenderer(int column,
-      @SuppressWarnings("unused") IStringPropertyDescriptor propertyDescriptor,
+      IStringPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
+    if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
+      return new FormattedTableCellRenderer(column, createPasswordDataType());
+    }
     return new FormattedTableCellRenderer(column, null);
+  }
+
+  private ULCPasswordDataType createPasswordDataType() {
+    return passwordDataType;
   }
 
   private ULCDateDataType createTimeDataType(

@@ -94,6 +94,7 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.format.IFormatter;
+import org.jspresso.framework.util.format.PasswordFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.FontHelper;
@@ -2092,8 +2093,11 @@ public class DefaultWingsViewFactory extends
   }
 
   private STableCellRenderer createStringTableCellRenderer(
-      @SuppressWarnings("unused") IStringPropertyDescriptor propertyDescriptor,
+      IStringPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
+    if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
+      return new FormattedTableCellRenderer(new PasswordFormatter());
+    }
     return new FormattedTableCellRenderer(null);
   }
 

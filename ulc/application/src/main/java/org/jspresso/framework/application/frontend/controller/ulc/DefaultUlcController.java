@@ -374,7 +374,9 @@ public class DefaultUlcController extends
       ActionList actionList) {
     List<ULCMenuItem> menuItems = new ArrayList<ULCMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
-      menuItems.add(createMenuItem(sourceComponent, action));
+      if (isAccessGranted(action)) {
+        menuItems.add(createMenuItem(sourceComponent, action));
+      }
     }
     return menuItems;
   }

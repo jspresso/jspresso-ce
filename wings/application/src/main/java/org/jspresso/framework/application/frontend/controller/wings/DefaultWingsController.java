@@ -384,7 +384,9 @@ public class DefaultWingsController extends
   private List<SMenuItem> createMenuItems(SMenu menu, ActionList actionList) {
     List<SMenuItem> menuItems = new ArrayList<SMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
-      menuItems.add(createMenuItem(menu, action));
+      if (isAccessGranted(action)) {
+        menuItems.add(createMenuItem(menu, action));
+      }
     }
     return menuItems;
   }

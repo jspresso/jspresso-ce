@@ -534,8 +534,10 @@ public class DefaultRemoteController extends
 
     List<RAction> actions = new ArrayList<RAction>();
     for (IDisplayableAction action : actionList.getActions()) {
-      actions.add(getViewFactory().getActionFactory().createAction(action,
-          this, null, null, null, getLocale()));
+      if (isAccessGranted(action)) {
+        actions.add(getViewFactory().getActionFactory().createAction(action,
+            this, null, null, null, getLocale()));
+      }
     }
     rActionList.setActions(actions.toArray(new RAction[0]));
     return rActionList;

@@ -518,7 +518,9 @@ public class DefaultSwingController extends
   private List<JMenuItem> createMenuItems(JMenu menu, ActionList actionList) {
     List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
-      menuItems.add(createMenuItem(menu, action));
+      if (isAccessGranted(action)) {
+        menuItems.add(createMenuItem(menu, action));
+      }
     }
     return menuItems;
   }

@@ -1912,6 +1912,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         } else {
           format = new qx.util.format.DateFormat(qx.locale.Date.getDateFormat("short") + "");
         }
+      } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RPasswordField) {
+        return new org.jspresso.framework.util.format.PasswordFormat();
       } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
         return new qx.util.format.DateFormat(qx.locale.Date.getDateTimeFormat("HHmmss", "HH:mm:ss"));
       } else if(remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {

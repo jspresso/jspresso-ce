@@ -99,6 +99,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     queryPropertyDescriptor.setReadOnly(false);
     queryPropertyDescriptor.integrityProcessors = null;
     queryPropertyDescriptor.setIntegrityProcessorClassNames(null);
+    queryPropertyDescriptor.writabilityGates = null;
+    queryPropertyDescriptor.readabilityGates = null;
     return queryPropertyDescriptor;
   }
 
