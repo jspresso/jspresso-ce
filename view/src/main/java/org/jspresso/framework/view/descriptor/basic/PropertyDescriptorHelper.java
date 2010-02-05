@@ -72,6 +72,23 @@ public final class PropertyDescriptorHelper {
             + nestedRenderedProperty);
         nestedPropertyViewDescriptor.setModelDescriptor(rootComponentDescriptor
             .getPropertyDescriptor(nestedPropertyViewDescriptor.getName()));
+        nestedPropertyViewDescriptor.setReadOnly(propertyViewDescriptor
+            .isReadOnly());
+        nestedPropertyViewDescriptor.setWritabilityGates(propertyViewDescriptor
+            .getWritabilityGates());
+        nestedPropertyViewDescriptor.setReadabilityGates(propertyViewDescriptor
+            .getReadabilityGates());
+        nestedPropertyViewDescriptor.setLabelBackground(propertyViewDescriptor
+            .getLabelBackground());
+        nestedPropertyViewDescriptor.setLabelForeground(propertyViewDescriptor
+            .getLabelForeground());
+        nestedPropertyViewDescriptor.setLabelFont(propertyViewDescriptor
+            .getLabelFont());
+        nestedPropertyViewDescriptor.setBackground(propertyViewDescriptor
+            .getBackground());
+        nestedPropertyViewDescriptor.setForeground(propertyViewDescriptor
+            .getForeground());
+        nestedPropertyViewDescriptor.setFont(propertyViewDescriptor.getFont());
         returnedList.addAll(explodeComponentReferences(
             nestedPropertyViewDescriptor, componentDescriptorProvider));
       }

@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.model.component.query;
 
+import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
@@ -27,12 +28,18 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ComparableQueryStructure extends
-    AbstractPropertyChangeCapable {
+public class ComparableQueryStructure extends AbstractPropertyChangeCapable {
 
   private String comparator;
   private Object infValue;
   private Object supValue;
+
+  /**
+   * Constructs a new <code>ComparableQueryStructure</code> instance.
+   */
+  public ComparableQueryStructure() {
+    this.comparator = ComparableQueryStructureDescriptor.EQ;
+  }
 
   /**
    * Gets the comparator.
@@ -65,7 +72,7 @@ public class ComparableQueryStructure extends
    * Sets the comparator.
    * 
    * @param comparator
-   *            the comparator to set.
+   *          the comparator to set.
    */
   public void setComparator(String comparator) {
     String oldComparator = this.comparator;
@@ -77,7 +84,7 @@ public class ComparableQueryStructure extends
    * Sets the infValue.
    * 
    * @param infValue
-   *            the infValue to set.
+   *          the infValue to set.
    */
   public void setInfValue(Object infValue) {
     Object oldInfValue = this.infValue;
@@ -89,7 +96,7 @@ public class ComparableQueryStructure extends
    * Sets the supValue.
    * 
    * @param supValue
-   *            the supValue to set.
+   *          the supValue to set.
    */
   public void setSupValue(Object supValue) {
     Object oldSupValue = this.supValue;

@@ -28,6 +28,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
@@ -74,6 +75,12 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
           .getReferencedDescriptor();
       QueryComponent referencedQueryComponent = new QueryComponent(
           referencedDescriptor);
+      if (ComparableQueryStructure.class
+          .isAssignableFrom(referencedQueryComponent.getQueryContract())) {
+        referencedQueryComponent.put(
+            ComparableQueryStructureDescriptor.COMPARATOR,
+            ComparableQueryStructureDescriptor.EQ);
+      }
       referencedQueryComponent
           .addPropertyChangeListener(new InlinedComponentTracker(
               propertyDescriptor.getName()));
