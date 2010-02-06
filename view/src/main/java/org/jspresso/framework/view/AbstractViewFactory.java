@@ -84,6 +84,7 @@ import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
@@ -130,57 +131,57 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * <code>DEF_DISP_MAX_FRACTION_DIGIT</code>.
    */
-  protected static final int            DEF_DISP_MAX_FRACTION_DIGIT = 2;
+  protected static final int            DEF_DISP_MAX_FRACTION_DIGIT      = 2;
   /**
    * <code>DEF_DISP_MAX_VALUE</code>.
    */
-  protected static final double         DEF_DISP_MAX_VALUE          = 1000;
+  protected static final double         DEF_DISP_MAX_VALUE               = 1000;
   /**
    * <code>DEF_DISP_TEMPLATE_PERCENT</code>.
    */
-  protected static final double         DEF_DISP_TEMPLATE_PERCENT   = 99;
+  protected static final double         DEF_DISP_TEMPLATE_PERCENT        = 99;
   /**
    * <code>TEMPLATE_CHAR</code>.
    */
-  protected static final char           TEMPLATE_CHAR               = 'O';
+  protected static final char           TEMPLATE_CHAR                    = 'O';
   /**
    * <code>TEMPLATE_DATE</code>.
    */
-  protected static final Date           TEMPLATE_DATE               = new Date(
-                                                                        27166271000L);
+  protected static final Date           TEMPLATE_DATE                    = new Date(
+                                                                             27166271000L);
   /**
    * <code>TEMPLATE_DURATION</code>.
    */
-  protected static final Long           TEMPLATE_DURATION           = new Long(
-                                                                        EDuration.ONE_SECOND
-                                                                            .getMillis()
-                                                                            + EDuration.ONE_MINUTE
-                                                                                .getMillis()
-                                                                            + EDuration.ONE_HOUR
-                                                                                .getMillis()
-                                                                            + EDuration.ONE_DAY
-                                                                                .getMillis()
-                                                                            + EDuration.ONE_WEEK
-                                                                                .getMillis());
+  protected static final Long           TEMPLATE_DURATION                = new Long(
+                                                                             EDuration.ONE_SECOND
+                                                                                 .getMillis()
+                                                                                 + EDuration.ONE_MINUTE
+                                                                                     .getMillis()
+                                                                                 + EDuration.ONE_HOUR
+                                                                                     .getMillis()
+                                                                                 + EDuration.ONE_DAY
+                                                                                     .getMillis()
+                                                                                 + EDuration.ONE_WEEK
+                                                                                     .getMillis());
   /**
    * <code>TEMPLATE_TIME</code>.
    */
-  protected static final Date           TEMPLATE_TIME               = new Date(
-                                                                        366000);
+  protected static final Date           TEMPLATE_TIME                    = new Date(
+                                                                             366000);
 
   /**
    * <code>BOLD_FONT</code>.
    */
-  protected static final String         BOLD_FONT                   = ";BOLD;";
+  protected static final String         BOLD_FONT                        = ";BOLD;";
 
   private IActionFactory<G, E>          actionFactory;
   private IDisplayableAction            binaryPropertyInfoAction;
   private IConfigurableConnectorFactory connectorFactory;
   private IIconFactory<F>               iconFactory;
   private IDisplayableAction            lovAction;
-  private int                           maxCharacterLength          = 32;
+  private int                           maxCharacterLength               = 32;
 
-  private int                           maxColumnCharacterLength    = 32;
+  private int                           maxColumnCharacterLength         = 32;
   private IModelCascadingBinder         modelCascadingBinder;
   private IModelConnectorFactory        modelConnectorFactory;
   private IMvcBinder                    mvcBinder;
@@ -190,6 +191,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
   private ITranslationProvider          translationProvider;
   private IValueChangeListener          firstRowSelector;
+
+  private ERenderingOptions             defaultActionMapRenderingOptions = ERenderingOptions.ICON;
 
   /**
    * Constructs a new <code>AbstractViewFactory</code> instance.
@@ -2472,4 +2475,24 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected abstract void applyPreferredSize(E component,
       Dimension preferredSize);
+
+  /**
+   * Gets the defaultActionMapRenderingOptions.
+   * 
+   * @return the defaultActionMapRenderingOptions.
+   */
+  protected ERenderingOptions getDefaultActionMapRenderingOptions() {
+    return defaultActionMapRenderingOptions;
+  }
+
+  /**
+   * Sets the defaultActionMapRenderingOptions.
+   * 
+   * @param defaultActionMapRenderingOptions
+   *          the defaultActionMapRenderingOptions to set.
+   */
+  public void setDefaultActionMapRenderingOptions(
+      ERenderingOptions defaultActionMapRenderingOptions) {
+    this.defaultActionMapRenderingOptions = defaultActionMapRenderingOptions;
+  }
 }

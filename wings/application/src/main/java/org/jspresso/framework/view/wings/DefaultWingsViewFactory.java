@@ -1798,7 +1798,7 @@ public class DefaultWingsViewFactory extends
       for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
           .hasNext();) {
         ActionList nextActionList = iter.next();
-        ERenderingOptions renderingOptions = ERenderingOptions.ICON;
+        ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
         if (nextActionList.getRenderingOptions() != null) {
           renderingOptions = nextActionList.getRenderingOptions();
         } else if (actionMap.getRenderingOptions() != null) {
