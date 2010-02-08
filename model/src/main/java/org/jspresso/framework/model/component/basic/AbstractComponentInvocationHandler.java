@@ -1087,7 +1087,8 @@ public abstract class AbstractComponentInvocationHandler implements
       storeProperty(propertyName, newPropertyValue);
     }
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      if (currentPropertyValue != null) {
+      if (currentPropertyValue != null
+          && currentPropertyValue == newPropertyValue) {
         currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
             .getContextClassLoader(),
             new Class[] {((ICollectionPropertyDescriptor) propertyDescriptor)
