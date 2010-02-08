@@ -196,8 +196,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             && ((Boolean) property.getValue()).booleanValue()) {
           criteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
         } else if (property.getValue() instanceof String) {
-          criteria.add(Restrictions.like(prefixedProperty,
-              (String) property.getValue(), MatchMode.START).ignoreCase());
+          if (((String) property.getValue()).length() > 0) {
+            criteria.add(Restrictions.like(prefixedProperty,
+                (String) property.getValue(), MatchMode.START).ignoreCase());
+          }
         } else if (property.getValue() instanceof Number
             || property.getValue() instanceof Date) {
           criteria.add(Restrictions.eq(prefixedProperty, property.getValue()));

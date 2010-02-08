@@ -87,7 +87,8 @@ public class CreateQueryComponentAction extends BackendAction {
     context.put(QUERY_MODEL_CONNECTOR, modelConnector);
     modelConnector.setConnectorValue(queryComponent);
     String queryPropertyValue = getActionCommand(context);
-    if (queryPropertyValue != null && !queryPropertyValue.equals("*")) {
+    if (queryPropertyValue != null && !queryPropertyValue.equals("*")
+        && queryPropertyValue.length() > 0) {
       String propertyName = (String) getActionParameter(context);
       if (propertyName != null) {
         modelConnector.getChildConnector(propertyName).setConnectorValue(
