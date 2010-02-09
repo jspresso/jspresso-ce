@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,29 +16,26 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.model.descriptor;
+package org.jspresso.framework.model.persistence.hibernate.dialect;
+
+import java.sql.Types;
 
 /**
- * Constants for date types.
+ * Customized Oracle 10g dialect.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public enum EDateType {
+public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
 
   /**
-   * <code>DATE</code>.
+   * Maps integers differently.
+   * <p>
+   * {@inheritDoc}
    */
-  DATE,
-
-  /**
-   * <code>DATE_TIME</code>.
-   */
-  DATE_TIME,
-
-  /**
-   * <code>TIMESTAMP</code>.
-   */
-  TIMESTAMP
-
+  @Override
+  protected void registerNumericTypeMappings() {
+    super.registerNumericTypeMappings();
+    registerColumnType(Types.INTEGER, "number($p,0)");
+  }
 }

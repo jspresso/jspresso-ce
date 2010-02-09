@@ -67,8 +67,8 @@ public class DatabaseLoginModule extends DatabaseServerLoginModule {
           for (int i = 2; i < rsmd.getColumnCount() + 1; i++) {
             String customKey = rsmd.getColumnName(i);
             Object customValue = rs.getObject(i);
-            ((UserPrincipal) getIdentity()).putCustomProperty(customKey,
-                customValue);
+            ((UserPrincipal) getIdentity()).putCustomProperty(customKey
+                .toLowerCase(), customValue);
           }
         }
       } catch (Throwable ex) {

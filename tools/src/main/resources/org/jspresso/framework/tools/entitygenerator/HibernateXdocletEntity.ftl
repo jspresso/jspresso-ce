@@ -64,15 +64,21 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if isEntity && !superEntity?exists>
 
   /**
-   * @hibernate.id generator-class = "assigned" column = "ID" type = "string"
-   *               length = "36"
+   * @hibernate.id
+   *           generator-class = "assigned"
+   *           column = "ID"
+   *           type = "string"
+   *           length = "36"
    * <p>
    * {@inheritDoc}
    */
   java.io.Serializable getId();
 
   /**
-   * @hibernate.version column = "VERSION" unsaved-value = "null"
+   * @hibernate.version
+   *           column = "VERSION"
+   *           unsaved-value = "null"
+   *           type="integer"
    * <p>
    * {@inheritDoc}
    */
@@ -118,10 +124,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           optimistic-lock = "false"
     </#if>
     <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDatePropertyDescriptor")>
-      <#if propertyDescriptor.type = "DATE">
-   *           type = "date"
-      <#else>
+      <#if propertyDescriptor.type = "TIMESTAMP">
    *           type = "timestamp"
+      <#else>
+   *           type = "date"
       </#if>
     <#elseif instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.ITimePropertyDescriptor")>
    *           type = "time"
@@ -157,15 +163,15 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         <#else>
           <#local length=supLength/>
         </#if>
-   *           scale = "${length?c}"
+   *           precision = "${length?c}"
       <#else>
-   *           scale = "10"
+   *           precision = "10"
       </#if>
       <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor")>
         <#if propertyDescriptor.maxFractionDigit?exists>
-   *           precision = "${propertyDescriptor.maxFractionDigit?c}"
+   *           scale = "${propertyDescriptor.maxFractionDigit?c}"
         <#else>
-   *           precision = "2"
+   *           scale = "2"
         </#if>
       </#if>
     </#if>

@@ -33,7 +33,8 @@ import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 public abstract class AbstractEnumerationPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IEnumerationPropertyDescriptor {
 
-  private String enumerationName;
+  private String  enumerationName;
+  private Integer maxLength;
 
   /**
    * {@inheritDoc}
@@ -59,6 +60,9 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * @return the maxLength.
    */
   public Integer getMaxLength() {
+    if (maxLength != null) {
+      return maxLength;
+    }
     int max = 1;
     for (String value : getEnumerationValues()) {
       if (value != null && value.length() > max) {
@@ -97,10 +101,8 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * 
    * @param maxLength
    *          the maxLength to set.
-   * @deprecated maxlength is automatically determined from allowed values.
    */
-  @Deprecated
   public void setMaxLength(Integer maxLength) {
-    // this.maxLength = maxLength;
+    this.maxLength = maxLength;
   }
 }
