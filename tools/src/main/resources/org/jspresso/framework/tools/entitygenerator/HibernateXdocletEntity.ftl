@@ -147,7 +147,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#elseif instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IColorPropertyDescriptor")>
    *           length = "10"
     </#if>
-    <#if propertyDescriptor.mandatory>
+    <#if (   propertyDescriptor.mandatory
+          || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor"))>
    *           not-null = "true"
     </#if>
     <#if propertyDescriptor.unicityScope?exists>
