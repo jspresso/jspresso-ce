@@ -1514,7 +1514,7 @@ public class DefaultWingsViewFactory extends
         IPropertyDescriptor propertyDescriptor = modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()
             .getPropertyDescriptor(propertyName);
-        StringBuffer columnName = new StringBuffer(propertyDescriptor
+        StringBuffer columnName = new StringBuffer(columnViewDescriptor
             .getI18nName(getTranslationProvider(), locale));
         if (propertyDescriptor.isMandatory()) {
           columnName.append("*");
