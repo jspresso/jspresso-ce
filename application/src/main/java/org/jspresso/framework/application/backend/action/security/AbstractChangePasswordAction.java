@@ -3,10 +3,14 @@
  */
 package org.jspresso.framework.application.backend.action.security;
 
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.security.Base64Encoder;
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
@@ -67,16 +71,29 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   public static final String                                    PASSWD_TYPED             = "password_typed";
 
+  private String                                                digestAlgorithm;
+
+  /**
+   * Sets the digestAlgorithm to use to hash the password before storing it.
+   * 
+   * @param digestAlgorithm
+   *          the digestAlgorithm to set.
+   */
+  public void setDigestAlgorithm(String digestAlgorithm) {
+    this.digestAlgorithm = digestAlgorithm;
+  }
+
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
     BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();
     BasicPasswordPropertyDescriptor currentPassword = new BasicPasswordPropertyDescriptor();
     currentPassword.setName(PASSWD_CURRENT);
+    currentPassword.setMaxLength(new Integer(32));
     BasicPasswordPropertyDescriptor typedPassword = new BasicPasswordPropertyDescriptor();
     typedPassword.setName(PASSWD_TYPED);
-    typedPassword.setMaxLength(new Integer(15));
+    typedPassword.setMaxLength(new Integer(32));
     BasicPasswordPropertyDescriptor retypedPassword = new BasicPasswordPropertyDescriptor();
     retypedPassword.setName(PASSWD_RETYPED);
-    retypedPassword.setMaxLength(new Integer(15));
+    retypedPassword.setMaxLength(new Integer(32));
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     propertyDescriptors.add(currentPassword);
@@ -114,6 +131,31 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   }
 
   /**
+   * Hashes a char array using the algorithm parametered in the instance.
+   * 
+   * @param newPassword
+   *          the new password to hash.
+   * @return the password digest.
+   * @throws NoSuchAlgorithmException
+   *           when the digest algorithm is not supported.
+   * @throws IOException
+   *           whenever an I/O exception occurs.
+   */
+  protected String digest(char[] newPassword) throws NoSuchAlgorithmException,
+      IOException {
+    if (getDigestAlgorithm() != null) {
+      String prefix = "{" + getDigestAlgorithm() + "}";
+      MessageDigest md = MessageDigest.getInstance(getDigestAlgorithm());
+      md.reset();
+      md.update(new String(newPassword).getBytes("UTF-8"));
+
+      byte[] digest = md.digest();
+      return prefix + Base64Encoder.encode(digest);
+    }
+    return new String(newPassword);
+  }
+
+  /**
    * Performs the effective password change depending on the underlying storage.
    * 
    * @param userPrincipal
@@ -126,4 +168,13 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   protected abstract boolean changePassword(UserPrincipal userPrincipal,
       String currentPassword, String newPassword);
+
+  /**
+   * Gets the digestAlgorithm.
+   * 
+   * @return the digestAlgorithm.
+   */
+  protected String getDigestAlgorithm() {
+    return digestAlgorithm;
+  }
 }

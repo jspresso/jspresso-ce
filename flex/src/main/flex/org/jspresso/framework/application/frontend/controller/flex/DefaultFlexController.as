@@ -630,6 +630,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function restart():void {
       var applicationFrame:Application = Application.application as Application;
       applicationFrame.removeAllChildren();
+      while(_dialogStack.length > 1) {
+        PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as IFlexDisplayObject);
+      }
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _changeNotificationsEnabled = true;
       _commandsQueue = new ArrayCollection(new Array());
