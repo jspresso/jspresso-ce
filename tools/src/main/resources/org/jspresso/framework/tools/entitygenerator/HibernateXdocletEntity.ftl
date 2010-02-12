@@ -437,6 +437,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
         </#if>
+        <#if propertyDescriptor.fetchType?exists && propertyDescriptor.fetchType.toString() = "JOIN">
+   *           fetch = "join"
+        </#if>
       <#else>
    * @hibernate.many-to-one
         <#if !propertyDescriptor.versionControl>
@@ -457,6 +460,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           <#else>
    *           cascade = "none"
           </#if>
+        </#if>
+        <#if propertyDescriptor.fetchType?exists && propertyDescriptor.fetchType.toString() = "JOIN">
+   *           fetch = "join"
         </#if>
    * @hibernate.column
    *           name = "${propSqlName}_ID"

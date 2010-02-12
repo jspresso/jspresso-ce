@@ -39,6 +39,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   private Map<String, Object>     initializationMapping;
   private IComponentDescriptor<E> referencedDescriptor;
   private Integer                 pageSize;
+  private EFetchType              fetchType = EFetchType.SELECT;
 
   /**
    * {@inheritDoc}
@@ -214,5 +215,32 @@ public class BasicReferencePropertyDescriptor<E> extends
         .createQueryDescriptor();
     queryDescriptor.setReferencedDescriptor(queryReferencedDescriptor);
     return queryDescriptor;
+  }
+
+  
+  /**
+   * Gets the fetchType.
+   * 
+   * @return the fetchType.
+   */
+  public EFetchType getFetchType() {
+    return fetchType;
+  }
+
+  
+  /**
+   * This property allows to finely tune fetching strategy of the ORM on this relationship end. This is either a value of the
+   * <code>EFetchType</code> enum or its equivalent string representation :
+   * <ul>
+   * <li><code>SELECT</code> for default 2nd select strategy (lazy)</li>
+   * <li><code>JOIN</code> for a join select strategy (not lazy)</li>
+   * </ul>
+   * <p>
+   * Default value is <code>EFetchType.JOIN</code>, i.e. 2nd select strategy.
+   * 
+   * @param fetchType the fetchType to set.
+   */
+  public void setFetchType(EFetchType fetchType) {
+    this.fetchType = fetchType;
   }
 }
