@@ -860,7 +860,8 @@ public abstract class AbstractBackendController extends AbstractController
             } else {
               Object registeredProperty = registeredEntityProperties
                   .get(property.getKey());
-              if (mergeMode == EMergeMode.MERGE_EAGER) {
+              if (mergeMode == EMergeMode.MERGE_EAGER
+                  && isInitialized(property.getValue())) {
                 initializePropertyIfNeeded(registeredEntity, property.getKey());
               }
               if (isInitialized(registeredProperty)) {
@@ -878,7 +879,8 @@ public abstract class AbstractBackendController extends AbstractController
             } else {
               Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties
                   .get(property.getKey());
-              if (mergeMode == EMergeMode.MERGE_EAGER) {
+              if (mergeMode == EMergeMode.MERGE_EAGER
+                  && isInitialized(property.getValue())) {
                 initializePropertyIfNeeded(registeredEntity, property.getKey());
               }
               if (isInitialized(registeredCollection)) {
@@ -965,7 +967,8 @@ public abstract class AbstractBackendController extends AbstractController
           } else {
             Object registeredProperty = registeredComponentProperties
                 .get(property.getKey());
-            if (mergeMode == EMergeMode.MERGE_EAGER) {
+            if (mergeMode == EMergeMode.MERGE_EAGER
+                && isInitialized(property.getValue())) {
               initializePropertyIfNeeded(registeredComponent, property.getKey());
             }
             if (isInitialized(registeredProperty)) {
