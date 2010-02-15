@@ -56,6 +56,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   private Collection<IGate>  writabilityGates;
   private Integer            preferredWidth;
   private Integer            preferredHeight;
+  private String             automationId;
 
   /**
    * Gets the grantedRoles.
@@ -438,5 +439,24 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   public void setPreferredHeight(Integer preferedHeight) {
     this.preferredHeight = preferedHeight;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getAutomationId() {
+    return automationId;
+  }
+
+  /**
+   * Gets a fixed id to mark the generated UI component (actually the UI
+   * component connector). This id can serve to record/replay UI command
+   * sequences.
+   * 
+   * @param automationId
+   *          fixed id to mark the generated UI component.
+   */
+  public void setAutomationId(String automationId) {
+    this.automationId = automationId;
   }
 }

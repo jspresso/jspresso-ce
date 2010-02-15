@@ -39,6 +39,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
 
   private Boolean                            composition;
   private IRelationshipEndPropertyDescriptor reverseRelationEnd;
+  private String                             fkName;
 
   /**
    * {@inheritDoc}
@@ -140,4 +141,24 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * @return the default composition of a relationship end.
    */
   protected abstract boolean getDefaultComposition();
+
+  /**
+   * Gets the fkName.
+   * 
+   * @return the fkName.
+   */
+  public String getFkName() {
+    return fkName;
+  }
+
+  /**
+   * Gives the developer the oportunity to customize the geneated foreign key
+   * (if any) name.
+   * 
+   * @param fkName
+   *          the fkName to set.
+   */
+  public void setFkName(String fkName) {
+    this.fkName = fkName;
+  }
 }

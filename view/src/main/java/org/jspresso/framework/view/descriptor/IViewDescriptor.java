@@ -83,4 +83,12 @@ public interface IViewDescriptor extends IIconDescriptor, ISecurable,
    * @return the preferred dimension of the view peer component.
    */
   Dimension getPreferredSize();
+
+  /**
+   * Gets a fixed id to mark the generated UI component. This id can serve to
+   * record/replay UI command sequences.
+   * 
+   * @return a fixed id to mark the generated UI component.
+   */
+  String getAutomationId();
 }

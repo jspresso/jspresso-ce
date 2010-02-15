@@ -243,6 +243,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateCollectionGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
+  <#if propertyDescriptor.fkName?exists>
+    <#local fkName=propertyDescriptor.fkName/>
+  </#if>
   <#local collectionType=propertyDescriptor.modelType.name/>
   <#local elementDescriptor=propertyDescriptor.referencedDescriptor.elementDescriptor/>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
@@ -260,6 +263,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#local bidirectional=true/>
     <#local reversePropertyName=propertyDescriptor.reverseRelationEnd.name/>
     <#local reverseMandatory=propertyDescriptor.reverseRelationEnd.mandatory/>
+    <#if propertyDescriptor.reverseRelationEnd.fkName?exists>
+      <#local reverseFkName=propertyDescriptor.reverseRelationEnd.fkName/>
+    </#if>
     <#if manyToMany>
       <#local inverse=(compareStrings(elementName, componentName) > 0)/>
     <#else>
@@ -308,63 +314,87 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if !propertyDescriptor.versionControl>
    *           optimistic-lock = "false"
     </#if>
-      <#if manyToMany && inverse>
+    <#if manyToMany && inverse>
    *           cascade = "none"
-        <#else>
-          <#if propertyDescriptor.composition>
+    <#else>
+      <#if propertyDescriptor.composition>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate,delete"
-          <#else>
+      <#else>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
-          </#if>
-        </#if>
-      <#if manyToMany>
-        <#if inverse>
-          <#local joinTableName=eltSqlName+"_"+revSqlName/>
-   *           table = "${joinTableName}"
-        <#else>
-          <#local joinTableName=compSqlName+"_"+propSqlName/>
-   *           table = "${joinTableName}"
-        </#if>
       </#if>
+    </#if>
+    <#if manyToMany>
       <#if inverse>
-   *           inverse = "true"
+        <#local joinTableName=eltSqlName+"_"+revSqlName/>
+   *           table = "${joinTableName}"
+      <#else>
+        <#local joinTableName=compSqlName+"_"+propSqlName/>
+   *           table = "${joinTableName}"
       </#if>
+    </#if>
+    <#if inverse>
+   *           inverse = "true"
+    </#if>
 <#--
   The following replaces the previous block wich makes hibernate fail... Ordering is now handled in the entity itself.
   But hibernate must be provided with an ordering attribute so that a Linked HashSet is used instead of a set.
 -->
-      <#if (!manyToMany && !(hibernateCollectionType="list"))>
+    <#if (!manyToMany && !(hibernateCollectionType="list"))>
    *           order-by="ID"
-      </#if>
-      <#if manyToMany>
+    </#if>
+    <#if manyToMany>
    * @hibernate.key
-        <#if componentName=elementName>
-          <#if inverse>
+      <#if componentName=elementName>
+        <#if inverse>
    *           column = "${compSqlName}_ID2"
-   *           foreign-key = "${joinTableName}_${compSqlName}_FK2"
+          <#if fkName?exists>
+   *           foreign-key = "${fkName}"
           <#else>
+   *           foreign-key = "${joinTableName}_${compSqlName}_FK2"
+          </#if>
+        <#else>
    *           column = "${compSqlName}_ID1"
+          <#if fkName?exists>
+   *           foreign-key = "${fkName}"
+          <#else>
    *           foreign-key = "${joinTableName}_${compSqlName}_FK1"
           </#if>
-        <#else>
-   *           column = "${compSqlName}_ID"
-   *           foreign-key = "${joinTableName}_${compSqlName}_FK"
-        </#if>
-   * @hibernate.many-to-many
-   *           class = "${elementType}"
-        <#if componentName=elementName>
-          <#if inverse>
-   *           column = "${eltSqlName}_ID1"
-   *           foreign-key = "${joinTableName}_${eltSqlName}_FK1"
-          <#else>
-   *           column = "${eltSqlName}_ID2"
-   *           foreign-key = "${joinTableName}_${eltSqlName}_FK2"
-          </#if>
-        <#else>
-   *           column = "${eltSqlName}_ID"
-   *           foreign-key = "${joinTableName}_${eltSqlName}_FK"
         </#if>
       <#else>
+   *           column = "${compSqlName}_ID"
+        <#if fkName?exists>
+   *           foreign-key = "${fkName}"
+        <#else>
+   *           foreign-key = "${joinTableName}_${compSqlName}_FK"
+        </#if>
+      </#if>
+   * @hibernate.many-to-many
+   *           class = "${elementType}"
+      <#if componentName=elementName>
+        <#if inverse>
+   *           column = "${eltSqlName}_ID1"
+          <#if reverseFkName?exists>
+   *           foreign-key = "${reverseFkName}"
+          <#else>
+   *           foreign-key = "${joinTableName}_${eltSqlName}_FK1"
+          </#if>
+        <#else>
+   *           column = "${eltSqlName}_ID2"
+          <#if reverseFkName?exists>
+   *           foreign-key = "${reverseFkName}"
+          <#else>
+   *           foreign-key = "${joinTableName}_${eltSqlName}_FK2"
+          </#if>
+        </#if>
+      <#else>
+   *           column = "${eltSqlName}_ID"
+        <#if reverseFkName?exists>
+   *           foreign-key = "${reverseFkName}"
+        <#else>
+   *           foreign-key = "${joinTableName}_${eltSqlName}_FK"
+        </#if>
+      </#if>
+    <#else>
    * @hibernate.key
    *           column = "${revSqlName}_ID"
       <#if bidirectional>
@@ -374,9 +404,19 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       </#if>
       <#if isEntity>
         <#if bidirectional>
+          <#if fkName?exists>
+   *           foreign-key = "${fkName}"
+<#--
+          <#else>
    *           foreign-key = "${eltSqlName}_${revSqlName}_FK"
+-->
+          </#if>
         <#else>
+          <#if fkName?exists>
+   *           foreign-key = "${fkName}"
+          <#else>
    *           foreign-key = "${revSqlName}_FK"
+          </#if>
         </#if>
       <#else>
    *           foreign-key = "none"
@@ -416,6 +456,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateComponentRefGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
+  <#if propertyDescriptor.fkName?exists>
+    <#local fkName=propertyDescriptor.fkName/>
+  </#if>
   <#local propertyType=propertyDescriptor.referencedDescriptor.name/>
   <#if propertyDescriptor.referencedDescriptor.sqlName?exists>
     <#local refSqlName=propertyDescriptor.referencedDescriptor.sqlName/>
@@ -489,10 +532,18 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           fetch = "join"
         </#if>
         <#if isEntity>
+          <#if fkName?exists>
+   *           foreign-key = "${fkName}"
+          <#else>
    *           foreign-key = "${tableName}_${propSqlName}_FK"
+          </#if>
         <#else>
 <#--
+          <#if fkName?exists>
+   *           foreign-key = "${fkName}"
+          <#else>
    *           foreign-key = "${propSqlName}_FK"
+          </#if>
 -->
         </#if>
    * @hibernate.column
