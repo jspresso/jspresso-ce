@@ -56,7 +56,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   private Collection<IGate>  writabilityGates;
   private Integer            preferredWidth;
   private Integer            preferredHeight;
-  private String             automationId;
+  private String             automationSeed;
 
   /**
    * Gets the grantedRoles.
@@ -447,8 +447,8 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
-  public String getAutomationId() {
-    return automationId;
+  public String getAutomationSeed() {
+    return automationSeed;
   }
 
   /**
@@ -456,10 +456,10 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * component connector). This id can serve to record/replay UI command
    * sequences.
    * 
-   * @param automationId
+   * @param automationSeed
    *          fixed id to mark the generated UI component.
    */
-  public void setAutomationId(String automationId) {
-    this.automationId = automationId;
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 }

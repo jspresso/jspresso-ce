@@ -85,10 +85,10 @@ public interface IViewDescriptor extends IIconDescriptor, ISecurable,
   Dimension getPreferredSize();
 
   /**
-   * Gets a fixed id to mark the generated UI component. This id can serve to
-   * record/replay UI command sequences.
+   * Gets a seed to generate fixed ids to mark the generated UI component. This
+   * id can serve to record/replay UI command sequences.
    * 
    * @return a fixed id to mark the generated UI component.
    */
-  String getAutomationId();
+  String getAutomationSeed();
 }
