@@ -246,9 +246,12 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   @Override
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
-    if (getI18nNameKey() == null && getName() == null) {
+    if (getI18nNameKey() == null) {
       if (getModelDescriptor() != null) {
-        return getModelDescriptor().getI18nName(translationProvider, locale);
+        if (getName() == null
+            || getName().equals(getModelDescriptor().getName())) {
+          return getModelDescriptor().getI18nName(translationProvider, locale);
+        }
       }
     }
     return super.getI18nName(translationProvider, locale);
