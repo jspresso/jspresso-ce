@@ -161,4 +161,15 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   public void setFkName(String fkName) {
     this.fkName = fkName;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicRelationshipEndPropertyDescriptor createQueryDescriptor() {
+    BasicRelationshipEndPropertyDescriptor queryDescriptor = (BasicRelationshipEndPropertyDescriptor) super
+        .createQueryDescriptor();
+    queryDescriptor.reverseRelationEnd = null;
+    return queryDescriptor;
+  }
 }
