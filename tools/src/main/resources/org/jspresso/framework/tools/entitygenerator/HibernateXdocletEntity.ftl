@@ -129,7 +129,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           optimistic-lock = "false"
     </#if>
     <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDatePropertyDescriptor")>
-      <#if propertyDescriptor.type = "TIMESTAMP">
+      <#if propertyDescriptor.type = "DATE_TIME">
    *           type = "timestamp"
       <#else>
    *           type = "date"

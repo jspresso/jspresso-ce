@@ -38,4 +38,16 @@ public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
     super.registerNumericTypeMappings();
     registerColumnType(Types.INTEGER, "number($p,0)");
   }
+
+  /**
+   * Maps dates differently.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void registerDateTimeTypeMappings() {
+    registerColumnType(Types.DATE, "date");
+    registerColumnType(Types.TIME, "date");
+    registerColumnType(Types.TIMESTAMP, "date");
+  }
 }

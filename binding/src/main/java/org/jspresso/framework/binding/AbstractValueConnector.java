@@ -30,7 +30,6 @@ import java.util.List;
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.model.IModelProvider;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.security.ISubjectAware;
@@ -245,7 +244,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (connector == null) {
       return null;
     }
-    if (connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+    /* connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?> */
+    if (connector instanceof ICompositeValueConnector
+        && !(connector instanceof ICollectionConnector)) {
       return connector;
     }
     return getComponentConnector(connector.getParentConnector());

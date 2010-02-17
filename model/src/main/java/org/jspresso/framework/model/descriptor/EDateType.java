@@ -34,11 +34,5 @@ public enum EDateType {
   /**
    * <code>DATE_TIME</code>.
    */
-  DATE_TIME,
-
-  /**
-   * <code>TIMESTAMP</code>.
-   */
-  TIMESTAMP
-
+  DATE_TIME
 }
