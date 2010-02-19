@@ -43,7 +43,6 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Image;
   import mx.controls.Label;
   import mx.controls.List;
-  import mx.controls.RichTextEditor;
   import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
@@ -1567,16 +1566,16 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createHtmlEditor(remoteHtmlArea:RHtmlArea):UIComponent {
-      var htmlEditor:RichTextEditor = new RichTextEditor();
+      var htmlEditor:EnhancedRichTextEditor = new EnhancedRichTextEditor();
       bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
       return htmlEditor;
     }
     
-    protected function bindHtmlEditor(htmlEditor:RichTextEditor, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(htmlEditor, "htmlText", remoteState, "value", true);
+    protected function bindHtmlEditor(htmlEditor:EnhancedRichTextEditor, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(htmlEditor, "xhtmlText", remoteState, "value", true);
       BindingUtils.bindProperty(htmlEditor, "enabled", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
-        remoteState.value = (event.currentTarget as RichTextEditor).htmlText;
+        remoteState.value = (event.currentTarget as EnhancedRichTextEditor).xhtmlText;
       };
       htmlEditor.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
       htmlEditor.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
