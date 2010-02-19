@@ -131,7 +131,7 @@ package org.jspresso.framework.view.flex {
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
     private static const COLUMN_MAX_CHAR_COUNT:int = 20;
     private static const DATE_CHAR_COUNT:int = 10;
-    private static const TIME_CHAR_COUNT:int = 8;
+    private static const TIME_CHAR_COUNT:int = 6;
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
@@ -613,7 +613,7 @@ package org.jspresso.framework.view.flex {
           width = tr.length;
         }
       }
-      width += 7;
+      width += 2;
       sizeMaxComponentWidth(comboBox, width);
       return comboBox;
     }
@@ -1571,6 +1571,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createHtmlEditor(remoteHtmlArea:RHtmlArea):UIComponent {
       var htmlEditor:EnhancedRichTextEditor = new EnhancedRichTextEditor();
+      htmlEditor.setStyle("headerHeight",0);
       bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
       return htmlEditor;
     }
