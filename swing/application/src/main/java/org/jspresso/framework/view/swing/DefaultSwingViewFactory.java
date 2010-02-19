@@ -1589,11 +1589,6 @@ public class DefaultSwingViewFactory extends
 
         IView<JComponent> editorView = createView(columnViewDescriptor,
             actionHandler, locale);
-        // if (editorView.getPeer() instanceof JActionField) {
-        // JActionField actionField = (JActionField) editorView.getPeer();
-        // actionField.setActions(Collections.singletonList(actionField
-        // .getActions().get(0)));
-        // }
         if (editorView.getConnector().getParentConnector() == null) {
           editorView.getConnector().setParentConnector(connector);
         }
@@ -1605,23 +1600,30 @@ public class DefaultSwingViewFactory extends
         } else {
           column.setCellRenderer(new EvenOddTableCellRenderer());
         }
-        int minHeaderWidth = computePixelWidth(viewComponent, columnName
-            .length());
-        if (propertyDescriptor instanceof IBooleanPropertyDescriptor
-            || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(
-              computePixelWidth(viewComponent, 2), minHeaderWidth));
-        } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
-              getEnumerationTemplateValue(
-                  (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                  .length() + 4), minHeaderWidth));
+        if (columnViewDescriptor.getPreferredSize() != null
+            && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
+          column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
+              .getWidth());
         } else {
-          column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
-              viewComponent, getFormatLength(createFormatter(
-                  propertyDescriptor, locale),
-                  getTemplateValue(propertyDescriptor))), maxColumnSize),
-              minHeaderWidth));
+          int minHeaderWidth = computePixelWidth(viewComponent, columnName
+              .length());
+          if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+              || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+            column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
+                2), minHeaderWidth));
+          } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+            column.setPreferredWidth(Math.max(
+                computePixelWidth(viewComponent,
+                    getEnumerationTemplateValue(
+                        (IEnumerationPropertyDescriptor) propertyDescriptor,
+                        locale).length() + 4), minHeaderWidth));
+          } else {
+            column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
+                viewComponent, getFormatLength(createFormatter(
+                    propertyDescriptor, locale),
+                    getTemplateValue(propertyDescriptor))), maxColumnSize),
+                minHeaderWidth));
+          }
         }
       }
     }

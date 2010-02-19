@@ -1451,18 +1451,6 @@ public class DefaultWingsViewFactory extends
         columnClasses.add(modelDescriptor.getCollectionDescriptor()
             .getElementDescriptor().getPropertyDescriptor(columnId)
             .getModelType());
-        // already handled in createColumnConnector
-        // if (columnViewDescriptor.getReadabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-        // columnConnector.addReadabilityGate(gate.clone());
-        // }
-        // }
-        // if (columnViewDescriptor.getWritabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-        // columnConnector.addWritabilityGate(gate.clone());
-        // }
-        // }
-        // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
       } else {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);
@@ -1524,11 +1512,6 @@ public class DefaultWingsViewFactory extends
         if (!viewDescriptor.isReadOnly()) {
           IView<SComponent> editorView = createView(columnViewDescriptor,
               actionHandler, locale);
-          // if (editorView.getPeer() instanceof SActionField) {
-          // SActionField actionField = (SActionField) editorView.getPeer();
-          // actionField.setActions(Collections.singletonList(actionField
-          // .getActions().get(0)));
-          // }
           if (editorView.getConnector().getParentConnector() == null) {
             editorView.getConnector().setParentConnector(connector);
           }
@@ -1542,23 +1525,29 @@ public class DefaultWingsViewFactory extends
         } else {
           column.setCellRenderer(new EvenOddTableCellRenderer());
         }
-        int minHeaderWidth = computePixelWidth(viewComponent, columnName
-            .length());
         int columnWidth;
-        if (propertyDescriptor instanceof IBooleanPropertyDescriptor
-            || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-          columnWidth = Math.max(computePixelWidth(viewComponent, 2),
-              minHeaderWidth);
-        } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-          columnWidth = Math.max(computePixelWidth(viewComponent,
-              getEnumerationTemplateValue(
-                  (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                  .length() + 4), minHeaderWidth);
+        if (columnViewDescriptor.getPreferredSize() != null
+            && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
+          columnWidth = columnViewDescriptor.getPreferredSize().getWidth();
         } else {
-          columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
-              getFormatLength(createFormatter(propertyDescriptor, locale),
-                  getTemplateValue(propertyDescriptor))), maxColumnSize),
-              minHeaderWidth);
+          int minHeaderWidth = computePixelWidth(viewComponent, columnName
+              .length());
+          if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+              || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+            columnWidth = Math.max(computePixelWidth(viewComponent, 2),
+                minHeaderWidth);
+          } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+            columnWidth = Math.max(
+                computePixelWidth(viewComponent,
+                    getEnumerationTemplateValue(
+                        (IEnumerationPropertyDescriptor) propertyDescriptor,
+                        locale).length() + 4), minHeaderWidth);
+          } else {
+            columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
+                getFormatLength(createFormatter(propertyDescriptor, locale),
+                    getTemplateValue(propertyDescriptor))), maxColumnSize),
+                minHeaderWidth);
+          }
         }
         column.setWidth(columnWidth + "px");
         tableWidth += columnWidth;

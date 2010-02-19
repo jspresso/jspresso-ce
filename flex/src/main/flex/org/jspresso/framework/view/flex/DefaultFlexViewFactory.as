@@ -1349,14 +1349,18 @@ package org.jspresso.framework.view.flex {
                                  state:rColumn.state,
                                  index:i+1};
         column.itemEditor = itemEditor;
-        if(rColumn is RCheckBox) {
-          column.width = table.measureText(column.headerText).width + 16;
+        if(rColumn.preferredSize != null && rColumn.preferredSize.width > 0) {
+          column.width = rColumn.preferredSize.width;
         } else {
-          column.width = Math.max(
-                           Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT,
-                                    editorComponent.maxWidth),
-                           table.measureText(column.headerText).width + 16
-                         );
+          if(rColumn is RCheckBox) {
+            column.width = table.measureText(column.headerText).width + 16;
+          } else {
+            column.width = Math.max(
+                             Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT,
+                                      editorComponent.maxWidth),
+                             table.measureText(column.headerText).width + 16
+                           );
+          }
         }
         editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
         column.editorDataField = "state";

@@ -20,6 +20,8 @@ package org.jspresso.framework.application.startup;
 
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
@@ -33,6 +35,11 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  */
 public abstract class AbstractStartup implements IStartup {
 
+  /**
+   * Logger, available to subclasses.
+   */
+  private final Log   logger = LogFactory.getLog(getClass());
+
   private BeanFactory applicationContext;
 
   /**
@@ -41,12 +48,22 @@ public abstract class AbstractStartup implements IStartup {
    * @return the applicationContext.
    */
   protected BeanFactory getApplicationContext() {
-    if (applicationContext == null) {
-      BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
-      BeanFactoryReference bf = bfl.useBeanFactory(getApplicationContextKey());
-      applicationContext = bf.getFactory();
+    try {
+      if (applicationContext == null) {
+        BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
+        BeanFactoryReference bf = bfl
+            .useBeanFactory(getApplicationContextKey());
+        applicationContext = bf.getFactory();
+      }
+      return applicationContext;
+    } catch (RuntimeException ex) {
+      if (getLogger().isErrorEnabled()) {
+        getLogger().error(
+            getApplicationContextKey() + " context could not be instanciated.",
+            ex);
+      }
+      throw ex;
     }
-    return applicationContext;
   }
 
   /**
@@ -63,4 +80,13 @@ public abstract class AbstractStartup implements IStartup {
    * @return the startup locale.
    */
   protected abstract Locale getStartupLocale();
+
+  /**
+   * Gets the logger.
+   * 
+   * @return the logger.
+   */
+  protected Log getLogger() {
+    return logger;
+  }
 }

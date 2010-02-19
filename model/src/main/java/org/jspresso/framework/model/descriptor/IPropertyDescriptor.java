@@ -145,4 +145,11 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    * @return true if the property is computed.
    */
   boolean isComputed();
+
+  /**
+   * Gives a preferred width hint for representing the property.
+   * 
+   * @return a preferred width hint for representing the property.
+   */
+  Integer getPreferredWidth();
 }

@@ -1163,17 +1163,6 @@ public class DefaultRemoteViewFactory extends
         // modelDescriptor.getCollectionDescriptor().getElementDescriptor());
         IValueConnector columnConnector = column.getConnector();
         rowConnectorPrototype.addChildConnector(columnConnector);
-        // already handled in createView.
-        // if (columnViewDescriptor.getReadabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-        // columnConnector.addReadabilityGate(gate.clone());
-        // }
-        // }
-        // if (columnViewDescriptor.getWritabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-        // columnConnector.addWritabilityGate(gate.clone());
-        // }
-        // }
         String propertyName = columnViewDescriptor.getModelDescriptor()
             .getName();
         columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());

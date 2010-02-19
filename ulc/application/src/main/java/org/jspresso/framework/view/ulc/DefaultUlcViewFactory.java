@@ -1252,13 +1252,6 @@ public class DefaultUlcViewFactory extends
             columnFormatters.add(null);
           }
         }
-        // already handled in createColumnConnector
-        // if (columnViewDescriptor.getReadabilityGates() != null) {
-        // ...
-        // if (columnViewDescriptor.getWritabilityGates() != null) {
-        // ...
-        // }
-        // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
       } else {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);
@@ -1300,7 +1293,6 @@ public class DefaultUlcViewFactory extends
       listSelectionModelBinder.bindSelectionModel(connector, viewComponent
           .getSelectionModel(), null);
     }
-
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());
@@ -1324,11 +1316,6 @@ public class DefaultUlcViewFactory extends
         column.setHeaderValue(columnName.toString());
         IView<ULCComponent> editorView = createView(columnViewDescriptor,
             actionHandler, locale);
-        // if (editorView.getPeer() instanceof ULCActionField) {
-        // ULCActionField actionField = (ULCActionField) editorView.getPeer();
-        // actionField.setActions(Collections.singletonList(actionField
-        // .getActions().get(0)));
-        // }
         if (editorView.getConnector().getParentConnector() == null) {
           editorView.getConnector().setParentConnector(connector);
         }
@@ -1345,30 +1332,37 @@ public class DefaultUlcViewFactory extends
           column.setCellRenderer(new EvenOddTableCellRenderer(column
               .getModelIndex()));
         }
-        int minHeaderWidth = computePixelWidth(viewComponent, columnName
-            .length());
-        if (propertyDescriptor instanceof IBooleanPropertyDescriptor
-            || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(
-              computePixelWidth(viewComponent, 2), minHeaderWidth));
-          if (editorView.getPeer() instanceof ULCAbstractButton) {
-            ((ULCAbstractButton) editorView.getPeer())
-                .setHorizontalAlignment(IDefaults.CENTER);
-          } else if (editorView.getPeer() instanceof ULCLabel) {
-            ((ULCLabel) editorView.getPeer())
-                .setHorizontalAlignment(IDefaults.CENTER);
-          }
-        } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
-              getEnumerationTemplateValue(
-                  (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                  .length() + 4), minHeaderWidth));
+        if (columnViewDescriptor.getPreferredSize() != null
+            && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
+          column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
+              .getWidth());
         } else {
-          column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
-              viewComponent, getFormatLength(createFormatter(
-                  propertyDescriptor, locale),
-                  getTemplateValue(propertyDescriptor))), maxColumnSize),
-              minHeaderWidth));
+          int minHeaderWidth = computePixelWidth(viewComponent, columnName
+              .length());
+          if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+              || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+            column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
+                2), minHeaderWidth));
+            if (editorView.getPeer() instanceof ULCAbstractButton) {
+              ((ULCAbstractButton) editorView.getPeer())
+                  .setHorizontalAlignment(IDefaults.CENTER);
+            } else if (editorView.getPeer() instanceof ULCLabel) {
+              ((ULCLabel) editorView.getPeer())
+                  .setHorizontalAlignment(IDefaults.CENTER);
+            }
+          } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+            column.setPreferredWidth(Math.max(
+                computePixelWidth(viewComponent,
+                    getEnumerationTemplateValue(
+                        (IEnumerationPropertyDescriptor) propertyDescriptor,
+                        locale).length() + 4), minHeaderWidth));
+          } else {
+            column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
+                viewComponent, getFormatLength(createFormatter(
+                    propertyDescriptor, locale),
+                    getTemplateValue(propertyDescriptor))), maxColumnSize),
+                minHeaderWidth));
+          }
         }
       }
     }
