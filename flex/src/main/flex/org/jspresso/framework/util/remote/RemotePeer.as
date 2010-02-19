@@ -20,6 +20,7 @@ package org.jspresso.framework.util.remote {
     public class RemotePeer implements IRemotePeer {
 
         private var _guid:String;
+        private var _automationId:String;
 
         public function RemotePeer() {
           //default constructor.
@@ -30,6 +31,13 @@ package org.jspresso.framework.util.remote {
         }
         public function get guid():String {
             return _guid;
+        }
+
+        public function set automationId(value:String):void {
+            _automationId = value;
+        }
+        public function get automationId():String {
+            return _automationId;
         }
     }
 }

@@ -27,6 +27,11 @@ qx.Class.define("org.jspresso.framework.util.remote.RemotePeer",
     guid :
     {
       check : "String"
+    },
+    automationId :
+    {
+      check : "String",
+      nullable : true
     }
   }
 });
