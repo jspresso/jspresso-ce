@@ -21,6 +21,7 @@ package org.jspresso.framework.security;
 import java.security.Principal;
 import java.security.acl.Group;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
 
 import javax.security.auth.Subject;
@@ -98,6 +99,16 @@ public final class SecurityHelper {
     if (subject == null) {
       return false;
     }
+
+    grantedRoles = new HashSet<String>(grantedRoles);
+    Collection<String> ungrantedRoles = new HashSet<String>();
+    for (String role : grantedRoles) {
+      if (role.startsWith("!")) {
+        grantedRoles.remove(role);
+        ungrantedRoles.add(role.substring(1));
+      }
+    }
+
     Group subjectRoles = null;
     for (Principal p : subject.getPrincipals()) {
       if (p instanceof Group && ROLES_GROUP_NAME.equalsIgnoreCase(p.getName())) {
@@ -105,11 +116,25 @@ public final class SecurityHelper {
       }
     }
     if (subjectRoles != null) {
-      for (String grantedRole : grantedRoles) {
-        if (subjectRoles.isMember(new SimplePrincipal(grantedRole))) {
-          return true;
+      boolean granted = false;
+      if (!grantedRoles.isEmpty()) {
+        for (String grantedRole : grantedRoles) {
+          if (subjectRoles.isMember(new SimplePrincipal(grantedRole))) {
+            granted = true;
+            break;
+          }
         }
       }
+      if (!granted && !ungrantedRoles.isEmpty()) {
+        granted = true;
+        for (String ungrantedRole : ungrantedRoles) {
+          if (subjectRoles.isMember(new SimplePrincipal(ungrantedRole))) {
+            granted = false;
+            break;
+          }
+        }
+      }
+      return granted;
     }
     return false;
   }

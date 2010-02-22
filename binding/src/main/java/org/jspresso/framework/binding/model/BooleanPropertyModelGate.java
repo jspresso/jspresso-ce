@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.binding.model;
 
-
 /**
  * This gate opens and closes based on the value of a boolean property of its
  * model.
@@ -29,12 +28,18 @@ package org.jspresso.framework.binding.model;
 public class BooleanPropertyModelGate extends
     AbstractPropertyModelGate<Boolean> {
 
+  private boolean negatedByName;
+
   /**
    * {@inheritDoc}
    */
   @Override
   protected boolean shouldOpen(Boolean propertyValue) {
-    return propertyValue != null && propertyValue.booleanValue();
+    boolean superValue = propertyValue != null && propertyValue.booleanValue();
+    if (negatedByName) {
+      return !superValue;
+    }
+    return superValue;
   }
 
   /**
@@ -44,6 +49,12 @@ public class BooleanPropertyModelGate extends
    *          the booleanPropertyName to set.
    */
   public void setBooleanPropertyName(String booleanPropertyName) {
-    super.setPropertyName(booleanPropertyName);
+    if (booleanPropertyName != null && booleanPropertyName.startsWith("!")) {
+      super.setPropertyName(booleanPropertyName.substring(1));
+      negatedByName = true;
+    } else {
+      super.setPropertyName(booleanPropertyName);
+      negatedByName = false;
+    }
   }
 }
