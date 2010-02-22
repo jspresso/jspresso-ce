@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.security.Base64Encoder;
+import org.jboss.security.Util;
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
@@ -72,6 +72,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   public static final String                                    PASSWD_TYPED             = "password_typed";
 
   private String                                                digestAlgorithm;
+  private String                                                hashEncoding;
 
   /**
    * Sets the digestAlgorithm to use to hash the password before storing it.
@@ -81,6 +82,16 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   public void setDigestAlgorithm(String digestAlgorithm) {
     this.digestAlgorithm = digestAlgorithm;
+  }
+
+  /**
+   * Sets the hashEncoding to encode the password hash before storing it.
+   * 
+   * @param hashEncoding
+   *          the hashEncoding to set.
+   */
+  public void setHashEncoding(String hashEncoding) {
+    this.hashEncoding = hashEncoding;
   }
 
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
@@ -141,18 +152,30 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * @throws IOException
    *           whenever an I/O exception occurs.
    */
-  protected String digest(char[] newPassword) throws NoSuchAlgorithmException,
-      IOException {
+  protected String digestAndEncode(char[] newPassword)
+      throws NoSuchAlgorithmException, IOException {
     if (getDigestAlgorithm() != null) {
-      String prefix = "{" + getDigestAlgorithm() + "}";
       MessageDigest md = MessageDigest.getInstance(getDigestAlgorithm());
       md.reset();
       md.update(new String(newPassword).getBytes("UTF-8"));
 
       byte[] digest = md.digest();
-      return prefix + Base64Encoder.encode(digest);
+      return getPasswordStorePrefix() + encode(digest);
     }
     return new String(newPassword);
+  }
+
+  /**
+   * Returns a prefix to use before storing a password. An example usage is to
+   * prefix the password hash with the type of hash, e.g. {MD5}.
+   * 
+   * @return a prefix to use before storing a password.
+   */
+  protected String getPasswordStorePrefix() {
+    if (getDigestAlgorithm() != null) {
+      return "{" + getDigestAlgorithm() + "}";
+    }
+    return "";
   }
 
   /**
@@ -176,5 +199,35 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   protected String getDigestAlgorithm() {
     return digestAlgorithm;
+  }
+
+  /**
+   * Gets the hashEncoding.
+   * 
+   * @return the hashEncoding.
+   */
+  protected String getHashEncoding() {
+    return hashEncoding;
+  }
+
+  /**
+   * Encodes the password hash based on the hash encoding parameter (either
+   * Base64, Base16 or RFC2617). Defaults to Base64.
+   * 
+   * @param source
+   *          the byte array (hash) to encode.
+   * @return the encoded string.
+   */
+  protected String encode(byte[] source) {
+    String he = getHashEncoding();
+    if (Util.BASE64_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeBase64(source);
+    } else if (Util.BASE16_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeBase16(source);
+    } else if (Util.RFC2617_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeRFC2617(source);
+    }
+    // defaults to Base64
+    return Util.encodeBase64(source);
   }
 }

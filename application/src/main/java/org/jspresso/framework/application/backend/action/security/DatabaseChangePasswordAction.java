@@ -30,8 +30,8 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
   protected boolean changePassword(UserPrincipal userPrincipal,
       String currentPassword, String newPassword) {
     try {
-      String newPassHash = digest(newPassword.toCharArray());
-      String currentPassHash = digest(currentPassword.toCharArray());
+      String newPassHash = digestAndEncode(newPassword.toCharArray());
+      String currentPassHash = digestAndEncode(currentPassword.toCharArray());
 
       int updCount = getJdbcTemplate().update(getUpdateQuery(),
           new Object[] {newPassHash, userPrincipal.getName(), currentPassHash});

@@ -66,7 +66,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
     try {
       mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
           new BasicAttribute(LdapConstants.PASSWORD_ATTIBUTE,
-              digest(newPassword.toCharArray()))));
+              digestAndEncode(newPassword.toCharArray()))));
       ldapTemplate.modifyAttributes(userDn, mods
           .toArray(new ModificationItem[0]));
     } catch (NoSuchAlgorithmException ex) {
@@ -80,5 +80,19 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
           "password.current.invalid");
     }
     return true;
+  }
+
+  /**
+   * Returns a prefix to use before storing a password. An example usage is to
+   * prefix the password hash with the type of hash, e.g. {MD5}.
+   * 
+   * @return a prefix to use before storing a password.
+   */
+  @Override
+  protected String getPasswordStorePrefix() {
+    if (getDigestAlgorithm() != null) {
+      return "{" + getDigestAlgorithm() + "}";
+    }
+    return super.getPasswordStorePrefix();
   }
 }
