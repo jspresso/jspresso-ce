@@ -172,9 +172,6 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * @return a prefix to use before storing a password.
    */
   protected String getPasswordStorePrefix() {
-    if (getDigestAlgorithm() != null) {
-      return "{" + getDigestAlgorithm() + "}";
-    }
     return "";
   }
 

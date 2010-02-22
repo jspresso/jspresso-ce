@@ -101,4 +101,28 @@ public class DatabaseLoginModule extends DatabaseServerLoginModule {
     }
     return false;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String createPasswordHash(String username, String password,
+      String digestOption) throws LoginException {
+    if (password == null) {
+      return null;
+    }
+    return super.createPasswordHash(username, password, digestOption);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean validatePassword(String inputPassword,
+      String expectedPassword) {
+    if (inputPassword == null && expectedPassword == null) {
+      return true;
+    }
+    return super.validatePassword(inputPassword, expectedPassword);
+  }
 }
