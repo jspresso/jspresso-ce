@@ -110,7 +110,12 @@ public class DefaultWingsController extends
       dialog = ((SDialog) actionWindow);
       dialog.removeAll();
     } else {
-      SFrame window = sourceComponent.getParentFrame();
+      SFrame window;
+      if (sourceComponent != null) {
+        window = sourceComponent.getParentFrame();
+      } else {
+        window = controllerFrame;
+      }
       dialog = new SDialog(window, title, true);
       dialog.setDraggable(true);
     }

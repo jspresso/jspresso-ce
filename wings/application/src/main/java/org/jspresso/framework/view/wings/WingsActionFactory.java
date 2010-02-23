@@ -119,6 +119,7 @@ public class WingsActionFactory extends
       if (action instanceof IDisplayableAction) {
         putValue(Action.NAME, ((IDisplayableAction) action).getI18nName(
             getTranslationProvider(), locale));
+        putValue(Action.ACTION_COMMAND_KEY, "");
         String i18nDescription = ((IDisplayableAction) action)
             .getI18nDescription(getTranslationProvider(), locale);
         if (i18nDescription != null) {

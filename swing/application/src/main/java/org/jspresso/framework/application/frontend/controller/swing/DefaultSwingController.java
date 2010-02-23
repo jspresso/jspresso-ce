@@ -116,7 +116,12 @@ public class DefaultSwingController extends
       Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     final JDialog dialog;
-    Window window = SwingUtil.getVisibleWindow(sourceComponent);
+    Window window;
+    if (sourceComponent != null) {
+      window = SwingUtil.getVisibleWindow(sourceComponent);
+    } else {
+      window = controllerFrame;
+    }
     if (window instanceof JDialog) {
       if (reuseCurrent) {
         dialog = (JDialog) window;

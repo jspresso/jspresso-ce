@@ -103,7 +103,12 @@ public class DefaultUlcController extends
       Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     final ULCDialog dialog;
-    ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
+    ULCWindow window;
+    if (sourceComponent != null) {
+      window = UlcUtil.getVisibleWindow(sourceComponent);
+    } else {
+      window = controllerFrame;
+    }
     if (reuseCurrent && window instanceof ULCDialog) {
       dialog = (ULCDialog) window;
       dialog.getContentPane().removeAll();

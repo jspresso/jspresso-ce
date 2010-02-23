@@ -94,8 +94,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     actionHandler.execute(createQueryComponentAction, context);
 
     String queryPropertyValue = getActionCommand(context);
-    if (autoquery && queryPropertyValue != null
-        && queryPropertyValue.length() > 0 && !queryPropertyValue.equals("*")) {
+    if (autoquery
+        && queryPropertyValue != null
+        && /* queryPropertyValue.length() > 0 && */!queryPropertyValue
+            .equals("*")) {
       actionHandler.execute(findAction, context);
       IQueryComponent queryComponent = (IQueryComponent) context
           .get(IQueryComponent.QUERY_COMPONENT);

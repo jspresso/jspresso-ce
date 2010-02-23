@@ -111,6 +111,7 @@ public class UlcActionFactory extends
       if (action instanceof IDisplayableAction) {
         putValue(IAction.NAME, ((IDisplayableAction) action).getI18nName(
             getTranslationProvider(), locale));
+        putValue(IAction.ACTION_COMMAND_KEY, "");
         String i18nDescription = ((IDisplayableAction) action)
             .getI18nDescription(getTranslationProvider(), locale);
         if (i18nDescription != null) {
