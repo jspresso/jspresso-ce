@@ -136,7 +136,7 @@ public class BasicStringPropertyDescriptor extends
             Locale locale) {
           StringBuffer boundsSpec = new StringBuffer("l");
           if (getMaxLength() != null) {
-            boundsSpec.append(" &lt= ").append(getMaxLength());
+            boundsSpec.append(" <= ").append(getMaxLength());
           }
           return translationProvider.getTranslation(
               "integrity.property.toolong", new Object[] {

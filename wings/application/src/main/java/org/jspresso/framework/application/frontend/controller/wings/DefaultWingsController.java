@@ -239,13 +239,15 @@ public class DefaultWingsController extends
     SComponent sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(ex.getMessage())),
+          .toHtml(HtmlHelper
+              .emphasis(HtmlHelper.escapeForHTML(ex.getMessage()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof BusinessException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
-              getTranslationProvider(), getLocale()))),
+          .toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(
+                  getTranslationProvider(), getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof DataIntegrityViolationException) {
@@ -254,16 +256,18 @@ public class DefaultWingsController extends
               sourceComponent,
               HtmlHelper
                   .toHtml(HtmlHelper
-                      .emphasis(getTranslationProvider()
-                          .getTranslation(
-                              refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                              getLocale()))), getTranslationProvider()
+                      .emphasis(HtmlHelper
+                          .escapeForHTML(getTranslationProvider()
+                              .getTranslation(
+                                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                                  getLocale())))), getTranslationProvider()
                   .getTranslation("error", getLocale()),
               SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof ConcurrencyFailureException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
-              "concurrency.error.description", getLocale()))),
+          .toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(getTranslationProvider().getTranslation(
+                  "concurrency.error.description", getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else {
@@ -277,8 +281,8 @@ public class DefaultWingsController extends
           getIconFactory().getMediumIconSize()));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
-      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
-          .getLocalizedMessage())));
+      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+          .escapeForHTML(ex.getLocalizedMessage()))));
       dialog.setDetails(ex);
       dialog.setVisible(true);
     }

@@ -233,16 +233,17 @@ public class DefaultUlcController extends
     if (ex instanceof SecurityException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(ex.getMessage())),
-          getTranslationProvider().getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
+              .getMessage()))), getTranslationProvider().getTranslation("ok",
+              getLocale()), null, null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof BusinessException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(((BusinessException) ex)
-              .getI18nMessage(getTranslationProvider(), getLocale()))),
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(
+                  getTranslationProvider(), getLocale())))),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
           null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
@@ -253,18 +254,20 @@ public class DefaultUlcController extends
           getTranslationProvider().getTranslation("error", getLocale()),
           HtmlHelper
               .toHtml(HtmlHelper
-                  .emphasis(getTranslationProvider()
-                      .getTranslation(
-                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                          getLocale()))), getTranslationProvider()
+                  .emphasis(HtmlHelper
+                      .escapeForHTML(getTranslationProvider()
+                          .getTranslation(
+                              refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                              getLocale())))), getTranslationProvider()
               .getTranslation("ok", getLocale()), null, null, getIconFactory()
               .getErrorIcon(getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof ConcurrencyFailureException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(getTranslationProvider()
-              .getTranslation("concurrency.error.description", getLocale()))),
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(getTranslationProvider().getTranslation(
+                  "concurrency.error.description", getLocale())))),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
           null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
@@ -277,8 +280,8 @@ public class DefaultUlcController extends
           getIconFactory().getMediumIconSize()));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
-      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
-          .getLocalizedMessage())));
+      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+          .escapeForHTML(ex.getLocalizedMessage()))));
       dialog.setDetails(ex);
       int screenRes = ClientContext.getScreenResolution();
       dialog.setSize(8 * screenRes, 3 * screenRes);

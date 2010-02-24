@@ -436,20 +436,20 @@ public class DefaultRemoteController extends
         registerCommand(initLoginCommand);
       } else {
         performLogin();
-        execute(getStartupAction(), getInitialActionContext());
         List<RemoteCommand> initCommands = createInitCommands();
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
         }
+        execute(getStartupAction(), getInitialActionContext());
       }
     } else if (command instanceof RemoteLoginCommand) {
       if (performLogin()) {
         registerCommand(new RemoteCloseDialogCommand());
-        execute(getStartupAction(), getInitialActionContext());
         List<RemoteCommand> initCommands = createInitCommands();
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
         }
+        execute(getStartupAction(), getInitialActionContext());
       } else {
         RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
         errorMessageCommand.setMessage(getTranslationProvider().getTranslation(

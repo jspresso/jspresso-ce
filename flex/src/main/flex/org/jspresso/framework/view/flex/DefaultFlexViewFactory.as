@@ -1596,16 +1596,9 @@ package org.jspresso.framework.view.flex {
     protected function bindHtmlText(htmlText:Text, remoteState:RemoteValueState):void {
       var updateText:Function = function (value:Object):void {
         if(value == null) {
-          htmlText.text = null;
           htmlText.htmlText = null;
         } else {
-          if(HtmlUtil.isHtml(value.toString())) {
-            htmlText.text = null;
-            htmlText.htmlText = HtmlUtil.preprocessHtml(value.toString());
-          } else {
-            htmlText.htmlText = null;
-            htmlText.text = value.toString();
-          }
+          htmlText.htmlText = HtmlUtil.preprocessHtml(value.toString());
         }
       };
       BindingUtils.bindSetter(updateText, remoteState, "value", true);

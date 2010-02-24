@@ -94,11 +94,11 @@ public abstract class BasicNumberPropertyDescriptor extends
               ITranslationProvider translationProvider, Locale locale) {
             StringBuffer boundsSpec = new StringBuffer();
             if (getMinValue() != null) {
-              boundsSpec.append(getMinValue()).append(" &lt= ");
+              boundsSpec.append(getMinValue()).append(" <= ");
             }
             boundsSpec.append("x");
             if (getMaxValue() != null) {
-              boundsSpec.append(" &lt= ").append(getMaxValue());
+              boundsSpec.append(" <= ").append(getMaxValue());
             }
             String messageKey = null;
             if (getMinValue() != null
