@@ -32,6 +32,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.gate.CollectionSelectionTrackingGate;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
@@ -60,6 +61,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private boolean               collectionBased;
 
   private static final IGate    COLLECTION_TRACKING_GATE = new CollectionSelectionTrackingGate();
+  private static final IGate    MODEL_TRACKING_GATE      = new ModelTrackingGate();
 
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
@@ -107,6 +109,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
     List<IGate> gates = new ArrayList<IGate>();
     if (isCollectionBased()) {
       gates.add(COLLECTION_TRACKING_GATE);
+    } else {
+      gates.add(MODEL_TRACKING_GATE);
     }
     if (actionabilityGates != null) {
       gates.addAll(actionabilityGates);

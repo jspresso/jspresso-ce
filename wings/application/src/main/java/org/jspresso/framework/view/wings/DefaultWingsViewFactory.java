@@ -2413,8 +2413,17 @@ public class DefaultWingsViewFactory extends
   protected void applyPreferredSize(SComponent component,
       org.jspresso.framework.util.gui.Dimension preferredSize) {
     if (preferredSize != null) {
-      component.setPreferredSize(new SDimension(preferredSize.getWidth(),
-          preferredSize.getHeight()));
+      Integer pW = null;
+      Integer pH = null;
+
+      if (preferredSize.getWidth() > 0) {
+        pW = new Integer(preferredSize.getWidth());
+      }
+      if (preferredSize.getHeight() > 0) {
+        pH = new Integer(preferredSize.getHeight());
+      }
+
+      component.setPreferredSize(new SDimension(pW, pH));
     }
   }
 }

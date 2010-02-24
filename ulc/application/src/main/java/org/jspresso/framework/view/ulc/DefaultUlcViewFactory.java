@@ -2596,8 +2596,19 @@ public class DefaultUlcViewFactory extends
   protected void applyPreferredSize(ULCComponent component,
       org.jspresso.framework.util.gui.Dimension preferredSize) {
     if (preferredSize != null) {
-      component.setPreferredSize(new Dimension(preferredSize.getWidth(),
-          preferredSize.getHeight()));
+      int pW = preferredSize.getWidth();
+      int pH = preferredSize.getHeight();
+      Dimension compSize = component.getPreferredSize();
+      if ((pW <= 0 || pH <= 0) && compSize == null) {
+        return;
+      }
+      if (pW <= 0) {
+        pW = compSize.getWidth();
+      }
+      if (pH <= 0) {
+        pH = compSize.getHeight();
+      }
+      component.setPreferredSize(new Dimension(pW, pH));
     }
   }
 }

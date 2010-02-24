@@ -2660,8 +2660,15 @@ public class DefaultSwingViewFactory extends
   protected void applyPreferredSize(JComponent component,
       org.jspresso.framework.util.gui.Dimension preferredSize) {
     if (preferredSize != null) {
-      component.setPreferredSize(new Dimension(preferredSize.getWidth(),
-          preferredSize.getHeight()));
+      int pW = preferredSize.getWidth();
+      if (pW <= 0) {
+        pW = component.getPreferredSize().width;
+      }
+      int pH = preferredSize.getHeight();
+      if (pH <= 0) {
+        pH = component.getPreferredSize().height;
+      }
+      component.setPreferredSize(new Dimension(pW, pH));
     }
   }
 }
