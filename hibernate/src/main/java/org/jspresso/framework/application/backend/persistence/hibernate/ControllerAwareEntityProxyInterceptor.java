@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -153,6 +154,13 @@ public class ControllerAwareEntityProxyInterceptor extends
       if (entity instanceof IEntity
           && backendController.getRegisteredEntity(((IEntity) entity)
               .getComponentContract(), id) == null) {
+        Map<String, Object> properties = new HashMap<String, Object>();
+        for (int i = 0; i < propertyNames.length; i++) {
+          if (state[i] != null) {
+            properties.put(propertyNames[i], state[i]);
+          }
+        }
+        ((IEntity) entity).straightSetProperties(properties);
         backendController.registerEntity((IEntity) entity, false);
       }
     }

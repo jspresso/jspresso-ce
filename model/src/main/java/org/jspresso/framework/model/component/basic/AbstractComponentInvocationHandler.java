@@ -682,7 +682,8 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void firePropertyChange(String propertyName, Object oldValue,
       Object newValue) {
-    if (changeSupport == null || (oldValue == null && newValue == null)) {
+    if (changeSupport == null || (oldValue == null && newValue == null)
+        || (oldValue == newValue)) {
       return;
     }
     if (!isInitialized(oldValue)) {
@@ -1088,7 +1089,8 @@ public abstract class AbstractComponentInvocationHandler implements
     }
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       if (currentPropertyValue != null
-          && currentPropertyValue == newPropertyValue) {
+          && currentPropertyValue == newPropertyValue
+          && isInitialized(currentPropertyValue)) {
         currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
             .getContextClassLoader(),
             new Class[] {((ICollectionPropertyDescriptor) propertyDescriptor)
