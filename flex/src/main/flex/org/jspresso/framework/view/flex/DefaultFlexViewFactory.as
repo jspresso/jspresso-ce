@@ -647,6 +647,8 @@ package org.jspresso.framework.view.flex {
       borderContainer.addChild(row);
       
       cell = new GridItem();
+      cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+      cell.verticalScrollPolicy  = ScrollPolicy.OFF;
       cell.colSpan = nbCols;
       cell.percentWidth = 100.0;
       if(remoteBorderContainer.north != null) {
@@ -679,6 +681,8 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.west != null) {
         cellComponent = createComponent(remoteBorderContainer.west);
         cell = new GridItem();
+        cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        cell.verticalScrollPolicy  = ScrollPolicy.OFF;
         //cell.setStyle("horizontalAlign", "left");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
@@ -700,6 +704,8 @@ package org.jspresso.framework.view.flex {
       }
 
       cell = new GridItem();
+      cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+      cell.verticalScrollPolicy  = ScrollPolicy.OFF;
       cell.percentHeight = 100.0;
       cell.percentWidth = 100.0;
       if(remoteBorderContainer.center != null) {
@@ -713,6 +719,8 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.east != null) {
         cellComponent = createComponent(remoteBorderContainer.east);
         cell = new GridItem();
+        cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        cell.verticalScrollPolicy  = ScrollPolicy.OFF;
         //cell.setStyle("horizontalAlign", "right");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
@@ -738,6 +746,8 @@ package org.jspresso.framework.view.flex {
       row.percentWidth = 100.0;
       borderContainer.addChild(row);
       cell = new GridItem();
+      cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+      cell.verticalScrollPolicy  = ScrollPolicy.OFF;
       cell.colSpan = nbCols;
       cell.percentWidth = 100.0;
       if(remoteBorderContainer.south != null) {
@@ -841,7 +851,10 @@ package org.jspresso.framework.view.flex {
       for(i = 0; i < constrainedGridContainer.getChildren().length; i++) {
         row = constrainedGridContainer.getChildAt(i) as GridRow;
         for(j = 0; j < nbCols; j++) {
-          row.addChild(new GridItem());
+          cell = new GridItem();
+          cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+          cell.verticalScrollPolicy  = ScrollPolicy.OFF;
+          row.addChild(cell);
         }
       }
       
@@ -921,6 +934,8 @@ package org.jspresso.framework.view.flex {
         gridRow = evenGridContainer.getChildAt(row) as GridRow;
 
         cell = new GridItem();
+        cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        cell.verticalScrollPolicy  = ScrollPolicy.OFF;
         cell.percentHeight = 100.0;
         cell.percentWidth = 100.0;
         gridRow.addChild(cell);
@@ -976,10 +991,14 @@ package org.jspresso.framework.view.flex {
         if(remoteForm.labelsPosition != "NONE") {
           componentLabel = createComponent(rComponentLabel, false);
           labelCell = new GridItem();
+          labelCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+          labelCell.verticalScrollPolicy  = ScrollPolicy.OFF;
         }
 
         var componentCell:GridItem = new GridItem();
-
+        componentCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        componentCell.verticalScrollPolicy  = ScrollPolicy.OFF;
+        
         if(elementWidth > remoteForm.columnCount) {
           elementWidth = remoteForm.columnCount;
         }
