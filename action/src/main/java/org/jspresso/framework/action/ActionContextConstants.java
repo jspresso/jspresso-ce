@@ -76,11 +76,6 @@ public final class ActionContextConstants {
    */
   public static final String VIEW_CONNECTOR   = "VIEW_CONNECTOR";
 
-  /**
-   * SELECTED_MODEL context key.
-   */
-  public static final String SELECTED_MODEL   = "SELECTED_MODEL";
-
   private ActionContextConstants() {
     // to prevent this class from being instanciated.
   }

@@ -338,15 +338,6 @@ public abstract class AbstractActionFactory<E, F, G> implements
           ((ICollectionConnectorProvider) viewConnector)
               .getCollectionConnector().getSelectedIndices());
     }
-    if (viewConnector instanceof IItemSelectable) {
-      Object selectedItem = ((IItemSelectable) viewConnector).getSelectedItem();
-      if (selectedItem instanceof IValueConnector) {
-        actionContext.put(ActionContextConstants.SELECTED_MODEL,
-            ((IValueConnector) selectedItem).getConnectorValue());
-      } else {
-        actionContext.put(ActionContextConstants.SELECTED_MODEL, selectedItem);
-      }
-    }
     actionContext.put(ActionContextConstants.ACTION_COMMAND, actionCommand);
     actionContext.put(ActionContextConstants.ACTION_WIDGET, actionWidget);
     return actionContext;
