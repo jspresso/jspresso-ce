@@ -976,12 +976,19 @@ package org.jspresso.framework.application.frontend.controller.flex {
         dialog.setStyle("borderThicknessLeft", 5);
         dialog.setStyle("borderThicknessRight", 5);
         dialog.setStyle("borderThicknessBottom", 5);
+        dialog.horizontalScrollPolicy = ScrollPolicy.OFF;
+        dialog.verticalScrollPolicy = ScrollPolicy.OFF;
         _dialogStack.push([dialog, null]);
       }
       dialog.title = title;
       if(icon) {
         dialog.titleIcon = _viewFactory.getIconForComponent(dialog, icon);
       }
+      dialogBox.percentWidth = 100.0;
+      dialogBox.percentHeight = 100.0;
+      var applicationFrame:Application = Application.application as Application;
+      dialogBox.maxHeight = applicationFrame.height * 95 / 100;
+      dialogBox.maxWidth = applicationFrame.width * 95 / 100;
       dialog.addChild(dialogBox);
       PopUpManager.centerPopUp(dialog);
     }

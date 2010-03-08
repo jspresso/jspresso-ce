@@ -1607,12 +1607,15 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createHtmlText(remoteHtmlArea:RHtmlArea):UIComponent {
-      var htmlText:Text = new Text();
+      var htmlText:TextArea = new TextArea();
+      htmlText.editable = false;
+      htmlText.setStyle("borderSyle","none");
+      htmlText.setStyle("focusAlpha",0);
       bindHtmlText(htmlText, remoteHtmlArea.state);
       return htmlText;
     }
 
-    protected function bindHtmlText(htmlText:Text, remoteState:RemoteValueState):void {
+    protected function bindHtmlText(htmlText:TextArea, remoteState:RemoteValueState):void {
       var updateText:Function = function (value:Object):void {
         if(value == null) {
           htmlText.htmlText = null;
