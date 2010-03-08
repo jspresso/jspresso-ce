@@ -450,7 +450,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (getModelConnector() != null && !getModelConnector().isReadable()) {
       return false;
     }
-    return locallyReadable && GateHelper.areGatesOpen(readabilityGates);
+    return isLocallyReadable();
   }
 
   /**
@@ -466,7 +466,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (getModelConnector() != null && !getModelConnector().isWritable()) {
       return false;
     }
-    return locallyWritable && GateHelper.areGatesOpen(writabilityGates);
+    return isLocallyWritable();
   }
 
   /**
@@ -866,5 +866,23 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   protected Subject getSubject() {
     return subject;
+  }
+
+  /**
+   * Gets the locallyWritable.
+   * 
+   * @return the locallyWritable.
+   */
+  protected boolean isLocallyWritable() {
+    return locallyWritable && GateHelper.areGatesOpen(getWritabilityGates());
+  }
+
+  /**
+   * Gets the locallyReadable.
+   * 
+   * @return the locallyReadable.
+   */
+  protected boolean isLocallyReadable() {
+    return locallyReadable && GateHelper.areGatesOpen(getReadabilityGates());
   }
 }

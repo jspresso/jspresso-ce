@@ -34,6 +34,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.action.IActionHandlerAware;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
@@ -1395,6 +1396,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .getLovAction();
     } else {
       listOfValueAction = getLovAction();
+    }
+    Collection<IGate> aGates = listOfValueAction.getActionabilityGates();
+    if (aGates != null) {
+      aGates.remove(FrontendAction.MODEL_TRACKING_GATE);
     }
     G action = getActionFactory().createAction(listOfValueAction,
         actionHandler, viewComponent,

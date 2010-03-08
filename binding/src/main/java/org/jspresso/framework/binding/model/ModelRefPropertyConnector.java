@@ -103,7 +103,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * {@inheritDoc}
    */
   public boolean areChildrenWritable() {
-    return isWritable();
+    // if not set to true, computed reference properties cannot have their
+    // nested properties editable unless they are made delegateWritable= true.
+    return true /* isWritable() */;
   }
 
   /**

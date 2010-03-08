@@ -82,13 +82,6 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * {@inheritDoc}
    */
-  public boolean areChildrenWritable() {
-    return isWritable();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public AbstractCompositeValueConnector clone() {
     return clone(getId());

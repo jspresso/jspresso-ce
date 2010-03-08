@@ -218,25 +218,39 @@ public class HibernateBackendController extends AbstractBackendController {
           }
         }
 
-        hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
-        hibernateTemplate.execute(new HibernateCallback() {
+        int oldFlushMode = hibernateTemplate.getFlushMode();
+        try {
+          // Temporary switch to a read-only session.
+          hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
+          hibernateTemplate.execute(new HibernateCallback() {
 
-          /**
-           * {@inheritDoc}
-           */
-          public Object doInHibernate(Session session) {
-            cleanPersistentCollectionDirtyState(componentOrEntity);
-            if (componentOrEntity instanceof IEntity) {
-              if (((IEntity) componentOrEntity).isPersistent()) {
-                try {
-                  session.lock(componentOrEntity, LockMode.NONE);
-                } catch (Exception ex) {
-                  session.evict(session.get(componentOrEntity
-                      .getComponentContract(), ((IEntity) componentOrEntity)
-                      .getId()));
-                  session.lock(componentOrEntity, LockMode.NONE);
+            /**
+             * {@inheritDoc}
+             */
+            public Object doInHibernate(Session session) {
+              cleanPersistentCollectionDirtyState(componentOrEntity);
+              if (componentOrEntity instanceof IEntity) {
+                if (((IEntity) componentOrEntity).isPersistent()) {
+                  try {
+                    session.lock(componentOrEntity, LockMode.NONE);
+                  } catch (Exception ex) {
+                    session.evict(session.get(componentOrEntity
+                        .getComponentContract(), ((IEntity) componentOrEntity)
+                        .getId()));
+                    session.lock(componentOrEntity, LockMode.NONE);
+                  }
+                } else if (initializedProperty instanceof IEntity) {
+                  try {
+                    session.lock(initializedProperty, LockMode.NONE);
+                  } catch (Exception ex) {
+                    session.evict(session.get(((IEntity) initializedProperty)
+                        .getComponentContract(),
+                        ((IEntity) initializedProperty).getId()));
+                    session.lock(initializedProperty, LockMode.NONE);
+                  }
                 }
               } else if (initializedProperty instanceof IEntity) {
+                // to handle initialization of component properties.
                 try {
                   session.lock(initializedProperty, LockMode.NONE);
                 } catch (Exception ex) {
@@ -246,22 +260,14 @@ public class HibernateBackendController extends AbstractBackendController {
                   session.lock(initializedProperty, LockMode.NONE);
                 }
               }
-            } else if (initializedProperty instanceof IEntity) {
-              // to handle initialization of component properties.
-              try {
-                session.lock(initializedProperty, LockMode.NONE);
-              } catch (Exception ex) {
-                session.evict(session.get(((IEntity) initializedProperty)
-                    .getComponentContract(), ((IEntity) initializedProperty)
-                    .getId()));
-                session.lock(initializedProperty, LockMode.NONE);
-              }
-            }
 
-            Hibernate.initialize(initializedProperty);
-            return null;
-          }
-        });
+              Hibernate.initialize(initializedProperty);
+              return null;
+            }
+          });
+        } finally {
+          hibernateTemplate.setFlushMode(oldFlushMode);
+        }
         super.initializePropertyIfNeeded(componentOrEntity, propertyName);
         if (initializedProperty instanceof PersistentCollection) {
           ((PersistentCollection) initializedProperty).clearDirty();

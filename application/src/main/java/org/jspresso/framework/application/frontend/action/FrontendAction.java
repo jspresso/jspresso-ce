@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -60,8 +59,19 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private String                mnemonicAsString;
   private boolean               collectionBased;
 
-  private static final IGate    COLLECTION_TRACKING_GATE = new CollectionSelectionTrackingGate();
-  private static final IGate    MODEL_TRACKING_GATE      = new ModelTrackingGate();
+  /**
+   * <code>COLLECTION_TRACKING_GATE</code> is a singleton instance of a gate
+   * whose state depends on the underlying collection connector selection (empty
+   * => closed, not empty => open).
+   */
+  public static final IGate     COLLECTION_TRACKING_GATE = new CollectionSelectionTrackingGate();
+
+  /**
+   * <code>MODEL_TRACKING_GATE</code> is a singleton instance of a gate whose
+   * state depends on the underlying action model (null => closed, not null =>
+   * open).
+   */
+  public static final IGate     MODEL_TRACKING_GATE      = new ModelTrackingGate();
 
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
@@ -106,16 +116,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * @return the actionabilityGates.
    */
   public Collection<IGate> getActionabilityGates() {
-    List<IGate> gates = new ArrayList<IGate>();
-    if (isCollectionBased()) {
-      gates.add(COLLECTION_TRACKING_GATE);
-    } else {
-      gates.add(MODEL_TRACKING_GATE);
-    }
-    if (actionabilityGates != null) {
-      gates.addAll(actionabilityGates);
-    }
-    return gates;
+    return actionabilityGates;
   }
 
   /**
@@ -206,6 +207,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public void setActionabilityGates(Collection<IGate> actionabilityGates) {
     this.actionabilityGates = actionabilityGates;
+    completeActionabilityGates();
   }
 
   /**
@@ -362,6 +364,20 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public void setCollectionBased(boolean collectionBased) {
     this.collectionBased = collectionBased;
+    completeActionabilityGates();
+  }
+
+  private void completeActionabilityGates() {
+    if (actionabilityGates == null) {
+      actionabilityGates = new ArrayList<IGate>();
+    }
+    if (isCollectionBased()) {
+      actionabilityGates.remove(MODEL_TRACKING_GATE);
+      actionabilityGates.add(COLLECTION_TRACKING_GATE);
+    } else {
+      actionabilityGates.remove(COLLECTION_TRACKING_GATE);
+      actionabilityGates.add(MODEL_TRACKING_GATE);
+    }
   }
 
   /**
