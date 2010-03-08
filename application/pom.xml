@@ -14,6 +14,10 @@
       <artifactId>jspresso-view</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-util</artifactId>
+    </dependency>
+    <dependency>
       <groupId>bsf</groupId>
       <artifactId>bsf</artifactId>
     </dependency>

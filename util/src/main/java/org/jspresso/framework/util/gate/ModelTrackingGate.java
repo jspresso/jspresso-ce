@@ -26,7 +26,13 @@ package org.jspresso.framework.util.gate;
  */
 public class ModelTrackingGate extends AbstractModelGate {
 
-  private static final Object START_MODEL = new Object();
+  /**
+   * <code>INSTANCE</code> is a singleton instance of a gate whose state depends
+   * on the underlying action model (null => closed, not null => open).
+   */
+  public static final ModelTrackingGate INSTANCE    = new ModelTrackingGate();
+
+  private static final Object           START_MODEL = new Object();
 
   /**
    * Constructs a new <code>ModelTrackingGate</code> instance.

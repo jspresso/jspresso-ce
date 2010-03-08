@@ -60,20 +60,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private boolean               collectionBased;
 
   /**
-   * <code>COLLECTION_TRACKING_GATE</code> is a singleton instance of a gate
-   * whose state depends on the underlying collection connector selection (empty
-   * => closed, not empty => open).
-   */
-  public static final IGate     COLLECTION_TRACKING_GATE = new CollectionSelectionTrackingGate();
-
-  /**
-   * <code>MODEL_TRACKING_GATE</code> is a singleton instance of a gate whose
-   * state depends on the underlying action model (null => closed, not null =>
-   * open).
-   */
-  public static final IGate     MODEL_TRACKING_GATE      = new ModelTrackingGate();
-
-  /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
    */
   public FrontendAction() {
@@ -372,11 +358,11 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
       actionabilityGates = new ArrayList<IGate>();
     }
     if (isCollectionBased()) {
-      actionabilityGates.remove(MODEL_TRACKING_GATE);
-      actionabilityGates.add(COLLECTION_TRACKING_GATE);
+      actionabilityGates.remove(ModelTrackingGate.INSTANCE);
+      actionabilityGates.add(CollectionSelectionTrackingGate.INSTANCE);
     } else {
-      actionabilityGates.remove(COLLECTION_TRACKING_GATE);
-      actionabilityGates.add(MODEL_TRACKING_GATE);
+      actionabilityGates.remove(CollectionSelectionTrackingGate.INSTANCE);
+      actionabilityGates.add(ModelTrackingGate.INSTANCE);
     }
   }
 

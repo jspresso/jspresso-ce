@@ -34,7 +34,6 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.action.IActionHandlerAware;
-import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
@@ -84,6 +83,7 @@ import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -1399,7 +1399,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     Collection<IGate> aGates = listOfValueAction.getActionabilityGates();
     if (aGates != null) {
-      aGates.remove(FrontendAction.MODEL_TRACKING_GATE);
+      aGates.remove(ModelTrackingGate.INSTANCE);
     }
     G action = getActionFactory().createAction(listOfValueAction,
         actionHandler, viewComponent,
