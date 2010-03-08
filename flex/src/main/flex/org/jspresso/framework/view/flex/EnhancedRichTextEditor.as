@@ -81,6 +81,9 @@ package org.jspresso.framework.view.flex {
       pattern = /<\/u>/g;
       str = str.replace(pattern, "</U>");
     
+      pattern = /&#39;/g;
+      str = str.replace(pattern, "&apos;");
+
       // Remove extra white space
       pattern = /  /g;
       str = str.replace(pattern, " ");
@@ -154,6 +157,9 @@ package org.jspresso.framework.view.flex {
       pattern = /<\/U>/g;
       str = str.replace(pattern, "</u>");
       
+      pattern = /&apos;/g;
+      str = str.replace(pattern, "&#39;");
+
       return str;
     }
   }
