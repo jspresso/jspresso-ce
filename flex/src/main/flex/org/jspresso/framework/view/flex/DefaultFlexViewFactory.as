@@ -1617,7 +1617,7 @@ package org.jspresso.framework.view.flex {
         if(value == null) {
           htmlText.htmlText = null;
         } else {
-          htmlText.htmlText = HtmlUtil.preprocessHtml(value.toString());
+          htmlText.htmlText = HtmlUtil.convertFromXHtml(value.toString());
         }
       };
       BindingUtils.bindSetter(updateText, remoteState, "value", true);
@@ -1633,7 +1633,7 @@ package org.jspresso.framework.view.flex {
       if(!remoteLabel.state && remoteLabel.label) {
         if(HtmlUtil.isHtml(remoteLabel.label)) {
           label.text = null;
-          label.htmlText = HtmlUtil.preprocessHtml(remoteLabel.label);
+          label.htmlText = remoteLabel.label;
         } else {
           label.htmlText = null;
           label.text = remoteLabel.label;
@@ -1653,7 +1653,7 @@ package org.jspresso.framework.view.flex {
         } else {
           if(HtmlUtil.isHtml(value.toString())) {
             label.text = null;
-            label.htmlText = HtmlUtil.preprocessHtml(value.toString());
+            label.htmlText = value.toString();
           } else {
             label.htmlText = null;
             label.text = value.toString();

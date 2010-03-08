@@ -15,6 +15,8 @@
 package org.jspresso.framework.view.flex {
 
   import mx.controls.RichTextEditor;
+  
+  import org.jspresso.framework.util.html.HtmlUtil;
 
   public class EnhancedRichTextEditor extends RichTextEditor {
 
@@ -23,144 +25,12 @@ package org.jspresso.framework.view.flex {
     }
     
     public function get xhtmlText():String {
-      return convertToXHtml(this.htmlText);
+      return HtmlUtil.convertToXHtml(this.htmlText);
     }
     
     public function set xhtmlText(val:String):void {
-      this.htmlText = convertFromXHtml(val);
+      this.htmlText = HtmlUtil.convertFromXHtml(val);
     }
   
-    public static function convertFromXHtml(str:String):String {
-
-      if(str == null) {
-        return str;
-      }
-      
-      var pattern:RegExp;
-    
-      pattern = /<p style="text-align:left">/g;
-      str = str.replace(pattern, "<P ALIGN=\"LEFT\">");
-      pattern = /<p style="text-align:right">/g;
-      str = str.replace(pattern, "<P ALIGN=\"RIGHT\">");
-      pattern = /<p style="text-align:justify">/g;
-      str = str.replace(pattern, "<P ALIGN=\"JUSTIFY\">");
-      pattern = /<\/p>/g;
-      str = str.replace(pattern, "</P>");
-    
-      pattern = /<span style=\"(.*?)\">/g;
-      str = str.replace(pattern, "<FONT $1>");
-      pattern = /color:(.*?);/g;
-      str = str.replace(pattern, "COLOR=\"$1\" ");
-      pattern = /font-size:(.*?)px;/g;
-      str = str.replace(pattern, "SIZE=\"$1\" ");
-      pattern = /font-family:(.*?);/g;
-      str = str.replace(pattern, "FACE=\"$1\" ");
-      pattern = /text-align:(.*?);/g;
-      str = str.replace(pattern, "ALIGN=\"$1\" ");
-    
-      pattern = /<\/span.*?>/g;
-      str = str.replace(pattern, "</FONT>");
-    
-      pattern= /<\/li><li>/g;
-      str = str.replace(pattern, "</LI><LI>");
-      pattern= /<\/li><\/ul>/g;
-      str = str.replace(pattern, "</LI>");
-      pattern= /<ul><li>/g;
-      str = str.replace(pattern, "<LI>");
-    
-      pattern = /<em>/g;
-      str = str.replace(pattern, "<I>");
-      pattern = /<\/em>/g;
-      str = str.replace(pattern, "</I>");
-      pattern = /<strong>/g;
-      str = str.replace(pattern, "<B>");
-      pattern = /<\/strong>/g;
-      str = str.replace(pattern, "</B>");
-      pattern = /<u>/g;
-      str = str.replace(pattern, "<U>");
-      pattern = /<\/u>/g;
-      str = str.replace(pattern, "</U>");
-    
-      pattern = /&#39;/g;
-      str = str.replace(pattern, "&apos;");
-
-      // Remove extra white space
-      pattern = /  /g;
-      str = str.replace(pattern, " ");
-    
-      return str;
-    }
-  
-    public static function convertToXHtml(str:String):String {
-
-      if(str == null) {
-        return str;
-      }
-      
-      var pattern:RegExp;
-      
-      pattern = /<TEXTFORMAT.*?>/g;
-      str = str.replace(pattern, "");
-      pattern = /<\/TEXTFORMAT.*?>/g;
-      str = str.replace(pattern, "");
-      
-      pattern = /<P ALIGN="LEFT">/g;
-      str = str.replace(pattern, "<p style=\"text-align:left\">");
-      pattern = /<P ALIGN="RIGHT">/g;
-      str = str.replace(pattern, "<p style=\"text-align:right\">");
-      pattern = /<P ALIGN="JUSTIFY">/g;
-      str = str.replace(pattern, "<p style=\"text-align:justify\">");
-      pattern = /<\/P>/g;
-      str = str.replace(pattern, "</p>");
-      
-      pattern = /<FONT (.*?)>/g;
-      str = str.replace(pattern, "<span style=\"$1\">");
-      
-      pattern = /COLOR=\"(.*?)\"/g;
-      str = str.replace(pattern, "color:$1;");
-     
-      pattern = /SIZE=\"(.*?)\"/g;
-      str = str.replace(pattern, "font-size:$1px;");
-      
-      pattern = /FACE=\"(.*?)\"/g;
-      str = str.replace(pattern, "font-family:$1;");
-      
-      pattern = /ALIGN=\"(.*?)\"/g;
-      str = str.replace(pattern, "text-align:$1;");
-      
-      pattern = /LETTERSPACING=\".*?\"/g;
-      str = str.replace(pattern, "");
-      
-      pattern = /KERNING=\".*?\"/g;
-      str = str.replace(pattern, "");
-      
-      pattern = /<\/FONT.*?>/g;
-      str = str.replace(pattern, "</span>");
-      
-      pattern= /<\/LI><LI>/g;
-      str = str.replace(pattern, "</li><li>");
-      pattern= /<\/LI>/g;
-      str = str.replace(pattern, "</li></ul>");
-      pattern= /<LI>/g;
-      str = str.replace(pattern, "<ul><li>");
-     
-      pattern = /<I>/g;
-      str = str.replace(pattern, "<em>");
-      pattern = /<\/I>/g;
-      str = str.replace(pattern, "</em>");
-      pattern = /<B>/g;
-      str = str.replace(pattern, "<strong>");
-      pattern = /<\/B>/g;
-      str = str.replace(pattern, "</strong>");
-      pattern = /<U>/g;
-      str = str.replace(pattern, "<u>");
-      pattern = /<\/U>/g;
-      str = str.replace(pattern, "</u>");
-      
-      pattern = /&apos;/g;
-      str = str.replace(pattern, "&#39;");
-
-      return str;
-    }
   }
 }
