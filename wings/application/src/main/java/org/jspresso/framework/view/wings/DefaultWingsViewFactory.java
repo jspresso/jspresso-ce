@@ -1498,7 +1498,8 @@ public class DefaultWingsViewFactory extends
       if (!forbiddenColumns.contains(propertyName)) {
         STableColumn column = viewComponent.getColumnModel().getColumn(
             columnIndex++);
-        column.setIdentifier(propertyName);
+        column.setIdentifier(computeColumnIdentifier(rowConnectorPrototype
+            .getChildConnector(propertyName)));
         IPropertyDescriptor propertyDescriptor = modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()
             .getPropertyDescriptor(propertyName);

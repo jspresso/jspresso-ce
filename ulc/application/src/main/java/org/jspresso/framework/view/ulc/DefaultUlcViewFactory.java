@@ -1304,7 +1304,8 @@ public class DefaultUlcViewFactory extends
         ULCTableColumn column = viewComponent.getColumnModel().getColumn(
             columnIndex++);
         column.setHeaderRenderer(null);
-        column.setIdentifier(propertyName);
+        column.setIdentifier(computeColumnIdentifier(rowConnectorPrototype
+            .getChildConnector(propertyName)));
         IPropertyDescriptor propertyDescriptor = modelDescriptor
             .getCollectionDescriptor().getElementDescriptor()
             .getPropertyDescriptor(propertyName);

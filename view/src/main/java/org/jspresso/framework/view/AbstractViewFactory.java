@@ -43,6 +43,7 @@ import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvid
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IMvcBinder;
+import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
@@ -877,6 +878,27 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     columnConnector.setSubject(actionHandler.getSubject());
     return columnConnector;
+  }
+
+  /**
+   * Computes a table column identifer that is used for sorting.
+   * 
+   * @param columnConnector
+   *          the column connector behind the column.
+   * @return the column identifier.
+   */
+  protected String computeColumnIdentifier(IValueConnector columnConnector) {
+    String propertyName = columnConnector.getId();
+    if (columnConnector instanceof IRenderableCompositeValueConnector) {
+      String renderingProperty = ((IRenderableCompositeValueConnector) columnConnector)
+          .getRenderingConnector().getId();
+      if (renderingProperty != null) {
+        // for ref sorting to occur properly.
+        return propertyName + "." + renderingProperty;
+      }
+      return propertyName;
+    }
+    return propertyName;
   }
 
   /**

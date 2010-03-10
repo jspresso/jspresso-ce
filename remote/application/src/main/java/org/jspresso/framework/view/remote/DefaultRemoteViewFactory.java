@@ -1186,7 +1186,7 @@ public class DefaultRemoteViewFactory extends
           }
         }
         columns.add(column.getPeer());
-        columnIds.add(propertyName);
+        columnIds.add(computeColumnIdentifier(columnConnector));
       }
     }
     viewComponent.setColumns(columns.toArray(new RComponent[0]));

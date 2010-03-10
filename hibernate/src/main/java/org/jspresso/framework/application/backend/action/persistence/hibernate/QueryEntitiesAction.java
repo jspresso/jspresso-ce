@@ -238,9 +238,17 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     if (aQueryComponent.getOrderingProperties() != null) {
       for (Map.Entry<String, ESort> orderingProperty : aQueryComponent
           .getOrderingProperties().entrySet()) {
-        String[] propElts = orderingProperty.getKey().split("\\.");
-        DetachedCriteria orderingCriteria = criteria;
         String propertyName = orderingProperty.getKey();
+        // IPropertyDescriptor terminalPropDesc = aQueryComponent
+        // .getComponentDescriptor().getPropertyDescriptor(propertyName);
+        // if (terminalPropDesc instanceof IReferencePropertyDescriptor<?>) {
+        // propertyName = propertyName
+        // + "."
+        // + ((IReferencePropertyDescriptor<?>) terminalPropDesc)
+        // .getReferencedDescriptor().getToStringProperty();
+        // }
+        String[] propElts = propertyName.split("\\.");
+        DetachedCriteria orderingCriteria = criteria;
         boolean isComputed = false;
         if (propElts.length > 1) {
           IComponentDescriptor<?> currentCompDesc = aQueryComponent
