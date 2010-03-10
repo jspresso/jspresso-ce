@@ -125,6 +125,7 @@ import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
@@ -1479,11 +1480,11 @@ public class DefaultSwingViewFactory extends
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(
-            modelDescriptor.getName() + "Element",
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-                .getToStringProperty());
+        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+            rowDescriptor.getToStringProperty());
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -1491,9 +1492,8 @@ public class DefaultSwingViewFactory extends
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     JLabel iconLabel = createJLabel(false);
-    iconLabel.setIcon(getIconFactory().getIcon(
-        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-            .getIconImageURL(), getIconFactory().getTinyIconSize()));
+    iconLabel.setIcon(getIconFactory().getIcon(rowDescriptor.getIconImageURL(),
+        getIconFactory().getTinyIconSize()));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
@@ -1512,11 +1512,9 @@ public class DefaultSwingViewFactory extends
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IValueConnector columnConnector = createColumnConnector(
-            columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor(), actionHandler);
+            columnViewDescriptor, rowDescriptor, actionHandler);
         rowConnectorPrototype.addChildConnector(columnConnector);
-        columnClasses.add(modelDescriptor.getCollectionDescriptor()
-            .getElementDescriptor().getPropertyDescriptor(columnId)
+        columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId)
             .getModelType());
         // already handled in createColumnConnector
         // if (columnViewDescriptor.getReadabilityGates() != null) {
@@ -1576,10 +1574,9 @@ public class DefaultSwingViewFactory extends
       if (!forbiddenColumns.contains(propertyName)) {
         TableColumn column = viewComponent.getColumnModel().getColumn(
             columnIndex++);
-        column.setIdentifier(computeColumnIdentifier(rowConnectorPrototype
-            .getChildConnector(propertyName)));
-        IPropertyDescriptor propertyDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
+        column.setIdentifier(computeColumnIdentifier(rowDescriptor,
+            rowConnectorPrototype.getChildConnector(propertyName)));
+        IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         StringBuffer columnName = new StringBuffer(columnViewDescriptor
             .getI18nName(getTranslationProvider(), locale));

@@ -114,6 +114,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
 
 /**
  * Abstract base class factory for views.
@@ -883,22 +884,29 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Computes a table column identifer that is used for sorting.
    * 
+   * @param rowDescriptor
+   *          the row component descriptor.
    * @param columnConnector
    *          the column connector behind the column.
    * @return the column identifier.
    */
-  protected String computeColumnIdentifier(IValueConnector columnConnector) {
+  protected String computeColumnIdentifier(
+      IComponentDescriptor<?> rowDescriptor, IValueConnector columnConnector) {
     String propertyName = columnConnector.getId();
+    String identifier = propertyName;
     if (columnConnector instanceof IRenderableCompositeValueConnector) {
       String renderingProperty = ((IRenderableCompositeValueConnector) columnConnector)
           .getRenderingConnector().getId();
       if (renderingProperty != null) {
         // for ref sorting to occur properly.
-        return propertyName + "." + renderingProperty;
+        identifier = identifier + "." + renderingProperty;
       }
-      return propertyName;
     }
-    return propertyName;
+    if (PropertyDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
+      // to prevent column sorting
+      return "";
+    }
+    return identifier;
   }
 
   /**

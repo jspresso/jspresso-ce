@@ -102,4 +102,33 @@ public final class PropertyDescriptorHelper {
     }
     return returnedList;
   }
+
+  /**
+   * Explores a property chain and determines wether one of the chain element is
+   * computed (thus making the complete chain computed).
+   * 
+   * @param componentDescriptor
+   *          the component descriptor from wich the property chain is
+   *          extracted.
+   * @param propertyName
+   *          the (potentially nested) property name.
+   * @return true if the (potentially nested) property is computed.
+   */
+  public static boolean isComputed(IComponentDescriptor<?> componentDescriptor,
+      String propertyName) {
+    String[] propElts = propertyName.split("\\.");
+    IComponentDescriptor<?> currentCompDesc = componentDescriptor;
+    for (int i = 0; i < propElts.length; i++) {
+      IPropertyDescriptor propDesc = currentCompDesc
+          .getPropertyDescriptor(propElts[i]);
+      if (propDesc.isComputed()) {
+        return true;
+      }
+      if (i < propElts.length - 1) {
+        currentCompDesc = ((IReferencePropertyDescriptor<?>) propDesc)
+            .getReferencedDescriptor();
+      }
+    }
+    return false;
+  }
 }

@@ -161,7 +161,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
-      _dialogStack.push([null, null]);
+      _dialogStack.push([null, null, null]);
       _userLanguage = userLanguage;
       _initialLocaleChain = ResourceManager.getInstance().localeChain;
       if (ExternalInterface.available) {
@@ -640,7 +640,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _changeNotificationsEnabled = true;
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
-      _dialogStack.push([null, null]);
+      _dialogStack.push([null, null, null]);
       start();
     }
 

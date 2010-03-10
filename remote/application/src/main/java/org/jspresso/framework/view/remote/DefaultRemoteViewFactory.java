@@ -77,6 +77,7 @@ import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
@@ -1140,11 +1141,11 @@ public class DefaultRemoteViewFactory extends
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(
-            modelDescriptor.getName() + "Element",
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-                .getToStringProperty());
+        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+            rowDescriptor.getToStringProperty());
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -1169,14 +1170,13 @@ public class DefaultRemoteViewFactory extends
         // Do not use standard createColumnConnector method to preserve
         // formatted value connectors.
         // IValueConnector columnConnector = createColumnConnector(columnId,
-        // modelDescriptor.getCollectionDescriptor().getElementDescriptor());
+        // rowDescriptor);
         IValueConnector columnConnector = column.getConnector();
         rowConnectorPrototype.addChildConnector(columnConnector);
         String propertyName = columnViewDescriptor.getModelDescriptor()
             .getName();
         columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
-        IPropertyDescriptor propertyDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
+        IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         if (propertyDescriptor.isMandatory()) {
           if (column.getPeer().getLabel() != null) {
@@ -1186,7 +1186,7 @@ public class DefaultRemoteViewFactory extends
           }
         }
         columns.add(column.getPeer());
-        columnIds.add(computeColumnIdentifier(columnConnector));
+        columnIds.add(computeColumnIdentifier(rowDescriptor, columnConnector));
       }
     }
     viewComponent.setColumns(columns.toArray(new RComponent[0]));

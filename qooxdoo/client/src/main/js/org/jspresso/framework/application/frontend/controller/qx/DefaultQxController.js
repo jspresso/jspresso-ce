@@ -37,7 +37,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     this.__remoteController = remoteController;
     this.__commandsQueue = new Array();
     this.__dialogStack = new Array();
-    this.__dialogStack.push([null, null]);
+    this.__dialogStack.push([null, null, null]);
     this.__userLanguage = userLanguage;
     qx.locale.Manager.getInstance().setLocale(this.__userLanguage);
     this.__initRemoteController();
@@ -640,7 +640,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__changeNotificationsEnabled = true;
       this.__commandsQueue = new Array();
       this.__dialogStack = new Array();
-      this.__dialogStack.push([null, null]);
+      this.__dialogStack.push([null, null, null]);
       this.start();
     },
 
@@ -891,7 +891,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           showMinimize : false
         });
         dialogParent.add(dialog);
-        this.__dialogStack.push([dialog, null]);
+        this.__dialogStack.push([dialog, null, null]);
       }
       dialog.setCaption(title);
       this.__viewFactory.setIcon(dialog, icon);

@@ -1464,10 +1464,14 @@ package org.jspresso.framework.view.flex {
           table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
             event.preventDefault();
             var column:DataGridColumn = table.columns[event.columnIndex];
+            var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
+            if(!property || property.length == 0) {
+              // do not sort
+              return;
+            }
             column.sortDescending = !column.sortDescending;
             table.displaySort(event.columnIndex, column.sortDescending);
             if(state.children.length > 1) {
-              var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
               var orderingProperties:Object = new Object();
               orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
               var sortCommand:RemoteSortCommand = new RemoteSortCommand();

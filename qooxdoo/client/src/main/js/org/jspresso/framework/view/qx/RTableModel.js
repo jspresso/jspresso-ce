@@ -123,15 +123,20 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
     	if(!this.__sortable) {
     		return;
     	}
+    	var property = this.getColumnId(columnIndex);
+    	if(!property || property.length == 0) {
+    		return;
+    	}
       this.__sortColumnIndex = columnIndex;
       this.__sortAscending = ascending;
       if(this.__sortingAction) {
       	if(this.getRowCount() > 1) {
 	        var orderingProperties = new Object();
-	        orderingProperties[this.getColumnId(columnIndex)] = ascending ? "ASCENDING": "DESCENDING";
+	        orderingProperties[property] = ascending ? "ASCENDING": "DESCENDING";
 	        var sortCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand();
 	        sortCommand.setOrderingProperties(orderingProperties);
-	        sortCommand.setViewStateGuid(this.__state.getGuid(), this.__state.getAutomationId());
+          sortCommand.setViewStateGuid(this.__state.getGuid());
+          sortCommand.setViewStateAutomationId(this.__state.getAutomationId());
           sortCommand.setTargetPeerGuid(this.__sortingAction.getGuid());
           sortCommand.setAutomationId(this.__sortingAction.getAutomationId());
 	        this.__commandHandler.registerCommand(sortCommand);

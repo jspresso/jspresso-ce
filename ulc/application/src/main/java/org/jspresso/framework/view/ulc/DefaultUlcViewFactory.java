@@ -75,6 +75,7 @@ import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
@@ -1194,11 +1195,11 @@ public class DefaultUlcViewFactory extends
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(
-            modelDescriptor.getName() + "Element",
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-                .getToStringProperty());
+        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+            rowDescriptor.getToStringProperty());
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -1206,9 +1207,8 @@ public class DefaultUlcViewFactory extends
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
     ULCLabel iconLabel = createULCLabel(false);
-    iconLabel.setIcon(getIconFactory().getIcon(
-        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-            .getIconImageURL(), getIconFactory().getTinyIconSize()));
+    iconLabel.setIcon(getIconFactory().getIcon(rowDescriptor.getIconImageURL(),
+        getIconFactory().getTinyIconSize()));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ULCScrollPane.UPPER_RIGHT_CORNER, iconLabel);
     IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,
@@ -1228,11 +1228,9 @@ public class DefaultUlcViewFactory extends
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IValueConnector columnConnector = createColumnConnector(
-            columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor(), actionHandler);
+            columnViewDescriptor, rowDescriptor, actionHandler);
         rowConnectorPrototype.addChildConnector(columnConnector);
-        IPropertyDescriptor columnModelDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
+        IPropertyDescriptor columnModelDescriptor = rowDescriptor
             .getPropertyDescriptor(columnId);
         if (columnModelDescriptor instanceof IReferencePropertyDescriptor<?>) {
           columnClasses.add(String.class);
@@ -1304,10 +1302,9 @@ public class DefaultUlcViewFactory extends
         ULCTableColumn column = viewComponent.getColumnModel().getColumn(
             columnIndex++);
         column.setHeaderRenderer(null);
-        column.setIdentifier(computeColumnIdentifier(rowConnectorPrototype
-            .getChildConnector(propertyName)));
-        IPropertyDescriptor propertyDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
+        column.setIdentifier(computeColumnIdentifier(rowDescriptor,
+            rowConnectorPrototype.getChildConnector(propertyName)));
+        IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         StringBuffer columnName = new StringBuffer(columnViewDescriptor
             .getI18nName(getTranslationProvider(), locale));
