@@ -21,6 +21,7 @@ package org.jspresso.framework.binding.remote;
 import org.jspresso.framework.binding.basic.BasicFormattedValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.automation.IAutomationSource;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
@@ -32,10 +33,11 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @author Vincent Vandenschrick
  */
 public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
-    implements IRemotePeer, IRemoteStateOwner {
+    implements IRemotePeer, IRemoteStateOwner, IAutomationSource {
 
   private RemoteConnectorFactory connectorFactory;
   private String                 guid;
+  private String                 automationSeed;
   private RemoteValueState       state;
 
   /**
@@ -104,8 +106,8 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * @return the newly created state.
    */
   protected RemoteValueState createState() {
-    RemoteValueState createdState = connectorFactory
-        .createRemoteValueState(getGuid());
+    RemoteValueState createdState = connectorFactory.createRemoteValueState(
+        getGuid(), getAutomationSeed());
     return createdState;
   }
 
@@ -134,5 +136,27 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   @Override
   public boolean isWritable() {
     return getModelConnector() != null && super.isWritable();
+  }
+
+  /**
+   * Gets the automationSeed.
+   * 
+   * @return the automationSeed.
+   */
+  public String getAutomationSeed() {
+    if (automationSeed != null) {
+      return automationSeed;
+    }
+    return getId();
+  }
+
+  /**
+   * Sets the automationSeed.
+   * 
+   * @param automationSeed
+   *          the automationSeed to set.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 }

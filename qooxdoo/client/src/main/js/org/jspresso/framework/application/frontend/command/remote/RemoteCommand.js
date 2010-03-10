@@ -26,6 +26,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     {
       check : "String",
       nullable : true
+    },
+    automationId :
+    {
+      check : "String",
+      nullable : true
     }
   }
 });

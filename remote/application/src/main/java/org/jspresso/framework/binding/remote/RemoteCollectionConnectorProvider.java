@@ -26,6 +26,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.automation.IAutomationSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -36,10 +37,12 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  * @author Vincent Vandenschrick
  */
 public class RemoteCollectionConnectorProvider extends
-    BasicCollectionConnectorProvider implements IRemotePeer, IRemoteStateOwner {
+    BasicCollectionConnectorProvider implements IRemotePeer, IRemoteStateOwner,
+    IAutomationSource {
 
   private RemoteConnectorFactory    connectorFactory;
   private String                    guid;
+  private String                    automationSeed;
   private RemoteCompositeValueState state;
 
   /**
@@ -107,7 +110,7 @@ public class RemoteCollectionConnectorProvider extends
    */
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
-        .createRemoteCompositeValueState(getGuid());
+        .createRemoteCompositeValueState(getGuid(), getAutomationSeed());
     ICollectionConnector collectionConnector = getCollectionConnector();
     if (collectionConnector instanceof RemoteCollectionConnector) {
       createdState.setChildren(new ArrayList<RemoteValueState>(
@@ -138,5 +141,27 @@ public class RemoteCollectionConnectorProvider extends
    */
   public Object actualValue() {
     return getConnectorValue();
+  }
+
+  /**
+   * Gets the automationSeed.
+   * 
+   * @return the automationSeed.
+   */
+  public String getAutomationSeed() {
+    if (automationSeed != null) {
+      return automationSeed;
+    }
+    return getId();
+  }
+
+  /**
+   * Sets the automationSeed.
+   * 
+   * @param automationSeed
+   *          the automationSeed to set.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 }

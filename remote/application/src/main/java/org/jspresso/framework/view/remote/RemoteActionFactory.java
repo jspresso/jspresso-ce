@@ -142,6 +142,13 @@ public class RemoteActionFactory extends
     }
     ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction, action,
         actionHandler, sourceComponent, modelDescriptor, viewConnector);
+    String automationSeed = action.getAutomationSeed();
+    if (automationSeed == null && action instanceof IDisplayableAction) {
+      automationSeed = ((IDisplayableAction) action).getName();
+    }
+    String automationId = remotePeerRegistry.registerAutomationId(
+        automationSeed, remoteAction.getGuid());
+    remoteAction.setAutomationId(automationId);
     remotePeerRegistry.register(remoteActionAdapter);
     return remoteAction;
   }

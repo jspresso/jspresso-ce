@@ -131,8 +131,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
 	        orderingProperties[this.getColumnId(columnIndex)] = ascending ? "ASCENDING": "DESCENDING";
 	        var sortCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand();
 	        sortCommand.setOrderingProperties(orderingProperties);
-	        sortCommand.setViewStateGuid(this.__state.getGuid());
-	        sortCommand.setTargetPeerGuid(this.__sortingAction.getGuid());
+	        sortCommand.setViewStateGuid(this.__state.getGuid(), this.__state.getAutomationId());
+          sortCommand.setTargetPeerGuid(this.__sortingAction.getGuid());
+          sortCommand.setAutomationId(this.__sortingAction.getAutomationId());
 	        this.__commandHandler.registerCommand(sortCommand);
       	}
       } else {

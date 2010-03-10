@@ -31,6 +31,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     {
       check : "String",
       nullable : true
+    },
+    viewStateAutomationId :
+    {
+      check : "String",
+      nullable : true
     }
   }
 });

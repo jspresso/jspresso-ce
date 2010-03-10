@@ -18,7 +18,7 @@ qx.Interface.define("org.jspresso.framework.action.IActionHandler",
 	{
     execute : function (action, param){},
     
-    setCurrentViewStateGuid : function(viewStateGuid){}
+    setCurrentViewStateGuid : function(viewStateGuid, viewStateAutomationId){}
     
   }
 });

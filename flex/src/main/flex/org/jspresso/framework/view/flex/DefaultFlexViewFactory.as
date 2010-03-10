@@ -1473,7 +1473,9 @@ package org.jspresso.framework.view.flex {
               var sortCommand:RemoteSortCommand = new RemoteSortCommand();
               sortCommand.orderingProperties = orderingProperties;
               sortCommand.viewStateGuid = remoteTable.state.guid;
+              sortCommand.viewStateAutomationId = remoteTable.state.automationId;
               sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
+              sortCommand.automationId = remoteTable.sortingAction.automationId;
               _commandHandler.registerCommand(sortCommand);
             }
           });
@@ -1524,7 +1526,7 @@ package org.jspresso.framework.view.flex {
       
       table.addEventListener(DataGridEvent.ITEM_EDIT_END, function(event:DataGridEvent):void {
         var table:DataGrid = event.currentTarget as DataGrid;
-    	  _actionHandler.setCurrentViewStateGuid(table, null);
+    	  _actionHandler.setCurrentViewStateGuid(table, null, null);
         if (event.reason != DataGridEventReason.CANCELLED) {
           if(table.itemEditorInstance is RemoteValueDgItemEditor) {
             var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
@@ -1552,7 +1554,7 @@ package org.jspresso.framework.view.flex {
         var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
         var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
             .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
-        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid);
+        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.automationId);
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();

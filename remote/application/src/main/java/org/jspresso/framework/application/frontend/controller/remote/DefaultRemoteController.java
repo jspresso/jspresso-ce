@@ -230,6 +230,13 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  public IRemotePeer getRegisteredForAutomationId(String automationId) {
+    return remotePeerRegistry.getRegisteredForAutomationId(automationId);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public synchronized List<RemoteCommand> handleCommands(
       List<RemoteCommand> commands) {
     try {
@@ -285,6 +292,13 @@ public class DefaultRemoteController extends
    */
   public boolean isRegistered(String guid) {
     return remotePeerRegistry.isRegistered(guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String registerAutomationId(String automationsSeed, String guid) {
+    return remotePeerRegistry.registerAutomationId(automationsSeed, guid);
   }
 
   /**
@@ -460,7 +474,13 @@ public class DefaultRemoteController extends
       displayWorkspace(((RemoteWorkspaceDisplayCommand) command)
           .getWorkspaceName(), false);
     } else {
-      IRemotePeer targetPeer = getRegistered(command.getTargetPeerGuid());
+      IRemotePeer targetPeer = null;
+      if (command.getAutomationId() != null) {
+        targetPeer = getRegisteredForAutomationId(command.getAutomationId());
+      }
+      if (targetPeer == null) {
+        targetPeer = getRegistered(command.getTargetPeerGuid());
+      }
       if (targetPeer == null) {
         throw new CommandException("Target remote peer could not be retrieved");
       }
@@ -478,11 +498,6 @@ public class DefaultRemoteController extends
         if (targetPeer instanceof ICollectionConnectorProvider) {
           selectable = ((ICollectionConnectorProvider) targetPeer)
               .getCollectionConnector();
-          // } else if (targetPeer instanceof ICollectionConnectorListProvider)
-          // {
-          // selectable = (ISelectable) ((ICollectionConnectorListProvider)
-          // targetPeer)
-          // .getParentConnector();
         } else if (targetPeer instanceof ISelectable) {
           selectable = (ISelectable) targetPeer;
         }
@@ -493,8 +508,20 @@ public class DefaultRemoteController extends
         }
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
+        String viewStateGuid = null;
+        String viewStateAutomationId = ((RemoteActionCommand) command)
+            .getViewStateAutomationId();
+        if (viewStateAutomationId != null) {
+          IRemotePeer viewPeer = getRegisteredForAutomationId(viewStateAutomationId);
+          if (viewPeer != null) {
+            viewStateGuid = viewPeer.getGuid();
+          }
+        }
+        if (viewStateGuid == null) {
+          viewStateGuid = ((RemoteActionCommand) command).getViewStateGuid();
+        }
         action.actionPerformed(((RemoteActionCommand) command).getParameter(),
-            ((RemoteActionCommand) command).getViewStateGuid(), null);
+            viewStateGuid, null);
       } else if (command instanceof RemoteSortCommand) {
         RAction sortAction = (RAction) targetPeer;
         Map<String, String> orderingProperties = ((RemoteSortCommand) command)
@@ -510,8 +537,19 @@ public class DefaultRemoteController extends
         Map<String, Object> context = new HashMap<String, Object>();
         context.put(IQueryComponent.ORDERING_PROPERTIES,
             typedOrderingProperties);
-        sortAction.actionPerformed(null, ((RemoteSortCommand) command)
-            .getViewStateGuid(), context);
+        String viewStateGuid = null;
+        String viewStateAutomationId = ((RemoteSortCommand) command)
+            .getViewStateAutomationId();
+        if (viewStateAutomationId != null) {
+          IRemotePeer viewPeer = getRegisteredForAutomationId(viewStateAutomationId);
+          if (viewPeer != null) {
+            viewStateGuid = viewPeer.getGuid();
+          }
+        }
+        if (viewStateGuid == null) {
+          viewStateGuid = ((RemoteSortCommand) command).getViewStateGuid();
+        }
+        sortAction.actionPerformed(null, viewStateGuid, context);
       } else {
         throw new CommandException("Unsupported command type : "
             + command.getClass().getSimpleName());

@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.util.automation.IAutomationSource;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.gui.Dimension;
@@ -32,7 +33,7 @@ import org.jspresso.framework.view.action.IActionable;
  * @author Vincent Vandenschrick
  */
 public interface IViewDescriptor extends IIconDescriptor, ISecurable,
-    IActionable, IGateAccessible {
+    IActionable, IGateAccessible, IAutomationSource {
 
   /**
    * Gets the background color of this view as hex string representation argb
@@ -83,12 +84,4 @@ public interface IViewDescriptor extends IIconDescriptor, ISecurable,
    * @return the preferred dimension of the view peer component.
    */
   Dimension getPreferredSize();
-
-  /**
-   * Gets a seed to generate fixed ids to mark the generated UI component. This
-   * id can serve to record/replay UI command sequences.
-   * 
-   * @return a fixed id to mark the generated UI component.
-   */
-  String getAutomationSeed();
 }

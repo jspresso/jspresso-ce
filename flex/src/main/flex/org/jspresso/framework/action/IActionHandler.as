@@ -22,7 +22,7 @@ package org.jspresso.framework.action {
     
     function execute(action:RAction, param:String=null):void;
     
-    function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String):void;
+    function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStateAutomationId:String):void;
     
   }
 }

@@ -98,6 +98,7 @@ import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.automation.IAutomationSource;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
@@ -167,6 +168,14 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> view = super.createView(viewDescriptor, actionHandler,
         locale);
+    if (view.getConnector() instanceof IAutomationSource) {
+      String automationSeed = viewDescriptor.getAutomationSeed();
+      if (automationSeed == null) {
+        automationSeed = viewDescriptor.getName();
+      }
+      ((IAutomationSource) view.getConnector())
+          .setAutomationSeed(automationSeed);
+    }
     if (view.getPeer().getState() == null) {
       view.getPeer().setState(
           ((IRemoteStateOwner) view.getConnector()).getState());
@@ -363,7 +372,7 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createCardView(
       ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    RCardContainer viewComponent = createRCardContainer();
+    RCardContainer viewComponent = createRCardContainer(viewDescriptor);
     List<String> cardNames = new ArrayList<String>();
     List<RComponent> cards = new ArrayList<RComponent>();
     cardNames.add(ICardViewDescriptor.DEFAULT_CARD);
@@ -1528,9 +1537,6 @@ public class DefaultRemoteViewFactory extends
       IValueConnector connector) {
     RActionField component = new RActionField(getGuidGenerator().generateGUID());
     component.setShowTextField(showTextField);
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1546,13 +1552,17 @@ public class DefaultRemoteViewFactory extends
   /**
    * Creates a remote card container.
    * 
+   * @param viewDescriptor
+   *          the card view descriptor.
    * @return the created remote component.
    */
-  protected RCardContainer createRCardContainer() {
+  protected RCardContainer createRCardContainer(
+      ICardViewDescriptor viewDescriptor) {
     RCardContainer cardContainer = new RCardContainer(getGuidGenerator()
         .generateGUID());
     cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory())
-        .createRemoteValueState(getGuidGenerator().generateGUID()));
+        .createRemoteValueState(getGuidGenerator().generateGUID(),
+            viewDescriptor.getAutomationSeed()));
     return cardContainer;
   }
 
@@ -1565,9 +1575,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RCheckBox createRCheckBox(IValueConnector connector) {
     RCheckBox component = new RCheckBox(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1580,9 +1587,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RColorField createRColorField(IValueConnector connector) {
     RColorField component = new RColorField(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1595,9 +1599,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RComboBox createRComboBox(IValueConnector connector) {
     RComboBox component = new RComboBox(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1619,9 +1620,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RDateField createRDateField(IValueConnector connector) {
     RDateField component = new RDateField(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1635,9 +1633,6 @@ public class DefaultRemoteViewFactory extends
   protected RDecimalField createRDecimalField(IValueConnector connector) {
     RDecimalField component = new RDecimalField(getGuidGenerator()
         .generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1651,9 +1646,6 @@ public class DefaultRemoteViewFactory extends
   protected RDurationField createRDurationField(IValueConnector connector) {
     RDurationField component = new RDurationField(getGuidGenerator()
         .generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1685,9 +1677,6 @@ public class DefaultRemoteViewFactory extends
   protected RImageComponent createRImageComponent(IValueConnector connector) {
     RImageComponent component = new RImageComponent(getGuidGenerator()
         .generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1701,9 +1690,6 @@ public class DefaultRemoteViewFactory extends
   protected RActionComponent createRActionComponent(IValueConnector connector) {
     RActionComponent component = new RActionComponent(getGuidGenerator()
         .generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1717,9 +1703,6 @@ public class DefaultRemoteViewFactory extends
   protected RIntegerField createRIntegerField(IValueConnector connector) {
     RIntegerField component = new RIntegerField(getGuidGenerator()
         .generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1732,9 +1715,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RList createRList(ICollectionConnector connector) {
     RList component = new RList(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1748,9 +1728,6 @@ public class DefaultRemoteViewFactory extends
   protected RPasswordField createRPasswordField(IValueConnector connector) {
     RPasswordField component = new RPasswordField(getGuidGenerator()
         .generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1764,9 +1741,6 @@ public class DefaultRemoteViewFactory extends
   protected RPercentField createRPercentField(IValueConnector connector) {
     RPercentField component = new RPercentField(getGuidGenerator()
         .generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1797,9 +1771,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RTable createRTable(IValueConnector connector) {
     RTable component = new RTable(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1812,9 +1783,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RTextArea createRTextArea(IValueConnector connector) {
     RTextArea component = new RTextArea(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1827,9 +1795,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RHtmlArea createRHtmlArea(IValueConnector connector) {
     RHtmlArea component = new RHtmlArea(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1844,9 +1809,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RLabel createRLabel(IValueConnector connector, boolean bold) {
     RLabel component = new RLabel(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     if (bold) {
       if (bold) {
         component.setFont(createFont(BOLD_FONT));
@@ -1864,9 +1826,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RTextField createRTextField(IValueConnector connector) {
     RTextField component = new RTextField(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1879,9 +1838,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RTimeField createRTimeField(IValueConnector connector) {
     RTimeField component = new RTimeField(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 
@@ -1894,9 +1850,6 @@ public class DefaultRemoteViewFactory extends
    */
   protected RTree createRTree(IValueConnector connector) {
     RTree component = new RTree(getGuidGenerator().generateGUID());
-    if (connector instanceof IRemoteStateOwner) {
-      component.setState(((IRemoteStateOwner) connector).getState());
-    }
     return component;
   }
 

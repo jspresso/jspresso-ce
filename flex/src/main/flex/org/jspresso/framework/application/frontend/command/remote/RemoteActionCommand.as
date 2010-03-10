@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _parameter:String;
         private var _viewStateGuid:String;
+        private var _viewStateAutomationId:String;
 
         public function RemoteActionCommand() {
           //default constructor.
@@ -38,6 +39,13 @@ package org.jspresso.framework.application.frontend.command.remote {
         }
         public function get viewStateGuid():String {
             return _viewStateGuid;
+        }
+
+        public function set viewStateAutomationId(value:String):void {
+            _viewStateAutomationId = value;
+        }
+        public function get viewStateAutomationId():String {
+            return _viewStateAutomationId;
         }
     }
 }
