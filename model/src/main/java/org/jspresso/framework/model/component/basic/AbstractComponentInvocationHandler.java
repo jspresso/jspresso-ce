@@ -477,7 +477,8 @@ public abstract class AbstractComponentInvocationHandler implements
       IReferencePropertyDescriptor<?> propertyDescriptor) {
     return !IEntity.class.isAssignableFrom(propertyDescriptor
         .getReferencedDescriptor().getComponentContract())
-        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract();
+        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract()
+        && !propertyDescriptor.isComputed();
   }
 
   /**
