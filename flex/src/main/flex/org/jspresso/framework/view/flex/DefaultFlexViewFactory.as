@@ -43,7 +43,6 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Image;
   import mx.controls.Label;
   import mx.controls.List;
-  import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
@@ -384,6 +383,9 @@ package org.jspresso.framework.view.flex {
       bindTree(tree, remoteTree.state as RemoteCompositeValueState);
       if(remoteTree.expanded) {
         tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+            expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
+          });
+        tree.addEventListener(FlexEvent.UPDATE_COMPLETE, function(event:FlexEvent):void {
             expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
           });
       } else {
