@@ -28,7 +28,7 @@ import java.util.Map;
  * @author Vincent Vandenschrick
  * @param <E>
  */
-public interface IMapView<E> extends IView<E> {
+public interface IMapView<E> extends ICompositeView<E> {
 
   /**
    * Gets the child view indexed by the key or null if the key does not exist.

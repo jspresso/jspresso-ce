@@ -18,8 +18,12 @@
  */
 package org.jspresso.framework.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 
 /**
  * Basic map view.
@@ -67,6 +71,27 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
    * {@inheritDoc}
    */
   public void addToChildrenMap(String key, IView<E> childView) {
+    if (childView != null) {
+      childView.setParent(this);
+    }
     getChildrenMap().put(key, childView);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IView<E>> getChildren() {
+    if (childrenMap != null) {
+      return new ArrayList<IView<E>>(childrenMap.values());
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ICardViewDescriptor getDescriptor() {
+    return (ICardViewDescriptor) super.getDescriptor();
   }
 }

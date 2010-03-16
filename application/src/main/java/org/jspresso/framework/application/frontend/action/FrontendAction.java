@@ -35,6 +35,7 @@ import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -325,10 +326,30 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * 
    * @param context
    *          the action context.
-   * @return the value connector this model action was triggered on.
+   * @return the value connector this action was triggered on.
    */
   protected IValueConnector getViewConnector(Map<String, Object> context) {
     return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the view this action has
+   * been executed on from its context. It uses well-known context keys of the
+   * action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW</code> to get the the view the action
+   * executes on.
+   * </ul>
+   * <p>
+   * The returned view mainly serves for acting on the view component the action
+   * has to be triggered on.
+   * 
+   * @param context
+   *          the action context.
+   * @return the view this action was triggered on.
+   */
+  protected IView<?> getView(Map<String, Object> context) {
+    return (IView<?>) context.get(ActionContextConstants.VIEW);
   }
 
   /**

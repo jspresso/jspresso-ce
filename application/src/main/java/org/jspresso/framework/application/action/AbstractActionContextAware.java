@@ -334,5 +334,4 @@ public abstract class AbstractActionContextAware {
           (ICollectionConnector) modelConnector, selectedModels), context);
     }
   }
-
 }

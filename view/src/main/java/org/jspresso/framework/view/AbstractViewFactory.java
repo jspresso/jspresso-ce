@@ -242,9 +242,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
                   ((ICollectionViewDescriptor) viewDescriptor)
                       .getItemSelectionAction(), actionHandler, view));
         }
-      } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-        view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-            actionHandler, locale);
       } else if (viewDescriptor instanceof ICardViewDescriptor) {
         view = createCardView((ICardViewDescriptor) viewDescriptor,
             actionHandler, locale);
@@ -257,6 +254,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
                   ((ITreeViewDescriptor) viewDescriptor)
                       .getItemSelectionAction(), actionHandler, view));
         }
+      } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
+        view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
+            actionHandler, locale);
       }
     }
     if (view != null) {

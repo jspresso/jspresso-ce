@@ -28,7 +28,8 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICardViewDescriptor extends IViewDescriptor, ICardNameSelector {
+public interface ICardViewDescriptor extends ICompositeViewDescriptor,
+    ICardNameSelector {
 
   /**
    * <code>DEFAULT_CARD</code>.

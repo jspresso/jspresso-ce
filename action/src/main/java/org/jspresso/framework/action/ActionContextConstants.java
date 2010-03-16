@@ -76,6 +76,11 @@ public final class ActionContextConstants {
    */
   public static final String VIEW_CONNECTOR   = "VIEW_CONNECTOR";
 
+  /**
+   * VIEW context key.
+   */
+  public static final String VIEW             = "VIEW";
+
   private ActionContextConstants() {
     // to prevent this class from being instanciated.
   }
