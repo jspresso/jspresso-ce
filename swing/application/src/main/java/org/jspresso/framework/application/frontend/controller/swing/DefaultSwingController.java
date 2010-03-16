@@ -513,22 +513,22 @@ public class DefaultSwingController extends
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         getIconFactory().getSmallIconSize()));
-    for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
+    for (JMenuItem menuItem : createMenuItems(actionList)) {
       menu.add(menuItem);
     }
     return menu;
   }
 
-  private JMenuItem createMenuItem(JMenu menu, IDisplayableAction action) {
+  private JMenuItem createMenuItem(IDisplayableAction action) {
     return new JMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, menu, null, null, getLocale()));
+        action, this, null, getLocale()));
   }
 
-  private List<JMenuItem> createMenuItems(JMenu menu, ActionList actionList) {
+  private List<JMenuItem> createMenuItems(ActionList actionList) {
     List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(menu, action));
+        menuItems.add(createMenuItem(action));
       }
     }
     return menuItems;
@@ -545,7 +545,7 @@ public class DefaultSwingController extends
           menus.add(menu);
         } else {
           menu.addSeparator();
-          for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
+          for (JMenuItem menuItem : createMenuItems(actionList)) {
             menu.add(menuItem);
           }
         }

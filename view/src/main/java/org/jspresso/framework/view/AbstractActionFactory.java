@@ -36,6 +36,7 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelChangeListener;
 import org.jspresso.framework.model.ModelChangeEvent;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -50,7 +51,6 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IModelGate;
-import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -77,31 +77,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   public E createAction(IAction action, IActionHandler actionHandler,
       IView<F> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public E createAction(IAction action, Dimension dimension,
-      IActionHandler actionHandler, IView<F> view, Locale locale) {
-    Dimension d = dimension;
-    if (d == null) {
-      d = getIconFactory().getTinyIconSize();
-    }
-    return createAction(action, d, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public E createAction(IAction action, IActionHandler actionHandler,
-      F sourceComponent, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, Locale locale) {
-    return createAction(action, getIconFactory().getTinyIconSize(),
-        actionHandler, sourceComponent, modelDescriptor, viewConnector, locale);
+    return createAction(action, null, actionHandler, view, locale);
   }
 
   /**
@@ -111,16 +87,22 @@ public abstract class AbstractActionFactory<E, F, G> implements
    *          the displayable Jspresso action.
    * @param actionHandler
    *          the action handler.
-   * @param modelDescriptor
-   *          the model descriptor of the view.
-   * @param viewConnector
-   *          the view connector.
+   * @param view
+   *          the view.
    * @param uiAction
    *          the created ui specific action.
    */
   protected void attachActionGates(IDisplayableAction action,
-      IActionHandler actionHandler, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, E uiAction) {
+      IActionHandler actionHandler, IView<F> view, E uiAction) {
+    if (view == null) {
+      return;
+    }
+    IModelDescriptor modelDescriptor = null;
+    IValueConnector viewConnector = null;
+    if (view.getDescriptor() != null) {
+      modelDescriptor = view.getDescriptor().getModelDescriptor();
+    }
+    viewConnector = view.getConnector();
     if (action.getActionabilityGates() != null) {
       Collection<IGate> clonedGates = new HashSet<IGate>();
       for (IGate gate : action.getActionabilityGates()) {
@@ -312,10 +294,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * 
    * @param actionHandler
    *          the action handler.
-   * @param modelDescriptor
-   *          the model descriptor.
-   * @param sourceComponent
-   *          the source component.
+   * @param view
+   *          the view.
    * @param viewConnector
    *          the view connector.
    * @param actionCommand
@@ -325,17 +305,32 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * @return the initial action context.
    */
   public Map<String, Object> createActionContext(IActionHandler actionHandler,
-      IModelDescriptor modelDescriptor, F sourceComponent,
-      IValueConnector viewConnector, String actionCommand, F actionWidget) {
+      IView<F> view, IValueConnector viewConnector, String actionCommand,
+      F actionWidget) {
     Map<String, Object> actionContext = actionHandler.createEmptyContext();
+
+    IModelDescriptor modelDescriptor = null;
+    F sourceComponent = null;
+    if (view != null) {
+      if (view.getDescriptor() != null) {
+        modelDescriptor = view.getDescriptor().getModelDescriptor();
+      }
+      sourceComponent = view.getPeer();
+    }
+    IValueConnector refinedViewConnector = viewConnector;
+    if (modelDescriptor instanceof ICollectionDescriptor<?>) {
+      refinedViewConnector = ((ICollectionConnectorProvider) viewConnector)
+          .getCollectionConnector();
+    }
     actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR, modelDescriptor);
     actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);
-    actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
-    if (viewConnector instanceof ICollectionConnectorProvider
-        && ((ICollectionConnectorProvider) viewConnector)
+    actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
+        refinedViewConnector);
+    if (refinedViewConnector instanceof ICollectionConnectorProvider
+        && ((ICollectionConnectorProvider) refinedViewConnector)
             .getCollectionConnector() != null) {
       actionContext.put(ActionContextConstants.SELECTED_INDICES,
-          ((ICollectionConnectorProvider) viewConnector)
+          ((ICollectionConnectorProvider) refinedViewConnector)
               .getCollectionConnector().getSelectedIndices());
     }
     actionContext.put(ActionContextConstants.ACTION_COMMAND, actionCommand);

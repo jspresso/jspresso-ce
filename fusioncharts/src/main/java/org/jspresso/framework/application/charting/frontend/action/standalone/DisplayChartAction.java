@@ -28,6 +28,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.charting.frontend.action.AbstractChartAction;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.jdbc.core.ConnectionCallback;
 
@@ -48,6 +49,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
@@ -69,8 +71,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
     List<G> chartActions = new ArrayList<G>();
     for (IDisplayableAction action : getActions()) {
       chartActions.add(getActionFactory(context).createAction(action,
-          actionHandler, getSourceComponent(context), null,
-          getViewConnector(context), getLocale(context)));
+          actionHandler, (IView<E>) getView(context), getLocale(context)));
     }
 
     getController(context).displayFlashObject(

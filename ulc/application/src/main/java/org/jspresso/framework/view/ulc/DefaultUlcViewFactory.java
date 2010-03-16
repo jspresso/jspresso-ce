@@ -83,7 +83,6 @@ import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
@@ -103,6 +102,7 @@ import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
+import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -270,10 +270,12 @@ public class DefaultUlcViewFactory extends
     ULCActionFieldConnector connector = new ULCActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    viewComponent.setActions(createBinaryActions(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale));
+    IView<ULCComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    viewComponent.setActions(createBinaryActions(propertyView, actionHandler,
+        locale));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**
@@ -1022,8 +1024,9 @@ public class DefaultUlcViewFactory extends
     }
     connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
-    IAction lovAction = createLovAction(viewComponent, connector,
-        propertyViewDescriptor, actionHandler, locale);
+    IView<ULCComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    IAction lovAction = createLovAction(propertyView, actionHandler, locale);
     // lovAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
     // "lov.element.name",
     // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
@@ -1041,7 +1044,7 @@ public class DefaultUlcViewFactory extends
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**
@@ -2241,10 +2244,9 @@ public class DefaultUlcViewFactory extends
         createTimeFormat(propertyDescriptor, locale)));
   }
 
-  private ULCPopupMenu createULCPopupMenu(ULCComponent sourceComponent,
-      ActionMap actionMap, IModelDescriptor modelDescriptor,
-      IViewDescriptor viewDescriptor, IValueConnector viewConnector,
-      IActionHandler actionHandler, Locale locale) {
+  private ULCPopupMenu createULCPopupMenu(IView<ULCComponent> view,
+      ActionMap actionMap, IActionHandler actionHandler, Locale locale) {
+    IViewDescriptor viewDescriptor = view.getDescriptor();
     ULCPopupMenu popupMenu = createULCPopupMenu();
     ULCLabel titleLabel = createULCLabel(false);
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
@@ -2260,8 +2262,7 @@ public class DefaultUlcViewFactory extends
       for (IDisplayableAction action : nextActionList.getActions()) {
         if (actionHandler.isAccessGranted(action)) {
           IAction ulcAction = getActionFactory().createAction(action,
-              actionHandler, sourceComponent, modelDescriptor, viewConnector,
-              locale);
+              actionHandler, view, locale);
           ULCMenuItem actionItem = createULCMenuItem();
           actionItem.setAction(ulcAction);
           popupMenu.add(actionItem);
@@ -2274,12 +2275,10 @@ public class DefaultUlcViewFactory extends
     return popupMenu;
   }
 
-  private ULCPopupMenu createULCTablePopupMenu(ULCExtendedTable table,
+  private ULCPopupMenu createULCTablePopupMenu(
+      @SuppressWarnings("unused") ULCExtendedTable table,
       IView<ULCComponent> tableView, IActionHandler actionHandler, Locale locale) {
 
-    IValueConnector elementConnector = tableView.getConnector();
-    IModelDescriptor modelDescriptor = tableView.getDescriptor()
-        .getModelDescriptor();
     ActionMap actionMap = ((ICollectionViewDescriptor) tableView
         .getDescriptor()).getActionMap();
 
@@ -2287,8 +2286,7 @@ public class DefaultUlcViewFactory extends
       return null;
     }
 
-    return createULCPopupMenu(table, actionMap, modelDescriptor, tableView
-        .getDescriptor(), elementConnector, actionHandler, locale);
+    return createULCPopupMenu(tableView, actionMap, actionHandler, locale);
   }
 
   private ULCPopupMenu createULCTreePopupMenu(ULCTree tree,
@@ -2314,12 +2312,9 @@ public class DefaultUlcViewFactory extends
 
     IValueConnector viewConnector = (IValueConnector) path
         .getLastPathComponent();
-    IModelDescriptor modelDescriptor;
     ActionMap actionMap;
     IViewDescriptor viewDescriptor;
     if (viewConnector == tree.getModel().getRoot()) {
-      modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-      actionMap = treeView.getDescriptor().getActionMap();
       viewDescriptor = treeView.getDescriptor();
     } else {
       viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
@@ -2327,19 +2322,20 @@ public class DefaultUlcViewFactory extends
               .getRootSubtreeDescriptor(),
           getDescriptorPathFromConnectorTreePath(path))
           .getNodeGroupDescriptor();
-      modelDescriptor = viewDescriptor.getModelDescriptor();
-      actionMap = viewDescriptor.getActionMap();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }
     }
+    actionMap = viewDescriptor.getActionMap();
 
     if (actionMap == null) {
       return null;
     }
 
-    return createULCPopupMenu(tree, actionMap, modelDescriptor, viewDescriptor,
-        viewConnector, actionHandler, locale);
+    BasicView<ULCComponent> treeLevelView = new BasicView<ULCComponent>(tree);
+    treeLevelView.setConnector(viewConnector);
+    treeLevelView.setDescriptor(viewDescriptor);
+    return createULCPopupMenu(treeLevelView, actionMap, actionHandler, locale);
   }
 
   private void decorateWithTitle(IView<ULCComponent> view, Locale locale) {

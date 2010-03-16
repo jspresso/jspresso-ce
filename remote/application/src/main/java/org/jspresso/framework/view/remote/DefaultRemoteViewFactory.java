@@ -292,14 +292,14 @@ public class DefaultRemoteViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(false, connector);
-    IView<RComponent> view = constructView(viewComponent,
+    IView<RComponent> propertyView = constructView(viewComponent,
         propertyViewDescriptor, connector);
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
-    List<RAction> binaryActions = createBinaryActions(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale);
+    List<RAction> binaryActions = createBinaryActions(propertyView,
+        actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
     viewComponent.setActionLists(new RActionList[] {actionList});
-    return view;
+    return propertyView;
   }
 
   /**
@@ -1035,10 +1035,9 @@ public class DefaultRemoteViewFactory extends
             renderedProperty);
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(true, connector);
-    IView<RComponent> view = constructView(viewComponent,
+    IView<RComponent> propertyView = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    RAction lovAction = createLovAction(view.getPeer(), view.getConnector(),
-        propertyViewDescriptor, actionHandler, locale);
+    RAction lovAction = createLovAction(propertyView, actionHandler, locale);
     // lovAction.setName(getTranslationProvider().getTranslation(
     // "lov.element.name",
     // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
@@ -1055,7 +1054,7 @@ public class DefaultRemoteViewFactory extends
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     actionList.setActions(new RAction[] {lovAction});
     viewComponent.setActionLists(new RActionList[] {actionList});
-    return view;
+    return propertyView;
   }
 
   /**

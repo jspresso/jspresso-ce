@@ -319,26 +319,26 @@ public class DefaultUlcController extends
     return true;
   }
 
-  private List<ULCMenu> createActionMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, getActionMap(), false);
+  private List<ULCMenu> createActionMenus() {
+    return createMenus(getActionMap(), false);
   }
 
-  private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {
+  private ULCMenuBar createApplicationMenuBar() {
     ULCMenuBar applicationMenuBar = new ULCMenuBar();
-    List<ULCMenu> workspaceMenus = createWorkspacesMenus(sourceComponent);
+    List<ULCMenu> workspaceMenus = createWorkspacesMenus();
     if (workspaceMenus != null) {
       for (ULCMenu workspaceMenu : workspaceMenus) {
         applicationMenuBar.add(workspaceMenu);
       }
     }
-    List<ULCMenu> actionMenus = createActionMenus(sourceComponent);
+    List<ULCMenu> actionMenus = createActionMenus();
     if (actionMenus != null) {
       for (ULCMenu actionMenu : actionMenus) {
         applicationMenuBar.add(actionMenu);
       }
     }
     applicationMenuBar.add(ULCFiller.createHorizontalGlue());
-    List<ULCMenu> helpActionMenus = createHelpActionMenus(sourceComponent);
+    List<ULCMenu> helpActionMenus = createHelpActionMenus();
     if (helpActionMenus != null) {
       for (ULCMenu helpActionMenu : helpActionMenus) {
         applicationMenuBar.add(helpActionMenu);
@@ -348,15 +348,15 @@ public class DefaultUlcController extends
   }
 
   private void updateControllerFrame() {
-    controllerFrame.setMenuBar(createApplicationMenuBar(controllerFrame));
+    controllerFrame.setMenuBar(createApplicationMenuBar());
     updateFrameTitle();
   }
 
-  private List<ULCMenu> createHelpActionMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, getHelpActions(), true);
+  private List<ULCMenu> createHelpActionMenus() {
+    return createMenus(getHelpActions(), true);
   }
 
-  private ULCMenu createMenu(ActionList actionList, ULCComponent sourceComponent) {
+  private ULCMenu createMenu(ActionList actionList) {
     ULCMenu menu = new ULCMenu(actionList.getI18nName(getTranslationProvider(),
         getLocale()));
     if (actionList.getDescription() != null) {
@@ -366,43 +366,39 @@ public class DefaultUlcController extends
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         getIconFactory().getSmallIconSize()));
-    for (ULCMenuItem menuItem : createMenuItems(sourceComponent, actionList)) {
+    for (ULCMenuItem menuItem : createMenuItems(actionList)) {
       menu.add(menuItem);
     }
     return menu;
   }
 
-  private ULCMenuItem createMenuItem(ULCComponent sourceComponent,
-      IDisplayableAction action) {
+  private ULCMenuItem createMenuItem(IDisplayableAction action) {
     return new ULCMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, sourceComponent, null, null, getLocale()));
+        action, this, null, getLocale()));
   }
 
-  private List<ULCMenuItem> createMenuItems(ULCComponent sourceComponent,
-      ActionList actionList) {
+  private List<ULCMenuItem> createMenuItems(ActionList actionList) {
     List<ULCMenuItem> menuItems = new ArrayList<ULCMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(sourceComponent, action));
+        menuItems.add(createMenuItem(action));
       }
     }
     return menuItems;
   }
 
   @SuppressWarnings("null")
-  private List<ULCMenu> createMenus(ULCComponent sourceComponent,
-      ActionMap actionMap, boolean useSeparator) {
+  private List<ULCMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<ULCMenu> menus = new ArrayList<ULCMenu>();
     if (actionMap != null) {
       ULCMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
         if (!useSeparator || menus.isEmpty()) {
-          menu = createMenu(actionList, sourceComponent);
+          menu = createMenu(actionList);
           menus.add(menu);
         } else {
           menu.addSeparator();
-          for (ULCMenuItem menuItem : createMenuItems(sourceComponent,
-              actionList)) {
+          for (ULCMenuItem menuItem : createMenuItems(actionList)) {
             menu.add(menuItem);
           }
         }
@@ -431,8 +427,8 @@ public class DefaultUlcController extends
     return internalFrame;
   }
 
-  private List<ULCMenu> createWorkspacesMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, createWorkspaceActionMap(), true);
+  private List<ULCMenu> createWorkspacesMenus() {
+    return createMenus(createWorkspaceActionMap(), true);
   }
 
   private void initLoginProcess() {

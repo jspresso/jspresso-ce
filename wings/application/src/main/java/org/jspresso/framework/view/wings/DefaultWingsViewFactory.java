@@ -259,10 +259,12 @@ public class DefaultWingsViewFactory extends
     SActionFieldConnector connector = new SActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    viewComponent.setActions(createBinaryActions(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale));
+    IView<SComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    viewComponent.setActions(createBinaryActions(propertyView, actionHandler,
+        locale));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**
@@ -973,8 +975,9 @@ public class DefaultWingsViewFactory extends
     }
     connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
-    Action lovAction = createLovAction(viewComponent, connector,
-        propertyViewDescriptor, actionHandler, locale);
+    IView<SComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    Action lovAction = createLovAction(propertyView, actionHandler, locale);
     // lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
     // "lov.element.name",
     // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
@@ -992,7 +995,7 @@ public class DefaultWingsViewFactory extends
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**

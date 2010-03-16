@@ -43,6 +43,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
+import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
@@ -179,49 +180,54 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       }
     } else {
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        String prefixedProperty;
-        if (path != null) {
-          prefixedProperty = path + "." + property.getKey();
-        } else {
-          prefixedProperty = property.getKey();
-        }
-        if (property.getValue() instanceof IEntity) {
-          if (!((IEntity) property.getValue()).isPersistent()) {
-            abort = true;
+        if (!PropertyDescriptorHelper.isComputed(aQueryComponent
+            .getComponentDescriptor(), property.getKey())) {
+          String prefixedProperty;
+          if (path != null) {
+            prefixedProperty = path + "." + property.getKey();
           } else {
+            prefixedProperty = property.getKey();
+          }
+          if (property.getValue() instanceof IEntity) {
+            if (!((IEntity) property.getValue()).isPersistent()) {
+              abort = true;
+            } else {
+              criteria.add(Restrictions.eq(prefixedProperty, property
+                  .getValue()));
+            }
+          } else if (property.getValue() instanceof Boolean
+              && ((Boolean) property.getValue()).booleanValue()) {
             criteria
                 .add(Restrictions.eq(prefixedProperty, property.getValue()));
-          }
-        } else if (property.getValue() instanceof Boolean
-            && ((Boolean) property.getValue()).booleanValue()) {
-          criteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
-        } else if (property.getValue() instanceof String) {
-          if (((String) property.getValue()).length() > 0) {
-            criteria.add(Restrictions.like(prefixedProperty,
-                (String) property.getValue(), MatchMode.START).ignoreCase());
-          }
-        } else if (property.getValue() instanceof Number
-            || property.getValue() instanceof Date) {
-          criteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
-        } else if (property.getValue() instanceof IQueryComponent) {
-          IQueryComponent joinedComponent = ((IQueryComponent) property
-              .getValue());
-          if (!joinedComponent.isEmpty()) {
-            if (joinedComponent.isInlineComponent() || path != null) {
-              // the joined component is an inlined component so we must use
-              // dot nested properties. Same applies if we are in a nested
-              // path i.e. already on an inline component.
-              abort = abort
-                  || completeCriteria(criteria, prefixedProperty,
-                      (IQueryComponent) property.getValue(), context);
-            } else {
-              // the joined component is an entity so we must use
-              // nested criteria.
-              DetachedCriteria joinCriteria = criteria.createCriteria(property
-                  .getKey());
-              abort = abort
-                  || completeCriteria(joinCriteria, null, joinedComponent,
-                      context);
+          } else if (property.getValue() instanceof String) {
+            if (((String) property.getValue()).length() > 0) {
+              criteria.add(Restrictions.like(prefixedProperty,
+                  (String) property.getValue(), MatchMode.START).ignoreCase());
+            }
+          } else if (property.getValue() instanceof Number
+              || property.getValue() instanceof Date) {
+            criteria
+                .add(Restrictions.eq(prefixedProperty, property.getValue()));
+          } else if (property.getValue() instanceof IQueryComponent) {
+            IQueryComponent joinedComponent = ((IQueryComponent) property
+                .getValue());
+            if (!joinedComponent.isEmpty()) {
+              if (joinedComponent.isInlineComponent() || path != null) {
+                // the joined component is an inlined component so we must use
+                // dot nested properties. Same applies if we are in a nested
+                // path i.e. already on an inline component.
+                abort = abort
+                    || completeCriteria(criteria, prefixedProperty,
+                        (IQueryComponent) property.getValue(), context);
+              } else {
+                // the joined component is an entity so we must use
+                // nested criteria.
+                DetachedCriteria joinCriteria = criteria
+                    .createCriteria(property.getKey());
+                abort = abort
+                    || completeCriteria(joinCriteria, null, joinedComponent,
+                        context);
+              }
             }
           }
         }

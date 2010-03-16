@@ -65,7 +65,6 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -581,7 +580,7 @@ public class DefaultRemoteController extends
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
         actions.add(getViewFactory().getActionFactory().createAction(action,
-            this, null, null, null, getLocale()));
+            this, null, getLocale()));
       }
     }
     rActionList.setActions(actions.toArray(new RAction[0]));
@@ -646,7 +645,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public void popupOkCancel(RComponent sourceComponent, String title,
+  public void popupOkCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction okAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
@@ -663,12 +663,10 @@ public class DefaultRemoteController extends
           getIconFactory().getLargeIconSize()));
     }
     if (okAction != null) {
-      messageCommand.setOkAction(createRAction(okAction, sourceComponent,
-          context));
+      messageCommand.setOkAction(createRAction(okAction, context));
     }
     if (cancelAction != null) {
-      messageCommand.setCancelAction(createRAction(cancelAction,
-          sourceComponent, context));
+      messageCommand.setCancelAction(createRAction(cancelAction, context));
     }
     registerCommand(messageCommand);
   }
@@ -676,7 +674,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public void popupYesNo(RComponent sourceComponent, String title,
+  public void popupYesNo(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       Map<String, Object> context) {
     RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
@@ -693,12 +692,10 @@ public class DefaultRemoteController extends
           getIconFactory().getLargeIconSize()));
     }
     if (yesAction != null) {
-      messageCommand.setYesAction(createRAction(yesAction, sourceComponent,
-          context));
+      messageCommand.setYesAction(createRAction(yesAction, context));
     }
     if (noAction != null) {
-      messageCommand.setNoAction(createRAction(noAction, sourceComponent,
-          context));
+      messageCommand.setNoAction(createRAction(noAction, context));
     }
     registerCommand(messageCommand);
   }
@@ -706,7 +703,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public void popupYesNoCancel(RComponent sourceComponent, String title,
+  public void popupYesNoCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
@@ -723,31 +721,22 @@ public class DefaultRemoteController extends
           getIconFactory().getLargeIconSize()));
     }
     if (yesAction != null) {
-      messageCommand.setYesAction(createRAction(yesAction, sourceComponent,
-          context));
+      messageCommand.setYesAction(createRAction(yesAction, context));
     }
     if (noAction != null) {
-      messageCommand.setNoAction(createRAction(noAction, sourceComponent,
-          context));
+      messageCommand.setNoAction(createRAction(noAction, context));
     }
     if (cancelAction != null) {
-      messageCommand.setCancelAction(createRAction(cancelAction,
-          sourceComponent, context));
+      messageCommand.setCancelAction(createRAction(cancelAction, context));
     }
     registerCommand(messageCommand);
   }
 
-  private RAction createRAction(IAction action, RComponent sourceComponent,
-      Map<String, Object> context) {
-    return getViewFactory().getActionFactory()
-        .createAction(
-            wrapAction(action),
-            this,
-            sourceComponent,
-            (IModelDescriptor) context
-                .get(ActionContextConstants.MODEL_DESCRIPTOR),
-            (IValueConnector) context
-                .get(ActionContextConstants.VIEW_CONNECTOR), getLocale());
+  @SuppressWarnings("unchecked")
+  private RAction createRAction(IAction action, Map<String, Object> context) {
+    return getViewFactory().getActionFactory().createAction(wrapAction(action),
+        this, (IView<RComponent>) context.get(ActionContextConstants.VIEW),
+        getLocale());
   }
 
   private IDisplayableAction wrapAction(IAction action) {

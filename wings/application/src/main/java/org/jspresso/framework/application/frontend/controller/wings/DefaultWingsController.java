@@ -379,22 +379,22 @@ public class DefaultWingsController extends
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         getIconFactory().getSmallIconSize()));
-    for (SMenuItem menuItem : createMenuItems(menu, actionList)) {
+    for (SMenuItem menuItem : createMenuItems(actionList)) {
       menu.add(menuItem);
     }
     return menu;
   }
 
-  private SMenuItem createMenuItem(SMenu menu, IDisplayableAction action) {
+  private SMenuItem createMenuItem(IDisplayableAction action) {
     return new SMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, menu, null, null, getLocale()));
+        action, this, null, getLocale()));
   }
 
-  private List<SMenuItem> createMenuItems(SMenu menu, ActionList actionList) {
+  private List<SMenuItem> createMenuItems(ActionList actionList) {
     List<SMenuItem> menuItems = new ArrayList<SMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(menu, action));
+        menuItems.add(createMenuItem(action));
       }
     }
     return menuItems;
@@ -415,7 +415,7 @@ public class DefaultWingsController extends
           // separator.setBorder(new SLineBorder(1));
           // menu.add(separator);
 
-          for (SMenuItem menuItem : createMenuItems(menu, actionList)) {
+          for (SMenuItem menuItem : createMenuItems(actionList)) {
             menu.add(menuItem);
           }
         }

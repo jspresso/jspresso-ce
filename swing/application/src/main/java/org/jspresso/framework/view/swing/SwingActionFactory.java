@@ -30,12 +30,10 @@ import javax.swing.KeyStroke;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.AbstractActionFactory;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -51,18 +49,16 @@ public class SwingActionFactory extends
    * {@inheritDoc}
    */
   public Action createAction(IAction action, Dimension dimension,
-      IActionHandler actionHandler, JComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
+      IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
     Dimension d = dimension;
     if (d == null) {
       d = getIconFactory().getTinyIconSize();
     }
-    Action swingAction = new ActionAdapter(action, d, actionHandler,
-        sourceComponent, modelDescriptor, viewConnector, locale);
+    Action swingAction = new ActionAdapter(action, d, actionHandler, view,
+        locale);
     if (action instanceof IDisplayableAction) {
-      attachActionGates(((IDisplayableAction) action), actionHandler,
-          modelDescriptor, viewConnector, swingAction);
+      attachActionGates(((IDisplayableAction) action), actionHandler, view,
+          swingAction);
     }
     return swingAction;
   }
@@ -87,9 +83,7 @@ public class SwingActionFactory extends
 
     private IAction           action;
     private IActionHandler    actionHandler;
-    private IModelDescriptor  modelDescriptor;
-    private JComponent        sourceComponent;
-    private IValueConnector   viewConnector;
+    private IView<JComponent> view;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
@@ -97,25 +91,14 @@ public class SwingActionFactory extends
      * @param action
      * @param dimension
      * @param actionHandler
-     * @param sourceComponent
-     * @param modelDescriptor
-     * @param viewConnector
+     * @param view
      * @param locale
      */
     public ActionAdapter(IAction action, Dimension dimension,
-        IActionHandler actionHandler, JComponent sourceComponent,
-        IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-        Locale locale) {
+        IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
       this.action = action;
       this.actionHandler = actionHandler;
-      this.sourceComponent = sourceComponent;
-      this.modelDescriptor = modelDescriptor;
-      if (modelDescriptor instanceof ICollectionDescriptor<?>) {
-        this.viewConnector = ((ICollectionConnectorProvider) viewConnector)
-            .getCollectionConnector();
-      } else {
-        this.viewConnector = viewConnector;
-      }
+      this.view = view;
       if (action instanceof IDisplayableAction) {
         putValue(Action.NAME, ((IDisplayableAction) action).getI18nName(
             getTranslationProvider(), locale));
@@ -137,22 +120,17 @@ public class SwingActionFactory extends
     }
 
     /**
-     * Triggers the action execution on the action handler. The following
-     * initial action context is filled in : <li>
-     * <code>ActionContextConstants.SOURCE_COMPONENT</code> <li>
-     * <code>ActionContextConstants.VIEW_CONNECTOR</code> <li>
-     * <code>ActionContextConstants.MODEL_CONNECTOR</code> <li>
-     * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> <li>
-     * <code>ActionContextConstants.SELECTED_INDICES</code> <li>
-     * <code>ActionContextConstants.LOCALE</code>
-     * <p>
      * {@inheritDoc}
      */
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
+        IValueConnector viewConnector = null;
+        if (view != null) {
+          viewConnector = view.getConnector();
+        }
         Map<String, Object> actionContext = createActionContext(actionHandler,
-            modelDescriptor, sourceComponent, viewConnector, e
-                .getActionCommand(), (JComponent) e.getSource());
+            view, viewConnector, e.getActionCommand(), (JComponent) e
+                .getSource());
         actionHandler.execute(action, actionContext);
       }
     }
