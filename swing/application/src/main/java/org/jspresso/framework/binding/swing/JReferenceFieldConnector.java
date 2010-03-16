@@ -37,7 +37,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
     IRenderableCompositeValueConnector {
 
   private IValueChangeListener renderingListener;
-  private IValueConnector               renderingConnector;
+  private IValueConnector      renderingConnector;
 
   /**
    * Constructs a new <code>JActionFieldConnector</code> instance.
@@ -134,13 +134,11 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    */
   public void setRenderingConnector(IValueConnector renderingConnector) {
     if (this.renderingConnector != null) {
-      this.renderingConnector
-          .removeValueChangeListener(renderingListener);
+      this.renderingConnector.removeValueChangeListener(renderingListener);
     }
     this.renderingConnector = renderingConnector;
     if (this.renderingConnector != null) {
-      this.renderingConnector
-          .addValueChangeListener(renderingListener);
+      this.renderingConnector.addValueChangeListener(renderingListener);
     }
   }
 
@@ -150,8 +148,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
     /**
      * {@inheritDoc}
      */
-    public void valueChange(
-        @SuppressWarnings("unused") ValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
       protectedSetConnecteeValue(getConnecteeValue());
     }
   }

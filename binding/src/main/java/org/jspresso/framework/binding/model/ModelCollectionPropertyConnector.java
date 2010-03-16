@@ -329,4 +329,26 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
       @SuppressWarnings("unused") boolean tracksChildrenSelection) {
     throw new UnsupportedOperationException();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void writabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).writabilityChange();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void readabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).readabilityChange();
+    }
+  }
 }

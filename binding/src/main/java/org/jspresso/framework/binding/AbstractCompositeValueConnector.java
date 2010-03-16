@@ -360,4 +360,25 @@ public abstract class AbstractCompositeValueConnector extends
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void writabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).writabilityChange();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void readabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).readabilityChange();
+    }
+  }
 }

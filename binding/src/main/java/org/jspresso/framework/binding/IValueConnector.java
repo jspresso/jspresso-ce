@@ -143,6 +143,16 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   boolean isReadable();
 
   /**
+   * Called whenever readability may have changed.
+   */
+  void readabilityChange();
+
+  /**
+   * Called whenever writability may have changed.
+   */
+  void writabilityChange();
+
+  /**
    * Is the connector writable ?
    * 
    * @return true if writable.

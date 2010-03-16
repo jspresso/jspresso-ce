@@ -268,4 +268,26 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   protected void fireModelChange(Object oldModel, Object newModel) {
     modelChangeSupport.fireModelChange(oldModel, newModel);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void writabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).writabilityChange();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void readabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).readabilityChange();
+    }
+  }
 }

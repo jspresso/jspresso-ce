@@ -23,17 +23,16 @@ import java.awt.Color;
 import org.jspresso.framework.binding.AbstractValueConnector;
 import org.wings.SComponent;
 
-
 /**
  * This abstract class serves as the base class for all SComponent connectors.
  * Subclasses can access the SComponent using the parametrized method
- * <code>getConnectedSComponent()</code> which returns the parametrized type
- * of the class.
+ * <code>getConnectedSComponent()</code> which returns the parametrized type of
+ * the class.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The actual class of the subclass of <code>SComponent</code>.
+ *          The actual class of the subclass of <code>SComponent</code>.
  */
 public abstract class SComponentConnector<E extends SComponent> extends
     AbstractValueConnector {
@@ -46,9 +45,9 @@ public abstract class SComponentConnector<E extends SComponent> extends
    * Constructs a new <code>SComponentConnector</code> instance.
    * 
    * @param id
-   *            the connector identifier.
+   *          the connector identifier.
    * @param connectedSComponent
-   *            the connected SComponent.
+   *          the connected SComponent.
    */
   public SComponentConnector(String id, E connectedSComponent) {
     super(id);
@@ -110,7 +109,7 @@ public abstract class SComponentConnector<E extends SComponent> extends
    * {@inheritDoc}
    */
   @Override
-  protected void readabilityChange() {
+  public void readabilityChange() {
     super.readabilityChange();
     if (isReadable()) {
       if (savedForeground != null) {
