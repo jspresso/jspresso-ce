@@ -185,4 +185,18 @@ public final class HtmlHelper {
     String number = padding + aIdx;
     aBuilder.append("&#" + number + ";");
   }
+
+  /**
+   * Is this message HTML code.
+   * 
+   * @param msg
+   *          the message to test.
+   * @return true if it contains &lt;HTML&gt;
+   */
+  public static boolean isHtml(String msg) {
+    if (msg == null) {
+      return false;
+    }
+    return msg.toUpperCase().indexOf(HTML_START) >= 0;
+  }
 }
