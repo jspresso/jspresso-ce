@@ -65,6 +65,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public FrontendAction() {
     actionDescriptor = new DefaultIconDescriptor();
+    setCollectionBased(false);
   }
 
   /**
