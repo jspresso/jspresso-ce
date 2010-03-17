@@ -322,6 +322,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
       refinedViewConnector = ((ICollectionConnectorProvider) viewConnector)
           .getCollectionConnector();
     }
+    actionContext.put(ActionContextConstants.VIEW, view);
     actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR, modelDescriptor);
     actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);
     actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
