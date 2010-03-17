@@ -1636,11 +1636,11 @@ package org.jspresso.framework.view.flex {
 
     protected function createLabel(remoteLabel:RLabel):UIComponent {
       var label:Label = new Label();
-      if(remoteLabel.maxLength > 0) {
-        sizeMaxComponentWidth(label, remoteLabel.maxLength);
-      } else {
-        sizeMaxComponentWidth(label);
-      }
+//      if(remoteLabel.maxLength > 0) {
+//        sizeMaxComponentWidth(label, remoteLabel.maxLength);
+//      } else {
+//        sizeMaxComponentWidth(label);
+//      }
       if(!remoteLabel.state && remoteLabel.label) {
         if(HtmlUtil.isHtml(remoteLabel.label)) {
           label.text = null;
