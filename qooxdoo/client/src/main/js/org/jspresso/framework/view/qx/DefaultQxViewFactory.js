@@ -1638,7 +1638,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                       }
                       //viewSelection.push(child);
                       if(selIndex == 0/* || tree.getSelectionMode() == "multi" || tree.getSelectionMode() == "additive"*/) {
-                        viewSelection.setItem(i, child);
+                        viewSelection.setItem(selIndex, child);
                         selIndex++;
                       }
                     }
