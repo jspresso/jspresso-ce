@@ -1614,6 +1614,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       treeController.setIconPath("iconImageUrl");
       treeController.setDelegate(
         {
+          createItem: function() {
+            var item = new qx.ui.tree.TreeFolder();
+            item.getChildControl("label").setRich(true);
+            return item;
+          },
           bindItem : function(controller, treeNode, modelNode) {
             controller.bindProperty(controller.getLabelPath(), "label", controller.getLabelOptions(), treeNode, modelNode);
             controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
