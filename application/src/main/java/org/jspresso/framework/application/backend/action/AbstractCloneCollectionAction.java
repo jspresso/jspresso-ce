@@ -24,10 +24,17 @@ import java.util.Map;
 
 import org.jspresso.framework.binding.ICollectionConnector;
 
-
 /**
  * An action used duplicate a collection of domain objects. Cloning an entity
  * should result in adding it to the collection the action was triggered on.
+ * Components to clone are retrieved from the context using the selected indices
+ * of the model collection connector. Actual cloning of components is left to
+ * concrete implementations that must implement :
+ * 
+ * <pre>
+ * protected abstract Object cloneElement(Object element,
+ *     Map&lt;String, Object&gt; context)
+ * </pre>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -39,9 +46,9 @@ public abstract class AbstractCloneCollectionAction extends
    * Clones an element.
    * 
    * @param element
-   *            the element to clone.
+   *          the element to clone.
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the cloned element.
    */
   protected abstract Object cloneElement(Object element,

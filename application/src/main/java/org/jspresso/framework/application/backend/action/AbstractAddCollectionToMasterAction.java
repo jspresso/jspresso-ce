@@ -34,7 +34,14 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * An action used in master/detail views to create and add a new detail to a
- * master domain object.
+ * master domain object. The only method to be implemented by concrete subcasses
+ * to retrieve the instances to be added to the master is :
+ * <p>
+ * 
+ * <pre>
+ * protected abstract List&lt;?&gt;
+ *           getAddedComponents(Map&lt;String, Object&gt; context)
+ * </pre>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

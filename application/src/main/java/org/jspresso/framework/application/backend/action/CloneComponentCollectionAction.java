@@ -25,8 +25,9 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
 /**
- * An action used duplicate a collection of domain objects. Cloning an entity
- * should result in adding it to the collection the action was triggered on.
+ * An action used duplicate a collection of entities or components. This action
+ * is parameterized with a clone factory (<code>IEntityCloneFactory</code>) to
+ * perform the actual component cloning.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -37,7 +38,8 @@ public class CloneComponentCollectionAction extends
   private IEntityCloneFactory entityCloneFactory;
 
   /**
-   * Sets the entityCloneFactory.
+   * Configures the entity clone factory to use to clone the components or
+   * entities.
    * 
    * @param entityCloneFactory
    *          the entityCloneFactory to set.

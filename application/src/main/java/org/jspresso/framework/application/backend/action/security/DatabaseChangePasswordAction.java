@@ -13,7 +13,8 @@ import org.jspresso.framework.security.UserPrincipal;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * Changes a user password in a database table.
+ * Concrete backend implementation of a change password action where password is
+ * stored in a relational database.
  * 
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
@@ -65,7 +66,7 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
   }
 
   /**
-   * Sets the jdbcTemplate.
+   * Configures the Spring jdbcTemplate to use to issue the update statement.
    * 
    * @param jdbcTemplate
    *          the jdbcTemplate to set.
@@ -84,7 +85,13 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
   }
 
   /**
-   * Sets the updateQuery.
+   * Configures the update query to execute to change the password. The prepared
+   * statement parameters that will be bound are, in order :
+   * <ol>
+   * <li><b>&quot;new password&quot;</b> potentially hashed.</li>
+   * <li><b>&quot;user name&quot;</b>.</li>
+   * <li><b>&quot;current password&quot;</b> potentially hashed.</li>
+   * </ol>
    * 
    * @param updateQuery
    *          the updateQuery to set.

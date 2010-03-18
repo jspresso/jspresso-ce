@@ -25,7 +25,8 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
 /**
- * Base class for backend actions acting on collections.
+ * Base class for backend actions acting on collection models. This class is
+ * just used to refine certain protected methods return types.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

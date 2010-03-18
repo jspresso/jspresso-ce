@@ -22,7 +22,9 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.DirContextSource;
 
 /**
- * Changes a user password in an ldap directory.
+ * Concrete backend implementation of a change password action where password is
+ * stored in an LDAP directory. The user DN to use to connect to the LDAP
+ * directory is the one stored in the user principal from the login process.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -32,7 +34,9 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
   private String ldapUrl;
 
   /**
-   * Sets the ldapUrl.
+   * Configures the LDAP url (e.g. <i>http://localhost:389</i>) of the LDAP
+   * directory. The user must be authorized to change its own password in the
+   * LDAP backend.
    * 
    * @param ldapUrl
    *          the ldapUrl to set.

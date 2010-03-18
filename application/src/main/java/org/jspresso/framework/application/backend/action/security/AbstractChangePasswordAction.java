@@ -44,7 +44,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * 
  * <pre>
  * protected abstract boolean changePassword(UserPrincipal userPrincipal,
- *       String currentPassword, String newPassword)
+ *           String currentPassword, String newPassword)
  * </pre>
  * 
  * @version $LastChangedRevision$
@@ -75,7 +75,8 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   private String                                                hashEncoding;
 
   /**
-   * Sets the digestAlgorithm to use to hash the password before storing it.
+   * Sets the digestAlgorithm to use to hash the password before storing it (MD5
+   * for instance).
    * 
    * @param digestAlgorithm
    *          the digestAlgorithm to set.
@@ -85,7 +86,14 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   }
 
   /**
-   * Sets the hashEncoding to encode the password hash before storing it.
+   * Sets the hashEncoding to encode the password hash before storing it. You
+   * may choose between :
+   * <ul>
+   * <li><code>BASE64</code> for base 64 encoding.</li>
+   * <li><code>HEX</code> for base 16 encoding.</li>
+   * <li><code>RFC2617</code> for RFC 2617 encoding.</li>
+   * </ul>
+   * Default encoding is <code>BASE64</code>.
    * 
    * @param hashEncoding
    *          the hashEncoding to set.
