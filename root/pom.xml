@@ -21,7 +21,7 @@
     <qooxdoo.version>1.0</qooxdoo.version>
     <!--<flex.version>3.2.0.3958</flex.version>-->
     <flex.version>3.4.0.9271</flex.version>
-    <jasper.version>3.5.3</jasper.version>
+    <jasper.version>3.7.1</jasper.version>
     <jfree.version>1.0.13</jfree.version>
     <commons-collections.version>3.2.1</commons-collections.version>
     <wings.version>3.2.1</wings.version>
@@ -76,6 +76,13 @@
     <repository>
       <id>sonatype-repository</id>
       <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jasperreports-repository</id>
+      <url>http://jasperreports.sourceforge.net/maven2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
