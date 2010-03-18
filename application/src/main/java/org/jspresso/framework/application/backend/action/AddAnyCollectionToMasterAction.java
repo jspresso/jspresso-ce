@@ -28,7 +28,7 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 /**
  * An action used in master/detail views to add new detail(s) to a master domain
  * object. The details to add are taken from the action context through the
- * ACTION_PARAM constant.
+ * <code>ActionParameter</code> context value.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
