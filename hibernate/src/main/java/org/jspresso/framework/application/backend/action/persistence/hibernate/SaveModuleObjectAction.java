@@ -28,7 +28,7 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * Reloads all the module entities as well as all its sub-modules entities
+ * Saves all the module entities as well as all its sub-modules entities
  * recursively. All previously registered persistence operations are also
  * performed.
  * 
@@ -38,7 +38,8 @@ import org.jspresso.framework.model.entity.IEntity;
 public class SaveModuleObjectAction extends SaveAction {
 
   /**
-   * Saves the projected object(s) in a transaction.
+   * All the module entities as well as all its sub-modules entities
+   * recursively.
    * <p>
    * {@inheritDoc}
    */
