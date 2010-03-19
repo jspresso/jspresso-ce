@@ -24,8 +24,8 @@ import org.jspresso.framework.action.IActionHandler;
 
 /**
  * A trivial backend action that updates the action context by setting the
- * ActionContextConstants.ACTION_PARAM with the selected components of the
- * backend connector.
+ * <code>ActionParamerer</code> with the selected components of the underlying
+ * model.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -28,7 +28,10 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * An action used in list components to move a detail up and down.
+ * This action can be declared on views that are backed by collections with list
+ * semantics (indexed collections). It allows to take a the selected elements
+ * and move them in the collection using a configured offset. It allows for
+ * re-ordering the list.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -96,7 +99,10 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
   }
 
   /**
-   * Sets the offset.
+   * Configures the offset to use when moving the selected elements inside the
+   * list. A cofigured offset of <b>1</b> will increase (move down) by one the
+   * selected elements indices whereas an offset of <b>-1</b> will decrease
+   * (move up) the selected elements indices.
    * 
    * @param offset
    *          the offset to set.

@@ -31,7 +31,8 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * An action used in master/detail views to remove selected details from a
- * master domain object.
+ * master domain object. No further operation (like actual removal from a
+ * persistent store) is performed by this action.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
