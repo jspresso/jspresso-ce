@@ -6,18 +6,22 @@ package org.jspresso.framework.application.backend.action;
 import org.springframework.ldap.core.LdapTemplate;
 
 /**
- * Root class of ldap actions.
+ * Root abstrat class of actions that deal with LDAP directory. It's only
+ * purpose is to standardize the use of Spring's <code>LdapTemplate</code>.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractLdapAction extends BackendAction
-    implements ILdapAction {
+public abstract class AbstractLdapAction extends BackendAction implements
+    ILdapAction {
 
   private LdapTemplate ldapTemplate;
 
   /**
-   * {@inheritDoc}
+   * Configures the Spring's LDAP template to use with this action.
+   * 
+   * @param ldapTemplate
+   *          the ldapTemplate to set.
    */
   public void setLdapTemplate(LdapTemplate ldapTemplate) {
     this.ldapTemplate = ldapTemplate;

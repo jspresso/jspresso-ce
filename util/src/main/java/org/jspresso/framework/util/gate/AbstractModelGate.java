@@ -61,6 +61,7 @@ public abstract class AbstractModelGate extends AbstractGate implements
    * 
    * @param model
    *          the model to set.
+   * @internal
    */
   public void setModel(Object model) {
     this.model = model;
