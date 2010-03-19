@@ -1505,7 +1505,7 @@ public class DefaultRemoteViewFactory extends
     for (int i = 0; i < cardContainer.getCards().length; i++) {
       newCards[i] = cardContainer.getCards()[i];
     }
-    newCards[newCards.length - 1] = cardView.getPeer();
+    newCards[newCards.length - 1] = card.getPeer();
     cardContainer.setCards(newCards);
 
     String[] newCardNames = new String[cardContainer.getCardNames().length + 1];
