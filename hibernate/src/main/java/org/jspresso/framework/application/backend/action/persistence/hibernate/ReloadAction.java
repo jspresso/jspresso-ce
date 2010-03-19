@@ -27,7 +27,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
 /**
- * Reloads the object(s) provided by the action context.
+ * Reloads the entities provided by the context <code>ActionParameter</code>.
+ * The whole entities graphs are reloaded from the persistent store.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

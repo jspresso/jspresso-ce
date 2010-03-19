@@ -49,15 +49,42 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
 /**
- * An action to hibernate query entities by example.
+ * This action is used to Hibernate query entities by example. It is used behind
+ * the scene in several places in Jspresso based applications, as in filtered
+ * bean collection modules, list of values, ... The principles are to tailor an
+ * Hibernate Criterion based on the Jspresso &quot;<code>IQueryComponent</code>
+ * &quot;. A Jspresso query component is a hierarchical datastructure that
+ * mimics a portion of the domain model headed by an entity. It is essentially a
+ * set of property/value pairs where values can be :
+ * <ol>
+ * <li>a scalar value</li>
+ * <li>a comparable query structure (operator, inf and sup value) to place a
+ * constraint on a comparable property (date, number, ...)</li>
+ * <li>a sub query component</li>
+ * </ol>
+ * <p>
+ * Out of this query component, the action will build an Hibernate detached
+ * criteria by constructing all join sub-criteria whenever necessary.
+ * <p>
+ * Once the detached criteria is complete, the action will perform the Hibernate
+ * query while using paging informations taken from the query component as well
+ * as custom sorting properties.
+ * <p>
+ * Whenever the query is successful, the result is merged back to the
+ * application session and assigned to the query component
+ * <code>queriedComponents</code> property.
+ * <p>
+ * Note that there are 2 hooks that can be configured by injection to fine-tune
+ * the performed query : <code>queryComponentRefiner</code> and
+ * <code>criteriaRefiner</code>.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class QueryEntitiesAction extends AbstractHibernateAction {
 
-  private ICriteriaRefiner       criteriaRefiner;
   private IQueryComponentRefiner queryComponentRefiner;
+  private ICriteriaRefiner       criteriaRefiner;
 
   /**
    * {@inheritDoc}
@@ -339,7 +366,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
-   * Sets the criteriaRefiner.
+   * Configures a criteria refiner that will be called before the Hibernate
+   * detached criteria is actually used to perform the query. It allows to
+   * complement the criteria with arbitrary complex clauses that cannot be
+   * simply expressed in a &quot;<i>Query by Example</i>&quot; semantics.
    * 
    * @param criteriaRefiner
    *          the criteriaRefiner to set.
@@ -349,7 +379,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
-   * Sets the queryComponentRefiner.
+   * Configures a query component refiner that will be called before the query
+   * component is processed to extract the Hibernate detached criteria. This
+   * allows for instance to force query values.
    * 
    * @param queryComponentRefiner
    *          the queryComponentRefiner to set.

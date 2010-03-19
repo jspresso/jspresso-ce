@@ -28,7 +28,8 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * Reloads the projected object(s) in a transaction.
+ * Reloads all the module entities. The whole entities graphs are reloaded from
+ * the persistent store.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

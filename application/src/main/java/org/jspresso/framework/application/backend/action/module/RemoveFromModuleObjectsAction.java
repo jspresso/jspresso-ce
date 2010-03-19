@@ -30,7 +30,7 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
 
 /**
- * This action, that is to be used on bean collection modules, removes the
+ * This action, which is to be used on bean collection modules, removes the
  * selected objects from the module's projected collection. If one (or more) of
  * the removed objects are also used in children bean modules, the corresponding
  * children bean modules are also removed accordingly.
