@@ -26,7 +26,8 @@ import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.model.component.IComponent;
 
 /**
- * Initialize a module filter with a query entity.
+ * Initialize a module filter with a brand new query component and resets the
+ * module objects collection.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -26,8 +26,8 @@ import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.datatransfer.ETransferMode;
 
 /**
- * An action used register a collection of domain objects into the controller's
- * clipboard.
+ * An action used to register a collection of domain objects into the
+ * application's clipboard along with a transfer mode semantics.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -53,7 +53,11 @@ public class TransferCollectionAction extends BackendAction {
   }
 
   /**
-   * Sets the transferMode.
+   * Coinfigures the transferMode to use when pasting will be requested, i.e. :
+   * <ul>
+   * <li>ETransferMode.COPY</li> for copy semantics.
+   * <li>ETransferMode.MOVE</li> for move/cut semantics.
+   * </ul>
    * 
    * @param transferMode
    *          the transferMode to set.

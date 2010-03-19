@@ -30,7 +30,9 @@ import org.jspresso.framework.util.collection.ESort;
 
 /**
  * Retrieves the filter of a module and queries the persistent store to populate
- * the module objects.
+ * the module objects. The actual query is delegated to another backend action
+ * (defaulted to <code>QueryEntitiesAction</code>) that can be configured
+ * through the <code>queryAction</code> property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -96,7 +98,7 @@ public class QueryModuleFilterAction extends BackendAction {
   }
 
   /**
-   * Sets the queryAction.
+   * Configures the query action used to actually perform the entity query.
    * 
    * @param queryAction
    *          the queryAction to set.

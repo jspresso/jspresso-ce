@@ -24,7 +24,8 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.scripting.ScriptMixin;
 
 /**
- * A scripted backend action.
+ * A statically scripted backend action. The script and the scriptiong language
+ * are statically configured in the action itself.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
