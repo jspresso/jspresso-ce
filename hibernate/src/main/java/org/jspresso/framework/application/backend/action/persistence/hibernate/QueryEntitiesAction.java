@@ -212,7 +212,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           } else if (property.getValue() instanceof IQueryComponent) {
             IQueryComponent joinedComponent = ((IQueryComponent) property
                 .getValue());
-            if (!joinedComponent.isEmpty()) {
+            if (!isQueryComponentEmpty(joinedComponent)) {
               if (joinedComponent.isInlineComponent() || path != null) {
                 // the joined component is an inlined component so we must use
                 // dot nested properties. Same applies if we are in a nested
@@ -357,5 +357,23 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   public void setQueryComponentRefiner(
       IQueryComponentRefiner queryComponentRefiner) {
     this.queryComponentRefiner = queryComponentRefiner;
+  }
+
+  private boolean isQueryComponentEmpty(IQueryComponent queryComponent) {
+    if (queryComponent == null || queryComponent.isEmpty()) {
+      return true;
+    }
+    for (Map.Entry<String, Object> property : queryComponent.entrySet()) {
+      if (property.getValue() != null) {
+        if (property.getValue() instanceof IQueryComponent) {
+          if (!isQueryComponentEmpty((IQueryComponent) property.getValue())) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
