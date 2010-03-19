@@ -499,8 +499,8 @@ public class DefaultRemoteViewFactory extends
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     RLabel propertyLabel = createRLabel(null, false);
-    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
-        getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground("0x00FF0000");

@@ -2072,14 +2072,25 @@ public class DefaultWingsViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private SLabel createPropertyLabel(
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected SLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
-      @SuppressWarnings("unused") SComponent propertyComponent, Locale locale) {
+      SComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     SLabel propertyLabel = createSLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
-        getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground(Color.RED);

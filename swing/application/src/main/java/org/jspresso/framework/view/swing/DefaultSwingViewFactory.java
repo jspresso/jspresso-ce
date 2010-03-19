@@ -2162,14 +2162,25 @@ public class DefaultSwingViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private JLabel createPropertyLabel(
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected JLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
       JComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JLabel propertyLabel = createJLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
-        getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground(Color.RED);

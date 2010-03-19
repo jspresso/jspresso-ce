@@ -2169,14 +2169,25 @@ public class DefaultUlcViewFactory extends
     return null;
   }
 
-  private ULCLabel createPropertyLabel(
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected ULCLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
       ULCComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     ULCLabel propertyLabel = createULCLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
-        getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground(Color.red);
