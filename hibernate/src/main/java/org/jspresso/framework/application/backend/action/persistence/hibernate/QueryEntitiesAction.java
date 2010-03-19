@@ -42,6 +42,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
 import org.springframework.transaction.TransactionStatus;
@@ -74,7 +75,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         context).execute(new TransactionCallback() {
 
       public Object doInTransaction(TransactionStatus status) {
-        DetachedCriteria criteria = DetachedCriteria
+        DetachedCriteria criteria = EnhancedDetachedCriteria
             .forEntityName(queryComponent.getQueryContract().getName());
         boolean abort = completeCriteria(criteria, null, queryComponent,
             context);
