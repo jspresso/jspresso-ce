@@ -66,7 +66,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings({"unused", "unchecked" })
+  @SuppressWarnings({ "unused", "unchecked" })
   public Object instantiate(String entityName, EntityMode entityMode,
       Serializable id) {
     try {
@@ -149,17 +149,25 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       Object[] state) {
     for (int i = 0; i < propertyNames.length; i++) {
       String propertyName = propertyNames[i];
-      // Hibernate uses "extra" properties to cope with relationships
-      // e.g. _[collectionName]BackRef
-      // e.g. _[collectionName]IndexBackRef
-      // Those properties are not known by the entity and thus cannot be
-      // extracted.
-      if (!propertyName.startsWith("_")) {
+      if (!isHibernateInternal(propertyName)) {
         Object property = entity.straightGetProperty(propertyName);
         if (!(property instanceof Collection<?>)) {
           state[i] = property;
         }
       }
     }
+  }
+
+  /**
+   * Hibernate uses "extra" properties to cope with relationships e.g.
+   * _[collectionName]BackRef or _[collectionName]IndexBackRef Those properties
+   * are not known by the entity and thus cannot be extracted.
+   * 
+   * @param propertyName
+   *          the property name to test.
+   * @return true if this property is an Hibernate internal managed one.
+   */
+  protected boolean isHibernateInternal(String propertyName) {
+    return propertyName.startsWith("_");
   }
 }

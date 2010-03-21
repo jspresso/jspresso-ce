@@ -157,7 +157,9 @@ public class ControllerAwareEntityProxyInterceptor extends
         Map<String, Object> properties = new HashMap<String, Object>();
         for (int i = 0; i < propertyNames.length; i++) {
           if (state[i] != null) {
-            properties.put(propertyNames[i], state[i]);
+            if (!isHibernateInternal(propertyNames[i])) {
+              properties.put(propertyNames[i], state[i]);
+            }
           }
         }
         ((IEntity) entity).straightSetProperties(properties);
