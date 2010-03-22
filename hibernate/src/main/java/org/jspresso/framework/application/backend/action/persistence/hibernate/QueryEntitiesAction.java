@@ -288,7 +288,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           IComponentDescriptor<?> currentCompDesc = aQueryComponent
               .getComponentDescriptor();
           int i = 0;
-          StringBuffer path = new StringBuffer();
+          List<String> path = new ArrayList<String>();
           for (; !isComputed && i < propElts.length - 1; i++) {
             IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
                 .getPropertyDescriptor(propElts[i]));
@@ -301,10 +301,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               break;
             }
             currentCompDesc = referencedDesc;
-            if (i > 0) {
-              path.append(".");
-            }
-            path.append(propElts[i]);
+            path.add(propElts[i]);
           }
           if (!isComputed) {
             StringBuffer name = new StringBuffer();
@@ -322,8 +319,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               name.append(propElts[j]);
             }
             if (!isComputed) {
-              if (path.length() > 0) {
-                orderingCriteria = criteria.createCriteria(path.toString(),
+              for (String pathElt : path) {
+                orderingCriteria = orderingCriteria.createCriteria(pathElt,
                     CriteriaSpecification.LEFT_JOIN);
               }
               propertyName = name.toString();
