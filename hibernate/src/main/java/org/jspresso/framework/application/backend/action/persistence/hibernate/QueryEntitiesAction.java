@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
 import org.springframework.transaction.TransactionStatus;
@@ -102,10 +102,13 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         context).execute(new TransactionCallback() {
 
       public Object doInTransaction(TransactionStatus status) {
-        DetachedCriteria criteria = EnhancedDetachedCriteria
+        // DetachedCriteria criteria = EnhancedDetachedCriteria
+        // .forEntityName(queryComponent.getQueryContract().getName());
+        DetachedCriteria criteria = DetachedCriteria
             .forEntityName(queryComponent.getQueryContract().getName());
+        Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry = new HashMap<DetachedCriteria, Map<String, DetachedCriteria>>();
         boolean abort = completeCriteria(criteria, null, queryComponent,
-            context);
+            subCriteriaRegistry, context);
         List entities;
         if (abort) {
           entities = new ArrayList<IEntity>();
@@ -127,11 +130,13 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               totalCount = (Integer) getHibernateTemplate(context)
                   .findByCriteria(criteria).get(0);
             }
-            completeCriteriaWithOrdering(criteria, queryComponent);
+            completeCriteriaWithOrdering(criteria, queryComponent,
+                subCriteriaRegistry);
             entities = getHibernateTemplate(context).findByCriteria(criteria,
                 page.intValue() * pageSize.intValue(), pageSize.intValue());
           } else {
-            completeCriteriaWithOrdering(criteria, queryComponent);
+            completeCriteriaWithOrdering(criteria, queryComponent,
+                subCriteriaRegistry);
             entities = getHibernateTemplate(context).findByCriteria(criteria);
             totalCount = new Integer(entities.size());
           }
@@ -156,7 +161,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   private boolean completeCriteria(DetachedCriteria criteria, String path,
-      IQueryComponent aQueryComponent, Map<String, Object> context) {
+      IQueryComponent aQueryComponent,
+      Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry,
+      Map<String, Object> context) {
     boolean abort = false;
     if (ComparableQueryStructure.class.isAssignableFrom(aQueryComponent
         .getQueryContract())) {
@@ -246,15 +253,17 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                 // path i.e. already on an inline component.
                 abort = abort
                     || completeCriteria(criteria, prefixedProperty,
-                        (IQueryComponent) property.getValue(), context);
+                        (IQueryComponent) property.getValue(),
+                        subCriteriaRegistry, context);
               } else {
                 // the joined component is an entity so we must use
                 // nested criteria.
-                DetachedCriteria joinCriteria = criteria
-                    .createCriteria(property.getKey());
+                DetachedCriteria joinCriteria = createSubCriteria(criteria,
+                    property.getKey(), CriteriaSpecification.INNER_JOIN,
+                    subCriteriaRegistry);
                 abort = abort
                     || completeCriteria(joinCriteria, null, joinedComponent,
-                        context);
+                        subCriteriaRegistry, context);
               }
             }
           }
@@ -265,7 +274,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   private void completeCriteriaWithOrdering(DetachedCriteria criteria,
-      IQueryComponent aQueryComponent) {
+      IQueryComponent aQueryComponent,
+      Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry) {
     criteria.setProjection(null);
     criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
     // complete sorting properties
@@ -320,8 +330,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             }
             if (!isComputed) {
               for (String pathElt : path) {
-                orderingCriteria = orderingCriteria.createCriteria(pathElt,
-                    CriteriaSpecification.LEFT_JOIN);
+                orderingCriteria = createSubCriteria(orderingCriteria, pathElt,
+                    CriteriaSpecification.LEFT_JOIN, subCriteriaRegistry);
               }
               propertyName = name.toString();
             }
@@ -404,5 +414,22 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       }
     }
     return true;
+  }
+
+  private DetachedCriteria createSubCriteria(DetachedCriteria criteria,
+      String associationPath, int joinType,
+      Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry) {
+    Map<String, DetachedCriteria> subRegistry = subCriteriaRegistry
+        .get(criteria);
+    if (subRegistry == null) {
+      subRegistry = new HashMap<String, DetachedCriteria>();
+      subCriteriaRegistry.put(criteria, subRegistry);
+    }
+    DetachedCriteria subCriteria = subRegistry.get(associationPath);
+    if (subCriteria == null) {
+      subCriteria = criteria.createCriteria(associationPath, joinType);
+      subRegistry.put(associationPath, subCriteria);
+    }
+    return subCriteria;
   }
 }
