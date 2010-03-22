@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
@@ -58,7 +57,8 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
         return getController(context).stop();
       }
     };
-    checkCurrentModuleDirtyStateAction = new CheckModuleDirtyStateAction<E, F, G>();
+    // checkCurrentModuleDirtyStateAction = new CheckModuleDirtyStateAction<E,
+    // F, G>();
   }
 
   /**
@@ -69,7 +69,9 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    checkCurrentModuleDirtyStateAction.execute(actionHandler, context);
+    if (getCheckCurrentModuleDirtyStateAction() != null) {
+      getCheckCurrentModuleDirtyStateAction().execute(actionHandler, context);
+    }
     boolean hasDirtyModules = false;
     for (String workspaceName : getController(context).getWorkspaceNames()) {
       Workspace ws = getController(context).getWorkspace(workspaceName);
@@ -114,6 +116,26 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
       }
     }
     return false;
+  }
+
+  /**
+   * Sets the checkCurrentModuleDirtyStateAction.
+   * 
+   * @param checkCurrentModuleDirtyStateAction
+   *          the checkCurrentModuleDirtyStateAction to set.
+   */
+  public void setCheckCurrentModuleDirtyStateAction(
+      IAction checkCurrentModuleDirtyStateAction) {
+    this.checkCurrentModuleDirtyStateAction = checkCurrentModuleDirtyStateAction;
+  }
+
+  /**
+   * Gets the checkCurrentModuleDirtyStateAction.
+   * 
+   * @return the checkCurrentModuleDirtyStateAction.
+   */
+  protected IAction getCheckCurrentModuleDirtyStateAction() {
+    return checkCurrentModuleDirtyStateAction;
   }
 
 }

@@ -1128,4 +1128,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public void setOnModuleEnterAction(IAction onModuleEnterAction) {
     this.onModuleEnterAction = onModuleEnterAction;
   }
+
+  /**
+   * Sets the exitAction.
+   * 
+   * @param exitAction
+   *          the exitAction to set.
+   */
+  public void setExitAction(IDisplayableAction exitAction) {
+    this.exitAction = exitAction;
+  }
 }

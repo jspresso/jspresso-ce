@@ -147,6 +147,13 @@
     </property>
     <property name="nextAction" ref="executeActionAction" />
   </bean>
+  
+  <bean id="exitFrontAction" class="org.jspresso.framework.application.frontend.action.workspace.ExitAction">
+    <property name="name" value="quit.name"/>
+    <property name="description" value="quit.description"/>
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/cancel-48x48.png"/>
+    <property name="checkCurrentModuleDirtyStateAction" ref="checkModuleDirtyStateFrontAction"/>
+  </bean>
 
   <bean id="chooseComponentAction" class="org.jspresso.framework.application.frontend.action.lov.ChooseComponentAction">
     <property name="cancelAction" ref="cancelDialogFrontAction" />
