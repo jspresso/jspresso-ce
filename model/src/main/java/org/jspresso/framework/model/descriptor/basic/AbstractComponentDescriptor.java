@@ -523,9 +523,11 @@ public abstract class AbstractComponentDescriptor<E> extends
     if (descriptors != null) {
       tempPropertyBuffer = new ArrayList<IPropertyDescriptor>(descriptors);
       propertyDescriptorsMap = null;
+      nestedPropertyDescriptors = null;
     } else {
       tempPropertyBuffer = null;
       propertyDescriptorsMap = null;
+      nestedPropertyDescriptors = null;
     }
   }
 
