@@ -34,6 +34,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardC
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
@@ -100,6 +101,9 @@ import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.automation.IAutomationSource;
+import org.jspresso.framework.util.event.IItemSelectable;
+import org.jspresso.framework.util.event.IItemSelectionListener;
+import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
@@ -1332,7 +1336,7 @@ public class DefaultRemoteViewFactory extends
   protected IView<RComponent> createTreeView(
       ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ICompositeValueConnector connector = createTreeViewConnector(
+    final ICompositeValueConnector connector = createTreeViewConnector(
         viewDescriptor, actionHandler, locale);
 
     RTree viewComponent = createRTree(connector);
@@ -1342,6 +1346,20 @@ public class DefaultRemoteViewFactory extends
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale));
+    }
+    if (connector instanceof IItemSelectable
+        && connector instanceof ICollectionConnectorProvider) {
+      ((IItemSelectable) connector)
+          .addItemSelectionListener(new IItemSelectionListener() {
+
+            public void selectedItemChange(ItemSelectionEvent event) {
+              if (event.getSelectedItem() == null) {
+                // change selected item so that the root connector is considered
+                // selected.
+                event.setSelectedItem(connector);
+              }
+            }
+          });
     }
     return view;
   }

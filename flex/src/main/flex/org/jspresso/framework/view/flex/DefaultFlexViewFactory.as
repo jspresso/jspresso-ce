@@ -372,7 +372,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTree(remoteTree:RTree):UIComponent {
-      var tree:Tree = new SelectionTrackingTree();
+      var tree:SelectionTrackingTree = new SelectionTrackingTree();
       tree.labelField = "value";
       tree.dataTipField = "description";
       tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
@@ -402,11 +402,11 @@ package org.jspresso.framework.view.flex {
       return tree;
     }
     
-    protected function expandItem(tree:Tree, remoteState:RemoteCompositeValueState, recurse:Boolean):void {
+    protected function expandItem(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState, recurse:Boolean):void {
       tree.expandItem(remoteState, true, true, true);
       if(recurse) {
         if(remoteState.children != null) {
-          (tree as SelectionTrackingTree).fixListeners(remoteState.children);
+          tree.fixListeners(remoteState.children);
           for(var i:int = 0; i < remoteState.children.length; i++) {
             if(remoteState.children[i] is RemoteCompositeValueState) {
               expandItem(tree,remoteState.children[i], recurse); 
@@ -416,7 +416,7 @@ package org.jspresso.framework.view.flex {
       }
     }
 
-    protected function bindTree(tree:Tree, rootState:RemoteCompositeValueState):void {
+    protected function bindTree(tree:SelectionTrackingTree, rootState:RemoteCompositeValueState):void {
       var updateModel:Function = function (selectedItems:Array):void {
         var parentsOfSelectedNodes:Array = new Array();
         var i:int;
@@ -432,23 +432,29 @@ package org.jspresso.framework.view.flex {
             parentsOfSelectedNodes.push(parentNode);
           }
         }
-        clearStateSelection(rootState, parentsOfSelectedNodes);
-        for(i=0; i < selectedItems.length; i++) {
-          node = selectedItems[i];
-          parentNode = tree.getParentItem(node);
-          if(parentNode == null && !tree.showRoot) {
-            parentNode = rootState
-          }
-          if(parentNode != null) {
-            var selectedIndices:Array = new Array();
-            if(parentNode.selectedIndices != null) {
-              selectedIndices.concat(parentNode.selectedIndices);
+        var oldSelectionTrackingEnabled:Boolean = tree.selectionTrackingEnabled;
+        try {
+          tree.selectionTrackingEnabled = false;
+          clearStateSelection(rootState, parentsOfSelectedNodes);
+          for(i=0; i < selectedItems.length; i++) {
+            node = selectedItems[i];
+            parentNode = tree.getParentItem(node);
+            if(parentNode == null && !tree.showRoot) {
+              parentNode = rootState
             }
-            var childIndex:int = parentNode.children.getItemIndex(node);
-            selectedIndices.push(childIndex);
-            parentNode.leadingIndex = childIndex;
-            parentNode.selectedIndices = selectedIndices;
+            if(parentNode != null) {
+              var selectedIndices:Array = new Array();
+              if(parentNode.selectedIndices != null) {
+                selectedIndices.concat(parentNode.selectedIndices);
+              }
+              var childIndex:int = parentNode.children.getItemIndex(node);
+              selectedIndices.push(childIndex);
+              parentNode.leadingIndex = childIndex;
+              parentNode.selectedIndices = selectedIndices;
+            }
           }
+        } finally {
+          tree.selectionTrackingEnabled = oldSelectionTrackingEnabled;
         }
       };
       BindingUtils.bindSetter(updateModel, tree, "selectedItems", true);
@@ -456,8 +462,8 @@ package org.jspresso.framework.view.flex {
     
     protected function clearStateSelection(remoteState:RemoteCompositeValueState, excludedNodes:Array):void {
       if(excludedNodes.indexOf(remoteState) == -1) {
-        remoteState.selectedIndices = null
         remoteState.leadingIndex = -1;
+        remoteState.selectedIndices = null
       }
       if(remoteState.children != null) {
         for(var i:int = 0; i < remoteState.children.length; i++) {
@@ -615,7 +621,7 @@ package org.jspresso.framework.view.flex {
           width = tr.length;
         }
       }
-      width += 2;
+      width += 4;
       sizeMaxComponentWidth(comboBox, width);
       return comboBox;
     }

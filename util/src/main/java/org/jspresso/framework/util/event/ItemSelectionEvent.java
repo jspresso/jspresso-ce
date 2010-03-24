@@ -54,4 +54,14 @@ public class ItemSelectionEvent extends EventObject {
   public Object getSelectedItem() {
     return selectedItem;
   }
+
+  /**
+   * Sets the selectedItem.
+   * 
+   * @param selectedItem
+   *          the selectedItem to set.
+   */
+  public void setSelectedItem(Object selectedItem) {
+    this.selectedItem = selectedItem;
+  }
 }
