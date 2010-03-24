@@ -794,6 +794,13 @@ public abstract class AbstractBackendController extends AbstractController
         } else {
           uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
+      } else if (property.getValue() instanceof IEntity[]) {
+        IEntity[] uowArray = new IEntity[((IEntity[]) property.getValue()).length];
+        for (int i = 0; i < uowArray.length; i++) {
+          uowArray[i] = cloneInUnitOfWork(((IEntity[]) property.getValue())[i],
+              alreadyCloned);
+        }
+        uowEntity.straightSetProperty(property.getKey(), uowArray);
       } else if (property.getValue() instanceof IComponent) {
         uowEntity.straightSetProperty(property.getKey(),
             cloneComponentInUnitOfWork((IComponent) property.getValue(),

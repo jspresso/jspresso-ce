@@ -51,6 +51,9 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityFactory;
+import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
+import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
@@ -756,6 +759,10 @@ public abstract class AbstractComponentInvocationHandler implements
         .getName())) {
       // Important to check for not null values.
       checkIntegrity(proxy);
+    } else if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
+        .getName())) {
+      onUpdate((IEntityFactory) args[0], (UserPrincipal) args[1],
+          (IEntityLifecycleHandler) args[2]);
     }
     boolean interceptorResults = false;
     for (ILifecycleInterceptor<?> lifecycleInterceptor : componentDescriptor
@@ -869,6 +876,9 @@ public abstract class AbstractComponentInvocationHandler implements
             propertyDescriptor.postprocessRemover(proxy, collectionProperty,
                 value);
           }
+          if (proxy instanceof IEntity && value instanceof IEntity) {
+            entityDetached((IEntity) value);
+          }
         }
       }
     } catch (IllegalAccessException ex) {
@@ -948,6 +958,9 @@ public abstract class AbstractComponentInvocationHandler implements
             // It is bidirectionnal, so we are going to update the other end.
             if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
               // It's a one-to-one relationship
+              if (oldProperty instanceof IEntity) {
+                entityDetached((IEntity) oldProperty);
+              }
               IAccessor reversePropertyAccessor = accessorFactory
                   .createPropertyAccessor(reversePropertyDescriptor.getName(),
                       ((IReferencePropertyDescriptor) propertyDescriptor)
@@ -1057,7 +1070,13 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private Map<String, Object> straightGetProperties() {
+  /**
+   * Directly gets all property values out of the property store without any
+   * other operation.
+   * 
+   * @return The map of properties.
+   */
+  protected Map<String, Object> straightGetProperties() {
     Map<String, Object> allProperties = new HashMap<String, Object>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
@@ -1075,8 +1094,18 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
+  /**
+   * Directly get a property value out of the property store without any other
+   * operation.
+   * 
+   * @param propertyName
+   *          the name of the property.
+   * @param newPropertyValue
+   *          the property value or null.
+   */
   @SuppressWarnings("unchecked")
-  private void straightSetProperty(String propertyName, Object newPropertyValue) {
+  protected void straightSetProperty(String propertyName,
+      Object newPropertyValue) {
     Object currentPropertyValue = straightGetProperty(propertyName);
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(propertyName);
@@ -1123,6 +1152,33 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
+  }
+
+  /**
+   * An empty hook that gets called whenever an entity is detached from a parent
+   * one.
+   * 
+   * @param child
+   *          the child entity.
+   */
+  protected void entityDetached(IEntity child) {
+    // defaults to no-op.
+  }
+
+  /**
+   * An empty hook that gets called whenever an entity is to be updated.
+   * 
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
+   * @param entityLifecycleHandler
+   *          entityLifecycleHandler.
+   */
+  protected void onUpdate(IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    // defaults to no-op.
   }
 
   private class InlineReferenceTracker implements PropertyChangeListener {

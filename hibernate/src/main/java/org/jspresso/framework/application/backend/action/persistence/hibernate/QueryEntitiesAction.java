@@ -102,11 +102,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         context).execute(new TransactionCallback() {
 
       public Object doInTransaction(TransactionStatus status) {
-        // DetachedCriteria criteria = EnhancedDetachedCriteria
-        // .forEntityName(queryComponent.getQueryContract().getName());
         DetachedCriteria criteria = DetachedCriteria
             .forEntityName(queryComponent.getQueryContract().getName());
-        Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry = new HashMap<DetachedCriteria, Map<String, DetachedCriteria>>();
+        Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry;
+        subCriteriaRegistry = new HashMap<DetachedCriteria, Map<String, DetachedCriteria>>();
         boolean abort = completeCriteria(criteria, null, queryComponent,
             subCriteriaRegistry, context);
         List entities;
@@ -115,7 +114,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
           queryComponent.setRecordCount(new Integer(0));
         } else {
           if (criteriaRefiner != null) {
-            criteriaRefiner.refineCriteria(criteria, context);
+            criteriaRefiner.refineCriteria(criteria, subCriteriaRegistry,
+                queryComponent, context);
           }
           Integer totalCount = null;
           Integer pageSize = queryComponent.getPageSize();

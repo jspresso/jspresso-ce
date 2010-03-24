@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
  * This interface is used to refine hibernate queries and can be injected in
@@ -36,8 +37,15 @@ public interface ICriteriaRefiner {
    * 
    * @param criteria
    *          the query criteria to refine.
+   * @param subCriteriaRegistry
+   *          the sub-criteria registry used to avoid duplicate association
+   *          paths in queries.
+   * @param queryComponent
+   *          the query component.
    * @param context
    *          the action context.
    */
-  void refineCriteria(DetachedCriteria criteria, Map<String, Object> context);
+  void refineCriteria(DetachedCriteria criteria,
+      Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry,
+      IQueryComponent queryComponent, Map<String, Object> context);
 }
