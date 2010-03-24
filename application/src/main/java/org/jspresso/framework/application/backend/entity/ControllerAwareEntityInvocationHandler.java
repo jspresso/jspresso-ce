@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.backend.entity;
 
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -211,12 +210,7 @@ public class ControllerAwareEntityInvocationHandler extends
   @Override
   protected Object straightGetProperty(String propertyName) {
     if (DETACHED_ENTITIES_PROPERTY_NAME.equals(propertyName)) {
-      IEntity[] asArray = null;
-      if (detachedEntities != null) {
-        asArray = new ArrayList<IEntity>(detachedEntities)
-            .toArray(new IEntity[0]);
-      }
-      return asArray;
+      return detachedEntities;
     }
     return super.straightGetProperty(propertyName);
   }
@@ -224,19 +218,12 @@ public class ControllerAwareEntityInvocationHandler extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected void straightSetProperty(String propertyName,
       Object newPropertyValue) {
     if (DETACHED_ENTITIES_PROPERTY_NAME.equals(propertyName)) {
-      IEntity[] asArray = (IEntity[]) newPropertyValue;
-      if (asArray != null) {
-        detachedEntities = new LinkedHashSet<IEntity>();
-        for (int i = 0; i < asArray.length; i++) {
-          detachedEntities.add(asArray[i]);
-        }
-      } else {
-        detachedEntities = null;
-      }
+      detachedEntities = (Set<IEntity>) newPropertyValue;
     } else {
       super.straightSetProperty(propertyName, newPropertyValue);
     }
@@ -248,12 +235,7 @@ public class ControllerAwareEntityInvocationHandler extends
   @Override
   protected Map<String, Object> straightGetProperties() {
     Map<String, Object> superMap = super.straightGetProperties();
-    IEntity[] asArray = null;
-    if (detachedEntities != null) {
-      asArray = new ArrayList<IEntity>(detachedEntities)
-          .toArray(new IEntity[0]);
-    }
-    superMap.put(DETACHED_ENTITIES_PROPERTY_NAME, asArray);
+    superMap.put(DETACHED_ENTITIES_PROPERTY_NAME, detachedEntities);
     return superMap;
   }
 }
