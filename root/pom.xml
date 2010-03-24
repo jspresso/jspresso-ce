@@ -845,6 +845,11 @@
               <artifactId>log4j</artifactId>
               <version>${log4j.version}</version>
             </dependency>
+            <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-beans</artifactId>
+              <version>${spring.version}</version>
+            </dependency>
           </dependencies>
         </plugin>
         <plugin>

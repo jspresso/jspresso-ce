@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.action.Transactional;
@@ -120,6 +121,11 @@ public abstract class AbstractBackendController extends AbstractController
   public boolean execute(final IAction action, final Map<String, Object> context) {
     if (action == null) {
       return true;
+    }
+    if (!action.isBackend()) {
+      throw new ActionException(
+          "The backend controller is executing a frontend action. Please check the action chaining : "
+              + action.toString());
     }
     SecurityHelper.checkAccess(getApplicationSession().getSubject(), action,
         getTranslationProvider(), getLocale());
