@@ -56,6 +56,7 @@ public class HibernateBackendController extends AbstractBackendController {
   private HibernateTemplate hibernateTemplate;
   private boolean           traversedPendingOperations = false;
   private boolean           pendingOperationsExecuting = false;
+  private Set<IEntity>      pendingUpdatingEntities;
 
   /**
    * Gets the hibernateTemplate.
@@ -301,6 +302,7 @@ public class HibernateBackendController extends AbstractBackendController {
         public Object doInHibernate(Session session) {
           try {
             pendingOperationsExecuting = true;
+            pendingUpdatingEntities = new HashSet<IEntity>();
             boolean flushIsNecessary = false;
             Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
             Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
@@ -348,6 +350,7 @@ public class HibernateBackendController extends AbstractBackendController {
             return null;
           } finally {
             pendingOperationsExecuting = false;
+            pendingUpdatingEntities = null;
           }
         }
       });
@@ -462,7 +465,10 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public void registerForUpdate(IEntity entity) {
     if (pendingOperationsExecuting) {
-      getHibernateTemplate().saveOrUpdate(entity);
+      if (!pendingUpdatingEntities.contains(entity)) {
+        pendingUpdatingEntities.add(entity);
+        getHibernateTemplate().saveOrUpdate(entity);
+      }
     } else {
       super.registerForUpdate(entity);
     }
