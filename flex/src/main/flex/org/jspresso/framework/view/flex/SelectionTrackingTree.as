@@ -31,6 +31,10 @@ package org.jspresso.framework.view.flex {
     
     private var _selectionTrackingEnabled:Boolean;
     
+    public function SelectionTrackingTree() {
+      selectionTrackingEnabled = true;
+    }
+    
     public function set selectionTrackingEnabled(value:Boolean):void {
         _selectionTrackingEnabled = value;
     }
