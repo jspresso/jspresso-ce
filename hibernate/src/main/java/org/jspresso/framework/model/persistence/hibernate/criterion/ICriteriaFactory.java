@@ -16,32 +16,38 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.action.persistence.hibernate;
-
-import java.util.Map;
+package org.jspresso.framework.model.persistence.hibernate.criterion;
 
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 
 /**
- * This interface is used to refine hibernate queries and can be injected in
- * <code>QueryEntitiesAction</code>.
+ * A factory used to create a criteria based on a query component.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICriteriaRefiner {
+public interface ICriteriaFactory {
 
   /**
-   * Refines a query criteria.
+   * Creates an Hibernate detached criteria by traversing a query component.
+   * Whenever the query component is not valid (references a transient entity
+   * for instance), the method should return null.
+   * 
+   * @param queryComponent
+   *          the query component to traverse.
+   * @return the detached criteria or null if the query component is invalid.
+   */
+  EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent);
+
+  /**
+   * Takes a criteria and applies ordering specs to it.
    * 
    * @param criteria
-   *          the query criteria to refine.
+   *          the enhanced detached criteria to apply ordering for.
    * @param queryComponent
-   *          the query component.
-   * @param context
-   *          the action context.
+   *          the query component holding the sort order specs.
    */
-  void refineCriteria(EnhancedDetachedCriteria criteria,
-      IQueryComponent queryComponent, Map<String, Object> context);
+  void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
+      IQueryComponent queryComponent);
+
 }
