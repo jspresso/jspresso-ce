@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.entity.IEntityDirtAware;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 
 /**
@@ -36,8 +35,7 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntityUnitOfWork extends IEntityDirtAware,
-    IEntityLifecycleHandler {
+public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
 
   /**
    * Registers an entity as being updated.

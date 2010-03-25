@@ -24,7 +24,7 @@ package org.jspresso.framework.model.entity;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntityLifecycleHandler {
+public interface IEntityLifecycleHandler extends IEntityDirtAware {
 
   /**
    * Clears the pending operations.
@@ -35,7 +35,7 @@ public interface IEntityLifecycleHandler {
    * Tests wether an entity has been registered for deletion.
    * 
    * @param entity
-   *            the entity to test.
+   *          the entity to test.
    * @return true if the entity has been registered for deletion.
    */
   boolean isEntityRegisteredForDeletion(IEntity entity);
@@ -44,7 +44,7 @@ public interface IEntityLifecycleHandler {
    * Tests wether an entity has been registered for update.
    * 
    * @param entity
-   *            the entity to test.
+   *          the entity to test.
    * @return true if the entity has been registered for update.
    */
   boolean isEntityRegisteredForUpdate(IEntity entity);
@@ -53,7 +53,7 @@ public interface IEntityLifecycleHandler {
    * Registers an entity for deletion.
    * 
    * @param entity
-   *            the entity to register.
+   *          the entity to register.
    */
   void registerForDeletion(IEntity entity);
 
@@ -61,7 +61,7 @@ public interface IEntityLifecycleHandler {
    * Registers an entity for update.
    * 
    * @param entity
-   *            the entity to register.
+   *          the entity to register.
    */
   void registerForUpdate(IEntity entity);
 }

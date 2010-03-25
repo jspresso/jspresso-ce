@@ -31,7 +31,6 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.entity.IEntityDirtAware;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
@@ -45,7 +44,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IBackendController extends IController, IEntityDirtAware,
+public interface IBackendController extends IController,
     IEntityLifecycleHandler {
 
   /**
