@@ -10,7 +10,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <generator.templateResourcePath>/org/jspresso/framework/tools/entitygenerator</generator.templateResourcePath>
     <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
-    <jspresso.version>3.5.0-RC1</jspresso.version>
+    <jspresso.version>3.0.1-SNAPSHOT</jspresso.version>
     <sjs.version>1.0-SNAPSHOT</sjs.version>
     <junit.version>3.8.1</junit.version>
     <blazeds.version>3.2.0.3978</blazeds.version>
