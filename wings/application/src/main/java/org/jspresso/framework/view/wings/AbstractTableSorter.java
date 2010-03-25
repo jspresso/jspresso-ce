@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,6 +36,7 @@ import org.wings.SIcon;
 import org.wings.SLabel;
 import org.wings.STable;
 import org.wings.table.SDefaultTableCellRenderer;
+import org.wings.table.STableColumn;
 import org.wings.table.STableColumnModel;
 
 /**
@@ -372,6 +373,10 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
      * {@inheritDoc}
      */
     public void headerClicked(HeaderClickEvent event) {
+      STableColumn column = getTableColumnModel().getColumn(event.getColumn());
+      if (!isSortable(column)) {
+        return;
+      }
       int status = getSortingStatus(event.getColumn());
       cancelSorting();
       // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING}
@@ -422,5 +427,17 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    */
   protected STableColumnModel getTableColumnModel() {
     return tableColumnModel;
+  }
+
+  /**
+   * Wether the table column is sortable.
+   * 
+   * @param column
+   *          the table column to test.
+   * @return true is the table column is sortable.
+   */
+  protected boolean isSortable(STableColumn column) {
+    return column.getIdentifier() != null
+        && column.getIdentifier().toString().length() > 0;
   }
 }

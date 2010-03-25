@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -125,6 +125,7 @@ import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
@@ -132,7 +133,6 @@ import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
@@ -153,6 +153,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
+import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
@@ -264,10 +265,12 @@ public class DefaultSwingViewFactory extends
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    viewComponent.setActions(createBinaryActions(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale));
+    IView<JComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    viewComponent.setActions(createBinaryActions(propertyView, actionHandler,
+        locale));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**
@@ -1305,8 +1308,9 @@ public class DefaultSwingViewFactory extends
     }
     connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
-    Action lovAction = createLovAction(viewComponent, connector,
-        propertyViewDescriptor, actionHandler, locale);
+    IView<JComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    Action lovAction = createLovAction(propertyView, actionHandler, locale);
     // lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
     // "lov.element.name",
     // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
@@ -1324,7 +1328,7 @@ public class DefaultSwingViewFactory extends
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**
@@ -1479,11 +1483,11 @@ public class DefaultSwingViewFactory extends
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(
-            modelDescriptor.getName() + "Element",
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-                .getToStringProperty());
+        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+            rowDescriptor.getToStringProperty());
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -1491,9 +1495,8 @@ public class DefaultSwingViewFactory extends
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     JLabel iconLabel = createJLabel(false);
-    iconLabel.setIcon(getIconFactory().getIcon(
-        modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-            .getIconImageURL(), getIconFactory().getTinyIconSize()));
+    iconLabel.setIcon(getIconFactory().getIcon(rowDescriptor.getIconImageURL(),
+        getIconFactory().getTinyIconSize()));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
@@ -1512,11 +1515,9 @@ public class DefaultSwingViewFactory extends
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IValueConnector columnConnector = createColumnConnector(
-            columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor(), actionHandler);
+            columnViewDescriptor, rowDescriptor, actionHandler);
         rowConnectorPrototype.addChildConnector(columnConnector);
-        columnClasses.add(modelDescriptor.getCollectionDescriptor()
-            .getElementDescriptor().getPropertyDescriptor(columnId)
+        columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId)
             .getModelType());
         // already handled in createColumnConnector
         // if (columnViewDescriptor.getReadabilityGates() != null) {
@@ -1576,9 +1577,9 @@ public class DefaultSwingViewFactory extends
       if (!forbiddenColumns.contains(propertyName)) {
         TableColumn column = viewComponent.getColumnModel().getColumn(
             columnIndex++);
-        column.setIdentifier(propertyName);
-        IPropertyDescriptor propertyDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
+        column.setIdentifier(computeColumnIdentifier(rowDescriptor,
+            rowConnectorPrototype.getChildConnector(propertyName)));
+        IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         StringBuffer columnName = new StringBuffer(columnViewDescriptor
             .getI18nName(getTranslationProvider(), locale));
@@ -1589,11 +1590,6 @@ public class DefaultSwingViewFactory extends
 
         IView<JComponent> editorView = createView(columnViewDescriptor,
             actionHandler, locale);
-        // if (editorView.getPeer() instanceof JActionField) {
-        // JActionField actionField = (JActionField) editorView.getPeer();
-        // actionField.setActions(Collections.singletonList(actionField
-        // .getActions().get(0)));
-        // }
         if (editorView.getConnector().getParentConnector() == null) {
           editorView.getConnector().setParentConnector(connector);
         }
@@ -1605,23 +1601,30 @@ public class DefaultSwingViewFactory extends
         } else {
           column.setCellRenderer(new EvenOddTableCellRenderer());
         }
-        int minHeaderWidth = computePixelWidth(viewComponent, columnName
-            .length());
-        if (propertyDescriptor instanceof IBooleanPropertyDescriptor
-            || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(
-              computePixelWidth(viewComponent, 2), minHeaderWidth));
-        } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
-              getEnumerationTemplateValue(
-                  (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                  .length() + 4), minHeaderWidth));
+        if (columnViewDescriptor.getPreferredSize() != null
+            && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
+          column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
+              .getWidth());
         } else {
-          column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
-              viewComponent, getFormatLength(createFormatter(
-                  propertyDescriptor, locale),
-                  getTemplateValue(propertyDescriptor))), maxColumnSize),
-              minHeaderWidth));
+          int minHeaderWidth = computePixelWidth(viewComponent, columnName
+              .length());
+          if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+              || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+            column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
+                2), minHeaderWidth));
+          } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+            column.setPreferredWidth(Math.max(
+                computePixelWidth(viewComponent,
+                    getEnumerationTemplateValue(
+                        (IEnumerationPropertyDescriptor) propertyDescriptor,
+                        locale).length() + 4), minHeaderWidth));
+          } else {
+            column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
+                viewComponent, getFormatLength(createFormatter(
+                    propertyDescriptor, locale),
+                    getTemplateValue(propertyDescriptor))), maxColumnSize),
+                minHeaderWidth));
+          }
         }
       }
     }
@@ -2108,10 +2111,9 @@ public class DefaultSwingViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private JPopupMenu createJPopupMenu(JComponent sourceComponent,
-      ActionMap actionMap, IModelDescriptor modelDescriptor,
-      IViewDescriptor viewDescriptor, IValueConnector viewConnector,
-      IActionHandler actionHandler, Locale locale) {
+  private JPopupMenu createJPopupMenu(IView<JComponent> view,
+      ActionMap actionMap, IActionHandler actionHandler, Locale locale) {
+    IViewDescriptor viewDescriptor = view.getDescriptor();
     JPopupMenu popupMenu = createJPopupMenu();
     JLabel titleLabel = createJLabel(false);
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
@@ -2128,8 +2130,7 @@ public class DefaultSwingViewFactory extends
       for (IDisplayableAction action : nextActionSet.getActions()) {
         if (actionHandler.isAccessGranted(action)) {
           Action swingAction = getActionFactory().createAction(action,
-              actionHandler, sourceComponent, modelDescriptor, viewConnector,
-              locale);
+              actionHandler, view, locale);
           JMenuItem actionItem = createJMenuItem();
           actionItem.setAction(swingAction);
           popupMenu.add(actionItem);
@@ -2161,14 +2162,25 @@ public class DefaultSwingViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private JLabel createPropertyLabel(
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected JLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
       JComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JLabel propertyLabel = createJLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
-        getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground(Color.RED);
@@ -2311,9 +2323,6 @@ public class DefaultSwingViewFactory extends
       table.setRowSelectionInterval(row, row);
     }
 
-    IValueConnector elementConnector = tableView.getConnector();
-    IModelDescriptor modelDescriptor = tableView.getDescriptor()
-        .getModelDescriptor();
     ActionMap actionMap = ((ICollectionViewDescriptor) tableView
         .getDescriptor()).getActionMap();
 
@@ -2321,8 +2330,8 @@ public class DefaultSwingViewFactory extends
       return;
     }
 
-    JPopupMenu popupMenu = createJPopupMenu(table, actionMap, modelDescriptor,
-        tableView.getDescriptor(), elementConnector, actionHandler, locale);
+    JPopupMenu popupMenu = createJPopupMenu(tableView, actionMap,
+        actionHandler, locale);
     popupMenu.show(table, evt.getX(), evt.getY());
   }
 
@@ -2348,12 +2357,9 @@ public class DefaultSwingViewFactory extends
 
     IValueConnector viewConnector = (IValueConnector) path
         .getLastPathComponent();
-    IModelDescriptor modelDescriptor;
     ActionMap actionMap;
     IViewDescriptor viewDescriptor;
     if (viewConnector == tree.getModel().getRoot()) {
-      modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-      actionMap = treeView.getDescriptor().getActionMap();
       viewDescriptor = treeView.getDescriptor();
     } else {
       viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
@@ -2361,19 +2367,21 @@ public class DefaultSwingViewFactory extends
               .getRootSubtreeDescriptor(),
           getDescriptorPathFromConnectorTreePath(path))
           .getNodeGroupDescriptor();
-      modelDescriptor = viewDescriptor.getModelDescriptor();
-      actionMap = viewDescriptor.getActionMap();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }
     }
+    actionMap = viewDescriptor.getActionMap();
 
     if (actionMap == null) {
       return;
     }
 
-    JPopupMenu popupMenu = createJPopupMenu(tree, actionMap, modelDescriptor,
-        viewDescriptor, viewConnector, actionHandler, locale);
+    BasicView<JComponent> treeLevelView = new BasicView<JComponent>(tree);
+    treeLevelView.setConnector(viewConnector);
+    treeLevelView.setDescriptor(viewDescriptor);
+    JPopupMenu popupMenu = createJPopupMenu(treeLevelView, actionMap,
+        actionHandler, locale);
     popupMenu.show(tree, evt.getX(), evt.getY());
   }
 
@@ -2658,8 +2666,15 @@ public class DefaultSwingViewFactory extends
   protected void applyPreferredSize(JComponent component,
       org.jspresso.framework.util.gui.Dimension preferredSize) {
     if (preferredSize != null) {
-      component.setPreferredSize(new Dimension(preferredSize.getWidth(),
-          preferredSize.getHeight()));
+      int pW = preferredSize.getWidth();
+      if (pW <= 0) {
+        pW = component.getPreferredSize().width;
+      }
+      int pH = preferredSize.getHeight();
+      if (pH <= 0) {
+        pH = component.getPreferredSize().height;
+      }
+      component.setPreferredSize(new Dimension(pW, pH));
     }
   }
 }

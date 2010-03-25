@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,6 +33,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
@@ -407,10 +408,14 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     public void mouseClicked(MouseEvent e) {
       JTableHeader h = (JTableHeader) e.getSource();
       TableColumnModel columnModel = h.getColumnModel();
-      int viewColumn = columnModel.getColumnIndexAtX(e.getX());
-      int column = columnModel.getColumn(viewColumn).getModelIndex();
-      if (column != -1) {
-        int status = getSortingStatus(column);
+      int columnViewIndex = columnModel.getColumnIndexAtX(e.getX());
+      TableColumn column = columnModel.getColumn(columnViewIndex);
+      if (!isSortable(column)) {
+        return;
+      }
+      int columnModelIndex = column.getModelIndex();
+      if (columnModelIndex != -1) {
+        int status = getSortingStatus(columnModelIndex);
         if (!e.isControlDown()) {
           cancelSorting();
         }
@@ -424,7 +429,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
           status += 1;
         }
         status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
-        setSortingStatus(column, status);
+        setSortingStatus(columnModelIndex, status);
       }
     }
   }
@@ -487,5 +492,17 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    */
   protected List<Directive> getSortingColumns() {
     return sortingColumns;
+  }
+
+  /**
+   * Wether the table column is sortable.
+   * 
+   * @param column
+   *          the table column to test.
+   * @return true is the table column is sortable.
+   */
+  protected boolean isSortable(TableColumn column) {
+    return column.getIdentifier() != null
+        && column.getIdentifier().toString().length() > 0;
   }
 }

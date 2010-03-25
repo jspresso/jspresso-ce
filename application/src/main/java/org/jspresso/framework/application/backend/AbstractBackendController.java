@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.action.Transactional;
@@ -46,7 +47,9 @@ import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -118,6 +121,11 @@ public abstract class AbstractBackendController extends AbstractController
   public boolean execute(final IAction action, final Map<String, Object> context) {
     if (action == null) {
       return true;
+    }
+    if (!action.isBackend()) {
+      throw new ActionException(
+          "The backend controller is executing a frontend action. Please check the action chaining : "
+              + action.toString());
     }
     SecurityHelper.checkAccess(getApplicationSession().getSubject(), action,
         getTranslationProvider(), getLocale());
@@ -733,6 +741,8 @@ public abstract class AbstractBackendController extends AbstractController
       Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned) {
     Map<Serializable, IEntity> contractBuffer = alreadyCloned.get(entity
         .getComponentContract());
+    IComponentDescriptor<?> entityDescriptor = getEntityFactory()
+        .getComponentDescriptor(entity.getComponentContract());
     IEntity uowEntity = null;
     if (contractBuffer == null) {
       contractBuffer = new HashMap<Serializable, IEntity>();
@@ -752,6 +762,8 @@ public abstract class AbstractBackendController extends AbstractController
     contractBuffer.put(entity.getId(), uowEntity);
     Map<String, Object> entityProperties = entity.straightGetProperties();
     for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+      IPropertyDescriptor propertyDescriptor = entityDescriptor
+          .getPropertyDescriptor(property.getKey());
       if (property.getValue() instanceof IEntity) {
         if (isInitialized(property.getValue())) {
           uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
@@ -759,41 +771,58 @@ public abstract class AbstractBackendController extends AbstractController
         } else {
           uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
-      } else if (property.getValue() instanceof Collection) {
+      } else if (property.getValue() instanceof Collection<?>) {
         if (isInitialized(property.getValue())) {
-          Collection<IComponent> uowEntityCollection = createTransientEntityCollection((Collection) property
+          Collection<IComponent> uowCollection = createTransientEntityCollection((Collection) property
               .getValue());
           for (IComponent collectionElement : (Collection<IComponent>) property
               .getValue()) {
             if (collectionElement instanceof IEntity) {
-              uowEntityCollection.add(cloneInUnitOfWork(
-                  (IEntity) collectionElement, alreadyCloned));
+              uowCollection.add(cloneInUnitOfWork((IEntity) collectionElement,
+                  alreadyCloned));
             } else {
-              uowEntityCollection.add(cloneComponentInUnitOfWork(
-                  collectionElement, alreadyCloned));
+              uowCollection.add(cloneComponentInUnitOfWork(collectionElement,
+                  alreadyCloned));
             }
           }
-          Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
-              .get(property.getKey());
-          if (snapshotCollection != null) {
-            Collection clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
-            for (IComponent snapshotCollectionElement : snapshotCollection) {
-              if (snapshotCollectionElement instanceof IEntity) {
-                clonedSnapshotCollection.add(cloneInUnitOfWork(
-                    (IEntity) snapshotCollectionElement, alreadyCloned));
-              } else {
-                clonedSnapshotCollection.add(cloneComponentInUnitOfWork(
-                    snapshotCollectionElement, alreadyCloned));
+          if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
+            Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
+                .get(property.getKey());
+            if (snapshotCollection != null) {
+              Collection clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
+              for (IComponent snapshotCollectionElement : snapshotCollection) {
+                if (snapshotCollectionElement instanceof IEntity) {
+                  clonedSnapshotCollection.add(cloneInUnitOfWork(
+                      (IEntity) snapshotCollectionElement, alreadyCloned));
+                } else {
+                  clonedSnapshotCollection.add(cloneComponentInUnitOfWork(
+                      snapshotCollectionElement, alreadyCloned));
+                }
               }
+              snapshotCollection = clonedSnapshotCollection;
             }
-            snapshotCollection = clonedSnapshotCollection;
+            uowCollection = wrapDetachedCollection(entity, uowCollection,
+                snapshotCollection, property.getKey());
           }
-          uowEntityCollection = wrapDetachedCollection(entity,
-              uowEntityCollection, snapshotCollection, property.getKey());
-          uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
+          uowEntity.straightSetProperty(property.getKey(), uowCollection);
         } else {
           uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
+      } else if (property.getValue() instanceof IEntity[]) {
+        IEntity[] uowArray = new IEntity[((IEntity[]) property.getValue()).length];
+        for (int i = 0; i < uowArray.length; i++) {
+          uowArray[i] = cloneInUnitOfWork(((IEntity[]) property.getValue())[i],
+              alreadyCloned);
+        }
+        uowEntity.straightSetProperty(property.getKey(), uowArray);
+      } else if (property.getValue() instanceof IComponent[]) {
+        IComponent[] uowArray = new IComponent[((IComponent[]) property
+            .getValue()).length];
+        for (int i = 0; i < uowArray.length; i++) {
+          uowArray[i] = cloneComponentInUnitOfWork(((IComponent[]) property
+              .getValue())[i], alreadyCloned);
+        }
+        uowEntity.straightSetProperty(property.getKey(), uowArray);
       } else if (property.getValue() instanceof IComponent) {
         uowEntity.straightSetProperty(property.getKey(),
             cloneComponentInUnitOfWork((IComponent) property.getValue(),

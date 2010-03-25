@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,9 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
 import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -41,6 +43,7 @@ public class OpenFileAction extends ChooseFileAction {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -48,14 +51,12 @@ public class OpenFileAction extends ChooseFileAction {
     fileUploadCommand.setFileFilter(translateFilter(getFileFilter(context),
         context));
     RAction successCallbackAction = getActionFactory(context).createAction(
-        createSuccessCallbackAction(), actionHandler, getSourceComponent(context),
-        getModelDescriptor(context), getViewConnector(context),
-        getLocale(context));
+        createSuccessCallbackAction(), actionHandler,
+        (IView<RComponent>) getView(context), getLocale(context));
     fileUploadCommand.setSuccessCallbackAction(successCallbackAction);
     RAction cancelCallbackAction = getActionFactory(context).createAction(
-        createCancelCallbackAction(fileOpenCallback), actionHandler, getSourceComponent(context),
-        getModelDescriptor(context), getViewConnector(context),
-        getLocale(context));
+        createCancelCallbackAction(fileOpenCallback), actionHandler,
+        (IView<RComponent>) getView(context), getLocale(context));
     fileUploadCommand.setCancelCallbackAction(cancelCallbackAction);
     fileUploadCommand.setFileUrl(ResourceProviderServlet.computeUploadUrl());
     registerCommand(fileUploadCommand, context);

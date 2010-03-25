@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteCommand {
 
         private var _targetPeerGuid:String;
+        private var _automationId:String;
         
         public function RemoteCommand() {
           //default constructor.
@@ -30,6 +31,13 @@ package org.jspresso.framework.application.frontend.command.remote {
         }
         public function get targetPeerGuid():String {
             return _targetPeerGuid;
+        }
+
+        public function set automationId(value:String):void {
+            _automationId = value;
+        }
+        public function get automationId():String {
+            return _automationId;
         }
     }
 }

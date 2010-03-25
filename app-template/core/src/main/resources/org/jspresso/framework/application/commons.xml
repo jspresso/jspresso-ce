@@ -180,6 +180,7 @@
     <property name="loginViewDescriptor" ref="loginViewDescriptor" />
     <property name="actionMap" ref="moduleHistoryNavigationActionMap"/>
     <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction"/>
+    <property name="exitAction" ref="exitFrontAction"/>
   </bean>
 
   <bean abstract="true" id="abstractIconFactory" class="org.jspresso.framework.view.AbstractIconFactory">

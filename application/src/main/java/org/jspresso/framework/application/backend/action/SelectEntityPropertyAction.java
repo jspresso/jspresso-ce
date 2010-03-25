@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.framework.application.backend.action;
 
@@ -11,8 +11,8 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * A generic action to fill-in the context ACTION_PARAM with the value of an
- * entity property.
+ * A generic action to fill-in the context <code>ActionParameter</code> with the
+ * value of an entity property.
  * 
  * @version $LastChangedRevision: 475 $
  * @author Vincent Vandenschrick
@@ -52,7 +52,7 @@ public class SelectEntityPropertyAction extends BackendAction {
   }
 
   /**
-   * Sets the property.
+   * Configures the property to extract out of the underlying model.
    * 
    * @param property
    *          the property to set.

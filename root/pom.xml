@@ -1,31 +1,63 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.5.0-RC1</version>
   <name>Jspresso Root POM</name>
   <url>http://www.jspresso.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <generator.templateResourcePath>/org/jspresso/framework/tools/entitygenerator</generator.templateResourcePath>
     <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
-    <jspresso.version>3.0.1-SNAPSHOT</jspresso.version>
+    <jspresso.version>3.5.0-RC1</jspresso.version>
+    <sjs.version>1.0-SNAPSHOT</sjs.version>
+    <junit.version>3.8.1</junit.version>
     <blazeds.version>3.2.0.3978</blazeds.version>
+    <datetimelibrary.version>1.0.1</datetimelibrary.version>
     <spring.version>2.5.6</spring.version>
+    <spring-ldap.version>1.3.0.RELEASE</spring-ldap.version>
+    <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>3.3.2.GA</hibernate.version>
     <ulc.version>6.0.5</ulc.version>
     <jboss.version>4.2.2.GA</jboss.version>
     <qooxdoo.version>1.0</qooxdoo.version>
-    <!--<flex.version>3.2.0.3958</flex.version>-->
     <flex.version>3.4.0.9271</flex.version>
-    <jasper.version>3.5.3</jasper.version>
+    <jasper.version>3.7.1</jasper.version>
     <jfree.version>1.0.13</jfree.version>
+    <itext.version>2.1.5</itext.version>
     <commons-collections.version>3.2.1</commons-collections.version>
+    <commons-logging.version>1.1</commons-logging.version>
+    <commons-lang.version>2.4</commons-lang.version>
+    <commons-beanutils.version>1.7.0</commons-beanutils.version>
+    <commons-io.version>1.4</commons-io.version>
+    <commons-httpclient.version>3.1</commons-httpclient.version>
+    <commons-fileupload.version>1.2.1</commons-fileupload.version>
+    <commons-cli.version>1.2</commons-cli.version>
+    <commons-pool.version>1.2</commons-pool.version>
+    <commons-dbcp.version>1.2.1</commons-dbcp.version>
+    <log4j.version>1.2.14</log4j.version>
+    <javassist.version>3.4.GA</javassist.version>
+    <slf4j.version>1.5.2</slf4j.version>
+    <joda-time.version>1.6</joda-time.version>
+    <bsf.version>2.3.0</bsf.version>
+    <jython.version>2.5.0</jython.version>
+    <bsh.version>2.0b4</bsh.version>
+    <foxtrot.version>2.0</foxtrot.version>
+    <swt.version>3.5.1</swt.version>
+    <dj-nativeswing.version>0.9.8</dj-nativeswing.version>
+    <nachocalendar.version>0.23</nachocalendar.version>
+    <jedit-syntax.version>2.2.2</jedit-syntax.version>
+    <substance.version>4.3</substance.version>
+    <freemarker.version>2.3.3</freemarker.version>
+    <fusioncharts.version>2.2</fusioncharts.version>
     <wings.version>3.2.1</wings.version>
-    <sjs.version>1.0-SNAPSHOT</sjs.version>
+    <qx-collapsable-panel.version>0.5</qx-collapsable-panel.version>
+    <qx-upload-widget.version>0.5</qx-upload-widget.version>
+    <qx-java-rpc.version>0.6</qx-java-rpc.version>
+    <hsql.version>1.8.0.1</hsql.version>
+    <jnlp-servlet.version>1.1</jnlp-servlet.version>
+    <servlet.version>2.4</servlet.version>
   </properties>
   <distributionManagement>
     <repository>
@@ -76,6 +108,13 @@
     <repository>
       <id>sonatype-repository</id>
       <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jasperreports-repository</id>
+      <url>http://jasperreports.sourceforge.net/maven2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -351,19 +390,19 @@
       <dependency>
         <groupId>org.qooxdoo</groupId>
         <artifactId>qooxdoo-collapsable-panel</artifactId>
-        <version>0.5</version>
+        <version>${qx-collapsable-panel.version}</version>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>org.qooxdoo</groupId>
         <artifactId>qooxdoo-upload-widget</artifactId>
-        <version>0.5</version>
+        <version>${qx-upload-widget.version}</version>
         <type>zip</type>
       </dependency>
       <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
-        <version>1.1</version>
+        <version>${commons-logging.version}</version>
         <exclusions>
           <exclusion>
             <groupId>logkit</groupId>
@@ -378,12 +417,12 @@
       <dependency>
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
-        <version>1.2.14</version>
+        <version>${log4j.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
-        <version>2.4</version>
+        <version>${commons-lang.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
@@ -398,32 +437,32 @@
       <dependency>
         <groupId>javassist</groupId>
         <artifactId>javassist</artifactId>
-        <version>3.4.GA</version>
+        <version>${javassist.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
-        <version>1.5.2</version>
+        <version>${slf4j.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-beanutils</groupId>
         <artifactId>commons-beanutils</artifactId>
-        <version>1.7.0</version>
+        <version>${commons-beanutils.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-        <version>1.4</version>
+        <version>${commons-io.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-httpclient</groupId>
         <artifactId>commons-httpclient</artifactId>
-        <version>3.1</version>
+        <version>${commons-httpclient.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
-        <version>1.2.1</version>
+        <version>${commons-fileupload.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
@@ -453,62 +492,62 @@
       <dependency>
         <groupId>org.springframework.ldap</groupId>
         <artifactId>spring-ldap-core</artifactId>
-        <version>1.3.0.RELEASE</version>
+        <version>${spring-ldap.version}</version>
       </dependency>
       <dependency>
         <groupId>com.sun</groupId>
         <artifactId>ldapbp</artifactId>
-        <version>1.0</version>
+        <version>${ldapbp.version}</version>
       </dependency>
       <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
-        <version>1.6</version>
+        <version>${joda-time.version}</version>
       </dependency>
       <dependency>
         <groupId>bsf</groupId>
         <artifactId>bsf</artifactId>
-        <version>2.3.0</version>
+        <version>${bsf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.python</groupId>
         <artifactId>jython</artifactId>
-        <version>2.5.0</version>
+        <version>${jython.version}</version>
       </dependency>
       <dependency>
         <groupId>org.beanshell</groupId>
         <artifactId>bsh</artifactId>
-        <version>2.0b4</version>
+        <version>${bsh.version}</version>
       </dependency>
       <dependency>
         <groupId>foxtrot</groupId>
         <artifactId>foxtrot</artifactId>
-        <version>2.0</version>
+        <version>${foxtrot.version}</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse</groupId>
         <artifactId>swt</artifactId>
-        <version>3.5.1</version>
+        <version>${swt.version}</version>
       </dependency>
       <dependency>
         <groupId>chrriis</groupId>
         <artifactId>dj-nativeswing</artifactId>
-        <version>0.9.8</version>
+        <version>${dj-nativeswing.version}</version>
       </dependency>
       <dependency>
         <groupId>net.sf.nachocalendar</groupId>
         <artifactId>nachocalendar</artifactId>
-        <version>0.23</version>
+        <version>${nachocalendar.version}</version>
       </dependency>
       <dependency>
         <groupId>net.sf.jedit-syntax</groupId>
         <artifactId>jedit-syntax</artifactId>
-        <version>2.2.2</version>
+        <version>${jedit-syntax.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-cli</groupId>
         <artifactId>commons-cli</artifactId>
-        <version>1.2</version>
+        <version>${commons-cli.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-collections</groupId>
@@ -518,7 +557,7 @@
       <dependency>
         <groupId>freemarker</groupId>
         <artifactId>freemarker</artifactId>
-        <version>2.3.3</version>
+        <version>${freemarker.version}</version>
       </dependency>
       <dependency>
         <groupId>jboss</groupId>
@@ -573,7 +612,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>3.8.1</version>
+        <version>${junit.version}</version>
       </dependency>
       <dependency>
         <groupId>jasperreports</groupId>
@@ -583,12 +622,12 @@
       <dependency>
         <groupId>com.fusioncharts</groupId>
         <artifactId>fusioncharts-free</artifactId>
-        <version>2.2</version>
+        <version>${fusioncharts.version}</version>
       </dependency>
       <dependency>
         <groupId>com.lowagie</groupId>
         <artifactId>itext</artifactId>
-        <version>2.1.5</version>
+        <version>${itext.version}</version>
       </dependency>
       <dependency>
         <groupId>jfree</groupId>
@@ -598,7 +637,7 @@
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
-        <version>2.4</version>
+        <version>${servlet.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -619,12 +658,12 @@
       <dependency>
         <groupId>org.jvnet.substance</groupId>
         <artifactId>substance</artifactId>
-        <version>4.3</version>
+        <version>${substance.version}</version>
       </dependency>
       <dependency>
         <groupId>com.sun.jnlp</groupId>
         <artifactId>jnlp-servlet</artifactId>
-        <version>1.1</version>
+        <version>${jnlp-servlet.version}</version>
       </dependency>
       <dependency>
         <groupId>com.adobe.blazeds</groupId>
@@ -654,7 +693,7 @@
       <dependency>
         <groupId>datetimelibrary</groupId>
         <artifactId>datetimelibrary</artifactId>
-        <version>1.0.1</version>
+        <version>${datetimelibrary.version}</version>
         <type>swc</type>
       </dependency>
       <dependency>
@@ -666,22 +705,22 @@
       <dependency>
         <groupId>org.qooxdoo</groupId>
         <artifactId>qooxdoo-java-rpc</artifactId>
-        <version>0.6</version>
+        <version>${qx-java-rpc.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-pool</groupId>
         <artifactId>commons-pool</artifactId>
-        <version>1.2</version>
+        <version>${commons-pool.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-dbcp</groupId>
         <artifactId>commons-dbcp</artifactId>
-        <version>1.2.1</version>
+        <version>${commons-dbcp.version}</version>
       </dependency>
       <dependency>
         <groupId>hsqldb</groupId>
         <artifactId>hsqldb</artifactId>
-        <version>1.8.0.1</version>
+        <version>${hsql.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -761,6 +800,13 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>hibernate3-maven-plugin</artifactId>
           <version>2.2</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.hibernate</groupId>
+              <artifactId>hibernate-core</artifactId>
+              <version>${hibernate.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -790,12 +836,17 @@
             <dependency>
               <groupId>com.lowagie</groupId>
               <artifactId>itext</artifactId>
-              <version>2.1.5</version>
+              <version>${itext.version}</version>
             </dependency>
             <dependency>
               <groupId>log4j</groupId>
               <artifactId>log4j</artifactId>
-              <version>1.2.14</version>
+              <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-beans</artifactId>
+              <version>${spring.version}</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -867,7 +918,7 @@
             <dependency>
               <groupId>com.adobe.flex</groupId>
               <artifactId>compiler</artifactId>
-              <version>3.4.0.9271</version>
+              <version>${flex.version}</version>
               <type>pom</type>
             </dependency>
           </dependencies>

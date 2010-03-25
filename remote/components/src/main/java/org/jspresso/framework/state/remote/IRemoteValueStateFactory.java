@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,17 +31,22 @@ public interface IRemoteValueStateFactory {
    * 
    * @param guid
    *          the state guid.
+   * @param automationSeed
+   *          the seed to generate automation ids.
    * @return the created <code>RemoteValueState</code>.
    */
-  RemoteCompositeValueState createRemoteCompositeValueState(String guid);
+  RemoteCompositeValueState createRemoteCompositeValueState(String guid,
+      String automationSeed);
 
   /**
    * Creates a new <code>RemoteValueState</code> instance.
    * 
    * @param guid
    *          the state guid.
+   * @param automationSeed
+   *          the seed to generate automation ids.
    * @return the created <code>RemoteValueState</code>.
    */
-  RemoteValueState createRemoteValueState(String guid);
+  RemoteValueState createRemoteValueState(String guid, String automationSeed);
 
 }

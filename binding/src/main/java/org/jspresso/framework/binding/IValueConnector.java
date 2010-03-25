@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -141,6 +141,16 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    * @return true if readable.
    */
   boolean isReadable();
+
+  /**
+   * Called whenever readability may have changed.
+   */
+  void readabilityChange();
+
+  /**
+   * Called whenever writability may have changed.
+   */
+  void writabilityChange();
 
   /**
    * Is the connector writable ?

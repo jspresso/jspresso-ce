@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -44,6 +44,16 @@ public interface IRemotePeerRegistry {
   IRemotePeer getRegistered(String guid);
 
   /**
+   * Retrieves a registered remote peer using its automation id.
+   * 
+   * @param automationId
+   *          the remote peer automationId.
+   * @return the registered remote peer or null if no remote peer with the given
+   *         automationId is registered.
+   */
+  IRemotePeer getRegisteredForAutomationId(String automationId);
+
+  /**
    * Tests wether a remote peer is already registered.
    * 
    * @param guid
@@ -67,4 +77,16 @@ public interface IRemotePeerRegistry {
    *          the remote peer guid.
    */
   void unregister(String guid);
+
+  /**
+   * Generates and registers an automation Id.
+   * 
+   * @param automationSeed
+   *          the automation seed to use.
+   * @param guid
+   *          the guid to associate the generated automation idto.
+   * @return the generated automation id.
+   */
+  String registerAutomationId(String automationSeed, String guid);
+
 }

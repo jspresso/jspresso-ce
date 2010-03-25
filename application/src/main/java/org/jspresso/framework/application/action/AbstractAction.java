@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -101,6 +101,8 @@ public abstract class AbstractAction extends AbstractActionContextAware
   private IAction               nextAction;
   private IAction               wrappedAction;
 
+  private String                automationSeed;
+
   /**
    * {@inheritDoc}
    */
@@ -195,4 +197,23 @@ public abstract class AbstractAction extends AbstractActionContextAware
    * @return the controller (frontend or backend).
    */
   protected abstract IController getController(Map<String, Object> context);
+
+  /**
+   * Gets the automationSeed.
+   * 
+   * @return the automationSeed.
+   */
+  public String getAutomationSeed() {
+    return automationSeed;
+  }
+
+  /**
+   * Sets the automationSeed.
+   * 
+   * @param automationSeed
+   *          the automationSeed to set.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
+  }
 }

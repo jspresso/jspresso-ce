@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -407,13 +407,15 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   public Dimension getPreferredSize() {
-    if (preferredWidth != null || preferredHeight != null) {
+    Integer w = getPreferredWidth();
+    Integer h = getPreferredHeight();
+    if (w != null || h != null) {
       Dimension dim = new Dimension();
-      if (preferredWidth != null) {
-        dim.setWidth(preferredWidth.intValue());
+      if (w != null) {
+        dim.setWidth(w.intValue());
       }
-      if (preferredHeight != null) {
-        dim.setHeight(preferredHeight.intValue());
+      if (h != null) {
+        dim.setHeight(h.intValue());
       }
       return dim;
     }
@@ -461,5 +463,23 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   public void setAutomationSeed(String automationSeed) {
     this.automationSeed = automationSeed;
+  }
+
+  /**
+   * Gets the preferredWidth.
+   * 
+   * @return the preferredWidth.
+   */
+  protected Integer getPreferredWidth() {
+    return preferredWidth;
+  }
+
+  /**
+   * Gets the preferredHeight.
+   * 
+   * @return the preferredHeight.
+   */
+  protected Integer getPreferredHeight() {
+    return preferredHeight;
   }
 }

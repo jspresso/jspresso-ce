@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,19 +44,47 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
+import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
 /**
- * An action to hibernate query entities by example.
+ * This action is used to Hibernate query entities by example. It is used behind
+ * the scene in several places in Jspresso based applications, as in filtered
+ * bean collection modules, list of values, ... The principles are to tailor an
+ * Hibernate Criterion based on the Jspresso &quot;<code>IQueryComponent</code>
+ * &quot;. A Jspresso query component is a hierarchical datastructure that
+ * mimics a portion of the domain model headed by an entity. It is essentially a
+ * set of property/value pairs where values can be :
+ * <ol>
+ * <li>a scalar value</li>
+ * <li>a comparable query structure (operator, inf and sup value) to place a
+ * constraint on a comparable property (date, number, ...)</li>
+ * <li>a sub query component</li>
+ * </ol>
+ * <p>
+ * Out of this query component, the action will build an Hibernate detached
+ * criteria by constructing all join sub-criteria whenever necessary.
+ * <p>
+ * Once the detached criteria is complete, the action will perform the Hibernate
+ * query while using paging informations taken from the query component as well
+ * as custom sorting properties.
+ * <p>
+ * Whenever the query is successful, the result is merged back to the
+ * application session and assigned to the query component
+ * <code>queriedComponents</code> property.
+ * <p>
+ * Note that there are 2 hooks that can be configured by injection to fine-tune
+ * the performed query : <code>queryComponentRefiner</code> and
+ * <code>criteriaRefiner</code>.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class QueryEntitiesAction extends AbstractHibernateAction {
 
-  private ICriteriaRefiner       criteriaRefiner;
   private IQueryComponentRefiner queryComponentRefiner;
+  private ICriteriaRefiner       criteriaRefiner;
 
   /**
    * {@inheritDoc}
@@ -75,15 +104,18 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       public Object doInTransaction(TransactionStatus status) {
         DetachedCriteria criteria = DetachedCriteria
             .forEntityName(queryComponent.getQueryContract().getName());
+        Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry;
+        subCriteriaRegistry = new HashMap<DetachedCriteria, Map<String, DetachedCriteria>>();
         boolean abort = completeCriteria(criteria, null, queryComponent,
-            context);
+            subCriteriaRegistry, context);
         List entities;
         if (abort) {
           entities = new ArrayList<IEntity>();
           queryComponent.setRecordCount(new Integer(0));
         } else {
           if (criteriaRefiner != null) {
-            criteriaRefiner.refineCriteria(criteria, context);
+            criteriaRefiner.refineCriteria(criteria, subCriteriaRegistry,
+                queryComponent, context);
           }
           Integer totalCount = null;
           Integer pageSize = queryComponent.getPageSize();
@@ -98,11 +130,13 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               totalCount = (Integer) getHibernateTemplate(context)
                   .findByCriteria(criteria).get(0);
             }
-            completeCriteriaWithOrdering(criteria, queryComponent);
+            completeCriteriaWithOrdering(criteria, queryComponent,
+                subCriteriaRegistry);
             entities = getHibernateTemplate(context).findByCriteria(criteria,
                 page.intValue() * pageSize.intValue(), pageSize.intValue());
           } else {
-            completeCriteriaWithOrdering(criteria, queryComponent);
+            completeCriteriaWithOrdering(criteria, queryComponent,
+                subCriteriaRegistry);
             entities = getHibernateTemplate(context).findByCriteria(criteria);
             totalCount = new Integer(entities.size());
           }
@@ -127,7 +161,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   private boolean completeCriteria(DetachedCriteria criteria, String path,
-      IQueryComponent aQueryComponent, Map<String, Object> context) {
+      IQueryComponent aQueryComponent,
+      Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry,
+      Map<String, Object> context) {
     boolean abort = false;
     if (ComparableQueryStructure.class.isAssignableFrom(aQueryComponent
         .getQueryContract())) {
@@ -179,49 +215,56 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       }
     } else {
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        String prefixedProperty;
-        if (path != null) {
-          prefixedProperty = path + "." + property.getKey();
-        } else {
-          prefixedProperty = property.getKey();
-        }
-        if (property.getValue() instanceof IEntity) {
-          if (!((IEntity) property.getValue()).isPersistent()) {
-            abort = true;
+        if (!PropertyDescriptorHelper.isComputed(aQueryComponent
+            .getComponentDescriptor(), property.getKey())) {
+          String prefixedProperty;
+          if (path != null) {
+            prefixedProperty = path + "." + property.getKey();
           } else {
+            prefixedProperty = property.getKey();
+          }
+          if (property.getValue() instanceof IEntity) {
+            if (!((IEntity) property.getValue()).isPersistent()) {
+              abort = true;
+            } else {
+              criteria.add(Restrictions.eq(prefixedProperty, property
+                  .getValue()));
+            }
+          } else if (property.getValue() instanceof Boolean
+              && ((Boolean) property.getValue()).booleanValue()) {
             criteria
                 .add(Restrictions.eq(prefixedProperty, property.getValue()));
-          }
-        } else if (property.getValue() instanceof Boolean
-            && ((Boolean) property.getValue()).booleanValue()) {
-          criteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
-        } else if (property.getValue() instanceof String) {
-          if (((String) property.getValue()).length() > 0) {
-            criteria.add(Restrictions.like(prefixedProperty,
-                (String) property.getValue(), MatchMode.START).ignoreCase());
-          }
-        } else if (property.getValue() instanceof Number
-            || property.getValue() instanceof Date) {
-          criteria.add(Restrictions.eq(prefixedProperty, property.getValue()));
-        } else if (property.getValue() instanceof IQueryComponent) {
-          IQueryComponent joinedComponent = ((IQueryComponent) property
-              .getValue());
-          if (!joinedComponent.isEmpty()) {
-            if (joinedComponent.isInlineComponent() || path != null) {
-              // the joined component is an inlined component so we must use
-              // dot nested properties. Same applies if we are in a nested
-              // path i.e. already on an inline component.
-              abort = abort
-                  || completeCriteria(criteria, prefixedProperty,
-                      (IQueryComponent) property.getValue(), context);
-            } else {
-              // the joined component is an entity so we must use
-              // nested criteria.
-              DetachedCriteria joinCriteria = criteria.createCriteria(property
-                  .getKey());
-              abort = abort
-                  || completeCriteria(joinCriteria, null, joinedComponent,
-                      context);
+          } else if (property.getValue() instanceof String) {
+            if (((String) property.getValue()).length() > 0) {
+              criteria.add(Restrictions.like(prefixedProperty,
+                  (String) property.getValue(), MatchMode.START).ignoreCase());
+            }
+          } else if (property.getValue() instanceof Number
+              || property.getValue() instanceof Date) {
+            criteria
+                .add(Restrictions.eq(prefixedProperty, property.getValue()));
+          } else if (property.getValue() instanceof IQueryComponent) {
+            IQueryComponent joinedComponent = ((IQueryComponent) property
+                .getValue());
+            if (!isQueryComponentEmpty(joinedComponent)) {
+              if (joinedComponent.isInlineComponent() || path != null) {
+                // the joined component is an inlined component so we must use
+                // dot nested properties. Same applies if we are in a nested
+                // path i.e. already on an inline component.
+                abort = abort
+                    || completeCriteria(criteria, prefixedProperty,
+                        (IQueryComponent) property.getValue(),
+                        subCriteriaRegistry, context);
+              } else {
+                // the joined component is an entity so we must use
+                // nested criteria.
+                DetachedCriteria joinCriteria = createSubCriteria(criteria,
+                    property.getKey(), CriteriaSpecification.INNER_JOIN,
+                    subCriteriaRegistry);
+                abort = abort
+                    || completeCriteria(joinCriteria, null, joinedComponent,
+                        subCriteriaRegistry, context);
+              }
             }
           }
         }
@@ -231,22 +274,31 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   private void completeCriteriaWithOrdering(DetachedCriteria criteria,
-      IQueryComponent aQueryComponent) {
+      IQueryComponent aQueryComponent,
+      Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry) {
     criteria.setProjection(null);
     criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
     // complete sorting properties
     if (aQueryComponent.getOrderingProperties() != null) {
       for (Map.Entry<String, ESort> orderingProperty : aQueryComponent
           .getOrderingProperties().entrySet()) {
-        String[] propElts = orderingProperty.getKey().split("\\.");
-        DetachedCriteria orderingCriteria = criteria;
         String propertyName = orderingProperty.getKey();
+        // IPropertyDescriptor terminalPropDesc = aQueryComponent
+        // .getComponentDescriptor().getPropertyDescriptor(propertyName);
+        // if (terminalPropDesc instanceof IReferencePropertyDescriptor<?>) {
+        // propertyName = propertyName
+        // + "."
+        // + ((IReferencePropertyDescriptor<?>) terminalPropDesc)
+        // .getReferencedDescriptor().getToStringProperty();
+        // }
+        String[] propElts = propertyName.split("\\.");
+        DetachedCriteria orderingCriteria = criteria;
         boolean isComputed = false;
         if (propElts.length > 1) {
           IComponentDescriptor<?> currentCompDesc = aQueryComponent
               .getComponentDescriptor();
           int i = 0;
-          StringBuffer path = new StringBuffer();
+          List<String> path = new ArrayList<String>();
           for (; !isComputed && i < propElts.length - 1; i++) {
             IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
                 .getPropertyDescriptor(propElts[i]));
@@ -259,10 +311,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               break;
             }
             currentCompDesc = referencedDesc;
-            if (i > 0) {
-              path.append(".");
-            }
-            path.append(propElts[i]);
+            path.add(propElts[i]);
           }
           if (!isComputed) {
             StringBuffer name = new StringBuffer();
@@ -280,9 +329,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               name.append(propElts[j]);
             }
             if (!isComputed) {
-              if (path.length() > 0) {
-                orderingCriteria = criteria.createCriteria(path.toString(),
-                    CriteriaSpecification.LEFT_JOIN);
+              for (String pathElt : path) {
+                orderingCriteria = createSubCriteria(orderingCriteria, pathElt,
+                    CriteriaSpecification.LEFT_JOIN, subCriteriaRegistry);
               }
               propertyName = name.toString();
             }
@@ -324,7 +373,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
-   * Sets the criteriaRefiner.
+   * Configures a criteria refiner that will be called before the Hibernate
+   * detached criteria is actually used to perform the query. It allows to
+   * complement the criteria with arbitrary complex clauses that cannot be
+   * simply expressed in a &quot;<i>Query by Example</i>&quot; semantics.
    * 
    * @param criteriaRefiner
    *          the criteriaRefiner to set.
@@ -334,7 +386,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
-   * Sets the queryComponentRefiner.
+   * Configures a query component refiner that will be called before the query
+   * component is processed to extract the Hibernate detached criteria. This
+   * allows for instance to force query values.
    * 
    * @param queryComponentRefiner
    *          the queryComponentRefiner to set.
@@ -342,5 +396,40 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   public void setQueryComponentRefiner(
       IQueryComponentRefiner queryComponentRefiner) {
     this.queryComponentRefiner = queryComponentRefiner;
+  }
+
+  private boolean isQueryComponentEmpty(IQueryComponent queryComponent) {
+    if (queryComponent == null || queryComponent.isEmpty()) {
+      return true;
+    }
+    for (Map.Entry<String, Object> property : queryComponent.entrySet()) {
+      if (property.getValue() != null) {
+        if (property.getValue() instanceof IQueryComponent) {
+          if (!isQueryComponentEmpty((IQueryComponent) property.getValue())) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private DetachedCriteria createSubCriteria(DetachedCriteria criteria,
+      String associationPath, int joinType,
+      Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry) {
+    Map<String, DetachedCriteria> subRegistry = subCriteriaRegistry
+        .get(criteria);
+    if (subRegistry == null) {
+      subRegistry = new HashMap<String, DetachedCriteria>();
+      subCriteriaRegistry.put(criteria, subRegistry);
+    }
+    DetachedCriteria subCriteria = subRegistry.get(associationPath);
+    if (subCriteria == null) {
+      subCriteria = criteria.createCriteria(associationPath, joinType);
+      subRegistry.put(associationPath, subCriteria);
+    }
+    return subCriteria;
   }
 }

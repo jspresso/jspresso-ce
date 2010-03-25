@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,10 +25,12 @@ import java.util.Map;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.util.collection.ObjectEqualityMap;
 
-
 /**
- * An action used duplicate a collection of map domain objects. Cloning a map
- * should result in adding it to the collection the action was triggered on.
+ * An action used duplicate a collection of domain objects implemented as maps.
+ * Newly created maps are instances of
+ * <code>org.jspresso.framework.util.collection.ObjectEqualityMap</code> that
+ * conatins the same key/value pairs as the maps to clone. Executing this action
+ * will result in adding the cloned map to the underlying model collection.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -39,9 +41,9 @@ public class CloneMapCollectionAction extends AddMapToMasterAction {
    * Clones a map.
    * 
    * @param element
-   *            the map to clone.
+   *          the map to clone.
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the cloned map.
    */
   protected Object cloneElement(Object element, Map<String, Object> context) {

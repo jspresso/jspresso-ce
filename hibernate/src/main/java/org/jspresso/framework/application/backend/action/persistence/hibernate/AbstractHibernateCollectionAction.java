@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,8 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
 /**
- * Base class for backend actions acting on collections.
+ * Base class for backend Hibernate actions acting on collections. This class is
+ * just used to refine certain protected methods return types.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

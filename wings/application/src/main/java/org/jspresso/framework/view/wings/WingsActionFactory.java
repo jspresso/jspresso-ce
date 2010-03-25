@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,12 +28,10 @@ import javax.swing.KeyStroke;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.AbstractActionFactory;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.wings.SComponent;
 import org.wings.SIcon;
@@ -51,18 +49,16 @@ public class WingsActionFactory extends
    * {@inheritDoc}
    */
   public Action createAction(IAction action, Dimension dimension,
-      IActionHandler actionHandler, SComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
+      IActionHandler actionHandler, IView<SComponent> view, Locale locale) {
     Dimension d = dimension;
     if (d == null) {
       d = getIconFactory().getTinyIconSize();
     }
-    Action wingsAction = new ActionAdapter(action, d, actionHandler,
-        sourceComponent, modelDescriptor, viewConnector, locale);
+    Action wingsAction = new ActionAdapter(action, d, actionHandler, view,
+        locale);
     if (action instanceof IDisplayableAction) {
-      attachActionGates(((IDisplayableAction) action), actionHandler,
-          modelDescriptor, viewConnector, wingsAction);
+      attachActionGates(((IDisplayableAction) action), actionHandler, view,
+          wingsAction);
     }
     return wingsAction;
   }
@@ -87,9 +83,7 @@ public class WingsActionFactory extends
 
     private IAction           action;
     private IActionHandler    actionHandler;
-    private IModelDescriptor  modelDescriptor;
-    private SComponent        sourceComponent;
-    private IValueConnector   viewConnector;
+    private IView<SComponent> view;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
@@ -97,28 +91,18 @@ public class WingsActionFactory extends
      * @param action
      * @param dimension
      * @param actionHandler
-     * @param sourceComponent
-     * @param modelDescriptor
-     * @param viewConnector
+     * @param view
      * @param locale
      */
     public ActionAdapter(IAction action, Dimension dimension,
-        IActionHandler actionHandler, SComponent sourceComponent,
-        IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-        Locale locale) {
+        IActionHandler actionHandler, IView<SComponent> view, Locale locale) {
       this.action = action;
       this.actionHandler = actionHandler;
-      this.sourceComponent = sourceComponent;
-      this.modelDescriptor = modelDescriptor;
-      if (modelDescriptor instanceof ICollectionDescriptor<?>) {
-        this.viewConnector = ((ICollectionConnectorProvider) viewConnector)
-            .getCollectionConnector();
-      } else {
-        this.viewConnector = viewConnector;
-      }
+      this.view = view;
       if (action instanceof IDisplayableAction) {
         putValue(Action.NAME, ((IDisplayableAction) action).getI18nName(
             getTranslationProvider(), locale));
+        putValue(Action.ACTION_COMMAND_KEY, "");
         String i18nDescription = ((IDisplayableAction) action)
             .getI18nDescription(getTranslationProvider(), locale);
         if (i18nDescription != null) {
@@ -136,24 +120,19 @@ public class WingsActionFactory extends
     }
 
     /**
-     * Triggers the action execution on the action handler. The following
-     * initial action context is filled in : <li>
-     * <code>ActionContextConstants.SOURCE_COMPONENT</code> <li>
-     * <code>ActionContextConstants.VIEW_CONNECTOR</code> <li>
-     * <code>ActionContextConstants.MODEL_CONNECTOR</code> <li>
-     * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> <li>
-     * <code>ActionContextConstants.SELECTED_INDICES</code> <li>
-     * <code>ActionContextConstants.LOCALE</code>
-     * <p>
      * {@inheritDoc}
      */
     public void actionPerformed(ActionEvent e) {
       // "".equals(e.getActionCommand()) prevents the form
       // action to be handled.
       if (actionHandler != null && !"".equals(e.getActionCommand())) {
+        IValueConnector viewConnector = null;
+        if (view != null) {
+          viewConnector = view.getConnector();
+        }
         Map<String, Object> actionContext = createActionContext(actionHandler,
-            modelDescriptor, sourceComponent, viewConnector, e
-                .getActionCommand(), (SComponent) e.getSource());
+            view, viewConnector, e.getActionCommand(), (SComponent) e
+                .getSource());
         actionHandler.execute(action, actionContext);
       }
     }

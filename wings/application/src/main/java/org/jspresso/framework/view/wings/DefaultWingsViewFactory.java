@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -77,6 +77,7 @@ import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
@@ -258,10 +259,12 @@ public class DefaultWingsViewFactory extends
     SActionFieldConnector connector = new SActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    viewComponent.setActions(createBinaryActions(viewComponent, connector,
-        propertyDescriptor, actionHandler, locale));
+    IView<SComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    viewComponent.setActions(createBinaryActions(propertyView, actionHandler,
+        locale));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**
@@ -972,8 +975,9 @@ public class DefaultWingsViewFactory extends
     }
     connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
     connector.setExceptionHandler(actionHandler);
-    Action lovAction = createLovAction(viewComponent, connector,
-        propertyViewDescriptor, actionHandler, locale);
+    IView<SComponent> propertyView = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    Action lovAction = createLovAction(propertyView, actionHandler, locale);
     // lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
     // "lov.element.name",
     // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
@@ -991,7 +995,7 @@ public class DefaultWingsViewFactory extends
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**
@@ -1424,11 +1428,11 @@ public class DefaultWingsViewFactory extends
       Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor();
     ICompositeValueConnector rowConnectorPrototype = getConnectorFactory()
-        .createCompositeValueConnector(
-            modelDescriptor.getName() + "Element",
-            modelDescriptor.getCollectionDescriptor().getElementDescriptor()
-                .getToStringProperty());
+        .createCompositeValueConnector(modelDescriptor.getName() + "Element",
+            rowDescriptor.getToStringProperty());
     ICollectionConnector connector = getConnectorFactory()
         .createCollectionConnector(modelDescriptor.getName(), getMvcBinder(),
             rowConnectorPrototype);
@@ -1445,24 +1449,10 @@ public class DefaultWingsViewFactory extends
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IValueConnector columnConnector = createColumnConnector(
-            columnViewDescriptor, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor(), actionHandler);
+            columnViewDescriptor, rowDescriptor, actionHandler);
         rowConnectorPrototype.addChildConnector(columnConnector);
-        columnClasses.add(modelDescriptor.getCollectionDescriptor()
-            .getElementDescriptor().getPropertyDescriptor(columnId)
+        columnClasses.add(rowDescriptor.getPropertyDescriptor(columnId)
             .getModelType());
-        // already handled in createColumnConnector
-        // if (columnViewDescriptor.getReadabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-        // columnConnector.addReadabilityGate(gate.clone());
-        // }
-        // }
-        // if (columnViewDescriptor.getWritabilityGates() != null) {
-        // for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-        // columnConnector.addWritabilityGate(gate.clone());
-        // }
-        // }
-        // columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
       } else {
         // The column simply won't be added.
         forbiddenColumns.add(columnId);
@@ -1510,9 +1500,9 @@ public class DefaultWingsViewFactory extends
       if (!forbiddenColumns.contains(propertyName)) {
         STableColumn column = viewComponent.getColumnModel().getColumn(
             columnIndex++);
-        column.setIdentifier(propertyName);
-        IPropertyDescriptor propertyDescriptor = modelDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
+        column.setIdentifier(computeColumnIdentifier(rowDescriptor,
+            rowConnectorPrototype.getChildConnector(propertyName)));
+        IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
         StringBuffer columnName = new StringBuffer(columnViewDescriptor
             .getI18nName(getTranslationProvider(), locale));
@@ -1524,11 +1514,6 @@ public class DefaultWingsViewFactory extends
         if (!viewDescriptor.isReadOnly()) {
           IView<SComponent> editorView = createView(columnViewDescriptor,
               actionHandler, locale);
-          // if (editorView.getPeer() instanceof SActionField) {
-          // SActionField actionField = (SActionField) editorView.getPeer();
-          // actionField.setActions(Collections.singletonList(actionField
-          // .getActions().get(0)));
-          // }
           if (editorView.getConnector().getParentConnector() == null) {
             editorView.getConnector().setParentConnector(connector);
           }
@@ -1542,23 +1527,29 @@ public class DefaultWingsViewFactory extends
         } else {
           column.setCellRenderer(new EvenOddTableCellRenderer());
         }
-        int minHeaderWidth = computePixelWidth(viewComponent, columnName
-            .length());
         int columnWidth;
-        if (propertyDescriptor instanceof IBooleanPropertyDescriptor
-            || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-          columnWidth = Math.max(computePixelWidth(viewComponent, 2),
-              minHeaderWidth);
-        } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-          columnWidth = Math.max(computePixelWidth(viewComponent,
-              getEnumerationTemplateValue(
-                  (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                  .length() + 4), minHeaderWidth);
+        if (columnViewDescriptor.getPreferredSize() != null
+            && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
+          columnWidth = columnViewDescriptor.getPreferredSize().getWidth();
         } else {
-          columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
-              getFormatLength(createFormatter(propertyDescriptor, locale),
-                  getTemplateValue(propertyDescriptor))), maxColumnSize),
-              minHeaderWidth);
+          int minHeaderWidth = computePixelWidth(viewComponent, columnName
+              .length());
+          if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+              || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+            columnWidth = Math.max(computePixelWidth(viewComponent, 2),
+                minHeaderWidth);
+          } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+            columnWidth = Math.max(
+                computePixelWidth(viewComponent,
+                    getEnumerationTemplateValue(
+                        (IEnumerationPropertyDescriptor) propertyDescriptor,
+                        locale).length() + 4), minHeaderWidth);
+          } else {
+            columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
+                getFormatLength(createFormatter(propertyDescriptor, locale),
+                    getTemplateValue(propertyDescriptor))), maxColumnSize),
+                minHeaderWidth);
+          }
         }
         column.setWidth(columnWidth + "px");
         tableWidth += columnWidth;
@@ -2081,14 +2072,25 @@ public class DefaultWingsViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private SLabel createPropertyLabel(
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected SLabel createPropertyLabel(
       IPropertyViewDescriptor propertyViewDescriptor,
-      @SuppressWarnings("unused") SComponent propertyComponent, Locale locale) {
+      SComponent propertyComponent, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     SLabel propertyLabel = createSLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
-        getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground(Color.RED);
@@ -2424,8 +2426,17 @@ public class DefaultWingsViewFactory extends
   protected void applyPreferredSize(SComponent component,
       org.jspresso.framework.util.gui.Dimension preferredSize) {
     if (preferredSize != null) {
-      component.setPreferredSize(new SDimension(preferredSize.getWidth(),
-          preferredSize.getHeight()));
+      Integer pW = null;
+      Integer pH = null;
+
+      if (preferredSize.getWidth() > 0) {
+        pW = new Integer(preferredSize.getWidth());
+      }
+      if (preferredSize.getHeight() > 0) {
+        pH = new Integer(preferredSize.getHeight());
+      }
+
+      component.setPreferredSize(new SDimension(pW, pH));
     }
   }
 }

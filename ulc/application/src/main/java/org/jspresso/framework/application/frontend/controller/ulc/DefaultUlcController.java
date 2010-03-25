@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -103,7 +103,12 @@ public class DefaultUlcController extends
       Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     final ULCDialog dialog;
-    ULCWindow window = UlcUtil.getVisibleWindow(sourceComponent);
+    ULCWindow window;
+    if (sourceComponent != null) {
+      window = UlcUtil.getVisibleWindow(sourceComponent);
+    } else {
+      window = controllerFrame;
+    }
     if (reuseCurrent && window instanceof ULCDialog) {
       dialog = (ULCDialog) window;
       dialog.getContentPane().removeAll();
@@ -228,16 +233,17 @@ public class DefaultUlcController extends
     if (ex instanceof SecurityException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(ex.getMessage())),
-          getTranslationProvider().getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
+              .getMessage()))), getTranslationProvider().getTranslation("ok",
+              getLocale()), null, null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof BusinessException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(((BusinessException) ex)
-              .getI18nMessage(getTranslationProvider(), getLocale()))),
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(
+                  getTranslationProvider(), getLocale())))),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
           null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
@@ -248,18 +254,20 @@ public class DefaultUlcController extends
           getTranslationProvider().getTranslation("error", getLocale()),
           HtmlHelper
               .toHtml(HtmlHelper
-                  .emphasis(getTranslationProvider()
-                      .getTranslation(
-                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                          getLocale()))), getTranslationProvider()
+                  .emphasis(HtmlHelper
+                      .escapeForHTML(getTranslationProvider()
+                          .getTranslation(
+                              refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                              getLocale())))), getTranslationProvider()
               .getTranslation("ok", getLocale()), null, null, getIconFactory()
               .getErrorIcon(getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof ConcurrencyFailureException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
-          HtmlHelper.toHtml(HtmlHelper.emphasis(getTranslationProvider()
-              .getTranslation("concurrency.error.description", getLocale()))),
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(getTranslationProvider().getTranslation(
+                  "concurrency.error.description", getLocale())))),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
           null, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
@@ -272,8 +280,8 @@ public class DefaultUlcController extends
           getIconFactory().getMediumIconSize()));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
-      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
-          .getLocalizedMessage())));
+      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+          .escapeForHTML(ex.getLocalizedMessage()))));
       dialog.setDetails(ex);
       int screenRes = ClientContext.getScreenResolution();
       dialog.setSize(8 * screenRes, 3 * screenRes);
@@ -311,26 +319,26 @@ public class DefaultUlcController extends
     return true;
   }
 
-  private List<ULCMenu> createActionMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, getActionMap(), false);
+  private List<ULCMenu> createActionMenus() {
+    return createMenus(getActionMap(), false);
   }
 
-  private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {
+  private ULCMenuBar createApplicationMenuBar() {
     ULCMenuBar applicationMenuBar = new ULCMenuBar();
-    List<ULCMenu> workspaceMenus = createWorkspacesMenus(sourceComponent);
+    List<ULCMenu> workspaceMenus = createWorkspacesMenus();
     if (workspaceMenus != null) {
       for (ULCMenu workspaceMenu : workspaceMenus) {
         applicationMenuBar.add(workspaceMenu);
       }
     }
-    List<ULCMenu> actionMenus = createActionMenus(sourceComponent);
+    List<ULCMenu> actionMenus = createActionMenus();
     if (actionMenus != null) {
       for (ULCMenu actionMenu : actionMenus) {
         applicationMenuBar.add(actionMenu);
       }
     }
     applicationMenuBar.add(ULCFiller.createHorizontalGlue());
-    List<ULCMenu> helpActionMenus = createHelpActionMenus(sourceComponent);
+    List<ULCMenu> helpActionMenus = createHelpActionMenus();
     if (helpActionMenus != null) {
       for (ULCMenu helpActionMenu : helpActionMenus) {
         applicationMenuBar.add(helpActionMenu);
@@ -340,15 +348,15 @@ public class DefaultUlcController extends
   }
 
   private void updateControllerFrame() {
-    controllerFrame.setMenuBar(createApplicationMenuBar(controllerFrame));
+    controllerFrame.setMenuBar(createApplicationMenuBar());
     updateFrameTitle();
   }
 
-  private List<ULCMenu> createHelpActionMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, getHelpActions(), true);
+  private List<ULCMenu> createHelpActionMenus() {
+    return createMenus(getHelpActions(), true);
   }
 
-  private ULCMenu createMenu(ActionList actionList, ULCComponent sourceComponent) {
+  private ULCMenu createMenu(ActionList actionList) {
     ULCMenu menu = new ULCMenu(actionList.getI18nName(getTranslationProvider(),
         getLocale()));
     if (actionList.getDescription() != null) {
@@ -358,43 +366,39 @@ public class DefaultUlcController extends
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         getIconFactory().getSmallIconSize()));
-    for (ULCMenuItem menuItem : createMenuItems(sourceComponent, actionList)) {
+    for (ULCMenuItem menuItem : createMenuItems(actionList)) {
       menu.add(menuItem);
     }
     return menu;
   }
 
-  private ULCMenuItem createMenuItem(ULCComponent sourceComponent,
-      IDisplayableAction action) {
+  private ULCMenuItem createMenuItem(IDisplayableAction action) {
     return new ULCMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, sourceComponent, null, null, getLocale()));
+        action, this, null, getLocale()));
   }
 
-  private List<ULCMenuItem> createMenuItems(ULCComponent sourceComponent,
-      ActionList actionList) {
+  private List<ULCMenuItem> createMenuItems(ActionList actionList) {
     List<ULCMenuItem> menuItems = new ArrayList<ULCMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(sourceComponent, action));
+        menuItems.add(createMenuItem(action));
       }
     }
     return menuItems;
   }
 
   @SuppressWarnings("null")
-  private List<ULCMenu> createMenus(ULCComponent sourceComponent,
-      ActionMap actionMap, boolean useSeparator) {
+  private List<ULCMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
     List<ULCMenu> menus = new ArrayList<ULCMenu>();
     if (actionMap != null) {
       ULCMenu menu = null;
       for (ActionList actionList : actionMap.getActionLists()) {
         if (!useSeparator || menus.isEmpty()) {
-          menu = createMenu(actionList, sourceComponent);
+          menu = createMenu(actionList);
           menus.add(menu);
         } else {
           menu.addSeparator();
-          for (ULCMenuItem menuItem : createMenuItems(sourceComponent,
-              actionList)) {
+          for (ULCMenuItem menuItem : createMenuItems(actionList)) {
             menu.add(menuItem);
           }
         }
@@ -423,8 +427,8 @@ public class DefaultUlcController extends
     return internalFrame;
   }
 
-  private List<ULCMenu> createWorkspacesMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, createWorkspaceActionMap(), true);
+  private List<ULCMenu> createWorkspacesMenus() {
+    return createMenus(createWorkspaceActionMap(), true);
   }
 
   private void initLoginProcess() {

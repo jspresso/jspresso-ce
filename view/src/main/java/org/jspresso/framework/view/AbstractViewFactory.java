@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -43,6 +43,7 @@ import org.jspresso.framework.binding.IConfigurableCollectionConnectorListProvid
 import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IMvcBinder;
+import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
@@ -83,6 +84,7 @@ import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -112,6 +114,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
 
 /**
  * Abstract base class factory for views.
@@ -239,9 +242,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
                   ((ICollectionViewDescriptor) viewDescriptor)
                       .getItemSelectionAction(), actionHandler, view));
         }
-      } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-        view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-            actionHandler, locale);
       } else if (viewDescriptor instanceof ICardViewDescriptor) {
         view = createCardView((ICardViewDescriptor) viewDescriptor,
             actionHandler, locale);
@@ -254,6 +254,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
                   ((ITreeViewDescriptor) viewDescriptor)
                       .getItemSelectionAction(), actionHandler, view));
         }
+      } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
+        view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
+            actionHandler, locale);
       }
     }
     if (view != null) {
@@ -618,31 +621,24 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * Creates the action list for a binary property (open from file, save as
    * file, reset, size info).
    * 
-   * @param viewComponent
-   *          the component these actions will be triggered from.
-   * @param connector
-   *          the connector these actions will be triggered from.
-   * @param propertyDescriptor
-   *          the binary property descriptor.
+   * @param propertyView
+   *          the view these actions will be triggered from.
    * @param actionHandler
    *          the action handler.
    * @param locale
    *          the locale.
    * @return the action list.
    */
-  protected List<G> createBinaryActions(E viewComponent,
-      IValueConnector connector, IPropertyDescriptor propertyDescriptor,
+  protected List<G> createBinaryActions(IView<E> propertyView,
       IActionHandler actionHandler, Locale locale) {
     G openAction = getActionFactory().createAction(
-        openFileAsBinaryPropertyAction, actionHandler, viewComponent,
-        propertyDescriptor, connector, locale);
+        openFileAsBinaryPropertyAction, actionHandler, propertyView, locale);
     G saveAction = getActionFactory().createAction(
-        saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
-        propertyDescriptor, connector, locale);
+        saveBinaryPropertyAsFileAction, actionHandler, propertyView, locale);
     G resetAction = getActionFactory().createAction(resetPropertyAction,
-        actionHandler, viewComponent, propertyDescriptor, connector, locale);
+        actionHandler, propertyView, locale);
     G infoAction = getActionFactory().createAction(binaryPropertyInfoAction,
-        actionHandler, viewComponent, propertyDescriptor, connector, locale);
+        actionHandler, propertyView, locale);
     List<G> binaryActions = new ArrayList<G>();
     getActionFactory().setActionName(openAction, null);
     getActionFactory().setActionName(saveAction, null);
@@ -876,6 +872,34 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     columnConnector.setSubject(actionHandler.getSubject());
     return columnConnector;
+  }
+
+  /**
+   * Computes a table column identifer that is used for sorting.
+   * 
+   * @param rowDescriptor
+   *          the row component descriptor.
+   * @param columnConnector
+   *          the column connector behind the column.
+   * @return the column identifier.
+   */
+  protected String computeColumnIdentifier(
+      IComponentDescriptor<?> rowDescriptor, IValueConnector columnConnector) {
+    String propertyName = columnConnector.getId();
+    String identifier = propertyName;
+    if (columnConnector instanceof IRenderableCompositeValueConnector) {
+      String renderingProperty = ((IRenderableCompositeValueConnector) columnConnector)
+          .getRenderingConnector().getId();
+      if (renderingProperty != null) {
+        // for ref sorting to occur properly.
+        identifier = identifier + "." + renderingProperty;
+      }
+    }
+    if (PropertyDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
+      // to prevent column sorting
+      return "";
+    }
+    return identifier;
   }
 
   /**
@@ -1372,21 +1396,18 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates the list of value action.
    * 
-   * @param viewComponent
-   *          the component these actions will be triggered from.
-   * @param connector
-   *          the connector these actions will be triggered from.
-   * @param propertyViewDescriptor
-   *          the reference property view descriptor.
+   * @param propertyView
+   *          the view these actions will be triggered from.
    * @param actionHandler
    *          the action handler.
    * @param locale
    *          the locale.
    * @return the generic list of value action.
    */
-  protected G createLovAction(E viewComponent, IValueConnector connector,
-      IPropertyViewDescriptor propertyViewDescriptor,
+  protected G createLovAction(IView<E> propertyView,
       IActionHandler actionHandler, Locale locale) {
+    IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView
+        .getDescriptor();
     IDisplayableAction listOfValueAction;
     if (propertyViewDescriptor instanceof IReferencePropertyViewDescriptor
         && ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
@@ -1396,9 +1417,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else {
       listOfValueAction = getLovAction();
     }
+    Collection<IGate> aGates = listOfValueAction.getActionabilityGates();
+    if (aGates != null) {
+      aGates.remove(ModelTrackingGate.INSTANCE);
+    }
     G action = getActionFactory().createAction(listOfValueAction,
-        actionHandler, viewComponent,
-        propertyViewDescriptor.getModelDescriptor(), connector, locale);
+        actionHandler, propertyView, locale);
     getActionFactory().setActionName(action, null);
     return action;
   }
@@ -2458,8 +2482,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
      */
     public void selectedItemChange(ItemSelectionEvent event) {
       Map<String, Object> context = getActionFactory().createActionContext(
-          actionHandler, view.getDescriptor().getModelDescriptor(),
-          view.getPeer(), view.getConnector(), null, view.getPeer());
+          actionHandler, view, view.getConnector(), null, view.getPeer());
       context.put(ActionContextConstants.ACTION_PARAM, event.getSelectedItem());
       actionHandler.execute(actionDelegate, context);
     }

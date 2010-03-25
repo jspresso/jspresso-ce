@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,15 +30,17 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
 
 /**
- * This action removes the selected objects from the projected collection.
+ * This action, which is to be used on bean collection modules, removes the
+ * selected objects from the module's projected collection. If one (or more) of
+ * the removed objects are also used in children bean modules, the corresponding
+ * children bean modules are also removed accordingly.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
 
-  private static void removeFromSubModules(Module parentModule,
-      Object removedObject) {
+  private void removeFromSubModules(Module parentModule, Object removedObject) {
     if (parentModule.getSubModules() != null) {
       for (Module module : new ArrayList<Module>(parentModule.getSubModules())) {
         if (module instanceof BeanModule

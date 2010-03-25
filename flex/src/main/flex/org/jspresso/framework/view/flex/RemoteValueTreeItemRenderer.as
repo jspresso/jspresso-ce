@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,6 +17,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.treeClasses.TreeItemRenderer;
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+  import org.jspresso.framework.util.html.HtmlUtil;
 
   public class RemoteValueTreeItemRenderer extends TreeItemRenderer  {
 
@@ -48,6 +49,20 @@ package org.jspresso.framework.view.flex {
 				  icon.visible = false;
 				}
 			}
+		}
+		
+		override protected function commitProperties():void {
+		  super.commitProperties();
+		  if(listData) {
+		    if(HtmlUtil.isHtml(listData.label)) {
+		      label.text = null;
+		      label.htmlText = listData.label;
+		    } else {
+          label.htmlText = null;
+          label.text = listData.label;
+		    }
+		    invalidateDisplayList();
+		  }
 		}
   }
 }

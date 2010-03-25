@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -77,13 +77,6 @@ public abstract class AbstractCompositeValueConnector extends
    */
   public boolean areChildrenReadable() {
     return isReadable();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean areChildrenWritable() {
-    return isWritable();
   }
 
   /**
@@ -367,4 +360,25 @@ public abstract class AbstractCompositeValueConnector extends
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void writabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).writabilityChange();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void readabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).readabilityChange();
+    }
+  }
 }

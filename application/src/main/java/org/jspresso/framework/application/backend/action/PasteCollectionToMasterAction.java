@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,8 +30,13 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
 /**
- * An action used in master/detail views to paste previously copy or cut detail
- * to a master domain object.
+ * An action used in master/detail views to paste previously copied or cut
+ * detail(s) to a master domain object. The application clipboard is used to
+ * retrieve the entities (or components) to paste. Whenever the components have
+ * been previously <i>copied</i> to the clipboard, the paste action will clone
+ * them when executed using the configured entity clone factory. Whenever the
+ * components have been previously <i>cut</i>, the paste action will simply use
+ * the exact same instances as the one placed on the clipboard.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -42,7 +47,8 @@ public class PasteCollectionToMasterAction extends
   private IEntityCloneFactory entityCloneFactory;
 
   /**
-   * Sets the entityCloneFactory.
+   * Configures the entity clone factory to use when the paste action is
+   * triggered after a copy.
    * 
    * @param entityCloneFactory
    *          the entityCloneFactory to set.

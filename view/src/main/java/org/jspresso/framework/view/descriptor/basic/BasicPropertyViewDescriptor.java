@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,6 +23,7 @@ import java.util.List;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
@@ -206,5 +207,17 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    */
   public void setLabelForeground(String labelForeground) {
     this.labelForeground = labelForeground;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Integer getPreferredWidth() {
+    Integer w = super.getPreferredWidth();
+    if (w == null && getModelDescriptor() instanceof IPropertyDescriptor) {
+      w = ((IPropertyDescriptor) getModelDescriptor()).getPreferredWidth();
+    }
+    return w;
   }
 }

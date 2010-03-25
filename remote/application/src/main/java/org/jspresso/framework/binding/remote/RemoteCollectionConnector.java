@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,6 +29,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.automation.IAutomationSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -39,10 +40,11 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  * @author Vincent Vandenschrick
  */
 public class RemoteCollectionConnector extends BasicCollectionConnector
-    implements IRemotePeer, IRemoteStateOwner {
+    implements IRemotePeer, IRemoteStateOwner, IAutomationSource {
 
   private RemoteConnectorFactory    connectorFactory;
   private String                    guid;
+  private String                    automationSeed;
   private RemoteCompositeValueState state;
 
   /**
@@ -115,7 +117,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    */
   protected RemoteCompositeValueState createState() {
     RemoteCompositeValueState createdState = connectorFactory
-        .createRemoteCompositeValueState(getGuid());
+        .createRemoteCompositeValueState(getGuid(), getAutomationSeed());
     createdState.setSelectedIndices(getSelectedIndices());
     List<RemoteValueState> children = new ArrayList<RemoteValueState>();
     for (int i = 0; i < getChildConnectorCount(); i++) {
@@ -149,5 +151,27 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    */
   public Object actualValue() {
     return getConnectorValue();
+  }
+
+  /**
+   * Gets the automationSeed.
+   * 
+   * @return the automationSeed.
+   */
+  public String getAutomationSeed() {
+    if (automationSeed != null) {
+      return automationSeed;
+    }
+    return getId();
+  }
+
+  /**
+   * Sets the automationSeed.
+   * 
+   * @param automationSeed
+   *          the automationSeed to set.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 }

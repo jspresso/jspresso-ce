@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,6 @@ import java.util.Map;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
 
 /**
@@ -43,51 +42,6 @@ public interface IActionFactory<E, F> {
    * <code>TOOLTIP_ELLIPSIS</code> is "...".
    */
   String TOOLTIP_ELLIPSIS = "...";
-
-  /**
-   * Creates an action from its descriptor.
-   * 
-   * @param action
-   *          the action descriptor.
-   * @param actionHandler
-   *          the handler responsible for executing the action.
-   * @param sourceComponent
-   *          the view component which the action is attached to.
-   * @param modelDescriptor
-   *          the model descriptor this action is triggered on.
-   * @param viewConnector
-   *          the view connector this action is created on.
-   * @param locale
-   *          the locale the action has to use.
-   * @return the constructed action.
-   */
-  E createAction(IAction action, IActionHandler actionHandler,
-      F sourceComponent, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, Locale locale);
-
-  /**
-   * Creates an action from its descriptor.
-   * 
-   * @param action
-   *          the action descriptor.
-   * @param dimension
-   *          the icon dimension.
-   * @param actionHandler
-   *          the handler responsible for executing the action.
-   * @param sourceComponent
-   *          the view component which the action is attached to.
-   * @param modelDescriptor
-   *          the model descriptor this action is triggered on.
-   * @param viewConnector
-   *          the view connector this action is created on.
-   * @param locale
-   *          the locale the action has to use.
-   * @return the constructed action.
-   */
-  E createAction(IAction action, Dimension dimension,
-      IActionHandler actionHandler, F sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale);
 
   /**
    * Creates an action from its descriptor.
@@ -148,6 +102,8 @@ public interface IActionFactory<E, F> {
    * 
    * @param actionHandler
    *          the action handler.
+   * @param view
+   *          the view.
    * @param modelDescriptor
    *          the model descriptor.
    * @param sourceComponent
@@ -161,7 +117,7 @@ public interface IActionFactory<E, F> {
    * @return the initial action context.
    */
   Map<String, Object> createActionContext(IActionHandler actionHandler,
-      IModelDescriptor modelDescriptor, F sourceComponent,
-      IValueConnector viewConnector, String actionCommand, F actionWidget);
+      IView<F> view, IValueConnector viewConnector, String actionCommand,
+      F actionWidget);
 
 }

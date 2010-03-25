@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,9 +31,10 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class BasicView<E> implements IView<E> {
 
-  private IValueConnector connector;
-  private IViewDescriptor descriptor;
-  private E               peer;
+  private IValueConnector   connector;
+  private IViewDescriptor   descriptor;
+  private E                 peer;
+  private ICompositeView<E> parent;
 
   /**
    * Constructs a new <code>BasicView</code> instance.
@@ -109,6 +110,25 @@ public class BasicView<E> implements IView<E> {
    */
   public void setPeer(E peer) {
     this.peer = peer;
+  }
+
+  /**
+   * Gets the parent.
+   * 
+   * @return the parent.
+   */
+  public ICompositeView<E> getParent() {
+    return parent;
+  }
+
+  /**
+   * Sets the parent.
+   * 
+   * @param parent
+   *          the parent to set.
+   */
+  public void setParent(ICompositeView<E> parent) {
+    this.parent = parent;
   }
 
 }

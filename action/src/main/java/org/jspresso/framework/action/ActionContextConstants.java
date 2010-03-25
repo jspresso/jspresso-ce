@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -77,9 +77,9 @@ public final class ActionContextConstants {
   public static final String VIEW_CONNECTOR   = "VIEW_CONNECTOR";
 
   /**
-   * SELECTED_MODEL context key.
+   * VIEW context key.
    */
-  public static final String SELECTED_MODEL   = "SELECTED_MODEL";
+  public static final String VIEW             = "VIEW";
 
   private ActionContextConstants() {
     // to prevent this class from being instanciated.

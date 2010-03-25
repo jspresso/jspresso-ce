@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 /**
  * An action used in master/detail views to add new detail(s) to a master domain
  * object. The details to add are taken from the action context through the
- * ACTION_PARAM constant.
+ * <code>ActionParameter</code> context value.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

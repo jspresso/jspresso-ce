@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -110,7 +110,12 @@ public class DefaultWingsController extends
       dialog = ((SDialog) actionWindow);
       dialog.removeAll();
     } else {
-      SFrame window = sourceComponent.getParentFrame();
+      SFrame window;
+      if (sourceComponent != null) {
+        window = sourceComponent.getParentFrame();
+      } else {
+        window = controllerFrame;
+      }
       dialog = new SDialog(window, title, true);
       dialog.setDraggable(true);
     }
@@ -234,13 +239,15 @@ public class DefaultWingsController extends
     SComponent sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(ex.getMessage())),
+          .toHtml(HtmlHelper
+              .emphasis(HtmlHelper.escapeForHTML(ex.getMessage()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof BusinessException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
-              getTranslationProvider(), getLocale()))),
+          .toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(
+                  getTranslationProvider(), getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof DataIntegrityViolationException) {
@@ -249,16 +256,18 @@ public class DefaultWingsController extends
               sourceComponent,
               HtmlHelper
                   .toHtml(HtmlHelper
-                      .emphasis(getTranslationProvider()
-                          .getTranslation(
-                              refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                              getLocale()))), getTranslationProvider()
+                      .emphasis(HtmlHelper
+                          .escapeForHTML(getTranslationProvider()
+                              .getTranslation(
+                                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                                  getLocale())))), getTranslationProvider()
                   .getTranslation("error", getLocale()),
               SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof ConcurrencyFailureException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
-              "concurrency.error.description", getLocale()))),
+          .toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(getTranslationProvider().getTranslation(
+                  "concurrency.error.description", getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else {
@@ -272,8 +281,8 @@ public class DefaultWingsController extends
           getIconFactory().getMediumIconSize()));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
-      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
-          .getLocalizedMessage())));
+      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+          .escapeForHTML(ex.getLocalizedMessage()))));
       dialog.setDetails(ex);
       dialog.setVisible(true);
     }
@@ -370,22 +379,22 @@ public class DefaultWingsController extends
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         getIconFactory().getSmallIconSize()));
-    for (SMenuItem menuItem : createMenuItems(menu, actionList)) {
+    for (SMenuItem menuItem : createMenuItems(actionList)) {
       menu.add(menuItem);
     }
     return menu;
   }
 
-  private SMenuItem createMenuItem(SMenu menu, IDisplayableAction action) {
+  private SMenuItem createMenuItem(IDisplayableAction action) {
     return new SMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, menu, null, null, getLocale()));
+        action, this, null, getLocale()));
   }
 
-  private List<SMenuItem> createMenuItems(SMenu menu, ActionList actionList) {
+  private List<SMenuItem> createMenuItems(ActionList actionList) {
     List<SMenuItem> menuItems = new ArrayList<SMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(menu, action));
+        menuItems.add(createMenuItem(action));
       }
     }
     return menuItems;
@@ -406,7 +415,7 @@ public class DefaultWingsController extends
           // separator.setBorder(new SLineBorder(1));
           // menu.add(separator);
 
-          for (SMenuItem menuItem : createMenuItems(menu, actionList)) {
+          for (SMenuItem menuItem : createMenuItems(actionList)) {
             menu.add(menuItem);
           }
         }

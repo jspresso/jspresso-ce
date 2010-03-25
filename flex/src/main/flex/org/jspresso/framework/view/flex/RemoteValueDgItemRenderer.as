@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -109,6 +109,14 @@ package org.jspresso.framework.view.flex {
 	        cellLabel = _formatter.format(cellValue);
 	      } else {
   	      cellLabel = cellValue.toString();
+  	      var i:int = cellLabel.indexOf("\n");
+  	      if(i >= 0) {
+  	        cellLabel = cellLabel.substr(0,i);
+  	      }
+          i = cellLabel.indexOf("\r");
+          if(i >= 0) {
+            cellLabel = cellLabel.substr(0,i);
+          }
   	    }
   	  } else {
   	    cellLabel = null;

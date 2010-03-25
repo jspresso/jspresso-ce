@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,6 @@ import java.util.Collection;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 
-
 /**
  * This is a simple connector which itself holds the connector's value and which
  * allows child connectors. This connector is useful for building complex
@@ -41,7 +40,7 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
    * Constructs a new instance of BasicCompositeConnector.
    * 
    * @param id
-   *            the connector identifier
+   *          the connector identifier
    */
   public BasicCompositeConnector(String id) {
     super(id);
@@ -99,7 +98,7 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
    * Sets the self-hosted value.
    * 
    * @param connecteeValue
-   *            the value to host
+   *          the value to host
    */
   @Override
   protected void setConnecteeValue(Object connecteeValue) {
@@ -108,5 +107,20 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
 
   private String getRankedKey(String base, int rank) {
     return base + "#" + rank;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean areChildrenWritable() {
+    if (getParentConnector() != null
+        && !getParentConnector().areChildrenWritable()) {
+      return false;
+    }
+    // overriden to remove model connector writability condition.
+    // if (getModelConnector() != null && !getModelConnector().isWritable()) {
+    // return false;
+    // }
+    return isLocallyWritable();
   }
 }

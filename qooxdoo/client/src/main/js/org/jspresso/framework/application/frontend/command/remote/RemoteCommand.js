@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -23,6 +23,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
   properties :
   {
     targetPeerGuid :
+    {
+      check : "String",
+      nullable : true
+    },
+    automationId :
     {
       check : "String",
       nullable : true

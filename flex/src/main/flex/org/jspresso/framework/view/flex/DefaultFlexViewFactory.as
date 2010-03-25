@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -43,8 +43,6 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Image;
   import mx.controls.Label;
   import mx.controls.List;
-  import mx.controls.RichTextEditor;
-  import mx.controls.Text;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
@@ -132,7 +130,7 @@ package org.jspresso.framework.view.flex {
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
     private static const COLUMN_MAX_CHAR_COUNT:int = 20;
     private static const DATE_CHAR_COUNT:int = 10;
-    private static const TIME_CHAR_COUNT:int = 8;
+    private static const TIME_CHAR_COUNT:int = 6;
 
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _actionHandler:IActionHandler;
@@ -374,7 +372,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTree(remoteTree:RTree):UIComponent {
-      var tree:Tree = new SelectionTrackingTree();
+      var tree:SelectionTrackingTree = new SelectionTrackingTree();
       tree.labelField = "value";
       tree.dataTipField = "description";
       tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
@@ -385,6 +383,9 @@ package org.jspresso.framework.view.flex {
       bindTree(tree, remoteTree.state as RemoteCompositeValueState);
       if(remoteTree.expanded) {
         tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+            expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
+          });
+        tree.addEventListener(FlexEvent.UPDATE_COMPLETE, function(event:FlexEvent):void {
             expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
           });
       } else {
@@ -401,11 +402,11 @@ package org.jspresso.framework.view.flex {
       return tree;
     }
     
-    protected function expandItem(tree:Tree, remoteState:RemoteCompositeValueState, recurse:Boolean):void {
+    protected function expandItem(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState, recurse:Boolean):void {
       tree.expandItem(remoteState, true, true, true);
       if(recurse) {
         if(remoteState.children != null) {
-          (tree as SelectionTrackingTree).fixListeners(remoteState.children);
+          tree.fixListeners(remoteState.children);
           for(var i:int = 0; i < remoteState.children.length; i++) {
             if(remoteState.children[i] is RemoteCompositeValueState) {
               expandItem(tree,remoteState.children[i], recurse); 
@@ -415,7 +416,7 @@ package org.jspresso.framework.view.flex {
       }
     }
 
-    protected function bindTree(tree:Tree, rootState:RemoteCompositeValueState):void {
+    protected function bindTree(tree:SelectionTrackingTree, rootState:RemoteCompositeValueState):void {
       var updateModel:Function = function (selectedItems:Array):void {
         var parentsOfSelectedNodes:Array = new Array();
         var i:int;
@@ -431,23 +432,29 @@ package org.jspresso.framework.view.flex {
             parentsOfSelectedNodes.push(parentNode);
           }
         }
-        clearStateSelection(rootState, parentsOfSelectedNodes);
-        for(i=0; i < selectedItems.length; i++) {
-          node = selectedItems[i];
-          parentNode = tree.getParentItem(node);
-          if(parentNode == null && !tree.showRoot) {
-            parentNode = rootState
-          }
-          if(parentNode != null) {
-            var selectedIndices:Array = new Array();
-            if(parentNode.selectedIndices != null) {
-              selectedIndices.concat(parentNode.selectedIndices);
+        var oldSelectionTrackingEnabled:Boolean = tree.selectionTrackingEnabled;
+        try {
+          tree.selectionTrackingEnabled = false;
+          clearStateSelection(rootState, parentsOfSelectedNodes);
+          for(i=0; i < selectedItems.length; i++) {
+            node = selectedItems[i];
+            parentNode = tree.getParentItem(node);
+            if(parentNode == null && !tree.showRoot) {
+              parentNode = rootState
             }
-            var childIndex:int = parentNode.children.getItemIndex(node);
-            selectedIndices.push(childIndex);
-            parentNode.leadingIndex = childIndex;
-            parentNode.selectedIndices = selectedIndices;
+            if(parentNode != null) {
+              var selectedIndices:Array = new Array();
+              if(parentNode.selectedIndices != null) {
+                selectedIndices.concat(parentNode.selectedIndices);
+              }
+              var childIndex:int = parentNode.children.getItemIndex(node);
+              selectedIndices.push(childIndex);
+              parentNode.leadingIndex = childIndex;
+              parentNode.selectedIndices = selectedIndices;
+            }
           }
+        } finally {
+          tree.selectionTrackingEnabled = oldSelectionTrackingEnabled;
         }
       };
       BindingUtils.bindSetter(updateModel, tree, "selectedItems", true);
@@ -455,8 +462,8 @@ package org.jspresso.framework.view.flex {
     
     protected function clearStateSelection(remoteState:RemoteCompositeValueState, excludedNodes:Array):void {
       if(excludedNodes.indexOf(remoteState) == -1) {
-        remoteState.selectedIndices = null
         remoteState.leadingIndex = -1;
+        remoteState.selectedIndices = null
       }
       if(remoteState.children != null) {
         for(var i:int = 0; i < remoteState.children.length; i++) {
@@ -614,7 +621,7 @@ package org.jspresso.framework.view.flex {
           width = tr.length;
         }
       }
-      width += 7;
+      width += 4;
       sizeMaxComponentWidth(comboBox, width);
       return comboBox;
     }
@@ -648,6 +655,8 @@ package org.jspresso.framework.view.flex {
       borderContainer.addChild(row);
       
       cell = new GridItem();
+      cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+      cell.verticalScrollPolicy  = ScrollPolicy.OFF;
       cell.colSpan = nbCols;
       cell.percentWidth = 100.0;
       if(remoteBorderContainer.north != null) {
@@ -680,6 +689,8 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.west != null) {
         cellComponent = createComponent(remoteBorderContainer.west);
         cell = new GridItem();
+        cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        cell.verticalScrollPolicy  = ScrollPolicy.OFF;
         //cell.setStyle("horizontalAlign", "left");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
@@ -701,6 +712,8 @@ package org.jspresso.framework.view.flex {
       }
 
       cell = new GridItem();
+      cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+      cell.verticalScrollPolicy  = ScrollPolicy.OFF;
       cell.percentHeight = 100.0;
       cell.percentWidth = 100.0;
       if(remoteBorderContainer.center != null) {
@@ -714,6 +727,8 @@ package org.jspresso.framework.view.flex {
       if(remoteBorderContainer.east != null) {
         cellComponent = createComponent(remoteBorderContainer.east);
         cell = new GridItem();
+        cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        cell.verticalScrollPolicy  = ScrollPolicy.OFF;
         //cell.setStyle("horizontalAlign", "right");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
@@ -739,6 +754,8 @@ package org.jspresso.framework.view.flex {
       row.percentWidth = 100.0;
       borderContainer.addChild(row);
       cell = new GridItem();
+      cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+      cell.verticalScrollPolicy  = ScrollPolicy.OFF;
       cell.colSpan = nbCols;
       cell.percentWidth = 100.0;
       if(remoteBorderContainer.south != null) {
@@ -842,7 +859,10 @@ package org.jspresso.framework.view.flex {
       for(i = 0; i < constrainedGridContainer.getChildren().length; i++) {
         row = constrainedGridContainer.getChildAt(i) as GridRow;
         for(j = 0; j < nbCols; j++) {
-          row.addChild(new GridItem());
+          cell = new GridItem();
+          cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+          cell.verticalScrollPolicy  = ScrollPolicy.OFF;
+          row.addChild(cell);
         }
       }
       
@@ -922,6 +942,8 @@ package org.jspresso.framework.view.flex {
         gridRow = evenGridContainer.getChildAt(row) as GridRow;
 
         cell = new GridItem();
+        cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        cell.verticalScrollPolicy  = ScrollPolicy.OFF;
         cell.percentHeight = 100.0;
         cell.percentWidth = 100.0;
         gridRow.addChild(cell);
@@ -977,10 +999,14 @@ package org.jspresso.framework.view.flex {
         if(remoteForm.labelsPosition != "NONE") {
           componentLabel = createComponent(rComponentLabel, false);
           labelCell = new GridItem();
+          labelCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+          labelCell.verticalScrollPolicy  = ScrollPolicy.OFF;
         }
 
         var componentCell:GridItem = new GridItem();
-
+        componentCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        componentCell.verticalScrollPolicy  = ScrollPolicy.OFF;
+        
         if(elementWidth > remoteForm.columnCount) {
           elementWidth = remoteForm.columnCount;
         }
@@ -1350,14 +1376,18 @@ package org.jspresso.framework.view.flex {
                                  state:rColumn.state,
                                  index:i+1};
         column.itemEditor = itemEditor;
-        if(rColumn is RCheckBox) {
-          column.width = table.measureText(column.headerText).width + 16;
+        if(rColumn.preferredSize != null && rColumn.preferredSize.width > 0) {
+          column.width = rColumn.preferredSize.width;
         } else {
-          column.width = Math.max(
-                           Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT,
-                                    editorComponent.maxWidth),
-                           table.measureText(column.headerText).width + 16
-                         );
+          if(rColumn is RCheckBox) {
+            column.width = table.measureText(column.headerText).width + 16;
+          } else {
+            column.width = Math.max(
+                             Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT,
+                                      editorComponent.maxWidth),
+                             table.measureText(column.headerText).width + 16
+                           );
+          }
         }
         editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
         column.editorDataField = "state";
@@ -1442,16 +1472,22 @@ package org.jspresso.framework.view.flex {
           table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {
             event.preventDefault();
             var column:DataGridColumn = table.columns[event.columnIndex];
+            var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
+            if(!property || property.length == 0) {
+              // do not sort
+              return;
+            }
             column.sortDescending = !column.sortDescending;
             table.displaySort(event.columnIndex, column.sortDescending);
             if(state.children.length > 1) {
-              var property:String = remoteTable.columnIds[((column.itemRenderer as ClassFactory).properties["index"] as int) - 1];
               var orderingProperties:Object = new Object();
               orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
               var sortCommand:RemoteSortCommand = new RemoteSortCommand();
               sortCommand.orderingProperties = orderingProperties;
               sortCommand.viewStateGuid = remoteTable.state.guid;
+              sortCommand.viewStateAutomationId = remoteTable.state.automationId;
               sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
+              sortCommand.automationId = remoteTable.sortingAction.automationId;
               _commandHandler.registerCommand(sortCommand);
             }
           });
@@ -1502,7 +1538,7 @@ package org.jspresso.framework.view.flex {
       
       table.addEventListener(DataGridEvent.ITEM_EDIT_END, function(event:DataGridEvent):void {
         var table:DataGrid = event.currentTarget as DataGrid;
-    	  _actionHandler.setCurrentViewStateGuid(table, null);
+    	  _actionHandler.setCurrentViewStateGuid(table, null, null);
         if (event.reason != DataGridEventReason.CANCELLED) {
           if(table.itemEditorInstance is RemoteValueDgItemEditor) {
             var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
@@ -1530,7 +1566,7 @@ package org.jspresso.framework.view.flex {
         var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
         var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
             .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
-        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid);
+        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.automationId);
     	});
       table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, function(event:DataGridEvent):void {
         ((event.currentTarget as DataGrid).itemEditorInstance as UIComponent).setFocus();
@@ -1567,16 +1603,17 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createHtmlEditor(remoteHtmlArea:RHtmlArea):UIComponent {
-      var htmlEditor:RichTextEditor = new RichTextEditor();
+      var htmlEditor:EnhancedRichTextEditor = new EnhancedRichTextEditor();
+      htmlEditor.setStyle("headerHeight",0);
       bindHtmlEditor(htmlEditor, remoteHtmlArea.state);
       return htmlEditor;
     }
     
-    protected function bindHtmlEditor(htmlEditor:RichTextEditor, remoteState:RemoteValueState):void {
-      BindingUtils.bindProperty(htmlEditor, "htmlText", remoteState, "value", true);
+    protected function bindHtmlEditor(htmlEditor:EnhancedRichTextEditor, remoteState:RemoteValueState):void {
+      BindingUtils.bindProperty(htmlEditor, "xhtmlText", remoteState, "value", true);
       BindingUtils.bindProperty(htmlEditor, "enabled", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
-        remoteState.value = (event.currentTarget as RichTextEditor).htmlText;
+        remoteState.value = (event.currentTarget as EnhancedRichTextEditor).xhtmlText;
       };
       htmlEditor.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,updateModel);
       htmlEditor.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,updateModel);
@@ -1584,24 +1621,20 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createHtmlText(remoteHtmlArea:RHtmlArea):UIComponent {
-      var htmlText:Text = new Text();
+      var htmlText:TextArea = new TextArea();
+      htmlText.editable = false;
+      htmlText.setStyle("borderSyle","none");
+      htmlText.setStyle("focusAlpha",0);
       bindHtmlText(htmlText, remoteHtmlArea.state);
       return htmlText;
     }
 
-    protected function bindHtmlText(htmlText:Text, remoteState:RemoteValueState):void {
+    protected function bindHtmlText(htmlText:TextArea, remoteState:RemoteValueState):void {
       var updateText:Function = function (value:Object):void {
         if(value == null) {
-          htmlText.text = null;
           htmlText.htmlText = null;
         } else {
-          if(HtmlUtil.isHtml(value.toString())) {
-            htmlText.text = null;
-            htmlText.htmlText = HtmlUtil.preprocessHtml(value.toString());
-          } else {
-            htmlText.htmlText = null;
-            htmlText.text = value.toString();
-          }
+          htmlText.htmlText = HtmlUtil.convertFromXHtml(value.toString());
         }
       };
       BindingUtils.bindSetter(updateText, remoteState, "value", true);
@@ -1609,15 +1642,15 @@ package org.jspresso.framework.view.flex {
 
     protected function createLabel(remoteLabel:RLabel):UIComponent {
       var label:Label = new Label();
-      if(remoteLabel.maxLength > 0) {
-        sizeMaxComponentWidth(label, remoteLabel.maxLength);
-      } else {
-        sizeMaxComponentWidth(label);
-      }
+//      if(remoteLabel.maxLength > 0) {
+//        sizeMaxComponentWidth(label, remoteLabel.maxLength);
+//      } else {
+//        sizeMaxComponentWidth(label);
+//      }
       if(!remoteLabel.state && remoteLabel.label) {
         if(HtmlUtil.isHtml(remoteLabel.label)) {
           label.text = null;
-          label.htmlText = HtmlUtil.preprocessHtml(remoteLabel.label);
+          label.htmlText = remoteLabel.label;
         } else {
           label.htmlText = null;
           label.text = remoteLabel.label;
@@ -1637,7 +1670,7 @@ package org.jspresso.framework.view.flex {
         } else {
           if(HtmlUtil.isHtml(value.toString())) {
             label.text = null;
-            label.htmlText = HtmlUtil.preprocessHtml(value.toString());
+            label.htmlText = value.toString();
           } else {
             label.htmlText = null;
             label.text = value.toString();

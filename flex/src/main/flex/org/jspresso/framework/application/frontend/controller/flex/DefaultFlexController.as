@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -161,7 +161,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remoteController = remoteController;
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
-      _dialogStack.push([null, null]);
+      _dialogStack.push([null, null, null]);
       _userLanguage = userLanguage;
       _initialLocaleChain = ResourceManager.getInstance().localeChain;
       if (ExternalInterface.available) {
@@ -225,6 +225,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         //trace(">>> Value update <<< " + remoteValueState.value);
         var command:RemoteValueCommand = new RemoteValueCommand();
         command.targetPeerGuid = remoteValueState.guid;
+        command.automationId = remoteValueState.automationId;
         command.value = remoteValueState.value;
         registerCommand(command);
       }
@@ -235,6 +236,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         //trace(">>> Selected indices update <<< " + remoteCompositeValueState.selectedIndices + " on " + remoteCompositeValueState.value);
         var command:RemoteSelectionCommand = new RemoteSelectionCommand();
         command.targetPeerGuid = remoteCompositeValueState.guid;
+        command.automationId = remoteCompositeValueState.automationId;
         command.selectedIndices = remoteCompositeValueState.selectedIndices;
         command.leadingIndex = remoteCompositeValueState.leadingIndex;
         registerCommand(command);
@@ -246,8 +248,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       if(action) {
         var command:RemoteActionCommand = new RemoteActionCommand();
         command.targetPeerGuid = action.guid;
+        command.automationId = action.automationId;
         command.parameter = param;
         command.viewStateGuid = (_dialogStack[_dialogStack.length -1] as Array)[1];
+        command.viewStateAutomationId = (_dialogStack[_dialogStack.length -1] as Array)[2];
         registerCommand(command);
       }
     }
@@ -554,7 +558,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
        	// The HTML string must be passed to the show() method, so the width and height of
       	// the textField can be calculated correctly. All HTML tags will be removed and the
       	// <br> and <br/> tag will be replaced by /n (new line).
-      	message = HtmlUtil.preprocessHtml(message); // to handle <p>
       	message = message.replace(/<br.*?>/g, "/n");
       	message = message.replace(/<.*?>/g, "");
       }
@@ -622,7 +625,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                    Alert.OK);
       }
       if(isHtml) {
-        alert.mx_internal::alertForm.mx_internal::textField.htmlText = HtmlUtil.preprocessHtml(messageCommand.message);
+        alert.mx_internal::alertForm.mx_internal::textField.htmlText = messageCommand.message;
       }
       return alert;
     }
@@ -637,7 +640,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _changeNotificationsEnabled = true;
       _commandsQueue = new ArrayCollection(new Array());
       _dialogStack = new Array();
-      _dialogStack.push([null, null]);
+      _dialogStack.push([null, null, null]);
       start();
     }
 
@@ -977,17 +980,24 @@ package org.jspresso.framework.application.frontend.controller.flex {
         dialog.setStyle("borderThicknessLeft", 5);
         dialog.setStyle("borderThicknessRight", 5);
         dialog.setStyle("borderThicknessBottom", 5);
+        dialog.horizontalScrollPolicy = ScrollPolicy.OFF;
+        dialog.verticalScrollPolicy = ScrollPolicy.OFF;
         _dialogStack.push([dialog, null]);
       }
       dialog.title = title;
       if(icon) {
         dialog.titleIcon = _viewFactory.getIconForComponent(dialog, icon);
       }
+      dialogBox.percentWidth = 100.0;
+      dialogBox.percentHeight = 100.0;
+      var applicationFrame:Application = Application.application as Application;
+      dialogBox.maxHeight = applicationFrame.height * 95 / 100;
+      dialogBox.maxWidth = applicationFrame.width * 95 / 100;
       dialog.addChild(dialogBox);
       PopUpManager.centerPopUp(dialog);
     }
     
-    public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String):void {
+    public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStateAutomationId:String):void {
       if(_dialogStack.length > 1) {
         // at least a dialog is open
         for(var i:int = _dialogStack.length -1; i > 0 ; i--) {
@@ -995,11 +1005,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
           var dialog:Array = _dialogStack[_dialogStack.length -i] as Array; 
           if((dialog[0] as Panel).contains(component)) {
             dialog[1] = viewStateGuid;
+            dialog[2] = viewStateAutomationId;
             return;
           }
         }
       }
       (_dialogStack[0] as Array)[1] = viewStateGuid;
+      (_dialogStack[0] as Array)[2] = viewStateAutomationId;
     }
     
     protected function registerRemoteClasses():void {

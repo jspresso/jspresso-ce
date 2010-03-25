@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,8 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICardViewDescriptor extends IViewDescriptor, ICardNameSelector {
+public interface ICardViewDescriptor extends ICompositeViewDescriptor,
+    ICardNameSelector {
 
   /**
    * <code>DEFAULT_CARD</code>.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -154,7 +154,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * @see #protectedReadabilityChange()
    */
   @Override
-  protected final void readabilityChange() {
+  public final void readabilityChange() {
     super.readabilityChange();
     SwingUtil.updateSwingGui(new Runnable() {
 
@@ -194,7 +194,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * @see #protectedWritabilityChange()
    */
   @Override
-  protected final void writabilityChange() {
+  public final void writabilityChange() {
     super.writabilityChange();
     SwingUtil.updateSwingGui(new Runnable() {
 

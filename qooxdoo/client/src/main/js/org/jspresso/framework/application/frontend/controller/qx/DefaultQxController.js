@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -37,7 +37,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     this.__remoteController = remoteController;
     this.__commandsQueue = new Array();
     this.__dialogStack = new Array();
-    this.__dialogStack.push([null, null]);
+    this.__dialogStack.push([null, null, null]);
     this.__userLanguage = userLanguage;
     qx.locale.Manager.getInstance().setLocale(this.__userLanguage);
     this.__initRemoteController();
@@ -145,6 +145,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         //this.debug(">>> Selected indices update <<< " + remoteCompositeValueState.getSelectedIndices() + " on " + remoteCompositeValueState.getValue());
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
         command.setTargetPeerGuid(remoteCompositeValueState.getGuid());
+        command.setAutomationId(remoteCompositeValueState.getAutomationId());
         command.setSelectedIndices(remoteCompositeValueState.getSelectedIndices());
         command.setLeadingIndex(remoteCompositeValueState.getLeadingIndex());
         this.registerCommand(command);
@@ -162,6 +163,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         //this.debug(">>> Value update <<< " + remoteValueState.getValue());
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand();
         command.setTargetPeerGuid(remoteValueState.getGuid());
+        command.setAutomationId(remoteValueState.getAutomationId());
         command.setValue(remoteValueState.getValue());
         this.registerCommand(command);
       }
@@ -179,8 +181,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();
         command.setTargetPeerGuid(action.getGuid());
+        command.setAutomationId(action.getAutomationId());
         command.setParameter(param);
         command.setViewStateGuid(this.__dialogStack[this.__dialogStack.length -1][1]);
+        command.setViewStateAutomationId(this.__dialogStack[this.__dialogStack.length -1][2]);
         this.registerCommand(command);
       }
     },
@@ -636,7 +640,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__changeNotificationsEnabled = true;
       this.__commandsQueue = new Array();
       this.__dialogStack = new Array();
-      this.__dialogStack.push([null, null]);
+      this.__dialogStack.push([null, null, null]);
       this.start();
     },
 
@@ -758,9 +762,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**
      * 
      * @param {String} viewStateGuid
+     * @param {String} viewStateAutomationId
      */
-    setCurrentViewStateGuid : function(viewStateGuid) {
+    setCurrentViewStateGuid : function(viewStateGuid, viewStateAutomationId) {
       this.__dialogStack[this.__dialogStack.length -1][1] = viewStateGuid;
+      this.__dialogStack[this.__dialogStack.length -1][2] = viewStateAutomationId;
     },
 
     _handleError : function(message) {
@@ -885,7 +891,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           showMinimize : false
         });
         dialogParent.add(dialog);
-        this.__dialogStack.push([dialog, null]);
+        this.__dialogStack.push([dialog, null, null]);
       }
       dialog.setCaption(title);
       this.__viewFactory.setIcon(dialog, icon);
@@ -899,7 +905,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         });
       }
 
-      if(this.__workspaceStack) {
+      if(this.__workspaceStack && this.__workspaceStack.getBounds()) {
         dialog.setMaxWidth(Math.floor(this.__workspaceStack.getBounds().width * 90 / 100));
         dialog.setMaxHeight(Math.floor(this.__workspaceStack.getBounds().height * 90 / 100));
       }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,14 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 /**
  * An action used in master/detail views to remove selected details from a
- * master domain object.
+ * master domain object. More than just removing the selected details from their
+ * owning collection, this action &quot;<i>cuts</i>&quot; the existing links
+ * between the entities to remove and the rest of the domain then registers them
+ * for deletion on next save operation.
+ * <p>
+ * Note that cleaning of relationships is a 2 pass process. The 1st one is a dry
+ * run that checks that no functional exception is thrown by the business rules.
+ * The second one performs the actual cleaning.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

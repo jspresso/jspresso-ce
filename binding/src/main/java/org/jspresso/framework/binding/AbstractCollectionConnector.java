@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -108,7 +108,6 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
-  @Override
   public boolean areChildrenWritable() {
     return true;
   }

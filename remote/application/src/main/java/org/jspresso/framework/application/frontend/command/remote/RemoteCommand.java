@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,6 +31,7 @@ public abstract class RemoteCommand implements Serializable {
   private static final long serialVersionUID = 4102568065040838006L;
 
   private String            targetPeerGuid;
+  private String            automationId;
 
   /**
    * Gets the targetPeerGuid.
@@ -49,6 +50,25 @@ public abstract class RemoteCommand implements Serializable {
    */
   public void setTargetPeerGuid(String targetPeerGuid) {
     this.targetPeerGuid = targetPeerGuid;
+  }
+
+  /**
+   * Gets the automationId.
+   * 
+   * @return the automationId.
+   */
+  public String getAutomationId() {
+    return automationId;
+  }
+
+  /**
+   * Sets the automationId.
+   * 
+   * @param automationId
+   *          the automationId to set.
+   */
+  public void setAutomationId(String automationId) {
+    this.automationId = automationId;
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,7 +33,19 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * This action adds the selected objects as child modules.
+ * This action can be installed on any collection view and will :
+ * <ol>
+ * <li>take the selected elements in the underlying model collection,</li>
+ * <li>create bean modules out of them, using the
+ * <code>childModuleProjectedViewDescriptor</code> as projected view if it has
+ * been configured,</li>
+ * <li>add the created bean modules as children of the currently selected
+ * module, vizualizing them in the workspace navigation tree.</li>
+ * </ol>
+ * Whenever there is no <code>childModuleProjectedViewDescriptor</code>
+ * configured, and the currently selected module is a bean collection module,
+ * the created modules projected view descriptor is taken from the bean
+ * collection module (<code>elementViewDescriptor</code>).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

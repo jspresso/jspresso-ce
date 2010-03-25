@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,8 @@ import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.model.component.IComponent;
 
 /**
- * Initialize a module filter with a query entity.
+ * Initialize a module filter with a brand new query component and resets the
+ * module objects collection.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

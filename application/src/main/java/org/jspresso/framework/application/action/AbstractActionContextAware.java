@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,6 +33,7 @@ import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -271,14 +272,18 @@ public abstract class AbstractActionContextAware {
    * @return the selected model.
    */
   protected Object getSelectedModel(Map<String, Object> context) {
-    Object model = null;
-    if (context.containsKey(ActionContextConstants.SELECTED_MODEL)) {
-      // we are on a IItemSelectable.
-      model = context.get(ActionContextConstants.SELECTED_MODEL);
+    IValueConnector viewConnector = (IValueConnector) context
+        .get(ActionContextConstants.VIEW_CONNECTOR);
+    Object selectedModel;
+    if (viewConnector instanceof IItemSelectable) {
+      selectedModel = ((IItemSelectable) viewConnector).getSelectedItem();
+      if (selectedModel instanceof IValueConnector) {
+        selectedModel = ((IValueConnector) selectedModel).getConnectorValue();
+      }
     } else {
-      model = getModel(context);
+      selectedModel = getModel(context);
     }
-    return model;
+    return selectedModel;
   }
 
   /**
@@ -329,5 +334,4 @@ public abstract class AbstractActionContextAware {
           (ICollectionConnector) modelConnector, selectedModels), context);
     }
   }
-
 }

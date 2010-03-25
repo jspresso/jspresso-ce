@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,11 @@ import org.jspresso.framework.util.scripting.IScript;
 import org.jspresso.framework.util.scripting.IScriptHandler;
 
 /**
- * A scripted backend action.
+ * A scripted backend action. The action takes the script to execute (an
+ * <code>IScript</code> implementation) out of its context (using
+ * <code>ActionParameter</code>) and delegates the actual script execution to a
+ * <code>IScriptHandler</code> configured through the <code>scriptHandler</code>
+ * property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -47,7 +51,7 @@ public class ScriptedBackendAction extends BackendAction {
   }
 
   /**
-   * Sets the scriptHandler.
+   * Configures the script handler to use to perform the script execution.
    * 
    * @param scriptHandler
    *          the scriptHandler to set.

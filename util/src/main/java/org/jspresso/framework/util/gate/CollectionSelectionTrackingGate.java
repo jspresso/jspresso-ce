@@ -30,6 +30,13 @@ import java.util.Collection;
 public class CollectionSelectionTrackingGate extends AbstractModelGate {
 
   /**
+   * <code>INSTANCE</code> is a singleton instance of a gate whose state depends
+   * on the underlying collection connector selection (empty => closed, not
+   * empty => open).
+   */
+  public static final CollectionSelectionTrackingGate INSTANCE = new CollectionSelectionTrackingGate();
+
+  /**
    * Constructs a new <code>CollectionSelectionTrackingGate</code> instance.
    */
   public CollectionSelectionTrackingGate() {

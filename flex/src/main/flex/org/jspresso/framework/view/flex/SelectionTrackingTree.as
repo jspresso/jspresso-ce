@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -29,29 +29,44 @@ package org.jspresso.framework.view.flex {
     
   public class SelectionTrackingTree extends Tree {
     
+    private var _selectionTrackingEnabled:Boolean;
+    
+    public function SelectionTrackingTree() {
+      selectionTrackingEnabled = true;
+    }
+    
+    public function set selectionTrackingEnabled(value:Boolean):void {
+        _selectionTrackingEnabled = value;
+    }
+    public function get selectionTrackingEnabled():Boolean {
+        return _selectionTrackingEnabled;
+    }
+
     override protected function collectionChangeHandler(event:Event):void {
-      if(event is CollectionEvent) {
-        var collEvent:CollectionEvent = event as CollectionEvent;
-        if(collEvent.kind == CollectionEventKind.UPDATE) {
-          if(collEvent.items) {
-            if(collEvent.items.length > 0 && collEvent.items[0] is PropertyChangeEvent) {
-              var pcEvent:PropertyChangeEvent = collEvent.items[0] as PropertyChangeEvent;
-              if(pcEvent.kind == PropertyChangeEventKind.UPDATE) {
-                if(pcEvent.property == "selectedIndices"
-                    && pcEvent.source is RemoteCompositeValueState) {
-                  var changedState:RemoteCompositeValueState = pcEvent.source as RemoteCompositeValueState;
-                  var newlySelectedItems:Array = new Array();
-                  if(changedState.selectedIndices) {
-                    for each(var index:int in changedState.selectedIndices) {
-                      newlySelectedItems.push(changedState.children[index]);
+      if(selectionTrackingEnabled) {
+        if(event is CollectionEvent) {
+          var collEvent:CollectionEvent = event as CollectionEvent;
+          if(collEvent.kind == CollectionEventKind.UPDATE) {
+            if(collEvent.items) {
+              if(collEvent.items.length > 0 && collEvent.items[0] is PropertyChangeEvent) {
+                var pcEvent:PropertyChangeEvent = collEvent.items[0] as PropertyChangeEvent;
+                if(pcEvent.kind == PropertyChangeEventKind.UPDATE) {
+                  if(pcEvent.property == "selectedIndices"
+                      && pcEvent.source is RemoteCompositeValueState) {
+                    var changedState:RemoteCompositeValueState = pcEvent.source as RemoteCompositeValueState;
+                    var newlySelectedItems:Array = new Array();
+                    if(changedState.selectedIndices) {
+                      for each(var index:int in changedState.selectedIndices) {
+                        newlySelectedItems.push(changedState.children[index]);
+                      }
                     }
-                  }
-                  if(!ArrayUtil.areUnorderedArraysEqual(selectedItems, newlySelectedItems)) {
-                    selectedItems = newlySelectedItems;
-                    if(newlySelectedItems.length > 0 && !isItemOpen(changedState)) {
-                      var newOpenItems:Array = new Array().concat(openItems);
-                      newOpenItems.push(changedState);
-                      openItems = newOpenItems;
+                    if(!ArrayUtil.areUnorderedArraysEqual(selectedItems, newlySelectedItems)) {
+                      selectedItems = newlySelectedItems;
+                      if(newlySelectedItems.length > 0 && !isItemOpen(changedState)) {
+                        var newOpenItems:Array = new Array().concat(openItems);
+                        newOpenItems.push(changedState);
+                        openItems = newOpenItems;
+                      }
                     }
                   }
                 }

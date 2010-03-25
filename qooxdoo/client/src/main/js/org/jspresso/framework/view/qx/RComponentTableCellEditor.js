@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -60,7 +60,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
         state.removeAllBindings();
       }
       this.__currentBinding = this.__currentCellState.bind("value", state, "value");
-      this.__actionHandler.setCurrentViewStateGuid(this.__currentCellState.getGuid());
+      this.__actionHandler.setCurrentViewStateGuid(this.__currentCellState.getGuid(), this.__currentCellState.getAutomationId());
       var editorWidget = this.__viewFactory.createComponent(this.__rComponent, false);
       editorWidget.addListener("disappear", this.__cleanCurrentCellBinding, this);
       state.addListener("changeValue", function() {
@@ -96,7 +96,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
       this.__currentCellState.removeBinding(this.__currentBinding);
       this.__currentBinding = null;
       this.__currentCellState = null;
-      this.__actionHandler.setCurrentViewStateGuid(null);
+      this.__actionHandler.setCurrentViewStateGuid(null, null);
     }
   }
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -335,8 +335,10 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  public RemoteCompositeValueState createRemoteCompositeValueState(String guid) {
+  public RemoteCompositeValueState createRemoteCompositeValueState(String guid,
+      String automationSeed) {
     RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
+    state.setAutomationId(registerAutomationId(automationSeed, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;
@@ -345,8 +347,10 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  public RemoteValueState createRemoteValueState(String guid) {
+  public RemoteValueState createRemoteValueState(String guid,
+      String automationSeed) {
     RemoteValueState state = new RemoteValueState(guid);
+    state.setAutomationId(registerAutomationId(automationSeed, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;
@@ -371,8 +375,22 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
+  public IRemotePeer getRegisteredForAutomationId(String automationId) {
+    return remotePeerRegistry.getRegisteredForAutomationId(automationId);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean isRegistered(String guid) {
     return remotePeerRegistry.isRegistered(guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String registerAutomationId(String automationSeed, String guid) {
+    return remotePeerRegistry.registerAutomationId(automationSeed, guid);
   }
 
   /**
@@ -465,13 +483,14 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   }
 
   private boolean isCascadingModelWrapperConnector(IValueConnector connector) {
+    boolean hasRenderingConector = connector instanceof IRenderableCompositeValueConnector
+        && ((IRenderableCompositeValueConnector) connector)
+            .getRenderingConnector() != null;
     return (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
-        && connector.getParentConnector() == null && !(connector instanceof IRenderableCompositeValueConnector && ((IRenderableCompositeValueConnector) connector)
-        .getRenderingConnector() != null))
+        && connector.getParentConnector() == null && !hasRenderingConector)
         || (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
             && connector.getParentConnector() != null
             && ModelRefPropertyConnector.THIS_PROPERTY.equals(connector
-                .getParentConnector().getId()) && !(connector instanceof IRenderableCompositeValueConnector && ((IRenderableCompositeValueConnector) connector)
-            .getRenderingConnector() != null));
+                .getParentConnector().getId()) && !hasRenderingConector);
   }
 }

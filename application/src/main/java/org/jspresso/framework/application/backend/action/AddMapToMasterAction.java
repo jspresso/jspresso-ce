@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,11 @@ import org.jspresso.framework.util.collection.ObjectEqualityMap;
 
 /**
  * An action used in master/detail views where models are backed by maps to
- * create and add a new detail to a master domain object.
+ * create and add a new detail to a master domain object. The new instance
+ * created is an instance of
+ * <code>org.jspresso.framework.util.collection.ObjectEqualityMap</code>.
+ * Default property alues as well as <code>onCreate</code> lifecycle
+ * interceptors registered on the component descrtiptor are supported.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

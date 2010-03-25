@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -1127,5 +1127,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setOnModuleEnterAction(IAction onModuleEnterAction) {
     this.onModuleEnterAction = onModuleEnterAction;
+  }
+
+  /**
+   * Sets the exitAction.
+   * 
+   * @param exitAction
+   *          the exitAction to set.
+   */
+  public void setExitAction(IDisplayableAction exitAction) {
+    this.exitAction = exitAction;
   }
 }

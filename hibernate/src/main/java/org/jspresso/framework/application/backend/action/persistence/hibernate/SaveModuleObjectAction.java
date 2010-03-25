@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,9 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * Saves the projected object(s) in a transaction.
+ * Saves all the module entities as well as all its sub-modules entities
+ * recursively. All previously registered persistence operations are also
+ * performed.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -36,7 +38,8 @@ import org.jspresso.framework.model.entity.IEntity;
 public class SaveModuleObjectAction extends SaveAction {
 
   /**
-   * Saves the projected object(s) in a transaction.
+   * All the module entities as well as all its sub-modules entities
+   * recursively.
    * <p>
    * {@inheritDoc}
    */
@@ -44,6 +47,12 @@ public class SaveModuleObjectAction extends SaveAction {
   protected List<IEntity> getEntitiesToSave(Map<String, Object> context) {
     List<IEntity> entitiesToSave = new ArrayList<IEntity>();
     Module module = getModule(context);
+    completeEntitiesToSave(module, entitiesToSave);
+    return entitiesToSave;
+  }
+
+  private void completeEntitiesToSave(Module module,
+      List<IEntity> entitiesToSave) {
     if (module instanceof BeanCollectionModule
         && ((BeanCollectionModule) module).getModuleObjects() != null) {
       for (Object entity : ((BeanCollectionModule) module).getModuleObjects()) {
@@ -52,6 +61,10 @@ public class SaveModuleObjectAction extends SaveAction {
     } else if (module instanceof BeanModule) {
       entitiesToSave.add((IEntity) ((BeanModule) module).getModuleObject());
     }
-    return entitiesToSave;
+    if (module.getSubModules() != null) {
+      for (Module subModule : module.getSubModules()) {
+        completeEntitiesToSave(subModule, entitiesToSave);
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -73,6 +73,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   private String                         sqlName;
   private boolean                        versionControl;
+
+  private Integer                        preferredWidth;
 
   /**
    * Constructs a new <code>BasicPropertyDescriptor</code> instance.
@@ -649,5 +651,29 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public void setVersionControl(boolean versionControl) {
     this.versionControl = versionControl;
+  }
+
+  /**
+   * This property allows for setting an indication of width for representing
+   * this property in a view.
+   * <p>
+   * Default value is <code>null</code>, so that the view factory will make its
+   * decision based on the type and/or other characteristics of the property
+   * (e.g. max length).
+   * 
+   * @param preferredWidth
+   *          the preferredWidth to set.
+   */
+  public void setPreferredWidth(Integer preferredWidth) {
+    this.preferredWidth = preferredWidth;
+  }
+
+  /**
+   * Gets the preferredWidth.
+   * 
+   * @return the preferredWidth.
+   */
+  public Integer getPreferredWidth() {
+    return preferredWidth;
   }
 }

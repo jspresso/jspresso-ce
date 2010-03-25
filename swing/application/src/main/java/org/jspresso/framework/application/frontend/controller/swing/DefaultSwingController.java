@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -116,7 +116,12 @@ public class DefaultSwingController extends
       Dimension dimension, boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
     final JDialog dialog;
-    Window window = SwingUtil.getVisibleWindow(sourceComponent);
+    Window window;
+    if (sourceComponent != null) {
+      window = SwingUtil.getVisibleWindow(sourceComponent);
+    } else {
+      window = controllerFrame;
+    }
     if (window instanceof JDialog) {
       if (reuseCurrent) {
         dialog = (JDialog) window;
@@ -296,14 +301,16 @@ public class DefaultSwingController extends
     Component sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(ex.getMessage())),
+          .toHtml(HtmlHelper
+              .emphasis(HtmlHelper.escapeForHTML(ex.getMessage()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
-              getTranslationProvider(), getLocale()))),
+          .toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(((BusinessException) ex).getI18nMessage(
+                  getTranslationProvider(), getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
@@ -313,17 +320,19 @@ public class DefaultSwingController extends
               sourceComponent,
               HtmlHelper
                   .toHtml(HtmlHelper
-                      .emphasis(getTranslationProvider()
-                          .getTranslation(
-                              refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                              getLocale()))), getTranslationProvider()
+                      .emphasis(HtmlHelper
+                          .escapeForHTML(getTranslationProvider()
+                              .getTranslation(
+                                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                                  getLocale())))), getTranslationProvider()
                   .getTranslation("error", getLocale()),
               JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
                   getIconFactory().getLargeIconSize()));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper.emphasis(getTranslationProvider().getTranslation(
-              "concurrency.error.description", getLocale()))),
+          .toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(getTranslationProvider().getTranslation(
+                  "concurrency.error.description", getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
           JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
               getIconFactory().getLargeIconSize()));
@@ -335,8 +344,8 @@ public class DefaultSwingController extends
           getIconFactory().getMediumIconSize()));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
-      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(ex
-          .getLocalizedMessage())));
+      dialog.setMessage(HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+          .escapeForHTML(ex.getLocalizedMessage()))));
       dialog.setDetails(ex);
       int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
       dialog.pack();
@@ -504,22 +513,22 @@ public class DefaultSwingController extends
     }
     menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
         getIconFactory().getSmallIconSize()));
-    for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
+    for (JMenuItem menuItem : createMenuItems(actionList)) {
       menu.add(menuItem);
     }
     return menu;
   }
 
-  private JMenuItem createMenuItem(JMenu menu, IDisplayableAction action) {
+  private JMenuItem createMenuItem(IDisplayableAction action) {
     return new JMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, menu, null, null, getLocale()));
+        action, this, null, getLocale()));
   }
 
-  private List<JMenuItem> createMenuItems(JMenu menu, ActionList actionList) {
+  private List<JMenuItem> createMenuItems(ActionList actionList) {
     List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(menu, action));
+        menuItems.add(createMenuItem(action));
       }
     }
     return menuItems;
@@ -536,7 +545,7 @@ public class DefaultSwingController extends
           menus.add(menu);
         } else {
           menu.addSeparator();
-          for (JMenuItem menuItem : createMenuItems(menu, actionList)) {
+          for (JMenuItem menuItem : createMenuItems(actionList)) {
             menu.add(menuItem);
           }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,9 +29,11 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.util.resources.AbstractResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
+import org.jspresso.framework.view.IView;
 
 /**
  * Initiates a file save action.
@@ -46,6 +48,7 @@ public class SaveFileAction extends ChooseFileAction {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -60,8 +63,7 @@ public class SaveFileAction extends ChooseFileAction {
         .computeDownloadUrl(resourceId));
     RAction cancelCallbackAction = getActionFactory(context).createAction(
         createCancelCallbackAction(fileSaveCallback), actionHandler,
-        getSourceComponent(context), getModelDescriptor(context),
-        getViewConnector(context), getLocale(context));
+        (IView<RComponent>) getView(context), getLocale(context));
     fileDownloadCommand.setCancelCallbackAction(cancelCallbackAction);
     registerCommand(fileDownloadCommand, context);
     return super.execute(actionHandler, context);

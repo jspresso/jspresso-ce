@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,15 @@ import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * An action used in master/detail views to create and add a new detail to a
- * master domain object.
+ * master domain object. Entity (or component) to add are actually created by
+ * the entity factory retrieved from the action context. The class of entity
+ * (component) to create is either taken :
+ * <ol>
+ * <li>from the action context under the key <code>ELEMENT_DESCRIPTOR</code></li>
+ * <li>or, if it does not exist, taken from the view model descriptor. In this
+ * case, the component descriptor to use is the element descriptor of the
+ * underlying collection descriptor.</li>
+ * </ol>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

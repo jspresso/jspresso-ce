@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -19,6 +19,9 @@
 package org.jspresso.framework.application.backend.entity;
 
 import java.lang.reflect.Proxy;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.component.ControllerAwareComponentInvocationHandler;
@@ -32,8 +35,11 @@ import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityFactory;
+import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.entity.basic.BasicEntityInvocationHandler;
 import org.jspresso.framework.security.ISubjectAware;
+import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
@@ -165,5 +171,71 @@ public class ControllerAwareEntityInvocationHandler extends
    */
   protected IBackendController getBackendController() {
     return backendController;
+  }
+
+  private Set<IEntity>        detachedEntities;
+  private static final String DETACHED_ENTITIES_PROPERTY_NAME = "detachedEntities";
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void entityDetached(IEntity child) {
+    if (detachedEntities == null) {
+      detachedEntities = new LinkedHashSet<IEntity>();
+    }
+    detachedEntities.add(child);
+  }
+
+  /**
+   * Registers detached entities for update.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onUpdate(IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    if (detachedEntities != null) {
+      for (IEntity detachedEntity : detachedEntities) {
+        entityLifecycleHandler.registerForUpdate(detachedEntity);
+      }
+    }
+    detachedEntities = null;
+    super.onUpdate(entityFactory, principal, entityLifecycleHandler);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object straightGetProperty(String propertyName) {
+    if (DETACHED_ENTITIES_PROPERTY_NAME.equals(propertyName)) {
+      return detachedEntities;
+    }
+    return super.straightGetProperty(propertyName);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected void straightSetProperty(String propertyName,
+      Object newPropertyValue) {
+    if (DETACHED_ENTITIES_PROPERTY_NAME.equals(propertyName)) {
+      detachedEntities = (Set<IEntity>) newPropertyValue;
+    } else {
+      super.straightSetProperty(propertyName, newPropertyValue);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Map<String, Object> straightGetProperties() {
+    Map<String, Object> superMap = super.straightGetProperties();
+    superMap.put(DETACHED_ENTITIES_PROPERTY_NAME, detachedEntities);
+    return superMap;
   }
 }

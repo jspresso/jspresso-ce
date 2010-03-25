@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.framework.application.backend.action.security;
 
@@ -22,7 +22,9 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.DirContextSource;
 
 /**
- * Changes a user password in an ldap directory.
+ * Concrete backend implementation of a change password action where password is
+ * stored in an LDAP directory. The user DN to use to connect to the LDAP
+ * directory is the one stored in the user principal from the login process.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -32,7 +34,9 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
   private String ldapUrl;
 
   /**
-   * Sets the ldapUrl.
+   * Configures the LDAP url (e.g. <i>http://localhost:389</i>) of the LDAP
+   * directory. The user must be authorized to change its own password in the
+   * LDAP backend.
    * 
    * @param ldapUrl
    *          the ldapUrl to set.
@@ -66,7 +70,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
     try {
       mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
           new BasicAttribute(LdapConstants.PASSWORD_ATTIBUTE,
-              digest(newPassword.toCharArray()))));
+              digestAndEncode(newPassword.toCharArray()))));
       ldapTemplate.modifyAttributes(userDn, mods
           .toArray(new ModificationItem[0]));
     } catch (NoSuchAlgorithmException ex) {
@@ -80,5 +84,19 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
           "password.current.invalid");
     }
     return true;
+  }
+
+  /**
+   * Returns a prefix to use before storing a password. An example usage is to
+   * prefix the password hash with the type of hash, e.g. {MD5}.
+   * 
+   * @return a prefix to use before storing a password.
+   */
+  @Override
+  protected String getPasswordStorePrefix() {
+    if (getDigestAlgorithm() != null) {
+      return "{" + getDigestAlgorithm() + "}";
+    }
+    return super.getPasswordStorePrefix();
   }
 }

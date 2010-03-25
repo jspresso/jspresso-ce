@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -65,7 +65,6 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
@@ -230,6 +229,13 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  public IRemotePeer getRegisteredForAutomationId(String automationId) {
+    return remotePeerRegistry.getRegisteredForAutomationId(automationId);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public synchronized List<RemoteCommand> handleCommands(
       List<RemoteCommand> commands) {
     try {
@@ -285,6 +291,13 @@ public class DefaultRemoteController extends
    */
   public boolean isRegistered(String guid) {
     return remotePeerRegistry.isRegistered(guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String registerAutomationId(String automationsSeed, String guid) {
+    return remotePeerRegistry.registerAutomationId(automationsSeed, guid);
   }
 
   /**
@@ -436,20 +449,20 @@ public class DefaultRemoteController extends
         registerCommand(initLoginCommand);
       } else {
         performLogin();
-        execute(getStartupAction(), getInitialActionContext());
         List<RemoteCommand> initCommands = createInitCommands();
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
         }
+        execute(getStartupAction(), getInitialActionContext());
       }
     } else if (command instanceof RemoteLoginCommand) {
       if (performLogin()) {
         registerCommand(new RemoteCloseDialogCommand());
-        execute(getStartupAction(), getInitialActionContext());
         List<RemoteCommand> initCommands = createInitCommands();
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
         }
+        execute(getStartupAction(), getInitialActionContext());
       } else {
         RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
         errorMessageCommand.setMessage(getTranslationProvider().getTranslation(
@@ -460,7 +473,13 @@ public class DefaultRemoteController extends
       displayWorkspace(((RemoteWorkspaceDisplayCommand) command)
           .getWorkspaceName(), false);
     } else {
-      IRemotePeer targetPeer = getRegistered(command.getTargetPeerGuid());
+      IRemotePeer targetPeer = null;
+      if (command.getAutomationId() != null) {
+        targetPeer = getRegisteredForAutomationId(command.getAutomationId());
+      }
+      if (targetPeer == null) {
+        targetPeer = getRegistered(command.getTargetPeerGuid());
+      }
       if (targetPeer == null) {
         throw new CommandException("Target remote peer could not be retrieved");
       }
@@ -478,11 +497,6 @@ public class DefaultRemoteController extends
         if (targetPeer instanceof ICollectionConnectorProvider) {
           selectable = ((ICollectionConnectorProvider) targetPeer)
               .getCollectionConnector();
-          // } else if (targetPeer instanceof ICollectionConnectorListProvider)
-          // {
-          // selectable = (ISelectable) ((ICollectionConnectorListProvider)
-          // targetPeer)
-          // .getParentConnector();
         } else if (targetPeer instanceof ISelectable) {
           selectable = (ISelectable) targetPeer;
         }
@@ -493,8 +507,20 @@ public class DefaultRemoteController extends
         }
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
+        String viewStateGuid = null;
+        String viewStateAutomationId = ((RemoteActionCommand) command)
+            .getViewStateAutomationId();
+        if (viewStateAutomationId != null) {
+          IRemotePeer viewPeer = getRegisteredForAutomationId(viewStateAutomationId);
+          if (viewPeer != null) {
+            viewStateGuid = viewPeer.getGuid();
+          }
+        }
+        if (viewStateGuid == null) {
+          viewStateGuid = ((RemoteActionCommand) command).getViewStateGuid();
+        }
         action.actionPerformed(((RemoteActionCommand) command).getParameter(),
-            ((RemoteActionCommand) command).getViewStateGuid(), null);
+            viewStateGuid, null);
       } else if (command instanceof RemoteSortCommand) {
         RAction sortAction = (RAction) targetPeer;
         Map<String, String> orderingProperties = ((RemoteSortCommand) command)
@@ -510,8 +536,19 @@ public class DefaultRemoteController extends
         Map<String, Object> context = new HashMap<String, Object>();
         context.put(IQueryComponent.ORDERING_PROPERTIES,
             typedOrderingProperties);
-        sortAction.actionPerformed(null, ((RemoteSortCommand) command)
-            .getViewStateGuid(), context);
+        String viewStateGuid = null;
+        String viewStateAutomationId = ((RemoteSortCommand) command)
+            .getViewStateAutomationId();
+        if (viewStateAutomationId != null) {
+          IRemotePeer viewPeer = getRegisteredForAutomationId(viewStateAutomationId);
+          if (viewPeer != null) {
+            viewStateGuid = viewPeer.getGuid();
+          }
+        }
+        if (viewStateGuid == null) {
+          viewStateGuid = ((RemoteSortCommand) command).getViewStateGuid();
+        }
+        sortAction.actionPerformed(null, viewStateGuid, context);
       } else {
         throw new CommandException("Unsupported command type : "
             + command.getClass().getSimpleName());
@@ -543,7 +580,7 @@ public class DefaultRemoteController extends
     for (IDisplayableAction action : actionList.getActions()) {
       if (isAccessGranted(action)) {
         actions.add(getViewFactory().getActionFactory().createAction(action,
-            this, null, null, null, getLocale()));
+            this, null, getLocale()));
       }
     }
     rActionList.setActions(actions.toArray(new RAction[0]));
@@ -608,7 +645,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public void popupOkCancel(RComponent sourceComponent, String title,
+  public void popupOkCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction okAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
@@ -625,12 +663,10 @@ public class DefaultRemoteController extends
           getIconFactory().getLargeIconSize()));
     }
     if (okAction != null) {
-      messageCommand.setOkAction(createRAction(okAction, sourceComponent,
-          context));
+      messageCommand.setOkAction(createRAction(okAction, context));
     }
     if (cancelAction != null) {
-      messageCommand.setCancelAction(createRAction(cancelAction,
-          sourceComponent, context));
+      messageCommand.setCancelAction(createRAction(cancelAction, context));
     }
     registerCommand(messageCommand);
   }
@@ -638,7 +674,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public void popupYesNo(RComponent sourceComponent, String title,
+  public void popupYesNo(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       Map<String, Object> context) {
     RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
@@ -655,12 +692,10 @@ public class DefaultRemoteController extends
           getIconFactory().getLargeIconSize()));
     }
     if (yesAction != null) {
-      messageCommand.setYesAction(createRAction(yesAction, sourceComponent,
-          context));
+      messageCommand.setYesAction(createRAction(yesAction, context));
     }
     if (noAction != null) {
-      messageCommand.setNoAction(createRAction(noAction, sourceComponent,
-          context));
+      messageCommand.setNoAction(createRAction(noAction, context));
     }
     registerCommand(messageCommand);
   }
@@ -668,7 +703,8 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public void popupYesNoCancel(RComponent sourceComponent, String title,
+  public void popupYesNoCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context) {
     RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
@@ -685,31 +721,22 @@ public class DefaultRemoteController extends
           getIconFactory().getLargeIconSize()));
     }
     if (yesAction != null) {
-      messageCommand.setYesAction(createRAction(yesAction, sourceComponent,
-          context));
+      messageCommand.setYesAction(createRAction(yesAction, context));
     }
     if (noAction != null) {
-      messageCommand.setNoAction(createRAction(noAction, sourceComponent,
-          context));
+      messageCommand.setNoAction(createRAction(noAction, context));
     }
     if (cancelAction != null) {
-      messageCommand.setCancelAction(createRAction(cancelAction,
-          sourceComponent, context));
+      messageCommand.setCancelAction(createRAction(cancelAction, context));
     }
     registerCommand(messageCommand);
   }
 
-  private RAction createRAction(IAction action, RComponent sourceComponent,
-      Map<String, Object> context) {
-    return getViewFactory().getActionFactory()
-        .createAction(
-            wrapAction(action),
-            this,
-            sourceComponent,
-            (IModelDescriptor) context
-                .get(ActionContextConstants.MODEL_DESCRIPTOR),
-            (IValueConnector) context
-                .get(ActionContextConstants.VIEW_CONNECTOR), getLocale());
+  @SuppressWarnings("unchecked")
+  private RAction createRAction(IAction action, Map<String, Object> context) {
+    return getViewFactory().getActionFactory().createAction(wrapAction(action),
+        this, (IView<RComponent>) context.get(ActionContextConstants.VIEW),
+        getLocale());
   }
 
   private IDisplayableAction wrapAction(IAction action) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,17 +25,15 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
-import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractActionFactory;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -55,18 +53,15 @@ public class RemoteActionFactory extends
    * {@inheritDoc}
    */
   public RAction createAction(IAction action, Dimension dimension,
-      IActionHandler actionHandler, RComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
+      IActionHandler actionHandler, IView<RComponent> view, Locale locale) {
     Dimension d = dimension;
     if (d == null) {
       d = getIconFactory().getTinyIconSize();
     }
-    RAction remoteAction = createRAction(action, d, actionHandler,
-        sourceComponent, modelDescriptor, viewConnector, locale);
+    RAction remoteAction = createRAction(action, d, actionHandler, view, locale);
     if (action instanceof IDisplayableAction) {
-      attachActionGates((IDisplayableAction) action, actionHandler,
-          modelDescriptor, viewConnector, remoteAction);
+      attachActionGates((IDisplayableAction) action, actionHandler, view,
+          remoteAction);
     }
     return remoteAction;
   }
@@ -121,9 +116,7 @@ public class RemoteActionFactory extends
   }
 
   private RAction createRAction(IAction action, Dimension dimension,
-      IActionHandler actionHandler, RComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
+      IActionHandler actionHandler, IView<RComponent> view, Locale locale) {
     RAction remoteAction = new RAction(guidGenerator.generateGUID());
     if (action instanceof IDisplayableAction) {
       remoteAction.setName(((IDisplayableAction) action).getI18nName(
@@ -141,7 +134,14 @@ public class RemoteActionFactory extends
       }
     }
     ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction, action,
-        actionHandler, sourceComponent, modelDescriptor, viewConnector);
+        actionHandler, view);
+    String automationSeed = action.getAutomationSeed();
+    if (automationSeed == null && action instanceof IDisplayableAction) {
+      automationSeed = ((IDisplayableAction) action).getName();
+    }
+    String automationId = remotePeerRegistry.registerAutomationId(
+        automationSeed, remoteAction.getGuid());
+    remoteAction.setAutomationId(automationId);
     remotePeerRegistry.register(remoteActionAdapter);
     return remoteAction;
   }
@@ -152,35 +152,18 @@ public class RemoteActionFactory extends
 
     private IAction           action;
     private IActionHandler    actionHandler;
-    private IModelDescriptor  modelDescriptor;
-    private RComponent        sourceComponent;
-    private IValueConnector   viewConnector;
+    private IView<RComponent> view;
 
     public ActionAdapter(RAction remoteAction, IAction anAction,
-        IActionHandler anActionHandler, RComponent aSourceComponent,
-        IModelDescriptor aModelDescriptor, IValueConnector aViewConnector) {
+        IActionHandler anActionHandler, IView<RComponent> view) {
       super(remoteAction.getGuid());
       this.action = anAction;
       this.actionHandler = anActionHandler;
-      this.sourceComponent = aSourceComponent;
-      this.modelDescriptor = aModelDescriptor;
-      if (aModelDescriptor instanceof ICollectionDescriptor<?>) {
-        this.viewConnector = ((ICollectionConnectorProvider) aViewConnector)
-            .getCollectionConnector();
-      } else {
-        this.viewConnector = aViewConnector;
-      }
+      this.view = view;
     }
 
     /**
-     * Triggers the action execution on the action handler. The following
-     * initial action context is filled in : <li>
-     * <code>ActionContextConstants.SOURCE_COMPONENT</code> <li>
-     * <code>ActionContextConstants.VIEW_CONNECTOR</code> <li>
-     * <code>ActionContextConstants.MODEL_CONNECTOR</code> <li>
-     * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> <li>
-     * <code>ActionContextConstants.SELECTED_INDICES</code> <li>
-     * <code>ActionContextConstants.LOCALE</code>
+     * Triggers the action execution on the action handler.
      * 
      * @param parameter
      *          the action parameter.
@@ -192,6 +175,12 @@ public class RemoteActionFactory extends
     public void actionPerformed(String parameter, String viewStateGuid,
         Map<String, Object> context) {
       if (actionHandler != null) {
+        RComponent sourceComponent = null;
+        IValueConnector viewConnector = null;
+        if (view != null) {
+          sourceComponent = view.getPeer();
+          viewConnector = view.getConnector();
+        }
         Map<String, Object> actionContext = actionHandler.createEmptyContext();
         if (context != null) {
           actionContext.putAll(context);
@@ -204,8 +193,8 @@ public class RemoteActionFactory extends
           contextViewConnector = viewConnector;
         }
         Map<String, Object> defaultActionContext = createActionContext(
-            actionHandler, modelDescriptor, sourceComponent,
-            contextViewConnector, parameter, sourceComponent);
+            actionHandler, view, contextViewConnector, parameter,
+            sourceComponent);
         actionContext.putAll(defaultActionContext);
         actionHandler.execute(action, actionContext);
       }

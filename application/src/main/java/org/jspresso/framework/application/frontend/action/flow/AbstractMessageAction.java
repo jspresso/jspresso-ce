@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -47,7 +47,11 @@ public abstract class AbstractMessageAction<E, F, G> extends
    * @return the message.
    */
   protected String getMessage(Map<String, Object> context) {
-    return HtmlHelper.toHtml(HtmlHelper
-        .emphasis((String) getActionParameter(context)));
+    String msg = (String) getActionParameter(context);
+    if (msg == null || HtmlHelper.isHtml(msg)) {
+      return msg;
+    }
+    return HtmlHelper
+        .toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(msg)));
   }
 }

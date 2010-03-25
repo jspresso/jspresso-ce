@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,9 +25,12 @@ import java.util.Map;
  * This class can be used as parent class for actions that can be registered
  * either on collection or singleton models.
  * 
+ * @deprecated since <code>getSelectedModels</code> does exactly what the class
+ *             was meant for and is available to all actions.
  * @version $LastChangedRevision: 1671 $
  * @author Vincent Vandenschrick
  */
+@Deprecated
 public abstract class AbstractPolymorphicAction extends BackendAction {
 
   /**

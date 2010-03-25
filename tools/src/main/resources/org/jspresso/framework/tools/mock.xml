@@ -7,7 +7,7 @@
 
   <bean
     id="queryEntitiesBackAction"
-    class="org.jspresso.framework.application.backend.action.MockBackendAction" />
+    class="org.jspresso.framework.application.backend.action.BackendAction" />
 
   <bean
     id="removeCollectionFromMasterBackAction"

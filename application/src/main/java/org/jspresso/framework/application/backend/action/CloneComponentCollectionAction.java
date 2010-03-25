@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,8 +25,10 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
 /**
- * An action used duplicate a collection of domain objects. Cloning an entity
- * should result in adding it to the collection the action was triggered on.
+ * An action used duplicate a collection of entities or components. This action
+ * is parameterized with a clone factory (<code>IEntityCloneFactory</code>) to
+ * perform the actual component cloning. Executing this action will result in
+ * adding the cloned component(s) to the underlying model collection.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -37,7 +39,8 @@ public class CloneComponentCollectionAction extends
   private IEntityCloneFactory entityCloneFactory;
 
   /**
-   * Sets the entityCloneFactory.
+   * Configures the entity clone factory to use to clone the components or
+   * entities.
    * 
    * @param entityCloneFactory
    *          the entityCloneFactory to set.

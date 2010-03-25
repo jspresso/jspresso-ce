@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -407,6 +407,9 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     public void actionPerformed(ActionEvent e) {
       ULCTableColumn viewColumn = (ULCTableColumn) e.getSource();
       if (viewColumn != null) {
+        if (isSortable(viewColumn)) {
+          return;
+        }
         int status = getSortingStatus(viewColumn.getModelIndex());
 
         if ((e.getModifiers() & ActionEvent.CTRL_MASK) == 0) {
@@ -502,5 +505,17 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
    */
   protected List<Directive> getSortingColumns() {
     return sortingColumns;
+  }
+
+  /**
+   * Wether the table column is sortable.
+   * 
+   * @param column
+   *          the table column to test.
+   * @return true is the table column is sortable.
+   */
+  protected boolean isSortable(ULCTableColumn column) {
+    return column.getIdentifier() != null
+        && column.getIdentifier().toString().length() > 0;
   }
 }

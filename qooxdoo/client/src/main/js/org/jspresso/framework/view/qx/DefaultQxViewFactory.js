@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  * <p>
  * This file is part of the Jspresso framework. Jspresso is free software: you
  * can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -425,22 +425,27 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         if(cellRenderer) {
           columnModel.setDataCellRenderer(i, cellRenderer);
         }
-        var tableFont = qx.theme.manager.Font.getInstance().resolve("default");
-        var headerWidth = qx.bom.Label.getTextSize(columnNames[i], tableFont.getStyles()).width;
-        if(rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
-          columnModel.setColumnWidth(i, headerWidth + 16);
+        var columnWidth;
+        if(rComponent.getPreferredSize() && rComponent.getPreferredSize().getWidth() > 0) {
+        	columnWidth = rComponent.getPreferredSize().getWidth();
         } else {
-          var maxColumnWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.DefaultQxViewFactory.__TEMPLATE_CHAR,
-                                               tableFont.getStyles()).width
-                               * org.jspresso.framework.view.qx.DefaultQxViewFactory.__COLUMN_MAX_CHAR_COUNT;
-          var editorComponent = this.createComponent(rComponent, false);
-          var columnWidth = maxColumnWidth;
-          if(editorComponent.getMaxWidth()) {
-          	columnWidth = Math.min(maxColumnWidth, editorComponent.getMaxWidth());
+          var tableFont = qx.theme.manager.Font.getInstance().resolve("default");
+          var headerWidth = qx.bom.Label.getTextSize(columnNames[i], tableFont.getStyles()).width;
+          if(rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+            columnWidth = headerWidth + 16;
+          } else {
+            var maxColumnWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.DefaultQxViewFactory.__TEMPLATE_CHAR,
+                                                 tableFont.getStyles()).width
+                                 * org.jspresso.framework.view.qx.DefaultQxViewFactory.__COLUMN_MAX_CHAR_COUNT;
+            var editorComponent = this.createComponent(rComponent, false);
+            columnWidth = maxColumnWidth;
+            if(editorComponent.getMaxWidth()) {
+            	columnWidth = Math.min(maxColumnWidth, editorComponent.getMaxWidth());
+            }
+            columnWidth = Math.max(columnWidth, headerWidth + 16);
           }
-          columnWidth = Math.max(columnWidth, headerWidth + 16);
-          columnModel.setColumnWidth(i, columnWidth);
         }
+        columnModel.setColumnWidth(i, columnWidth);
       }
       
       table.setHeight(5*table.getRowHeight() + table.getHeaderCellHeight());
@@ -1609,6 +1614,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       treeController.setIconPath("iconImageUrl");
       treeController.setDelegate(
         {
+          createItem: function() {
+            var item = new qx.ui.tree.TreeFolder();
+            item.getChildControl("label").setRich(true);
+            return item;
+          },
           bindItem : function(controller, treeNode, modelNode) {
             controller.bindProperty(controller.getLabelPath(), "label", controller.getLabelOptions(), treeNode, modelNode);
             controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
@@ -1628,7 +1638,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                       }
                       //viewSelection.push(child);
                       if(selIndex == 0/* || tree.getSelectionMode() == "multi" || tree.getSelectionMode() == "additive"*/) {
-                        viewSelection.setItem(i, child);
+                        viewSelection.setItem(selIndex, child);
                         selIndex++;
                       }
                     }

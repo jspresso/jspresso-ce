@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -39,7 +39,10 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
 
 /**
- * Creates a query component.
+ * Creates a query component to be used in filters or list of values. The
+ * created query component is stored in the context under the key
+ * <code>IQueryComponent.QUERY_COMPONENT</code>. Further explanations are given
+ * about query components in the <code>QueryEntitiesAction</code> documentation.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -59,7 +62,7 @@ public class CreateQueryComponentAction extends BackendAction {
   /**
    * Creates a query component using the model descriptor passed in the context.
    * The action result contains the model connector holding the created query
-   * entity with the key <code>ActionContextConstants.MODEL_CONNECTOR</code>.
+   * entity with the key <code>QUERY_MODEL_CONNECTOR</code>.
    * <p>
    * {@inheritDoc}
    */

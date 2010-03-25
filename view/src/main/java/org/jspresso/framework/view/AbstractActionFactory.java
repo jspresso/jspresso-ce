@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -34,6 +34,9 @@ import org.jspresso.framework.action.IActionHandlerAware;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.IModelChangeListener;
+import org.jspresso.framework.model.ModelChangeEvent;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -48,7 +51,6 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IModelGate;
-import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -75,31 +77,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   public E createAction(IAction action, IActionHandler actionHandler,
       IView<F> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public E createAction(IAction action, Dimension dimension,
-      IActionHandler actionHandler, IView<F> view, Locale locale) {
-    Dimension d = dimension;
-    if (d == null) {
-      d = getIconFactory().getTinyIconSize();
-    }
-    return createAction(action, d, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public E createAction(IAction action, IActionHandler actionHandler,
-      F sourceComponent, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, Locale locale) {
-    return createAction(action, getIconFactory().getTinyIconSize(),
-        actionHandler, sourceComponent, modelDescriptor, viewConnector, locale);
+    return createAction(action, null, actionHandler, view, locale);
   }
 
   /**
@@ -109,16 +87,22 @@ public abstract class AbstractActionFactory<E, F, G> implements
    *          the displayable Jspresso action.
    * @param actionHandler
    *          the action handler.
-   * @param modelDescriptor
-   *          the model descriptor of the view.
-   * @param viewConnector
-   *          the view connector.
+   * @param view
+   *          the view.
    * @param uiAction
    *          the created ui specific action.
    */
   protected void attachActionGates(IDisplayableAction action,
-      IActionHandler actionHandler, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, E uiAction) {
+      IActionHandler actionHandler, IView<F> view, E uiAction) {
+    if (view == null) {
+      return;
+    }
+    IModelDescriptor modelDescriptor = null;
+    IValueConnector viewConnector = null;
+    if (view.getDescriptor() != null) {
+      modelDescriptor = view.getDescriptor().getModelDescriptor();
+    }
+    viewConnector = view.getConnector();
     if (action.getActionabilityGates() != null) {
       Collection<IGate> clonedGates = new HashSet<IGate>();
       for (IGate gate : action.getActionabilityGates()) {
@@ -132,6 +116,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
         if (clonedGate instanceof IModelGate) {
           if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             if (((IModelGate) clonedGate).isCollectionBased()) {
+              ((IModelGate) clonedGate).setModel(null);
               ((ICollectionConnectorProvider) viewConnector)
                   .getCollectionConnector().addSelectionChangeListener(
                       new ISelectionChangeListener() {
@@ -153,25 +138,44 @@ public abstract class AbstractActionFactory<E, F, G> implements
                         }
                       });
             } else {
-              ((ICollectionConnectorProvider) viewConnector)
-                  .getCollectionConnector().addValueChangeListener(
-                      new IValueChangeListener() {
+              if (viewConnector.getModelConnector() != null) {
+                ((IModelGate) clonedGate).setModel(viewConnector
+                    .getModelConnector().getModelProvider().getModel());
+              } else {
+                ((IModelGate) clonedGate).setModel(null);
+              }
+              final IModelChangeListener modelChangeListener = new IModelChangeListener() {
 
-                        public void valueChange(ValueChangeEvent evt) {
-                          ICollectionConnector collectionConnector = (ICollectionConnector) evt
-                              .getSource();
-                          if (collectionConnector.getModelConnector() != null) {
-                            ((IModelGate) clonedGate)
-                                .setModel(collectionConnector
-                                    .getModelProvider().getModel());
-                          } else {
-                            ((IModelGate) clonedGate).setModel(null);
-                          }
-                        }
-                      });
+                public void modelChange(ModelChangeEvent evt) {
+                  ((IModelGate) clonedGate).setModel(evt.getNewValue());
+                }
+              };
+              viewConnector.addPropertyChangeListener("modelConnector",
+                  new PropertyChangeListener() {
+
+                    public void propertyChange(PropertyChangeEvent evt) {
+                      IValueConnector oldModelConnector = (IValueConnector) evt
+                          .getOldValue();
+                      IValueConnector newModelConnector = (IValueConnector) evt
+                          .getNewValue();
+                      if (oldModelConnector != null) {
+                        oldModelConnector.getModelProvider()
+                            .removeModelChangeListener(modelChangeListener);
+                      }
+                      if (newModelConnector != null) {
+                        ((IModelGate) clonedGate).setModel(newModelConnector
+                            .getModelProvider().getModel());
+                        newModelConnector.getModelProvider()
+                            .addModelChangeListener(modelChangeListener);
+                      } else {
+                        ((IModelGate) clonedGate).setModel(null);
+                      }
+                    }
+                  });
             }
           } else if (((IModelGate) clonedGate).isCollectionBased()
               && viewConnector instanceof IItemSelectable) {
+            ((IModelGate) clonedGate).setModel(null);
             ((IItemSelectable) viewConnector)
                 .addItemSelectionListener(new IItemSelectionListener() {
 
@@ -200,6 +204,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
                   }
                 });
           } else if (modelDescriptor instanceof IComponentDescriptorProvider<?>) {
+            ((IModelGate) clonedGate).setModel(viewConnector
+                .getConnectorValue());
             viewConnector.addValueChangeListener(new IValueChangeListener() {
 
               public void valueChange(ValueChangeEvent evt) {
@@ -288,10 +294,8 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * 
    * @param actionHandler
    *          the action handler.
-   * @param modelDescriptor
-   *          the model descriptor.
-   * @param sourceComponent
-   *          the source component.
+   * @param view
+   *          the view.
    * @param viewConnector
    *          the view connector.
    * @param actionCommand
@@ -301,27 +305,34 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * @return the initial action context.
    */
   public Map<String, Object> createActionContext(IActionHandler actionHandler,
-      IModelDescriptor modelDescriptor, F sourceComponent,
-      IValueConnector viewConnector, String actionCommand, F actionWidget) {
+      IView<F> view, IValueConnector viewConnector, String actionCommand,
+      F actionWidget) {
     Map<String, Object> actionContext = actionHandler.createEmptyContext();
+
+    IModelDescriptor modelDescriptor = null;
+    F sourceComponent = null;
+    if (view != null) {
+      if (view.getDescriptor() != null) {
+        modelDescriptor = view.getDescriptor().getModelDescriptor();
+      }
+      sourceComponent = view.getPeer();
+    }
+    IValueConnector refinedViewConnector = viewConnector;
+    if (modelDescriptor instanceof ICollectionDescriptor<?>) {
+      refinedViewConnector = ((ICollectionConnectorProvider) viewConnector)
+          .getCollectionConnector();
+    }
+    actionContext.put(ActionContextConstants.VIEW, view);
     actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR, modelDescriptor);
     actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);
-    actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
-    if (viewConnector instanceof ICollectionConnectorProvider
-        && ((ICollectionConnectorProvider) viewConnector)
+    actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
+        refinedViewConnector);
+    if (refinedViewConnector instanceof ICollectionConnectorProvider
+        && ((ICollectionConnectorProvider) refinedViewConnector)
             .getCollectionConnector() != null) {
       actionContext.put(ActionContextConstants.SELECTED_INDICES,
-          ((ICollectionConnectorProvider) viewConnector)
+          ((ICollectionConnectorProvider) refinedViewConnector)
               .getCollectionConnector().getSelectedIndices());
-    }
-    if (viewConnector instanceof IItemSelectable) {
-      Object selectedItem = ((IItemSelectable) viewConnector).getSelectedItem();
-      if (selectedItem instanceof IValueConnector) {
-        actionContext.put(ActionContextConstants.SELECTED_MODEL,
-            ((IValueConnector) selectedItem).getConnectorValue());
-      } else {
-        actionContext.put(ActionContextConstants.SELECTED_MODEL, selectedItem);
-      }
     }
     actionContext.put(ActionContextConstants.ACTION_COMMAND, actionCommand);
     actionContext.put(ActionContextConstants.ACTION_WIDGET, actionWidget);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -145,4 +145,11 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    * @return true if the property is computed.
    */
   boolean isComputed();
+
+  /**
+   * Gives a preferred width hint for representing the property.
+   * 
+   * @return a preferred width hint for representing the property.
+   */
+  Integer getPreferredWidth();
 }

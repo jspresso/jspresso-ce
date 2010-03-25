@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,9 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * Reloads the projected object(s) in a transaction.
+ * Reloads all the module entities as well as all its sub-modules entities
+ * recursively. The whole entities graphs are reloaded from the persistent
+ * store.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -36,7 +38,8 @@ import org.jspresso.framework.model.entity.IEntity;
 public class ReloadModuleObjectAction extends ReloadAction {
 
   /**
-   * Saves the projected object(s) in a transaction.
+   * All the module entities as well as all its sub-modules entities
+   * recursively.
    * <p>
    * {@inheritDoc}
    */
@@ -44,6 +47,12 @@ public class ReloadModuleObjectAction extends ReloadAction {
   protected List<IEntity> getEntitiesToReload(Map<String, Object> context) {
     List<IEntity> entitiesToReload = new ArrayList<IEntity>();
     Module module = getModule(context);
+    completeEntitiesToReload(module, entitiesToReload);
+    return entitiesToReload;
+  }
+
+  private void completeEntitiesToReload(Module module,
+      List<IEntity> entitiesToReload) {
     if (module instanceof BeanCollectionModule
         && ((BeanCollectionModule) module).getModuleObjects() != null) {
       for (Object entity : ((BeanCollectionModule) module).getModuleObjects()) {
@@ -52,6 +61,10 @@ public class ReloadModuleObjectAction extends ReloadAction {
     } else if (module instanceof BeanModule) {
       entitiesToReload.add((IEntity) ((BeanModule) module).getModuleObject());
     }
-    return entitiesToReload;
+    if (module.getSubModules() != null) {
+      for (Module subModule : module.getSubModules()) {
+        completeEntitiesToReload(subModule, entitiesToReload);
+      }
+    }
   }
 }

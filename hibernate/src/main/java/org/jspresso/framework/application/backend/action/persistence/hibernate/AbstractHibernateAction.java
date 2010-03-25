@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -39,7 +39,12 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
- * This the root abstract class of all hibernate related persistence actions.
+ * This the root abstract class of all hibernate related persistence actions. It
+ * refines the return values of some protected methods (like the controller that
+ * is refined to <code>HibernateBackendController</code>) and adds some new ones
+ * (like the access to the controller's configured &quot;<i>Spring Hibernate
+ * template</i>&quot;. It provides also protected utility methods for various
+ * standard persistence operations on Jspresso managed entities.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

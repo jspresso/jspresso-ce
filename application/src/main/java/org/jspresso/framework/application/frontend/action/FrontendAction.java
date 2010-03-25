@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,6 @@ package org.jspresso.framework.application.frontend.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,9 +31,11 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.gate.CollectionSelectionTrackingGate;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -59,13 +60,12 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private String                mnemonicAsString;
   private boolean               collectionBased;
 
-  private static final IGate    COLLECTION_TRACKING_GATE = new CollectionSelectionTrackingGate();
-
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
    */
   public FrontendAction() {
     actionDescriptor = new DefaultIconDescriptor();
+    setCollectionBased(false);
   }
 
   /**
@@ -104,14 +104,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * @return the actionabilityGates.
    */
   public Collection<IGate> getActionabilityGates() {
-    List<IGate> gates = new ArrayList<IGate>();
-    if (isCollectionBased()) {
-      gates.add(COLLECTION_TRACKING_GATE);
-    }
-    if (actionabilityGates != null) {
-      gates.addAll(actionabilityGates);
-    }
-    return gates;
+    return actionabilityGates;
   }
 
   /**
@@ -202,6 +195,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public void setActionabilityGates(Collection<IGate> actionabilityGates) {
     this.actionabilityGates = actionabilityGates;
+    completeActionabilityGates();
   }
 
   /**
@@ -333,10 +327,30 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * 
    * @param context
    *          the action context.
-   * @return the value connector this model action was triggered on.
+   * @return the value connector this action was triggered on.
    */
   protected IValueConnector getViewConnector(Map<String, Object> context) {
     return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the view this action has
+   * been executed on from its context. It uses well-known context keys of the
+   * action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW</code> to get the the view the action
+   * executes on.
+   * </ul>
+   * <p>
+   * The returned view mainly serves for acting on the view component the action
+   * has to be triggered on.
+   * 
+   * @param context
+   *          the action context.
+   * @return the view this action was triggered on.
+   */
+  protected IView<?> getView(Map<String, Object> context) {
+    return (IView<?>) context.get(ActionContextConstants.VIEW);
   }
 
   /**
@@ -358,6 +372,20 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public void setCollectionBased(boolean collectionBased) {
     this.collectionBased = collectionBased;
+    completeActionabilityGates();
+  }
+
+  private void completeActionabilityGates() {
+    if (actionabilityGates == null) {
+      actionabilityGates = new ArrayList<IGate>();
+    }
+    if (isCollectionBased()) {
+      actionabilityGates.remove(ModelTrackingGate.INSTANCE);
+      actionabilityGates.add(CollectionSelectionTrackingGate.INSTANCE);
+    } else {
+      actionabilityGates.remove(CollectionSelectionTrackingGate.INSTANCE);
+      actionabilityGates.add(ModelTrackingGate.INSTANCE);
+    }
   }
 
   /**

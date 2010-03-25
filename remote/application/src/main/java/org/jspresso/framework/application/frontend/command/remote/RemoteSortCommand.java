@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,6 +32,7 @@ public class RemoteSortCommand extends RemoteCommand {
 
   private Map<String, String> orderingProperties;
   private String              viewStateGuid;
+  private String              viewStateAutomationId;
 
   /**
    * Gets the viewStateGuid.
@@ -69,5 +70,24 @@ public class RemoteSortCommand extends RemoteCommand {
    */
   public void setOrderingProperties(Map<String, String> orderingProperties) {
     this.orderingProperties = orderingProperties;
+  }
+
+  /**
+   * Gets the viewStateAutomationId.
+   * 
+   * @return the viewStateAutomationId.
+   */
+  public String getViewStateAutomationId() {
+    return viewStateAutomationId;
+  }
+
+  /**
+   * Sets the viewStateAutomationId.
+   * 
+   * @param viewStateAutomationId
+   *          the viewStateAutomationId to set.
+   */
+  public void setViewStateAutomationId(String viewStateAutomationId) {
+    this.viewStateAutomationId = viewStateAutomationId;
   }
 }

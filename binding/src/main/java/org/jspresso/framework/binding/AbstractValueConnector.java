@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -64,8 +64,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   private IValueConnector          modelConnector;
   private PropertyChangeListener   modelReadabilityListener;
   private PropertyChangeListener   modelWritabilityListener;
-  private PropertyChangeListener   parentReadabilityListener;
-  private PropertyChangeListener   parentWritabilityListener;
   private Object                   oldConnectorValue;
 
   private boolean                  oldReadability;
@@ -284,8 +282,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
     clonedConnector.writabilityGates = null;
     clonedConnector.modelReadabilityListener = null;
     clonedConnector.modelWritabilityListener = null;
-    clonedConnector.parentReadabilityListener = null;
-    clonedConnector.parentWritabilityListener = null;
     clonedConnector.readabilityGatesListener = null;
     clonedConnector.writabilityGatesListener = null;
     if (readabilityGates != null) {
@@ -450,7 +446,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (getModelConnector() != null && !getModelConnector().isReadable()) {
       return false;
     }
-    return locallyReadable && GateHelper.areGatesOpen(readabilityGates);
+    return isLocallyReadable();
   }
 
   /**
@@ -466,7 +462,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (getModelConnector() != null && !getModelConnector().isWritable()) {
       return false;
     }
-    return locallyWritable && GateHelper.areGatesOpen(writabilityGates);
+    return isLocallyWritable();
   }
 
   /**
@@ -639,44 +635,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *          the parentConnector to set.
    */
   public void setParentConnector(ICompositeValueConnector parentConnector) {
-    IValueConnector oldParentConnector = getParentConnector();
     this.parentConnector = parentConnector;
-    if (oldParentConnector != parentConnector) {
-      if (oldParentConnector != null) {
-        if (parentReadabilityListener != null) {
-          oldParentConnector.removePropertyChangeListener(READABLE_PROPERTY,
-              parentReadabilityListener);
-        }
-        if (parentWritabilityListener != null) {
-          oldParentConnector.removePropertyChangeListener(WRITABLE_PROPERTY,
-              parentReadabilityListener);
-        }
-      }
-      if (parentConnector != null) {
-        if (parentReadabilityListener == null) {
-          parentReadabilityListener = new PropertyChangeListener() {
-
-            public void propertyChange(
-                @SuppressWarnings("unused") PropertyChangeEvent evt) {
-              readabilityChange();
-            }
-          };
-        }
-        parentConnector.addPropertyChangeListener(READABLE_PROPERTY,
-            parentReadabilityListener);
-        if (parentWritabilityListener == null) {
-          parentWritabilityListener = new PropertyChangeListener() {
-
-            public void propertyChange(
-                @SuppressWarnings("unused") PropertyChangeEvent evt) {
-              writabilityChange();
-            }
-          };
-        }
-        parentConnector.addPropertyChangeListener(WRITABLE_PROPERTY,
-            parentWritabilityListener);
-      }
-    }
   }
 
   /**
@@ -779,7 +738,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * Called whenever readability may have changed.
    */
-  protected void readabilityChange() {
+  public void readabilityChange() {
     boolean readable = isReadable();
     firePropertyChange(READABLE_PROPERTY, oldReadability, readable);
     oldReadability = readable;
@@ -796,7 +755,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * Called whenever writability may have changed.
    */
-  protected void writabilityChange() {
+  public void writabilityChange() {
     boolean writable = isWritable();
     firePropertyChange(WRITABLE_PROPERTY, oldWritability, writable);
     oldWritability = writable;
@@ -866,5 +825,23 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   protected Subject getSubject() {
     return subject;
+  }
+
+  /**
+   * Gets the locallyWritable.
+   * 
+   * @return the locallyWritable.
+   */
+  protected boolean isLocallyWritable() {
+    return locallyWritable && GateHelper.areGatesOpen(getWritabilityGates());
+  }
+
+  /**
+   * Gets the locallyReadable.
+   * 
+   * @return the locallyReadable.
+   */
+  protected boolean isLocallyReadable() {
+    return locallyReadable && GateHelper.areGatesOpen(getReadabilityGates());
   }
 }

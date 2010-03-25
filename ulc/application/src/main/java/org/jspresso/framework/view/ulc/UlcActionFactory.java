@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,9 +23,9 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.AbstractActionFactory;
+import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 import com.ulcjava.base.application.IAction;
@@ -48,17 +48,16 @@ public class UlcActionFactory extends
    */
   public IAction createAction(org.jspresso.framework.action.IAction action,
       Dimension dimension, IActionHandler actionHandler,
-      ULCComponent sourceComponent, IModelDescriptor modelDescriptor,
-      IValueConnector viewConnector, Locale locale) {
+      IView<ULCComponent> view, Locale locale) {
     Dimension d = dimension;
     if (d == null) {
       d = getIconFactory().getTinyIconSize();
     }
-    IAction ulcAction = new ActionAdapter(action, d, actionHandler,
-        sourceComponent, modelDescriptor, viewConnector, locale);
+    IAction ulcAction = new ActionAdapter(action, d, actionHandler, view,
+        locale);
     if (action instanceof IDisplayableAction) {
-      attachActionGates(((IDisplayableAction) action), actionHandler,
-          modelDescriptor, viewConnector, ulcAction);
+      attachActionGates(((IDisplayableAction) action), actionHandler, view,
+          ulcAction);
     }
     return ulcAction;
   }
@@ -84,9 +83,7 @@ public class UlcActionFactory extends
 
     private org.jspresso.framework.action.IAction action;
     private IActionHandler                        actionHandler;
-    private IModelDescriptor                      modelDescriptor;
-    private ULCComponent                          sourceComponent;
-    private IValueConnector                       viewConnector;
+    private IView<ULCComponent>                   view;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
@@ -94,23 +91,19 @@ public class UlcActionFactory extends
      * @param action
      * @param dimension
      * @param actionHandler
-     * @param sourceComponent
-     * @param modelDescriptor
-     * @param viewConnector
+     * @param view
      * @param locale
      */
     public ActionAdapter(org.jspresso.framework.action.IAction action,
         Dimension dimension, IActionHandler actionHandler,
-        ULCComponent sourceComponent, IModelDescriptor modelDescriptor,
-        IValueConnector viewConnector, Locale locale) {
+        IView<ULCComponent> view, Locale locale) {
       this.action = action;
       this.actionHandler = actionHandler;
-      this.sourceComponent = sourceComponent;
-      this.modelDescriptor = modelDescriptor;
-      this.viewConnector = viewConnector;
+      this.view = view;
       if (action instanceof IDisplayableAction) {
         putValue(IAction.NAME, ((IDisplayableAction) action).getI18nName(
             getTranslationProvider(), locale));
+        putValue(IAction.ACTION_COMMAND_KEY, "");
         String i18nDescription = ((IDisplayableAction) action)
             .getI18nDescription(getTranslationProvider(), locale);
         if (i18nDescription != null) {
@@ -129,22 +122,17 @@ public class UlcActionFactory extends
     }
 
     /**
-     * Triggers the action execution on the action handler. The following
-     * initial action context is filled in : <li>
-     * <code>ActionContextConstants.SOURCE_COMPONENT</code> <li>
-     * <code>ActionContextConstants.VIEW_CONNECTOR</code> <li>
-     * <code>ActionContextConstants.MODEL_CONNECTOR</code> <li>
-     * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> <li>
-     * <code>ActionContextConstants.SELECTED_INDICES</code> <li>
-     * <code>ActionContextConstants.LOCALE</code>
-     * <p>
      * {@inheritDoc}
      */
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
+        IValueConnector viewConnector = null;
+        if (view != null) {
+          viewConnector = view.getConnector();
+        }
         Map<String, Object> actionContext = createActionContext(actionHandler,
-            modelDescriptor, sourceComponent, viewConnector, e
-                .getActionCommand(), (ULCComponent) e.getSource());
+            view, viewConnector, e.getActionCommand(), (ULCComponent) e
+                .getSource());
         actionHandler.execute(action, actionContext);
       }
     }

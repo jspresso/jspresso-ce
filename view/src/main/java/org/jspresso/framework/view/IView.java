@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,6 @@ package org.jspresso.framework.view;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * This interface establishes the general contract of a view. Its main role is
  * to provide a pair of (visible peer , connector) used by the framework.
@@ -29,7 +28,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            The root class of the view peers.
+ *          The root class of the view peers.
  */
 public interface IView<E> extends IViewProvider<E> {
 
@@ -60,7 +59,7 @@ public interface IView<E> extends IViewProvider<E> {
    * the view peer.
    * 
    * @param connector
-   *            the view connector.
+   *          the view connector.
    */
   void setConnector(IValueConnector connector);
 
@@ -68,7 +67,22 @@ public interface IView<E> extends IViewProvider<E> {
    * Sets the view peer of this view.
    * 
    * @param peer
-   *            the view peer.
+   *          the view peer.
    */
   void setPeer(E peer);
+
+  /**
+   * Gets the parent view or null if it's a root view.
+   * 
+   * @return the parent view or null if it's a root view.
+   */
+  ICompositeView<E> getParent();
+
+  /**
+   * Sets the parent view or null if it's a root view.
+   * 
+   * @param parent
+   *          the parent view or null if it's a root view.
+   */
+  void setParent(ICompositeView<E> parent);
 }

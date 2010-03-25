@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -35,7 +35,11 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
 /**
- * This action removes the selected objects from the projected collection.
+ * This action, which is to be used on bean collection modules, removes the
+ * selected objects from the module's projected collection <b>and deletes them
+ * from the persistent store</b>. If one (or more) of the removed objects are
+ * also used in children bean modules, the corresponding children bean modules
+ * are also removed accordingly.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,6 +22,7 @@ import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.automation.IAutomationSource;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
@@ -31,10 +32,11 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * @author Vincent Vandenschrick
  */
 public class RemoteValueConnector extends BasicValueConnector implements
-    IRemotePeer, IRemoteStateOwner {
+    IRemotePeer, IRemoteStateOwner, IAutomationSource {
 
   private RemoteConnectorFactory  connectorFactory;
   private String                  guid;
+  private String                  automationSeed;
   private RemoteValueState        state;
   private IRemoteStateValueMapper remoteStateValueMapper;
 
@@ -101,8 +103,8 @@ public class RemoteValueConnector extends BasicValueConnector implements
    * @return the newly created state.
    */
   protected RemoteValueState createState() {
-    RemoteValueState createdState = connectorFactory
-        .createRemoteValueState(getGuid());
+    RemoteValueState createdState = connectorFactory.createRemoteValueState(
+        getGuid(), getAutomationSeed());
     return createdState;
   }
 
@@ -168,5 +170,27 @@ public class RemoteValueConnector extends BasicValueConnector implements
   public void setRemoteStateValueMapper(
       IRemoteStateValueMapper remoteStateValueMapper) {
     this.remoteStateValueMapper = remoteStateValueMapper;
+  }
+
+  /**
+   * Gets the automationSeed.
+   * 
+   * @return the automationSeed.
+   */
+  public String getAutomationSeed() {
+    if (automationSeed != null) {
+      return automationSeed;
+    }
+    return getId();
+  }
+
+  /**
+   * Sets the automationSeed.
+   * 
+   * @param automationSeed
+   *          the automationSeed to set.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 }

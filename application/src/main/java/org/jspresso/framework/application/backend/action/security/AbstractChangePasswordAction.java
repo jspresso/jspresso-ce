@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2009 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.framework.application.backend.action.security;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.security.Base64Encoder;
+import org.jboss.security.Util;
 import org.jspresso.framework.action.ActionBusinessException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
@@ -44,7 +44,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * 
  * <pre>
  * protected abstract boolean changePassword(UserPrincipal userPrincipal,
- *       String currentPassword, String newPassword)
+ *           String currentPassword, String newPassword)
  * </pre>
  * 
  * @version $LastChangedRevision$
@@ -72,15 +72,34 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   public static final String                                    PASSWD_TYPED             = "password_typed";
 
   private String                                                digestAlgorithm;
+  private String                                                hashEncoding;
 
   /**
-   * Sets the digestAlgorithm to use to hash the password before storing it.
+   * Sets the digestAlgorithm to use to hash the password before storing it (MD5
+   * for instance).
    * 
    * @param digestAlgorithm
    *          the digestAlgorithm to set.
    */
   public void setDigestAlgorithm(String digestAlgorithm) {
     this.digestAlgorithm = digestAlgorithm;
+  }
+
+  /**
+   * Sets the hashEncoding to encode the password hash before storing it. You
+   * may choose between :
+   * <ul>
+   * <li><code>BASE64</code> for base 64 encoding.</li>
+   * <li><code>HEX</code> for base 16 encoding.</li>
+   * <li><code>RFC2617</code> for RFC 2617 encoding.</li>
+   * </ul>
+   * Default encoding is <code>BASE64</code>.
+   * 
+   * @param hashEncoding
+   *          the hashEncoding to set.
+   */
+  public void setHashEncoding(String hashEncoding) {
+    this.hashEncoding = hashEncoding;
   }
 
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
@@ -141,18 +160,27 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * @throws IOException
    *           whenever an I/O exception occurs.
    */
-  protected String digest(char[] newPassword) throws NoSuchAlgorithmException,
-      IOException {
+  protected String digestAndEncode(char[] newPassword)
+      throws NoSuchAlgorithmException, IOException {
     if (getDigestAlgorithm() != null) {
-      String prefix = "{" + getDigestAlgorithm() + "}";
       MessageDigest md = MessageDigest.getInstance(getDigestAlgorithm());
       md.reset();
       md.update(new String(newPassword).getBytes("UTF-8"));
 
       byte[] digest = md.digest();
-      return prefix + Base64Encoder.encode(digest);
+      return getPasswordStorePrefix() + encode(digest);
     }
     return new String(newPassword);
+  }
+
+  /**
+   * Returns a prefix to use before storing a password. An example usage is to
+   * prefix the password hash with the type of hash, e.g. {MD5}.
+   * 
+   * @return a prefix to use before storing a password.
+   */
+  protected String getPasswordStorePrefix() {
+    return "";
   }
 
   /**
@@ -176,5 +204,35 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    */
   protected String getDigestAlgorithm() {
     return digestAlgorithm;
+  }
+
+  /**
+   * Gets the hashEncoding.
+   * 
+   * @return the hashEncoding.
+   */
+  protected String getHashEncoding() {
+    return hashEncoding;
+  }
+
+  /**
+   * Encodes the password hash based on the hash encoding parameter (either
+   * Base64, Base16 or RFC2617). Defaults to Base64.
+   * 
+   * @param source
+   *          the byte array (hash) to encode.
+   * @return the encoded string.
+   */
+  protected String encode(byte[] source) {
+    String he = getHashEncoding();
+    if (Util.BASE64_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeBase64(source);
+    } else if (Util.BASE16_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeBase16(source);
+    } else if (Util.RFC2617_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeRFC2617(source);
+    }
+    // defaults to Base64
+    return Util.encodeBase64(source);
   }
 }
