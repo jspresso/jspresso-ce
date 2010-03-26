@@ -59,6 +59,9 @@
           </locales>
           <mergeResourceBundle>true</mergeResourceBundle>
           <contextRoot>${rootArtifactId}-webapp</contextRoot>
+          <parameters>
+            <swf>${project.artifactId}</swf>
+          </parameters>
         </configuration>
       </plugin>
       <plugin>

@@ -127,18 +127,6 @@
               <excludeTransitive>true</excludeTransitive>
             </configuration>
           </execution>
-          <execution>
-            <id>copy-flex-dependencies</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/${project.artifactId}/flex</outputDirectory>
-              <includeTypes>swf</includeTypes>
-              <stripVersion>true</stripVersion>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -158,30 +146,22 @@
           <execution>
             <goals>
               <goal>wrapper</goal>
+              <goal>copy-flex-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/${project.artifactId}/flex</outputDirectory>
-              <htmlName>index</htmlName>
-              <templateUri>folder:${basedir}/src/main/flex-template</templateUri>
-              <parameters>
-                <swf>${rootArtifactId}-startup-flex-client</swf>
-              </parameters>
-              <!--
-              <targetPlayer>9.0.124</targetPlayer>
-              <templateURI>folder:html-template</templateURI>
-              <parameters>
-                  <bgcolor>#ffffff</bgcolor>
-                  Version comes from 'targetPlayer' or '9.0.0' if no targetPlayer.
-                  <version_major>9</version_major>
-                  <version_minor>0</version_minor>
-                  <version_revision>0</version_revision>
-                  <swf>${project.build.finalName}</swf>
-                  <width>100%</height>
-                  <height>100%</height>
-                  <application>${project.artifactId}</application>
-                  <bgcolor>#869ca7</bgcolor>
-              </parameters>
-              -->
+              <wrapperArtifact>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${rootArtifactId}-startup-flex-client</artifactId>
+              </wrapperArtifact>
+              <templateInclusions>
+                <String>**/flex/*.html</String>
+              </templateInclusions>
+              <templateExclusions>
+                <String>**/flex/*.js</String>
+              </templateExclusions>
+              
+              <stripVersion>true</stripVersion>
+              <webappDirectory>${project.build.directory}/${project.artifactId}/flex</webappDirectory>
             </configuration>
           </execution>
         </executions>
