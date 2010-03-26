@@ -14,7 +14,7 @@
     <sjs.version>1.0-SNAPSHOT</sjs.version>
     <junit.version>3.8.1</junit.version>
     <blazeds.version>3.2.0.3978</blazeds.version>
-    <datetimelibrary.version>1.0.1</datetimelibrary.version>
+    <datetimelibrary.version>1.0.2</datetimelibrary.version>
     <spring.version>2.5.6</spring.version>
     <spring-ldap.version>1.3.0.RELEASE</spring-ldap.version>
     <ldapbp.version>1.0</ldapbp.version>
