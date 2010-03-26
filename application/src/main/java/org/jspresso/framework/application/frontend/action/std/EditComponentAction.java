@@ -73,8 +73,11 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
     IView<E> componentView = getViewFactory(context).createView(
         getViewDescriptor(context), actionHandler, getLocale(context));
-    context.put(ModalDialogAction.DIALOG_TITLE, getI18nName(
-        getTranslationProvider(context), getLocale(context)));
+    String dialogTitle = getI18nName(getTranslationProvider(context),
+        getLocale(context));
+    if (dialogTitle != null && dialogTitle.length() > 0) {
+      context.put(ModalDialogAction.DIALOG_TITLE, dialogTitle);
+    }
     context.put(ModalDialogAction.DIALOG_VIEW, componentView);
 
     IValueConnector componentConnector = modelConnectorFactory
