@@ -5,7 +5,7 @@
       <compilerSourcePathEntry kind="1" linkType="1" path="flex/src/main/resources"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="flex/src/main/locales/{locale}"/>
     </compilerSourcePath>
-    <libraryPath defaultLinkType="1">
+    <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path=""/>
       <libraryPathEntry kind="3" linkType="1" path="C:/Documents and Settings/Vincent/.m2/repository/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
     </libraryPath>

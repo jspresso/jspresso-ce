@@ -14,6 +14,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
       <groupId>org.jspresso.framework</groupId>
       <artifactId>jspresso-flex</artifactId>
       <type>swc</type>

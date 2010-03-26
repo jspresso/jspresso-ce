@@ -15,8 +15,14 @@
     <jspresso.version>3.0.1-SNAPSHOT</jspresso.version>
     <sjs.version>1.0-SNAPSHOT</sjs.version>
     <junit.version>3.8.1</junit.version>
+
     <flex.version>3.4.0.9271</flex.version>
     <flexunit.version>0.90</flexunit.version>
+    <!--
+    <flex.version>4.0.0.8811</flex.version>
+    <flexunit.version>4.0-rc-1</flexunit.version>
+    -->
+
     <blazeds.version>3.2.0.3978</blazeds.version>
     <datetimelibrary.version>1.0.2</datetimelibrary.version>
     <spring.version>2.5.6</spring.version>
@@ -720,6 +726,12 @@
         <artifactId>flex-framework</artifactId>
         <version>${flex.version}</version>
         <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>com.adobe.flex.framework</groupId>
+        <artifactId>framework</artifactId>
+        <version>${flex.version}</version>
+        <type>swc</type>
       </dependency>
       <dependency>
         <groupId>org.qooxdoo</groupId>

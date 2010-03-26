@@ -12,14 +12,20 @@
 
   <dependencies>
     <dependency>
-      <groupId>datetimelibrary</groupId>
-      <artifactId>datetimelibrary</artifactId>
-      <type>swc</type>
-    </dependency>
-    <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>flex-framework</artifactId>
       <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>framework</artifactId>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>datetimelibrary</groupId>
+      <artifactId>datetimelibrary</artifactId>
+      <type>swc</type>
     </dependency>
   </dependencies>
 
@@ -30,6 +36,7 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
+        <!--
         <executions>
           <execution>
             <id>generate-asdoc</id>
@@ -45,6 +52,7 @@
             </goals>
           </execution>
         </executions>
+        -->
         <configuration>
           <locales>
             <locale>en_US</locale>
