@@ -263,20 +263,28 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view.getConnector().setLocallyWritable(!viewDescriptor.isReadOnly());
       if (viewDescriptor.getReadabilityGates() != null) {
         for (IGate gate : viewDescriptor.getReadabilityGates()) {
-          IGate clonedGate = gate.clone();
-          if (clonedGate instanceof IActionHandlerAware) {
-            ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+          if (!(gate instanceof ISecurable)
+              || actionHandler.isAccessGranted((ISecurable) gate)) {
+            IGate clonedGate = gate.clone();
+            if (clonedGate instanceof IActionHandlerAware) {
+              ((IActionHandlerAware) clonedGate)
+                  .setActionHandler(actionHandler);
+            }
+            view.getConnector().addReadabilityGate(clonedGate);
           }
-          view.getConnector().addReadabilityGate(clonedGate);
         }
       }
       if (viewDescriptor.getWritabilityGates() != null) {
         for (IGate gate : viewDescriptor.getWritabilityGates()) {
-          IGate clonedGate = gate.clone();
-          if (clonedGate instanceof IActionHandlerAware) {
-            ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+          if (!(gate instanceof ISecurable)
+              || actionHandler.isAccessGranted((ISecurable) gate)) {
+            IGate clonedGate = gate.clone();
+            if (clonedGate instanceof IActionHandlerAware) {
+              ((IActionHandlerAware) clonedGate)
+                  .setActionHandler(actionHandler);
+            }
+            view.getConnector().addWritabilityGate(clonedGate);
           }
-          view.getConnector().addWritabilityGate(clonedGate);
         }
       }
       view.getConnector().setSubject(actionHandler.getSubject());
@@ -854,20 +862,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
     columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
     if (columnViewDescriptor.getReadabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-        IGate clonedGate = gate.clone();
-        if (clonedGate instanceof IActionHandlerAware) {
-          ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+        if (!(gate instanceof ISecurable)
+            || actionHandler.isAccessGranted((ISecurable) gate)) {
+          IGate clonedGate = gate.clone();
+          if (clonedGate instanceof IActionHandlerAware) {
+            ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+          }
+          columnConnector.addReadabilityGate(clonedGate);
         }
-        columnConnector.addReadabilityGate(clonedGate);
       }
     }
     if (columnViewDescriptor.getWritabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-        IGate clonedGate = gate.clone();
-        if (clonedGate instanceof IActionHandlerAware) {
-          ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+        if (!(gate instanceof ISecurable)
+            || actionHandler.isAccessGranted((ISecurable) gate)) {
+          IGate clonedGate = gate.clone();
+          if (clonedGate instanceof IActionHandlerAware) {
+            ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+          }
+          columnConnector.addWritabilityGate(clonedGate);
         }
-        columnConnector.addWritabilityGate(clonedGate);
       }
     }
     columnConnector.setSubject(actionHandler.getSubject());

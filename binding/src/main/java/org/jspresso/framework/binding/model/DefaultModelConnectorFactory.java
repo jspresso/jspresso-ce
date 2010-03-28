@@ -30,6 +30,8 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IGateAccessible;
@@ -91,13 +93,19 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
         if (((IGateAccessible) modelDescriptor).getReadabilityGates() != null) {
           for (IGate gate : ((IGateAccessible) modelDescriptor)
               .getReadabilityGates()) {
-            modelConnector.addReadabilityGate(gate.clone());
+            if (!(gate instanceof ISecurable)
+                || SecurityHelper.isSubjectGranted(subject, (ISecurable) gate)) {
+              modelConnector.addReadabilityGate(gate.clone());
+            }
           }
         }
         if (((IGateAccessible) modelDescriptor).getWritabilityGates() != null) {
           for (IGate gate : ((IGateAccessible) modelDescriptor)
               .getWritabilityGates()) {
-            modelConnector.addWritabilityGate(gate.clone());
+            if (!(gate instanceof ISecurable)
+                || SecurityHelper.isSubjectGranted(subject, (ISecurable) gate)) {
+              modelConnector.addWritabilityGate(gate.clone());
+            }
           }
         }
       }
