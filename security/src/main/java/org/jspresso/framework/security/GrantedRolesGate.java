@@ -30,8 +30,7 @@ import org.jspresso.framework.util.gate.AbstractGate;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class GrantedRolesGate extends AbstractGate implements ISecurable,
-    ISubjectAware {
+public class GrantedRolesGate extends AbstractGate implements ISubjectAware {
 
   private boolean            open;
   private Collection<String> grantedRoles;
@@ -48,7 +47,12 @@ public class GrantedRolesGate extends AbstractGate implements ISecurable,
    */
   public void setSubject(Subject subject) {
     boolean oldOpen = isOpen();
-    this.open = SecurityHelper.isSubjectGranted(subject, this);
+    this.open = SecurityHelper.isSubjectGranted(subject, new ISecurable() {
+
+      public Collection<String> getGrantedRoles() {
+        return GrantedRolesGate.this.getGrantedRoles();
+      }
+    });
     firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }
 
@@ -57,7 +61,7 @@ public class GrantedRolesGate extends AbstractGate implements ISecurable,
    * 
    * @return the grantedRoles.
    */
-  public Collection<String> getGrantedRoles() {
+  protected Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
 

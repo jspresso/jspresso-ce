@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
@@ -39,12 +40,13 @@ import org.jspresso.framework.util.gate.AbstractModelGate;
  *          the actual property type.
  */
 public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
-    implements PropertyChangeListener {
+    implements PropertyChangeListener, ISecurable {
 
-  private IAccessorFactory accessorFactory;
-  private String           propertyName;
-  private boolean          open;
-  private boolean          openOnTrue;
+  private IAccessorFactory   accessorFactory;
+  private String             propertyName;
+  private boolean            open;
+  private boolean            openOnTrue;
+  private Collection<String> grantedRoles;
 
   /**
    * Constructs a new <code>AbstractPropertyModelGate</code> instance.
@@ -225,5 +227,24 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
    *         property).
    */
   protected abstract boolean shouldOpen(E propertyValue);
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
+  }
 
 }
