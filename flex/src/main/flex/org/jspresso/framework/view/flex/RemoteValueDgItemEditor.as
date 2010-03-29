@@ -18,6 +18,7 @@ package org.jspresso.framework.view.flex
   
   import mx.containers.Canvas;
   import mx.controls.CheckBox;
+  import mx.controls.TextInput;
   import mx.core.Container;
   import mx.core.ScrollPolicy;
   import mx.core.UIComponent;
@@ -77,6 +78,15 @@ package org.jspresso.framework.view.flex
         _state.value = ((value as RemoteCompositeValueState).children[index] as RemoteValueState).value;
       } else if(value is RemoteValueState) {
         _state.value = (value as RemoteValueState).value;
+      }
+      if(_state.value == null || _state.value == ""){
+        var tf:UIComponent;
+        if(_editor is Container) {
+          tf = (_editor as Container).getChildByName("tf") as UIComponent;
+        }
+        if(tf is TextInput) {
+          (tf as TextInput).text = "";
+        }
       }
     }
     
