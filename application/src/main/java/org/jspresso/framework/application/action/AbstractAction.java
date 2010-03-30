@@ -21,6 +21,7 @@ package org.jspresso.framework.application.action;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.IController;
@@ -215,5 +216,13 @@ public abstract class AbstractAction extends AbstractActionContextAware
    */
   public void setAutomationSeed(String automationSeed) {
     this.automationSeed = automationSeed;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).toString();
   }
 }

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.frontend.IFrontendController;
@@ -395,5 +396,15 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public boolean isCollectionBased() {
     return collectionBased;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("name", getName()).append(
+        "description", getDescription()).append("iconImageURL",
+        getIconImageURL()).toString();
   }
 }
