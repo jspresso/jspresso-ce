@@ -48,11 +48,16 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
    * @return the application backend controller.
    */
   protected IBackendController getBackendController() {
-    if (backendController == null) {
-      backendController = (IBackendController) getApplicationContext().getBean(
-          "applicationBackController");
+    try {
+      if (backendController == null) {
+        backendController = (IBackendController) getApplicationContext()
+            .getBean("applicationBackController");
+      }
+      return backendController;
+    } catch (RuntimeException ex) {
+      getLogger().error("applicationBackController could not be instanciated.",
+          ex);
+      throw ex;
     }
-    return backendController;
-
   }
 }

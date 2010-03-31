@@ -33,8 +33,7 @@ import org.jspresso.framework.application.frontend.IFrontendController;
  * @param <G>
  *          the actual action type used.
  */
-public abstract class AbstractFrontendStartup<E, F, G> extends
-    AbstractStartup {
+public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
 
   private IBackendController           backendController;
   private IFrontendController<E, F, G> frontendController;
@@ -58,11 +57,17 @@ public abstract class AbstractFrontendStartup<E, F, G> extends
    * @return the application backend controller.
    */
   protected IBackendController getBackendController() {
-    if (backendController == null) {
-      backendController = (IBackendController) getApplicationContext().getBean(
-          "applicationBackController");
+    try {
+      if (backendController == null) {
+        backendController = (IBackendController) getApplicationContext()
+            .getBean("applicationBackController");
+      }
+      return backendController;
+    } catch (RuntimeException ex) {
+      getLogger().error("applicationBackController could not be instanciated.",
+          ex);
+      throw ex;
     }
-    return backendController;
 
   }
 
@@ -73,10 +78,16 @@ public abstract class AbstractFrontendStartup<E, F, G> extends
    */
   @SuppressWarnings("unchecked")
   protected IFrontendController<E, F, G> getFrontendController() {
-    if (frontendController == null) {
-      frontendController = (IFrontendController<E, F, G>) getApplicationContext()
-          .getBean("applicationFrontController");
+    try {
+      if (frontendController == null) {
+        frontendController = (IFrontendController<E, F, G>) getApplicationContext()
+            .getBean("applicationFrontController");
+      }
+      return frontendController;
+    } catch (RuntimeException ex) {
+      getLogger().error(
+          "applicationFrontController could not be instanciated.", ex);
+      throw ex;
     }
-    return frontendController;
   }
 }
