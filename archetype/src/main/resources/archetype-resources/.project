@@ -54,12 +54,14 @@
       <location>WORKSPACE_ABSOLUTE_PATH/${artifactId}/webapp/target/${artifactId}-webapp/lib
       </location>
     </link>
+    <!--
     <link>
       <name>webapp/src/main/webapp/flex</name>
       <type>2</type>
       <location>WORKSPACE_ABSOLUTE_PATH/${artifactId}/webapp/target/${artifactId}-webapp/flex
       </location>
     </link>
+    -->
     <link>
       <name>html-template</name>
       <type>2</type>
