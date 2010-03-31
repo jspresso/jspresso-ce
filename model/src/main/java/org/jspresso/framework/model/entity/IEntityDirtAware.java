@@ -38,27 +38,4 @@ public interface IEntityDirtAware {
    *         dirty properties with their original values.
    */
   Map<String, Object> getDirtyProperties(IEntity entity);
-
-  /**
-   * Gets wether the entity is dirty (has changes that need to be updated to the
-   * persistent store).
-   * 
-   * @param entity
-   *          the entity to test.
-   * @return true if the entity is dirty.
-   */
-  boolean isDirty(IEntity entity);
-
-  /**
-   * Gets wether the entity property is dirty (has changes that need to be
-   * updated to the persistent store).
-   * 
-   * @param entity
-   *          the entity to test.
-   * @param property
-   *          the entity property to test.
-   * @return true if the entity is dirty.
-   */
-  boolean isDirty(IEntity entity, String property);
-
 }

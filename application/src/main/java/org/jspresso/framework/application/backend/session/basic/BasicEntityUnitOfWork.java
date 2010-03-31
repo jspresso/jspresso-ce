@@ -131,23 +131,6 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
-  public boolean isDirty(IEntity entity) {
-    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    return (entityDirtyProperties != null && entityDirtyProperties.size() > 0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isDirty(IEntity entity, String propertyName) {
-    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    return (entityDirtyProperties != null && entityDirtyProperties
-        .containsKey(propertyName));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public boolean isEntityRegisteredForDeletion(IEntity entity) {
     return entitiesRegisteredForDeletion != null
         && entitiesRegisteredForDeletion.contains(entity);

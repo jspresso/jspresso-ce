@@ -309,4 +309,5 @@ public interface IBackendController extends IController,
    * @return true if any of the entities is dirty in depth.
    */
   boolean isAnyDirtyInDepth(Collection<?> elements);
+
 }

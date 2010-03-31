@@ -400,14 +400,30 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * {@inheritDoc}
+   * Gets wether the entity is dirty (has changes that need to be updated to the
+   * persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @return true if the entity is dirty.
    */
-  public boolean isDirty(IEntity entity) {
-    if (unitOfWork.isActive()) {
-      return unitOfWork.isDirty(entity);
+  protected boolean isDirty(IEntity entity) {
+    if (entity == null) {
+      return false;
     }
     Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    return (entityDirtyProperties != null && entityDirtyProperties.size() > 0);
+    IComponentDescriptor<?> entityDescriptor = getEntityFactory()
+        .getComponentDescriptor(entity.getComponentContract());
+    if (entityDirtyProperties != null) {
+      for (Map.Entry<String, Object> dirtyProperty : entityDirtyProperties
+          .entrySet()) {
+        if (!entityDescriptor.getPropertyDescriptor(dirtyProperty.getKey())
+            .isComputed()) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**
@@ -464,15 +480,27 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * {@inheritDoc}
+   * Gets wether the entity property is dirty (has changes that need to be
+   * updated to the persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @param propertyName
+   *          the entity property to test.
+   * @return true if the entity is dirty.
    */
-  public boolean isDirty(IEntity entity, String propertyName) {
-    if (unitOfWork.isActive()) {
-      return unitOfWork.isDirty(entity, propertyName);
+  protected boolean isDirty(IEntity entity, String propertyName) {
+    if (entity == null) {
+      return false;
     }
     Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    return (entityDirtyProperties != null && entityDirtyProperties
-        .containsKey(propertyName));
+    if (entityDirtyProperties != null
+        && entityDirtyProperties.containsKey(propertyName)) {
+      return !getEntityFactory().getComponentDescriptor(
+          entity.getComponentContract()).getPropertyDescriptor(propertyName)
+          .isComputed();
+    }
+    return false;
   }
 
   /**
