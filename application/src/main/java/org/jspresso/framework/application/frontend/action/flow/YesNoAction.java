@@ -24,7 +24,9 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 
 /**
- * Action to ask a binary question to the user.
+ * This action pops-up a binary question. Depending on user answer, another
+ * action is triggered. The Yes - No alternative actions are parameterized
+ * statically.
  * 
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
@@ -55,7 +57,8 @@ public class YesNoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   }
 
   /**
-   * Sets the noAction.
+   * Assigns the action to execute when the user answers negatively to the
+   * question.
    * 
    * @param noAction
    *          the noAction to set.
@@ -65,7 +68,8 @@ public class YesNoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   }
 
   /**
-   * Sets the yesAction.
+   * Assigns the action to execute when the user answers positively to the
+   * question.
    * 
    * @param yesAction
    *          the yesAction to set.

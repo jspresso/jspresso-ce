@@ -24,7 +24,9 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 
 /**
- * Action to ask a user validation.
+ * This action pops-up an Ok - Cancel confirmation option. Depending on user
+ * answer, another action is triggered. The Ok - Cancel alternative actions are
+ * parameterized statically.
  * 
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
@@ -57,7 +59,7 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   }
 
   /**
-   * Sets the cancelAction.
+   * Assigns the action to execute when the user cancels the option.
    * 
    * @param cancelAction
    *          the cancelAction to set.
@@ -67,7 +69,7 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   }
 
   /**
-   * Sets the okAction.
+   * Assigns the action to execute when the user confirms the option.
    * 
    * @param okAction
    *          the okAction to set.

@@ -41,7 +41,18 @@ import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
- * Base class for frontend actions.
+ * This is the base class for frontend actions. To get a better understanding of
+ * how actions are organized in Jspresso, please refer to
+ * <code>AbstractAction</code> documentation.
+ * <p>
+ * This base class allows for visual (name, icon, tooltip) as well as
+ * accessibility (accelerator, mnemonic shortcuts) and actionability (using
+ * gates) parameterization.
+ * <p>
+ * A frontend action is to be executed by the frontend controller in the context
+ * of the UI. It can thus access the view structure, interact visually with the
+ * user, and so on. A frontend action can chain a backend action but the
+ * opposite will be prevented.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -179,7 +190,12 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Sets the acceleratorAsString.
+   * Configures a keyboard accelerator shortcut on this action. Support of this
+   * feature depends on the UI execution platform. The syntax used consists of
+   * listing keys that should be pressed to trigger the action, i.e.
+   * <code>alt d</code> or <code>ctrl c</code>. This is the syntax supported by
+   * the <code>javax.swing.KeyStroke#getKeyStroke(...)</code> swing static
+   * method.
    * 
    * @param acceleratorAsString
    *          the acceleratorAsString to set.
@@ -189,7 +205,22 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Sets the actionabilityGates.
+   * Assigns a collection of gates to determine action <i>actionability</i>. An
+   * action will be considered actionable (enabled) if and only if all gates are
+   * open. This mecanism is mainly used for dynamic UI authorization based on
+   * model state, e.g. a validated invoice should not be validated twice.
+   * <p>
+   * Action assigned gates will be cloned for each concrete action instance
+   * created and bound to its respective UI component (usually a button). So
+   * basically, each action instance will have its own, unshared collection of
+   * actionability gates.
+   * <p>
+   * Jspresso provides a useful set of gate types, like the binary property gate
+   * that open/close based on the value of a boolean property of the view model
+   * the action is installed to.
+   * <p>
+   * By default, frontend actions are assigned a generic gate that closes
+   * (disables the action) when the view is not assigned any model.
    * 
    * @param actionabilityGates
    *          the actionabilityGates to set.
@@ -200,7 +231,9 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Sets the description.
+   * Sets the key used to compute the internationalized description of the
+   * action. The translated description is then usually used as tooltip for the
+   * action.
    * 
    * @param description
    *          the description to set.
@@ -210,7 +243,14 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Sets the iconImageURL.
+   * Sets the icon image URL used to decorate the action UI component peer.
+   * <p>
+   * Supported URL protocols include :
+   * <ul>
+   * <li>all JVM supported protocols</li>
+   * <li>the <b>jar:/</b> pseudo URL protocol</li>
+   * <li>the <b>classpath:/</b> pseudo URL protocol</li>
+   * </ul>
    * 
    * @param iconImageURL
    *          the iconImageURL to set.
@@ -220,7 +260,9 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Sets the mnemonic of the action.
+   * Configures the mnemnonic key used for this action. Support of this feature
+   * depends on the UI execution platform. Mnemonics are typically used in menu
+   * and menu items.
    * 
    * @param mnemonicStringRep
    *          the mnemonic to set represented as a string as KeyStroke factory
@@ -231,7 +273,9 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Sets the name.
+   * Sets the key used to compute the internationalized name of the action. The
+   * translated name is then usually used as label for the action (button label,
+   * menu label, ...).
    * 
    * @param name
    *          the name to set.
@@ -366,7 +410,15 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * Sets the collectionBased.
+   * Declares the action as working on a collection of objects. Collection based
+   * actions will typically be installed on selectable views (table, list, tree)
+   * and will be enabled only when the view selection is not empty (a default
+   * gate is installed for this purpose). Moreover, model gates that are
+   * configured on collection based actions take their model from the view
+   * selected components instead of the view model itself. In case of
+   * multi-selection enabled UI views, the actionability gates will actually
+   * open if and only if their opening condition is met for all the selected
+   * items.
    * 
    * @param collectionBased
    *          the collectionBased to set.

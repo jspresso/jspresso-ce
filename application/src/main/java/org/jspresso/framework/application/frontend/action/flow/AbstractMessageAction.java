@@ -24,8 +24,12 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.util.html.HtmlHelper;
 
 /**
- * Base class for all message swing actions. It just keeps a reference on the
- * message to be displayed.
+ * This is the base class for all UI message based communication actions. This
+ * type of action generally opens a modal dialog to display an informational
+ * message, ask a question, and so on. It takes the message from the action
+ * context parameter and suppports basic HTML formatting. In order for the
+ * message to be interpreted as HTML, it must be surrounded by
+ * <code>&lt;HTML&gt;</code> tags.
  * 
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick

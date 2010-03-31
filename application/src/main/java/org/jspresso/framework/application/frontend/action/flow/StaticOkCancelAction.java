@@ -8,7 +8,9 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 
 /**
- * Action with a static i18nalized message.
+ * This action pops-up an Ok - Cancel confirmation option. The message, instead
+ * of being extracted out of the context, is parameterized statically into the
+ * action through its internationalization key.
  * 
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
@@ -35,7 +37,10 @@ public class StaticOkCancelAction<E, F, G> extends OkCancelAction<E, F, G> {
   }
 
   /**
-   * Sets the messageCode.
+   * Configures the I18N key used to translate the message that is to be
+   * displayed to the user. When the action executes, the statically configured
+   * message is first translated, then placed into the action context to be
+   * popped-up.
    * 
    * @param messageCode
    *          the messageCode to set.

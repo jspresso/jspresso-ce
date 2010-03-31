@@ -23,7 +23,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 
 /**
- * Action to present a message to the user.
+ * This action pops-up an informational message to the user.
  * 
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
