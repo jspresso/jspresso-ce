@@ -29,7 +29,12 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * This is the base action class for all dirty checking module actions.
+ * This is the base abstract class for actions that are responsible for checking
+ * module dirty state. <i>Dirty</i> is taken in the sense of an entity needing
+ * to be flushed to the persistence store. Among modules that are to be checked,
+ * a collection module is marked dirty if and only if one of its module objects
+ * is an entity which is dirty. On the other hand, a bean module is marked dirty
+ * if and only if its (single) module object is an entity and is dirty.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

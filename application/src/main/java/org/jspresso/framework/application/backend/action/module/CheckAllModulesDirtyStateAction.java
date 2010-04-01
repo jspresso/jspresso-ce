@@ -27,7 +27,10 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 
 /**
- * This action recomputes all modules dirty state.
+ * This action recomputes all application modules dirty state. All the
+ * workspaces are traversed as well as, for each workspace, the whole module
+ * hierarchy. This action is typically triggered before a user exists the
+ * application to bring up a notification of potentially lost pending changes.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

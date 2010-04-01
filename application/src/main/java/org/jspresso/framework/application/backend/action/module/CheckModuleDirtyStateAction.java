@@ -25,8 +25,9 @@ import java.util.Map;
 import org.jspresso.framework.application.model.Module;
 
 /**
- * This action informs the user of module content dirty state. It is meant to
- * operate on bean (collection) modules that handle entities.
+ * This action recomputes the dirty state of the current selected module. It is
+ * typically trigerred when the user navigates (leaves) out of the module to
+ * compute a visual notification of a pending change.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

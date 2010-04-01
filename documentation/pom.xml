@@ -75,7 +75,7 @@
                 -maxDepth_8 1
 
                 -rootClassName_9 org.jspresso.framework.application.frontend.action.FrontendAction
-                -excludedSubtrees_9 org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction:org.jspresso.framework.application.frontend.action.swing.AbstractWingsAction:org.jspresso.framework.application.frontend.action.swing.AbstractUlcAction
+                -excludedSubtrees_9 org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction:org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction:org.jspresso.framework.application.frontend.action.ulc.AbstractUlcAction
 
                 -rootClassName_10 org.jspresso.framework.application.backend.action.BackendAction
 

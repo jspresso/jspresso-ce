@@ -31,6 +31,7 @@ import org.jspresso.framework.gui.remote.RIcon;
  * This class serves as base class for remote actions. It provides accessors on
  * commonly used artifacts.
  * 
+ * @internal
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
