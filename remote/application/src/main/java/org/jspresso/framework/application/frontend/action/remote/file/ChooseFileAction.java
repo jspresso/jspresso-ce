@@ -32,7 +32,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ChooseFileAction extends AbstractRemoteAction {
+public abstract class ChooseFileAction extends AbstractRemoteAction {
 
   private String                    defaultFileName;
   private FileCancelCallbackAction  fileCancelCallbackAction;

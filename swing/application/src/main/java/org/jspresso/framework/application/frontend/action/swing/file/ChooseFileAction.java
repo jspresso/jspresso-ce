@@ -35,7 +35,7 @@ import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAct
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ChooseFileAction extends AbstractSwingAction {
+public abstract class ChooseFileAction extends AbstractSwingAction {
 
   private String                    defaultFileName;
   private Map<String, List<String>> fileFilter;
