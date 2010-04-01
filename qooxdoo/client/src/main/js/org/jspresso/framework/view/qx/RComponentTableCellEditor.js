@@ -48,8 +48,13 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor",
       var col = cellInfo.col;
       /**@type qx.ui.table.Table*/
       var table = cellInfo.table;
+      /**@type org.jspresso.framework.state.remote.RemoteCompositeValueState*/
+      var rowState = table.getTableModel().getRowData(row);
+      if(!rowState.isWritable()) {
+        return null;
+      }
       /**@type org.jspresso.framework.state.remote.RemoteValueState*/
-      var cellState = table.getTableModel().getRowData(row).getChildren().getItem(col+1);
+      var cellState = rowState.getChildren().getItem(col+1);
       if(!cellState.isWritable()) {
         return null;
       }

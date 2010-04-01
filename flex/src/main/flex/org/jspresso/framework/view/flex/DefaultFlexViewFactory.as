@@ -1554,11 +1554,16 @@ package org.jspresso.framework.view.flex {
         var dg:DataGrid = event.currentTarget as DataGrid;
         var column:DataGridColumn = dg.columns[event.columnIndex]; 
         var rowCollection:ArrayCollection = dg.dataProvider as ArrayCollection;
-        var cellValueState:RemoteValueState = (rowCollection[event.rowIndex] as RemoteCompositeValueState)
-            .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
-        if(!cellValueState.writable) {
-    	    event.preventDefault();
-    	  }
+        var rowValueState:RemoteCompositeValueState = rowCollection[event.rowIndex] as RemoteCompositeValueState;
+        if(!rowValueState.writable) {
+          event.preventDefault();
+        } else {
+          var cellValueState:RemoteValueState = rowValueState
+              .children[(column.itemRenderer as ClassFactory).properties["index"] as int] as RemoteValueState;
+          if(!cellValueState.writable) {
+      	    event.preventDefault();
+      	  }
+        }
     	});
       table.addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, function(event:DataGridEvent):void {
         var dg:DataGrid = event.currentTarget as DataGrid;

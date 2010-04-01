@@ -25,8 +25,8 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 /**
  * This class implements the connector mechanism on an arbitrry model. This type
  * of connector is not targetted at a specific property but at the model
- * instance itself. This implies that the <code>getConnectorValue</code>
- * method returns the model instance itself.
+ * instance itself. This implies that the <code>getConnectorValue</code> method
+ * returns the model instance itself.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -39,11 +39,11 @@ public class ModelConnector extends ModelRefPropertyConnector {
    * Constructs a new instance based on the model class passed as parameter.
    * 
    * @param id
-   *            the connector identifier.
+   *          the connector identifier.
    * @param modelDescriptor
-   *            the model descriptor backing this connector.
+   *          the model descriptor backing this connector.
    * @param modelConnectorFactory
-   *            the factory used to create the child property connectors.
+   *          the factory used to create the child property connectors.
    */
   ModelConnector(String id, IComponentDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
@@ -102,5 +102,15 @@ public class ModelConnector extends ModelRefPropertyConnector {
   @Override
   protected void setConnecteeValue(Object aValue) {
     ((EmbeddedModelProvider) getModelProvider()).setModel(aValue);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean areChildrenWritable() {
+    // overriden to restore local writability condition for children (opposite
+    // to ModelRefPropertyConnector).
+    return isWritable();
   }
 }
