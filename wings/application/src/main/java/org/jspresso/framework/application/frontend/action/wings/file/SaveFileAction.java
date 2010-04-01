@@ -74,7 +74,7 @@ public class SaveFileAction extends ChooseFileAction {
       };
       Map<String, String> headers = new HashMap<String, String>();
       headers.put("Content-Disposition", "attachment; filename="
-          + getDefaultFileName());
+          + getFileName(context));
       String url = SessionManager.getSession().getExternalizeManager()
           .externalize(resource, headers.entrySet(),
               AbstractExternalizeManager.REQUEST);
@@ -94,5 +94,23 @@ public class SaveFileAction extends ChooseFileAction {
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
     this.fileSaveCallback = fileSaveCallback;
+  }
+
+  /**
+   * Computes a file name to save the file. Queries the file save callback for a
+   * file name and defaults to the action default one if none is returned.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file name to save the file under.
+   */
+  protected String getFileName(Map<String, Object> context) {
+    if (fileSaveCallback != null) {
+      String fileName = fileSaveCallback.getFileName(context);
+      if (fileName != null && fileName.length() > 0) {
+        return fileName;
+      }
+    }
+    return getDefaultFileName();
   }
 }

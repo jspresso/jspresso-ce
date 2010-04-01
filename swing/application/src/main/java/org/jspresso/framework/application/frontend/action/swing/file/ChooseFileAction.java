@@ -81,15 +81,16 @@ public class ChooseFileAction extends AbstractSwingAction {
           extensionsDescription.append("*").append(fileExtension).append(" ");
         }
         extensionsDescription.append(")");
-        fileChooser.addChoosableFileFilter(new FileFilterAdapter(
-            fileTypeEntry.getValue(), getTranslationProvider(context)
-                .getTranslation(fileTypeEntry.getKey(), getLocale(context))
-                + extensionsDescription.toString()));
+        fileChooser.addChoosableFileFilter(new FileFilterAdapter(fileTypeEntry
+            .getValue(), getTranslationProvider(context).getTranslation(
+            fileTypeEntry.getKey(), getLocale(context))
+            + extensionsDescription.toString()));
       }
     }
     fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    if (defaultFileName != null) {
-      fileChooser.setSelectedFile(new File(defaultFileName));
+    String fileName = getFileName(context);
+    if (fileName != null) {
+      fileChooser.setSelectedFile(new File(fileName));
     }
     return fileChooser;
   }
@@ -147,5 +148,17 @@ public class ChooseFileAction extends AbstractSwingAction {
       return description;
     }
 
+  }
+
+  /**
+   * Computes a file name to save the file. Defaults to the action default file
+   * name parameterized in the action.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file name to save the file under.
+   */
+  protected String getFileName(Map<String, Object> context) {
+    return defaultFileName;
   }
 }

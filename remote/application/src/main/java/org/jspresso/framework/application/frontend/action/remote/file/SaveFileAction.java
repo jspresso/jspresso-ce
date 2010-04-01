@@ -63,10 +63,11 @@ public class SaveFileAction extends ChooseFileAction {
     RemoteFileDownloadCommand fileDownloadCommand = new RemoteFileDownloadCommand();
     fileDownloadCommand.setFileFilter(translateFilter(getFileFilter(context),
         context));
-    fileDownloadCommand.setDefaultFileName(getDefaultFileName());
+    String fileName = getFileName(context);
+    fileDownloadCommand.setDefaultFileName(fileName);
     String resourceId = ResourceManager.getInstance().register(
-        new ResourceAdapter(getDefaultFileName(), getContentType(),
-            fileSaveCallback, actionHandler, context));
+        new ResourceAdapter(fileName, getContentType(), fileSaveCallback,
+            actionHandler, context));
     fileDownloadCommand.setResourceId(resourceId);
     fileDownloadCommand.setFileUrl(ResourceProviderServlet
         .computeDownloadUrl(resourceId));
@@ -155,5 +156,23 @@ public class SaveFileAction extends ChooseFileAction {
    */
   public void setContentType(String contentType) {
     this.contentType = contentType;
+  }
+
+  /**
+   * Computes a file name to save the file. Queries the file save callback for a
+   * file name and defaults to the action default one if none is returned.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file name to save the file under.
+   */
+  protected String getFileName(Map<String, Object> context) {
+    if (fileSaveCallback != null) {
+      String fileName = fileSaveCallback.getFileName(context);
+      if (fileName != null && fileName.length() > 0) {
+        return fileName;
+      }
+    }
+    return getDefaultFileName();
   }
 }

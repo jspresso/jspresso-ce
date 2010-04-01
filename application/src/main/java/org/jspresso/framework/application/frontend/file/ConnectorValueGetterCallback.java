@@ -64,4 +64,12 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
       os.flush();
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getFileName(
+      @SuppressWarnings("unused") Map<String, Object> context) {
+    return null;
+  }
 }

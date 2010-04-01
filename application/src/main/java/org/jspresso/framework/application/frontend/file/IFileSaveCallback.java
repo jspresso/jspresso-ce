@@ -46,4 +46,13 @@ public interface IFileSaveCallback extends IFileCallback {
    */
   void fileChosen(OutputStream out, IActionHandler actionHandler,
       Map<String, Object> context) throws IOException;
+
+  /**
+   * Computes a file name based on the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return a file name to save the filr
+   */
+  String getFileName(Map<String, Object> context);
 }

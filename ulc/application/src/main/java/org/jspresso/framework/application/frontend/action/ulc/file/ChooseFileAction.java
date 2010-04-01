@@ -40,7 +40,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
    * Sets the defaultFileName.
    * 
    * @param defaultFileName
-   *            the defaultFileName to set.
+   *          the defaultFileName to set.
    */
   public void setDefaultFileName(String defaultFileName) {
     this.defaultFileName = defaultFileName;
@@ -51,7 +51,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
    * file extension arays.
    * 
    * @param fileFilter
-   *            the fileFilter to set.
+   *          the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;
@@ -61,7 +61,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
    * Gets the file chooser configuration used to build this file chooser.
    * 
    * @param context
-   *            the action context.
+   *          the action context.
    * @return the file chooser configuration.
    */
   protected FileChooserConfig createFileChooser(Map<String, Object> context) {
@@ -73,8 +73,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
       for (Map.Entry<String, List<String>> fileTypeEntry : executionFileFilter
           .entrySet()) {
         StringBuffer extensionsDescription = new StringBuffer(" (");
-        String[] allowedExtensions = new String[fileTypeEntry.getValue()
-            .size() * 2];
+        String[] allowedExtensions = new String[fileTypeEntry.getValue().size() * 2];
         int i = 0;
         for (String fileExtension : fileTypeEntry.getValue()) {
           extensionsDescription.append("*").append(fileExtension).append(" ");
@@ -82,14 +81,13 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
           allowedExtensions[i++] = fileExtension.toUpperCase();
         }
         extensionsDescription.append(")");
-        fileChooser
-            .addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
-                allowedExtensions, getTranslationProvider(context)
-                    .getTranslation(fileTypeEntry.getKey(),
-                        getLocale(context))
-                    + extensionsDescription.toString()));
-        if (defaultFileName != null) {
-          fileChooser.setSelectedFile(defaultFileName);
+        fileChooser.addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
+            allowedExtensions, getTranslationProvider(context).getTranslation(
+                fileTypeEntry.getKey(), getLocale(context))
+                + extensionsDescription.toString()));
+        String fileName = getFileName(context);
+        if (fileName != null) {
+          fileChooser.setSelectedFile(fileName);
         }
       }
     }
@@ -106,4 +104,17 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
   protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
     return fileFilter;
   }
+
+  /**
+   * Computes a file name to save the file. Defaults to the action default file
+   * name parameterized in the action.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file name to save the file under.
+   */
+  protected String getFileName(Map<String, Object> context) {
+    return defaultFileName;
+  }
+
 }

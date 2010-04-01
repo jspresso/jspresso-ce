@@ -106,4 +106,23 @@ public class SaveFileAction extends ChooseFileAction {
     FileChooserConfig fileChooser = super.createFileChooser(context);
     return fileChooser;
   }
+
+  /**
+   * Computes a file name to save the file. Queries the file save callback for a
+   * file name and defaults to the action default one if none is returned.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file name to save the file under.
+   */
+  @Override
+  protected String getFileName(Map<String, Object> context) {
+    if (fileSaveCallback != null) {
+      String fileName = fileSaveCallback.getFileName(context);
+      if (fileName != null && fileName.length() > 0) {
+        return fileName;
+      }
+    }
+    return super.getFileName(context);
+  }
 }
