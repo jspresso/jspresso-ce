@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction;
 
-
 /**
  * Initiates a file choosing action.
  * 
@@ -39,7 +38,7 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
    * Sets the defaultFileName.
    * 
    * @param defaultFileName
-   *            the defaultFileName to set.
+   *          the defaultFileName to set.
    */
   public void setDefaultFileName(String defaultFileName) {
     this.defaultFileName = defaultFileName;
@@ -50,7 +49,7 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
    * file extension arays.
    * 
    * @param fileFilter
-   *            the fileFilter to set.
+   *          the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;
@@ -72,5 +71,17 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
    */
   protected Map<String, List<String>> getFileFilter() {
     return fileFilter;
+  }
+
+  /**
+   * Computes a file name to save the file. Defaults to the action default file
+   * name parameterized in the action.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file name to save the file under.
+   */
+  protected String getFileName(Map<String, Object> context) {
+    return getDefaultFileName();
   }
 }

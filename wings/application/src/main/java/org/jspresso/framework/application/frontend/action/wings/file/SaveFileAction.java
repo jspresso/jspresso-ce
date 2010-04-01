@@ -104,6 +104,7 @@ public class SaveFileAction extends ChooseFileAction {
    *          the action context.
    * @return the file name to save the file under.
    */
+  @Override
   protected String getFileName(Map<String, Object> context) {
     if (fileSaveCallback != null) {
       String fileName = fileSaveCallback.getFileName(context);
@@ -111,6 +112,6 @@ public class SaveFileAction extends ChooseFileAction {
         return fileName;
       }
     }
-    return getDefaultFileName();
+    return super.getFileName(context);
   }
 }
