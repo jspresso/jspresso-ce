@@ -27,7 +27,15 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
- * Initiates a file choosing action.
+ * This is the abstract base class for actions dealing with client file system
+ * operations. It holds several parameterizations that are common to all file
+ * operations. Please, be aware that these FS actions heavily depend on the UI
+ * channel, i.e. you have different implementation classes (but registered under
+ * the same Spring name) for all supported UI technologies. For instance,
+ * <code>SaveFileAction</code> will have as many implementations as the number
+ * of supported UIs, all in a specific package :
+ * <p>
+ * <code>org.jspresso.framework.application.frontend.action.<b>[ui]</b>.file.SaveFileAction</code>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
