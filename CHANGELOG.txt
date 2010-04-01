@@ -112,6 +112,8 @@ New features
 2906653    Allow to force oneToOne on reference property descriptors.
 2906877    Auto compute maxLength for enumerations
 2909947    Allow to specify preferredSize on view descriptors
+2977933    Further refinement for actionability gates
+2979892    Not static defaultFileName for SaveFileAction
 
 3.0.0
 =====
