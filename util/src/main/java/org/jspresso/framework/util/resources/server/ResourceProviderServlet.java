@@ -253,6 +253,11 @@ public class ResourceProviderServlet extends HttpServlet {
       }
 
       response.setContentType(resource.getMimeType());
+      String resourceName = resource.getName();
+      if (resourceName != null && resourceName.length() > 0) {
+        response.setHeader("Content-Disposition", "attachment; filename="
+            + resourceName);
+      }
       long resourceLength = resource.getSize();
       if (resourceLength > 0) {
         response.setContentLength((int) resourceLength);
@@ -348,6 +353,13 @@ public class ResourceProviderServlet extends HttpServlet {
      */
     public long getSize() {
       return item.getSize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getName() {
+      return item.getName();
     }
 
   }

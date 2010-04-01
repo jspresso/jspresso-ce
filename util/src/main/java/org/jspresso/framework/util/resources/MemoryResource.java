@@ -29,17 +29,20 @@ import java.io.InputStream;
  */
 public class MemoryResource extends AbstractResource {
 
+  private String name;
   private byte[] resourceBytes;
 
   /**
    * Constructs a new <code>MemoryResource</code> instance.
    * 
+   * @param name
+   *          the name of the resource.
    * @param mimeType
-   *            the resource mime type.
+   *          the resource mime type.
    * @param resourceBytes
-   *            the resource content.
+   *          the resource content.
    */
-  public MemoryResource(String mimeType, byte[] resourceBytes) {
+  public MemoryResource(String name, String mimeType, byte[] resourceBytes) {
     super(mimeType);
     this.resourceBytes = resourceBytes;
   }
@@ -56,6 +59,15 @@ public class MemoryResource extends AbstractResource {
    */
   public long getSize() {
     return resourceBytes.length;
+  }
+
+  /**
+   * Gets the name.
+   * 
+   * @return the name.
+   */
+  public String getName() {
+    return name;
   }
 
 }

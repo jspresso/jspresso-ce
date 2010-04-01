@@ -67,7 +67,8 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
                 getTranslationProvider(context), getLocale(context));
           }
         });
-    IResource resource = new MemoryResource("text/xml", chartData.getBytes());
+    IResource resource = new MemoryResource(null, "text/xml", chartData
+        .getBytes());
     String resourceId = ResourceManager.getInstance().register(resource);
     Map<String, String> flashContext = new LinkedHashMap<String, String>();
     Dimension d = getChartDescriptor().getDimension();

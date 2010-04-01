@@ -44,6 +44,14 @@ import org.jspresso.framework.view.IView;
 public class SaveFileAction extends ChooseFileAction {
 
   private IFileSaveCallback fileSaveCallback;
+  private String            contentType;
+
+  /**
+   * Constructs a new <code>SaveFileAction</code> instance.
+   */
+  public SaveFileAction() {
+    this.contentType = "application/octet-stream";
+  }
 
   /**
    * {@inheritDoc}
@@ -57,7 +65,8 @@ public class SaveFileAction extends ChooseFileAction {
         context));
     fileDownloadCommand.setDefaultFileName(getDefaultFileName());
     String resourceId = ResourceManager.getInstance().register(
-        new ResourceAdapter(fileSaveCallback, actionHandler, context));
+        new ResourceAdapter(getDefaultFileName(), getContentType(),
+            fileSaveCallback, actionHandler, context));
     fileDownloadCommand.setResourceId(resourceId);
     fileDownloadCommand.setFileUrl(ResourceProviderServlet
         .computeDownloadUrl(resourceId));
@@ -81,11 +90,14 @@ public class SaveFileAction extends ChooseFileAction {
 
   private static class ResourceAdapter extends AbstractResource {
 
+    private String name;
     private byte[] content;
 
-    public ResourceAdapter(IFileSaveCallback source,
-        IActionHandler actionHandler, Map<String, Object> context) {
-      super("application/octet-stream");
+    public ResourceAdapter(String name, String contentType,
+        IFileSaveCallback source, IActionHandler actionHandler,
+        Map<String, Object> context) {
+      super(contentType);
+      this.name = name;
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       try {
         source.fileChosen(baos, actionHandler, context);
@@ -115,5 +127,33 @@ public class SaveFileAction extends ChooseFileAction {
     public long getSize() {
       return content.length;
     }
+
+    /**
+     * Gets the name.
+     * 
+     * @return the name.
+     */
+    public String getName() {
+      return name;
+    }
+  }
+
+  /**
+   * Gets the contentType.
+   * 
+   * @return the contentType.
+   */
+  public String getContentType() {
+    return contentType;
+  }
+
+  /**
+   * Sets the contentType.
+   * 
+   * @param contentType
+   *          the contentType to set.
+   */
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
   }
 }

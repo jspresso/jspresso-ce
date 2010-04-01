@@ -59,4 +59,11 @@ public class FileResource extends AbstractResource {
   public long getSize() {
     return resourceFile.length();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getName() {
+    return resourceFile.getName();
+  }
 }

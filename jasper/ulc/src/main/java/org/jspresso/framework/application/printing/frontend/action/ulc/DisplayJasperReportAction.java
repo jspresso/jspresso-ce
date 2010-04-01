@@ -55,8 +55,8 @@ public class DisplayJasperReportAction extends AbstractUlcAction {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       JasperExportManager.exportReportToPdfStream(report, baos);
 
-      IResource resource = new MemoryResource("application/pdf", baos
-          .toByteArray());
+      IResource resource = new MemoryResource("Report.pdf", "application/pdf",
+          baos.toByteArray());
       String resourceId = ResourceManager.getInstance().register(resource);
       DocumentHelper.showDocument(resourceId);
     } catch (IOException ex) {

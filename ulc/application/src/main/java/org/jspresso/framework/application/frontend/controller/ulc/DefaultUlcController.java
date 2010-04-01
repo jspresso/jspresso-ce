@@ -651,7 +651,8 @@ public class DefaultUlcController extends
         + "\" name=\"Column3D\" type=\"application/x-shockwave-flash\" "
         + "pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"
         + "</object>" + "</body>" + "</html>";
-    IResource resource = new MemoryResource("text/html", htmlText.getBytes());
+    IResource resource = new MemoryResource(null, "text/html", htmlText
+        .getBytes());
     String resourceId = ResourceManager.getInstance().register(resource);
     try {
       DocumentHelper.showDocument(resourceId);

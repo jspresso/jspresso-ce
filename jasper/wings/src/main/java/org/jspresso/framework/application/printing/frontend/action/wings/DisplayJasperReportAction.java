@@ -53,8 +53,8 @@ public class DisplayJasperReportAction extends AbstractWingsAction {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       JasperExportManager.exportReportToPdfStream(report, baos);
 
-      IResource resource = new MemoryResource("application/pdf", baos
-          .toByteArray());
+      IResource resource = new MemoryResource("Report.pdf", "application/pdf",
+          baos.toByteArray());
       String resourceId = ResourceManager.getInstance().register(resource);
       getController(context).displayUrl(
           ResourceProviderServlet.computeDownloadUrl(resourceId));
