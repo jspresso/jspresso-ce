@@ -195,7 +195,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the autoquery.
+   * Whenever setting autoquery to <code>true</code>, the LOV action will
+   * trigger the query as soon as it gets executed and the initial query filter
+   * is not empty (e.g. the user typed something in the reference field). This
+   * brings autocomplete feature to reference fields since, whenever the initial
+   * filter limits to exactly 1 result, the LOV dialog won't even open. Defaults
+   * to true.
    * 
    * @param autoquery
    *          the autoquery to set.
@@ -205,7 +210,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the cancelAction.
+   * Configures the action to be executed whenever the user cancels the LOV
+   * dialog.
    * 
    * @param cancelAction
    *          the cancelAction to set.
@@ -215,7 +221,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the createQueryComponentAction.
+   * Configures the action used to create the filter query component based on
+   * the type of entities backing the LOV.
    * 
    * @param createQueryComponentAction
    *          the createQueryComponentAction to set.
@@ -226,7 +233,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the entityDescriptor.
+   * Configures explicitely the type of entities the LOV relies on. This is
+   * automatically determined when installed on areference field but must be set
+   * in any other case.
    * 
    * @param entityDescriptor
    *          the entityDescriptor to set.
@@ -235,19 +244,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     this.entityDescriptor = entityDescriptor;
   }
 
-  // /**
-  // * Sets the entityRefQueryDescriptor.
-  // *
-  // * @param entityRefQueryDescriptor
-  // * the entityRefQueryDescriptor to set.
-  // */
-  // public void setEntityRefQueryDescriptor(
-  // IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor) {
-  // this.entityRefQueryDescriptor = entityRefQueryDescriptor;
-  // }
-
   /**
-   * Sets the findAction.
+   * Configures the action to be executed whenever the user queries the
+   * persistent store, either explicitely when using the action installed in the
+   * LOV dialog or implicitely through the auto query feature.
    * 
    * @param findAction
    *          the findAction to set.
@@ -257,7 +257,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the initializationMapping.
+   * Whenever the LOV action is not used on a reference field, in which case the
+   * filter initialization mapping is taken from the reference field descriptor
+   * (see <code>BasicReferencePropertyDescriptor</code> documentation), this
+   * property allows to initialize some of the LOV filter properties.
+   * Initialization is computed dynamically by transferring property values from
+   * the view model to the filter.
    * 
    * @param initializationMapping
    *          the initializationMapping to set.
@@ -267,7 +272,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the lovViewDescriptorFactory.
+   * Configures the factory to be used to create the QBE view used in the
+   * dialog.
    * 
    * @param lovViewDescriptorFactory
    *          the lovViewDescriptorFactory to set.
@@ -278,7 +284,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the okAction.
+   * Configures the action to be executed whenever the user validates the LOV
+   * selection.
    * 
    * @param okAction
    *          the okAction to set.
