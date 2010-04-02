@@ -38,7 +38,9 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * This action displays a list of frontend actions so that the user can choose
- * and launch one of them.
+ * and launch one of them. This action is meant to be chained with the generic
+ * <code>ChooseComponentAction</code> so that the action list is actually
+ * displayed.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -74,7 +76,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the actions.
+   * Configures the list of actions to choose from.
    * 
    * @param actions
    *          the actions to set.

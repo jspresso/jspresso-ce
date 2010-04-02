@@ -31,8 +31,12 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 
 /**
- * A standard List of value action for reference property views. This action
- * should be used in view factories.
+ * This action takes an arbitrary model collection connector from the action
+ * context parameter and binds it to a newly created table view. This action is
+ * meant to be chained to the generic <code>ModalDialogAction</code> so that the
+ * table is actually poped-up in a dialog. Two actions (<code>okAction</code>
+ * and <code>cancelAction</code>) can be configured to react to the user
+ * decision.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -81,7 +85,8 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the cancelAction.
+   * Configures the action that will be triggered when the user cancels the
+   * component choice.
    * 
    * @param cancelAction
    *          the cancelAction to set.
@@ -91,7 +96,9 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the okAction.
+   * Configures the action that will be triggered when the user confirms the
+   * component choice. the chosen component will then be retrieved from the
+   * selected view item.
    * 
    * @param okAction
    *          the okAction to set.
