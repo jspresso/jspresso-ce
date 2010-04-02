@@ -40,7 +40,6 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   private IDisplayableAction    cancelAction;
   private IDisplayableAction    finishAction;
   private IWizardStepDescriptor firstWizardStep;
-  // private IModelConnectorFactory modelConnectorFactory;
   private Integer               width;
   private Integer               height;
 
@@ -51,10 +50,6 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    // IValueConnector modelConnector = modelConnectorFactory
-    // .createModelConnector(ACTION_MODEL_NAME, firstWizardStep
-    // .getViewDescriptor().getModelDescriptor(), actionHandler
-    // .getSubject());
     IValueConnector modelConnector = getBackendController(context)
         .createModelConnector(ACTION_MODEL_NAME,
             firstWizardStep.getViewDescriptor().getModelDescriptor());

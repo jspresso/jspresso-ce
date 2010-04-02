@@ -33,9 +33,13 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * A simple action to edit a component in a form view. This action must be
- * followed by a view technology dependent action that will take care of
- * displaying the view in a dialog.
+ * This action pulls a model out of the context (action parameter), creates a
+ * view, binds it on the model and prepares for chaining with a modal dialog
+ * action to pop-up the result. The translated name of the action, whenever not
+ * empty, will be used as the dialog title. If the context extracted model is a
+ * collection, the first element of the collection is used. Custom actions (
+ * <code>okAction</code> and <code>cancelAction</code>) can be configured to
+ * take care of user decision when closing the dialog.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -49,7 +53,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private IDisplayableAction cancelAction;
-  // private IModelConnectorFactory modelConnectorFactory;
   private IDisplayableAction okAction;
   private IViewDescriptor    viewDescriptor;
 
@@ -80,9 +83,6 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     context.put(ModalDialogAction.DIALOG_VIEW, componentView);
 
-    // IValueConnector componentConnector = modelConnectorFactory
-    // .createModelConnector(ACTION_MODEL_NAME, getViewDescriptor(context)
-    // .getModelDescriptor(), actionHandler.getSubject());
     IValueConnector componentConnector = getBackendController(context)
         .createModelConnector(ACTION_MODEL_NAME,
             getViewDescriptor(context).getModelDescriptor());
@@ -95,7 +95,8 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the cancelAction.
+   * Configures the action to be installed in the dialog when the user cancels
+   * the component edition.
    * 
    * @param cancelAction
    *          the cancelAction to set.
@@ -118,7 +119,8 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the okAction.
+   * Configures the action to be installed in the dialog when the user confirms
+   * the component edition.
    * 
    * @param okAction
    *          the okAction to set.
@@ -128,7 +130,8 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the viewDescriptor.
+   * Configures the view descriptor to be used to create the component editing
+   * view that will be installed in the dialog.
    * 
    * @param viewDescriptor
    *          the viewDescriptor to set.

@@ -48,7 +48,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  */
 public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  // private IModelConnectorFactory modelConnectorFactory;
   private List<IReportDescriptor> reportDescriptors;
   private IReportFactory          reportFactory;
 
@@ -60,9 +59,6 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
       Map<String, Object> context) {
     BasicListDescriptor<IReport> modelDescriptor = new BasicListDescriptor<IReport>();
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
-    // IValueConnector reportsConnector = modelConnectorFactory
-    // .createModelConnector("ActionModel", modelDescriptor, actionHandler
-    // .getSubject());
     IValueConnector reportsConnector = getBackendController(context)
         .createModelConnector(ACTION_MODEL_NAME, modelDescriptor);
     reportsConnector.setConnectorValue(createReportInstances(
