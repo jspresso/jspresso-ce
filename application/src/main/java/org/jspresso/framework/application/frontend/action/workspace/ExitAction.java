@@ -28,7 +28,10 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 
 /**
- * Application exit action.
+ * This action exits the aplication. Before doing so, user activated application
+ * modules are traversed ton check that no pending changes need to be forwarded
+ * to the persistent store. Whenever the dirty checking is positive, then the
+ * user is notified and given a chance to cancel the exit.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -57,8 +60,6 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
         return getController(context).stop();
       }
     };
-    // checkCurrentModuleDirtyStateAction = new CheckModuleDirtyStateAction<E,
-    // F, G>();
   }
 
   /**
@@ -119,7 +120,10 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the checkCurrentModuleDirtyStateAction.
+   * Configures the action used to perform dirty checking on current module to
+   * update its dirty state. It will be triggered just before a global iteration
+   * is performed on all the application modules to be able to notify the user
+   * that pending changes are not yet flushed to the persistent store.
    * 
    * @param checkCurrentModuleDirtyStateAction
    *          the checkCurrentModuleDirtyStateAction to set.

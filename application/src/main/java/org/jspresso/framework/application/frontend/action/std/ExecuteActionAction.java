@@ -25,7 +25,8 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * Executes the action set in the context using the key ACTION_PARAM.
+ * This generic action takes another arbitrary action out of the context
+ * parameter and executes it.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

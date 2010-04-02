@@ -12,7 +12,23 @@ import org.jspresso.framework.application.frontend.action.std.EditComponentActio
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 
 /**
- * The frontend action to initiate the password change.
+ * This is the frontend action to initiate the logged-in user password change.
+ * It will install a form view with a custom component designed to host :
+ * <ol>
+ * <li>the current password</li>
+ * <li>the new password</li>
+ * <li>the confirmation for the new password</li>
+ * </ol>
+ * This action must be combined (setting <code>okAction</code>) with a concrete
+ * subclass of backend <code>AbstractChangePasswordAction</code> that performs
+ * the actual password change depending on the authentication backend. Jspresso
+ * offers two concrete implementations :
+ * <ul>
+ * <li><code>LdapChangePasswordAction</code> for LDAP based authentication
+ * backends</li>
+ * <li><code>DatabaseChangePasswordAction</code> for JDBC based authentication
+ * backends</li>
+ * </ul>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

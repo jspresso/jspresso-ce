@@ -42,8 +42,19 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
 
 /**
- * A standard List of value action for reference property views. This action
- * should be used in view factories.
+ * This is a standard &quot;List Of Values&quot; action for reference property
+ * views. Although this action is used by default in view factories on reference
+ * fields, it can also be used in a more standard way, i.e. registered as a view
+ * action. In the latter, the <code>okAction</code> must be configured to
+ * perform a custom treatment once the entity is chosen from the LOV.
+ * Additionally you can statically configure the descriptor of the searched
+ * entities using the <code>entityDescriptor</code> parameter so that the LOV
+ * will act on this type of entities.
+ * <p>
+ * The LOV action prepares a QBE view (filter / result list) along with 3
+ * actions that can be further refined : <code>findAction</code>,
+ * <code>okAction</code> and <code>cancelAction</code>. It must the be linked to
+ * a <code>ModalDialogAction</code> so that the LOV actually pops up.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -224,16 +235,16 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     this.entityDescriptor = entityDescriptor;
   }
 
-  /**
-   * Sets the entityRefQueryDescriptor.
-   * 
-   * @param entityRefQueryDescriptor
-   *          the entityRefQueryDescriptor to set.
-   */
-  public void setEntityRefQueryDescriptor(
-      IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor) {
-    this.entityRefQueryDescriptor = entityRefQueryDescriptor;
-  }
+  // /**
+  // * Sets the entityRefQueryDescriptor.
+  // *
+  // * @param entityRefQueryDescriptor
+  // * the entityRefQueryDescriptor to set.
+  // */
+  // public void setEntityRefQueryDescriptor(
+  // IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor) {
+  // this.entityRefQueryDescriptor = entityRefQueryDescriptor;
+  // }
 
   /**
    * Sets the findAction.

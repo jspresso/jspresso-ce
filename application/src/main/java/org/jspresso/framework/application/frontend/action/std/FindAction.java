@@ -28,8 +28,11 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.collection.ESort;
 
 /**
- * A standard find action. Since it is a chained action, it can be chained with
- * another action.
+ * This action will climb the connector hierarchy to retrieve a query component
+ * used as QBE filter. It will then tailor paging status on this query component
+ * before continuing execution. This action is meant to be chained with an
+ * actual backend action to perform the query (like
+ * <code>QueryEntitiesAction</code>).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -89,7 +92,7 @@ public class FindAction<E, F, G> extends FrontendAction<E, F, G> {
               .intValue()
               + pageOffset.intValue()));
         } else {
-          // We are of limits
+          // We are off limits
           return false;
         }
       }
