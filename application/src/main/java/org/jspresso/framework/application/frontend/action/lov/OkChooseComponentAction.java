@@ -26,8 +26,8 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 
 /**
- * Sets the selected component as the value of the source view connector (which
- * will propagate to the backend).
+ * This action augments the context by setting the action parameter to the
+ * selected component of the collection view (or null if none is selected).
  * 
  * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick

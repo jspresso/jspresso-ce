@@ -29,8 +29,8 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * Sets the selected entity as the value of the source view connector (which
- * will propagate to the backend).
+ * This action augments the context by setting the action parameter to the
+ * selected entity of the LOV result list (or null if none is selected).
  * 
  * @version $LastChangedRevision: 1442 $
  * @author Vincent Vandenschrick

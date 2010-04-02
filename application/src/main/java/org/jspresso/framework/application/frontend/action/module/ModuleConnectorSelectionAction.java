@@ -25,7 +25,10 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.Module;
 
 /**
- * A simple action which selects indices on a module view connector.
+ * This action takes an indices array (
+ * <code>ActionContextConstants.SELECTED_INDICES</code>) out of the action
+ * context, and selects the corresponding child connectors of the currently
+ * select one.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

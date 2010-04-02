@@ -24,7 +24,9 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * A standard action to fill the contaxt with a page offset.
+ * This action simply augment the context with a page offset integer (
+ * <code>PAGE_OFFSET</code>). It is meant to be linked to a find/query action
+ * that will further leverage this offset to navigate a pageable result set.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -55,7 +57,7 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the pageOffset.
+   * Configures the page offset to be set to the action context.
    * 
    * @param pageOffset
    *          the pageOffset to set.

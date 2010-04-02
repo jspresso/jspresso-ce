@@ -25,7 +25,8 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.Module;
 
 /**
- * A simple action that selects the module parent in the module navigator.
+ * This action simply displays the parent of the currently selected module; i.e.
+ * it goes up one level in the module hierarchy of the current workspace.
  * 
  * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick

@@ -29,8 +29,8 @@ import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 
 /**
- * A simple action which restarts the current module executing the module
- * startup action.
+ * This action is used to restart a module. It cleans its children and executes
+ * its startup action.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

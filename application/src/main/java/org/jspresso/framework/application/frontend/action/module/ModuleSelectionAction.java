@@ -26,8 +26,9 @@ import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 
 /**
- * Can be used as startup action to select and display a module when the
- * application launches.
+ * Displays a module, and the corresponding workspace if necessary based on
+ * their names. It can be used as startup action to select and display a module
+ * when the application launches.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -65,7 +66,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the workspaceName.
+   * Configures the name (untranslated) of the workspace to be displayed.
    * 
    * @param workspaceName
    *          the workspaceName to set.
@@ -75,7 +76,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the moduleName.
+   * Configures the name (untranslated) of the module to be displayed.
    * 
    * @param moduleName
    *          the moduleName to set.

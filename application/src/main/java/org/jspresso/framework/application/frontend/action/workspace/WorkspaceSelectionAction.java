@@ -24,7 +24,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * Workspace selection action.
+ * This action displays a workspace using its (untranslated) name.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -52,7 +52,7 @@ public class WorkspaceSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the workspaceName.
+   * Configures the name of the workspace to display.
    * 
    * @param workspaceName
    *          the workspaceName to set.

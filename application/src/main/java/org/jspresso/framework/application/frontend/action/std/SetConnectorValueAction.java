@@ -25,9 +25,9 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
 
 /**
- * Sets the object registered as ACTION_RESULT in the action context as the
- * connector value. The connector used is also retrieved from the action context
- * using the key parametrized.
+ * This acgion retrieves the action parameter from the action context and
+ * assigns it as value to the targetted connector. The connector to target is
+ * itself retrieved from the action context using a parameterized key.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -58,7 +58,8 @@ public class SetConnectorValueAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the connectorActionContextKey.
+   * Configures the key to look for the target connector in the context, e.g.
+   * VIEW_CONNECTOR.
    * 
    * @param connectorActionContextKey
    *          the connectorActionContextKey to set.
