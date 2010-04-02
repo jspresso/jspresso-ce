@@ -187,7 +187,6 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/print-48x48.png" />
     <property name="name" value="print.name" />
     <property name="description" value="print.description" />
-    <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="reportFactory" ref="reportFactory" />
     <property name="nextAction">
       <bean parent="chooseComponentAction">
@@ -198,7 +197,6 @@
 
   <bean id="abstractChooseActionAction" abstract="true"
     class="org.jspresso.framework.application.frontend.action.flow.ChooseActionAction">
-    <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="nextAction">
       <bean parent="chooseComponentAction">
         <property name="okAction" ref="chooseActionOkFrontAction" />
@@ -230,7 +228,6 @@
   </bean>
 
   <bean id="editComponentAction" class="org.jspresso.framework.application.frontend.action.std.EditComponentAction">
-    <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="cancelAction" ref="cancelDialogFrontAction" />
     <property name="nextAction" ref="modalDialogAction" />
   </bean>
@@ -244,7 +241,6 @@
     class="org.jspresso.framework.application.frontend.action.security.ChangePasswordAction">
     <property name="name" value="password.change" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/password-48x48.png" />
-    <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="okAction">
       <bean parent="okDialogFrontAction">
         <property name="wrappedAction" ref="changePasswordBackAction" />
@@ -265,7 +261,6 @@
   <bean id="wizardAction" abstract="true" class="org.jspresso.framework.application.frontend.action.wizard.WizardAction">
     <property name="name" value="wizard.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/wizard-48x48.png" />
-    <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="cancelAction" ref="cancelDialogFrontAction" />
   </bean>
 

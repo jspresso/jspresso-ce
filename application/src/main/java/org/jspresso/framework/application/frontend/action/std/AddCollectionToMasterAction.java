@@ -30,7 +30,13 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
- * Creates and adds an entity to the selected master detail collection.
+ * This action is designed to wrap a backend action that will create and add a
+ * (collection of) component(s) to the model collection of the view it's
+ * installed on. Its objective is to complete the action context with the
+ * descriptor of the component (or entity) to be added so that the backend
+ * action explicitely knows what to create. Moreover, the name, description and
+ * icon used for the graphical representation are all computed out of the
+ * configured <code>elementEntityDescriptor</code>.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -121,9 +127,17 @@ public class AddCollectionToMasterAction<E, F, G> extends
   }
 
   /**
-   * Sets the elementEntityDescriptor. Entities of this type (which must be a
-   * subclass of the collection element) are created and added to the detail
-   * collection.
+   * Configures the descriptor of the entities that are to be added by the
+   * action to the underlying model collection. Setting this property serves
+   * multiple objectives :
+   * <ul>
+   * <li>complete the application context with the
+   * <code>AddComponentCollectionToMasterAction.ELEMENT_DESCRIPTOR</code> key so
+   * that the chained backend action knows what type of entity to create.</li>
+   * <li>customize the name, description and icon used to represent the action
+   * in the UI. All three are derived from the configured element entity
+   * descriptor.</li>
+   * </ul>
    * 
    * @param elementEntityDescriptor
    *          the elementEntityDescriptor to set.

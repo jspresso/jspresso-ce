@@ -37,7 +37,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
- * Frontend action to select an action and launch it.
+ * This action displays a list of frontend actions so that the user can choose
+ * and launch one of them.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -52,8 +53,6 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private List<IDisplayableAction> actions;
 
-  private IModelConnectorFactory   modelConnectorFactory;
-
   /**
    * {@inheritDoc}
    */
@@ -63,9 +62,11 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
     BasicListDescriptor<IDescriptor> modelDescriptor = new BasicListDescriptor<IDescriptor>();
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
     modelDescriptor.setName(ACTION_MODEL_NAME);
-    IValueConnector actionsConnector = modelConnectorFactory
-        .createModelConnector(ACTION_MODEL_NAME, modelDescriptor, actionHandler
-            .getSubject());
+    // IValueConnector actionsConnector = modelConnectorFactory
+    // .createModelConnector(ACTION_MODEL_NAME, modelDescriptor, actionHandler
+    // .getSubject());
+    IValueConnector actionsConnector = getBackendController(context)
+        .createModelConnector(ACTION_MODEL_NAME, modelDescriptor);
     actionsConnector.setConnectorValue(createActionProxies(
         getTranslationProvider(context), getLocale(context)));
     setActionParameter(actionsConnector, context);
@@ -87,10 +88,12 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
    * 
    * @param modelConnectorFactory
    *          the beanConnectorFactory to set.
+   * @deprecated modeconnector is now created by the backend controller.
    */
+  @Deprecated
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
+    // this.modelConnectorFactory = modelConnectorFactory;
   }
 
   private List<IDisplayableAction> createActionProxies(

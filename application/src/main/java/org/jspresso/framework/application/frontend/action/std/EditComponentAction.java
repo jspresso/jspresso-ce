@@ -48,10 +48,10 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private IDisplayableAction     cancelAction;
-  private IModelConnectorFactory modelConnectorFactory;
-  private IDisplayableAction     okAction;
-  private IViewDescriptor        viewDescriptor;
+  private IDisplayableAction cancelAction;
+  // private IModelConnectorFactory modelConnectorFactory;
+  private IDisplayableAction okAction;
+  private IViewDescriptor    viewDescriptor;
 
   /**
    * {@inheritDoc}
@@ -80,9 +80,12 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     context.put(ModalDialogAction.DIALOG_VIEW, componentView);
 
-    IValueConnector componentConnector = modelConnectorFactory
-        .createModelConnector(ACTION_MODEL_NAME, getViewDescriptor(context)
-            .getModelDescriptor(), actionHandler.getSubject());
+    // IValueConnector componentConnector = modelConnectorFactory
+    // .createModelConnector(ACTION_MODEL_NAME, getViewDescriptor(context)
+    // .getModelDescriptor(), actionHandler.getSubject());
+    IValueConnector componentConnector = getBackendController(context)
+        .createModelConnector(ACTION_MODEL_NAME,
+            getViewDescriptor(context).getModelDescriptor());
     componentConnector.setConnectorValue(component);
 
     getMvcBinder(context)
@@ -106,10 +109,12 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    * 
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
+   * @deprecated modeconnector is now created by the backend controller.
    */
+  @Deprecated
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
+    // this.modelConnectorFactory = modelConnectorFactory;
   }
 
   /**

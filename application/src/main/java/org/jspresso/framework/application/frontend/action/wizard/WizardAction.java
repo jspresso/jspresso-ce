@@ -37,12 +37,12 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  */
 public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private IDisplayableAction     cancelAction;
-  private IDisplayableAction     finishAction;
-  private IWizardStepDescriptor  firstWizardStep;
-  private IModelConnectorFactory modelConnectorFactory;
-  private Integer                width;
-  private Integer                height;
+  private IDisplayableAction    cancelAction;
+  private IDisplayableAction    finishAction;
+  private IWizardStepDescriptor firstWizardStep;
+  // private IModelConnectorFactory modelConnectorFactory;
+  private Integer               width;
+  private Integer               height;
 
   /**
    * {@inheritDoc}
@@ -51,10 +51,13 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IValueConnector modelConnector = modelConnectorFactory
-        .createModelConnector(ACTION_MODEL_NAME, firstWizardStep
-            .getViewDescriptor().getModelDescriptor(), actionHandler
-            .getSubject());
+    // IValueConnector modelConnector = modelConnectorFactory
+    // .createModelConnector(ACTION_MODEL_NAME, firstWizardStep
+    // .getViewDescriptor().getModelDescriptor(), actionHandler
+    // .getSubject());
+    IValueConnector modelConnector = getBackendController(context)
+        .createModelConnector(ACTION_MODEL_NAME,
+            firstWizardStep.getViewDescriptor().getModelDescriptor());
     Map<String, Object> wizardModelInit = (Map<String, Object>) context
         .get(IWizardStepDescriptor.INITIAL_WIZARD_MODEL);
     Map<String, Object> wizardModel = new ObjectEqualityMap<String, Object>();
@@ -103,10 +106,12 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
    * 
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
+   * @deprecated modeconnector is now created by the backend controller.
    */
+  @Deprecated
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
+    // this.modelConnectorFactory = modelConnectorFactory;
   }
 
   /**

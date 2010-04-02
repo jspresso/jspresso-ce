@@ -24,8 +24,9 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * A frontend action to display all usefull informations about a binary
- * property.
+ * This action displays informations about a binary property content. The
+ * displayed information mainly consists in the content size. The action must be
+ * installed on a property view and supports textual and binary properties.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
