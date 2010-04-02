@@ -25,9 +25,12 @@ import org.jspresso.framework.application.frontend.file.ConnectorValueSetterCall
 import org.jspresso.framework.model.descriptor.IFileFilterable;
 
 /**
- * Lets the user browse the local file system and choose a file to update the
- * content of a binary property. Files are filtered based on the file filter
- * defined in the binary property descriptor.
+ * This action lets the user browse the local file system and choose a file to
+ * update the content of a binary property. Files are filtered based on the file
+ * filter defined in the binary property descriptor. This file action must be
+ * installed on a property view. A suitable (built-in) file open callback is
+ * installed upon action instanciation and thus, nothing has to be configured
+ * for the action to be immediately operational.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

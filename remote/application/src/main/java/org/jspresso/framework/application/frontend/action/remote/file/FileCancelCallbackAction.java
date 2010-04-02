@@ -26,8 +26,9 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 
 /**
- * An action to trigger the file open cancel callback.
+ * An (intenal) action to trigger the file open cancel callback.
  * 
+ * @internal
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

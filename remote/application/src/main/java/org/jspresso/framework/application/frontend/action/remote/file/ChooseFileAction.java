@@ -33,7 +33,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * channel, i.e. you have different implementation classes (but registered under
  * the same Spring name) for all supported UI technologies. For instance,
  * <code>SaveFileAction</code> will have as many implementations as the number
- * of supported UIs, all in a specific package :
+ * of supported UIs, each in a specific package :
  * <p>
  * <code>org.jspresso.framework.application.frontend.action.<b>[ui]</b>.file.SaveFileAction</code>
  * 
@@ -47,7 +47,9 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   private Map<String, List<String>> fileFilter;
 
   /**
-   * Sets the defaultFileName.
+   * Configures a default file name to be used whenever a file needs to be
+   * chosen. Subclasses ma use their specific callback to override this name
+   * with a more dynamically computed one.
    * 
    * @param defaultFileName
    *          the defaultFileName to set.
@@ -57,8 +59,17 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   }
 
   /**
-   * Sets the fileFilter. Filter file types are a map of descriptions keying
-   * file extension arays.
+   * Configures the file filters to be used whenever the UI technology supports
+   * it in the file choosing dialog. Filter file types are a map of descriptions
+   * keying file extension lists.
+   * <p>
+   * For instance, an entry in this map could be :
+   * <ul>
+   * <li>key : <code>&quot;images&quot;</code></li>
+   * <li>value :
+   * <code>[&quot;.png&quot;,&quot;.jpg&quot;,&quot;.gif&quot;,&quot;.bmp&quot;]</code>
+   * </li>
+   * </ul>
    * 
    * @param fileFilter
    *          the fileFilter to set.

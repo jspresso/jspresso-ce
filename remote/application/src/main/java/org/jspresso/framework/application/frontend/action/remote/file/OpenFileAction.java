@@ -30,7 +30,9 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
- * Initiates a file open action.
+ * This action lets the user browse his local file system and choose a file to
+ * read some content from. What is done with the file content is determined by
+ * the configured <code>fileOpenCallback</code> instance.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -64,7 +66,18 @@ public class OpenFileAction extends ChooseFileAction {
   }
 
   /**
-   * Sets the fileOpenCallback.
+   * Configures the file open callback instance that will be used to deal with
+   * the file dialog events. Two methods must be implemented :
+   * <ul>
+   * <li>
+   * <code>fileChosen(InputStream, IActionHandler, Map&lt;String, Object&gt;)</code>
+   * that is called whenever a file has been chosen. The input stream that is
+   * passed as parameter allows for reading from the chosen file. The developer
+   * doesn't have to cope with closing the stream.</li>
+   * <li><code>cancel(IActionHandler, Map&lt;String, Object&gt;)</code> that is
+   * called whenever the file selection is cancelled. It is perfectly legal not
+   * to do anything.</li>
+   * </ul>
    * 
    * @param fileOpenCallback
    *          the fileOpenCallback to set.

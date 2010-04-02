@@ -29,8 +29,9 @@ import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 
 /**
- * An action to trigger the file open callback.
+ * An (internal) action to trigger the file open callback.
  * 
+ * @internal
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
