@@ -24,7 +24,10 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * Displays the previous pinned module.
+ * This action triggers a <i>&quot;backward&quot;</i> navigation in the recorded
+ * module history. The frontend controler automatically keeps track of the
+ * traversed modules so that a user can go back and forward his navigation
+ * history, much like for a web navigation.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

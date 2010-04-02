@@ -24,7 +24,9 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
- * A simple action to display an static Url content.
+ * This action opens a browser (or a browser tab) targetted at a URL. The actual
+ * URL is a composition of a static parameterized prefix (<code>baseUrl</code>)
+ * and a dynamic part taken from the action context parameter.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -59,7 +61,8 @@ public class DisplayUrlAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the baseUrl.
+   * Configures the static prefix that is prepended (if not <code>null</code>)
+   * to the opened URL.
    * 
    * @param baseUrl
    *          the baseUrl to set.

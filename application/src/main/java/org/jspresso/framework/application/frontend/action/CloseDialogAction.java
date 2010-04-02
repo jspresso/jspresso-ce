@@ -23,8 +23,9 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 
 /**
- * A standard close dialog action. Since it is a chained action, it can be
- * chained with another action.
+ * This is a very generic action that closes (disposes) the currently opened
+ * dialog. The dialog is actually closed between the <i>wrapped</i> action and
+ * the <i>next</i> action if and only if the wrapped action succeeds.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

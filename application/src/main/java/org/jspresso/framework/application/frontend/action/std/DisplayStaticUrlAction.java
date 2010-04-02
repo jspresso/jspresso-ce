@@ -23,7 +23,13 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 
 /**
- * A simple action to display an static Url content.
+ * Like its parent, this action opens a URL in a browser (or a browser tab). But
+ * instead of taking the URL out of the context, it uses a statically
+ * parameterized URL, or rather a key (<code>urlKey</code>) used to translate
+ * the URL based on the logged-in user language. This is particularly useful for
+ * linking to static internationalized content, like an online manual. Be aware
+ * that once the URL is translated, it is still appended to the
+ * <code>baseUrl</code>.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -50,7 +56,7 @@ public class DisplayStaticUrlAction<E, F, G> extends DisplayUrlAction<E, F, G> {
   }
 
   /**
-   * Sets the urlKey.
+   * Configures the translation key used to internationalize the URL to open.
    * 
    * @param urlKey
    *          the urlKey to set.

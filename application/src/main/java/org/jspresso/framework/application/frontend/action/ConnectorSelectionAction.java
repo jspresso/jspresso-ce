@@ -24,7 +24,10 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 
 /**
- * A simple action which selects indices on ath view connector.
+ * This is a very generic action that takes an array of indices (
+ * <code>ActionContextConstants.SELECTED_INDICES</code>) out of the action
+ * context and selects these indices on the view. This action is, obviously,
+ * designed to be used in an action chained installed on a collection view.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
