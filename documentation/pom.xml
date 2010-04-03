@@ -75,7 +75,7 @@
                 -maxDepth_8 1
 
                 -rootClassName_9 org.jspresso.framework.application.frontend.action.FrontendAction
-                -excludedSubtrees_9 org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction:org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction:org.jspresso.framework.application.frontend.action.ulc.AbstractUlcAction
+                -excludedSubtrees_9 org.jspresso.framework.application.frontend.action.swing.AbstractSwingAction:org.jspresso.framework.application.frontend.action.wings.AbstractWingsAction:org.jspresso.framework.application.frontend.action.ulc.AbstractUlcAction:org.jspresso.framework.application.charting.frontend.action.standalone.DisplayChartAction
 
                 -rootClassName_10 org.jspresso.framework.application.backend.action.BackendAction
 
@@ -107,7 +107,7 @@
           <reportOutputDirectory>${project.build.directory}/staging/reference</reportOutputDirectory>
           <destDir>generated</destDir>
           <subpackages>org.jspresso.framework</subpackages>
-          <sourcepath>${basedir}/../util/src/main/java${path.separator}${basedir}/../model/src/main/java${path.separator}${basedir}/../view/src/main/java${path.separator}${basedir}/../application/src/main/java${path.separator}${basedir}/../hibernate/src/main/java${path.separator}${basedir}/../remote/application/src/main/java${path.separator}${basedir}/../remote/application/src/main/java${path.separator}${basedir}/../swing/application/src/main/java${path.separator}${basedir}/../wings/application/src/main/java${path.separator}${basedir}/../ulc/application/src/main/java</sourcepath>
+          <sourcepath>${basedir}/../util/src/main/java${path.separator}${basedir}/../model/src/main/java${path.separator}${basedir}/../view/src/main/java${path.separator}${basedir}/../application/src/main/java${path.separator}${basedir}/../hibernate/src/main/java${path.separator}${basedir}/../remote/application/src/main/java${path.separator}${basedir}/../remote/application/src/main/java${path.separator}${basedir}/../swing/application/src/main/java${path.separator}${basedir}/../wings/application/src/main/java${path.separator}${basedir}/../ulc/application/src/main/java${path.separator}${basedir}/../jasper/core/src/main/java${path.separator}${basedir}/../jasper/remote/src/main/java${path.separator}${basedir}/../jasper/swing/src/main/java${path.separator}${basedir}/../jasper/ulc/src/main/java${path.separator}${basedir}/../jasper/wings/src/main/java${path.separator}${basedir}/../fusioncharts/src/main/java</sourcepath>
         </configuration>
       </plugin>
       <plugin>
