@@ -26,8 +26,11 @@ import org.jspresso.framework.application.printing.model.descriptor.IReportDescr
 import org.jspresso.framework.binding.ICollectionConnector;
 
 /**
- * Frontend action to generate a report selected among the model collection
- * connector holding a list of report descriptors.
+ * This action allows the user to select a report to generate on the collection
+ * view where it has been installed. The collection backing the view can either
+ * be a collection of <code>IReport</code> or <code>IReportDescriptor</code>. In
+ * the latter situation, the correponding <code>IReport</code> instances are
+ * created on the fly using the configured report factory.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

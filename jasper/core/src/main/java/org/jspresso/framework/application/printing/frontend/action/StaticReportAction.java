@@ -26,8 +26,10 @@ import org.jspresso.framework.application.printing.model.descriptor.IReportDescr
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
- * Frontend action to generate a report. The report is injected statically into
- * the action.
+ * This action generates and displays a report that is statically configured
+ * through the <code>reportDescriptor</code> parameter. The report context is
+ * augmented with the identifier of the entity that is selected in the view were
+ * the action is installed, under the key <code>ENTITY_ID</code>.
  * 
  * @version $LastChangedRevision: 1332 $
  * @author Vincent Vandenschrick
@@ -57,7 +59,7 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
   }
 
   /**
-   * Sets the reportDescriptor.
+   * Configures the report to execute.
    * 
    * @param reportDescriptor
    *          the reportDescriptor to set.

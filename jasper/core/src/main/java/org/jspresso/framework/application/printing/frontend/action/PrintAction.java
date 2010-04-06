@@ -35,7 +35,8 @@ import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
- * This action allows the user to choose a report among a list and print it.
+ * This action allows the user to choose a report among a list and print it. The
+ * list of available reports is statically configured into the action.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -81,7 +82,8 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the reportDescriptors.
+   * Configures the available report descriptors the user will be allowed to
+   * choose.
    * 
    * @param reportDescriptors
    *          the reportDescriptors to set.
@@ -91,7 +93,9 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the reportFactory.
+   * Configures the report factory to use. The report factory is responsible for
+   * creating an <code>IReport</code> (a concrete report instance) from a report
+   * descriptor (<code>IReportDescriptor</code>).
    * 
    * @param reportFactory
    *          the reportFactory to set.
