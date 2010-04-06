@@ -54,9 +54,9 @@ public class ControllerAwareProxyComponentFactory extends
   @Override
   protected InvocationHandler createComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor) {
-    return new ControllerAwareComponentInvocationHandler(
-        componentDescriptor, this, getComponentCollectionFactory(),
-        getAccessorFactory(), getComponentExtensionFactory(), backendController);
+    return new ControllerAwareComponentInvocationHandler(componentDescriptor,
+        this, getComponentCollectionFactory(), getAccessorFactory(),
+        getComponentExtensionFactory(), getBackendController());
   }
 
   /**
@@ -64,6 +64,15 @@ public class ControllerAwareProxyComponentFactory extends
    */
   @Override
   protected UserPrincipal getPrincipal() {
-    return backendController.getApplicationSession().getPrincipal();
+    return getBackendController().getApplicationSession().getPrincipal();
+  }
+
+  /**
+   * Gets the backendController.
+   * 
+   * @return the backendController.
+   */
+  protected IBackendController getBackendController() {
+    return backendController;
   }
 }

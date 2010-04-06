@@ -95,7 +95,7 @@ public class ControllerAwareEntityInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    backendController.initializePropertyIfNeeded((IEntity) proxy,
+    getBackendController().initializePropertyIfNeeded((IEntity) proxy,
         propertyDescriptor.getName());
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
@@ -107,7 +107,7 @@ public class ControllerAwareEntityInvocationHandler extends
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
 
-    backendController.initializePropertyIfNeeded((IEntity) proxy,
+    getBackendController().initializePropertyIfNeeded((IEntity) proxy,
         propertyDescriptor.getName());
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
@@ -117,7 +117,7 @@ public class ControllerAwareEntityInvocationHandler extends
    */
   @Override
   protected boolean isInitialized(Object objectOrProxy) {
-    return backendController.isInitialized(objectOrProxy);
+    return getBackendController().isInitialized(objectOrProxy);
   }
 
   /**

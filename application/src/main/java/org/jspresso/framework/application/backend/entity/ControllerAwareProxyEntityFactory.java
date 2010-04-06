@@ -36,8 +36,7 @@ import org.jspresso.framework.security.UserPrincipal;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ControllerAwareProxyEntityFactory extends
-    BasicProxyEntityFactory {
+public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
 
   private IBackendController backendController;
 
@@ -49,7 +48,7 @@ public class ControllerAwareProxyEntityFactory extends
   @Override
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
     T newEntity = super.createEntityInstance(entityContract);
-    backendController.registerEntity(newEntity, true);
+    getBackendController().registerEntity(newEntity, true);
     return newEntity;
   }
 
@@ -75,7 +74,8 @@ public class ControllerAwareProxyEntityFactory extends
       IComponentDescriptor<IComponent> entityDescriptor) {
     return new ControllerAwareEntityInvocationHandler(entityDescriptor,
         getInlineComponentFactory(), getEntityCollectionFactory(),
-        getAccessorFactory(), getEntityExtensionFactory(), backendController);
+        getAccessorFactory(), getEntityExtensionFactory(),
+        getBackendController());
   }
 
   /**
@@ -85,7 +85,7 @@ public class ControllerAwareProxyEntityFactory extends
    */
   @Override
   protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return backendController;
+    return getBackendController();
   }
 
   /**
@@ -93,6 +93,15 @@ public class ControllerAwareProxyEntityFactory extends
    */
   @Override
   protected UserPrincipal getPrincipal() {
-    return backendController.getApplicationSession().getPrincipal();
+    return getBackendController().getApplicationSession().getPrincipal();
+  }
+
+  /**
+   * Gets the backendController.
+   * 
+   * @return the backendController.
+   */
+  protected IBackendController getBackendController() {
+    return backendController;
   }
 }
