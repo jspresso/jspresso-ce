@@ -28,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
@@ -47,7 +48,9 @@ import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.resources.AbstractResource;
+import org.jspresso.framework.util.resources.IActiveResource;
 import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.IResourceBase;
 import org.jspresso.framework.util.url.UrlHelper;
 
 /**
@@ -211,7 +214,7 @@ public class ResourceProviderServlet extends HttpServlet {
       for (FileItem item : items) {
         if (!item.isFormField()) {
           out.print("<resource");
-          IResource uploadResource = new UploadResourceAdapter(
+          IResourceBase uploadResource = new UploadResourceAdapter(
               "application/octet-stream", item);
           String resourceId = ResourceManager.getInstance().register(
               uploadResource);
@@ -247,7 +250,7 @@ public class ResourceProviderServlet extends HttpServlet {
 
     BufferedInputStream inputStream = null;
     if (id != null) {
-      IResource resource = ResourceManager.getInstance().getRegistered(id);
+      IResourceBase resource = ResourceManager.getInstance().getRegistered(id);
       if (resource == null) {
         throw new ServletException("Bad resource id : " + id);
       }
@@ -263,7 +266,15 @@ public class ResourceProviderServlet extends HttpServlet {
         response.setContentLength((int) resourceLength);
       }
 
-      inputStream = new BufferedInputStream(resource.getContent());
+      if (resource instanceof IResource) {
+        inputStream = new BufferedInputStream(((IResource) resource)
+            .getContent());
+      } else if (resource instanceof IActiveResource) {
+        OutputStream outputStream = response.getOutputStream();
+        ((IActiveResource) resource).writeToContent(outputStream);
+        outputStream.flush();
+        outputStream.close();
+      }
     } else if (localUrlSpec != null) {
       if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
         // we must append parameters that are passed AFTER the localUrl

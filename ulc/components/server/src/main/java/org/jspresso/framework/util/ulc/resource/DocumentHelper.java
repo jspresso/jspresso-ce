@@ -86,8 +86,8 @@ public final class DocumentHelper {
    */
   public static void showDocument(String id, String target) throws IOException {
     if (inDevelopmentEnvironment()) {
-      IResource resourceProvider = ResourceManager.getInstance().getRegistered(
-          id);
+      IResource resourceProvider = (IResource) ResourceManager
+          .getInstance().getRegistered(id);
       String fileExtension = ".tmp";
       if (resourceProvider.getMimeType() != null
           && resourceProvider.getMimeType().startsWith(APPLICATION_PREFIX)) {

@@ -18,22 +18,36 @@
  */
 package org.jspresso.framework.util.resources;
 
+import java.io.IOException;
+
 /**
- * Base implementation class for passive web resources.
+ * This interface is implemented by web resources.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractResource extends AbstractResourceBase implements
-    IResource {
+public interface IResourceBase {
 
   /**
-   * Constructs a new <code>AbstractResource</code> instance.
+   * Gets the resource mime type.
    * 
-   * @param mimeType
-   *          the mime type of the resource.
+   * @return the resource mime type.
    */
-  public AbstractResource(String mimeType) {
-    super(mimeType);
-  }
+  String getMimeType();
+
+  /**
+   * Gets the resource length.
+   * 
+   * @return the resource length.
+   * @throws IOException
+   *           whenever an IO exception occurs.
+   */
+  long getSize() throws IOException;
+
+  /**
+   * Gets the name of the resource or null.
+   * 
+   * @return the name of the resource.
+   */
+  String getName();
 }

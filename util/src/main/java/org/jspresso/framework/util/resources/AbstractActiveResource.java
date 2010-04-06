@@ -19,13 +19,13 @@
 package org.jspresso.framework.util.resources;
 
 /**
- * Base implementation class for passive web resources.
+ * Base implementation class for active web resources.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2529 $
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractResource extends AbstractResourceBase implements
-    IResource {
+public abstract class AbstractActiveResource extends AbstractResourceBase
+    implements IActiveResource {
 
   /**
    * Constructs a new <code>AbstractResource</code> instance.
@@ -33,7 +33,7 @@ public abstract class AbstractResource extends AbstractResourceBase implements
    * @param mimeType
    *          the mime type of the resource.
    */
-  public AbstractResource(String mimeType) {
+  public AbstractActiveResource(String mimeType) {
     super(mimeType);
   }
 }

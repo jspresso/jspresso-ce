@@ -43,7 +43,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.ReferenceMap;
-import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.IResourceBase;
 
 /**
  * This class allows to register a resource provider by a unique id and to
@@ -56,7 +56,7 @@ public final class ResourceManager {
   private static final ResourceManager INSTANCE = new ResourceManager();
 
   private SecureRandom                 random;
-  private Map<String, IResource>       resources;
+  private Map<String, IResourceBase>       resources;
 
   @SuppressWarnings("unchecked")
   private ResourceManager() {
@@ -82,8 +82,8 @@ public final class ResourceManager {
    *          the identifier under which the resource has been registered.
    * @return the registsred resource or null.
    */
-  public IResource getRegistered(String id) {
-    IResource resource = resources.get(id);
+  public IResourceBase getRegistered(String id) {
+    IResourceBase resource = resources.get(id);
     // Do not unregister resource once retrieved. There might be cases
     // when the resource must be retrieved multiple times.
     // unregister(id);
@@ -98,7 +98,7 @@ public final class ResourceManager {
    * @return the generated identifier under which the resource has been
    *         registered.
    */
-  public String register(IResource resource) {
+  public String register(IResourceBase resource) {
     try {
       String id = createId();
       resources.put(id, resource);
@@ -117,7 +117,7 @@ public final class ResourceManager {
    * @param resource
    *          the resource to be registered.
    */
-  public void register(String id, IResource resource) {
+  public void register(String id, IResourceBase resource) {
     resources.put(id, resource);
   }
 

@@ -18,22 +18,24 @@
  */
 package org.jspresso.framework.util.resources;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
- * Base implementation class for passive web resources.
+ * This interface is implemented by active web resources.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2587 $
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractResource extends AbstractResourceBase implements
-    IResource {
+public interface IActiveResource extends IResourceBase {
 
   /**
-   * Constructs a new <code>AbstractResource</code> instance.
+   * Writes content to the passed outputstream.
    * 
-   * @param mimeType
-   *          the mime type of the resource.
+   * @param out
+   *          the outputstream where to write the resource content.
+   * @throws IOException
+   *           whenever an exception occurs.
    */
-  public AbstractResource(String mimeType) {
-    super(mimeType);
-  }
+  void writeToContent(OutputStream out) throws IOException;
 }

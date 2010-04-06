@@ -22,12 +22,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * This interface is implemented by web resources.
+ * This interface is implemented by passive web resources.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2587 $
  * @author Vincent Vandenschrick
  */
-public interface IResource {
+public interface IResource extends IResourceBase {
 
   /**
    * Gets the resource content input stream.
@@ -37,27 +37,4 @@ public interface IResource {
    *           whenever an IO exception occurs.
    */
   InputStream getContent() throws IOException;
-
-  /**
-   * Gets the resource mime type.
-   * 
-   * @return the resource mime type.
-   */
-  String getMimeType();
-
-  /**
-   * Gets the resource length.
-   * 
-   * @return the resource length.
-   * @throws IOException
-   *           whenever an IO exception occurs.
-   */
-  long getSize() throws IOException;
-
-  /**
-   * Gets the name of the resource or null.
-   * 
-   * @return the name of the resource.
-   */
-  String getName();
 }

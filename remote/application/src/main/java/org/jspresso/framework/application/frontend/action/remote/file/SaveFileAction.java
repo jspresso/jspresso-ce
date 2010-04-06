@@ -18,19 +18,17 @@
  */
 package org.jspresso.framework.application.frontend.action.remote.file;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.util.resources.AbstractResource;
+import org.jspresso.framework.util.resources.AbstractActiveResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.view.IView;
@@ -107,44 +105,31 @@ public class SaveFileAction extends ChooseFileAction {
     this.fileSaveCallback = fileSaveCallback;
   }
 
-  private static class ResourceAdapter extends AbstractResource {
+  private static class ResourceAdapter extends AbstractActiveResource {
 
-    private String name;
-    private byte[] content;
+    private String              name;
+    private IFileSaveCallback   source;
+    private IActionHandler      actionHandler;
+    private Map<String, Object> context;
 
     public ResourceAdapter(String name, String contentType,
         IFileSaveCallback source, IActionHandler actionHandler,
         Map<String, Object> context) {
       super(contentType);
       this.name = name;
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      try {
-        source.fileChosen(baos, actionHandler, context);
-        baos.flush();
-      } catch (IOException ex) {
-        throw new ActionException(ex);
-      } finally {
-        try {
-          baos.close();
-        } catch (IOException ex) {
-          // NO-OP.
-        }
+      this.source = source;
+      this.actionHandler = actionHandler;
+      this.context = new HashMap<String, Object>();
+      if (context != null) {
+        this.context = context;
       }
-      content = baos.toByteArray();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public InputStream getContent() {
-      return new ByteArrayInputStream(content);
     }
 
     /**
      * {@inheritDoc}
      */
     public long getSize() {
-      return content.length;
+      return -1; // unknown.
     }
 
     /**
@@ -154,6 +139,13 @@ public class SaveFileAction extends ChooseFileAction {
      */
     public String getName() {
       return name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void writeToContent(OutputStream out) throws IOException {
+      source.fileChosen(out, actionHandler, context);
     }
   }
 
