@@ -24,7 +24,62 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
- * A Wizard action.
+ * This action implements a &quot;wizard&quot;. It can be configured from the
+ * simplest use-case (as for a value entering) to the most complex, multi-step
+ * wizard. Here are a usage directions :
+ * <ol>
+ * <li>The generic wizard front-end action is registered in the Spring context
+ * under the name wizardAction. So you will typically inherit the bean
+ * definition using the parent="wizardAction" when declaring yours.</li>
+ * <li>The goal of the wizard action is to work on a map - the wizard model -
+ * (potentially containing other maps) that represents a hierarchical data
+ * structure that can be used seamlessly as model for any Jspresso view. In your
+ * case, the map will only contain 1 key-value pair (the property you want your
+ * user to enter). When finishing the wizard, the action context will contain
+ * the map with all the key-value pairs the user has created/modified through
+ * the wizard steps. It will be accessible in the action context under the
+ * ActionContextConstants.ACTION_PARAM key and will typically serve as input for
+ * the finish chained action.</li>
+ * <li>The wizard action is configured using chained
+ * org.jspresso.framework.application
+ * .frontend.action.wizard.IWizardStepDescriptor. A concrete, directly usable,
+ * implementation of this interface is
+ * org.jspresso.framework.application.frontend
+ * .action.wizard.StaticWizardStepDescriptor. Each wizard step is highly
+ * configurable (name, description, icon, ...) but its most important properties
+ * are :
+ * <ol>
+ * <li><code>viewDescriptor</code> : the Jspresso view descriptor to be shown in
+ * the wizard GUI when the user enters this step. It can be arbitrarily complex
+ * (even with master-detail like views, inner actions, constraints, security
+ * enforcements, ...). Of course, the view descriptor needs a model descriptor.
+ * So you must describe the wizard model as you would do for persistent entities
+ * or components (so that step views can configure themselves). You will
+ * typically use a BasicComponentDescriptor without name so that it is
+ * automatically excluded from code generation. Note that your actual model
+ * object will be a map (and not Jpresso generated java bean) but Jspresso
+ * connectors are "smart" enough to detect the situation and work with the
+ * hierarchy of maps as if it was a hierarchy of java beans.</li>
+ * <li>optional <code>onEnterAction</code> and <code>onLeaveAction</code> :
+ * actions that will respectively be executed when entering and when exiting the
+ * wizard step.</li>
+ * <li>optional <code>nextLabelKey</code> and <code>previousLabelKey</code> :
+ * I18N keys for next and previous buttons if you want to change the default
+ * ones.</li>
+ * <li>optional <code>nextStepDescriptor</code> : the next wizard step. If null,
+ * the wizard GUI will enable the finish action.</li>
+ * </ol>
+ * </li>
+ * <li>The first wizard step is registered on the wizard action using the
+ * <code>firstWizardStep</code> property.</li>
+ * <li>When the user leaves the last wizard step (clicking the finish action
+ * button), the finish action is triggered. The finish action can be registered
+ * on the wizard action using the <code>finishAction</code> property. This is
+ * typically the place where you explore the wizard map model -
+ * <code>ACTION_PARAM</code> - to get back all the data the user has worked on.
+ * Note that the finish button is entirely configured from the finish action
+ * (label and icon).</li>
+ * </ol>
  * 
  * @version $LastChangedRevision: 1302 $
  * @author Vincent Vandenschrick
