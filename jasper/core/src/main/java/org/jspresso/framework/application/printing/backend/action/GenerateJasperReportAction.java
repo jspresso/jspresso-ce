@@ -111,7 +111,8 @@ public class GenerateJasperReportAction extends BackendAction {
   }
 
   /**
-   * Sets the jdbcTemplate.
+   * Configures the JDBC template (wrapping a datasource) to use for filling the
+   * report.
    * 
    * @param jdbcTemplate
    *          the jdbcTemplate to set.

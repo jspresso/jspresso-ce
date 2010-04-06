@@ -35,7 +35,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
- * Frontend action to select a report.
+ * This action allows the user to choose a report among a list and print it.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

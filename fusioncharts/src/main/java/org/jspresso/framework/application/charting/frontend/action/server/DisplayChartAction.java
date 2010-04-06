@@ -37,7 +37,11 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.jdbc.core.ConnectionCallback;
 
 /**
- * Displays a fusionchart chart for server-based frontends.
+ * This is the concrete implementation of the Fusionchart display action. This
+ * action is specialized by UI channel, i.e. server based UI channels (Ajax,
+ * Flex, ULC) will use <code><i>server</i>.DisplayChartAction</code> whereas
+ * standalone UI channels (Swing) will use
+ * <code><i>standalone</i>.DisplayChartAction</code>.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

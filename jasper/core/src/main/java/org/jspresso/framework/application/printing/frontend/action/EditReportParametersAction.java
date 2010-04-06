@@ -26,7 +26,9 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 
 /**
- * A simple action to edit input parameters in a form view.
+ * This action takes a report (<code>IReport</code>) from the context (
+ * <code>IReport.REPORT_ACTION_PARAM</code> key) and pops-up a form to allow for
+ * the report input parameters customization.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

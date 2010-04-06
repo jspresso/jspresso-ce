@@ -26,7 +26,9 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * Abstract base class for chart display action.
+ * This is the abstract base class for <i>Fusioncharts</i> (flash based charting
+ * library) display actions. It holds several common properties that are
+ * independant from the actual, concrete, implementations.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -53,7 +55,15 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the chartDescriptor.
+   * This property describes the chart to compute and display. A chart
+   * descriptor is a simple data structure that provides :
+   * <ul>
+   * <li>the URL of the chart SWF archive (can be loaded by the classloader
+   * using a classpath pseudo URL)</li>
+   * <li>the title of the chart</li>
+   * <li>the width/height of the chart area</li>
+   * <li>an abstract method to implement in order to compute the chart XML data</li>
+   * </ul>
    * 
    * @param chartDescriptor
    *          the chartDescriptor to set.
@@ -72,7 +82,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the actions.
+   * Configures a list of actions to install in the chart modal dialog.
    * 
    * @param actions
    *          the actions to set.
@@ -91,7 +101,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the jdbcTemplate.
+   * Configures the JDBC template to be used by the achart to compute its data.
    * 
    * @param jdbcTemplate
    *          the jdbcTemplate to set.

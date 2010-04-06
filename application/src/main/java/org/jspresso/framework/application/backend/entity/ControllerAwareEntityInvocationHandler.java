@@ -197,7 +197,12 @@ public class ControllerAwareEntityInvocationHandler extends
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     if (detachedEntities != null) {
       for (IEntity detachedEntity : detachedEntities) {
-        entityLifecycleHandler.registerForUpdate(detachedEntity);
+        if (!entityLifecycleHandler
+            .isEntityRegisteredForDeletion(detachedEntity)
+            && !entityLifecycleHandler
+                .isEntityRegisteredForUpdate(detachedEntity)) {
+          entityLifecycleHandler.registerForUpdate(detachedEntity);
+        }
       }
     }
     detachedEntities = null;

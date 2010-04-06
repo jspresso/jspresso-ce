@@ -33,7 +33,8 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.springframework.jdbc.core.ConnectionCallback;
 
 /**
- * Displays a fusionchart chart for standalone frontends.
+ * This is the concrete implementation of the Fusionchart display action used in
+ * standalone UI channels (Swing).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

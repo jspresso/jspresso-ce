@@ -27,7 +27,7 @@ import org.jspresso.framework.application.printing.model.IReport;
 import org.jspresso.framework.application.printing.model.IReportFactory;
 
 /**
- * Abstract base class of report actions.
+ * Abstract base class for Jasper report actions.
  * 
  * @version $LastChangedRevision: 1332 $
  * @author Vincent Vandenschrick
@@ -44,7 +44,9 @@ public abstract class AbstractReportAction<E, F, G> extends
   private IReportFactory reportFactory;
 
   /**
-   * Sets the reportFactory.
+   * Configures the report factory to use. The report factory is responsible for
+   * creating an <code>IReport</code> (a concrete report instance) from a report
+   * descriptor (<code>IReportDescriptor</code>).
    * 
    * @param reportFactory
    *          the reportFactory to set.
