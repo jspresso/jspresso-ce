@@ -41,7 +41,16 @@ import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * Generates a jasper report.
+ * This action performs the actual Jasper report generation using a JDBC
+ * datasource. The report design is retrieved from the action context (under the
+ * key <code>IReport.REPORT_ACTION_PARAM</code>). The report context used during
+ * the generation includes the action context so that all Jspresso managed
+ * objects can be leveraged in the report itself. The logged-in user locale is
+ * used as the report locale.
+ * <p>
+ * The resulting <code>JasperPrint</code> report is then placed into the action
+ * context as action parameter for further processing (like PDF production for
+ * instance).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

@@ -33,10 +33,8 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
 
   /**
    * Back controller is retrieved from the spring context and started.
-   * <p>
-   * {@inheritDoc}
    */
-  public void start() {
+  protected void startController() {
     // start on brand new instances.
     backendController = null;
     getBackendController().start(getStartupLocale());

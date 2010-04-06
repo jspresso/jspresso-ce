@@ -18,11 +18,7 @@
  */
 package org.jspresso.framework.application.startup.batch;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-
-import javax.security.auth.Subject;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -31,11 +27,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.jspresso.framework.application.backend.action.BackendAction;
-import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.launch.batch.BatchLauncher;
-import org.jspresso.framework.application.startup.AbstractBackendStartup;
-import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.application.startup.BackendActionStartup;
 
 /**
  * A simple batch process starter. The batch itself is coded as a backend action
@@ -44,14 +37,7 @@ import org.jspresso.framework.security.UserPrincipal;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BatchStartup extends AbstractBackendStartup implements
-    IBatchStartup {
-
-  private String              applicationContextKey;
-  private Locale              startupLocale;
-  private String              actionBeanId;
-  private Map<String, Object> actionContext;
-  private String              batchUserName;
+public class BatchStartup extends BackendActionStartup implements IBatchStartup {
 
   private static final String APP_CONTEXT     = "applicationContext";
   private static final String LOCALE          = "locale";
@@ -62,68 +48,11 @@ public class BatchStartup extends AbstractBackendStartup implements
    * {@inheritDoc}
    */
   @Override
-  protected String getApplicationContextKey() {
-    return applicationContextKey;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Locale getStartupLocale() {
-    return startupLocale;
-  }
-
-  /**
-   * Gets the initial parameterized action context.
-   * 
-   * @return the initial parameterized action context.
-   */
-  protected Map<String, Object> getActionContext() {
-    if (actionContext == null) {
-      actionContext = new HashMap<String, Object>();
-    }
-    return actionContext;
-  }
-
-  /**
-   * The bean id of the backend action to execute.
-   * 
-   * @return bean id of the backend action to execute.
-   */
-  protected String getActionBeanId() {
-    return actionBeanId;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public void start() {
-    super.start();
-    IApplicationSession batchSession = getBackendController()
-        .getApplicationSession();
-    batchSession.setLocale(getStartupLocale());
-    batchSession.setSubject(createSubject());
-    BackendAction backendAction = getAction();
-    Map<String, Object> startupActionContext = new HashMap<String, Object>();
-    startupActionContext.putAll(getBackendController()
-        .getInitialActionContext());
-    startupActionContext.putAll(getActionContext());
-    boolean success = getBackendController().execute(backendAction,
-        startupActionContext);
-    if (!success) {
+    startController();
+    if (!executeAction()) {
       System.exit(1);
     }
-  }
-
-  /**
-   * Retrieves the backend action to execute.
-   * 
-   * @return the backend action to execute.
-   */
-  protected BackendAction getAction() {
-    return (BackendAction) getApplicationContext().getBean(getActionBeanId());
   }
 
   /**
@@ -153,10 +82,10 @@ public class BatchStartup extends AbstractBackendStartup implements
    *           whenever an error occurs parsing the command line.
    */
   protected void processCommandLine(CommandLine cmd) throws ParseException {
-    applicationContextKey = cmd.getOptionValue(APP_CONTEXT);
-    startupLocale = new Locale(cmd.getOptionValue(LOCALE, "en"));
-    actionBeanId = cmd.getOptionValue(ACTION_ID);
-    batchUserName = cmd.getOptionValue(BATCH_USER_NAME, "batch");
+    setApplicationContextKey(cmd.getOptionValue(APP_CONTEXT));
+    setStartupLocale(new Locale(cmd.getOptionValue(LOCALE, "en")));
+    setActionBeanId(cmd.getOptionValue(ACTION_ID));
+    setBatchUserName(cmd.getOptionValue(BATCH_USER_NAME, "batch"));
   }
 
   /**
@@ -180,17 +109,5 @@ public class BatchStartup extends AbstractBackendStartup implements
         .withDescription("use the specified batch user name.").create(
             BATCH_USER_NAME));
     return options;
-  }
-
-  /**
-   * Creates a default batch user subject.
-   * 
-   * @return a default batch user subject.
-   */
-  protected Subject createSubject() {
-    Subject s = new Subject();
-    UserPrincipal p = new UserPrincipal(batchUserName);
-    s.getPrincipals().add(p);
-    return s;
   }
 }
