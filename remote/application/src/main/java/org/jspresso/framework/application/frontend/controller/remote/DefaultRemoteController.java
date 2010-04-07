@@ -418,6 +418,7 @@ public class DefaultRemoteController extends
     localeCommand.setLanguage(getLocale().getLanguage());
     initCommands.add(localeCommand);
     RemoteInitCommand initCommand = new RemoteInitCommand();
+    initCommand.setWorkspaceNames(getWorkspaceNames().toArray(new String[0]));
     initCommand
         .setWorkspaceActions(createRActionLists(createWorkspaceActionMap()));
     initCommand.setActions(createRActionLists(getActionMap()));

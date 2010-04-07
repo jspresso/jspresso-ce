@@ -350,7 +350,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       } else if(command is RemoteInitCommand) {
         var initCommand:RemoteInitCommand = command as RemoteInitCommand;
-        initApplicationFrame(initCommand.workspaceActions,
+        initApplicationFrame(initCommand.workspaceNames,
+                             initCommand.workspaceActions,
                              initCommand.actions,
                              initCommand.helpActions);
       } else if(command is RemoteWorkspaceDisplayCommand) {
@@ -703,9 +704,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
-    protected function initApplicationFrame(workspaceActions:Array,
-                                          actions:Array,
-                                          helpActions:Array):void {
+    protected function initApplicationFrame(workspaceNames:Array,
+                                            workspaceActions:Array,
+                                            actions:Array,
+                                            helpActions:Array):void {
       var applicationFrame:Application = Application.application as Application; 
       var controlBar:ApplicationControlBar = applicationFrame.controlBar as ApplicationControlBar;
       if(controlBar) {
@@ -727,6 +729,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
         cardCanvas.label = workspaceAction.name;
         _workspaceAccordion.addChild(cardCanvas);
+        cardCanvas.name = workspaceNames[i];
         cardCanvas.icon = _viewFactory.getIconForComponent(_workspaceAccordion.getHeaderAt(i), workspaceAction.icon);
       }
       _workspaceAccordion.percentWidth = 20.0;
@@ -900,8 +903,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
               }
             }, state, "selectedIndices", true);
           }
-          _workspaceAccordion.selectedChild.addChild(workspaceNavigatorUI);
-          _workspaceAccordion.selectedChild.name = workspaceName;
+          (_workspaceAccordion.getChildByName(workspaceName) as Container).addChild(workspaceNavigatorUI);
         }
       }
       _workspaceViewStack.selectedChild = _workspaceViewStack.getChildByName(workspaceName) as Container;

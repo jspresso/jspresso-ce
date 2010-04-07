@@ -22,6 +22,7 @@ package org.jspresso.framework.application.frontend.command.remote {
         private var _actions:Array;
         private var _helpActions:Array;
         private var _workspaceActions:Array;
+        private var _workspaceNames:Array;
 
         public function RemoteInitCommand() {
           //default constructor.
@@ -46,6 +47,13 @@ package org.jspresso.framework.application.frontend.command.remote {
         }
         public function get workspaceActions():Array {
             return _workspaceActions;
+        }
+
+        public function set workspaceNames(value:Array):void {
+          _workspaceNames = value;
+        }
+        public function get workspaceNames():Array {
+          return _workspaceNames;
         }
     }
 }

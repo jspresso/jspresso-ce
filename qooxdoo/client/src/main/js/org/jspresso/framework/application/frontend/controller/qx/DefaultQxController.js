@@ -277,7 +277,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           topDialog.destroy();
         }
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand) {
-        this.__initApplicationFrame(command.getWorkspaceActions(),
+        this.__initApplicationFrame(command.getWorkspaceNames(),
+                             command.getWorkspaceActions(),
                              command.getActions(),
                              command.getHelpActions());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand) {
@@ -452,8 +453,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           if(workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
             workspaceNavigatorUI.setHideRoot(true);
           }
-          this.__workspaceAccordionGroup.getSelection()[0].setUserData("workspaceName", workspaceName);
-          this.__workspaceAccordionGroup.getSelection()[0].add(workspaceNavigatorUI);
+          var existingChildren = this.__workspaceAccordionGroup.getChildren();
+          var existingChild;
+          for(var i = 0; i < existingChildren.length; i++) {
+            var child = existingChildren[i];
+            if(child.getUserData("workspaceName") == workspaceName) {
+              existingChild = child;
+            }
+          }
+          if(existingChild) {
+          	existingChild.add(workspaceNavigatorUI);
+          }
         }
       }
       var children = this.__workspaceStack.getChildren();
@@ -469,7 +479,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
 
       children = this.__workspaceAccordionGroup.getChildren();
-      var selectedChild;
+      selectedChild = null;
       for(var i = 0; i < children.length; i++) {
         var child = children[i];
         if(child.getUserData("workspaceName") == workspaceName) {
@@ -489,9 +499,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      * 
      */
-    __initApplicationFrame : function(workspaceActions,
-                                    actions,
-                                    helpActions) {
+    __initApplicationFrame : function(workspaceNames,
+                                      workspaceActions,
+                                      actions,
+                                      helpActions) {
       //this.__application.getRoot().removeAll();
 
       var applicationContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox(10));
@@ -509,6 +520,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         } else {
           workspacePanel.setValue(false);
         }
+        workspacePanel.setUserData("workspaceName", workspaceNames[i]);
         workspacePanel.setGroup(this.__workspaceAccordionGroup);
         workspacePanel.setUserData("rAction", workspaceActions[0].getActions()[i]);
         workspacePanel.addListener("changeValue", function(event) {

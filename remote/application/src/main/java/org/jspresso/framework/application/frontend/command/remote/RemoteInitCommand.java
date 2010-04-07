@@ -33,6 +33,7 @@ public class RemoteInitCommand extends RemoteCommand {
   private RActionList[]     actions;
   private RActionList[]     helpActions;
   private RActionList[]     workspaceActions;
+  private String[]          workspaceNames;
 
   /**
    * Gets the actions.
@@ -89,5 +90,24 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public void setWorkspaceActions(RActionList[] workspaceActions) {
     this.workspaceActions = workspaceActions;
+  }
+
+  /**
+   * Gets the workspaceNames.
+   * 
+   * @return the workspaceNames.
+   */
+  public String[] getWorkspaceNames() {
+    return workspaceNames;
+  }
+
+  /**
+   * Sets the workspaceNames.
+   * 
+   * @param workspaceNames
+   *          the workspaceNames to set.
+   */
+  public void setWorkspaceNames(String[] workspaceNames) {
+    this.workspaceNames = workspaceNames;
   }
 }
