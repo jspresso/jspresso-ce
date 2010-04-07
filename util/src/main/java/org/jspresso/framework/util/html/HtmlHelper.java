@@ -93,8 +93,11 @@ public final class HtmlHelper {
    * @return the ecaped HTML text.
    */
   public static String escapeForHTML(String aText) {
-    final StringBuilder result = new StringBuilder();
-    final StringCharacterIterator iterator = new StringCharacterIterator(aText);
+    if (aText == null) {
+      return null;
+    }
+    StringBuilder result = new StringBuilder();
+    StringCharacterIterator iterator = new StringCharacterIterator(aText);
     char character = iterator.current();
     while (character != CharacterIterator.DONE) {
       if (character == '<') {

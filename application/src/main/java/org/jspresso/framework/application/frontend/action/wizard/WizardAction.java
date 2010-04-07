@@ -122,7 +122,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the cancelAction.
+   * Configures the action that will be executed whenever the user cancels the
+   * wizard.
    * 
    * @param cancelAction
    *          the cancelAction to set.
@@ -132,7 +133,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the finishAction.
+   * Configures the action that will be executed whenever the user validates the
+   * wizard.
    * 
    * @param finishAction
    *          the finishAction to set.
@@ -142,7 +144,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the firstWizardStep.
+   * Configures the first wizard step to display.
    * 
    * @param firstWizardStep
    *          the firstWizardStep to set.
@@ -474,7 +476,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the width.
+   * Configures explicitely the width of the wizard dialog. It prevents the
+   * dialog from resizing dynamically depending on the displayed wizard step.
    * 
    * @param width
    *          the width to set.
@@ -484,7 +487,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Sets the height.
+   * Configures explicitely the height of the wizard dialog. It prevents the
+   * dialog from resizing dynamically depending on the displayed wizard step.
    * 
    * @param height
    *          the height to set.
