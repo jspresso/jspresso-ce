@@ -800,18 +800,21 @@ package org.jspresso.framework.view.flex {
     }
     
     public function addCard(cardContainer:ViewStack, rCardComponent:RComponent, cardName:String):void {
-      var cardCanvas:Canvas = new Canvas();
-      cardCanvas.percentWidth = 100.0;
-      cardCanvas.percentHeight = 100.0;
-      cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
-      cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
-      cardCanvas.name = cardName;
-      cardContainer.addChild(cardCanvas);
-  
-      var cardComponent:UIComponent = createComponent(rCardComponent);
-      cardComponent.percentWidth = 100.0;
-      cardComponent.percentHeight = 100.0;
-      cardCanvas.addChild(cardComponent);
+      var existingCard:Container = cardContainer.getChildByName(cardName) as Container;
+      if(existingCard == null) {
+        var cardCanvas:Canvas = new Canvas();
+        cardCanvas.percentWidth = 100.0;
+        cardCanvas.percentHeight = 100.0;
+        cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
+        cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
+        cardCanvas.name = cardName;
+        cardContainer.addChild(cardCanvas);
+    
+        var cardComponent:UIComponent = createComponent(rCardComponent);
+        cardComponent.percentWidth = 100.0;
+        cardComponent.percentHeight = 100.0;
+        cardCanvas.addChild(cardComponent);
+      }
     }
 
     protected function bindCardContainer(cardContainer:ViewStack, remoteState:RemoteValueState):void {

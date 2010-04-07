@@ -280,16 +280,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         this.__initApplicationFrame(command.getWorkspaceActions(),
                              command.getActions(),
                              command.getHelpActions());
-        if(command.getWorkspaceActions().length > 1
-            && command.getWorkspaceActions()[0].getActions().length > 0) {
-          var wasEnabled = this.__changeNotificationsEnabled;
-          try {
-            this.__changeNotificationsEnabled = true;
-            this.execute(command.getWorkspaceActions()[0].getActions()[0]);
-          } finally {
-            this.__changeNotificationsEnabled = wasEnabled;
-          }
-        }
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand) {
         this.__displayWorkspace(command.getWorkspaceName(),
                          command.getWorkspaceView());

@@ -453,6 +453,9 @@ public class DefaultRemoteController extends
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
         }
+        if (getWorkspaceNames() != null && getWorkspaceNames().size() > 0) {
+          displayWorkspace(getWorkspaceNames().get(0));
+        }
         execute(getStartupAction(), getInitialActionContext());
       }
     } else if (command instanceof RemoteLoginCommand) {
@@ -461,6 +464,9 @@ public class DefaultRemoteController extends
         List<RemoteCommand> initCommands = createInitCommands();
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
+        }
+        if (getWorkspaceNames() != null && getWorkspaceNames().size() > 0) {
+          displayWorkspace(getWorkspaceNames().get(0));
         }
         execute(getStartupAction(), getInitialActionContext());
       } else {

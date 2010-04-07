@@ -353,16 +353,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
         initApplicationFrame(initCommand.workspaceActions,
                              initCommand.actions,
                              initCommand.helpActions);
-        if(initCommand.workspaceActions.length > 1
-            && (initCommand.workspaceActions[0] as RActionList).actions.length > 0) {
-          var wasEnabled:Boolean = _changeNotificationsEnabled;
-          try {
-            _changeNotificationsEnabled = true;
-            execute((initCommand.workspaceActions[0] as RActionList).actions[0] as RAction);
-          } finally {
-            _changeNotificationsEnabled = wasEnabled;
-          }
-        }
       } else if(command is RemoteWorkspaceDisplayCommand) {
         var workspaceDisplayCommand:RemoteWorkspaceDisplayCommand = command as RemoteWorkspaceDisplayCommand;
         displayWorkspace(workspaceDisplayCommand.workspaceName,

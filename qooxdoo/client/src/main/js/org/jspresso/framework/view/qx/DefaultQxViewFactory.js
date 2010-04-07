@@ -1880,9 +1880,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return void
      */
     addCard : function(cardContainer, rCardComponent, cardName) {
-      var cardComponent = this.createComponent(rCardComponent);
-      cardComponent.setUserData("cardName", cardName);
-      cardContainer.add(cardComponent);
+      var children = cardContainer.getChildren();
+      var existingCard;
+      for(var i = 0; i < children.length; i++) {
+        var child = children[i];
+        if(child.getUserData("cardName") == cardName) {
+          existingCard = child;
+        }
+      }
+      if(!existingCard) {
+        var cardComponent = this.createComponent(rCardComponent);
+        cardComponent.setUserData("cardName", cardName);
+        cardContainer.add(cardComponent);
+        cardContainer.setSelection([cardComponent]);
+      }
     },
     
     __modelToViewFieldConverter : function(modelValue, model) {

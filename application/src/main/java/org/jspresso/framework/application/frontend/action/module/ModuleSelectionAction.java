@@ -52,12 +52,11 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    getController(context).displayWorkspace(workspaceName);
 
     Workspace ws = getController(context).getWorkspace(workspaceName);
     for (Module m : ws.getModules()) {
       if (m.getName().equals(moduleName)) {
-        getController(context).displayModule(m);
+        getController(context).displayModule(workspaceName, m);
         break;
       }
     }
