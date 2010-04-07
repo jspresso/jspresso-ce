@@ -18,18 +18,18 @@
  */
 package org.jspresso.framework.application.printing.frontend.action.remote;
 
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
-import org.jspresso.framework.util.resources.IResource;
-import org.jspresso.framework.util.resources.MemoryResource;
+import org.jspresso.framework.util.resources.AbstractActiveResource;
+import org.jspresso.framework.util.resources.IActiveResource;
 import org.jspresso.framework.util.resources.server.ResourceManager;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
@@ -49,20 +49,31 @@ public class DisplayJasperReportAction extends AbstractRemoteAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    JasperPrint report = (JasperPrint) getActionParameter(context);
+    final JasperPrint report = (JasperPrint) getActionParameter(context);
 
-    try {
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      JasperExportManager.exportReportToPdfStream(report, baos);
+    IActiveResource pdfProducer = new AbstractActiveResource("application/pdf") {
 
-      IResource resource = new MemoryResource("Report.pdf", "application/pdf",
-          baos.toByteArray());
-      String resourceId = ResourceManager.getInstance().register(resource);
-      getController(context).displayUrl(
-          ResourceProviderServlet.computeDownloadUrl(resourceId));
-      return super.execute(actionHandler, context);
-    } catch (JRException ex) {
-      throw new ActionException(ex);
-    }
+      public long getSize() {
+        return -1;
+      }
+
+      public String getName() {
+        return "Report.pdf";
+      }
+
+      public void writeToContent(OutputStream out) throws IOException {
+        try {
+          JasperExportManager.exportReportToPdfStream(report, out);
+        } catch (JRException ex) {
+          IOException ioe = new IOException(ex.getMessage());
+          ioe.initCause(ex);
+          throw ioe;
+        }
+      }
+    };
+    String resourceId = ResourceManager.getInstance().register(pdfProducer);
+    getController(context).displayUrl(
+        ResourceProviderServlet.computeDownloadUrl(resourceId));
+    return super.execute(actionHandler, context);
   }
 }
