@@ -16,50 +16,50 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.session;
+package org.jspresso.framework.application.backend;
 
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
- * This exception is thrown whenever an unexpected exception occurs on an
- * application session.
+ * This exception is thrown whenever an unexpected exception occurs on a backend
+ * operation.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ApplicationSessionException extends NestedRuntimeException {
+public class BackendException extends NestedRuntimeException {
 
   private static final long serialVersionUID = -809573572653239047L;
 
   /**
-   * Constructs a new <code>ApplicationSessionException</code> instance.
+   * Constructs a new <code>BackendException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
-  public ApplicationSessionException(String message) {
+  public BackendException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>ApplicationSessionException</code> instance.
+   * Constructs a new <code>BackendException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    */
-  public ApplicationSessionException(Throwable nestedException) {
+  public BackendException(Throwable nestedException) {
     super(nestedException);
   }
 
   /**
-   * Constructs a new <code>ApplicationSessionException</code> instance.
+   * Constructs a new <code>BackendException</code> instance.
    * 
    * @param nestedException
-   *            the nested exception.
+   *          the nested exception.
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
-  public ApplicationSessionException(Throwable nestedException, String message) {
+  public BackendException(Throwable nestedException, String message) {
     super(nestedException, message);
   }
 }

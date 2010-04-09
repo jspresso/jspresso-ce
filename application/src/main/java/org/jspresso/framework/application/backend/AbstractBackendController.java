@@ -36,7 +36,6 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.action.Transactional;
 import org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory;
-import org.jspresso.framework.application.backend.session.ApplicationSessionException;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
@@ -66,9 +65,20 @@ import org.springframework.transaction.support.TransactionTemplate;
  * Base class for backend application controllers. Backend controllers are
  * responsible for :
  * <ul>
- * <li>holding the application session</li>
+ * <li>keeping a reference to the application session</li>
  * <li>keeping a reference to the application workspaces and their state</li>
+ * <li>keeping a reference to the application clipboard</li>
+ * <li>keeping a reference to the entity registry that garantees the in-memory
+ * entity reference unicity in the user session</li>
+ * <li>keeping a reference to the entity dirt recorder that keeps track of
+ * entity changes to afterwards optimize the ORM operations</li>
+ * <li>keeping a reference to the Spring transaction template and its peer
+ * &quot;Unit of Work&quot; -aka UOW- that is responsible to manage application
+ * transactions and adapt the underlying transaction system (Hibernate, JTA,
+ * ...)</li>
  * </ul>
+ * Moreover, the backend controller will provide several model related factories
+ * that can be configured to customize default, built-in behaviour.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -236,17 +246,29 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Sets the applicationSession.
+   * Assigns the application session to this backend controller. This property
+   * can only be set once and should only be used by the DI container. It will
+   * rarely be changed from built-in defaults unless you need to specify a
+   * custom implementation instance to be used.
    * 
    * @param applicationSession
    *          the applicationSession to set.
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
+    if (this.applicationSession != null) {
+      throw new IllegalArgumentException(
+          "application session can only be configured once.");
+    }
     this.applicationSession = applicationSession;
   }
 
   /**
-   * Sets the entityFactory.
+   * Configures the entity factory to use to create new entities. Backend
+   * controllers only accept instances of
+   * <code>ControllerAwareProxyEntityFactory</code> or a subclass. This is
+   * because the backend controller must keep track of created entities.
+   * Jspresso entity implementations also use the controller from which they
+   * were created behind the scene.
    * 
    * @param entityFactory
    *          the entityFactory to set.
@@ -254,7 +276,7 @@ public abstract class AbstractBackendController extends AbstractController
   public void setEntityFactory(IEntityFactory entityFactory) {
     if (!(entityFactory instanceof ControllerAwareProxyEntityFactory)) {
       throw new IllegalArgumentException(
-          "entityFactory must be an ControllerAwareProxyEntityFactory.");
+          "entityFactory must be a ControllerAwareProxyEntityFactory.");
     }
     this.entityFactory = entityFactory;
     ((ControllerAwareProxyEntityFactory) getEntityFactory())
@@ -262,7 +284,9 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Sets the modelConnectorFactory.
+   * Configures the model connector factory to use to create new model
+   * connectors. Connectors are adapters used by the binding layer to access
+   * domain model values.
    * 
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
@@ -300,7 +324,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void beginUnitOfWork() {
     if (unitOfWork.isActive()) {
-      throw new ApplicationSessionException(
+      throw new BackendException(
           "Cannot begin a new unit of work. Another one is already active.");
     }
     unitOfWork.begin();
@@ -320,7 +344,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public IEntity cloneInUnitOfWork(IEntity entity) {
     if (!unitOfWork.isActive()) {
-      throw new ApplicationSessionException(
+      throw new BackendException(
           "Cannot use a unit of work that has not begun.");
     }
     return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
@@ -331,7 +355,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
     if (!unitOfWork.isActive()) {
-      throw new ApplicationSessionException(
+      throw new BackendException(
           "Cannot use a unit of work that has not begun.");
     }
     List<IEntity> uowEntities = new ArrayList<IEntity>();
@@ -350,7 +374,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void commitUnitOfWork() {
     if (!unitOfWork.isActive()) {
-      throw new ApplicationSessionException(
+      throw new BackendException(
           "Cannot commit a unit of work that has not begun.");
     }
     try {
@@ -539,7 +563,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public boolean isUpdatedInUnitOfWork(IEntity entity) {
     if (!unitOfWork.isActive()) {
-      throw new ApplicationSessionException("Cannot access unit of work.");
+      throw new BackendException("Cannot access unit of work.");
     }
     return unitOfWork.isUpdated(entity);
   }
@@ -621,14 +645,20 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void rollbackUnitOfWork() {
     if (!unitOfWork.isActive()) {
-      throw new ApplicationSessionException(
+      throw new BackendException(
           "Cannot rollback a unit of work that has not begun.");
     }
     unitOfWork.rollback();
   }
 
   /**
-   * Sets the carbonEntityCloneFactory.
+   * Configures the entity clone factory used to carbon-copy entities. An entity
+   * carbon-copy is an technical copy of an entity, including id and version but
+   * excluding relationhip properties. This mecanism is used by the controller
+   * when duplicating entities into the UOW to allow for memory state aware
+   * transactions. This property should only be used by the DI container. It
+   * will rarely be changed from built-in defaults unless you need to specify a
+   * custom implementation instance to be used.
    * 
    * @param carbonEntityCloneFactory
    *          the carbonEntityCloneFactory to set.
@@ -639,7 +669,11 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Sets the collectionFactory.
+   * Configures the factory responsible for creating entities (or components)
+   * collections that are held by domain relationship properties. This property
+   * should only be used by the DI container. It will rarely be changed from
+   * built-in defaults unless you need to specify a custom implementation
+   * instance to be used.
    * 
    * @param collectionFactory
    *          the collectionFactory to set.
@@ -650,22 +684,39 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Sets the entityRegistry.
+   * Configures the entity registry to be used in this controller. The role of
+   * the entity registry is to garantee that an entity will be represented by at
+   * most 1 instance in the user application session. This property can only be
+   * set once and should only be used by the DI container. It will rarely be
+   * changed from built-in defaults unless you need to specify a custom
+   * implementation instance to be used.
    * 
    * @param entityRegistry
    *          the entityRegistry to set.
    */
   public void setEntityRegistry(IEntityRegistry entityRegistry) {
+    if (this.entityRegistry != null) {
+      throw new IllegalArgumentException(
+          "entityRegistry session can only be configured once.");
+    }
     this.entityRegistry = entityRegistry;
   }
 
   /**
-   * Sets the unitOfWork.
+   * Configures the &quot;Unit of Work&quot; implementation to be used by this
+   * controller. The same UOW instance is reused (started, cleared) all along
+   * the session. This property can only be set once and should only be used by
+   * the DI container. It will rarely be changed from built-in defaults unless
+   * you need to specify a custom implementation instance to be used.
    * 
    * @param unitOfWork
    *          the unitOfWork to set.
    */
   public void setUnitOfWork(IEntityUnitOfWork unitOfWork) {
+    if (this.unitOfWork != null) {
+      throw new IllegalArgumentException(
+          "unitOfWork can only be configured once.");
+    }
     this.unitOfWork = unitOfWork;
   }
 
