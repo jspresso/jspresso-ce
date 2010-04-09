@@ -394,6 +394,7 @@ package org.jspresso.framework.view.flex {
           });
       }
       if(remoteTree.rowAction) {
+        getRemotePeerRegistry().register(remoteTree.rowAction);
         tree.doubleClickEnabled = true;
         tree.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, function(event:ListEvent):void {
           _actionHandler.execute(remoteTree.rowAction);
@@ -1286,6 +1287,7 @@ package org.jspresso.framework.view.flex {
       list.dataProvider = (remoteList.state as RemoteCompositeValueState).children;
       bindList(list, remoteList.state as RemoteCompositeValueState);
       if(remoteList.rowAction) {
+        getRemotePeerRegistry().register(remoteList.rowAction);
         list.doubleClickEnabled = true;
         list.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, function(event:ListEvent):void {
           _actionHandler.execute(remoteList.rowAction);
@@ -1460,6 +1462,7 @@ package org.jspresso.framework.view.flex {
       });
       bindTable(table, remoteTable);
       if(remoteTable.rowAction) {
+        getRemotePeerRegistry().register(remoteTable.rowAction);
         table.doubleClickEnabled = true;
         table.addEventListener(ListEvent.ITEM_DOUBLE_CLICK, function(event:ListEvent):void {
           _actionHandler.execute(remoteTable.rowAction);

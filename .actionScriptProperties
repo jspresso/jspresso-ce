@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <actionScriptProperties mainApplicationPath="JspressoAsTest.as" projectUUID="aac1298b-1d9d-42b5-a0c3-1f951df60fd9" version="6">
-  <compiler additionalCompilerArguments="-locale fr_FR" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="flex/target" sourceFolderPath="flex/src/main/flex" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+  <compiler additionalCompilerArguments="-locale=en_US,fr_FR" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="flex/target" sourceFolderPath="flex/src/main/flex" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="flex/src/main/resources"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="flex/src/main/locales/{locale}"/>
     </compilerSourcePath>
-    <libraryPath defaultLinkType="0">
+    <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
       <libraryPathEntry kind="3" linkType="1" path="C:/Documents and Settings/Vincent/.m2/repository/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
     </libraryPath>

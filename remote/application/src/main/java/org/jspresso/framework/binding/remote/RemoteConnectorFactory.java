@@ -120,6 +120,16 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           // don't listen to provided collection connector.
           connector.removePropertyChangeListener(
               IValueConnector.WRITABLE_PROPERTY, this);
+        } else if (connector.getParentConnector() == null
+            && connector.getId() == null) {
+          // don't listen to root connectors.
+          connector.removePropertyChangeListener(
+              IValueConnector.WRITABLE_PROPERTY, this);
+        } else if (connector instanceof ICollectionConnectorProvider
+            && isCascadingModelWrapperConnector((ICollectionConnectorProvider) connector)) {
+          // don't listen to maser-detail wrappers.
+          connector.removePropertyChangeListener(
+              IValueConnector.WRITABLE_PROPERTY, this);
         } else {
           ((IRemoteStateOwner) connector).synchRemoteState();
           RemoteValueState state = ((IRemoteStateOwner) connector).getState();
@@ -199,7 +209,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
                 .getCollectionConnector() == connector
             // The next condition is to prevent commands on master-detail
             // connector wrappers.
-            && !isCascadingModelWrapperConnector(parentConnector)) {
+            && !isCascadingModelWrapperConnector((ICollectionConnectorProvider) parentConnector)) {
           RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
               .getState());
           parentState.setChildren(new ArrayList<RemoteValueState>(children));
@@ -243,7 +253,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
                 .getCollectionConnector() == connector
             // The next condition is to prevent commands on master-detail
             // connector wrappers.
-            && !isCascadingModelWrapperConnector(parentConnector)) {
+            && !isCascadingModelWrapperConnector((ICollectionConnectorProvider) parentConnector)) {
           RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
               .getState());
           parentState.setSelectedIndices(evt.getNewSelection());
@@ -482,15 +492,20 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     }
   }
 
-  private boolean isCascadingModelWrapperConnector(IValueConnector connector) {
-    boolean hasRenderingConector = connector instanceof IRenderableCompositeValueConnector
-        && ((IRenderableCompositeValueConnector) connector)
-            .getRenderingConnector() != null;
-    return (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
-        && connector.getParentConnector() == null && !hasRenderingConector)
-        || (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
-            && connector.getParentConnector() != null
-            && ModelRefPropertyConnector.THIS_PROPERTY.equals(connector
-                .getParentConnector().getId()) && !hasRenderingConector);
+  private boolean isCascadingModelWrapperConnector(
+      ICollectionConnectorProvider connector) {
+    boolean hasRenderingConnector = false;
+    if (connector instanceof IRenderableCompositeValueConnector) {
+      hasRenderingConnector = (((IRenderableCompositeValueConnector) connector)
+          .getRenderingConnector() != null);
+    }
+    // return (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
+    // && connector.getParentConnector() == null && !hasRenderingConnector)
+    // || (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
+    // && connector.getParentConnector() != null
+    // && ModelRefPropertyConnector.THIS_PROPERTY.equals(connector
+    // .getParentConnector().getId()) && !hasRenderingConnector);
+    return ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
+        && !hasRenderingConnector;
   }
 }

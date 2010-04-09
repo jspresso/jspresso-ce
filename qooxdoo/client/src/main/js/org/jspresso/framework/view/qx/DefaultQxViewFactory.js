@@ -321,6 +321,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }, this);
       
       if(remoteList.getRowAction()) {
+      	this.__remotePeerRegistry.register(remoteList.getRowAction());
         list.addListener("dblclick", function(e){
           this.__actionHandler.execute(remoteList.getRowAction());
         }, this);
@@ -540,6 +541,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
       }, this);
       if(remoteTable.getRowAction()) {
+      	this.__remotePeerRegistry.register(remoteTable.getRowAction());
         table.addListener("dblclick", function(e){
           this.__actionHandler.execute(remoteTable.getRowAction());
         }, this);
@@ -1681,6 +1683,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
       }, this);
       if(remoteTree.getRowAction()) {
+        this.__remotePeerRegistry.register(remoteTree.getRowAction());
         tree.addListener("dblclick", function(e){
           this.__actionHandler.execute(remoteTree.getRowAction());
         }, this);
