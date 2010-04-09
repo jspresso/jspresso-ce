@@ -63,9 +63,12 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
- * Base class for backend application controllers. It provides the implementor
- * with commonly used accessors as well as a reference to the root model
- * descriptor.
+ * Base class for backend application controllers. Backend controllers are
+ * responsible for :
+ * <ul>
+ * <li>holding the application session</li>
+ * <li>keeping a reference to the application workspaces and their state</li>
+ * </ul>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

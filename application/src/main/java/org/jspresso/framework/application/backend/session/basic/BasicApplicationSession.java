@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.application.backend.session.basic;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.security.auth.Subject;
 
@@ -33,8 +35,9 @@ import org.jspresso.framework.security.UserPrincipal;
  */
 public class BasicApplicationSession implements IApplicationSession {
 
-  private Locale  locale;
-  private Subject subject;
+  private Locale              locale;
+  private Subject             subject;
+  private Map<String, Object> customValues;
 
   /**
    * Gets the locale.
@@ -82,5 +85,25 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   public void setSubject(Subject subject) {
     this.subject = subject;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getCustomValue(String key) {
+    if (customValues == null) {
+      return null;
+    }
+    return customValues.get(key);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void putCustomValue(String key, Object value) {
+    if (customValues == null) {
+      customValues = new HashMap<String, Object>();
+    }
+    customValues.put(key, value);
   }
 }
