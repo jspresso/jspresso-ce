@@ -29,10 +29,10 @@ qx.Interface.define("org.jspresso.framework.util.remote.registry.IRemotePeerRegi
     getRegistered : function(guid){},
 
     /**
-     * @param {String} guid
+     * @param {org.jspresso.framework.util.remote.IRemotePeer} remotePeer
      * @return void
      */
-    unregister : function(guid){},
+    unregister : function(remotePeer){},
 
     /**
      * @param {String} guid

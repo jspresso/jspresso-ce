@@ -746,11 +746,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     },
 
     /**
-     * @param {String} guid
+     * @param {org.jspresso.framework.util.remote.IRemotePeer} remotePeer
      * @return void
      */
-    unregister : function(guid) {
-      this.__remotePeerRegistry.unregister(guid);
+    unregister : function(remotePeer) {
+      this.__remotePeerRegistry.unregister(remotePeer);
     },
 
     /**

@@ -31,8 +31,8 @@ package org.jspresso.framework.util.remote.registry {
       return _backingStore[guid];
     }
 
-    public function unregister(guid:String):void {
-      delete _backingStore[guid];
+    public function unregister(remotePeer:IRemotePeer):void {
+      delete _backingStore[remotePeer.guid];
     }
 
     public function isRegistered(guid:String):Boolean {

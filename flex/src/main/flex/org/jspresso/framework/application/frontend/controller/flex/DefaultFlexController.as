@@ -647,8 +647,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return _remotePeerRegistry.getRegistered(guid);
     }
 
-    public function unregister(guid:String):void {
-      _remotePeerRegistry.unregister(guid);
+    public function unregister(remotePeer:IRemotePeer):void {
+      _remotePeerRegistry.unregister(remotePeer);
     }
 
     public function isRegistered(guid:String):Boolean {
