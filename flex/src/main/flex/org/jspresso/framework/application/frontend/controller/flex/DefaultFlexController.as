@@ -365,7 +365,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
-          if(_unregistered[command.targetPeerGuid] == null) {
+          if(_unregistered[command.targetPeerGuid] == null && !(command is RemoteEnablementCommand)) {
             if(!_postponedCommands[command.targetPeerGuid]) {
               _postponedCommands[command.targetPeerGuid] = new ArrayCollection(new Array());
             } 

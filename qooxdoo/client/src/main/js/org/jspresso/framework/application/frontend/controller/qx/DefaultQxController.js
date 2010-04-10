@@ -292,7 +292,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         var targetPeerGuid = command.getTargetPeerGuid();
         var targetPeer = this.getRegistered(targetPeerGuid);
         if(targetPeer == null) {
-          if(!this.__unregistered[targetPeerGuid]) {
+          if(!this.__unregistered[targetPeerGuid] && !(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand)) {
 	          if(!this.__postponedCommands[targetPeerGuid]) {
 	            this.__postponedCommands[targetPeerGuid] = new Array();
 	          } 
