@@ -330,7 +330,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             } else {
               this.register(child);
             }
-            childrenContent[i] = child;
+            var existingChild = null;
+            if(i < childrenContent.length) {
+              existingChild = childrenContent[i];
+            }
+            if(existingChild != child) {
+              this.unregister(existingChild);
+              childrenContent[i] = child;
+            }
+          }
+          if(newLength < childrenContent.length) {
+            for(var i = newLength; i < childrenContent.length; i++) {
+              var removedChild = childrenContent[i];
+              this.unregister(removedChild);
+            }
           }
         	childrenContent.length = newLength;
         	children.length = newLength;
@@ -751,6 +764,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     unregister : function(remotePeer) {
       this.__remotePeerRegistry.unregister(remotePeer);
+      if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteValueState) {
+        //this.__unbindRemoteValueState(remotePeer);
+        if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+          if(remotePeer.getChildren()) {
+            var children = remotePeer.getChildren().toArray();
+            for (var i = 0; i < children.length; i++) {
+              this.unregister(children[i]);
+            }
+          }
+        }
+      }
     },
 
     /**

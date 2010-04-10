@@ -405,7 +405,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
                 register(child);
               }
               if(childIndex < children.length) {
-                if(children.getItemAt(childIndex) != child) {
+                var existingChild:RemoteValueState = children.getItemAt(childIndex) as RemoteValueState;
+                if(existingChild != child) {
+                  unregister(existingChild);
                   children.setItemAt(child, childIndex);
                 }
               } else {
@@ -415,7 +417,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
             }
           }
           while(childIndex < children.length) {
-            children.removeItemAt(childIndex);
+            var removedChild:RemoteValueState = children.removeItemAt(childIndex) as RemoteValueState;
+            unregister(removedChild);
           }
         } else if(command is RemoteAddCardCommand) {
           _viewFactory.addCard(
@@ -649,6 +652,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     public function unregister(remotePeer:IRemotePeer):void {
       _remotePeerRegistry.unregister(remotePeer);
+      if(remotePeer is RemoteValueState) {
+        //unbindRemoteValueState(remotePeer as RemoteValueState);
+        if(remotePeer is RemoteCompositeValueState) {
+          for each(var childState:RemoteValueState in (remotePeer as RemoteCompositeValueState).children) {
+            unregister(childState);
+          }
+        }
+      }
     }
 
     public function isRegistered(guid:String):Boolean {
