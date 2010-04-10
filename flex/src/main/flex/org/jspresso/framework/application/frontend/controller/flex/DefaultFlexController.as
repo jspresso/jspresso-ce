@@ -148,6 +148,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _commandsQueue:IList;
     private var _workspaceAccordion:Accordion;
     private var _workspaceViewStack:ViewStack;
+    private var _unregistered:Object;
     private var _postponedCommands:Object;
     private var _dialogStack:Array;
     private var _userLanguage:String;
@@ -364,10 +365,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
-          if(!_postponedCommands[command.targetPeerGuid]) {
-            _postponedCommands[command.targetPeerGuid] = new ArrayCollection(new Array());
-          } 
-          (_postponedCommands[command.targetPeerGuid] as IList).addItem(command);
+          if(_unregistered[command.targetPeerGuid] == null) {
+            if(!_postponedCommands[command.targetPeerGuid]) {
+              _postponedCommands[command.targetPeerGuid] = new ArrayCollection(new Array());
+            } 
+            (_postponedCommands[command.targetPeerGuid] as IList).addItem(command);
+          }
           return;
         }
         if(command is RemoteValueCommand) {
@@ -651,6 +654,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
 
     public function unregister(remotePeer:IRemotePeer):void {
+      if(_unregistered && remotePeer) {
+        _unregistered[remotePeer.guid] = remotePeer;
+      }
       _remotePeerRegistry.unregister(remotePeer);
       if(remotePeer is RemoteValueState) {
         //unbindRemoteValueState(remotePeer as RemoteValueState);
@@ -676,11 +682,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remoteController.showBusyCursor = true;
       var commandsHandler:Function = function(resultEvent:ResultEvent):void {
         _postponedCommands = new Object();
+        _unregistered = new Object();
         try {
           handleCommands(resultEvent.result as IList);
         } finally {
           checkPostponedCommandsCompletion();
           _postponedCommands = null;
+          _unregistered = null;
         }
       };
       var errorHandler:Function = function(faultEvent:FaultEvent):void {
