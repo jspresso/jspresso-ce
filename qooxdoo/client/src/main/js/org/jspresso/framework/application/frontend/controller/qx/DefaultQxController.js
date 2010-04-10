@@ -64,6 +64,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**@type qx.ui.container.Stack*/
     __workspaceStack : null,
     /**@type Object*/
+    __unregistered : null,
+    /**@type Object*/
     __postponedCommands : null,
     /**@type Array*/
     __dialogStack : null,
@@ -290,10 +292,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         var targetPeerGuid = command.getTargetPeerGuid();
         var targetPeer = this.getRegistered(targetPeerGuid);
         if(targetPeer == null) {
-          if(!this.__postponedCommands[targetPeerGuid]) {
-            this.__postponedCommands[targetPeerGuid] = new Array();
-          } 
-          this.__postponedCommands[targetPeerGuid].push(command);
+          if(!this.__unregistered[targetPeerGuid]) {
+	          if(!this.__postponedCommands[targetPeerGuid]) {
+	            this.__postponedCommands[targetPeerGuid] = new Array();
+	          } 
+	          this.__postponedCommands[targetPeerGuid].push(command);
+          }
           return;
         }
         if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand) {
@@ -345,17 +349,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
               this.unregister(removedChild);
             }
           }
-        	childrenContent.length = newLength;
-        	children.length = newLength;
+          childrenContent.length = newLength;
+          children.length = newLength;
           children.fireEvent("changeLength", qx.event.type.Event);
-	        children.fireDataEvent("change",
-	          {
-	            start: 0,
-	            end: newLength,
-	            type: "add",
-	            items: childrenContent
-	          }, null
-	        );
+          children.fireDataEvent("change",
+            {
+              start: 0,
+              end: newLength,
+              type: "add",
+              items: childrenContent
+            }, null
+          );
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
           this.__viewFactory.addCard(targetPeer, command.getCard(), command.getCardName());
         }
@@ -475,7 +479,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             }
           }
           if(existingChild) {
-          	existingChild.add(workspaceNavigatorUI);
+            existingChild.add(workspaceNavigatorUI);
           }
         }
       }
@@ -763,6 +767,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      */
     unregister : function(remotePeer) {
+      if(this.__unregistered && remotePeer) {
+        this.__unregistered[remotePeer.getGuid()] = remotePeer;
+      }
       this.__remotePeerRegistry.unregister(remotePeer);
       if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteValueState) {
         //this.__unbindRemoteValueState(remotePeer);
@@ -805,6 +812,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
        */
       var commandsHandler = function(result) {
         this.__postponedCommands = new Object();
+        this.__unregistered = new Object();
         try {
           var data = result.getData();
           this._handleCommands(org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]).toArray());
@@ -814,6 +822,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           this.__application.getRoot().setGlobalCursor("default");
           this.__checkPostponedCommandsCompletion();
           this.__postponedCommands = null;
+          this.__unregistered = null;
         }
       };
       
