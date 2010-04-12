@@ -973,16 +973,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   public void displayModule(String workspaceName, Module module) {
-    displayWorkspace(workspaceName);
-    Module currentModule = selectedModules.get(workspaceName);
+    Module currentModule = selectedModules.get(getSelectedWorkspaceName());
     if ((currentModule == null && module == null)
         || ObjectUtils.equals(currentModule, module)) {
       return;
     }
     if (currentModule != null) {
+      pinModule(getSelectedWorkspaceName(), currentModule);
       execute(currentModule.getExitAction(), createEmptyContext());
       execute(getOnModuleExitAction(), createEmptyContext());
     }
+    displayWorkspace(workspaceName);
     IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
         .get(workspaceName);
     if (moduleAreaViewConnector != null) {
@@ -1026,7 +1027,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
     } finally {
       tracksWorkspaceNavigator = wasTracksWorkspaceNavigator;
     }
-    pinModule(workspaceName, module);
   }
 
   private Object[] synchWorkspaceNavigatorSelection(
