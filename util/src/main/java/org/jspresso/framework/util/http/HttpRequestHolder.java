@@ -61,10 +61,20 @@ public class HttpRequestHolder implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response,
       FilterChain chain) throws IOException, ServletException {
     if (request instanceof HttpServletRequest) {
-      CURRENT_HTTP_REQUEST.set((HttpServletRequest) request);
+      setServletRequest((HttpServletRequest) request);
     }
     chain.doFilter(request, response);
-    CURRENT_HTTP_REQUEST.set(null);
+    setServletRequest(null);
+  }
+
+  /**
+   * Assigns the servlet request for this current thread.
+   * 
+   * @param request
+   *          the servlet request.
+   */
+  public static void setServletRequest(HttpServletRequest request) {
+    CURRENT_HTTP_REQUEST.set(request);
   }
 
   /**

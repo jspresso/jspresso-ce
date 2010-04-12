@@ -205,6 +205,7 @@ public class ResourceProviderServlet extends HttpServlet {
     ServletOutputStream out = null;
 
     try {
+      HttpRequestHolder.setServletRequest(request);
       FileItemFactory factory = new DiskFileItemFactory();
       ServletFileUpload upload = new ServletFileUpload(factory);
 
@@ -231,6 +232,8 @@ public class ResourceProviderServlet extends HttpServlet {
       ioe.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
+    } finally {
+      HttpRequestHolder.setServletRequest(null);
     }
   }
 
@@ -240,77 +243,83 @@ public class ResourceProviderServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String localUrlSpec = request.getParameter(LOCAL_URL_PARAMETER);
-    String imageUrlSpec = request.getParameter(IMAGE_URL_PARAMETER);
-    String id = request.getParameter(ID_PARAMETER);
+    try {
+      HttpRequestHolder.setServletRequest(request);
+      String localUrlSpec = request.getParameter(LOCAL_URL_PARAMETER);
+      String imageUrlSpec = request.getParameter(IMAGE_URL_PARAMETER);
+      String id = request.getParameter(ID_PARAMETER);
 
-    if (id == null && localUrlSpec == null && imageUrlSpec == null) {
-      throw new ServletException("No resource id nor local URL specified.");
-    }
-
-    BufferedInputStream inputStream = null;
-    if (id != null) {
-      IResourceBase resource = ResourceManager.getInstance().getRegistered(id);
-      if (resource == null) {
-        throw new ServletException("Bad resource id : " + id);
+      if (id == null && localUrlSpec == null && imageUrlSpec == null) {
+        throw new ServletException("No resource id nor local URL specified.");
       }
 
-      response.setContentType(resource.getMimeType());
-      String resourceName = resource.getName();
-      if (resourceName != null && resourceName.length() > 0) {
-        response.setHeader("Content-Disposition", "attachment; filename="
-            + resourceName);
-      }
-      long resourceLength = resource.getSize();
-      if (resourceLength > 0) {
-        response.setContentLength((int) resourceLength);
-      }
+      BufferedInputStream inputStream = null;
+      if (id != null) {
+        IResourceBase resource = ResourceManager.getInstance()
+            .getRegistered(id);
+        if (resource == null) {
+          throw new ServletException("Bad resource id : " + id);
+        }
 
-      if (resource instanceof IResource) {
-        inputStream = new BufferedInputStream(((IResource) resource)
-            .getContent());
-      } else if (resource instanceof IActiveResource) {
-        OutputStream outputStream = response.getOutputStream();
-        ((IActiveResource) resource).writeToContent(outputStream);
-        outputStream.flush();
+        response.setContentType(resource.getMimeType());
+        String resourceName = resource.getName();
+        if (resourceName != null && resourceName.length() > 0) {
+          response.setHeader("Content-Disposition", "attachment; filename="
+              + resourceName);
+        }
+        long resourceLength = resource.getSize();
+        if (resourceLength > 0) {
+          response.setContentLength((int) resourceLength);
+        }
+
+        if (resource instanceof IResource) {
+          inputStream = new BufferedInputStream(((IResource) resource)
+              .getContent());
+        } else if (resource instanceof IActiveResource) {
+          OutputStream outputStream = response.getOutputStream();
+          ((IActiveResource) resource).writeToContent(outputStream);
+          outputStream.flush();
+          outputStream.close();
+        }
+      } else if (localUrlSpec != null) {
+        if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
+          // we must append parameters that are passed AFTER the localUrl
+          // parameter as they must be considered as part of the localUrl.
+          String queryString = request.getQueryString();
+          localUrlSpec = queryString.substring(queryString
+              .indexOf(LOCAL_URL_PARAMETER)
+              + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
+        }
+        URL localUrl = UrlHelper.createURL(localUrlSpec);
+        if (localUrl == null) {
+          throw new ServletException("Bad local URL : " + localUrlSpec);
+        }
+        inputStream = new BufferedInputStream(localUrl.openStream());
+      } else if (imageUrlSpec != null) {
+        URL imageUrl = UrlHelper.createURL(imageUrlSpec);
+        if (imageUrl == null) {
+          throw new ServletException("Bad image URL : " + imageUrlSpec);
+        }
+        String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
+        String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
+        if (width != null && height != null) {
+          inputStream = scaleImage(imageUrl, Integer.parseInt(width), Integer
+              .parseInt(height));
+        } else {
+          inputStream = new BufferedInputStream(imageUrl.openStream());
+        }
+      }
+      if (inputStream != null) {
+        BufferedOutputStream outputStream = new BufferedOutputStream(response
+            .getOutputStream());
+
+        IoHelper.copyStream(inputStream, outputStream);
+
+        inputStream.close();
         outputStream.close();
       }
-    } else if (localUrlSpec != null) {
-      if (!UrlHelper.isClasspathUrl(localUrlSpec)) {
-        // we must append parameters that are passed AFTER the localUrl
-        // parameter as they must be considered as part of the localUrl.
-        String queryString = request.getQueryString();
-        localUrlSpec = queryString.substring(queryString
-            .indexOf(LOCAL_URL_PARAMETER)
-            + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
-      }
-      URL localUrl = UrlHelper.createURL(localUrlSpec);
-      if (localUrl == null) {
-        throw new ServletException("Bad local URL : " + localUrlSpec);
-      }
-      inputStream = new BufferedInputStream(localUrl.openStream());
-    } else if (imageUrlSpec != null) {
-      URL imageUrl = UrlHelper.createURL(imageUrlSpec);
-      if (imageUrl == null) {
-        throw new ServletException("Bad image URL : " + imageUrlSpec);
-      }
-      String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
-      String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
-      if (width != null && height != null) {
-        inputStream = scaleImage(imageUrl, Integer.parseInt(width), Integer
-            .parseInt(height));
-      } else {
-        inputStream = new BufferedInputStream(imageUrl.openStream());
-      }
-    }
-    if (inputStream != null) {
-      BufferedOutputStream outputStream = new BufferedOutputStream(response
-          .getOutputStream());
-
-      IoHelper.copyStream(inputStream, outputStream);
-
-      inputStream.close();
-      outputStream.close();
+    } finally {
+      HttpRequestHolder.setServletRequest(null);
     }
   }
 
