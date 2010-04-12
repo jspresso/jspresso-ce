@@ -444,6 +444,7 @@ public abstract class AbstractBackendController extends AbstractController
     IComponentDescriptor<?> entityDescriptor = getEntityFactory()
         .getComponentDescriptor(entity.getComponentContract());
     if (entityDirtyProperties != null) {
+      entityDirtyProperties.remove(IEntity.VERSION);
       for (Map.Entry<String, Object> dirtyProperty : entityDirtyProperties
           .entrySet()) {
         if (!entityDescriptor.getPropertyDescriptor(dirtyProperty.getKey())

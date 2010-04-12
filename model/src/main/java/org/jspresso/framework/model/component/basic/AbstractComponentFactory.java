@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.collection.PersistentCollection;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -68,6 +69,11 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   public void sortCollectionProperty(IComponent component, String propertyName) {
     Collection<Object> propertyValue = (Collection<Object>) component
         .straightGetProperty(propertyName);
+    boolean wasClean = false;
+    if (propertyValue instanceof PersistentCollection
+        && !((PersistentCollection) propertyValue).isDirty()) {
+      wasClean = true;
+    }
     ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) getComponentDescriptor(
         component.getComponentContract()).getPropertyDescriptor(propertyName);
     if (propertyValue != null
@@ -97,6 +103,9 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
           Collection<Object> collectionProperty = propertyValue;
           collectionProperty.clear();
           collectionProperty.addAll(collectionCopy);
+          if (wasClean) {
+            ((PersistentCollection) collectionProperty).clearDirty();
+          }
         }
       }
     }

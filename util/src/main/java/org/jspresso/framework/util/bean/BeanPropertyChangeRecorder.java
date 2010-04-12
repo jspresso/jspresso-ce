@@ -67,7 +67,12 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    * @return the set of changed properties on the bean.
    */
   public Map<String, Object> getChangedProperties(IPropertyChangeCapable bean) {
-    return changedPropertiesMap.get(bean);
+    Map<String, Object> changedProperties = changedPropertiesMap.get(bean);
+    Map<String, Object> defensiveCopy = null;
+    if (changedProperties != null) {
+      defensiveCopy = new HashMap<String, Object>(changedProperties);
+    }
+    return defensiveCopy;
   }
 
   /**
