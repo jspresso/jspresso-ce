@@ -78,8 +78,9 @@ import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
 
 /**
- * Default implementation of a wings frontend controller. This implementation is
- * usable "as-is".
+ * This is is the default implementation of the <b>WingS</b> frontend
+ * controller. It will implement a 3-tier architecture through the WingS
+ * internal architecture.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -290,7 +291,7 @@ public class DefaultWingsController extends
   }
 
   /**
-   * Sets the frameHeight.
+   * Configures the default height of the application frame.
    * 
    * @param frameHeight
    *          the frameHeight to set.
@@ -300,7 +301,7 @@ public class DefaultWingsController extends
   }
 
   /**
-   * Sets the frameWidth.
+   * Configures the default width of the application frame.
    * 
    * @param frameWidth
    *          the frameWidth to set.

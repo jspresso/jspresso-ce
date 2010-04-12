@@ -97,7 +97,7 @@ public abstract class AbstractController implements IController {
    * Configures a custom exception handler on the controller. The controller
    * itself is an exception handler and is used as such across most of the
    * application layers. Jspresso philosophy is to use unchecked exceptions in
-   * services, business rules, and so on so that whenever an exception occurs,
+   * services, business rules, and so on, so that, whenever an exception occurs,
    * it climbs the call stack up to an exception handler (usually one of the
    * controller). Whenever a custom exception handler is configured, the
    * exception handling is delegated to it, allowing the exceptions to be

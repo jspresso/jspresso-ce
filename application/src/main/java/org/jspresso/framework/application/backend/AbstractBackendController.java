@@ -78,7 +78,9 @@ import org.springframework.transaction.support.TransactionTemplate;
  * ...)</li>
  * </ul>
  * Moreover, the backend controller will provide several model related factories
- * that can be configured to customize default, built-in behaviour.
+ * that can be configured to customize default, built-in behaviour. Most of
+ * these configured properties will be accessible using the corresponding
+ * getters. Those getters should be used by the service layer.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -1112,12 +1114,23 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Sets the transactionTemplate.
+   * Assigns the Spring transaction template to this backend controller. This
+   * property can only be set once and should only be used by the DI container.
+   * It will rarely be changed from built-in defaults unless you need to specify
+   * a custom implementation instance to be used.
+   * <p>
+   * The configured instance is the one that will be returned by the
+   * controller's <code>getTransactionTemplate()</code> method that should be
+   * used by the service layer for transaction management.
    * 
    * @param transactionTemplate
    *          the transactionTemplate to set.
    */
   public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+    if (this.transactionTemplate != null) {
+      throw new IllegalArgumentException(
+          "Spring transaction template can only be configured once.");
+    }
     this.transactionTemplate = transactionTemplate;
   }
 }

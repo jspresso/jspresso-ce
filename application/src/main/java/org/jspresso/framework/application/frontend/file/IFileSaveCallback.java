@@ -52,7 +52,7 @@ public interface IFileSaveCallback extends IFileCallback {
    * 
    * @param context
    *          the action context.
-   * @return a file name to save the filr
+   * @return a file name to save the file.
    */
   String getFileName(Map<String, Object> context);
 }

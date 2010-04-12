@@ -82,8 +82,9 @@ import com.ulcjava.base.application.util.ULCIcon;
 import com.ulcjava.base.shared.IWindowConstants;
 
 /**
- * Default implementation of a swing frontend controller. This implementation is
- * usable "as-is".
+ * This is is the default implementation of the <b>ULC</b> frontend controller.
+ * It will implement a 3-tier architecture through the ULC internal
+ * architecture. Workspaces are displayed using an MDI UI using internal frames.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

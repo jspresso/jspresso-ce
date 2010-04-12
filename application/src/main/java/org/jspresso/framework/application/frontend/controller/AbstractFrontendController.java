@@ -71,7 +71,15 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
- * This class serves as base class for frontend (view) controllers.
+ * Base class for frontend application controllers. Frontend controllers are
+ * responsible for adapting the Jspresso application to the UI channel. Although
+ * this generic abstract class centralizes most of the controller's
+ * configuration, it will be subclassed by concrete, UI dependent subclasses to
+ * implement polymorphic behaviour.
+ * <p>
+ * More than a behavioural adapter, the frontend controller will also be the
+ * place where you define the top-level application structure like the workspace
+ * list, the name, the application-wide actions, ...
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -362,7 +370,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the actionMap.
+   * Configures an application-wide action map that will be installed in the
+   * main application frame. These actions are available at any time from the UI
+   * and thus, do not depend on the active workspace. General purpose actions
+   * like &quot;Change password&quot; action should be installed here.
    * 
    * @param actionMap
    *          the actionMap to set.
@@ -372,7 +383,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the description.
+   * Sets the application description I18N key. The way this description is
+   * actully leveraged depends on the UI channel.
    * 
    * @param description
    *          the description to set.
@@ -382,7 +394,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the forcedStartingLocale.
+   * Configures the locale used to initiate the login process. Whenever the
+   * forced starting locale is <code>null</code>, the client host default locale
+   * is used.
+   * <p>
+   * As soon as the user logs-in, his locale is then used to translate the UI.
+   * Whenever the login process is disabled, then the forced starting locale is
+   * kept as the UI I18N locale.
    * 
    * @param forcedStartingLocale
    *          the forcedStartingLocale to set.
@@ -392,7 +410,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the helpActionMap.
+   * Configures the help action map. The help action map should contain actions
+   * that are related to helping the user (online help, reference manual,
+   * tutorial, version dialog...).
+   * <p>
+   * The help action map is visually distinguished from the regular aplication
+   * action map. For instance elp actions can be represented in a menu that is
+   * right-aligned in the menubar.
    * 
    * @param helpActionMap
    *          the helpActionMap to set.
@@ -402,7 +426,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the iconImageURL.
+   * Sets the icon image URL that is used as the application icon. Supported URL
+   * protocols include :
+   * <ul>
+   * <li>all JVM supported protocols</li>
+   * <li>the <b>jar:/</b> pseudo URL protocol</li>
+   * <li>the <b>classpath:/</b> pseudo URL protocol</li>
+   * </ul>
    * 
    * @param iconImageURL
    *          the iconImageURL to set.
@@ -412,7 +442,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the loginContextName.
+   * Configures the name of the JAAS login context to use to authenticate users.
+   * It must reference a valid JAAS context that is installed in the JVM, either
+   * through setting the <code>java.security.auth.login.config</code> system
+   * property or through server-specific configuration.
    * 
    * @param loginContextName
    *          the loginContextName to set.
@@ -422,7 +455,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the mvcBinder.
+   * Configures the MVC binder used to apply model-view bindings. There is
+   * hardly any reason for the developper to change the default binder but it
+   * can be customized here.
    * 
    * @param mvcBinder
    *          the mvcBinder to set.
@@ -432,7 +467,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the name.
+   * Sets the application name I18N key. The way this nae is actully leveraged
+   * depends on the UI channel but it typically generates (part of the) frame
+   * title.
    * 
    * @param name
    *          the name to set.
@@ -442,7 +479,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the startupAction.
+   * Configures an action to be executed on an empty UI context when the
+   * application starts. An example of such an action would be a default
+   * workspace/module opening and selection, a &quot;tip of the day&quot; like
+   * action, ...
    * 
    * @param startupAction
    *          the startupAction to set.
@@ -452,7 +492,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the viewFactory.
+   * Configures the view factory used to create views from view descriptors.
+   * Using a custom view factory is typically needed for extending Jspresso to
+   * use custom view descriptors / UI components. Of course, there is a view
+   * factory contrete type per UI channel.
    * 
    * @param viewFactory
    *          the viewFactory to set.
@@ -462,8 +505,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the workspaces. Modules are used by the frontend controller to give a
-   * user access on the domain window.
+   * Configures the workspaces that are available in the application. Workspaces
+   * are application entry-points and are hierarchically composed of modules /
+   * sub-modules.
    * 
    * @param workspaces
    *          the workspaces to set.
@@ -476,7 +520,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the workspacesMenuIconImageUrl.
+   * Sets the icon image URL that is used as the workspace menu icon. Supported
+   * URL protocols include :
+   * <ul>
+   * <li>all JVM supported protocols</li>
+   * <li>the <b>jar:/</b> pseudo URL protocol</li>
+   * <li>the <b>classpath:/</b> pseudo URL protocol</li>
+   * </ul>
    * 
    * @param workspacesMenuIconImageUrl
    *          the workspacesMenuIconImageUrl to set.
@@ -486,7 +536,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the loginViewDescriptor.
+   * Configures the view descriptor used to create the login dialog. The default
+   * built-in login view descriptor includes a standard login/password form.
    * 
    * @param loginViewDescriptor
    *          the loginViewDescriptor to set.
@@ -1101,7 +1152,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the onModuleExitAction.
+   * Configures an action to be executed each time a module of the application
+   * is exited. The action is executed in the context of the module the user
+   * exits. Default frontend controller configuration installs an action that
+   * checks current module dirty state.
    * 
    * @param onModuleExitAction
    *          the onModuleExitAction to set.
@@ -1120,7 +1174,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the onModuleEnterAction.
+   * Configures an action to be executed each time a module of the application
+   * is entered. The action is executed in the context of the module the user
+   * enters.
    * 
    * @param onModuleEnterAction
    *          the onModuleEnterAction to set.
@@ -1130,7 +1186,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the exitAction.
+   * Configures the exit action to be executed whenever the user wants to quit
+   * the application. The default installed exit action fisrt checks for started
+   * module(s) dirty state(s), then notifies user of pending persistent changes.
+   * When no flush is needed or the user bypasses them, the actual exit is
+   * performed.
    * 
    * @param exitAction
    *          the exitAction to set.

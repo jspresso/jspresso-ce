@@ -454,9 +454,9 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   }
 
   /**
-   * Gets a fixed id to mark the generated UI component (actually the UI
-   * component connector). This id can serve to record/replay UI command
-   * sequences.
+   * Configures a fixed id to mark the generated UI component (actually the UI
+   * component connector). This id can serve for the sake of recording/replaying
+   * UI command sequences.
    * 
    * @param automationSeed
    *          fixed id to mark the generated UI component.

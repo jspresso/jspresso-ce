@@ -32,7 +32,12 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
- * A remote controller capable of dumping incomming commands.
+ * A special remote controller capable of dumping incoming commands. The dump
+ * file can then be re-used in tools like SOAP-UI to perform :
+ * <ul>
+ * <li>functional testing</li>
+ * <li>load testing</li>
+ * </ul>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -80,7 +85,7 @@ public class RecordingRemoteController extends DefaultRemoteController {
   }
 
   /**
-   * Sets the commandsFileName.
+   * Configures the file name where to append the incoming commands dump.
    * 
    * @param commandsFileName
    *          the commandsFileName to set.

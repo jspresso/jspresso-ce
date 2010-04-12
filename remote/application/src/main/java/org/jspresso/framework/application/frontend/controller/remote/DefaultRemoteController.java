@@ -88,8 +88,13 @@ import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
- * Default implementation of a remote frontend controller. This implementation
- * is usable "as-is".
+ * This is is the default implementation of a &quot;remotable&quot; frontend
+ * controller. It will implement a 3-tier architecture. The remote controller
+ * lives on server-side and communicates with generic UI engines that are
+ * deployed on client side. As of now, the remote frontend controller is used by
+ * the <code>Flex</code> and <b>QooxDoo</b> frontends. Communication happens
+ * through the use of generic UI commands that are produced/consumed on both
+ * sides of the network.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -336,6 +341,7 @@ public class DefaultRemoteController extends
    * 
    * @param guidGenerator
    *          the guidGenerator to set.
+   * @internal
    */
   public void setGuidGenerator(IGUIDGenerator guidGenerator) {
     this.guidGenerator = guidGenerator;
@@ -346,6 +352,7 @@ public class DefaultRemoteController extends
    * 
    * @param remotePeerRegistry
    *          the remotePeerRegistry to set.
+   * @internal
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
     this.remotePeerRegistry = remotePeerRegistry;
@@ -355,6 +362,8 @@ public class DefaultRemoteController extends
    * Updates the view factory with the remote peer registry.
    * <p>
    * {@inheritDoc}
+   * 
+   * @internal
    */
   @Override
   public void setViewFactory(

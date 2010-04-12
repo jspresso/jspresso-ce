@@ -46,7 +46,8 @@ import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
- * Hibernate aware backend controller.
+ * This is the default Jspresso implementation of Hibernate-based backend
+ * controller.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -68,7 +69,12 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
+   * The configured entity factory will be configured with the necessary
+   * interceptors so that the controller can be notified of entity creations.
+   * <p>
    * {@inheritDoc}
+   * 
+   * @internal
    */
   @Override
   public void setEntityFactory(IEntityFactory entityFactory) {
@@ -77,18 +83,34 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
-   * Sets the hibernateTemplate.
+   * Assigns the Spring hibernate template to this backend controller. This
+   * property can only be set once and should only be used by the DI container.
+   * It will rarely be changed from built-in defaults unless you need to specify
+   * a custom implementation instance to be used.
+   * <p>
+   * The configured instance is the one that will be returned by the
+   * controller's <code>getHibernateTemplate()</code> method that should be used
+   * by the service layer to access Hibernate.
    * 
    * @param hibernateTemplate
    *          the hibernateTemplate to set.
    */
   public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+    if (this.hibernateTemplate != null) {
+      throw new IllegalArgumentException(
+          "Spring hibernate template can only be configured once.");
+    }
     this.hibernateTemplate = hibernateTemplate;
     linkHibernateArtifacts();
   }
 
   /**
+   * The configured transaction template will be configured with the necessary
+   * interceptors so that the controller can be notified of transactions.
+   * <p>
    * {@inheritDoc}
+   * 
+   * @internal
    */
   @Override
   public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
