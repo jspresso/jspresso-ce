@@ -383,7 +383,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the application description I18N key. The way this description is
+   * Sets the application description i18n key. The way this description is
    * actully leveraged depends on the UI channel.
    * 
    * @param description
@@ -400,7 +400,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * As soon as the user logs-in, his locale is then used to translate the UI.
    * Whenever the login process is disabled, then the forced starting locale is
-   * kept as the UI I18N locale.
+   * kept as the UI i18n locale.
    * 
    * @param forcedStartingLocale
    *          the forcedStartingLocale to set.
@@ -467,7 +467,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the application name I18N key. The way this nae is actully leveraged
+   * Sets the application name i18n key. The way this nae is actully leveraged
    * depends on the UI channel but it typically generates (part of the) frame
    * title.
    * 

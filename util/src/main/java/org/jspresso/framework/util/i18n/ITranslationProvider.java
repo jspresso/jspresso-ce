@@ -21,7 +21,7 @@ package org.jspresso.framework.util.i18n;
 import java.util.Locale;
 
 /**
- * The interface being implemented by all I18N string providers.
+ * The interface being implemented by all i18n string providers.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

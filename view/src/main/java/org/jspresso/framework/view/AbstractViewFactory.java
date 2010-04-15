@@ -314,7 +314,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the object responsible for executing the view actions (generally
    *          the frontend controller itself).
    * @param locale
-   *          the locale the view must use for I18N.
+   *          the locale the view must use for i18n.
    * @return the created view or null.
    */
   protected IView<E> createCustomView(IViewDescriptor viewDescriptor,
@@ -333,7 +333,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the object responsible for executing the view actions (generally
    *          the frontend controller itself).
    * @param locale
-   *          the locale the view must use for I18N.
+   *          the locale the view must use for i18n.
    * @return the empty view.
    */
   private IView<E> createEmptyView(IViewDescriptor viewDescriptor,

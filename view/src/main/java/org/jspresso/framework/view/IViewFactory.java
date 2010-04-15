@@ -54,7 +54,7 @@ public interface IViewFactory<E, F, G> {
    *            the object responsible for executing the view actions (generally
    *            the frontend controller itself).
    * @param locale
-   *            the locale the view must use for I18N.
+   *            the locale the view must use for i18n.
    * @return the created view.
    */
   IView<E> createView(IViewDescriptor viewDescriptor,

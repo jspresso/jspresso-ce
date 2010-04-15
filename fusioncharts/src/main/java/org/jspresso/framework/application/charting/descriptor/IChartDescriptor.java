@@ -69,9 +69,9 @@ public interface IChartDescriptor {
       throws SQLException;
 
   /**
-   * Gets the chart title I18N key. This key will be internationalized.
+   * Gets the chart title i18n key. This key will be internationalized.
    * 
-   * @return the chart title I18N key.
+   * @return the chart title i18n key.
    */
   String getTitle();
 }

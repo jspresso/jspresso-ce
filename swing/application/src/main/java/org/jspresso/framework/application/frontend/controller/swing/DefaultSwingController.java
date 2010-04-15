@@ -94,7 +94,7 @@ import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
 import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
 
 /**
- * This is is the default implementation of the <b>swing</b> frontend
+ * This is is the default implementation of the <b>Swing</b> frontend
  * controller. It will implement a 2-tier architecture that is particularly
  * useful for the development/debugging phases. Workspaces are displayed using
  * an MDI UI using internal frames.

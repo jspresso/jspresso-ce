@@ -9,12 +9,12 @@
 
     <section>
       <title>Overview</title>
-  
+
       <para></para>
-  
+
       <figure>
         <title>Controllers class diagram</title>
-  
+
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="50%"
@@ -24,10 +24,12 @@
         </mediaobject>
       </figure>
     </section>
+
     <section>
       <title>Reference</title>
+
       <para></para>
-      
+
       <xi:include href="../generated/AbstractController.xml"
                   xmlns:xi="http://www.w3.org/2001/XInclude" />
     </section>
@@ -38,28 +40,29 @@
 
     <section>
       <title>Overview</title>
-  
+
       <para></para>
-  
+
       <figure>
         <title>Modules class diagram</title>
-  
+
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="60%"
-                       fileref="../uml/modules.PNG" scalefit="1"
-                       width="100%" />
+            <imagedata align="center" contentdepth="50%"
+                       fileref="../uml/modules.PNG" scalefit="1" width="100%" />
           </imageobject>
         </mediaobject>
       </figure>
     </section>
-    
+
     <section>
       <title>Reference</title>
+
       <para></para>
-      
+
       <xi:include href="../generated/Workspace.xml"
                   xmlns:xi="http://www.w3.org/2001/XInclude" />
+
       <xi:include href="../generated/Module.xml"
                   xmlns:xi="http://www.w3.org/2001/XInclude" />
     </section>
@@ -70,12 +73,12 @@
 
     <section>
       <title>Overview</title>
-  
+
       <para></para>
-  
+
       <figure>
         <title>Gates class diagram</title>
-  
+
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
@@ -85,11 +88,12 @@
         </mediaobject>
       </figure>
     </section>
-    
+
     <section>
       <title>Reference</title>
+
       <para></para>
-      
+
       <xi:include href="../generated/AbstractGate.xml"
                   xmlns:xi="http://www.w3.org/2001/XInclude" />
     </section>
@@ -100,17 +104,16 @@
 
     <section>
       <title>Overview</title>
-  
+
       <para></para>
-  
+
       <figure>
         <title>Startup class diagram</title>
-  
+
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="60%"
-                       fileref="../uml/startup.PNG" scalefit="1"
-                       width="100%" />
+                       fileref="../uml/startup.PNG" scalefit="1" width="100%" />
           </imageobject>
         </mediaobject>
       </figure>

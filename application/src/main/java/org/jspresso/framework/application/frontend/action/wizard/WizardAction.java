@@ -64,7 +64,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * actions that will respectively be executed when entering and when exiting the
  * wizard step.</li>
  * <li>optional <code>nextLabelKey</code> and <code>previousLabelKey</code> :
- * I18N keys for next and previous buttons if you want to change the default
+ * i18n keys for next and previous buttons if you want to change the default
  * ones.</li>
  * <li>optional <code>nextStepDescriptor</code> : the next wizard step. If null,
  * the wizard GUI will enable the finish action.</li>

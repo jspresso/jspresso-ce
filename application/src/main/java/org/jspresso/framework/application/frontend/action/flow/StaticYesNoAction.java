@@ -37,7 +37,7 @@ public class StaticYesNoAction<E, F, G> extends YesNoAction<E, F, G> {
   }
 
   /**
-   * Configures the I18N key used to translate the message that is to be
+   * Configures the i18n key used to translate the message that is to be
    * displayed to the user. When the action executes, the statically configured
    * message is first translated, then placed into the action context to be
    * popped-up.

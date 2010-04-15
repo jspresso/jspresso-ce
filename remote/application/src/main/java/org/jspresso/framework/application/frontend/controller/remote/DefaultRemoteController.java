@@ -92,9 +92,9 @@ import org.springframework.dao.DataIntegrityViolationException;
  * controller. It will implement a 3-tier architecture. The remote controller
  * lives on server-side and communicates with generic UI engines that are
  * deployed on client side. As of now, the remote frontend controller is used by
- * the <code>Flex</code> and <b>QooxDoo</b> frontends. Communication happens
- * through the use of generic UI commands that are produced/consumed on both
- * sides of the network.
+ * the <b>Flex</b> and <b>Qooxdoo</b> frontends. Communication happens through
+ * the use of generic UI commands that are produced/consumed on both sides of
+ * the network.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

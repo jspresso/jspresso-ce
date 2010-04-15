@@ -5344,7 +5344,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
     autonomous part of the application that can be registered in workspaces
     which in turn are registered in the frontend controller to make them
     available to the end-user. As of this writing, the built-in frontend
-    controllers (Swing, ULC, Wings and Flax) create a main application frame
+    controllers (Swing, ULC, Wings and Flex) create a main application frame
     and give access to the registered workspaces through a menu. Whenever a
     workspace is opened, the workspace modules structure is displayed.</para>
 

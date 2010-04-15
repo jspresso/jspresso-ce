@@ -36,13 +36,20 @@ import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
- * A workspace is a central element in the application architecture. It serves
- * as an entry point on the domain model. Workspaces are organized as a tree
- * structure since they can (optionally) provide modules. A module can be seen
- * as a window on the business grouping processes forming a business activity
- * (like master data management, customer contract handling, ...). Each module
- * can (optionally) provide a projected object serving as model root for
- * trigerring grouped processes.
+ * A workspace is an group of functional application modules. You may decide
+ * arbitrarily how to group modules into workspaces but a good approach might be
+ * to design the workspaces based on roles (i.e. business activities). This
+ * helps to clearly seperates tasks-unrelated modules and eases authorization
+ * management since a workspace can be granted or forbidden as a whole by
+ * Jspresso security.
+ * <p>
+ * Workspaces might be graphically represented differently depending on the UI
+ * technology used. For instance, the Swing and ULC channels use a MDI UI in
+ * which each workspace is represented as an internal frame (document). On the
+ * other hand, Flex and Qooxdoo channels represent workspaces stacked in an
+ * accordion. Whatever the graphical representation is, there is at most one
+ * workspace active at a time for a user session - either the active (focused)
+ * internal frame or the expanded accordion section.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -232,7 +239,10 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the workspace description. It may serve for the workspace view.
+   * Configures the workspace description key used to translate actual
+   * internationalized workspace description. The resulting translation will
+   * generally be leveraged as a tooltip on the UI side but its use may be
+   * extended for online help.
    * 
    * @param description
    *          the workspace description.
@@ -242,7 +252,11 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the grantedRoles.
+   * Assigns the roles that are authorized to start this workspace. Whenever the
+   * user is not granted sufficient privileges, the workspace is not installed
+   * at all in the application frame. Setting the collection of granted roles to
+   * <code>null</code> (default value) disables role based authorization on this
+   * workspace.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.
@@ -252,7 +266,8 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the i18nDescription.
+   * Stores the internationalized workspace description for use in the UI as
+   * tooltip for instance.
    * 
    * @param i18nDescription
    *          the i18nDescription to set.
@@ -262,7 +277,8 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the i18nName.
+   * Stores the internationalized workspace name for use in the UI as workspace
+   * label.
    * 
    * @param i18nName
    *          the i18nName to set.
@@ -272,7 +288,13 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the iconImageURL.
+   * Sets the icon image URL used to identify this workspace. Supported URL
+   * protocols include :
+   * <ul>
+   * <li>all JVM supported protocols</li>
+   * <li>the <b>jar:/</b> pseudo URL protocol</li>
+   * <li>the <b>classpath:/</b> pseudo URL protocol</li>
+   * </ul>
    * 
    * @param iconImageURL
    *          the iconImageURL to set.
@@ -282,7 +304,12 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the iconImageURLProvider.
+   * Since a workspace is represented as a tree view of modules, this property
+   * can be used to customize an incon image URL provider on the created tree
+   * view (see <code>BasicTreeViewDescriptor.iconImageURLProvider</code>).
+   * However, the workspace built-in incon image URL provider (
+   * <code>WorkspaceIconImageURLProvider</code>) will setup sensible defaults so
+   * that it unlikely has to be changed.
    * 
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
@@ -292,7 +319,9 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the modules modules. It will fire a "modules" property change event.
+   * Installs a list of module(s) into this workspace. Each module may own
+   * sub-modules that form a (potentially complex and dynamic) hierarchy, that
+   * is visually rendered as a tree view.
    * 
    * @param modules
    *          the modules modules to set.
@@ -307,7 +336,9 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the module's name. It may serve for the module's view.
+   * Configures the workspace name key used to translate actual
+   * internationalized workspace name. The resulting translation will be
+   * leveraged as the workspace label on the UI side.
    * 
    * @param name
    *          the module's name.
@@ -317,7 +348,7 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * based on name.
+   * based on i18n name.
    * <p>
    * {@inheritDoc}
    */
@@ -339,7 +370,10 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the startupAction.
+   * Configures an action to be executed the first time the workspace is
+   * &quot;started&quot; by the user. The action will execute in the context of
+   * the workspace but with no specific module selected. It will help
+   * initializing workspace-wide values.
    * 
    * @param startupAction
    *          the startupAction to set.
@@ -362,6 +396,7 @@ public class Workspace implements ISecurable, ISubjectAware {
    * 
    * @param started
    *          the started to set.
+   * @internal
    */
   public void setStarted(boolean started) {
     this.started = started;
@@ -379,7 +414,11 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Sets the itemSelectionAction.
+   * Configures the action to be installed as item selection action on the
+   * rendered module tree view - see
+   * <code>BasicTreeViewDescriptor.itemSelectionAction</code>. The configured
+   * action will then be executed each time a module selection changes in the
+   * workspace.
    * 
    * @param itemSelectionAction
    *          the itemSelectionAction to set.
@@ -390,6 +429,8 @@ public class Workspace implements ISecurable, ISubjectAware {
 
   /**
    * {@inheritDoc}
+   * 
+   * @internal
    */
   public void setSubject(Subject subject) {
     this.subject = subject;
