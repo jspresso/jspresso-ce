@@ -38,7 +38,10 @@ import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
- * A bean collection module that offers a filter.
+ * This is a specialized type of bean collection module that provides a filter (
+ * an instance of <code>IQueryComponent</code> ). This type of module, coupled
+ * with a generic, built-in, action map is perfectly suited for CRUD-like
+ * operations.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -54,8 +57,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   private IViewDescriptor              pagingStatusViewDescriptor;
   private FrontendAction<?, ?, ?>      previousPageAction;
   private FrontendAction<?, ?, ?>      nextPageAction;
-  private Map<String, ESort> orderingProperties;
-  private Integer pageSize;
+  private Map<String, ESort>           orderingProperties;
+  private Integer                      pageSize;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -95,7 +98,11 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Sets the filter.
+   * Assigns the filter to this module instance. It is by default assigned by
+   * the module startup action (see <code>InitModuleFilterAction</code>). So if
+   * you ever want to change the default implementation of the filter, you have
+   * to write and install you own custom startup action or explicitely inject a
+   * specific instance.
    * 
    * @param filter
    *          the filter to set.
@@ -123,7 +130,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Sets the filterComponentDescriptor.
+   * This property allows to configure a custom filter model descriptor. If not
+   * set, which is the default value, the filter model is built out of the
+   * element component descriptor (QBE filter model).
    * 
    * @param filterComponentDescriptor
    *          the filterComponentDescriptor to set.
@@ -134,7 +143,11 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Sets the filterViewDescriptor.
+   * This property allows to refine the default filer view to re-arange the
+   * filter fields. Custom filter view descriptors assigned here must not be
+   * assigned a model descriptor since they will be at runtime. This is because
+   * the filter component descriptor must be reworked - to adapt comparable
+   * field structures for instance.
    * 
    * @param filterViewDescriptor
    *          the filterViewDescriptor to set.
@@ -166,7 +179,10 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Sets the pagingStatusViewDescriptor.
+   * Allows to change the default view for the paging status. If not set
+   * (default), a default paging status view is created containing the curent
+   * pageas well as the total number of pages available. This paging status view
+   * is the bordered wth the bage navigation actions.
    * 
    * @param pagingStatusViewDescriptor
    *          the pagingStatusViewDescriptor to set.
@@ -198,35 +214,38 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
     BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
     decorator.setNorthViewDescriptor(filterViewDesc);
     decorator.setCenterViewDescriptor(superViewDescriptor);
-    if (pagingStatusViewDescriptor != null) {
-      BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
-      nestingViewDescriptor
-          .setModelDescriptor(moduleDescriptor
-              .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
-      nestingViewDescriptor.setCenterViewDescriptor(pagingStatusViewDescriptor);
-      nestingViewDescriptor.setBorderType(EBorderType.SIMPLE);
+    if (getPageSize() != null && getPageSize() >= 0) {
+      if (pagingStatusViewDescriptor != null) {
+        BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
+        nestingViewDescriptor
+            .setModelDescriptor(moduleDescriptor
+                .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
+        nestingViewDescriptor
+            .setCenterViewDescriptor(pagingStatusViewDescriptor);
+        nestingViewDescriptor.setBorderType(EBorderType.SIMPLE);
 
-      if (previousPageAction != null || nextPageAction != null) {
-        BasicBorderViewDescriptor pageNavigationViewDescriptor = new BasicBorderViewDescriptor();
-        pageNavigationViewDescriptor
-            .setCenterViewDescriptor(nestingViewDescriptor);
-
-        if (previousPageAction != null) {
-          BasicActionViewDescriptor previousActionViewDescriptor = new BasicActionViewDescriptor();
-          previousActionViewDescriptor.setAction(previousPageAction);
+        if (previousPageAction != null || nextPageAction != null) {
+          BasicBorderViewDescriptor pageNavigationViewDescriptor = new BasicBorderViewDescriptor();
           pageNavigationViewDescriptor
-              .setWestViewDescriptor(previousActionViewDescriptor);
-        }
+              .setCenterViewDescriptor(nestingViewDescriptor);
 
-        if (nextPageAction != null) {
-          BasicActionViewDescriptor nextActionViewDescriptor = new BasicActionViewDescriptor();
-          nextActionViewDescriptor.setAction(nextPageAction);
-          pageNavigationViewDescriptor
-              .setEastViewDescriptor(nextActionViewDescriptor);
+          if (previousPageAction != null) {
+            BasicActionViewDescriptor previousActionViewDescriptor = new BasicActionViewDescriptor();
+            previousActionViewDescriptor.setAction(previousPageAction);
+            pageNavigationViewDescriptor
+                .setWestViewDescriptor(previousActionViewDescriptor);
+          }
+
+          if (nextPageAction != null) {
+            BasicActionViewDescriptor nextActionViewDescriptor = new BasicActionViewDescriptor();
+            nextActionViewDescriptor.setAction(nextPageAction);
+            pageNavigationViewDescriptor
+                .setEastViewDescriptor(nextActionViewDescriptor);
+          }
+          decorator.setSouthViewDescriptor(pageNavigationViewDescriptor);
+        } else {
+          decorator.setSouthViewDescriptor(nestingViewDescriptor);
         }
-        decorator.setSouthViewDescriptor(pageNavigationViewDescriptor);
-      } else {
-        decorator.setSouthViewDescriptor(nestingViewDescriptor);
       }
     }
     decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());
@@ -245,7 +264,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Sets the previousPageAction.
+   * Assigns the action triggered for previous page navigation on a pageable
+   * result set. This should hardly be changed from default built-in.
    * 
    * @param previousPageAction
    *          the previousPageAction to set.
@@ -255,7 +275,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Sets the nextPageAction.
+   * Assigns the action triggered for next page navigation on a pageable result
+   * set. This should hardly be changed from default built-in.
    * 
    * @param nextPageAction
    *          the nextPageAction to set.
@@ -277,7 +298,19 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Sets the orderingProperties.
+   * Configures a custom map of ordering properties for the result set. If not
+   * set, which is the default, the elements ordering properties is used.
+   * <p>
+   * This property consist of a <code>Map</code> whose entries are composed with
+   * :
+   * <ul>
+   * <li>the property name as key</li>
+   * <li>the sort order for this property as value. This is either a value of
+   * the <code>ESort</code> enum (<i>ASCENDING</i> or <i>DESCENDING</i>) or its
+   * equivalent string representation.</li>
+   * </ul>
+   * Ordering properties are considered following their order in the map
+   * iterator.
    * 
    * @param orderingProperties
    *          the orderingProperties to set.
