@@ -45,10 +45,13 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
  * (in fact workspaces and modules are regular beans that are used as model in
  * standard Jspresso views).
  * <p>
- * All module, among other features, are capable of providing a view to be
- * installedin the UI wen they are selected. This makes Jspresso applications
+ * Modules, among other features, are capable of providing a view to be
+ * installed in the UI wen they are selected. This makes Jspresso applications
  * really modular and their architecture flexible enough to embed and run a
  * large variety of different module types.
+ * <p>
+ * A module can also be as simple as a grouping structure for other modules
+ * (intermediary nodes).
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

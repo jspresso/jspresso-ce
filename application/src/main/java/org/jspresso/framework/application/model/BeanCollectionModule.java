@@ -37,7 +37,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * other type of java beans.
  * <p>
  * Simple bean collection modules must have their collection of referenced beans
- * initialized somehow. There is no standard built-in action to do so since it
+ * initialized somehow. There is no standard built-in action to do so, since it
  * is highly dependent on what's needed. So it's rather common to have the
  * module content initialized through a startup action depending on the session
  * state.
@@ -108,7 +108,7 @@ public class BeanCollectionModule extends Module {
   /**
    * Configures the type of bean element this collection module manages. A bunch
    * of default values are inferred from this element component descriptor. For
-   * instance, pageing size (if used) will default to the component one unless
+   * instance, paging size (if used) will default to the component one unless
    * explicitely set. Same goes for icon image URL, default ordering properties
    * or even granted roles. The latter means that bean collection modules based
    * on forbidden entities will automatically be excluded from the workspace of

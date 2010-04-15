@@ -36,7 +36,17 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
- * A bean module is the base class of bean related modules.
+ * This type of module keeps a reference on a single bean. There is no
+ * assumption made on wether this bean is actually a persistent entity or any
+ * other type of java bean.
+ * <p>
+ * Bean modules must have their referenced bean initialized somehow. So it's
+ * rather common to have the module content initialized through a startup action
+ * depending on the session state or dynamically constructed by a standard
+ * action like <code>AddBeanAsSubModuleAction</code>.
+ * <p>
+ * This type of module is definitely the one that offers maximum flexibility to
+ * handle arbitrary models.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -144,7 +154,14 @@ public class BeanModule extends Module implements PropertyChangeListener {
   }
 
   /**
-   * Sets the componentDescriptor.
+   * Configures the type of bean this module manages. A bunch of default values
+   * are inferred from this component descriptor. For instance, icon image URL
+   * or even granted roles can be infered from the configured component
+   * descriptor. The latter means that bean modules based on forbidden entities
+   * will automatically be excluded from the workspace of the logged-in user.
+   * <p>
+   * However, when not set, the omponent descriptor it self can be infered from
+   * the configured projected view descriptor model.
    * 
    * @param componentDescriptor
    *          the componentDescriptor to set.
@@ -155,7 +172,9 @@ public class BeanModule extends Module implements PropertyChangeListener {
   }
 
   /**
-   * Sets the module's projected object.
+   * Assigns the bean this module manages. The projected view will automatically
+   * reflect this change since a &quot;moduleObject&quot; property change will
+   * be fired.
    * 
    * @param moduleObject
    *          the projected object.
