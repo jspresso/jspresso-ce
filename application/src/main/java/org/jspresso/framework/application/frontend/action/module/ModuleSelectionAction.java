@@ -55,7 +55,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
     Workspace ws = getController(context).getWorkspace(workspaceName);
     for (Module m : ws.getModules()) {
-      if (m.getName().equals(moduleName)) {
+      if (moduleName.equals(m.getName())) {
         getController(context).displayModule(workspaceName, m);
         break;
       }

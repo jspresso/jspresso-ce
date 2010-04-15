@@ -239,10 +239,9 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Configures the workspace description key used to translate actual
-   * internationalized workspace description. The resulting translation will
-   * generally be leveraged as a tooltip on the UI side but its use may be
-   * extended for online help.
+   * Configures the key used to translate actual internationalized workspace
+   * description. The resulting translation will generally be leveraged as a
+   * tooltip on the UI side but its use may be extended for online help.
    * 
    * @param description
    *          the workspace description.
@@ -271,6 +270,7 @@ public class Workspace implements ISecurable, ISubjectAware {
    * 
    * @param i18nDescription
    *          the i18nDescription to set.
+   * @internal
    */
   public void setI18nDescription(String i18nDescription) {
     this.i18nDescription = i18nDescription;
@@ -282,6 +282,7 @@ public class Workspace implements ISecurable, ISubjectAware {
    * 
    * @param i18nName
    *          the i18nName to set.
+   * @internal
    */
   public void setI18nName(String i18nName) {
     this.i18nName = i18nName;
@@ -336,9 +337,9 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Configures the workspace name key used to translate actual
-   * internationalized workspace name. The resulting translation will be
-   * leveraged as the workspace label on the UI side.
+   * Configures the key used to translate actual internationalized workspace
+   * name. The resulting translation will be leveraged as the workspace label on
+   * the UI side.
    * 
    * @param name
    *          the module's name.

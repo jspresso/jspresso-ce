@@ -130,7 +130,7 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
     childModule
         .setComponentDescriptor((IComponentDescriptor<Object>) childComponentDescriptor);
     childModule.setModuleObject(childModuleObject);
-    childModule.setName(String.valueOf(childModuleObject));
+    childModule.setI18nName(String.valueOf(childModuleObject));
     return childModule;
   }
 

@@ -37,8 +37,18 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 
 /**
- * A child module is a non-root module (it belongs to a workspace). A child
- * module uses a view to render its projected artifact.
+ * A module is an entry point in the application. Modules are organized in
+ * bi-directional, parent-children hierarchy. As such, they can be viewed (and
+ * they are materalized in the UI) as trees. Modules can be (re)organized
+ * dynamically by changing their parent-children relationship and their owning
+ * workspace UI will reflect the change seamlessly, as with any Jspresso model
+ * (in fact workspaces and modules are regular beans that are used as model in
+ * standard Jspresso views).
+ * <p>
+ * All module, among other features, are capable of providing a view to be
+ * installedin the UI wen they are selected. This makes Jspresso applications
+ * really modular and their architecture flexible enough to embed and run a
+ * large variety of different module types.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -208,11 +218,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * @return the module's name.
    */
   public String getName() {
-    String dirtyMarker = "";
-    if (isDirty()) {
-      dirtyMarker = "(*)";
-    }
-    return dirtyMarker + name;
+    return name;
   }
 
   /**
@@ -322,7 +328,9 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the module's description. It may serve for the module's view.
+   * Configures the key used to translate actual internationalized module
+   * description. The resulting translation will generally be leveraged as a
+   * tooltip on the UI side but its use may be extended for online help.
    * 
    * @param description
    *          the module's description.
@@ -334,6 +342,9 @@ public class Module extends AbstractPropertyChangeCapable implements
     String oldValue = getDescription();
     this.description = description;
     firePropertyChange(DESCRIPTION, oldValue, getDescription());
+    if (this.i18nDescription == null) {
+      setI18nDescription(name);
+    }
   }
 
   /**
@@ -347,11 +358,12 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the i18nDescription.
+   * Stores the internationalized workspace description for use in the UI as
+   * tooltip for instance.
    * 
-   * @internal
    * @param i18nDescription
    *          the i18nDescription to set.
+   * @internal
    */
   public void setI18nDescription(String i18nDescription) {
     if (ObjectUtils.equals(this.i18nDescription, i18nDescription)) {
@@ -360,14 +372,18 @@ public class Module extends AbstractPropertyChangeCapable implements
     String oldValue = getI18nDescription();
     this.i18nDescription = i18nDescription;
     firePropertyChange(I18N_DESCRIPTION, oldValue, getI18nDescription());
+    if (this.description == null) {
+      setDescription(i18nDescription);
+    }
   }
 
   /**
-   * Sets the i18nName.
+   * Stores the internationalized workspace name for use in the UI as workspace
+   * label.
    * 
-   * @internal
    * @param i18nName
    *          the i18nName to set.
+   * @internal
    */
   public void setI18nName(String i18nName) {
     if (ObjectUtils.equals(this.i18nName, i18nName)) {
@@ -376,6 +392,9 @@ public class Module extends AbstractPropertyChangeCapable implements
     String oldValue = getI18nName();
     this.i18nName = i18nName;
     firePropertyChange(I18N_NAME, oldValue, getI18nName());
+    if (this.name == null) {
+      setName(i18nName);
+    }
   }
 
   /**
@@ -389,7 +408,9 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the module's name. It may serve for the module's view.
+   * Configures the key used to translate actual internationalized module name.
+   * The resulting translation will be leveraged as the module label on the UI
+   * side.
    * 
    * @param name
    *          the module's name.
@@ -401,6 +422,9 @@ public class Module extends AbstractPropertyChangeCapable implements
     String oldValue = getName();
     this.name = name;
     firePropertyChange(NAME, oldValue, getName());
+    if (this.i18nName == null) {
+      setI18nName(name);
+    }
   }
 
   /**
@@ -597,10 +621,8 @@ public class Module extends AbstractPropertyChangeCapable implements
    *          the dirty to set.
    */
   public void setDirty(boolean dirty) {
-    String oldName = getName();
     String oldI18nName = getI18nName();
     this.dirty = dirty;
-    firePropertyChange(NAME, oldName, getName());
     firePropertyChange(I18N_NAME, oldI18nName, getI18nName());
   }
 }
