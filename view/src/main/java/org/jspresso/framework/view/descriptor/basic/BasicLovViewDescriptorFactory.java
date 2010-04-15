@@ -59,28 +59,33 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
         .getModelDescriptor());
     lovViewDescriptor.setCenterViewDescriptor(createResultViewDescriptor(
         entityRefDescriptor.getComponentDescriptor(), okAction));
-    if (pagingStatusViewDescriptor != null) {
-      if (previousPageAction != null || nextPageAction != null) {
-        BasicBorderViewDescriptor pageNavigationViewDescriptor = new BasicBorderViewDescriptor();
-        pageNavigationViewDescriptor
-            .setCenterViewDescriptor(pagingStatusViewDescriptor);
-
-        if (previousPageAction != null) {
-          BasicActionViewDescriptor previousActionViewDescriptor = new BasicActionViewDescriptor();
-          previousActionViewDescriptor.setAction(previousPageAction);
+    if (entityRefDescriptor.getReferencedDescriptor().getPageSize() != null
+        && entityRefDescriptor.getReferencedDescriptor().getPageSize()
+            .intValue() >= 0) {
+      if (pagingStatusViewDescriptor != null) {
+        if (previousPageAction != null || nextPageAction != null) {
+          BasicBorderViewDescriptor pageNavigationViewDescriptor = new BasicBorderViewDescriptor();
           pageNavigationViewDescriptor
-              .setWestViewDescriptor(previousActionViewDescriptor);
-        }
+              .setCenterViewDescriptor(pagingStatusViewDescriptor);
 
-        if (nextPageAction != null) {
-          BasicActionViewDescriptor nextActionViewDescriptor = new BasicActionViewDescriptor();
-          nextActionViewDescriptor.setAction(nextPageAction);
-          pageNavigationViewDescriptor
-              .setEastViewDescriptor(nextActionViewDescriptor);
+          if (previousPageAction != null) {
+            BasicActionViewDescriptor previousActionViewDescriptor = new BasicActionViewDescriptor();
+            previousActionViewDescriptor.setAction(previousPageAction);
+            pageNavigationViewDescriptor
+                .setWestViewDescriptor(previousActionViewDescriptor);
+          }
+
+          if (nextPageAction != null) {
+            BasicActionViewDescriptor nextActionViewDescriptor = new BasicActionViewDescriptor();
+            nextActionViewDescriptor.setAction(nextPageAction);
+            pageNavigationViewDescriptor
+                .setEastViewDescriptor(nextActionViewDescriptor);
+          }
+          lovViewDescriptor
+              .setSouthViewDescriptor(pageNavigationViewDescriptor);
+        } else {
+          lovViewDescriptor.setSouthViewDescriptor(pagingStatusViewDescriptor);
         }
-        lovViewDescriptor.setSouthViewDescriptor(pageNavigationViewDescriptor);
-      } else {
-        lovViewDescriptor.setSouthViewDescriptor(pagingStatusViewDescriptor);
       }
     }
     return lovViewDescriptor;
