@@ -20,6 +20,7 @@ package org.jspresso.framework.application.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
@@ -27,6 +28,7 @@ import org.jspresso.framework.application.model.descriptor.FilterableBeanCollect
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
+import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
@@ -52,6 +54,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   private IViewDescriptor              pagingStatusViewDescriptor;
   private FrontendAction<?, ?, ?>      previousPageAction;
   private FrontendAction<?, ?, ?>      nextPageAction;
+  private Map<String, ESort> orderingProperties;
+  private Integer pageSize;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -258,5 +262,49 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    */
   public void setNextPageAction(FrontendAction<?, ?, ?> nextPageAction) {
     this.nextPageAction = nextPageAction;
+  }
+
+  /**
+   * Gets the orderingProperties.
+   * 
+   * @return the orderingProperties.
+   */
+  public Map<String, ESort> getOrderingProperties() {
+    if (orderingProperties == null) {
+      return getElementComponentDescriptor().getOrderingProperties();
+    }
+    return orderingProperties;
+  }
+
+  /**
+   * Sets the orderingProperties.
+   * 
+   * @param orderingProperties
+   *          the orderingProperties to set.
+   */
+  public void setOrderingProperties(Map<String, ESort> orderingProperties) {
+    this.orderingProperties = orderingProperties;
+  }
+
+  /**
+   * Gets the pageSize.
+   * 
+   * @return the pageSize.
+   */
+  public Integer getPageSize() {
+    if (pageSize == null) {
+      return getElementComponentDescriptor().getPageSize();
+    }
+    return pageSize;
+  }
+
+  /**
+   * Sets the pageSize.
+   * 
+   * @param pageSize
+   *          the pageSize to set.
+   */
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
   }
 }
