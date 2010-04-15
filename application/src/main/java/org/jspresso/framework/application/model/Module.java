@@ -117,8 +117,8 @@ public class Module extends AbstractPropertyChangeCapable implements
    * Adds a child module.
    * 
    * @param child
-   *          the child module to add. It will fire a "subModules" property
-   *          change event.
+   *          the child module to add. It will fire a &quot;subModules&quot;
+   *          property change event.
    * @return <code>true</code> if the module was succesfully added.
    */
   public boolean addSubModule(Module child) {
@@ -134,8 +134,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Adds a modules module collection. It will fire a "subModules" property
-   * change event.
+   * Adds a modules module collection. It will fire a &quot;subModules&quot;
+   * property change event.
    * 
    * @param children
    *          the modules modules to add.
@@ -288,7 +288,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Removes a child module. It will fire a "subModules" property change event.
+   * Removes a child module. It will fire a &quot;subModules&quot; property
+   * change event.
    * 
    * @param module
    *          the child module to remove.
@@ -307,8 +308,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Removes a modules module collection. It will fire a "subModules" property
-   * change event.
+   * Removes a modules module collection. It will fire a &quot;subModules&quot;
+   * property change event.
    * 
    * @param children
    *          the modules modules to remove.
@@ -348,7 +349,15 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the grantedRoles.
+   * Assigns the roles that are authorized to start this module. Whenever the
+   * user is not granted sufficient privileges, the module is simply not
+   * installed in the workspace. Setting the collection of granted roles to
+   * <code>null</code> (default value) disables role based authorization on this
+   * module.
+   * <p>
+   * Some specific modules that are component/entity model based i.e.
+   * <code>Bean(Collection)Module</code> also inherit their authrorizations from
+   * their model.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.
@@ -398,7 +407,13 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the iconImageURL.
+   * Sets the icon image URL used to identify this workspace. Supported URL
+   * protocols include :
+   * <ul>
+   * <li>all JVM supported protocols</li>
+   * <li>the <b>jar:/</b> pseudo URL protocol</li>
+   * <li>the <b>classpath:/</b> pseudo URL protocol</li>
+   * </ul>
    * 
    * @param iconImageURL
    *          the iconImageURL to set.
@@ -428,7 +443,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the parent module. It will fire a "parent" property change event.
+   * Assigns the parent module and potentially move itself out of previous
+   * parent children. It will fire a &quot;parent&quot; property change event.
    * 
    * @param parent
    *          the parent module to set or null if none.
@@ -450,7 +466,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the projectedViewDescriptor.
+   * Configures the view descriptor used to construct the view that will be
+   * displayed when this module is selected.
    * 
    * @param projectedViewDescriptor
    *          the projectedViewDescriptor to set.
@@ -462,16 +479,19 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Sets the started.
    * 
-   * @internal
    * @param started
    *          the started to set.
+   * @internal
    */
   public void setStarted(boolean started) {
     this.started = started;
   }
 
   /**
-   * Sets the startupAction.
+   * Configures an action to be executed the first time the module is
+   * &quot;started&quot; by the user. The action will execute in the context of
+   * the current workspace, this module being the current selected module. It
+   * will help initializing module values, notify user, ....
    * 
    * @param startupAction
    *          the startupAction to set.
@@ -481,8 +501,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the modules modules. It will fire a "subModules" property change
-   * event.
+   * Installs a list of module(s) as sub-modules of this one. It will fire a
+   * &quot;subModules&quot; property change event.
    * 
    * @param children
    *          the modules modules to set.
@@ -513,7 +533,7 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * This method will set the parent module to the new modules modules and
    * remove the parent of the old removed modules modules. It will fire the
-   * "subModules" property change event.
+   * &quot;subModules&quot; property change event.
    * 
    * @param oldChildren
    *          the old modules collection property.
@@ -577,7 +597,10 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the entryAction.
+   * Configures an action to be executed every time the module becomes the
+   * current selected module (either through a user explicit navigation or a
+   * programmatic selection). The action will execute in the context of the
+   * current workspace, this module being the current selected module.
    * 
    * @param entryAction
    *          the entryAction to set.
@@ -596,7 +619,11 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Sets the exitAction.
+   * Configures an action to be executed every time the module becomes
+   * unselected (either through a user explicit navigation or a programmatic
+   * deselection). The action will execute in the context of the current
+   * workspace, this module being the current selected module (i.e. the action
+   * occurs before the module is actually left).
    * 
    * @param exitAction
    *          the exitAction to set.
@@ -619,6 +646,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * 
    * @param dirty
    *          the dirty to set.
+   * @internal
    */
   public void setDirty(boolean dirty) {
     String oldI18nName = getI18nName();

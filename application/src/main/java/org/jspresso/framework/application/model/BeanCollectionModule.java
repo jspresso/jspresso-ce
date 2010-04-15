@@ -34,7 +34,15 @@ import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
- * A bean collection module is a module dealing with a collection of beans.
+ * This type of module keeps a reference on a beans collection. There is no
+ * assumption made on wether these beans are actually persistent entites or any
+ * other type of java beans.
+ * <p>
+ * Simple bean collection modules must have their collection of referenced beans
+ * initialized somehow. There is no standard built-in action to do so since it
+ * is highly dependent on what's needed. So it's rather common to have the
+ * module content initialized through a startup action depending on the session
+ * state.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -103,7 +111,17 @@ public class BeanCollectionModule extends Module {
   }
 
   /**
-   * Sets the elementComponentDescriptor.
+   * Configures the type of bean element this collection module manages. A bunch
+   * of default values are inferred from this element component descriptor. For
+   * instance, pageing size (if used) will default to the component one unless
+   * explicitely set. Same goes for icon image URL, default ordering properties
+   * or even granted roles. The latter means that bean collection modules based
+   * on forbidden entities will automatically be excluded from the workspace of
+   * the logged-in user.
+   * <p>
+   * if not explicitely configured, the eement component descriptor can be
+   * inferred from the collection view descriptor configured as projected view
+   * descriptor.
    * 
    * @param elementComponentDescriptor
    *          the elementComponentDescriptor to set.
@@ -114,7 +132,14 @@ public class BeanCollectionModule extends Module {
   }
 
   /**
-   * Sets the elementViewDescriptor.
+   * This property is not used by the module itself, but by built-in actions
+   * that maybe registered on this module. One of tese actions is
+   * <code>AddBeanAsSubModuleAction</code>.
+   * <p>
+   * This property indicates the view to use whenever the user requests a
+   * &quot;form-like&quot; view on a collection element. Naturally the
+   * configured element view descriptor must be backed by a model matching the
+   * type of the module managed beans.
    * 
    * @param elementViewDescriptor
    *          the elementViewDescriptor to set.
@@ -124,7 +149,9 @@ public class BeanCollectionModule extends Module {
   }
 
   /**
-   * Sets the module's projected object collection.
+   * Assigns the list of beans this module manages. The projected view will
+   * automatically reflect this change since a &quot;moduleObjects&quot;
+   * property change will be fired.
    * 
    * @param moduleObjects
    *          the projected object collection.

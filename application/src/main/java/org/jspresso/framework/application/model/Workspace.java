@@ -374,7 +374,7 @@ public class Workspace implements ISecurable, ISubjectAware {
    * Configures an action to be executed the first time the workspace is
    * &quot;started&quot; by the user. The action will execute in the context of
    * the workspace but with no specific module selected. It will help
-   * initializing workspace-wide values.
+   * initializing workspace values, notify user, ...
    * 
    * @param startupAction
    *          the startupAction to set.
