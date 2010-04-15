@@ -181,8 +181,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   /**
    * Allows to change the default view for the paging status. If not set
    * (default), a default paging status view is created containing the curent
-   * pageas well as the total number of pages available. This paging status view
-   * is the bordered wth the bage navigation actions.
+   * pageas well as the total number of pages available and the total number of
+   * records in the result set. This paging status view is the bordered with the
+   * bage navigation actions.
    * 
    * @param pagingStatusViewDescriptor
    *          the pagingStatusViewDescriptor to set.
@@ -214,7 +215,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
     BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
     decorator.setNorthViewDescriptor(filterViewDesc);
     decorator.setCenterViewDescriptor(superViewDescriptor);
-    if (getPageSize() != null && getPageSize() >= 0) {
+    if (getPageSize() != null && getPageSize().intValue() >= 0) {
       if (pagingStatusViewDescriptor != null) {
         BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
         nestingViewDescriptor
@@ -332,7 +333,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Sets the pageSize.
+   * Configures a custom page size for the result set. If not set, which is the
+   * default, the elements default page size is used.
    * 
    * @param pageSize
    *          the pageSize to set.
