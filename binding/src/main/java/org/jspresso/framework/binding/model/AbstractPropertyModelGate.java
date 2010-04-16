@@ -31,8 +31,8 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.AbstractModelGate;
 
 /**
- * This gate opens and closes based on the value of a property of its model. Its
- * is abstract and its subclasses need to define the rule for opening/closing.
+ * This is the base abstract class of gates whose opening rules are based on a
+ * single model property value.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick the actual type of property.
@@ -77,6 +77,8 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
 
   /**
    * {@inheritDoc}
+   * 
+   * @internal
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -188,7 +190,8 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   }
 
   /**
-   * Sets the accessorFactory.
+   * Configures the accessor factory to use to access the underlying model
+   * property.
    * 
    * @param accessorFactory
    *          the accessorFactory to set.
@@ -198,17 +201,20 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   }
 
   /**
-   * Sets the propertyName.
+   * Configures the model property name to which this gate is attached. How the
+   * property value is actually linked to the gate state is delegated to the
+   * concrete implementations.
    * 
    * @param propertyName
-   *          the booleanPropertyName to set.
+   *          the propertyName to set.
    */
   public void setPropertyName(String propertyName) {
     this.propertyName = propertyName;
   }
 
   /**
-   * Sets the openOnTrue.
+   * This property allows to revert the standard behaviour of the gate, i.e.
+   * close when it should normally have opened and the other way around.
    * 
    * @param openOnTrue
    *          the openOnTrue to set.
@@ -238,7 +244,8 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   }
 
   /**
-   * Sets the grantedRoles.
+   * Configures the roles for which the gate is installed. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s).
    * 
    * @param grantedRoles
    *          the grantedRoles to set.

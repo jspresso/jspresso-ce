@@ -25,7 +25,11 @@ import javax.security.auth.Subject;
 import org.jspresso.framework.util.gate.AbstractGate;
 
 /**
- * A role based gate.
+ * This is a role based gate. The gate depends only on the roles of the
+ * logged-in user. The difference between using a roles gate and directly
+ * assigning the granted roles on the authorized artifact, is that the gate only
+ * disables the artifact whereas the artifact granted roles prevent the artifact
+ * from being created at all.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -44,6 +48,8 @@ public class GrantedRolesGate extends AbstractGate implements ISubjectAware {
 
   /**
    * {@inheritDoc}
+   * 
+   * @internal
    */
   public void setSubject(Subject subject) {
     boolean oldOpen = isOpen();
@@ -57,7 +63,7 @@ public class GrantedRolesGate extends AbstractGate implements ISubjectAware {
   }
 
   /**
-   * Gets the grantedRoles.
+   * Gets the granted roles.
    * 
    * @return the grantedRoles.
    */
@@ -66,7 +72,8 @@ public class GrantedRolesGate extends AbstractGate implements ISubjectAware {
   }
 
   /**
-   * Sets the grantedRoles.
+   * Configures the roles for which the gate is open. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s).
    * 
    * @param grantedRoles
    *          the grantedRoles to set.

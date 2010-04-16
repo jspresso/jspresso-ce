@@ -121,13 +121,14 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   }
 
   /**
-   * Assigns the roles that are authorized to use this view. Whenever the user
-   * is not granted sufficient privileges, the view is replaced by an empty
-   * section at runtime. Setting the collection of granted roles to
-   * <code>null</code> (default value) disables role based authorization on the
-   * view level. The framework then checks for the model roles authorizations
-   * and will apply the same restrictions. If both view and model granted roles
-   * collections are <code>null</code>, then access is granted to anyone.
+   * Assigns the roles that are authorized to use this view. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
+   * granted sufficient privileges, the view is replaced by an empty section at
+   * runtime. Setting the collection of granted roles to <code>null</code>
+   * (default value) disables role based authorization on the view level. The
+   * framework then checks for the model roles authorizations and will apply the
+   * same restrictions. If both view and model granted roles collections are
+   * <code>null</code>, then access is granted to anyone.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.

@@ -251,9 +251,10 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Assigns the roles that are authorized to start this workspace. Whenever the
-   * user is not granted sufficient privileges, the workspace is not installed
-   * at all in the application frame. Setting the collection of granted roles to
+   * Assigns the roles that are authorized to start this workspace. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
+   * granted sufficient privileges, the workspace is not installed at all in the
+   * application frame. Setting the collection of granted roles to
    * <code>null</code> (default value) disables role based authorization on this
    * workspace.
    * 

@@ -19,8 +19,8 @@
 package org.jspresso.framework.binding.model;
 
 /**
- * This gate opens and closes based on the value of a boolean property of its
- * model.
+ * This gate opens and closes based on the value of a boolean property of the
+ * assigned model.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -43,17 +43,30 @@ public class BooleanPropertyModelGate extends
   }
 
   /**
-   * Sets the booleanPropertyName.
+   * Configures the boolean property name.
    * 
    * @param booleanPropertyName
-   *          the booleanPropertyName to set.
+   *          the propertyName to set.
+   * @deprecated use setPropertyName instead.
    */
+  @Deprecated
   public void setBooleanPropertyName(String booleanPropertyName) {
-    if (booleanPropertyName != null && booleanPropertyName.startsWith("!")) {
-      super.setPropertyName(booleanPropertyName.substring(1));
+    setPropertyName(booleanPropertyName);
+  }
+
+  /**
+   * Configures the boolean property name to use. Unless the
+   * <code>openOnTrue</code> property is set to <code>false</code>, the state of
+   * the gate will follow the boolean property value. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the property value.
+   */
+  @Override
+  public void setPropertyName(String propertyName) {
+    if (propertyName != null && propertyName.startsWith("!")) {
+      super.setPropertyName(propertyName.substring(1));
       negatedByName = true;
     } else {
-      super.setPropertyName(booleanPropertyName);
+      super.setPropertyName(propertyName);
       negatedByName = false;
     }
   }

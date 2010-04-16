@@ -21,10 +21,12 @@ package org.jspresso.framework.util.gate;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
- * Base implementation of a gate.
+ * This is the base abstract class of all Jspresso built-in gates. Open/close
+ * rule is delegated to concrete implementations.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public abstract class AbstractGate extends AbstractPropertyChangeCapable
     implements IGate {

@@ -42,7 +42,8 @@ public class EnumerationPropertyModelGate extends
   }
 
   /**
-   * Sets the openingValues.
+   * Configures the enumeration values for which the gate is to be open, unless
+   * the <code>openOnTrue</code> property is set to <code>false</code>.
    * 
    * @param openingValues
    *          the openingValues to set.
@@ -50,5 +51,4 @@ public class EnumerationPropertyModelGate extends
   public void setOpeningValues(Collection<String> openingValues) {
     this.openingValues = openingValues;
   }
-
 }

@@ -176,12 +176,13 @@ public abstract class AbstractAction extends AbstractActionContextAware
   }
 
   /**
-   * Assigns the roles that are authorized to execute this action. This will
-   * directly influence the UI behaviour since unauthorized actions won't be
-   * displayed. Setting the collection of granted roles to <code>null</code>
-   * (default value) disables role based authorization on this action. Note that
-   * this authorization enforcement does not prevent programatic access that is
-   * of the developer responsbility.
+   * Assigns the roles that are authorized to execute this action. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). This will directly
+   * influence the UI behaviour since unauthorized actions won't be displayed.
+   * Setting the collection of granted roles to <code>null</code> (default
+   * value) disables role based authorization on this action. Note that this
+   * authorization enforcement does not prevent programatic access that is of
+   * the developer responsbility.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.

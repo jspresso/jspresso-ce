@@ -26,6 +26,7 @@ import java.util.Collection;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public class CollectionSelectionTrackingGate extends AbstractModelGate {
 

@@ -23,6 +23,7 @@ package org.jspresso.framework.util.gate;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public class ModelTrackingGate extends AbstractModelGate {
 

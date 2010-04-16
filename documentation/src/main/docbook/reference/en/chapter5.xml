@@ -71,6 +71,39 @@
   <section>
     <title>Enabling/Disabling</title>
 
+    <para>Jspresso goes beyond static, role-based, authorization by
+    introducing the concept of <emphasis>gate</emphasis>. A gate is a simple
+    monitor that can open or close based on certain (dynamic) rules. Jspresso
+    relies on gates to implement dynamic authorization that are most often
+    based on some kind of model sate.</para>
+
+    <para>There are various places in Jspresso where dynamic authorization can
+    be implemented :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>model writability</emphasis> : once a model instance
+        is determined to be read-only, all views on this model are also
+        made.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>view writability</emphasis> : same as above but only
+        applies to a single view.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>action enablement</emphasis> : enables / disable
+        actions based on the model of the view they are installed in.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Wherever you want to use dynamic authorization, you can always
+    combine gates. The combination is conjunctive, meaning that
+    <emphasis>all</emphasis> gates must be open for the property (writability,
+    actionability) to be allowed. In other words, a single closed gate is
+    sufficient to forbid the property.</para>
+
     <section>
       <title>Overview</title>
 

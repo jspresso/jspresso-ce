@@ -358,12 +358,12 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Assigns the roles that are authorized to manipulate the property backed by
-   * this descriptor. This will directly influence the UI behaviour and even
-   * composition (e.g. show/hide columns or fields). Setting the collection of
-   * granted roles to <code>null</code> (default value) disables role based
-   * authorization on this property level. Note that this authorization
-   * enforcement does not prevent programmatic access that is of the developer
-   * responsbility.
+   * this descriptor. It supports &quot;<b>!</b>&quot; prefix to negate the
+   * role(s). This will directly influence the UI behaviour and even composition
+   * (e.g. show/hide columns or fields). Setting the collection of granted roles
+   * to <code>null</code> (default value) disables role based authorization on
+   * this property level. Note that this authorization enforcement does not
+   * prevent programmatic access that is of the developer responsbility.
    * 
    * @param grantedRoles
    *          the grantedRoles to set.

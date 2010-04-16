@@ -352,11 +352,11 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
-   * Assigns the roles that are authorized to start this module. Whenever the
-   * user is not granted sufficient privileges, the module is simply not
-   * installed in the workspace. Setting the collection of granted roles to
-   * <code>null</code> (default value) disables role based authorization on this
-   * module.
+   * Assigns the roles that are authorized to start this module. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
+   * granted sufficient privileges, the module is simply not installed in the
+   * workspace. Setting the collection of granted roles to <code>null</code>
+   * (default value) disables role based authorization on this module.
    * <p>
    * Some specific modules that are component/entity model based i.e.
    * <code>Bean(Collection)Module</code> also inherit their authrorizations from

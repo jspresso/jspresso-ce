@@ -432,7 +432,8 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Assigns the roles that are authorized to manipulate components backed by
-   * this descriptor. This will directly influence the UI behaviour and even
+   * this descriptor. It supports &quot;<b>!</b>&quot; prefix to negate the
+   * role(s). This will directly influence the UI behaviour and even
    * composition. Setting the collection of granted roles to <code>null</code>
    * (default value) disables role based authorization on this component level.
    * Note that this authorization enforcement does not prevent programatic

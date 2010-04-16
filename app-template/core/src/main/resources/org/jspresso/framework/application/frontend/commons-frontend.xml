@@ -113,7 +113,7 @@
     <property name="actionabilityGates">
       <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
         <property name="accessorFactory" ref="accessorFactory" />
-        <property name="booleanPropertyName" value="nextPageEnabled" />
+        <property name="propertyName" value="nextPageEnabled" />
       </bean>
     </property>
   </bean>
@@ -127,7 +127,7 @@
     <property name="actionabilityGates">
       <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
         <property name="accessorFactory" ref="accessorFactory" />
-        <property name="booleanPropertyName" value="previousPageEnabled" />
+        <property name="propertyName" value="previousPageEnabled" />
       </bean>
     </property>
   </bean>
@@ -290,7 +290,7 @@
     <property name="actionabilityGates">
       <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
         <property name="accessorFactory" ref="accessorFactory" />
-        <property name="booleanPropertyName" value="filter.nextPageEnabled" />
+        <property name="propertyName" value="filter.nextPageEnabled" />
       </bean>
     </property>
   </bean>
@@ -300,7 +300,7 @@
     <property name="actionabilityGates">
       <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
         <property name="accessorFactory" ref="accessorFactory" />
-        <property name="booleanPropertyName" value="filter.previousPageEnabled" />
+        <property name="propertyName" value="filter.previousPageEnabled" />
       </bean>
     </property>
   </bean>
