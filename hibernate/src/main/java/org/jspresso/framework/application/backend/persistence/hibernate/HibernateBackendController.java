@@ -482,6 +482,17 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
+   * Allows for a new run of performPendingOperations.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void clearPendingOperations() {
+    super.clearPendingOperations();
+    traversedPendingOperations = false;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
