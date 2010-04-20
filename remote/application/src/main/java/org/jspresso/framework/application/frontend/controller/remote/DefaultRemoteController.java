@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -750,17 +751,46 @@ public class DefaultRemoteController extends
 
   @SuppressWarnings("unchecked")
   private RAction createRAction(IAction action, Map<String, Object> context) {
-    return getViewFactory().getActionFactory().createAction(wrapAction(action),
-        this, (IView<RComponent>) context.get(ActionContextConstants.VIEW),
+    return getViewFactory().getActionFactory().createAction(
+        wrapAction(action, context), this,
+        (IView<RComponent>) context.get(ActionContextConstants.VIEW),
         getLocale());
   }
 
-  private IDisplayableAction wrapAction(IAction action) {
+  private IDisplayableAction wrapAction(IAction action,
+      final Map<String, Object> initialContext) {
+    FrontendAction<RComponent, RIcon, RAction> wrapper;
     if (action instanceof IDisplayableAction) {
-      return (IDisplayableAction) action;
+      wrapper = new FrontendAction<RComponent, RIcon, RAction>() {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean execute(IActionHandler actionHandler,
+            Map<String, Object> context) {
+          // To keep original context
+          context.putAll(initialContext);
+          return super.execute(actionHandler, context);
+        }
+      };
+      wrapper.setNextAction(action);
+    } else {
+      wrapper = new FrontendAction<RComponent, RIcon, RAction>() {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean execute(IActionHandler actionHandler,
+            Map<String, Object> context) {
+          // To keep original context
+          context.putAll(initialContext);
+          return super.execute(actionHandler, context);
+        }
+      };
+      wrapper.setWrappedAction(action);
     }
-    FrontendAction<RComponent, RIcon, RAction> displayableAction = new FrontendAction<RComponent, RIcon, RAction>();
-    displayableAction.setWrappedAction(action);
-    return displayableAction;
+    return wrapper;
   }
 }
