@@ -38,8 +38,8 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
     BasicPropertyDescriptor implements IRelationshipEndPropertyDescriptor {
 
   private Boolean                            composition;
-  private IRelationshipEndPropertyDescriptor reverseRelationEnd;
   private String                             fkName;
+  private IRelationshipEndPropertyDescriptor reverseRelationEnd;
 
   /**
    * {@inheritDoc}
@@ -50,6 +50,26 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
         .clone();
 
     return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicRelationshipEndPropertyDescriptor createQueryDescriptor() {
+    BasicRelationshipEndPropertyDescriptor queryDescriptor = (BasicRelationshipEndPropertyDescriptor) super
+        .createQueryDescriptor();
+    queryDescriptor.reverseRelationEnd = null;
+    return queryDescriptor;
+  }
+
+  /**
+   * Gets the fkName.
+   * 
+   * @return the fkName.
+   */
+  public String getFkName() {
+    return fkName;
   }
 
   /**
@@ -92,6 +112,17 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    */
   public void setComposition(boolean composition) {
     this.composition = new Boolean(composition);
+  }
+
+  /**
+   * Gives the developer the oportunity to customize the geneated foreign key
+   * (if any) name.
+   * 
+   * @param fkName
+   *          the fkName to set.
+   */
+  public void setFkName(String fkName) {
+    this.fkName = fkName;
   }
 
   /**
@@ -141,35 +172,4 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * @return the default composition of a relationship end.
    */
   protected abstract boolean getDefaultComposition();
-
-  /**
-   * Gets the fkName.
-   * 
-   * @return the fkName.
-   */
-  public String getFkName() {
-    return fkName;
-  }
-
-  /**
-   * Gives the developer the oportunity to customize the geneated foreign key
-   * (if any) name.
-   * 
-   * @param fkName
-   *          the fkName to set.
-   */
-  public void setFkName(String fkName) {
-    this.fkName = fkName;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicRelationshipEndPropertyDescriptor createQueryDescriptor() {
-    BasicRelationshipEndPropertyDescriptor queryDescriptor = (BasicRelationshipEndPropertyDescriptor) super
-        .createQueryDescriptor();
-    queryDescriptor.reverseRelationEnd = null;
-    return queryDescriptor;
-  }
 }

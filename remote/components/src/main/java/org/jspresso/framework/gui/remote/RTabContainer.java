@@ -31,14 +31,6 @@ public class RTabContainer extends RContainer {
   private RComponent[]      tabs;
 
   /**
-   * Constructs a new <code>RTabContainer</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RTabContainer() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RTabContainer</code> instance.
    * 
    * @param guid
@@ -46,6 +38,14 @@ public class RTabContainer extends RContainer {
    */
   public RTabContainer(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RTabContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTabContainer() {
+    // For GWT support
   }
 
   /**

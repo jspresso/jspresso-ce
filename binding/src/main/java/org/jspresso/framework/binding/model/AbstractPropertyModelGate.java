@@ -43,10 +43,10 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
     implements PropertyChangeListener, ISecurable {
 
   private IAccessorFactory   accessorFactory;
-  private String             propertyName;
+  private Collection<String> grantedRoles;
   private boolean            open;
   private boolean            openOnTrue;
-  private Collection<String> grantedRoles;
+  private String             propertyName;
 
   /**
    * Constructs a new <code>AbstractPropertyModelGate</code> instance.
@@ -69,10 +69,69 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   }
 
   /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public boolean isOpen() {
     return open;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public void propertyChange(PropertyChangeEvent evt) {
+    try {
+      boolean oldOpen = isOpen();
+      if (getModel() instanceof Collection<?>) {
+        this.open = computeCollectionOpenState((Collection<?>) getModel());
+      } else {
+        this.open = shouldOpen((E) evt.getNewValue());
+        if (!openOnTrue) {
+          this.open = !this.open;
+        }
+      }
+      firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
+    } catch (IllegalAccessException ex) {
+      throw new NestedRuntimeException(ex);
+    } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new NestedRuntimeException(ex.getCause());
+    } catch (NoSuchMethodException ex) {
+      throw new NestedRuntimeException(ex);
+    }
+  }
+
+  /**
+   * Configures the accessor factory to use to access the underlying model
+   * property.
+   * 
+   * @param accessorFactory
+   *          the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
+  }
+
+  /**
+   * Configures the roles for which the gate is installed. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s).
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 
   /**
@@ -139,6 +198,40 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
     }
   }
 
+  /**
+   * This property allows to revert the standard behaviour of the gate, i.e.
+   * close when it should normally have opened and the other way around.
+   * 
+   * @param openOnTrue
+   *          the openOnTrue to set.
+   */
+  public void setOpenOnTrue(boolean openOnTrue) {
+    this.openOnTrue = openOnTrue;
+  }
+
+  /**
+   * Configures the model property name to which this gate is attached. How the
+   * property value is actually linked to the gate state is delegated to the
+   * concrete implementations.
+   * 
+   * @param propertyName
+   *          the propertyName to set.
+   */
+  public void setPropertyName(String propertyName) {
+    this.propertyName = propertyName;
+  }
+
+  /**
+   * Based on the underlying property value, determines if the gate should open
+   * or close. The return value might be later changed by the openOntrue value.
+   * 
+   * @param propertyValue
+   *          the model property value.
+   * @return true if the gate should open (before applying the openOnTrue
+   *         property).
+   */
+  protected abstract boolean shouldOpen(E propertyValue);
+
   @SuppressWarnings("unchecked")
   private boolean computeCollectionOpenState(Collection<?> model)
       throws IllegalAccessException, InvocationTargetException,
@@ -159,99 +252,6 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
       }
     }
     return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  public void propertyChange(PropertyChangeEvent evt) {
-    try {
-      boolean oldOpen = isOpen();
-      if (getModel() instanceof Collection<?>) {
-        this.open = computeCollectionOpenState((Collection<?>) getModel());
-      } else {
-        this.open = shouldOpen((E) evt.getNewValue());
-        if (!openOnTrue) {
-          this.open = !this.open;
-        }
-      }
-      firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
-    } catch (IllegalAccessException ex) {
-      throw new NestedRuntimeException(ex);
-    } catch (InvocationTargetException ex) {
-      if (ex.getCause() instanceof RuntimeException) {
-        throw (RuntimeException) ex.getCause();
-      }
-      throw new NestedRuntimeException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new NestedRuntimeException(ex);
-    }
-  }
-
-  /**
-   * Configures the accessor factory to use to access the underlying model
-   * property.
-   * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
-   * Configures the model property name to which this gate is attached. How the
-   * property value is actually linked to the gate state is delegated to the
-   * concrete implementations.
-   * 
-   * @param propertyName
-   *          the propertyName to set.
-   */
-  public void setPropertyName(String propertyName) {
-    this.propertyName = propertyName;
-  }
-
-  /**
-   * This property allows to revert the standard behaviour of the gate, i.e.
-   * close when it should normally have opened and the other way around.
-   * 
-   * @param openOnTrue
-   *          the openOnTrue to set.
-   */
-  public void setOpenOnTrue(boolean openOnTrue) {
-    this.openOnTrue = openOnTrue;
-  }
-
-  /**
-   * Based on the underlying property value, determines if the gate should open
-   * or close. The return value might be later changed by the openOntrue value.
-   * 
-   * @param propertyValue
-   *          the model property value.
-   * @return true if the gate should open (before applying the openOnTrue
-   *         property).
-   */
-  protected abstract boolean shouldOpen(E propertyValue);
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
-  }
-
-  /**
-   * Configures the roles for which the gate is installed. It supports
-   * &quot;<b>!</b>&quot; prefix to negate the role(s).
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
   }
 
 }

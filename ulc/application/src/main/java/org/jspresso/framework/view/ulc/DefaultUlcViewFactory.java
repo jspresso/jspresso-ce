@@ -196,8 +196,8 @@ public class DefaultUlcViewFactory extends
   private ULCDurationDataTypeFactory    durationDataTypeFactory    = new ULCDurationDataTypeFactory();
   private IListSelectionModelBinder     listSelectionModelBinder;
 
-  private ULCTranslationDataTypeFactory translationDataTypeFactory = new ULCTranslationDataTypeFactory();
   private ULCPasswordDataType           passwordDataType           = new ULCPasswordDataType();
+  private ULCTranslationDataTypeFactory translationDataTypeFactory = new ULCTranslationDataTypeFactory();
 
   private ITreeSelectionModelBinder     treeSelectionModelBinder;
 
@@ -227,6 +227,16 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void addCard(IMapView<ULCComponent> cardView,
+      IView<ULCComponent> card, String cardName) {
+    ((ULCCardPane) cardView.getPeer()).add(card.getPeer(), cardName);
+    cardView.addToChildrenMap(cardName, card);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected void adjustSizes(IViewDescriptor viewDescriptor,
       ULCComponent component, IFormatter formatter, Object templateValue,
       int extraWidth) {
@@ -249,12 +259,64 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void applyPreferredSize(ULCComponent component,
+      org.jspresso.framework.util.gui.Dimension preferredSize) {
+    if (preferredSize != null) {
+      int pW = preferredSize.getWidth();
+      int pH = preferredSize.getHeight();
+      Dimension compSize = component.getPreferredSize();
+      if ((pW <= 0 || pH <= 0) && compSize == null) {
+        return;
+      }
+      if (pW <= 0) {
+        pW = compSize.getWidth();
+      }
+      if (pH <= 0) {
+        pH = compSize.getHeight();
+      }
+      component.setPreferredSize(new Dimension(pW, pH));
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected int computePixelWidth(ULCComponent component, int characterLength) {
     int charLength = getMaxCharacterLength() + 2;
     if (characterLength > 0 && characterLength < getMaxCharacterLength()) {
       charLength = characterLength + 2;
     }
     return component.getFont().getSize() * charLength / 2;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createActionView(
+      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ULCButton viewComponent = createULCButton();
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        ModelRefPropertyConnector.THIS_PROPERTY);
+    connector.setExceptionHandler(actionHandler);
+    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    viewComponent.setAction(getActionFactory().createAction(
+        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
+        actionHandler, view, locale));
+    switch (viewDescriptor.getRenderingOptions()) {
+      case ICON:
+        viewComponent.setText(null);
+        break;
+      case LABEL:
+        viewComponent.setIcon(null);
+        break;
+      default:
+        break;
+    }
+    return view;
   }
 
   /**
@@ -385,15 +447,16 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void addCard(IMapView<ULCComponent> cardView,
-      IView<ULCComponent> card, String cardName) {
-    ((ULCCardPane) cardView.getPeer()).add(card.getPeer(), cardName);
-    cardView.addToChildrenMap(cardName, card);
-  }
+  // private void fillLastRow(ULCGridBagLayoutPane viewComponent) {
+  // GridBagConstraints constraints = new GridBagConstraints();
+  // constraints.setGridX(GridBagConstraints.RELATIVE);
+  // constraints.setWeightX(1.0);
+  // constraints.setFill(GridBagConstraints.HORIZONTAL);
+  // constraints.setGridWidth(GridBagConstraints.REMAINDER);
+  // ULCBorderLayoutPane filler = createBorderLayoutPane();
+  // // filler.setBorder(new SLineBorder(Color.BLUE));
+  // viewComponent.add(filler, constraints);
+  // }
 
   /**
    * {@inheritDoc}
@@ -596,17 +659,6 @@ public class DefaultUlcViewFactory extends
     }
     return view;
   }
-
-  // private void fillLastRow(ULCGridBagLayoutPane viewComponent) {
-  // GridBagConstraints constraints = new GridBagConstraints();
-  // constraints.setGridX(GridBagConstraints.RELATIVE);
-  // constraints.setWeightX(1.0);
-  // constraints.setFill(GridBagConstraints.HORIZONTAL);
-  // constraints.setGridWidth(GridBagConstraints.REMAINDER);
-  // ULCBorderLayoutPane filler = createBorderLayoutPane();
-  // // filler.setBorder(new SLineBorder(Color.BLUE));
-  // viewComponent.add(filler, constraints);
-  // }
 
   /**
    * {@inheritDoc}
@@ -822,6 +874,30 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected IView<ULCComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    if (propertyViewDescriptor.isReadOnly()) {
+      IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      ULCScrollPane scrollPane = createULCScrollPane();
+      ULCLabel viewComponent = createULCLabel(true);
+      viewComponent.setVerticalAlignment(IDefaults.TOP);
+      viewComponent.setHorizontalAlignment(IDefaults.LEADING);
+      IValueConnector connector = new ULCLabelConnector(propertyDescriptor
+          .getName(), viewComponent);
+      ((ULCLabelConnector) connector).setMultiLine(true);
+      scrollPane.setViewPortView(viewComponent);
+      connector.setExceptionHandler(actionHandler);
+      return constructView(scrollPane, propertyViewDescriptor, connector);
+    }
+    return createTextPropertyView(propertyViewDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<ULCComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
@@ -842,35 +918,6 @@ public class DefaultUlcViewFactory extends
       imageLabel.setHorizontalAlignment(IDefaults.CENTER);
       imageLabel.setVerticalAlignment(IDefaults.CENTER);
       viewComponent.add(imageLabel, ULCBorderLayoutPane.CENTER);
-    }
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<ULCComponent> createActionView(
-      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    ULCButton viewComponent = createULCButton();
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        ModelRefPropertyConnector.THIS_PROPERTY);
-    connector.setExceptionHandler(actionHandler);
-    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-    viewComponent.setAction(getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
-        actionHandler, view, locale));
-    switch (viewDescriptor.getRenderingOptions()) {
-      case ICON:
-        viewComponent.setText(null);
-        break;
-      case LABEL:
-        viewComponent.setIcon(null);
-        break;
-      default:
-        break;
     }
     return view;
   }
@@ -998,6 +1045,46 @@ public class DefaultUlcViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
+  }
+
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected ULCLabel createPropertyLabel(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      ULCComponent propertyComponent, Locale locale) {
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    ULCLabel propertyLabel = createULCLabel(false);
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
+    if (propertyDescriptor.isMandatory()) {
+      labelText.append("*");
+      propertyLabel.setForeground(Color.red);
+    }
+    propertyLabel.setText(labelText.toString());
+    propertyLabel.setLabelFor(propertyComponent);
+    if (propertyViewDescriptor.getLabelFont() != null) {
+      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
+          propertyLabel.getFont()));
+    }
+    if (propertyViewDescriptor.getLabelForeground() != null) {
+      propertyLabel.setForeground(createColor(propertyViewDescriptor
+          .getLabelForeground()));
+    }
+    if (propertyViewDescriptor.getLabelBackground() != null) {
+      propertyLabel.setBackground(createColor(propertyViewDescriptor
+          .getLabelBackground()));
+    }
+    return propertyLabel;
   }
 
   /**
@@ -1458,30 +1545,6 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<ULCComponent> createHtmlPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    if (propertyViewDescriptor.isReadOnly()) {
-      IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
-          .getModelDescriptor();
-      ULCScrollPane scrollPane = createULCScrollPane();
-      ULCLabel viewComponent = createULCLabel(true);
-      viewComponent.setVerticalAlignment(IDefaults.TOP);
-      viewComponent.setHorizontalAlignment(IDefaults.LEADING);
-      IValueConnector connector = new ULCLabelConnector(propertyDescriptor
-          .getName(), viewComponent);
-      ((ULCLabelConnector) connector).setMultiLine(true);
-      scrollPane.setViewPortView(viewComponent);
-      connector.setExceptionHandler(actionHandler);
-      return constructView(scrollPane, propertyViewDescriptor, connector);
-    }
-    return createTextPropertyView(propertyViewDescriptor, actionHandler, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected IView<ULCComponent> createTimePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1545,8 +1608,9 @@ public class DefaultUlcViewFactory extends
 
         private static final long serialVersionUID = 6875911618418554499L;
 
-        public void treeStructureChanged(TreeModelEvent e) {
-          expandAll(viewComponent, e.getTreePath());
+        public void treeNodesChanged(
+            @SuppressWarnings("unused") TreeModelEvent e) {
+          // NO-OP
         }
 
         public void treeNodesInserted(TreeModelEvent e) {
@@ -1558,9 +1622,8 @@ public class DefaultUlcViewFactory extends
           // NO-OP
         }
 
-        public void treeNodesChanged(
-            @SuppressWarnings("unused") TreeModelEvent e) {
-          // NO-OP
+        public void treeStructureChanged(TreeModelEvent e) {
+          expandAll(viewComponent, e.getTreePath());
         }
       });
     }
@@ -1577,20 +1640,6 @@ public class DefaultUlcViewFactory extends
       viewComponent.addActionListener(rowAction);
     }
     return view;
-  }
-
-  private void expandAll(ULCTree tree, TreePath tp) {
-    if (tp == null) {
-      return;
-    }
-    Object node = tp.getLastPathComponent();
-    ITreeModel model = tree.getModel();
-    if (!model.isLeaf(node)) {
-      tree.expandPath(tp);
-      for (int i = 0; i < model.getChildCount(node); i++) {
-        expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
-      }
-    }
   }
 
   /**
@@ -2143,6 +2192,10 @@ public class DefaultUlcViewFactory extends
     return cellRenderer;
   }
 
+  private ULCPasswordDataType createPasswordDataType() {
+    return passwordDataType;
+  }
+
   private ULCPercentDataType createPercentDataType(
       IPercentPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
@@ -2167,46 +2220,6 @@ public class DefaultUlcViewFactory extends
           actionHandler, locale);
     }
     return null;
-  }
-
-  /**
-   * Creates a property label.
-   * 
-   * @param propertyViewDescriptor
-   *          the property view descriptor.
-   * @param propertyComponent
-   *          the property component.
-   * @param locale
-   *          the locale.
-   * @return the created property label.
-   */
-  protected ULCLabel createPropertyLabel(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      ULCComponent propertyComponent, Locale locale) {
-    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
-    ULCLabel propertyLabel = createULCLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
-        .getI18nName(getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
-      labelText.append("*");
-      propertyLabel.setForeground(Color.red);
-    }
-    propertyLabel.setText(labelText.toString());
-    propertyLabel.setLabelFor(propertyComponent);
-    if (propertyViewDescriptor.getLabelFont() != null) {
-      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
-          propertyLabel.getFont()));
-    }
-    if (propertyViewDescriptor.getLabelForeground() != null) {
-      propertyLabel.setForeground(createColor(propertyViewDescriptor
-          .getLabelForeground()));
-    }
-    if (propertyViewDescriptor.getLabelBackground() != null) {
-      propertyLabel.setBackground(createColor(propertyViewDescriptor
-          .getLabelBackground()));
-    }
-    return propertyLabel;
   }
 
   private ITableCellRenderer createReferenceTableCellRenderer(
@@ -2236,10 +2249,6 @@ public class DefaultUlcViewFactory extends
       return new FormattedTableCellRenderer(column, createPasswordDataType());
     }
     return new FormattedTableCellRenderer(column, null);
-  }
-
-  private ULCPasswordDataType createPasswordDataType() {
-    return passwordDataType;
   }
 
   private ULCDateDataType createTimeDataType(
@@ -2364,6 +2373,20 @@ public class DefaultUlcViewFactory extends
     // iFrame.pack();
     // iFrame.setPreferredSize(new Dimension(100,100));
     // view.setPeer(iFrame);
+  }
+
+  private void expandAll(ULCTree tree, TreePath tp) {
+    if (tp == null) {
+      return;
+    }
+    Object node = tp.getLastPathComponent();
+    ITreeModel model = tree.getModel();
+    if (!model.isLeaf(node)) {
+      tree.expandPath(tp);
+      for (int i = 0; i < model.getChildCount(node); i++) {
+        expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
+      }
+    }
   }
 
   private List<String> getDescriptorPathFromConnectorTreePath(
@@ -2591,29 +2614,6 @@ public class DefaultUlcViewFactory extends
      */
     public ULCPopupMenu createPopupForTreepath(TreePath path) {
       return createULCTreePopupMenu(tree, view, path, actionHandler, locale);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void applyPreferredSize(ULCComponent component,
-      org.jspresso.framework.util.gui.Dimension preferredSize) {
-    if (preferredSize != null) {
-      int pW = preferredSize.getWidth();
-      int pH = preferredSize.getHeight();
-      Dimension compSize = component.getPreferredSize();
-      if ((pW <= 0 || pH <= 0) && compSize == null) {
-        return;
-      }
-      if (pW <= 0) {
-        pW = compSize.getWidth();
-      }
-      if (pH <= 0) {
-        pH = compSize.getHeight();
-      }
-      component.setPreferredSize(new Dimension(pW, pH));
     }
   }
 }

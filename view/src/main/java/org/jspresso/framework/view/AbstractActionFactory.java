@@ -82,6 +82,76 @@ public abstract class AbstractActionFactory<E, F, G> implements
   }
 
   /**
+   * Creates the initial action context.
+   * 
+   * @param actionHandler
+   *          the action handler.
+   * @param view
+   *          the view.
+   * @param viewConnector
+   *          the view connector.
+   * @param actionCommand
+   *          the action command.
+   * @param actionWidget
+   *          the widget this action was triggered from.
+   * @return the initial action context.
+   */
+  public Map<String, Object> createActionContext(IActionHandler actionHandler,
+      IView<F> view, IValueConnector viewConnector, String actionCommand,
+      F actionWidget) {
+    Map<String, Object> actionContext = actionHandler.createEmptyContext();
+
+    IModelDescriptor modelDescriptor = null;
+    F sourceComponent = null;
+    if (view != null) {
+      if (view.getDescriptor() != null) {
+        modelDescriptor = view.getDescriptor().getModelDescriptor();
+      }
+      sourceComponent = view.getPeer();
+    }
+    IValueConnector refinedViewConnector = viewConnector;
+    if (modelDescriptor instanceof ICollectionDescriptor<?>) {
+      refinedViewConnector = ((ICollectionConnectorProvider) viewConnector)
+          .getCollectionConnector();
+    }
+    actionContext.put(ActionContextConstants.VIEW, view);
+    actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR, modelDescriptor);
+    actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);
+    actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
+        refinedViewConnector);
+    if (refinedViewConnector instanceof ICollectionConnectorProvider
+        && ((ICollectionConnectorProvider) refinedViewConnector)
+            .getCollectionConnector() != null) {
+      actionContext.put(ActionContextConstants.SELECTED_INDICES,
+          ((ICollectionConnectorProvider) refinedViewConnector)
+              .getCollectionConnector().getSelectedIndices());
+    }
+    actionContext.put(ActionContextConstants.ACTION_COMMAND, actionCommand);
+    actionContext.put(ActionContextConstants.ACTION_WIDGET, actionWidget);
+    return actionContext;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *          the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<G> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *          the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
+  /**
    * Creates and attach the necessary action gates.
    * 
    * @param action
@@ -225,23 +295,21 @@ public abstract class AbstractActionFactory<E, F, G> implements
   }
 
   /**
-   * Sets the iconFactory.
+   * Gets the iconFactory.
    * 
-   * @param iconFactory
-   *          the iconFactory to set.
+   * @return the iconFactory.
    */
-  public void setIconFactory(IIconFactory<G> iconFactory) {
-    this.iconFactory = iconFactory;
+  protected IIconFactory<G> getIconFactory() {
+    return iconFactory;
   }
 
   /**
-   * Sets the translationProvider.
+   * Gets the translationProvider.
    * 
-   * @param translationProvider
-   *          the translationProvider to set.
+   * @return the translationProvider.
    */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
+  protected ITranslationProvider getTranslationProvider() {
+    return translationProvider;
   }
 
   private final class GatesListener implements PropertyChangeListener {
@@ -273,73 +341,5 @@ public abstract class AbstractActionFactory<E, F, G> implements
         @SuppressWarnings("unused") PropertyChangeEvent evt) {
       setActionEnabled(action, GateHelper.areGatesOpen(gates));
     }
-  }
-
-  /**
-   * Gets the iconFactory.
-   * 
-   * @return the iconFactory.
-   */
-  protected IIconFactory<G> getIconFactory() {
-    return iconFactory;
-  }
-
-  /**
-   * Gets the translationProvider.
-   * 
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
-  }
-
-  /**
-   * Creates the initial action context.
-   * 
-   * @param actionHandler
-   *          the action handler.
-   * @param view
-   *          the view.
-   * @param viewConnector
-   *          the view connector.
-   * @param actionCommand
-   *          the action command.
-   * @param actionWidget
-   *          the widget this action was triggered from.
-   * @return the initial action context.
-   */
-  public Map<String, Object> createActionContext(IActionHandler actionHandler,
-      IView<F> view, IValueConnector viewConnector, String actionCommand,
-      F actionWidget) {
-    Map<String, Object> actionContext = actionHandler.createEmptyContext();
-
-    IModelDescriptor modelDescriptor = null;
-    F sourceComponent = null;
-    if (view != null) {
-      if (view.getDescriptor() != null) {
-        modelDescriptor = view.getDescriptor().getModelDescriptor();
-      }
-      sourceComponent = view.getPeer();
-    }
-    IValueConnector refinedViewConnector = viewConnector;
-    if (modelDescriptor instanceof ICollectionDescriptor<?>) {
-      refinedViewConnector = ((ICollectionConnectorProvider) viewConnector)
-          .getCollectionConnector();
-    }
-    actionContext.put(ActionContextConstants.VIEW, view);
-    actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR, modelDescriptor);
-    actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);
-    actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
-        refinedViewConnector);
-    if (refinedViewConnector instanceof ICollectionConnectorProvider
-        && ((ICollectionConnectorProvider) refinedViewConnector)
-            .getCollectionConnector() != null) {
-      actionContext.put(ActionContextConstants.SELECTED_INDICES,
-          ((ICollectionConnectorProvider) refinedViewConnector)
-              .getCollectionConnector().getSelectedIndices());
-    }
-    actionContext.put(ActionContextConstants.ACTION_COMMAND, actionCommand);
-    actionContext.put(ActionContextConstants.ACTION_WIDGET, actionWidget);
-    return actionContext;
   }
 }

@@ -27,8 +27,8 @@ package org.jspresso.framework.util.gate;
 public abstract class AbstractModelGate extends AbstractGate implements
     IModelGate {
 
-  private Object  model;
   private boolean collectionBased;
+  private Object  model;
 
   /**
    * Constructs a new <code>AbstractModelGate</code> instance.
@@ -45,26 +45,6 @@ public abstract class AbstractModelGate extends AbstractGate implements
     AbstractModelGate clonedGate = (AbstractModelGate) super.clone();
     clonedGate.model = null;
     return clonedGate;
-  }
-
-  /**
-   * Gets the model.
-   * 
-   * @return the model.
-   */
-  protected Object getModel() {
-    return model;
-  }
-
-  /**
-   * Sets the model.
-   * 
-   * @param model
-   *          the model to set.
-   * @internal
-   */
-  public void setModel(Object model) {
-    this.model = model;
   }
 
   /**
@@ -97,6 +77,26 @@ public abstract class AbstractModelGate extends AbstractGate implements
    */
   public void setCollectionBased(boolean collectionBased) {
     this.collectionBased = collectionBased;
+  }
+
+  /**
+   * Sets the model.
+   * 
+   * @param model
+   *          the model to set.
+   * @internal
+   */
+  public void setModel(Object model) {
+    this.model = model;
+  }
+
+  /**
+   * Gets the model.
+   * 
+   * @return the model.
+   */
+  protected Object getModel() {
+    return model;
   }
 
 }

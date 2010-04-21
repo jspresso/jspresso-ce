@@ -42,9 +42,19 @@ public abstract class RComponent extends RemotePeer implements
   private String            foreground;
   private RIcon             icon;
   private String            label;
+  private Dimension         preferredSize;
   private RemoteValueState  state;
   private String            tooltip;
-  private Dimension         preferredSize;
+
+  /**
+   * Constructs a new <code>RComponent</code> instance.
+   * 
+   * @param guid
+   *          the guid.
+   */
+  public RComponent(String guid) {
+    super(guid);
+  }
 
   /**
    * Constructs a new <code>RComponent</code> instance. Only used for GWT
@@ -55,13 +65,10 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Constructs a new <code>RComponent</code> instance.
-   * 
-   * @param guid
-   *          the guid.
+   * {@inheritDoc}
    */
-  public RComponent(String guid) {
-    super(guid);
+  public Object actualValue() {
+    return getState().getValue();
   }
 
   /**
@@ -92,6 +99,15 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
+   * Gets the font.
+   * 
+   * @return the font.
+   */
+  public Font getFont() {
+    return font;
+  }
+
+  /**
    * Gets the foreground.
    * 
    * @return the foreground.
@@ -116,6 +132,15 @@ public abstract class RComponent extends RemotePeer implements
    */
   public String getLabel() {
     return label;
+  }
+
+  /**
+   * Gets the preferredSize.
+   * 
+   * @return the preferredSize.
+   */
+  public Dimension getPreferredSize() {
+    return preferredSize;
   }
 
   /**
@@ -167,6 +192,16 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
+   * Sets the font.
+   * 
+   * @param font
+   *          the font to set.
+   */
+  public void setFont(Font font) {
+    this.font = font;
+  }
+
+  /**
    * Sets the foreground.
    * 
    * @param foreground
@@ -197,6 +232,16 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
+   * Sets the preferredSize.
+   * 
+   * @param preferredSize
+   *          the preferredSize to set.
+   */
+  public void setPreferredSize(Dimension preferredSize) {
+    this.preferredSize = preferredSize;
+  }
+
+  /**
    * Sets the state.
    * 
    * @param state
@@ -217,54 +262,9 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
-   * Gets the font.
-   * 
-   * @return the font.
-   */
-  public Font getFont() {
-    return font;
-  }
-
-  /**
-   * Sets the font.
-   * 
-   * @param font
-   *          the font to set.
-   */
-  public void setFont(Font font) {
-    this.font = font;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void synchRemoteState() {
     // Empty implementation
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object actualValue() {
-    return getState().getValue();
-  }
-
-  /**
-   * Gets the preferredSize.
-   * 
-   * @return the preferredSize.
-   */
-  public Dimension getPreferredSize() {
-    return preferredSize;
-  }
-
-  /**
-   * Sets the preferredSize.
-   * 
-   * @param preferredSize
-   *          the preferredSize to set.
-   */
-  public void setPreferredSize(Dimension preferredSize) {
-    this.preferredSize = preferredSize;
   }
 }

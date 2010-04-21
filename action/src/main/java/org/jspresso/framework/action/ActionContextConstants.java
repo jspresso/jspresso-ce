@@ -42,14 +42,14 @@ public final class ActionContextConstants {
   public static final String ACTION_WIDGET    = "ACTION_WIDGET";
 
   /**
-   * FRONT_CONTROLLER context key.
-   */
-  public static final String FRONT_CONTROLLER = "FRONT_CONTROLLER";
-
-  /**
    * BACK_CONTROLLER context key.
    */
   public static final String BACK_CONTROLLER  = "BACK_CONTROLLER";
+
+  /**
+   * FRONT_CONTROLLER context key.
+   */
+  public static final String FRONT_CONTROLLER = "FRONT_CONTROLLER";
 
   /**
    * MODEL_DESCRIPTOR context key.
@@ -72,14 +72,14 @@ public final class ActionContextConstants {
   public static final String SOURCE_COMPONENT = "SOURCE_COMPONENT";
 
   /**
-   * VIEW_CONNECTOR context key.
-   */
-  public static final String VIEW_CONNECTOR   = "VIEW_CONNECTOR";
-
-  /**
    * VIEW context key.
    */
   public static final String VIEW             = "VIEW";
+
+  /**
+   * VIEW_CONNECTOR context key.
+   */
+  public static final String VIEW_CONNECTOR   = "VIEW_CONNECTOR";
 
   private ActionContextConstants() {
     // to prevent this class from being instanciated.

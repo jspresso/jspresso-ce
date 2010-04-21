@@ -73,9 +73,9 @@ public class ResourceProviderServlet extends HttpServlet {
   private static final String ID_PARAMETER                 = "id";
 
   /**
-   * localUrl.
+   * height.
    */
-  private static final String LOCAL_URL_PARAMETER          = "localUrl";
+  private static final String IMAGE_HEIGHT_PARAMETER       = "height";
 
   /**
    * imageUrl.
@@ -88,29 +88,16 @@ public class ResourceProviderServlet extends HttpServlet {
   private static final String IMAGE_WIDTH_PARAMETER        = "width";
 
   /**
-   * height.
+   * localUrl.
    */
-  private static final String IMAGE_HEIGHT_PARAMETER       = "height";
+  private static final String LOCAL_URL_PARAMETER          = "localUrl";
+
+  private static final long   serialVersionUID             = 5253634459280974738L;
 
   /**
    * the url pattern to activate a resource upload.
    */
   private static final String UPLOAD_SERVLET_URL_PATTERN   = "/upload";
-
-  private static final long   serialVersionUID             = 5253634459280974738L;
-
-  /**
-   * Computes the url where the resource is available for download.
-   * 
-   * @param request
-   *          the incomming HTTP request.
-   * @param id
-   *          the resource id.
-   * @return the resource url.
-   */
-  private static String computeDownloadUrl(HttpServletRequest request, String id) {
-    return computeUrl(request, "?" + ID_PARAMETER + "=" + id);
-  }
 
   /**
    * Computes the url where the resource is available for download.
@@ -122,21 +109,6 @@ public class ResourceProviderServlet extends HttpServlet {
   public static String computeDownloadUrl(String id) {
     HttpServletRequest request = HttpRequestHolder.getServletRequest();
     return computeDownloadUrl(request, id);
-  }
-
-  /**
-   * Computes the url where the resource is available for download.
-   * 
-   * @param localUrl
-   *          the resource local url.
-   * @return the resource url.
-   */
-  public static String computeLocalResourceDownloadUrl(String localUrl) {
-    if (localUrl != null) {
-      HttpServletRequest request = HttpRequestHolder.getServletRequest();
-      return computeUrl(request, "?" + LOCAL_URL_PARAMETER + "=" + localUrl);
-    }
-    return null;
   }
 
   /**
@@ -164,6 +136,32 @@ public class ResourceProviderServlet extends HttpServlet {
   }
 
   /**
+   * Computes the url where the resource is available for download.
+   * 
+   * @param localUrl
+   *          the resource local url.
+   * @return the resource url.
+   */
+  public static String computeLocalResourceDownloadUrl(String localUrl) {
+    if (localUrl != null) {
+      HttpServletRequest request = HttpRequestHolder.getServletRequest();
+      return computeUrl(request, "?" + LOCAL_URL_PARAMETER + "=" + localUrl);
+    }
+    return null;
+  }
+
+  /**
+   * Computes a static URL based on servlet request.
+   * 
+   * @param relativePath
+   *          the relative path.
+   * @return the absolute static URL.
+   */
+  public static String computeStaticUrl(String relativePath) {
+    return computeStaticUrl(HttpRequestHolder.getServletRequest(), relativePath);
+  }
+
+  /**
    * Computes the url where the resource can be uploaded.
    * 
    * @return the resource url.
@@ -171,6 +169,35 @@ public class ResourceProviderServlet extends HttpServlet {
   public static String computeUploadUrl() {
     HttpServletRequest request = HttpRequestHolder.getServletRequest();
     return computeUploadUrl(request);
+  }
+
+  /**
+   * Computes the url where the resource is available for download.
+   * 
+   * @param request
+   *          the incomming HTTP request.
+   * @param id
+   *          the resource id.
+   * @return the resource url.
+   */
+  private static String computeDownloadUrl(HttpServletRequest request, String id) {
+    return computeUrl(request, "?" + ID_PARAMETER + "=" + id);
+  }
+
+  /**
+   * Computes a static URL based on servlet request.
+   * 
+   * @param request
+   *          the servlet request.
+   * @param relativePath
+   *          the relative path.
+   * @return the absolute static URL.
+   */
+  private static String computeStaticUrl(HttpServletRequest request,
+      String relativePath) {
+    return request.getScheme() + "://" + request.getServerName() + ":"
+        + request.getServerPort() + request.getContextPath() + "/"
+        + relativePath;
   }
 
   /**
@@ -371,43 +398,16 @@ public class ResourceProviderServlet extends HttpServlet {
     /**
      * {@inheritDoc}
      */
-    public long getSize() {
-      return item.getSize();
+    public String getName() {
+      return item.getName();
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getName() {
-      return item.getName();
+    public long getSize() {
+      return item.getSize();
     }
 
-  }
-
-  /**
-   * Computes a static URL based on servlet request.
-   * 
-   * @param relativePath
-   *          the relative path.
-   * @return the absolute static URL.
-   */
-  public static String computeStaticUrl(String relativePath) {
-    return computeStaticUrl(HttpRequestHolder.getServletRequest(), relativePath);
-  }
-
-  /**
-   * Computes a static URL based on servlet request.
-   * 
-   * @param request
-   *          the servlet request.
-   * @param relativePath
-   *          the relative path.
-   * @return the absolute static URL.
-   */
-  private static String computeStaticUrl(HttpServletRequest request,
-      String relativePath) {
-    return request.getScheme() + "://" + request.getServerName() + ":"
-        + request.getServerPort() + request.getContextPath() + "/"
-        + relativePath;
   }
 }

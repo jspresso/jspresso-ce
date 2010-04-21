@@ -48,22 +48,6 @@ public interface IActionFactory<E, F> {
    * 
    * @param action
    *          the action descriptor.
-   * @param actionHandler
-   *          the handler responsible for executing the action.
-   * @param view
-   *          the view which the action is attached to.
-   * @param locale
-   *          the locale the action has to use.
-   * @return the constructed action.
-   */
-  E createAction(IAction action, IActionHandler actionHandler, IView<F> view,
-      Locale locale);
-
-  /**
-   * Creates an action from its descriptor.
-   * 
-   * @param action
-   *          the action descriptor.
    * @param dimension
    *          the icon dimension.
    * @param actionHandler
@@ -78,24 +62,20 @@ public interface IActionFactory<E, F> {
       IActionHandler actionHandler, IView<F> view, Locale locale);
 
   /**
-   * Enabled or disables an action.
+   * Creates an action from its descriptor.
    * 
    * @param action
-   *          the action to work on.
-   * @param enabled
-   *          true to enable, false otherwise.
+   *          the action descriptor.
+   * @param actionHandler
+   *          the handler responsible for executing the action.
+   * @param view
+   *          the view which the action is attached to.
+   * @param locale
+   *          the locale the action has to use.
+   * @return the constructed action.
    */
-  void setActionEnabled(E action, boolean enabled);
-
-  /**
-   * Sets an action name.
-   * 
-   * @param action
-   *          the action to work on.
-   * @param name
-   *          the action name.
-   */
-  void setActionName(E action, String name);
+  E createAction(IAction action, IActionHandler actionHandler, IView<F> view,
+      Locale locale);
 
   /**
    * Creates the initial action context.
@@ -119,5 +99,25 @@ public interface IActionFactory<E, F> {
   Map<String, Object> createActionContext(IActionHandler actionHandler,
       IView<F> view, IValueConnector viewConnector, String actionCommand,
       F actionWidget);
+
+  /**
+   * Enabled or disables an action.
+   * 
+   * @param action
+   *          the action to work on.
+   * @param enabled
+   *          true to enable, false otherwise.
+   */
+  void setActionEnabled(E action, boolean enabled);
+
+  /**
+   * Sets an action name.
+   * 
+   * @param action
+   *          the action to work on.
+   * @param name
+   *          the action name.
+   */
+  void setActionName(E action, String name);
 
 }

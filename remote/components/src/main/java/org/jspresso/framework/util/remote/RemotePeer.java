@@ -33,8 +33,8 @@ public abstract class RemotePeer implements IRemotePeer, IAutomatable,
 
   private static final long serialVersionUID = 2174357777581427148L;
 
-  private String            guid;
   private String            automationId;
+  private String            guid;
 
   /**
    * Constructs a new <code>RemotePeer</code> instance. Only used for GWT
@@ -55,29 +55,19 @@ public abstract class RemotePeer implements IRemotePeer, IAutomatable,
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public String getGuid() {
-    return guid;
-  }
-
-  /**
-   * Sets the guid.
-   * 
-   * @param guid
-   *          the guid to set.
-   */
-  public void setGuid(String guid) {
-    this.guid = guid;
-  }
-
-  /**
    * Gets the automationId.
    * 
    * @return the automationId.
    */
   public String getAutomationId() {
     return automationId;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getGuid() {
+    return guid;
   }
 
   /**
@@ -88,6 +78,16 @@ public abstract class RemotePeer implements IRemotePeer, IAutomatable,
    */
   public void setAutomationId(String automationId) {
     this.automationId = automationId;
+  }
+
+  /**
+   * Sets the guid.
+   * 
+   * @param guid
+   *          the guid to set.
+   */
+  public void setGuid(String guid) {
+    this.guid = guid;
   }
 
 }

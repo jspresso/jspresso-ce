@@ -50,9 +50,9 @@ public class JHTMLEditor extends JPanel {
 
   private static final long serialVersionUID = 2630154668370585110L;
 
+  private ResourceBundle    bundle;
   private JTextPane         editorPane;
   private JToolBar          toolBar;
-  private ResourceBundle    bundle;
 
   /**
    * Constructs a new <code>JHTMLEditor</code> instance.
@@ -79,6 +79,83 @@ public class JHTMLEditor extends JPanel {
     scrollPane.setViewportView(editorPane);
     add(scrollPane, BorderLayout.CENTER);
     add(toolBar, BorderLayout.SOUTH);
+  }
+
+  /**
+   * Gets the editorPane.
+   * 
+   * @return the editorPane.
+   */
+  public JTextPane getEditorPane() {
+    return editorPane;
+  }
+
+  /**
+   * @return the HTML text.
+   * @see javax.swing.JEditorPane#getText()
+   */
+  public String getText() {
+    return editorPane.getText();
+  }
+
+  /**
+   * @return true if the component is editable.
+   * @see javax.swing.text.JTextComponent#isEditable()
+   */
+  public boolean isEditable() {
+    return editorPane.isEditable();
+  }
+
+  /**
+   * @param b
+   *          editable.
+   * @see javax.swing.text.JTextComponent#setEditable(boolean)
+   */
+  public void setEditable(boolean b) {
+    editorPane.setEditable(b);
+    int scCount = toolBar.getComponentCount();
+    for (int i = 0; i < scCount; i++) {
+      toolBar.getComponentAtIndex(i).setEnabled(b);
+    }
+    toolBar.setEnabled(b);
+  }
+
+  /**
+   * @param htmlText
+   *          the HTML text.
+   * @see javax.swing.JEditorPane#setText(java.lang.String)
+   */
+  public void setText(String htmlText) {
+    editorPane.setText(htmlText);
+  }
+
+  private JButton createActionButton(Map<String, Action> editorActions,
+      String actionName, String iconImage) {
+    Action action = createDisplayableAction(editorActions, actionName,
+        iconImage);
+    JButton b = new JButton();
+    b.setAction(action);
+    b.setText(null);
+    b.setPreferredSize(new Dimension(22, 22));
+    return b;
+  }
+
+  private Action createDisplayableAction(Map<String, Action> editorActions,
+      String actionName) {
+    return createDisplayableAction(editorActions, actionName, null);
+  }
+
+  private Action createDisplayableAction(Map<String, Action> editorActions,
+      String actionName, String iconImage) {
+    Action actionAdapter = new DisplayableActionAdapter(editorActions
+        .get(actionName));
+    if (iconImage != null) {
+      actionAdapter.putValue(Action.SMALL_ICON, new ImageIcon(getClass()
+          .getResource(iconImage)));
+    }
+    actionAdapter.putValue(Action.SHORT_DESCRIPTION, bundle
+        .getString(actionName));
+    return actionAdapter;
   }
 
   private JToolBar createToolBar(Map<String, Action> editorActions) {
@@ -145,24 +222,6 @@ public class JHTMLEditor extends JPanel {
     return tb;
   }
 
-  private Action createDisplayableAction(Map<String, Action> editorActions,
-      String actionName) {
-    return createDisplayableAction(editorActions, actionName, null);
-  }
-
-  private Action createDisplayableAction(Map<String, Action> editorActions,
-      String actionName, String iconImage) {
-    Action actionAdapter = new DisplayableActionAdapter(editorActions
-        .get(actionName));
-    if (iconImage != null) {
-      actionAdapter.putValue(Action.SMALL_ICON, new ImageIcon(getClass()
-          .getResource(iconImage)));
-    }
-    actionAdapter.putValue(Action.SHORT_DESCRIPTION, bundle
-        .getString(actionName));
-    return actionAdapter;
-  }
-
   private static class DisplayableActionAdapter implements Action {
 
     private Action delegate;
@@ -175,6 +234,13 @@ public class JHTMLEditor extends JPanel {
      */
     public DisplayableActionAdapter(Action delegate) {
       this.delegate = delegate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void actionPerformed(ActionEvent e) {
+      delegate.actionPerformed(e);
     }
 
     /**
@@ -222,75 +288,9 @@ public class JHTMLEditor extends JPanel {
     /**
      * {@inheritDoc}
      */
-    public void actionPerformed(ActionEvent e) {
-      delegate.actionPerformed(e);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
       return (String) getValue(Action.SHORT_DESCRIPTION);
     }
-  }
-
-  private JButton createActionButton(Map<String, Action> editorActions,
-      String actionName, String iconImage) {
-    Action action = createDisplayableAction(editorActions, actionName,
-        iconImage);
-    JButton b = new JButton();
-    b.setAction(action);
-    b.setText(null);
-    b.setPreferredSize(new Dimension(22, 22));
-    return b;
-  }
-
-  /**
-   * @return the HTML text.
-   * @see javax.swing.JEditorPane#getText()
-   */
-  public String getText() {
-    return editorPane.getText();
-  }
-
-  /**
-   * @param htmlText
-   *          the HTML text.
-   * @see javax.swing.JEditorPane#setText(java.lang.String)
-   */
-  public void setText(String htmlText) {
-    editorPane.setText(htmlText);
-  }
-
-  /**
-   * @return true if the component is editable.
-   * @see javax.swing.text.JTextComponent#isEditable()
-   */
-  public boolean isEditable() {
-    return editorPane.isEditable();
-  }
-
-  /**
-   * @param b
-   *          editable.
-   * @see javax.swing.text.JTextComponent#setEditable(boolean)
-   */
-  public void setEditable(boolean b) {
-    editorPane.setEditable(b);
-    int scCount = toolBar.getComponentCount();
-    for (int i = 0; i < scCount; i++) {
-      toolBar.getComponentAtIndex(i).setEnabled(b);
-    }
-    toolBar.setEnabled(b);
-  }
-
-  /**
-   * Gets the editorPane.
-   * 
-   * @return the editorPane.
-   */
-  public JTextPane getEditorPane() {
-    return editorPane;
   }
 }

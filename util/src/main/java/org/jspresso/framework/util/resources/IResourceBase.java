@@ -36,6 +36,13 @@ public interface IResourceBase {
   String getMimeType();
 
   /**
+   * Gets the name of the resource or null.
+   * 
+   * @return the name of the resource.
+   */
+  String getName();
+
+  /**
    * Gets the resource length.
    * 
    * @return the resource length.
@@ -43,11 +50,4 @@ public interface IResourceBase {
    *           whenever an IO exception occurs.
    */
   long getSize() throws IOException;
-
-  /**
-   * Gets the name of the resource or null.
-   * 
-   * @return the name of the resource.
-   */
-  String getName();
 }

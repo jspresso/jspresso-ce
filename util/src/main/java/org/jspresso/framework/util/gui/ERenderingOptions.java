@@ -27,9 +27,9 @@ package org.jspresso.framework.util.gui;
 public enum ERenderingOptions {
 
   /**
-   * <code>LABEL_ICON</code> is the option to render label and icon.
+   * <code>ICON</code> is the option to render icon only.
    */
-  LABEL_ICON,
+  ICON,
 
   /**
    * <code>LABEL</code> is the option to render label only.
@@ -37,7 +37,7 @@ public enum ERenderingOptions {
   LABEL,
 
   /**
-   * <code>ICON</code> is the option to render icon only.
+   * <code>LABEL_ICON</code> is the option to render label and icon.
    */
-  ICON
+  LABEL_ICON
 }

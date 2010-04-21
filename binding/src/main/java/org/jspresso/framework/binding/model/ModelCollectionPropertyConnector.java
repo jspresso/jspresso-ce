@@ -228,6 +228,17 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  @Override
+  public void readabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).readabilityChange();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void removeSelectionChangeListener(ISelectionChangeListener listener) {
     selectionChangeSupport.removeSelectionChangeListener(listener);
   }
@@ -262,6 +273,27 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
     selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
+  }
+
+  /**
+   * Unsupported operation.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void setTracksChildrenSelection(
+      @SuppressWarnings("unused") boolean tracksChildrenSelection) {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void writabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).writabilityChange();
+    }
   }
 
   /**
@@ -317,38 +349,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     while (getChildConnectorCount() != modelCollectionSize) {
       IValueConnector childConnector = getChildConnector(computeConnectorId(getChildConnectorCount() - 1));
       removeChildConnector(childConnector);
-    }
-  }
-
-  /**
-   * Unsupported operation.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void setTracksChildrenSelection(
-      @SuppressWarnings("unused") boolean tracksChildrenSelection) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void writabilityChange() {
-    super.writabilityChange();
-    for (String key : getChildConnectorKeys()) {
-      getChildConnector(key).writabilityChange();
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void readabilityChange() {
-    super.writabilityChange();
-    for (String key : getChildConnectorKeys()) {
-      getChildConnector(key).readabilityChange();
     }
   }
 }

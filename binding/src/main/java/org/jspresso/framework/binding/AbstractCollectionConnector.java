@@ -134,19 +134,6 @@ public abstract class AbstractCollectionConnector extends
   }
 
   /**
-   * Dynamically adapts collection of child connectors (child connectors are
-   * added or removed depending on the state of the source connector of the
-   * event) before calling super implementation.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void valueChange(ValueChangeEvent evt) {
-    updateChildConnectors();
-    super.valueChange(evt);
-  }
-
-  /**
    * creates a new connector cloning the connector prototype.
    * <p>
    * {@inheritDoc}
@@ -160,13 +147,6 @@ public abstract class AbstractCollectionConnector extends
    */
   public void fireSelectedItemChange(ItemSelectionEvent evt) {
     implFireSelectedItemChange(evt);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getSelectedItem() {
-    return implGetSelectedItem();
   }
 
   /**
@@ -216,6 +196,13 @@ public abstract class AbstractCollectionConnector extends
    */
   public int[] getSelectedIndices() {
     return selectionChangeSupport.getSelectedIndices();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getSelectedItem() {
+    return implGetSelectedItem();
   }
 
   /**
@@ -293,6 +280,19 @@ public abstract class AbstractCollectionConnector extends
   @Override
   public String toString() {
     return getId();
+  }
+
+  /**
+   * Dynamically adapts collection of child connectors (child connectors are
+   * added or removed depending on the state of the source connector of the
+   * event) before calling super implementation.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void valueChange(ValueChangeEvent evt) {
+    updateChildConnectors();
+    super.valueChange(evt);
   }
 
   /**

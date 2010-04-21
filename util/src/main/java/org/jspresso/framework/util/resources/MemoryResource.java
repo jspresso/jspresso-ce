@@ -55,19 +55,19 @@ public class MemoryResource extends AbstractResource {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public long getSize() {
-    return resourceBytes.length;
-  }
-
-  /**
    * Gets the name.
    * 
    * @return the name.
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public long getSize() {
+    return resourceBytes.length;
   }
 
 }

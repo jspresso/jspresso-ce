@@ -74,34 +74,6 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   private String                                                digestAlgorithm;
   private String                                                hashEncoding;
 
-  /**
-   * Sets the digestAlgorithm to use to hash the password before storing it (MD5
-   * for instance).
-   * 
-   * @param digestAlgorithm
-   *          the digestAlgorithm to set.
-   */
-  public void setDigestAlgorithm(String digestAlgorithm) {
-    this.digestAlgorithm = digestAlgorithm;
-  }
-
-  /**
-   * Sets the hashEncoding to encode the password hash before storing it. You
-   * may choose between :
-   * <ul>
-   * <li><code>BASE64</code> for base 64 encoding.</li>
-   * <li><code>HEX</code> for base 16 encoding.</li>
-   * <li><code>RFC2617</code> for RFC 2617 encoding.</li>
-   * </ul>
-   * Default encoding is <code>BASE64</code>.
-   * 
-   * @param hashEncoding
-   *          the hashEncoding to set.
-   */
-  public void setHashEncoding(String hashEncoding) {
-    this.hashEncoding = hashEncoding;
-  }
-
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
     BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();
     BasicPasswordPropertyDescriptor currentPassword = new BasicPasswordPropertyDescriptor();
@@ -150,6 +122,48 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   }
 
   /**
+   * Sets the digestAlgorithm to use to hash the password before storing it (MD5
+   * for instance).
+   * 
+   * @param digestAlgorithm
+   *          the digestAlgorithm to set.
+   */
+  public void setDigestAlgorithm(String digestAlgorithm) {
+    this.digestAlgorithm = digestAlgorithm;
+  }
+
+  /**
+   * Sets the hashEncoding to encode the password hash before storing it. You
+   * may choose between :
+   * <ul>
+   * <li><code>BASE64</code> for base 64 encoding.</li>
+   * <li><code>HEX</code> for base 16 encoding.</li>
+   * <li><code>RFC2617</code> for RFC 2617 encoding.</li>
+   * </ul>
+   * Default encoding is <code>BASE64</code>.
+   * 
+   * @param hashEncoding
+   *          the hashEncoding to set.
+   */
+  public void setHashEncoding(String hashEncoding) {
+    this.hashEncoding = hashEncoding;
+  }
+
+  /**
+   * Performs the effective password change depending on the underlying storage.
+   * 
+   * @param userPrincipal
+   *          the connected user principal.
+   * @param currentPassword
+   *          the current password.
+   * @param newPassword
+   *          the new password.
+   * @return true if password was changed succesfully.
+   */
+  protected abstract boolean changePassword(UserPrincipal userPrincipal,
+      String currentPassword, String newPassword);
+
+  /**
    * Hashes a char array using the algorithm parametered in the instance.
    * 
    * @param newPassword
@@ -174,28 +188,25 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   }
 
   /**
-   * Returns a prefix to use before storing a password. An example usage is to
-   * prefix the password hash with the type of hash, e.g. {MD5}.
+   * Encodes the password hash based on the hash encoding parameter (either
+   * Base64, Base16 or RFC2617). Defaults to Base64.
    * 
-   * @return a prefix to use before storing a password.
+   * @param source
+   *          the byte array (hash) to encode.
+   * @return the encoded string.
    */
-  protected String getPasswordStorePrefix() {
-    return "";
+  protected String encode(byte[] source) {
+    String he = getHashEncoding();
+    if (Util.BASE64_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeBase64(source);
+    } else if (Util.BASE16_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeBase16(source);
+    } else if (Util.RFC2617_ENCODING.equalsIgnoreCase(he)) {
+      return Util.encodeRFC2617(source);
+    }
+    // defaults to Base64
+    return Util.encodeBase64(source);
   }
-
-  /**
-   * Performs the effective password change depending on the underlying storage.
-   * 
-   * @param userPrincipal
-   *          the connected user principal.
-   * @param currentPassword
-   *          the current password.
-   * @param newPassword
-   *          the new password.
-   * @return true if password was changed succesfully.
-   */
-  protected abstract boolean changePassword(UserPrincipal userPrincipal,
-      String currentPassword, String newPassword);
 
   /**
    * Gets the digestAlgorithm.
@@ -216,23 +227,12 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   }
 
   /**
-   * Encodes the password hash based on the hash encoding parameter (either
-   * Base64, Base16 or RFC2617). Defaults to Base64.
+   * Returns a prefix to use before storing a password. An example usage is to
+   * prefix the password hash with the type of hash, e.g. {MD5}.
    * 
-   * @param source
-   *          the byte array (hash) to encode.
-   * @return the encoded string.
+   * @return a prefix to use before storing a password.
    */
-  protected String encode(byte[] source) {
-    String he = getHashEncoding();
-    if (Util.BASE64_ENCODING.equalsIgnoreCase(he)) {
-      return Util.encodeBase64(source);
-    } else if (Util.BASE16_ENCODING.equalsIgnoreCase(he)) {
-      return Util.encodeBase16(source);
-    } else if (Util.RFC2617_ENCODING.equalsIgnoreCase(he)) {
-      return Util.encodeRFC2617(source);
-    }
-    // defaults to Base64
-    return Util.encodeBase64(source);
+  protected String getPasswordStorePrefix() {
+    return "";
   }
 }

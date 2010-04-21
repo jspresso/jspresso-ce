@@ -76,6 +76,15 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
   }
 
   /**
+   * Gets the set of beans registered in this recorder.
+   * 
+   * @return the set of beans registered in this recorder.
+   */
+  public Set<IPropertyChangeCapable> getRegistered() {
+    return changedPropertiesMap.keySet();
+  }
+
+  /**
    * Gets the enabled.
    * 
    * @return the enabled.
@@ -159,14 +168,5 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
    */
   public void unregister(IPropertyChangeCapable bean) {
     changedPropertiesMap.remove(bean);
-  }
-
-  /**
-   * Gets the set of beans registered in this recorder.
-   * 
-   * @return the set of beans registered in this recorder.
-   */
-  public Set<IPropertyChangeCapable> getRegistered() {
-    return changedPropertiesMap.keySet();
   }
 }

@@ -62,25 +62,25 @@ public abstract class AbstractValueConnector extends AbstractConnector
   private boolean                  locallyWritable;
 
   private IValueConnector          modelConnector;
+  private IModelDescriptor         modelDescriptor;
   private PropertyChangeListener   modelReadabilityListener;
   private PropertyChangeListener   modelWritabilityListener;
+
   private Object                   oldConnectorValue;
-
   private boolean                  oldReadability;
+
   private boolean                  oldWritability;
-
   private ICompositeValueConnector parentConnector;
+
   private Collection<IGate>        readabilityGates;
-
   private PropertyChangeListener   readabilityGatesListener;
-  private ValueChangeSupport       valueChangeSupport;
 
+  private Subject                  subject;
+
+  private ValueChangeSupport       valueChangeSupport;
   private Collection<IGate>        writabilityGates;
 
   private PropertyChangeListener   writabilityGatesListener;
-  private IModelDescriptor         modelDescriptor;
-
-  private Subject                  subject;
 
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
@@ -102,15 +102,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
-  public void addValueChangeListener(IValueChangeListener listener) {
-    if (listener != null) {
-      valueChangeSupport.addValueChangeListener(listener);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void addReadabilityGate(IGate gate) {
     if (gate instanceof ISubjectAware) {
       ((ISubjectAware) gate).setSubject(getSubject());
@@ -122,6 +113,15 @@ public abstract class AbstractValueConnector extends AbstractConnector
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
         getReadabilityGatesListener());
     readabilityChange();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void addValueChangeListener(IValueChangeListener listener) {
+    if (listener != null) {
+      valueChangeSupport.addValueChangeListener(listener);
+    }
   }
 
   /**
@@ -157,97 +157,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   public void boundAsView() {
     bindModelGates(getWritabilityGates());
     bindModelGates(getReadabilityGates());
-  }
-
-  private void bindModelGates(Collection<IGate> gates) {
-    if (gates != null) {
-      IValueConnector connectorToListenTo = getComponentConnector(this);
-      if (connectorToListenTo != null) {
-        for (IGate gate : gates) {
-          if (gate instanceof IModelAware) {
-            ((IModelAware) gate).setModel(connectorToListenTo
-                .getConnectorValue());
-            connectorToListenTo
-                .addValueChangeListener(new InnerGateModelListener(
-                    (IModelAware) gate));
-          }
-        }
-      }
-    }
-  }
-
-  private static class InnerGateModelListener implements IValueChangeListener {
-
-    private IModelAware gate;
-
-    /**
-     * Constructs a new <code>InnerGateModelListener</code> instance.
-     * 
-     * @param gate
-     *          the model gate.
-     */
-    public InnerGateModelListener(IModelAware gate) {
-      this.gate = gate;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void valueChange(ValueChangeEvent evt) {
-      gate.setModel(evt.getNewValue());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result;
-      if (gate != null) {
-        result += gate.hashCode();
-      }
-      return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null) {
-        return false;
-      }
-      if (getClass() != obj.getClass()) {
-        return false;
-      }
-      InnerGateModelListener other = (InnerGateModelListener) obj;
-      if (gate == null) {
-        if (other.gate != null) {
-          return false;
-        }
-      } else if (!gate.equals(other.gate)) {
-        return false;
-      }
-      return true;
-    }
-
-  }
-
-  private IValueConnector getComponentConnector(IValueConnector connector) {
-    if (connector == null) {
-      return null;
-    }
-    /* connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?> */
-    if (connector instanceof ICompositeValueConnector
-        && !(connector instanceof ICollectionConnector)) {
-      return connector;
-    }
-    return getComponentConnector(connector.getParentConnector());
   }
 
   /**
@@ -324,36 +233,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * This connector is notified of a change in a bound connector. It forwards by
-   * default the change to its own connectee.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void valueChange(ValueChangeEvent evt) {
-    // we must prevent the event to return back to the sender.
-    valueChangeSupport.addInhibitedListener((IValueConnector) evt.getSource());
-    try {
-      setConnectorValue(evt.getNewValue());
-      // a model connector should not be updated by the view connector when
-      // being assigned as model.
-      if (evt.getSource() != getModelConnector()) {
-        Object potentiallyChangedValue = getConnectorValue();
-        if (!ObjectUtils.equals(potentiallyChangedValue, evt.getNewValue())) {
-          // the source connector must be notified because settting this
-          // connector
-          // value resulted in a value changed (a string to uppercase for
-          // instance).
-          ((IValueConnector) evt.getSource())
-              .setConnectorValue(potentiallyChangedValue);
-        }
-      }
-    } finally {
-      valueChangeSupport.removeInhibitedListener((IValueConnector) evt
-          .getSource());
-    }
-  }
-
-  /**
    * {@inheritDoc}
    */
   public String getConnectorPath() {
@@ -386,6 +265,30 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public IValueConnector getModelConnector() {
     return modelConnector;
+  }
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  public IModelDescriptor getModelDescriptor() {
+    if (modelDescriptor != null) {
+      return modelDescriptor;
+    } else if (getModelConnector() != null) {
+      return getModelConnector().getModelDescriptor();
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IModelProvider getModelProvider() {
+    if (getModelConnector() != null) {
+      return getModelConnector().getModelProvider();
+    }
+    return null;
   }
 
   /**
@@ -466,12 +369,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * {@inheritDoc}
+   * Called whenever readability may have changed.
    */
-  public void removeValueChangeListener(IValueChangeListener listener) {
-    if (listener != null) {
-      valueChangeSupport.removeValueChangeListener(listener);
-    }
+  public void readabilityChange() {
+    boolean readable = isReadable();
+    firePropertyChange(READABLE_PROPERTY, oldReadability, readable);
+    oldReadability = readable;
   }
 
   /**
@@ -488,6 +391,15 @@ public abstract class AbstractValueConnector extends AbstractConnector
     gate.removePropertyChangeListener(IGate.OPEN_PROPERTY,
         getReadabilityGatesListener());
     readabilityChange();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeValueChangeListener(IValueChangeListener listener) {
+    if (listener != null) {
+      valueChangeSupport.removeValueChangeListener(listener);
+    }
   }
 
   /**
@@ -629,6 +541,16 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
+   * Sets the modelDescriptor.
+   * 
+   * @param modelDescriptor
+   *          the modelDescriptor to set.
+   */
+  public void setModelDescriptor(IModelDescriptor modelDescriptor) {
+    this.modelDescriptor = modelDescriptor;
+  }
+
+  /**
    * Sets the parentConnector.
    * 
    * @param parentConnector
@@ -636,6 +558,68 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public void setParentConnector(ICompositeValueConnector parentConnector) {
     this.parentConnector = parentConnector;
+  }
+
+  /**
+   * Configures accessibility gates with the subject.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void setSubject(Subject subject) {
+    this.subject = subject;
+    if (getReadabilityGates() != null) {
+      for (IGate gate : getReadabilityGates()) {
+        if (gate instanceof ISubjectAware) {
+          ((ISubjectAware) gate).setSubject(subject);
+        }
+      }
+    }
+    if (getWritabilityGates() != null) {
+      for (IGate gate : getWritabilityGates()) {
+        if (gate instanceof ISubjectAware) {
+          ((ISubjectAware) gate).setSubject(subject);
+        }
+      }
+    }
+  }
+
+  /**
+   * This connector is notified of a change in a bound connector. It forwards by
+   * default the change to its own connectee.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void valueChange(ValueChangeEvent evt) {
+    // we must prevent the event to return back to the sender.
+    valueChangeSupport.addInhibitedListener((IValueConnector) evt.getSource());
+    try {
+      setConnectorValue(evt.getNewValue());
+      // a model connector should not be updated by the view connector when
+      // being assigned as model.
+      if (evt.getSource() != getModelConnector()) {
+        Object potentiallyChangedValue = getConnectorValue();
+        if (!ObjectUtils.equals(potentiallyChangedValue, evt.getNewValue())) {
+          // the source connector must be notified because settting this
+          // connector
+          // value resulted in a value changed (a string to uppercase for
+          // instance).
+          ((IValueConnector) evt.getSource())
+              .setConnectorValue(potentiallyChangedValue);
+        }
+      }
+    } finally {
+      valueChangeSupport.removeInhibitedListener((IValueConnector) evt
+          .getSource());
+    }
+  }
+
+  /**
+   * Called whenever writability may have changed.
+   */
+  public void writabilityChange() {
+    boolean writable = isWritable();
+    firePropertyChange(WRITABLE_PROPERTY, oldWritability, writable);
+    oldWritability = writable;
   }
 
   /**
@@ -727,6 +711,15 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
+   * Gets the subject.
+   * 
+   * @return the subject.
+   */
+  protected Subject getSubject() {
+    return subject;
+  }
+
+  /**
    * Gets the writabilityGates.
    * 
    * @return the writabilityGates.
@@ -736,95 +729,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Called whenever readability may have changed.
-   */
-  public void readabilityChange() {
-    boolean readable = isReadable();
-    firePropertyChange(READABLE_PROPERTY, oldReadability, readable);
-    oldReadability = readable;
-  }
-
-  /**
-   * Sets the value to the peer connectee.
+   * Gets the locallyReadable.
    * 
-   * @param connecteeValue
-   *          the connectee value to set
+   * @return the locallyReadable.
    */
-  protected abstract void setConnecteeValue(Object connecteeValue);
-
-  /**
-   * Called whenever writability may have changed.
-   */
-  public void writabilityChange() {
-    boolean writable = isWritable();
-    firePropertyChange(WRITABLE_PROPERTY, oldWritability, writable);
-    oldWritability = writable;
-  }
-
-  /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  public IModelDescriptor getModelDescriptor() {
-    if (modelDescriptor != null) {
-      return modelDescriptor;
-    } else if (getModelConnector() != null) {
-      return getModelConnector().getModelDescriptor();
-    }
-    return null;
-  }
-
-  /**
-   * Sets the modelDescriptor.
-   * 
-   * @param modelDescriptor
-   *          the modelDescriptor to set.
-   */
-  public void setModelDescriptor(IModelDescriptor modelDescriptor) {
-    this.modelDescriptor = modelDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IModelProvider getModelProvider() {
-    if (getModelConnector() != null) {
-      return getModelConnector().getModelProvider();
-    }
-    return null;
-  }
-
-  /**
-   * Configures accessibility gates with the subject.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void setSubject(Subject subject) {
-    this.subject = subject;
-    if (getReadabilityGates() != null) {
-      for (IGate gate : getReadabilityGates()) {
-        if (gate instanceof ISubjectAware) {
-          ((ISubjectAware) gate).setSubject(subject);
-        }
-      }
-    }
-    if (getWritabilityGates() != null) {
-      for (IGate gate : getWritabilityGates()) {
-        if (gate instanceof ISubjectAware) {
-          ((ISubjectAware) gate).setSubject(subject);
-        }
-      }
-    }
-  }
-
-  /**
-   * Gets the subject.
-   * 
-   * @return the subject.
-   */
-  protected Subject getSubject() {
-    return subject;
+  protected boolean isLocallyReadable() {
+    return locallyReadable && GateHelper.areGatesOpen(getReadabilityGates());
   }
 
   /**
@@ -837,11 +747,101 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Gets the locallyReadable.
+   * Sets the value to the peer connectee.
    * 
-   * @return the locallyReadable.
+   * @param connecteeValue
+   *          the connectee value to set
    */
-  protected boolean isLocallyReadable() {
-    return locallyReadable && GateHelper.areGatesOpen(getReadabilityGates());
+  protected abstract void setConnecteeValue(Object connecteeValue);
+
+  private void bindModelGates(Collection<IGate> gates) {
+    if (gates != null) {
+      IValueConnector connectorToListenTo = getComponentConnector(this);
+      if (connectorToListenTo != null) {
+        for (IGate gate : gates) {
+          if (gate instanceof IModelAware) {
+            ((IModelAware) gate).setModel(connectorToListenTo
+                .getConnectorValue());
+            connectorToListenTo
+                .addValueChangeListener(new InnerGateModelListener(
+                    (IModelAware) gate));
+          }
+        }
+      }
+    }
+  }
+
+  private IValueConnector getComponentConnector(IValueConnector connector) {
+    if (connector == null) {
+      return null;
+    }
+    /* connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?> */
+    if (connector instanceof ICompositeValueConnector
+        && !(connector instanceof ICollectionConnector)) {
+      return connector;
+    }
+    return getComponentConnector(connector.getParentConnector());
+  }
+
+  private static class InnerGateModelListener implements IValueChangeListener {
+
+    private IModelAware gate;
+
+    /**
+     * Constructs a new <code>InnerGateModelListener</code> instance.
+     * 
+     * @param gate
+     *          the model gate.
+     */
+    public InnerGateModelListener(IModelAware gate) {
+      this.gate = gate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      InnerGateModelListener other = (InnerGateModelListener) obj;
+      if (gate == null) {
+        if (other.gate != null) {
+          return false;
+        }
+      } else if (!gate.equals(other.gate)) {
+        return false;
+      }
+      return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result;
+      if (gate != null) {
+        result += gate.hashCode();
+      }
+      return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void valueChange(ValueChangeEvent evt) {
+      gate.setModel(evt.getNewValue());
+    }
+
   }
 }

@@ -36,47 +36,60 @@ import org.jspresso.framework.security.UserPrincipal;
  */
 public class BackendActionStartup extends AbstractBackendStartup {
 
-  private String              applicationContextKey;
-  private Locale              startupLocale;
   private String              actionBeanId;
   private Map<String, Object> actionContext;
+  private String              applicationContextKey;
   private String              batchUserName;
+  private Locale              startupLocale;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getApplicationContextKey() {
-    return applicationContextKey;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Locale getStartupLocale() {
-    return startupLocale;
-  }
-
-  /**
-   * Gets the initial parameterized action context.
+   * Sets the actionBeanId.
    * 
-   * @return the initial parameterized action context.
+   * @param actionBeanId
+   *          the actionBeanId to set.
    */
-  protected Map<String, Object> getActionContext() {
-    if (actionContext == null) {
-      actionContext = new HashMap<String, Object>();
-    }
-    return actionContext;
+  public void setActionBeanId(String actionBeanId) {
+    this.actionBeanId = actionBeanId;
   }
 
   /**
-   * The bean id of the backend action to execute.
+   * Sets the actionContext.
    * 
-   * @return bean id of the backend action to execute.
+   * @param actionContext
+   *          the actionContext to set.
    */
-  protected String getActionBeanId() {
-    return actionBeanId;
+  public void setActionContext(Map<String, Object> actionContext) {
+    this.actionContext = actionContext;
+  }
+
+  /**
+   * Sets the applicationContextKey.
+   * 
+   * @param applicationContextKey
+   *          the applicationContextKey to set.
+   */
+  public void setApplicationContextKey(String applicationContextKey) {
+    this.applicationContextKey = applicationContextKey;
+  }
+
+  /**
+   * Sets the batchUserName.
+   * 
+   * @param batchUserName
+   *          the batchUserName to set.
+   */
+  public void setBatchUserName(String batchUserName) {
+    this.batchUserName = batchUserName;
+  }
+
+  /**
+   * Sets the startupLocale.
+   * 
+   * @param startupLocale
+   *          the startupLocale to set.
+   */
+  public void setStartupLocale(Locale startupLocale) {
+    this.startupLocale = startupLocale;
   }
 
   /**
@@ -85,6 +98,18 @@ public class BackendActionStartup extends AbstractBackendStartup {
   public void start() {
     startController();
     executeAction();
+  }
+
+  /**
+   * Creates a default batch user subject.
+   * 
+   * @return a default batch user subject.
+   */
+  protected Subject createSubject() {
+    Subject s = new Subject();
+    UserPrincipal p = new UserPrincipal(getBatchUserName());
+    s.getPrincipals().add(p);
+    return s;
   }
 
   /**
@@ -117,65 +142,32 @@ public class BackendActionStartup extends AbstractBackendStartup {
   }
 
   /**
-   * Creates a default batch user subject.
+   * The bean id of the backend action to execute.
    * 
-   * @return a default batch user subject.
+   * @return bean id of the backend action to execute.
    */
-  protected Subject createSubject() {
-    Subject s = new Subject();
-    UserPrincipal p = new UserPrincipal(getBatchUserName());
-    s.getPrincipals().add(p);
-    return s;
+  protected String getActionBeanId() {
+    return actionBeanId;
   }
 
   /**
-   * Sets the applicationContextKey.
+   * Gets the initial parameterized action context.
    * 
-   * @param applicationContextKey
-   *          the applicationContextKey to set.
+   * @return the initial parameterized action context.
    */
-  public void setApplicationContextKey(String applicationContextKey) {
-    this.applicationContextKey = applicationContextKey;
+  protected Map<String, Object> getActionContext() {
+    if (actionContext == null) {
+      actionContext = new HashMap<String, Object>();
+    }
+    return actionContext;
   }
 
   /**
-   * Sets the startupLocale.
-   * 
-   * @param startupLocale
-   *          the startupLocale to set.
+   * {@inheritDoc}
    */
-  public void setStartupLocale(Locale startupLocale) {
-    this.startupLocale = startupLocale;
-  }
-
-  /**
-   * Sets the actionBeanId.
-   * 
-   * @param actionBeanId
-   *          the actionBeanId to set.
-   */
-  public void setActionBeanId(String actionBeanId) {
-    this.actionBeanId = actionBeanId;
-  }
-
-  /**
-   * Sets the actionContext.
-   * 
-   * @param actionContext
-   *          the actionContext to set.
-   */
-  public void setActionContext(Map<String, Object> actionContext) {
-    this.actionContext = actionContext;
-  }
-
-  /**
-   * Sets the batchUserName.
-   * 
-   * @param batchUserName
-   *          the batchUserName to set.
-   */
-  public void setBatchUserName(String batchUserName) {
-    this.batchUserName = batchUserName;
+  @Override
+  protected String getApplicationContextKey() {
+    return applicationContextKey;
   }
 
   /**
@@ -185,5 +177,13 @@ public class BackendActionStartup extends AbstractBackendStartup {
    */
   protected String getBatchUserName() {
     return batchUserName;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Locale getStartupLocale() {
+    return startupLocale;
   }
 }

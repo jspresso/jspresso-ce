@@ -69,6 +69,28 @@ public class ClickableHeaderSTable extends STable {
   }
 
   /**
+   * Adds a <code>HeaderClickListener</code>.
+   * 
+   * @param listener
+   *          the <code>HeaderClickListener</code> to add.
+   */
+  public void addHeaderClickListener(HeaderClickListener listener) {
+    addEventListener(HeaderClickListener.class, listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void fireFinalEvents() {
+    super.fireFinalEvents();
+    if (delayedClickedHeaderColumn != -1) {
+      fireHeaderClicked(new HeaderClickEvent(this, delayedClickedHeaderColumn));
+      delayedClickedHeaderColumn = -1;
+    }
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -104,16 +126,6 @@ public class ClickableHeaderSTable extends STable {
   }
 
   /**
-   * Adds a <code>HeaderClickListener</code>.
-   * 
-   * @param listener
-   *          the <code>HeaderClickListener</code> to add.
-   */
-  public void addHeaderClickListener(HeaderClickListener listener) {
-    addEventListener(HeaderClickListener.class, listener);
-  }
-
-  /**
    * Removes a <code>HeaderClickListener</code>.
    * 
    * @param listener
@@ -138,18 +150,6 @@ public class ClickableHeaderSTable extends STable {
       if (listeners[i] == HeaderClickListener.class) {
         ((HeaderClickListener) listeners[i + 1]).headerClicked(event);
       }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void fireFinalEvents() {
-    super.fireFinalEvents();
-    if (delayedClickedHeaderColumn != -1) {
-      fireHeaderClicked(new HeaderClickEvent(this, delayedClickedHeaderColumn));
-      delayedClickedHeaderColumn = -1;
     }
   }
 }

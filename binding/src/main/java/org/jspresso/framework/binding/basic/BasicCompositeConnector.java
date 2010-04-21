@@ -68,6 +68,21 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
   /**
    * {@inheritDoc}
    */
+  public boolean areChildrenWritable() {
+    if (getParentConnector() != null
+        && !getParentConnector().areChildrenWritable()) {
+      return false;
+    }
+    // overriden to remove model connector writability condition.
+    // if (getModelConnector() != null && !getModelConnector().isWritable()) {
+    // return false;
+    // }
+    return isLocallyWritable();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public BasicCompositeConnector clone() {
     return clone(getId());
@@ -107,20 +122,5 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
 
   private String getRankedKey(String base, int rank) {
     return base + "#" + rank;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean areChildrenWritable() {
-    if (getParentConnector() != null
-        && !getParentConnector().areChildrenWritable()) {
-      return false;
-    }
-    // overriden to remove model connector writability condition.
-    // if (getModelConnector() != null && !getModelConnector().isWritable()) {
-    // return false;
-    // }
-    return isLocallyWritable();
   }
 }

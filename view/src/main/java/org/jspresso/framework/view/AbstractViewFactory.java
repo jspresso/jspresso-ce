@@ -132,6 +132,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
     IViewFactory<E, F, G> {
 
   /**
+   * <code>BOLD_FONT</code>.
+   */
+  protected static final String         BOLD_FONT                        = ";BOLD;";
+  /**
    * <code>DEF_DISP_MAX_FRACTION_DIGIT</code>.
    */
   protected static final int            DEF_DISP_MAX_FRACTION_DIGIT      = 2;
@@ -166,36 +170,32 @@ public abstract class AbstractViewFactory<E, F, G> implements
                                                                                      .getMillis()
                                                                                  + EDuration.ONE_WEEK
                                                                                      .getMillis());
+
   /**
    * <code>TEMPLATE_TIME</code>.
    */
   protected static final Date           TEMPLATE_TIME                    = new Date(
                                                                              366000);
 
-  /**
-   * <code>BOLD_FONT</code>.
-   */
-  protected static final String         BOLD_FONT                        = ";BOLD;";
-
   private IActionFactory<G, E>          actionFactory;
   private IDisplayableAction            binaryPropertyInfoAction;
   private IConfigurableConnectorFactory connectorFactory;
+  private ERenderingOptions             defaultActionMapRenderingOptions = ERenderingOptions.ICON;
+  private IValueChangeListener          firstRowSelector;
   private IIconFactory<F>               iconFactory;
+
   private IDisplayableAction            lovAction;
   private int                           maxCharacterLength               = 32;
-
   private int                           maxColumnCharacterLength         = 32;
   private IModelCascadingBinder         modelCascadingBinder;
   private IModelConnectorFactory        modelConnectorFactory;
   private IMvcBinder                    mvcBinder;
+
   private IDisplayableAction            openFileAsBinaryPropertyAction;
   private IDisplayableAction            resetPropertyAction;
-
   private IDisplayableAction            saveBinaryPropertyAsFileAction;
-  private ITranslationProvider          translationProvider;
-  private IValueChangeListener          firstRowSelector;
 
-  private ERenderingOptions             defaultActionMapRenderingOptions = ERenderingOptions.ICON;
+  private ITranslationProvider          translationProvider;
 
   /**
    * Constructs a new <code>AbstractViewFactory</code> instance.
@@ -304,47 +304,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Gives a chance to subclasses to create custom views. Returns null by
-   * default.
-   * 
-   * @param viewDescriptor
-   *          the view descriptor being the root of the view hierarchy to be
-   *          constructed.
-   * @param actionHandler
-   *          the object responsible for executing the view actions (generally
-   *          the frontend controller itself).
-   * @param locale
-   *          the locale the view must use for i18n.
-   * @return the created view or null.
-   */
-  protected IView<E> createCustomView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    return null;
-  }
-
-  /**
-   * Creates an empty view whenever this specific view descriptor is not
-   * supported.
-   * 
-   * @param viewDescriptor
-   *          the view descriptor being the root of the view hierarchy to be
-   *          constructed.
-   * @param actionHandler
-   *          the object responsible for executing the view actions (generally
-   *          the frontend controller itself).
-   * @param locale
-   *          the locale the view must use for i18n.
-   * @return the empty view.
-   */
-  private IView<E> createEmptyView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        ModelRefPropertyConnector.THIS_PROPERTY);
-    E viewComponent = createEmptyComponent();
-    return constructView(viewComponent, viewDescriptor, connector);
-  }
-
-  /**
    * Gets the actionFactory.
    * 
    * @return the actionFactory.
@@ -403,6 +362,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Sets the defaultActionMapRenderingOptions.
+   * 
+   * @param defaultActionMapRenderingOptions
+   *          the defaultActionMapRenderingOptions to set.
+   */
+  public void setDefaultActionMapRenderingOptions(
+      ERenderingOptions defaultActionMapRenderingOptions) {
+    this.defaultActionMapRenderingOptions = defaultActionMapRenderingOptions;
+  }
+
+  /**
    * Sets the iconFactory.
    * 
    * @param iconFactory
@@ -420,15 +390,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
-  }
-
-  /**
-   * Gets the lovAction.
-   * 
-   * @return the lovAction.
-   */
-  protected IDisplayableAction getLovAction() {
-    return lovAction;
   }
 
   /**
@@ -459,6 +420,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
     this.modelCascadingBinder = modelCascadingBinder;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
   }
 
   /**
@@ -514,6 +486,19 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Adds a card in a card view.
+   * 
+   * @param cardView
+   *          the card view to add the card to.
+   * @param card
+   *          the card to add.
+   * @param cardName
+   *          the card name.
+   */
+  protected abstract void addCard(IMapView<E> cardView, IView<E> card,
+      String cardName);
+
+  /**
    * Adjusts a component various sizes (e.g. min, max, preferred) based on a
    * formatter and a template value.
    * 
@@ -548,6 +533,128 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected abstract void adjustSizes(IViewDescriptor viewDescriptor,
       E component, IFormatter formatter, Object templateValue, int extraWidth);
+
+  /**
+   * Applies a component preferred size.
+   * 
+   * @param component
+   *          the component to apply the preferred sze on.
+   * @param preferredSize
+   *          vthe preferred size to apply (might be null).
+   */
+  protected abstract void applyPreferredSize(E component,
+      Dimension preferredSize);
+
+  /**
+   * Selects the first element of a collection connector when its value changes.
+   * 
+   * @param collectionConnector
+   *          the collection connector to attach the listener to.
+   */
+  protected void attachDefaultCollectionListener(
+      ICollectionConnector collectionConnector) {
+    collectionConnector.addValueChangeListener(firstRowSelector);
+
+  }
+
+  /**
+   * Performs all the necessary connectors binding among the composite view and
+   * its children.
+   * 
+   * @param view
+   *          the composite view to bind.
+   */
+  protected void bindCompositeView(ICompositeView<E> view) {
+    if (view != null) {
+      ICompositeViewDescriptor viewDescriptor = view.getDescriptor();
+      if (viewDescriptor.isCascadingModels()) {
+        IView<E> masterView = view.getChildren().get(0);
+        IValueConnector viewConnector;
+        if (masterView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
+          IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
+              .createConfigurableCollectionConnectorProvider(
+                  ModelRefPropertyConnector.THIS_PROPERTY, null);
+          mainConnector.addChildConnector(masterView.getConnector());
+          if (masterView.getConnector() instanceof ICollectionConnector) {
+            mainConnector
+                .setCollectionConnectorProvider((ICollectionConnector) masterView
+                    .getConnector());
+          }
+          viewConnector = mainConnector;
+        } else {
+          ICompositeValueConnector mainConnector = getConnectorFactory()
+              .createCompositeValueConnector(
+                  ModelRefPropertyConnector.THIS_PROPERTY, null);
+          mainConnector.addChildConnector(masterView.getConnector());
+          viewConnector = mainConnector;
+        }
+        view.setConnector(viewConnector);
+        for (int i = 1; i < view.getChildren().size(); i++) {
+          IView<E> detailView = view.getChildren().get(i);
+
+          IValueConnector detailConnector = null;
+          if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
+            IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
+                .createConfigurableCollectionConnectorProvider(
+                    ModelRefPropertyConnector.THIS_PROPERTY, null);
+            wrapper.addChildConnector(detailView.getConnector());
+            if (detailView.getConnector() instanceof ICollectionConnector) {
+              wrapper
+                  .setCollectionConnectorProvider((ICollectionConnector) detailView
+                      .getConnector());
+            }
+            detailConnector = wrapper;
+          } else {
+            detailConnector = detailView.getConnector();
+          }
+          getModelCascadingBinder().bind(masterView.getConnector(),
+              detailConnector);
+          masterView = detailView;
+        }
+      } else {
+        String connectorId;
+        if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
+          connectorId = viewDescriptor.getModelDescriptor().getName();
+        } else {
+          connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
+        }
+        ICompositeValueConnector connector = getConnectorFactory()
+            .createCompositeValueConnector(connectorId, null);
+        view.setConnector(connector);
+        for (IView<E> childView : view.getChildren()) {
+          connector.addChildConnector(childView.getConnector());
+        }
+      }
+    }
+  }
+
+  /**
+   * Computes a table column identifer that is used for sorting.
+   * 
+   * @param rowDescriptor
+   *          the row component descriptor.
+   * @param columnConnector
+   *          the column connector behind the column.
+   * @return the column identifier.
+   */
+  protected String computeColumnIdentifier(
+      IComponentDescriptor<?> rowDescriptor, IValueConnector columnConnector) {
+    String propertyName = columnConnector.getId();
+    String identifier = propertyName;
+    if (columnConnector instanceof IRenderableCompositeValueConnector) {
+      String renderingProperty = ((IRenderableCompositeValueConnector) columnConnector)
+          .getRenderingConnector().getId();
+      if (renderingProperty != null) {
+        // for ref sorting to occur properly.
+        identifier = identifier + "." + renderingProperty;
+      }
+    }
+    if (PropertyDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
+      // to prevent column sorting
+      return "";
+    }
+    return identifier;
+  }
 
   /**
    * Computes an enumeration key.
@@ -624,6 +731,21 @@ public abstract class AbstractViewFactory<E, F, G> implements
     view.setDescriptor(descriptor);
     return view;
   }
+
+  /**
+   * Creates an action view.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created action view.
+   */
+  protected abstract IView<E> createActionView(
+      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale);
 
   /**
    * Creates the action list for a binary property (open from file, save as
@@ -792,19 +914,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Adds a card in a card view.
-   * 
-   * @param cardView
-   *          the card view to add the card to.
-   * @param card
-   *          the card to add.
-   * @param cardName
-   *          the card name.
-   */
-  protected abstract void addCard(IMapView<E> cardView, IView<E> card,
-      String cardName);
-
-  /**
    * Creates a color property view.
    * 
    * @param propertyViewDescriptor
@@ -889,61 +998,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Computes a table column identifer that is used for sorting.
-   * 
-   * @param rowDescriptor
-   *          the row component descriptor.
-   * @param columnConnector
-   *          the column connector behind the column.
-   * @return the column identifier.
-   */
-  protected String computeColumnIdentifier(
-      IComponentDescriptor<?> rowDescriptor, IValueConnector columnConnector) {
-    String propertyName = columnConnector.getId();
-    String identifier = propertyName;
-    if (columnConnector instanceof IRenderableCompositeValueConnector) {
-      String renderingProperty = ((IRenderableCompositeValueConnector) columnConnector)
-          .getRenderingConnector().getId();
-      if (renderingProperty != null) {
-        // for ref sorting to occur properly.
-        identifier = identifier + "." + renderingProperty;
-      }
-    }
-    if (PropertyDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
-      // to prevent column sorting
-      return "";
-    }
-    return identifier;
-  }
-
-  /**
-   * Creates a list column connector.
-   * 
-   * @param renderedProperty
-   *          the list rendered property.
-   * @param descriptor
-   *          the component descriptor this list relies on.
-   * @return the connector for the list.
-   */
-  protected IValueConnector createListConnector(String renderedProperty,
-      IComponentDescriptor<?> descriptor) {
-    IPropertyDescriptor propertyDescriptor = descriptor
-        .getPropertyDescriptor(renderedProperty);
-    if (propertyDescriptor == null) {
-      throw new ViewException("No property " + renderedProperty
-          + " defined for " + descriptor.getComponentContract());
-    }
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-      return getConnectorFactory().createCompositeValueConnector(
-          renderedProperty,
-          ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getToStringProperty());
-    }
-    return getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
-  }
-
-  /**
    * Creates a component view.
    * 
    * @param viewDescriptor
@@ -991,77 +1045,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
-   * Performs all the necessary connectors binding among the composite view and
-   * its children.
-   * 
-   * @param view
-   *          the composite view to bind.
-   */
-  protected void bindCompositeView(ICompositeView<E> view) {
-    if (view != null) {
-      ICompositeViewDescriptor viewDescriptor = view.getDescriptor();
-      if (viewDescriptor.isCascadingModels()) {
-        IView<E> masterView = view.getChildren().get(0);
-        IValueConnector viewConnector;
-        if (masterView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
-          IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
-              .createConfigurableCollectionConnectorProvider(
-                  ModelRefPropertyConnector.THIS_PROPERTY, null);
-          mainConnector.addChildConnector(masterView.getConnector());
-          if (masterView.getConnector() instanceof ICollectionConnector) {
-            mainConnector
-                .setCollectionConnectorProvider((ICollectionConnector) masterView
-                    .getConnector());
-          }
-          viewConnector = mainConnector;
-        } else {
-          ICompositeValueConnector mainConnector = getConnectorFactory()
-              .createCompositeValueConnector(
-                  ModelRefPropertyConnector.THIS_PROPERTY, null);
-          mainConnector.addChildConnector(masterView.getConnector());
-          viewConnector = mainConnector;
-        }
-        view.setConnector(viewConnector);
-        for (int i = 1; i < view.getChildren().size(); i++) {
-          IView<E> detailView = view.getChildren().get(i);
-
-          IValueConnector detailConnector = null;
-          if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
-            IConfigurableCollectionConnectorProvider wrapper = getConnectorFactory()
-                .createConfigurableCollectionConnectorProvider(
-                    ModelRefPropertyConnector.THIS_PROPERTY, null);
-            wrapper.addChildConnector(detailView.getConnector());
-            if (detailView.getConnector() instanceof ICollectionConnector) {
-              wrapper
-                  .setCollectionConnectorProvider((ICollectionConnector) detailView
-                      .getConnector());
-            }
-            detailConnector = wrapper;
-          } else {
-            detailConnector = detailView.getConnector();
-          }
-          getModelCascadingBinder().bind(masterView.getConnector(),
-              detailConnector);
-          masterView = detailView;
-        }
-      } else {
-        String connectorId;
-        if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
-          connectorId = viewDescriptor.getModelDescriptor().getName();
-        } else {
-          connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
-        }
-        ICompositeValueConnector connector = getConnectorFactory()
-            .createCompositeValueConnector(connectorId, null);
-        view.setConnector(connector);
-        for (IView<E> childView : view.getChildren()) {
-          connector.addChildConnector(childView.getConnector());
-        }
-      }
-    }
-  }
-
-  /**
    * Creates a constrained grid view.
    * 
    * @param viewDescriptor
@@ -1075,6 +1058,25 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected abstract ICompositeView<E> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Gives a chance to subclasses to create custom views. Returns null by
+   * default.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor being the root of the view hierarchy to be
+   *          constructed.
+   * @param actionHandler
+   *          the object responsible for executing the view actions (generally
+   *          the frontend controller itself).
+   * @param locale
+   *          the locale the view must use for i18n.
+   * @return the created view or null.
+   */
+  protected IView<E> createCustomView(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    return null;
+  }
 
   /**
    * Creates a date format based on a date property descriptor.
@@ -1320,6 +1322,21 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Creates an html property view.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the created property view.
+   */
+  protected abstract IView<E> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale);
+
+  /**
    * Creates a image view.
    * 
    * @param viewDescriptor
@@ -1332,21 +1349,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected abstract IView<E> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale);
-
-  /**
-   * Creates an action view.
-   * 
-   * @param viewDescriptor
-   *          the view descriptor.
-   * @param actionHandler
-   *          the action handler.
-   * @param locale
-   *          the locale.
-   * @return the created action view.
-   */
-  protected abstract IView<E> createActionView(
-      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale);
 
   /**
@@ -1391,6 +1393,33 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected abstract IView<E> createIntegerPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale);
+
+  /**
+   * Creates a list column connector.
+   * 
+   * @param renderedProperty
+   *          the list rendered property.
+   * @param descriptor
+   *          the component descriptor this list relies on.
+   * @return the connector for the list.
+   */
+  protected IValueConnector createListConnector(String renderedProperty,
+      IComponentDescriptor<?> descriptor) {
+    IPropertyDescriptor propertyDescriptor = descriptor
+        .getPropertyDescriptor(renderedProperty);
+    if (propertyDescriptor == null) {
+      throw new ViewException("No property " + renderedProperty
+          + " defined for " + descriptor.getComponentContract());
+    }
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+      return getConnectorFactory().createCompositeValueConnector(
+          renderedProperty,
+          ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+              .getReferencedDescriptor().getToStringProperty());
+    }
+    return getConnectorFactory().createValueConnector(
+        propertyDescriptor.getName());
+  }
 
   /**
    * Creates a list view.
@@ -1639,21 +1668,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the security panel.
    */
   protected abstract E createSecurityComponent();
-
-  /**
-   * Creates an html property view.
-   * 
-   * @param propertyViewDescriptor
-   *          the property view descriptor.
-   * @param actionHandler
-   *          the action handler.
-   * @param locale
-   *          the locale.
-   * @return the created property view.
-   */
-  protected abstract IView<E> createHtmlPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, Locale locale);
 
   /**
    * Creates a source code property view.
@@ -2018,6 +2032,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Gets the defaultActionMapRenderingOptions.
+   * 
+   * @return the defaultActionMapRenderingOptions.
+   */
+  protected ERenderingOptions getDefaultActionMapRenderingOptions() {
+    return defaultActionMapRenderingOptions;
+  }
+
+  /**
    * Gets a duration template value.
    * 
    * @param propertyDescriptor
@@ -2101,6 +2124,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Gets the lovAction.
+   * 
+   * @return the lovAction.
+   */
+  protected IDisplayableAction getLovAction() {
+    return lovAction;
+  }
+
+  /**
    * Gets the maxCharacterLength.
    * 
    * @return the maxCharacterLength.
@@ -2125,6 +2157,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected IModelCascadingBinder getModelCascadingBinder() {
     return modelCascadingBinder;
+  }
+
+  /**
+   * Gets the modelConnectorFactory.
+   * 
+   * @return the modelConnectorFactory.
+   */
+  protected IModelConnectorFactory getModelConnectorFactory() {
+    return modelConnectorFactory;
   }
 
   /**
@@ -2245,6 +2286,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Gets wether a property view is considered to fill all the available height
+   * space.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @return true if a property view is considered to fill all the available
+   *         height space.
+   */
+  protected boolean isHeightExtensible(
+      IPropertyViewDescriptor propertyViewDescriptor) {
+    IModelDescriptor propertyDescriptor = propertyViewDescriptor
+        .getModelDescriptor();
+    if (propertyDescriptor instanceof ITextPropertyDescriptor
+        || propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Shows a card in in card layouted panel.
    * 
    * @param cardsPeer
@@ -2359,6 +2420,28 @@ public abstract class AbstractViewFactory<E, F, G> implements
     return nodeGroupCollectionConnector;
   }
 
+  /**
+   * Creates an empty view whenever this specific view descriptor is not
+   * supported.
+   * 
+   * @param viewDescriptor
+   *          the view descriptor being the root of the view hierarchy to be
+   *          constructed.
+   * @param actionHandler
+   *          the object responsible for executing the view actions (generally
+   *          the frontend controller itself).
+   * @param locale
+   *          the locale the view must use for i18n.
+   * @return the empty view.
+   */
+  private IView<E> createEmptyView(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        ModelRefPropertyConnector.THIS_PROPERTY);
+    E viewComponent = createEmptyComponent();
+    return constructView(viewComponent, viewDescriptor, connector);
+  }
+
   private ICollectionConnectorProvider createNodeGroupConnector(
       ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale, ITreeLevelDescriptor subtreeViewDescriptor, int depth) {
@@ -2426,58 +2509,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
     return nodeGroupCollectionConnector;
   }
 
-  /**
-   * Gets wether a property view is considered to fill all the available height
-   * space.
-   * 
-   * @param propertyViewDescriptor
-   *          the property view descriptor.
-   * @return true if a property view is considered to fill all the available
-   *         height space.
-   */
-  protected boolean isHeightExtensible(
-      IPropertyViewDescriptor propertyViewDescriptor) {
-    IModelDescriptor propertyDescriptor = propertyViewDescriptor
-        .getModelDescriptor();
-    if (propertyDescriptor instanceof ITextPropertyDescriptor
-        || propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Gets the modelConnectorFactory.
-   * 
-   * @return the modelConnectorFactory.
-   */
-  protected IModelConnectorFactory getModelConnectorFactory() {
-    return modelConnectorFactory;
-  }
-
-  /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
-   * Selects the first element of a collection connector when its value changes.
-   * 
-   * @param collectionConnector
-   *          the collection connector to attach the listener to.
-   */
-  protected void attachDefaultCollectionListener(
-      ICollectionConnector collectionConnector) {
-    collectionConnector.addValueChangeListener(firstRowSelector);
-
-  }
-
   private class ItemSelectionAdapter implements IItemSelectionListener {
 
     private IAction        actionDelegate;
@@ -2500,36 +2531,5 @@ public abstract class AbstractViewFactory<E, F, G> implements
       context.put(ActionContextConstants.ACTION_PARAM, event.getSelectedItem());
       actionHandler.execute(actionDelegate, context);
     }
-  }
-
-  /**
-   * Applies a component preferred size.
-   * 
-   * @param component
-   *          the component to apply the preferred sze on.
-   * @param preferredSize
-   *          vthe preferred size to apply (might be null).
-   */
-  protected abstract void applyPreferredSize(E component,
-      Dimension preferredSize);
-
-  /**
-   * Gets the defaultActionMapRenderingOptions.
-   * 
-   * @return the defaultActionMapRenderingOptions.
-   */
-  protected ERenderingOptions getDefaultActionMapRenderingOptions() {
-    return defaultActionMapRenderingOptions;
-  }
-
-  /**
-   * Sets the defaultActionMapRenderingOptions.
-   * 
-   * @param defaultActionMapRenderingOptions
-   *          the defaultActionMapRenderingOptions to set.
-   */
-  public void setDefaultActionMapRenderingOptions(
-      ERenderingOptions defaultActionMapRenderingOptions) {
-    this.defaultActionMapRenderingOptions = defaultActionMapRenderingOptions;
   }
 }

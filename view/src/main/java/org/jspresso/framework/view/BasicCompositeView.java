@@ -53,6 +53,14 @@ public class BasicCompositeView<E> extends BasicView<E> implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ICompositeViewDescriptor getDescriptor() {
+    return (ICompositeViewDescriptor) super.getDescriptor();
+  }
+
+  /**
    * Sets the children.
    * 
    * @param children
@@ -70,13 +78,5 @@ public class BasicCompositeView<E> extends BasicView<E> implements
         child.setParent(this);
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ICompositeViewDescriptor getDescriptor() {
-    return (ICompositeViewDescriptor) super.getDescriptor();
   }
 }

@@ -116,6 +116,24 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
+  public Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities() {
+    Map<Class<?>, Map<Serializable, IEntity>> registeredEntities = new HashMap<Class<?>, Map<Serializable, IEntity>>();
+    for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
+      Class<?> entityContract = ((IEntity) entity).getComponentContract();
+      Map<Serializable, IEntity> contractBuffer = registeredEntities
+          .get(entityContract);
+      if (contractBuffer == null) {
+        contractBuffer = new HashMap<Serializable, IEntity>();
+        registeredEntities.put(entityContract, contractBuffer);
+      }
+      contractBuffer.put(((IEntity) entity).getId(), (IEntity) entity);
+    }
+    return registeredEntities;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Set<IEntity> getUpdatedEntities() {
     return updatedEntities;
   }
@@ -190,24 +208,6 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   public void rollback() {
     cleanup();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities() {
-    Map<Class<?>, Map<Serializable, IEntity>> registeredEntities = new HashMap<Class<?>, Map<Serializable, IEntity>>();
-    for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
-      Class<?> entityContract = ((IEntity) entity).getComponentContract();
-      Map<Serializable, IEntity> contractBuffer = registeredEntities
-          .get(entityContract);
-      if (contractBuffer == null) {
-        contractBuffer = new HashMap<Serializable, IEntity>();
-        registeredEntities.put(entityContract, contractBuffer);
-      }
-      contractBuffer.put(((IEntity) entity).getId(), (IEntity) entity);
-    }
-    return registeredEntities;
   }
 
   private void cleanup() {

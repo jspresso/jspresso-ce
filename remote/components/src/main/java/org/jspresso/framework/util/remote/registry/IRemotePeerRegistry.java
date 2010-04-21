@@ -71,14 +71,6 @@ public interface IRemotePeerRegistry {
   void register(IRemotePeer remotePeer);
 
   /**
-   * Unregisters a remote peer.
-   * 
-   * @param guid
-   *          the remote peer guid.
-   */
-  void unregister(String guid);
-
-  /**
    * Generates and registers an automation Id.
    * 
    * @param automationSeed
@@ -88,5 +80,13 @@ public interface IRemotePeerRegistry {
    * @return the generated automation id.
    */
   String registerAutomationId(String automationSeed, String guid);
+
+  /**
+   * Unregisters a remote peer.
+   * 
+   * @param guid
+   *          the remote peer guid.
+   */
+  void unregister(String guid);
 
 }

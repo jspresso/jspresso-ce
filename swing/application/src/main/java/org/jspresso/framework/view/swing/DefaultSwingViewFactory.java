@@ -222,6 +222,16 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void addCard(IMapView<JComponent> cardView, IView<JComponent> card,
+      String cardName) {
+    cardView.getPeer().add(card.getPeer(), cardName);
+    cardView.addToChildrenMap(cardName, card);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected void adjustSizes(IViewDescriptor viewDescriptor,
       JComponent component, IFormatter formatter, Object templateValue,
       int extraWidth) {
@@ -244,12 +254,61 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void applyPreferredSize(JComponent component,
+      org.jspresso.framework.util.gui.Dimension preferredSize) {
+    if (preferredSize != null) {
+      int pW = preferredSize.getWidth();
+      if (pW <= 0) {
+        pW = component.getPreferredSize().width;
+      }
+      int pH = preferredSize.getHeight();
+      if (pH <= 0) {
+        pH = component.getPreferredSize().height;
+      }
+      component.setPreferredSize(new Dimension(pW, pH));
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected int computePixelWidth(JComponent component, int characterLength) {
     int charLength = getMaxCharacterLength() + 2;
     if (characterLength > 0 && characterLength < getMaxCharacterLength()) {
       charLength = characterLength + 2;
     }
     return component.getFont().getSize() * charLength / 2;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createActionView(
+      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    JButton viewComponent = createJButton();
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        ModelRefPropertyConnector.THIS_PROPERTY);
+    connector.setExceptionHandler(actionHandler);
+    IView<JComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    viewComponent.setAction(getActionFactory().createAction(
+        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
+        actionHandler, view, locale));
+    viewComponent.setBorderPainted(false);
+    switch (viewDescriptor.getRenderingOptions()) {
+      case ICON:
+        viewComponent.setText(null);
+        break;
+      case LABEL:
+        viewComponent.setIcon(null);
+        break;
+      default:
+        break;
+    }
+    return view;
   }
 
   /**
@@ -366,15 +425,16 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void addCard(IMapView<JComponent> cardView, IView<JComponent> card,
-      String cardName) {
-    cardView.getPeer().add(card.getPeer(), cardName);
-    cardView.addToChildrenMap(cardName, card);
-  }
+  // private void fillLastRow(JPanel viewComponent) {
+  // GridBagConstraints constraints = new GridBagConstraints();
+  // constraints.gridx = GridBagConstraints.RELATIVE;
+  // constraints.weightx = 1.0;
+  // constraints.fill = GridBagConstraints.HORIZONTAL;
+  // constraints.gridwidth = GridBagConstraints.REMAINDER;
+  // JPanel filler = createJPanel();
+  // // filler.setBorder(new SLineBorder(Color.BLUE));
+  // viewComponent.add(filler, constraints);
+  // }
 
   /**
    * {@inheritDoc}
@@ -580,17 +640,6 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  // private void fillLastRow(JPanel viewComponent) {
-  // GridBagConstraints constraints = new GridBagConstraints();
-  // constraints.gridx = GridBagConstraints.RELATIVE;
-  // constraints.weightx = 1.0;
-  // constraints.fill = GridBagConstraints.HORIZONTAL;
-  // constraints.gridwidth = GridBagConstraints.REMAINDER;
-  // JPanel filler = createJPanel();
-  // // filler.setBorder(new SLineBorder(Color.BLUE));
-  // viewComponent.add(filler, constraints);
-  // }
-
   /**
    * {@inheritDoc}
    */
@@ -790,6 +839,36 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected IView<JComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    JComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isReadOnly()) {
+      JScrollPane scrollPane = createJScrollPane();
+      JTextPane htmlPane = createJTextPane();
+      JTextPaneConnector textPaneConnector = new JTextPaneConnector(
+          propertyDescriptor.getName(), htmlPane);
+      scrollPane.setViewportView(htmlPane);
+      viewComponent = scrollPane;
+      connector = textPaneConnector;
+    } else {
+      JHTMLEditor htmlEditor = createJHTMLEditor(locale);
+      JHTMLEditorConnector htmlEditorConnector = new JHTMLEditorConnector(
+          propertyDescriptor.getName(), htmlEditor);
+      viewComponent = htmlEditor;
+      connector = htmlEditorConnector;
+    }
+    connector.setExceptionHandler(actionHandler);
+    return constructView(viewComponent, propertyViewDescriptor, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<JComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
@@ -812,36 +891,6 @@ public class DefaultSwingViewFactory extends
       imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
       imageLabel.setVerticalAlignment(SwingConstants.CENTER);
       viewComponent.add(imageLabel, BorderLayout.CENTER);
-    }
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<JComponent> createActionView(
-      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    JButton viewComponent = createJButton();
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        ModelRefPropertyConnector.THIS_PROPERTY);
-    connector.setExceptionHandler(actionHandler);
-    IView<JComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-    viewComponent.setAction(getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
-        actionHandler, view, locale));
-    viewComponent.setBorderPainted(false);
-    switch (viewDescriptor.getRenderingOptions()) {
-      case ICON:
-        viewComponent.setText(null);
-        break;
-      case LABEL:
-        viewComponent.setIcon(null);
-        break;
-      default:
-        break;
     }
     return view;
   }
@@ -959,6 +1008,18 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
+   * Creates an HTML editor.
+   * 
+   * @param locale
+   *          the locale to create the HTML editor for.
+   * @return the created HTML editor.
+   */
+  protected JHTMLEditor createJHTMLEditor(Locale locale) {
+    JHTMLEditor htmlEditor = new JHTMLEditor(locale);
+    return htmlEditor;
+  }
+
+  /**
    * Creates a label.
    * 
    * @param bold
@@ -1002,18 +1063,6 @@ public class DefaultSwingViewFactory extends
   protected JPanel createJPanel() {
     JPanel panel = new JPanel();
     return panel;
-  }
-
-  /**
-   * Creates an HTML editor.
-   * 
-   * @param locale
-   *          the locale to create the HTML editor for.
-   * @return the created HTML editor.
-   */
-  protected JHTMLEditor createJHTMLEditor(Locale locale) {
-    JHTMLEditor htmlEditor = new JHTMLEditor(locale);
-    return htmlEditor;
   }
 
   /**
@@ -1122,18 +1171,6 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
-   * Creates a text pane.
-   * 
-   * @return the created text pane.
-   */
-  protected JTextPane createJTextPane() {
-    JTextPane textPane = new JTextPane();
-    textPane.setEditorKit(new HTMLEditorKit());
-    textPane.setDragEnabled(true);
-    return textPane;
-  }
-
-  /**
    * Creates a text area.
    * 
    * @return the created text area.
@@ -1154,6 +1191,18 @@ public class DefaultSwingViewFactory extends
     JTextField textField = new JTextField();
     SwingUtil.enableSelectionOnFocusGained(textField);
     return textField;
+  }
+
+  /**
+   * Creates a text pane.
+   * 
+   * @return the created text pane.
+   */
+  protected JTextPane createJTextPane() {
+    JTextPane textPane = new JTextPane();
+    textPane.setEditorKit(new HTMLEditorKit());
+    textPane.setDragEnabled(true);
+    return textPane;
   }
 
   /**
@@ -1282,6 +1331,46 @@ public class DefaultSwingViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
+  }
+
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected JLabel createPropertyLabel(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      JComponent propertyComponent, Locale locale) {
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    JLabel propertyLabel = createJLabel(false);
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
+    if (propertyDescriptor.isMandatory()) {
+      labelText.append("*");
+      propertyLabel.setForeground(Color.RED);
+    }
+    propertyLabel.setText(labelText.toString());
+    propertyLabel.setLabelFor(propertyComponent);
+    if (propertyViewDescriptor.getLabelFont() != null) {
+      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
+          propertyLabel.getFont()));
+    }
+    if (propertyViewDescriptor.getLabelForeground() != null) {
+      propertyLabel.setForeground(createColor(propertyViewDescriptor
+          .getLabelForeground()));
+    }
+    if (propertyViewDescriptor.getLabelBackground() != null) {
+      propertyLabel.setBackground(createColor(propertyViewDescriptor
+          .getLabelBackground()));
+    }
+    return propertyLabel;
   }
 
   /**
@@ -1732,36 +1821,6 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createHtmlPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
-    JComponent viewComponent;
-    IValueConnector connector;
-    if (propertyViewDescriptor.isReadOnly()) {
-      JScrollPane scrollPane = createJScrollPane();
-      JTextPane htmlPane = createJTextPane();
-      JTextPaneConnector textPaneConnector = new JTextPaneConnector(
-          propertyDescriptor.getName(), htmlPane);
-      scrollPane.setViewportView(htmlPane);
-      viewComponent = scrollPane;
-      connector = textPaneConnector;
-    } else {
-      JHTMLEditor htmlEditor = createJHTMLEditor(locale);
-      JHTMLEditorConnector htmlEditorConnector = new JHTMLEditorConnector(
-          propertyDescriptor.getName(), htmlEditor);
-      viewComponent = htmlEditor;
-      connector = htmlEditorConnector;
-    }
-    connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected IView<JComponent> createTimePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1809,11 +1868,7 @@ public class DefaultSwingViewFactory extends
     if (viewDescriptor.isExpanded()) {
       viewComponent.getModel().addTreeModelListener(new TreeModelListener() {
 
-        public void treeStructureChanged(TreeModelEvent e) {
-          expandAll(viewComponent, e.getTreePath());
-        }
-
-        public void treeNodesRemoved(
+        public void treeNodesChanged(
             @SuppressWarnings("unused") TreeModelEvent e) {
           // NO-OP.
         }
@@ -1822,9 +1877,13 @@ public class DefaultSwingViewFactory extends
           expandAll(viewComponent, e.getTreePath());
         }
 
-        public void treeNodesChanged(
+        public void treeNodesRemoved(
             @SuppressWarnings("unused") TreeModelEvent e) {
           // NO-OP.
+        }
+
+        public void treeStructureChanged(TreeModelEvent e) {
+          expandAll(viewComponent, e.getTreePath());
         }
       });
     }
@@ -1852,25 +1911,6 @@ public class DefaultSwingViewFactory extends
       });
     }
     return view;
-  }
-
-  private void expandAll(final JTree tree, final TreePath tp) {
-    SwingUtilities.invokeLater(new Runnable() {
-
-      public void run() {
-        if (tp == null) {
-          return;
-        }
-        Object node = tp.getLastPathComponent();
-        TreeModel model = tree.getModel();
-        if (!model.isLeaf(node)) {
-          tree.expandPath(tp);
-          for (int i = 0; i < model.getChildCount(node); i++) {
-            expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
-          }
-        }
-      }
-    });
   }
 
   /**
@@ -2162,46 +2202,6 @@ public class DefaultSwingViewFactory extends
         propertyDescriptor, locale));
   }
 
-  /**
-   * Creates a property label.
-   * 
-   * @param propertyViewDescriptor
-   *          the property view descriptor.
-   * @param propertyComponent
-   *          the property component.
-   * @param locale
-   *          the locale.
-   * @return the created property label.
-   */
-  protected JLabel createPropertyLabel(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      JComponent propertyComponent, Locale locale) {
-    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
-    JLabel propertyLabel = createJLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
-        .getI18nName(getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
-      labelText.append("*");
-      propertyLabel.setForeground(Color.RED);
-    }
-    propertyLabel.setText(labelText.toString());
-    propertyLabel.setLabelFor(propertyComponent);
-    if (propertyViewDescriptor.getLabelFont() != null) {
-      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
-          propertyLabel.getFont()));
-    }
-    if (propertyViewDescriptor.getLabelForeground() != null) {
-      propertyLabel.setForeground(createColor(propertyViewDescriptor
-          .getLabelForeground()));
-    }
-    if (propertyViewDescriptor.getLabelBackground() != null) {
-      propertyLabel.setBackground(createColor(propertyViewDescriptor
-          .getLabelBackground()));
-    }
-    return propertyLabel;
-  }
-
   private TableCellRenderer createReferenceTableCellRenderer(
       @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
@@ -2280,6 +2280,25 @@ public class DefaultSwingViewFactory extends
     // iFrame.getContentPane().add(view.getPeer());
     // iFrame.pack();
     // view.setPeer(iFrame);
+  }
+
+  private void expandAll(final JTree tree, final TreePath tp) {
+    SwingUtilities.invokeLater(new Runnable() {
+
+      public void run() {
+        if (tp == null) {
+          return;
+        }
+        Object node = tp.getLastPathComponent();
+        TreeModel model = tree.getModel();
+        if (!model.isLeaf(node)) {
+          tree.expandPath(tp);
+          for (int i = 0; i < model.getChildCount(node); i++) {
+            expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
+          }
+        }
+      }
+    });
   }
 
   private List<String> getDescriptorPathFromConnectorTreePath(
@@ -2418,43 +2437,6 @@ public class DefaultSwingViewFactory extends
     }
   }
 
-  private final class EvenOddListCellRenderer extends DefaultListCellRenderer {
-
-    private static final long serialVersionUID = 2051850807889065438L;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Component getListCellRendererComponent(JList list, Object value,
-        int index, boolean isSelected, boolean cellHasFocus) {
-      JLabel renderer = (JLabel) super.getListCellRendererComponent(list,
-          value, index, isSelected, cellHasFocus);
-      if (value instanceof IValueConnector) {
-        if (value instanceof IRenderableCompositeValueConnector) {
-          renderer.setText(((IRenderableCompositeValueConnector) value)
-              .getDisplayValue());
-          renderer.setIcon(getIconFactory().getIcon(
-              ((IRenderableCompositeValueConnector) value)
-                  .getDisplayIconImageUrl(),
-              getIconFactory().getSmallIconSize()));
-          if (((IRenderableCompositeValueConnector) value)
-              .getDisplayDescription() != null) {
-            ToolTipManager.sharedInstance().registerComponent(list);
-            renderer
-                .setToolTipText(((IRenderableCompositeValueConnector) value)
-                    .getDisplayDescription()
-                    + TOOLTIP_ELLIPSIS);
-          }
-        } else {
-          renderer.setText(value.toString());
-        }
-      }
-      SwingUtil.alternateEvenOddBackground(renderer, list, isSelected, index);
-      return renderer;
-    }
-  }
-
   private final class ConnectorTreeCellRenderer extends DefaultTreeCellRenderer {
 
     private static final long serialVersionUID = -5153268751092971328L;
@@ -2488,6 +2470,43 @@ public class DefaultSwingViewFactory extends
           renderer.setText(value.toString());
         }
       }
+      return renderer;
+    }
+  }
+
+  private final class EvenOddListCellRenderer extends DefaultListCellRenderer {
+
+    private static final long serialVersionUID = 2051850807889065438L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getListCellRendererComponent(JList list, Object value,
+        int index, boolean isSelected, boolean cellHasFocus) {
+      JLabel renderer = (JLabel) super.getListCellRendererComponent(list,
+          value, index, isSelected, cellHasFocus);
+      if (value instanceof IValueConnector) {
+        if (value instanceof IRenderableCompositeValueConnector) {
+          renderer.setText(((IRenderableCompositeValueConnector) value)
+              .getDisplayValue());
+          renderer.setIcon(getIconFactory().getIcon(
+              ((IRenderableCompositeValueConnector) value)
+                  .getDisplayIconImageUrl(),
+              getIconFactory().getSmallIconSize()));
+          if (((IRenderableCompositeValueConnector) value)
+              .getDisplayDescription() != null) {
+            ToolTipManager.sharedInstance().registerComponent(list);
+            renderer
+                .setToolTipText(((IRenderableCompositeValueConnector) value)
+                    .getDisplayDescription()
+                    + TOOLTIP_ELLIPSIS);
+          }
+        } else {
+          renderer.setText(value.toString());
+        }
+      }
+      SwingUtil.alternateEvenOddBackground(renderer, list, isSelected, index);
       return renderer;
     }
   }
@@ -2656,25 +2675,6 @@ public class DefaultSwingViewFactory extends
           }
         }
       }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void applyPreferredSize(JComponent component,
-      org.jspresso.framework.util.gui.Dimension preferredSize) {
-    if (preferredSize != null) {
-      int pW = preferredSize.getWidth();
-      if (pW <= 0) {
-        pW = component.getPreferredSize().width;
-      }
-      int pH = preferredSize.getHeight();
-      if (pH <= 0) {
-        pH = component.getPreferredSize().height;
-      }
-      component.setPreferredSize(new Dimension(pW, pH));
     }
   }
 }

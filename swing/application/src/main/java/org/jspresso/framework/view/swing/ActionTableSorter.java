@@ -67,6 +67,22 @@ public class ActionTableSorter extends AbstractTableSorter {
   /**
    * {@inheritDoc}
    */
+  public int modelIndex(int viewIndex) {
+    // there is no mapping.
+    return viewIndex;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int viewIndex(int modelIndex) {
+    // there is no mapping.
+    return modelIndex;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected TableModelListener createTableModelHandler() {
     return new TableModelHandler();
@@ -100,22 +116,6 @@ public class ActionTableSorter extends AbstractTableSorter {
           .put(IQueryComponent.ORDERING_PROPERTIES, orderingProperties);
       actionHandler.execute(sortingAction, actionContext);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int modelIndex(int viewIndex) {
-    // there is no mapping.
-    return viewIndex;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int viewIndex(int modelIndex) {
-    // there is no mapping.
-    return modelIndex;
   }
 
   private class TableModelHandler implements TableModelListener {

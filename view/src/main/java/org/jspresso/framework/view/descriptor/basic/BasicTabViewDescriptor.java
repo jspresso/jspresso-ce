@@ -39,8 +39,8 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
     implements ITabViewDescriptor {
 
-  private List<IViewDescriptor> tabs;
   private ERenderingOptions     renderingOptions = ERenderingOptions.LABEL_ICON;
+  private List<IViewDescriptor> tabs;
 
   /**
    * {@inheritDoc}
@@ -53,29 +53,6 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
       }
     }
     return tabs;
-  }
-
-  /**
-   * Sets the viewDescriptors.
-   * 
-   * @param viewDescriptors
-   *          the viewDescriptors to set.
-   * @deprecated use setTabs instead.
-   */
-  @Deprecated
-  public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
-    setTabs(viewDescriptors);
-  }
-
-  /**
-   * Registers the list of views to be displayed as tabs. The tabs order follows
-   * the children views order of this list.
-   * 
-   * @param tabs
-   *          the tabs to set.
-   */
-  public void setTabs(List<IViewDescriptor> tabs) {
-    this.tabs = tabs;
   }
 
   /**
@@ -105,5 +82,28 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
    */
   public void setRenderingOptions(ERenderingOptions renderingOptions) {
     this.renderingOptions = renderingOptions;
+  }
+
+  /**
+   * Registers the list of views to be displayed as tabs. The tabs order follows
+   * the children views order of this list.
+   * 
+   * @param tabs
+   *          the tabs to set.
+   */
+  public void setTabs(List<IViewDescriptor> tabs) {
+    this.tabs = tabs;
+  }
+
+  /**
+   * Sets the viewDescriptors.
+   * 
+   * @param viewDescriptors
+   *          the viewDescriptors to set.
+   * @deprecated use setTabs instead.
+   */
+  @Deprecated
+  public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
+    setTabs(viewDescriptors);
   }
 }

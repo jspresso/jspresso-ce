@@ -31,18 +31,6 @@ public class BooleanPropertyModelGate extends
   private boolean negatedByName;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean shouldOpen(Boolean propertyValue) {
-    boolean superValue = propertyValue != null && propertyValue.booleanValue();
-    if (negatedByName) {
-      return !superValue;
-    }
-    return superValue;
-  }
-
-  /**
    * Configures the boolean property name.
    * 
    * @param booleanPropertyName
@@ -69,5 +57,17 @@ public class BooleanPropertyModelGate extends
       super.setPropertyName(propertyName);
       negatedByName = false;
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean shouldOpen(Boolean propertyValue) {
+    boolean superValue = propertyValue != null && propertyValue.booleanValue();
+    if (negatedByName) {
+      return !superValue;
+    }
+    return superValue;
   }
 }

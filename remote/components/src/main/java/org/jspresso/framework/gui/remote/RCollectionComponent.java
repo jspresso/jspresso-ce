@@ -28,16 +28,8 @@ public class RCollectionComponent extends RComponent {
 
   private static final long serialVersionUID = -5154116400205068483L;
 
-  private String            selectionMode;
   private RAction           rowAction;
-
-  /**
-   * Constructs a new <code>RCollectionComponent</code> instance. Only used for
-   * GWT serialization support.
-   */
-  protected RCollectionComponent() {
-    // For GWT support
-  }
+  private String            selectionMode;
 
   /**
    * Constructs a new <code>RCollectionComponent</code> instance.
@@ -50,22 +42,11 @@ public class RCollectionComponent extends RComponent {
   }
 
   /**
-   * Gets the selectionMode.
-   * 
-   * @return the selectionMode.
+   * Constructs a new <code>RCollectionComponent</code> instance. Only used for
+   * GWT serialization support.
    */
-  public String getSelectionMode() {
-    return selectionMode;
-  }
-
-  /**
-   * Sets the selectionMode.
-   * 
-   * @param selectionMode
-   *          the selectionMode to set.
-   */
-  public void setSelectionMode(String selectionMode) {
-    this.selectionMode = selectionMode;
+  protected RCollectionComponent() {
+    // For GWT support
   }
 
   /**
@@ -78,6 +59,15 @@ public class RCollectionComponent extends RComponent {
   }
 
   /**
+   * Gets the selectionMode.
+   * 
+   * @return the selectionMode.
+   */
+  public String getSelectionMode() {
+    return selectionMode;
+  }
+
+  /**
    * Sets the rowAction.
    * 
    * @param rowAction
@@ -85,5 +75,15 @@ public class RCollectionComponent extends RComponent {
    */
   public void setRowAction(RAction rowAction) {
     this.rowAction = rowAction;
+  }
+
+  /**
+   * Sets the selectionMode.
+   * 
+   * @param selectionMode
+   *          the selectionMode to set.
+   */
+  public void setSelectionMode(String selectionMode) {
+    this.selectionMode = selectionMode;
   }
 }

@@ -95,10 +95,6 @@ public class RandomGUID extends Object {
   private static Random       myRand;
   private static SecureRandom mySecureRand;
   private static String       sId;
-  private String              valueAfterMD5  = "";
-
-  private String              valueBeforeMD5 = "";
-
   /**
    * Static block to take care of one time secureRandom seed. It takes a few
    * seconds to initialize SecureRandom. You might want to consider removing
@@ -115,6 +111,10 @@ public class RandomGUID extends Object {
       e.printStackTrace();
     }
   }
+
+  private String              valueAfterMD5  = "";
+
+  private String              valueBeforeMD5 = "";
 
   /**
    * Default constructor. With no specification of security option, this

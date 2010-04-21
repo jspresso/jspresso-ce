@@ -89,19 +89,19 @@ public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
   private IApplicationSession                              applicationSession;
-  private IEntityFactory                                   entityFactory;
-  private IModelConnectorFactory                           modelConnectorFactory;
-  private ComponentTransferStructure<? extends IComponent> transferStructure;
-
-  private Map<String, IValueConnector>                     workspaceConnectors;
-
   private IEntityCloneFactory                              carbonEntityCloneFactory;
   private IComponentCollectionFactory<IComponent>          collectionFactory;
   private BeanPropertyChangeRecorder                       dirtRecorder;
+
+  private IEntityFactory                                   entityFactory;
+
   private IEntityRegistry                                  entityRegistry;
+  private IModelConnectorFactory                           modelConnectorFactory;
+  private TransactionTemplate                              transactionTemplate;
+  private ComponentTransferStructure<? extends IComponent> transferStructure;
   private IEntityUnitOfWork                                unitOfWork;
 
-  private TransactionTemplate                              transactionTemplate;
+  private Map<String, IValueConnector>                     workspaceConnectors;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
@@ -113,9 +113,79 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  public void beginUnitOfWork() {
+    if (unitOfWork.isActive()) {
+      throw new BackendException(
+          "Cannot begin a new unit of work. Another one is already active.");
+    }
+    unitOfWork.begin();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void checkWorkspaceAccess(String workspaceName) {
     checkAccess((ISecurable) getWorkspaceConnector(workspaceName)
         .getConnectorValue());
+  }
+
+  /**
+   * Clears the pending operations.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void clearPendingOperations() {
+    unitOfWork.clearPendingOperations();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IEntity cloneInUnitOfWork(IEntity entity) {
+    if (!unitOfWork.isActive()) {
+      throw new BackendException(
+          "Cannot use a unit of work that has not begun.");
+    }
+    return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
+    if (!unitOfWork.isActive()) {
+      throw new BackendException(
+          "Cannot use a unit of work that has not begun.");
+    }
+    List<IEntity> uowEntities = new ArrayList<IEntity>();
+    // Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = new
+    // HashMap<Class<?>, Map<Serializable, IEntity>>();
+    Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = unitOfWork
+        .getRegisteredEntities();
+    for (IEntity entity : entities) {
+      uowEntities.add(cloneInUnitOfWork(entity, alreadyCloned));
+    }
+    return uowEntities;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void commitUnitOfWork() {
+    if (!unitOfWork.isActive()) {
+      throw new BackendException(
+          "Cannot commit a unit of work that has not begun.");
+    }
+    try {
+      Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
+      if (unitOfWork.getUpdatedEntities() != null) {
+        for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
+          merge(entityToMergeBack, EMergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
+        }
+      }
+    } finally {
+      unitOfWork.commit();
+    }
   }
 
   /**
@@ -183,6 +253,16 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  public Map<String, Object> getDirtyProperties(IEntity entity) {
+    if (unitOfWork.isActive()) {
+      return unitOfWork.getDirtyProperties(entity);
+    }
+    return dirtRecorder.getChangedProperties(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IEntityFactory getEntityFactory() {
     return entityFactory;
   }
@@ -211,8 +291,44 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
+      Object entityId) {
+    return entityRegistry.get(entityContract, entityId);
+  }
+
+  /**
+   * Gets the transactionTemplate.
+   * 
+   * @return the transactionTemplate.
+   */
+  public TransactionTemplate getTransactionTemplate() {
+    return transactionTemplate;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IValueConnector getWorkspaceConnector(String workspaceName) {
     return workspaceConnectors.get(workspaceName);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void initializePropertyIfNeeded(IComponent componentOrEntity,
+      String propertyName) {
+    Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
+    if (propertyValue instanceof Collection<?>) {
+      for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite
+          .hasNext();) {
+        Object collectionElement = ite.next();
+        if (collectionElement instanceof IEntity) {
+          if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
+            ite.remove();
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -243,222 +359,6 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public ComponentTransferStructure<? extends IComponent> retrieveComponents() {
-    return transferStructure;
-  }
-
-  /**
-   * Assigns the application session to this backend controller. This property
-   * can only be set once and should only be used by the DI container. It will
-   * rarely be changed from built-in defaults unless you need to specify a
-   * custom implementation instance to be used.
-   * 
-   * @param applicationSession
-   *          the applicationSession to set.
-   */
-  public void setApplicationSession(IApplicationSession applicationSession) {
-    if (this.applicationSession != null) {
-      throw new IllegalArgumentException(
-          "application session can only be configured once.");
-    }
-    this.applicationSession = applicationSession;
-  }
-
-  /**
-   * Configures the entity factory to use to create new entities. Backend
-   * controllers only accept instances of
-   * <code>ControllerAwareProxyEntityFactory</code> or a subclass. This is
-   * because the backend controller must keep track of created entities.
-   * Jspresso entity implementations also use the controller from which they
-   * were created behind the scene.
-   * 
-   * @param entityFactory
-   *          the entityFactory to set.
-   */
-  public void setEntityFactory(IEntityFactory entityFactory) {
-    if (!(entityFactory instanceof ControllerAwareProxyEntityFactory)) {
-      throw new IllegalArgumentException(
-          "entityFactory must be a ControllerAwareProxyEntityFactory.");
-    }
-    this.entityFactory = entityFactory;
-    ((ControllerAwareProxyEntityFactory) getEntityFactory())
-        .setBackendController(this);
-  }
-
-  /**
-   * Configures the model connector factory to use to create new model
-   * connectors. Connectors are adapters used by the binding layer to access
-   * domain model values.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean start(Locale startingLocale) {
-    applicationSession.setLocale(startingLocale);
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean stop() {
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void storeComponents(
-      ComponentTransferStructure<? extends IComponent> components) {
-    this.transferStructure = components;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void beginUnitOfWork() {
-    if (unitOfWork.isActive()) {
-      throw new BackendException(
-          "Cannot begin a new unit of work. Another one is already active.");
-    }
-    unitOfWork.begin();
-  }
-
-  /**
-   * Clears the pending operations.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void clearPendingOperations() {
-    unitOfWork.clearPendingOperations();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IEntity cloneInUnitOfWork(IEntity entity) {
-    if (!unitOfWork.isActive()) {
-      throw new BackendException(
-          "Cannot use a unit of work that has not begun.");
-    }
-    return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
-    if (!unitOfWork.isActive()) {
-      throw new BackendException(
-          "Cannot use a unit of work that has not begun.");
-    }
-    List<IEntity> uowEntities = new ArrayList<IEntity>();
-    // Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = new
-    // HashMap<Class<?>, Map<Serializable, IEntity>>();
-    Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = unitOfWork
-        .getRegisteredEntities();
-    for (IEntity entity : entities) {
-      uowEntities.add(cloneInUnitOfWork(entity, alreadyCloned));
-    }
-    return uowEntities;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void commitUnitOfWork() {
-    if (!unitOfWork.isActive()) {
-      throw new BackendException(
-          "Cannot commit a unit of work that has not begun.");
-    }
-    try {
-      Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
-      if (unitOfWork.getUpdatedEntities() != null) {
-        for (IEntity entityToMergeBack : unitOfWork.getUpdatedEntities()) {
-          merge(entityToMergeBack, EMergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
-        }
-      }
-    } finally {
-      unitOfWork.commit();
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Map<String, Object> getDirtyProperties(IEntity entity) {
-    if (unitOfWork.isActive()) {
-      return unitOfWork.getDirtyProperties(entity);
-    }
-    return dirtRecorder.getChangedProperties(entity);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
-      Object entityId) {
-    return entityRegistry.get(entityContract, entityId);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void initializePropertyIfNeeded(IComponent componentOrEntity,
-      String propertyName) {
-    Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
-    if (propertyValue instanceof Collection<?>) {
-      for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite
-          .hasNext();) {
-        Object collectionElement = ite.next();
-        if (collectionElement instanceof IEntity) {
-          if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
-            ite.remove();
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Gets wether the entity is dirty (has changes that need to be updated to the
-   * persistent store).
-   * 
-   * @param entity
-   *          the entity to test.
-   * @return true if the entity is dirty.
-   */
-  protected boolean isDirty(IEntity entity) {
-    if (entity == null) {
-      return false;
-    }
-    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    IComponentDescriptor<?> entityDescriptor = getEntityFactory()
-        .getComponentDescriptor(entity.getComponentContract());
-    if (entityDirtyProperties != null) {
-      entityDirtyProperties.remove(IEntity.VERSION);
-      for (Map.Entry<String, Object> dirtyProperty : entityDirtyProperties
-          .entrySet()) {
-        if (!entityDescriptor.getPropertyDescriptor(dirtyProperty.getKey())
-            .isComputed()) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public boolean isAnyDirtyInDepth(Collection<?> elements) {
     Set<IEntity> alreadyTraversed = new HashSet<IEntity>();
     if (elements != null) {
@@ -478,59 +378,6 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public boolean isDirtyInDepth(IEntity entity) {
     return isAnyDirtyInDepth(Collections.singleton(entity));
-  }
-
-  private boolean isDirtyInDepth(IEntity entity, Set<IEntity> alreadyTraversed) {
-    alreadyTraversed.add(entity);
-    if (isDirty(entity)) {
-      return true;
-    }
-    Map<String, Object> entityProps = entity.straightGetProperties();
-    for (Map.Entry<String, Object> property : entityProps.entrySet()) {
-      if (property.getValue() instanceof IEntity) {
-        if (isInitialized(property.getValue())
-            && !alreadyTraversed.contains(property.getValue())) {
-          if (isDirtyInDepth((IEntity) property.getValue(), alreadyTraversed)) {
-            return true;
-          }
-        }
-      } else if (property.getValue() instanceof Collection<?>) {
-        if (isInitialized(property.getValue())) {
-          for (Object elt : ((Collection<?>) property.getValue())) {
-            if (elt instanceof IEntity && !alreadyTraversed.contains(elt)) {
-              if (isDirtyInDepth((IEntity) elt, alreadyTraversed)) {
-                return true;
-              }
-            }
-          }
-        }
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Gets wether the entity property is dirty (has changes that need to be
-   * updated to the persistent store).
-   * 
-   * @param entity
-   *          the entity to test.
-   * @param propertyName
-   *          the entity property to test.
-   * @return true if the entity is dirty.
-   */
-  protected boolean isDirty(IEntity entity, String propertyName) {
-    if (entity == null) {
-      return false;
-    }
-    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    if (entityDirtyProperties != null
-        && entityDirtyProperties.containsKey(propertyName)) {
-      return !getEntityFactory().getComponentDescriptor(
-          entity.getComponentContract()).getPropertyDescriptor(propertyName)
-          .isComputed();
-    }
-    return false;
   }
 
   /**
@@ -646,12 +493,36 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  public ComponentTransferStructure<? extends IComponent> retrieveComponents() {
+    return transferStructure;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void rollbackUnitOfWork() {
     if (!unitOfWork.isActive()) {
       throw new BackendException(
           "Cannot rollback a unit of work that has not begun.");
     }
     unitOfWork.rollback();
+  }
+
+  /**
+   * Assigns the application session to this backend controller. This property
+   * can only be set once and should only be used by the DI container. It will
+   * rarely be changed from built-in defaults unless you need to specify a
+   * custom implementation instance to be used.
+   * 
+   * @param applicationSession
+   *          the applicationSession to set.
+   */
+  public void setApplicationSession(IApplicationSession applicationSession) {
+    if (this.applicationSession != null) {
+      throw new IllegalArgumentException(
+          "application session can only be configured once.");
+    }
+    this.applicationSession = applicationSession;
   }
 
   /**
@@ -687,6 +558,27 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
+   * Configures the entity factory to use to create new entities. Backend
+   * controllers only accept instances of
+   * <code>ControllerAwareProxyEntityFactory</code> or a subclass. This is
+   * because the backend controller must keep track of created entities.
+   * Jspresso entity implementations also use the controller from which they
+   * were created behind the scene.
+   * 
+   * @param entityFactory
+   *          the entityFactory to set.
+   */
+  public void setEntityFactory(IEntityFactory entityFactory) {
+    if (!(entityFactory instanceof ControllerAwareProxyEntityFactory)) {
+      throw new IllegalArgumentException(
+          "entityFactory must be a ControllerAwareProxyEntityFactory.");
+    }
+    this.entityFactory = entityFactory;
+    ((ControllerAwareProxyEntityFactory) getEntityFactory())
+        .setBackendController(this);
+  }
+
+  /**
    * Configures the entity registry to be used in this controller. The role of
    * the entity registry is to garantee that an entity will be represented by at
    * most 1 instance in the user application session. This property can only be
@@ -706,6 +598,40 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
+   * Configures the model connector factory to use to create new model
+   * connectors. Connectors are adapters used by the binding layer to access
+   * domain model values.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
+   * Assigns the Spring transaction template to this backend controller. This
+   * property can only be set once and should only be used by the DI container.
+   * It will rarely be changed from built-in defaults unless you need to specify
+   * a custom implementation instance to be used.
+   * <p>
+   * The configured instance is the one that will be returned by the
+   * controller's <code>getTransactionTemplate()</code> method that should be
+   * used by the service layer for transaction management.
+   * 
+   * @param transactionTemplate
+   *          the transactionTemplate to set.
+   */
+  public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+    if (this.transactionTemplate != null) {
+      throw new IllegalArgumentException(
+          "Spring transaction template can only be configured once.");
+    }
+    this.transactionTemplate = transactionTemplate;
+  }
+
+  /**
    * Configures the &quot;Unit of Work&quot; implementation to be used by this
    * controller. The same UOW instance is reused (started, cleared) all along
    * the session. This property can only be set once and should only be used by
@@ -721,6 +647,29 @@ public abstract class AbstractBackendController extends AbstractController
           "unitOfWork can only be configured once.");
     }
     this.unitOfWork = unitOfWork;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean start(Locale startingLocale) {
+    applicationSession.setLocale(startingLocale);
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean stop() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void storeComponents(
+      ComponentTransferStructure<? extends IComponent> components) {
+    this.transferStructure = components;
   }
 
   /**
@@ -770,6 +719,58 @@ public abstract class AbstractBackendController extends AbstractController
    */
   protected Collection<IEntity> getEntitiesRegisteredForUpdate() {
     return unitOfWork.getEntitiesRegisteredForUpdate();
+  }
+
+  /**
+   * Gets wether the entity is dirty (has changes that need to be updated to the
+   * persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @return true if the entity is dirty.
+   */
+  protected boolean isDirty(IEntity entity) {
+    if (entity == null) {
+      return false;
+    }
+    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
+    IComponentDescriptor<?> entityDescriptor = getEntityFactory()
+        .getComponentDescriptor(entity.getComponentContract());
+    if (entityDirtyProperties != null) {
+      entityDirtyProperties.remove(IEntity.VERSION);
+      for (Map.Entry<String, Object> dirtyProperty : entityDirtyProperties
+          .entrySet()) {
+        if (!entityDescriptor.getPropertyDescriptor(dirtyProperty.getKey())
+            .isComputed()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Gets wether the entity property is dirty (has changes that need to be
+   * updated to the persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @param propertyName
+   *          the entity property to test.
+   * @return true if the entity is dirty.
+   */
+  protected boolean isDirty(IEntity entity, String propertyName) {
+    if (entity == null) {
+      return false;
+    }
+    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
+    if (entityDirtyProperties != null
+        && entityDirtyProperties.containsKey(propertyName)) {
+      return !getEntityFactory().getComponentDescriptor(
+          entity.getComponentContract()).getPropertyDescriptor(propertyName)
+          .isComputed();
+    }
+    return false;
   }
 
   /**
@@ -918,6 +919,35 @@ public abstract class AbstractBackendController extends AbstractController
         .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
     uowEntity.onLoad();
     return uowEntity;
+  }
+
+  private boolean isDirtyInDepth(IEntity entity, Set<IEntity> alreadyTraversed) {
+    alreadyTraversed.add(entity);
+    if (isDirty(entity)) {
+      return true;
+    }
+    Map<String, Object> entityProps = entity.straightGetProperties();
+    for (Map.Entry<String, Object> property : entityProps.entrySet()) {
+      if (property.getValue() instanceof IEntity) {
+        if (isInitialized(property.getValue())
+            && !alreadyTraversed.contains(property.getValue())) {
+          if (isDirtyInDepth((IEntity) property.getValue(), alreadyTraversed)) {
+            return true;
+          }
+        }
+      } else if (property.getValue() instanceof Collection<?>) {
+        if (isInitialized(property.getValue())) {
+          for (Object elt : ((Collection<?>) property.getValue())) {
+            if (elt instanceof IEntity && !alreadyTraversed.contains(elt)) {
+              if (isDirtyInDepth((IEntity) elt, alreadyTraversed)) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
   }
 
   @SuppressWarnings("unchecked")
@@ -1103,35 +1133,5 @@ public abstract class AbstractBackendController extends AbstractController
       varRegisteredComponent.straightSetProperties(mergedProperties);
     }
     return varRegisteredComponent;
-  }
-
-  /**
-   * Gets the transactionTemplate.
-   * 
-   * @return the transactionTemplate.
-   */
-  public TransactionTemplate getTransactionTemplate() {
-    return transactionTemplate;
-  }
-
-  /**
-   * Assigns the Spring transaction template to this backend controller. This
-   * property can only be set once and should only be used by the DI container.
-   * It will rarely be changed from built-in defaults unless you need to specify
-   * a custom implementation instance to be used.
-   * <p>
-   * The configured instance is the one that will be returned by the
-   * controller's <code>getTransactionTemplate()</code> method that should be
-   * used by the service layer for transaction management.
-   * 
-   * @param transactionTemplate
-   *          the transactionTemplate to set.
-   */
-  public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
-    if (this.transactionTemplate != null) {
-      throw new IllegalArgumentException(
-          "Spring transaction template can only be configured once.");
-    }
-    this.transactionTemplate = transactionTemplate;
   }
 }

@@ -90,6 +90,15 @@ public class ActionMap {
   }
 
   /**
+   * Gets the renderingOptions.
+   * 
+   * @return the renderingOptions.
+   */
+  public ERenderingOptions getRenderingOptions() {
+    return renderingOptions;
+  }
+
+  /**
    * Sets the action lists list.
    * 
    * @param actionLists
@@ -117,14 +126,5 @@ public class ActionMap {
    */
   public void setRenderingOptions(ERenderingOptions renderingOptions) {
     this.renderingOptions = renderingOptions;
-  }
-
-  /**
-   * Gets the renderingOptions.
-   * 
-   * @return the renderingOptions.
-   */
-  public ERenderingOptions getRenderingOptions() {
-    return renderingOptions;
   }
 }

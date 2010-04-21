@@ -80,6 +80,29 @@ public class ControllerAwareComponentInvocationHandler extends
   }
 
   /**
+   * Sets the JAAS subject to subject aware extensions.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void configureExtension(IComponentExtension<IComponent> extension) {
+    super.configureExtension(extension);
+    if (extension instanceof ISubjectAware && getBackendController() != null) {
+      ((ISubjectAware) extension).setSubject(getBackendController()
+          .getSubject());
+    }
+  }
+
+  /**
+   * Gets the backendController.
+   * 
+   * @return the backendController.
+   */
+  protected IBackendController getBackendController() {
+    return backendController;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
@@ -138,28 +161,5 @@ public class ControllerAwareComponentInvocationHandler extends
       super.storeReferenceProperty(propertyDescriptor, oldPropertyValue,
           newPropertyValue);
     }
-  }
-
-  /**
-   * Sets the JAAS subject to subject aware extensions.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void configureExtension(IComponentExtension<IComponent> extension) {
-    super.configureExtension(extension);
-    if (extension instanceof ISubjectAware && getBackendController() != null) {
-      ((ISubjectAware) extension).setSubject(getBackendController()
-          .getSubject());
-    }
-  }
-
-  /**
-   * Gets the backendController.
-   * 
-   * @return the backendController.
-   */
-  protected IBackendController getBackendController() {
-    return backendController;
   }
 }

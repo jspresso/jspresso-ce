@@ -27,12 +27,12 @@ package org.jspresso.framework.model.descriptor.basic;
 public enum EFetchType {
 
   /**
-   * <code>SELECT</code> fetch type.
-   */
-  SELECT,
-
-  /**
    * <code>JOIN</code> fetch type.
    */
-  JOIN
+  JOIN,
+
+  /**
+   * <code>SELECT</code> fetch type.
+   */
+  SELECT
 }

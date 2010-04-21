@@ -30,11 +30,13 @@ import org.jspresso.framework.action.IAction;
 public interface ICollectionViewDescriptor extends IViewDescriptor {
 
   /**
-   * Gets the type of selection allowed on the collection view.
+   * Gets the item selection action that will be attached to the created
+   * collection view.
    * 
-   * @return the type of selection allowed on the collection view.
+   * @return the item selection action that will be attached to the created
+   *         collection view.
    */
-  ESelectionMode getSelectionMode();
+  IAction getItemSelectionAction();
 
   /**
    * Gets the action that is registered on the selected collection element.
@@ -44,11 +46,9 @@ public interface ICollectionViewDescriptor extends IViewDescriptor {
   IAction getRowAction();
 
   /**
-   * Gets the item selection action that will be attached to the created
-   * collection view.
+   * Gets the type of selection allowed on the collection view.
    * 
-   * @return the item selection action that will be attached to the created
-   *         collection view.
+   * @return the type of selection allowed on the collection view.
    */
-  IAction getItemSelectionAction();
+  ESelectionMode getSelectionMode();
 }

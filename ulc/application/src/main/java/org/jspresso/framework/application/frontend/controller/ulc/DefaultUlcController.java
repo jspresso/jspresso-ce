@@ -92,9 +92,73 @@ import com.ulcjava.base.shared.IWindowConstants;
 public class DefaultUlcController extends
     AbstractFrontendController<ULCComponent, ULCIcon, IAction> {
 
+  private static final String CANCEL_OPTION = "cancel";
+
+  private static final String NO_OPTION     = "no";
+
+  private static final String OK_OPTION     = "ok";
+
+  private static final String YES_OPTION    = "yes";
+
   private ULCFrame                              controllerFrame;
 
   private Map<String, ULCExtendedInternalFrame> workspaceInternalFrames;
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext,
+      @SuppressWarnings("unused") List<IAction> actions,
+      @SuppressWarnings("unused") String title,
+      @SuppressWarnings("unused") ULCComponent sourceComponent,
+      @SuppressWarnings("unused") Map<String, Object> context,
+      Dimension dimension, @SuppressWarnings("unused") boolean reuseCurrent) {
+    StringBuffer flashVars = new StringBuffer();
+    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
+      flashVars.append("&").append(flashVar.getKey()).append("=").append(
+          flashVar.getValue());
+    }
+    int width = 600;
+    int height = 600;
+    if (dimension != null) {
+      width = dimension.getWidth();
+      height = dimension.getHeight();
+    }
+    final String htmlText = "<html>"
+        + "<body bgcolor=\"#ffffff\">"
+        + "<OBJECT classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" "
+        + "codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\" width=\""
+        + width
+        + "\" height=\""
+        + height
+        + "\" id=\"Column3D\" >"
+        + "<param name=\"movie\" value=\""
+        + swfUrl
+        + "\" />"
+        + "<param name=\"FlashVars\" value=\""
+        + flashVars.toString()
+        + "\">"
+        + "<embed src=\""
+        + swfUrl
+        + "\" flashVars=\""
+        + flashVars.toString()
+        + "\" quality=\"high\" width=\""
+        + width
+        + "\" height=\""
+        + height
+        + "\" name=\"Column3D\" type=\"application/x-shockwave-flash\" "
+        + "pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"
+        + "</object>" + "</body>" + "</html>";
+    IResource resource = new MemoryResource(null, "text/html", htmlText
+        .getBytes());
+    String resourceId = ResourceManager.getInstance().register(resource);
+    try {
+      DocumentHelper.showDocument(resourceId);
+    } catch (IOException ex) {
+      throw new NestedRuntimeException(ex);
+    }
+  }
 
   /**
    * {@inheritDoc}
@@ -294,6 +358,52 @@ public class DefaultUlcController extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void popupInfo(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message) {
+    displayPopup(sourceComponent, title, iconImageUrl, message, null,
+        OK_OPTION, null, null, null, null, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupOkCancel(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message,
+      org.jspresso.framework.action.IAction okAction,
+      org.jspresso.framework.action.IAction cancelAction,
+      Map<String, Object> context) {
+    displayPopup(sourceComponent, title, iconImageUrl, message, context,
+        OK_OPTION, CANCEL_OPTION, null, okAction, cancelAction, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNo(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message,
+      org.jspresso.framework.action.IAction yesAction,
+      org.jspresso.framework.action.IAction noAction,
+      Map<String, Object> context) {
+    displayPopup(sourceComponent, title, iconImageUrl, message, context,
+        YES_OPTION, NO_OPTION, null, yesAction, noAction, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNoCancel(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message,
+      org.jspresso.framework.action.IAction yesAction,
+      org.jspresso.framework.action.IAction noAction,
+      org.jspresso.framework.action.IAction cancelAction,
+      Map<String, Object> context) {
+    displayPopup(sourceComponent, title, iconImageUrl, message, context,
+        YES_OPTION, NO_OPTION, CANCEL_OPTION, yesAction, noAction, cancelAction);
+  }
+
+  /**
    * Creates the initial view from the root view descriptor, then a SFrame
    * containing this view and presents it to the user.
    * <p>
@@ -348,9 +458,27 @@ public class DefaultUlcController extends
     return applicationMenuBar;
   }
 
-  private void updateControllerFrame() {
-    controllerFrame.setMenuBar(createApplicationMenuBar());
+  private void createControllerFrame() {
+    controllerFrame = new ULCFrame();
+    controllerFrame.setContentPane(new ULCDesktopPane());
+    controllerFrame
+        .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    controllerFrame.addWindowListener(new IWindowListener() {
+
+      private static final long serialVersionUID = -7845554617417316256L;
+
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
+        stop();
+      }
+    });
+    controllerFrame.pack();
+    int screenRes = ClientContext.getScreenResolution();
+    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    controllerFrame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
+        getIconFactory().getSmallIconSize()));
+    UlcUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
+    controllerFrame.setVisible(true);
   }
 
   private List<ULCMenu> createHelpActionMenus() {
@@ -432,6 +560,53 @@ public class DefaultUlcController extends
     return createMenus(createWorkspaceActionMap(), true);
   }
 
+  private void displayPopup(ULCComponent sourceComponent, String title,
+      String iconImageUrl, String message, final Map<String, Object> context,
+      String firstOption, String secondOption, String thirdOption,
+      final org.jspresso.framework.action.IAction firstAction,
+      final org.jspresso.framework.action.IAction secondAction,
+      final org.jspresso.framework.action.IAction thirdAction) {
+    ITranslationProvider translationProvider = getTranslationProvider();
+    Locale locale = getLocale();
+    final Map<String, org.jspresso.framework.action.IAction> optionReverseDictionary;
+    optionReverseDictionary = new HashMap<String, org.jspresso.framework.action.IAction>();
+    String translatedFirstOption = null;
+    if (firstOption != null) {
+      translatedFirstOption = translationProvider.getTranslation(firstOption,
+          locale);
+      optionReverseDictionary.put(translatedFirstOption, firstAction);
+    }
+    String translatedSecondOption = null;
+    if (secondOption != null) {
+      translatedSecondOption = translationProvider.getTranslation(secondOption,
+          locale);
+      optionReverseDictionary.put(translatedSecondOption, secondAction);
+    }
+    String translatedThirdOption = null;
+    if (thirdOption != null) {
+      translatedThirdOption = translationProvider.getTranslation(thirdOption,
+          locale);
+      optionReverseDictionary.put(translatedThirdOption, thirdAction);
+    }
+    final ULCAlert alert = new ULCAlert(UlcUtil
+        .getVisibleWindow(sourceComponent), title, message,
+        translatedFirstOption, translatedSecondOption, translatedThirdOption,
+        getIconFactory().getIcon(iconImageUrl,
+            getIconFactory().getLargeIconSize()));
+    alert.addWindowListener(new IWindowListener() {
+
+      private static final long serialVersionUID = -6049928144066455758L;
+
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
+        org.jspresso.framework.action.IAction nextAction = optionReverseDictionary
+            .get(alert.getValue());
+        if (nextAction != null) {
+          execute(nextAction, context);
+        }
+      }
+    });
+    alert.show();
+  }
   private void initLoginProcess() {
     createControllerFrame();
     if (getLoginContextName() == null) {
@@ -497,30 +672,10 @@ public class DefaultUlcController extends
     UlcUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }
-
-  private void createControllerFrame() {
-    controllerFrame = new ULCFrame();
-    controllerFrame.setContentPane(new ULCDesktopPane());
-    controllerFrame
-        .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
-    controllerFrame.addWindowListener(new IWindowListener() {
-
-      private static final long serialVersionUID = -7845554617417316256L;
-
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
-        stop();
-      }
-    });
-    controllerFrame.pack();
-    int screenRes = ClientContext.getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-    controllerFrame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
-        getIconFactory().getSmallIconSize()));
-    UlcUtil.centerOnScreen(controllerFrame);
+  private void updateControllerFrame() {
+    controllerFrame.setMenuBar(createApplicationMenuBar());
     updateFrameTitle();
-    controllerFrame.setVisible(true);
   }
-
   private void updateFrameTitle() {
     String workspaceName = getSelectedWorkspaceName();
     if (workspaceName != null) {
@@ -560,6 +715,22 @@ public class DefaultUlcController extends
     /**
      * {@inheritDoc}
      */
+    public void internalFrameClosed(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
+      displayWorkspace(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void internalFrameClosing(
+        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
+      displayWorkspace(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void internalFrameDeactivated(
         @SuppressWarnings("unused") ExtendedInternalFrameEvent e) {
       // displayWorkspace(null);
@@ -588,176 +759,5 @@ public class DefaultUlcController extends
         @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
       displayWorkspace(workspaceName);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void internalFrameClosing(
-        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
-      displayWorkspace(null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void internalFrameClosed(
-        @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
-      displayWorkspace(null);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void displayFlashObject(String swfUrl,
-      Map<String, String> flashContext,
-      @SuppressWarnings("unused") List<IAction> actions,
-      @SuppressWarnings("unused") String title,
-      @SuppressWarnings("unused") ULCComponent sourceComponent,
-      @SuppressWarnings("unused") Map<String, Object> context,
-      Dimension dimension, @SuppressWarnings("unused") boolean reuseCurrent) {
-    StringBuffer flashVars = new StringBuffer();
-    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
-      flashVars.append("&").append(flashVar.getKey()).append("=").append(
-          flashVar.getValue());
-    }
-    int width = 600;
-    int height = 600;
-    if (dimension != null) {
-      width = dimension.getWidth();
-      height = dimension.getHeight();
-    }
-    final String htmlText = "<html>"
-        + "<body bgcolor=\"#ffffff\">"
-        + "<OBJECT classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" "
-        + "codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\" width=\""
-        + width
-        + "\" height=\""
-        + height
-        + "\" id=\"Column3D\" >"
-        + "<param name=\"movie\" value=\""
-        + swfUrl
-        + "\" />"
-        + "<param name=\"FlashVars\" value=\""
-        + flashVars.toString()
-        + "\">"
-        + "<embed src=\""
-        + swfUrl
-        + "\" flashVars=\""
-        + flashVars.toString()
-        + "\" quality=\"high\" width=\""
-        + width
-        + "\" height=\""
-        + height
-        + "\" name=\"Column3D\" type=\"application/x-shockwave-flash\" "
-        + "pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"
-        + "</object>" + "</body>" + "</html>";
-    IResource resource = new MemoryResource(null, "text/html", htmlText
-        .getBytes());
-    String resourceId = ResourceManager.getInstance().register(resource);
-    try {
-      DocumentHelper.showDocument(resourceId);
-    } catch (IOException ex) {
-      throw new NestedRuntimeException(ex);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupInfo(ULCComponent sourceComponent, String title,
-      String iconImageUrl, String message) {
-    displayPopup(sourceComponent, title, iconImageUrl, message, null,
-        OK_OPTION, null, null, null, null, null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupOkCancel(ULCComponent sourceComponent, String title,
-      String iconImageUrl, String message,
-      org.jspresso.framework.action.IAction okAction,
-      org.jspresso.framework.action.IAction cancelAction,
-      Map<String, Object> context) {
-    displayPopup(sourceComponent, title, iconImageUrl, message, context,
-        OK_OPTION, CANCEL_OPTION, null, okAction, cancelAction, null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupYesNo(ULCComponent sourceComponent, String title,
-      String iconImageUrl, String message,
-      org.jspresso.framework.action.IAction yesAction,
-      org.jspresso.framework.action.IAction noAction,
-      Map<String, Object> context) {
-    displayPopup(sourceComponent, title, iconImageUrl, message, context,
-        YES_OPTION, NO_OPTION, null, yesAction, noAction, null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupYesNoCancel(ULCComponent sourceComponent, String title,
-      String iconImageUrl, String message,
-      org.jspresso.framework.action.IAction yesAction,
-      org.jspresso.framework.action.IAction noAction,
-      org.jspresso.framework.action.IAction cancelAction,
-      Map<String, Object> context) {
-    displayPopup(sourceComponent, title, iconImageUrl, message, context,
-        YES_OPTION, NO_OPTION, CANCEL_OPTION, yesAction, noAction, cancelAction);
-  }
-
-  private static final String CANCEL_OPTION = "cancel";
-  private static final String NO_OPTION     = "no";
-  private static final String OK_OPTION     = "ok";
-  private static final String YES_OPTION    = "yes";
-
-  private void displayPopup(ULCComponent sourceComponent, String title,
-      String iconImageUrl, String message, final Map<String, Object> context,
-      String firstOption, String secondOption, String thirdOption,
-      final org.jspresso.framework.action.IAction firstAction,
-      final org.jspresso.framework.action.IAction secondAction,
-      final org.jspresso.framework.action.IAction thirdAction) {
-    ITranslationProvider translationProvider = getTranslationProvider();
-    Locale locale = getLocale();
-    final Map<String, org.jspresso.framework.action.IAction> optionReverseDictionary;
-    optionReverseDictionary = new HashMap<String, org.jspresso.framework.action.IAction>();
-    String translatedFirstOption = null;
-    if (firstOption != null) {
-      translatedFirstOption = translationProvider.getTranslation(firstOption,
-          locale);
-      optionReverseDictionary.put(translatedFirstOption, firstAction);
-    }
-    String translatedSecondOption = null;
-    if (secondOption != null) {
-      translatedSecondOption = translationProvider.getTranslation(secondOption,
-          locale);
-      optionReverseDictionary.put(translatedSecondOption, secondAction);
-    }
-    String translatedThirdOption = null;
-    if (thirdOption != null) {
-      translatedThirdOption = translationProvider.getTranslation(thirdOption,
-          locale);
-      optionReverseDictionary.put(translatedThirdOption, thirdAction);
-    }
-    final ULCAlert alert = new ULCAlert(UlcUtil
-        .getVisibleWindow(sourceComponent), title, message,
-        translatedFirstOption, translatedSecondOption, translatedThirdOption,
-        getIconFactory().getIcon(iconImageUrl,
-            getIconFactory().getLargeIconSize()));
-    alert.addWindowListener(new IWindowListener() {
-
-      private static final long serialVersionUID = -6049928144066455758L;
-
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent event) {
-        org.jspresso.framework.action.IAction nextAction = optionReverseDictionary
-            .get(alert.getValue());
-        if (nextAction != null) {
-          execute(nextAction, context);
-        }
-      }
-    });
-    alert.show();
   }
 }

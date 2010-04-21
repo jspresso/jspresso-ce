@@ -31,8 +31,8 @@ import org.jspresso.framework.application.model.Module;
  */
 public class ModuleHistoryEntry {
 
-  private String            workspaceName;
   private Reference<Module> moduleRef;
+  private String            workspaceName;
 
   /**
    * Constructs a new <code>ModuleHistoryEntry</code> instance.
@@ -52,21 +52,21 @@ public class ModuleHistoryEntry {
   }
 
   /**
-   * Gets the workspaceName.
-   * 
-   * @return the workspaceName.
-   */
-  public String getWorkspaceName() {
-    return workspaceName;
-  }
-
-  /**
    * Gets the module.
    * 
    * @return the module.
    */
   public Module getModule() {
     return moduleRef.get();
+  }
+
+  /**
+   * Gets the workspaceName.
+   * 
+   * @return the workspaceName.
+   */
+  public String getWorkspaceName() {
+    return workspaceName;
   }
 
 }

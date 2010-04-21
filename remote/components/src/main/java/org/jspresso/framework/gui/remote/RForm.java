@@ -29,19 +29,11 @@ public class RForm extends RContainer {
   private static final long serialVersionUID = -5376646056261143239L;
 
   private int               columnCount;
-  private RComponent[]      elements;
   private RComponent[]      elementLabels;
+  private RComponent[]      elements;
   private Integer[]         elementWidths;
 
   private String            labelsPosition;
-
-  /**
-   * Constructs a new <code>RForm</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RForm() {
-    // For GWT support
-  }
 
   /**
    * Constructs a new <code>RForm</code> instance.
@@ -54,12 +46,29 @@ public class RForm extends RContainer {
   }
 
   /**
+   * Constructs a new <code>RForm</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RForm() {
+    // For GWT support
+  }
+
+  /**
    * Gets the columnCount.
    * 
    * @return the columnCount.
    */
   public int getColumnCount() {
     return columnCount;
+  }
+
+  /**
+   * Gets the elementLabels.
+   * 
+   * @return the elementLabels.
+   */
+  public RComponent[] getElementLabels() {
+    return elementLabels;
   }
 
   /**
@@ -100,6 +109,16 @@ public class RForm extends RContainer {
   }
 
   /**
+   * Sets the elementLabels.
+   * 
+   * @param elementLabels
+   *          the elementLabels to set.
+   */
+  public void setElementLabels(RComponent[] elementLabels) {
+    this.elementLabels = elementLabels;
+  }
+
+  /**
    * Sets the elements.
    * 
    * @param elements
@@ -127,25 +146,6 @@ public class RForm extends RContainer {
    */
   public void setLabelsPosition(String labelsPosition) {
     this.labelsPosition = labelsPosition;
-  }
-
-  /**
-   * Gets the elementLabels.
-   * 
-   * @return the elementLabels.
-   */
-  public RComponent[] getElementLabels() {
-    return elementLabels;
-  }
-
-  /**
-   * Sets the elementLabels.
-   * 
-   * @param elementLabels
-   *          the elementLabels to set.
-   */
-  public void setElementLabels(RComponent[] elementLabels) {
-    this.elementLabels = elementLabels;
   }
 
 }

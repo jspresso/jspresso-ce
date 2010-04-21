@@ -45,149 +45,18 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     implements IViewDescriptor {
 
   private ActionMap          actionMap;
+  private String             automationSeed;
   private String             background;
   private EBorderType        borderType = EBorderType.NONE;
   private String             font;
   private String             foreground;
-  private IModelDescriptor   modelDescriptor;
   private Collection<String> grantedRoles;
+  private IModelDescriptor   modelDescriptor;
+  private Integer            preferredHeight;
+  private Integer            preferredWidth;
   private Collection<IGate>  readabilityGates;
   private boolean            readOnly;
   private Collection<IGate>  writabilityGates;
-  private Integer            preferredWidth;
-  private Integer            preferredHeight;
-  private String             automationSeed;
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    if (grantedRoles == null && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof ISecurable) {
-        return ((ISecurable) getModelDescriptor()).getGrantedRoles();
-      }
-    }
-    return grantedRoles;
-  }
-
-  /**
-   * Gets the readabilityGates.
-   * 
-   * @return the readabilityGates.
-   */
-  public Collection<IGate> getReadabilityGates() {
-    // Gates are handled both on model connector and view connector. It is not
-    // necessary to fetch the model gates here. Only component view descriptors
-    // use their model gates since they are often backed by a reference property
-    // connector.
-    // if (readabilityGates == null && getModelDescriptor() != null) {
-    // if (getModelDescriptor() instanceof IGateAccessible) {
-    // return ((IGateAccessible) getModelDescriptor()).getReadabilityGates();
-    // }
-    // }
-    return readabilityGates;
-  }
-
-  /**
-   * Gets the writabilityGates.
-   * 
-   * @return the writabilityGates.
-   */
-  public Collection<IGate> getWritabilityGates() {
-    // Gates are handled both on model connector and view connector. It is not
-    // necessary to fetch the model gates here. Only component view descriptors
-    // use their model gates since they are often backed by a reference property
-    // connector.
-    // if (writabilityGates == null && getModelDescriptor() != null) {
-    // if (getModelDescriptor() instanceof IGateAccessible) {
-    // return ((IGateAccessible) getModelDescriptor()).getWritabilityGates();
-    // }
-    // }
-    return writabilityGates;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isReadOnly() {
-    if (!readOnly && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof IGateAccessible) {
-        return ((IGateAccessible) getModelDescriptor()).isReadOnly();
-      }
-    }
-    return readOnly;
-  }
-
-  /**
-   * Assigns the roles that are authorized to use this view. It supports
-   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
-   * granted sufficient privileges, the view is replaced by an empty section at
-   * runtime. Setting the collection of granted roles to <code>null</code>
-   * (default value) disables role based authorization on the view level. The
-   * framework then checks for the model roles authorizations and will apply the
-   * same restrictions. If both view and model granted roles collections are
-   * <code>null</code>, then access is granted to anyone.
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
-  }
-
-  /**
-   * Sets the readabilityGates.
-   * 
-   * @param readabilityGates
-   *          the readabilityGates to set.
-   * @internal
-   */
-  public void setReadabilityGates(Collection<IGate> readabilityGates) {
-    this.readabilityGates = readabilityGates;
-  }
-
-  /**
-   * Allows to set a view read-only, i.e. none of the view part will allow for
-   * updating the underlying model. This is mainly a shortcut to assigning an
-   * &quot;always closed&quot; writability gate. One difference though is that,
-   * since the framework knows that the view will never be updatable, it may
-   * take specific decisions to render properties in a slightly different way,
-   * e.g. instead of using a disabled textfied, use a label.
-   * <p>
-   * Default value is <code>false</code>, i.e. view is updatable.
-   * 
-   * @param readOnly
-   *          the readOnly to set.
-   */
-  public void setReadOnly(boolean readOnly) {
-    this.readOnly = readOnly;
-  }
-
-  /**
-   * Assigns a collection of gates to determine view <i>writability</i>. A view
-   * will be considered writable (updatable) if and only if all gates are open.
-   * This mecanism is mainly used for dynamic UI authorization based on model
-   * state, e.g. a validated invoice should not be editable anymore.
-   * <p>
-   * View assigned gates will be cloned for each view instance created and
-   * backed by this descriptor. So basically, each view instance will have its
-   * own, unshared collection of writability gates.
-   * <p>
-   * Jspresso provides a useful set of gate types, like the binary property gate
-   * that open/close based on the value of a boolean property of the view model.
-   * <p>
-   * By default, view descriptors are not assigned any gates collection, i.e.
-   * there is no writability restriction. Note however that view actual
-   * writability is the combination of view <i>and</i> model writability.
-   * 
-   * @param writabilityGates
-   *          the writabilityGates to set.
-   */
-  public void setWritabilityGates(Collection<IGate> writabilityGates) {
-    this.writabilityGates = writabilityGates;
-  }
 
   /**
    * Gets the actionMap.
@@ -196,6 +65,13 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   public ActionMap getActionMap() {
     return actionMap;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getAutomationSeed() {
+    return automationSeed;
   }
 
   /**
@@ -224,6 +100,20 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   public String getForeground() {
     return foreground;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    if (grantedRoles == null && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof ISecurable) {
+        return ((ISecurable) getModelDescriptor()).getGrantedRoles();
+      }
+    }
+    return grantedRoles;
   }
 
   /**
@@ -283,6 +173,73 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public Dimension getPreferredSize() {
+    Integer w = getPreferredWidth();
+    Integer h = getPreferredHeight();
+    if (w != null || h != null) {
+      Dimension dim = new Dimension();
+      if (w != null) {
+        dim.setWidth(w.intValue());
+      }
+      if (h != null) {
+        dim.setHeight(h.intValue());
+      }
+      return dim;
+    }
+    return null;
+  }
+
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  public Collection<IGate> getReadabilityGates() {
+    // Gates are handled both on model connector and view connector. It is not
+    // necessary to fetch the model gates here. Only component view descriptors
+    // use their model gates since they are often backed by a reference property
+    // connector.
+    // if (readabilityGates == null && getModelDescriptor() != null) {
+    // if (getModelDescriptor() instanceof IGateAccessible) {
+    // return ((IGateAccessible) getModelDescriptor()).getReadabilityGates();
+    // }
+    // }
+    return readabilityGates;
+  }
+
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  public Collection<IGate> getWritabilityGates() {
+    // Gates are handled both on model connector and view connector. It is not
+    // necessary to fetch the model gates here. Only component view descriptors
+    // use their model gates since they are often backed by a reference property
+    // connector.
+    // if (writabilityGates == null && getModelDescriptor() != null) {
+    // if (getModelDescriptor() instanceof IGateAccessible) {
+    // return ((IGateAccessible) getModelDescriptor()).getWritabilityGates();
+    // }
+    // }
+    return writabilityGates;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isReadOnly() {
+    if (!readOnly && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).isReadOnly();
+      }
+    }
+    return readOnly;
+  }
+
+  /**
    * Assigns the view action map. An action map is generally represented as a
    * toolbar attached to the view. The toolbar follows the structure of the
    * action map :
@@ -304,6 +261,18 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   public void setActionMap(ActionMap actionMap) {
     this.actionMap = actionMap;
+  }
+
+  /**
+   * Configures a fixed id to mark the generated UI component (actually the UI
+   * component connector). This id can serve for the sake of recording/replaying
+   * UI command sequences.
+   * 
+   * @param automationSeed
+   *          fixed id to mark the generated UI component.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 
   /**
@@ -374,6 +343,23 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   }
 
   /**
+   * Assigns the roles that are authorized to use this view. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
+   * granted sufficient privileges, the view is replaced by an empty section at
+   * runtime. Setting the collection of granted roles to <code>null</code>
+   * (default value) disables role based authorization on the view level. The
+   * framework then checks for the model roles authorizations and will apply the
+   * same restrictions. If both view and model granted roles collections are
+   * <code>null</code>, then access is granted to anyone.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
+  }
+
+  /**
    * Assigns the model descriptor backing the view. The model descriptor serves
    * several purposes :
    * <ul>
@@ -405,22 +391,15 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   }
 
   /**
-   * {@inheritDoc}
+   * Allows to set a preferred height (in pixels) for the created peer UI
+   * component. This will override default and give hints to the UI layouting
+   * system.
+   * 
+   * @param preferedHeight
+   *          the preferedHeight to set.
    */
-  public Dimension getPreferredSize() {
-    Integer w = getPreferredWidth();
-    Integer h = getPreferredHeight();
-    if (w != null || h != null) {
-      Dimension dim = new Dimension();
-      if (w != null) {
-        dim.setWidth(w.intValue());
-      }
-      if (h != null) {
-        dim.setHeight(h.intValue());
-      }
-      return dim;
-    }
-    return null;
+  public void setPreferredHeight(Integer preferedHeight) {
+    this.preferredHeight = preferedHeight;
   }
 
   /**
@@ -436,43 +415,55 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   }
 
   /**
-   * Allows to set a preferred height (in pixels) for the created peer UI
-   * component. This will override default and give hints to the UI layouting
-   * system.
+   * Sets the readabilityGates.
    * 
-   * @param preferedHeight
-   *          the preferedHeight to set.
+   * @param readabilityGates
+   *          the readabilityGates to set.
+   * @internal
    */
-  public void setPreferredHeight(Integer preferedHeight) {
-    this.preferredHeight = preferedHeight;
+  public void setReadabilityGates(Collection<IGate> readabilityGates) {
+    this.readabilityGates = readabilityGates;
   }
 
   /**
-   * {@inheritDoc}
+   * Allows to set a view read-only, i.e. none of the view part will allow for
+   * updating the underlying model. This is mainly a shortcut to assigning an
+   * &quot;always closed&quot; writability gate. One difference though is that,
+   * since the framework knows that the view will never be updatable, it may
+   * take specific decisions to render properties in a slightly different way,
+   * e.g. instead of using a disabled textfied, use a label.
+   * <p>
+   * Default value is <code>false</code>, i.e. view is updatable.
+   * 
+   * @param readOnly
+   *          the readOnly to set.
    */
-  public String getAutomationSeed() {
-    return automationSeed;
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = readOnly;
   }
 
   /**
-   * Configures a fixed id to mark the generated UI component (actually the UI
-   * component connector). This id can serve for the sake of recording/replaying
-   * UI command sequences.
+   * Assigns a collection of gates to determine view <i>writability</i>. A view
+   * will be considered writable (updatable) if and only if all gates are open.
+   * This mecanism is mainly used for dynamic UI authorization based on model
+   * state, e.g. a validated invoice should not be editable anymore.
+   * <p>
+   * View assigned gates will be cloned for each view instance created and
+   * backed by this descriptor. So basically, each view instance will have its
+   * own, unshared collection of writability gates.
+   * <p>
+   * Jspresso provides a useful set of gate types, like the binary property gate
+   * that open/close based on the value of a boolean property of the view model.
+   * <p>
+   * By default, view descriptors are not assigned any gates collection, i.e.
+   * there is no writability restriction. Note however that view actual
+   * writability is the combination of view <i>and</i> model writability.
    * 
-   * @param automationSeed
-   *          fixed id to mark the generated UI component.
+   * @param writabilityGates
+   *          the writabilityGates to set.
    */
-  public void setAutomationSeed(String automationSeed) {
-    this.automationSeed = automationSeed;
-  }
-
-  /**
-   * Gets the preferredWidth.
-   * 
-   * @return the preferredWidth.
-   */
-  protected Integer getPreferredWidth() {
-    return preferredWidth;
+  public void setWritabilityGates(Collection<IGate> writabilityGates) {
+    this.writabilityGates = writabilityGates;
   }
 
   /**
@@ -482,5 +473,14 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   protected Integer getPreferredHeight() {
     return preferredHeight;
+  }
+
+  /**
+   * Gets the preferredWidth.
+   * 
+   * @return the preferredWidth.
+   */
+  protected Integer getPreferredWidth() {
+    return preferredWidth;
   }
 }

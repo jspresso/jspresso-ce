@@ -66,6 +66,13 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
       Class<? extends IComponent> componentContract);
 
   /**
+   * Gets the accessor factory used by this component factory.
+   * 
+   * @return the accessor factory used by this component factory.
+   */
+  IAccessorFactory getAccessorFactory();
+
+  /**
    * Sorts a component collection property.
    * 
    * @param component
@@ -74,11 +81,4 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
    *          the name of the collection property to sort.
    */
   void sortCollectionProperty(IComponent component, String propertyName);
-
-  /**
-   * Gets the accessor factory used by this component factory.
-   * 
-   * @return the accessor factory used by this component factory.
-   */
-  IAccessorFactory getAccessorFactory();
 }

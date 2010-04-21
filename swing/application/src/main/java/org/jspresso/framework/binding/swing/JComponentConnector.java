@@ -70,6 +70,48 @@ public abstract class JComponentConnector<E extends JComponent> extends
   }
 
   /**
+   * This implementation takes care of having the peer component modifications
+   * ran on the Swing event dispatch thread. It actually delegates the connectee
+   * modification to the <code>protectedReadabilityChange</code> method.
+   * 
+   * @see #protectedReadabilityChange()
+   */
+  @Override
+  public final void readabilityChange() {
+    super.readabilityChange();
+    SwingUtil.updateSwingGui(new Runnable() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void run() {
+        protectedReadabilityChange();
+      }
+    });
+  }
+
+  /**
+   * This implementation takes care of having the peer component modifications
+   * ran on the Swing event dispatch thread. It actually delegates the connectee
+   * modification to the <code>protectedWritabilityChange</code> method.
+   * 
+   * @see #protectedWritabilityChange()
+   */
+  @Override
+  public final void writabilityChange() {
+    super.writabilityChange();
+    SwingUtil.updateSwingGui(new Runnable() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void run() {
+        protectedWritabilityChange();
+      }
+    });
+  }
+
+  /**
    * Attaches the JComponent to the connector.
    */
   protected abstract void bindJComponent();
@@ -105,6 +147,15 @@ public abstract class JComponentConnector<E extends JComponent> extends
    */
   protected E getConnectedJComponent() {
     return connectedJComponent;
+  }
+
+  /**
+   * This method can be overriden by subclasses in lieu of
+   * <code>fireConnectorValueChange</code> that has been made final to take care
+   * of the swing EDT.
+   */
+  protected void protectedFireConnectorValueChange() {
+    super.fireConnectorValueChange();
   }
 
   /**
@@ -149,27 +200,6 @@ public abstract class JComponentConnector<E extends JComponent> extends
   /**
    * This implementation takes care of having the peer component modifications
    * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedReadabilityChange</code> method.
-   * 
-   * @see #protectedReadabilityChange()
-   */
-  @Override
-  public final void readabilityChange() {
-    super.readabilityChange();
-    SwingUtil.updateSwingGui(new Runnable() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void run() {
-        protectedReadabilityChange();
-      }
-    });
-  }
-
-  /**
-   * This implementation takes care of having the peer component modifications
-   * ran on the Swing event dispatch thread. It actually delegates the connectee
    * modification to the <code>protectedSetConnecteeValue</code> method.
    * <p>
    * {@inheritDoc}
@@ -184,35 +214,5 @@ public abstract class JComponentConnector<E extends JComponent> extends
         protectedSetConnecteeValue(aValue);
       }
     });
-  }
-
-  /**
-   * This implementation takes care of having the peer component modifications
-   * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedWritabilityChange</code> method.
-   * 
-   * @see #protectedWritabilityChange()
-   */
-  @Override
-  public final void writabilityChange() {
-    super.writabilityChange();
-    SwingUtil.updateSwingGui(new Runnable() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void run() {
-        protectedWritabilityChange();
-      }
-    });
-  }
-
-  /**
-   * This method can be overriden by subclasses in lieu of
-   * <code>fireConnectorValueChange</code> that has been made final to take care
-   * of the swing EDT.
-   */
-  protected void protectedFireConnectorValueChange() {
-    super.fireConnectorValueChange();
   }
 }

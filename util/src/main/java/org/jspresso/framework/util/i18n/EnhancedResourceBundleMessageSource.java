@@ -41,6 +41,43 @@ public class EnhancedResourceBundleMessageSource extends
   private boolean           resolveNested = true;
 
   /**
+   * Sets the resolveNested.
+   * 
+   * @param resolveNested
+   *          the resolveNested to set.
+   */
+  public void setResolveNested(boolean resolveNested) {
+    this.resolveNested = resolveNested;
+  }
+
+  /**
+   * Delegates to super implementation (do not search for nested translations).
+   * 
+   * @param code
+   *          the translation code.
+   * @param locale
+   *          the locale.
+   * @return the translation.
+   */
+  protected final MessageFormat baseResolveCode(String code, Locale locale) {
+    return super.resolveCode(code, locale);
+  }
+
+  /**
+   * Delegates to super implementation (do not search for nested translations).
+   * 
+   * @param code
+   *          the translation code.
+   * @param locale
+   *          the locale.
+   * @return the translation.
+   */
+  protected final String baseResolveCodeWithoutArguments(String code,
+      Locale locale) {
+    return super.resolveCodeWithoutArguments(code, locale);
+  }
+
+  /**
    * Overriden so that we can explore the nested key chain for a translation
    * before actually going to the parent.
    * <p>
@@ -75,19 +112,6 @@ public class EnhancedResourceBundleMessageSource extends
   }
 
   /**
-   * Delegates to super implementation (do not search for nested translations).
-   * 
-   * @param code
-   *          the translation code.
-   * @param locale
-   *          the locale.
-   * @return the translation.
-   */
-  protected final MessageFormat baseResolveCode(String code, Locale locale) {
-    return super.resolveCode(code, locale);
-  }
-
-  /**
    * Overriden so that we can explore the nested key chain for a translation
    * before actually going to the parent.
    * <p>
@@ -119,29 +143,5 @@ public class EnhancedResourceBundleMessageSource extends
       dotIndex = codePart.indexOf(DOT);
     }
     return res;
-  }
-
-  /**
-   * Delegates to super implementation (do not search for nested translations).
-   * 
-   * @param code
-   *          the translation code.
-   * @param locale
-   *          the locale.
-   * @return the translation.
-   */
-  protected final String baseResolveCodeWithoutArguments(String code,
-      Locale locale) {
-    return super.resolveCodeWithoutArguments(code, locale);
-  }
-
-  /**
-   * Sets the resolveNested.
-   * 
-   * @param resolveNested
-   *          the resolveNested to set.
-   */
-  public void setResolveNested(boolean resolveNested) {
-    this.resolveNested = resolveNested;
   }
 }

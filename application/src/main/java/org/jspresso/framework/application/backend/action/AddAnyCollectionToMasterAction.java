@@ -37,6 +37,23 @@ public class AddAnyCollectionToMasterAction extends
     AbstractAddCollectionToMasterAction {
 
   /**
+   * Gets the new detail to or collection of details to add from the context.
+   * The ACTION_PARAM variable is used.
+   * 
+   * @param context
+   *          the action context.
+   * @return the collection of details to add to the collection.
+   */
+  @Override
+  protected List<?> getAddedComponents(Map<String, Object> context) {
+    Object detailOrList = getActionParameter(context);
+    if (detailOrList instanceof List<?>) {
+      return (List<?>) detailOrList;
+    }
+    return Collections.singletonList(detailOrList);
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -53,22 +70,5 @@ public class AddAnyCollectionToMasterAction extends
       Map<String, Object> context) {
     return (ICollectionDescriptorProvider<?>) getModelConnector(context)
         .getModelDescriptor();
-  }
-
-  /**
-   * Gets the new detail to or collection of details to add from the context.
-   * The ACTION_PARAM variable is used.
-   * 
-   * @param context
-   *          the action context.
-   * @return the collection of details to add to the collection.
-   */
-  @Override
-  protected List<?> getAddedComponents(Map<String, Object> context) {
-    Object detailOrList = getActionParameter(context);
-    if (detailOrList instanceof List<?>) {
-      return (List<?>) detailOrList;
-    }
-    return Collections.singletonList(detailOrList);
   }
 }

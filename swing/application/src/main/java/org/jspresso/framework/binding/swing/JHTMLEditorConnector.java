@@ -84,7 +84,7 @@ public class JHTMLEditorConnector extends JComponentConnector<JHTMLEditor> {
     getConnectedJComponent().getEditorPane().getDocument().addDocumentListener(
         new DocumentListener() {
 
-          public void removeUpdate(DocumentEvent e) {
+          public void changedUpdate(DocumentEvent e) {
             documentChanged(e);
           }
 
@@ -92,7 +92,7 @@ public class JHTMLEditorConnector extends JComponentConnector<JHTMLEditor> {
             documentChanged(e);
           }
 
-          public void changedUpdate(DocumentEvent e) {
+          public void removeUpdate(DocumentEvent e) {
             documentChanged(e);
           }
 

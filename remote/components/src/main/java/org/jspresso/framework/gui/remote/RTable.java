@@ -28,19 +28,11 @@ public class RTable extends RCollectionComponent {
 
   private static final long serialVersionUID = 4825156764599864408L;
 
-  private RComponent[]      columns;
   private String[]          columnIds;
-  private RAction           sortingAction;
+  private RComponent[]      columns;
   private boolean           horizontallyScrollable;
   private boolean           sortable;
-
-  /**
-   * Constructs a new <code>RTable</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RTable() {
-    // For GWT support
-  }
+  private RAction           sortingAction;
 
   /**
    * Constructs a new <code>RTable</code> instance.
@@ -53,22 +45,29 @@ public class RTable extends RCollectionComponent {
   }
 
   /**
+   * Constructs a new <code>RTable</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTable() {
+    // For GWT support
+  }
+
+  /**
+   * Gets the columnIds.
+   * 
+   * @return the columnIds.
+   */
+  public String[] getColumnIds() {
+    return columnIds;
+  }
+
+  /**
    * Gets the columns.
    * 
    * @return the columns.
    */
   public RComponent[] getColumns() {
     return columns;
-  }
-
-  /**
-   * Sets the columns.
-   * 
-   * @param columns
-   *          the columns to set.
-   */
-  public void setColumns(RComponent[] columns) {
-    this.columns = columns;
   }
 
   /**
@@ -81,22 +80,21 @@ public class RTable extends RCollectionComponent {
   }
 
   /**
-   * Sets the sortingAction.
+   * Gets the horizontallyScrollable.
    * 
-   * @param sortingAction
-   *          the sortingAction to set.
+   * @return the horizontallyScrollable.
    */
-  public void setSortingAction(RAction sortingAction) {
-    this.sortingAction = sortingAction;
+  public boolean isHorizontallyScrollable() {
+    return horizontallyScrollable;
   }
 
   /**
-   * Gets the columnIds.
+   * Gets the sortable.
    * 
-   * @return the columnIds.
+   * @return the sortable.
    */
-  public String[] getColumnIds() {
-    return columnIds;
+  public boolean isSortable() {
+    return sortable;
   }
 
   /**
@@ -110,12 +108,13 @@ public class RTable extends RCollectionComponent {
   }
 
   /**
-   * Gets the horizontallyScrollable.
+   * Sets the columns.
    * 
-   * @return the horizontallyScrollable.
+   * @param columns
+   *          the columns to set.
    */
-  public boolean isHorizontallyScrollable() {
-    return horizontallyScrollable;
+  public void setColumns(RComponent[] columns) {
+    this.columns = columns;
   }
 
   /**
@@ -129,15 +128,6 @@ public class RTable extends RCollectionComponent {
   }
 
   /**
-   * Gets the sortable.
-   * 
-   * @return the sortable.
-   */
-  public boolean isSortable() {
-    return sortable;
-  }
-
-  /**
    * Sets the sortable.
    * 
    * @param sortable
@@ -145,5 +135,15 @@ public class RTable extends RCollectionComponent {
    */
   public void setSortable(boolean sortable) {
     this.sortable = sortable;
+  }
+
+  /**
+   * Sets the sortingAction.
+   * 
+   * @param sortingAction
+   *          the sortingAction to set.
+   */
+  public void setSortingAction(RAction sortingAction) {
+    this.sortingAction = sortingAction;
   }
 }

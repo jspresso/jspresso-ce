@@ -44,17 +44,17 @@ public interface IItemSelectable {
   void fireSelectedItemChange(ItemSelectionEvent evt);
 
   /**
+   * Retrieves the selected item out of this item selectable or null if none.
+   * 
+   * @return the selected item out of this item selectable.
+   */
+  Object getSelectedItem();
+
+  /**
    * Removes an item selection listener from this object.
    * 
    * @param listener
    *          the listener to remove.
    */
   void removeItemSelectionListener(IItemSelectionListener listener);
-
-  /**
-   * Retrieves the selected item out of this item selectable or null if none.
-   * 
-   * @return the selected item out of this item selectable.
-   */
-  Object getSelectedItem();
 }

@@ -95,8 +95,8 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   private IDisplayableAction    cancelAction;
   private IDisplayableAction    finishAction;
   private IWizardStepDescriptor firstWizardStep;
-  private Integer               width;
   private Integer               height;
+  private Integer               width;
 
   /**
    * {@inheritDoc}
@@ -154,6 +154,17 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
+   * Configures explicitely the height of the wizard dialog. It prevents the
+   * dialog from resizing dynamically depending on the displayed wizard step.
+   * 
+   * @param height
+   *          the height to set.
+   */
+  public void setHeight(Integer height) {
+    this.height = height;
+  }
+
+  /**
    * Sets the modelConnectorFactory.
    * 
    * @param modelConnectorFactory
@@ -164,6 +175,17 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
     // this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
+   * Configures explicitely the width of the wizard dialog. It prevents the
+   * dialog from resizing dynamically depending on the displayed wizard step.
+   * 
+   * @param width
+   *          the width to set.
+   */
+  public void setWidth(Integer width) {
+    this.width = width;
   }
 
   /**
@@ -473,27 +495,5 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
           context, true);
       return super.execute(actionHandler, context);
     }
-  }
-
-  /**
-   * Configures explicitely the width of the wizard dialog. It prevents the
-   * dialog from resizing dynamically depending on the displayed wizard step.
-   * 
-   * @param width
-   *          the width to set.
-   */
-  public void setWidth(Integer width) {
-    this.width = width;
-  }
-
-  /**
-   * Configures explicitely the height of the wizard dialog. It prevents the
-   * dialog from resizing dynamically depending on the displayed wizard step.
-   * 
-   * @param height
-   *          the height to set.
-   */
-  public void setHeight(Integer height) {
-    this.height = height;
   }
 }

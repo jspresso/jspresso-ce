@@ -32,6 +32,16 @@ public class RTree extends RComponent {
   private RAction           rowAction;
 
   /**
+   * Constructs a new <code>RTreeComponent</code> instance.
+   * 
+   * @param guid
+   *          the guid.
+   */
+  public RTree(String guid) {
+    super(guid);
+  }
+
+  /**
    * Constructs a new <code>RTree</code> instance. Only used for GWT
    * serialization support.
    */
@@ -40,13 +50,12 @@ public class RTree extends RComponent {
   }
 
   /**
-   * Constructs a new <code>RTreeComponent</code> instance.
+   * Gets the rowAction.
    * 
-   * @param guid
-   *          the guid.
+   * @return the rowAction.
    */
-  public RTree(String guid) {
-    super(guid);
+  public RAction getRowAction() {
+    return rowAction;
   }
 
   /**
@@ -66,15 +75,6 @@ public class RTree extends RComponent {
    */
   public void setExpanded(boolean expanded) {
     this.expanded = expanded;
-  }
-
-  /**
-   * Gets the rowAction.
-   * 
-   * @return the rowAction.
-   */
-  public RAction getRowAction() {
-    return rowAction;
   }
 
   /**

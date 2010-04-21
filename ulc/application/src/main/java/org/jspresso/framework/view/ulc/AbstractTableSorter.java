@@ -73,8 +73,6 @@ import com.ulcjava.base.shared.IDefaults;
 public abstract class AbstractTableSorter extends AbstractTableModel implements
     IIndexMapper {
 
-  private static final long      serialVersionUID     = -1685247933285583431L;
-
   /**
    * <code>ASCENDING</code>.
    */
@@ -92,6 +90,8 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   private static final Directive NOT_SORTED_DIRECTIVE = new Directive(-1,
                                                           NOT_SORTED);
+
+  private static final long      serialVersionUID     = -1685247933285583431L;
 
   private ULCIcon                downIcon;
   private IActionListener        headerActionListener;
@@ -119,14 +119,6 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     setTableModel(tableModel);
     setTableHeader(tableHeader);
   }
-
-  /**
-   * Creates a table model listener to react to the underlying table model
-   * change events.
-   * 
-   * @return the table model listener.
-   */
-  protected abstract ITableModelListener createTableModelHandler();
 
   /**
    * {@inheritDoc}
@@ -301,6 +293,31 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   }
 
   /**
+   * Cancels sorting.
+   */
+  protected void cancelSorting() {
+    resetHeaderRenderers();
+    sortingColumns.clear();
+    // sortingStatusChanged();
+  }
+
+  /**
+   * Performs any operation needed to clear some internal state when sorting has
+   * changed.
+   */
+  protected void clearSortingState() {
+    // NO-OP by default.
+  }
+
+  /**
+   * Creates a table model listener to react to the underlying table model
+   * change events.
+   * 
+   * @return the table model listener.
+   */
+  protected abstract ITableModelListener createTableModelHandler();
+
+  /**
    * Gets HeaderRendererIcon.
    * 
    * @param column
@@ -319,21 +336,50 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   }
 
   /**
-   * Cancels sorting.
+   * Retrieves the column from the model index.
+   * 
+   * @param modelColumnIndex
+   *          the model column index.
+   * @return the column.
    */
-  protected void cancelSorting() {
-    resetHeaderRenderers();
-    sortingColumns.clear();
-    // sortingStatusChanged();
+  protected ULCTableColumn getSortedColumn(int modelColumnIndex) {
+    if (modelColumnIndex < 0) {
+      return null;
+    }
+    for (ULCTableColumn column : sortedColumnsBuffer) {
+      if (column.getModelIndex() == modelColumnIndex) {
+        return column;
+      }
+    }
+    return null;
   }
 
   /**
-   * Performs any operation needed to clear some internal state when sorting has
-   * changed.
+   * Gets the sortingColumns.
+   * 
+   * @return the sortingColumns.
    */
-  protected void clearSortingState() {
-    // NO-OP by default.
+  protected List<Directive> getSortingColumns() {
+    return sortingColumns;
   }
+
+  /**
+   * Wether the table column is sortable.
+   * 
+   * @param column
+   *          the table column to test.
+   * @return true is the table column is sortable.
+   */
+  protected boolean isSortable(ULCTableColumn column) {
+    return column.getIdentifier() != null
+        && column.getIdentifier().toString().length() > 0;
+  }
+
+  /**
+   * This method is triggered whenever the user clicks changed the sorting in
+   * any way.
+   */
+  protected abstract void sortingStatusChanged();
 
   private Directive getDirective(int column) {
     for (int i = 0; i < sortingColumns.size(); i++) {
@@ -352,12 +398,6 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     sortedColumnsBuffer.clear();
     tableHeader.repaint();
   }
-
-  /**
-   * This method is triggered whenever the user clicks changed the sorting in
-   * any way.
-   */
-  protected abstract void sortingStatusChanged();
 
   /**
    * Internal class to represent a sorted column state.
@@ -477,45 +517,5 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row);
     }
-  }
-
-  /**
-   * Retrieves the column from the model index.
-   * 
-   * @param modelColumnIndex
-   *          the model column index.
-   * @return the column.
-   */
-  protected ULCTableColumn getSortedColumn(int modelColumnIndex) {
-    if (modelColumnIndex < 0) {
-      return null;
-    }
-    for (ULCTableColumn column : sortedColumnsBuffer) {
-      if (column.getModelIndex() == modelColumnIndex) {
-        return column;
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Gets the sortingColumns.
-   * 
-   * @return the sortingColumns.
-   */
-  protected List<Directive> getSortingColumns() {
-    return sortingColumns;
-  }
-
-  /**
-   * Wether the table column is sortable.
-   * 
-   * @param column
-   *          the table column to test.
-   * @return true is the table column is sortable.
-   */
-  protected boolean isSortable(ULCTableColumn column) {
-    return column.getIdentifier() != null
-        && column.getIdentifier().toString().length() > 0;
   }
 }

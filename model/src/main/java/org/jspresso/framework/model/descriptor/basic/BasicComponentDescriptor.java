@@ -87,22 +87,6 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
   }
 
   /**
-   * Gets the entity.
-   * 
-   * @return the entity.
-   */
-  public boolean isEntity() {
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isPurelyAbstract() {
-    return false;
-  }
-
-  /**
    * Relax ClassNotFoundException since component descriptors can be used
    * without actual java class.
    * <p>
@@ -120,5 +104,21 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
       }
       throw ex;
     }
+  }
+
+  /**
+   * Gets the entity.
+   * 
+   * @return the entity.
+   */
+  public boolean isEntity() {
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isPurelyAbstract() {
+    return false;
   }
 }

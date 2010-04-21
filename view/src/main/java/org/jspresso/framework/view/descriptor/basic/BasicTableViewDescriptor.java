@@ -59,10 +59,10 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     implements ITableViewDescriptor {
 
   private List<IPropertyViewDescriptor> columnViewDescriptors;
-  private List<String>                  renderedProperties;
-  private IDisplayableAction            sortingAction;
   private boolean                       horizontallyScrollable;
+  private List<String>                  renderedProperties;
   private boolean                       sortable;
+  private IDisplayableAction            sortingAction;
 
   /**
    * Constructs a new <code>BasicTableViewDescriptor</code> instance.
@@ -70,38 +70,6 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   public BasicTableViewDescriptor() {
     horizontallyScrollable = true;
     sortable = true;
-  }
-
-  /**
-   * Gets the renderedProperties.
-   * 
-   * @return the renderedProperties.
-   */
-  private List<String> getRenderedProperties() {
-    if (renderedProperties == null) {
-      renderedProperties = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
-          .getCollectionDescriptor().getElementDescriptor()
-          .getRenderedProperties();
-    }
-    return renderedProperties;
-  }
-
-  /**
-   * This is somehow a shortcut to using the <code>columnViewDescriptors</code>
-   * property. Instead of providing a full-blown list of property view
-   * descriptors to configure the table columns, you just pass-in a list of
-   * property names. Table columns are then created from this list, keeping
-   * model defaults for all column characteristics.
-   * <p>
-   * Whenever the property value is <code>null</code> (default), the column list
-   * is determined from the collection element component descriptor
-   * <code>renderedProperties</code> property.
-   * 
-   * @param renderedProperties
-   *          the renderedProperties to set.
-   */
-  public void setRenderedProperties(List<String> renderedProperties) {
-    this.renderedProperties = renderedProperties;
   }
 
   /**
@@ -144,6 +112,33 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
+   * Gets the sortingAction.
+   * 
+   * @return the sortingAction.
+   */
+  public IDisplayableAction getSortingAction() {
+    return sortingAction;
+  }
+
+  /**
+   * Gets the horizontallyScrollable.
+   * 
+   * @return the horizontallyScrollable.
+   */
+  public boolean isHorizontallyScrollable() {
+    return horizontallyScrollable;
+  }
+
+  /**
+   * Gets the sortable.
+   * 
+   * @return the sortable.
+   */
+  public boolean isSortable() {
+    return sortable;
+  }
+
+  /**
    * This property allows for configuring the columns of the table view in a
    * very customizable manner, thus overriding the model descriptor defaults.
    * Each property view descriptor copntained in the list describes a table
@@ -178,35 +173,6 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * Gets the sortingAction.
-   * 
-   * @return the sortingAction.
-   */
-  public IDisplayableAction getSortingAction() {
-    return sortingAction;
-  }
-
-  /**
-   * Sets the sortingAction.
-   * 
-   * @param sortingAction
-   *          the sortingAction to set.
-   * @internal
-   */
-  public void setSortingAction(IDisplayableAction sortingAction) {
-    this.sortingAction = sortingAction;
-  }
-
-  /**
-   * Gets the horizontallyScrollable.
-   * 
-   * @return the horizontallyScrollable.
-   */
-  public boolean isHorizontallyScrollable() {
-    return horizontallyScrollable;
-  }
-
-  /**
    * This property allows to define the table horizontal scrolling behaviour.
    * Whenever it is set to false, the corresponding table UI component will
    * adapt its columns to fit the available horizontal space.
@@ -222,12 +188,21 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * Gets the sortable.
+   * This is somehow a shortcut to using the <code>columnViewDescriptors</code>
+   * property. Instead of providing a full-blown list of property view
+   * descriptors to configure the table columns, you just pass-in a list of
+   * property names. Table columns are then created from this list, keeping
+   * model defaults for all column characteristics.
+   * <p>
+   * Whenever the property value is <code>null</code> (default), the column list
+   * is determined from the collection element component descriptor
+   * <code>renderedProperties</code> property.
    * 
-   * @return the sortable.
+   * @param renderedProperties
+   *          the renderedProperties to set.
    */
-  public boolean isSortable() {
-    return sortable;
+  public void setRenderedProperties(List<String> renderedProperties) {
+    this.renderedProperties = renderedProperties;
   }
 
   /**
@@ -243,6 +218,31 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    */
   public void setSortable(boolean sortable) {
     this.sortable = sortable;
+  }
+
+  /**
+   * Sets the sortingAction.
+   * 
+   * @param sortingAction
+   *          the sortingAction to set.
+   * @internal
+   */
+  public void setSortingAction(IDisplayableAction sortingAction) {
+    this.sortingAction = sortingAction;
+  }
+
+  /**
+   * Gets the renderedProperties.
+   * 
+   * @return the renderedProperties.
+   */
+  private List<String> getRenderedProperties() {
+    if (renderedProperties == null) {
+      renderedProperties = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
+          .getCollectionDescriptor().getElementDescriptor()
+          .getRenderedProperties();
+    }
+    return renderedProperties;
   }
 
 }

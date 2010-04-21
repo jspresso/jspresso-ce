@@ -57,6 +57,50 @@ public class BeanCollectionModule extends Module {
   private List<?>                      moduleObjects;
 
   /**
+   * Adds an element to the module's projected object collection at the
+   * specified index. If the index is out of the list bounds, the element is
+   * simply added at the end of the list.
+   * 
+   * @param index
+   *          the index to add the events element at.
+   * @param element
+   *          the element to add.
+   */
+  public void addToModuleObjects(int index, Object element) {
+    List<Object> newModuleObjects;
+    if (getModuleObjects() != null) {
+      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+    } else {
+      newModuleObjects = new ArrayList<Object>();
+    }
+    if (index < 0) {
+      newModuleObjects.add(0, element);
+    } else if (index >= newModuleObjects.size()) {
+      newModuleObjects.add(element);
+    } else {
+      newModuleObjects.add(index, element);
+    }
+    setModuleObjects(newModuleObjects);
+  }
+
+  /**
+   * Adds an element to the module's projected object collection.
+   * 
+   * @param element
+   *          the element to add.
+   */
+  public void addToModuleObjects(Object element) {
+    List<Object> newModuleObjects;
+    if (getModuleObjects() != null) {
+      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+    } else {
+      newModuleObjects = new ArrayList<Object>();
+    }
+    newModuleObjects.add(element);
+    setModuleObjects(newModuleObjects);
+  }
+
+  /**
    * Gets the elementComponentDescriptor.
    * 
    * @return the elementComponentDescriptor.
@@ -87,6 +131,21 @@ public class BeanCollectionModule extends Module {
    * {@inheritDoc}
    */
   @Override
+  public Collection<String> getGrantedRoles() {
+    Collection<String> grantedRoles = super.getGrantedRoles();
+    if (grantedRoles == null && elementViewDescriptor != null) {
+      grantedRoles = elementViewDescriptor.getGrantedRoles();
+    }
+    if (grantedRoles == null && elementComponentDescriptor != null) {
+      grantedRoles = elementComponentDescriptor.getGrantedRoles();
+    }
+    return grantedRoles;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public String getIconImageURL() {
     String iconImageUrl = super.getIconImageURL();
     if (iconImageUrl == null) {
@@ -103,6 +162,49 @@ public class BeanCollectionModule extends Module {
    */
   public List<?> getModuleObjects() {
     return moduleObjects;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getViewDescriptor() {
+    IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
+    BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
+    ((BasicViewDescriptor) projectedViewDescriptor)
+        .setModelDescriptor(moduleDescriptor
+            .getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
+    BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
+    moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+    moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
+
+    // TEST
+    // BasicListViewDescriptor subModulesListViewDescriptor = new
+    // BasicListViewDescriptor();
+    // subModulesListViewDescriptor.setRenderedProperty("name");
+    // subModulesListViewDescriptor.setModelDescriptor(moduleDescriptor
+    // .getPropertyDescriptor(Module.SUB_MODULES));
+    // subModulesListViewDescriptor.setPreferredWidth(new Integer(300));
+    // subModulesListViewDescriptor.setPreferredHeight(new Integer(300));
+    // moduleViewDescriptor.setEastViewDescriptor(subModulesListViewDescriptor);
+    // TEST
+
+    return moduleViewDescriptor;
+  }
+
+  /**
+   * Removes an element from the the module's projected object collection.
+   * 
+   * @param element
+   *          the element to remove.
+   */
+  public void removeFromModuleObjects(Object element) {
+    if (getModuleObjects() != null) {
+      List<Object> newModuleObjects;
+      newModuleObjects = new ArrayList<Object>(getModuleObjects());
+      newModuleObjects.remove(element);
+      setModuleObjects(newModuleObjects);
+    }
   }
 
   /**
@@ -161,113 +263,11 @@ public class BeanCollectionModule extends Module {
   }
 
   /**
-   * Adds an element to the module's projected object collection.
-   * 
-   * @param element
-   *          the element to add.
-   */
-  public void addToModuleObjects(Object element) {
-    List<Object> newModuleObjects;
-    if (getModuleObjects() != null) {
-      newModuleObjects = new ArrayList<Object>(getModuleObjects());
-    } else {
-      newModuleObjects = new ArrayList<Object>();
-    }
-    newModuleObjects.add(element);
-    setModuleObjects(newModuleObjects);
-  }
-
-  /**
-   * Adds an element to the module's projected object collection at the
-   * specified index. If the index is out of the list bounds, the element is
-   * simply added at the end of the list.
-   * 
-   * @param index
-   *          the index to add the events element at.
-   * @param element
-   *          the element to add.
-   */
-  public void addToModuleObjects(int index, Object element) {
-    List<Object> newModuleObjects;
-    if (getModuleObjects() != null) {
-      newModuleObjects = new ArrayList<Object>(getModuleObjects());
-    } else {
-      newModuleObjects = new ArrayList<Object>();
-    }
-    if (index < 0) {
-      newModuleObjects.add(0, element);
-    } else if (index >= newModuleObjects.size()) {
-      newModuleObjects.add(element);
-    } else {
-      newModuleObjects.add(index, element);
-    }
-    setModuleObjects(newModuleObjects);
-  }
-
-  /**
-   * Removes an element from the the module's projected object collection.
-   * 
-   * @param element
-   *          the element to remove.
-   */
-  public void removeFromModuleObjects(Object element) {
-    if (getModuleObjects() != null) {
-      List<Object> newModuleObjects;
-      newModuleObjects = new ArrayList<Object>(getModuleObjects());
-      newModuleObjects.remove(element);
-      setModuleObjects(newModuleObjects);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IViewDescriptor getViewDescriptor() {
-    IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
-    BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-    ((BasicViewDescriptor) projectedViewDescriptor)
-        .setModelDescriptor(moduleDescriptor
-            .getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
-    BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
-    moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
-    moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
-
-    // TEST
-    // BasicListViewDescriptor subModulesListViewDescriptor = new
-    // BasicListViewDescriptor();
-    // subModulesListViewDescriptor.setRenderedProperty("name");
-    // subModulesListViewDescriptor.setModelDescriptor(moduleDescriptor
-    // .getPropertyDescriptor(Module.SUB_MODULES));
-    // subModulesListViewDescriptor.setPreferredWidth(new Integer(300));
-    // subModulesListViewDescriptor.setPreferredHeight(new Integer(300));
-    // moduleViewDescriptor.setEastViewDescriptor(subModulesListViewDescriptor);
-    // TEST
-
-    return moduleViewDescriptor;
-  }
-
-  /**
    * Gets the module descriptor.
    * 
    * @return the module descriptor.
    */
   protected BeanCollectionModuleDescriptor getDescriptor() {
     return new BeanCollectionModuleDescriptor(getElementComponentDescriptor());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection<String> getGrantedRoles() {
-    Collection<String> grantedRoles = super.getGrantedRoles();
-    if (grantedRoles == null && elementViewDescriptor != null) {
-      grantedRoles = elementViewDescriptor.getGrantedRoles();
-    }
-    if (grantedRoles == null && elementComponentDescriptor != null) {
-      grantedRoles = elementComponentDescriptor.getGrantedRoles();
-    }
-    return grantedRoles;
   }
 }

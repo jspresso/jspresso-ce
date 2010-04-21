@@ -67,17 +67,6 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Sets the childViewDescriptors.
-   * 
-   * @param cardViewDescriptors
-   *          the cardViewDescriptors to set.
-   */
-  protected void setCardViewDescriptors(
-      Map<String, IViewDescriptor> cardViewDescriptors) {
-    this.cardViewDescriptors = cardViewDescriptors;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public List<IViewDescriptor> getChildViewDescriptors() {
@@ -94,5 +83,16 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
    */
   public boolean isCascadingModels() {
     return false;
+  }
+
+  /**
+   * Sets the childViewDescriptors.
+   * 
+   * @param cardViewDescriptors
+   *          the cardViewDescriptors to set.
+   */
+  protected void setCardViewDescriptors(
+      Map<String, IViewDescriptor> cardViewDescriptors) {
+    this.cardViewDescriptors = cardViewDescriptors;
   }
 }

@@ -58,16 +58,17 @@ public abstract class AbstractController implements IController {
   /**
    * {@inheritDoc}
    */
-  public boolean isAccessGranted(ISecurable securable) {
-    return SecurityHelper.isSubjectGranted(
-        getApplicationSession().getSubject(), securable);
+  public Map<String, Object> createEmptyContext() {
+    return new HashMap<String, Object>();
   }
 
   /**
+   * Gets the subject out of the application session.
+   * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> createEmptyContext() {
-    return new HashMap<String, Object>();
+  public Subject getSubject() {
+    return getApplicationSession().getSubject();
   }
 
   /**
@@ -91,6 +92,14 @@ public abstract class AbstractController implements IController {
       return customExceptionHandler.handleException(ex, context);
     }
     return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isAccessGranted(ISecurable securable) {
+    return SecurityHelper.isSubjectGranted(
+        getApplicationSession().getSubject(), securable);
   }
 
   /**
@@ -126,15 +135,6 @@ public abstract class AbstractController implements IController {
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
-  }
-
-  /**
-   * Gets the subject out of the application session.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Subject getSubject() {
-    return getApplicationSession().getSubject();
   }
 
 }

@@ -60,19 +60,19 @@ public class ControllerAwareProxyComponentFactory extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected UserPrincipal getPrincipal() {
-    return getBackendController().getApplicationSession().getPrincipal();
-  }
-
-  /**
    * Gets the backendController.
    * 
    * @return the backendController.
    */
   protected IBackendController getBackendController() {
     return backendController;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected UserPrincipal getPrincipal() {
+    return getBackendController().getApplicationSession().getPrincipal();
   }
 }

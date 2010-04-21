@@ -31,27 +31,8 @@ public class RemoteSortCommand extends RemoteCommand {
   private static final long   serialVersionUID = 6499019879319233162L;
 
   private Map<String, String> orderingProperties;
-  private String              viewStateGuid;
   private String              viewStateAutomationId;
-
-  /**
-   * Gets the viewStateGuid.
-   * 
-   * @return the viewStateGuid.
-   */
-  public String getViewStateGuid() {
-    return viewStateGuid;
-  }
-
-  /**
-   * Sets the viewStateGuid.
-   * 
-   * @param viewStateGuid
-   *          the viewStateGuid to set.
-   */
-  public void setViewStateGuid(String viewStateGuid) {
-    this.viewStateGuid = viewStateGuid;
-  }
+  private String              viewStateGuid;
 
   /**
    * Gets the orderingProperties.
@@ -60,6 +41,24 @@ public class RemoteSortCommand extends RemoteCommand {
    */
   public Map<String, String> getOrderingProperties() {
     return orderingProperties;
+  }
+
+  /**
+   * Gets the viewStateAutomationId.
+   * 
+   * @return the viewStateAutomationId.
+   */
+  public String getViewStateAutomationId() {
+    return viewStateAutomationId;
+  }
+
+  /**
+   * Gets the viewStateGuid.
+   * 
+   * @return the viewStateGuid.
+   */
+  public String getViewStateGuid() {
+    return viewStateGuid;
   }
 
   /**
@@ -73,15 +72,6 @@ public class RemoteSortCommand extends RemoteCommand {
   }
 
   /**
-   * Gets the viewStateAutomationId.
-   * 
-   * @return the viewStateAutomationId.
-   */
-  public String getViewStateAutomationId() {
-    return viewStateAutomationId;
-  }
-
-  /**
    * Sets the viewStateAutomationId.
    * 
    * @param viewStateAutomationId
@@ -89,5 +79,15 @@ public class RemoteSortCommand extends RemoteCommand {
    */
   public void setViewStateAutomationId(String viewStateAutomationId) {
     this.viewStateAutomationId = viewStateAutomationId;
+  }
+
+  /**
+   * Sets the viewStateGuid.
+   * 
+   * @param viewStateGuid
+   *          the viewStateGuid to set.
+   */
+  public void setViewStateGuid(String viewStateGuid) {
+    this.viewStateGuid = viewStateGuid;
   }
 }

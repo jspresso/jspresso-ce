@@ -57,18 +57,18 @@ public class UrlResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
-  public long getSize() {
-    return -1; // unknown.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public String getName() {
     String path = url.getPath();
     if (path != null && path.indexOf("/") > 0) {
       path = path.substring(path.lastIndexOf("/"));
     }
     return path;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public long getSize() {
+    return -1; // unknown.
   }
 }

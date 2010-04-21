@@ -35,14 +35,6 @@ public class RBorderContainer extends RContainer {
   private RComponent        west;
 
   /**
-   * Constructs a new <code>RBorderContainer</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RBorderContainer() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RBorderContainer</code> instance.
    * 
    * @param guid
@@ -50,6 +42,14 @@ public class RBorderContainer extends RContainer {
    */
   public RBorderContainer(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RBorderContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RBorderContainer() {
+    // For GWT support
   }
 
   /**

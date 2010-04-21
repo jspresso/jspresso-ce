@@ -44,14 +44,14 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
 
   private ITreeLevelDescriptor       childDescriptor;
   private List<ITreeLevelDescriptor> childrenDescriptors;
+  private boolean                    expanded;
   private IIconImageURLProvider      iconImageURLProvider;
-  private int                        maxDepth = 10;
 
+  private IAction                    itemSelectionAction;
+  private int                        maxDepth = 10;
   private String                     renderedProperty;
   private ITreeLevelDescriptor       rootSubtreeDescriptor;
-  private IAction                    itemSelectionAction;
   private IAction                    rowAction;
-  private boolean                    expanded;
 
   /**
    * Constructs a new <code>BasicTreeViewDescriptor</code> instance.
@@ -81,6 +81,13 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    */
   public IIconImageURLProvider getIconImageURLProvider() {
     return iconImageURLProvider;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IAction getItemSelectionAction() {
+    return itemSelectionAction;
   }
 
   /**
@@ -122,6 +129,22 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public IAction getRowAction() {
+    return rowAction;
+  }
+
+  /**
+   * Gets the expanded.
+   * 
+   * @return the expanded.
+   */
+  public boolean isExpanded() {
+    return expanded;
+  }
+
+  /**
    * Configures the first tree level as being a single collection of sibling
    * nodes. For instance, if the child tree level is mapped to a collection
    * (collA) containing 5 elements (collA_Elt-1 to 5), the tree would look like
@@ -153,6 +176,53 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
+   * Configures the first tree level as being a list of collections of sibling
+   * nodes (subtrees). For instance, if the children tree levels are mapped to 2
+   * collection properties (collA, collB) each containing 3 elements
+   * (collA_Elt-1 to 3 and collB_Elt-1 to 3), the tree would look like :
+   * 
+   * <pre>
+   * rootItem
+   *   <i>collA</i>
+   *     coll<b>A</b>_Elt-<b>1</b>
+   *     coll<b>A</b>_Elt-<b>2</b>
+   *     coll<b>A</b>_Elt-<b>3</b>
+   *   <i>collB</i>
+   *     coll<b>B</b>_Elt-<b>1</b>
+   *     coll<b>B</b>_Elt-<b>2</b>
+   *     coll<b>B</b>_Elt-<b>3</b>
+   * </pre>
+   * 
+   * In the example above, you should notice intermediate collection property
+   * grouping nodes (collA and collB in italic). They automatically appeared to
+   * clearly group the tree nodes belonging to the different collections.
+   * <p>
+   * This property is only used if the <code>rootSubtreeDescriptor</code> is not
+   * explicitely set. In the latter case, nested subtrees are determined from
+   * the <code>rootSubtreeDescriptor</code>.
+   * 
+   * @param childrenDescriptors
+   *          the childrenDescriptor to set.
+   */
+  public void setChildrenDescriptors(
+      List<ITreeLevelDescriptor> childrenDescriptors) {
+    this.childrenDescriptors = childrenDescriptors;
+    this.childDescriptor = null;
+  }
+
+  /**
+   * Setting this property to <code>true</code> configures the created tree to
+   * appear with its node expanded. A value of <code>false</code> (default)
+   * means that the tree nodes are initially collapsed.
+   * 
+   * @param expanded
+   *          the expanded to set.
+   */
+  public void setExpanded(boolean expanded) {
+    this.expanded = expanded;
+  }
+
+  /**
    * The icon image URL provider is the delegate responsible for inferring a
    * tree node icon based on its underlying model. By default (i.e. when
    * <code>iconImageURLProvider</code> is <code>null</code>), Jspresso will use
@@ -168,6 +238,19 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    */
   public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
+  }
+
+  /**
+   * This property alows to bind an action that gets triggered every time the
+   * selection changes on the tree view. The action context passed to the action
+   * when it is executed is the same as if it had been registered on the tree
+   * view.
+   * 
+   * @param itemSelectionAction
+   *          the itemSelectionAction to set.
+   */
+  public void setItemSelectionAction(IAction itemSelectionAction) {
+    this.itemSelectionAction = itemSelectionAction;
   }
 
   /**
@@ -217,89 +300,6 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   public void setRootSubtreeDescriptor(
       ITreeLevelDescriptor rootSubtreeDescriptor) {
     this.rootSubtreeDescriptor = rootSubtreeDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction getItemSelectionAction() {
-    return itemSelectionAction;
-  }
-
-  /**
-   * This property alows to bind an action that gets triggered every time the
-   * selection changes on the tree view. The action context passed to the action
-   * when it is executed is the same as if it had been registered on the tree
-   * view.
-   * 
-   * @param itemSelectionAction
-   *          the itemSelectionAction to set.
-   */
-  public void setItemSelectionAction(IAction itemSelectionAction) {
-    this.itemSelectionAction = itemSelectionAction;
-  }
-
-  /**
-   * Gets the expanded.
-   * 
-   * @return the expanded.
-   */
-  public boolean isExpanded() {
-    return expanded;
-  }
-
-  /**
-   * Setting this property to <code>true</code> configures the created tree to
-   * appear with its node expanded. A value of <code>false</code> (default)
-   * means that the tree nodes are initially collapsed.
-   * 
-   * @param expanded
-   *          the expanded to set.
-   */
-  public void setExpanded(boolean expanded) {
-    this.expanded = expanded;
-  }
-
-  /**
-   * Configures the first tree level as being a list of collections of sibling
-   * nodes (subtrees). For instance, if the children tree levels are mapped to 2
-   * collection properties (collA, collB) each containing 3 elements
-   * (collA_Elt-1 to 3 and collB_Elt-1 to 3), the tree would look like :
-   * 
-   * <pre>
-   * rootItem
-   *   <i>collA</i>
-   *     coll<b>A</b>_Elt-<b>1</b>
-   *     coll<b>A</b>_Elt-<b>2</b>
-   *     coll<b>A</b>_Elt-<b>3</b>
-   *   <i>collB</i>
-   *     coll<b>B</b>_Elt-<b>1</b>
-   *     coll<b>B</b>_Elt-<b>2</b>
-   *     coll<b>B</b>_Elt-<b>3</b>
-   * </pre>
-   * 
-   * In the example above, you should notice intermediate collection property
-   * grouping nodes (collA and collB in italic). They automatically appeared to
-   * clearly group the tree nodes belonging to the different collections.
-   * <p>
-   * This property is only used if the <code>rootSubtreeDescriptor</code> is not
-   * explicitely set. In the latter case, nested subtrees are determined from
-   * the <code>rootSubtreeDescriptor</code>.
-   * 
-   * @param childrenDescriptors
-   *          the childrenDescriptor to set.
-   */
-  public void setChildrenDescriptors(
-      List<ITreeLevelDescriptor> childrenDescriptors) {
-    this.childrenDescriptors = childrenDescriptors;
-    this.childDescriptor = null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction getRowAction() {
-    return rowAction;
   }
 
   /**

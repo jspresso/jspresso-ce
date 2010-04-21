@@ -39,21 +39,10 @@ import org.jspresso.framework.application.startup.BackendActionStartup;
  */
 public class BatchStartup extends BackendActionStartup implements IBatchStartup {
 
-  private static final String APP_CONTEXT     = "applicationContext";
-  private static final String LOCALE          = "locale";
   private static final String ACTION_ID       = "action";
+  private static final String APP_CONTEXT     = "applicationContext";
   private static final String BATCH_USER_NAME = "batchUserName";
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void start() {
-    startController();
-    if (!executeAction()) {
-      System.exit(1);
-    }
-  }
+  private static final String LOCALE          = "locale";
 
   /**
    * {@inheritDoc}
@@ -74,18 +63,14 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
   }
 
   /**
-   * Processes the command line.
-   * 
-   * @param cmd
-   *          the parsed command line.
-   * @throws ParseException
-   *           whenever an error occurs parsing the command line.
+   * {@inheritDoc}
    */
-  protected void processCommandLine(CommandLine cmd) throws ParseException {
-    setApplicationContextKey(cmd.getOptionValue(APP_CONTEXT));
-    setStartupLocale(new Locale(cmd.getOptionValue(LOCALE, "en")));
-    setActionBeanId(cmd.getOptionValue(ACTION_ID));
-    setBatchUserName(cmd.getOptionValue(BATCH_USER_NAME, "batch"));
+  @Override
+  public void start() {
+    startController();
+    if (!executeAction()) {
+      System.exit(1);
+    }
   }
 
   /**
@@ -109,5 +94,20 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
         .withDescription("use the specified batch user name.").create(
             BATCH_USER_NAME));
     return options;
+  }
+
+  /**
+   * Processes the command line.
+   * 
+   * @param cmd
+   *          the parsed command line.
+   * @throws ParseException
+   *           whenever an error occurs parsing the command line.
+   */
+  protected void processCommandLine(CommandLine cmd) throws ParseException {
+    setApplicationContextKey(cmd.getOptionValue(APP_CONTEXT));
+    setStartupLocale(new Locale(cmd.getOptionValue(LOCALE, "en")));
+    setActionBeanId(cmd.getOptionValue(ACTION_ID));
+    setBatchUserName(cmd.getOptionValue(BATCH_USER_NAME, "batch"));
   }
 }

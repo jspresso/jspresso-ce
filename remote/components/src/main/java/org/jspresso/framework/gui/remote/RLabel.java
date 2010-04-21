@@ -29,14 +29,6 @@ public class RLabel extends RTextComponent {
   private static final long serialVersionUID = -7684946402506329656L;
 
   /**
-   * Constructs a new <code>RLabel</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RLabel() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RLabel</code> instance.
    * 
    * @param guid
@@ -44,5 +36,13 @@ public class RLabel extends RTextComponent {
    */
   public RLabel(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RLabel</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RLabel() {
+    // For GWT support
   }
 }

@@ -31,14 +31,6 @@ public abstract class RTextComponent extends RComponent {
   private int               maxLength;
 
   /**
-   * Constructs a new <code>RTextComponent</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RTextComponent() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RTextField</code> instance.
    * 
    * @param guid
@@ -46,6 +38,14 @@ public abstract class RTextComponent extends RComponent {
    */
   public RTextComponent(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RTextComponent</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTextComponent() {
+    // For GWT support
   }
 
   /**

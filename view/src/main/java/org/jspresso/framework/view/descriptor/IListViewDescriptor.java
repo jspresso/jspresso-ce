@@ -31,17 +31,17 @@ import org.jspresso.framework.util.gui.IIconImageURLProvider;
 public interface IListViewDescriptor extends ICollectionViewDescriptor {
 
   /**
+   * Gets the iconImageURLProvider.
+   * 
+   * @return the iconImageURLProvider.
+   */
+  IIconImageURLProvider getIconImageURLProvider();
+
+  /**
    * Gets the name of the underlying model propertiy which is made visible by
    * the list.
    * 
    * @return the name of the underlying model rendered property.
    */
   String getRenderedProperty();
-
-  /**
-   * Gets the iconImageURLProvider.
-   * 
-   * @return the iconImageURLProvider.
-   */
-  IIconImageURLProvider getIconImageURLProvider();
 }

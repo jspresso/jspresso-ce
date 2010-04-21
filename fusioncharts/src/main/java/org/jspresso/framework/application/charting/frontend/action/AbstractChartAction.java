@@ -41,17 +41,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private JdbcTemplate             jdbcTemplate;
-  private IChartDescriptor         chartDescriptor;
   private List<IDisplayableAction> actions;
+  private IChartDescriptor         chartDescriptor;
+  private JdbcTemplate             jdbcTemplate;
 
   /**
-   * Gets the chartDescriptor.
+   * Configures a list of actions to install in the chart modal dialog.
    * 
-   * @return the chartDescriptor.
+   * @param actions
+   *          the actions to set.
    */
-  protected IChartDescriptor getChartDescriptor() {
-    return chartDescriptor;
+  public void setActions(List<IDisplayableAction> actions) {
+    this.actions = actions;
   }
 
   /**
@@ -73,6 +74,16 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
+   * Configures the JDBC template to be used by the achart to compute its data.
+   * 
+   * @param jdbcTemplate
+   *          the jdbcTemplate to set.
+   */
+  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
+
+  /**
    * Gets the actions.
    * 
    * @return the actions.
@@ -82,13 +93,12 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Configures a list of actions to install in the chart modal dialog.
+   * Gets the chartDescriptor.
    * 
-   * @param actions
-   *          the actions to set.
+   * @return the chartDescriptor.
    */
-  public void setActions(List<IDisplayableAction> actions) {
-    this.actions = actions;
+  protected IChartDescriptor getChartDescriptor() {
+    return chartDescriptor;
   }
 
   /**
@@ -98,15 +108,5 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   protected JdbcTemplate getJdbcTemplate() {
     return jdbcTemplate;
-  }
-
-  /**
-   * Configures the JDBC template to be used by the achart to compute its data.
-   * 
-   * @param jdbcTemplate
-   *          the jdbcTemplate to set.
-   */
-  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
   }
 }

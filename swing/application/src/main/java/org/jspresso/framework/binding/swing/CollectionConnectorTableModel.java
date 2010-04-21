@@ -248,16 +248,16 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
-    public void valueChange(
-        @SuppressWarnings("unused") final ValueChangeEvent evt) {
+    public void propertyChange(
+        @SuppressWarnings("unused") final PropertyChangeEvent evt) {
       updateCell();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void propertyChange(
-        @SuppressWarnings("unused") final PropertyChangeEvent evt) {
+    public void valueChange(
+        @SuppressWarnings("unused") final ValueChangeEvent evt) {
       updateCell();
     }
 

@@ -86,6 +86,21 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   }
 
   /**
+   * Gets the orderingProperties.
+   * 
+   * @return the orderingProperties.
+   */
+  public Map<String, ESort> getOrderingProperties() {
+    if (orderingProperties != null) {
+      return orderingProperties;
+    }
+    if (getElementDescriptor() != null) {
+      return getElementDescriptor().getOrderingProperties();
+    }
+    return null;
+  }
+
+  /**
    * Allows to choose between the supported collection semantics. The incoming
    * class property value must be one of :
    * <ul>
@@ -115,21 +130,6 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    */
   public void setElementDescriptor(IComponentDescriptor<E> elementDescriptor) {
     this.elementDescriptor = elementDescriptor;
-  }
-
-  /**
-   * Gets the orderingProperties.
-   * 
-   * @return the orderingProperties.
-   */
-  public Map<String, ESort> getOrderingProperties() {
-    if (orderingProperties != null) {
-      return orderingProperties;
-    }
-    if (getElementDescriptor() != null) {
-      return getElementDescriptor().getOrderingProperties();
-    }
-    return null;
   }
 
   /**

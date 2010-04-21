@@ -29,14 +29,6 @@ public class RTimeField extends RComponent {
   private static final long serialVersionUID = 2384664561321144507L;
 
   /**
-   * Constructs a new <code>RTimeField</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RTimeField() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RDateField</code> instance.
    * 
    * @param guid
@@ -44,5 +36,13 @@ public class RTimeField extends RComponent {
    */
   public RTimeField(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RTimeField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTimeField() {
+    // For GWT support
   }
 }

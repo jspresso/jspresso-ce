@@ -35,9 +35,19 @@ import org.jspresso.framework.security.UserPrincipal;
  */
 public class BasicApplicationSession implements IApplicationSession {
 
+  private Map<String, Object> customValues;
   private Locale              locale;
   private Subject             subject;
-  private Map<String, Object> customValues;
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getCustomValue(String key) {
+    if (customValues == null) {
+      return null;
+    }
+    return customValues.get(key);
+  }
 
   /**
    * Gets the locale.
@@ -68,6 +78,16 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void putCustomValue(String key, Object value) {
+    if (customValues == null) {
+      customValues = new HashMap<String, Object>();
+    }
+    customValues.put(key, value);
+  }
+
+  /**
    * Sets the locale.
    * 
    * @param locale
@@ -85,25 +105,5 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   public void setSubject(Subject subject) {
     this.subject = subject;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getCustomValue(String key) {
-    if (customValues == null) {
-      return null;
-    }
-    return customValues.get(key);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void putCustomValue(String key, Object value) {
-    if (customValues == null) {
-      customValues = new HashMap<String, Object>();
-    }
-    customValues.put(key, value);
   }
 }

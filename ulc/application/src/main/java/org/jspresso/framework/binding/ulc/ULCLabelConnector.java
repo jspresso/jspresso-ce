@@ -34,8 +34,8 @@ import com.ulcjava.base.application.ULCLabel;
  */
 public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
 
-  private boolean    multiLine;
   private IFormatter formatter;
+  private boolean    multiLine;
 
   /**
    * Constructs a new <code>ULCLabelConnector</code> instance.
@@ -50,34 +50,31 @@ public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the formatter.
+   * 
+   * @param formatter
+   *          the formatter to set.
    */
-  @Override
-  protected void bindULCComponent() {
-    // Empty since a label is read-only.
+  public void setFormatter(IFormatter formatter) {
+    this.formatter = formatter;
+  }
+
+  /**
+   * Sets the multiLine.
+   * 
+   * @param multiLine
+   *          the multiLine to set.
+   */
+  public void setMultiLine(boolean multiLine) {
+    this.multiLine = multiLine;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected void setConnecteeValue(Object aValue) {
-    if (aValue == null) {
-      getConnectedULCComponent().setText(null);
-    } else {
-      if (formatter != null) {
-        getConnectedULCComponent().setText(formatter.format(aValue));
-      } else if (multiLine) {
-        if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
-          getConnectedULCComponent().setText(
-              HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
-        } else {
-          getConnectedULCComponent().setText(aValue.toString());
-        }
-      } else {
-        getConnectedULCComponent().setText(aValue.toString());
-      }
-    }
+  protected void bindULCComponent() {
+    // Empty since a label is read-only.
   }
 
   /**
@@ -103,22 +100,25 @@ public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
   }
 
   /**
-   * Sets the multiLine.
-   * 
-   * @param multiLine
-   *          the multiLine to set.
+   * {@inheritDoc}
    */
-  public void setMultiLine(boolean multiLine) {
-    this.multiLine = multiLine;
-  }
-
-  /**
-   * Sets the formatter.
-   * 
-   * @param formatter
-   *          the formatter to set.
-   */
-  public void setFormatter(IFormatter formatter) {
-    this.formatter = formatter;
+  @Override
+  protected void setConnecteeValue(Object aValue) {
+    if (aValue == null) {
+      getConnectedULCComponent().setText(null);
+    } else {
+      if (formatter != null) {
+        getConnectedULCComponent().setText(formatter.format(aValue));
+      } else if (multiLine) {
+        if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
+          getConnectedULCComponent().setText(
+              HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
+        } else {
+          getConnectedULCComponent().setText(aValue.toString());
+        }
+      } else {
+        getConnectedULCComponent().setText(aValue.toString());
+      }
+    }
   }
 }

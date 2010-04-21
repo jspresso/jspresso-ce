@@ -58,6 +58,17 @@ public class CollectionConnectorListModel extends AbstractListModel {
   }
 
   /**
+   * return the underlying cell connetor.
+   * 
+   * @param row
+   *          the row to get the connector for.
+   * @return the underlying cell connetor.
+   */
+  public IValueConnector getCellConnector(int row) {
+    return collectionConnector.getChildConnector(row);
+  }
+
+  /**
    * Returns the connector value of the connector at <code>index</code> in the
    * child connectors collection contained in the backed collection connector.
    * <p>
@@ -159,16 +170,5 @@ public class CollectionConnectorListModel extends AbstractListModel {
             oldCollectionSize, newCollectionSize);
       }
     }
-  }
-
-  /**
-   * return the underlying cell connetor.
-   * 
-   * @param row
-   *          the row to get the connector for.
-   * @return the underlying cell connetor.
-   */
-  public IValueConnector getCellConnector(int row) {
-    return collectionConnector.getChildConnector(row);
   }
 }

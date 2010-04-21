@@ -39,18 +39,30 @@ public final class StringUtils {
   }
 
   /**
-   * Eliminates any whitespace character from the source string. This is useful
-   * to ensure that any XML formatting does not break class names for instance.
+   * Ensures that all strings in the source collection are whitespace free.
    * 
-   * @param source
-   *          the source string.
-   * @return the whitespace free string.
+   * @param sourceCollection
+   *          the list of strings to check.
+   * @return the set of whitespace free strings.
    */
-  public static String ensureSpaceFree(String source) {
-    if (source == null) {
+  public static Collection<String> ensureSpaceFree(
+      Collection<String> sourceCollection) {
+    if (sourceCollection == null) {
       return null;
     }
-    return source.replaceAll("\\s*", "");
+    Collection<String> result;
+    if (sourceCollection instanceof Set<?>) {
+      result = ensureSpaceFree((Set<String>) sourceCollection);
+    } else if (sourceCollection instanceof List<?>) {
+      result = ensureSpaceFree((List<String>) sourceCollection);
+    } else {
+      result = sourceCollection;
+      for (String source : new ArrayList<String>(sourceCollection)) {
+        result.remove(source);
+        result.add(ensureSpaceFree(source));
+      }
+    }
+    return result;
   }
 
   /**
@@ -111,29 +123,17 @@ public final class StringUtils {
   }
 
   /**
-   * Ensures that all strings in the source collection are whitespace free.
+   * Eliminates any whitespace character from the source string. This is useful
+   * to ensure that any XML formatting does not break class names for instance.
    * 
-   * @param sourceCollection
-   *          the list of strings to check.
-   * @return the set of whitespace free strings.
+   * @param source
+   *          the source string.
+   * @return the whitespace free string.
    */
-  public static Collection<String> ensureSpaceFree(
-      Collection<String> sourceCollection) {
-    if (sourceCollection == null) {
+  public static String ensureSpaceFree(String source) {
+    if (source == null) {
       return null;
     }
-    Collection<String> result;
-    if (sourceCollection instanceof Set<?>) {
-      result = ensureSpaceFree((Set<String>) sourceCollection);
-    } else if (sourceCollection instanceof List<?>) {
-      result = ensureSpaceFree((List<String>) sourceCollection);
-    } else {
-      result = sourceCollection;
-      for (String source : new ArrayList<String>(sourceCollection)) {
-        result.remove(source);
-        result.add(ensureSpaceFree(source));
-      }
-    }
-    return result;
+    return source.replaceAll("\\s*", "");
   }
 }

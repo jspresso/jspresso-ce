@@ -59,8 +59,8 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
     TableCG {
 
   private static final long serialVersionUID     = 1L;
-  protected String          fixedTableBorderWidth;
   protected SIcon           editIcon;
+  protected String          fixedTableBorderWidth;
   protected String          selectionColumnWidth = "30";
 
   int                       horizontalOversize   = 4;
@@ -77,36 +77,22 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
         "TableCG.selectionColumnWidth", String.class);
   }
 
-  public int getHorizontalOversize() {
-    return horizontalOversize;
+  public static void printClickability(final Device device,
+      final SComponent component, final String eventValue,
+      final boolean formComponent) throws IOException {
+    device.print(" onclick=\"return wingS.table.cellClick(");
+    device.print("event,this,");
+    device.print(formComponent + ",");
+    device.print(!component.isReloadForced() + ",'");
+    device.print(Utils.event(component));
+    device.print("','");
+    device.print(eventValue == null ? "" : eventValue);
+    device.print("'");
+    device.print(");\"");
   }
 
-  public void setHorizontalOversize(int horizontalOversize) {
-    this.horizontalOversize = horizontalOversize;
-  }
-
-  /**
-   * Tweak property. Declares a deprecated BORDER=xxx attribute on the HTML
-   * TABLE element.
-   */
-  public String getFixedTableBorderWidth() {
-    return fixedTableBorderWidth;
-  }
-
-  /**
-   * Tweak property. Declares a deprecated BORDER=xxx attribute on the HTML
-   * TABLE element.
-   */
-  public void setFixedTableBorderWidth(String fixedTableBorderWidth) {
-    this.fixedTableBorderWidth = fixedTableBorderWidth;
-  }
-
-  /**
-   * Sets the icon used to indicated an editable cell (if content is not direct
-   * clickable).
-   */
-  public void setEditIcon(SIcon editIcon) {
-    this.editIcon = editIcon;
+  public Update getEditCellUpdate(STable table, int row, int column) {
+    return new EditCellUpdate(table, row, column);
   }
 
   /**
@@ -118,20 +104,41 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
   }
 
   /**
+   * Tweak property. Declares a deprecated BORDER=xxx attribute on the HTML
+   * TABLE element.
+   */
+  public String getFixedTableBorderWidth() {
+    return fixedTableBorderWidth;
+  }
+
+  public int getHorizontalOversize() {
+    return horizontalOversize;
+  }
+
+  public Update getRenderCellUpdate(STable table, int row, int column) {
+    return new RenderCellUpdate(table, row, column);
+  }
+
+  /**
    * @return The width of the (optional) row selection column in px
    */
   public String getSelectionColumnWidth() {
     return selectionColumnWidth;
   }
 
-  /**
-   * The width of the (optional) row selection column in px
-   * 
-   * @param selectionColumnWidth
-   *          The width of the (optional) row selection column with unit
-   */
-  public void setSelectionColumnWidth(String selectionColumnWidth) {
-    this.selectionColumnWidth = selectionColumnWidth;
+  public Update getSelectionUpdate(STable table, List deselectedIndices,
+      List selectedIndices) {
+    return new SelectionUpdate(table, deselectedIndices, selectedIndices);
+  }
+
+  public Update getTableScrollUpdate(STable table, Rectangle newViewport,
+      Rectangle oldViewport) {
+    // return new TableScrollUpdate(table);
+    return new ComponentUpdate(this, table);
+  }
+
+  public String getToggleSortParameter(int col) {
+    return "o" + col;
   }
 
   public void installCG(final SComponent comp) {
@@ -168,12 +175,79 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
           horizontalOversize));
   }
 
+  /**
+   * Sets the icon used to indicated an editable cell (if content is not direct
+   * clickable).
+   */
+  public void setEditIcon(SIcon editIcon) {
+    this.editIcon = editIcon;
+  }
+
+  /**
+   * Tweak property. Declares a deprecated BORDER=xxx attribute on the HTML
+   * TABLE element.
+   */
+  public void setFixedTableBorderWidth(String fixedTableBorderWidth) {
+    this.fixedTableBorderWidth = fixedTableBorderWidth;
+  }
+
+  public void setHorizontalOversize(int horizontalOversize) {
+    this.horizontalOversize = horizontalOversize;
+  }
+
+  /**
+   * The width of the (optional) row selection column in px
+   * 
+   * @param selectionColumnWidth
+   *          The width of the (optional) row selection column with unit
+   */
+  public void setSelectionColumnWidth(String selectionColumnWidth) {
+    this.selectionColumnWidth = selectionColumnWidth;
+  }
+
   public void uninstallCG(SComponent component) {
     super.uninstallCG(component);
     final STable table = (STable) component;
     table.setHeaderRenderer(null);
     table.setDefaultRenderer(null);
     table.setRowSelectionRenderer(null);
+  }
+
+  public final void writeInternal(final Device device, final SComponent _c)
+      throws IOException {
+    final STable table = (STable) _c;
+
+    device.print("<table");
+    Utils.writeAllAttributes(device, table);
+    writeTableAttributes(device, table);
+    device.print("><thead>");
+    Utils.printNewline(device, table);
+
+    Rectangle currentViewport = table.getViewportSize();
+    Rectangle maximalViewport = table.getScrollableViewportSize();
+    int startX = 0;
+    int endX = table.getVisibleColumnCount();
+    int startY = 0;
+    int endY = table.getRowCount();
+    int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
+
+    if (currentViewport != null) {
+      startX = currentViewport.x;
+      endX = startX + currentViewport.width;
+      startY = currentViewport.y;
+      endY = startY + currentViewport.height;
+    }
+
+    writeColumnWidths(device, table, startX, endX);
+    writeHeader(device, table, startX, endX);
+
+    device.print("</thead>");
+    Utils.printNewline(device, table);
+    device.print("<tbody>");
+
+    writeBody(device, table, startX, endX, startY, endY, emptyIndex);
+
+    device.print("</tbody></table>");
   }
 
   /**
@@ -232,6 +306,25 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
     Utils.printNewline(device, component);
   }
 
+  protected void writeBody(Device device, STable table, int startX, int endX,
+      int startY, int endY, int emptyIndex) throws IOException {
+    final SListSelectionModel selectionModel = table.getSelectionModel();
+
+    StringBuilder selectedArea = Utils.inlineStyles(table
+        .getDynamicStyle(STable.SELECTOR_SELECTED));
+    StringBuilder evenArea = Utils.inlineStyles(table
+        .getDynamicStyle(STable.SELECTOR_EVEN_ROWS));
+    StringBuilder oddArea = Utils.inlineStyles(table
+        .getDynamicStyle(STable.SELECTOR_ODD_ROWS));
+    final SCellRendererPane rendererPane = table.getCellRendererPane();
+    STableColumnModel columnModel = table.getColumnModel();
+
+    for (int r = startY; r < endY; ++r) {
+      writeTableRow(device, table, columnModel, selectionModel, rendererPane,
+          r, startX, endX, emptyIndex, selectedArea, oddArea, evenArea);
+    }
+  }
+
   protected void writeHeaderCell(final Device device, final STable table,
       final SCellRendererPane rendererPane, final int col) throws IOException {
     // final SComponent comp = table.prepareHeaderRenderer(table
@@ -273,126 +366,49 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
     Utils.printNewline(device, comp);
   }
 
-  public String getToggleSortParameter(int col) {
-    return "o" + col;
-  }
+  /**
+   * Renders the row sometimes needed to allow row selection.
+   */
+  protected void writeSelectionBody(final Device device, final STable table,
+      final SCellRendererPane rendererPane, final int row) throws IOException {
+    final STableCellRenderer rowSelectionRenderer = table
+        .getRowSelectionRenderer();
+    if (isSelectionColumnVisible(table)) {
+      final SComponent comp = rowSelectionRenderer
+          .getTableCellRendererComponent(table, table
+              .getToggleSelectionParameter(row, -1), table.isRowSelected(row),
+              row, -1);
+      final String columnStyle = Utils.joinStyles(comp, "num");
 
-  public final void writeInternal(final Device device, final SComponent _c)
-      throws IOException {
-    final STable table = (STable) _c;
+      device.print("<td valign=\"top\" align=\"right\"");
+      Utils.optAttribute(device, "width", selectionColumnWidth);
 
-    device.print("<table");
-    Utils.writeAllAttributes(device, table);
-    writeTableAttributes(device, table);
-    device.print("><thead>");
-    Utils.printNewline(device, table);
-
-    Rectangle currentViewport = table.getViewportSize();
-    Rectangle maximalViewport = table.getScrollableViewportSize();
-    int startX = 0;
-    int endX = table.getVisibleColumnCount();
-    int startY = 0;
-    int endY = table.getRowCount();
-    int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
-
-    if (currentViewport != null) {
-      startX = currentViewport.x;
-      endX = startX + currentViewport.width;
-      startY = currentViewport.y;
-      endY = startY + currentViewport.height;
-    }
-
-    writeColumnWidths(device, table, startX, endX);
-    writeHeader(device, table, startX, endX);
-
-    device.print("</thead>");
-    Utils.printNewline(device, table);
-    device.print("<tbody>");
-
-    writeBody(device, table, startX, endX, startY, endY, emptyIndex);
-
-    device.print("</tbody></table>");
-  }
-
-  private void writeTableAttributes(Device device, STable table)
-      throws IOException {
-    final SDimension intercellPadding = table.getIntercellPadding();
-    final SDimension intercellSpacing = table.getIntercellSpacing();
-    Utils.writeEvents(device, table, null);
-
-    // TODO: border="" should be obsolete
-    // TODO: cellspacing and cellpadding may be in conflict with border-collapse
-    /* Tweaking: CG configured to have a fixed border="xy" width */
-    Utils.optAttribute(device, "border", fixedTableBorderWidth);
-    Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""
-        + intercellSpacing.getWidthInt() : null));
-    Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""
-        + intercellPadding.getHeightInt() : null));
-  }
-
-  private void writeColumnWidths(Device device, STable table, int startX,
-      int endX) throws IOException {
-    STableColumnModel columnModel = table.getColumnModel();
-    if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
-      device.print("<colgroup>");
-      if (isSelectionColumnVisible(table))
-        writeCol(device, selectionColumnWidth);
-
-      for (int i = startX; i < endX; ++i) {
-        STableColumn column = columnModel.getColumn(i);
-        if (!column.isHidden())
-          writeCol(device, column.getWidth());
-        else
-          ++endX;
+      String value = table.getToggleSelectionParameter(row, -1);
+      if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION) {
+        printClickability(device, table, value, table.getShowAsFormComponent());
+        device.print(" class=\"clickable ");
+        device.print(columnStyle);
+        device.print("\"");
+      } else {
+        device.print(" class=\"");
+        device.print(columnStyle);
+        device.print("\"");
       }
-      device.print("</colgroup>");
-      Utils.printNewline(device, table);
+      device.print(">");
+
+      // Renders the content of the row selection row
+      rendererPane.writeComponent(device, comp, table);
+
+      device.print("</td>");
     }
   }
 
-  private void writeHeader(Device device, STable table, int startX, int endX)
+  protected void writeSelectionHeader(Device device, STable table)
       throws IOException {
-    if (!table.isHeaderVisible()) return;
-
-    final SCellRendererPane rendererPane = table.getCellRendererPane();
-    STableColumnModel columnModel = table.getColumnModel();
-
-    StringBuilder headerArea = Utils.inlineStyles(table
-        .getDynamicStyle(STable.SELECTOR_HEADER));
-    device.print("<tr class=\"header\"");
-    Utils.optAttribute(device, "style", headerArea);
-    device.print(">");
-
-    Utils.printNewline(device, table, 1);
-    writeSelectionHeader(device, table);
-
-    for (int i = startX; i < endX; ++i) {
-      STableColumn column = columnModel.getColumn(i);
-      if (!column.isHidden())
-        writeHeaderCell(device, table, rendererPane, i);
-      else
-        ++endX;
-    }
-    device.print("</tr>");
-    Utils.printNewline(device, table);
-  }
-
-  protected void writeBody(Device device, STable table, int startX, int endX,
-      int startY, int endY, int emptyIndex) throws IOException {
-    final SListSelectionModel selectionModel = table.getSelectionModel();
-
-    StringBuilder selectedArea = Utils.inlineStyles(table
-        .getDynamicStyle(STable.SELECTOR_SELECTED));
-    StringBuilder evenArea = Utils.inlineStyles(table
-        .getDynamicStyle(STable.SELECTOR_EVEN_ROWS));
-    StringBuilder oddArea = Utils.inlineStyles(table
-        .getDynamicStyle(STable.SELECTOR_ODD_ROWS));
-    final SCellRendererPane rendererPane = table.getCellRendererPane();
-    STableColumnModel columnModel = table.getColumnModel();
-
-    for (int r = startY; r < endY; ++r) {
-      writeTableRow(device, table, columnModel, selectionModel, rendererPane,
-          r, startX, endX, emptyIndex, selectedArea, oddArea, evenArea);
+    if (isSelectionColumnVisible(table)) {
+      device.print("<th valign=\"middle\" class=\"num\"");
+      Utils.optAttribute(device, "width", selectionColumnWidth);
+      device.print("></th>");
     }
   }
 
@@ -443,15 +459,6 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
     Utils.printNewline(device, table);
   }
 
-  protected void writeSelectionHeader(Device device, STable table)
-      throws IOException {
-    if (isSelectionColumnVisible(table)) {
-      device.print("<th valign=\"middle\" class=\"num\"");
-      Utils.optAttribute(device, "width", selectionColumnWidth);
-      device.print("></th>");
-    }
-  }
-
   private boolean atLeastOneColumnWidthIsNotNull(STableColumnModel columnModel) {
     int columnCount = columnModel.getColumnCount();
     for (int i = 0; i < columnCount; i++)
@@ -459,61 +466,13 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
     return false;
   }
 
-  private void writeCol(Device device, String width) throws IOException {
-    device.print("<col");
-    Utils.optAttribute(device, "width", width);
-    device.print("/>");
-  }
-
-  /**
-   * Renders the row sometimes needed to allow row selection.
-   */
-  protected void writeSelectionBody(final Device device, final STable table,
-      final SCellRendererPane rendererPane, final int row) throws IOException {
-    final STableCellRenderer rowSelectionRenderer = table
-        .getRowSelectionRenderer();
-    if (isSelectionColumnVisible(table)) {
-      final SComponent comp = rowSelectionRenderer
-          .getTableCellRendererComponent(table, table
-              .getToggleSelectionParameter(row, -1), table.isRowSelected(row),
-              row, -1);
-      final String columnStyle = Utils.joinStyles(comp, "num");
-
-      device.print("<td valign=\"top\" align=\"right\"");
-      Utils.optAttribute(device, "width", selectionColumnWidth);
-
-      String value = table.getToggleSelectionParameter(row, -1);
-      if (table.getSelectionMode() != SListSelectionModel.NO_SELECTION) {
-        printClickability(device, table, value, table.getShowAsFormComponent());
-        device.print(" class=\"clickable ");
-        device.print(columnStyle);
-        device.print("\"");
-      } else {
-        device.print(" class=\"");
-        device.print(columnStyle);
-        device.print("\"");
-      }
-      device.print(">");
-
-      // Renders the content of the row selection row
-      rendererPane.writeComponent(device, comp, table);
-
-      device.print("</td>");
+  private int columnInView(STable table, int column) {
+    int viewColumn = 0;
+    for (int i = 0; i < column; i++) {
+      STableColumn tableColumn = table.getColumnModel().getColumn(i);
+      if (!tableColumn.isHidden()) viewColumn++;
     }
-  }
-
-  public static void printClickability(final Device device,
-      final SComponent component, final String eventValue,
-      final boolean formComponent) throws IOException {
-    device.print(" onclick=\"return wingS.table.cellClick(");
-    device.print("event,this,");
-    device.print(formComponent + ",");
-    device.print(!component.isReloadForced() + ",'");
-    device.print(Utils.event(component));
-    device.print("','");
-    device.print(eventValue == null ? "" : eventValue);
-    device.print("'");
-    device.print(");\"");
+    return viewColumn;
   }
 
   private boolean isSelectionColumnVisible(STable table) {
@@ -523,68 +482,73 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
     return false;
   }
 
-  public Update getTableScrollUpdate(STable table, Rectangle newViewport,
-      Rectangle oldViewport) {
-    // return new TableScrollUpdate(table);
-    return new ComponentUpdate(this, table);
+  private void writeCol(Device device, String width) throws IOException {
+    device.print("<col");
+    Utils.optAttribute(device, "width", width);
+    device.print("/>");
   }
 
-  public Update getSelectionUpdate(STable table, List deselectedIndices,
-      List selectedIndices) {
-    return new SelectionUpdate(table, deselectedIndices, selectedIndices);
-  }
+  private void writeColumnWidths(Device device, STable table, int startX,
+      int endX) throws IOException {
+    STableColumnModel columnModel = table.getColumnModel();
+    if (columnModel != null && atLeastOneColumnWidthIsNotNull(columnModel)) {
+      device.print("<colgroup>");
+      if (isSelectionColumnVisible(table))
+        writeCol(device, selectionColumnWidth);
 
-  public Update getEditCellUpdate(STable table, int row, int column) {
-    return new EditCellUpdate(table, row, column);
-  }
-
-  public Update getRenderCellUpdate(STable table, int row, int column) {
-    return new RenderCellUpdate(table, row, column);
-  }
-
-  protected class TableScrollUpdate extends AbstractUpdate {
-
-    public TableScrollUpdate(SComponent component) {
-      super(component);
+      for (int i = startX; i < endX; ++i) {
+        STableColumn column = columnModel.getColumn(i);
+        if (!column.isHidden())
+          writeCol(device, column.getWidth());
+        else
+          ++endX;
+      }
+      device.print("</colgroup>");
+      Utils.printNewline(device, table);
     }
+  }
 
-    public Handler getHandler() {
-      STable table = (STable) component;
+  private void writeHeader(Device device, STable table, int startX, int endX)
+      throws IOException {
+    if (!table.isHeaderVisible()) return;
 
-      Rectangle currentViewport = table.getViewportSize();
-      Rectangle maximalViewport = table.getScrollableViewportSize();
-      int startX = 0;
-      int endX = table.getVisibleColumnCount();
-      int startY = 0;
-      int endY = table.getRowCount();
-      int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
+    final SCellRendererPane rendererPane = table.getCellRendererPane();
+    STableColumnModel columnModel = table.getColumnModel();
 
-      if (currentViewport != null) {
-        startX = currentViewport.x;
-        endX = startX + currentViewport.width;
-        startY = currentViewport.y;
-        endY = startY + currentViewport.height;
-      }
+    StringBuilder headerArea = Utils.inlineStyles(table
+        .getDynamicStyle(STable.SELECTOR_HEADER));
+    device.print("<tr class=\"header\"");
+    Utils.optAttribute(device, "style", headerArea);
+    device.print(">");
 
-      String htmlCode = "";
-      String exception = null;
+    Utils.printNewline(device, table, 1);
+    writeSelectionHeader(device, table);
 
-      try {
-        StringBuilderDevice htmlDevice = new StringBuilderDevice();
-        writeBody(htmlDevice, table, startX, endX, startY, endY, emptyIndex);
-        htmlCode = htmlDevice.toString();
-      } catch (Throwable t) {
-        exception = t.getClass().getName();
-      }
-
-      UpdateHandler handler = new UpdateHandler("tableScroll");
-      handler.addParameter(table.getName());
-      handler.addParameter(htmlCode);
-      if (exception != null) {
-        handler.addParameter(exception);
-      }
-      return handler;
+    for (int i = startX; i < endX; ++i) {
+      STableColumn column = columnModel.getColumn(i);
+      if (!column.isHidden())
+        writeHeaderCell(device, table, rendererPane, i);
+      else
+        ++endX;
     }
+    device.print("</tr>");
+    Utils.printNewline(device, table);
+  }
+
+  private void writeTableAttributes(Device device, STable table)
+      throws IOException {
+    final SDimension intercellPadding = table.getIntercellPadding();
+    final SDimension intercellSpacing = table.getIntercellSpacing();
+    Utils.writeEvents(device, table, null);
+
+    // TODO: border="" should be obsolete
+    // TODO: cellspacing and cellpadding may be in conflict with border-collapse
+    /* Tweaking: CG configured to have a fixed border="xy" width */
+    Utils.optAttribute(device, "border", fixedTableBorderWidth);
+    Utils.optAttribute(device, "cellspacing", ((intercellSpacing != null) ? ""
+        + intercellSpacing.getWidthInt() : null));
+    Utils.optAttribute(device, "cellpadding", ((intercellPadding != null) ? ""
+        + intercellPadding.getHeightInt() : null));
   }
 
   protected class SelectionUpdate extends AbstractUpdate<STable> {
@@ -642,10 +606,55 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
     }
   }
 
+  protected class TableScrollUpdate extends AbstractUpdate {
+
+    public TableScrollUpdate(SComponent component) {
+      super(component);
+    }
+
+    public Handler getHandler() {
+      STable table = (STable) component;
+
+      Rectangle currentViewport = table.getViewportSize();
+      Rectangle maximalViewport = table.getScrollableViewportSize();
+      int startX = 0;
+      int endX = table.getVisibleColumnCount();
+      int startY = 0;
+      int endY = table.getRowCount();
+      int emptyIndex = maximalViewport != null ? maximalViewport.height : endY;
+
+      if (currentViewport != null) {
+        startX = currentViewport.x;
+        endX = startX + currentViewport.width;
+        startY = currentViewport.y;
+        endY = startY + currentViewport.height;
+      }
+
+      String htmlCode = "";
+      String exception = null;
+
+      try {
+        StringBuilderDevice htmlDevice = new StringBuilderDevice();
+        writeBody(htmlDevice, table, startX, endX, startY, endY, emptyIndex);
+        htmlCode = htmlDevice.toString();
+      } catch (Throwable t) {
+        exception = t.getClass().getName();
+      }
+
+      UpdateHandler handler = new UpdateHandler("tableScroll");
+      handler.addParameter(table.getName());
+      handler.addParameter(htmlCode);
+      if (exception != null) {
+        handler.addParameter(exception);
+      }
+      return handler;
+    }
+  }
+
   private class EditCellUpdate extends AbstractUpdate<STable> {
 
-    private int row;
     private int column;
+    private int row;
 
     public EditCellUpdate(STable table, int row, int column) {
       super(table);
@@ -698,13 +707,24 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
 
   private class RenderCellUpdate extends AbstractUpdate<STable> {
 
-    private int row;
     private int column;
+    private int row;
 
     public RenderCellUpdate(STable table, int row, int column) {
       super(table);
       this.row = row;
       this.column = column;
+    }
+
+    public boolean equals(Object object) {
+      if (!super.equals(object)) return false;
+
+      RenderCellUpdate other = (RenderCellUpdate) object;
+
+      if (this.row != other.row) return false;
+      if (this.column != other.column) return false;
+
+      return true;
     }
 
     public Handler getHandler() {
@@ -750,17 +770,6 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
       return handler;
     }
 
-    public boolean equals(Object object) {
-      if (!super.equals(object)) return false;
-
-      RenderCellUpdate other = (RenderCellUpdate) object;
-
-      if (this.row != other.row) return false;
-      if (this.column != other.column) return false;
-
-      return true;
-    }
-
     public int hashCode() {
       int hashCode = super.hashCode();
       int dispersionFactor = 37;
@@ -770,14 +779,5 @@ public class ClickableHeaderTableCG extends AbstractComponentCG implements
 
       return hashCode;
     }
-  }
-
-  private int columnInView(STable table, int column) {
-    int viewColumn = 0;
-    for (int i = 0; i < column; i++) {
-      STableColumn tableColumn = table.getColumnModel().getColumn(i);
-      if (!tableColumn.isHidden()) viewColumn++;
-    }
-    return viewColumn;
   }
 }

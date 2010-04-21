@@ -48,11 +48,38 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     IPropertyViewDescriptor {
 
-  private List<String> renderedChildProperties;
-  private Integer      width;
   private String       labelBackground;
   private String       labelFont;
   private String       labelForeground;
+  private List<String> renderedChildProperties;
+  private Integer      width;
+
+  /**
+   * Gets the labelBackground.
+   * 
+   * @return the labelBackground.
+   */
+  public String getLabelBackground() {
+    return labelBackground;
+  }
+
+  /**
+   * Gets the labelFont.
+   * 
+   * @return the labelFont.
+   */
+  public String getLabelFont() {
+    return labelFont;
+  }
+
+  /**
+   * Gets the labelForeground.
+   * 
+   * @return the labelForeground.
+   */
+  public String getLabelForeground() {
+    return labelForeground;
+  }
 
   /**
    * {@inheritDoc}
@@ -74,6 +101,71 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
           .getReferencedDescriptor().getRenderedProperties();
     }
     return null;
+  }
+
+  /**
+   * Gets the width.
+   * 
+   * @return the width.
+   */
+  public Integer getWidth() {
+    if (width != null) {
+      return width;
+    }
+    return new Integer(1);
+  }
+
+  /**
+   * When the property has to be labelled (e.g. in a component view), this
+   * property defines the background color of the corresponding label. It might
+   * differ from the field component one. The color must be defined using its
+   * string hexadecimal representation (<i>0xrgba</i> encoded).
+   * <p>
+   * Default value is <code>null</code>, meaning use UI default.
+   * 
+   * @param labelBackground
+   *          the labelBackground to set.
+   */
+  public void setLabelBackground(String labelBackground) {
+    this.labelBackground = labelBackground;
+  }
+
+  /**
+   * When the property has to be labelled (e.g. in a component view), this
+   * property defines the font of the corresponding label. It might differ from
+   * the field component one. The font must be string encoded using the pattern
+   * <b>&quot;[name];[style];[size]&quot;</b> :
+   * <ul>
+   * <li><b>[name]</b> is the name of the font, e.g. <i>arial</i>.</li>
+   * <li><b>[style]</b> is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC
+   * combined with the '|' character, e.g. <i>BOLD|ITALIC</i>.</li>
+   * <li><b>[size]</b> is the size of the font, e.g. <i>10</i>.</li>
+   * </ul>
+   * Any of the above pattern section can be left empty, thus falling back to
+   * the component default.
+   * <p>
+   * Default value is <code>null</code>, meaning use default component font.
+   * 
+   * @param labelFont
+   *          the labelFont to set.
+   */
+  public void setLabelFont(String labelFont) {
+    this.labelFont = labelFont;
+  }
+
+  /**
+   * When the property has to be labelled (e.g. in a component view), this
+   * property defines the foregroud color of the corresponding label. It might
+   * differ from the field component one. The color must be defined using its
+   * string hexadecimal representation (<i>0xrgba</i> encoded).
+   * <p>
+   * Default value is <code>null</code>, meaning use UI default.
+   * 
+   * @param labelForeground
+   *          the labelForeground to set.
+   */
+  public void setLabelForeground(String labelForeground) {
+    this.labelForeground = labelForeground;
   }
 
   /**
@@ -104,18 +196,6 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Gets the width.
-   * 
-   * @return the width.
-   */
-  public Integer getWidth() {
-    if (width != null) {
-      return width;
-    }
-    return new Integer(1);
-  }
-
-  /**
    * When the property has to be displayed in a grid-like layout (e.g. in a
    * component view), this property defines the umber of grid columns the
    * corresponding UI component will span.
@@ -127,86 +207,6 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    */
   public void setWidth(Integer width) {
     this.width = width;
-  }
-
-  /**
-   * Gets the labelBackground.
-   * 
-   * @return the labelBackground.
-   */
-  public String getLabelBackground() {
-    return labelBackground;
-  }
-
-  /**
-   * When the property has to be labelled (e.g. in a component view), this
-   * property defines the background color of the corresponding label. It might
-   * differ from the field component one. The color must be defined using its
-   * string hexadecimal representation (<i>0xrgba</i> encoded).
-   * <p>
-   * Default value is <code>null</code>, meaning use UI default.
-   * 
-   * @param labelBackground
-   *          the labelBackground to set.
-   */
-  public void setLabelBackground(String labelBackground) {
-    this.labelBackground = labelBackground;
-  }
-
-  /**
-   * Gets the labelFont.
-   * 
-   * @return the labelFont.
-   */
-  public String getLabelFont() {
-    return labelFont;
-  }
-
-  /**
-   * When the property has to be labelled (e.g. in a component view), this
-   * property defines the font of the corresponding label. It might differ from
-   * the field component one. The font must be string encoded using the pattern
-   * <b>&quot;[name];[style];[size]&quot;</b> :
-   * <ul>
-   * <li><b>[name]</b> is the name of the font, e.g. <i>arial</i>.</li>
-   * <li><b>[style]</b> is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC
-   * combined with the '|' character, e.g. <i>BOLD|ITALIC</i>.</li>
-   * <li><b>[size]</b> is the size of the font, e.g. <i>10</i>.</li>
-   * </ul>
-   * Any of the above pattern section can be left empty, thus falling back to
-   * the component default.
-   * <p>
-   * Default value is <code>null</code>, meaning use default component font.
-   * 
-   * @param labelFont
-   *          the labelFont to set.
-   */
-  public void setLabelFont(String labelFont) {
-    this.labelFont = labelFont;
-  }
-
-  /**
-   * Gets the labelForeground.
-   * 
-   * @return the labelForeground.
-   */
-  public String getLabelForeground() {
-    return labelForeground;
-  }
-
-  /**
-   * When the property has to be labelled (e.g. in a component view), this
-   * property defines the foregroud color of the corresponding label. It might
-   * differ from the field component one. The color must be defined using its
-   * string hexadecimal representation (<i>0xrgba</i> encoded).
-   * <p>
-   * Default value is <code>null</code>, meaning use UI default.
-   * 
-   * @param labelForeground
-   *          the labelForeground to set.
-   */
-  public void setLabelForeground(String labelForeground) {
-    this.labelForeground = labelForeground;
   }
 
   /**

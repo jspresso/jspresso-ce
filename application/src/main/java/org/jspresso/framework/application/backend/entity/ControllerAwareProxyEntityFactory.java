@@ -79,6 +79,15 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
   }
 
   /**
+   * Gets the backendController.
+   * 
+   * @return the backendController.
+   */
+  protected IBackendController getBackendController() {
+    return backendController;
+  }
+
+  /**
    * Returns the backend controller.
    * <p>
    * {@inheritDoc}
@@ -94,14 +103,5 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
   @Override
   protected UserPrincipal getPrincipal() {
     return getBackendController().getApplicationSession().getPrincipal();
-  }
-
-  /**
-   * Gets the backendController.
-   * 
-   * @return the backendController.
-   */
-  protected IBackendController getBackendController() {
-    return backendController;
   }
 }

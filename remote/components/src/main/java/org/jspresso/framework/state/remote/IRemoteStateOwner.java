@@ -27,6 +27,14 @@ package org.jspresso.framework.state.remote;
 public interface IRemoteStateOwner {
 
   /**
+   * Gets the actual state owner value that may be different from the state
+   * value.
+   * 
+   * @return the actual state owner value.
+   */
+  Object actualValue();
+
+  /**
    * Extracts the state from the state owner.
    * 
    * @return the state value object.
@@ -37,12 +45,4 @@ public interface IRemoteStateOwner {
    * Triggers synchronization of the remote state.
    */
   void synchRemoteState();
-
-  /**
-   * Gets the actual state owner value that may be different from the state
-   * value.
-   * 
-   * @return the actual state owner value.
-   */
-  Object actualValue();
 }

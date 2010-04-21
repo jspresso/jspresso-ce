@@ -75,8 +75,6 @@ import com.ulcjava.base.application.table.ULCTableHeader;
 
 public class TableSorter extends AbstractTableSorter {
 
-  private static final long                 serialVersionUID      = -5437879837063286581L;
-
   /**
    * <code>COMPARABLE_COMPARATOR</code>.
    */
@@ -107,6 +105,8 @@ public class TableSorter extends AbstractTableSorter {
                                                                     }
                                                                   };
 
+  private static final long                 serialVersionUID      = -5437879837063286581L;
+
   private Map<Class<?>, Comparator<Object>> columnComparators     = new HashMap<Class<?>, Comparator<Object>>();
 
   private int[]                             modelToView;
@@ -122,14 +122,6 @@ public class TableSorter extends AbstractTableSorter {
    */
   public TableSorter(ITableModel tableModel, ULCTableHeader tableHeader) {
     super(tableModel, tableHeader);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ITableModelListener createTableModelHandler() {
-    return new TableModelHandler();
   }
 
   /**
@@ -172,6 +164,23 @@ public class TableSorter extends AbstractTableSorter {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void clearSortingState() {
+    viewToModel = null;
+    modelToView = null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ITableModelListener createTableModelHandler() {
+    return new TableModelHandler();
+  }
+
+  /**
    * Gets Comparator.
    * 
    * @param column
@@ -194,9 +203,12 @@ public class TableSorter extends AbstractTableSorter {
    * {@inheritDoc}
    */
   @Override
-  protected void clearSortingState() {
-    viewToModel = null;
-    modelToView = null;
+  protected void sortingStatusChanged() {
+    clearSortingState();
+    fireTableDataChanged();
+    // if (tableHeader != null) {
+    // tableHeader.repaint();
+    // }
   }
 
   private int[] getModelToView() {
@@ -223,18 +235,6 @@ public class TableSorter extends AbstractTableSorter {
       }
     }
     return viewToModel;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void sortingStatusChanged() {
-    clearSortingState();
-    fireTableDataChanged();
-    // if (tableHeader != null) {
-    // tableHeader.repaint();
-    // }
   }
 
   private class Row implements Comparable<Object> {

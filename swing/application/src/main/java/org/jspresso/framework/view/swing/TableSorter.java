@@ -75,8 +75,6 @@ import javax.swing.table.TableModel;
 
 public class TableSorter extends AbstractTableSorter {
 
-  private static final long                 serialVersionUID      = -5437879837063286581L;
-
   /**
    * <code>COMPARABLE_COMPARATOR</code>.
    */
@@ -106,6 +104,8 @@ public class TableSorter extends AbstractTableSorter {
                                                                                   .toString());
                                                                     }
                                                                   };
+
+  private static final long                 serialVersionUID      = -5437879837063286581L;
 
   private Map<Class<?>, Comparator<Object>> columnComparators     = new HashMap<Class<?>, Comparator<Object>>();
 
@@ -164,6 +164,23 @@ public class TableSorter extends AbstractTableSorter {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void clearSortingState() {
+    viewToModel = null;
+    modelToView = null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected TableModelListener createTableModelHandler() {
+    return new TableModelHandler();
+  }
+
+  /**
    * Gets Comparator.
    * 
    * @param column
@@ -182,13 +199,18 @@ public class TableSorter extends AbstractTableSorter {
     return LEXICAL_COMPARATOR;
   }
 
+  // Helper classes
+
   /**
    * {@inheritDoc}
    */
   @Override
-  protected void clearSortingState() {
-    viewToModel = null;
-    modelToView = null;
+  protected void sortingStatusChanged() {
+    clearSortingState();
+    fireTableDataChanged();
+    if (getTableHeader() != null) {
+      getTableHeader().repaint();
+    }
   }
 
   private int[] getModelToView() {
@@ -201,8 +223,6 @@ public class TableSorter extends AbstractTableSorter {
     }
     return modelToView;
   }
-
-  // Helper classes
 
   private Row[] getViewToModel() {
     if (viewToModel == null) {
@@ -217,18 +237,6 @@ public class TableSorter extends AbstractTableSorter {
       }
     }
     return viewToModel;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void sortingStatusChanged() {
-    clearSortingState();
-    fireTableDataChanged();
-    if (getTableHeader() != null) {
-      getTableHeader().repaint();
-    }
   }
 
   private class Row implements Comparable<Object> {
@@ -281,14 +289,6 @@ public class TableSorter extends AbstractTableSorter {
       }
       return 0;
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected TableModelListener createTableModelHandler() {
-    return new TableModelHandler();
   }
 
   private class TableModelHandler implements TableModelListener {

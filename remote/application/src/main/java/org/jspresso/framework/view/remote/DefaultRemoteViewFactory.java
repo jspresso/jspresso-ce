@@ -242,6 +242,38 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void addCard(IMapView<RComponent> cardView, IView<RComponent> card,
+      String cardName) {
+    cardView.addToChildrenMap(cardName, card);
+
+    RCardContainer cardContainer = (RCardContainer) cardView.getPeer();
+
+    RComponent[] newCards = new RComponent[cardContainer.getCards().length + 1];
+    for (int i = 0; i < cardContainer.getCards().length; i++) {
+      newCards[i] = cardContainer.getCards()[i];
+    }
+    newCards[newCards.length - 1] = card.getPeer();
+    cardContainer.setCards(newCards);
+
+    String[] newCardNames = new String[cardContainer.getCardNames().length + 1];
+    for (int i = 0; i < cardContainer.getCardNames().length; i++) {
+      newCardNames[i] = cardContainer.getCardNames()[i];
+    }
+    newCardNames[newCardNames.length - 1] = cardName;
+    cardContainer.setCardNames(newCardNames);
+
+    RemoteAddCardCommand command = new RemoteAddCardCommand();
+    command.setTargetPeerGuid(cardContainer.getGuid());
+    command.setCard(card.getPeer());
+    command.setCardName(cardName);
+
+    getRemoteCommandHandler().registerCommand(command);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected void adjustSizes(
       @SuppressWarnings("unused") IViewDescriptor viewDescriptor,
       @SuppressWarnings("unused") RComponent component,
@@ -255,11 +287,52 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void applyPreferredSize(RComponent component,
+      Dimension preferredSize) {
+    if (preferredSize != null) {
+      component.setPreferredSize(preferredSize);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected int computePixelWidth(
       @SuppressWarnings("unused") RComponent component,
       @SuppressWarnings("unused") int characterLength) {
     // Empty as of now.
     return 0;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createActionView(
+      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        ModelRefPropertyConnector.THIS_PROPERTY);
+    connector.setExceptionHandler(actionHandler);
+    RActionComponent viewComponent = createRActionComponent(connector);
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    RAction action = getActionFactory().createAction(
+        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
+        actionHandler, view, locale);
+    switch (viewDescriptor.getRenderingOptions()) {
+      case ICON:
+        action.setName(null);
+        break;
+      case LABEL:
+        action.setIcon(null);
+        break;
+      default:
+        break;
+    }
+    viewComponent.setAction(action);
+    return view;
   }
 
   /**
@@ -484,47 +557,6 @@ public class DefaultRemoteViewFactory extends
     viewComponent.setElements(elements.toArray(new RComponent[0]));
     viewComponent.setElementLabels(elementLabels.toArray(new RComponent[0]));
     return view;
-  }
-
-  /**
-   * Creates a property label.
-   * 
-   * @param propertyViewDescriptor
-   *          the property view descriptor.
-   * @param propertyComponent
-   *          the property component.
-   * @param locale
-   *          the locale.
-   * @return the created property label.
-   */
-  protected RLabel createPropertyLabel(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      RComponent propertyComponent, Locale locale) {
-    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
-    RLabel propertyLabel = createRLabel(null, false);
-    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
-        .getI18nName(getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
-      labelText.append("*");
-      propertyLabel.setForeground("0x00FF0000");
-    }
-    propertyLabel.setLabel(labelText.toString());
-    if (propertyViewDescriptor.getLabelFont() != null) {
-      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont()));
-    }
-    if (propertyViewDescriptor.getLabelForeground() != null) {
-      propertyLabel.setForeground(propertyViewDescriptor.getLabelForeground());
-    }
-    if (propertyViewDescriptor.getLabelBackground() != null) {
-      propertyLabel.setBackground(propertyViewDescriptor.getLabelBackground());
-    }
-    return propertyLabel;
-  }
-
-  private Font createFont(String fontString) {
-    Font font = FontHelper.fromString(fontString);
-    return font;
   }
 
   /**
@@ -764,29 +796,18 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createActionView(
-      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+  protected IView<RComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(
-        ModelRefPropertyConnector.THIS_PROPERTY);
+        propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
-    RActionComponent viewComponent = createRActionComponent(connector);
-    IView<RComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-    RAction action = getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
-        actionHandler, view, locale);
-    switch (viewDescriptor.getRenderingOptions()) {
-      case ICON:
-        action.setName(null);
-        break;
-      case LABEL:
-        action.setIcon(null);
-        break;
-      default:
-        break;
-    }
-    viewComponent.setAction(action);
+    RHtmlArea viewComponent = createRHtmlArea(connector);
+    viewComponent.setReadOnly(propertyViewDescriptor.isReadOnly());
+    IView<RComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
     return view;
   }
 
@@ -994,6 +1015,42 @@ public class DefaultRemoteViewFactory extends
   }
 
   /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected RLabel createPropertyLabel(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      RComponent propertyComponent, Locale locale) {
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    RLabel propertyLabel = createRLabel(null, false);
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
+    if (propertyDescriptor.isMandatory()) {
+      labelText.append("*");
+      propertyLabel.setForeground("0x00FF0000");
+    }
+    propertyLabel.setLabel(labelText.toString());
+    if (propertyViewDescriptor.getLabelFont() != null) {
+      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont()));
+    }
+    if (propertyViewDescriptor.getLabelForeground() != null) {
+      propertyLabel.setForeground(propertyViewDescriptor.getLabelForeground());
+    }
+    if (propertyViewDescriptor.getLabelBackground() != null) {
+      propertyLabel.setBackground(propertyViewDescriptor.getLabelBackground());
+    }
+    return propertyLabel;
+  }
+
+  /**
    * Override to set the property view name that will be useful on client-side.
    * <p>
    * {@inheritDoc}
@@ -1013,6 +1070,144 @@ public class DefaultRemoteViewFactory extends
       }
     }
     return view;
+  }
+
+  /**
+   * Creates a remote button component.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RActionComponent createRActionComponent(IValueConnector connector) {
+    RActionComponent component = new RActionComponent(getGuidGenerator()
+        .generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote action field.
+   * 
+   * @param showTextField
+   *          does it actually show a text field ?
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RActionField createRActionField(boolean showTextField,
+      IValueConnector connector) {
+    RActionField component = new RActionField(getGuidGenerator().generateGUID());
+    component.setShowTextField(showTextField);
+    return component;
+  }
+
+  /**
+   * Creates a remote border container.
+   * 
+   * @return the created remote component.
+   */
+  protected RBorderContainer createRBorderContainer() {
+    return new RBorderContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote card container.
+   * 
+   * @param viewDescriptor
+   *          the card view descriptor.
+   * @return the created remote component.
+   */
+  protected RCardContainer createRCardContainer(
+      ICardViewDescriptor viewDescriptor) {
+    RCardContainer cardContainer = new RCardContainer(getGuidGenerator()
+        .generateGUID());
+    cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory())
+        .createRemoteValueState(getGuidGenerator().generateGUID(),
+            viewDescriptor.getAutomationSeed()));
+    return cardContainer;
+  }
+
+  /**
+   * Creates a remote check box.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RCheckBox createRCheckBox(IValueConnector connector) {
+    RCheckBox component = new RCheckBox(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote color field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RColorField createRColorField(IValueConnector connector) {
+    RColorField component = new RColorField(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote combo box.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RComboBox createRComboBox(IValueConnector connector) {
+    RComboBox component = new RComboBox(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote contrained grid container.
+   * 
+   * @return the created remote component.
+   */
+  protected RConstrainedGridContainer createRConstrainedGridContainer() {
+    return new RConstrainedGridContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote date field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RDateField createRDateField(IValueConnector connector) {
+    RDateField component = new RDateField(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote decimal field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RDecimalField createRDecimalField(IValueConnector connector) {
+    RDecimalField component = new RDecimalField(getGuidGenerator()
+        .generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote duration field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RDurationField createRDurationField(IValueConnector connector) {
+    RDurationField component = new RDurationField(getGuidGenerator()
+        .generateGUID());
+    return component;
   }
 
   /**
@@ -1059,6 +1254,197 @@ public class DefaultRemoteViewFactory extends
     actionList.setActions(new RAction[] {lovAction});
     viewComponent.setActionLists(new RActionList[] {actionList});
     return propertyView;
+  }
+
+  /**
+   * Creates a remote even grid container.
+   * 
+   * @return the created remote component.
+   */
+  protected REvenGridContainer createREvenGridContainer() {
+    return new REvenGridContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote form.
+   * 
+   * @return the created remote component.
+   */
+  protected RForm createRForm() {
+    return new RForm(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote html area.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RHtmlArea createRHtmlArea(IValueConnector connector) {
+    RHtmlArea component = new RHtmlArea(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote image component.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RImageComponent createRImageComponent(IValueConnector connector) {
+    RImageComponent component = new RImageComponent(getGuidGenerator()
+        .generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote integer field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RIntegerField createRIntegerField(IValueConnector connector) {
+    RIntegerField component = new RIntegerField(getGuidGenerator()
+        .generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote label.
+   * 
+   * @param connector
+   *          the component connector.
+   * @param bold
+   *          make it bold ?
+   * @return the created remote component.
+   */
+  protected RLabel createRLabel(IValueConnector connector, boolean bold) {
+    RLabel component = new RLabel(getGuidGenerator().generateGUID());
+    if (bold) {
+      if (bold) {
+        component.setFont(createFont(BOLD_FONT));
+      }
+    }
+    return component;
+  }
+
+  /**
+   * Creates a remote list.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RList createRList(ICollectionConnector connector) {
+    RList component = new RList(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote password field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RPasswordField createRPasswordField(IValueConnector connector) {
+    RPasswordField component = new RPasswordField(getGuidGenerator()
+        .generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote percent field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RPercentField createRPercentField(IValueConnector connector) {
+    RPercentField component = new RPercentField(getGuidGenerator()
+        .generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote split container.
+   * 
+   * @return the created remote component.
+   */
+  protected RSplitContainer createRSplitContainer() {
+    return new RSplitContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote tab container.
+   * 
+   * @return the created remote component.
+   */
+  protected RTabContainer createRTabContainer() {
+    return new RTabContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote table.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTable createRTable(IValueConnector connector) {
+    RTable component = new RTable(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote text area.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTextArea createRTextArea(IValueConnector connector) {
+    RTextArea component = new RTextArea(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote text field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTextField createRTextField(IValueConnector connector) {
+    RTextField component = new RTextField(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote time field.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTimeField createRTimeField(IValueConnector connector) {
+    RTimeField component = new RTimeField(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote tree.
+   * 
+   * @param connector
+   *          the component connector.
+   * @return the created remote component.
+   */
+  protected RTree createRTree(IValueConnector connector) {
+    RTree component = new RTree(getGuidGenerator().generateGUID());
+    return component;
   }
 
   /**
@@ -1264,25 +1650,6 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createHtmlPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
-    IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        propertyDescriptor.getName());
-    connector.setExceptionHandler(actionHandler);
-    RHtmlArea viewComponent = createRHtmlArea(connector);
-    viewComponent.setReadOnly(propertyViewDescriptor.isReadOnly());
-    IView<RComponent> view = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected IView<RComponent> createTextualPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1469,6 +1836,24 @@ public class DefaultRemoteViewFactory extends
   }
 
   /**
+   * Gets the getGuidGenerator().
+   * 
+   * @return the getGuidGenerator().
+   */
+  protected IGUIDGenerator getGuidGenerator() {
+    return guidGenerator;
+  }
+
+  /**
+   * Gets the remoteCommandHandler.
+   * 
+   * @return the remoteCommandHandler.
+   */
+  protected IRemoteCommandHandler getRemoteCommandHandler() {
+    return remoteCommandHandler;
+  }
+
+  /**
    * Gets the dateServerParse.
    * 
    * @return the dateServerParse.
@@ -1509,393 +1894,8 @@ public class DefaultRemoteViewFactory extends
     getRemoteCommandHandler().registerCommand(command);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void addCard(IMapView<RComponent> cardView, IView<RComponent> card,
-      String cardName) {
-    cardView.addToChildrenMap(cardName, card);
-
-    RCardContainer cardContainer = (RCardContainer) cardView.getPeer();
-
-    RComponent[] newCards = new RComponent[cardContainer.getCards().length + 1];
-    for (int i = 0; i < cardContainer.getCards().length; i++) {
-      newCards[i] = cardContainer.getCards()[i];
-    }
-    newCards[newCards.length - 1] = card.getPeer();
-    cardContainer.setCards(newCards);
-
-    String[] newCardNames = new String[cardContainer.getCardNames().length + 1];
-    for (int i = 0; i < cardContainer.getCardNames().length; i++) {
-      newCardNames[i] = cardContainer.getCardNames()[i];
-    }
-    newCardNames[newCardNames.length - 1] = cardName;
-    cardContainer.setCardNames(newCardNames);
-
-    RemoteAddCardCommand command = new RemoteAddCardCommand();
-    command.setTargetPeerGuid(cardContainer.getGuid());
-    command.setCard(card.getPeer());
-    command.setCardName(cardName);
-
-    getRemoteCommandHandler().registerCommand(command);
-  }
-
-  /**
-   * Creates a remote action field.
-   * 
-   * @param showTextField
-   *          does it actually show a text field ?
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RActionField createRActionField(boolean showTextField,
-      IValueConnector connector) {
-    RActionField component = new RActionField(getGuidGenerator().generateGUID());
-    component.setShowTextField(showTextField);
-    return component;
-  }
-
-  /**
-   * Creates a remote border container.
-   * 
-   * @return the created remote component.
-   */
-  protected RBorderContainer createRBorderContainer() {
-    return new RBorderContainer(getGuidGenerator().generateGUID());
-  }
-
-  /**
-   * Creates a remote card container.
-   * 
-   * @param viewDescriptor
-   *          the card view descriptor.
-   * @return the created remote component.
-   */
-  protected RCardContainer createRCardContainer(
-      ICardViewDescriptor viewDescriptor) {
-    RCardContainer cardContainer = new RCardContainer(getGuidGenerator()
-        .generateGUID());
-    cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory())
-        .createRemoteValueState(getGuidGenerator().generateGUID(),
-            viewDescriptor.getAutomationSeed()));
-    return cardContainer;
-  }
-
-  /**
-   * Creates a remote check box.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RCheckBox createRCheckBox(IValueConnector connector) {
-    RCheckBox component = new RCheckBox(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote color field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RColorField createRColorField(IValueConnector connector) {
-    RColorField component = new RColorField(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote combo box.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RComboBox createRComboBox(IValueConnector connector) {
-    RComboBox component = new RComboBox(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote contrained grid container.
-   * 
-   * @return the created remote component.
-   */
-  protected RConstrainedGridContainer createRConstrainedGridContainer() {
-    return new RConstrainedGridContainer(getGuidGenerator().generateGUID());
-  }
-
-  /**
-   * Creates a remote date field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RDateField createRDateField(IValueConnector connector) {
-    RDateField component = new RDateField(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote decimal field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RDecimalField createRDecimalField(IValueConnector connector) {
-    RDecimalField component = new RDecimalField(getGuidGenerator()
-        .generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote duration field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RDurationField createRDurationField(IValueConnector connector) {
-    RDurationField component = new RDurationField(getGuidGenerator()
-        .generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote even grid container.
-   * 
-   * @return the created remote component.
-   */
-  protected REvenGridContainer createREvenGridContainer() {
-    return new REvenGridContainer(getGuidGenerator().generateGUID());
-  }
-
-  /**
-   * Creates a remote form.
-   * 
-   * @return the created remote component.
-   */
-  protected RForm createRForm() {
-    return new RForm(getGuidGenerator().generateGUID());
-  }
-
-  /**
-   * Creates a remote image component.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RImageComponent createRImageComponent(IValueConnector connector) {
-    RImageComponent component = new RImageComponent(getGuidGenerator()
-        .generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote button component.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RActionComponent createRActionComponent(IValueConnector connector) {
-    RActionComponent component = new RActionComponent(getGuidGenerator()
-        .generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote integer field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RIntegerField createRIntegerField(IValueConnector connector) {
-    RIntegerField component = new RIntegerField(getGuidGenerator()
-        .generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote list.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RList createRList(ICollectionConnector connector) {
-    RList component = new RList(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote password field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RPasswordField createRPasswordField(IValueConnector connector) {
-    RPasswordField component = new RPasswordField(getGuidGenerator()
-        .generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote percent field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RPercentField createRPercentField(IValueConnector connector) {
-    RPercentField component = new RPercentField(getGuidGenerator()
-        .generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote split container.
-   * 
-   * @return the created remote component.
-   */
-  protected RSplitContainer createRSplitContainer() {
-    return new RSplitContainer(getGuidGenerator().generateGUID());
-  }
-
-  /**
-   * Creates a remote tab container.
-   * 
-   * @return the created remote component.
-   */
-  protected RTabContainer createRTabContainer() {
-    return new RTabContainer(getGuidGenerator().generateGUID());
-  }
-
-  /**
-   * Creates a remote table.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RTable createRTable(IValueConnector connector) {
-    RTable component = new RTable(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote text area.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RTextArea createRTextArea(IValueConnector connector) {
-    RTextArea component = new RTextArea(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote html area.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RHtmlArea createRHtmlArea(IValueConnector connector) {
-    RHtmlArea component = new RHtmlArea(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote label.
-   * 
-   * @param connector
-   *          the component connector.
-   * @param bold
-   *          make it bold ?
-   * @return the created remote component.
-   */
-  protected RLabel createRLabel(IValueConnector connector, boolean bold) {
-    RLabel component = new RLabel(getGuidGenerator().generateGUID());
-    if (bold) {
-      if (bold) {
-        component.setFont(createFont(BOLD_FONT));
-      }
-    }
-    return component;
-  }
-
-  /**
-   * Creates a remote text field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RTextField createRTextField(IValueConnector connector) {
-    RTextField component = new RTextField(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote time field.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RTimeField createRTimeField(IValueConnector connector) {
-    RTimeField component = new RTimeField(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote tree.
-   * 
-   * @param connector
-   *          the component connector.
-   * @return the created remote component.
-   */
-  protected RTree createRTree(IValueConnector connector) {
-    RTree component = new RTree(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Gets the getGuidGenerator().
-   * 
-   * @return the getGuidGenerator().
-   */
-  protected IGUIDGenerator getGuidGenerator() {
-    return guidGenerator;
-  }
-
-  /**
-   * Gets the remoteCommandHandler.
-   * 
-   * @return the remoteCommandHandler.
-   */
-  protected IRemoteCommandHandler getRemoteCommandHandler() {
-    return remoteCommandHandler;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void applyPreferredSize(RComponent component,
-      Dimension preferredSize) {
-    if (preferredSize != null) {
-      component.setPreferredSize(preferredSize);
-    }
+  private Font createFont(String fontString) {
+    Font font = FontHelper.fromString(fontString);
+    return font;
   }
 }

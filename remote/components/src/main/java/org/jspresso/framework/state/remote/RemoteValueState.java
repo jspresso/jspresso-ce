@@ -38,14 +38,6 @@ public class RemoteValueState extends RemotePeer {
   private boolean           writable;
 
   /**
-   * Constructs a new <code>RemoteValueState</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RemoteValueState() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RemoteValueState</code> instance.
    * 
    * @param guid
@@ -53,6 +45,14 @@ public class RemoteValueState extends RemotePeer {
    */
   public RemoteValueState(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RemoteValueState</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RemoteValueState() {
+    // For GWT support
   }
 
   /**

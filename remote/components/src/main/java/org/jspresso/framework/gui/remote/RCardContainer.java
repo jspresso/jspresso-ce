@@ -32,14 +32,6 @@ public class RCardContainer extends RContainer {
   private RComponent[]      cards;
 
   /**
-   * Constructs a new <code>RCardContainer</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RCardContainer() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RCardContainer</code> instance.
    * 
    * @param guid
@@ -47,6 +39,14 @@ public class RCardContainer extends RContainer {
    */
   public RCardContainer(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RCardContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RCardContainer() {
+    // For GWT support
   }
 
   /**

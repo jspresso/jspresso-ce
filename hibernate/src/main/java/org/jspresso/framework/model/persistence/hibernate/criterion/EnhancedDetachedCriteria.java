@@ -54,6 +54,16 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * 
    * @param entityName
    *          entity name.
+   */
+  protected EnhancedDetachedCriteria(String entityName) {
+    super(entityName);
+  }
+
+  /**
+   * Constructs a new <code>EnhancedDetachedCriteria</code> instance.
+   * 
+   * @param entityName
+   *          entity name.
    * @param alias
    *          alias.
    */
@@ -62,13 +72,52 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   }
 
   /**
-   * Constructs a new <code>EnhancedDetachedCriteria</code> instance.
+   * Creates a new enhanced detached criteria.
+   * 
+   * @param clazz
+   *          class.
+   * @return the new enhanced detached criteria.
+   */
+  public static EnhancedDetachedCriteria forClass(Class<?> clazz) {
+    return new EnhancedDetachedCriteria(clazz.getName());
+  }
+
+  /**
+   * Creates a new enhanced detached criteria.
+   * 
+   * @param clazz
+   *          class.
+   * @param alias
+   *          alias.
+   * @return the new enhanced detached criteria.
+   */
+  public static EnhancedDetachedCriteria forClass(Class<?> clazz, String alias) {
+    return new EnhancedDetachedCriteria(clazz.getName(), alias);
+  }
+
+  /**
+   * Creates a new enhanced detached criteria.
    * 
    * @param entityName
    *          entity name.
+   * @return the new enhanced detached criteria.
    */
-  protected EnhancedDetachedCriteria(String entityName) {
-    super(entityName);
+  public static EnhancedDetachedCriteria forEntityName(String entityName) {
+    return new EnhancedDetachedCriteria(entityName);
+  }
+
+  /**
+   * Creates a new enhanced detached criteria.
+   * 
+   * @param entityName
+   *          entity name.
+   * @param alias
+   *          alias.
+   * @return the new enhanced detached criteria.
+   */
+  public static EnhancedDetachedCriteria forEntityName(String entityName,
+      String alias) {
+    return new EnhancedDetachedCriteria(entityName, alias);
   }
 
   /**
@@ -158,55 +207,6 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
       registerSubCriteria(masterCriteria, associationPath, subCriteria);
     }
     return subCriteria;
-  }
-
-  /**
-   * Creates a new enhanced detached criteria.
-   * 
-   * @param entityName
-   *          entity name.
-   * @return the new enhanced detached criteria.
-   */
-  public static EnhancedDetachedCriteria forEntityName(String entityName) {
-    return new EnhancedDetachedCriteria(entityName);
-  }
-
-  /**
-   * Creates a new enhanced detached criteria.
-   * 
-   * @param entityName
-   *          entity name.
-   * @param alias
-   *          alias.
-   * @return the new enhanced detached criteria.
-   */
-  public static EnhancedDetachedCriteria forEntityName(String entityName,
-      String alias) {
-    return new EnhancedDetachedCriteria(entityName, alias);
-  }
-
-  /**
-   * Creates a new enhanced detached criteria.
-   * 
-   * @param clazz
-   *          class.
-   * @return the new enhanced detached criteria.
-   */
-  public static EnhancedDetachedCriteria forClass(Class<?> clazz) {
-    return new EnhancedDetachedCriteria(clazz.getName());
-  }
-
-  /**
-   * Creates a new enhanced detached criteria.
-   * 
-   * @param clazz
-   *          class.
-   * @param alias
-   *          alias.
-   * @return the new enhanced detached criteria.
-   */
-  public static EnhancedDetachedCriteria forClass(Class<?> clazz, String alias) {
-    return new EnhancedDetachedCriteria(clazz.getName(), alias);
   }
 
   private DetachedCriteria getRegisteredSubCriteria(

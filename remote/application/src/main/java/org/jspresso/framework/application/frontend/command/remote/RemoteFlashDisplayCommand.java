@@ -28,28 +28,9 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
   private static final long serialVersionUID = -5032857814132356840L;
 
-  private String            swfUrl;
   private String[]          paramNames;
   private String[]          paramValues;
-
-  /**
-   * Gets the swfUrl.
-   * 
-   * @return the swfUrl.
-   */
-  public String getSwfUrl() {
-    return swfUrl;
-  }
-
-  /**
-   * Sets the swfUrl.
-   * 
-   * @param swfUrl
-   *          the swfUrl to set.
-   */
-  public void setSwfUrl(String swfUrl) {
-    this.swfUrl = swfUrl;
-  }
+  private String            swfUrl;
 
   /**
    * Gets the paramNames.
@@ -58,6 +39,24 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
    */
   public String[] getParamNames() {
     return paramNames;
+  }
+
+  /**
+   * Gets the paramValues.
+   * 
+   * @return the paramValues.
+   */
+  public String[] getParamValues() {
+    return paramValues;
+  }
+
+  /**
+   * Gets the swfUrl.
+   * 
+   * @return the swfUrl.
+   */
+  public String getSwfUrl() {
+    return swfUrl;
   }
 
   /**
@@ -71,15 +70,6 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
   }
 
   /**
-   * Gets the paramValues.
-   * 
-   * @return the paramValues.
-   */
-  public String[] getParamValues() {
-    return paramValues;
-  }
-
-  /**
    * Sets the paramValues.
    * 
    * @param paramValues
@@ -87,5 +77,15 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
    */
   public void setParamValues(String[] paramValues) {
     this.paramValues = paramValues;
+  }
+
+  /**
+   * Sets the swfUrl.
+   * 
+   * @param swfUrl
+   *          the swfUrl to set.
+   */
+  public void setSwfUrl(String swfUrl) {
+    this.swfUrl = swfUrl;
   }
 }

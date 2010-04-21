@@ -34,13 +34,6 @@ public interface ICollectionDescriptor<E> extends IModelDescriptor,
     ICollectionDescriptorProvider<E> {
 
   /**
-   * Get the list of properties ordering this collection.
-   * 
-   * @return the list of properties ordering this collection.
-   */
-  Map<String, ESort> getOrderingProperties();
-
-  /**
    * Gets the <code>Collection</code> sub-interface implemented by the described
    * collection property (i.e <code>java.util.Set</code>,
    * <code>java.util.List</code>, ...).
@@ -55,4 +48,11 @@ public interface ICollectionDescriptor<E> extends IModelDescriptor,
    * @return The collection's component descriptor.
    */
   IComponentDescriptor<E> getElementDescriptor();
+
+  /**
+   * Get the list of properties ordering this collection.
+   * 
+   * @return the list of properties ordering this collection.
+   */
+  Map<String, ESort> getOrderingProperties();
 }

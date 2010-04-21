@@ -31,14 +31,6 @@ public class RHtmlArea extends RTextComponent {
   private boolean           readOnly;
 
   /**
-   * Constructs a new <code>RHtmlArea</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RHtmlArea() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RHtmlArea</code> instance.
    * 
    * @param guid
@@ -46,6 +38,14 @@ public class RHtmlArea extends RTextComponent {
    */
   public RHtmlArea(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RHtmlArea</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RHtmlArea() {
+    // For GWT support
   }
 
   /**

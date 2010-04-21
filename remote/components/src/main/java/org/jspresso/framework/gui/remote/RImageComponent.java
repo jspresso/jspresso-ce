@@ -31,14 +31,6 @@ public class RImageComponent extends RComponent {
   private boolean           scrollable;
 
   /**
-   * Constructs a new <code>RImageComponent</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RImageComponent() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RImageComponent</code> instance.
    * 
    * @param guid
@@ -49,13 +41,11 @@ public class RImageComponent extends RComponent {
   }
 
   /**
-   * Sets the scrollable.
-   * 
-   * @param scrollable
-   *          the scrollable to set.
+   * Constructs a new <code>RImageComponent</code> instance. Only used for GWT
+   * serialization support.
    */
-  public void setScrollable(boolean scrollable) {
-    this.scrollable = scrollable;
+  protected RImageComponent() {
+    // For GWT support
   }
 
   /**
@@ -65,5 +55,15 @@ public class RImageComponent extends RComponent {
    */
   public boolean isScrollable() {
     return scrollable;
+  }
+
+  /**
+   * Sets the scrollable.
+   * 
+   * @param scrollable
+   *          the scrollable to set.
+   */
+  public void setScrollable(boolean scrollable) {
+    this.scrollable = scrollable;
   }
 }

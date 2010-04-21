@@ -104,21 +104,6 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
     return false;
   }
 
-  private boolean isDirtyInDepth(Module module) {
-    if (module.isDirty()) {
-      return true;
-    }
-    List<Module> subModules = module.getSubModules();
-    if (subModules != null) {
-      for (Module subModule : subModules) {
-        if (isDirtyInDepth(subModule)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   /**
    * Configures the action used to perform dirty checking on current module to
    * update its dirty state. It will be triggered just before a global iteration
@@ -140,6 +125,21 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   protected IAction getCheckCurrentModuleDirtyStateAction() {
     return checkCurrentModuleDirtyStateAction;
+  }
+
+  private boolean isDirtyInDepth(Module module) {
+    if (module.isDirty()) {
+      return true;
+    }
+    List<Module> subModules = module.getSubModules();
+    if (subModules != null) {
+      for (Module subModule : subModules) {
+        if (isDirtyInDepth(subModule)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }

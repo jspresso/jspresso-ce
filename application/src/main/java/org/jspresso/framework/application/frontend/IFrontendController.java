@@ -50,11 +50,29 @@ public interface IFrontendController<E, F, G> extends IController,
     IIconDescriptor, IActionable {
 
   /**
-   * Gets the peer model controller.
+   * Displays a flash object on the client in a modal dialog.
    * 
-   * @return the backend controller this frontend controller is attached to.
+   * @param swfUrl
+   *          the URL of the swf to load.
+   * @param flashContext
+   *          the flash context from which the flashVars is computed.
+   * @param actions
+   *          the actions available in the dialog.
+   * @param title
+   *          the dialog title.
+   * @param sourceComponent
+   *          the source component.
+   * @param context
+   *          the context to store on the context stack.
+   * @param dimension
+   *          the dimension to set the dialog to. If null, the dialog will be
+   *          sized to the preferred size of the contained view.
+   * @param reuseCurrent
+   *          set to true to reuse an existing modal dialog.
    */
-  IBackendController getBackendController();
+  void displayFlashObject(String swfUrl, Map<String, String> flashContext,
+      List<G> actions, String title, E sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent);
 
   /**
    * Displays a modal dialog.
@@ -78,6 +96,34 @@ public interface IFrontendController<E, F, G> extends IController,
   void displayModalDialog(E mainView, List<G> actions, String title,
       E sourceComponent, Map<String, Object> context, Dimension dimension,
       boolean reuseCurrent);
+
+  /**
+   * Sets the selected module in the current workspace.
+   * 
+   * @param module
+   *          the module to display to the user.
+   */
+  void displayModule(Module module);
+
+  /**
+   * Sets the selected module in the given workspace.
+   * 
+   * @param workspaceName
+   *          the workspace name for which to display the module.
+   * @param module
+   *          the module to display to the user.
+   */
+  void displayModule(String workspaceName, Module module);
+
+  /**
+   * Navigates forward in the pinned modules.
+   */
+  void displayNextPinnedModule();
+
+  /**
+   * Navigates backward in the pinned modules.
+   */
+  void displayPreviousPinnedModule();
 
   /**
    * Displays the given URL in a new browser window (or tab).
@@ -106,6 +152,13 @@ public interface IFrontendController<E, F, G> extends IController,
   void disposeModalDialog(E sourceWidget, Map<String, Object> context);
 
   /**
+   * Gets the peer model controller.
+   * 
+   * @return the backend controller this frontend controller is attached to.
+   */
+  IBackendController getBackendController();
+
+  /**
    * Retrieves a map of help action lists to be presented on this view.
    * 
    * @return the map of action lists handled by this view.
@@ -118,6 +171,13 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return the mvc binder used by this controller.
    */
   IMvcBinder getMvcBinder();
+
+  /**
+   * Gets the selectedWorkspaceName.
+   * 
+   * @return the selectedWorkspaceName.
+   */
+  String getSelectedWorkspaceName();
 
   /**
    * Gets the action which is executed when the controller is started.
@@ -134,81 +194,13 @@ public interface IFrontendController<E, F, G> extends IController,
   IViewFactory<E, F, G> getViewFactory();
 
   /**
-   * Starts the controller. This method performs any necessary initializations
-   * (such as binding to the backend controller) and shows the initial view to
-   * the user. The initial view is generally built from the root view
-   * descriptor.
-   * 
-   * @param backendController
-   *          the backend controller to bind to.
-   * @param clientLocale
-   *          the locale this controller should use to initiate the login
-   *          session while not knowing yet the user locale.
-   * @return true if the controller succesfully started.
-   */
-  boolean start(IBackendController backendController, Locale clientLocale);
-
-  /**
-   * Displays a flash object on the client in a modal dialog.
-   * 
-   * @param swfUrl
-   *          the URL of the swf to load.
-   * @param flashContext
-   *          the flash context from which the flashVars is computed.
-   * @param actions
-   *          the actions available in the dialog.
-   * @param title
-   *          the dialog title.
-   * @param sourceComponent
-   *          the source component.
-   * @param context
-   *          the context to store on the context stack.
-   * @param dimension
-   *          the dimension to set the dialog to. If null, the dialog will be
-   *          sized to the preferred size of the contained view.
-   * @param reuseCurrent
-   *          set to true to reuse an existing modal dialog.
-   */
-  void displayFlashObject(String swfUrl, Map<String, String> flashContext,
-      List<G> actions, String title, E sourceComponent,
-      Map<String, Object> context, Dimension dimension, boolean reuseCurrent);
-
-  /**
-   * Sets the selected module in the current workspace.
-   * 
-   * @param module
-   *          the module to display to the user.
-   */
-  void displayModule(Module module);
-
-  /**
-   * Sets the selected module in the given workspace.
+   * Given a workspace name, this method returns the associated workspace.
    * 
    * @param workspaceName
-   *          the workspace name for which to display the module.
-   * @param module
-   *          the module to display to the user.
+   *          the name of the workspace.
+   * @return the selected workspace.
    */
-  void displayModule(String workspaceName, Module module);
-
-  /**
-   * Pins a module in the history navigation thus allowing the user to navigate
-   * back.
-   * 
-   * @param module
-   *          the module to pin.
-   */
-  void pinModule(Module module);
-
-  /**
-   * Navigates forward in the pinned modules.
-   */
-  void displayNextPinnedModule();
-
-  /**
-   * Navigates backward in the pinned modules.
-   */
-  void displayPreviousPinnedModule();
+  Workspace getWorkspace(String workspaceName);
 
   /**
    * Returns the list of workspace names. This list defines the set of
@@ -219,20 +211,13 @@ public interface IFrontendController<E, F, G> extends IController,
   List<String> getWorkspaceNames();
 
   /**
-   * Given a workspace name, this method returns the associated workspace.
+   * Pins a module in the history navigation thus allowing the user to navigate
+   * back.
    * 
-   * @param workspaceName
-   *          the name of the workspace.
-   * @return the selected workspace.
+   * @param module
+   *          the module to pin.
    */
-  Workspace getWorkspace(String workspaceName);
-
-  /**
-   * Gets the selectedWorkspaceName.
-   * 
-   * @return the selectedWorkspaceName.
-   */
-  String getSelectedWorkspaceName();
+  void pinModule(Module module);
 
   /**
    * Pops up an information message.
@@ -316,4 +301,19 @@ public interface IFrontendController<E, F, G> extends IController,
   void popupYesNoCancel(E sourceComponent, String title, String iconImageUrl,
       String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context);
+
+  /**
+   * Starts the controller. This method performs any necessary initializations
+   * (such as binding to the backend controller) and shows the initial view to
+   * the user. The initial view is generally built from the root view
+   * descriptor.
+   * 
+   * @param backendController
+   *          the backend controller to bind to.
+   * @param clientLocale
+   *          the locale this controller should use to initiate the login
+   *          session while not knowing yet the user locale.
+   * @return true if the controller succesfully started.
+   */
+  boolean start(IBackendController backendController, Locale clientLocale);
 }

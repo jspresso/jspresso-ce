@@ -44,45 +44,8 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  */
 public class RecordingRemoteController extends DefaultRemoteController {
 
-  private String     commandsFileName;
   private XMLEncoder commandsEncoder;
-
-  /**
-   * Records the incoming commands into a file dumping them in XML.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void handleCommand(RemoteCommand command) {
-    if (command.getTargetPeerGuid() != null) {
-      IRemotePeer rPeer = getRegisteredForAutomationId(command
-          .getAutomationId());
-      if (rPeer == null || !command.getTargetPeerGuid().equals(rPeer.getGuid())) {
-        System.err.println();
-        System.err.println("####################################");
-        System.err.println("############### AUTOMATION ERROR ###");
-        System.err.println("####################################");
-        System.err.println();
-      }
-    }
-
-    super.handleCommand(command);
-
-    if (commandsEncoder != null) {
-      // perform some cleanup before dumping the command.
-      command.setTargetPeerGuid(null);
-      if (command instanceof RemoteActionCommand) {
-        ((RemoteActionCommand) command).setViewStateGuid(null);
-      } else if (command instanceof RemoteSortCommand) {
-        ((RemoteSortCommand) command).setViewStateGuid(null);
-      }
-      try {
-        commandsEncoder.writeObject(command);
-      } catch (Exception ex) {
-        handleException(ex, new HashMap<String, Object>());
-      }
-    }
-  }
+  private String     commandsFileName;
 
   /**
    * Configures the file name where to append the incoming commands dump.
@@ -119,5 +82,42 @@ public class RecordingRemoteController extends DefaultRemoteController {
       commandsEncoder.close();
     }
     return super.stop();
+  }
+
+  /**
+   * Records the incoming commands into a file dumping them in XML.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void handleCommand(RemoteCommand command) {
+    if (command.getTargetPeerGuid() != null) {
+      IRemotePeer rPeer = getRegisteredForAutomationId(command
+          .getAutomationId());
+      if (rPeer == null || !command.getTargetPeerGuid().equals(rPeer.getGuid())) {
+        System.err.println();
+        System.err.println("####################################");
+        System.err.println("############### AUTOMATION ERROR ###");
+        System.err.println("####################################");
+        System.err.println();
+      }
+    }
+
+    super.handleCommand(command);
+
+    if (commandsEncoder != null) {
+      // perform some cleanup before dumping the command.
+      command.setTargetPeerGuid(null);
+      if (command instanceof RemoteActionCommand) {
+        ((RemoteActionCommand) command).setViewStateGuid(null);
+      } else if (command instanceof RemoteSortCommand) {
+        ((RemoteSortCommand) command).setViewStateGuid(null);
+      }
+      try {
+        commandsEncoder.writeObject(command);
+      } catch (Exception ex) {
+        handleException(ex, new HashMap<String, Object>());
+      }
+    }
   }
 }

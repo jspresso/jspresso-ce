@@ -63,6 +63,15 @@ public class RemoteInitCommand extends RemoteCommand {
   }
 
   /**
+   * Gets the workspaceNames.
+   * 
+   * @return the workspaceNames.
+   */
+  public String[] getWorkspaceNames() {
+    return workspaceNames;
+  }
+
+  /**
    * Sets the actions.
    * 
    * @param actions
@@ -90,15 +99,6 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public void setWorkspaceActions(RActionList[] workspaceActions) {
     this.workspaceActions = workspaceActions;
-  }
-
-  /**
-   * Gets the workspaceNames.
-   * 
-   * @return the workspaceNames.
-   */
-  public String[] getWorkspaceNames() {
-    return workspaceNames;
   }
 
   /**

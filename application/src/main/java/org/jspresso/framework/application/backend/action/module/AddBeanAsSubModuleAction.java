@@ -102,6 +102,17 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
   }
 
   /**
+   * Sets the childModuleProjectedViewDescriptor.
+   * 
+   * @param childModuleProjectedViewDescriptor
+   *          the childModuleProjectedViewDescriptor to set.
+   */
+  public void setChildModuleProjectedViewDescriptor(
+      IViewDescriptor childModuleProjectedViewDescriptor) {
+    this.childModuleProjectedViewDescriptor = childModuleProjectedViewDescriptor;
+  }
+
+  /**
    * Creates a module to be added to the currently selected module as child.
    * 
    * @param parentModule
@@ -141,17 +152,6 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
    */
   protected IViewDescriptor getChildModuleProjectedViewDescriptor() {
     return childModuleProjectedViewDescriptor;
-  }
-
-  /**
-   * Sets the childModuleProjectedViewDescriptor.
-   * 
-   * @param childModuleProjectedViewDescriptor
-   *          the childModuleProjectedViewDescriptor to set.
-   */
-  public void setChildModuleProjectedViewDescriptor(
-      IViewDescriptor childModuleProjectedViewDescriptor) {
-    this.childModuleProjectedViewDescriptor = childModuleProjectedViewDescriptor;
   }
 
 }

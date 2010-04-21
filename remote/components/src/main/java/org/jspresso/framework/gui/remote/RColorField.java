@@ -31,14 +31,6 @@ public class RColorField extends RComponent {
   private String            defaultColor;
 
   /**
-   * Constructs a new <code>RColorField</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RColorField() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RColorField</code> instance.
    * 
    * @param guid
@@ -46,6 +38,14 @@ public class RColorField extends RComponent {
    */
   public RColorField(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RColorField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RColorField() {
+    // For GWT support
   }
 
   /**

@@ -31,14 +31,6 @@ public class RDurationField extends RComponent {
   private long              maxMillis;
 
   /**
-   * Constructs a new <code>RDurationField</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RDurationField() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RDurationField</code> instance.
    * 
    * @param guid
@@ -46,6 +38,14 @@ public class RDurationField extends RComponent {
    */
   public RDurationField(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RDurationField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RDurationField() {
+    // For GWT support
   }
 
   /**

@@ -32,14 +32,6 @@ public abstract class RNumericComponent extends RComponent {
   private Number            minValue;
 
   /**
-   * Constructs a new <code>RNumericComponent</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RNumericComponent() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RIntegerField</code> instance.
    * 
    * @param guid
@@ -47,6 +39,14 @@ public abstract class RNumericComponent extends RComponent {
    */
   public RNumericComponent(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RNumericComponent</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RNumericComponent() {
+    // For GWT support
   }
 
   /**

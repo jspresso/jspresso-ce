@@ -25,6 +25,32 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
   private String       updateQuery;
 
   /**
+   * Configures the Spring jdbcTemplate to use to issue the update statement.
+   * 
+   * @param jdbcTemplate
+   *          the jdbcTemplate to set.
+   */
+  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
+
+  /**
+   * Configures the update query to execute to change the password. The prepared
+   * statement parameters that will be bound are, in order :
+   * <ol>
+   * <li><b>&quot;new password&quot;</b> potentially hashed.</li>
+   * <li><b>&quot;user name&quot;</b>.</li>
+   * <li><b>&quot;current password&quot;</b> potentially hashed.</li>
+   * </ol>
+   * 
+   * @param updateQuery
+   *          the updateQuery to set.
+   */
+  public void setUpdateQuery(String updateQuery) {
+    this.updateQuery = updateQuery;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -66,37 +92,11 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
   }
 
   /**
-   * Configures the Spring jdbcTemplate to use to issue the update statement.
-   * 
-   * @param jdbcTemplate
-   *          the jdbcTemplate to set.
-   */
-  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
-  }
-
-  /**
    * Gets the updateQuery.
    * 
    * @return the updateQuery.
    */
   protected String getUpdateQuery() {
     return updateQuery;
-  }
-
-  /**
-   * Configures the update query to execute to change the password. The prepared
-   * statement parameters that will be bound are, in order :
-   * <ol>
-   * <li><b>&quot;new password&quot;</b> potentially hashed.</li>
-   * <li><b>&quot;user name&quot;</b>.</li>
-   * <li><b>&quot;current password&quot;</b> potentially hashed.</li>
-   * </ol>
-   * 
-   * @param updateQuery
-   *          the updateQuery to set.
-   */
-  public void setUpdateQuery(String updateQuery) {
-    this.updateQuery = updateQuery;
   }
 }

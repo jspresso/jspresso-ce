@@ -40,14 +40,6 @@ public class RAction extends RemotePeer {
   private String            name;
 
   /**
-   * Constructs a new <code>RAction</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RAction() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RAction</code> instance.
    * 
    * @param guid
@@ -56,6 +48,14 @@ public class RAction extends RemotePeer {
   public RAction(String guid) {
     super(guid);
     enabled = true;
+  }
+
+  /**
+   * Constructs a new <code>RAction</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RAction() {
+    // For GWT support
   }
 
   /**

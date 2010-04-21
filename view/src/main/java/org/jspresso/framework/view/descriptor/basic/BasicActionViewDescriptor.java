@@ -39,6 +39,20 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
   private ERenderingOptions  renderingOptions = ERenderingOptions.ICON;
 
   /**
+   * {@inheritDoc}
+   */
+  public IDisplayableAction getAction() {
+    return action;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ERenderingOptions getRenderingOptions() {
+    return renderingOptions;
+  }
+
+  /**
    * Assigns the action to display as a view. The action will typically be
    * rendered as a button in the UI. whenever you want to size the icon used to
    * display the action (and thus the button peer), you might use the
@@ -49,13 +63,6 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
    */
   public void setAction(IDisplayableAction action) {
     this.action = action;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IDisplayableAction getAction() {
-    return action;
   }
 
   /**
@@ -75,13 +82,6 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
    */
   public void setRenderingOptions(ERenderingOptions renderingOptions) {
     this.renderingOptions = renderingOptions;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public ERenderingOptions getRenderingOptions() {
-    return renderingOptions;
   }
 
 }

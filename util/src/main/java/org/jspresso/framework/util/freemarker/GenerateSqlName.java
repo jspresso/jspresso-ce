@@ -37,12 +37,9 @@ import freemarker.template.TemplateModelException;
  */
 public class GenerateSqlName implements TemplateMethodModel {
 
-  private static final String          WORD_SEP = "_";
-  private static final KeyWordProvider DEFAULT_KEY_WORD_PROVIDER;
   private static final Formatter       DEFAULT_FORMATTER;
-  private Set<String>                  reservedKeyWords;
-  private Formatter                    formatter;
-
+  private static final KeyWordProvider DEFAULT_KEY_WORD_PROVIDER;
+  private static final String          WORD_SEP = "_";
   static {
     DEFAULT_FORMATTER = new Formatter() {
 
@@ -67,6 +64,9 @@ public class GenerateSqlName implements TemplateMethodModel {
       }
     };
   }
+  private Formatter                    formatter;
+
+  private Set<String>                  reservedKeyWords;
 
   /**
    * Constructs a new <code>GenerateSqlName</code> instance.
@@ -74,6 +74,76 @@ public class GenerateSqlName implements TemplateMethodModel {
   public GenerateSqlName() {
     reservedKeyWords = new HashSet<String>(DEFAULT_KEY_WORD_PROVIDER.run());
     formatter = DEFAULT_FORMATTER;
+  }
+
+  /**
+   * Infer a SQL column name from a property name. By default: - use camel
+   * parser to separate words with "_" - check for sql reserved key words
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public TemplateModel exec(List arguments) throws TemplateModelException {
+
+    String sqlColumnName = formatter.run(arguments.get(0).toString());
+    if (isReserved(sqlColumnName)) {
+      sqlColumnName += WORD_SEP;
+      if (arguments.size() > 1 && arguments.get(1) != null) {
+        sqlColumnName += formatter.run(arguments.get(1).toString());
+      }
+    }
+    try {
+      return new SimpleScalar(sqlColumnName);
+    } catch (Exception ex) {
+      throw new TemplateModelException("Could not infer SQL column name.", ex);
+    }
+  }
+
+  /**
+   * Sets an additional keyword provider.
+   * 
+   * @param provider
+   *          an additional keyword provider.
+   */
+  public void setAdditionalKeyWordProvider(KeyWordProvider provider) {
+    if (provider == null) {
+      return;
+    }
+
+    reservedKeyWords.addAll(provider.run());
+  }
+
+  /**
+   * Sets a new column name formatter. If null, the default one is restored.
+   * 
+   * @param formatter
+   *          a new formatter.
+   */
+  public void setFormatter(Formatter formatter) {
+    if (formatter != null) {
+      this.formatter = formatter;
+    } else {
+      this.formatter = DEFAULT_FORMATTER;
+    }
+  }
+
+  /**
+   * Sets a new keyword provider. If null, the default one is restored.
+   * 
+   * @param provider
+   *          a new keyword provider.
+   */
+  public void setKeyWordProvider(KeyWordProvider provider) {
+    KeyWordProvider currentProvider;
+    if (provider != null) {
+      currentProvider = provider;
+    } else {
+      currentProvider = DEFAULT_KEY_WORD_PROVIDER;
+    }
+    reservedKeyWords = new HashSet<String>(currentProvider.run());
+  }
+
+  private boolean isReserved(String name) {
+    return reservedKeyWords.contains(name.toUpperCase());
   }
 
   /**
@@ -103,76 +173,6 @@ public class GenerateSqlName implements TemplateMethodModel {
      * @return the list of reserved keywords uppercase.
      */
     List<String> run();
-  }
-
-  /**
-   * Infer a SQL column name from a property name. By default: - use camel
-   * parser to separate words with "_" - check for sql reserved key words
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  public TemplateModel exec(List arguments) throws TemplateModelException {
-
-    String sqlColumnName = formatter.run(arguments.get(0).toString());
-    if (isReserved(sqlColumnName)) {
-      sqlColumnName += WORD_SEP;
-      if (arguments.size() > 1 && arguments.get(1) != null) {
-        sqlColumnName += formatter.run(arguments.get(1).toString());
-      }
-    }
-    try {
-      return new SimpleScalar(sqlColumnName);
-    } catch (Exception ex) {
-      throw new TemplateModelException("Could not infer SQL column name.", ex);
-    }
-  }
-
-  private boolean isReserved(String name) {
-    return reservedKeyWords.contains(name.toUpperCase());
-  }
-
-  /**
-   * Sets a new keyword provider. If null, the default one is restored.
-   * 
-   * @param provider
-   *          a new keyword provider.
-   */
-  public void setKeyWordProvider(KeyWordProvider provider) {
-    KeyWordProvider currentProvider;
-    if (provider != null) {
-      currentProvider = provider;
-    } else {
-      currentProvider = DEFAULT_KEY_WORD_PROVIDER;
-    }
-    reservedKeyWords = new HashSet<String>(currentProvider.run());
-  }
-
-  /**
-   * Sets an additional keyword provider.
-   * 
-   * @param provider
-   *          an additional keyword provider.
-   */
-  public void setAdditionalKeyWordProvider(KeyWordProvider provider) {
-    if (provider == null) {
-      return;
-    }
-
-    reservedKeyWords.addAll(provider.run());
-  }
-
-  /**
-   * Sets a new column name formatter. If null, the default one is restored.
-   * 
-   * @param formatter
-   *          a new formatter.
-   */
-  public void setFormatter(Formatter formatter) {
-    if (formatter != null) {
-      this.formatter = formatter;
-    } else {
-      this.formatter = DEFAULT_FORMATTER;
-    }
   }
 
 }

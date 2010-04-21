@@ -59,6 +59,16 @@ public class ModelConnector extends ModelRefPropertyConnector {
    * {@inheritDoc}
    */
   @Override
+  public boolean areChildrenWritable() {
+    // overriden to restore local writability condition for children (opposite
+    // to ModelRefPropertyConnector).
+    return isWritable();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public ModelConnector clone(String newConnectorId) {
     ModelConnector clonedConnector = (ModelConnector) super
         .clone(newConnectorId);
@@ -102,15 +112,5 @@ public class ModelConnector extends ModelRefPropertyConnector {
   @Override
   protected void setConnecteeValue(Object aValue) {
     ((EmbeddedModelProvider) getModelProvider()).setModel(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean areChildrenWritable() {
-    // overriden to restore local writability condition for children (opposite
-    // to ModelRefPropertyConnector).
-    return isWritable();
   }
 }

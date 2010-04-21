@@ -65,6 +65,23 @@ public interface IIconFactory<E> {
   String getCancelIconImageURL();
 
   /**
+   * Gets the standard down icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getDownIcon(Dimension iconSize);
+
+  /**
+   * Gets the downIconImageURL.
+   * 
+   * @return the downIconImageURL.
+   */
+  String getDownIconImageURL();
+
+  /**
    * Gets the standard error icon.
    * 
    * @param iconSize
@@ -145,6 +162,20 @@ public interface IIconFactory<E> {
   String getInfoIconImageURL();
 
   /**
+   * Gets large incon size.
+   * 
+   * @return large incon size.
+   */
+  Dimension getLargeIconSize();
+
+  /**
+   * Gets medium incon size.
+   * 
+   * @return medium incon size.
+   */
+  Dimension getMediumIconSize();
+
+  /**
    * Gets the standard no icon.
    * 
    * @param iconSize
@@ -179,23 +210,6 @@ public interface IIconFactory<E> {
   String getOkYesIconImageURL();
 
   /**
-   * Gets the standard warning icon.
-   * 
-   * @param iconSize
-   *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
-   * @return the constructed icon.
-   */
-  E getWarningIcon(Dimension iconSize);
-
-  /**
-   * Gets the warningIconImageURL.
-   * 
-   * @return the warningIconImageURL.
-   */
-  String getWarningIconImageURL();
-
-  /**
    * Gets the standard question icon.
    * 
    * @param iconSize
@@ -211,6 +225,20 @@ public interface IIconFactory<E> {
    * @return the questionIconImageURL.
    */
   String getQuestionIconImageURL();
+
+  /**
+   * Gets small incon size.
+   * 
+   * @return small incon size.
+   */
+  Dimension getSmallIconSize();
+
+  /**
+   * Gets tiny incon size.
+   * 
+   * @return tiny incon size.
+   */
+  Dimension getTinyIconSize();
 
   /**
    * Gets the standard up icon.
@@ -230,47 +258,19 @@ public interface IIconFactory<E> {
   String getUpIconImageURL();
 
   /**
-   * Gets the standard down icon.
+   * Gets the standard warning icon.
    * 
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
    *          nacessary to match the requested size.
    * @return the constructed icon.
    */
-  E getDownIcon(Dimension iconSize);
+  E getWarningIcon(Dimension iconSize);
 
   /**
-   * Gets the downIconImageURL.
+   * Gets the warningIconImageURL.
    * 
-   * @return the downIconImageURL.
+   * @return the warningIconImageURL.
    */
-  String getDownIconImageURL();
-
-  /**
-   * Gets tiny incon size.
-   * 
-   * @return tiny incon size.
-   */
-  Dimension getTinyIconSize();
-
-  /**
-   * Gets small incon size.
-   * 
-   * @return small incon size.
-   */
-  Dimension getSmallIconSize();
-
-  /**
-   * Gets medium incon size.
-   * 
-   * @return medium incon size.
-   */
-  Dimension getMediumIconSize();
-
-  /**
-   * Gets large incon size.
-   * 
-   * @return large incon size.
-   */
-  Dimension getLargeIconSize();
+  String getWarningIconImageURL();
 }

@@ -53,6 +53,21 @@ public class ValueChangeSupport {
   }
 
   /**
+   * Registers a listener to be excluded (generally temporarily) from the
+   * notification process without being removed from the actual listeners
+   * collection.
+   * 
+   * @param listener
+   *          the excluded listener.
+   */
+  public void addInhibitedListener(IValueChangeListener listener) {
+    if (inhibitedListeners == null && listener != null) {
+      inhibitedListeners = new HashSet<IValueChangeListener>(4);
+    }
+    inhibitedListeners.add(listener);
+  }
+
+  /**
    * Adds a new listener to this connector.
    * 
    * @param listener
@@ -70,18 +85,17 @@ public class ValueChangeSupport {
   }
 
   /**
-   * Registers a listener to be excluded (generally temporarily) from the
-   * notification process without being removed from the actual listeners
-   * collection.
+   * Fires a new <code>ValueChangeEvent</code> built with <code>source</code> as
+   * source and parameters as old and new values.
    * 
-   * @param listener
-   *          the excluded listener.
+   * @param oldValue
+   *          The old connector's value
+   * @param newValue
+   *          The new connector's value
    */
-  public void addInhibitedListener(IValueChangeListener listener) {
-    if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<IValueChangeListener>(4);
-    }
-    inhibitedListeners.add(listener);
+  public void fireConnectorValueChange(Object oldValue, Object newValue) {
+    ValueChangeEvent evt = new ValueChangeEvent(source, oldValue, newValue);
+    fireConnectorValueChange(evt);
   }
 
   /**
@@ -111,20 +125,6 @@ public class ValueChangeSupport {
   }
 
   /**
-   * Fires a new <code>ValueChangeEvent</code> built with <code>source</code> as
-   * source and parameters as old and new values.
-   * 
-   * @param oldValue
-   *          The old connector's value
-   * @param newValue
-   *          The new connector's value
-   */
-  public void fireConnectorValueChange(Object oldValue, Object newValue) {
-    ValueChangeEvent evt = new ValueChangeEvent(source, oldValue, newValue);
-    fireConnectorValueChange(evt);
-  }
-
-  /**
    * Gets the listeners.
    * 
    * @return the listeners.
@@ -146,19 +146,6 @@ public class ValueChangeSupport {
   }
 
   /**
-   * Removes a new <code>IValueChangeListener</code>.
-   * 
-   * @param listener
-   *          The removed listener.
-   */
-  public synchronized void removeValueChangeListener(
-      IValueChangeListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
-    }
-  }
-
-  /**
    * Registers a listener to be re-included to the notification process without
    * being re-added to the actual listeners collection.
    * 
@@ -170,5 +157,18 @@ public class ValueChangeSupport {
       return;
     }
     inhibitedListeners.remove(listener);
+  }
+
+  /**
+   * Removes a new <code>IValueChangeListener</code>.
+   * 
+   * @param listener
+   *          The removed listener.
+   */
+  public synchronized void removeValueChangeListener(
+      IValueChangeListener listener) {
+    if (listener != null && listeners != null) {
+      listeners.remove(listener);
+    }
   }
 }

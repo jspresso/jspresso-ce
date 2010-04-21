@@ -64,7 +64,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     IRemoteValueStateFactory, IRemotePeerRegistry {
 
   private IValueChangeListener     collectionConnectorValueChangeListener;
-  private IValueChangeListener     valueChangeListener;
   private IValueChangeListener     formattedConnectorValueChangeListener;
   private IGUIDGenerator           guidGenerator;
   private PropertyChangeListener   readabilityListener;
@@ -72,6 +71,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   private IRemotePeerRegistry      remotePeerRegistry;
   private IValueChangeListener     renderingConnectorValueChangeListener;
   private ISelectionChangeListener selectionChangeListener;
+  private IValueChangeListener     valueChangeListener;
   private PropertyChangeListener   writabilityListener;
 
   /**
@@ -399,15 +399,15 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * {@inheritDoc}
    */
-  public String registerAutomationId(String automationSeed, String guid) {
-    return remotePeerRegistry.registerAutomationId(automationSeed, guid);
+  public void register(IRemotePeer remotePeer) {
+    remotePeerRegistry.register(remotePeer);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void register(IRemotePeer remotePeer) {
-    remotePeerRegistry.register(remotePeer);
+  public String registerAutomationId(String automationSeed, String guid) {
+    return remotePeerRegistry.registerAutomationId(automationSeed, guid);
   }
 
   /**

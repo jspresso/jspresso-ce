@@ -55,80 +55,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class HibernateBackendController extends AbstractBackendController {
 
   private HibernateTemplate hibernateTemplate;
-  private boolean           traversedPendingOperations = false;
   private boolean           pendingOperationsExecuting = false;
   private Set<IEntity>      pendingUpdatingEntities;
-
-  /**
-   * Gets the hibernateTemplate.
-   * 
-   * @return the hibernateTemplate.
-   */
-  public HibernateTemplate getHibernateTemplate() {
-    return hibernateTemplate;
-  }
-
-  /**
-   * The configured entity factory will be configured with the necessary
-   * interceptors so that the controller can be notified of entity creations.
-   * <p>
-   * {@inheritDoc}
-   * 
-   * @internal
-   */
-  @Override
-  public void setEntityFactory(IEntityFactory entityFactory) {
-    super.setEntityFactory(entityFactory);
-    linkHibernateArtifacts();
-  }
-
-  /**
-   * Assigns the Spring hibernate template to this backend controller. This
-   * property can only be set once and should only be used by the DI container.
-   * It will rarely be changed from built-in defaults unless you need to specify
-   * a custom implementation instance to be used.
-   * <p>
-   * The configured instance is the one that will be returned by the
-   * controller's <code>getHibernateTemplate()</code> method that should be used
-   * by the service layer to access Hibernate.
-   * 
-   * @param hibernateTemplate
-   *          the hibernateTemplate to set.
-   */
-  public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-    if (this.hibernateTemplate != null) {
-      throw new IllegalArgumentException(
-          "Spring hibernate template can only be configured once.");
-    }
-    this.hibernateTemplate = hibernateTemplate;
-    linkHibernateArtifacts();
-  }
-
-  /**
-   * The configured transaction template will be configured with the necessary
-   * interceptors so that the controller can be notified of transactions.
-   * <p>
-   * {@inheritDoc}
-   * 
-   * @internal
-   */
-  @Override
-  public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
-    super.setTransactionTemplate(transactionTemplate);
-    linkHibernateArtifacts();
-  }
-
-  private void linkHibernateArtifacts() {
-    if (getHibernateTemplate() != null && getTransactionTemplate() != null
-        && getEntityFactory() != null) {
-      ControllerAwareEntityProxyInterceptor entityInterceptor = new ControllerAwareEntityProxyInterceptor();
-      entityInterceptor.setBackendController(this);
-      entityInterceptor.setEntityFactory(getEntityFactory());
-      getHibernateTemplate().setEntityInterceptor(entityInterceptor);
-      ((HibernateTransactionManager) getTransactionTemplate()
-          .getTransactionManager()).setEntityInterceptor(entityInterceptor);
-    }
-  }
+  private boolean           traversedPendingOperations = false;
 
   /**
    * Whenever the entity has dirty persistent collection, make them clean to
@@ -184,6 +113,17 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
+   * Allows for a new run of performPendingOperations.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void clearPendingOperations() {
+    super.clearPendingOperations();
+    traversedPendingOperations = false;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -213,6 +153,15 @@ public class HibernateBackendController extends AbstractBackendController {
     } finally {
       traversedPendingOperations = false;
     }
+  }
+
+  /**
+   * Gets the hibernateTemplate.
+   * 
+   * @return the hibernateTemplate.
+   */
+  public HibernateTemplate getHibernateTemplate() {
+    return hibernateTemplate;
   }
 
   /**
@@ -362,12 +311,77 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
+  public void registerForUpdate(IEntity entity) {
+    if (pendingOperationsExecuting) {
+      if (!pendingUpdatingEntities.contains(entity)) {
+        pendingUpdatingEntities.add(entity);
+        getHibernateTemplate().saveOrUpdate(entity);
+      }
+    } else {
+      super.registerForUpdate(entity);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void rollbackUnitOfWork() {
     try {
       super.rollbackUnitOfWork();
     } finally {
       traversedPendingOperations = false;
     }
+  }
+
+  /**
+   * The configured entity factory will be configured with the necessary
+   * interceptors so that the controller can be notified of entity creations.
+   * <p>
+   * {@inheritDoc}
+   * 
+   * @internal
+   */
+  @Override
+  public void setEntityFactory(IEntityFactory entityFactory) {
+    super.setEntityFactory(entityFactory);
+    linkHibernateArtifacts();
+  }
+
+  /**
+   * Assigns the Spring hibernate template to this backend controller. This
+   * property can only be set once and should only be used by the DI container.
+   * It will rarely be changed from built-in defaults unless you need to specify
+   * a custom implementation instance to be used.
+   * <p>
+   * The configured instance is the one that will be returned by the
+   * controller's <code>getHibernateTemplate()</code> method that should be used
+   * by the service layer to access Hibernate.
+   * 
+   * @param hibernateTemplate
+   *          the hibernateTemplate to set.
+   */
+  public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+    if (this.hibernateTemplate != null) {
+      throw new IllegalArgumentException(
+          "Spring hibernate template can only be configured once.");
+    }
+    this.hibernateTemplate = hibernateTemplate;
+    linkHibernateArtifacts();
+  }
+
+  /**
+   * The configured transaction template will be configured with the necessary
+   * interceptors so that the controller can be notified of transactions.
+   * <p>
+   * {@inheritDoc}
+   * 
+   * @internal
+   */
+  @Override
+  public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+    super.setTransactionTemplate(transactionTemplate);
+    linkHibernateArtifacts();
   }
 
   /**
@@ -425,35 +439,15 @@ public class HibernateBackendController extends AbstractBackendController {
         varSnapshotCollection, role);
   }
 
-  @SuppressWarnings("unchecked")
-  private void lockInHibernateInDepth(IComponent component,
-      Session hibernateSession, Set<IEntity> alreadyLocked) {
-    boolean isEntity = component instanceof IEntity;
-    if (!isEntity || alreadyLocked.add((IEntity) component)) {
-      if (!isEntity || ((IEntity) component).isPersistent()) {
-        if (isEntity) {
-          boolean newlyAttached = lockInHibernate((IEntity) component,
-              hibernateSession);
-          if (!newlyAttached) {
-            return;
-          }
-        }
-        Map<String, Object> entityProperties = component
-            .straightGetProperties();
-        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
-          if (Hibernate.isInitialized(property.getValue())) {
-            if (property.getValue() instanceof IEntity) {
-              lockInHibernateInDepth((IEntity) property.getValue(),
-                  hibernateSession, alreadyLocked);
-            } else if (property.getValue() instanceof Collection) {
-              for (IComponent element : ((Collection<IComponent>) property
-                  .getValue())) {
-                lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
-              }
-            }
-          }
-        }
-      }
+  private void linkHibernateArtifacts() {
+    if (getHibernateTemplate() != null && getTransactionTemplate() != null
+        && getEntityFactory() != null) {
+      ControllerAwareEntityProxyInterceptor entityInterceptor = new ControllerAwareEntityProxyInterceptor();
+      entityInterceptor.setBackendController(this);
+      entityInterceptor.setEntityFactory(getEntityFactory());
+      getHibernateTemplate().setEntityInterceptor(entityInterceptor);
+      ((HibernateTransactionManager) getTransactionTemplate()
+          .getTransactionManager()).setEntityInterceptor(entityInterceptor);
     }
   }
 
@@ -484,29 +478,35 @@ public class HibernateBackendController extends AbstractBackendController {
     return newlyAttached;
   }
 
-  /**
-   * Allows for a new run of performPendingOperations.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void clearPendingOperations() {
-    super.clearPendingOperations();
-    traversedPendingOperations = false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void registerForUpdate(IEntity entity) {
-    if (pendingOperationsExecuting) {
-      if (!pendingUpdatingEntities.contains(entity)) {
-        pendingUpdatingEntities.add(entity);
-        getHibernateTemplate().saveOrUpdate(entity);
+  @SuppressWarnings("unchecked")
+  private void lockInHibernateInDepth(IComponent component,
+      Session hibernateSession, Set<IEntity> alreadyLocked) {
+    boolean isEntity = component instanceof IEntity;
+    if (!isEntity || alreadyLocked.add((IEntity) component)) {
+      if (!isEntity || ((IEntity) component).isPersistent()) {
+        if (isEntity) {
+          boolean newlyAttached = lockInHibernate((IEntity) component,
+              hibernateSession);
+          if (!newlyAttached) {
+            return;
+          }
+        }
+        Map<String, Object> entityProperties = component
+            .straightGetProperties();
+        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+          if (Hibernate.isInitialized(property.getValue())) {
+            if (property.getValue() instanceof IEntity) {
+              lockInHibernateInDepth((IEntity) property.getValue(),
+                  hibernateSession, alreadyLocked);
+            } else if (property.getValue() instanceof Collection) {
+              for (IComponent element : ((Collection<IComponent>) property
+                  .getValue())) {
+                lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
+              }
+            }
+          }
+        }
       }
-    } else {
-      super.registerForUpdate(entity);
     }
   }
 

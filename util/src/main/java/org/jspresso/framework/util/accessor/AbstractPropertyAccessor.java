@@ -127,12 +127,13 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
   }
 
   /**
-   * Gets the property property.
+   * Gets the final nested property.
    * 
-   * @return the property.
+   * @return the final nested property.
    */
-  protected String getProperty() {
-    return property;
+  protected String getLastNestedProperty() {
+    return getProperty().substring(
+        getProperty().lastIndexOf(IAccessor.NESTED_DELIM) + 1);
   }
 
   /**
@@ -180,12 +181,11 @@ public abstract class AbstractPropertyAccessor implements IAccessor {
   }
 
   /**
-   * Gets the final nested property.
+   * Gets the property property.
    * 
-   * @return the final nested property.
+   * @return the property.
    */
-  protected String getLastNestedProperty() {
-    return getProperty().substring(
-        getProperty().lastIndexOf(IAccessor.NESTED_DELIM) + 1);
+  protected String getProperty() {
+    return property;
   }
 }

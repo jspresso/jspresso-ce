@@ -31,14 +31,6 @@ public class RDateField extends RComponent {
   private String            type;
 
   /**
-   * Constructs a new <code>RDateField</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RDateField() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RDateField</code> instance.
    * 
    * @param guid
@@ -46,6 +38,14 @@ public class RDateField extends RComponent {
    */
   public RDateField(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RDateField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RDateField() {
+    // For GWT support
   }
 
   /**

@@ -58,9 +58,9 @@ import org.jspresso.framework.view.IView;
 public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
     TableCellEditor, TreeCellEditor {
 
-  private static final long                serialVersionUID = 8182961519931949735L;
   private static final Map<String, Object> NULLMAP          = Collections
                                                                 .unmodifiableMap(new HashMap<String, Object>());
+  private static final long                serialVersionUID = 8182961519931949735L;
   private IView<JComponent>                editorView;
 
   /**

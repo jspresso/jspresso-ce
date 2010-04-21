@@ -188,34 +188,6 @@ public class ControllerAwareEntityProxyInterceptor extends
   }
 
   /**
-   * Sets the backendController.
-   * 
-   * @param backendController
-   *          the backendController to set.
-   */
-  public void setBackendController(IBackendController backendController) {
-    this.backendController = backendController;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return backendController;
-  }
-
-  /**
-   * Gets the principal of the application session.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected UserPrincipal getPrincipal() {
-    return backendController.getApplicationSession().getPrincipal();
-  }
-
-  /**
    * This is the place to trigger the update lifecycle handler. onFlushDirty is
    * not the right place since it cannot deal with transient new instances that
    * might be added to the object tree.
@@ -259,5 +231,33 @@ public class ControllerAwareEntityProxyInterceptor extends
         }
       }
     }
+  }
+
+  /**
+   * Sets the backendController.
+   * 
+   * @param backendController
+   *          the backendController to set.
+   */
+  public void setBackendController(IBackendController backendController) {
+    this.backendController = backendController;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return backendController;
+  }
+
+  /**
+   * Gets the principal of the application session.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected UserPrincipal getPrincipal() {
+    return backendController.getApplicationSession().getPrincipal();
   }
 }

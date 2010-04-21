@@ -29,8 +29,8 @@ public class RemoteActionCommand extends RemoteCommand {
   private static final long serialVersionUID = -3055572538206728529L;
 
   private String            parameter;
-  private String            viewStateGuid;
   private String            viewStateAutomationId;
+  private String            viewStateGuid;
 
   /**
    * Gets the parameter.
@@ -39,6 +39,15 @@ public class RemoteActionCommand extends RemoteCommand {
    */
   public String getParameter() {
     return parameter;
+  }
+
+  /**
+   * Gets the viewStateAutomationId.
+   * 
+   * @return the viewStateAutomationId.
+   */
+  public String getViewStateAutomationId() {
+    return viewStateAutomationId;
   }
 
   /**
@@ -61,25 +70,6 @@ public class RemoteActionCommand extends RemoteCommand {
   }
 
   /**
-   * Sets the viewStateGuid.
-   * 
-   * @param viewStateGuid
-   *          the viewStateGuid to set.
-   */
-  public void setViewStateGuid(String viewStateGuid) {
-    this.viewStateGuid = viewStateGuid;
-  }
-
-  /**
-   * Gets the viewStateAutomationId.
-   * 
-   * @return the viewStateAutomationId.
-   */
-  public String getViewStateAutomationId() {
-    return viewStateAutomationId;
-  }
-
-  /**
    * Sets the viewStateAutomationId.
    * 
    * @param viewStateAutomationId
@@ -87,5 +77,15 @@ public class RemoteActionCommand extends RemoteCommand {
    */
   public void setViewStateAutomationId(String viewStateAutomationId) {
     this.viewStateAutomationId = viewStateAutomationId;
+  }
+
+  /**
+   * Sets the viewStateGuid.
+   * 
+   * @param viewStateGuid
+   *          the viewStateGuid to set.
+   */
+  public void setViewStateGuid(String viewStateGuid) {
+    this.viewStateGuid = viewStateGuid;
   }
 }

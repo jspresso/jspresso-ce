@@ -29,14 +29,6 @@ public class RPasswordField extends RTextField {
   private static final long serialVersionUID = 1595790630114480024L;
 
   /**
-   * Constructs a new <code>RPasswordField</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RPasswordField() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RPasswordField</code> instance.
    * 
    * @param guid
@@ -44,5 +36,13 @@ public class RPasswordField extends RTextField {
    */
   public RPasswordField(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RPasswordField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RPasswordField() {
+    // For GWT support
   }
 }

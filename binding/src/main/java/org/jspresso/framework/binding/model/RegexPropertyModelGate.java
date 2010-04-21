@@ -32,15 +32,6 @@ public class RegexPropertyModelGate extends AbstractPropertyModelGate<String> {
   private String regexpPattern;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean shouldOpen(String propertyValue) {
-    return propertyValue != null && regexpPattern != null
-        && Pattern.matches(regexpPattern, propertyValue);
-  }
-
-  /**
    * Configures the regular expression to match the property value against. The
    * gate will open if the property value matches the regex unless the
    * <code>openOnTrue</code> property has been set to false.
@@ -50,5 +41,14 @@ public class RegexPropertyModelGate extends AbstractPropertyModelGate<String> {
    */
   public void setRegexpPattern(String regexpPattern) {
     this.regexpPattern = regexpPattern;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean shouldOpen(String propertyValue) {
+    return propertyValue != null && regexpPattern != null
+        && Pattern.matches(regexpPattern, propertyValue);
   }
 }

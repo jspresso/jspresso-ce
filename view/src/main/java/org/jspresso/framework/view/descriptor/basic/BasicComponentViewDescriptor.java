@@ -62,38 +62,6 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   private List<String>                  renderedProperties;
 
   /**
-   * Gets the renderedProperties.
-   * 
-   * @return the renderedProperties.
-   */
-  private List<String> getRenderedProperties() {
-    if (renderedProperties == null) {
-      renderedProperties = ((IComponentDescriptorProvider<?>) getModelDescriptor())
-          .getComponentDescriptor().getRenderedProperties();
-    }
-    return renderedProperties;
-  }
-
-  /**
-   * This is somehow a shortcut to using the
-   * <code>propertyViewDescriptors</code> property. Instead of providing a
-   * full-blown list of property view descriptors to configure the component
-   * view fields, you just pass-in a list of property names. view fields are
-   * then created from this list, keeping model defaults for all fields
-   * characteristics.
-   * <p>
-   * Whenever the property value is <code>null</code> (default), the fields list
-   * is determined from the component descriptor <code>renderedProperties</code>
-   * property.
-   * 
-   * @param renderedProperties
-   *          the renderedProperties to set.
-   */
-  public void setRenderedProperties(List<String> renderedProperties) {
-    this.renderedProperties = renderedProperties;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public int getColumnCount() {
@@ -149,6 +117,38 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
               (IComponentDescriptorProvider<?>) getModelDescriptor()));
     }
     return actualPropertyViewDescriptors;
+  }
+
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  @Override
+  public Collection<IGate> getReadabilityGates() {
+    Collection<IGate> gates = super.getReadabilityGates();
+    if (gates == null && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).getReadabilityGates();
+      }
+    }
+    return gates;
+  }
+
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  @Override
+  public Collection<IGate> getWritabilityGates() {
+    Collection<IGate> gates = super.getWritabilityGates();
+    if (gates == null && getModelDescriptor() != null) {
+      if (getModelDescriptor() instanceof IGateAccessible) {
+        return ((IGateAccessible) getModelDescriptor()).getWritabilityGates();
+      }
+    }
+    return gates;
   }
 
   /**
@@ -263,13 +263,6 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     }
   }
 
-  private Integer getPropertyWidth(String propertyName) {
-    if (propertyWidths != null) {
-      return propertyWidths.get(propertyName);
-    }
-    return new Integer(1);
-  }
-
   /**
    * Whenever a rendered property is not scalar, this property allows to
    * override which of the referenced component fields should be displayed :
@@ -301,6 +294,32 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     this.renderedChildProperties = renderedChildProperties;
   }
 
+  /**
+   * This is somehow a shortcut to using the
+   * <code>propertyViewDescriptors</code> property. Instead of providing a
+   * full-blown list of property view descriptors to configure the component
+   * view fields, you just pass-in a list of property names. view fields are
+   * then created from this list, keeping model defaults for all fields
+   * characteristics.
+   * <p>
+   * Whenever the property value is <code>null</code> (default), the fields list
+   * is determined from the component descriptor <code>renderedProperties</code>
+   * property.
+   * 
+   * @param renderedProperties
+   *          the renderedProperties to set.
+   */
+  public void setRenderedProperties(List<String> renderedProperties) {
+    this.renderedProperties = renderedProperties;
+  }
+
+  private Integer getPropertyWidth(String propertyName) {
+    if (propertyWidths != null) {
+      return propertyWidths.get(propertyName);
+    }
+    return new Integer(1);
+  }
+
   private List<String> getRenderedChildProperties(String propertyName) {
     List<String> childProperties = null;
     if (renderedChildProperties != null) {
@@ -322,34 +341,15 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Gets the readabilityGates.
+   * Gets the renderedProperties.
    * 
-   * @return the readabilityGates.
+   * @return the renderedProperties.
    */
-  @Override
-  public Collection<IGate> getReadabilityGates() {
-    Collection<IGate> gates = super.getReadabilityGates();
-    if (gates == null && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof IGateAccessible) {
-        return ((IGateAccessible) getModelDescriptor()).getReadabilityGates();
-      }
+  private List<String> getRenderedProperties() {
+    if (renderedProperties == null) {
+      renderedProperties = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor().getRenderedProperties();
     }
-    return gates;
-  }
-
-  /**
-   * Gets the writabilityGates.
-   * 
-   * @return the writabilityGates.
-   */
-  @Override
-  public Collection<IGate> getWritabilityGates() {
-    Collection<IGate> gates = super.getWritabilityGates();
-    if (gates == null && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof IGateAccessible) {
-        return ((IGateAccessible) getModelDescriptor()).getWritabilityGates();
-      }
-    }
-    return gates;
+    return renderedProperties;
   }
 }

@@ -36,14 +36,6 @@ public class RActionList extends RemotePeer {
   private String            name;
 
   /**
-   * Constructs a new <code>RActionList</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RActionList() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RActionList</code> instance.
    * 
    * @param guid
@@ -51,6 +43,14 @@ public class RActionList extends RemotePeer {
    */
   public RActionList(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RActionList</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RActionList() {
+    // For GWT support
   }
 
   /**

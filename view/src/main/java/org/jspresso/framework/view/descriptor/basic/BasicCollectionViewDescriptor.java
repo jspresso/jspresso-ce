@@ -37,9 +37,9 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     implements ICollectionViewDescriptor {
 
-  private ESelectionMode selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
-  private IAction        rowAction;
   private IAction        itemSelectionAction;
+  private IAction        rowAction;
+  private ESelectionMode selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
 
   /**
    * {@inheritDoc}
@@ -60,12 +60,51 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public IAction getItemSelectionAction() {
+    return itemSelectionAction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IAction getRowAction() {
+    return rowAction;
+  }
+
+  /**
    * Gets the selectionMode.
    * 
    * @return the selectionMode.
    */
   public ESelectionMode getSelectionMode() {
     return selectionMode;
+  }
+
+  /**
+   * Registers an action that is implicitely triggered everytime the selection
+   * changes on the collection view UI peer. The context of the action execution
+   * is the same as if the action was registered in the view action map.
+   * 
+   * @param itemSelectionAction
+   *          the itemSelectionAction to set.
+   */
+  public void setItemSelectionAction(IAction itemSelectionAction) {
+    this.itemSelectionAction = itemSelectionAction;
+  }
+
+  /**
+   * Registers an action that is implicitely triggered everytime a row is
+   * activated (e.g. double-clicked for current UI channels) on the collection
+   * view UI peer. The context of the action execution is the same as if the
+   * action was registered in the view action map.
+   * 
+   * @param rowAction
+   *          the rowAction to set.
+   */
+  public void setRowAction(IAction rowAction) {
+    this.rowAction = rowAction;
   }
 
   /**
@@ -89,45 +128,6 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    */
   public void setSelectionMode(ESelectionMode selectionMode) {
     this.selectionMode = selectionMode;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction getRowAction() {
-    return rowAction;
-  }
-
-  /**
-   * Registers an action that is implicitely triggered everytime a row is
-   * activated (e.g. double-clicked for current UI channels) on the collection
-   * view UI peer. The context of the action execution is the same as if the
-   * action was registered in the view action map.
-   * 
-   * @param rowAction
-   *          the rowAction to set.
-   */
-  public void setRowAction(IAction rowAction) {
-    this.rowAction = rowAction;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction getItemSelectionAction() {
-    return itemSelectionAction;
-  }
-
-  /**
-   * Registers an action that is implicitely triggered everytime the selection
-   * changes on the collection view UI peer. The context of the action execution
-   * is the same as if the action was registered in the view action map.
-   * 
-   * @param itemSelectionAction
-   *          the itemSelectionAction to set.
-   */
-  public void setItemSelectionAction(IAction itemSelectionAction) {
-    this.itemSelectionAction = itemSelectionAction;
   }
 
 }

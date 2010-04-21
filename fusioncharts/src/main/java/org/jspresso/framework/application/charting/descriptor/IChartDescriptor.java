@@ -34,20 +34,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public interface IChartDescriptor {
 
   /**
-   * Gets the chart url.
-   * 
-   * @return the chart url.
-   */
-  String getUrl();
-
-  /**
-   * Gets the chart dimensions.
-   * 
-   * @return the chart dimensions.
-   */
-  Dimension getDimension();
-
-  /**
    * Gets the chart data.
    * 
    * @param model
@@ -69,9 +55,23 @@ public interface IChartDescriptor {
       throws SQLException;
 
   /**
+   * Gets the chart dimensions.
+   * 
+   * @return the chart dimensions.
+   */
+  Dimension getDimension();
+
+  /**
    * Gets the chart title i18n key. This key will be internationalized.
    * 
    * @return the chart title i18n key.
    */
   String getTitle();
+
+  /**
+   * Gets the chart url.
+   * 
+   * @return the chart url.
+   */
+  String getUrl();
 }

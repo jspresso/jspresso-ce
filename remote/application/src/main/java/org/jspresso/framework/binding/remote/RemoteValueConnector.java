@@ -34,11 +34,11 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 public class RemoteValueConnector extends BasicValueConnector implements
     IRemotePeer, IRemoteStateOwner, IAutomationSource {
 
+  private String                  automationSeed;
   private RemoteConnectorFactory  connectorFactory;
   private String                  guid;
-  private String                  automationSeed;
-  private RemoteValueState        state;
   private IRemoteStateValueMapper remoteStateValueMapper;
+  private RemoteValueState        state;
 
   /**
    * Constructs a new <code>RemoteValueConnector</code> instance.
@@ -53,6 +53,15 @@ public class RemoteValueConnector extends BasicValueConnector implements
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
     connectorFactory.register(this);
+  }
+
+  /**
+   * Returns the actual connector value.
+   * <p>
+   * {@inheritDoc}
+   */
+  public Object actualValue() {
+    return getConnectorValue();
   }
 
   /**
@@ -78,6 +87,18 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
+   * Gets the automationSeed.
+   * 
+   * @return the automationSeed.
+   */
+  public String getAutomationSeed() {
+    if (automationSeed != null) {
+      return automationSeed;
+    }
+    return getId();
+  }
+
+  /**
    * Gets the guid.
    * 
    * @return the guid.
@@ -98,6 +119,45 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    return getModelConnector() != null && super.isWritable();
+  }
+
+  /**
+   * Sets the automationSeed.
+   * 
+   * @param automationSeed
+   *          the automationSeed to set.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
+  }
+
+  /**
+   * Sets the remoteStateValueMapper.
+   * 
+   * @param remoteStateValueMapper
+   *          the remoteStateValueMapper to set.
+   */
+  public void setRemoteStateValueMapper(
+      IRemoteStateValueMapper remoteStateValueMapper) {
+    this.remoteStateValueMapper = remoteStateValueMapper;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void synchRemoteState() {
+    RemoteValueState currentState = getState();
+    currentState.setValue(getValueForState());
+    currentState.setReadable(isReadable());
+    currentState.setWritable(isWritable());
+  }
+
+  /**
    * Creates a new state instance rerpesenting this connector.
    * 
    * @return the newly created state.
@@ -109,13 +169,12 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the remoteStateValueMapper.
+   * 
+   * @return the remoteStateValueMapper.
    */
-  public void synchRemoteState() {
-    RemoteValueState currentState = getState();
-    currentState.setValue(getValueForState());
-    currentState.setReadable(isReadable());
-    currentState.setWritable(isWritable());
+  protected IRemoteStateValueMapper getRemoteStateValueMapper() {
+    return remoteStateValueMapper;
   }
 
   /**
@@ -133,64 +192,5 @@ public class RemoteValueConnector extends BasicValueConnector implements
           valueForState);
     }
     return valueForState;
-  }
-
-  /**
-   * Returns the actual connector value.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Object actualValue() {
-    return getConnectorValue();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isWritable() {
-    return getModelConnector() != null && super.isWritable();
-  }
-
-  /**
-   * Gets the remoteStateValueMapper.
-   * 
-   * @return the remoteStateValueMapper.
-   */
-  protected IRemoteStateValueMapper getRemoteStateValueMapper() {
-    return remoteStateValueMapper;
-  }
-
-  /**
-   * Sets the remoteStateValueMapper.
-   * 
-   * @param remoteStateValueMapper
-   *          the remoteStateValueMapper to set.
-   */
-  public void setRemoteStateValueMapper(
-      IRemoteStateValueMapper remoteStateValueMapper) {
-    this.remoteStateValueMapper = remoteStateValueMapper;
-  }
-
-  /**
-   * Gets the automationSeed.
-   * 
-   * @return the automationSeed.
-   */
-  public String getAutomationSeed() {
-    if (automationSeed != null) {
-      return automationSeed;
-    }
-    return getId();
-  }
-
-  /**
-   * Sets the automationSeed.
-   * 
-   * @param automationSeed
-   *          the automationSeed to set.
-   */
-  public void setAutomationSeed(String automationSeed) {
-    this.automationSeed = automationSeed;
   }
 }

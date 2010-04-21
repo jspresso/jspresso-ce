@@ -31,6 +31,16 @@ import java.util.Map;
 public interface IMapView<E> extends ICompositeView<E> {
 
   /**
+   * Adds a child view to the map.
+   * 
+   * @param key
+   *          the child view key.
+   * @param childView
+   *          the child view to be added.
+   */
+  void addToChildrenMap(String key, IView<E> childView);
+
+  /**
    * Gets the child view indexed by the key or null if the key does not exist.
    * 
    * @param key
@@ -45,14 +55,4 @@ public interface IMapView<E> extends ICompositeView<E> {
    * @return the children view map.
    */
   Map<String, IView<E>> getChildrenMap();
-
-  /**
-   * Adds a child view to the map.
-   * 
-   * @param key
-   *          the child view key.
-   * @param childView
-   *          the child view to be added.
-   */
-  void addToChildrenMap(String key, IView<E> childView);
 }

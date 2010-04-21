@@ -36,26 +36,26 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   private String                         backwardIconImageURL;
 
   private String                         cancelIconImageURL;
+  private String                         downIconImageURL;
   private String                         errorIconImageURL;
-  private String                         forbiddenIconImageURL;
 
+  private String                         forbiddenIconImageURL;
   private String                         forwardIconImageURL;
   private Map<String, Map<Dimension, E>> iconStore;
+
   private String                         infoIconImageURL;
 
+  private Dimension                      largeIconSize;
+  private Dimension                      mediumIconSize;
+
   private String                         noIconImageURL;
-
-  private String                         upIconImageURL;
-  private String                         downIconImageURL;
-
   private String                         okYesIconImageURL;
-  private String                         warningIconImageURL;
   private String                         questionIconImageURL;
 
-  private Dimension                      tinyIconSize;
   private Dimension                      smallIconSize;
-  private Dimension                      mediumIconSize;
-  private Dimension                      largeIconSize;
+  private Dimension                      tinyIconSize;
+  private String                         upIconImageURL;
+  private String                         warningIconImageURL;
 
   /**
    * Constructs a new <code>AbstractIconFactory</code> instance.
@@ -99,6 +99,22 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
+  public E getDownIcon(Dimension iconSize) {
+    return getIcon(downIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the downIconImageURL.
+   * 
+   * @return the downIconImageURL.
+   */
+  public String getDownIconImageURL() {
+    return downIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public E getErrorIcon(Dimension iconSize) {
     return getIcon(errorIconImageURL, iconSize);
   }
@@ -117,20 +133,6 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public E getForbiddenIcon(Dimension iconSize) {
     return getIcon(forbiddenIconImageURL, iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public E getUpIcon(Dimension iconSize) {
-    return getIcon(upIconImageURL, iconSize);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public E getDownIcon(Dimension iconSize) {
-    return getIcon(downIconImageURL, iconSize);
   }
 
   /**
@@ -192,6 +194,30 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
+   * Gets the largeIconSize.
+   * 
+   * @return the largeIconSize.
+   */
+  public Dimension getLargeIconSize() {
+    if (largeIconSize == null) {
+      largeIconSize = new Dimension(48, 48);
+    }
+    return largeIconSize;
+  }
+
+  /**
+   * Gets the mediumIconSize.
+   * 
+   * @return the mediumIconSize.
+   */
+  public Dimension getMediumIconSize() {
+    if (mediumIconSize == null) {
+      mediumIconSize = new Dimension(32, 32);
+    }
+    return mediumIconSize;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public E getNoIcon(Dimension iconSize) {
@@ -226,22 +252,6 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   /**
    * {@inheritDoc}
    */
-  public E getWarningIcon(Dimension iconSize) {
-    return getIcon(warningIconImageURL, iconSize);
-  }
-
-  /**
-   * Gets the warningIconImageURL.
-   * 
-   * @return the warningIconImageURL.
-   */
-  public String getWarningIconImageURL() {
-    return warningIconImageURL;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public E getQuestionIcon(Dimension iconSize) {
     return getIcon(questionIconImageURL, iconSize);
   }
@@ -253,6 +263,62 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public String getQuestionIconImageURL() {
     return questionIconImageURL;
+  }
+
+  /**
+   * Gets the smallIconSize.
+   * 
+   * @return the smallIconSize.
+   */
+  public Dimension getSmallIconSize() {
+    if (smallIconSize == null) {
+      smallIconSize = new Dimension(24, 24);
+    }
+    return smallIconSize;
+  }
+
+  /**
+   * Gets the tinyIconSize.
+   * 
+   * @return the tinyIconSize.
+   */
+  public Dimension getTinyIconSize() {
+    if (tinyIconSize == null) {
+      tinyIconSize = new Dimension(16, 16);
+    }
+    return tinyIconSize;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getUpIcon(Dimension iconSize) {
+    return getIcon(upIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the upIconImageURL.
+   * 
+   * @return the upIconImageURL.
+   */
+  public String getUpIconImageURL() {
+    return upIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getWarningIcon(Dimension iconSize) {
+    return getIcon(warningIconImageURL, iconSize);
+  }
+
+  /**
+   * Gets the warningIconImageURL.
+   * 
+   * @return the warningIconImageURL.
+   */
+  public String getWarningIconImageURL() {
+    return warningIconImageURL;
   }
 
   /**
@@ -273,6 +339,16 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public void setCancelIconImageURL(String cancelIconImageURL) {
     this.cancelIconImageURL = cancelIconImageURL;
+  }
+
+  /**
+   * Sets the downIconImageURL.
+   * 
+   * @param downIconImageURL
+   *          the downIconImageURL to set.
+   */
+  public void setDownIconImageURL(String downIconImageURL) {
+    this.downIconImageURL = downIconImageURL;
   }
 
   /**
@@ -316,6 +392,26 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
+   * Sets the largeIconSize.
+   * 
+   * @param largeIconSize
+   *          the largeIconSize to set.
+   */
+  public void setLargeIconSize(Dimension largeIconSize) {
+    this.largeIconSize = largeIconSize;
+  }
+
+  /**
+   * Sets the mediumIconSize.
+   * 
+   * @param mediumIconSize
+   *          the mediumIconSize to set.
+   */
+  public void setMediumIconSize(Dimension mediumIconSize) {
+    this.mediumIconSize = mediumIconSize;
+  }
+
+  /**
    * Sets the noIconImageURL.
    * 
    * @param noIconImageURL
@@ -336,16 +432,6 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
-   * Sets the warningIconImageURL.
-   * 
-   * @param warningIconImageURL
-   *          the warningIconImageURL to set.
-   */
-  public void setWarningIconImageURL(String warningIconImageURL) {
-    this.warningIconImageURL = warningIconImageURL;
-  }
-
-  /**
    * Sets the questionIconImageURL.
    * 
    * @param questionIconImageURL
@@ -353,90 +439,6 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public void setQuestionIconImageURL(String questionIconImageURL) {
     this.questionIconImageURL = questionIconImageURL;
-  }
-
-  /**
-   * Creates a swing icon from an image url.
-   * 
-   * @param urlSpec
-   *          the url of the image to be used on the icon.
-   * @param iconSize
-   *          the size of the constructed icon. The image will be resized if
-   *          nacessary to match the requested size.
-   * @return the constructed icon.
-   */
-  protected abstract E createIcon(String urlSpec, Dimension iconSize);
-
-  /**
-   * Gets the upIconImageURL.
-   * 
-   * @return the upIconImageURL.
-   */
-  public String getUpIconImageURL() {
-    return upIconImageURL;
-  }
-
-  /**
-   * Sets the upIconImageURL.
-   * 
-   * @param upIconImageURL
-   *          the upIconImageURL to set.
-   */
-  public void setUpIconImageURL(String upIconImageURL) {
-    this.upIconImageURL = upIconImageURL;
-  }
-
-  /**
-   * Gets the downIconImageURL.
-   * 
-   * @return the downIconImageURL.
-   */
-  public String getDownIconImageURL() {
-    return downIconImageURL;
-  }
-
-  /**
-   * Sets the downIconImageURL.
-   * 
-   * @param downIconImageURL
-   *          the downIconImageURL to set.
-   */
-  public void setDownIconImageURL(String downIconImageURL) {
-    this.downIconImageURL = downIconImageURL;
-  }
-
-  /**
-   * Gets the tinyIconSize.
-   * 
-   * @return the tinyIconSize.
-   */
-  public Dimension getTinyIconSize() {
-    if (tinyIconSize == null) {
-      tinyIconSize = new Dimension(16, 16);
-    }
-    return tinyIconSize;
-  }
-
-  /**
-   * Sets the tinyIconSize.
-   * 
-   * @param tinyIconSize
-   *          the tinyIconSize to set.
-   */
-  public void setTinyIconSize(Dimension tinyIconSize) {
-    this.tinyIconSize = tinyIconSize;
-  }
-
-  /**
-   * Gets the smallIconSize.
-   * 
-   * @return the smallIconSize.
-   */
-  public Dimension getSmallIconSize() {
-    if (smallIconSize == null) {
-      smallIconSize = new Dimension(24, 24);
-    }
-    return smallIconSize;
   }
 
   /**
@@ -450,47 +452,45 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   }
 
   /**
-   * Gets the mediumIconSize.
+   * Sets the tinyIconSize.
    * 
-   * @return the mediumIconSize.
+   * @param tinyIconSize
+   *          the tinyIconSize to set.
    */
-  public Dimension getMediumIconSize() {
-    if (mediumIconSize == null) {
-      mediumIconSize = new Dimension(32, 32);
-    }
-    return mediumIconSize;
+  public void setTinyIconSize(Dimension tinyIconSize) {
+    this.tinyIconSize = tinyIconSize;
   }
 
   /**
-   * Sets the mediumIconSize.
+   * Sets the upIconImageURL.
    * 
-   * @param mediumIconSize
-   *          the mediumIconSize to set.
+   * @param upIconImageURL
+   *          the upIconImageURL to set.
    */
-  public void setMediumIconSize(Dimension mediumIconSize) {
-    this.mediumIconSize = mediumIconSize;
+  public void setUpIconImageURL(String upIconImageURL) {
+    this.upIconImageURL = upIconImageURL;
   }
 
   /**
-   * Gets the largeIconSize.
+   * Sets the warningIconImageURL.
    * 
-   * @return the largeIconSize.
+   * @param warningIconImageURL
+   *          the warningIconImageURL to set.
    */
-  public Dimension getLargeIconSize() {
-    if (largeIconSize == null) {
-      largeIconSize = new Dimension(48, 48);
-    }
-    return largeIconSize;
+  public void setWarningIconImageURL(String warningIconImageURL) {
+    this.warningIconImageURL = warningIconImageURL;
   }
 
   /**
-   * Sets the largeIconSize.
+   * Creates a swing icon from an image url.
    * 
-   * @param largeIconSize
-   *          the largeIconSize to set.
+   * @param urlSpec
+   *          the url of the image to be used on the icon.
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
    */
-  public void setLargeIconSize(Dimension largeIconSize) {
-    this.largeIconSize = largeIconSize;
-  }
+  protected abstract E createIcon(String urlSpec, Dimension iconSize);
 
 }

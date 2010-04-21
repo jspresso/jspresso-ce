@@ -81,6 +81,16 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   }
 
   /**
+   * Registers the nested views to display as grid cells.
+   * 
+   * @param cells
+   *          the cells to set.
+   */
+  public void setCells(List<IViewDescriptor> cells) {
+    this.cells = cells;
+  }
+
+  /**
    * Sets the viewDescriptors.
    * 
    * @param viewDescriptors
@@ -90,16 +100,6 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   @Deprecated
   public void setChildViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     setCells(viewDescriptors);
-  }
-
-  /**
-   * Registers the nested views to display as grid cells.
-   * 
-   * @param cells
-   *          the cells to set.
-   */
-  public void setCells(List<IViewDescriptor> cells) {
-    this.cells = cells;
   }
 
   /**

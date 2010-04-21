@@ -44,13 +44,15 @@ public class ModelTrackingGate extends AbstractModelGate {
   }
 
   /**
+   * Restores the default model.
+   * <p>
    * {@inheritDoc}
    */
   @Override
-  public void setModel(Object model) {
-    boolean oldOpen = isOpen();
-    super.setModel(model);
-    firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
+  public ModelTrackingGate clone() {
+    ModelTrackingGate clonedGate = (ModelTrackingGate) super.clone();
+    clonedGate.setModel(START_MODEL);
+    return clonedGate;
   }
 
   /**
@@ -63,15 +65,13 @@ public class ModelTrackingGate extends AbstractModelGate {
   }
 
   /**
-   * Restores the default model.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public ModelTrackingGate clone() {
-    ModelTrackingGate clonedGate = (ModelTrackingGate) super.clone();
-    clonedGate.setModel(START_MODEL);
-    return clonedGate;
+  public void setModel(Object model) {
+    boolean oldOpen = isOpen();
+    super.setModel(model);
+    firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }
 
 }

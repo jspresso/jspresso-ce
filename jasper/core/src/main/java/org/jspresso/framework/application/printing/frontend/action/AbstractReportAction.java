@@ -44,27 +44,6 @@ public abstract class AbstractReportAction<E, F, G> extends
   private IReportFactory reportFactory;
 
   /**
-   * Configures the report factory to use. The report factory is responsible for
-   * creating an <code>IReport</code> (a concrete report instance) from a report
-   * descriptor (<code>IReportDescriptor</code>).
-   * 
-   * @param reportFactory
-   *          the reportFactory to set.
-   */
-  public void setReportFactory(IReportFactory reportFactory) {
-    this.reportFactory = reportFactory;
-  }
-
-  /**
-   * Gets the reportFactory.
-   * 
-   * @return the reportFactory.
-   */
-  protected IReportFactory getReportFactory() {
-    return reportFactory;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -80,6 +59,18 @@ public abstract class AbstractReportAction<E, F, G> extends
   }
 
   /**
+   * Configures the report factory to use. The report factory is responsible for
+   * creating an <code>IReport</code> (a concrete report instance) from a report
+   * descriptor (<code>IReportDescriptor</code>).
+   * 
+   * @param reportFactory
+   *          the reportFactory to set.
+   */
+  public void setReportFactory(IReportFactory reportFactory) {
+    this.reportFactory = reportFactory;
+  }
+
+  /**
    * Construct a contextual initial report context.
    * 
    * @param actionHandler
@@ -91,6 +82,15 @@ public abstract class AbstractReportAction<E, F, G> extends
   protected Map<String, Object> getInitialReportContext(
       IActionHandler actionHandler, Map<String, Object> context) {
     return new HashMap<String, Object>();
+  }
+
+  /**
+   * Gets the reportFactory.
+   * 
+   * @return the reportFactory.
+   */
+  protected IReportFactory getReportFactory() {
+    return reportFactory;
   }
 
   /**

@@ -45,19 +45,19 @@ public interface IReferencePropertyDescriptor<E> extends
   Map<String, Object> getInitializationMapping();
 
   /**
-   * Gets the descriptor of the component referenced by this property.
-   * 
-   * @return the referenced component descriptor
-   */
-  IComponentDescriptor<E> getReferencedDescriptor();
-
-  /**
    * When a list of value is triggered, this is the default page size of the
    * result list.
    * 
    * @return the default page size of the result list.
    */
   Integer getPageSize();
+
+  /**
+   * Gets the descriptor of the component referenced by this property.
+   * 
+   * @return the referenced component descriptor
+   */
+  IComponentDescriptor<E> getReferencedDescriptor();
 
   /**
    * Gets whether this reference property descriptor is a one-to-one end.

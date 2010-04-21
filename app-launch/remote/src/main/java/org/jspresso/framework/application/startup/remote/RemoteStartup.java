@@ -43,8 +43,8 @@ public abstract class RemoteStartup extends
     AbstractFrontendStartup<RComponent, RIcon, Action> implements
     IRemoteCommandHandler {
 
-  private Locale  startupLocale;
   private boolean started;
+  private Locale  startupLocale;
 
   /**
    * Constructs a new <code>RemoteStartup</code> instance.
@@ -79,6 +79,18 @@ public abstract class RemoteStartup extends
   }
 
   /**
+   * Registers the controller in the http session.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void start() {
+    super.start();
+    HttpRequestHolder.getServletRequest().getSession().setAttribute(
+        "PeerRegistry", getFrontendController());
+  }
+
+  /**
    * Starts the remote application passing it the client locale.
    * 
    * @param startupLanguage
@@ -91,18 +103,6 @@ public abstract class RemoteStartup extends
     started = true;
     return handleCommands(Collections
         .singletonList((RemoteCommand) new RemoteStartCommand()));
-  }
-
-  /**
-   * Registers the controller in the http session.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void start() {
-    super.start();
-    HttpRequestHolder.getServletRequest().getSession().setAttribute(
-        "PeerRegistry", getFrontendController());
   }
 
   /**

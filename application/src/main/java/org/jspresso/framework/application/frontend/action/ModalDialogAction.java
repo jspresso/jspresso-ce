@@ -60,6 +60,11 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
   public static final String DIALOG_ACTIONS = "DIALOG_ACTIONS";
 
   /**
+   * The dialog size.
+   */
+  public static final String DIALOG_SIZE    = "DIALOG_SIZE";
+
+  /**
    * The dialog title.
    */
   public static final String DIALOG_TITLE   = "DIALOG_TITLE";
@@ -68,11 +73,6 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    * The dialog view.
    */
   public static final String DIALOG_VIEW    = "DIALOG_VIEW";
-
-  /**
-   * The dialog size.
-   */
-  public static final String DIALOG_SIZE    = "DIALOG_SIZE";
 
   /**
    * Shows a modal dialog containig a main view and a button panel with the list
@@ -114,6 +114,17 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
+   * Gets the sialog size.
+   * 
+   * @param context
+   *          the action context.
+   * @return the dialog size.
+   */
+  public Dimension getDialogSize(Map<String, Object> context) {
+    return (Dimension) context.get(DIALOG_SIZE);
+  }
+
+  /**
    * Gets the mainView.
    * 
    * @param context
@@ -123,17 +134,6 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
   @SuppressWarnings("unchecked")
   public IView<E> getMainView(Map<String, Object> context) {
     return (IView<E>) context.get(DIALOG_VIEW);
-  }
-
-  /**
-   * Gets the sialog size.
-   * 
-   * @param context
-   *          the action context.
-   * @return the dialog size.
-   */
-  public Dimension getDialogSize(Map<String, Object> context) {
-    return (Dimension) context.get(DIALOG_SIZE);
   }
 
   /**

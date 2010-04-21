@@ -45,6 +45,14 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
     IGateAccessible {
 
   /**
+   * Creates a new component descriptor to allow for querying.
+   * 
+   * @return a new component descriptor that allows for expressing constraints
+   *         on this component.
+   */
+  IComponentDescriptor<E> createQueryDescriptor();
+
+  /**
    * Gets the interface class defining the component contract.
    * 
    * @return the interface class defining the component contract.
@@ -74,6 +82,14 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    *         component.
    */
   Map<String, ESort> getOrderingProperties();
+
+  /**
+   * Whenever this component is used as a query filter, this is the default page
+   * size applied for the query.
+   * 
+   * @return the page size for the query when used as query filter.
+   */
+  Integer getPageSize();
 
   /**
    * Retrieves the <code>IPropertyDescriptor</code> describing the property
@@ -172,20 +188,4 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();
-
-  /**
-   * Whenever this component is used as a query filter, this is the default page
-   * size applied for the query.
-   * 
-   * @return the page size for the query when used as query filter.
-   */
-  Integer getPageSize();
-
-  /**
-   * Creates a new component descriptor to allow for querying.
-   * 
-   * @return a new component descriptor that allows for expressing constraints
-   *         on this component.
-   */
-  IComponentDescriptor<E> createQueryDescriptor();
 }

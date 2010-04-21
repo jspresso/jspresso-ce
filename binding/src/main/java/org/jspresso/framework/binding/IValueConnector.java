@@ -49,14 +49,6 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   String WRITABLE_PROPERTY = "writable";
 
   /**
-   * Adds a new Connector listener to this connector.
-   * 
-   * @param listener
-   *          The added listener
-   */
-  void addValueChangeListener(IValueChangeListener listener);
-
-  /**
    * Adds a readability gate. Whenever one of the gate is not open, the
    * connector is not readable.
    * 
@@ -64,6 +56,14 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    *          the new gate to add.
    */
   void addReadabilityGate(IGate gate);
+
+  /**
+   * Adds a new Connector listener to this connector.
+   * 
+   * @param listener
+   *          The added listener
+   */
+  void addValueChangeListener(IValueChangeListener listener);
 
   /**
    * Adds a writability gate. Whenever one of the gate is not open, the
@@ -128,6 +128,20 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   IValueConnector getModelConnector();
 
   /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  IModelDescriptor getModelDescriptor();
+
+  /**
+   * Gets the modelProvider.
+   * 
+   * @return the modelProvider.
+   */
+  IModelProvider getModelProvider();
+
+  /**
    * Gets the connector this connector is attached to in parent / child
    * relationship.
    * 
@@ -143,16 +157,6 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   boolean isReadable();
 
   /**
-   * Called whenever readability may have changed.
-   */
-  void readabilityChange();
-
-  /**
-   * Called whenever writability may have changed.
-   */
-  void writabilityChange();
-
-  /**
    * Is the connector writable ?
    * 
    * @return true if writable.
@@ -160,12 +164,9 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   boolean isWritable();
 
   /**
-   * Removes a Connector listener from this connector.
-   * 
-   * @param listener
-   *          The removed listener
+   * Called whenever readability may have changed.
    */
-  void removeValueChangeListener(IValueChangeListener listener);
+  void readabilityChange();
 
   /**
    * Removes a readability gate.
@@ -174,6 +175,14 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    *          the new gate to remove.
    */
   void removeReadabilityGate(IGate gate);
+
+  /**
+   * Removes a Connector listener from this connector.
+   * 
+   * @param listener
+   *          The removed listener
+   */
+  void removeValueChangeListener(IValueChangeListener listener);
 
   /**
    * Removes a writability gate.
@@ -230,6 +239,14 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   void setModelConnector(IValueConnector modelConnector);
 
   /**
+   * Sets the modelDescriptor.
+   * 
+   * @param modelDescriptor
+   *          the modelDescriptor.
+   */
+  void setModelDescriptor(IModelDescriptor modelDescriptor);
+
+  /**
    * Sets the connector this connector is attached to in parent / child
    * relationship.
    * 
@@ -239,24 +256,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   void setParentConnector(ICompositeValueConnector parent);
 
   /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
+   * Called whenever writability may have changed.
    */
-  IModelDescriptor getModelDescriptor();
-
-  /**
-   * Sets the modelDescriptor.
-   * 
-   * @param modelDescriptor
-   *          the modelDescriptor.
-   */
-  void setModelDescriptor(IModelDescriptor modelDescriptor);
-
-  /**
-   * Gets the modelProvider.
-   * 
-   * @return the modelProvider.
-   */
-  IModelProvider getModelProvider();
+  void writabilityChange();
 }

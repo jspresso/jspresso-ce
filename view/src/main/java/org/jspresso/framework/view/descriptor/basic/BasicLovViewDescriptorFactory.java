@@ -37,12 +37,12 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory {
 
+  private IDisplayableAction          nextPageAction;
+  private IViewDescriptor             pagingStatusViewDescriptor;
+  private IDisplayableAction          previousPageAction;
   private IQueryViewDescriptorFactory queryViewDescriptorFactory;
   private ActionMap                   resultViewActionMap;
-  private IViewDescriptor             pagingStatusViewDescriptor;
   private IDisplayableAction          sortingAction;
-  private IDisplayableAction          previousPageAction;
-  private IDisplayableAction          nextPageAction;
 
   /**
    * {@inheritDoc}
@@ -93,6 +93,37 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   }
 
   /**
+   * Sets the nextPageAction.
+   * 
+   * @param nextPageAction
+   *          the nextPageAction to set.
+   */
+  public void setNextPageAction(IDisplayableAction nextPageAction) {
+    this.nextPageAction = nextPageAction;
+  }
+
+  /**
+   * Sets the pagingStatusViewDescriptor.
+   * 
+   * @param pagingStatusViewDescriptor
+   *          the pagingStatusViewDescriptor to set.
+   */
+  public void setPagingStatusViewDescriptor(
+      IViewDescriptor pagingStatusViewDescriptor) {
+    this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
+  }
+
+  /**
+   * Sets the previousPageAction.
+   * 
+   * @param previousPageAction
+   *          the previousPageAction to set.
+   */
+  public void setPreviousPageAction(IDisplayableAction previousPageAction) {
+    this.previousPageAction = previousPageAction;
+  }
+
+  /**
    * Sets the queryViewDescriptorFactory.
    * 
    * @param queryViewDescriptorFactory
@@ -101,6 +132,26 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   public void setQueryViewDescriptorFactory(
       IQueryViewDescriptorFactory queryViewDescriptorFactory) {
     this.queryViewDescriptorFactory = queryViewDescriptorFactory;
+  }
+
+  /**
+   * Sets the resultViewActionMap.
+   * 
+   * @param resultViewActionMap
+   *          the resultViewActionMap to set.
+   */
+  public void setResultViewActionMap(ActionMap resultViewActionMap) {
+    this.resultViewActionMap = resultViewActionMap;
+  }
+
+  /**
+   * Sets the sortingAction.
+   * 
+   * @param sortingAction
+   *          the sortingAction to set.
+   */
+  public void setSortingAction(IDisplayableAction sortingAction) {
+    this.sortingAction = sortingAction;
   }
 
   private IViewDescriptor createResultViewDescriptor(
@@ -123,56 +174,5 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
     return resultViewDescriptor;
-  }
-
-  /**
-   * Sets the resultViewActionMap.
-   * 
-   * @param resultViewActionMap
-   *          the resultViewActionMap to set.
-   */
-  public void setResultViewActionMap(ActionMap resultViewActionMap) {
-    this.resultViewActionMap = resultViewActionMap;
-  }
-
-  /**
-   * Sets the pagingStatusViewDescriptor.
-   * 
-   * @param pagingStatusViewDescriptor
-   *          the pagingStatusViewDescriptor to set.
-   */
-  public void setPagingStatusViewDescriptor(
-      IViewDescriptor pagingStatusViewDescriptor) {
-    this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
-  }
-
-  /**
-   * Sets the sortingAction.
-   * 
-   * @param sortingAction
-   *          the sortingAction to set.
-   */
-  public void setSortingAction(IDisplayableAction sortingAction) {
-    this.sortingAction = sortingAction;
-  }
-
-  /**
-   * Sets the previousPageAction.
-   * 
-   * @param previousPageAction
-   *          the previousPageAction to set.
-   */
-  public void setPreviousPageAction(IDisplayableAction previousPageAction) {
-    this.previousPageAction = previousPageAction;
-  }
-
-  /**
-   * Sets the nextPageAction.
-   * 
-   * @param nextPageAction
-   *          the nextPageAction to set.
-   */
-  public void setNextPageAction(IDisplayableAction nextPageAction) {
-    this.nextPageAction = nextPageAction;
   }
 }

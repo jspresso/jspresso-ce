@@ -28,49 +28,10 @@ import org.jspresso.framework.util.gui.Dimension;
  */
 public abstract class AbstractChartDescriptor implements IChartDescriptor {
 
-  private String  url;
-  private Integer width;
   private Integer height;
   private String  title;
-
-  /**
-   * Gets the chart Url.
-   * 
-   * @return the chart Url.
-   */
-  public String getUrl() {
-    return url;
-  }
-
-  /**
-   * Sets the chart Url.
-   * 
-   * @param url
-   *          the chart Url to set.
-   */
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  /**
-   * Sets the chart Width.
-   * 
-   * @param width
-   *          the chart Width to set.
-   */
-  public void setWidth(Integer width) {
-    this.width = width;
-  }
-
-  /**
-   * Sets the chart Height.
-   * 
-   * @param height
-   *          the chart Height to set.
-   */
-  public void setHeight(Integer height) {
-    this.height = height;
-  }
+  private String  url;
+  private Integer width;
 
   /**
    * {@inheritDoc}
@@ -100,6 +61,25 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
   }
 
   /**
+   * Gets the chart Url.
+   * 
+   * @return the chart Url.
+   */
+  public String getUrl() {
+    return url;
+  }
+
+  /**
+   * Sets the chart Height.
+   * 
+   * @param height
+   *          the chart Height to set.
+   */
+  public void setHeight(Integer height) {
+    this.height = height;
+  }
+
+  /**
    * Sets the title.
    * 
    * @param title
@@ -107,6 +87,26 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
    */
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  /**
+   * Sets the chart Url.
+   * 
+   * @param url
+   *          the chart Url to set.
+   */
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  /**
+   * Sets the chart Width.
+   * 
+   * @param width
+   *          the chart Width to set.
+   */
+  public void setWidth(Integer width) {
+    this.width = width;
   }
 
 }

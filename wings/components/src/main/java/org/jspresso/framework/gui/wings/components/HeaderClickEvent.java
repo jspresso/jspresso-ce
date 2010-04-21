@@ -28,9 +28,9 @@ import java.awt.AWTEvent;
  */
 public class HeaderClickEvent extends AWTEvent {
 
+  private static final int  HEADER_CLICKED   = 12001;
   private static final long serialVersionUID = 8470997493776930280L;
   private int               column           = -1;
-  private static final int  HEADER_CLICKED   = 12001;
 
   /**
    * Constructs a new <code>HeaderClickEvent</code> instance.

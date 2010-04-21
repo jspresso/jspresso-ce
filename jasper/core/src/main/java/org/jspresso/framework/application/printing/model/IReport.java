@@ -37,16 +37,16 @@ public interface IReport extends IDescriptor {
   String REPORT_ACTION_PARAM = "REPORT_ACTION_PARAM";
 
   /**
-   * Gets the descriptor of this report.
-   * 
-   * @return the descriptor of this report.
-   */
-  IReportDescriptor getReportDescriptor();
-
-  /**
    * Gets the report context.
    * 
    * @return the context key/value pairs.
    */
   Map<String, Object> getContext();
+
+  /**
+   * Gets the descriptor of this report.
+   * 
+   * @return the descriptor of this report.
+   */
+  IReportDescriptor getReportDescriptor();
 }

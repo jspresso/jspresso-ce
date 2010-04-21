@@ -48,6 +48,13 @@ public interface IBackendController extends IController,
     IEntityLifecycleHandler {
 
   /**
+   * Begins the current unit of work.
+   * 
+   * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
+   */
+  void beginUnitOfWork();
+
+  /**
    * Checks authorization for workspace access. It shoud throw a
    * SecurityException whenever access should not be granted.
    * 
@@ -55,88 +62,6 @@ public interface IBackendController extends IController,
    *          the id of the workspace access to check.
    */
   void checkWorkspaceAccess(String workspaceName);
-
-  /**
-   * Creates a model connector out of a model descriptor. It should be either a
-   * bean connector or a bean collection connector depending on the type of
-   * model descriptor.
-   * 
-   * @param id
-   *          the connector id.
-   * @param modelDescriptor
-   *          the model descriptor to create the connector for.
-   * @return the created model connector.
-   */
-  IValueConnector createModelConnector(String id,
-      IModelDescriptor modelDescriptor);
-
-  /**
-   * Gets the appropriate accessor factory based on the targetted object.
-   * 
-   * @return the approriate accessor factory.
-   */
-  IAccessorFactory getAccessorFactory();
-
-  /**
-   * Gets the entityFactory for this backend controller.
-   * 
-   * @return the entityFactory for this backend controller.
-   */
-  IEntityFactory getEntityFactory();
-
-  /**
-   * Given a workspace identifier, this method returns the composite connector
-   * used as model connector for the associated workspace.
-   * 
-   * @param workspaceName
-   *          the workspace identifier.
-   * @return the associated workspace connector.
-   */
-  IValueConnector getWorkspaceConnector(String workspaceName);
-
-  /**
-   * Installs the passed in workspaces into the backend controller.
-   * 
-   * @param workspaces
-   *          the workspaces to install.
-   */
-  void installWorkspaces(Map<String, Workspace> workspaces);
-
-  /**
-   * Acts as a clipboard for retrieving previously stored component references
-   * along with their descriptors.
-   * 
-   * @return components the component transfer structure to retrieve.
-   */
-  ComponentTransferStructure<? extends IComponent> retrieveComponents();
-
-  /**
-   * Asks this backend controller to perform any necessary action upon startup.
-   * One of this action should be to construct the root connector based on the
-   * root model descriptor.
-   * 
-   * @param startingLocale
-   *          the locale this backend controller should start with.
-   * @return true if the controller successfully started.
-   */
-  boolean start(Locale startingLocale);
-
-  /**
-   * Acts as a clipboard for storing component references along with their
-   * descriptors.
-   * 
-   * @param components
-   *          the component transfer structure to store.
-   */
-  void storeComponents(
-      ComponentTransferStructure<? extends IComponent> components);
-
-  /**
-   * Begins the current unit of work.
-   * 
-   * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
-   */
-  void beginUnitOfWork();
 
   /**
    * Registers an entity (actually a clone of it) and all its graph as taking
@@ -168,6 +93,63 @@ public interface IBackendController extends IController,
   void commitUnitOfWork();
 
   /**
+   * Creates a model connector out of a model descriptor. It should be either a
+   * bean connector or a bean collection connector depending on the type of
+   * model descriptor.
+   * 
+   * @param id
+   *          the connector id.
+   * @param modelDescriptor
+   *          the model descriptor to create the connector for.
+   * @return the created model connector.
+   */
+  IValueConnector createModelConnector(String id,
+      IModelDescriptor modelDescriptor);
+
+  /**
+   * Gets the appropriate accessor factory based on the targetted object.
+   * 
+   * @return the approriate accessor factory.
+   */
+  IAccessorFactory getAccessorFactory();
+
+  /**
+   * Gets the entityFactory for this backend controller.
+   * 
+   * @return the entityFactory for this backend controller.
+   */
+  IEntityFactory getEntityFactory();
+
+  /**
+   * Gets a previously registered entity in this application session.
+   * 
+   * @param entityContract
+   *          the entity contract.
+   * @param entityId
+   *          the identifier of the looked-up entity.
+   * @return the registered entity or null.
+   */
+  IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
+      Object entityId);
+
+  /**
+   * Gets the transactionTemplate.
+   * 
+   * @return the transactionTemplate.
+   */
+  TransactionTemplate getTransactionTemplate();
+
+  /**
+   * Given a workspace identifier, this method returns the composite connector
+   * used as model connector for the associated workspace.
+   * 
+   * @param workspaceName
+   *          the workspace identifier.
+   * @return the associated workspace connector.
+   */
+  IValueConnector getWorkspaceConnector(String workspaceName);
+
+  /**
    * Whenever a property might not be fully initialized, this method performs
    * all necessary complementary initializations..
    * 
@@ -178,6 +160,34 @@ public interface IBackendController extends IController,
    */
   void initializePropertyIfNeeded(IComponent componentOrEntity,
       String propertyName);
+
+  /**
+   * Installs the passed in workspaces into the backend controller.
+   * 
+   * @param workspaces
+   *          the workspaces to install.
+   */
+  void installWorkspaces(Map<String, Workspace> workspaces);
+
+  /**
+   * Gets wether any of the entities or if any of the entities they can reach
+   * are dirty (has changes that need to be updated to the persistent store).
+   * 
+   * @param elements
+   *          the elements to test. Only entities are actually tested.
+   * @return true if any of the entities is dirty in depth.
+   */
+  boolean isAnyDirtyInDepth(Collection<?> elements);
+
+  /**
+   * Gets wether the entity or if one of the entities it can reach is dirty (has
+   * changes that need to be updated to the persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @return true if the entity is dirty in depth.
+   */
+  boolean isDirtyInDepth(IEntity entity);
 
   /**
    * Wether the object is fully initialized.
@@ -254,13 +264,6 @@ public interface IBackendController extends IController,
   void recordAsSynchronized(IEntity flushedEntity);
 
   /**
-   * Rollbacks the current unit of work.
-   * 
-   * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#rollback()
-   */
-  void rollbackUnitOfWork();
-
-  /**
    * Registers an entity in this application session.
    * 
    * @param entity
@@ -272,42 +275,39 @@ public interface IBackendController extends IController,
   void registerEntity(IEntity entity, boolean isEntityTransient);
 
   /**
-   * Gets a previously registered entity in this application session.
+   * Acts as a clipboard for retrieving previously stored component references
+   * along with their descriptors.
    * 
-   * @param entityContract
-   *          the entity contract.
-   * @param entityId
-   *          the identifier of the looked-up entity.
-   * @return the registered entity or null.
+   * @return components the component transfer structure to retrieve.
    */
-  IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
-      Object entityId);
+  ComponentTransferStructure<? extends IComponent> retrieveComponents();
 
   /**
-   * Gets the transactionTemplate.
+   * Rollbacks the current unit of work.
    * 
-   * @return the transactionTemplate.
+   * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#rollback()
    */
-  TransactionTemplate getTransactionTemplate();
+  void rollbackUnitOfWork();
 
   /**
-   * Gets wether the entity or if one of the entities it can reach is dirty (has
-   * changes that need to be updated to the persistent store).
+   * Asks this backend controller to perform any necessary action upon startup.
+   * One of this action should be to construct the root connector based on the
+   * root model descriptor.
    * 
-   * @param entity
-   *          the entity to test.
-   * @return true if the entity is dirty in depth.
+   * @param startingLocale
+   *          the locale this backend controller should start with.
+   * @return true if the controller successfully started.
    */
-  boolean isDirtyInDepth(IEntity entity);
+  boolean start(Locale startingLocale);
 
   /**
-   * Gets wether any of the entities or if any of the entities they can reach
-   * are dirty (has changes that need to be updated to the persistent store).
+   * Acts as a clipboard for storing component references along with their
+   * descriptors.
    * 
-   * @param elements
-   *          the elements to test. Only entities are actually tested.
-   * @return true if any of the entities is dirty in depth.
+   * @param components
+   *          the component transfer structure to store.
    */
-  boolean isAnyDirtyInDepth(Collection<?> elements);
+  void storeComponents(
+      ComponentTransferStructure<? extends IComponent> components);
 
 }

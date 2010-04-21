@@ -42,8 +42,17 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
     implements IListViewDescriptor {
 
-  private String                renderedProperty;
   private IIconImageURLProvider iconImageURLProvider;
+  private String                renderedProperty;
+
+  /**
+   * Gets the iconImageURLProvider.
+   * 
+   * @return the iconImageURLProvider.
+   */
+  public IIconImageURLProvider getIconImageURLProvider() {
+    return iconImageURLProvider;
+  }
 
   /**
    * {@inheritDoc}
@@ -55,27 +64,6 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
           .getToStringProperty();
     }
     return renderedProperty;
-  }
-
-  /**
-   * Configures the model property to be rendered in the list. Whenever this
-   * property is left to <code>null</code> (default value), the
-   * <code>toStringProperty</code> of the element component descriptor is used.
-   * 
-   * @param renderedProperty
-   *          the renderedProperty to set.
-   */
-  public void setRenderedProperty(String renderedProperty) {
-    this.renderedProperty = renderedProperty;
-  }
-
-  /**
-   * Gets the iconImageURLProvider.
-   * 
-   * @return the iconImageURLProvider.
-   */
-  public IIconImageURLProvider getIconImageURLProvider() {
-    return iconImageURLProvider;
   }
 
   /**
@@ -94,5 +82,17 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    */
   public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
+  }
+
+  /**
+   * Configures the model property to be rendered in the list. Whenever this
+   * property is left to <code>null</code> (default value), the
+   * <code>toStringProperty</code> of the element component descriptor is used.
+   * 
+   * @param renderedProperty
+   *          the renderedProperty to set.
+   */
+  public void setRenderedProperty(String renderedProperty) {
+    this.renderedProperty = renderedProperty;
   }
 }

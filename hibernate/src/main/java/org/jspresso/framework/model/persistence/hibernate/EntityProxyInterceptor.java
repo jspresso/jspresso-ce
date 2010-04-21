@@ -145,19 +145,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
     return null;
   }
 
-  private void extractState(IEntity entity, String[] propertyNames,
-      Object[] state) {
-    for (int i = 0; i < propertyNames.length; i++) {
-      String propertyName = propertyNames[i];
-      if (!isHibernateInternal(propertyName)) {
-        Object property = entity.straightGetProperty(propertyName);
-        if (!(property instanceof Collection<?>)) {
-          state[i] = property;
-        }
-      }
-    }
-  }
-
   /**
    * Hibernate uses "extra" properties to cope with relationships e.g.
    * _[collectionName]BackRef or _[collectionName]IndexBackRef Those properties
@@ -169,5 +156,18 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    */
   protected boolean isHibernateInternal(String propertyName) {
     return propertyName.startsWith("_");
+  }
+
+  private void extractState(IEntity entity, String[] propertyNames,
+      Object[] state) {
+    for (int i = 0; i < propertyNames.length; i++) {
+      String propertyName = propertyNames[i];
+      if (!isHibernateInternal(propertyName)) {
+        Object property = entity.straightGetProperty(propertyName);
+        if (!(property instanceof Collection<?>)) {
+          state[i] = property;
+        }
+      }
+    }
   }
 }

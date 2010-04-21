@@ -35,9 +35,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  */
 public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
-  private Map<String, IRemotePeer> backingStore;
   private Map<String, String>      automationBackingStore;
   private Map<String, Integer>     automationIndices;
+  private Map<String, IRemotePeer> backingStore;
 
   /**
    * Constructs a new <code>BasicRemotePeerRegistry</code> instance.
@@ -69,6 +69,16 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   /**
    * {@inheritDoc}
    */
+  public IRemotePeer getRegisteredForAutomationId(String automationId) {
+    if (automationId != null) {
+      return getRegistered(automationBackingStore.get(automationId));
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean isRegistered(String guid) {
     return backingStore.containsKey(guid);
   }
@@ -84,6 +94,19 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
         automationBackingStore.put(automationId, remotePeer.getGuid());
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String registerAutomationId(String automationsSeed, String guid) {
+    String seed = automationsSeed;
+    if (seed == null) {
+      seed = "generic";
+    }
+    String automationId = computeNextAutomationId(seed);
+    automationBackingStore.put(automationId, guid);
+    return automationId;
   }
 
   /**
@@ -110,29 +133,6 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     }
     automationIndices.put(seed, new Integer(idIndex));
     return new StringBuffer(seed).append("#").append(idIndex).toString();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String registerAutomationId(String automationsSeed, String guid) {
-    String seed = automationsSeed;
-    if (seed == null) {
-      seed = "generic";
-    }
-    String automationId = computeNextAutomationId(seed);
-    automationBackingStore.put(automationId, guid);
-    return automationId;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IRemotePeer getRegisteredForAutomationId(String automationId) {
-    if (automationId != null) {
-      return getRegistered(automationBackingStore.get(automationId));
-    }
-    return null;
   }
 
 }

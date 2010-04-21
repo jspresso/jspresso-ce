@@ -33,14 +33,6 @@ public class RSplitContainer extends RContainer {
   private RComponent        rightBottom;
 
   /**
-   * Constructs a new <code>RSplitContainer</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RSplitContainer() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RSplitContainer</code> instance.
    * 
    * @param guid
@@ -48,6 +40,14 @@ public class RSplitContainer extends RContainer {
    */
   public RSplitContainer(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RSplitContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RSplitContainer() {
+    // For GWT support
   }
 
   /**

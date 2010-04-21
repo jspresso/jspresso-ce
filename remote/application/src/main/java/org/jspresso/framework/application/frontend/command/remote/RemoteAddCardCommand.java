@@ -30,27 +30,8 @@ public class RemoteAddCardCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -8530785074677068249L;
 
-  private String            cardName;
   private RComponent        card;
-
-  /**
-   * Gets the cardName.
-   * 
-   * @return the cardName.
-   */
-  public String getCardName() {
-    return cardName;
-  }
-
-  /**
-   * Sets the cardName.
-   * 
-   * @param cardName
-   *          the cardName to set.
-   */
-  public void setCardName(String cardName) {
-    this.cardName = cardName;
-  }
+  private String            cardName;
 
   /**
    * Gets the card.
@@ -62,6 +43,15 @@ public class RemoteAddCardCommand extends RemoteCommand {
   }
 
   /**
+   * Gets the cardName.
+   * 
+   * @return the cardName.
+   */
+  public String getCardName() {
+    return cardName;
+  }
+
+  /**
    * Sets the card.
    * 
    * @param card
@@ -69,6 +59,16 @@ public class RemoteAddCardCommand extends RemoteCommand {
    */
   public void setCard(RComponent card) {
     this.card = card;
+  }
+
+  /**
+   * Sets the cardName.
+   * 
+   * @param cardName
+   *          the cardName to set.
+   */
+  public void setCardName(String cardName) {
+    this.cardName = cardName;
   }
 
 }

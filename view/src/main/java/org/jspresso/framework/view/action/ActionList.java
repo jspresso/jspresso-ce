@@ -41,6 +41,15 @@ public class ActionList extends DefaultIconDescriptor {
   }
 
   /**
+   * Gets the renderingOptions.
+   * 
+   * @return the renderingOptions.
+   */
+  public ERenderingOptions getRenderingOptions() {
+    return renderingOptions;
+  }
+
+  /**
    * Sets the actions.
    * 
    * @param actions
@@ -58,15 +67,6 @@ public class ActionList extends DefaultIconDescriptor {
    */
   public void setRenderingOptions(ERenderingOptions renderingOptions) {
     this.renderingOptions = renderingOptions;
-  }
-
-  /**
-   * Gets the renderingOptions.
-   * 
-   * @return the renderingOptions.
-   */
-  public ERenderingOptions getRenderingOptions() {
-    return renderingOptions;
   }
 
 }

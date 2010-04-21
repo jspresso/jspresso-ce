@@ -49,6 +49,86 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
   /**
    * {@inheritDoc}
    */
+  public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
+      IQueryComponent queryComponent) {
+    criteria.setProjection(null);
+    criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
+    // complete sorting properties
+    if (queryComponent.getOrderingProperties() != null) {
+      for (Map.Entry<String, ESort> orderingProperty : queryComponent
+          .getOrderingProperties().entrySet()) {
+        String propertyName = orderingProperty.getKey();
+        String[] propElts = propertyName.split("\\.");
+        DetachedCriteria orderingCriteria = criteria;
+        boolean isComputed = false;
+        if (propElts.length > 1) {
+          IComponentDescriptor<?> currentCompDesc = queryComponent
+              .getComponentDescriptor();
+          int i = 0;
+          List<String> path = new ArrayList<String>();
+          for (; !isComputed && i < propElts.length - 1; i++) {
+            IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
+                .getPropertyDescriptor(propElts[i]));
+            isComputed = isComputed || refPropDescriptor.isComputed();
+            IComponentDescriptor<?> referencedDesc = refPropDescriptor
+                .getReferencedDescriptor();
+            if (!IEntity.class.isAssignableFrom(referencedDesc
+                .getComponentContract())
+                && !referencedDesc.isPurelyAbstract()) {
+              break;
+            }
+            currentCompDesc = referencedDesc;
+            path.add(propElts[i]);
+          }
+          if (!isComputed) {
+            StringBuffer name = new StringBuffer();
+            for (int j = i; !isComputed && j < propElts.length; j++) {
+              IPropertyDescriptor propDescriptor = currentCompDesc
+                  .getPropertyDescriptor(propElts[j]);
+              isComputed = isComputed || propDescriptor.isComputed();
+              if (j < propElts.length - 1) {
+                currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor)
+                    .getReferencedDescriptor();
+              }
+              if (j > i) {
+                name.append(".");
+              }
+              name.append(propElts[j]);
+            }
+            if (!isComputed) {
+              for (String pathElt : path) {
+                orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria,
+                    pathElt, CriteriaSpecification.LEFT_JOIN);
+              }
+              propertyName = name.toString();
+            }
+          }
+        } else {
+          isComputed = queryComponent.getComponentDescriptor()
+              .getPropertyDescriptor(propertyName).isComputed();
+        }
+        if (!isComputed) {
+          // computed properties must be ignored
+          // since they can't be sorted
+          // by the DB.
+          Order order;
+          switch (orderingProperty.getValue()) {
+            case DESCENDING:
+              order = Order.desc(propertyName);
+              break;
+            case ASCENDING:
+            default:
+              order = Order.asc(propertyName);
+          }
+          orderingCriteria.addOrder(order);
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent) {
     EnhancedDetachedCriteria criteria = EnhancedDetachedCriteria
         .forEntityName(queryComponent.getQueryContract().getName());
@@ -171,86 +251,6 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
       }
     }
     return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
-      IQueryComponent queryComponent) {
-    criteria.setProjection(null);
-    criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
-    // complete sorting properties
-    if (queryComponent.getOrderingProperties() != null) {
-      for (Map.Entry<String, ESort> orderingProperty : queryComponent
-          .getOrderingProperties().entrySet()) {
-        String propertyName = orderingProperty.getKey();
-        String[] propElts = propertyName.split("\\.");
-        DetachedCriteria orderingCriteria = criteria;
-        boolean isComputed = false;
-        if (propElts.length > 1) {
-          IComponentDescriptor<?> currentCompDesc = queryComponent
-              .getComponentDescriptor();
-          int i = 0;
-          List<String> path = new ArrayList<String>();
-          for (; !isComputed && i < propElts.length - 1; i++) {
-            IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
-                .getPropertyDescriptor(propElts[i]));
-            isComputed = isComputed || refPropDescriptor.isComputed();
-            IComponentDescriptor<?> referencedDesc = refPropDescriptor
-                .getReferencedDescriptor();
-            if (!IEntity.class.isAssignableFrom(referencedDesc
-                .getComponentContract())
-                && !referencedDesc.isPurelyAbstract()) {
-              break;
-            }
-            currentCompDesc = referencedDesc;
-            path.add(propElts[i]);
-          }
-          if (!isComputed) {
-            StringBuffer name = new StringBuffer();
-            for (int j = i; !isComputed && j < propElts.length; j++) {
-              IPropertyDescriptor propDescriptor = currentCompDesc
-                  .getPropertyDescriptor(propElts[j]);
-              isComputed = isComputed || propDescriptor.isComputed();
-              if (j < propElts.length - 1) {
-                currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor)
-                    .getReferencedDescriptor();
-              }
-              if (j > i) {
-                name.append(".");
-              }
-              name.append(propElts[j]);
-            }
-            if (!isComputed) {
-              for (String pathElt : path) {
-                orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria,
-                    pathElt, CriteriaSpecification.LEFT_JOIN);
-              }
-              propertyName = name.toString();
-            }
-          }
-        } else {
-          isComputed = queryComponent.getComponentDescriptor()
-              .getPropertyDescriptor(propertyName).isComputed();
-        }
-        if (!isComputed) {
-          // computed properties must be ignored
-          // since they can't be sorted
-          // by the DB.
-          Order order;
-          switch (orderingProperty.getValue()) {
-            case DESCENDING:
-              order = Order.desc(propertyName);
-              break;
-            case ASCENDING:
-            default:
-              order = Order.asc(propertyName);
-          }
-          orderingCriteria.addOrder(order);
-        }
-      }
-    }
   }
 
 }

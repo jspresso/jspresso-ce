@@ -31,14 +31,6 @@ public class RActionComponent extends RComponent {
   private RAction           action;
 
   /**
-   * Constructs a new <code>RActionComponent</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RActionComponent() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RActionComponent</code> instance.
    * 
    * @param guid
@@ -46,6 +38,14 @@ public class RActionComponent extends RComponent {
    */
   public RActionComponent(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RActionComponent</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RActionComponent() {
+    // For GWT support
   }
 
   /**

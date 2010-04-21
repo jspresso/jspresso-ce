@@ -46,6 +46,15 @@ public class BasicObjectPropertyDescriptor extends
   }
 
   /**
+   * Returns null.
+   * <p>
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor<Object> getComponentDescriptor() {
+    return null;
+  }
+
+  /**
    * Returns Object class or the class refined by
    * <code>modelTypeClassName</code>.
    * <p>
@@ -78,15 +87,6 @@ public class BasicObjectPropertyDescriptor extends
    */
   public void setModelTypeClassName(String modelTypeClassName) {
     this.modelTypeClassName = modelTypeClassName;
-  }
-
-  /**
-   * Returns null.
-   * <p>
-   * {@inheritDoc}
-   */
-  public IComponentDescriptor<Object> getComponentDescriptor() {
-    return null;
   }
 
 }

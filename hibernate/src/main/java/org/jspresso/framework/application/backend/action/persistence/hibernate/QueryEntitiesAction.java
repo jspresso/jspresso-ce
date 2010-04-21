@@ -70,8 +70,8 @@ import org.springframework.transaction.support.TransactionCallback;
 public class QueryEntitiesAction extends AbstractHibernateAction {
 
   private ICriteriaFactory       criteriaFactory;
-  private IQueryComponentRefiner queryComponentRefiner;
   private ICriteriaRefiner       criteriaRefiner;
+  private IQueryComponentRefiner queryComponentRefiner;
 
   /**
    * {@inheritDoc}
@@ -143,16 +143,13 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
-   * Retrieves the query component from the context.
+   * Sets the criteriaFactory.
    * 
-   * @param context
-   *          the action context.
-   * @return the query component.
+   * @param criteriaFactory
+   *          the criteriaFactory to set.
    */
-  protected IQueryComponent getQueryComponent(Map<String, Object> context) {
-    IQueryComponent queryComponent = (IQueryComponent) context
-        .get(IQueryComponent.QUERY_COMPONENT);
-    return queryComponent;
+  public void setCriteriaFactory(ICriteriaFactory criteriaFactory) {
+    this.criteriaFactory = criteriaFactory;
   }
 
   /**
@@ -191,12 +188,15 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
-   * Sets the criteriaFactory.
+   * Retrieves the query component from the context.
    * 
-   * @param criteriaFactory
-   *          the criteriaFactory to set.
+   * @param context
+   *          the action context.
+   * @return the query component.
    */
-  public void setCriteriaFactory(ICriteriaFactory criteriaFactory) {
-    this.criteriaFactory = criteriaFactory;
+  protected IQueryComponent getQueryComponent(Map<String, Object> context) {
+    IQueryComponent queryComponent = (IQueryComponent) context
+        .get(IQueryComponent.QUERY_COMPONENT);
+    return queryComponent;
   }
 }

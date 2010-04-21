@@ -97,6 +97,18 @@ public class BeanModule extends Module implements PropertyChangeListener {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Collection<String> getGrantedRoles() {
+    Collection<String> grantedRoles = super.getGrantedRoles();
+    if (grantedRoles == null && componentDescriptor != null) {
+      grantedRoles = componentDescriptor.getGrantedRoles();
+    }
+    return grantedRoles;
+  }
+
+  /**
    * Gets the module's projected object.
    * 
    * @return the projected object.
@@ -132,6 +144,29 @@ public class BeanModule extends Module implements PropertyChangeListener {
       }
     }
     return projectedViewDescriptor;
+  }
+
+  /**
+   * Returns the projectedViewDescriptor nested in a "moduleObject" property
+   * view.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getViewDescriptor() {
+    if (getProjectedViewDescriptor() != null) {
+      BeanModuleDescriptor beanModuleDescriptor = getDescriptor();
+      BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
+      nestingViewDescriptor
+          .setCenterViewDescriptor(getProjectedViewDescriptor());
+      nestingViewDescriptor.setModelDescriptor(beanModuleDescriptor
+          .getPropertyDescriptor(MODULE_OBJECT));
+      BasicBorderViewDescriptor viewDescriptor = new BasicBorderViewDescriptor();
+      viewDescriptor.setModelDescriptor(beanModuleDescriptor);
+      viewDescriptor.setCenterViewDescriptor(nestingViewDescriptor);
+      return viewDescriptor;
+    }
+    return null;
   }
 
   /**
@@ -197,46 +232,11 @@ public class BeanModule extends Module implements PropertyChangeListener {
   }
 
   /**
-   * Returns the projectedViewDescriptor nested in a "moduleObject" property
-   * view.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public IViewDescriptor getViewDescriptor() {
-    if (getProjectedViewDescriptor() != null) {
-      BeanModuleDescriptor beanModuleDescriptor = getDescriptor();
-      BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
-      nestingViewDescriptor
-          .setCenterViewDescriptor(getProjectedViewDescriptor());
-      nestingViewDescriptor.setModelDescriptor(beanModuleDescriptor
-          .getPropertyDescriptor(MODULE_OBJECT));
-      BasicBorderViewDescriptor viewDescriptor = new BasicBorderViewDescriptor();
-      viewDescriptor.setModelDescriptor(beanModuleDescriptor);
-      viewDescriptor.setCenterViewDescriptor(nestingViewDescriptor);
-      return viewDescriptor;
-    }
-    return null;
-  }
-
-  /**
    * Gets the module descriptor.
    * 
    * @return the module descriptor.
    */
   protected BeanModuleDescriptor getDescriptor() {
     return new BeanModuleDescriptor(getComponentDescriptor());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection<String> getGrantedRoles() {
-    Collection<String> grantedRoles = super.getGrantedRoles();
-    if (grantedRoles == null && componentDescriptor != null) {
-      grantedRoles = componentDescriptor.getGrantedRoles();
-    }
-    return grantedRoles;
   }
 }

@@ -80,6 +80,20 @@ public final class SecurityHelper {
   }
 
   /**
+   * Creates an anonymous subject.
+   * 
+   * @return a new anonymous subject.
+   */
+  public static Subject createAnonymousSubject() {
+    Subject anonymousSubject = new Subject();
+    UserPrincipal userPrincipal = new UserPrincipal(ANONYMOUS_USER_NAME);
+    if (!anonymousSubject.getPrincipals().contains(userPrincipal)) {
+      anonymousSubject.getPrincipals().add(userPrincipal);
+    }
+    return anonymousSubject;
+  }
+
+  /**
    * Do the passed subject has sufficient roles ?
    * 
    * @param subject
@@ -137,19 +151,5 @@ public final class SecurityHelper {
       return granted;
     }
     return false;
-  }
-
-  /**
-   * Creates an anonymous subject.
-   * 
-   * @return a new anonymous subject.
-   */
-  public static Subject createAnonymousSubject() {
-    Subject anonymousSubject = new Subject();
-    UserPrincipal userPrincipal = new UserPrincipal(ANONYMOUS_USER_NAME);
-    if (!anonymousSubject.getPrincipals().contains(userPrincipal)) {
-      anonymousSubject.getPrincipals().add(userPrincipal);
-    }
-    return anonymousSubject;
   }
 }

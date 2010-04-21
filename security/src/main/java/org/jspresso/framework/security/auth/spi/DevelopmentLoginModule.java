@@ -59,8 +59,8 @@ public class DevelopmentLoginModule implements LoginModule {
   private char[]              password;
   private Subject             subject;
   private boolean             succeeded           = false;
-  private String              username;
   private String              suffix;
+  private String              username;
   private UserPrincipal       userPrincipal;
 
   /**
@@ -270,24 +270,6 @@ public class DevelopmentLoginModule implements LoginModule {
     throw new FailedLoginException(LoginUtils.PASSWORD_FAILED);
   }
 
-  private boolean checkUserName() {
-    boolean usernameCorrect = false;
-    boolean atLeastOneUserEntryFound = false;
-    for (Map.Entry<String, ?> optionEntry : options.entrySet()) {
-      if (optionEntry.getKey().startsWith(USER_OPT)) {
-        atLeastOneUserEntryFound = true;
-        if (optionEntry.getValue().equals(username)) {
-          usernameCorrect = true;
-          suffix = optionEntry.getKey().substring(USER_OPT.length());
-        }
-      }
-    }
-    if (atLeastOneUserEntryFound) {
-      return usernameCorrect;
-    }
-    return true;
-  }
-
   /**
    * Logout the user.
    * <p>
@@ -311,6 +293,24 @@ public class DevelopmentLoginModule implements LoginModule {
       password = null;
     }
     userPrincipal = null;
+    return true;
+  }
+
+  private boolean checkUserName() {
+    boolean usernameCorrect = false;
+    boolean atLeastOneUserEntryFound = false;
+    for (Map.Entry<String, ?> optionEntry : options.entrySet()) {
+      if (optionEntry.getKey().startsWith(USER_OPT)) {
+        atLeastOneUserEntryFound = true;
+        if (optionEntry.getValue().equals(username)) {
+          usernameCorrect = true;
+          suffix = optionEntry.getKey().substring(USER_OPT.length());
+        }
+      }
+    }
+    if (atLeastOneUserEntryFound) {
+      return usernameCorrect;
+    }
     return true;
   }
 }

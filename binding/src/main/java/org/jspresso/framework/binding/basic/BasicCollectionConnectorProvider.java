@@ -100,13 +100,6 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
-  public Object getSelectedItem() {
-    return implGetSelectedItem();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public ICollectionConnector getCollectionConnector() {
     if (collectionConnectorProvider != null) {
       return collectionConnectorProvider.getCollectionConnector();
@@ -125,6 +118,13 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
           .getCollectionConnector());
     }
     return Collections.emptyList();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getSelectedItem() {
+    return implGetSelectedItem();
   }
 
   /**

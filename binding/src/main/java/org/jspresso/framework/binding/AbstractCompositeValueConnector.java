@@ -40,14 +40,14 @@ public abstract class AbstractCompositeValueConnector extends
     AbstractValueConnector implements IRenderableCompositeValueConnector {
 
   private Map<String, IValueConnector> childConnectors;
-  private ItemSelectionSupport         itemSelectionSupport;
   private String                       displayDescription;
   private String                       displayIconImageUrl;
   private String                       displayValue;
   private IIconImageURLProvider        iconImageURLProvider;
+  private ItemSelectionSupport         itemSelectionSupport;
   private String                       renderingChildConnectorId;
-  private boolean                      trackingChildrenSelection;
   private Object                       selectedItem;
+  private boolean                      trackingChildrenSelection;
 
   /**
    * Constructs a new <code>AbstractCompositeValueConnector</code>.
@@ -185,6 +185,17 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void readabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).readabilityChange();
+    }
+  }
+
+  /**
    * Sets the displayDescription.
    * 
    * @param displayDescription
@@ -245,6 +256,17 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void writabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).writabilityChange();
+    }
+  }
+
+  /**
    * Adds a new child connector using a specified storage key.
    * 
    * @param storageKey
@@ -268,6 +290,18 @@ public abstract class AbstractCompositeValueConnector extends
   protected void implAddConnectorSelectionListener(
       IItemSelectionListener listener) {
     itemSelectionSupport.addItemSelectionListener(listener);
+  }
+
+  /**
+   * Utility implementation to factorize method support. This should only be
+   * used by subclasses which implement <code>IConnectorSelector</code>.
+   * 
+   * @param selectedConnector
+   *          the newly selected connector or null.
+   */
+  protected void implFireSelectedConnectorChange(
+      IValueConnector selectedConnector) {
+    implFireSelectedItemChange(new ItemSelectionEvent(this, selectedConnector));
   }
 
   /**
@@ -300,18 +334,6 @@ public abstract class AbstractCompositeValueConnector extends
    */
   protected Object implGetSelectedItem() {
     return selectedItem;
-  }
-
-  /**
-   * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
-   * @param selectedConnector
-   *          the newly selected connector or null.
-   */
-  protected void implFireSelectedConnectorChange(
-      IValueConnector selectedConnector) {
-    implFireSelectedItemChange(new ItemSelectionEvent(this, selectedConnector));
   }
 
   /**
@@ -357,28 +379,6 @@ public abstract class AbstractCompositeValueConnector extends
         .remove(connector.getId());
     if (removedConnector != null) {
       removedConnector.setParentConnector(null);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void writabilityChange() {
-    super.writabilityChange();
-    for (String key : getChildConnectorKeys()) {
-      getChildConnector(key).writabilityChange();
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void readabilityChange() {
-    super.writabilityChange();
-    for (String key : getChildConnectorKeys()) {
-      getChildConnector(key).readabilityChange();
     }
   }
 }

@@ -50,15 +50,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
 
   private IQueryComponent              filter;
   private IComponentDescriptor<Object> filterComponentDescriptor;
-  private IViewDescriptor              filterViewDescriptor;
   private PropertyChangeListener       filterComponentTracker;
+  private IViewDescriptor              filterViewDescriptor;
 
-  private IQueryViewDescriptorFactory  queryViewDescriptorFactory;
-  private IViewDescriptor              pagingStatusViewDescriptor;
-  private FrontendAction<?, ?, ?>      previousPageAction;
   private FrontendAction<?, ?, ?>      nextPageAction;
   private Map<String, ESort>           orderingProperties;
   private Integer                      pageSize;
+  private IViewDescriptor              pagingStatusViewDescriptor;
+  private FrontendAction<?, ?, ?>      previousPageAction;
+  private IQueryViewDescriptorFactory  queryViewDescriptorFactory;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -98,99 +98,27 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Assigns the filter to this module instance. It is by default assigned by
-   * the module startup action (see <code>InitModuleFilterAction</code>). So if
-   * you ever want to change the default implementation of the filter, you have
-   * to write and install you own custom startup action or explicitely inject a
-   * specific instance.
+   * Gets the orderingProperties.
    * 
-   * @param filter
-   *          the filter to set.
+   * @return the orderingProperties.
    */
-  public void setFilter(IQueryComponent filter) {
-    if (ObjectUtils.equals(this.filter, filter)) {
-      return;
+  public Map<String, ESort> getOrderingProperties() {
+    if (orderingProperties == null) {
+      return getElementComponentDescriptor().getOrderingProperties();
     }
-    Object oldValue = getFilter();
-    if (oldValue instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) oldValue)
-          .removePropertyChangeListener(filterComponentTracker);
-    }
-    this.filter = filter;
-    if (filter != null) {
-      filter.setPageSize(getPageSize());
-      filter.setDefaultOrderingProperties(getOrderingProperties());
-    }
-    if (filter instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) filter)
-          .addPropertyChangeListener(filterComponentTracker);
-    }
-    firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER,
-        oldValue, getFilter());
+    return orderingProperties;
   }
 
   /**
-   * This property allows to configure a custom filter model descriptor. If not
-   * set, which is the default value, the filter model is built out of the
-   * element component descriptor (QBE filter model).
+   * Gets the pageSize.
    * 
-   * @param filterComponentDescriptor
-   *          the filterComponentDescriptor to set.
+   * @return the pageSize.
    */
-  public void setFilterComponentDescriptor(
-      IComponentDescriptor<Object> filterComponentDescriptor) {
-    this.filterComponentDescriptor = filterComponentDescriptor;
-  }
-
-  /**
-   * This property allows to refine the default filer view to re-arange the
-   * filter fields. Custom filter view descriptors assigned here must not be
-   * assigned a model descriptor since they will be at runtime. This is because
-   * the filter component descriptor must be reworked - to adapt comparable
-   * field structures for instance.
-   * 
-   * @param filterViewDescriptor
-   *          the filterViewDescriptor to set.
-   */
-  public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
-    this.filterViewDescriptor = filterViewDescriptor;
-  }
-
-  private class FilterComponentTracker implements PropertyChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(PropertyChangeEvent evt) {
-      firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
-          + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+  public Integer getPageSize() {
+    if (pageSize == null) {
+      return getElementComponentDescriptor().getPageSize();
     }
-  }
-
-  /**
-   * Sets the queryViewDescriptorFactory.
-   * 
-   * @param queryViewDescriptorFactory
-   *          the queryViewDescriptorFactory to set.
-   */
-  public void setQueryViewDescriptorFactory(
-      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
-    this.queryViewDescriptorFactory = queryViewDescriptorFactory;
-  }
-
-  /**
-   * Allows to change the default view for the paging status. If not set
-   * (default), a default paging status view is created containing the curent
-   * pageas well as the total number of pages available and the total number of
-   * records in the result set. This paging status view is the bordered with the
-   * bage navigation actions.
-   * 
-   * @param pagingStatusViewDescriptor
-   *          the pagingStatusViewDescriptor to set.
-   */
-  public void setPagingStatusViewDescriptor(
-      IViewDescriptor pagingStatusViewDescriptor) {
-    this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
+    return pageSize;
   }
 
   /**
@@ -254,25 +182,62 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Gets the module descriptor.
+   * Assigns the filter to this module instance. It is by default assigned by
+   * the module startup action (see <code>InitModuleFilterAction</code>). So if
+   * you ever want to change the default implementation of the filter, you have
+   * to write and install you own custom startup action or explicitely inject a
+   * specific instance.
    * 
-   * @return the module descriptor.
+   * @param filter
+   *          the filter to set.
    */
-  @Override
-  protected BeanCollectionModuleDescriptor getDescriptor() {
-    return new FilterableBeanCollectionModuleDescriptor(
-        getElementComponentDescriptor(), getFilterComponentDescriptor());
+  public void setFilter(IQueryComponent filter) {
+    if (ObjectUtils.equals(this.filter, filter)) {
+      return;
+    }
+    Object oldValue = getFilter();
+    if (oldValue instanceof IPropertyChangeCapable) {
+      ((IPropertyChangeCapable) oldValue)
+          .removePropertyChangeListener(filterComponentTracker);
+    }
+    this.filter = filter;
+    if (filter != null) {
+      filter.setPageSize(getPageSize());
+      filter.setDefaultOrderingProperties(getOrderingProperties());
+    }
+    if (filter instanceof IPropertyChangeCapable) {
+      ((IPropertyChangeCapable) filter)
+          .addPropertyChangeListener(filterComponentTracker);
+    }
+    firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER,
+        oldValue, getFilter());
   }
 
   /**
-   * Assigns the action triggered for previous page navigation on a pageable
-   * result set. This should hardly be changed from default built-in.
+   * This property allows to configure a custom filter model descriptor. If not
+   * set, which is the default value, the filter model is built out of the
+   * element component descriptor (QBE filter model).
    * 
-   * @param previousPageAction
-   *          the previousPageAction to set.
+   * @param filterComponentDescriptor
+   *          the filterComponentDescriptor to set.
    */
-  public void setPreviousPageAction(FrontendAction<?, ?, ?> previousPageAction) {
-    this.previousPageAction = previousPageAction;
+  public void setFilterComponentDescriptor(
+      IComponentDescriptor<Object> filterComponentDescriptor) {
+    this.filterComponentDescriptor = filterComponentDescriptor;
+  }
+
+  /**
+   * This property allows to refine the default filer view to re-arange the
+   * filter fields. Custom filter view descriptors assigned here must not be
+   * assigned a model descriptor since they will be at runtime. This is because
+   * the filter component descriptor must be reworked - to adapt comparable
+   * field structures for instance.
+   * 
+   * @param filterViewDescriptor
+   *          the filterViewDescriptor to set.
+   */
+  public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
+    this.filterViewDescriptor = filterViewDescriptor;
   }
 
   /**
@@ -284,18 +249,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    */
   public void setNextPageAction(FrontendAction<?, ?, ?> nextPageAction) {
     this.nextPageAction = nextPageAction;
-  }
-
-  /**
-   * Gets the orderingProperties.
-   * 
-   * @return the orderingProperties.
-   */
-  public Map<String, ESort> getOrderingProperties() {
-    if (orderingProperties == null) {
-      return getElementComponentDescriptor().getOrderingProperties();
-    }
-    return orderingProperties;
   }
 
   /**
@@ -321,18 +274,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Gets the pageSize.
-   * 
-   * @return the pageSize.
-   */
-  public Integer getPageSize() {
-    if (pageSize == null) {
-      return getElementComponentDescriptor().getPageSize();
-    }
-    return pageSize;
-  }
-
-  /**
    * Configures a custom page size for the result set. If not set, which is the
    * default, the elements default page size is used.
    * 
@@ -341,5 +282,64 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    */
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  /**
+   * Allows to change the default view for the paging status. If not set
+   * (default), a default paging status view is created containing the curent
+   * pageas well as the total number of pages available and the total number of
+   * records in the result set. This paging status view is the bordered with the
+   * bage navigation actions.
+   * 
+   * @param pagingStatusViewDescriptor
+   *          the pagingStatusViewDescriptor to set.
+   */
+  public void setPagingStatusViewDescriptor(
+      IViewDescriptor pagingStatusViewDescriptor) {
+    this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
+  }
+
+  /**
+   * Assigns the action triggered for previous page navigation on a pageable
+   * result set. This should hardly be changed from default built-in.
+   * 
+   * @param previousPageAction
+   *          the previousPageAction to set.
+   */
+  public void setPreviousPageAction(FrontendAction<?, ?, ?> previousPageAction) {
+    this.previousPageAction = previousPageAction;
+  }
+
+  /**
+   * Sets the queryViewDescriptorFactory.
+   * 
+   * @param queryViewDescriptorFactory
+   *          the queryViewDescriptorFactory to set.
+   */
+  public void setQueryViewDescriptorFactory(
+      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
+    this.queryViewDescriptorFactory = queryViewDescriptorFactory;
+  }
+
+  /**
+   * Gets the module descriptor.
+   * 
+   * @return the module descriptor.
+   */
+  @Override
+  protected BeanCollectionModuleDescriptor getDescriptor() {
+    return new FilterableBeanCollectionModuleDescriptor(
+        getElementComponentDescriptor(), getFilterComponentDescriptor());
+  }
+
+  private class FilterComponentTracker implements PropertyChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(PropertyChangeEvent evt) {
+      firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
+          + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+    }
   }
 }

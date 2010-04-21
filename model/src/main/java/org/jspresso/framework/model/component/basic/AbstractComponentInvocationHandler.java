@@ -85,9 +85,9 @@ public abstract class AbstractComponentInvocationHandler implements
   private IComponentExtensionFactory                                                   extensionFactory;
   private IComponentFactory                                                            inlineComponentFactory;
   private Set<String>                                                                  modifierMonitors;
-  private Map<String, InlineReferenceTracker>                                          referenceTrackers;
-
   private boolean                                                                      propertyProcessorsEnabled;
+
+  private Map<String, InlineReferenceTracker>                                          referenceTrackers;
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -291,6 +291,16 @@ public abstract class AbstractComponentInvocationHandler implements
   protected abstract int computeHashCode(IComponent proxy);
 
   /**
+   * Gives a chance to configure created extensions.
+   * 
+   * @param extension
+   *          the extension to configure.
+   */
+  protected void configureExtension(IComponentExtension<IComponent> extension) {
+    // Empty by default.
+  }
+
+  /**
    * Gives a chance to the implementor to decorate a component reference before
    * returning it when fetching association ends.
    * 
@@ -302,6 +312,17 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   protected abstract IComponent decorateReferent(IComponent referent,
       IComponentDescriptor<? extends IComponent> referentDescriptor);
+
+  /**
+   * An empty hook that gets called whenever an entity is detached from a parent
+   * one.
+   * 
+   * @param child
+   *          the child entity.
+   */
+  protected void entityDetached(IEntity child) {
+    // defaults to no-op.
+  }
 
   /**
    * Gets the accessorFactory.
@@ -355,6 +376,33 @@ public abstract class AbstractComponentInvocationHandler implements
     inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
         propertyDescriptor.getName());
     return property;
+  }
+
+  /**
+   * Creates and registers an extension instance.
+   * 
+   * @param extensionClass
+   *          the extension class.
+   * @param proxy
+   *          the proxy to register the extension on.
+   * @return the component extension.
+   */
+  protected synchronized IComponentExtension<? extends IComponent> getExtensionInstance(
+      Class<IComponentExtension<IComponent>> extensionClass, IComponent proxy) {
+    IComponentExtension<IComponent> extension;
+    if (componentExtensions == null) {
+      componentExtensions = new HashMap<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>>();
+      extension = null;
+    } else {
+      extension = componentExtensions.get(extensionClass);
+    }
+    if (extension == null) {
+      extension = extensionFactory.createComponentExtension(extensionClass,
+          componentDescriptor.getComponentContract(), proxy);
+      configureExtension(extension);
+      componentExtensions.put(extensionClass, extension);
+    }
+    return extension;
   }
 
   /**
@@ -485,6 +533,22 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
+   * An empty hook that gets called whenever an entity is to be updated.
+   * 
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
+   * @param entityLifecycleHandler
+   *          entityLifecycleHandler.
+   */
+  protected void onUpdate(IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    // defaults to no-op.
+  }
+
+  /**
    * Direct read access to the properties map without any other operation. Use
    * with caution only in subclasses.
    * 
@@ -564,6 +628,24 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
+   * Directly gets all property values out of the property store without any
+   * other operation.
+   * 
+   * @return The map of properties.
+   */
+  protected Map<String, Object> straightGetProperties() {
+    Map<String, Object> allProperties = new HashMap<String, Object>();
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+        .getPropertyDescriptors()) {
+      if (!propertyDescriptor.isComputed()) {
+        allProperties.put(propertyDescriptor.getName(),
+            retrievePropertyValue(propertyDescriptor.getName()));
+      }
+    }
+    return allProperties;
+  }
+
+  /**
    * Directly get a property value out of the property store without any other
    * operation.
    * 
@@ -578,6 +660,44 @@ public abstract class AbstractComponentInvocationHandler implements
       return Boolean.FALSE;
     }
     return propertyValue;
+  }
+
+  /**
+   * Directly get a property value out of the property store without any other
+   * operation.
+   * 
+   * @param propertyName
+   *          the name of the property.
+   * @param newPropertyValue
+   *          the property value or null.
+   */
+  @SuppressWarnings("unchecked")
+  protected void straightSetProperty(String propertyName,
+      Object newPropertyValue) {
+    Object currentPropertyValue = straightGetProperty(propertyName);
+    IPropertyDescriptor propertyDescriptor = componentDescriptor
+        .getPropertyDescriptor(propertyName);
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor
+        && !ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
+      storeReferenceProperty(
+          (IReferencePropertyDescriptor<?>) propertyDescriptor,
+          currentPropertyValue, newPropertyValue);
+    } else {
+      storeProperty(propertyName, newPropertyValue);
+    }
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      if (currentPropertyValue != null
+          && currentPropertyValue == newPropertyValue
+          && isInitialized(currentPropertyValue)) {
+        currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
+            .getContextClassLoader(),
+            new Class[] {((ICollectionPropertyDescriptor) propertyDescriptor)
+                .getReferencedDescriptor().getCollectionInterface()},
+            new NeverEqualsInvocationHandler(CollectionHelper
+                .cloneCollection((Collection<?>) currentPropertyValue)));
+      }
+    }
+    firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
   }
 
   private synchronized void addPropertyChangeListener(Object proxy,
@@ -695,43 +815,6 @@ public abstract class AbstractComponentInvocationHandler implements
     } else {
       changeSupport.firePropertyChange(propertyName, oldValue, newValue);
     }
-  }
-
-  /**
-   * Creates and registers an extension instance.
-   * 
-   * @param extensionClass
-   *          the extension class.
-   * @param proxy
-   *          the proxy to register the extension on.
-   * @return the component extension.
-   */
-  protected synchronized IComponentExtension<? extends IComponent> getExtensionInstance(
-      Class<IComponentExtension<IComponent>> extensionClass, IComponent proxy) {
-    IComponentExtension<IComponent> extension;
-    if (componentExtensions == null) {
-      componentExtensions = new HashMap<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>>();
-      extension = null;
-    } else {
-      extension = componentExtensions.get(extensionClass);
-    }
-    if (extension == null) {
-      extension = extensionFactory.createComponentExtension(extensionClass,
-          componentDescriptor.getComponentContract(), proxy);
-      configureExtension(extension);
-      componentExtensions.put(extensionClass, extension);
-    }
-    return extension;
-  }
-
-  /**
-   * Gives a chance to configure created extensions.
-   * 
-   * @param extension
-   *          the extension to configure.
-   */
-  protected void configureExtension(IComponentExtension<IComponent> extension) {
-    // Empty by default.
   }
 
   private Object invokeExtensionMethod(
@@ -912,6 +995,17 @@ public abstract class AbstractComponentInvocationHandler implements
     changeSupport.removePropertyChangeListener(propertyName, listener);
   }
 
+  private void rollbackProperty(Object proxy,
+      IPropertyDescriptor propertyDescriptor, Object oldProperty) {
+    boolean wasPropertyProcessorsEnabled = propertyProcessorsEnabled;
+    try {
+      propertyProcessorsEnabled = false;
+      setProperty(proxy, propertyDescriptor, oldProperty);
+    } finally {
+      propertyProcessorsEnabled = wasPropertyProcessorsEnabled;
+    }
+  }
+
   @SuppressWarnings("unchecked")
   private void setProperty(Object proxy,
       IPropertyDescriptor propertyDescriptor, Object newProperty) {
@@ -1059,77 +1153,10 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private void rollbackProperty(Object proxy,
-      IPropertyDescriptor propertyDescriptor, Object oldProperty) {
-    boolean wasPropertyProcessorsEnabled = propertyProcessorsEnabled;
-    try {
-      propertyProcessorsEnabled = false;
-      setProperty(proxy, propertyDescriptor, oldProperty);
-    } finally {
-      propertyProcessorsEnabled = wasPropertyProcessorsEnabled;
-    }
-  }
-
-  /**
-   * Directly gets all property values out of the property store without any
-   * other operation.
-   * 
-   * @return The map of properties.
-   */
-  protected Map<String, Object> straightGetProperties() {
-    Map<String, Object> allProperties = new HashMap<String, Object>();
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
-      if (!propertyDescriptor.isComputed()) {
-        allProperties.put(propertyDescriptor.getName(),
-            retrievePropertyValue(propertyDescriptor.getName()));
-      }
-    }
-    return allProperties;
-  }
-
   private void straightSetProperties(Map<String, Object> backendProperties) {
     for (Map.Entry<String, Object> propertyEntry : backendProperties.entrySet()) {
       straightSetProperty(propertyEntry.getKey(), propertyEntry.getValue());
     }
-  }
-
-  /**
-   * Directly get a property value out of the property store without any other
-   * operation.
-   * 
-   * @param propertyName
-   *          the name of the property.
-   * @param newPropertyValue
-   *          the property value or null.
-   */
-  @SuppressWarnings("unchecked")
-  protected void straightSetProperty(String propertyName,
-      Object newPropertyValue) {
-    Object currentPropertyValue = straightGetProperty(propertyName);
-    IPropertyDescriptor propertyDescriptor = componentDescriptor
-        .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor
-        && !ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
-      storeReferenceProperty(
-          (IReferencePropertyDescriptor<?>) propertyDescriptor,
-          currentPropertyValue, newPropertyValue);
-    } else {
-      storeProperty(propertyName, newPropertyValue);
-    }
-    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      if (currentPropertyValue != null
-          && currentPropertyValue == newPropertyValue
-          && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
-            .getContextClassLoader(),
-            new Class[] {((ICollectionPropertyDescriptor) propertyDescriptor)
-                .getReferencedDescriptor().getCollectionInterface()},
-            new NeverEqualsInvocationHandler(CollectionHelper
-                .cloneCollection((Collection<?>) currentPropertyValue)));
-      }
-    }
-    firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
   }
 
   private String toString(Object proxy) {
@@ -1154,38 +1181,11 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  /**
-   * An empty hook that gets called whenever an entity is detached from a parent
-   * one.
-   * 
-   * @param child
-   *          the child entity.
-   */
-  protected void entityDetached(IEntity child) {
-    // defaults to no-op.
-  }
-
-  /**
-   * An empty hook that gets called whenever an entity is to be updated.
-   * 
-   * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
-   * @param principal
-   *          the principal triggering the action.
-   * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
-   */
-  protected void onUpdate(IEntityFactory entityFactory,
-      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
-    // defaults to no-op.
-  }
-
   private class InlineReferenceTracker implements PropertyChangeListener {
 
     private String  componentName;
-    private boolean inlinedComponent;
     private boolean enabled;
+    private boolean inlinedComponent;
 
     /**
      * Constructs a new <code>InnerComponentTracker</code> instance.

@@ -97,12 +97,12 @@ public abstract class AbstractAction extends AbstractActionContextAware
    * <code>ACTION_MODEL_NAME</code>.
    */
   protected static final String ACTION_MODEL_NAME = "ActionModel";
-  private Collection<String>    grantedRoles;
-
-  private IAction               nextAction;
-  private IAction               wrappedAction;
-
   private String                automationSeed;
+
+  private Collection<String>    grantedRoles;
+  private IAction               nextAction;
+
+  private IAction               wrappedAction;
 
   /**
    * {@inheritDoc}
@@ -116,56 +116,12 @@ public abstract class AbstractAction extends AbstractActionContextAware
   }
 
   /**
-   * Registers an action to be executed after this action but before the
-   * <i>next</i> one. This is perfectly suited to chain a backend action from a
-   * frontend action since the control flow will return back to the calling
-   * layer (the frontend).
+   * Gets the automationSeed.
    * 
-   * @param wrappedAction
-   *          the wrappedAction to set.
+   * @return the automationSeed.
    */
-  public void setWrappedAction(IAction wrappedAction) {
-    this.wrappedAction = wrappedAction;
-  }
-
-  /**
-   * Gets the wrapped action reference. If the wrapped action has been
-   * configured strongly through the setter method, it is directly returned. If
-   * not, it is looked up into the action context.
-   * 
-   * @param context
-   *          the action context.
-   * @return the wrapped action to execute.
-   * @see #setWrappedAction(IAction)
-   */
-  protected IAction getWrappedAction(Map<String, Object> context) {
-    return wrappedAction;
-  }
-
-  /**
-   * Gets the next action reference. If the next action has been configured
-   * strongly through the setter method, it is directly returned. If not, it is
-   * looked up into the action context.
-   * 
-   * @param context
-   *          the action context.
-   * @return the next action to execute.
-   * @see #setNextAction(IAction)
-   */
-  protected IAction getNextAction(Map<String, Object> context) {
-    return nextAction;
-  }
-
-  /**
-   * Registers an action to be executed after this action and after the
-   * <i>wrapped</i> one. This is perfectly suited to chain an action of the same
-   * type (frontend or backend) as this one.
-   * 
-   * @param nextAction
-   *          the next action to execute.
-   */
-  public void setNextAction(IAction nextAction) {
-    this.nextAction = nextAction;
+  public String getAutomationSeed() {
+    return automationSeed;
   }
 
   /**
@@ -173,6 +129,16 @@ public abstract class AbstractAction extends AbstractActionContextAware
    */
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
+  }
+
+  /**
+   * Sets the automationSeed.
+   * 
+   * @param automationSeed
+   *          the automationSeed to set.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 
   /**
@@ -192,6 +158,39 @@ public abstract class AbstractAction extends AbstractActionContextAware
   }
 
   /**
+   * Registers an action to be executed after this action and after the
+   * <i>wrapped</i> one. This is perfectly suited to chain an action of the same
+   * type (frontend or backend) as this one.
+   * 
+   * @param nextAction
+   *          the next action to execute.
+   */
+  public void setNextAction(IAction nextAction) {
+    this.nextAction = nextAction;
+  }
+
+  /**
+   * Registers an action to be executed after this action but before the
+   * <i>next</i> one. This is perfectly suited to chain a backend action from a
+   * frontend action since the control flow will return back to the calling
+   * layer (the frontend).
+   * 
+   * @param wrappedAction
+   *          the wrappedAction to set.
+   */
+  public void setWrappedAction(IAction wrappedAction) {
+    this.wrappedAction = wrappedAction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).toString();
+  }
+
+  /**
    * Gets the controller (frontend or backend) out of the action context.
    * 
    * @param context
@@ -201,29 +200,30 @@ public abstract class AbstractAction extends AbstractActionContextAware
   protected abstract IController getController(Map<String, Object> context);
 
   /**
-   * Gets the automationSeed.
+   * Gets the next action reference. If the next action has been configured
+   * strongly through the setter method, it is directly returned. If not, it is
+   * looked up into the action context.
    * 
-   * @return the automationSeed.
+   * @param context
+   *          the action context.
+   * @return the next action to execute.
+   * @see #setNextAction(IAction)
    */
-  public String getAutomationSeed() {
-    return automationSeed;
+  protected IAction getNextAction(Map<String, Object> context) {
+    return nextAction;
   }
 
   /**
-   * Sets the automationSeed.
+   * Gets the wrapped action reference. If the wrapped action has been
+   * configured strongly through the setter method, it is directly returned. If
+   * not, it is looked up into the action context.
    * 
-   * @param automationSeed
-   *          the automationSeed to set.
+   * @param context
+   *          the action context.
+   * @return the wrapped action to execute.
+   * @see #setWrappedAction(IAction)
    */
-  public void setAutomationSeed(String automationSeed) {
-    this.automationSeed = automationSeed;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    return new ToStringBuilder(this).toString();
+  protected IAction getWrappedAction(Map<String, Object> context) {
+    return wrappedAction;
   }
 }

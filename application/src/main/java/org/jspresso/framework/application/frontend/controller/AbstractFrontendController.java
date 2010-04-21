@@ -101,40 +101,40 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private ActionMap                             actionMap;
   private IBackendController                    backendController;
 
+  private List<ModuleHistoryEntry>              backwardHistoryEntries;
   private Locale                                clientLocale;
   private DefaultIconDescriptor                 controllerDescriptor;
   private List<Map<String, Object>>             dialogContextStack;
+  private IDisplayableAction                    exitAction;
+
   private String                                forcedStartingLocale;
+
+  private List<ModuleHistoryEntry>              forwardHistoryEntries;
+
   private ActionMap                             helpActionMap;
 
   private CallbackHandler                       loginCallbackHandler;
 
   private String                                loginContextName;
+  private IViewDescriptor                       loginViewDescriptor;
+  private Map<String, IValueConnector>          moduleAreaViewConnectors;
+  private boolean                               moduleAutoPinEnabled;
 
   private IMvcBinder                            mvcBinder;
+  private IAction                               onModuleEnterAction;
+
+  private IAction                               onModuleExitAction;
 
   private Map<String, Module>                   selectedModules;
 
   private String                                selectedWorkspaceName;
   private IAction                               startupAction;
-  private IAction                               onModuleExitAction;
-  private IAction                               onModuleEnterAction;
 
-  private IViewFactory<E, F, G>                 viewFactory;
-  private Map<String, Workspace>                workspaces;
-
-  private String                                workspacesMenuIconImageUrl;
-
-  private IViewDescriptor                       loginViewDescriptor;
-
-  private Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
-  private Map<String, IValueConnector>          moduleAreaViewConnectors;
-
-  private List<ModuleHistoryEntry>              backwardHistoryEntries;
-  private List<ModuleHistoryEntry>              forwardHistoryEntries;
-  private boolean                               moduleAutoPinEnabled;
   private boolean                               tracksWorkspaceNavigator;
-  private IDisplayableAction                    exitAction;
+  private IViewFactory<E, F, G>                 viewFactory;
+  private Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
+  private Map<String, Workspace>                workspaces;
+  private String                                workspacesMenuIconImageUrl;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -152,34 +152,129 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Creates the exit action.
-   * 
-   * @return the exit action.
+   * {@inheritDoc}
    */
-  protected IDisplayableAction getExitAction() {
-    if (exitAction == null) {
-      ExitAction<E, F, G> action = new ExitAction<E, F, G>();
-      action.setName("quit.name");
-      action.setDescription("quit.description");
-      action.setIconImageURL(getViewFactory().getIconFactory()
-          .getCancelIconImageURL());
-      exitAction = action;
-    }
-    return exitAction;
+  public void displayModule(Module module) {
+    displayModule(getSelectedWorkspaceName(), module);
   }
 
   /**
-   * Must be called when a modal dialog is displayed.
-   * 
-   * @param context
-   *          the context to store on the context stack.
-   * @param reuseCurrent
-   *          set to true to reuse an existing modal dialog.
+   * {@inheritDoc}
    */
-  protected void displayModalDialog(Map<String, Object> context,
-      boolean reuseCurrent) {
-    if (!reuseCurrent || dialogContextStack.size() == 0) {
-      dialogContextStack.add(0, context);
+  public void displayModule(String workspaceName, Module module) {
+    Module currentModule = selectedModules.get(getSelectedWorkspaceName());
+    if ((currentModule == null && module == null)
+        || ObjectUtils.equals(currentModule, module)) {
+      return;
+    }
+    if (currentModule != null) {
+      pinModule(getSelectedWorkspaceName(), currentModule);
+      execute(currentModule.getExitAction(), createEmptyContext());
+      execute(getOnModuleExitAction(), createEmptyContext());
+    }
+    displayWorkspace(workspaceName);
+    IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
+        .get(workspaceName);
+    if (moduleAreaViewConnector != null) {
+
+      IValueConnector oldModuleModelConnector = moduleAreaViewConnector
+          .getModelConnector();
+      if (oldModuleModelConnector != null) {
+        oldModuleModelConnector.setConnectorValue(null);
+      }
+
+      IValueConnector moduleModelConnector = getBackendController()
+          .createModelConnector(workspaceName,
+              ModuleDescriptor.MODULE_DESCRIPTOR);
+      moduleModelConnector.setConnectorValue(module);
+      mvcBinder.bind(moduleAreaViewConnector, moduleModelConnector);
+    }
+    selectedModules.put(workspaceName, module);
+    if (module != null) {
+      if (!module.isStarted() && module.getStartupAction() != null) {
+        execute(module.getStartupAction(), createEmptyContext());
+      }
+      module.setStarted(true);
+      execute(module.getEntryAction(), createEmptyContext());
+      execute(getOnModuleEnterAction(), createEmptyContext());
+    }
+    boolean wasTracksWorkspaceNavigator = tracksWorkspaceNavigator;
+    try {
+      tracksWorkspaceNavigator = false;
+      ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors
+          .get(workspaceName);
+      if (workspaceNavigatorConnector instanceof ICollectionConnectorListProvider) {
+        Object[] result = synchWorkspaceNavigatorSelection(
+            (ICollectionConnectorListProvider) workspaceNavigatorConnector,
+            module);
+        if (result != null) {
+          int moduleModelIndex = ((Integer) result[1]).intValue();
+          ((ICollectionConnector) result[0]).setSelectedIndices(
+              new int[] {moduleModelIndex}, moduleModelIndex);
+        }
+      }
+    } finally {
+      tracksWorkspaceNavigator = wasTracksWorkspaceNavigator;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayNextPinnedModule() {
+    boolean wasAutoPinEnabled = moduleAutoPinEnabled;
+    try {
+      moduleAutoPinEnabled = false;
+      if (forwardHistoryEntries.size() > 0) {
+        ModuleHistoryEntry nextEntry = forwardHistoryEntries.remove(0);
+        String nextWorkspaceName = nextEntry.getWorkspaceName();
+        Module nextModule = nextEntry.getModule();
+        if (nextWorkspaceName != null && nextModule != null) {
+          backwardHistoryEntries.add(nextEntry);
+          if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName())
+              && ObjectUtils.equals(nextModule,
+                  getSelectedModule(getSelectedWorkspaceName()))) {
+            displayNextPinnedModule();
+          } else {
+            displayModule(nextWorkspaceName, nextModule);
+          }
+        } else {
+          displayNextPinnedModule();
+        }
+      }
+    } finally {
+      moduleAutoPinEnabled = wasAutoPinEnabled;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void displayPreviousPinnedModule() {
+    boolean wasAutoPinEnabled = moduleAutoPinEnabled;
+    try {
+      moduleAutoPinEnabled = false;
+      if (backwardHistoryEntries.size() > 0) {
+        ModuleHistoryEntry previousEntry = backwardHistoryEntries
+            .remove(backwardHistoryEntries.size() - 1);
+        String previousWorkspaceName = previousEntry.getWorkspaceName();
+        Module previousModule = previousEntry.getModule();
+        if (previousWorkspaceName != null && previousModule != null) {
+          forwardHistoryEntries.add(0, previousEntry);
+          if (ObjectUtils.equals(previousWorkspaceName,
+              getSelectedWorkspaceName())
+              && ObjectUtils.equals(previousModule,
+                  getSelectedModule(getSelectedWorkspaceName()))) {
+            displayPreviousPinnedModule();
+          } else {
+            displayModule(previousWorkspaceName, previousModule);
+          }
+        } else {
+          displayPreviousPinnedModule();
+        }
+      }
+    } finally {
+      moduleAutoPinEnabled = wasAutoPinEnabled;
     }
   }
 
@@ -354,6 +449,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Gets the selectedWorkspaceName.
+   * 
+   * @return the selectedWorkspaceName.
+   */
+  public String getSelectedWorkspaceName() {
+    return selectedWorkspaceName;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public IAction getStartupAction() {
@@ -367,6 +471,40 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public IViewFactory<E, F, G> getViewFactory() {
     return viewFactory;
+  }
+
+  /**
+   * Given a workspace name, this method returns the associated workspace.
+   * 
+   * @param workspaceName
+   *          the name of the workspace.
+   * @return the selected workspace.
+   */
+  public Workspace getWorkspace(String workspaceName) {
+    if (workspaces != null) {
+      return workspaces.get(workspaceName);
+    }
+    return null;
+  }
+
+  /**
+   * Returns the list of workspace names. This list defines the set of
+   * workspaces the user has access to.
+   * 
+   * @return the list of workspace names.
+   */
+  public List<String> getWorkspaceNames() {
+    if (workspaces != null) {
+      return new ArrayList<String>(workspaces.keySet());
+    }
+    return Collections.<String> emptyList();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void pinModule(Module module) {
+    pinModule(getSelectedWorkspaceName(), module);
   }
 
   /**
@@ -391,6 +529,20 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setDescription(String description) {
     controllerDescriptor.setDescription(description);
+  }
+
+  /**
+   * Configures the exit action to be executed whenever the user wants to quit
+   * the application. The default installed exit action fisrt checks for started
+   * module(s) dirty state(s), then notifies user of pending persistent changes.
+   * When no flush is needed or the user bypasses them, the actual exit is
+   * performed.
+   * 
+   * @param exitAction
+   *          the exitAction to set.
+   */
+  public void setExitAction(IDisplayableAction exitAction) {
+    this.exitAction = exitAction;
   }
 
   /**
@@ -455,6 +607,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Configures the view descriptor used to create the login dialog. The default
+   * built-in login view descriptor includes a standard login/password form.
+   * 
+   * @param loginViewDescriptor
+   *          the loginViewDescriptor to set.
+   */
+  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
+    this.loginViewDescriptor = loginViewDescriptor;
+  }
+
+  /**
    * Configures the MVC binder used to apply model-view bindings. There is
    * hardly any reason for the developper to change the default binder but it
    * can be customized here.
@@ -476,6 +639,31 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setName(String name) {
     controllerDescriptor.setName(name);
+  }
+
+  /**
+   * Configures an action to be executed each time a module of the application
+   * is entered. The action is executed in the context of the module the user
+   * enters.
+   * 
+   * @param onModuleEnterAction
+   *          the onModuleEnterAction to set.
+   */
+  public void setOnModuleEnterAction(IAction onModuleEnterAction) {
+    this.onModuleEnterAction = onModuleEnterAction;
+  }
+
+  /**
+   * Configures an action to be executed each time a module of the application
+   * is exited. The action is executed in the context of the module the user
+   * exits. Default frontend controller configuration installs an action that
+   * checks current module dirty state.
+   * 
+   * @param onModuleExitAction
+   *          the onModuleExitAction to set.
+   */
+  public void setOnModuleExitAction(IAction onModuleExitAction) {
+    this.onModuleExitAction = onModuleExitAction;
   }
 
   /**
@@ -536,17 +724,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Configures the view descriptor used to create the login dialog. The default
-   * built-in login view descriptor includes a standard login/password form.
-   * 
-   * @param loginViewDescriptor
-   *          the loginViewDescriptor to set.
-   */
-  public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
-    this.loginViewDescriptor = loginViewDescriptor;
-  }
-
-  /**
    * Binds to the backend controller and ask it to start.
    * <p>
    * {@inheritDoc}
@@ -597,6 +774,20 @@ public abstract class AbstractFrontendController<E, F, G> extends
     getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
     loginModelConnector.setConnectorValue(getLoginCallbackHandler());
     return loginView;
+  }
+
+  /**
+   * Creates the module area view to display the modules content.
+   * 
+   * @param workspaceName
+   *          the workspace to create the module area view for.
+   * @return the the module area view to display the modules content.
+   */
+  protected IView<E> createModuleAreaView(String workspaceName) {
+    IMapView<E> moduleAreaView = (IMapView<E>) viewFactory.createView(
+        new WorkspaceCardViewDescriptor(), this, getLocale());
+    moduleAreaViewConnectors.put(workspaceName, moduleAreaView.getConnector());
+    return moduleAreaView;
   }
 
   /**
@@ -678,17 +869,18 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Creates the module area view to display the modules content.
+   * Must be called when a modal dialog is displayed.
    * 
-   * @param workspaceName
-   *          the workspace to create the module area view for.
-   * @return the the module area view to display the modules content.
+   * @param context
+   *          the context to store on the context stack.
+   * @param reuseCurrent
+   *          set to true to reuse an existing modal dialog.
    */
-  protected IView<E> createModuleAreaView(String workspaceName) {
-    IMapView<E> moduleAreaView = (IMapView<E>) viewFactory.createView(
-        new WorkspaceCardViewDescriptor(), this, getLocale());
-    moduleAreaViewConnectors.put(workspaceName, moduleAreaView.getConnector());
-    return moduleAreaView;
+  protected void displayModalDialog(Map<String, Object> context,
+      boolean reuseCurrent) {
+    if (!reuseCurrent || dialogContextStack.size() == 0) {
+      dialogContextStack.add(0, context);
+    }
   }
 
   /**
@@ -724,6 +916,23 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected Subject getAnonymousSubject() {
     return SecurityHelper.createAnonymousSubject();
+  }
+
+  /**
+   * Creates the exit action.
+   * 
+   * @return the exit action.
+   */
+  protected IDisplayableAction getExitAction() {
+    if (exitAction == null) {
+      ExitAction<E, F, G> action = new ExitAction<E, F, G>();
+      action.setName("quit.name");
+      action.setDescription("quit.description");
+      action.setIconImageURL(getViewFactory().getIconFactory()
+          .getCancelIconImageURL());
+      exitAction = action;
+    }
+    return exitAction;
   }
 
   /**
@@ -766,12 +975,30 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the selectedWorkspaceName.
+   * Gets the loginViewDescriptor.
    * 
-   * @return the selectedWorkspaceName.
+   * @return the loginViewDescriptor.
    */
-  public String getSelectedWorkspaceName() {
-    return selectedWorkspaceName;
+  protected IViewDescriptor getLoginViewDescriptor() {
+    return loginViewDescriptor;
+  }
+
+  /**
+   * Gets the onModuleEnterAction.
+   * 
+   * @return the onModuleEnterAction.
+   */
+  protected IAction getOnModuleEnterAction() {
+    return onModuleEnterAction;
+  }
+
+  /**
+   * Gets the onModuleExitAction.
+   * 
+   * @return the onModuleExitAction.
+   */
+  protected IAction getOnModuleExitAction() {
+    return onModuleExitAction;
   }
 
   /**
@@ -783,33 +1010,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected Module getSelectedModule(String workspaceName) {
     return selectedModules.get(workspaceName);
-  }
-
-  /**
-   * Given a workspace name, this method returns the associated workspace.
-   * 
-   * @param workspaceName
-   *          the name of the workspace.
-   * @return the selected workspace.
-   */
-  public Workspace getWorkspace(String workspaceName) {
-    if (workspaces != null) {
-      return workspaces.get(workspaceName);
-    }
-    return null;
-  }
-
-  /**
-   * Returns the list of workspace names. This list defines the set of
-   * workspaces the user has access to.
-   * 
-   * @return the list of workspace names.
-   */
-  public List<String> getWorkspaceNames() {
-    if (workspaces != null) {
-      return new ArrayList<String>(workspaces.keySet());
-    }
-    return Collections.<String> emptyList();
   }
 
   /**
@@ -881,59 +1081,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the backend controller this controller is attached to.
+   * Pins a module in the history navigation thus allowing the user to navigate
+   * back.
    * 
-   * @param backendController
-   *          the backend controller to set.
+   * @param workspaceName
+   *          the workspace to pin the module for.
+   * @param module
+   *          the module to pin.
    */
-  protected void setBackendController(IBackendController backendController) {
-    this.backendController = backendController;
-  }
-
-  private void navigatorSelectionChanged(String workspaceName,
-      ICompositeValueConnector selectedConnector) {
-    if (tracksWorkspaceNavigator) {
-      if (selectedConnector != null
-          && selectedConnector.getConnectorValue() instanceof Module) {
-        Module selectedModule = (Module) selectedConnector.getConnectorValue();
-        displayModule(workspaceName, selectedModule);
-      } else {
-        displayModule(workspaceName, null);
-      }
+  protected void pinModule(String workspaceName, Module module) {
+    if (moduleAutoPinEnabled && module != null) {
+      backwardHistoryEntries.add(new ModuleHistoryEntry(workspaceName, module));
+      forwardHistoryEntries.clear();
     }
-  }
-
-  private void translateModule(Module module) {
-    module.setI18nName(getTranslationProvider().getTranslation(
-        module.getName(), getLocale()));
-    module.setI18nDescription(getTranslationProvider().getTranslation(
-        module.getDescription(), getLocale()));
-    if (module.getSubModules() != null) {
-      for (Module subModule : module.getSubModules()) {
-        translateModule(subModule);
-      }
-    }
-  }
-
-  private void translateWorkspace(Workspace workspace) {
-    workspace.setI18nName(getTranslationProvider().getTranslation(
-        workspace.getName(), getLocale()));
-    workspace.setI18nDescription(getTranslationProvider().getTranslation(
-        workspace.getDescription(), getLocale()));
-    if (workspace.getModules() != null) {
-      for (Module module : workspace.getModules()) {
-        translateModule(module);
-      }
-    }
-  }
-
-  /**
-   * Gets the loginViewDescriptor.
-   * 
-   * @return the loginViewDescriptor.
-   */
-  protected IViewDescriptor getLoginViewDescriptor() {
-    return loginViewDescriptor;
   }
 
   /**
@@ -963,69 +1123,25 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the backend controller this controller is attached to.
+   * 
+   * @param backendController
+   *          the backend controller to set.
    */
-  public void displayModule(Module module) {
-    displayModule(getSelectedWorkspaceName(), module);
+  protected void setBackendController(IBackendController backendController) {
+    this.backendController = backendController;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void displayModule(String workspaceName, Module module) {
-    Module currentModule = selectedModules.get(getSelectedWorkspaceName());
-    if ((currentModule == null && module == null)
-        || ObjectUtils.equals(currentModule, module)) {
-      return;
-    }
-    if (currentModule != null) {
-      pinModule(getSelectedWorkspaceName(), currentModule);
-      execute(currentModule.getExitAction(), createEmptyContext());
-      execute(getOnModuleExitAction(), createEmptyContext());
-    }
-    displayWorkspace(workspaceName);
-    IValueConnector moduleAreaViewConnector = moduleAreaViewConnectors
-        .get(workspaceName);
-    if (moduleAreaViewConnector != null) {
-
-      IValueConnector oldModuleModelConnector = moduleAreaViewConnector
-          .getModelConnector();
-      if (oldModuleModelConnector != null) {
-        oldModuleModelConnector.setConnectorValue(null);
+  private void navigatorSelectionChanged(String workspaceName,
+      ICompositeValueConnector selectedConnector) {
+    if (tracksWorkspaceNavigator) {
+      if (selectedConnector != null
+          && selectedConnector.getConnectorValue() instanceof Module) {
+        Module selectedModule = (Module) selectedConnector.getConnectorValue();
+        displayModule(workspaceName, selectedModule);
+      } else {
+        displayModule(workspaceName, null);
       }
-
-      IValueConnector moduleModelConnector = getBackendController()
-          .createModelConnector(workspaceName,
-              ModuleDescriptor.MODULE_DESCRIPTOR);
-      moduleModelConnector.setConnectorValue(module);
-      mvcBinder.bind(moduleAreaViewConnector, moduleModelConnector);
-    }
-    selectedModules.put(workspaceName, module);
-    if (module != null) {
-      if (!module.isStarted() && module.getStartupAction() != null) {
-        execute(module.getStartupAction(), createEmptyContext());
-      }
-      module.setStarted(true);
-      execute(module.getEntryAction(), createEmptyContext());
-      execute(getOnModuleEnterAction(), createEmptyContext());
-    }
-    boolean wasTracksWorkspaceNavigator = tracksWorkspaceNavigator;
-    try {
-      tracksWorkspaceNavigator = false;
-      ICompositeValueConnector workspaceNavigatorConnector = workspaceNavigatorConnectors
-          .get(workspaceName);
-      if (workspaceNavigatorConnector instanceof ICollectionConnectorListProvider) {
-        Object[] result = synchWorkspaceNavigatorSelection(
-            (ICollectionConnectorListProvider) workspaceNavigatorConnector,
-            module);
-        if (result != null) {
-          int moduleModelIndex = ((Integer) result[1]).intValue();
-          ((ICollectionConnector) result[0]).setSelectedIndices(
-              new int[] {moduleModelIndex}, moduleModelIndex);
-        }
-      }
-    } finally {
-      tracksWorkspaceNavigator = wasTracksWorkspaceNavigator;
     }
   }
 
@@ -1059,143 +1175,27 @@ public abstract class AbstractFrontendController<E, F, G> extends
     return result;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void pinModule(Module module) {
-    pinModule(getSelectedWorkspaceName(), module);
-  }
-
-  /**
-   * Pins a module in the history navigation thus allowing the user to navigate
-   * back.
-   * 
-   * @param workspaceName
-   *          the workspace to pin the module for.
-   * @param module
-   *          the module to pin.
-   */
-  protected void pinModule(String workspaceName, Module module) {
-    if (moduleAutoPinEnabled && module != null) {
-      backwardHistoryEntries.add(new ModuleHistoryEntry(workspaceName, module));
-      forwardHistoryEntries.clear();
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void displayNextPinnedModule() {
-    boolean wasAutoPinEnabled = moduleAutoPinEnabled;
-    try {
-      moduleAutoPinEnabled = false;
-      if (forwardHistoryEntries.size() > 0) {
-        ModuleHistoryEntry nextEntry = forwardHistoryEntries.remove(0);
-        String nextWorkspaceName = nextEntry.getWorkspaceName();
-        Module nextModule = nextEntry.getModule();
-        if (nextWorkspaceName != null && nextModule != null) {
-          backwardHistoryEntries.add(nextEntry);
-          if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName())
-              && ObjectUtils.equals(nextModule,
-                  getSelectedModule(getSelectedWorkspaceName()))) {
-            displayNextPinnedModule();
-          } else {
-            displayModule(nextWorkspaceName, nextModule);
-          }
-        } else {
-          displayNextPinnedModule();
-        }
+  private void translateModule(Module module) {
+    module.setI18nName(getTranslationProvider().getTranslation(
+        module.getName(), getLocale()));
+    module.setI18nDescription(getTranslationProvider().getTranslation(
+        module.getDescription(), getLocale()));
+    if (module.getSubModules() != null) {
+      for (Module subModule : module.getSubModules()) {
+        translateModule(subModule);
       }
-    } finally {
-      moduleAutoPinEnabled = wasAutoPinEnabled;
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void displayPreviousPinnedModule() {
-    boolean wasAutoPinEnabled = moduleAutoPinEnabled;
-    try {
-      moduleAutoPinEnabled = false;
-      if (backwardHistoryEntries.size() > 0) {
-        ModuleHistoryEntry previousEntry = backwardHistoryEntries
-            .remove(backwardHistoryEntries.size() - 1);
-        String previousWorkspaceName = previousEntry.getWorkspaceName();
-        Module previousModule = previousEntry.getModule();
-        if (previousWorkspaceName != null && previousModule != null) {
-          forwardHistoryEntries.add(0, previousEntry);
-          if (ObjectUtils.equals(previousWorkspaceName,
-              getSelectedWorkspaceName())
-              && ObjectUtils.equals(previousModule,
-                  getSelectedModule(getSelectedWorkspaceName()))) {
-            displayPreviousPinnedModule();
-          } else {
-            displayModule(previousWorkspaceName, previousModule);
-          }
-        } else {
-          displayPreviousPinnedModule();
-        }
+  private void translateWorkspace(Workspace workspace) {
+    workspace.setI18nName(getTranslationProvider().getTranslation(
+        workspace.getName(), getLocale()));
+    workspace.setI18nDescription(getTranslationProvider().getTranslation(
+        workspace.getDescription(), getLocale()));
+    if (workspace.getModules() != null) {
+      for (Module module : workspace.getModules()) {
+        translateModule(module);
       }
-    } finally {
-      moduleAutoPinEnabled = wasAutoPinEnabled;
     }
-  }
-
-  /**
-   * Gets the onModuleExitAction.
-   * 
-   * @return the onModuleExitAction.
-   */
-  protected IAction getOnModuleExitAction() {
-    return onModuleExitAction;
-  }
-
-  /**
-   * Configures an action to be executed each time a module of the application
-   * is exited. The action is executed in the context of the module the user
-   * exits. Default frontend controller configuration installs an action that
-   * checks current module dirty state.
-   * 
-   * @param onModuleExitAction
-   *          the onModuleExitAction to set.
-   */
-  public void setOnModuleExitAction(IAction onModuleExitAction) {
-    this.onModuleExitAction = onModuleExitAction;
-  }
-
-  /**
-   * Gets the onModuleEnterAction.
-   * 
-   * @return the onModuleEnterAction.
-   */
-  protected IAction getOnModuleEnterAction() {
-    return onModuleEnterAction;
-  }
-
-  /**
-   * Configures an action to be executed each time a module of the application
-   * is entered. The action is executed in the context of the module the user
-   * enters.
-   * 
-   * @param onModuleEnterAction
-   *          the onModuleEnterAction to set.
-   */
-  public void setOnModuleEnterAction(IAction onModuleEnterAction) {
-    this.onModuleEnterAction = onModuleEnterAction;
-  }
-
-  /**
-   * Configures the exit action to be executed whenever the user wants to quit
-   * the application. The default installed exit action fisrt checks for started
-   * module(s) dirty state(s), then notifies user of pending persistent changes.
-   * When no flush is needed or the user bypasses them, the actual exit is
-   * performed.
-   * 
-   * @param exitAction
-   *          the exitAction to set.
-   */
-  public void setExitAction(IDisplayableAction exitAction) {
-    this.exitAction = exitAction;
   }
 }

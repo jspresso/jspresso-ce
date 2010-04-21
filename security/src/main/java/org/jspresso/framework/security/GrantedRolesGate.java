@@ -36,14 +36,25 @@ import org.jspresso.framework.util.gate.AbstractGate;
  */
 public class GrantedRolesGate extends AbstractGate implements ISubjectAware {
 
-  private boolean            open;
   private Collection<String> grantedRoles;
+  private boolean            open;
 
   /**
    * {@inheritDoc}
    */
   public boolean isOpen() {
     return open;
+  }
+
+  /**
+   * Configures the roles for which the gate is open. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s).
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 
   /**
@@ -69,17 +80,6 @@ public class GrantedRolesGate extends AbstractGate implements ISubjectAware {
    */
   protected Collection<String> getGrantedRoles() {
     return grantedRoles;
-  }
-
-  /**
-   * Configures the roles for which the gate is open. It supports
-   * &quot;<b>!</b>&quot; prefix to negate the role(s).
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
   }
 
 }

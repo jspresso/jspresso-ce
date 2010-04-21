@@ -29,17 +29,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 public interface ICriteriaFactory {
 
   /**
-   * Creates an Hibernate detached criteria by traversing a query component.
-   * Whenever the query component is not valid (references a transient entity
-   * for instance), the method should return null.
-   * 
-   * @param queryComponent
-   *          the query component to traverse.
-   * @return the detached criteria or null if the query component is invalid.
-   */
-  EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent);
-
-  /**
    * Takes a criteria and applies ordering specs to it.
    * 
    * @param criteria
@@ -49,5 +38,16 @@ public interface ICriteriaFactory {
    */
   void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
       IQueryComponent queryComponent);
+
+  /**
+   * Creates an Hibernate detached criteria by traversing a query component.
+   * Whenever the query component is not valid (references a transient entity
+   * for instance), the method should return null.
+   * 
+   * @param queryComponent
+   *          the query component to traverse.
+   * @return the detached criteria or null if the query component is invalid.
+   */
+  EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent);
 
 }

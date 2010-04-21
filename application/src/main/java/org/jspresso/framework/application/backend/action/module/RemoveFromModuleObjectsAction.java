@@ -40,17 +40,6 @@ import org.jspresso.framework.binding.ICollectionConnector;
  */
 public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
 
-  private void removeFromSubModules(Module parentModule, Object removedObject) {
-    if (parentModule.getSubModules() != null) {
-      for (Module module : new ArrayList<Module>(parentModule.getSubModules())) {
-        if (module instanceof BeanModule
-            && removedObject.equals(((BeanModule) module).getModuleObject())) {
-          parentModule.removeSubModule(module);
-        }
-      }
-    }
-  }
-
   /**
    * Removes the selected objects from the projected collection.
    * <p>
@@ -85,5 +74,16 @@ public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
 
     getModelConnector(context).setConnectorValue(projectedCollection);
     return super.execute(actionHandler, context);
+  }
+
+  private void removeFromSubModules(Module parentModule, Object removedObject) {
+    if (parentModule.getSubModules() != null) {
+      for (Module module : new ArrayList<Module>(parentModule.getSubModules())) {
+        if (module instanceof BeanModule
+            && removedObject.equals(((BeanModule) module).getModuleObject())) {
+          parentModule.removeSubModule(module);
+        }
+      }
+    }
   }
 }

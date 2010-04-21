@@ -248,6 +248,17 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
 
   /**
    * {@inheritDoc}
+   */
+  @Override
+  public void readabilityChange() {
+    super.writabilityChange();
+    for (String key : getChildConnectorKeys()) {
+      getChildConnector(key).readabilityChange();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
    * 
    * @see #addModelChangeListener(IModelChangeListener)
    */
@@ -255,18 +266,6 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     if (listener != null) {
       modelChangeSupport.removeModelChangeListener(listener);
     }
-  }
-
-  /**
-   * Notifies its listeners that the connector's model changed.
-   * 
-   * @param oldModel
-   *          The old model of the connector
-   * @param newModel
-   *          The new model of the connector
-   */
-  protected void fireModelChange(Object oldModel, Object newModel) {
-    modelChangeSupport.fireModelChange(oldModel, newModel);
   }
 
   /**
@@ -281,13 +280,14 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   }
 
   /**
-   * {@inheritDoc}
+   * Notifies its listeners that the connector's model changed.
+   * 
+   * @param oldModel
+   *          The old model of the connector
+   * @param newModel
+   *          The new model of the connector
    */
-  @Override
-  public void readabilityChange() {
-    super.writabilityChange();
-    for (String key : getChildConnectorKeys()) {
-      getChildConnector(key).readabilityChange();
-    }
+  protected void fireModelChange(Object oldModel, Object newModel) {
+    modelChangeSupport.fireModelChange(oldModel, newModel);
   }
 }

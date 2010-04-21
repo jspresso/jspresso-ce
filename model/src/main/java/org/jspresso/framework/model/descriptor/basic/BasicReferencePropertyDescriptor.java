@@ -35,11 +35,11 @@ public class BasicReferencePropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
     IReferencePropertyDescriptor<E> {
 
-  private Boolean                 oneToOne;
-  private Map<String, Object>     initializationMapping;
-  private IComponentDescriptor<E> referencedDescriptor;
-  private Integer                 pageSize;
   private EFetchType              fetchType = EFetchType.SELECT;
+  private Map<String, Object>     initializationMapping;
+  private Boolean                 oneToOne;
+  private Integer                 pageSize;
+  private IComponentDescriptor<E> referencedDescriptor;
 
   /**
    * {@inheritDoc}
@@ -56,8 +56,33 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
+  @Override
+  public BasicReferencePropertyDescriptor<E> createQueryDescriptor() {
+    BasicReferencePropertyDescriptor<E> queryDescriptor = (BasicReferencePropertyDescriptor<E>) super
+        .createQueryDescriptor();
+    IComponentDescriptor<E> realReferencedDescriptor = queryDescriptor
+        .getReferencedDescriptor();
+    IComponentDescriptor<E> queryReferencedDescriptor = realReferencedDescriptor
+        .createQueryDescriptor();
+    queryDescriptor.setReferencedDescriptor(queryReferencedDescriptor);
+    return queryDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IComponentDescriptor<E> getComponentDescriptor() {
     return getReferencedDescriptor();
+  }
+
+  /**
+   * Gets the fetchType.
+   * 
+   * @return the fetchType.
+   */
+  public EFetchType getFetchType() {
+    return fetchType;
   }
 
   /**
@@ -75,10 +100,38 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
+   * Gets the pageSize.
+   * 
+   * @return the pageSize.
+   */
+  public Integer getPageSize() {
+    if (pageSize == null) {
+      return getComponentDescriptor().getPageSize();
+    }
+    return pageSize;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public IComponentDescriptor<E> getReferencedDescriptor() {
     return referencedDescriptor;
+  }
+
+  /**
+   * Gets the oneToOne.
+   * 
+   * @return the oneToOne.
+   */
+  public boolean isOneToOne() {
+    if (getReverseRelationEnd() != null) {
+      // priory ty is given to the reverse relation end.
+      return getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>;
+    }
+    if (oneToOne != null) {
+      return oneToOne.booleanValue();
+    }
+    return false;
   }
 
   /**
@@ -87,6 +140,22 @@ public class BasicReferencePropertyDescriptor<E> extends
   @Override
   public boolean isQueryable() {
     return getDelegateClassName() == null;
+  }
+
+  /**
+   * This property allows to finely tune fetching strategy of the ORM on this relationship end. This is either a value of the
+   * <code>EFetchType</code> enum or its equivalent string representation :
+   * <ul>
+   * <li><code>SELECT</code> for default 2nd select strategy (lazy)</li>
+   * <li><code>JOIN</code> for a join select strategy (not lazy)</li>
+   * </ul>
+   * <p>
+   * Default value is <code>EFetchType.JOIN</code>, i.e. 2nd select strategy.
+   * 
+   * @param fetchType the fetchType to set.
+   */
+  public void setFetchType(EFetchType fetchType) {
+    this.fetchType = fetchType;
   }
 
   /**
@@ -116,59 +185,6 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * Qualifies the type of element this property refers to. It may point to any
-   * type of component descriptor, i.e. entity, interface or component
-   * descriptor.
-   * 
-   * @param referencedDescriptor
-   *          the referencedDescriptor to set.
-   */
-  public void setReferencedDescriptor(
-      IComponentDescriptor<E> referencedDescriptor) {
-    this.referencedDescriptor = referencedDescriptor;
-  }
-
-  /**
-   * return false.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean getDefaultComposition() {
-    // if (getReverseRelationEnd() == null
-    // || getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>) {
-    // return true;
-    // }
-    return false;
-  }
-
-  /**
-   * Gets the pageSize.
-   * 
-   * @return the pageSize.
-   */
-  public Integer getPageSize() {
-    if (pageSize == null) {
-      return getComponentDescriptor().getPageSize();
-    }
-    return pageSize;
-  }
-
-  /**
-   * This property allows for defining the page size of &quot;lists of
-   * values&quot; that are built by the UI for this reference property. Whenever
-   * the <code>pageSize</code> property is set to <code>null</code> on the
-   * reference property level, Jspresso falls back to the element type default
-   * page size or turns off paging if the former is also not set.
-   * 
-   * @param pageSize
-   *          the pageSize to set.
-   */
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
-
-  /**
    * Forces the reference property to be considered as a one to one
    * (&quot;1-1&quot;) end. When a relationship is bi-directional, setting both
    * ends as being reference properties turns <code>oneToOne=true</code>
@@ -186,61 +202,45 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
-   * Gets the oneToOne.
+   * This property allows for defining the page size of &quot;lists of
+   * values&quot; that are built by the UI for this reference property. Whenever
+   * the <code>pageSize</code> property is set to <code>null</code> on the
+   * reference property level, Jspresso falls back to the element type default
+   * page size or turns off paging if the former is also not set.
    * 
-   * @return the oneToOne.
+   * @param pageSize
+   *          the pageSize to set.
    */
-  public boolean isOneToOne() {
-    if (getReverseRelationEnd() != null) {
-      // priory ty is given to the reverse relation end.
-      return getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>;
-    }
-    if (oneToOne != null) {
-      return oneToOne.booleanValue();
-    }
-    return false;
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
   }
 
+  
   /**
+   * Qualifies the type of element this property refers to. It may point to any
+   * type of component descriptor, i.e. entity, interface or component
+   * descriptor.
+   * 
+   * @param referencedDescriptor
+   *          the referencedDescriptor to set.
+   */
+  public void setReferencedDescriptor(
+      IComponentDescriptor<E> referencedDescriptor) {
+    this.referencedDescriptor = referencedDescriptor;
+  }
+
+  
+  /**
+   * return false.
+   * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
-  public BasicReferencePropertyDescriptor<E> createQueryDescriptor() {
-    BasicReferencePropertyDescriptor<E> queryDescriptor = (BasicReferencePropertyDescriptor<E>) super
-        .createQueryDescriptor();
-    IComponentDescriptor<E> realReferencedDescriptor = queryDescriptor
-        .getReferencedDescriptor();
-    IComponentDescriptor<E> queryReferencedDescriptor = realReferencedDescriptor
-        .createQueryDescriptor();
-    queryDescriptor.setReferencedDescriptor(queryReferencedDescriptor);
-    return queryDescriptor;
-  }
-
-  
-  /**
-   * Gets the fetchType.
-   * 
-   * @return the fetchType.
-   */
-  public EFetchType getFetchType() {
-    return fetchType;
-  }
-
-  
-  /**
-   * This property allows to finely tune fetching strategy of the ORM on this relationship end. This is either a value of the
-   * <code>EFetchType</code> enum or its equivalent string representation :
-   * <ul>
-   * <li><code>SELECT</code> for default 2nd select strategy (lazy)</li>
-   * <li><code>JOIN</code> for a join select strategy (not lazy)</li>
-   * </ul>
-   * <p>
-   * Default value is <code>EFetchType.JOIN</code>, i.e. 2nd select strategy.
-   * 
-   * @param fetchType the fetchType to set.
-   */
-  public void setFetchType(EFetchType fetchType) {
-    this.fetchType = fetchType;
+  protected boolean getDefaultComposition() {
+    // if (getReverseRelationEnd() == null
+    // || getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>) {
+    // return true;
+    // }
+    return false;
   }
 }

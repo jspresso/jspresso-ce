@@ -49,6 +49,16 @@ public class HttpRequestHolder implements Filter {
   }
 
   /**
+   * Assigns the servlet request for this current thread.
+   * 
+   * @param request
+   *          the servlet request.
+   */
+  public static void setServletRequest(HttpServletRequest request) {
+    CURRENT_HTTP_REQUEST.set(request);
+  }
+
+  /**
    * {@inheritDoc}
    */
   public void destroy() {
@@ -65,16 +75,6 @@ public class HttpRequestHolder implements Filter {
     }
     chain.doFilter(request, response);
     setServletRequest(null);
-  }
-
-  /**
-   * Assigns the servlet request for this current thread.
-   * 
-   * @param request
-   *          the servlet request.
-   */
-  public static void setServletRequest(HttpServletRequest request) {
-    CURRENT_HTTP_REQUEST.set(request);
   }
 
   /**

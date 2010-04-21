@@ -69,8 +69,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private String                acceleratorAsString;
   private Collection<IGate>     actionabilityGates;
   private DefaultIconDescriptor actionDescriptor;
-  private String                mnemonicAsString;
   private boolean               collectionBased;
+  private String                mnemonicAsString;
 
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
@@ -190,6 +190,15 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
+   * Gets the collectionBased.
+   * 
+   * @return the collectionBased.
+   */
+  public boolean isCollectionBased() {
+    return collectionBased;
+  }
+
+  /**
    * Configures a keyboard accelerator shortcut on this action. Support of this
    * feature depends on the UI execution platform. The syntax used consists of
    * listing keys that should be pressed to trigger the action, i.e.
@@ -227,6 +236,25 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public void setActionabilityGates(Collection<IGate> actionabilityGates) {
     this.actionabilityGates = actionabilityGates;
+    completeActionabilityGates();
+  }
+
+  /**
+   * Declares the action as working on a collection of objects. Collection based
+   * actions will typically be installed on selectable views (table, list, tree)
+   * and will be enabled only when the view selection is not empty (a default
+   * gate is installed for this purpose). Moreover, model gates that are
+   * configured on collection based actions take their model from the view
+   * selected components instead of the view model itself. In case of
+   * multi-selection enabled UI views, the actionability gates will actually
+   * open if and only if their opening condition is met for all the selected
+   * items.
+   * 
+   * @param collectionBased
+   *          the collectionBased to set.
+   */
+  public void setCollectionBased(boolean collectionBased) {
+    this.collectionBased = collectionBased;
     completeActionabilityGates();
   }
 
@@ -282,6 +310,16 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public void setName(String name) {
     actionDescriptor.setName(name);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("name", getName()).append(
+        "description", getDescription()).append("iconImageURL",
+        getIconImageURL()).toString();
   }
 
   /**
@@ -359,26 +397,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
-   * This is a utility method which is able to retrieve the view connector this
-   * action has been executed on from its context. It uses well-known context
-   * keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the view
-   * value connector the action executes on.
-   * </ul>
-   * <p>
-   * The returned connector mainly serves for acting on the view component the
-   * action has to be triggered on.
-   * 
-   * @param context
-   *          the action context.
-   * @return the value connector this action was triggered on.
-   */
-  protected IValueConnector getViewConnector(Map<String, Object> context) {
-    return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
-  }
-
-  /**
    * This is a utility method which is able to retrieve the view this action has
    * been executed on from its context. It uses well-known context keys of the
    * action context which are:
@@ -399,6 +417,26 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   }
 
   /**
+   * This is a utility method which is able to retrieve the view connector this
+   * action has been executed on from its context. It uses well-known context
+   * keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the view
+   * value connector the action executes on.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
+   * 
+   * @param context
+   *          the action context.
+   * @return the value connector this action was triggered on.
+   */
+  protected IValueConnector getViewConnector(Map<String, Object> context) {
+    return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
+  }
+
+  /**
    * Gets the viewFactory.
    * 
    * @param context
@@ -407,25 +445,6 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
-  }
-
-  /**
-   * Declares the action as working on a collection of objects. Collection based
-   * actions will typically be installed on selectable views (table, list, tree)
-   * and will be enabled only when the view selection is not empty (a default
-   * gate is installed for this purpose). Moreover, model gates that are
-   * configured on collection based actions take their model from the view
-   * selected components instead of the view model itself. In case of
-   * multi-selection enabled UI views, the actionability gates will actually
-   * open if and only if their opening condition is met for all the selected
-   * items.
-   * 
-   * @param collectionBased
-   *          the collectionBased to set.
-   */
-  public void setCollectionBased(boolean collectionBased) {
-    this.collectionBased = collectionBased;
-    completeActionabilityGates();
   }
 
   private void completeActionabilityGates() {
@@ -439,24 +458,5 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
       actionabilityGates.remove(CollectionSelectionTrackingGate.INSTANCE);
       actionabilityGates.add(ModelTrackingGate.INSTANCE);
     }
-  }
-
-  /**
-   * Gets the collectionBased.
-   * 
-   * @return the collectionBased.
-   */
-  public boolean isCollectionBased() {
-    return collectionBased;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    return new ToStringBuilder(this).append("name", getName()).append(
-        "description", getDescription()).append("iconImageURL",
-        getIconImageURL()).toString();
   }
 }

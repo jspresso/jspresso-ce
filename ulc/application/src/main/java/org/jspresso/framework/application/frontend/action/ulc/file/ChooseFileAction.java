@@ -95,6 +95,15 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
   }
 
   /**
+   * Gets the defaultFileName.
+   * 
+   * @return the defaultFileName.
+   */
+  protected String getDefaultFileName() {
+    return defaultFileName;
+  }
+
+  /**
    * Gets the fileFilter.
    * 
    * @param context
@@ -103,15 +112,6 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
    */
   protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
     return fileFilter;
-  }
-
-  /**
-   * Gets the defaultFileName.
-   * 
-   * @return the defaultFileName.
-   */
-  protected String getDefaultFileName() {
-    return defaultFileName;
   }
 
   /**

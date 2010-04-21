@@ -96,6 +96,15 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
   }
 
   /**
+   * Gets the defaultFileName.
+   * 
+   * @return the defaultFileName.
+   */
+  protected String getDefaultFileName() {
+    return defaultFileName;
+  }
+
+  /**
    * Gets the fileFilter.
    * 
    * @param context
@@ -104,6 +113,18 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
    */
   protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
     return fileFilter;
+  }
+
+  /**
+   * Computes a file name to save the file. Defaults to the action default file
+   * name parameterized in the action.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file name to save the file under.
+   */
+  protected String getFileName(Map<String, Object> context) {
+    return getDefaultFileName();
   }
 
   private static class FileFilterAdapter extends FileFilter {
@@ -148,26 +169,5 @@ public abstract class ChooseFileAction extends AbstractSwingAction {
       return description;
     }
 
-  }
-
-  /**
-   * Gets the defaultFileName.
-   * 
-   * @return the defaultFileName.
-   */
-  protected String getDefaultFileName() {
-    return defaultFileName;
-  }
-
-  /**
-   * Computes a file name to save the file. Defaults to the action default file
-   * name parameterized in the action.
-   * 
-   * @param context
-   *          the action context.
-   * @return the file name to save the file under.
-   */
-  protected String getFileName(Map<String, Object> context) {
-    return getDefaultFileName();
   }
 }

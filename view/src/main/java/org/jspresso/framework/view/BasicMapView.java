@@ -50,26 +50,6 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
-  public IView<E> getChild(String key) {
-    if (childrenMap == null) {
-      return null;
-    }
-    return childrenMap.get(key);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Map<String, IView<E>> getChildrenMap() {
-    if (childrenMap == null) {
-      childrenMap = new HashMap<String, IView<E>>();
-    }
-    return childrenMap;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void addToChildrenMap(String key, IView<E> childView) {
     if (childView != null) {
       childView.setParent(this);
@@ -80,11 +60,31 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
+  public IView<E> getChild(String key) {
+    if (childrenMap == null) {
+      return null;
+    }
+    return childrenMap.get(key);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public List<IView<E>> getChildren() {
     if (childrenMap != null) {
       return new ArrayList<IView<E>>(childrenMap.values());
     }
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, IView<E>> getChildrenMap() {
+    if (childrenMap == null) {
+      childrenMap = new HashMap<String, IView<E>>();
+    }
+    return childrenMap;
   }
 
   /**

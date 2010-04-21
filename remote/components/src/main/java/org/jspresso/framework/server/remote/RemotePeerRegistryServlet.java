@@ -41,13 +41,6 @@ import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
  */
 public class RemotePeerRegistryServlet extends HttpServlet {
 
-  private static final long   serialVersionUID             = -2706982900134792757L;
-
-  /**
-   * the url pattern to activate a resource download.
-   */
-  private static final String REGISTRY_SERVLET_URL_PATTERN = "/registry";
-
   /**
    * id.
    */
@@ -57,6 +50,13 @@ public class RemotePeerRegistryServlet extends HttpServlet {
    * PeerRegistry.
    */
   private static final String PEER_REGISTRY                = "PeerRegistry";
+
+  /**
+   * the url pattern to activate a resource download.
+   */
+  private static final String REGISTRY_SERVLET_URL_PATTERN = "/registry";
+
+  private static final long   serialVersionUID             = -2706982900134792757L;
 
   /**
    * Computes the url where the resource is available for download.

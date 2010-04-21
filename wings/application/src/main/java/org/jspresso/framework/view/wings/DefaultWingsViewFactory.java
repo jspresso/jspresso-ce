@@ -181,10 +181,10 @@ import org.wingx.XCalendar;
 public class DefaultWingsViewFactory extends
     AbstractViewFactory<SComponent, SIcon, Action> {
 
-  private IListSelectionModelBinder listSelectionModelBinder;
-  private ITreeSelectionModelBinder treeSelectionModelBinder;
   private static final SFont        DEFAULT_FONT = new SFont(null, SFont.PLAIN,
                                                      SFont.DEFAULT_SIZE);
+  private IListSelectionModelBinder listSelectionModelBinder;
+  private ITreeSelectionModelBinder treeSelectionModelBinder;
 
   /**
    * Sets the listSelectionModelBinder.
@@ -212,6 +212,16 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void addCard(IMapView<SComponent> cardView, IView<SComponent> card,
+      String cardName) {
+    ((SContainer) cardView.getPeer()).add(card.getPeer(), cardName);
+    cardView.addToChildrenMap(cardName, card);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected void adjustSizes(IViewDescriptor viewDescriptor,
       SComponent component, IFormatter formatter, Object templateValue,
       int extraWidth) {
@@ -231,6 +241,27 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected void applyPreferredSize(SComponent component,
+      org.jspresso.framework.util.gui.Dimension preferredSize) {
+    if (preferredSize != null) {
+      Integer pW = null;
+      Integer pH = null;
+
+      if (preferredSize.getWidth() > 0) {
+        pW = new Integer(preferredSize.getWidth());
+      }
+      if (preferredSize.getHeight() > 0) {
+        pH = new Integer(preferredSize.getHeight());
+      }
+
+      component.setPreferredSize(new SDimension(pW, pH));
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected int computePixelWidth(SComponent component, int characterLength) {
     int charLength = getMaxCharacterLength() + 2;
     if (characterLength > 0 && characterLength < getMaxCharacterLength()) {
@@ -244,6 +275,35 @@ public class DefaultWingsViewFactory extends
       fontSize = component.getFont().getSize();
     }
     return (int) ((fontSize * charLength) / 4.0);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<SComponent> createActionView(
+      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    SButton viewComponent = createSButton();
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        ModelRefPropertyConnector.THIS_PROPERTY);
+    connector.setExceptionHandler(actionHandler);
+    IView<SComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    viewComponent.setAction(getActionFactory().createAction(
+        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
+        actionHandler, view, locale));
+    switch (viewDescriptor.getRenderingOptions()) {
+      case ICON:
+        viewComponent.setText(null);
+        break;
+      case LABEL:
+        viewComponent.setIcon(null);
+        break;
+      default:
+        break;
+    }
+    return view;
   }
 
   /**
@@ -354,16 +414,6 @@ public class DefaultWingsViewFactory extends
     viewComponent.setPreferredSize(SDimension.FULLAREA);
     view.setConnector(createCardViewConnector(view, actionHandler, locale));
     return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void addCard(IMapView<SComponent> cardView, IView<SComponent> card,
-      String cardName) {
-    ((SContainer) cardView.getPeer()).add(card.getPeer(), cardName);
-    cardView.addToChildrenMap(cardName, card);
   }
 
   /**
@@ -763,6 +813,33 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected IView<SComponent> createHtmlPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    if (propertyViewDescriptor.isReadOnly()) {
+      IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
+          .getModelDescriptor();
+      IValueConnector connector;
+      SLabel viewComponent = createSLabel(true);
+      viewComponent.setVerticalAlignment(SConstants.TOP);
+      viewComponent.setHorizontalAlignment(SConstants.LEFT);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          viewComponent);
+      ((SLabelConnector) connector).setForceHtml(true);
+      SScrollPane scrollPane = createSScrollPane();
+      scrollPane.setViewportView(viewComponent);
+      connector.setExceptionHandler(actionHandler);
+      IView<SComponent> view = constructView(scrollPane,
+          propertyViewDescriptor, connector);
+      return view;
+    }
+    return createTextPropertyView(propertyViewDescriptor, actionHandler, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<SComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
       @SuppressWarnings("unused") Locale locale) {
@@ -783,35 +860,6 @@ public class DefaultWingsViewFactory extends
     } else {
       imageLabel.setHorizontalAlignment(SConstants.CENTER);
       imageLabel.setVerticalAlignment(SConstants.CENTER);
-    }
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<SComponent> createActionView(
-      IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    SButton viewComponent = createSButton();
-    IValueConnector connector = getConnectorFactory().createValueConnector(
-        ModelRefPropertyConnector.THIS_PROPERTY);
-    connector.setExceptionHandler(actionHandler);
-    IView<SComponent> view = constructView(viewComponent, viewDescriptor,
-        connector);
-    viewComponent.setAction(getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
-        actionHandler, view, locale));
-    switch (viewDescriptor.getRenderingOptions()) {
-      case ICON:
-        viewComponent.setText(null);
-        break;
-      case LABEL:
-        viewComponent.setIcon(null);
-        break;
-      default:
-        break;
     }
     return view;
   }
@@ -949,6 +997,45 @@ public class DefaultWingsViewFactory extends
     }
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
+  }
+
+  /**
+   * Creates a property label.
+   * 
+   * @param propertyViewDescriptor
+   *          the property view descriptor.
+   * @param propertyComponent
+   *          the property component.
+   * @param locale
+   *          the locale.
+   * @return the created property label.
+   */
+  protected SLabel createPropertyLabel(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      SComponent propertyComponent, Locale locale) {
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
+        .getModelDescriptor();
+    SLabel propertyLabel = createSLabel(false);
+    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
+        .getI18nName(getTranslationProvider(), locale));
+    if (propertyDescriptor.isMandatory()) {
+      labelText.append("*");
+      propertyLabel.setForeground(Color.RED);
+    }
+    propertyLabel.setText(labelText.toString());
+    if (propertyViewDescriptor.getLabelFont() != null) {
+      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
+          propertyLabel.getFont()));
+    }
+    if (propertyViewDescriptor.getLabelForeground() != null) {
+      propertyLabel.setForeground(createColor(propertyViewDescriptor
+          .getLabelForeground()));
+    }
+    if (propertyViewDescriptor.getLabelBackground() != null) {
+      propertyLabel.setBackground(createColor(propertyViewDescriptor
+          .getLabelBackground()));
+    }
+    return propertyLabel;
   }
 
   /**
@@ -1660,33 +1747,6 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<SComponent> createHtmlPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    if (propertyViewDescriptor.isReadOnly()) {
-      IHtmlPropertyDescriptor propertyDescriptor = (IHtmlPropertyDescriptor) propertyViewDescriptor
-          .getModelDescriptor();
-      IValueConnector connector;
-      SLabel viewComponent = createSLabel(true);
-      viewComponent.setVerticalAlignment(SConstants.TOP);
-      viewComponent.setHorizontalAlignment(SConstants.LEFT);
-      connector = new SLabelConnector(propertyDescriptor.getName(),
-          viewComponent);
-      ((SLabelConnector) connector).setForceHtml(true);
-      SScrollPane scrollPane = createSScrollPane();
-      scrollPane.setViewportView(viewComponent);
-      connector.setExceptionHandler(actionHandler);
-      IView<SComponent> view = constructView(scrollPane,
-          propertyViewDescriptor, connector);
-      return view;
-    }
-    return createTextPropertyView(propertyViewDescriptor, actionHandler, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected IView<SComponent> createTimePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1734,11 +1794,7 @@ public class DefaultWingsViewFactory extends
     if (viewDescriptor.isExpanded()) {
       viewComponent.getModel().addTreeModelListener(new TreeModelListener() {
 
-        public void treeStructureChanged(TreeModelEvent e) {
-          expandAll(viewComponent, e.getTreePath());
-        }
-
-        public void treeNodesRemoved(
+        public void treeNodesChanged(
             @SuppressWarnings("unused") TreeModelEvent e) {
           // NO-OP.
         }
@@ -1747,9 +1803,13 @@ public class DefaultWingsViewFactory extends
           expandAll(viewComponent, e.getTreePath());
         }
 
-        public void treeNodesChanged(
+        public void treeNodesRemoved(
             @SuppressWarnings("unused") TreeModelEvent e) {
           // NO-OP.
+        }
+
+        public void treeStructureChanged(TreeModelEvent e) {
+          expandAll(viewComponent, e.getTreePath());
         }
       });
     }
@@ -1761,20 +1821,6 @@ public class DefaultWingsViewFactory extends
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;
-  }
-
-  private void expandAll(final STree tree, final TreePath tp) {
-    if (tp == null) {
-      return;
-    }
-    Object node = tp.getLastPathComponent();
-    TreeModel model = tree.getModel();
-    if (!model.isLeaf(node)) {
-      tree.expandPath(tp);
-      for (int i = 0; i < model.getChildCount(node); i++) {
-        expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
-      }
-    }
   }
 
   /**
@@ -1952,12 +1998,6 @@ public class DefaultWingsViewFactory extends
         propertyDescriptor, locale));
   }
 
-  private STableCellRenderer createEnumerationTableCellRenderer(
-      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
-        locale);
-  }
-
   // private ICompositeView<SComponent> createSplitView(
   // ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
   // Locale locale) {
@@ -1992,6 +2032,12 @@ public class DefaultWingsViewFactory extends
   // view.setChildren(childrenViews);
   // return view;
   // }
+
+  private STableCellRenderer createEnumerationTableCellRenderer(
+      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
+        locale);
+  }
 
   private SFont createFont(String fontString, SFont defaultFont) {
     SFont actualDefaultFont;
@@ -2072,45 +2118,6 @@ public class DefaultWingsViewFactory extends
         propertyDescriptor, locale));
   }
 
-  /**
-   * Creates a property label.
-   * 
-   * @param propertyViewDescriptor
-   *          the property view descriptor.
-   * @param propertyComponent
-   *          the property component.
-   * @param locale
-   *          the locale.
-   * @return the created property label.
-   */
-  protected SLabel createPropertyLabel(
-      IPropertyViewDescriptor propertyViewDescriptor,
-      SComponent propertyComponent, Locale locale) {
-    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
-        .getModelDescriptor();
-    SLabel propertyLabel = createSLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
-        .getI18nName(getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
-      labelText.append("*");
-      propertyLabel.setForeground(Color.RED);
-    }
-    propertyLabel.setText(labelText.toString());
-    if (propertyViewDescriptor.getLabelFont() != null) {
-      propertyLabel.setFont(createFont(propertyViewDescriptor.getLabelFont(),
-          propertyLabel.getFont()));
-    }
-    if (propertyViewDescriptor.getLabelForeground() != null) {
-      propertyLabel.setForeground(createColor(propertyViewDescriptor
-          .getLabelForeground()));
-    }
-    if (propertyViewDescriptor.getLabelBackground() != null) {
-      propertyLabel.setBackground(createColor(propertyViewDescriptor
-          .getLabelBackground()));
-    }
-    return propertyLabel;
-  }
-
   private STableCellRenderer createReferenceTableCellRenderer(
       @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused") Locale locale) {
@@ -2187,6 +2194,20 @@ public class DefaultWingsViewFactory extends
     titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(0, 0,
         2, 2)));
     view.setPeer(titledPanel);
+  }
+
+  private void expandAll(final STree tree, final TreePath tp) {
+    if (tp == null) {
+      return;
+    }
+    Object node = tp.getLastPathComponent();
+    TreeModel model = tree.getModel();
+    if (!model.isLeaf(node)) {
+      tree.expandPath(tp);
+      for (int i = 0; i < model.getChildCount(node); i++) {
+        expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
+      }
+    }
   }
 
   private void fillLastRow(SPanel viewComponent) {
@@ -2416,27 +2437,6 @@ public class DefaultWingsViewFactory extends
         }
       }
       return renderer;
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void applyPreferredSize(SComponent component,
-      org.jspresso.framework.util.gui.Dimension preferredSize) {
-    if (preferredSize != null) {
-      Integer pW = null;
-      Integer pH = null;
-
-      if (preferredSize.getWidth() > 0) {
-        pW = new Integer(preferredSize.getWidth());
-      }
-      if (preferredSize.getHeight() > 0) {
-        pH = new Integer(preferredSize.getHeight());
-      }
-
-      component.setPreferredSize(new SDimension(pW, pH));
     }
   }
 }

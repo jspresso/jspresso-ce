@@ -37,6 +37,15 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
   IIconImageURLProvider getIconImageURLProvider();
 
   /**
+   * Gets the item selection action that will be attached to the created tree
+   * view.
+   * 
+   * @return the item selection action that will be attached to the created tree
+   *         view.
+   */
+  IAction getItemSelectionAction();
+
+  /**
    * It gets the maximum depth of the tree structure whichis mandatory in case
    * of a recursive one.
    * 
@@ -50,15 +59,6 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
    * @return the root tree level descriptor of this tree view.
    */
   ITreeLevelDescriptor getRootSubtreeDescriptor();
-
-  /**
-   * Gets the item selection action that will be attached to the created tree
-   * view.
-   * 
-   * @return the item selection action that will be attached to the created tree
-   *         view.
-   */
-  IAction getItemSelectionAction();
 
   /**
    * Gets the row action that will be attached to the created tree view.

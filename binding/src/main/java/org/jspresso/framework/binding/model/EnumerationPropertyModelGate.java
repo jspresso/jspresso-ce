@@ -33,15 +33,6 @@ public class EnumerationPropertyModelGate extends
   private Collection<String> openingValues;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean shouldOpen(String propertyValue) {
-    return propertyValue != null && openingValues != null
-        && openingValues.contains(propertyValue);
-  }
-
-  /**
    * Configures the enumeration values for which the gate is to be open, unless
    * the <code>openOnTrue</code> property is set to <code>false</code>.
    * 
@@ -50,5 +41,14 @@ public class EnumerationPropertyModelGate extends
    */
   public void setOpeningValues(Collection<String> openingValues) {
     this.openingValues = openingValues;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean shouldOpen(String propertyValue) {
+    return propertyValue != null && openingValues != null
+        && openingValues.contains(propertyValue);
   }
 }

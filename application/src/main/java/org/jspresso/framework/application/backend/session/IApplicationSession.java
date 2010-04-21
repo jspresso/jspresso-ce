@@ -34,6 +34,15 @@ import org.jspresso.framework.security.UserPrincipal;
 public interface IApplicationSession {
 
   /**
+   * Gets a custom value from the session.
+   * 
+   * @param key
+   *          the key used to lookup the custom value.
+   * @return the value previously stored into the session or null if none.
+   */
+  Object getCustomValue(String key);
+
+  /**
    * Gets the session locale.
    * 
    * @return the session locale.
@@ -55,6 +64,16 @@ public interface IApplicationSession {
   Subject getSubject();
 
   /**
+   * Puts a custom value into the session.
+   * 
+   * @param key
+   *          the key under which to store the custom property.
+   * @param value
+   *          the value to store into the session.
+   */
+  void putCustomValue(String key, Object value);
+
+  /**
    * Sets the session locale.
    * 
    * @param locale
@@ -69,23 +88,4 @@ public interface IApplicationSession {
    *          the session owner.
    */
   void setSubject(Subject sessionOwner);
-
-  /**
-   * Puts a custom value into the session.
-   * 
-   * @param key
-   *          the key under which to store the custom property.
-   * @param value
-   *          the value to store into the session.
-   */
-  void putCustomValue(String key, Object value);
-
-  /**
-   * Gets a custom value from the session.
-   * 
-   * @param key
-   *          the key used to lookup the custom value.
-   * @return the value previously stored into the session or null if none.
-   */
-  Object getCustomValue(String key);
 }

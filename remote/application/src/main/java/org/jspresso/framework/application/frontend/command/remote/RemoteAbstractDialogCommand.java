@@ -32,9 +32,9 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
   private static final long serialVersionUID = -5918787333137992725L;
 
   private RAction[]         actions;
+  private Dimension         dimension;
   private String            title;
   private boolean           useCurrent;
-  private Dimension         dimension;
 
   /**
    * Gets the actions.
@@ -43,6 +43,15 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
    */
   public RAction[] getActions() {
     return actions;
+  }
+
+  /**
+   * Gets the dimension.
+   * 
+   * @return the dimension.
+   */
+  public Dimension getDimension() {
+    return dimension;
   }
 
   /**
@@ -74,6 +83,16 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
   }
 
   /**
+   * Sets the dimension.
+   * 
+   * @param dimension
+   *          the dimension to set.
+   */
+  public void setDimension(Dimension dimension) {
+    this.dimension = dimension;
+  }
+
+  /**
    * Sets the title.
    * 
    * @param title
@@ -91,24 +110,5 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
    */
   public void setUseCurrent(boolean useCurrent) {
     this.useCurrent = useCurrent;
-  }
-
-  /**
-   * Gets the dimension.
-   * 
-   * @return the dimension.
-   */
-  public Dimension getDimension() {
-    return dimension;
-  }
-
-  /**
-   * Sets the dimension.
-   * 
-   * @param dimension
-   *          the dimension to set.
-   */
-  public void setDimension(Dimension dimension) {
-    this.dimension = dimension;
   }
 }

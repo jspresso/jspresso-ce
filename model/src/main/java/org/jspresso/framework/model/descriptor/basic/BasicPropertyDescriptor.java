@@ -53,28 +53,28 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   private BeanFactory                    beanFactory;
 
+  private boolean                        computed;
   private Class<?>                       delegateClass;
+
   private String                         delegateClassName;
-
   private Boolean                        delegateWritable;
-  private Collection<String>             grantedRoles;
 
-  private List<String>                   integrityProcessorClassNames;
+  private Collection<String>             grantedRoles;
   private List<String>                   integrityProcessorBeanNames;
 
+  private List<String>                   integrityProcessorClassNames;
   private List<IPropertyProcessor<?, ?>> integrityProcessors;
   private Boolean                        mandatory;
+  private Integer                        preferredWidth;
   private Collection<IGate>              readabilityGates;
+
   private Boolean                        readOnly;
-  private String                         unicityScope;
-
-  private Collection<IGate>              writabilityGates;
-  private boolean                        computed;
-
   private String                         sqlName;
+
+  private String                         unicityScope;
   private boolean                        versionControl;
 
-  private Integer                        preferredWidth;
+  private Collection<IGate>              writabilityGates;
 
   /**
    * Constructs a new <code>BasicPropertyDescriptor</code> instance.
@@ -170,12 +170,30 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
+   * Gets the preferredWidth.
+   * 
+   * @return the preferredWidth.
+   */
+  public Integer getPreferredWidth() {
+    return preferredWidth;
+  }
+
+  /**
    * Gets the readabilityGates.
    * 
    * @return the readabilityGates.
    */
   public Collection<IGate> getReadabilityGates() {
     return readabilityGates;
+  }
+
+  /**
+   * Gets the sqlName.
+   * 
+   * @return the sqlName.
+   */
+  public String getSqlName() {
+    return sqlName;
   }
 
   /**
@@ -220,6 +238,18 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
+   * Returns true if a delegate class is registered to compute the property
+   * value. A property can be made <code>computed</code> even if its delegate
+   * class is null by calling <code>setComputed(true)</code>. This way, the
+   * property should be ignored by the ORM.
+   * <p>
+   * {@inheritDoc}
+   */
+  public boolean isComputed() {
+    return getDelegateClassName() != null || computed;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public boolean isMandatory() {
@@ -257,6 +287,15 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
       return readOnly.booleanValue();
     }
     return false;
+  }
+
+  /**
+   * Gets the versionControl.
+   * 
+   * @return the versionControl.
+   */
+  public boolean isVersionControl() {
+    return versionControl;
   }
 
   /**
@@ -305,6 +344,41 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
       ((IPropertyProcessor<Object, Object>) processor).preprocessSetter(
           component, newValue);
     }
+  }
+
+  /**
+   * Sets the beanFactory.
+   * 
+   * @param beanFactory
+   *          the beanFactory to set.
+   * @internal
+   */
+  public void setBeanFactory(BeanFactory beanFactory) {
+    this.beanFactory = beanFactory;
+  }
+
+  /**
+   * Forces a property to be considered as a computed property by the framework.
+   * A computed property will be completely ignored by the persistence layer and
+   * its management is left to the developer.
+   * <p>
+   * Properties declared with a delegate computing class are considered computed
+   * by default so there is no need to explicitely set them
+   * <code>computed=true</code>. However, there is sometimes a need to declare a
+   * property at some level (e.g. in an interface descriptor) and let lower
+   * level implementation decide how to handle this common property concretely
+   * (either computing it or handling it as a real persistent property). In that
+   * case, you can declare this property <code>computed=true</code> in the super
+   * type and refine the actual implementation (computed or not) in the
+   * sub-types.
+   * <p>
+   * Default value is <code>false</code>.
+   * 
+   * @param computed
+   *          the computed to set.
+   */
+  public void setComputed(boolean computed) {
+    this.computed = computed;
   }
 
   /**
@@ -373,153 +447,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
-   * Much the same as <code>integrityProcessorBeanNames</code> except that
-   * instead of providing a list of Spring bean names, you provide a list of
-   * fully qualified class names. These classes must :
-   * <ul>
-   * <li>provide a default constructor</li>
-   * <li>implement the <code>ILifecycleInterceptor&lt;E&gt;</code> interface.</li>
-   * </ul>
-   * When needed, Jspresso will create lifecycle interceptor instances.
-   * 
-   * @param integrityProcessorClassNames
-   *          the integrityProcessorClassNames to set.
-   */
-  public void setIntegrityProcessorClassNames(
-      List<String> integrityProcessorClassNames) {
-    this.integrityProcessorClassNames = StringUtils
-        .ensureSpaceFree(integrityProcessorClassNames);
-  }
-
-  /**
-   * Declare a property as mandatory. This will enforce mandatory checks when
-   * the owning component is persisted as well as when the property is updated
-   * individually. Moreover, this information allows the views bound to the
-   * property to be configured accordingly, e.g. display the property with a
-   * slightly modified label indicating it is mandatory. This constraint is also
-   * enforced programmatically.
-   * <p>
-   * Default value is false.
-   * 
-   * @param mandatory
-   *          the mandatory to set.
-   */
-  public void setMandatory(boolean mandatory) {
-    this.mandatory = new Boolean(mandatory);
-  }
-
-  /**
-   * Sets the readabilityGates.
-   * 
-   * @param readabilityGates
-   *          the readabilityGates to set.
-   * @internal
-   */
-  public void setReadabilityGates(Collection<IGate> readabilityGates) {
-    this.readabilityGates = readabilityGates;
-  }
-
-  /**
-   * Enforces a property to be read-only. This is only enforced at the UI level,
-   * i.e. the property can still be updated programmatically. The UI may take
-   * decisions like changing textfields into labels if it knows the underlying
-   * property is read-only.
-   * 
-   * @param readOnly
-   *          the readOnly to set.
-   */
-  public void setReadOnly(boolean readOnly) {
-    this.readOnly = new Boolean(readOnly);
-  }
-
-  /**
-   * Makes this property part of a unicity scope. All tuples of properties
-   * belonging to the same unicity scope are enforced to be unique in the
-   * component type scope. This concretely translates to unique constraints in
-   * the datastore spanning the properties composing the unicity scope.
-   * <p>
-   * Note that, for performance reasons, unicity scopes are only enforced by the
-   * persistence layer.
-   * 
-   * @param unicityScope
-   *          the unicityScope to set.
-   */
-  public void setUnicityScope(String unicityScope) {
-    this.unicityScope = unicityScope;
-  }
-
-  /**
-   * Assigns a collection of gates to determine property <i>writability</i>. A
-   * property will be considered writable if and only if all gates are open.
-   * This mecanism is mainly used for dynamic UI authorization based on model
-   * state, e.g. a validated invoice should not be editable anymore.
-   * <p>
-   * Descriptor assigned gates will be cloned for each property instance created
-   * and backed by this descriptor. So basically, each property instance will
-   * have its own, unshared collection of writability gates.
-   * <p>
-   * Jspresso provides a useful set of gate types, like the binary property gate
-   * that open/close based on the value of a boolean property of owning
-   * component.
-   * <p>
-   * By default, property descriptors are not assigned any gates collection,
-   * i.e. there is no writability restriction. Note that gates do not enforce
-   * programatic writability of a property; only UI is impacted.
-   * 
-   * @param writabilityGates
-   *          the writabilityGates to set.
-   */
-  public void setWritabilityGates(Collection<IGate> writabilityGates) {
-    this.writabilityGates = writabilityGates;
-  }
-
-  private synchronized void registerIntegrityProcessorsIfNecessary() {
-    if (integrityProcessorClassNames != null) {
-      // process creation of integrity processors.
-      for (String integrityProcessorClassName : integrityProcessorClassNames) {
-        try {
-          registerIntegrityProcessor((IPropertyProcessor<?, ?>) Class.forName(
-              integrityProcessorClassName).newInstance());
-        } catch (InstantiationException ex) {
-          throw new DescriptorException(ex);
-        } catch (IllegalAccessException ex) {
-          throw new DescriptorException(ex);
-        } catch (ClassNotFoundException ex) {
-          throw new DescriptorException(ex);
-        }
-      }
-      integrityProcessorClassNames = null;
-    }
-    if (integrityProcessorBeanNames != null && beanFactory != null) {
-      // process creation of integrity processors.
-      for (String integrityProcessorBeanName : integrityProcessorBeanNames) {
-        registerIntegrityProcessor((IPropertyProcessor<?, ?>) beanFactory
-            .getBean(integrityProcessorBeanName, IPropertyProcessor.class));
-      }
-      integrityProcessorClassNames = null;
-    }
-  }
-
-  private void registerIntegrityProcessor(
-      IPropertyProcessor<?, ?> integrityProcessor) {
-    if (integrityProcessors == null) {
-      integrityProcessors = new ArrayList<IPropertyProcessor<?, ?>>();
-    }
-    integrityProcessors.add(integrityProcessor);
-  }
-
-  /**
-   * Sets the beanFactory.
-   * 
-   * @param beanFactory
-   *          the beanFactory to set.
-   * @internal
-   */
-  public void setBeanFactory(BeanFactory beanFactory) {
-    this.beanFactory = beanFactory;
-  }
-
-  /**
    * Registers a list of property processor instances that will be triggered on
    * the different phases of the property modification, i.e. :
    * <ul>
@@ -567,39 +494,78 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
-   * Returns true if a delegate class is registered to compute the property
-   * value. A property can be made <code>computed</code> even if its delegate
-   * class is null by calling <code>setComputed(true)</code>. This way, the
-   * property should be ignored by the ORM.
-   * <p>
-   * {@inheritDoc}
+   * Much the same as <code>integrityProcessorBeanNames</code> except that
+   * instead of providing a list of Spring bean names, you provide a list of
+   * fully qualified class names. These classes must :
+   * <ul>
+   * <li>provide a default constructor</li>
+   * <li>implement the <code>ILifecycleInterceptor&lt;E&gt;</code> interface.</li>
+   * </ul>
+   * When needed, Jspresso will create lifecycle interceptor instances.
+   * 
+   * @param integrityProcessorClassNames
+   *          the integrityProcessorClassNames to set.
    */
-  public boolean isComputed() {
-    return getDelegateClassName() != null || computed;
+  public void setIntegrityProcessorClassNames(
+      List<String> integrityProcessorClassNames) {
+    this.integrityProcessorClassNames = StringUtils
+        .ensureSpaceFree(integrityProcessorClassNames);
   }
 
   /**
-   * Forces a property to be considered as a computed property by the framework.
-   * A computed property will be completely ignored by the persistence layer and
-   * its management is left to the developer.
+   * Declare a property as mandatory. This will enforce mandatory checks when
+   * the owning component is persisted as well as when the property is updated
+   * individually. Moreover, this information allows the views bound to the
+   * property to be configured accordingly, e.g. display the property with a
+   * slightly modified label indicating it is mandatory. This constraint is also
+   * enforced programmatically.
    * <p>
-   * Properties declared with a delegate computing class are considered computed
-   * by default so there is no need to explicitely set them
-   * <code>computed=true</code>. However, there is sometimes a need to declare a
-   * property at some level (e.g. in an interface descriptor) and let lower
-   * level implementation decide how to handle this common property concretely
-   * (either computing it or handling it as a real persistent property). In that
-   * case, you can declare this property <code>computed=true</code> in the super
-   * type and refine the actual implementation (computed or not) in the
-   * sub-types.
-   * <p>
-   * Default value is <code>false</code>.
+   * Default value is false.
    * 
-   * @param computed
-   *          the computed to set.
+   * @param mandatory
+   *          the mandatory to set.
    */
-  public void setComputed(boolean computed) {
-    this.computed = computed;
+  public void setMandatory(boolean mandatory) {
+    this.mandatory = new Boolean(mandatory);
+  }
+
+  /**
+   * This property allows for setting an indication of width for representing
+   * this property in a view.
+   * <p>
+   * Default value is <code>null</code>, so that the view factory will make its
+   * decision based on the type and/or other characteristics of the property
+   * (e.g. max length).
+   * 
+   * @param preferredWidth
+   *          the preferredWidth to set.
+   */
+  public void setPreferredWidth(Integer preferredWidth) {
+    this.preferredWidth = preferredWidth;
+  }
+
+  /**
+   * Sets the readabilityGates.
+   * 
+   * @param readabilityGates
+   *          the readabilityGates to set.
+   * @internal
+   */
+  public void setReadabilityGates(Collection<IGate> readabilityGates) {
+    this.readabilityGates = readabilityGates;
+  }
+
+  /**
+   * Enforces a property to be read-only. This is only enforced at the UI level,
+   * i.e. the property can still be updated programmatically. The UI may take
+   * decisions like changing textfields into labels if it knows the underlying
+   * property is read-only.
+   * 
+   * @param readOnly
+   *          the readOnly to set.
+   */
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = new Boolean(readOnly);
   }
 
   /**
@@ -618,21 +584,19 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
-   * Gets the sqlName.
+   * Makes this property part of a unicity scope. All tuples of properties
+   * belonging to the same unicity scope are enforced to be unique in the
+   * component type scope. This concretely translates to unique constraints in
+   * the datastore spanning the properties composing the unicity scope.
+   * <p>
+   * Note that, for performance reasons, unicity scopes are only enforced by the
+   * persistence layer.
    * 
-   * @return the sqlName.
+   * @param unicityScope
+   *          the unicityScope to set.
    */
-  public String getSqlName() {
-    return sqlName;
-  }
-
-  /**
-   * Gets the versionControl.
-   * 
-   * @return the versionControl.
-   */
-  public boolean isVersionControl() {
-    return versionControl;
+  public void setUnicityScope(String unicityScope) {
+    this.unicityScope = unicityScope;
   }
 
   /**
@@ -654,26 +618,62 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
-   * This property allows for setting an indication of width for representing
-   * this property in a view.
+   * Assigns a collection of gates to determine property <i>writability</i>. A
+   * property will be considered writable if and only if all gates are open.
+   * This mecanism is mainly used for dynamic UI authorization based on model
+   * state, e.g. a validated invoice should not be editable anymore.
    * <p>
-   * Default value is <code>null</code>, so that the view factory will make its
-   * decision based on the type and/or other characteristics of the property
-   * (e.g. max length).
+   * Descriptor assigned gates will be cloned for each property instance created
+   * and backed by this descriptor. So basically, each property instance will
+   * have its own, unshared collection of writability gates.
+   * <p>
+   * Jspresso provides a useful set of gate types, like the binary property gate
+   * that open/close based on the value of a boolean property of owning
+   * component.
+   * <p>
+   * By default, property descriptors are not assigned any gates collection,
+   * i.e. there is no writability restriction. Note that gates do not enforce
+   * programatic writability of a property; only UI is impacted.
    * 
-   * @param preferredWidth
-   *          the preferredWidth to set.
+   * @param writabilityGates
+   *          the writabilityGates to set.
    */
-  public void setPreferredWidth(Integer preferredWidth) {
-    this.preferredWidth = preferredWidth;
+  public void setWritabilityGates(Collection<IGate> writabilityGates) {
+    this.writabilityGates = writabilityGates;
   }
 
-  /**
-   * Gets the preferredWidth.
-   * 
-   * @return the preferredWidth.
-   */
-  public Integer getPreferredWidth() {
-    return preferredWidth;
+  private void registerIntegrityProcessor(
+      IPropertyProcessor<?, ?> integrityProcessor) {
+    if (integrityProcessors == null) {
+      integrityProcessors = new ArrayList<IPropertyProcessor<?, ?>>();
+    }
+    integrityProcessors.add(integrityProcessor);
+  }
+
+  private synchronized void registerIntegrityProcessorsIfNecessary() {
+    if (integrityProcessorClassNames != null) {
+      // process creation of integrity processors.
+      for (String integrityProcessorClassName : integrityProcessorClassNames) {
+        try {
+          registerIntegrityProcessor((IPropertyProcessor<?, ?>) Class.forName(
+              integrityProcessorClassName).newInstance());
+        } catch (InstantiationException ex) {
+          throw new DescriptorException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new DescriptorException(ex);
+        } catch (ClassNotFoundException ex) {
+          throw new DescriptorException(ex);
+        }
+      }
+      integrityProcessorClassNames = null;
+    }
+    if (integrityProcessorBeanNames != null && beanFactory != null) {
+      // process creation of integrity processors.
+      for (String integrityProcessorBeanName : integrityProcessorBeanNames) {
+        registerIntegrityProcessor((IPropertyProcessor<?, ?>) beanFactory
+            .getBean(integrityProcessorBeanName, IPropertyProcessor.class));
+      }
+      integrityProcessorClassNames = null;
+    }
   }
 }

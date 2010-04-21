@@ -41,9 +41,9 @@ public class RemoteCollectionConnectorListProvider extends
     BasicCollectionConnectorListProvider implements IRemotePeer,
     IRemoteStateOwner, IAutomationSource {
 
+  private String                    automationSeed;
   private RemoteConnectorFactory    connectorFactory;
   private String                    guid;
-  private String                    automationSeed;
   private RemoteCompositeValueState state;
 
   /**
@@ -61,6 +61,15 @@ public class RemoteCollectionConnectorListProvider extends
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
     connectorFactory.register(this);
+  }
+
+  /**
+   * Returns the actual connector value.
+   * <p>
+   * {@inheritDoc}
+   */
+  public Object actualValue() {
+    return getConnectorValue();
   }
 
   /**
@@ -86,6 +95,18 @@ public class RemoteCollectionConnectorListProvider extends
   }
 
   /**
+   * Gets the automationSeed.
+   * 
+   * @return the automationSeed.
+   */
+  public String getAutomationSeed() {
+    if (automationSeed != null) {
+      return automationSeed;
+    }
+    return getId();
+  }
+
+  /**
    * Gets the guid.
    * 
    * @return the guid.
@@ -106,21 +127,13 @@ public class RemoteCollectionConnectorListProvider extends
   }
 
   /**
-   * Creates a new state instance rerpesenting this connector.
+   * Sets the automationSeed.
    * 
-   * @return the newly created state.
+   * @param automationSeed
+   *          the automationSeed to set.
    */
-  protected RemoteCompositeValueState createState() {
-    RemoteCompositeValueState createdState = connectorFactory
-        .createRemoteCompositeValueState(getGuid(), getAutomationSeed());
-    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
-    for (ICollectionConnector childConnector : getCollectionConnectors()) {
-      if (childConnector instanceof IRemoteStateOwner) {
-        children.add(((IRemoteStateOwner) childConnector).getState());
-      }
-    }
-    createdState.setChildren(children);
-    return createdState;
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 
   /**
@@ -138,33 +151,20 @@ public class RemoteCollectionConnectorListProvider extends
   }
 
   /**
-   * Returns the actual connector value.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Object actualValue() {
-    return getConnectorValue();
-  }
-
-  /**
-   * Gets the automationSeed.
+   * Creates a new state instance rerpesenting this connector.
    * 
-   * @return the automationSeed.
+   * @return the newly created state.
    */
-  public String getAutomationSeed() {
-    if (automationSeed != null) {
-      return automationSeed;
+  protected RemoteCompositeValueState createState() {
+    RemoteCompositeValueState createdState = connectorFactory
+        .createRemoteCompositeValueState(getGuid(), getAutomationSeed());
+    List<RemoteValueState> children = new ArrayList<RemoteValueState>();
+    for (ICollectionConnector childConnector : getCollectionConnectors()) {
+      if (childConnector instanceof IRemoteStateOwner) {
+        children.add(((IRemoteStateOwner) childConnector).getState());
+      }
     }
-    return getId();
-  }
-
-  /**
-   * Sets the automationSeed.
-   * 
-   * @param automationSeed
-   *          the automationSeed to set.
-   */
-  public void setAutomationSeed(String automationSeed) {
-    this.automationSeed = automationSeed;
+    createdState.setChildren(children);
+    return createdState;
   }
 }

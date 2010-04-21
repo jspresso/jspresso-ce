@@ -29,14 +29,6 @@ public class RTextField extends RTextComponent {
   private static final long serialVersionUID = -7482939529748984634L;
 
   /**
-   * Constructs a new <code>RTextField</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RTextField() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RTextField</code> instance.
    * 
    * @param guid
@@ -44,5 +36,13 @@ public class RTextField extends RTextComponent {
    */
   public RTextField(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RTextField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RTextField() {
+    // For GWT support
   }
 }

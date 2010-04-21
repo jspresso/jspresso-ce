@@ -57,21 +57,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class Workspace implements ISecurable, ISubjectAware {
 
   /**
-   * <code>MODULES</code> is "modules".
-   */
-  public static final String    MODULES          = "modules";
-
-  /**
-   * <code>NAME</code> is "name".
-   */
-  public static final String    NAME             = "name";
-
-  /**
-   * <code>I18N_NAME</code> is "i18nName".
-   */
-  public static final String    I18N_NAME        = "i18nName";
-
-  /**
    * <code>DESCRIPTION</code> is "description".
    */
   public static final String    DESCRIPTION      = "description";
@@ -81,23 +66,38 @@ public class Workspace implements ISecurable, ISubjectAware {
    */
   public static final String    I18N_DESCRIPTION = "i18nDescription";
 
+  /**
+   * <code>I18N_NAME</code> is "i18nName".
+   */
+  public static final String    I18N_NAME        = "i18nName";
+
+  /**
+   * <code>MODULES</code> is "modules".
+   */
+  public static final String    MODULES          = "modules";
+
+  /**
+   * <code>NAME</code> is "name".
+   */
+  public static final String    NAME             = "name";
+
   private String                description;
   private Collection<String>    grantedRoles;
   private String                i18nDescription;
   private String                i18nName;
   private String                iconImageURL;
   private IIconImageURLProvider iconImageURLProvider;
-  private List<Module>          modules;
-
-  private boolean               started;
-  private IAction               startupAction;
-
-  private String                name;
-
-  private IViewDescriptor       viewDescriptor;
   private IAction               itemSelectionAction;
 
+  private List<Module>          modules;
+  private String                name;
+
+  private boolean               started;
+
+  private IAction               startupAction;
   private Subject               subject;
+
+  private IViewDescriptor       viewDescriptor;
 
   /**
    * Constructs a new <code>Workspace</code> instance.
@@ -175,6 +175,17 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
+   * Gets the item selection action that will be attached to the created view
+   * that displays the workspace.
+   * 
+   * @return the item selection action that will be attached to the created view
+   *         that displays the workspace
+   */
+  public IAction getItemSelectionAction() {
+    return itemSelectionAction;
+  }
+
+  /**
    * Gets the modules modules.
    * 
    * @return the list of modules belonging to this workspace.
@@ -201,6 +212,15 @@ public class Workspace implements ISecurable, ISubjectAware {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Gets the startupAction.
+   * 
+   * @return the startupAction.
+   */
+  public IAction getStartupAction() {
+    return startupAction;
   }
 
   /**
@@ -236,6 +256,15 @@ public class Workspace implements ISecurable, ISubjectAware {
   @Override
   public int hashCode() {
     return new HashCodeBuilder(23, 53).append(name).toHashCode();
+  }
+
+  /**
+   * Gets the started.
+   * 
+   * @return the started.
+   */
+  public boolean isStarted() {
+    return started;
   }
 
   /**
@@ -321,6 +350,20 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
+   * Configures the action to be installed as item selection action on the
+   * rendered module tree view - see
+   * <code>BasicTreeViewDescriptor.itemSelectionAction</code>. The configured
+   * action will then be executed each time a module selection changes in the
+   * workspace.
+   * 
+   * @param itemSelectionAction
+   *          the itemSelectionAction to set.
+   */
+  public void setItemSelectionAction(IAction itemSelectionAction) {
+    this.itemSelectionAction = itemSelectionAction;
+  }
+
+  /**
    * Installs a list of module(s) into this workspace. Each module may own
    * sub-modules that form a (potentially complex and dynamic) hierarchy, that
    * is visually rendered as a tree view.
@@ -350,25 +393,14 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * based on i18n name.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    if (getI18nName() != null) {
-      return getI18nName();
-    }
-    return "";
-  }
-
-  /**
-   * Gets the startupAction.
+   * Sets the started.
    * 
-   * @return the startupAction.
+   * @param started
+   *          the started to set.
+   * @internal
    */
-  public IAction getStartupAction() {
-    return startupAction;
+  public void setStarted(boolean started) {
+    this.started = started;
   }
 
   /**
@@ -385,51 +417,6 @@ public class Workspace implements ISecurable, ISubjectAware {
   }
 
   /**
-   * Gets the started.
-   * 
-   * @return the started.
-   */
-  public boolean isStarted() {
-    return started;
-  }
-
-  /**
-   * Sets the started.
-   * 
-   * @param started
-   *          the started to set.
-   * @internal
-   */
-  public void setStarted(boolean started) {
-    this.started = started;
-  }
-
-  /**
-   * Gets the item selection action that will be attached to the created view
-   * that displays the workspace.
-   * 
-   * @return the item selection action that will be attached to the created view
-   *         that displays the workspace
-   */
-  public IAction getItemSelectionAction() {
-    return itemSelectionAction;
-  }
-
-  /**
-   * Configures the action to be installed as item selection action on the
-   * rendered module tree view - see
-   * <code>BasicTreeViewDescriptor.itemSelectionAction</code>. The configured
-   * action will then be executed each time a module selection changes in the
-   * workspace.
-   * 
-   * @param itemSelectionAction
-   *          the itemSelectionAction to set.
-   */
-  public void setItemSelectionAction(IAction itemSelectionAction) {
-    this.itemSelectionAction = itemSelectionAction;
-  }
-
-  /**
    * {@inheritDoc}
    * 
    * @internal
@@ -441,6 +428,19 @@ public class Workspace implements ISecurable, ISubjectAware {
         module.setSubject(getSubject());
       }
     }
+  }
+
+  /**
+   * based on i18n name.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    if (getI18nName() != null) {
+      return getI18nName();
+    }
+    return "";
   }
 
   private Subject getSubject() {

@@ -105,13 +105,6 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
-  public Object getSelectedItem() {
-    return implGetSelectedItem();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public List<ICollectionConnector> getCollectionConnectors() {
     List<ICollectionConnector> collectionConnectors = new ArrayList<ICollectionConnector>();
     if (collectionConnectorProviders != null) {
@@ -121,6 +114,13 @@ public class BasicCollectionConnectorListProvider extends
       }
     }
     return collectionConnectors;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getSelectedItem() {
+    return implGetSelectedItem();
   }
 
   /**

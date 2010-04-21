@@ -79,6 +79,14 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
   Collection<IEntity> getEntitiesRegisteredForUpdate();
 
   /**
+   * Gets a map of entities already part of the unit of work. Entities are first
+   * keyed by their contract, then their id.
+   * 
+   * @return a map of entities already part of the unit of work
+   */
+  Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities();
+
+  /**
    * Gets the entitiesToMergeBack.
    * 
    * @return the entitiesToMergeBack.
@@ -120,12 +128,4 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
    * work.
    */
   void rollback();
-
-  /**
-   * Gets a map of entities already part of the unit of work. Entities are first
-   * keyed by their contract, then their id.
-   * 
-   * @return a map of entities already part of the unit of work
-   */
-  Map<Class<?>, Map<Serializable, IEntity>> getRegisteredEntities();
 }

@@ -29,17 +29,6 @@ import java.sql.Types;
 public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
 
   /**
-   * Maps integers differently.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void registerNumericTypeMappings() {
-    super.registerNumericTypeMappings();
-    registerColumnType(Types.INTEGER, "number($p,0)");
-  }
-
-  /**
    * Maps dates differently.
    * <p>
    * {@inheritDoc}
@@ -49,5 +38,16 @@ public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {
     registerColumnType(Types.DATE, "date");
     registerColumnType(Types.TIME, "date");
     registerColumnType(Types.TIMESTAMP, "date");
+  }
+
+  /**
+   * Maps integers differently.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void registerNumericTypeMappings() {
+    super.registerNumericTypeMappings();
+    registerColumnType(Types.INTEGER, "number($p,0)");
   }
 }

@@ -41,8 +41,8 @@ import org.jspresso.framework.application.model.Workspace;
  */
 public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private String workspaceName;
   private String moduleName;
+  private String workspaceName;
 
   /**
    * Displays the workspace.and module
@@ -65,16 +65,6 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Configures the name (untranslated) of the workspace to be displayed.
-   * 
-   * @param workspaceName
-   *          the workspaceName to set.
-   */
-  public void setWorkspaceName(String workspaceName) {
-    this.workspaceName = workspaceName;
-  }
-
-  /**
    * Configures the name (untranslated) of the module to be displayed.
    * 
    * @param moduleName
@@ -82,6 +72,16 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setModuleName(String moduleName) {
     this.moduleName = moduleName;
+  }
+
+  /**
+   * Configures the name (untranslated) of the workspace to be displayed.
+   * 
+   * @param workspaceName
+   *          the workspaceName to set.
+   */
+  public void setWorkspaceName(String workspaceName) {
+    this.workspaceName = workspaceName;
   }
 
 }

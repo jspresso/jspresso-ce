@@ -33,14 +33,6 @@ public class RComboBox extends RComponent {
   private String[]          values;
 
   /**
-   * Constructs a new <code>RComboBox</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RComboBox() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RComboBox</code> instance.
    * 
    * @param guid
@@ -48,6 +40,14 @@ public class RComboBox extends RComponent {
    */
   public RComboBox(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RComboBox</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RComboBox() {
+    // For GWT support
   }
 
   /**

@@ -47,6 +47,15 @@ public class BasicImageViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
+   * Gets the scrollable.
+   * 
+   * @return the scrollable.
+   */
+  public boolean isScrollable() {
+    return scrollable;
+  }
+
+  /**
    * Configures the image view to be either croped or scrollable when the
    * display area is too small to display it. A value of <code>true</code>
    * (default) means that the image view will be made scrollable.
@@ -56,15 +65,6 @@ public class BasicImageViewDescriptor extends BasicViewDescriptor implements
    */
   public void setScrollable(boolean scrollable) {
     this.scrollable = scrollable;
-  }
-
-  /**
-   * Gets the scrollable.
-   * 
-   * @return the scrollable.
-   */
-  public boolean isScrollable() {
-    return scrollable;
   }
 
 }

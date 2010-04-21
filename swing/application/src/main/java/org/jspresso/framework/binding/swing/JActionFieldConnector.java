@@ -95,6 +95,18 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   }
 
   /**
+   * Gest the action text to display in the action field.
+   * 
+   * @return the action text to display in the action field.
+   */
+  protected String getActionText() {
+    if (value == null) {
+      return "";
+    }
+    return value.toString();
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -118,17 +130,5 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   protected void protectedWritabilityChange() {
     super.protectedWritabilityChange();
     getConnectedJComponent().setEditable(isWritable());
-  }
-
-  /**
-   * Gest the action text to display in the action field.
-   * 
-   * @return the action text to display in the action field.
-   */
-  protected String getActionText() {
-    if (value == null) {
-      return "";
-    }
-    return value.toString();
   }
 }

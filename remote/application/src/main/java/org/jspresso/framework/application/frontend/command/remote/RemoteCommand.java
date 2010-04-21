@@ -30,27 +30,8 @@ public abstract class RemoteCommand implements Serializable {
 
   private static final long serialVersionUID = 4102568065040838006L;
 
-  private String            targetPeerGuid;
   private String            automationId;
-
-  /**
-   * Gets the targetPeerGuid.
-   * 
-   * @return the targetPeerGuid.
-   */
-  public String getTargetPeerGuid() {
-    return targetPeerGuid;
-  }
-
-  /**
-   * Sets the targetPeerGuid.
-   * 
-   * @param targetPeerGuid
-   *          the targetPeerGuid to set.
-   */
-  public void setTargetPeerGuid(String targetPeerGuid) {
-    this.targetPeerGuid = targetPeerGuid;
-  }
+  private String            targetPeerGuid;
 
   /**
    * Gets the automationId.
@@ -62,6 +43,15 @@ public abstract class RemoteCommand implements Serializable {
   }
 
   /**
+   * Gets the targetPeerGuid.
+   * 
+   * @return the targetPeerGuid.
+   */
+  public String getTargetPeerGuid() {
+    return targetPeerGuid;
+  }
+
+  /**
    * Sets the automationId.
    * 
    * @param automationId
@@ -69,6 +59,16 @@ public abstract class RemoteCommand implements Serializable {
    */
   public void setAutomationId(String automationId) {
     this.automationId = automationId;
+  }
+
+  /**
+   * Sets the targetPeerGuid.
+   * 
+   * @param targetPeerGuid
+   *          the targetPeerGuid to set.
+   */
+  public void setTargetPeerGuid(String targetPeerGuid) {
+    this.targetPeerGuid = targetPeerGuid;
   }
 
 }

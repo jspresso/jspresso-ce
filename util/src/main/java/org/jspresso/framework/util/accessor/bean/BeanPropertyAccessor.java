@@ -64,6 +64,15 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
     return writable;
   }
 
+  /**
+   * Gets the beanClass property.
+   * 
+   * @return the beanClass.
+   */
+  protected Class<?> getBeanClass() {
+    return beanClass;
+  }
+
   private Class<?> computeTargetBeanClass(Class<?> beanClazz, String prop) {
     int indexOfNestedDelim = prop.indexOf(IAccessor.NESTED_DELIM);
     if (indexOfNestedDelim < 0) {
@@ -73,15 +82,6 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
         .substring(0, indexOfNestedDelim));
     return computeTargetBeanClass(rootClass, prop
         .substring(indexOfNestedDelim + 1));
-  }
-
-  /**
-   * Gets the beanClass property.
-   * 
-   * @return the beanClass.
-   */
-  protected Class<?> getBeanClass() {
-    return beanClass;
   }
 
 }

@@ -75,6 +75,13 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
   List<IPropertyProcessor<?, ?>> getIntegrityProcessors();
 
   /**
+   * Gives a preferred width hint for representing the property.
+   * 
+   * @return a preferred width hint for representing the property.
+   */
+  Integer getPreferredWidth();
+
+  /**
    * Gets the scope on which the property is unique.
    * 
    * @return the unicity scope.
@@ -91,6 +98,15 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    * @return the result of the interception.
    */
   Object interceptSetter(Object component, Object newValue);
+
+  /**
+   * Gets wether this property is computed (derived). Most of the time a
+   * property is computed whenever it has a delegate to compute its value by
+   * opposition to properties handled by the ORM.
+   * 
+   * @return true if the property is computed.
+   */
+  boolean isComputed();
 
   /**
    * Wether the underlying property is mandatory.
@@ -136,20 +152,4 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    *          the property new value.
    */
   void preprocessSetter(Object component, Object newValue);
-
-  /**
-   * Gets wether this property is computed (derived). Most of the time a
-   * property is computed whenever it has a delegate to compute its value by
-   * opposition to properties handled by the ORM.
-   * 
-   * @return true if the property is computed.
-   */
-  boolean isComputed();
-
-  /**
-   * Gives a preferred width hint for representing the property.
-   * 
-   * @return a preferred width hint for representing the property.
-   */
-  Integer getPreferredWidth();
 }

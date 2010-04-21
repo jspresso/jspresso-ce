@@ -35,9 +35,9 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     implements IRemotePeer, IRemoteStateOwner, IAutomationSource {
 
+  private String                 automationSeed;
   private RemoteConnectorFactory connectorFactory;
   private String                 guid;
-  private String                 automationSeed;
   private RemoteValueState       state;
 
   /**
@@ -56,6 +56,15 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
     connectorFactory.register(this);
+  }
+
+  /**
+   * Returns the actual connector value.
+   * <p>
+   * {@inheritDoc}
+   */
+  public Object actualValue() {
+    return getConnectorValue();
   }
 
   /**
@@ -81,6 +90,18 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   }
 
   /**
+   * Gets the automationSeed.
+   * 
+   * @return the automationSeed.
+   */
+  public String getAutomationSeed() {
+    if (automationSeed != null) {
+      return automationSeed;
+    }
+    return getId();
+  }
+
+  /**
    * Gets the guid.
    * 
    * @return the guid.
@@ -101,14 +122,21 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   }
 
   /**
-   * Creates a new state instance rerpesenting this connector.
-   * 
-   * @return the newly created state.
+   * {@inheritDoc}
    */
-  protected RemoteValueState createState() {
-    RemoteValueState createdState = connectorFactory.createRemoteValueState(
-        getGuid(), getAutomationSeed());
-    return createdState;
+  @Override
+  public boolean isWritable() {
+    return getModelConnector() != null && super.isWritable();
+  }
+
+  /**
+   * Sets the automationSeed.
+   * 
+   * @param automationSeed
+   *          the automationSeed to set.
+   */
+  public void setAutomationSeed(String automationSeed) {
+    this.automationSeed = automationSeed;
   }
 
   /**
@@ -122,41 +150,13 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   }
 
   /**
-   * Returns the actual connector value.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Object actualValue() {
-    return getConnectorValue();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isWritable() {
-    return getModelConnector() != null && super.isWritable();
-  }
-
-  /**
-   * Gets the automationSeed.
+   * Creates a new state instance rerpesenting this connector.
    * 
-   * @return the automationSeed.
+   * @return the newly created state.
    */
-  public String getAutomationSeed() {
-    if (automationSeed != null) {
-      return automationSeed;
-    }
-    return getId();
-  }
-
-  /**
-   * Sets the automationSeed.
-   * 
-   * @param automationSeed
-   *          the automationSeed to set.
-   */
-  public void setAutomationSeed(String automationSeed) {
-    this.automationSeed = automationSeed;
+  protected RemoteValueState createState() {
+    RemoteValueState createdState = connectorFactory.createRemoteValueState(
+        getGuid(), getAutomationSeed());
+    return createdState;
   }
 }

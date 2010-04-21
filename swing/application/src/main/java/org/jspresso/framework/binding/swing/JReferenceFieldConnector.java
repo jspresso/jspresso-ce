@@ -36,8 +36,8 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 public class JReferenceFieldConnector extends JActionFieldConnector implements
     IRenderableCompositeValueConnector {
 
-  private IValueChangeListener renderingListener;
   private IValueConnector      renderingConnector;
+  private IValueChangeListener renderingListener;
 
   /**
    * Constructs a new <code>JActionFieldConnector</code> instance.
@@ -127,47 +127,6 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   }
 
   /**
-   * Sets the renderingConnector.
-   * 
-   * @param renderingConnector
-   *          the renderingConnector to set.
-   */
-  public void setRenderingConnector(IValueConnector renderingConnector) {
-    if (this.renderingConnector != null) {
-      this.renderingConnector.removeValueChangeListener(renderingListener);
-    }
-    this.renderingConnector = renderingConnector;
-    if (this.renderingConnector != null) {
-      this.renderingConnector.addValueChangeListener(renderingListener);
-    }
-  }
-
-  private final class RenderingConnectorListener implements
-      IValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
-      protectedSetConnecteeValue(getConnecteeValue());
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getActionText() {
-    if (renderingConnector != null) {
-      if (renderingConnector.getConnectorValue() == null) {
-        return "";
-      }
-      return renderingConnector.getConnectorValue().toString();
-    }
-    return super.getActionText();
-  }
-
-  /**
    * {@inheritDoc}
    */
   public String getDisplayDescription() {
@@ -196,5 +155,46 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    */
   public IValueConnector getRenderingConnector() {
     return renderingConnector;
+  }
+
+  /**
+   * Sets the renderingConnector.
+   * 
+   * @param renderingConnector
+   *          the renderingConnector to set.
+   */
+  public void setRenderingConnector(IValueConnector renderingConnector) {
+    if (this.renderingConnector != null) {
+      this.renderingConnector.removeValueChangeListener(renderingListener);
+    }
+    this.renderingConnector = renderingConnector;
+    if (this.renderingConnector != null) {
+      this.renderingConnector.addValueChangeListener(renderingListener);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getActionText() {
+    if (renderingConnector != null) {
+      if (renderingConnector.getConnectorValue() == null) {
+        return "";
+      }
+      return renderingConnector.getConnectorValue().toString();
+    }
+    return super.getActionText();
+  }
+
+  private final class RenderingConnectorListener implements
+      IValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
+      protectedSetConnecteeValue(getConnecteeValue());
+    }
   }
 }

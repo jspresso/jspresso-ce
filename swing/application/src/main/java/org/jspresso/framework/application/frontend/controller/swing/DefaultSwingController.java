@@ -113,6 +113,24 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext, List<Action> actions, String title,
+      JComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
+
+    JFlashPlayer flashPlayer = new JFlashPlayer();
+    FlashPluginOptions options = new FlashPluginOptions();
+    options.setVariables(flashContext);
+    flashPlayer.load(getClass(), UrlHelper.getResourcePathOrUrl(swfUrl, true),
+        options);
+
+    displayModalDialog(flashPlayer, actions, title, sourceComponent, context,
+        dimension, reuseCurrent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void displayModalDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
@@ -359,40 +377,20 @@ public class DefaultSwingController extends
   }
 
   /**
-   * Creates the initial view from the root view descriptor, then a SFrame
-   * containing this view and presents it to the user.
-   * <p>
    * {@inheritDoc}
    */
-  @Override
-  public boolean start(IBackendController backendController, Locale clientLocale) {
-    if (super.start(backendController, clientLocale)) {
-      waitTimer = new WaitCursorTimer(500);
-      waitTimer.setDaemon(true);
-      waitTimer.start();
-      Toolkit.getDefaultToolkit().getSystemEventQueue().push(
-          new WaitCursorEventQueue(500));
-      initLoginProcess();
-      NativeInterface.open();
-      NativeInterface.runEventPump();
-      return true;
-    }
-    return false;
-  }
+  public void popupInfo(final JComponent sourceComponent, final String title,
+      final String iconImageUrl, final String message) {
+    // To have the same threading model than the other UI channels
+    SwingUtilities.invokeLater(new Runnable() {
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean stop() {
-    if (super.stop()) {
-      if (controllerFrame != null) {
-        controllerFrame.dispose();
+      public void run() {
+        JOptionPane.showMessageDialog(SwingUtil
+            .getWindowOrInternalFrame(sourceComponent), message, title,
+            JOptionPane.INFORMATION_MESSAGE, getIconFactory().getIcon(
+                iconImageUrl, getIconFactory().getLargeIconSize()));
       }
-      System.exit(0);
-      return true;
-    }
-    return false;
+    });
   }
 
   // /**
@@ -432,358 +430,6 @@ public class DefaultSwingController extends
   // final Map<String, Object> context) {
   // return protectedExecuteFrontend(action, context);
   // }
-
-  private List<JMenu> createActionMenus() {
-    return createMenus(getActionMap(), false);
-  }
-
-  private JMenuBar createApplicationMenuBar() {
-    JMenuBar applicationMenuBar = new JMenuBar();
-    List<JMenu> workspaceMenus = createWorkspacesMenus();
-    if (workspaceMenus != null) {
-      for (JMenu workspaceMenu : workspaceMenus) {
-        applicationMenuBar.add(workspaceMenu);
-      }
-    }
-    List<JMenu> actionMenus = createActionMenus();
-    if (actionMenus != null) {
-      for (JMenu actionMenu : actionMenus) {
-        applicationMenuBar.add(actionMenu);
-      }
-    }
-    applicationMenuBar.add(Box.createHorizontalGlue());
-    List<JMenu> helpActionMenus = createHelpActionMenus();
-    if (helpActionMenus != null) {
-      for (JMenu helpActionMenu : helpActionMenus) {
-        applicationMenuBar.add(helpActionMenu);
-      }
-    }
-    return applicationMenuBar;
-  }
-
-  private void updateControllerFrame() {
-    controllerFrame.setJMenuBar(createApplicationMenuBar());
-    controllerFrame.invalidate();
-    controllerFrame.validate();
-    updateFrameTitle();
-  }
-
-  private List<JMenu> createHelpActionMenus() {
-    return createMenus(getHelpActions(), true);
-  }
-
-  private JComponent createHermeticGlassPane() {
-    JPanel glassPane = new JPanel();
-    glassPane.setOpaque(false);
-    glassPane.addMouseListener(new MouseAdapter() {
-      // No-op
-    });
-    glassPane.addKeyListener(new KeyAdapter() {
-      // No-op
-    });
-    return glassPane;
-  }
-
-  /**
-   * Creates a new JInternalFrame and populates it with a view.
-   * 
-   * @param view
-   *          the view to be set into the internal frame.
-   * @return the constructed internal frame.
-   */
-  private JInternalFrame createJInternalFrame(JComponent view, String title,
-      Icon frameIcon) {
-    JInternalFrame internalFrame = new JInternalFrame(title);
-    internalFrame.setFrameIcon(frameIcon);
-    internalFrame.setResizable(true);
-    internalFrame.setClosable(true);
-    internalFrame.setMaximizable(true);
-    internalFrame.setIconifiable(true);
-    internalFrame.getContentPane().add(view, BorderLayout.CENTER);
-    internalFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    internalFrame.setGlassPane(createHermeticGlassPane());
-    return internalFrame;
-  }
-
-  private JMenu createMenu(ActionList actionList) {
-    JMenu menu = new JMenu(actionList.getI18nName(getTranslationProvider(),
-        getLocale()));
-    if (actionList.getDescription() != null) {
-      menu.setToolTipText(actionList.getI18nDescription(
-          getTranslationProvider(), getLocale())
-          + IActionFactory.TOOLTIP_ELLIPSIS);
-    }
-    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        getIconFactory().getSmallIconSize()));
-    for (JMenuItem menuItem : createMenuItems(actionList)) {
-      menu.add(menuItem);
-    }
-    return menu;
-  }
-
-  private JMenuItem createMenuItem(IDisplayableAction action) {
-    return new JMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, null, getLocale()));
-  }
-
-  private List<JMenuItem> createMenuItems(ActionList actionList) {
-    List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
-    for (IDisplayableAction action : actionList.getActions()) {
-      if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(action));
-      }
-    }
-    return menuItems;
-  }
-
-  @SuppressWarnings("null")
-  private List<JMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
-    List<JMenu> menus = new ArrayList<JMenu>();
-    if (actionMap != null) {
-      JMenu menu = null;
-      for (ActionList actionList : actionMap.getActionLists()) {
-        if (!useSeparator || menus.isEmpty()) {
-          menu = createMenu(actionList);
-          menus.add(menu);
-        } else {
-          menu.addSeparator();
-          for (JMenuItem menuItem : createMenuItems(actionList)) {
-            menu.add(menuItem);
-          }
-        }
-      }
-    }
-    return menus;
-  }
-
-  private List<JMenu> createWorkspacesMenus() {
-    return createMenus(createWorkspaceActionMap(), true);
-  }
-
-  // private boolean protectedExecuteBackend(IAction action,
-  // Map<String, Object> context) {
-  // return super.executeBackend(action, context);
-  // }
-
-  // private boolean protectedExecuteFrontend(IAction action,
-  // Map<String, Object> context) {
-  // return super.executeFrontend(action, context);
-  // }
-
-  private void initLoginProcess() {
-    createControllerFrame();
-    if (getLoginContextName() == null) {
-      performLogin();
-      updateControllerFrame();
-      execute(getStartupAction(), getInitialActionContext());
-      return;
-    }
-
-    IView<JComponent> loginView = createLoginView();
-
-    // Login dialog
-    final JDialog dialog = new JDialog(controllerFrame,
-        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
-            getLocale()), true);
-    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
-    JPanel buttonBox = new JPanel();
-    buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
-    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
-
-    JButton loginButton = new JButton(getTranslationProvider().getTranslation(
-        "ok", getLocale()));
-    loginButton.setIcon(getIconFactory().getOkYesIcon(
-        getIconFactory().getSmallIconSize()));
-    loginButton.addActionListener(new ActionListener() {
-
-      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
-        if (performLogin()) {
-          dialog.dispose();
-          updateControllerFrame();
-          execute(getStartupAction(), getInitialActionContext());
-        } else {
-          JOptionPane.showMessageDialog(dialog, getTranslationProvider()
-              .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
-              getTranslationProvider().getTranslation("error", getLocale()),
-              JOptionPane.ERROR_MESSAGE);
-        }
-      }
-    });
-    buttonBox.add(loginButton);
-    dialog.getRootPane().setDefaultButton(loginButton);
-
-    JPanel actionPanel = new JPanel(new BorderLayout());
-    actionPanel.add(buttonBox, BorderLayout.EAST);
-
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    mainPanel.add(new JLabel(getTranslationProvider().getTranslation(
-        LoginUtils.CRED_MESSAGE, getLocale())), BorderLayout.NORTH);
-    mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
-    mainPanel.add(actionPanel, BorderLayout.SOUTH);
-    dialog.add(mainPanel);
-
-    dialog.pack();
-    SwingUtil.centerInParent(dialog);
-    dialog.setVisible(true);
-  }
-
-  private void createControllerFrame() {
-    controllerFrame = new JFrame();
-    controllerFrame.setContentPane(new JDesktopPane());
-    controllerFrame
-        .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    controllerFrame.setGlassPane(createHermeticGlassPane());
-    controllerFrame.addWindowListener(new WindowAdapter() {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
-        execute(getExitAction(), createEmptyContext());
-      }
-    });
-    controllerFrame.pack();
-    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-    // controllerFrame.setSize(1100, 800);
-    ImageIcon frameIcon = ((ImageIcon) getIconFactory().getIcon(
-        getIconImageURL(), getIconFactory().getSmallIconSize()));
-    if (frameIcon != null) {
-      controllerFrame.setIconImage(frameIcon.getImage());
-    }
-    SwingUtil.centerOnScreen(controllerFrame);
-    updateFrameTitle();
-    controllerFrame.setVisible(true);
-  }
-
-  private void updateFrameTitle() {
-    String workspaceName = getSelectedWorkspaceName();
-    if (workspaceName != null) {
-      controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
-          .getViewDescriptor().getI18nDescription(getTranslationProvider(),
-              getLocale())
-          + " - " + getI18nName(getTranslationProvider(), getLocale()));
-    } else {
-      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
-          getLocale()));
-    }
-  }
-
-  private final class WorkspaceInternalFrameListener extends
-      InternalFrameAdapter {
-
-    private String workspaceName;
-
-    /**
-     * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.
-     * 
-     * @param workspaceName
-     *          the workspace identifier this listener is attached to.
-     */
-    public WorkspaceInternalFrameListener(String workspaceName) {
-      this.workspaceName = workspaceName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameActivated(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
-      displayWorkspace(workspaceName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameDeactivated(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
-      // displayWorkspace(null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameDeiconified(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
-      displayWorkspace(workspaceName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameIconified(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
-      // displayWorkspace(null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameOpened(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
-      displayWorkspace(workspaceName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameClosed(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
-      displayWorkspace(null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameClosing(
-        @SuppressWarnings("unused") InternalFrameEvent e) {
-      displayWorkspace(null);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void displayFlashObject(String swfUrl,
-      Map<String, String> flashContext, List<Action> actions, String title,
-      JComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
-
-    JFlashPlayer flashPlayer = new JFlashPlayer();
-    FlashPluginOptions options = new FlashPluginOptions();
-    options.setVariables(flashContext);
-    flashPlayer.load(getClass(), UrlHelper.getResourcePathOrUrl(swfUrl, true),
-        options);
-
-    displayModalDialog(flashPlayer, actions, title, sourceComponent, context,
-        dimension, reuseCurrent);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupInfo(final JComponent sourceComponent, final String title,
-      final String iconImageUrl, final String message) {
-    // To have the same threading model than the other UI channels
-    SwingUtilities.invokeLater(new Runnable() {
-
-      public void run() {
-        JOptionPane.showMessageDialog(SwingUtil
-            .getWindowOrInternalFrame(sourceComponent), message, title,
-            JOptionPane.INFORMATION_MESSAGE, getIconFactory().getIcon(
-                iconImageUrl, getIconFactory().getLargeIconSize()));
-      }
-    });
-  }
 
   /**
    * {@inheritDoc}
@@ -871,5 +517,359 @@ public class DefaultSwingController extends
         }
       }
     });
+  }
+
+  /**
+   * Creates the initial view from the root view descriptor, then a SFrame
+   * containing this view and presents it to the user.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean start(IBackendController backendController, Locale clientLocale) {
+    if (super.start(backendController, clientLocale)) {
+      waitTimer = new WaitCursorTimer(500);
+      waitTimer.setDaemon(true);
+      waitTimer.start();
+      Toolkit.getDefaultToolkit().getSystemEventQueue().push(
+          new WaitCursorEventQueue(500));
+      initLoginProcess();
+      NativeInterface.open();
+      NativeInterface.runEventPump();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    if (super.stop()) {
+      if (controllerFrame != null) {
+        controllerFrame.dispose();
+      }
+      System.exit(0);
+      return true;
+    }
+    return false;
+  }
+
+  private List<JMenu> createActionMenus() {
+    return createMenus(getActionMap(), false);
+  }
+
+  private JMenuBar createApplicationMenuBar() {
+    JMenuBar applicationMenuBar = new JMenuBar();
+    List<JMenu> workspaceMenus = createWorkspacesMenus();
+    if (workspaceMenus != null) {
+      for (JMenu workspaceMenu : workspaceMenus) {
+        applicationMenuBar.add(workspaceMenu);
+      }
+    }
+    List<JMenu> actionMenus = createActionMenus();
+    if (actionMenus != null) {
+      for (JMenu actionMenu : actionMenus) {
+        applicationMenuBar.add(actionMenu);
+      }
+    }
+    applicationMenuBar.add(Box.createHorizontalGlue());
+    List<JMenu> helpActionMenus = createHelpActionMenus();
+    if (helpActionMenus != null) {
+      for (JMenu helpActionMenu : helpActionMenus) {
+        applicationMenuBar.add(helpActionMenu);
+      }
+    }
+    return applicationMenuBar;
+  }
+
+  private void createControllerFrame() {
+    controllerFrame = new JFrame();
+    controllerFrame.setContentPane(new JDesktopPane());
+    controllerFrame
+        .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    controllerFrame.setGlassPane(createHermeticGlassPane());
+    controllerFrame.addWindowListener(new WindowAdapter() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void windowClosing(@SuppressWarnings("unused") WindowEvent e) {
+        execute(getExitAction(), createEmptyContext());
+      }
+    });
+    controllerFrame.pack();
+    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    // controllerFrame.setSize(1100, 800);
+    ImageIcon frameIcon = ((ImageIcon) getIconFactory().getIcon(
+        getIconImageURL(), getIconFactory().getSmallIconSize()));
+    if (frameIcon != null) {
+      controllerFrame.setIconImage(frameIcon.getImage());
+    }
+    SwingUtil.centerOnScreen(controllerFrame);
+    updateFrameTitle();
+    controllerFrame.setVisible(true);
+  }
+
+  private List<JMenu> createHelpActionMenus() {
+    return createMenus(getHelpActions(), true);
+  }
+
+  private JComponent createHermeticGlassPane() {
+    JPanel glassPane = new JPanel();
+    glassPane.setOpaque(false);
+    glassPane.addMouseListener(new MouseAdapter() {
+      // No-op
+    });
+    glassPane.addKeyListener(new KeyAdapter() {
+      // No-op
+    });
+    return glassPane;
+  }
+
+  /**
+   * Creates a new JInternalFrame and populates it with a view.
+   * 
+   * @param view
+   *          the view to be set into the internal frame.
+   * @return the constructed internal frame.
+   */
+  private JInternalFrame createJInternalFrame(JComponent view, String title,
+      Icon frameIcon) {
+    JInternalFrame internalFrame = new JInternalFrame(title);
+    internalFrame.setFrameIcon(frameIcon);
+    internalFrame.setResizable(true);
+    internalFrame.setClosable(true);
+    internalFrame.setMaximizable(true);
+    internalFrame.setIconifiable(true);
+    internalFrame.getContentPane().add(view, BorderLayout.CENTER);
+    internalFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+    internalFrame.setGlassPane(createHermeticGlassPane());
+    return internalFrame;
+  }
+
+  // private boolean protectedExecuteBackend(IAction action,
+  // Map<String, Object> context) {
+  // return super.executeBackend(action, context);
+  // }
+
+  // private boolean protectedExecuteFrontend(IAction action,
+  // Map<String, Object> context) {
+  // return super.executeFrontend(action, context);
+  // }
+
+  private JMenu createMenu(ActionList actionList) {
+    JMenu menu = new JMenu(actionList.getI18nName(getTranslationProvider(),
+        getLocale()));
+    if (actionList.getDescription() != null) {
+      menu.setToolTipText(actionList.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IActionFactory.TOOLTIP_ELLIPSIS);
+    }
+    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        getIconFactory().getSmallIconSize()));
+    for (JMenuItem menuItem : createMenuItems(actionList)) {
+      menu.add(menuItem);
+    }
+    return menu;
+  }
+
+  private JMenuItem createMenuItem(IDisplayableAction action) {
+    return new JMenuItem(getViewFactory().getActionFactory().createAction(
+        action, this, null, getLocale()));
+  }
+
+  private List<JMenuItem> createMenuItems(ActionList actionList) {
+    List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      if (isAccessGranted(action)) {
+        menuItems.add(createMenuItem(action));
+      }
+    }
+    return menuItems;
+  }
+
+  @SuppressWarnings("null")
+  private List<JMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
+    List<JMenu> menus = new ArrayList<JMenu>();
+    if (actionMap != null) {
+      JMenu menu = null;
+      for (ActionList actionList : actionMap.getActionLists()) {
+        if (!useSeparator || menus.isEmpty()) {
+          menu = createMenu(actionList);
+          menus.add(menu);
+        } else {
+          menu.addSeparator();
+          for (JMenuItem menuItem : createMenuItems(actionList)) {
+            menu.add(menuItem);
+          }
+        }
+      }
+    }
+    return menus;
+  }
+
+  private List<JMenu> createWorkspacesMenus() {
+    return createMenus(createWorkspaceActionMap(), true);
+  }
+
+  private void initLoginProcess() {
+    createControllerFrame();
+    if (getLoginContextName() == null) {
+      performLogin();
+      updateControllerFrame();
+      execute(getStartupAction(), getInitialActionContext());
+      return;
+    }
+
+    IView<JComponent> loginView = createLoginView();
+
+    // Login dialog
+    final JDialog dialog = new JDialog(controllerFrame,
+        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
+            getLocale()), true);
+    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+    JPanel buttonBox = new JPanel();
+    buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
+    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+
+    JButton loginButton = new JButton(getTranslationProvider().getTranslation(
+        "ok", getLocale()));
+    loginButton.setIcon(getIconFactory().getOkYesIcon(
+        getIconFactory().getSmallIconSize()));
+    loginButton.addActionListener(new ActionListener() {
+
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+        if (performLogin()) {
+          dialog.dispose();
+          updateControllerFrame();
+          execute(getStartupAction(), getInitialActionContext());
+        } else {
+          JOptionPane.showMessageDialog(dialog, getTranslationProvider()
+              .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
+              getTranslationProvider().getTranslation("error", getLocale()),
+              JOptionPane.ERROR_MESSAGE);
+        }
+      }
+    });
+    buttonBox.add(loginButton);
+    dialog.getRootPane().setDefaultButton(loginButton);
+
+    JPanel actionPanel = new JPanel(new BorderLayout());
+    actionPanel.add(buttonBox, BorderLayout.EAST);
+
+    JPanel mainPanel = new JPanel(new BorderLayout());
+    mainPanel.add(new JLabel(getTranslationProvider().getTranslation(
+        LoginUtils.CRED_MESSAGE, getLocale())), BorderLayout.NORTH);
+    mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
+    mainPanel.add(actionPanel, BorderLayout.SOUTH);
+    dialog.add(mainPanel);
+
+    dialog.pack();
+    SwingUtil.centerInParent(dialog);
+    dialog.setVisible(true);
+  }
+
+  private void updateControllerFrame() {
+    controllerFrame.setJMenuBar(createApplicationMenuBar());
+    controllerFrame.invalidate();
+    controllerFrame.validate();
+    updateFrameTitle();
+  }
+
+  private void updateFrameTitle() {
+    String workspaceName = getSelectedWorkspaceName();
+    if (workspaceName != null) {
+      controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
+          .getViewDescriptor().getI18nDescription(getTranslationProvider(),
+              getLocale())
+          + " - " + getI18nName(getTranslationProvider(), getLocale()));
+    } else {
+      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
+          getLocale()));
+    }
+  }
+
+  private final class WorkspaceInternalFrameListener extends
+      InternalFrameAdapter {
+
+    private String workspaceName;
+
+    /**
+     * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.
+     * 
+     * @param workspaceName
+     *          the workspace identifier this listener is attached to.
+     */
+    public WorkspaceInternalFrameListener(String workspaceName) {
+      this.workspaceName = workspaceName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameActivated(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(workspaceName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameClosed(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameClosing(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameDeactivated(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      // displayWorkspace(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameDeiconified(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(workspaceName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameIconified(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      // displayWorkspace(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameOpened(
+        @SuppressWarnings("unused") InternalFrameEvent e) {
+      displayWorkspace(workspaceName);
+    }
   }
 }

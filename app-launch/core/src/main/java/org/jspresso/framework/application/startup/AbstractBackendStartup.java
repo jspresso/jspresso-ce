@@ -32,15 +32,6 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
   private IBackendController backendController;
 
   /**
-   * Back controller is retrieved from the spring context and started.
-   */
-  protected void startController() {
-    // start on brand new instances.
-    backendController = null;
-    getBackendController().start(getStartupLocale());
-  }
-
-  /**
    * Gets the application backend controller.
    * 
    * @return the application backend controller.
@@ -57,5 +48,14 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
           ex);
       throw ex;
     }
+  }
+
+  /**
+   * Back controller is retrieved from the spring context and started.
+   */
+  protected void startController() {
+    // start on brand new instances.
+    backendController = null;
+    getBackendController().start(getStartupLocale());
   }
 }

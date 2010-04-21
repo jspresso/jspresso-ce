@@ -33,8 +33,8 @@ public class BasicView<E> implements IView<E> {
 
   private IValueConnector   connector;
   private IViewDescriptor   descriptor;
-  private E                 peer;
   private ICompositeView<E> parent;
+  private E                 peer;
 
   /**
    * Constructs a new <code>BasicView</code> instance.
@@ -62,6 +62,15 @@ public class BasicView<E> implements IView<E> {
    */
   public IViewDescriptor getDescriptor() {
     return descriptor;
+  }
+
+  /**
+   * Gets the parent.
+   * 
+   * @return the parent.
+   */
+  public ICompositeView<E> getParent() {
+    return parent;
   }
 
   /**
@@ -103,25 +112,6 @@ public class BasicView<E> implements IView<E> {
   }
 
   /**
-   * Sets the peer.
-   * 
-   * @param peer
-   *          the peer to set.
-   */
-  public void setPeer(E peer) {
-    this.peer = peer;
-  }
-
-  /**
-   * Gets the parent.
-   * 
-   * @return the parent.
-   */
-  public ICompositeView<E> getParent() {
-    return parent;
-  }
-
-  /**
    * Sets the parent.
    * 
    * @param parent
@@ -129,6 +119,16 @@ public class BasicView<E> implements IView<E> {
    */
   public void setParent(ICompositeView<E> parent) {
     this.parent = parent;
+  }
+
+  /**
+   * Sets the peer.
+   * 
+   * @param peer
+   *          the peer to set.
+   */
+  public void setPeer(E peer) {
+    this.peer = peer;
   }
 
 }

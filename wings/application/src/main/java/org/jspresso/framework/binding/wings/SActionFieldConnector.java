@@ -106,6 +106,18 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
   }
 
   /**
+   * Gest the action text to display in the action field.
+   * 
+   * @return the action text to display in the action field.
+   */
+  protected String getActionText() {
+    if (value == null) {
+      return "";
+    }
+    return value.toString();
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -120,17 +132,5 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
   protected void setConnecteeValue(Object aValue) {
     value = aValue;
     getConnectedSComponent().setValue(getActionText());
-  }
-
-  /**
-   * Gest the action text to display in the action field.
-   * 
-   * @return the action text to display in the action field.
-   */
-  protected String getActionText() {
-    if (value == null) {
-      return "";
-    }
-    return value.toString();
   }
 }

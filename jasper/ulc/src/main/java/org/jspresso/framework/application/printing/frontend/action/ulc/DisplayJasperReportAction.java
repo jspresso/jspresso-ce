@@ -53,12 +53,12 @@ public class DisplayJasperReportAction extends AbstractUlcAction {
 
     IActiveResource pdfProducer = new AbstractActiveResource("application/pdf") {
 
-      public long getSize() {
-        return -1;
-      }
-
       public String getName() {
         return "Report.pdf";
+      }
+
+      public long getSize() {
+        return -1;
       }
 
       public void writeToContent(OutputStream out) throws IOException {

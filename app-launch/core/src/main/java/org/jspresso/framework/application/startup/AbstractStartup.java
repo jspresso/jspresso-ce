@@ -35,12 +35,12 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  */
 public abstract class AbstractStartup implements IStartup {
 
+  private BeanFactory applicationContext;
+
   /**
    * Logger, available to subclasses.
    */
   private final Log   logger = LogFactory.getLog(getClass());
-
-  private BeanFactory applicationContext;
 
   /**
    * Gets the applicationContext.
@@ -75,13 +75,6 @@ public abstract class AbstractStartup implements IStartup {
   protected abstract String getApplicationContextKey();
 
   /**
-   * Gets the startup locale.
-   * 
-   * @return the startup locale.
-   */
-  protected abstract Locale getStartupLocale();
-
-  /**
    * Gets the logger.
    * 
    * @return the logger.
@@ -89,4 +82,11 @@ public abstract class AbstractStartup implements IStartup {
   protected Log getLogger() {
     return logger;
   }
+
+  /**
+   * Gets the startup locale.
+   * 
+   * @return the startup locale.
+   */
+  protected abstract Locale getStartupLocale();
 }

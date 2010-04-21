@@ -29,23 +29,15 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RIcon extends RemotePeer {
 
-  private static final long     serialVersionUID = 4846497088272546437L;
-
   /**
    * <code>DEFAULT_DIM</code>.
    */
   public static final Dimension DEFAULT_DIM      = new Dimension(24, 24);
 
+  private static final long     serialVersionUID = 4846497088272546437L;
+
   private Dimension             dimension;
   private String                imageUrlSpec;
-
-  /**
-   * Constructs a new <code>RIcon</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RIcon() {
-    // For GWT support
-  }
 
   /**
    * Constructs a new <code>RIcon</code> instance.
@@ -58,22 +50,11 @@ public class RIcon extends RemotePeer {
   }
 
   /**
-   * Gets the imageUrlSpec.
-   * 
-   * @return the imageUrlSpec.
+   * Constructs a new <code>RIcon</code> instance. Only used for GWT
+   * serialization support.
    */
-  public String getImageUrlSpec() {
-    return imageUrlSpec;
-  }
-
-  /**
-   * Sets the imageUrlSpec.
-   * 
-   * @param imageUrlSpec
-   *          the imageUrlSpec to set.
-   */
-  public void setImageUrlSpec(String imageUrlSpec) {
-    this.imageUrlSpec = imageUrlSpec;
+  protected RIcon() {
+    // For GWT support
   }
 
   /**
@@ -86,6 +67,15 @@ public class RIcon extends RemotePeer {
   }
 
   /**
+   * Gets the imageUrlSpec.
+   * 
+   * @return the imageUrlSpec.
+   */
+  public String getImageUrlSpec() {
+    return imageUrlSpec;
+  }
+
+  /**
    * Sets the dimension.
    * 
    * @param dimension
@@ -93,6 +83,16 @@ public class RIcon extends RemotePeer {
    */
   public void setDimension(Dimension dimension) {
     this.dimension = dimension;
+  }
+
+  /**
+   * Sets the imageUrlSpec.
+   * 
+   * @param imageUrlSpec
+   *          the imageUrlSpec to set.
+   */
+  public void setImageUrlSpec(String imageUrlSpec) {
+    this.imageUrlSpec = imageUrlSpec;
   }
 
 }

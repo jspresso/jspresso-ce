@@ -31,14 +31,6 @@ public class RActionField extends RComponent {
   private boolean           showTextField;
 
   /**
-   * Constructs a new <code>RActionField</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RActionField() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RActionField</code> instance.
    * 
    * @param guid
@@ -47,6 +39,14 @@ public class RActionField extends RComponent {
   public RActionField(String guid) {
     super(guid);
     showTextField = true;
+  }
+
+  /**
+   * Constructs a new <code>RActionField</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RActionField() {
+    // For GWT support
   }
 
   /**

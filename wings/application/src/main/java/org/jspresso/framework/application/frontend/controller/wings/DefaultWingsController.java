@@ -101,6 +101,56 @@ public class DefaultWingsController extends
   /**
    * {@inheritDoc}
    */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext, List<Action> actions, String title,
+      SComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
+
+    StringBuffer flashVars = new StringBuffer();
+    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
+      flashVars.append("&").append(flashVar.getKey()).append("=").append(
+          flashVar.getValue());
+    }
+    int width = 600;
+    int height = 600;
+    if (dimension != null) {
+      width = dimension.getWidth();
+      height = dimension.getHeight();
+    }
+    String htmlText = "<html>"
+        + "<body bgcolor=\"#ffffff\">"
+        + "<OBJECT classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" "
+        + "codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\" width=\""
+        + width
+        + "\" height=\""
+        + height
+        + "\" id=\"Column3D\" >"
+        + "<param name=\"movie\" value=\""
+        + swfUrl
+        + "\" />"
+        + "<param name=\"FlashVars\" value=\""
+        + flashVars.toString()
+        + "\">"
+        + "<embed src=\""
+        + swfUrl
+        + "\" flashVars=\""
+        + flashVars.toString()
+        + "\" quality=\"high\" width=\""
+        + width
+        + "\" height=\""
+        + height
+        + "\" name=\"Column3D\" type=\"application/x-shockwave-flash\" "
+        + "pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"
+        + "</object>" + "</body>" + "</html>";
+    SLabel embedder = new SLabel();
+    embedder.setText(htmlText);
+    displayModalDialog(embedder, actions, title, sourceComponent, context,
+        dimension, reuseCurrent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void displayModalDialog(SComponent mainView, List<Action> actions,
       String title, SComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
@@ -291,283 +341,6 @@ public class DefaultWingsController extends
   }
 
   /**
-   * Configures the default height of the application frame.
-   * 
-   * @param frameHeight
-   *          the frameHeight to set.
-   */
-  public void setFrameHeight(String frameHeight) {
-    this.frameHeight = frameHeight;
-  }
-
-  /**
-   * Configures the default width of the application frame.
-   * 
-   * @param frameWidth
-   *          the frameWidth to set.
-   */
-  public void setFrameWidth(String frameWidth) {
-    this.frameWidth = frameWidth;
-  }
-
-  /**
-   * Creates the initial view from the root view descriptor, then a SFrame
-   * containing this view and presents it to the user.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean start(IBackendController backendController, Locale clientLocale) {
-    if (super.start(backendController, clientLocale)) {
-      initLoginProcess();
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean stop() {
-    if (super.stop()) {
-      controllerFrame.getSession().exit();
-      return true;
-    }
-    return false;
-  }
-
-  private List<SMenu> createActionMenus() {
-    return createMenus(getActionMap(), false);
-  }
-
-  private SMenuBar createApplicationMenuBar() {
-    SMenuBar applicationMenuBar = new SMenuBar();
-    applicationMenuBar.setBorder(new SLineBorder(Color.LIGHT_GRAY));
-    List<SMenu> workspaceMenus = createWorkspacesMenus();
-    if (workspaceMenus != null) {
-      for (SMenu workspaceMenu : workspaceMenus) {
-        applicationMenuBar.add(workspaceMenu);
-      }
-    }
-    List<SMenu> actionMenus = createActionMenus();
-    if (actionMenus != null) {
-      for (SMenu actionMenu : actionMenus) {
-        applicationMenuBar.add(actionMenu);
-      }
-    }
-    List<SMenu> helpActionMenus = createHelpActionMenus();
-    if (helpActionMenus != null) {
-      for (SMenu helpActionMenu : helpActionMenus) {
-        helpActionMenu.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
-        applicationMenuBar.add(helpActionMenu);
-      }
-    }
-    return applicationMenuBar;
-  }
-
-  private List<SMenu> createHelpActionMenus() {
-    return createMenus(getHelpActions(), true);
-  }
-
-  private SMenu createMenu(ActionList actionList) {
-    SMenu menu = new SMenu(actionList.getI18nName(getTranslationProvider(),
-        getLocale()));
-    if (actionList.getDescription() != null) {
-      menu.setToolTipText(actionList.getI18nDescription(
-          getTranslationProvider(), getLocale())
-          + IActionFactory.TOOLTIP_ELLIPSIS);
-    }
-    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
-        getIconFactory().getSmallIconSize()));
-    for (SMenuItem menuItem : createMenuItems(actionList)) {
-      menu.add(menuItem);
-    }
-    return menu;
-  }
-
-  private SMenuItem createMenuItem(IDisplayableAction action) {
-    return new SMenuItem(getViewFactory().getActionFactory().createAction(
-        action, this, null, getLocale()));
-  }
-
-  private List<SMenuItem> createMenuItems(ActionList actionList) {
-    List<SMenuItem> menuItems = new ArrayList<SMenuItem>();
-    for (IDisplayableAction action : actionList.getActions()) {
-      if (isAccessGranted(action)) {
-        menuItems.add(createMenuItem(action));
-      }
-    }
-    return menuItems;
-  }
-
-  @SuppressWarnings("null")
-  private List<SMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
-    List<SMenu> menus = new ArrayList<SMenu>();
-    if (actionMap != null) {
-      SMenu menu = null;
-      for (ActionList actionList : actionMap.getActionLists()) {
-        if (!useSeparator || menus.isEmpty()) {
-          menu = createMenu(actionList);
-          menus.add(menu);
-        } else {
-          menu.addSeparator();
-          // SMenuItem separator = new SMenuItem("---------");
-          // separator.setBorder(new SLineBorder(1));
-          // menu.add(separator);
-
-          for (SMenuItem menuItem : createMenuItems(actionList)) {
-            menu.add(menuItem);
-          }
-        }
-      }
-    }
-    return menus;
-  }
-
-  private List<SMenu> createWorkspacesMenus() {
-    return createMenus(createWorkspaceActionMap(), true);
-  }
-
-  private void updateControllerFrame() {
-    controllerFrame.getContentPane().add(createApplicationMenuBar(),
-        SBorderLayout.NORTH);
-    updateFrameTitle();
-  }
-
-  private void initLoginProcess() {
-    createControllerFrame();
-    if (getLoginContextName() == null) {
-      performLogin();
-      updateControllerFrame();
-      execute(getStartupAction(), getInitialActionContext());
-      return;
-    }
-
-    IView<SComponent> loginView = createLoginView();
-
-    // Login dialog
-    final SDialog dialog = new SDialog(controllerFrame,
-        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
-            getLocale()), true);
-    dialog.setDraggable(true);
-
-    SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
-    buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
-
-    SButton loginButton = new SButton(getTranslationProvider().getTranslation(
-        "ok", getLocale()));
-    loginButton.setIcon(getIconFactory().getOkYesIcon(
-        getIconFactory().getSmallIconSize()));
-    loginButton.addActionListener(new ActionListener() {
-
-      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
-        if (performLogin()) {
-          dialog.dispose();
-          updateControllerFrame();
-          execute(getStartupAction(), getInitialActionContext());
-        } else {
-          SOptionPane.showMessageDialog(dialog, getTranslationProvider()
-              .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
-              getTranslationProvider().getTranslation("error", getLocale()),
-              SOptionPane.ERROR_MESSAGE);
-        }
-      }
-    });
-    buttonBox.add(loginButton);
-    dialog.setDefaultButton(loginButton);
-
-    SPanel actionPanel = new SPanel(new SBorderLayout());
-    actionPanel.add(buttonBox, SBorderLayout.EAST);
-
-    SPanel mainPanel = new SPanel(new SBorderLayout());
-    mainPanel.add(new SLabel(getTranslationProvider().getTranslation(
-        LoginUtils.CRED_MESSAGE, getLocale())), SBorderLayout.NORTH);
-    mainPanel.add(loginView.getPeer(), SBorderLayout.CENTER);
-    mainPanel.add(actionPanel, SBorderLayout.SOUTH);
-    dialog.add(mainPanel);
-
-    dialog.setVisible(true);
-  }
-
-  private void createControllerFrame() {
-    controllerFrame = new SFrame();
-    controllerFrame
-        .setPreferredSize(new SDimension(frameWidth, frameHeight/*
-                                                                 * WingsUtil.FULL_DIM_PERCENT
-                                                                 */));
-    controllerFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
-    cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(SDimension.FULLAREA);
-    controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
-    updateFrameTitle();
-    controllerFrame.setVisible(true);
-  }
-
-  private void updateFrameTitle() {
-    String workspaceName = getSelectedWorkspaceName();
-    if (workspaceName != null) {
-      controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
-          .getViewDescriptor().getI18nDescription(getTranslationProvider(),
-              getLocale())
-          + " - " + getI18nName(getTranslationProvider(), getLocale()));
-    } else {
-      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
-          getLocale()));
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void displayFlashObject(String swfUrl,
-      Map<String, String> flashContext, List<Action> actions, String title,
-      SComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
-
-    StringBuffer flashVars = new StringBuffer();
-    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
-      flashVars.append("&").append(flashVar.getKey()).append("=").append(
-          flashVar.getValue());
-    }
-    int width = 600;
-    int height = 600;
-    if (dimension != null) {
-      width = dimension.getWidth();
-      height = dimension.getHeight();
-    }
-    String htmlText = "<html>"
-        + "<body bgcolor=\"#ffffff\">"
-        + "<OBJECT classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" "
-        + "codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\" width=\""
-        + width
-        + "\" height=\""
-        + height
-        + "\" id=\"Column3D\" >"
-        + "<param name=\"movie\" value=\""
-        + swfUrl
-        + "\" />"
-        + "<param name=\"FlashVars\" value=\""
-        + flashVars.toString()
-        + "\">"
-        + "<embed src=\""
-        + swfUrl
-        + "\" flashVars=\""
-        + flashVars.toString()
-        + "\" quality=\"high\" width=\""
-        + width
-        + "\" height=\""
-        + height
-        + "\" name=\"Column3D\" type=\"application/x-shockwave-flash\" "
-        + "pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"
-        + "</object>" + "</body>" + "</html>";
-    SLabel embedder = new SLabel();
-    embedder.setText(htmlText);
-    displayModalDialog(embedder, actions, title, sourceComponent, context,
-        dimension, reuseCurrent);
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void popupInfo(SComponent sourceComponent, String title,
@@ -650,5 +423,232 @@ public class DefaultWingsController extends
           }
 
         }, null);
+  }
+
+  /**
+   * Configures the default height of the application frame.
+   * 
+   * @param frameHeight
+   *          the frameHeight to set.
+   */
+  public void setFrameHeight(String frameHeight) {
+    this.frameHeight = frameHeight;
+  }
+
+  /**
+   * Configures the default width of the application frame.
+   * 
+   * @param frameWidth
+   *          the frameWidth to set.
+   */
+  public void setFrameWidth(String frameWidth) {
+    this.frameWidth = frameWidth;
+  }
+
+  /**
+   * Creates the initial view from the root view descriptor, then a SFrame
+   * containing this view and presents it to the user.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean start(IBackendController backendController, Locale clientLocale) {
+    if (super.start(backendController, clientLocale)) {
+      initLoginProcess();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    if (super.stop()) {
+      controllerFrame.getSession().exit();
+      return true;
+    }
+    return false;
+  }
+
+  private List<SMenu> createActionMenus() {
+    return createMenus(getActionMap(), false);
+  }
+
+  private SMenuBar createApplicationMenuBar() {
+    SMenuBar applicationMenuBar = new SMenuBar();
+    applicationMenuBar.setBorder(new SLineBorder(Color.LIGHT_GRAY));
+    List<SMenu> workspaceMenus = createWorkspacesMenus();
+    if (workspaceMenus != null) {
+      for (SMenu workspaceMenu : workspaceMenus) {
+        applicationMenuBar.add(workspaceMenu);
+      }
+    }
+    List<SMenu> actionMenus = createActionMenus();
+    if (actionMenus != null) {
+      for (SMenu actionMenu : actionMenus) {
+        applicationMenuBar.add(actionMenu);
+      }
+    }
+    List<SMenu> helpActionMenus = createHelpActionMenus();
+    if (helpActionMenus != null) {
+      for (SMenu helpActionMenu : helpActionMenus) {
+        helpActionMenu.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
+        applicationMenuBar.add(helpActionMenu);
+      }
+    }
+    return applicationMenuBar;
+  }
+
+  private void createControllerFrame() {
+    controllerFrame = new SFrame();
+    controllerFrame
+        .setPreferredSize(new SDimension(frameWidth, frameHeight/*
+                                                                 * WingsUtil.FULL_DIM_PERCENT
+                                                                 */));
+    controllerFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
+    cardPanel = new SPanel(new SCardLayout());
+    cardPanel.setPreferredSize(SDimension.FULLAREA);
+    controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
+    updateFrameTitle();
+    controllerFrame.setVisible(true);
+  }
+
+  private List<SMenu> createHelpActionMenus() {
+    return createMenus(getHelpActions(), true);
+  }
+
+  private SMenu createMenu(ActionList actionList) {
+    SMenu menu = new SMenu(actionList.getI18nName(getTranslationProvider(),
+        getLocale()));
+    if (actionList.getDescription() != null) {
+      menu.setToolTipText(actionList.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IActionFactory.TOOLTIP_ELLIPSIS);
+    }
+    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        getIconFactory().getSmallIconSize()));
+    for (SMenuItem menuItem : createMenuItems(actionList)) {
+      menu.add(menuItem);
+    }
+    return menu;
+  }
+
+  private SMenuItem createMenuItem(IDisplayableAction action) {
+    return new SMenuItem(getViewFactory().getActionFactory().createAction(
+        action, this, null, getLocale()));
+  }
+
+  private List<SMenuItem> createMenuItems(ActionList actionList) {
+    List<SMenuItem> menuItems = new ArrayList<SMenuItem>();
+    for (IDisplayableAction action : actionList.getActions()) {
+      if (isAccessGranted(action)) {
+        menuItems.add(createMenuItem(action));
+      }
+    }
+    return menuItems;
+  }
+
+  @SuppressWarnings("null")
+  private List<SMenu> createMenus(ActionMap actionMap, boolean useSeparator) {
+    List<SMenu> menus = new ArrayList<SMenu>();
+    if (actionMap != null) {
+      SMenu menu = null;
+      for (ActionList actionList : actionMap.getActionLists()) {
+        if (!useSeparator || menus.isEmpty()) {
+          menu = createMenu(actionList);
+          menus.add(menu);
+        } else {
+          menu.addSeparator();
+          // SMenuItem separator = new SMenuItem("---------");
+          // separator.setBorder(new SLineBorder(1));
+          // menu.add(separator);
+
+          for (SMenuItem menuItem : createMenuItems(actionList)) {
+            menu.add(menuItem);
+          }
+        }
+      }
+    }
+    return menus;
+  }
+
+  private List<SMenu> createWorkspacesMenus() {
+    return createMenus(createWorkspaceActionMap(), true);
+  }
+
+  private void initLoginProcess() {
+    createControllerFrame();
+    if (getLoginContextName() == null) {
+      performLogin();
+      updateControllerFrame();
+      execute(getStartupAction(), getInitialActionContext());
+      return;
+    }
+
+    IView<SComponent> loginView = createLoginView();
+
+    // Login dialog
+    final SDialog dialog = new SDialog(controllerFrame,
+        getLoginViewDescriptor().getI18nName(getTranslationProvider(),
+            getLocale()), true);
+    dialog.setDraggable(true);
+
+    SPanel buttonBox = new SPanel(new SBoxLayout(dialog, SBoxLayout.X_AXIS));
+    buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
+
+    SButton loginButton = new SButton(getTranslationProvider().getTranslation(
+        "ok", getLocale()));
+    loginButton.setIcon(getIconFactory().getOkYesIcon(
+        getIconFactory().getSmallIconSize()));
+    loginButton.addActionListener(new ActionListener() {
+
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+        if (performLogin()) {
+          dialog.dispose();
+          updateControllerFrame();
+          execute(getStartupAction(), getInitialActionContext());
+        } else {
+          SOptionPane.showMessageDialog(dialog, getTranslationProvider()
+              .getTranslation(LoginUtils.LOGIN_FAILED, getLocale()),
+              getTranslationProvider().getTranslation("error", getLocale()),
+              SOptionPane.ERROR_MESSAGE);
+        }
+      }
+    });
+    buttonBox.add(loginButton);
+    dialog.setDefaultButton(loginButton);
+
+    SPanel actionPanel = new SPanel(new SBorderLayout());
+    actionPanel.add(buttonBox, SBorderLayout.EAST);
+
+    SPanel mainPanel = new SPanel(new SBorderLayout());
+    mainPanel.add(new SLabel(getTranslationProvider().getTranslation(
+        LoginUtils.CRED_MESSAGE, getLocale())), SBorderLayout.NORTH);
+    mainPanel.add(loginView.getPeer(), SBorderLayout.CENTER);
+    mainPanel.add(actionPanel, SBorderLayout.SOUTH);
+    dialog.add(mainPanel);
+
+    dialog.setVisible(true);
+  }
+
+  private void updateControllerFrame() {
+    controllerFrame.getContentPane().add(createApplicationMenuBar(),
+        SBorderLayout.NORTH);
+    updateFrameTitle();
+  }
+
+  private void updateFrameTitle() {
+    String workspaceName = getSelectedWorkspaceName();
+    if (workspaceName != null) {
+      controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
+          .getViewDescriptor().getI18nDescription(getTranslationProvider(),
+              getLocale())
+          + " - " + getI18nName(getTranslationProvider(), getLocale()));
+    } else {
+      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
+          getLocale()));
+    }
   }
 }

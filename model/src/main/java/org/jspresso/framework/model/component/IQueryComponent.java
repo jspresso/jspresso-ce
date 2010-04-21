@@ -38,19 +38,26 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
     ISortable {
 
   /**
-   * "queriedComponents" string constant.
-   */
-  String QUERIED_COMPONENTS  = "queriedComponents";
-
-  /**
    * Ordering properties action constant.
    */
   String ORDERING_PROPERTIES = "ORDERING_PROPERTIES";
 
   /**
+   * "queriedComponents" string constant.
+   */
+  String QUERIED_COMPONENTS  = "queriedComponents";
+
+  /**
    * Query component action constant.
    */
   String QUERY_COMPONENT     = "QUERY_COMPONENT";
+
+  /**
+   * Gets the descriptor of the queried components.
+   * 
+   * @return the descriptor of the queried components.
+   */
+  IComponentDescriptor<?> getComponentDescriptor();
 
   /**
    * Gets the list of components result of the query.
@@ -67,12 +74,11 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   Class<?> getQueryContract();
 
   /**
-   * Sets the list of components result of the query.
+   * Does this query component map an inline component or an entity ?
    * 
-   * @param queriedComponents
-   *          the list of components result of the query.
+   * @return true if this query component map an inline component ?
    */
-  void setQueriedComponents(List<? extends IComponent> queriedComponents);
+  boolean isInlineComponent();
 
   /**
    * Sets the default ordering properties that are used when not changed by the
@@ -84,16 +90,10 @@ public interface IQueryComponent extends Map<String, Object>, IPageable,
   void setDefaultOrderingProperties(Map<String, ESort> defaultOrderingProperties);
 
   /**
-   * Does this query component map an inline component or an entity ?
+   * Sets the list of components result of the query.
    * 
-   * @return true if this query component map an inline component ?
+   * @param queriedComponents
+   *          the list of components result of the query.
    */
-  boolean isInlineComponent();
-
-  /**
-   * Gets the descriptor of the queried components.
-   * 
-   * @return the descriptor of the queried components.
-   */
-  IComponentDescriptor<?> getComponentDescriptor();
+  void setQueriedComponents(List<? extends IComponent> queriedComponents);
 }

@@ -73,8 +73,6 @@ import org.wings.table.STableColumnModel;
 public abstract class AbstractTableSorter extends AbstractTableModel implements
     IIndexMapper {
 
-  private static final long      serialVersionUID     = 7759053241235858224L;
-
   /**
    * <code>ASCENDING</code>.
    */
@@ -93,11 +91,13 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   private static final Directive NOT_SORTED_DIRECTIVE = new Directive(-1,
                                                           NOT_SORTED);
 
+  private static final long      serialVersionUID     = 7759053241235858224L;
+
   private SIcon                  downIcon;
 
   private List<Directive>        sortingColumns;
-  private TableModel             tableModel;
   private STableColumnModel      tableColumnModel;
+  private TableModel             tableModel;
   private TableModelListener     tableModelListener;
   private SIcon                  upIcon;
 
@@ -266,6 +266,30 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   }
 
   /**
+   * Cancels sorting.
+   */
+  protected void cancelSorting() {
+    sortingColumns.clear();
+    // sortingStatusChanged();
+  }
+
+  /**
+   * Performs any operation needed to clear some internal state when sorting has
+   * changed.
+   */
+  protected void clearSortingState() {
+    // NO-OP by default.
+  }
+
+  /**
+   * Creates a table model listener to react to the underlying table model
+   * change events.
+   * 
+   * @return the table model listener.
+   */
+  protected abstract TableModelListener createTableModelHandler();
+
+  /**
    * Gets HeaderRendererIcon.
    * 
    * @param column
@@ -290,20 +314,40 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   }
 
   /**
-   * Cancels sorting.
+   * Gets the sortingColumns.
+   * 
+   * @return the sortingColumns.
    */
-  protected void cancelSorting() {
-    sortingColumns.clear();
-    // sortingStatusChanged();
+  protected List<Directive> getSortingColumns() {
+    return sortingColumns;
   }
 
   /**
-   * Performs any operation needed to clear some internal state when sorting has
-   * changed.
+   * Gets the tableColumnModel.
+   * 
+   * @return the tableColumnModel.
    */
-  protected void clearSortingState() {
-    // NO-OP by default.
+  protected STableColumnModel getTableColumnModel() {
+    return tableColumnModel;
   }
+
+  /**
+   * Wether the table column is sortable.
+   * 
+   * @param column
+   *          the table column to test.
+   * @return true is the table column is sortable.
+   */
+  protected boolean isSortable(STableColumn column) {
+    return column.getIdentifier() != null
+        && column.getIdentifier().toString().length() > 0;
+  }
+
+  /**
+   * This method is triggered whenever the user clicks changed the sorting in
+   * any way.
+   */
+  protected abstract void sortingStatusChanged();
 
   private Directive getDirective(int column) {
     for (int i = 0; i < sortingColumns.size(); i++) {
@@ -314,20 +358,6 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
     }
     return NOT_SORTED_DIRECTIVE;
   }
-
-  /**
-   * Creates a table model listener to react to the underlying table model
-   * change events.
-   * 
-   * @return the table model listener.
-   */
-  protected abstract TableModelListener createTableModelHandler();
-
-  /**
-   * This method is triggered whenever the user clicks changed the sorting in
-   * any way.
-   */
-  protected abstract void sortingStatusChanged();
 
   /**
    * Internal class to represent a sorted column state.
@@ -409,35 +439,5 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
       }
       return c;
     }
-  }
-
-  /**
-   * Gets the sortingColumns.
-   * 
-   * @return the sortingColumns.
-   */
-  protected List<Directive> getSortingColumns() {
-    return sortingColumns;
-  }
-
-  /**
-   * Gets the tableColumnModel.
-   * 
-   * @return the tableColumnModel.
-   */
-  protected STableColumnModel getTableColumnModel() {
-    return tableColumnModel;
-  }
-
-  /**
-   * Wether the table column is sortable.
-   * 
-   * @param column
-   *          the table column to test.
-   * @return true is the table column is sortable.
-   */
-  protected boolean isSortable(STableColumn column) {
-    return column.getIdentifier() != null
-        && column.getIdentifier().toString().length() > 0;
   }
 }

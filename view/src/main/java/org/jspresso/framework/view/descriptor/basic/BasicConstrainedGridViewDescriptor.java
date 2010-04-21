@@ -81,16 +81,18 @@ public class BasicConstrainedGridViewDescriptor extends
   }
 
   /**
-   * Deprecated. Use <code>cells</code> instead.
+   * Registers the nested children views along with their cell constaints. They
+   * are set as a <code>Map</code> that is :
+   * <ul>
+   * <li>keyed by the children views</li>
+   * <li>valued by the cell constraints to apply to each nested view</li>
+   * </ul>
    * 
-   * @param constrainedViews
-   *          the constrainedViews to set.
-   * @deprecated use setCells instead.
+   * @param cells
+   *          the cells to set.
    */
-  @Deprecated
-  public void setConstrainedViews(
-      Map<IViewDescriptor, CellConstraints> constrainedViews) {
-    setCells(constrainedViews);
+  public void setCells(Map<IViewDescriptor, CellConstraints> cells) {
+    this.cells = cells;
   }
 
   /**
@@ -107,17 +109,15 @@ public class BasicConstrainedGridViewDescriptor extends
   }
 
   /**
-   * Registers the nested children views along with their cell constaints. They
-   * are set as a <code>Map</code> that is :
-   * <ul>
-   * <li>keyed by the children views</li>
-   * <li>valued by the cell constraints to apply to each nested view</li>
-   * </ul>
+   * Deprecated. Use <code>cells</code> instead.
    * 
-   * @param cells
-   *          the cells to set.
+   * @param constrainedViews
+   *          the constrainedViews to set.
+   * @deprecated use setCells instead.
    */
-  public void setCells(Map<IViewDescriptor, CellConstraints> cells) {
-    this.cells = cells;
+  @Deprecated
+  public void setConstrainedViews(
+      Map<IViewDescriptor, CellConstraints> constrainedViews) {
+    setCells(constrainedViews);
   }
 }

@@ -60,26 +60,6 @@ public class Module extends AbstractPropertyChangeCapable implements
     ISecurable, IViewDescriptorProvider, ISubjectAware {
 
   /**
-   * <code>SUB_MODULES</code> is "subModules".
-   */
-  public static final String SUB_MODULES      = "subModules";
-
-  /**
-   * <code>PARENT</code> is "parent".
-   */
-  public static final String PARENT           = "parent";
-
-  /**
-   * <code>NAME</code> is "name".
-   */
-  public static final String NAME             = "name";
-
-  /**
-   * <code>I18N_NAME</code> is "i18nName".
-   */
-  public static final String I18N_NAME        = "i18nName";
-
-  /**
    * <code>DESCRIPTION</code> is "description".
    */
   public static final String DESCRIPTION      = "description";
@@ -89,24 +69,44 @@ public class Module extends AbstractPropertyChangeCapable implements
    */
   public static final String I18N_DESCRIPTION = "i18nDescription";
 
+  /**
+   * <code>I18N_NAME</code> is "i18nName".
+   */
+  public static final String I18N_NAME        = "i18nName";
+
+  /**
+   * <code>NAME</code> is "name".
+   */
+  public static final String NAME             = "name";
+
+  /**
+   * <code>PARENT</code> is "parent".
+   */
+  public static final String PARENT           = "parent";
+
+  /**
+   * <code>SUB_MODULES</code> is "subModules".
+   */
+  public static final String SUB_MODULES      = "subModules";
+
   private String             description;
+  private boolean            dirty;
+  private IAction            entryAction;
+  private IAction            exitAction;
   private Collection<String> grantedRoles;
+
   private String             i18nDescription;
   private String             i18nName;
   private String             iconImageURL;
-
   private String             name;
   private Module             parent;
   private IViewDescriptor    projectedViewDescriptor;
   private boolean            started;
   private IAction            startupAction;
-  private IAction            entryAction;
-  private IAction            exitAction;
-  private List<Module>       subModules;
 
   private Subject            subject;
 
-  private boolean            dirty;
+  private List<Module>       subModules;
 
   /**
    * Constructs a new <code>Module</code> instance.
@@ -164,6 +164,24 @@ public class Module extends AbstractPropertyChangeCapable implements
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Gets the entryAction.
+   * 
+   * @return the entryAction.
+   */
+  public IAction getEntryAction() {
+    return entryAction;
+  }
+
+  /**
+   * Gets the exitAction.
+   * 
+   * @return the exitAction.
+   */
+  public IAction getExitAction() {
+    return exitAction;
   }
 
   /**
@@ -272,6 +290,15 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
+   * Returns unmodified projected view descriptor.
+   * <p>
+   * {@inheritDoc}
+   */
+  public IViewDescriptor getViewDescriptor() {
+    return getProjectedViewDescriptor();
+  }
+
+  /**
    * Hash code based on name.
    * <p>
    * {@inheritDoc}
@@ -279,6 +306,15 @@ public class Module extends AbstractPropertyChangeCapable implements
   @Override
   public int hashCode() {
     return new HashCodeBuilder(23, 57).append(name).toHashCode();
+  }
+
+  /**
+   * Gets the dirty.
+   * 
+   * @return the dirty.
+   */
+  public boolean isDirty() {
+    return dirty;
   }
 
   /**
@@ -349,6 +385,46 @@ public class Module extends AbstractPropertyChangeCapable implements
     if (this.i18nDescription == null) {
       setI18nDescription(name);
     }
+  }
+
+  /**
+   * Sets the dirty.
+   * 
+   * @param dirty
+   *          the dirty to set.
+   * @internal
+   */
+  public void setDirty(boolean dirty) {
+    String oldI18nName = getI18nName();
+    this.dirty = dirty;
+    firePropertyChange(I18N_NAME, oldI18nName, getI18nName());
+  }
+
+  /**
+   * Configures an action to be executed every time the module becomes the
+   * current selected module (either through a user explicit navigation or a
+   * programmatic selection). The action will execute in the context of the
+   * current workspace, this module being the current selected module.
+   * 
+   * @param entryAction
+   *          the entryAction to set.
+   */
+  public void setEntryAction(IAction entryAction) {
+    this.entryAction = entryAction;
+  }
+
+  /**
+   * Configures an action to be executed every time the module becomes
+   * unselected (either through a user explicit navigation or a programmatic
+   * deselection). The action will execute in the context of the current
+   * workspace, this module being the current selected module (i.e. the action
+   * occurs before the module is actually left).
+   * 
+   * @param exitAction
+   *          the exitAction to set.
+   */
+  public void setExitAction(IAction exitAction) {
+    this.exitAction = exitAction;
   }
 
   /**
@@ -504,6 +580,15 @@ public class Module extends AbstractPropertyChangeCapable implements
   }
 
   /**
+   * {@inheritDoc}
+   * 
+   * @internal
+   */
+  public void setSubject(Subject subject) {
+    this.subject = subject;
+  }
+
+  /**
    * Installs a list of module(s) as sub-modules of this one. It will fire a
    * &quot;subModules&quot; property change event.
    * 
@@ -562,24 +647,6 @@ public class Module extends AbstractPropertyChangeCapable implements
     firePropertyChange(SUB_MODULES, oldChildren, newChildren);
   }
 
-  /**
-   * Returns unmodified projected view descriptor.
-   * <p>
-   * {@inheritDoc}
-   */
-  public IViewDescriptor getViewDescriptor() {
-    return getProjectedViewDescriptor();
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @internal
-   */
-  public void setSubject(Subject subject) {
-    this.subject = subject;
-  }
-
   private Subject getSubject() {
     if (subject != null) {
       return subject;
@@ -588,72 +655,5 @@ public class Module extends AbstractPropertyChangeCapable implements
       return getParent().getSubject();
     }
     return null;
-  }
-
-  /**
-   * Gets the entryAction.
-   * 
-   * @return the entryAction.
-   */
-  public IAction getEntryAction() {
-    return entryAction;
-  }
-
-  /**
-   * Configures an action to be executed every time the module becomes the
-   * current selected module (either through a user explicit navigation or a
-   * programmatic selection). The action will execute in the context of the
-   * current workspace, this module being the current selected module.
-   * 
-   * @param entryAction
-   *          the entryAction to set.
-   */
-  public void setEntryAction(IAction entryAction) {
-    this.entryAction = entryAction;
-  }
-
-  /**
-   * Gets the exitAction.
-   * 
-   * @return the exitAction.
-   */
-  public IAction getExitAction() {
-    return exitAction;
-  }
-
-  /**
-   * Configures an action to be executed every time the module becomes
-   * unselected (either through a user explicit navigation or a programmatic
-   * deselection). The action will execute in the context of the current
-   * workspace, this module being the current selected module (i.e. the action
-   * occurs before the module is actually left).
-   * 
-   * @param exitAction
-   *          the exitAction to set.
-   */
-  public void setExitAction(IAction exitAction) {
-    this.exitAction = exitAction;
-  }
-
-  /**
-   * Gets the dirty.
-   * 
-   * @return the dirty.
-   */
-  public boolean isDirty() {
-    return dirty;
-  }
-
-  /**
-   * Sets the dirty.
-   * 
-   * @param dirty
-   *          the dirty to set.
-   * @internal
-   */
-  public void setDirty(boolean dirty) {
-    String oldI18nName = getI18nName();
-    this.dirty = dirty;
-    firePropertyChange(I18N_NAME, oldI18nName, getI18nName());
   }
 }

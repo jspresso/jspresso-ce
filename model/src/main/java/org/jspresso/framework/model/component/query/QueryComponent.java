@@ -45,11 +45,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private static final long       serialVersionUID = 4271673164192796253L;
 
   private IComponentDescriptor<?> componentDescriptor;
+  private Map<String, ESort>      defaultOrderingProperties;
+  private Map<String, ESort>      orderingProperties;
   private Integer                 page;
   private Integer                 pageSize;
   private Integer                 recordCount;
-  private Map<String, ESort>      defaultOrderingProperties;
-  private Map<String, ESort>      orderingProperties;
 
   /**
    * Constructs a new <code>QueryComponent</code> instance.
@@ -91,6 +91,66 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   }
 
   /**
+   * Gets the componentDescriptor.
+   * 
+   * @return the componentDescriptor.
+   */
+  public IComponentDescriptor<?> getComponentDescriptor() {
+    return componentDescriptor;
+  }
+
+  /**
+   * Gets the orderingProperties.
+   * 
+   * @return the orderingProperties.
+   */
+  public Map<String, ESort> getOrderingProperties() {
+    if (orderingProperties == null || orderingProperties.isEmpty()) {
+      if (defaultOrderingProperties == null) {
+        return componentDescriptor.getOrderingProperties();
+      }
+      return defaultOrderingProperties;
+    }
+    return orderingProperties;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Integer getPage() {
+    return page;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Integer getPageCount() {
+    if (getRecordCount() == null) {
+      return null;
+    }
+    if (getPageSize() == null || getPageSize().intValue() <= 0) {
+      return new Integer(1);
+    }
+    int remainder = getRecordCount().intValue() % getPageSize().intValue();
+    int lastIncompletePage = 0;
+    if (remainder > 0) {
+      lastIncompletePage = 1;
+    }
+    return new Integer(getRecordCount().intValue() / getPageSize().intValue()
+        + lastIncompletePage);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Integer getPageSize() {
+    if (pageSize == null) {
+      return componentDescriptor.getPageSize();
+    }
+    return pageSize;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
@@ -108,49 +168,50 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  public void setQueriedComponents(List<? extends IComponent> queriedComponents) {
-    put(QUERIED_COMPONENTS, queriedComponents);
-  }
-
-  private class InlinedComponentTracker implements PropertyChangeListener {
-
-    private String componentName;
-
-    /**
-     * Constructs a new <code>InnerComponentTracker</code> instance.
-     * 
-     * @param componentName
-     *          the name of the component to track the properties.
-     */
-    public InlinedComponentTracker(String componentName) {
-      this.componentName = componentName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(PropertyChangeEvent evt) {
-      firePropertyChange(componentName, null, evt.getSource());
-      firePropertyChange(componentName + "." + evt.getPropertyName(), evt
-          .getOldValue(), evt.getNewValue());
-    }
+  public Integer getRecordCount() {
+    return recordCount;
   }
 
   /**
    * {@inheritDoc}
    */
-  public Integer getPage() {
-    return page;
+  public boolean isInlineComponent() {
+    return !IEntity.class.isAssignableFrom(componentDescriptor
+        .getComponentContract())
+        && !componentDescriptor.isPurelyAbstract();
   }
 
   /**
    * {@inheritDoc}
    */
-  public Integer getPageSize() {
-    if (pageSize == null) {
-      return componentDescriptor.getPageSize();
-    }
-    return pageSize;
+  public boolean isNextPageEnabled() {
+    return getPageCount() != null && getPage() != null
+        && getPage().intValue() < getPageCount().intValue() - 1;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isPreviousPageEnabled() {
+    return getPage() != null && getPage().intValue() > 0;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setDefaultOrderingProperties(
+      Map<String, ESort> defaultOrderingProperties) {
+    this.defaultOrderingProperties = defaultOrderingProperties;
+  }
+
+  /**
+   * Sets the sortingAttributes.
+   * 
+   * @param orderingProperties
+   *          the sortingAttributes to set.
+   */
+  public void setOrderingProperties(Map<String, ESort> orderingProperties) {
+    this.orderingProperties = orderingProperties;
   }
 
   /**
@@ -182,8 +243,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
-  public Integer getRecordCount() {
-    return recordCount;
+  public void setQueriedComponents(List<? extends IComponent> queriedComponents) {
+    put(QUERIED_COMPONENTS, queriedComponents);
   }
 
   /**
@@ -203,88 +264,27 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         new Boolean(isNextPageEnabled()));
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public Integer getPageCount() {
-    if (getRecordCount() == null) {
-      return null;
+  private class InlinedComponentTracker implements PropertyChangeListener {
+
+    private String componentName;
+
+    /**
+     * Constructs a new <code>InnerComponentTracker</code> instance.
+     * 
+     * @param componentName
+     *          the name of the component to track the properties.
+     */
+    public InlinedComponentTracker(String componentName) {
+      this.componentName = componentName;
     }
-    if (getPageSize() == null || getPageSize().intValue() <= 0) {
-      return new Integer(1);
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(PropertyChangeEvent evt) {
+      firePropertyChange(componentName, null, evt.getSource());
+      firePropertyChange(componentName + "." + evt.getPropertyName(), evt
+          .getOldValue(), evt.getNewValue());
     }
-    int remainder = getRecordCount().intValue() % getPageSize().intValue();
-    int lastIncompletePage = 0;
-    if (remainder > 0) {
-      lastIncompletePage = 1;
-    }
-    return new Integer(getRecordCount().intValue() / getPageSize().intValue()
-        + lastIncompletePage);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isNextPageEnabled() {
-    return getPageCount() != null && getPage() != null
-        && getPage().intValue() < getPageCount().intValue() - 1;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isPreviousPageEnabled() {
-    return getPage() != null && getPage().intValue() > 0;
-  }
-
-  /**
-   * Gets the orderingProperties.
-   * 
-   * @return the orderingProperties.
-   */
-  public Map<String, ESort> getOrderingProperties() {
-    if (orderingProperties == null || orderingProperties.isEmpty()) {
-      if (defaultOrderingProperties == null) {
-        return componentDescriptor.getOrderingProperties();
-      }
-      return defaultOrderingProperties;
-    }
-    return orderingProperties;
-  }
-
-  /**
-   * Sets the sortingAttributes.
-   * 
-   * @param orderingProperties
-   *          the sortingAttributes to set.
-   */
-  public void setOrderingProperties(Map<String, ESort> orderingProperties) {
-    this.orderingProperties = orderingProperties;
-  }
-
-  /**
-   * Gets the componentDescriptor.
-   * 
-   * @return the componentDescriptor.
-   */
-  public IComponentDescriptor<?> getComponentDescriptor() {
-    return componentDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setDefaultOrderingProperties(
-      Map<String, ESort> defaultOrderingProperties) {
-    this.defaultOrderingProperties = defaultOrderingProperties;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isInlineComponent() {
-    return !IEntity.class.isAssignableFrom(componentDescriptor
-        .getComponentContract())
-        && !componentDescriptor.isPurelyAbstract();
   }
 }

@@ -29,14 +29,6 @@ public class RCheckBox extends RComponent {
   private static final long serialVersionUID = -5911137476479351628L;
 
   /**
-   * Constructs a new <code>RCheckBox</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RCheckBox() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RCheckBox</code> instance.
    * 
    * @param guid
@@ -44,5 +36,13 @@ public class RCheckBox extends RComponent {
    */
   public RCheckBox(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RCheckBox</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RCheckBox() {
+    // For GWT support
   }
 }

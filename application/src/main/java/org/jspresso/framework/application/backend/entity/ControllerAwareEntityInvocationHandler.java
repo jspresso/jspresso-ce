@@ -53,9 +53,13 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 public class ControllerAwareEntityInvocationHandler extends
     BasicEntityInvocationHandler {
 
+  private static final String DETACHED_ENTITIES_PROPERTY_NAME = "detachedEntities";
+
   private static final long  serialVersionUID = 3663517052427878204L;
 
   private IBackendController backendController;
+
+  private Set<IEntity>        detachedEntities;
 
   /**
    * Constructs a new <code>ControllerAwareEntityInvocationHandler</code>
@@ -89,6 +93,40 @@ public class ControllerAwareEntityInvocationHandler extends
   }
 
   /**
+   * Sets the JAAS subject to subject aware extensions.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void configureExtension(IComponentExtension<IComponent> extension) {
+    super.configureExtension(extension);
+    if (extension instanceof ISubjectAware && getBackendController() != null) {
+      ((ISubjectAware) extension).setSubject(getBackendController()
+          .getSubject());
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void entityDetached(IEntity child) {
+    if (detachedEntities == null) {
+      detachedEntities = new LinkedHashSet<IEntity>();
+    }
+    detachedEntities.add(child);
+  }
+
+  /**
+   * Gets the backendController.
+   * 
+   * @return the backendController.
+   */
+  protected IBackendController getBackendController() {
+    return backendController;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
@@ -111,13 +149,34 @@ public class ControllerAwareEntityInvocationHandler extends
         propertyDescriptor.getName());
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
-
   /**
    * {@inheritDoc}
    */
   @Override
   protected boolean isInitialized(Object objectOrProxy) {
     return getBackendController().isInitialized(objectOrProxy);
+  }
+
+  /**
+   * Registers detached entities for update.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onUpdate(IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    if (detachedEntities != null) {
+      for (IEntity detachedEntity : detachedEntities) {
+        if (!entityLifecycleHandler
+            .isEntityRegisteredForDeletion(detachedEntity)
+            && !entityLifecycleHandler
+                .isEntityRegisteredForUpdate(detachedEntity)) {
+          entityLifecycleHandler.registerForUpdate(detachedEntity);
+        }
+      }
+    }
+    detachedEntities = null;
+    super.onUpdate(entityFactory, principal, entityLifecycleHandler);
   }
 
   /**
@@ -151,62 +210,13 @@ public class ControllerAwareEntityInvocationHandler extends
   }
 
   /**
-   * Sets the JAAS subject to subject aware extensions.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  protected void configureExtension(IComponentExtension<IComponent> extension) {
-    super.configureExtension(extension);
-    if (extension instanceof ISubjectAware && getBackendController() != null) {
-      ((ISubjectAware) extension).setSubject(getBackendController()
-          .getSubject());
-    }
-  }
-
-  /**
-   * Gets the backendController.
-   * 
-   * @return the backendController.
-   */
-  protected IBackendController getBackendController() {
-    return backendController;
-  }
-
-  private Set<IEntity>        detachedEntities;
-  private static final String DETACHED_ENTITIES_PROPERTY_NAME = "detachedEntities";
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void entityDetached(IEntity child) {
-    if (detachedEntities == null) {
-      detachedEntities = new LinkedHashSet<IEntity>();
-    }
-    detachedEntities.add(child);
-  }
-
-  /**
-   * Registers detached entities for update.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void onUpdate(IEntityFactory entityFactory,
-      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
-    if (detachedEntities != null) {
-      for (IEntity detachedEntity : detachedEntities) {
-        if (!entityLifecycleHandler
-            .isEntityRegisteredForDeletion(detachedEntity)
-            && !entityLifecycleHandler
-                .isEntityRegisteredForUpdate(detachedEntity)) {
-          entityLifecycleHandler.registerForUpdate(detachedEntity);
-        }
-      }
-    }
-    detachedEntities = null;
-    super.onUpdate(entityFactory, principal, entityLifecycleHandler);
+  protected Map<String, Object> straightGetProperties() {
+    Map<String, Object> superMap = super.straightGetProperties();
+    superMap.put(DETACHED_ENTITIES_PROPERTY_NAME, detachedEntities);
+    return superMap;
   }
 
   /**
@@ -232,15 +242,5 @@ public class ControllerAwareEntityInvocationHandler extends
     } else {
       super.straightSetProperty(propertyName, newPropertyValue);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Map<String, Object> straightGetProperties() {
-    Map<String, Object> superMap = super.straightGetProperties();
-    superMap.put(DETACHED_ENTITIES_PROPERTY_NAME, detachedEntities);
-    return superMap;
   }
 }

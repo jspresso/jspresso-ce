@@ -45,6 +45,28 @@ public class UIExtendedInternalFrame extends UIInternalFrame {
        * {@inheritDoc}
        */
       @Override
+      public void internalFrameClosed(
+          @SuppressWarnings("unused") InternalFrameEvent e) {
+        sendOptionalEventULC(
+            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
+            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_CLOSED);
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void internalFrameClosing(
+          @SuppressWarnings("unused") InternalFrameEvent e) {
+        sendOptionalEventULC(
+            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
+            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_CLOSING);
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
       public void internalFrameDeactivated(
           @SuppressWarnings("unused") javax.swing.event.InternalFrameEvent e) {
         sendOptionalEventULC(
@@ -83,28 +105,6 @@ public class UIExtendedInternalFrame extends UIInternalFrame {
         sendOptionalEventULC(
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
             ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_OPENED);
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void internalFrameClosing(
-          @SuppressWarnings("unused") InternalFrameEvent e) {
-        sendOptionalEventULC(
-            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
-            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_CLOSING);
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void internalFrameClosed(
-          @SuppressWarnings("unused") InternalFrameEvent e) {
-        sendOptionalEventULC(
-            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT,
-            ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_CLOSED);
       }
     });
   }

@@ -45,20 +45,6 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
   private IReportDescriptor reportDescriptor;
 
   /**
-   * Gets the report to execute out of the model connector.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected IReport getReportToExecute(
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      Map<String, Object> context) {
-    IReport report = getReportFactory().createReportInstance(reportDescriptor,
-        getTranslationProvider(context), getLocale(context));
-    return report;
-  }
-
-  /**
    * Configures the report to execute.
    * 
    * @param reportDescriptor
@@ -82,5 +68,19 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
           .getId());
     }
     return initialReportContext;
+  }
+
+  /**
+   * Gets the report to execute out of the model connector.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IReport getReportToExecute(
+      @SuppressWarnings("unused") IActionHandler actionHandler,
+      Map<String, Object> context) {
+    IReport report = getReportFactory().createReportInstance(reportDescriptor,
+        getTranslationProvider(context), getLocale(context));
+    return report;
   }
 }

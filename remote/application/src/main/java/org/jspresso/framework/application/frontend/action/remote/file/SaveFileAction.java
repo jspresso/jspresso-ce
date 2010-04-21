@@ -43,8 +43,8 @@ import org.jspresso.framework.view.IView;
  */
 public class SaveFileAction extends ChooseFileAction {
 
-  private IFileSaveCallback fileSaveCallback;
   private String            contentType;
+  private IFileSaveCallback fileSaveCallback;
 
   /**
    * Constructs a new <code>SaveFileAction</code> instance.
@@ -80,6 +80,27 @@ public class SaveFileAction extends ChooseFileAction {
   }
 
   /**
+   * Gets the contentType.
+   * 
+   * @return the contentType.
+   */
+  public String getContentType() {
+    return contentType;
+  }
+
+  /**
+   * Configures the conten type to be used whenever the UI technology used
+   * requires a download. The content type defaults to
+   * <code>&quot;application/octet-stream&quot;</code>.
+   * 
+   * @param contentType
+   *          the contentType to set.
+   */
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
+
+  /**
    * Configures the file save callback instance that will be used to deal with
    * the file dialog events. Three methods must be implemented :
    * <ul>
@@ -105,71 +126,6 @@ public class SaveFileAction extends ChooseFileAction {
     this.fileSaveCallback = fileSaveCallback;
   }
 
-  private static class ResourceAdapter extends AbstractActiveResource {
-
-    private String              name;
-    private IFileSaveCallback   source;
-    private IActionHandler      actionHandler;
-    private Map<String, Object> context;
-
-    public ResourceAdapter(String name, String contentType,
-        IFileSaveCallback source, IActionHandler actionHandler,
-        Map<String, Object> context) {
-      super(contentType);
-      this.name = name;
-      this.source = source;
-      this.actionHandler = actionHandler;
-      this.context = new HashMap<String, Object>();
-      if (context != null) {
-        this.context = context;
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public long getSize() {
-      return -1; // unknown.
-    }
-
-    /**
-     * Gets the name.
-     * 
-     * @return the name.
-     */
-    public String getName() {
-      return name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void writeToContent(OutputStream out) throws IOException {
-      source.fileChosen(out, actionHandler, context);
-    }
-  }
-
-  /**
-   * Gets the contentType.
-   * 
-   * @return the contentType.
-   */
-  public String getContentType() {
-    return contentType;
-  }
-
-  /**
-   * Configures the conten type to be used whenever the UI technology used
-   * requires a download. The content type defaults to
-   * <code>&quot;application/octet-stream&quot;</code>.
-   * 
-   * @param contentType
-   *          the contentType to set.
-   */
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
-  }
-
   /**
    * Computes a file name to save the file. Queries the file save callback for a
    * file name and defaults to the action default one if none is returned.
@@ -187,5 +143,49 @@ public class SaveFileAction extends ChooseFileAction {
       }
     }
     return super.getFileName(context);
+  }
+
+  private static class ResourceAdapter extends AbstractActiveResource {
+
+    private IActionHandler      actionHandler;
+    private Map<String, Object> context;
+    private String              name;
+    private IFileSaveCallback   source;
+
+    public ResourceAdapter(String name, String contentType,
+        IFileSaveCallback source, IActionHandler actionHandler,
+        Map<String, Object> context) {
+      super(contentType);
+      this.name = name;
+      this.source = source;
+      this.actionHandler = actionHandler;
+      this.context = new HashMap<String, Object>();
+      if (context != null) {
+        this.context = context;
+      }
+    }
+
+    /**
+     * Gets the name.
+     * 
+     * @return the name.
+     */
+    public String getName() {
+      return name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getSize() {
+      return -1; // unknown.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void writeToContent(OutputStream out) throws IOException {
+      source.fileChosen(out, actionHandler, context);
+    }
   }
 }

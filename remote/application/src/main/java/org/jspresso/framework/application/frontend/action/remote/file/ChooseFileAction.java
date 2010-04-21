@@ -114,6 +114,18 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
   }
 
   /**
+   * Computes a file name to save the file. Defaults to the action default file
+   * name parameterized in the action.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file name to save the file under.
+   */
+  protected String getFileName(Map<String, Object> context) {
+    return getDefaultFileName();
+  }
+
+  /**
    * Translates the file filter for usage in remote commands.
    * 
    * @param executionFileFilter
@@ -135,17 +147,5 @@ public abstract class ChooseFileAction extends AbstractRemoteAction {
           .toArray(new String[0]));
     }
     return translatedFileFilter;
-  }
-
-  /**
-   * Computes a file name to save the file. Defaults to the action default file
-   * name parameterized in the action.
-   * 
-   * @param context
-   *          the action context.
-   * @return the file name to save the file under.
-   */
-  protected String getFileName(Map<String, Object> context) {
-    return getDefaultFileName();
   }
 }

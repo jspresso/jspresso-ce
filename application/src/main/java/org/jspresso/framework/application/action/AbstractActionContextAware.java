@@ -48,18 +48,32 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 public abstract class AbstractActionContextAware {
 
   /**
-   * Retrieves the model descriptor from the context using the
-   * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> standard key. The
-   * model descriptor is registered in the action context based on the model of
-   * the view to which the action is attached.
+   * Gets the (string) action command out of the context. The action command is
+   * an arbitrary character string that can be set by the UI component
+   * triggering the action. It is stored using the
+   * <code>ActionContextConstants.ACTION_COMMAND</code> standard key.
    * 
    * @param context
    *          the action context.
-   * @return the model descriptor this model action was triggered on.
+   * @return the (string) action command if it exists in the action context or
+   *         null.
    */
-  protected IModelDescriptor getModelDescriptor(Map<String, Object> context) {
-    return (IModelDescriptor) context
-        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+  protected String getActionCommand(Map<String, Object> context) {
+    return (String) context.get(ActionContextConstants.ACTION_COMMAND);
+  }
+
+  /**
+   * Gets the action parameter out of the context. The action parameter is a
+   * general purpose context entry that can be used to pass an arbitrary
+   * parameter along the action chain. It is stored using the
+   * <code>ActionContextConstants.ACTION_PARAM</code> standard key.
+   * 
+   * @param context
+   *          the action context.
+   * @return the action parameter if it exists in the action context or null.
+   */
+  protected Object getActionParameter(Map<String, Object> context) {
+    return context.get(ActionContextConstants.ACTION_PARAM);
   }
 
   /**
@@ -101,19 +115,6 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets he application translation provider out of the action context. This
-   * method simply delegates to the context backend controller.
-   * 
-   * @param context
-   *          the action context.
-   * @return the translation provider.
-   */
-  protected ITranslationProvider getTranslationProvider(
-      Map<String, Object> context) {
-    return getBackendController(context).getTranslationProvider();
-  }
-
-  /**
    * Retrieves the locale the action has to use to execute. This method
    * delegates to the context backend controller that in turn will delegate to
    * the session.
@@ -127,48 +128,18 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the action parameter out of the context. The action parameter is a
-   * general purpose context entry that can be used to pass an arbitrary
-   * parameter along the action chain. It is stored using the
-   * <code>ActionContextConstants.ACTION_PARAM</code> standard key.
+   * Gets the model this action was triggered on.
    * 
    * @param context
    *          the action context.
-   * @return the action parameter if it exists in the action context or null.
+   * @return the model.
    */
-  protected Object getActionParameter(Map<String, Object> context) {
-    return context.get(ActionContextConstants.ACTION_PARAM);
-  }
-
-  /**
-   * Sets the action parameter out of the context. The action parameter is a
-   * general purpose context entry that can be used to pass an arbitrary
-   * parameter along the action chain. It is stored using the
-   * <code>ActionContextConstants.ACTION_PARAM</code> standard key.
-   * 
-   * @param actionParam
-   *          the action parameter to set to the context.
-   * @param context
-   *          the action context.
-   */
-  protected void setActionParameter(Object actionParam,
-      Map<String, Object> context) {
-    context.put(ActionContextConstants.ACTION_PARAM, actionParam);
-  }
-
-  /**
-   * Gets the (string) action command out of the context. The action command is
-   * an arbitrary character string that can be set by the UI component
-   * triggering the action. It is stored using the
-   * <code>ActionContextConstants.ACTION_COMMAND</code> standard key.
-   * 
-   * @param context
-   *          the action context.
-   * @return the (string) action command if it exists in the action context or
-   *         null.
-   */
-  protected String getActionCommand(Map<String, Object> context) {
-    return (String) context.get(ActionContextConstants.ACTION_COMMAND);
+  protected Object getModel(Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(context);
+    if (modelConnector != null) {
+      return modelConnector.getConnectorValue();
+    }
+    return null;
   }
 
   /**
@@ -189,33 +160,18 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
-   * Gets the selected indices out of the action context. The value is stored
-   * with the key <code>ActionContextConstants.SELECTED_INDICES</code>. The
-   * context is initialized with the array of selected indices of the UI
-   * component if it is a collection component (table, list, ...). More
-   * acurately, the selected indices are taken from the view connector that
-   * adapts the UI component to the Jspresso binding architecture.
+   * Retrieves the model descriptor from the context using the
+   * <code>ActionContextConstants.MODEL_DESCRIPTOR</code> standard key. The
+   * model descriptor is registered in the action context based on the model of
+   * the view to which the action is attached.
    * 
    * @param context
    *          the action context.
-   * @return the selected indices stored in the action context.
+   * @return the model descriptor this model action was triggered on.
    */
-  protected int[] getSelectedIndices(Map<String, Object> context) {
-    return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
-  }
-
-  /**
-   * Sets the selected indices to the action context. The value is stored using
-   * the <code>ActionContextConstants.SELECTED_INDICES</code> key.
-   * 
-   * @param selectedIndices
-   *          the selected indices to store in the action context.
-   * @param context
-   *          the action context.
-   */
-  protected void setSelectedIndices(int[] selectedIndices,
-      Map<String, Object> context) {
-    context.put(ActionContextConstants.SELECTED_INDICES, selectedIndices);
+  protected IModelDescriptor getModelDescriptor(Map<String, Object> context) {
+    return (IModelDescriptor) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
   }
 
   /**
@@ -228,21 +184,6 @@ public abstract class AbstractActionContextAware {
    */
   protected Module getModule(Map<String, Object> context) {
     return (Module) context.get(ActionContextConstants.MODULE);
-  }
-
-  /**
-   * Gets the model this action was triggered on.
-   * 
-   * @param context
-   *          the action context.
-   * @return the model.
-   */
-  protected Object getModel(Map<String, Object> context) {
-    IValueConnector modelConnector = getModelConnector(context);
-    if (modelConnector != null) {
-      return modelConnector.getConnectorValue();
-    }
-    return null;
   }
 
   /**
@@ -260,6 +201,22 @@ public abstract class AbstractActionContextAware {
       }
     }
     return null;
+  }
+
+  /**
+   * Gets the selected indices out of the action context. The value is stored
+   * with the key <code>ActionContextConstants.SELECTED_INDICES</code>. The
+   * context is initialized with the array of selected indices of the UI
+   * component if it is a collection component (table, list, ...). More
+   * acurately, the selected indices are taken from the view connector that
+   * adapts the UI component to the Jspresso binding architecture.
+   * 
+   * @param context
+   *          the action context.
+   * @return the selected indices stored in the action context.
+   */
+  protected int[] getSelectedIndices(Map<String, Object> context) {
+    return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
   }
 
   /**
@@ -314,6 +271,49 @@ public abstract class AbstractActionContextAware {
       models = Collections.singletonList(getSelectedModel(context));
     }
     return models;
+  }
+
+  /**
+   * Gets he application translation provider out of the action context. This
+   * method simply delegates to the context backend controller.
+   * 
+   * @param context
+   *          the action context.
+   * @return the translation provider.
+   */
+  protected ITranslationProvider getTranslationProvider(
+      Map<String, Object> context) {
+    return getBackendController(context).getTranslationProvider();
+  }
+
+  /**
+   * Sets the action parameter out of the context. The action parameter is a
+   * general purpose context entry that can be used to pass an arbitrary
+   * parameter along the action chain. It is stored using the
+   * <code>ActionContextConstants.ACTION_PARAM</code> standard key.
+   * 
+   * @param actionParam
+   *          the action parameter to set to the context.
+   * @param context
+   *          the action context.
+   */
+  protected void setActionParameter(Object actionParam,
+      Map<String, Object> context) {
+    context.put(ActionContextConstants.ACTION_PARAM, actionParam);
+  }
+
+  /**
+   * Sets the selected indices to the action context. The value is stored using
+   * the <code>ActionContextConstants.SELECTED_INDICES</code> key.
+   * 
+   * @param selectedIndices
+   *          the selected indices to store in the action context.
+   * @param context
+   *          the action context.
+   */
+  protected void setSelectedIndices(int[] selectedIndices,
+      Map<String, Object> context) {
+    context.put(ActionContextConstants.SELECTED_INDICES, selectedIndices);
   }
 
   /**

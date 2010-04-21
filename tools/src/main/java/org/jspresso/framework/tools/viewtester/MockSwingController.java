@@ -68,6 +68,23 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext, List<Action> actions, String title,
+      JComponent sourceComponent, Map<String, Object> context,
+      Dimension dimension, boolean reuseCurrent) {
+
+    JFlashPlayer flashPlayer = new JFlashPlayer();
+    FlashPluginOptions options = new FlashPluginOptions();
+    options.setVariables(flashContext);
+    flashPlayer.load(swfUrl, options);
+
+    displayModalDialog(flashPlayer, actions, title, sourceComponent, context,
+        dimension, reuseCurrent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void displayModalDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
@@ -149,6 +166,14 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
+  public Workspace getWorkspace(@SuppressWarnings("unused") String workspaceName) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public boolean handleException(Throwable ex, Map<String, Object> context) {
     if (super.handleException(ex, context)) {
       return true;
@@ -195,39 +220,6 @@ public class MockSwingController extends
       ex.printStackTrace();
     }
     return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Workspace getWorkspace(@SuppressWarnings("unused") String workspaceName) {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void displayFlashObject(String swfUrl,
-      Map<String, String> flashContext, List<Action> actions, String title,
-      JComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
-
-    JFlashPlayer flashPlayer = new JFlashPlayer();
-    FlashPluginOptions options = new FlashPluginOptions();
-    options.setVariables(flashContext);
-    flashPlayer.load(swfUrl, options);
-
-    displayModalDialog(flashPlayer, actions, title, sourceComponent, context,
-        dimension, reuseCurrent);
   }
 
   /**
@@ -307,5 +299,13 @@ public class MockSwingController extends
     if (nextAction != null) {
       execute(nextAction, context);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected CallbackHandler createLoginCallbackHandler() {
+    return null;
   }
 }

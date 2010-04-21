@@ -29,14 +29,6 @@ public abstract class RContainer extends RComponent {
   private static final long serialVersionUID = -7174072538766465667L;
 
   /**
-   * Constructs a new <code>RContainer</code> instance. Only used for GWT
-   * serialization support.
-   */
-  protected RContainer() {
-    // For GWT support
-  }
-
-  /**
    * Constructs a new <code>RContainer</code> instance.
    * 
    * @param guid
@@ -44,6 +36,14 @@ public abstract class RContainer extends RComponent {
    */
   public RContainer(String guid) {
     super(guid);
+  }
+
+  /**
+   * Constructs a new <code>RContainer</code> instance. Only used for GWT
+   * serialization support.
+   */
+  protected RContainer() {
+    // For GWT support
   }
 
 }

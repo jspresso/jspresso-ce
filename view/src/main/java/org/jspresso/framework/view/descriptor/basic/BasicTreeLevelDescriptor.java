@@ -49,49 +49,8 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  */
 public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
 
-  private IListViewDescriptor nodeGroupDescriptor;
   private Collection<String>  grantedRoles;
-
-  /**
-   * {@inheritDoc}
-   */
-  public IListViewDescriptor getNodeGroupDescriptor() {
-    return nodeGroupDescriptor;
-  }
-
-  /**
-   * Describes the collection of sibling nodes (node group) as a if it were a
-   * list view. This is how you instruct Jspresso the type of the components
-   * that are used as model behind the tree nodes and which model property is
-   * used to compute the node labels. Most of the other properties defined on
-   * the node group descriptor itself are ignored (font, color, selection
-   * action, ...) since a tree group is not a "real" view but just a mean of
-   * defining a subtree. All these properties that are ignored on the tree group
-   * can be defined on the tree view itself.
-   * 
-   * @param nodeGroupDescriptor
-   *          the nodeGroupDescriptor to set.
-   */
-  public void setNodeGroupDescriptor(IListViewDescriptor nodeGroupDescriptor) {
-    this.nodeGroupDescriptor = nodeGroupDescriptor;
-  }
-
-  /**
-   * Assigns the roles that are authorized to use this subtree. It supports
-   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
-   * granted sufficient privileges, the subtree is simply hidden. Setting the
-   * collection of granted roles to <code>null</code> (default value) disables
-   * role based authorization on the node group level. The framework then checks
-   * for the model roles authorizations and will apply the same restrictions. If
-   * both view and model granted roles collections are <code>null</code>, then
-   * access is granted to anyone.
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
-  }
+  private IListViewDescriptor nodeGroupDescriptor;
 
   /**
    * Gets the grantedRoles.
@@ -123,5 +82,46 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
       }
     }
     return gr;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IListViewDescriptor getNodeGroupDescriptor() {
+    return nodeGroupDescriptor;
+  }
+
+  /**
+   * Assigns the roles that are authorized to use this subtree. It supports
+   * &quot;<b>!</b>&quot; prefix to negate the role(s). Whenever the user is not
+   * granted sufficient privileges, the subtree is simply hidden. Setting the
+   * collection of granted roles to <code>null</code> (default value) disables
+   * role based authorization on the node group level. The framework then checks
+   * for the model roles authorizations and will apply the same restrictions. If
+   * both view and model granted roles collections are <code>null</code>, then
+   * access is granted to anyone.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
+  }
+
+  /**
+   * Describes the collection of sibling nodes (node group) as a if it were a
+   * list view. This is how you instruct Jspresso the type of the components
+   * that are used as model behind the tree nodes and which model property is
+   * used to compute the node labels. Most of the other properties defined on
+   * the node group descriptor itself are ignored (font, color, selection
+   * action, ...) since a tree group is not a "real" view but just a mean of
+   * defining a subtree. All these properties that are ignored on the tree group
+   * can be defined on the tree view itself.
+   * 
+   * @param nodeGroupDescriptor
+   *          the nodeGroupDescriptor to set.
+   */
+  public void setNodeGroupDescriptor(IListViewDescriptor nodeGroupDescriptor) {
+    this.nodeGroupDescriptor = nodeGroupDescriptor;
   }
 }

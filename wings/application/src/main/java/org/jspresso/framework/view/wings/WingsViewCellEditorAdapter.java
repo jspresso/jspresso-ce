@@ -55,9 +55,9 @@ import org.wings.table.STableCellEditor;
 public class WingsViewCellEditorAdapter implements STableCellEditor,
     IValueChangeListener {
 
-  private static final long                serialVersionUID = 8182961519931949735L;
   private static final Map<String, Object> NULLMAP          = Collections
                                                                 .unmodifiableMap(new HashMap<String, Object>());
+  private static final long                serialVersionUID = 8182961519931949735L;
   private ChangeEvent                      changeEvent      = null;
   private IView<SComponent>                editorView;
   private EventListenerList                listenerList;
@@ -112,13 +112,6 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    */
   public void cancelCellEditing() {
     fireEditingCanceled();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
-    stopCellEditing();
   }
 
   /**
@@ -209,6 +202,13 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   public boolean stopCellEditing() {
     fireEditingStopped();
     return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
+    stopCellEditing();
   }
 
   /**

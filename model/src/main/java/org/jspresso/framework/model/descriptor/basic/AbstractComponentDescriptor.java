@@ -81,39 +81,39 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   protected static final IComponentDescriptor<IComponent> COMPONENT_DESCRIPTOR = createComponentDescriptor();
 
-  private BeanFactory                                     beanFactory;
-
   private List<IComponentDescriptor<?>>                   ancestorDescriptors;
+
+  private BeanFactory                                     beanFactory;
   private Class<?>                                        componentContract;
 
   private Collection<String>                              grantedRoles;
-  private List<String>                                    lifecycleInterceptorClassNames;
   private List<String>                                    lifecycleInterceptorBeanNames;
+  private List<String>                                    lifecycleInterceptorClassNames;
 
   private List<ILifecycleInterceptor<?>>                  lifecycleInterceptors;
   private Map<String, IPropertyDescriptor>                nestedPropertyDescriptors;
   private Map<String, ESort>                              orderingProperties;
-  private Map<String, IPropertyDescriptor>                propertyDescriptorsMap;
-  private List<String>                                    queryableProperties;
-
-  private List<String>                                    renderedProperties;
-  private Set<Class<?>>                                   serviceContracts;
-  private Map<String, String>                             serviceDelegateClassNames;
-  private Map<String, String>                             serviceDelegateBeanNames;
-
-  private Map<Method, IComponentService>                  serviceDelegates;
-  private List<IPropertyDescriptor>                       tempPropertyBuffer;
-  private String                                          toStringProperty;
-  private Collection<String>                              unclonedProperties;
-
-  private Collection<IGate>                               readabilityGates;
-  private Collection<IGate>                               writabilityGates;
-
   private Integer                                         pageSize;
+  private Map<String, IPropertyDescriptor>                propertyDescriptorsMap;
+
+  private List<String>                                    queryableProperties;
+  private IComponentDescriptor<E>                         queryDescriptor;
+  private Collection<IGate>                               readabilityGates;
+  private List<String>                                    renderedProperties;
+
+  private Set<Class<?>>                                   serviceContracts;
+  private Map<String, String>                             serviceDelegateBeanNames;
+  private Map<String, String>                             serviceDelegateClassNames;
+  private Map<Method, IComponentService>                  serviceDelegates;
 
   private String                                          sqlName;
+  private List<IPropertyDescriptor>                       tempPropertyBuffer;
 
-  private IComponentDescriptor<E>                         queryDescriptor;
+  private String                                          toStringProperty;
+
+  private Collection<String>                              unclonedProperties;
+
+  private Collection<IGate>                               writabilityGates;
 
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
@@ -124,6 +124,31 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public AbstractComponentDescriptor(String name) {
     setName(name);
+  }
+
+  private static IComponentDescriptor<IComponent> createComponentDescriptor() {
+    BasicInterfaceDescriptor<IComponent> componentDescriptor = new BasicInterfaceDescriptor<IComponent>(
+        IComponent.class.getName());
+
+    return componentDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public IComponentDescriptor<E> createQueryDescriptor() {
+    if (queryDescriptor == null) {
+      queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
+      // queryDescriptor = new BasicComponentDescriptor<E>();
+      Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+      for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
+        propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
+      }
+      ((AbstractComponentDescriptor<E>) queryDescriptor)
+          .setPropertyDescriptors(propertyDescriptors);
+    }
+    return queryDescriptor;
   }
 
   /**
@@ -232,6 +257,13 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  public Integer getPageSize() {
+    return pageSize;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
     IPropertyDescriptor descriptor = null;
     int nestedDotIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
@@ -311,6 +343,24 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  public Collection<IGate> getReadabilityGates() {
+    Set<IGate> gates = new HashSet<IGate>();
+    if (readabilityGates != null) {
+      gates.addAll(readabilityGates);
+    }
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+        gates.addAll(ancestorDescriptor.getReadabilityGates());
+      }
+    }
+    return gates;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public List<String> getRenderedProperties() {
@@ -377,6 +427,15 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Gets the sqlName.
+   * 
+   * @return the sqlName.
+   */
+  public String getSqlName() {
+    return sqlName;
+  }
+
+  /**
    * Gets the toStringProperty.
    * 
    * @return the toStringProperty.
@@ -415,6 +474,31 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  public Collection<IGate> getWritabilityGates() {
+    Set<IGate> gates = new HashSet<IGate>();
+    if (writabilityGates != null) {
+      gates.addAll(writabilityGates);
+    }
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+        gates.addAll(ancestorDescriptor.getWritabilityGates());
+      }
+    }
+    return gates;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isReadOnly() {
+    return false;
+  }
+
+  /**
    * Registers this descriptor with a collection of ancestors. It directly
    * translates the components inheritance hierarchy since the component
    * property descriptors are the union of the declared property descriptors of
@@ -431,6 +515,15 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * {@inheritDoc}
+   * 
+   * @internal
+   */
+  public void setBeanFactory(BeanFactory beanFactory) {
+    this.beanFactory = beanFactory;
+  }
+
+  /**
    * Assigns the roles that are authorized to manipulate components backed by
    * this descriptor. It supports &quot;<b>!</b>&quot; prefix to negate the
    * role(s). This will directly influence the UI behaviour and even
@@ -444,6 +537,36 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
+  }
+
+  /**
+   * Registers a list of lifecycle interceptor instances that will be triggered
+   * on the different phases of the component lifecycle, i.e. :
+   * <ul>
+   * <li>when the component is <i>instanciated</i> in memory</li>
+   * <li>when the component is <i>created</i> in the data store</li>
+   * <li>when the component is <i>updated</i> in the data store</li>
+   * <li>when the component is <i>loaded</i> from the data store</li>
+   * <li>when the component is <i>deleted</i> from the data store</li>
+   * </ul>
+   * This property must be set with Spring bean names (i.e. Spring ids). When
+   * needed, Jspresso will query the Spring application context to retrieve the
+   * interceptors instances. This property is equivalent to setting
+   * <code>lifecycleInterceptorClassNames</code> except that it allows to
+   * register interceptor instances that are configured externally in the Spring
+   * context. lifecycle interceptor instances must implement the
+   * <code>ILifecycleInterceptor&lt;E&gt;</code> interface where &lt;E&gt; is a
+   * type assignable from the component type.
+   * 
+   * @param lifecycleInterceptorBeanNames
+   *          the lifecycleInterceptorBeanNames to set. They are used to
+   *          retrieve interceptor instances from the Spring bean factory this
+   *          descriptor comes from if any.
+   */
+  public void setLifecycleInterceptorBeanNames(
+      List<String> lifecycleInterceptorBeanNames) {
+    this.lifecycleInterceptorBeanNames = StringUtils
+        .ensureSpaceFree(lifecycleInterceptorBeanNames);
   }
 
   /**
@@ -506,6 +629,20 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Whenever a collection of this component type is presented in a pageable UI,
+   * this property gives the size (number of component instances) of one page.
+   * This size can usually be refined at a lower level (e.g. at reference
+   * property descriptor for &quot;lists of values&quot;). A <code>null</code>
+   * value (default) disables paging for this component.
+   * 
+   * @param pageSize
+   *          the pageSize to set.
+   */
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
+  }
+
+  /**
    * This property allows to describe the properties of the components backed by
    * this descriptor. Like in classic OO programming, the actual set of
    * properties available to a component is the union of its properties and of
@@ -557,6 +694,17 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Sets the readabilityGates.
+   * 
+   * @param readabilityGates
+   *          the readabilityGates to set.
+   * @internal
+   */
+  public void setReadabilityGates(Collection<IGate> readabilityGates) {
+    this.readabilityGates = readabilityGates;
+  }
+
+  /**
    * This property allows to define which of the component properties are to be
    * rendered by default when displaying a UI based on this component family.
    * For instance, a table will render 1 column per rendered property of the
@@ -580,6 +728,45 @@ public abstract class AbstractComponentDescriptor<E> extends
   }
 
   /**
+   * Registers the collection of service delegate instances attached to this
+   * component. These delegate instances will automatically be triggered
+   * whenever a method of the service interface it implements get executed. For
+   * instance :
+   * <ul>
+   * <li>the component interface is <code>MyBeanClass</code>. It implements the
+   * service interface <code>MyService</code>.</li>
+   * <li>the service interface <code>MyService</code> contains method
+   * <code>int foo(String)</code>.</li>
+   * <li>the service delegate class, e.g. <code>MyServiceImpl</code> must
+   * implement the method <code>int foo(MyBeanClass,String)</code>. Note that
+   * the parameter list is augmented with the owing component type as 1st
+   * parameter. This allows to have stateless implementation for delegates, thus
+   * sharing instances of delegates among instances of components.</li>
+   * <li>when <code>foo(String)</code> is executed on an instance of
+   * <code>MyBeanClass</code>, the framework will trigger the delegate
+   * implementation, passing the instance of the component itself as parameter.</li>
+   * </ul>
+   * This property must be set with a map keyed by service interfaces and valued
+   * by Spring bean names (i.e. Spring ids). Each bean name corresponds to an
+   * instance of service delegate. When needed, Jspresso will query the Spring
+   * application context to retrieve the delegate instances. This property is
+   * equivalent to setting <code>serviceDelegateClassNames</code> except that it
+   * allows to register delegate instances that are configured externally in the
+   * Spring context. lifecycle interceptor instances must implement the
+   * <code>IComponentService</code> marker interface.
+   * 
+   * @param serviceDelegateBeanNames
+   *          the serviceDelegateBeanNames to set. They are used to retrieve
+   *          delegate instances from the Spring bean factory this descriptor
+   *          comes from if any.
+   */
+  public void setServiceDelegateBeanNames(
+      Map<String, String> serviceDelegateBeanNames) {
+    this.serviceDelegateBeanNames = StringUtils
+        .ensureSpaceFree(serviceDelegateBeanNames);
+  }
+
+  /**
    * Much the same as <code>serviceDelegateBeanNames</code> except that instead
    * of providing a map valued with Spring bean names, you provide a map valued
    * with fully qualified class names. These class must :
@@ -599,6 +786,21 @@ public abstract class AbstractComponentDescriptor<E> extends
       Map<String, String> serviceDelegateClassNames) {
     this.serviceDelegateClassNames = StringUtils
         .ensureSpaceFree(serviceDelegateClassNames);
+  }
+
+  /**
+   * Instructs Jspresso to use this name when translating this component type
+   * name to the data store namespace. This includes , but is not limited to,
+   * database table names.
+   * <p>
+   * Default value is <code>null</code> so that Jspresso uses its default naming
+   * policy.
+   * 
+   * @param sqlName
+   *          the sqlName to set.
+   */
+  public void setSqlName(String sqlName) {
+    this.sqlName = sqlName;
   }
 
   /**
@@ -637,6 +839,31 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public void setUnclonedProperties(Collection<String> unclonedProperties) {
     this.unclonedProperties = StringUtils.ensureSpaceFree(unclonedProperties);
+  }
+
+  /**
+   * Assigns a collection of gates to determine component <i>writability</i>. A
+   * component will be considered writable if and only if all gates are open.
+   * This mecanism is mainly used for dynamic UI authorization based on model
+   * state, e.g. a validated invoice should not be editable anymore.
+   * <p>
+   * Descriptor assigned gates will be cloned for each component instance
+   * created and backed by this descriptor. So basically, each component
+   * instance will have its own, unshared collection of writability gates.
+   * <p>
+   * Jspresso provides a useful set of gate types, like the binary property gate
+   * that open/close based on the value of a boolean property of owning
+   * component.
+   * <p>
+   * By default, component descriptors are not assigned any gates collection,
+   * i.e. there is no writability restriction. Note that gates do not enforce
+   * programatic writability of a component; only UI is impacted.
+   * 
+   * @param writabilityGates
+   *          the writabilityGates to set.
+   */
+  public void setWritabilityGates(Collection<IGate> writabilityGates) {
+    this.writabilityGates = writabilityGates;
   }
 
   private List<String> explodeComponentReferences(List<String> propertyNames) {
@@ -715,6 +942,14 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
   }
 
+  private void registerLifecycleInterceptor(
+      ILifecycleInterceptor<?> lifecycleInterceptor) {
+    if (lifecycleInterceptors == null) {
+      lifecycleInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
+    }
+    lifecycleInterceptors.add(lifecycleInterceptor);
+  }
+
   private synchronized void registerLifecycleInterceptorsIfNecessary() {
     // process creation of lifecycle interceptors.
     if (lifecycleInterceptorClassNames != null) {
@@ -741,14 +976,6 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
   }
 
-  private void registerLifecycleInterceptor(
-      ILifecycleInterceptor<?> lifecycleInterceptor) {
-    if (lifecycleInterceptors == null) {
-      lifecycleInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
-    }
-    lifecycleInterceptors.add(lifecycleInterceptor);
-  }
-
   private synchronized void registerService(Class<?> serviceContract,
       IComponentService service) {
     if (serviceDelegates == null) {
@@ -760,232 +987,5 @@ public abstract class AbstractComponentDescriptor<E> extends
     for (Method serviceMethod : contractServices) {
       serviceDelegates.put(serviceMethod, service);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Integer getPageSize() {
-    return pageSize;
-  }
-
-  /**
-   * Whenever a collection of this component type is presented in a pageable UI,
-   * this property gives the size (number of component instances) of one page.
-   * This size can usually be refined at a lower level (e.g. at reference
-   * property descriptor for &quot;lists of values&quot;). A <code>null</code>
-   * value (default) disables paging for this component.
-   * 
-   * @param pageSize
-   *          the pageSize to set.
-   */
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
-
-  /**
-   * Registers the collection of service delegate instances attached to this
-   * component. These delegate instances will automatically be triggered
-   * whenever a method of the service interface it implements get executed. For
-   * instance :
-   * <ul>
-   * <li>the component interface is <code>MyBeanClass</code>. It implements the
-   * service interface <code>MyService</code>.</li>
-   * <li>the service interface <code>MyService</code> contains method
-   * <code>int foo(String)</code>.</li>
-   * <li>the service delegate class, e.g. <code>MyServiceImpl</code> must
-   * implement the method <code>int foo(MyBeanClass,String)</code>. Note that
-   * the parameter list is augmented with the owing component type as 1st
-   * parameter. This allows to have stateless implementation for delegates, thus
-   * sharing instances of delegates among instances of components.</li>
-   * <li>when <code>foo(String)</code> is executed on an instance of
-   * <code>MyBeanClass</code>, the framework will trigger the delegate
-   * implementation, passing the instance of the component itself as parameter.</li>
-   * </ul>
-   * This property must be set with a map keyed by service interfaces and valued
-   * by Spring bean names (i.e. Spring ids). Each bean name corresponds to an
-   * instance of service delegate. When needed, Jspresso will query the Spring
-   * application context to retrieve the delegate instances. This property is
-   * equivalent to setting <code>serviceDelegateClassNames</code> except that it
-   * allows to register delegate instances that are configured externally in the
-   * Spring context. lifecycle interceptor instances must implement the
-   * <code>IComponentService</code> marker interface.
-   * 
-   * @param serviceDelegateBeanNames
-   *          the serviceDelegateBeanNames to set. They are used to retrieve
-   *          delegate instances from the Spring bean factory this descriptor
-   *          comes from if any.
-   */
-  public void setServiceDelegateBeanNames(
-      Map<String, String> serviceDelegateBeanNames) {
-    this.serviceDelegateBeanNames = StringUtils
-        .ensureSpaceFree(serviceDelegateBeanNames);
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @internal
-   */
-  public void setBeanFactory(BeanFactory beanFactory) {
-    this.beanFactory = beanFactory;
-  }
-
-  /**
-   * Registers a list of lifecycle interceptor instances that will be triggered
-   * on the different phases of the component lifecycle, i.e. :
-   * <ul>
-   * <li>when the component is <i>instanciated</i> in memory</li>
-   * <li>when the component is <i>created</i> in the data store</li>
-   * <li>when the component is <i>updated</i> in the data store</li>
-   * <li>when the component is <i>loaded</i> from the data store</li>
-   * <li>when the component is <i>deleted</i> from the data store</li>
-   * </ul>
-   * This property must be set with Spring bean names (i.e. Spring ids). When
-   * needed, Jspresso will query the Spring application context to retrieve the
-   * interceptors instances. This property is equivalent to setting
-   * <code>lifecycleInterceptorClassNames</code> except that it allows to
-   * register interceptor instances that are configured externally in the Spring
-   * context. lifecycle interceptor instances must implement the
-   * <code>ILifecycleInterceptor&lt;E&gt;</code> interface where &lt;E&gt; is a
-   * type assignable from the component type.
-   * 
-   * @param lifecycleInterceptorBeanNames
-   *          the lifecycleInterceptorBeanNames to set. They are used to
-   *          retrieve interceptor instances from the Spring bean factory this
-   *          descriptor comes from if any.
-   */
-  public void setLifecycleInterceptorBeanNames(
-      List<String> lifecycleInterceptorBeanNames) {
-    this.lifecycleInterceptorBeanNames = StringUtils
-        .ensureSpaceFree(lifecycleInterceptorBeanNames);
-  }
-
-  /**
-   * Gets the readabilityGates.
-   * 
-   * @return the readabilityGates.
-   */
-  public Collection<IGate> getReadabilityGates() {
-    Set<IGate> gates = new HashSet<IGate>();
-    if (readabilityGates != null) {
-      gates.addAll(readabilityGates);
-    }
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
-        gates.addAll(ancestorDescriptor.getReadabilityGates());
-      }
-    }
-    return gates;
-  }
-
-  /**
-   * Sets the readabilityGates.
-   * 
-   * @param readabilityGates
-   *          the readabilityGates to set.
-   * @internal
-   */
-  public void setReadabilityGates(Collection<IGate> readabilityGates) {
-    this.readabilityGates = readabilityGates;
-  }
-
-  /**
-   * Gets the writabilityGates.
-   * 
-   * @return the writabilityGates.
-   */
-  public Collection<IGate> getWritabilityGates() {
-    Set<IGate> gates = new HashSet<IGate>();
-    if (writabilityGates != null) {
-      gates.addAll(writabilityGates);
-    }
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
-        gates.addAll(ancestorDescriptor.getWritabilityGates());
-      }
-    }
-    return gates;
-  }
-
-  /**
-   * Assigns a collection of gates to determine component <i>writability</i>. A
-   * component will be considered writable if and only if all gates are open.
-   * This mecanism is mainly used for dynamic UI authorization based on model
-   * state, e.g. a validated invoice should not be editable anymore.
-   * <p>
-   * Descriptor assigned gates will be cloned for each component instance
-   * created and backed by this descriptor. So basically, each component
-   * instance will have its own, unshared collection of writability gates.
-   * <p>
-   * Jspresso provides a useful set of gate types, like the binary property gate
-   * that open/close based on the value of a boolean property of owning
-   * component.
-   * <p>
-   * By default, component descriptors are not assigned any gates collection,
-   * i.e. there is no writability restriction. Note that gates do not enforce
-   * programatic writability of a component; only UI is impacted.
-   * 
-   * @param writabilityGates
-   *          the writabilityGates to set.
-   */
-  public void setWritabilityGates(Collection<IGate> writabilityGates) {
-    this.writabilityGates = writabilityGates;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isReadOnly() {
-    return false;
-  }
-
-  /**
-   * Instructs Jspresso to use this name when translating this component type
-   * name to the data store namespace. This includes , but is not limited to,
-   * database table names.
-   * <p>
-   * Default value is <code>null</code> so that Jspresso uses its default naming
-   * policy.
-   * 
-   * @param sqlName
-   *          the sqlName to set.
-   */
-  public void setSqlName(String sqlName) {
-    this.sqlName = sqlName;
-  }
-
-  /**
-   * Gets the sqlName.
-   * 
-   * @return the sqlName.
-   */
-  public String getSqlName() {
-    return sqlName;
-  }
-
-  private static IComponentDescriptor<IComponent> createComponentDescriptor() {
-    BasicInterfaceDescriptor<IComponent> componentDescriptor = new BasicInterfaceDescriptor<IComponent>(
-        IComponent.class.getName());
-
-    return componentDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  public IComponentDescriptor<E> createQueryDescriptor() {
-    if (queryDescriptor == null) {
-      queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
-      // queryDescriptor = new BasicComponentDescriptor<E>();
-      Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
-      for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
-        propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
-      }
-      ((AbstractComponentDescriptor<E>) queryDescriptor)
-          .setPropertyDescriptors(propertyDescriptors);
-    }
-    return queryDescriptor;
   }
 }

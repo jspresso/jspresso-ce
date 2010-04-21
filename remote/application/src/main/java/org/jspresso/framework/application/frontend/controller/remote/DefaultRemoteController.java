@@ -129,6 +129,31 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  public void displayFlashObject(String swfUrl,
+      Map<String, String> flashContext, List<RAction> actions, String title,
+      @SuppressWarnings("unused") RComponent sourceComponent,
+      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
+    super.displayModalDialog(context, reuseCurrent);
+    RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
+    flashCommand.setSwfUrl(swfUrl);
+    flashCommand.setTitle(title);
+    flashCommand.setActions(actions.toArray(new RAction[0]));
+    flashCommand.setUseCurrent(reuseCurrent);
+    List<String> paramNames = new ArrayList<String>();
+    List<String> paramValues = new ArrayList<String>();
+    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
+      paramNames.add(flashVar.getKey());
+      paramValues.add(flashVar.getValue());
+    }
+    flashCommand.setParamNames(paramNames.toArray(new String[0]));
+    flashCommand.setParamValues(paramValues.toArray(new String[0]));
+    flashCommand.setDimension(dimension);
+    registerCommand(flashCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void displayModalDialog(RComponent mainView, List<RAction> actions,
       String title, @SuppressWarnings("unused") RComponent sourceComponent,
       Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
@@ -152,18 +177,6 @@ public class DefaultRemoteController extends
   }
 
   /**
-   * Selects the current workspace.
-   * 
-   * @param workspaceName
-   *          the current workspace name.
-   */
-  protected void selectWorkspace(String workspaceName) {
-    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
-      super.displayWorkspace(workspaceName);
-    }
-  }
-
-  /**
    * Sends a remote workspace display command.
    * <p>
    * {@inheritDoc}
@@ -171,48 +184,6 @@ public class DefaultRemoteController extends
   @Override
   public void displayWorkspace(String workspaceName) {
     displayWorkspace(workspaceName, true);
-  }
-
-  /**
-   * Sets the workspace as selected and optionaly notifies the remote peer.
-   * 
-   * @param workspaceName
-   *          the selected workspace name.
-   * @param notifyRemote
-   *          if true, a remote notification will be sent to the remote peer.
-   */
-  protected void displayWorkspace(String workspaceName, boolean notifyRemote) {
-    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
-      super.displayWorkspace(workspaceName);
-      if (workspaceViews == null) {
-        workspaceViews = new HashSet<String>();
-      }
-      RSplitContainer workspaceView = null;
-      if (!workspaceViews.contains(workspaceName)) {
-        workspaceView = new RSplitContainer(workspaceName + "_split");
-        workspaceView.setOrientation(EOrientation.HORIZONTAL.toString());
-        IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(
-            workspaceName).getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController()
-            .getWorkspaceConnector(workspaceName);
-        IView<RComponent> workspaceNavigator = createWorkspaceNavigator(
-            workspaceName, workspaceNavigatorViewDescriptor);
-        IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
-        workspaceView.setLeftTop(workspaceNavigator.getPeer());
-        workspaceView.setRightBottom(moduleAreaView.getPeer());
-        workspaceViews.add(workspaceName);
-        getMvcBinder().bind(workspaceNavigator.getConnector(),
-            workspaceConnector);
-      }
-      if (notifyRemote) {
-        RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
-        if (workspaceView != null) {
-          workspaceDisplayCommand.setWorkspaceView(workspaceView);
-        }
-        workspaceDisplayCommand.setWorkspaceName(workspaceName);
-        registerCommand(workspaceDisplayCommand);
-      }
-    }
   }
 
   /**
@@ -302,8 +273,111 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
-  public String registerAutomationId(String automationsSeed, String guid) {
-    return remotePeerRegistry.registerAutomationId(automationsSeed, guid);
+  public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent,
+      String title, String iconImageUrl, String message) {
+    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
+    messageCommand.setTitle(title);
+    messageCommand.setMessage(message);
+    messageCommand.setTitleIcon(getIconFactory().getInfoIcon(
+        getIconFactory().getTinyIconSize()));
+    if (iconImageUrl != null) {
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
+          getIconFactory().getLargeIconSize()));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory().getInfoIcon(
+          getIconFactory().getLargeIconSize()));
+    }
+    registerCommand(messageCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupOkCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction okAction,
+      IAction cancelAction, Map<String, Object> context) {
+    RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
+    messageCommand.setTitle(title);
+    messageCommand.setMessage(message);
+
+    messageCommand.setTitleIcon(getIconFactory().getWarningIcon(
+        getIconFactory().getTinyIconSize()));
+    if (iconImageUrl != null) {
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
+          getIconFactory().getLargeIconSize()));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory().getWarningIcon(
+          getIconFactory().getLargeIconSize()));
+    }
+    if (okAction != null) {
+      messageCommand.setOkAction(createRAction(okAction, context));
+    }
+    if (cancelAction != null) {
+      messageCommand.setCancelAction(createRAction(cancelAction, context));
+    }
+    registerCommand(messageCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNo(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
+      Map<String, Object> context) {
+    RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
+    messageCommand.setTitle(title);
+    messageCommand.setMessage(message);
+
+    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(
+        getIconFactory().getTinyIconSize()));
+    if (iconImageUrl != null) {
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
+          getIconFactory().getLargeIconSize()));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(
+          getIconFactory().getLargeIconSize()));
+    }
+    if (yesAction != null) {
+      messageCommand.setYesAction(createRAction(yesAction, context));
+    }
+    if (noAction != null) {
+      messageCommand.setNoAction(createRAction(noAction, context));
+    }
+    registerCommand(messageCommand);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void popupYesNoCancel(
+      @SuppressWarnings("unused") RComponent sourceComponent, String title,
+      String iconImageUrl, String message, IAction yesAction, IAction noAction,
+      IAction cancelAction, Map<String, Object> context) {
+    RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
+    messageCommand.setTitle(title);
+    messageCommand.setMessage(message);
+
+    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(
+        getIconFactory().getTinyIconSize()));
+    if (iconImageUrl != null) {
+      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
+          getIconFactory().getLargeIconSize()));
+    } else {
+      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(
+          getIconFactory().getLargeIconSize()));
+    }
+    if (yesAction != null) {
+      messageCommand.setYesAction(createRAction(yesAction, context));
+    }
+    if (noAction != null) {
+      messageCommand.setNoAction(createRAction(noAction, context));
+    }
+    if (cancelAction != null) {
+      messageCommand.setCancelAction(createRAction(cancelAction, context));
+    }
+    registerCommand(messageCommand);
   }
 
   /**
@@ -319,6 +393,13 @@ public class DefaultRemoteController extends
         register((IRemotePeer) childConnector);
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String registerAutomationId(String automationsSeed, String guid) {
+    return remotePeerRegistry.registerAutomationId(automationsSeed, guid);
   }
 
   /**
@@ -435,6 +516,48 @@ public class DefaultRemoteController extends
     initCommand.setHelpActions(createRActionLists(getHelpActions()));
     initCommands.add(initCommand);
     return initCommands;
+  }
+
+  /**
+   * Sets the workspace as selected and optionaly notifies the remote peer.
+   * 
+   * @param workspaceName
+   *          the selected workspace name.
+   * @param notifyRemote
+   *          if true, a remote notification will be sent to the remote peer.
+   */
+  protected void displayWorkspace(String workspaceName, boolean notifyRemote) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+      if (workspaceViews == null) {
+        workspaceViews = new HashSet<String>();
+      }
+      RSplitContainer workspaceView = null;
+      if (!workspaceViews.contains(workspaceName)) {
+        workspaceView = new RSplitContainer(workspaceName + "_split");
+        workspaceView.setOrientation(EOrientation.HORIZONTAL.toString());
+        IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(
+            workspaceName).getViewDescriptor();
+        IValueConnector workspaceConnector = getBackendController()
+            .getWorkspaceConnector(workspaceName);
+        IView<RComponent> workspaceNavigator = createWorkspaceNavigator(
+            workspaceName, workspaceNavigatorViewDescriptor);
+        IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
+        workspaceView.setLeftTop(workspaceNavigator.getPeer());
+        workspaceView.setRightBottom(moduleAreaView.getPeer());
+        workspaceViews.add(workspaceName);
+        getMvcBinder().bind(workspaceNavigator.getConnector(),
+            workspaceConnector);
+      }
+      if (notifyRemote) {
+        RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
+        if (workspaceView != null) {
+          workspaceDisplayCommand.setWorkspaceView(workspaceView);
+        }
+        workspaceDisplayCommand.setWorkspaceName(workspaceName);
+        registerCommand(workspaceDisplayCommand);
+      }
+    }
   }
 
   /**
@@ -573,6 +696,18 @@ public class DefaultRemoteController extends
     }
   }
 
+  /**
+   * Selects the current workspace.
+   * 
+   * @param workspaceName
+   *          the current workspace name.
+   */
+  protected void selectWorkspace(String workspaceName) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName);
+    }
+  }
+
   private RemoteMessageCommand createErrorMessageCommand() {
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
     messageCommand.setTitle(getTranslationProvider().getTranslation("error",
@@ -582,6 +717,14 @@ public class DefaultRemoteController extends
     messageCommand.setMessageIcon(getIconFactory().getErrorIcon(
         getIconFactory().getLargeIconSize()));
     return messageCommand;
+  }
+
+  @SuppressWarnings("unchecked")
+  private RAction createRAction(IAction action, Map<String, Object> context) {
+    return getViewFactory().getActionFactory().createAction(
+        wrapAction(action, context), this,
+        (IView<RComponent>) context.get(ActionContextConstants.VIEW),
+        getLocale());
   }
 
   private RActionList createRActionList(ActionList actionList) {
@@ -612,149 +755,6 @@ public class DefaultRemoteController extends
       }
     }
     return actionLists.toArray(new RActionList[0]);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void displayFlashObject(String swfUrl,
-      Map<String, String> flashContext, List<RAction> actions, String title,
-      @SuppressWarnings("unused") RComponent sourceComponent,
-      Map<String, Object> context, Dimension dimension, boolean reuseCurrent) {
-    super.displayModalDialog(context, reuseCurrent);
-    RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
-    flashCommand.setSwfUrl(swfUrl);
-    flashCommand.setTitle(title);
-    flashCommand.setActions(actions.toArray(new RAction[0]));
-    flashCommand.setUseCurrent(reuseCurrent);
-    List<String> paramNames = new ArrayList<String>();
-    List<String> paramValues = new ArrayList<String>();
-    for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
-      paramNames.add(flashVar.getKey());
-      paramValues.add(flashVar.getValue());
-    }
-    flashCommand.setParamNames(paramNames.toArray(new String[0]));
-    flashCommand.setParamValues(paramValues.toArray(new String[0]));
-    flashCommand.setDimension(dimension);
-    registerCommand(flashCommand);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupInfo(@SuppressWarnings("unused") RComponent sourceComponent,
-      String title, String iconImageUrl, String message) {
-    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
-    messageCommand.setTitle(title);
-    messageCommand.setMessage(message);
-    messageCommand.setTitleIcon(getIconFactory().getInfoIcon(
-        getIconFactory().getTinyIconSize()));
-    if (iconImageUrl != null) {
-      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
-          getIconFactory().getLargeIconSize()));
-    } else {
-      messageCommand.setMessageIcon(getIconFactory().getInfoIcon(
-          getIconFactory().getLargeIconSize()));
-    }
-    registerCommand(messageCommand);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupOkCancel(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction okAction,
-      IAction cancelAction, Map<String, Object> context) {
-    RemoteOkCancelCommand messageCommand = new RemoteOkCancelCommand();
-    messageCommand.setTitle(title);
-    messageCommand.setMessage(message);
-
-    messageCommand.setTitleIcon(getIconFactory().getWarningIcon(
-        getIconFactory().getTinyIconSize()));
-    if (iconImageUrl != null) {
-      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
-          getIconFactory().getLargeIconSize()));
-    } else {
-      messageCommand.setMessageIcon(getIconFactory().getWarningIcon(
-          getIconFactory().getLargeIconSize()));
-    }
-    if (okAction != null) {
-      messageCommand.setOkAction(createRAction(okAction, context));
-    }
-    if (cancelAction != null) {
-      messageCommand.setCancelAction(createRAction(cancelAction, context));
-    }
-    registerCommand(messageCommand);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupYesNo(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction yesAction, IAction noAction,
-      Map<String, Object> context) {
-    RemoteYesNoCommand messageCommand = new RemoteYesNoCommand();
-    messageCommand.setTitle(title);
-    messageCommand.setMessage(message);
-
-    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(
-        getIconFactory().getTinyIconSize()));
-    if (iconImageUrl != null) {
-      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
-          getIconFactory().getLargeIconSize()));
-    } else {
-      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(
-          getIconFactory().getLargeIconSize()));
-    }
-    if (yesAction != null) {
-      messageCommand.setYesAction(createRAction(yesAction, context));
-    }
-    if (noAction != null) {
-      messageCommand.setNoAction(createRAction(noAction, context));
-    }
-    registerCommand(messageCommand);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void popupYesNoCancel(
-      @SuppressWarnings("unused") RComponent sourceComponent, String title,
-      String iconImageUrl, String message, IAction yesAction, IAction noAction,
-      IAction cancelAction, Map<String, Object> context) {
-    RemoteYesNoCancelCommand messageCommand = new RemoteYesNoCancelCommand();
-    messageCommand.setTitle(title);
-    messageCommand.setMessage(message);
-
-    messageCommand.setTitleIcon(getIconFactory().getQuestionIcon(
-        getIconFactory().getTinyIconSize()));
-    if (iconImageUrl != null) {
-      messageCommand.setMessageIcon(getIconFactory().getIcon(iconImageUrl,
-          getIconFactory().getLargeIconSize()));
-    } else {
-      messageCommand.setMessageIcon(getIconFactory().getQuestionIcon(
-          getIconFactory().getLargeIconSize()));
-    }
-    if (yesAction != null) {
-      messageCommand.setYesAction(createRAction(yesAction, context));
-    }
-    if (noAction != null) {
-      messageCommand.setNoAction(createRAction(noAction, context));
-    }
-    if (cancelAction != null) {
-      messageCommand.setCancelAction(createRAction(cancelAction, context));
-    }
-    registerCommand(messageCommand);
-  }
-
-  @SuppressWarnings("unchecked")
-  private RAction createRAction(IAction action, Map<String, Object> context) {
-    return getViewFactory().getActionFactory().createAction(
-        wrapAction(action, context), this,
-        (IView<RComponent>) context.get(ActionContextConstants.VIEW),
-        getLocale());
   }
 
   private IDisplayableAction wrapAction(IAction action,

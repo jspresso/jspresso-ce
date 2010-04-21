@@ -50,34 +50,31 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the forceHtml.
+   * 
+   * @param forceHtml
+   *          the forceHtml to set.
    */
-  @Override
-  protected void bindJComponent() {
-    // Empty since a label is read-only.
+  public void setForceHtml(boolean forceHtml) {
+    this.forceHtml = forceHtml;
+  }
+
+  /**
+   * Sets the formatter.
+   * 
+   * @param formatter
+   *          the formatter to set.
+   */
+  public void setFormatter(IFormatter formatter) {
+    this.formatter = formatter;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected void protectedSetConnecteeValue(Object aValue) {
-    if (aValue == null) {
-      getConnectedJComponent().setText(null);
-    } else {
-      if (formatter != null) {
-        getConnectedJComponent().setText(formatter.format(aValue));
-      } else if (forceHtml) {
-        if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
-          getConnectedJComponent().setText(
-              HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
-        } else {
-          getConnectedJComponent().setText(aValue.toString());
-        }
-      } else {
-        getConnectedJComponent().setText(aValue.toString());
-      }
-    }
+  protected void bindJComponent() {
+    // Empty since a label is read-only.
   }
 
   /**
@@ -103,22 +100,25 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
   }
 
   /**
-   * Sets the forceHtml.
-   * 
-   * @param forceHtml
-   *          the forceHtml to set.
+   * {@inheritDoc}
    */
-  public void setForceHtml(boolean forceHtml) {
-    this.forceHtml = forceHtml;
-  }
-
-  /**
-   * Sets the formatter.
-   * 
-   * @param formatter
-   *          the formatter to set.
-   */
-  public void setFormatter(IFormatter formatter) {
-    this.formatter = formatter;
+  @Override
+  protected void protectedSetConnecteeValue(Object aValue) {
+    if (aValue == null) {
+      getConnectedJComponent().setText(null);
+    } else {
+      if (formatter != null) {
+        getConnectedJComponent().setText(formatter.format(aValue));
+      } else if (forceHtml) {
+        if (aValue.toString().toUpperCase().indexOf(HtmlHelper.HTML_START) < 0) {
+          getConnectedJComponent().setText(
+              HtmlHelper.toHtml(HtmlHelper.preformat(aValue.toString())));
+        } else {
+          getConnectedJComponent().setText(aValue.toString());
+        }
+      } else {
+        getConnectedJComponent().setText(aValue.toString());
+      }
+    }
   }
 }

@@ -72,22 +72,6 @@ public class BasicEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Defines the list of values as well as an icon image URL per value this
-   * enumeration contains. The incoming <code>Map</code> is keyed by the actual
-   * enumeration values and valued by the icon image URLs.
-   * <p>
-   * Enumeration values are translated in the UI using the following scheme :
-   * <i>[enumerationName]_[value]</i>.
-   * 
-   * @param valuesAndIconImageUrls
-   *          the valuesAndIconImageUrls to set.
-   */
-  public void setValuesAndIconImageUrls(
-      Map<String, String> valuesAndIconImageUrls) {
-    this.valuesAndIconImageUrls = valuesAndIconImageUrls;
-  }
-
-  /**
    * Defines the list of values this enumeration contains.
    * <p>
    * Enumeration values are translated in the UI using the following scheme :
@@ -101,6 +85,22 @@ public class BasicEnumerationPropertyDescriptor extends
     for (String value : StringUtils.ensureSpaceFree(values)) {
       valuesAndIconImageUrls.put(value, null);
     }
+  }
+
+  /**
+   * Defines the list of values as well as an icon image URL per value this
+   * enumeration contains. The incoming <code>Map</code> is keyed by the actual
+   * enumeration values and valued by the icon image URLs.
+   * <p>
+   * Enumeration values are translated in the UI using the following scheme :
+   * <i>[enumerationName]_[value]</i>.
+   * 
+   * @param valuesAndIconImageUrls
+   *          the valuesAndIconImageUrls to set.
+   */
+  public void setValuesAndIconImageUrls(
+      Map<String, String> valuesAndIconImageUrls) {
+    this.valuesAndIconImageUrls = valuesAndIconImageUrls;
   }
 
 }

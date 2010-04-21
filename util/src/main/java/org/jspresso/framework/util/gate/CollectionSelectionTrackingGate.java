@@ -45,16 +45,6 @@ public class CollectionSelectionTrackingGate extends AbstractModelGate {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setModel(Object model) {
-    boolean oldOpen = isOpen();
-    super.setModel(model);
-    firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
-  }
-
-  /**
    * Returns true whenever the model collection is not empty.
    * <p>
    * {@inheritDoc}
@@ -64,6 +54,16 @@ public class CollectionSelectionTrackingGate extends AbstractModelGate {
       return !((Collection<?>) getModel()).isEmpty();
     }
     return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setModel(Object model) {
+    boolean oldOpen = isOpen();
+    super.setModel(model);
+    firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
   }
 
 }

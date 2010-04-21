@@ -30,8 +30,8 @@ public class Dimension implements Serializable {
 
   private static final long serialVersionUID = -2769276185108835884L;
 
-  private int               width;
   private int               height;
+  private int               width;
 
   /**
    * Constructs a new <code>Dimension</code> instance.
@@ -71,21 +71,21 @@ public class Dimension implements Serializable {
   }
 
   /**
-   * Gets the width.
-   * 
-   * @return the width.
-   */
-  public int getWidth() {
-    return width;
-  }
-
-  /**
    * Gets the height.
    * 
    * @return the height.
    */
   public int getHeight() {
     return height;
+  }
+
+  /**
+   * Gets the width.
+   * 
+   * @return the width.
+   */
+  public int getWidth() {
+    return width;
   }
 
   /**
@@ -97,16 +97,6 @@ public class Dimension implements Serializable {
   }
 
   /**
-   * Sets the width.
-   * 
-   * @param width
-   *          the width to set.
-   */
-  public void setWidth(int width) {
-    this.width = width;
-  }
-
-  /**
    * Sets the height.
    * 
    * @param height
@@ -114,6 +104,16 @@ public class Dimension implements Serializable {
    */
   public void setHeight(int height) {
     this.height = height;
+  }
+
+  /**
+   * Sets the width.
+   * 
+   * @param width
+   *          the width to set.
+   */
+  public void setWidth(int width) {
+    this.width = width;
   }
 
   /**

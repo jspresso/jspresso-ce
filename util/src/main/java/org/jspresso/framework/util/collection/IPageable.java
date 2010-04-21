@@ -27,19 +27,14 @@ package org.jspresso.framework.util.collection;
 public interface IPageable {
 
   /**
+   * "nextPageEnabled" string constant.
+   */
+  String NEXT_PAGE_ENABLED     = "nextPageEnabled";
+
+  /**
    * "page" string constant.
    */
   String PAGE                  = "page";
-
-  /**
-   * "pageSize" string constant.
-   */
-  String PAGE_SIZE             = "pageSize";
-
-  /**
-   * "recordCount" string constant.
-   */
-  String RECORD_COUNT          = "recordCount";
 
   /**
    * "pageCount" string constant.
@@ -47,14 +42,19 @@ public interface IPageable {
   String PAGE_COUNT            = "pageCount";
 
   /**
-   * "nextPageEnabled" string constant.
+   * "pageSize" string constant.
    */
-  String NEXT_PAGE_ENABLED     = "nextPageEnabled";
+  String PAGE_SIZE             = "pageSize";
 
   /**
    * "previousPageEnabled" string constant.
    */
   String PREVIOUS_PAGE_ENABLED = "previousPageEnabled";
+
+  /**
+   * "recordCount" string constant.
+   */
+  String RECORD_COUNT          = "recordCount";
 
   /**
    * Gets the page number used for query actions.
@@ -64,12 +64,11 @@ public interface IPageable {
   Integer getPage();
 
   /**
-   * Sets the page number used for query actions.
+   * Gets the current page count.
    * 
-   * @param page
-   *          the page number used for query actions.
+   * @return the the current page count.
    */
-  void setPage(Integer page);
+  Integer getPageCount();
 
   /**
    * Gets the page size used for query actions.
@@ -79,34 +78,11 @@ public interface IPageable {
   Integer getPageSize();
 
   /**
-   * Sets the page size used for query actions.
-   * 
-   * @param pageSize
-   *          the page size used for query actions.
-   */
-  void setPageSize(Integer pageSize);
-
-  /**
    * Gets the current record count.
    * 
    * @return the the current record count.
    */
   Integer getRecordCount();
-
-  /**
-   * Sets the current record count.
-   * 
-   * @param recordCount
-   *          current record count.
-   */
-  void setRecordCount(Integer recordCount);
-
-  /**
-   * Gets the current page count.
-   * 
-   * @return the the current page count.
-   */
-  Integer getPageCount();
 
   /**
    * Wether navigation to next page is enabled.
@@ -121,4 +97,28 @@ public interface IPageable {
    * @return true if navigation to previous page is enabled, false otherwise.
    */
   boolean isPreviousPageEnabled();
+
+  /**
+   * Sets the page number used for query actions.
+   * 
+   * @param page
+   *          the page number used for query actions.
+   */
+  void setPage(Integer page);
+
+  /**
+   * Sets the page size used for query actions.
+   * 
+   * @param pageSize
+   *          the page size used for query actions.
+   */
+  void setPageSize(Integer pageSize);
+
+  /**
+   * Sets the current record count.
+   * 
+   * @param recordCount
+   *          current record count.
+   */
+  void setRecordCount(Integer recordCount);
 }

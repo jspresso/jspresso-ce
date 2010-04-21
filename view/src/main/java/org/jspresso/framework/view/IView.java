@@ -48,6 +48,13 @@ public interface IView<E> extends IViewProvider<E> {
   IViewDescriptor getDescriptor();
 
   /**
+   * Gets the parent view or null if it's a root view.
+   * 
+   * @return the parent view or null if it's a root view.
+   */
+  ICompositeView<E> getParent();
+
+  /**
    * Gets the view peer of this view.
    * 
    * @return the view peer.
@@ -64,25 +71,18 @@ public interface IView<E> extends IViewProvider<E> {
   void setConnector(IValueConnector connector);
 
   /**
-   * Sets the view peer of this view.
-   * 
-   * @param peer
-   *          the view peer.
-   */
-  void setPeer(E peer);
-
-  /**
-   * Gets the parent view or null if it's a root view.
-   * 
-   * @return the parent view or null if it's a root view.
-   */
-  ICompositeView<E> getParent();
-
-  /**
    * Sets the parent view or null if it's a root view.
    * 
    * @param parent
    *          the parent view or null if it's a root view.
    */
   void setParent(ICompositeView<E> parent);
+
+  /**
+   * Sets the view peer of this view.
+   * 
+   * @param peer
+   *          the view peer.
+   */
+  void setPeer(E peer);
 }
