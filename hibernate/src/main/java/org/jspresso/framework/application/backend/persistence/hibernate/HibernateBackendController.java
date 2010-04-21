@@ -194,7 +194,7 @@ public class HibernateBackendController extends AbstractBackendController {
       public Object doInHibernate(Session session) {
         Set<IEntity> alreadyLocked = new HashSet<IEntity>();
         for (IEntity mergedEntity : uowEntities) {
-          lockInHibernate(mergedEntity, session, alreadyLocked);
+          lockInHibernateInDepth(mergedEntity, session, alreadyLocked);
         }
         return null;
       }
@@ -254,34 +254,13 @@ public class HibernateBackendController extends AbstractBackendController {
               cleanPersistentCollectionDirtyState(componentOrEntity);
               if (componentOrEntity instanceof IEntity) {
                 if (((IEntity) componentOrEntity).isPersistent()) {
-                  try {
-                    session.lock(componentOrEntity, LockMode.NONE);
-                  } catch (Exception ex) {
-                    session.evict(session.get(componentOrEntity
-                        .getComponentContract(), ((IEntity) componentOrEntity)
-                        .getId()));
-                    session.lock(componentOrEntity, LockMode.NONE);
-                  }
+                  lockInHibernate((IEntity) componentOrEntity, session);
                 } else if (initializedProperty instanceof IEntity) {
-                  try {
-                    session.lock(initializedProperty, LockMode.NONE);
-                  } catch (Exception ex) {
-                    session.evict(session.get(((IEntity) initializedProperty)
-                        .getComponentContract(),
-                        ((IEntity) initializedProperty).getId()));
-                    session.lock(initializedProperty, LockMode.NONE);
-                  }
+                  lockInHibernate((IEntity) componentOrEntity, session);
                 }
               } else if (initializedProperty instanceof IEntity) {
                 // to handle initialization of component properties.
-                try {
-                  session.lock(initializedProperty, LockMode.NONE);
-                } catch (Exception ex) {
-                  session.evict(session.get(((IEntity) initializedProperty)
-                      .getComponentContract(), ((IEntity) initializedProperty)
-                      .getId()));
-                  session.lock(initializedProperty, LockMode.NONE);
-                }
+                lockInHibernate((IEntity) initializedProperty, session);
               }
 
               Hibernate.initialize(initializedProperty);
@@ -447,19 +426,16 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   @SuppressWarnings("unchecked")
-  private void lockInHibernate(IComponent component, Session hibernateSession,
-      Set<IEntity> alreadyLocked) {
+  private void lockInHibernateInDepth(IComponent component,
+      Session hibernateSession, Set<IEntity> alreadyLocked) {
     boolean isEntity = component instanceof IEntity;
     if (!isEntity || alreadyLocked.add((IEntity) component)) {
       if (!isEntity || ((IEntity) component).isPersistent()) {
         if (isEntity) {
-          try {
-            hibernateSession.lock(component, LockMode.NONE);
-          } catch (Exception ex) {
-            // ex.printStackTrace();
-            hibernateSession.evict(hibernateSession.get(component
-                .getComponentContract(), ((IEntity) component).getId()));
-            hibernateSession.lock(component, LockMode.NONE);
+          boolean newlyAttached = lockInHibernate((IEntity) component,
+              hibernateSession);
+          if (!newlyAttached) {
+            return;
           }
         }
         Map<String, Object> entityProperties = component
@@ -467,18 +443,45 @@ public class HibernateBackendController extends AbstractBackendController {
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (Hibernate.isInitialized(property.getValue())) {
             if (property.getValue() instanceof IEntity) {
-              lockInHibernate((IEntity) property.getValue(), hibernateSession,
-                  alreadyLocked);
+              lockInHibernateInDepth((IEntity) property.getValue(),
+                  hibernateSession, alreadyLocked);
             } else if (property.getValue() instanceof Collection) {
               for (IComponent element : ((Collection<IComponent>) property
                   .getValue())) {
-                lockInHibernate(element, hibernateSession, alreadyLocked);
+                lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
               }
             }
           }
         }
       }
     }
+  }
+
+  /**
+   * Locks an entity (LockMode.NONE) in current hibernate session.
+   * 
+   * @param entity
+   *          the entity to lock.
+   * @param hibernateSession
+   *          the hibernate session.
+   * @return true if entity was re-attached or false if the entity was already
+   *         in the session.
+   */
+  private boolean lockInHibernate(IEntity entity, Session hibernateSession) {
+    boolean newlyAttached = true;
+    Object sessionEntity = hibernateSession.get(entity.getComponentContract(),
+        entity.getId());
+    if (sessionEntity == entity) {
+      newlyAttached = false;
+    } else {
+      try {
+        hibernateSession.lock(entity, LockMode.NONE);
+      } catch (Exception ex) {
+        hibernateSession.evict(sessionEntity);
+        hibernateSession.lock(entity, LockMode.NONE);
+      }
+    }
+    return newlyAttached;
   }
 
   /**
