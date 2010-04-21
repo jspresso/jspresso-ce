@@ -92,13 +92,13 @@ import com.ulcjava.base.shared.IWindowConstants;
 public class DefaultUlcController extends
     AbstractFrontendController<ULCComponent, ULCIcon, IAction> {
 
-  private static final String CANCEL_OPTION = "cancel";
+  private static final String                   CANCEL_OPTION = "cancel";
 
-  private static final String NO_OPTION     = "no";
+  private static final String                   NO_OPTION     = "no";
 
-  private static final String OK_OPTION     = "ok";
+  private static final String                   OK_OPTION     = "ok";
 
-  private static final String YES_OPTION    = "yes";
+  private static final String                   YES_OPTION    = "yes";
 
   private ULCFrame                              controllerFrame;
 
@@ -473,7 +473,15 @@ public class DefaultUlcController extends
     });
     controllerFrame.pack();
     int screenRes = ClientContext.getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    int w = 12 * screenRes;
+    int h = 8 * screenRes;
+    if (getFrameWidth() != null) {
+      w = getFrameWidth().intValue();
+    }
+    if (getFrameHeight() != null) {
+      h = getFrameHeight().intValue();
+    }
+    controllerFrame.setSize(w, h);
     controllerFrame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
         getIconFactory().getSmallIconSize()));
     UlcUtil.centerOnScreen(controllerFrame);
@@ -607,6 +615,7 @@ public class DefaultUlcController extends
     });
     alert.show();
   }
+
   private void initLoginProcess() {
     createControllerFrame();
     if (getLoginContextName() == null) {
@@ -672,10 +681,12 @@ public class DefaultUlcController extends
     UlcUtil.centerInParent(dialog);
     dialog.setVisible(true);
   }
+
   private void updateControllerFrame() {
     controllerFrame.setMenuBar(createApplicationMenuBar());
     updateFrameTitle();
   }
+
   private void updateFrameTitle() {
     String workspaceName = getSelectedWorkspaceName();
     if (workspaceName != null) {

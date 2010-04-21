@@ -136,6 +136,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private Map<String, Workspace>                workspaces;
   private String                                workspacesMenuIconImageUrl;
 
+  private Integer                               frameWidth;
+  private Integer                               frameHeight;
+
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
    */
@@ -1197,5 +1200,45 @@ public abstract class AbstractFrontendController<E, F, G> extends
         translateModule(module);
       }
     }
+  }
+
+  /**
+   * Gets the frameWidth.
+   * 
+   * @return the frameWidth.
+   */
+  protected Integer getFrameWidth() {
+    return frameWidth;
+  }
+
+  /**
+   * Sets the preferred application frame width. How this dimension is leveraged
+   * depends on the UI channel.
+   * 
+   * @param frameWidth
+   *          the frameWidth to set.
+   */
+  public void setFrameWidth(Integer frameWidth) {
+    this.frameWidth = frameWidth;
+  }
+
+  /**
+   * Gets the frameHeight.
+   * 
+   * @return the frameHeight.
+   */
+  protected Integer getFrameHeight() {
+    return frameHeight;
+  }
+
+  /**
+   * Sets the preferred application frame height. How this dimension is
+   * leveraged depends on the UI channel.
+   * 
+   * @param frameHeight
+   *          the frameHeight to set.
+   */
+  public void setFrameHeight(Integer frameHeight) {
+    this.frameHeight = frameHeight;
   }
 }

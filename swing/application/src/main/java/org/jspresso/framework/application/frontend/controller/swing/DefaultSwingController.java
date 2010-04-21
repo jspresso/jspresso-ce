@@ -602,7 +602,15 @@ public class DefaultSwingController extends
     });
     controllerFrame.pack();
     int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    int w = 12 * screenRes;
+    int h = 8 * screenRes;
+    if (getFrameWidth() != null) {
+      w = getFrameWidth().intValue();
+    }
+    if (getFrameHeight() != null) {
+      h = getFrameHeight().intValue();
+    }
+    controllerFrame.setSize(w, h);
     // controllerFrame.setSize(1100, 800);
     ImageIcon frameIcon = ((ImageIcon) getIconFactory().getIcon(
         getIconImageURL(), getIconFactory().getSmallIconSize()));

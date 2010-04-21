@@ -94,8 +94,6 @@ public class DefaultWingsController extends
   private SPanel                  cardPanel;
   private SFrame                  controllerFrame;
 
-  private String                  frameHeight      = "768px";
-  private String                  frameWidth       = "95%";
   private Set<String>             workspaceViews;
 
   /**
@@ -426,26 +424,6 @@ public class DefaultWingsController extends
   }
 
   /**
-   * Configures the default height of the application frame.
-   * 
-   * @param frameHeight
-   *          the frameHeight to set.
-   */
-  public void setFrameHeight(String frameHeight) {
-    this.frameHeight = frameHeight;
-  }
-
-  /**
-   * Configures the default width of the application frame.
-   * 
-   * @param frameWidth
-   *          the frameWidth to set.
-   */
-  public void setFrameWidth(String frameWidth) {
-    this.frameWidth = frameWidth;
-  }
-
-  /**
    * Creates the initial view from the root view descriptor, then a SFrame
    * containing this view and presents it to the user.
    * <p>
@@ -503,10 +481,15 @@ public class DefaultWingsController extends
 
   private void createControllerFrame() {
     controllerFrame = new SFrame();
-    controllerFrame
-        .setPreferredSize(new SDimension(frameWidth, frameHeight/*
-                                                                 * WingsUtil.FULL_DIM_PERCENT
-                                                                 */));
+    String w = "95%";
+    String h = "768px";
+    if (getFrameWidth() != null) {
+      w = getFrameWidth().intValue() + "px";
+    }
+    if (getFrameHeight() != null) {
+      h = getFrameHeight().intValue() + "px";
+    }
+    controllerFrame.setPreferredSize(new SDimension(w, h));
     controllerFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
     cardPanel = new SPanel(new SCardLayout());
     cardPanel.setPreferredSize(SDimension.FULLAREA);
