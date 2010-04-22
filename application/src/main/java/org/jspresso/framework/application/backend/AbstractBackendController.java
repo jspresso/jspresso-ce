@@ -729,7 +729,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the entity to test.
    * @return true if the entity is dirty.
    */
-  protected boolean isDirty(IEntity entity) {
+  public boolean isDirty(IEntity entity) {
     if (entity == null) {
       return false;
     }
@@ -759,7 +759,7 @@ public abstract class AbstractBackendController extends AbstractController
    *          the entity property to test.
    * @return true if the entity is dirty.
    */
-  protected boolean isDirty(IEntity entity, String propertyName) {
+  public boolean isDirty(IEntity entity, String propertyName) {
     if (entity == null) {
       return false;
     }

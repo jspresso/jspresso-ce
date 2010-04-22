@@ -190,6 +190,28 @@ public interface IBackendController extends IController,
   boolean isDirtyInDepth(IEntity entity);
 
   /**
+   * Gets wether the entity is dirty (has changes that need to be updated to the
+   * persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @return true if the entity is dirty.
+   */
+  boolean isDirty(IEntity entity);
+
+  /**
+   * Gets wether the entity property is dirty (has changes that need to be
+   * updated to the persistent store).
+   * 
+   * @param entity
+   *          the entity to test.
+   * @param propertyName
+   *          the name of the property to test.
+   * @return true if the entity property is dirty.
+   */
+  boolean isDirty(IEntity entity, String propertyName);
+
+  /**
    * Wether the object is fully initialized.
    * 
    * @param objectOrProxy
