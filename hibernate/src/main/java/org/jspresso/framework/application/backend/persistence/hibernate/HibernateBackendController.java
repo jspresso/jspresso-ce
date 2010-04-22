@@ -461,21 +461,17 @@ public class HibernateBackendController extends AbstractBackendController {
    * @return true if entity was re-attached or false if the entity was already
    *         in the session.
    */
-  private boolean lockInHibernate(IEntity entity, Session hibernateSession) {
-    boolean newlyAttached = true;
-    Object sessionEntity = hibernateSession.get(entity.getComponentContract(),
-        entity.getId());
-    if (sessionEntity == entity) {
-      newlyAttached = false;
-    } else {
-      try {
-        hibernateSession.lock(entity, LockMode.NONE);
-      } catch (Exception ex) {
-        hibernateSession.evict(sessionEntity);
-        hibernateSession.lock(entity, LockMode.NONE);
-      }
+  private void lockInHibernate(IEntity entity, Session hibernateSession) {
+    // Do not use get before trying to lock.
+    // Get performs a DB query.
+    try {
+      hibernateSession.lock(entity, LockMode.NONE);
+    } catch (Exception ex) {
+      Object sessionEntity = hibernateSession.get(
+          entity.getComponentContract(), entity.getId());
+      hibernateSession.evict(sessionEntity);
+      hibernateSession.lock(entity, LockMode.NONE);
     }
-    return newlyAttached;
   }
 
   @SuppressWarnings("unchecked")
@@ -485,11 +481,7 @@ public class HibernateBackendController extends AbstractBackendController {
     if (!isEntity || alreadyLocked.add((IEntity) component)) {
       if (!isEntity || ((IEntity) component).isPersistent()) {
         if (isEntity) {
-          boolean newlyAttached = lockInHibernate((IEntity) component,
-              hibernateSession);
-          if (!newlyAttached) {
-            return;
-          }
+          lockInHibernate((IEntity) component, hibernateSession);
         }
         Map<String, Object> entityProperties = component
             .straightGetProperties();
