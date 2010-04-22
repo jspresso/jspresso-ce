@@ -23,7 +23,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/action/BackendAction.java" 
     binary="false">    
-    <position x="516" y="729" width="-1" height="-1"/>    
+    <position x="516" y="696" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="false" protected="true" private="false"/>    
@@ -59,69 +59,6 @@
       <operations public="true" package="false" protected="true" private="false"/>    
     </display>  
   </class>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.action.BackendAction" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/action/BackendAction.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
-      binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
-      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <bendpoint x="280" y="167"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
-      binary="false" navigable="false">      
-      <attribute name="wrappedAction">        
-        <position x="421" y="260" width="85" height="15"/>      
-      </attribute>      
-      <multiplicity minimum="0" maximum="1">        
-        <position x="158" y="3" width="20" height="17"/>      
-      </multiplicity>    
-    </source>    
-    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
-      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.action.FrontendAction" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
-      binary="false"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.action.IDisplayableAction" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
-      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.action.FrontendAction" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.action.IDisplayableAction" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
-      binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractActionContextAware" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractActionContextAware.java" 
-      binary="false"/>  
-  </generalization>  
   <association>    
     <bendpoint x="325" y="137"/>    
     <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
@@ -139,6 +76,69 @@
       navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.action.BackendAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/action/BackendAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false"/>  
+  </generalization>  
+  <association>    
+    <bendpoint x="280" y="167"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false" navigable="false">      
+      <attribute name="wrappedAction">        
+        <position x="421" y="260" width="85" height="15"/>      
+      </attribute>      
+      <multiplicity minimum="0" maximum="1">        
+        <position x="158" y="3" width="20" height="17"/>      
+      </multiplicity>    
+    </source>    
+    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
+      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
+      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>  
+  </realization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractActionContextAware" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractActionContextAware.java" 
+      binary="false"/>  
+  </generalization>  
+  <realization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.action.FrontendAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.action.IDisplayableAction" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
+      binary="false"/>  
+  </realization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.action.FrontendAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/action/FrontendAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.action.AbstractAction" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/action/AbstractAction.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.action.IDisplayableAction" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/action/IDisplayableAction.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
+      file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>  
+  </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
     <attributes public="false" package="false" protected="false" private="false"/>    
     <operations public="true" package="false" protected="true" private="false"/>  

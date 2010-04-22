@@ -6,7 +6,7 @@
     binary="false">    
     <position x="324" y="-42" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
+      <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
@@ -14,9 +14,9 @@
     project="jspresso-framework" 
     file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
     binary="false">    
-    <position x="325" y="145" width="-1" height="-1"/>    
+    <position x="324" y="78" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
+      <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
@@ -24,9 +24,9 @@
     project="jspresso-framework" 
     file="/jspresso-framework/app-launch/swing/src/main/java/org/jspresso/framework/application/startup/swing/SwingStartup.java" 
     binary="false">    
-    <position x="90" y="303" width="-1" height="-1"/>    
+    <position x="83" y="316" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
+      <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
@@ -34,9 +34,9 @@
     project="jspresso-framework" 
     file="/jspresso-framework/app-launch/ulc/src/main/java/org/jspresso/framework/application/startup/ulc/UlcStartup.java" 
     binary="false">    
-    <position x="484" y="435" width="-1" height="-1"/>    
+    <position x="530" y="450" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
+      <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
@@ -44,9 +44,9 @@
     project="jspresso-framework" 
     file="/jspresso-framework/app-launch/wings/src/main/java/org/jspresso/framework/application/startup/wings/WingsStartup.java" 
     binary="false">    
-    <position x="567" y="311" width="-1" height="-1"/>    
+    <position x="524" y="324" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
+      <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
@@ -56,24 +56,64 @@
     binary="false">    
     <position x="172" y="467" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
+    binary="false">    
+    <position x="324" y="219" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.startup.AbstractBackendStartup" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractBackendStartup.java" 
+    binary="false">    
+    <position x="776" y="220" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.startup.BackendActionStartup" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/BackendActionStartup.java" 
+    binary="false">    
+    <position x="776" y="432" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.application.startup.batch.BatchStartup" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/app-launch/batch/src/main/java/org/jspresso/framework/application/startup/batch/BatchStartup.java" 
+    binary="false">    
+    <position x="776" y="663" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.remote.RemoteStartup" 
-      file="/jspresso-framework/app-launch/remote/src/main/java/org/jspresso/framework/application/startup/remote/RemoteStartup.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.batch.BatchStartup" 
+      file="/jspresso-framework/app-launch/batch/src/main/java/org/jspresso/framework/application/startup/batch/BatchStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.BackendActionStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/BackendActionStartup.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.ulc.UlcStartup" 
-      file="/jspresso-framework/app-launch/ulc/src/main/java/org/jspresso/framework/application/startup/ulc/UlcStartup.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.swing.SwingStartup" 
+      file="/jspresso-framework/app-launch/swing/src/main/java/org/jspresso/framework/application/startup/swing/SwingStartup.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
-      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
       binary="false"/>  
   </generalization>  
   <realization>    
@@ -85,23 +125,56 @@
       binary="false"/>  
   </realization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.wings.WingsStartup" 
-      file="/jspresso-framework/app-launch/wings/src/main/java/org/jspresso/framework/application/startup/wings/WingsStartup.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractBackendStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractBackendStartup.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
       file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.swing.SwingStartup" 
-      file="/jspresso-framework/app-launch/swing/src/main/java/org/jspresso/framework/application/startup/swing/SwingStartup.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.remote.RemoteStartup" 
+      file="/jspresso-framework/app-launch/remote/src/main/java/org/jspresso/framework/application/startup/remote/RemoteStartup.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.wings.WingsStartup" 
+      file="/jspresso-framework/app-launch/wings/src/main/java/org/jspresso/framework/application/startup/wings/WingsStartup.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <bendpoint x="385" y="354"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.ulc.UlcStartup" 
+      file="/jspresso-framework/app-launch/ulc/src/main/java/org/jspresso/framework/application/startup/ulc/UlcStartup.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.BackendActionStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/BackendActionStartup.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractBackendStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractBackendStartup.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractFrontendStartup" 
+      file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractFrontendStartup.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
       file="/jspresso-framework/app-launch/core/src/main/java/org/jspresso/framework/application/startup/AbstractStartup.java" 
       binary="false"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
-    <attributes public="true" package="true" protected="true" private="true"/>    
+    <attributes public="false" package="false" protected="false" private="false"/>    
     <operations public="true" package="true" protected="true" private="true"/>  
   </classifier-display>  
   <association-display labels="true" multiplicity="true"/>

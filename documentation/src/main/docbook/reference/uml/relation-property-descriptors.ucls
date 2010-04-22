@@ -4,7 +4,7 @@
     name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
     binary="false">    
-    <position x="291" y="-61" width="-1" height="-1"/>    
+    <position x="384" y="-61" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -14,7 +14,7 @@
     name="org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IReferencePropertyDescriptor.java" 
     binary="false">    
-    <position x="150" y="69" width="-1" height="-1"/>    
+    <position x="514" y="120" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -24,7 +24,7 @@
     name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
     binary="false">    
-    <position x="461" y="104" width="-1" height="-1"/>    
+    <position x="175" y="264" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -34,7 +34,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionDescriptor.java" 
     binary="false">    
-    <position x="611" y="-61" width="-1" height="-1"/>    
+    <position x="593" y="264" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -49,8 +49,8 @@
       binary="false"/>  
   </dependency>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IReferencePropertyDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" 
       name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
@@ -58,8 +58,8 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" 
-      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IReferencePropertyDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" 
       name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 

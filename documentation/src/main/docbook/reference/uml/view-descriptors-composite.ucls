@@ -14,7 +14,7 @@
     name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
     binary="false">    
-    <position x="308" y="165" width="-1" height="-1"/>    
+    <position x="307" y="165" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -34,7 +34,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
     binary="false">    
-    <position x="304" y="336" width="-1" height="-1"/>    
+    <position x="307" y="336" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -80,9 +80,36 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java" 
+    binary="false">    
+    <position x="576" y="253" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <bendpoint x="375" y="279"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IBorderViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
@@ -97,24 +124,8 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISplitViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISplitViewDescriptor.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
-      binary="false"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IEvenGridViewDescriptor.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
-      binary="false"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IBorderViewDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
@@ -129,11 +140,20 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
+    <bendpoint x="198" y="284"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISplitViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISplitViewDescriptor.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IEvenGridViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java" 
       binary="false"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    

@@ -4,7 +4,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java" 
     binary="false">    
-    <position x="375" y="57" width="-1" height="-1"/>    
+    <position x="493" y="56" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="false" protected="true" private="false"/>    
@@ -14,7 +14,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
     binary="false">    
-    <position x="271" y="485" width="-1" height="-1"/>    
+    <position x="494" y="655" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -24,7 +24,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java" 
     binary="false">    
-    <position x="585" y="377" width="-1" height="-1"/>    
+    <position x="742" y="381" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="false" protected="true" private="false"/>    
@@ -34,7 +34,7 @@
     name="org.jspresso.framework.application.frontend.IFrontendController" project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
     binary="false">    
-    <position x="98" y="265" width="-1" height="-1"/>    
+    <position x="170" y="349" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="false" protected="true" private="false"/>    
@@ -45,7 +45,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
     binary="false">    
-    <position x="97" y="568" width="-1" height="-1"/>    
+    <position x="170" y="715" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -55,7 +55,7 @@
     name="org.jspresso.framework.application.backend.AbstractBackendController" project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
     binary="false">    
-    <position x="508" y="645" width="-1" height="-1"/>    
+    <position x="741" y="715" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -66,7 +66,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/hibernate/src/main/java/org/jspresso/framework/application/backend/persistence/hibernate/HibernateBackendController.java" 
     binary="false">    
-    <position x="589" y="717" width="-1" height="-1"/>    
+    <position x="741" y="792" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -77,7 +77,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/DefaultRemoteController.java" 
     binary="false">    
-    <position x="272" y="645" width="-1" height="-1"/>    
+    <position x="332" y="845" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -88,7 +88,7 @@
     project="jspresso-framework" 
     file="/jspresso-framework/swing/application/src/main/java/org/jspresso/framework/application/frontend/controller/swing/DefaultSwingController.java" 
     binary="false">    
-    <position x="-44" y="645" width="-1" height="-1"/>    
+    <position x="15" y="790" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -98,7 +98,7 @@
     name="org.jspresso.framework.application.frontend.controller.ulc.DefaultUlcController" project="jspresso-framework" 
     file="/jspresso-framework/ulc/application/src/main/java/org/jspresso/framework/application/frontend/controller/ulc/DefaultUlcController.java" 
     binary="false">    
-    <position x="-38" y="701" width="-1" height="-1"/>    
+    <position x="21" y="846" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -109,14 +109,33 @@
     project="jspresso-framework" 
     file="/jspresso-framework/wings/application/src/main/java/org/jspresso/framework/application/frontend/controller/wings/DefaultWingsController.java" 
     binary="false">    
-    <position x="269" y="701" width="-1" height="-1"/>    
+    <position x="328" y="789" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
+  <class corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.application.frontend.controller.remote.RecordingRemoteController" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/RecordingRemoteController.java" 
+    binary="false">    
+    <position x="332" y="915" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <realization>    
+    <source project="jspresso-framework" 
+      name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
+      binary="false"/>  
+  </realization>  
   <generalization>    
-    <bendpoint x="121" y="670"/>    
     <source project="jspresso-framework" 
       name="org.jspresso.framework.application.frontend.controller.wings.DefaultWingsController" 
       file="/jspresso-framework/wings/application/src/main/java/org/jspresso/framework/application/frontend/controller/wings/DefaultWingsController.java" 
@@ -126,25 +145,27 @@
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
       binary="false"/>  
   </generalization>  
-  <realization>    
-    <bendpoint x="376" y="418"/>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java" 
-      binary="false"/>  
-  </realization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
+    <source project="jspresso-framework" 
+      name="org.jspresso.framework.application.frontend.controller.remote.RecordingRemoteController" 
+      file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/RecordingRemoteController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java" 
+    <target project="jspresso-framework" 
+      name="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController" 
+      file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/DefaultRemoteController.java" 
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <bendpoint x="95" y="670"/>    
+    <source project="jspresso-framework" 
+      name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <bendpoint x="170" y="815"/>    
     <source project="jspresso-framework" 
       name="org.jspresso.framework.application.frontend.controller.ulc.DefaultUlcController" 
       file="/jspresso-framework/ulc/application/src/main/java/org/jspresso/framework/application/frontend/controller/ulc/DefaultUlcController.java" 
@@ -155,13 +176,23 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
+    <bendpoint x="170" y="815"/>    
     <source project="jspresso-framework" 
-      name="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController" 
-      file="/jspresso-framework/swing/application/src/main/java/org/jspresso/framework/application/frontend/controller/swing/DefaultSwingController.java" 
+      name="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController" 
+      file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/DefaultRemoteController.java" 
       binary="false"/>    
     <target project="jspresso-framework" 
       name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" 
+      name="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController" 
+      file="/jspresso-framework/hibernate/src/main/java/org/jspresso/framework/application/backend/persistence/hibernate/HibernateBackendController.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
       binary="false"/>  
   </generalization>  
   <realization>    
@@ -181,25 +212,22 @@
       binary="false"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" 
-      name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
+    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java" 
       binary="false"/>  
   </generalization>  
   <realization>    
-    <source project="jspresso-framework" 
-      name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java" 
       binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java" 
+    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java" 
       binary="false"/>  
   </realization>  
   <generalization>    
-    <bendpoint x="335" y="592"/>    
     <source project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
       binary="false"/>    
@@ -209,17 +237,8 @@
   </generalization>  
   <generalization>    
     <source project="jspresso-framework" 
-      name="org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController" 
-      file="/jspresso-framework/hibernate/src/main/java/org/jspresso/framework/application/backend/persistence/hibernate/HibernateBackendController.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java" 
-      binary="false"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" 
-      name="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController" 
-      file="/jspresso-framework/remote/application/src/main/java/org/jspresso/framework/application/frontend/controller/remote/DefaultRemoteController.java" 
+      name="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController" 
+      file="/jspresso-framework/swing/application/src/main/java/org/jspresso/framework/application/frontend/controller/swing/DefaultSwingController.java" 
       binary="false"/>    
     <target project="jspresso-framework" 
       name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 

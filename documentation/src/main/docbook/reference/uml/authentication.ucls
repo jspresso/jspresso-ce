@@ -1,8 +1,8 @@
 <class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class corner="BOTTOM_RIGHT" language="java" name="org.jboss.security.auth.spi.LdapExtLoginModule" 
-    project="jspresso-framework" 
-    file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" binary="true">    
+    project="jspresso-framework" file="C:/Users/vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" 
+    binary="true">    
     <position x="88" y="63" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -23,18 +23,44 @@
     project="jspresso-framework" 
     file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/DevelopmentLoginModule.java" 
     binary="false">    
-    <position x="472" y="251" width="-1" height="-1"/>    
+    <position x="88" y="380" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.security.auth.spi.DatabaseLoginModule" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/DatabaseLoginModule.java" 
+    binary="false">    
+    <position x="472" y="235" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.jboss.security.auth.spi.DatabaseServerLoginModule" 
+    project="jspresso-framework" file="C:/Users/vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" 
+    binary="true">    
+    <position x="472" y="55" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="false" protected="true" private="false"/>    
     </display>  
   </class>  
   <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.security.auth.spi.DatabaseLoginModule" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/DatabaseLoginModule.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jboss.security.auth.spi.DatabaseServerLoginModule" 
+      file="C:/Users/vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" binary="true"/>  
+  </generalization>  
+  <generalization>    
     <source project="jspresso-framework" name="org.jspresso.framework.security.auth.spi.LdapLoginModule" 
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jboss.security.auth.spi.LdapExtLoginModule" 
-      file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" binary="true"/>  
+      file="C:/Users/vincent/.m2/repository/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" binary="true"/>  
   </generalization>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
     <attributes public="false" package="false" protected="false" private="false"/>    
