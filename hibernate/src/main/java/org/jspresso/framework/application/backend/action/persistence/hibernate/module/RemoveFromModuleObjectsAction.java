@@ -84,29 +84,30 @@ public class RemoveFromModuleObjectsAction extends
       projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
 
-    final List<IEntity> moduleObjectsToRemove = new ArrayList<IEntity>();
+    List<IEntity> moduleObjectsToRemove = new ArrayList<IEntity>();
     for (int i = 0; i < selectedIndices.length; i++) {
       moduleObjectsToRemove.add((IEntity) collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue());
     }
+    for (IEntity entityToRemove : moduleObjectsToRemove) {
+      try {
+        deleteEntity(entityToRemove, context);
+      } catch (IllegalAccessException ex) {
+        throw new ActionException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ActionException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ActionException(ex);
+      }
+    }
+
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
       public Object doInTransaction(
           @SuppressWarnings("unused") TransactionStatus status) {
-        for (IEntity entityToRemove : moduleObjectsToRemove) {
-          try {
-            deleteEntity(entityToRemove, context);
-          } catch (IllegalAccessException ex) {
-            throw new ActionException(ex);
-          } catch (InvocationTargetException ex) {
-            if (ex.getCause() instanceof RuntimeException) {
-              throw (RuntimeException) ex.getCause();
-            }
-            throw new ActionException(ex.getCause());
-          } catch (NoSuchMethodException ex) {
-            throw new ActionException(ex);
-          }
-        }
         try {
           getController(context).performPendingOperations();
         } catch (RuntimeException ex) {

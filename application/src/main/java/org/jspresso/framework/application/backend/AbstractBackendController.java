@@ -254,10 +254,24 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   public Map<String, Object> getDirtyProperties(IEntity entity) {
+    Map<String, Object> dirtyProperties;
     if (unitOfWork.isActive()) {
-      return unitOfWork.getDirtyProperties(entity);
+      dirtyProperties = unitOfWork.getDirtyProperties(entity);
+    } else {
+      dirtyProperties = dirtRecorder.getChangedProperties(entity);
     }
-    return dirtRecorder.getChangedProperties(entity);
+    if (dirtyProperties != null) {
+      for (Map.Entry<String, Object> dirtyProperty : dirtyProperties.entrySet()) {
+        Object currentProperty = entity.straightGetProperty(dirtyProperty
+            .getKey());
+        if ((currentProperty != null && currentProperty.equals(dirtyProperty
+            .getValue()))
+            || (currentProperty == null && dirtyProperty.getValue() == null)) {
+          dirtyProperties.remove(dirtyProperty.getKey());
+        }
+      }
+    }
+    return dirtyProperties;
   }
 
   /**
@@ -435,13 +449,6 @@ public abstract class AbstractBackendController extends AbstractController
       mergedList.add(merge(entity, mergeMode, alreadyMerged));
     }
     return mergedList;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void performPendingOperations() {
-    // NO-OP.
   }
 
   /**

@@ -12,5 +12,15 @@ import org.jspresso.framework.application.backend.AbstractBackendController;
  * @author Vincent Vandenschrick
  */
 public class MockBackController extends AbstractBackendController {
+
   // a mock implementation.
+
+  /**
+   * NO-OP.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void performPendingOperations() {
+    // NO-OP
+  }
 }

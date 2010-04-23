@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -86,13 +85,8 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       for (int i = 0; i < indicesToMove.length; i++) {
         targetList.add(targetIndices[i], elementsToMove.get(i));
       }
-      ((IComponent) collectionConnector.getParentConnector()
-          .getConnectorValue()).straightSetProperty(
-          collectionConnector.getId(), null);
-      originalList.clear();
-      originalList.addAll(targetList);
       ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
-          .straightSetProperty(collectionConnector.getId(), originalList);
+          .straightSetProperty(collectionConnector.getId(), targetList);
       setSelectedModels(elementsToMove, context);
     }
     return super.execute(actionHandler, context);

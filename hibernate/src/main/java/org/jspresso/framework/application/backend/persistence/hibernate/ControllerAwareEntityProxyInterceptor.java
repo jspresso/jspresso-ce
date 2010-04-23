@@ -102,7 +102,7 @@ public class ControllerAwareEntityProxyInterceptor extends
         // Those just saved entities must not be considered dirty.
         return new int[0];
       }
-      int[] indices = new int[dirtyProperties.size()];
+      int[] indices = new int[propertyNames.length];
       int n = 0;
       for (int i = 0; i < propertyNames.length; i++) {
         if (dirtyProperties.containsKey(propertyNames[i])) {
