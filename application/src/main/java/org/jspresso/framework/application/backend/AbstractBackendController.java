@@ -261,13 +261,15 @@ public abstract class AbstractBackendController extends AbstractController
       dirtyProperties = dirtRecorder.getChangedProperties(entity);
     }
     if (dirtyProperties != null) {
-      for (Map.Entry<String, Object> dirtyProperty : dirtyProperties.entrySet()) {
+      for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet()
+          .iterator(); ite.hasNext();) {
+        Map.Entry<String, Object> dirtyProperty = ite.next();
         Object currentProperty = entity.straightGetProperty(dirtyProperty
             .getKey());
         if ((currentProperty != null && currentProperty.equals(dirtyProperty
             .getValue()))
             || (currentProperty == null && dirtyProperty.getValue() == null)) {
-          dirtyProperties.remove(dirtyProperty.getKey());
+          ite.remove(); // actually removes the mapping from the map.
         }
       }
     }
