@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1118,14 +1119,16 @@ public abstract class AbstractComponentInvocationHandler implements
           // if the property is a list we may restore the element order and be
           // careful not to miss one...
           if (actualNewProperty instanceof List) {
-            Collection currentProperty = propertyAccessor.getValue(proxy);
+            Collection currentProperty = (Collection) oldProperty;
+            List<Object> snapshot = new ArrayList<Object>(currentProperty);
             if (currentProperty instanceof List) {
-              // Just check the only order differs
+              // Just check that only order differs
               Set<Object> temp = new HashSet<Object>(currentProperty);
               temp.removeAll((List<?>) actualNewProperty);
               currentProperty.clear();
               currentProperty.addAll((List<?>) actualNewProperty);
               currentProperty.addAll(temp);
+              oldProperty = snapshot;
             }
           }
         }

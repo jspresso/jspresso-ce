@@ -18,13 +18,15 @@
  */
 package org.jspresso.framework.application.backend.action;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
-import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.component.IComponent;
 
 /**
  * This action can be declared on views that are backed by collections with list
@@ -85,8 +87,23 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       for (int i = 0; i < indicesToMove.length; i++) {
         targetList.add(targetIndices[i], elementsToMove.get(i));
       }
-      ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
-          .straightSetProperty(collectionConnector.getId(), targetList);
+      IComponent masterComponent = (IComponent) collectionConnector
+          .getParentConnector().getConnectorValue();
+      try {
+        getAccessorFactory(context)
+            .createPropertyAccessor(collectionConnector.getId(),
+                masterComponent.getComponentContract()).setValue(
+                masterComponent, targetList);
+      } catch (IllegalAccessException ex) {
+        throw new ActionException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getTargetException() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getTargetException();
+        }
+        throw new ActionException(ex);
+      } catch (NoSuchMethodException ex) {
+        throw new ActionException(ex);
+      }
       setSelectedModels(elementsToMove, context);
     }
     return super.execute(actionHandler, context);
