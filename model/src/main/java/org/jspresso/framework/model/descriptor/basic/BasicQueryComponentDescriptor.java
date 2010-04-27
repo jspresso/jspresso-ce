@@ -113,10 +113,6 @@ public class BasicQueryComponentDescriptor extends
           qProperties.add(propertyDescriptor.getName() + "."
               + nestedRenderedProperty);
         }
-        ((BasicPropertyDescriptor) ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getPropertyDescriptor(
-                ComparableQueryStructureDescriptor.COMPARATOR))
-            .setI18nNameKey(propertyDescriptor.getName());
       } else {
         qProperties.add(propertyDescriptor.getName());
       }

@@ -59,6 +59,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
 
     BasicStringPropertyDescriptor queryDescriptor = new BasicStringPropertyDescriptor();
     queryDescriptor.setName(defaultQueryDecriptor.getName());
+    queryDescriptor.setI18nNameKey(defaultQueryDecriptor.getI18nNameKey());
     queryDescriptor.setDescription(defaultQueryDecriptor.getDescription());
     queryDescriptor.setGrantedRoles(defaultQueryDecriptor.getGrantedRoles());
     queryDescriptor.setMandatory(defaultQueryDecriptor.isMandatory());

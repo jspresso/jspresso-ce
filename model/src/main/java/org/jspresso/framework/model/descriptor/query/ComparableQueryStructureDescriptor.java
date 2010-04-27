@@ -98,12 +98,19 @@ public class ComparableQueryStructureDescriptor extends
 
     super();
     setName(propertyDescriptor.getName());
+    setI18nNameKey(propertyDescriptor.getI18nNameKey());
+    setDescription(propertyDescriptor.getDescription());
 
     BasicComponentDescriptor<ComparableQueryStructure> refDescriptor = new BasicComponentDescriptor<ComparableQueryStructure>(
         ComparableQueryStructure.class.getName());
 
     BasicEnumerationPropertyDescriptor comparatorPropertyDescriptor = new BasicEnumerationPropertyDescriptor();
     comparatorPropertyDescriptor.setName(COMPARATOR);
+    if (getI18nNameKey() != null) {
+      comparatorPropertyDescriptor.setI18nNameKey(getI18nNameKey());
+    } else {
+      comparatorPropertyDescriptor.setI18nNameKey(getName());
+    }
     comparatorPropertyDescriptor.setEnumerationName("OP");
     Map<String, String> values = new LinkedHashMap<String, String>();
     values.put(EQ, null);
