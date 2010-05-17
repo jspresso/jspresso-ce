@@ -96,19 +96,25 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         erqDescriptor);
 
     IValueConnector viewConnector = getViewConnector(context);
+    String queryPropertyValue = getActionCommand(context);
     if (viewConnector instanceof IRenderableCompositeValueConnector
         && ((IRenderableCompositeValueConnector) viewConnector)
             .getRenderingConnector() != null) {
+      if (getModel(context) instanceof IQueryComponent) {
+        if (queryPropertyValue != null && !queryPropertyValue.equals("*")) {
+          viewConnector.setConnectorValue(null);
+          ((IRenderableCompositeValueConnector) viewConnector)
+              .getRenderingConnector().setConnectorValue(queryPropertyValue);
+          return true;
+        }
+      }
       setActionParameter(((IRenderableCompositeValueConnector) viewConnector)
           .getRenderingConnector().getId(), context);
     }
     actionHandler.execute(createQueryComponentAction, context);
 
-    String queryPropertyValue = getActionCommand(context);
-    if (autoquery
-        && queryPropertyValue != null
-        && /* queryPropertyValue.length() > 0 && */!queryPropertyValue
-            .equals("*")) {
+    if (autoquery && queryPropertyValue != null
+        && !queryPropertyValue.equals("*")) {
       actionHandler.execute(findAction, context);
       IQueryComponent queryComponent = (IQueryComponent) context
           .get(IQueryComponent.QUERY_COMPONENT);
