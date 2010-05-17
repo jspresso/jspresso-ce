@@ -152,6 +152,23 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   }
 
   /**
+   * Removes the mapping for this key from this map if present.
+   * 
+   * @param key
+   *          key whose mapping is to be removed from the map.
+   * @return previous value associated with specified key, or <tt>null</tt> if
+   *         there was no mapping for key. A <tt>null</tt> return can also
+   *         indicate that the map previously associated <tt>null</tt> with the
+   *         specified key.
+   */
+  @Override
+  public V remove(Object key) {
+    V oldValue = super.remove(key);
+    propertyChangeSupport.firePropertyChange(key.toString(), oldValue, null);
+    return oldValue;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public void removePropertyChangeListener(PropertyChangeListener listener) {

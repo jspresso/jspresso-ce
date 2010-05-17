@@ -91,6 +91,49 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Object put(String key, Object value) {
+    IPropertyDescriptor propertyDescriptor = componentDescriptor
+        .getPropertyDescriptor(key);
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+      IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+          .getReferencedDescriptor();
+      if (IEntity.class.isAssignableFrom(referencedDescriptor
+          .getComponentContract())) {
+        if (!(value instanceof IQueryComponent)) {
+          Object actualValue = super.get(key);
+          String tsProp = referencedDescriptor.getToStringProperty();
+          String reProp = null;
+          if (referencedDescriptor.getRenderedProperties() != null
+              && !referencedDescriptor.getRenderedProperties().isEmpty()) {
+            reProp = referencedDescriptor.getRenderedProperties().get(0);
+          }
+          if (value != null) {
+            ((IQueryComponent) actualValue).put(IEntity.ID, ((IEntity) value)
+                .getId());
+            ((IQueryComponent) actualValue).put(tsProp, ((IEntity) value)
+                .toString());
+            if (reProp != null) {
+              ((IQueryComponent) actualValue).put(reProp, ((IEntity) value)
+                  .straightGetProperty(reProp));
+            }
+          } else {
+            ((IQueryComponent) actualValue).remove(IEntity.ID);
+            ((IQueryComponent) actualValue).remove(tsProp);
+            if (reProp != null) {
+              ((IQueryComponent) actualValue).remove(reProp);
+            }
+          }
+          return actualValue;
+        }
+      }
+    }
+    return super.put(key, value);
+  }
+
+  /**
    * Gets the componentDescriptor.
    * 
    * @return the componentDescriptor.
