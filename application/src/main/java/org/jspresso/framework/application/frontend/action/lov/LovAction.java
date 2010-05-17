@@ -101,7 +101,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         && ((IRenderableCompositeValueConnector) viewConnector)
             .getRenderingConnector() != null) {
       if (getModel(context) instanceof IQueryComponent) {
-        if (queryPropertyValue != null && !queryPropertyValue.equals("*")) {
+        if (queryPropertyValue != null && queryPropertyValue.contains("%")) {
           viewConnector.setConnectorValue(null);
           ((IRenderableCompositeValueConnector) viewConnector)
               .getRenderingConnector().setConnectorValue(queryPropertyValue);
