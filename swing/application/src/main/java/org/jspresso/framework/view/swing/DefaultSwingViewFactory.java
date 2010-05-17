@@ -467,7 +467,7 @@ public class DefaultSwingViewFactory extends
       Locale locale) {
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForComponentView(viewDescriptor), null);
+            getConnectorIdForBeanView(viewDescriptor), null);
     JPanel viewComponent = createJPanel();
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);

@@ -855,7 +855,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected IValueConnector createCardViewConnector(final IMapView<E> cardView,
       final IActionHandler actionHandler, final Locale locale) {
     IValueConnector cardViewConnector = getConnectorFactory()
-        .createValueConnector(cardView.getDescriptor().getName());
+        .createValueConnector(
+            getConnectorIdForBeanView(cardView.getDescriptor()));
     cardViewConnector.addValueChangeListener(new IValueChangeListener() {
 
       public void valueChange(ValueChangeEvent evt) {
@@ -1986,10 +1987,24 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the computed connector id.
+   * @deprecated use more generic getConnectorIdForBeanView instead.
    */
+  @Deprecated
   protected String getConnectorIdForComponentView(
       IComponentViewDescriptor viewDescriptor) {
-    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>) {
+    return getConnectorIdForBeanView(viewDescriptor);
+  }
+
+  /**
+   * Computes the connector id for bean based view.
+   * 
+   * @param viewDescriptor
+   *          the component view descriptor.
+   * @return the computed connector id.
+   */
+  protected String getConnectorIdForBeanView(IViewDescriptor viewDescriptor) {
+    if (viewDescriptor.getModelDescriptor() == null
+        || viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor<?>) {
       return ModelRefPropertyConnector.THIS_PROPERTY;
     }
     return viewDescriptor.getModelDescriptor().getName();

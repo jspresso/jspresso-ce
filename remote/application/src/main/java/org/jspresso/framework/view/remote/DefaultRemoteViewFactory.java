@@ -504,7 +504,7 @@ public class DefaultRemoteViewFactory extends
       Locale locale) {
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForComponentView(viewDescriptor), null);
+            getConnectorIdForBeanView(viewDescriptor), null);
     RForm viewComponent = createRForm();
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition()

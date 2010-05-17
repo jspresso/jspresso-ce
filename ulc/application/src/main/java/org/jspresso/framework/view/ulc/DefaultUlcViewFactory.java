@@ -489,7 +489,7 @@ public class DefaultUlcViewFactory extends
       Locale locale) {
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForComponentView(viewDescriptor), null);
+            getConnectorIdForBeanView(viewDescriptor), null);
     ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
     IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
         connector);

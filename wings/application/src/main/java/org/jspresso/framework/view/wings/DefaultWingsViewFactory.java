@@ -447,7 +447,7 @@ public class DefaultWingsViewFactory extends
       Locale locale) {
     ICompositeValueConnector connector = getConnectorFactory()
         .createCompositeValueConnector(
-            getConnectorIdForComponentView(viewDescriptor), null);
+            getConnectorIdForBeanView(viewDescriptor), null);
     SPanel viewComponent = createSPanel(new SGridBagLayout());
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
