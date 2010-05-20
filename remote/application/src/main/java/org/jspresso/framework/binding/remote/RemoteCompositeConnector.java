@@ -125,6 +125,14 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    return (getModelConnector() != null) && super.isWritable();
+  }
+
+  /**
    * Sets the automationSeed.
    * 
    * @param automationSeed

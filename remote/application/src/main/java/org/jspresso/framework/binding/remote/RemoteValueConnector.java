@@ -123,7 +123,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
    */
   @Override
   public boolean isWritable() {
-    return getModelConnector() != null && super.isWritable();
+    return (getModelConnector() != null) && super.isWritable();
   }
 
   /**

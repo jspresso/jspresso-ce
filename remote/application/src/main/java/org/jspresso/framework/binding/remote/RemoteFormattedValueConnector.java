@@ -126,7 +126,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    */
   @Override
   public boolean isWritable() {
-    return getModelConnector() != null && super.isWritable();
+    return (getModelConnector() != null) && super.isWritable();
   }
 
   /**
