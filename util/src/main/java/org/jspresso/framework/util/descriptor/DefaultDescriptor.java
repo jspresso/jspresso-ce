@@ -101,11 +101,10 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
   }
 
   /**
-   * Sets the i18nNameKey.
+   * Sets the I18N key used for translation if it differs from the name itself.
    * 
    * @param nameKey
    *          the i18nNameKey to set.
-   * @internal
    */
   public void setI18nNameKey(String nameKey) {
     i18nNameKey = nameKey;

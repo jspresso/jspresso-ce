@@ -221,11 +221,11 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * Sets the sortingAction.
+   * Configures the action to be activated when a sort is triggered by the user.
+   * It should be used with caution and rarely be overriden from the default.
    * 
    * @param sortingAction
    *          the sortingAction to set.
-   * @internal
    */
   public void setSortingAction(IDisplayableAction sortingAction) {
     this.sortingAction = sortingAction;

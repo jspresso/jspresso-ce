@@ -26,9 +26,16 @@ import java.util.Map;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 
 /**
- * This class implements a hierachical structure for holding action maps. An
- * action map is a map of action sets keyed by their grouping goal (like 'EDIT',
- * 'VIEW', ...).
+ * An action map is used to structure a set of actions. The actions are not
+ * directly registered but are placed into action lists that in turn are
+ * assigned to the action map. Action maps can be merged together, i.e. an
+ * action map can have multiple parent action maps. In that case, Action lists
+ * that have the same name are merged together. The way action maps are rendered
+ * depends on the place where they are declared. For instance an action map that
+ * is assigned to a view might be rendered as a toolbar with each action list
+ * separated into its own group. On the other hand, an action map declared on
+ * the frontend controller might be represented as a menu bar on the main
+ * application frame.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -99,7 +106,11 @@ public class ActionMap {
   }
 
   /**
-   * Sets the action lists list.
+   * Assigns the action lists that are directly owned by this action map. The
+   * action lists that will actually be rendered will be the merge of the
+   * directly owned action lists and of the parent action maps. Action lists
+   * that have the same name are merged together and into a merged action list,
+   * local actions will replace parent actions with the same name.
    * 
    * @param actionLists
    *          the action lists list to set.
@@ -109,7 +120,11 @@ public class ActionMap {
   }
 
   /**
-   * Sets the parentActionMaps.
+   * Assigns the parent action maps. The action lists that will actually be
+   * rendered will be the merge of the directly owned action lists and of the
+   * parent action maps. Action lists that have the same name are merged
+   * together and into a merged action list, local actions will replace parent
+   * actions with the same name.
    * 
    * @param parentActionMaps
    *          the parentActionMaps to set.
@@ -119,7 +134,17 @@ public class ActionMap {
   }
 
   /**
-   * Sets the renderingOptions.
+   * Indicates how the actions should be rendered. This is either a value of the
+   * <code>ERenderingOptions</code> enum or its equivalent string representation
+   * :
+   * <ul>
+   * <li><code>LABEL_ICON</code> for label and icon</li>
+   * <li><code>LABEL</code> for label only</li>
+   * <li><code>ICON</code> for icon only.</li>
+   * </ul>
+   * <p>
+   * Default value is <code>null</code>, i.e. determined from outside, e.g. the
+   * view factory.
    * 
    * @param renderingOptions
    *          the renderingOptions to set.

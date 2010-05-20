@@ -90,6 +90,10 @@
                 -rootClassName_15 org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor
 
                 -rootClassName_16 org.jspresso.framework.view.descriptor.basic.BasicTreeLevelDescriptor
+
+                -rootClassName_17 org.jspresso.framework.view.action.ActionMap
+
+                -rootClassName_18 org.jspresso.framework.view.action.ActionList
               </additionalparam>
             </configuration>
           </execution>
