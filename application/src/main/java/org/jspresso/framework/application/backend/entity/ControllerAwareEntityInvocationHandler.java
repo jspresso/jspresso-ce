@@ -55,9 +55,9 @@ public class ControllerAwareEntityInvocationHandler extends
 
   private static final String DETACHED_ENTITIES_PROPERTY_NAME = "detachedEntities";
 
-  private static final long  serialVersionUID = 3663517052427878204L;
+  private static final long   serialVersionUID                = 3663517052427878204L;
 
-  private IBackendController backendController;
+  private IBackendController  backendController;
 
   private Set<IEntity>        detachedEntities;
 
@@ -149,6 +149,7 @@ public class ControllerAwareEntityInvocationHandler extends
         propertyDescriptor.getName());
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
+
   /**
    * {@inheritDoc}
    */
@@ -167,8 +168,9 @@ public class ControllerAwareEntityInvocationHandler extends
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     if (detachedEntities != null) {
       for (IEntity detachedEntity : detachedEntities) {
-        if (!entityLifecycleHandler
-            .isEntityRegisteredForDeletion(detachedEntity)
+        if (detachedEntity.isPersistent()
+            && !entityLifecycleHandler
+                .isEntityRegisteredForDeletion(detachedEntity)
             && !entityLifecycleHandler
                 .isEntityRegisteredForUpdate(detachedEntity)) {
           entityLifecycleHandler.registerForUpdate(detachedEntity);
