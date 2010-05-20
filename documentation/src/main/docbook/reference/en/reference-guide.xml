@@ -627,6 +627,10 @@
           <listitem>
             <para>Flex (Flash)</para>
           </listitem>
+
+          <listitem>
+            <para>Qooxdoo (Ajax)</para>
+          </listitem>
         </itemizedlist>
       </listitem>
 
@@ -660,8 +664,8 @@
   <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
   <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-  
+
   <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-  
+
   <!--<index/>-->
 </book>
