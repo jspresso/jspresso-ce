@@ -1163,14 +1163,21 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindProperty(dateField, "selectedDate", remoteState, "value", true);
       BindingUtils.bindProperty(dateField, "enabled", remoteState, "writable");
       var updateModel:Function = function (event:Event):void {
-        if(event is FocusEvent) {
-          var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
-          var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
-          
-          if(currentTarget == dateField
-            && !dateField.contains(relatedObject)
-            && !dateField.dropdown.contains(relatedObject)) {
-            // do not listen to inner focus events.
+        if(dateField.text == "") {
+          dateField.selectedDate = null;
+          remoteState.value = null;
+        } else {
+          if(event is FocusEvent) {
+            var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
+            var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
+            
+            if(currentTarget == dateField
+              && !dateField.contains(relatedObject)
+              && !dateField.dropdown.contains(relatedObject)) {
+              // do not listen to inner focus events.
+              remoteState.value = dateField.selectedDate;
+            }
+          } else {
             remoteState.value = dateField.selectedDate;
           }
         }
@@ -1194,13 +1201,20 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindProperty(dateTimeField, "enabled", remoteState, "writable");
       BindingUtils.bindProperty(remoteState, "value", dateTimeField, "selectedDateTime", true);
       var updateModel:Function = function (event:Event):void {
-        if(event is FocusEvent) {
-          var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
-          var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
-          
-          if(currentTarget == dateTimeField
-            && !dateTimeField.contains(relatedObject)
-            && !dateTimeField.dropdownDateTime.contains(relatedObject)) {
+        if(dateTimeField.text == "") {
+          dateTimeField.selectedDateTime = null;
+          remoteState.value = null;
+        } else {
+          if(event is FocusEvent) {
+            var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
+            var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
+            
+            if(currentTarget == dateTimeField
+              && !dateTimeField.contains(relatedObject)
+              && !dateTimeField.dropdownDateTime.contains(relatedObject)) {
+              remoteState.value = dateTimeField.selectedDateTime;
+            }
+          } else {
             remoteState.value = dateTimeField.selectedDateTime;
           }
         }

@@ -237,7 +237,6 @@ public class DefaultRemoteController extends
    */
   @Override
   public boolean handleException(Throwable ex, Map<String, Object> context) {
-    ex.printStackTrace();
     if (super.handleException(ex, context)) {
       return true;
     }
@@ -257,6 +256,7 @@ public class DefaultRemoteController extends
       messageCommand.setMessage(getTranslationProvider().getTranslation(
           "concurrency.error.description", getLocale()));
     } else {
+      ex.printStackTrace();
       messageCommand.setMessage(ex.getLocalizedMessage());
     }
     registerCommand(messageCommand);
