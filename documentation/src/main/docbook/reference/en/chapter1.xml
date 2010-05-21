@@ -11,7 +11,7 @@
     <title>Setting-up the development environment</title>
 
     <para>One of the interesting feature of Jspresso is its native integration
-    with now standard build tools. All the complex build process is completely
+    with standard build tools. All the complex build process is completely
     handled in <ulink url="http://maven.apache.org/">Maven</ulink>. Jspresso
     also offers a Maven archetype to quickly setup your project and import it
     directly in <ulink url="http://www.eclipse.org/">Eclipse</ulink>.</para>
@@ -30,12 +30,12 @@
 
         <listitem>
           <para>The <ulink url="http://maven.apache.org/download.html">Apache
-          Maven</ulink> project management tool (2.0.10 or 2.1).</para>
+          Maven</ulink> project management tool (2.2+).</para>
         </listitem>
 
         <listitem>
           <para>The <ulink url="http://www.eclipse.org/downloads/">Eclipse IDE
-          for Java EE Developers</ulink> (3.4+).</para>
+          for Java EE Developers</ulink> (3.5+).</para>
         </listitem>
 
         <listitem>
@@ -429,6 +429,22 @@
             <listitem>
               <para>a contact information</para>
             </listitem>
+
+            <listitem>
+              <para>a preferred color</para>
+            </listitem>
+
+            <listitem>
+              <para>a flag indicating if (s)he is married</para>
+            </listitem>
+
+            <listitem>
+              <para>a salary</para>
+            </listitem>
+
+            <listitem>
+              <para>a photo</para>
+            </listitem>
           </itemizedlist>
         </listitem>
       </itemizedlist>
@@ -762,25 +778,22 @@
 
       <itemizedlist>
         <listitem>
-          <para>Code completion for the XML elements and attributes</para>
+          <para>Code completion for the XML elements and attributes.</para>
         </listitem>
 
         <listitem>
-          <para>Code completion for the Jspresso descriptors</para>
+          <para>Code completion for the Jspresso descriptors.</para>
         </listitem>
 
         <listitem>
           <para>Quick navigation between beans and from beans to java
-          sources</para>
+          sources.</para>
         </listitem>
       </itemizedlist>
 
       <para>Moreover, Spring IDE will validate your Spring configuration files
       during the project compilation and report any error in the standard
       Eclipse <quote>problems</quote> view.</para>
-
-      <para>The various description java beans that are provided by Jspresso
-      are detailed in the next chapter.</para>
 
       <para>We will use the root package <code>org.jspresso.hrsample</code>
       for our application as defined during the archetype project generation.
@@ -807,7 +820,124 @@
     The domain model
   --&gt;
   &lt;!-- Describe your application domain model here. --&gt;
+
+
+  &lt;!--
+   The application I18N resources. 
+  --&gt;
+  &lt;bean
+    id="applicationMessageSource"
+    parent="abstractApplicationMessageSource"&gt;
+    &lt;property
+      name="parentMessageSource"
+      ref="commonsMessageSource" /&gt; <co id="commonsMessageSource" />
+    &lt;property name="basenames"&gt;
+      &lt;list&gt;
+        &lt;value&gt;org.jspresso.hrsample.i18n.Messages&lt;/value&gt; <co
+          id="basenames" />
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
 &lt;/beans&gt;</programlisting>
+
+      <calloutlist>
+        <callout arearefs="commonsMessageSource">
+          <para>We inherit the default Jspresso I18N resource bundles that
+          contain translated entries for generic terms.</para>
+        </callout>
+
+        <callout arearefs="basenames">
+          <para>We declare the list of I18N resource bundles we are going to
+          use to store the translations.</para>
+        </callout>
+      </calloutlist>
+
+      <para>Jspresso relies on the well-known java I18N mechanism through the
+      use of resource bundle property files. Translating the application is
+      then a matter of translating the entries contained in these property
+      files. Since Jspresso never use absolute positioning but instead heavily
+      relies on layouts, the translator won't have to care about translations
+      length.</para>
+
+      <para>As declared in the XML fragment above, we will use a
+      <code>org.jspresso.hrsample.i18n</code> package that will contain the
+      resource bundle property files. We will translate the application in
+      English and French; hopefuly, the archetype has already created both
+      property files for us. You should have the two files
+      <filename>Messages_en.properties</filename> and
+      <filename>Messages_fr.properties</filename> that will respectively
+      contain the English and French translations in the following folder
+      :</para>
+
+      <para><filename>/hrsample/core/src/main/resources/org/jspresso/hrsample/i18n</filename></para>
+
+      <para>Adding a new language will be just a mater of creating, in the
+      same package, a new property file with the 2 letter ISO code of the
+      language. Those 2 files are almost empty as of now but don't care about
+      that; Jspresso will graphically notify you that a translation is missing
+      for a given language.</para>
+    </section>
+
+    <section>
+      <title>Using the "Sugar for Jspresso" DSL (Jspresso 3.5+)</title>
+
+      <para>Starting from version 3.5.0, the preferred way of writing
+      applications is to use the new Jspresso Groovy based DSL (Domain
+      Specific Language) : "Sugar for Jspresso" - aka <emphasis
+      role="bold">SJS</emphasis>. The SJS DSL was thought from the very
+      begining to stay compatible with Spring XML. This means that during the
+      build, the SJS authored files are "compiled" to generate Spring XML
+      files that are loaded in the Spring context beside the usual ones. So
+      you can :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>develop only using SJS.</para>
+        </listitem>
+
+        <listitem>
+          <para>develop only using Spring XML.</para>
+        </listitem>
+
+        <listitem>
+          <para>develop using SJS and Spring XML and even reference on one
+          side, components that are defined on the other side.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>As for the model part, instead of working directly into the
+      <filename>model.xml</filename> Spring context file, you can write your
+      domain description using SJS into the <filename>model.groovy</filename>
+      file located here :</para>
+
+      <blockquote>
+        <para><filename>hrsample/core/src/main/dsl/model.groovy</filename></para>
+      </blockquote>
+
+      <para>Since the SJS files are plain Groovy files, you can install the
+      <ulink url="http://groovy.codehaus.org/Eclipse+Plugin">Groovy Eclipse
+      plugin</ulink> to help authoring them until the SJS Eclipse plugin gets
+      released.</para>
+
+      <para>Here is what the default generated
+      <filename>model.groovy</filename> looks like :</para>
+
+      <programlisting language="xml">// Implement your domain here using the SJS DSL.
+ </programlisting>
+
+      <note>
+        <para>For those who are familiar with Jspresso Spring XML, and want to
+        migrate smoothly to SJS, you can always have a look to the SJS
+        generated Spring config files. For instance,
+        <filename>model.groovy</filename> will be translated into
+        <filename>hrsample/core/target/generated-resources/dsl/org/jspresso/hrsample/model/dsl-model.xml</filename>
+        by the SJS compiler.</para>
+      </note>
+
+      <para>In all example given using the SJS DSL, pay special attention to
+      conventions. For instance, package names are most of the time inferred
+      and you will rarely change the default. This feature makes SJS code much
+      more compact and easier to read than plain Spring XML.</para>
     </section>
 
     <section>
@@ -892,6 +1022,12 @@
         </callout>
       </calloutlist>
 
+      <para>And the SJS way, that is way more compact :</para>
+
+      <para><programlisting language="java">Interface ('Nameable') {
+  string_64 'name', mandatory:true
+}</programlisting></para>
+
       <para>As you can see above, we create an interface descriptor
       (<code>org.jspresso.hrsample.backend.domain.Nameable</code>) with one
       property (<code>name</code>) along with its constraints
@@ -968,8 +1104,14 @@
         </callout>
       </calloutlist>
 
-      <para>The <code>Traceable</code> interface description is slightly more
-      complicated than the <code>Nameable</code> interface since not all
+      <para>And the SJS way :</para>
+
+      <para><programlisting language="java">Interface('Traceable',
+          uncloned:['createTimestamp', 'lastUpdateTimestamp']) {
+  date_time 'createTimestamp', readOnly:true
+  date_time 'lastUpdateTimestamp', readOnly:true
+}</programlisting>The <code>Traceable</code> interface description is slightly
+      more complicated than the <code>Nameable</code> interface since not all
       properties are eligible to cloning
       (<code>unclonedProperties</code>).</para>
     </section>
@@ -1194,6 +1336,14 @@ public class TraceableLifecycleInterceptor extends
             to the component.</para>
           </callout>
         </calloutlist></para>
+
+      <para>And the SJS way :</para>
+
+      <para><programlisting language="java">Interface('Traceable',
+    <emphasis role="bold">interceptors:'TraceableLifecycleInterceptor'</emphasis>,
+    uncloned:['createTimestamp', 'lastUpdateTimestamp']) {
+  ...
+}</programlisting></para>
     </section>
 
     <section>
@@ -1244,8 +1394,13 @@ public class TraceableLifecycleInterceptor extends
         </callout>
       </calloutlist>
 
-      <para>Relaunching the Jspresso Maven compilation will produce the
-      following class (<filename>City.java</filename>) :</para>
+      <para>And the SJS way :<programlisting language="java">Entity('City',
+       extend:'Nameable') {
+  string_10 'zip'
+}</programlisting></para>
+
+      <para> the Jspresso Maven compilation will produce the following class
+      (<filename>City.java</filename>) :</para>
 
       <programlisting language="java">package org.jspresso.hrsample.model;
 
@@ -1397,6 +1552,12 @@ public interface City extends
         </callout>
       </calloutlist>
 
+      <para>And the SJS way :<programlisting language="java">Component('ContactInfo') {
+  string_256 'address'
+  string_32  'phone'
+  string_128 'email', regex:"[\\w\\-\\.]*@[\\w\\-\\.]*", regexSample:'contact@acme.com'
+}</programlisting></para>
+
       <para>Relaunching the Jspresso generator will produce the following
       class (<filename>ContactInfo.java</filename>) :</para>
 
@@ -1535,7 +1696,15 @@ public interface ContactInfo extends
               <code>City</code> entity descriptor we described above (note the
               usage of the <code>ref</code> spring attribute).</para>
             </callout>
-          </calloutlist>Relaunching the Maven compilation will update the
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">Component('ContactInfo') {
+  ...
+  <emphasis role="bold">reference 'city', ref:'City'</emphasis>
+  ...
+}</programlisting></para>
+
+        <para>Relaunching the Maven compilation will update the
         <filename>ContactInfo.java</filename> source file we generated above,
         but since this is a unidirectional relationship, the
         <filename>City.java</filename> file will remain untouched. The
@@ -1578,7 +1747,7 @@ public interface ContactInfo extends
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="org.jspresso.framework.model.descriptor.basic.BasicTextPropertyDescriptor"&gt; <co
+        class="org.jspresso.framework.model.descriptor.basic.BasicHtmlPropertyDescriptor"&gt; <co
               id="BasicTextPropertyDescriptor" />
         &lt;property
           name="name"
@@ -1595,16 +1764,22 @@ public interface ContactInfo extends
             </callout>
 
             <callout arearefs="BasicTextPropertyDescriptor">
-              <para>We use a <code>BasicTextPropertyDescriptor</code> instead
+              <para>We use a <code>BasicHtmlPropertyDescriptor</code> instead
               of a <code>BasicStringPropertyDescriptor</code>. This is to
-              inform the framework the this property is likely to receive
-              multi-line text; although there is no direct impact on the model
-              layer, it might be useful in the view layer (e.g. : use a text
-              area instead of a text field to display and edit the
+              inform the framework the this property is used to store HTML
+              formatted data; although there is no direct impact on the model
+              layer, it might be useful in the view layer (e.g. : use a rich
+              text area instead of a text field to display and edit the
               <code>Event</code> text property).</para>
             </callout>
-          </calloutlist>This first relationship is fairly simple since it is a
-        n-1 unidirectional association. Of course, the Jspresso can also
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">Entity('Event',extend:'Traceable'){
+  html 'text', maxLength:2048 , id:'Event-text'
+}</programlisting></para>
+
+        <para>This first relationship is fairly simple since it is a n-1
+        unidirectional association. Of course, the Jspresso can also
         seamlessly handle 1-n, 1-1 and n-n unidirectional and bi-directional
         associations and compositions (strong aggregations).</para>
 
@@ -1703,6 +1878,44 @@ public interface ContactInfo extends
         &lt;/property&gt;
       &lt;/bean&gt;
       &lt;bean
+        class="org.jspresso.framework.model.descriptor.basic.BasicColorPropertyDescriptor"&gt; <co
+              id="preferredColor" />
+        &lt;property name="name" value="preferredColor" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="org.jspresso.framework.model.descriptor.basic.BasicBooleanPropertyDescriptor"&gt; <co
+              id="married" />
+        &lt;property name="name" value="married" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="org.jspresso.framework.model.descriptor.basic.BasicDecimalPropertyDescriptor"&gt; <co
+              id="salary" />
+        &lt;property name="name" value="salary" /&gt;
+        &lt;property name="minValue" value="0" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="org.jspresso.framework.model.descriptor.basic.BasicBinaryPropertyDescriptor"&gt; <co
+              id="photo" />
+        &lt;property name="name" value="photo" /&gt;
+        &lt;property name="maxLength" value="1048576" /&gt;
+        &lt;property name="fileFilter"&gt;
+          &lt;map&gt;
+            &lt;entry key="images"&gt;
+              &lt;list&gt;
+                &lt;value&gt;.jpg&lt;/value&gt;
+                &lt;value&gt;.bmp&lt;/value&gt;
+              &lt;/list&gt;
+            &lt;/entry&gt;
+          &lt;/map&gt;
+        &lt;/property&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor"&gt; <co
+              id="passwordProp" />
+        &lt;property name="name" value="password" /&gt;
+        &lt;property name="maxLength" value="32" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
         class=
         "org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
               id="inlinedComp" />
@@ -1722,6 +1935,12 @@ public interface ContactInfo extends
               digits.</para>
             </callout>
 
+            <callout arearefs="unicityScope">
+              <para>We define a unicity domain for the <code>ssn</code>
+              property. This will translate in a unique key definition in the
+              persistent store.</para>
+            </callout>
+
             <callout arearefs="birthDate">
               <para>We don't care about the time information of this date; so
               we use a DATE type as opposed to the DATE_TIME type that we used
@@ -1739,16 +1958,63 @@ public interface ContactInfo extends
               available.</para>
             </callout>
 
+            <callout arearefs="preferredColor">
+              <para>This defines a color property. Color properties are
+              internally stored as their RGBA base 16 encoded value, but are
+              visualized and edited using a color chooser un the UI.</para>
+            </callout>
+
+            <callout arearefs="married">
+              <para>This defines a boolean property.</para>
+            </callout>
+
+            <callout arearefs="salary">
+              <para>This defines a decimal property.</para>
+            </callout>
+
+            <callout arearefs="photo">
+              <para>This defines a binary property. It comes with a file
+              filter to set up the file extensions that are to be configured
+              when the user chooses a file to upload in order to fill in this
+              property value.</para>
+            </callout>
+
+            <callout arearefs="passwordProp">
+              <para>This defines a password property. It is stored internally
+              as a string but is visually represented using a password
+              field.</para>
+            </callout>
+
             <callout arearefs="inlinedComp">
               <para>This is where we reference the <code>ContactInfo</code>
               component.</para>
             </callout>
-          </calloutlist>The employee description above shows that it is
-        strictly equivalent - as far as description is concerned - to
-        reference an entity or to inline a component (see the contact
-        reference). The difference will be in the persistence store and in the
-        views since an inlined component will have its attributes "merged"
-        with the enclosing component as if they belonged to it.</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">Entity ('Employee',
+        extend:['Nameable','Traceable']) {
+  string_32 'firstName', mandatory:true
+  string_10 'ssn', regex:"[\\d]{10}", regexSample:'0123456789', unicityScope:'empSsn'
+  date 'birthDate'
+  date 'hireDate'
+  enumeration 'gender', enumName:'GENDER', mandatory:true, valuesAndIcons:[
+              'M':'male-48x48.png',
+              'F':'female-48x48.png']
+  color 'preferredColor'
+  bool 'married'
+  decimal 'salary', minValue:0
+  binary 'photo', maxLength:1048576, id:'Employee-photo',
+         fileFilter:['images':['.jpg','.bmp']]
+  password 'password', maxLength:32
+  reference 'contact', ref:'ContactInfo', id:'contact'
+}</programlisting></para>
+
+        <para>The employee description above shows that it is strictly
+        equivalent - as far as description is concerned - to reference an
+        entity or to inline a component (see the contact reference). The
+        difference will be in the persistence store and in the views since an
+        inlined component will have its attributes "merged" with the enclosing
+        component as if they belonged to it.</para>
       </section>
 
       <section>
@@ -1773,11 +2039,8 @@ public interface ContactInfo extends
     value="true" /&gt; <co id="composition" />
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt; <co
+      class="org.jspresso.framework.model.descriptor.basic.BasicListDescriptor"&gt; <co
               id="BasicCollectionDescriptor" />
-      &lt;property
-        name="collectionInterface"
-        value="java.util.List" /&gt; <co id="collectionInterface" />
       &lt;property
         name="elementDescriptor"
         ref="Event" /&gt; <co id="elementDescriptor" />
@@ -1790,12 +2053,6 @@ public interface ContactInfo extends
               <code>BasicCollectionPropertyDescriptor</code>.</para>
             </callout>
 
-            <callout arearefs="unicityScope">
-              <para>We define a unicity domain for the <code>ssn</code>
-              property. This will translate in a unique key definition in the
-              persistent store.</para>
-            </callout>
-
             <callout arearefs="composition">
               <para>We make this relationship a composition to express the
               fact that whenever an employee is deleted, the attached events
@@ -1805,14 +2062,11 @@ public interface ContactInfo extends
             <callout arearefs="BasicCollectionDescriptor">
               <para>A collection property descriptor always references a
               collection descriptor (which may be reused across different
-              collection property descriptors)</para>
-            </callout>
-
-            <callout arearefs="collectionInterface">
-              <para>We need an ordered list of event as specified in the
-              analysis; so we use a <code>java.util.List</code> to achieve
-              that. We could have used <code>java.util.Set</code> for a set
-              semantic (no duplicate and unordered).</para>
+              collection property descriptors). In our case, we need an
+              ordered list of events as specified in the analysis; so we use a
+              <code>BasicListDescriptor</code> to achieve that. We could have
+              used <code>BasicSetDescriptor</code> for a set semantic (no
+              duplicates and unordered).</para>
             </callout>
 
             <callout arearefs="elementDescriptor">
@@ -1850,6 +2104,16 @@ public interface ContactInfo extends
         make re-usable descriptor bean libraries you can reference among your
         applications. Your descriptor sources will be more concise and more
         readable and maintainable.</para>
+
+        <para>And the SJS way (note that SJS will automatically generate a
+        top-level bean for the collection property, with an id in the form of
+        <emphasis>Owner-property</emphasis>, i.e.
+        <emphasis>Employee-events</emphasis>) :<programlisting
+        language="java">Entity ('Employee'...) {
+  ...
+  list 'events', composition:true, ref:'Event'
+  ...
+}</programlisting></para>
 
         <para>Launching the Jspresso generator will generate the
         <filename>Employee.java</filename> source file :</para>
@@ -1985,6 +2249,102 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
   org.jspresso.hrsample.model.ContactInfo getContact();
 
   /**
+   * Gets the preferredColor.
+   *
+   * @hibernate.property
+   * @hibernate.column
+   *           name = "PREFERRED_COLOR"
+   *           length = "10"
+   * @return the preferredColor.
+   */
+  java.lang.String getPreferredColor();
+
+  /**
+   * Sets the preferredColor.
+   *
+   * @param preferredColor
+   *          the preferredColor to set.
+   */
+  void setPreferredColor(java.lang.String preferredColor);
+
+  /**
+   * Gets the married.
+   *
+   * @hibernate.property
+   * @hibernate.column
+   *           name = "MARRIED"
+   *           not-null = "true"
+   * @return the married.
+   */
+  boolean isMarried();
+
+  /**
+   * Sets the married.
+   *
+   * @param married
+   *          the married to set.
+   */
+  void setMarried(boolean married);
+
+  /**
+   * Gets the salary.
+   *
+   * @hibernate.property
+   * @hibernate.column
+   *           name = "SALARY"
+   *           precision = "10"
+   *           scale = "2"
+   * @return the salary.
+   */
+  java.math.BigDecimal getSalary();
+
+  /**
+   * Sets the salary.
+   *
+   * @param salary
+   *          the salary to set.
+   */
+  void setSalary(java.math.BigDecimal salary);
+
+  /**
+   * Gets the photo.
+   *
+   * @hibernate.property
+   * @hibernate.column
+   *           name = "PHOTO"
+   *           length = "1048576"
+   * @return the photo.
+   */
+  byte[] getPhoto();
+
+  /**
+   * Sets the photo.
+   *
+   * @param photo
+   *          the photo to set.
+   */
+  void setPhoto(byte[] photo);
+
+  /**
+   * Gets the password.
+   *
+   * @hibernate.property
+   * @hibernate.column
+   *           name = "PASSWORD"
+   *           length = "32"
+   * @return the password.
+   */
+  java.lang.String getPassword();
+
+  /**
+   * Sets the password.
+   *
+   * @param password
+   *          the password to set.
+   */
+  void setPassword(java.lang.String password);
+
+  /**
    * Sets the contact.
    * 
    * @param contact
@@ -2109,7 +2469,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
           value="[A-Z]{2}-[\d]{3}" /&gt;
         &lt;property
           name="regexpPatternSample"
-          value="IS-123" /&gt;
+          value="AB-123" /&gt;
         &lt;property
           name="maxLength"
           value="6" /&gt;
@@ -2161,10 +2521,29 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
             <para><code>Department</code> inherits from
             <code>OrganizationalUnit</code> as do <code>Team</code>.</para>
           </callout>
-        </calloutlist>Pretty easy, no ? You describe entity inheritance
-      exactly as you did previously for the interfaces. You don't have to care
-      for anything else, the framework will handle it behind the scene for
-      you.</para>
+        </calloutlist></para>
+
+      <para>And the SJS way :<programlisting language="java">Entity('Company',
+       extend:['Nameable', 'Traceable']) {
+  reference 'contact', ref:'ContactInfo'
+}
+
+Entity('OrganizationalUnit',
+       extend:['Nameable', 'Traceable'],
+       purelyAbstract:true) {
+  string_6 'ouId', regex:"[A-Z]{2}-[\\d]{3}", regexSample:'AB-123', mandatory:true
+  reference 'contact', ref:'ContactInfo'
+}
+
+Entity('Department',
+       extend:'OrganizationalUnit')
+
+Entity('Team',
+       extend:['OrganizationalUnit'])</programlisting></para>
+
+      <para>Pretty easy, no ? You describe entity inheritance exactly as you
+      did previously for the interfaces. You don't have to care for anything
+      else, the framework will handle it behind the scene for you.</para>
 
       <para>You can see also that <code>Company</code>,
       <code>OrganizationalUnit</code>, and <code>Employee</code> have the same
@@ -2238,8 +2617,28 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
             <para>We reference the contact bean as a property of the
             <code>OrganizationalUnit</code> entity.</para>
           </callout>
-        </calloutlist>Now that we have described our organization entities,
-      let's link them together using relationships.</para>
+        </calloutlist></para>
+
+      <para>And the SJS way :<programlisting language="java">Entity('Employee'...) {
+  ...
+  reference 'contact', ref:'ContactInfo', <emphasis role="bold">id:'contact'</emphasis>
+  ...
+}
+
+Entity('Company'...) {
+  ...
+  <emphasis role="bold">refId 'contact'</emphasis>
+  ...
+}
+
+Entity('OrganizationalUnit'...) {
+  ...
+  <emphasis role="bold">refId 'contact'</emphasis>
+  ...
+}</programlisting></para>
+
+      <para>Now that we have described our organization entities, let's link
+      them together using relationships.</para>
     </section>
 
     <section>
@@ -2270,10 +2669,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
     value="true" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
-      &lt;property
-        name="collectionInterface"
-        value="java.util.Set" /&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
       &lt;property
         name="elementDescriptor"
         ref="Department" /&gt;
@@ -2341,7 +2737,18 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
               <para>We link both side of the <code>Company</code> &lt;-&gt;
               <code>Department</code> relationship.</para>
             </callout>
-          </calloutlist>So making a relationship bi-directional is quite
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">Entity('Company'...) {
+  ...
+  set 'departments', composition:true, ref:'Department'
+}
+
+Entity('Department'...) {
+  reference 'company', ref:'Company', reverse:'Company-departments', mandatory:true
+}</programlisting></para>
+
+        <para>So making a relationship bi-directional is quite
         straightforward. We just have to reference one end of the relationship
         in the other end as being the reverse end. Although the generated java
         code will not be directly impacted by making a relationship
@@ -2415,10 +2822,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
     value="true" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
-      &lt;property
-        name="collectionInterface"
-        value="java.util.Set" /&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
       &lt;property
         name="elementDescriptor"
         ref="Team" /&gt;
@@ -2462,9 +2866,19 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
       &lt;/bean&gt;
     &lt;/list&gt;
   &lt;/property&gt;
-&lt;/bean&gt;</programlisting>And, to be complete, the <code>Company</code>
-        &lt;-&gt; <code>Employees</code> relationship :<programlisting
-        language="xml">&lt;bean
+&lt;/bean&gt;</programlisting></para>
+
+        <para>And the SJS way :<programlisting language="java">Entity('Department'...) {
+  ...
+  set 'teams', composition:true, ref:'Team'
+}
+
+Entity('Team'...) {
+  reference 'department', ref:'Department', reverse:'Department-teams', mandatory:true
+}</programlisting></para>
+
+        <para>And, to be complete, the <code>Company</code> &lt;-&gt;
+        <code>Employees</code> relationship :<programlisting language="xml">&lt;bean
   id="Company-employees"
   class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
   &lt;property
@@ -2475,10 +2889,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
     value="true" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
-      &lt;property
-        name="collectionInterface"
-        value="java.util.Set" /&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
       &lt;property
         name="elementDescriptor"
         ref="Employee" /&gt;
@@ -2523,6 +2934,15 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting></para>
+
+        <para>And the SJS way :<programlisting language="java">Entity('Company'...) {
+  ...
+  set 'employees', composition:true, ref:'Employee'
+}
+
+Entity('Employee'...) {
+  reference 'company', ref:'Company', reverse:'Company-employees', mandatory:true
+}</programlisting></para>
       </section>
 
       <section>
@@ -2579,6 +2999,16 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting></para>
 
+        <para>And the SJS way :<programlisting language="java">Entity('Employee'...) {
+  ...
+  reference 'managedOu', ref:'OrganizationalUnit', reverse:'OrganizationalUnit-manager'
+}
+
+Entity('OrganizationalUnit'...) {
+  ...
+  reference 'manager', id:'OrganizationalUnit-manager', ref:'Employee', mandatory:true
+}</programlisting></para>
+
         <para>Of course, setting one end of the 1-1 relationship will also
         update the other end accordingly without having to take care of
         it.</para>
@@ -2604,10 +3034,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
     value="teams" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
-      &lt;property
-        name="collectionInterface"
-        value="java.util.Set" /&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
       &lt;property
         name="elementDescriptor"
         ref="Team" /&gt;
@@ -2623,10 +3050,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
     value="teamMembers" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
-      &lt;property
-        name="collectionInterface"
-        value="java.util.Set" /&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor"&gt;
       &lt;property
         name="elementDescriptor"
         ref="Employee" /&gt;
@@ -2677,7 +3101,19 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
               <para>We reference both relation ends in their respective entity
               descriptor.</para>
             </callout>
-          </calloutlist>Of course, when re-generating the entities code,
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">Entity('Employee'...) {
+  ...
+  set 'teams', ref:'Team'
+}
+
+Entity('Team'...) {
+  ...
+  set 'teamMembers', ref:'Employee', reverse:'Employee-teams'
+}</programlisting></para>
+
+        <para>Of course, when re-generating the entities code,
         <code>Employee</code> and <code>Team</code> will have the
         corresponding collection accessors generated and whenever one side of
         the relationship is updated, the other one will also reflect the
@@ -2726,11 +3162,19 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
             <para>And its implementation delegate
             (<code>EmployeeService</code>Delegate).</para>
           </callout>
-        </calloutlist>Of course, we have to code both
-      <code>EmployeeService</code> (the service definition) and
-      <code>EmployeeServiceDelegate</code> (the service delegate
-      implementation) in the <code>org.jspresso.hrsample.model.service</code>
-      package as described in the previous XML fragment.</para>
+        </calloutlist></para>
+
+      <para>And the SJS way :<programlisting language="java">Entity('Employee',
+       ...
+       services:[EmployeeService:'EmployeeServiceDelegate']) {
+  ...
+}</programlisting></para>
+
+      <para>Of course, we have to code both <code>EmployeeService</code> (the
+      service definition) and <code>EmployeeServiceDelegate</code> (the
+      service delegate implementation) in the
+      <code>org.jspresso.hrsample.model.service</code> package as described in
+      the previous XML fragment.</para>
 
       <para>Here is the <filename>EmployeeService.java</filename> source file
       :</para>
@@ -2868,9 +3312,19 @@ public interface Employee extends
             <para>We link the age property to a java class used to compute its
             value.</para>
           </callout>
-        </calloutlist>As you can see in the above XML fragment, the age
-      property is almost described like any other standard entity property.
-      What differs is the reference to the
+        </calloutlist></para>
+
+      <para>And the SJS way :<programlisting language="java">Entity('Employee',
+       ...
+       extension :'EmployeeExtension') {
+  ...
+  integer 'age', minValue:0, maxValue:150, readOnly:true, <emphasis
+            role="bold">computed:true</emphasis>
+}</programlisting></para>
+
+      <para>As you can see in the above fragment, the age property is almost
+      described like any other standard entity property. What differs is the
+      reference to the
       <code>org.jspresso.hrsample.model.extension.EmployeeExtension</code>
       java class that will be used to compute it. So let's code it. As
       declared in the descriptor, we will put it in the
@@ -3204,6 +3658,16 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
           </callout>
         </calloutlist></para>
 
+      <para>And the SJS way :<programlisting language="java">Entity('Employee'
+       ...
+       processor:'EmployeePropertyProcessors') {
+  ...
+  string_32 'firstName', mandatory:true, <emphasis role="bold">processors:'FirstNameProcessor'</emphasis>
+  ...
+  date 'birthDate', <emphasis role="bold">processors:'BirthDateProcessor'</emphasis>
+  ...
+}</programlisting></para>
+
       <para>As described in the XML fragment, we are going to create an
       <code>EmployeePropertyProcessors</code> class in the new package
       <code>org.jspresso.hrsample.model.processor</code>. As a best practice,
@@ -3389,56 +3853,12 @@ public class EmployeePropertyProcessors {
     The views
   --&gt;
   &lt;!-- Describe your application views here. --&gt;
+&lt;/beans&gt;</programlisting></para>
 
-  &lt;!--
-   The application I18N resources. 
-  --&gt;
-  &lt;bean
-    id="applicationMessageSource"
-    parent="abstractApplicationMessageSource"&gt;
-    &lt;property
-      name="parentMessageSource"
-      ref="commonsMessageSource" /&gt; <co id="commonsMessageSource" />
-    &lt;property name="basenames"&gt;
-      &lt;list&gt;
-        &lt;value&gt;org.jspresso.hrsample.i18n.Messages&lt;/value&gt; <co
-          id="basenames" />
-      &lt;/list&gt;
-    &lt;/property&gt;
-  &lt;/bean&gt;
-&lt;/beans&gt;</programlisting><calloutlist>
-        <callout arearefs="commonsMessageSource">
-          <para>We inherit the default Jspresso I18N resource bundles that
-          contain translated entries for generic terms.</para>
-        </callout>
-
-        <callout arearefs="basenames">
-          <para>We declare the list of I18N resource bundles we are going to
-          use to store the translations.</para>
-        </callout>
-      </calloutlist>Jspresso relies on the well-known java I18N mechanism
-    through the use of resource bundle property files. Translating the
-    application is then a matter of translating the entries contained in these
-    property files. Since Jspresso never use absolute positioning but instead
-    heavily relies on layouts, the translator won't have to care about
-    translations length.</para>
-
-    <para>As declared in the XML fragment above, we will use a
-    <code>org.jspresso.hrsample.i18n</code> package that will contain the
-    resource bundle property files. We will translate the application in
-    English and French; hopefuly, the archetype has already created both
-    property files for us. You should have the two files
-    <filename>Messages_en.properties</filename> and
-    <filename>Messages_fr.properties</filename> that will respectively contain
-    the English and French translations in the following folder :</para>
-
-    <para><filename>/hrsample/core/src/main/resources/org/jspresso/hrsample/i18n</filename></para>
-
-    <para>Adding a new language will be just a mater of creating, in the same
-    package, a new property file with the 2 letter ISO code of the language.
-    Those 2 files are almost empty as of now but don't care about that;
-    Jspresso will graphically notify you that a translation is missing for a
-    given language.</para>
+    <para>The SJS equivalent is
+    <filename>hrsample/core/src/main/dsl/view.groovy</filename>
+    :<programlisting language="java">// Implement your views here using the SJS DSL.
+</programlisting></para>
 
     <para>In order to ease the work of the GUI designer, Jspresso provides a
     view tester tool that enables an immediate java swing preview of each
@@ -3519,9 +3939,16 @@ public class EmployeePropertyProcessors {
               <para>We refer to the company descriptor we described in the
               previous section.</para>
             </callout>
-          </calloutlist>Although there are plenty of configurations that can
-        be applied to view descriptions (font, color, properties subset, ...),
-        the previous XML fragment is fully enough to get our first view up and
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">form 'Company.pane',
+  parent:'decoratedView',
+  labelsPosition:'ABOVE',
+  columnCount:3</programlisting></para>
+
+        <para>Although there are plenty of configurations that can be applied
+        to view descriptions (font, color, properties subset, ...), the
+        previous XML fragment is fully enough to get our first view up and
         running using the view tester.</para>
 
         <note>
@@ -3538,6 +3965,9 @@ public class EmployeePropertyProcessors {
 
         <programlisting language="xml">&lt;bean id="testView" parent="Company.pane" /&gt;</programlisting>
 
+        <para>And the SJS way :<programlisting language="java">bean 'testView',
+  parent:'Company.pane'</programlisting></para>
+
         <para>Now, launching the tester will produce the following result
         :</para>
 
@@ -3547,8 +3977,8 @@ public class EmployeePropertyProcessors {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/Company-pane.jpg" scalefit="1"
-                           width="100%" />
+                           fileref="../screenshots/Company-pane.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure>You will notice several things on the screenshot above
@@ -3780,14 +4210,25 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               <para>We assign width (columns span) to properties we don't want
               to have the default value of 1.</para>
             </callout>
-          </calloutlist><note>
-            <para>Jspresso supports the use of nested properties for all
-            descriptors. For instance, in the example above, we have used the
-            <code>contact.phone</code> nested property of the
-            <code>Company</code> entity. It simply means the the field will
-            reference <code>company -&gt; contact -&gt; phone</code> of its
-            underlying company model.</para>
-          </note>Relaunching the view tester will produce the following output
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">form 'Company.pane',
+  ...
+  columnCount:2,
+  ...
+  fields:['name','contact.address','contact.city','contact.phone','contact.email'],
+  widths:[name:2]</programlisting></para>
+
+        <note>
+          <para>Jspresso supports the use of nested properties for all
+          descriptors. For instance, in the example above, we have used the
+          <code>contact.phone</code> nested property of the
+          <code>Company</code> entity. It simply means the the field will
+          reference <code>company -&gt; contact -&gt; phone</code> of its
+          underlying company model.</para>
+        </note>
+
+        <para>Relaunching the view tester will produce the following output
         :</para>
 
         <para><figure>
@@ -3825,8 +4266,8 @@ zip = Zip code</programlisting>Relaunching the view test with the English
           </listitem>
 
           <listitem>
-            <para>If set on the model, the
-            <code>renderedProperties</code>.</para>
+            <para>If set on the model, the <code>renderedProperties</code> (or
+            <code>fields</code> in SJS).</para>
           </listitem>
 
           <listitem>
@@ -3917,8 +4358,19 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               tabs. Of course, these sub-views may be any type of view,
               including other composite views.</para>
             </callout>
-          </calloutlist>After having completed the I18N property files with
-        the <code>org.jspresso.hrsample.model.Traceable</code> entry, we can
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">form 'Traceable.pane',
+  model:'Traceable',
+  labelsPosition:'ABOVE',
+  columnCount:2,
+  fields:['createTimestamp','lastUpdateTimestamp']
+
+tabs 'Company.tab.pane',
+  views:['Company.pane','Traceable.pane']</programlisting></para>
+
+        <para>After having completed the I18N property files with the
+        <code>org.jspresso.hrsample.model.Traceable</code> entry, we can
         launch the view tester on the <code>Company.tab.pane</code> view
         :</para>
 
@@ -3986,10 +4438,24 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               to represent a traceable component. Same applies for the
               company.</para>
             </callout>
-          </calloutlist>And we assign a more friendly description to both
-        component views. As for every potentially displayed string, these
-        descriptions are entries in the I18N property files that we will
-        translate. The following XML fragments achieves that :</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">Interface('Traceable',
+          ...
+          icon:'traceable-48x48.png') {
+  ...
+}
+
+Entity('Company',
+          ...
+          icon:'company-48x48.png') {
+  ...
+}</programlisting></para>
+
+        <para>And we assign a more friendly description to both component
+        views. As for every potentially displayed string, these descriptions
+        are entries in the I18N property files that we will translate. The
+        following XML fragments achieves that :</para>
 
         <para><programlisting language="xml">&lt;bean
   id="Traceable.pane"
@@ -4017,8 +4483,18 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               component view. Same applies for the company component
               view.</para>
             </callout>
-          </calloutlist>Re-launching the view tester displays the following
-        window :</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">form 'Traceable.pane',
+  ...
+  description:'traceable.editing'
+
+form 'Company.pane',
+  ...
+  description:'company.editing'</programlisting></para>
+
+        <para>Re-launching the view tester displays the following window
+        :</para>
 
         <para><figure>
             <title>The improved tab company view</title>
@@ -4065,10 +4541,11 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             application classpath. As an example, we have used the
             <code>classpath:org/jspresso/hrsample/images/company-48x48.png</code>
             URL to load an image from the
-            <code>org.jspresso.hrsample.images</code> package. This prevents
-            the developer from hard-coding references to application external
-            resources and promotes portability across deployment
-            environments.</para>
+            <code>org.jspresso.hrsample.images</code> package (this type of
+            URL is used by convention in SJS but can be overriden if
+            necessary). This prevents the developer from hard-coding
+            references to application external resources and promotes
+            portability across deployment environments.</para>
           </listitem>
 
           <listitem>
@@ -4092,36 +4569,39 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <itemizedlist>
           <listitem>
-            <para><code>BasicTabViewDescriptor</code> (we've just used it) to
-            organize sub-views in tabs.</para>
+            <para><code>BasicTabViewDescriptor</code> (or <code>tabs</code> in
+            SJS) to organize sub-views in tabs.</para>
           </listitem>
 
           <listitem>
-            <para><code>BasicBorderViewDescriptor</code> to layout up to 5
-            sub-views at north, south, east, west and center.</para>
+            <para><code>BasicBorderViewDescriptor</code> (or
+            <code>border</code> in SJS) to layout up to 5 sub-views at north,
+            south, east, west and center.</para>
           </listitem>
 
           <listitem>
-            <para><code>BasicSplitViewDescriptor</code> to layout 2 sub-view
-            within a separator splitted panel. The orientation of the split
-            may be vertical or horizontal.</para>
+            <para><code>BasicSplitViewDescriptor</code> (or
+            <code>split_[horizontal|vertical]</code> in SJS) to layout 2
+            sub-view within a separator splitted panel. The orientation of the
+            split may be vertical or horizontal.</para>
           </listitem>
 
           <listitem>
-            <para><code>BasicEvenGridViewDescriptor</code> to layout an
-            arbitrary number of sub-views into a grid with equally sized
-            cells. As for component views, you only set up the driving
-            dimension (horizontal or vertical), the maximum number of cells in
-            the driving dimension and an ordered list of the sub-views to be
-            contained in the cells. Whenever the line (or column) reaches the
-            maximum number of cells allowed, a new line (or column) is
-            created.</para>
+            <para><code>BasicEvenGridViewDescriptor</code> (or
+            <code>evenGrid</code> in SJS) to layout an arbitrary number of
+            sub-views into a grid with equally sized cells. As for component
+            views, you only set up the driving dimension (horizontal or
+            vertical), the maximum number of cells in the driving dimension
+            and an ordered list of the sub-views to be contained in the cells.
+            Whenever the line (or column) reaches the maximum number of cells
+            allowed, a new line (or column) is created.</para>
           </listitem>
 
           <listitem>
-            <para><code>BasicConstrainedGridViewDescriptor</code> lets you
-            organize sub-views in a grid where each cell behaviour is
-            determined by the following attributes :</para>
+            <para><code>BasicConstrainedGridViewDescriptor</code> (or
+            <code>grid</code> in SJS) lets you organize sub-views in a grid
+            where each cell behaviour is determined by the following
+            attributes :</para>
 
             <itemizedlist>
               <listitem>
@@ -4220,6 +4700,14 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             </callout>
           </calloutlist></para>
 
+        <para>And the SJS way :<programlisting language="java">table 'Company-departments.table',
+  parent:'decoratedView'
+
+split_vertical 'Company.organization.view',
+  model:'Company',
+  top:'Company.tab.pane',
+  bottom:'Company-departments.table'</programlisting></para>
+
         <para>After adding the necessary translations as usual, and linking a
         new icon to describe the department entities, re-launching the view
         tester produces the following window :</para>
@@ -4270,9 +4758,15 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               <para>We assign the predefined master-detail action map to the
               departments table view.</para>
             </callout>
-          </calloutlist>These 3 new XML lines bring us what we need to be able
-        to operate efficiently the company departments relationship.
-        Re-launching the view tester modifies the previous view :</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">table 'Company-departments.table',
+  ...
+  actionMap:'masterDetail'</programlisting></para>
+
+        <para>These new lines bring us what we need to be able to operate
+        efficiently the company departments relationship. Re-launching the
+        view tester modifies the previous view :</para>
 
         <para><figure>
             <title>The improved company and departments view</title>
@@ -4328,7 +4822,15 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               <para>We set the ordered list of department default rendered
               properties.</para>
             </callout>
-          </calloutlist>And when we re-launch the view tester :</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">Entity('Department',
+    ...
+    rendered:['ouId','name','manager','contact']) {
+  ...
+}</programlisting></para>
+
+        <para>And when we re-launch the view tester :</para>
 
         <para><figure>
             <title>The improved company and departments view with refined
@@ -4435,8 +4937,15 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               <para>We setup the ordered list of columns we want to display on
               the teams table.</para>
             </callout>
-          </calloutlist>This table view definition is strictly identical to
-        the previous department view. We now need to assemble the
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">table 'Department-teams.table',
+  parent:'decoratedView',
+  actionMap:'masterDetail',
+  columns:['ouId','name','manager']  </programlisting></para>
+
+        <para>This table view definition is strictly identical to the previous
+        department view. We now need to assemble the
         <code>Company-departments.table</code> and the new
         <code>Department-teams.table</code> into a split view and tell
         Jspresso to drive the teams table content with the departments table
@@ -4477,16 +4986,23 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               <para>We declare this composite view a master-detail view for
               Jspresso to track the departments selection.</para>
             </callout>
-          </calloutlist>The crucial part of the previous definition is the use
-        of the <code>cascadingModels</code> attribute. It tells the framework
-        that the sub-views we are composing are not straightly backed by
-        properties of the master model, but each one will be driven by some
-        kind of selection in the previous one. Note that this attribute is
-        available on all composite views. Although some types of composite
-        views are more adapted to master-detail relationships (the split view
-        for example), you might very well decide to present arbitrary deep
-        nested master-detail views in any kind of composite view (a tab view
-        for example; in this case, each tab will be a detail of the previous
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">split_vertical 'Departments.and.teams.view',
+  cascadingModels:true,
+  top:'Company-departments.table',
+  bottom:'Department-teams.table'</programlisting></para>
+
+        <para>The crucial part of the previous definition is the use of the
+        <code>cascadingModels</code> attribute. It tells the framework that
+        the sub-views we are composing are not straightly backed by properties
+        of the master model, but each one will be driven by some kind of
+        selection in the previous one. Note that this attribute is available
+        on all composite views. Although some types of composite views are
+        more adapted to master-detail relationships (the split view for
+        example), you might very well decide to present arbitrary deep nested
+        master-detail views in any kind of composite view (a tab view for
+        example; in this case, each tab will be a detail of the previous
         one).</para>
 
         <para>Then, we need to refactor the
@@ -4512,8 +5028,15 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               being now the bottom part of the company organization
               view.</para>
             </callout>
-          </calloutlist>After adding some new translations and icons for the
-        team entity, we can relaunch the view tester and obtain the following
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">split_vertical 'Company.organization.view',
+  model:'Company',
+  top:'Company.tab.pane',
+  bottom:'Departments.and.teams.view'</programlisting></para>
+
+        <para>After adding some new translations and icons for the team
+        entity, we can relaunch the view tester and obtain the following
         screen where you can fully manage the departments of a company and the
         teams of a department :</para>
 
@@ -4694,9 +5217,27 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               have a different icon once we install the view in the
               tab.</para>
             </callout>
-          </calloutlist>The final step to reach the objective is to install
-        the company tree view in a new tab of the company tab view. We do this
-        by modifying the <code>Company.tab.pane</code> view as below :</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">treeNode 'Department-teams.treeNode',
+  rendered:'ouId',
+  actionMap:'masterDetail'
+      
+treeNode 'Company-departments.treeNode',
+  rendered:'ouId',
+  actionMap:'masterDetail'
+
+tree('Company.tree',
+  rendered:'name',
+  icon:'structure-48x48.png') {
+  subTree('Company-departments.treeNode') {
+    subTree('Department-teams.treeNode')
+  }
+}</programlisting></para>
+
+        <para>The final step to reach the objective is to install the company
+        tree view in a new tab of the company tab view. We do this by
+        modifying the <code>Company.tab.pane</code> view as below :</para>
 
         <para><programlisting language="xml">&lt;bean
   id="Company.tab.pane"
@@ -4713,7 +5254,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <callout arearefs="Company.tree">
               <para>We declare another tab in the tab view.</para>
             </callout>
-          </calloutlist>We can now test the result.</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">tabs 'Company.tab.pane',
+  views:['Company.pane'<emphasis role="bold">,'Company.tree'</emphasis>,'Traceable.pane']</programlisting></para>
+
+        <para>We can now test the result.</para>
 
         <para><figure>
             <title>The company structure as a tree view</title>
@@ -4864,8 +5410,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
 &lt;/beans&gt;</programlisting>
 
-        <para>And the good news is that there is nothing to configure in it
-        for a standard usage.</para>
+        <para>The SJS equivalent, <filename>backend.groovy</filename>, is also
+        generated :</para>
+
+        <para><programlisting>// Implement your application backend here using the SJS DSL.
+</programlisting>And the good news is that there is nothing to code here for a
+        standard usage.</para>
       </section>
 
       <section>
@@ -4875,7 +5425,10 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         Spring configuration file where we can define everything related to
         the deployment environment. The default configuration generated by the
         archetype uses HSQL DB as the database. In a production environment,
-        you will adapt it to your targetted database.</para>
+        you will adapt it to your targeted database. Although you could also
+        define those configurations in SJS, there would not be much added
+        value. So the Jspresso archetype does not generate any equivalent SJS
+        file.</para>
 
         <para>Here is the file commented :</para>
 
@@ -5272,8 +5825,8 @@ public class SwingApplicationStartup extends SwingStartup { <co
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/LoginDialog.jpg" scalefit="1"
-                           width="100%" />
+                           fileref="../screenshots/LoginDialog.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure><figure>
@@ -5283,8 +5836,8 @@ public class SwingApplicationStartup extends SwingStartup { <co
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/AppLaunch_en.jpg" scalefit="1"
-                           width="100%" />
+                           fileref="../screenshots/AppLaunch_en.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure><figure>
@@ -6985,8 +7538,8 @@ hrsample {
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="60%"
-                         fileref="../screenshots/Access-denied.jpg" scalefit="1"
-                         width="100%" />
+                         fileref="../screenshots/Access-denied.jpg"
+                         scalefit="1" width="100%" />
             </imageobject>
           </mediaobject>
         </figure>
@@ -7230,8 +7783,8 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/JWS_download.jpg" scalefit="1"
-                           width="100%" />
+                           fileref="../screenshots/JWS_download.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure><figure>
@@ -7268,8 +7821,8 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/Wings_login.jpg" scalefit="1"
-                           width="100%" />
+                           fileref="../screenshots/Wings_login.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure>And you can play with the same application but in AJAX
@@ -7305,8 +7858,8 @@ hrsample {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../screenshots/Flex_login.jpg" scalefit="1"
-                           width="100%" />
+                           fileref="../screenshots/Flex_login.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure>And you can play with the same application but in Flash

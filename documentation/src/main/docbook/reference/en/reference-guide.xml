@@ -117,8 +117,9 @@
     notice conditions. Jspresso assembles them all together, in a loosely
     coupled architecture so that the resulting software is not locked in any
     of them. As an example, you don't have to choose whether you want to
-    deploy your application as a Java swing application through Java Web Start
-    or as an Ajax application without any plug-in or both ! Jspresso will take
+    deploy your application as a Java swing application through Java Web
+    Start, as an Adobe Flex application using the flash plugin or as an Ajax
+    application without any plug-in or all simultaneously ! Jspresso will take
     care of it at runtime.<figure id="Jspresso-modules">
         <title>Jspresso Modules</title>
 
@@ -146,8 +147,8 @@
     quantity, the date when this article was made available in the system, and
     so on). Everyone is able to describe this view precisely and everyone is
     able to understand what has been described. There should not be a need for
-    coding a single line of code (swing, flex, html, jsp, javascript, ...)
-    whenever this description has been captured by the framework. That is
+    writing a single line of code (swing, flex, html, jsp, javascript, ...)
+    whenever this description has been captured by the framework. This is
     exactly what Jspresso does by taking care of the implementation once you
     have expressed the requirements. And there is no complex code generation.
     Everything is just handled at runtime.</para>
@@ -648,8 +649,9 @@
     complete development process while presenting as much as possible of the
     Jspresso framework. We believe that this approach will be more efficient
     than a raw description of the framework features since it will show you
-    not only what to use but also how to use it efficiently. And of course,
-    whenever a new feature is introduced we will suggest a link to its full
+    not only what to use but also how to use it efficiently.</para>
+
+    <para>The second half of the manual is Jspresso beans full
     reference.</para>
 
     <para>So let's begin.</para>
