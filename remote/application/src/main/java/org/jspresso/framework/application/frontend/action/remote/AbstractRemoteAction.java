@@ -34,6 +34,7 @@ import org.jspresso.framework.gui.remote.RIcon;
  * @internal
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public abstract class AbstractRemoteAction extends
     FrontendAction<RComponent, RIcon, RAction> {

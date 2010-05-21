@@ -26,7 +26,6 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
- * @internal
  */
 public abstract class AbstractGate extends AbstractPropertyChangeCapable
     implements IGate {

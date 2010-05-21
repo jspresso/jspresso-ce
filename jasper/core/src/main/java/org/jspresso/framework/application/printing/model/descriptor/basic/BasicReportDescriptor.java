@@ -31,12 +31,12 @@ import org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 
-
 /**
  * Basic implementation of a report descriptor.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
     implements IReportDescriptor {
@@ -53,7 +53,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
    * Constructs a new <code>BasicReportDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the report.
+   *          the name of the report.
    */
   public BasicReportDescriptor(String name) {
     super(name);
@@ -93,7 +93,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
   @Override
   public Class<? extends IReport> getComponentContract() {
     // return null to have map accessors instead of bean accessors.
-    //return IReport.class;
+    // return IReport.class;
     return null;
   }
 
@@ -110,7 +110,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
    * Sets the beforeAction.
    * 
    * @param beforeAction
-   *            the beforeAction to set.
+   *          the beforeAction to set.
    */
   public void setBeforeAction(IAction beforeAction) {
     this.beforeAction = beforeAction;
@@ -120,7 +120,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
    * Sets the reportDesignUrl.
    * 
    * @param reportDesignUrl
-   *            the reportDesignUrl to set.
+   *          the reportDesignUrl to set.
    */
   public void setReportDesignUrl(String reportDesignUrl) {
     this.reportDesignUrl = reportDesignUrl;

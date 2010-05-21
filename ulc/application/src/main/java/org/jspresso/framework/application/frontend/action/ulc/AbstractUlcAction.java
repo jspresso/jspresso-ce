@@ -30,6 +30,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public abstract class AbstractUlcAction extends
     FrontendAction<ULCComponent, ULCIcon, IAction> {

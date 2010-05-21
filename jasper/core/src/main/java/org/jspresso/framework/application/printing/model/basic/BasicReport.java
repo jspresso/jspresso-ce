@@ -30,6 +30,7 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public class BasicReport extends DefaultDescriptor implements IReport {
 

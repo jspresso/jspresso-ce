@@ -31,6 +31,7 @@ import org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
 

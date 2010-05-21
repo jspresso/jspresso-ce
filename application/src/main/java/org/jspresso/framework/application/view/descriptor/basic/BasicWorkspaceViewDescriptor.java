@@ -28,6 +28,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicTreeViewDescriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public class BasicWorkspaceViewDescriptor extends BasicTreeViewDescriptor {
 

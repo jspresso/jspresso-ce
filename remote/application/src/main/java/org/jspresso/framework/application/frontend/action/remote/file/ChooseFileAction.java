@@ -35,7 +35,8 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * <code>SaveFileAction</code> will have as many implementations as the number
  * of supported UIs, each in a specific package :
  * <p>
- * <code>org.jspresso.framework.application.frontend.action.<b>[ui]</b>.file.SaveFileAction</code>
+ * <code>org.jspresso.framework.application.frontend.action.</code><b>
+ * <code>[ui]</code></b><code>.file.SaveFileAction</code>
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

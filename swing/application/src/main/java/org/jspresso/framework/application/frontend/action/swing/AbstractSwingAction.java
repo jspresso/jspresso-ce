@@ -30,6 +30,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public abstract class AbstractSwingAction extends
     FrontendAction<JComponent, Icon, Action> {

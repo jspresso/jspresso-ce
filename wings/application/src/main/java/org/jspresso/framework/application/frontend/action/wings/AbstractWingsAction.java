@@ -30,6 +30,7 @@ import org.wings.SIcon;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public abstract class AbstractWingsAction extends
     FrontendAction<SComponent, SIcon, Action> {

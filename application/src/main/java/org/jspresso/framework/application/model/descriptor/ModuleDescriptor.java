@@ -35,6 +35,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
 

@@ -44,6 +44,7 @@ import org.springframework.jdbc.core.ConnectionCallback;
  *          the actual icon type used.
  * @param <G>
  *          the actual action type used.
+ * @internal
  */
 public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
 

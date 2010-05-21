@@ -9,12 +9,12 @@ import java.beans.PropertyChangeSupport;
 
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
-
 /**
  * Abstract class to build a property change capable bean.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @internal
  */
 public abstract class AbstractPropertyChangeCapable implements
     IPropertyChangeCapable, Cloneable {
@@ -76,7 +76,7 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * @param evt
-   *            evt
+   *          evt
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.beans.PropertyChangeEvent)
    */
   protected void firePropertyChange(PropertyChangeEvent evt) {
@@ -85,11 +85,11 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * @param propertyName
-   *            propertyName
+   *          propertyName
    * @param oldValue
-   *            oldValue
+   *          oldValue
    * @param newValue
-   *            newValue
+   *          newValue
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
    *      boolean, boolean)
    */
@@ -100,11 +100,11 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * @param propertyName
-   *            propertyName
+   *          propertyName
    * @param oldValue
-   *            oldValue
+   *          oldValue
    * @param newValue
-   *            newValue
+   *          newValue
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
    *      int, int)
    */
@@ -115,11 +115,11 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * @param propertyName
-   *            propertyName
+   *          propertyName
    * @param oldValue
-   *            oldValue
+   *          oldValue
    * @param newValue
-   *            newValue
+   *          newValue
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
    *      int, int)
    */
@@ -131,11 +131,11 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * @param propertyName
-   *            propertyName
+   *          propertyName
    * @param oldValue
-   *            oldValue
+   *          oldValue
    * @param newValue
-   *            newValue
+   *          newValue
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
    *      java.lang.Object, java.lang.Object)
    */
@@ -155,9 +155,9 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * @param propertyName
-   *            propertyName
-   * @return all of the <code>PropertyChangeListeners</code> associated with
-   *         the named property. If no such listeners have been added, or if
+   *          propertyName
+   * @return all of the <code>PropertyChangeListeners</code> associated with the
+   *         named property. If no such listeners have been added, or if
    *         <code>propertyName</code> is null, an empty array is returned.
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(java.lang.String)
    */
@@ -168,7 +168,7 @@ public abstract class AbstractPropertyChangeCapable implements
 
   /**
    * @param propertyName
-   *            propertyName
+   *          propertyName
    * @return true if there are one or more listeners for the given property.
    * @see java.beans.PropertyChangeSupport#hasListeners(java.lang.String)
    */

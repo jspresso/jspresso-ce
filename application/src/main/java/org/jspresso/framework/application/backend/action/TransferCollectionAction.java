@@ -55,8 +55,8 @@ public class TransferCollectionAction extends BackendAction {
   /**
    * Coinfigures the transferMode to use when pasting will be requested, i.e. :
    * <ul>
-   * <li>ETransferMode.COPY</li> for copy semantics.
-   * <li>ETransferMode.MOVE</li> for move/cut semantics.
+   * <li><code>ETransferMode.COPY</code> for copy semantics.</li>
+   * <li><code>ETransferMode.MOVE</code> for move/cut semantics.</li>
    * </ul>
    * 
    * @param transferMode
