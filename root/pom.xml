@@ -31,7 +31,7 @@
     <hibernate.version>3.3.2.GA</hibernate.version>
     <ulc.version>6.0.5</ulc.version>
     <jboss.version>4.2.2.GA</jboss.version>
-    <qooxdoo.version>1.0</qooxdoo.version>
+    <qooxdoo.version>1.1</qooxdoo.version>
     <jasper.version>3.7.1</jasper.version>
     <jfree.version>1.0.13</jfree.version>
     <itext.version>2.1.5</itext.version>
