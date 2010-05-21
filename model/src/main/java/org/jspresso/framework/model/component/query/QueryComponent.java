@@ -167,6 +167,24 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * {@inheritDoc}
    */
+  public Integer getDisplayPageIndex() {
+    int pc = 0;
+    if (getPageCount() != null) {
+      pc = getPageCount().intValue();
+    }
+    if (pc == 0) {
+      return new Integer(0);
+    }
+    int p = 0;
+    if (getPage() != null) {
+      p = getPage().intValue();
+    }
+    return new Integer(p + 1);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Integer getPageCount() {
     if (getRecordCount() == null) {
       return null;
@@ -262,10 +280,13 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   public void setPage(Integer page) {
     Integer oldValue = getPage();
+    Integer oldDisplayPageIndex = getDisplayPageIndex();
     boolean oldPreviousPageEnabled = isPreviousPageEnabled();
     boolean oldNextPageEnabled = isNextPageEnabled();
     this.page = page;
     firePropertyChange(PAGE, oldValue, getPage());
+    firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex,
+        getDisplayPageIndex());
     firePropertyChange("previousPageEnabled", new Boolean(
         oldPreviousPageEnabled), new Boolean(isPreviousPageEnabled()));
     firePropertyChange("nextPageEnabled", new Boolean(oldNextPageEnabled),
@@ -299,10 +320,13 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public void setRecordCount(Integer recordCount) {
     Integer oldValue = getRecordCount();
     Integer oldPageCount = getPageCount();
+    Integer oldDisplayPageIndex = getDisplayPageIndex();
     boolean oldNextPageEnabled = isNextPageEnabled();
     this.recordCount = recordCount;
     firePropertyChange(RECORD_COUNT, oldValue, getRecordCount());
     firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
+    firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex,
+        getDisplayPageIndex());
     firePropertyChange("nextPageEnabled", new Boolean(oldNextPageEnabled),
         new Boolean(isNextPageEnabled()));
   }

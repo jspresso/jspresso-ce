@@ -124,7 +124,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="60%"
+            <imagedata align="center" contentdepth="30%"
                        fileref="../images/Jspresso-modules.jpg" scalefit="1"
                        width="100%" />
           </imageobject>
@@ -665,7 +665,7 @@
 
   <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
-  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <!--<xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />-->
 
   <!--<index/>-->
 </book>

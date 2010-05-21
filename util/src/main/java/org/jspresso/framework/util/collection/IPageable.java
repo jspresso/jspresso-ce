@@ -37,6 +37,11 @@ public interface IPageable {
   String PAGE                  = "page";
 
   /**
+   * "displayPageIndex" string constant.
+   */
+  String DISPLAY_PAGE_INDEX    = "displayPageIndex";
+
+  /**
    * "pageCount" string constant.
    */
   String PAGE_COUNT            = "pageCount";
@@ -62,6 +67,13 @@ public interface IPageable {
    * @return the page number used for query actions.
    */
   Integer getPage();
+
+  /**
+   * Gets the page index to display.
+   * 
+   * @return the page index to display graphically.
+   */
+  Integer getDisplayPageIndex();
 
   /**
    * Gets the current page count.

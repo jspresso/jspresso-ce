@@ -85,6 +85,11 @@ public class BasicQueryComponentDescriptor extends
     pagePropertyDescripror.setReadOnly(true);
     propertyDescriptors.add(pagePropertyDescripror);
 
+    BasicIntegerPropertyDescriptor displayPageIndexPropertyDescripror = new BasicIntegerPropertyDescriptor();
+    displayPageIndexPropertyDescripror.setName(IPageable.DISPLAY_PAGE_INDEX);
+    displayPageIndexPropertyDescripror.setReadOnly(true);
+    propertyDescriptors.add(displayPageIndexPropertyDescripror);
+
     BasicIntegerPropertyDescriptor pageSizePropertyDescripror = new BasicIntegerPropertyDescriptor();
     pageSizePropertyDescripror.setName(IPageable.PAGE_SIZE);
     pageSizePropertyDescripror.setReadOnly(true);

@@ -26,6 +26,10 @@
           <property name="readOnly" value="true" />
         </bean>
         <bean class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
+          <property name="name" value="displayPageIndex" />
+          <property name="readOnly" value="true" />
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
           <property name="name" value="pageCount" />
           <property name="readOnly" value="true" />
         </bean>
@@ -45,7 +49,7 @@
     <property name="propertyViewDescriptors">
       <list>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
-          <property name="name" value="page" />
+          <property name="name" value="displayPageIndex" />
         </bean>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="pageCount" />
