@@ -2203,7 +2203,8 @@ public class DefaultWingsViewFactory extends
     Object node = tp.getLastPathComponent();
     TreeModel model = tree.getModel();
     if (!model.isLeaf(node)) {
-      tree.expandPath(tp);
+      // Bug with duplicate nodes, when expanding parents of newly added nodes.
+      // tree.expandPath(tp);
       for (int i = 0; i < model.getChildCount(node); i++) {
         expandAll(tree, tp.pathByAddingChild(model.getChild(node, i)));
       }
