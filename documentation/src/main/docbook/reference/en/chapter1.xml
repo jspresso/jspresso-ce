@@ -1399,7 +1399,7 @@ public class TraceableLifecycleInterceptor extends
   string_10 'zip'
 }</programlisting></para>
 
-      <para> the Jspresso Maven compilation will produce the following class
+      <para>the Jspresso Maven compilation will produce the following class
       (<filename>City.java</filename>) :</para>
 
       <programlisting language="java">package org.jspresso.hrsample.model;
@@ -5413,7 +5413,7 @@ tree('Company.tree',
         <para>The SJS equivalent, <filename>backend.groovy</filename>, is also
         generated :</para>
 
-        <para><programlisting>// Implement your application backend here using the SJS DSL.
+        <para><programlisting language="java">// Implement your application backend here using the SJS DSL.
 </programlisting>And the good news is that there is nothing to code here for a
         standard usage.</para>
       </section>
@@ -5623,6 +5623,28 @@ tree('Company.tree',
               technology) will be used.</para>
             </callout>
           </calloutlist></para>
+
+        <para>Starting from release 3.5.0, the default frontend controller
+        definition is generated in the <filename>frontend.groovy</filename>
+        SJS source file, that has been automatically generated
+        :<programlisting language="java">// Implement your application frontend here using the SJS DSL.
+
+/*
+ * The workspaces and modules
+ */
+
+// Describe your workspaces and modules here.
+
+controller 'hrsample.name',
+  icon:'icon.png',
+  context:'hrsample',
+  language:'fr'
+  workspaces:[/*Reference your workspaces here.*/]</programlisting></para>
+
+        <para>The project is configured for the frontend to be developped
+        using SJS. If you still want to code directly using Spring XML, you
+        just ave to un-comment the corresponding sectionin the
+        <filename>frontend.xml</filename> file.</para>
       </section>
 
       <section>
@@ -5651,7 +5673,7 @@ tree('Company.tree',
         url="http://java.sun.com/j2se/1.5.0/docs/guide/security/jaas/tutorials/index.html">this
         one</ulink> for instance). Jspresso provides all the necessary
         plumbing to seamlessly integrate any JAAS login module and as of this
-        writing, there are 2 login modules that come with the framework
+        writing, there are 3 login modules that come with the framework
         :</para>
 
         <itemizedlist>
@@ -5661,8 +5683,13 @@ tree('Company.tree',
           </listitem>
 
           <listitem>
-            <para>The ldap login module which authenticates the user against
+            <para>The LDAP login module which authenticates the user against
             an LDAP directory.</para>
+          </listitem>
+
+          <listitem>
+            <para>The JDBC login module which authenticates the user against a
+            relational database.</para>
           </listitem>
         </itemizedlist>
 
@@ -5760,10 +5787,11 @@ hrsample { <co id="hrsample-app" />
             large applications, you may want to split the generated
             <filename>model.xml</filename>, <filename>view.xml</filename>,
             <filename>frontend.xml</filename> and
-            <filename>backend.xml</filename> context files into smaller parts.
-            In that case, you need to reflect these modifications into the
-            bootstrap <filename>beanRefFactory.xml</filename> file so that
-            your new context files get loaded.</para>
+            <filename>backend.xml</filename> context files, or their
+            equivalent SJS source files, into smaller parts. In that case, you
+            need to reflect these modifications into the bootstrap
+            <filename>beanRefFactory.xml</filename> file so that your new
+            context files get loaded.</para>
           </note></para>
 
         <para>Even though you won't have to modify startup classes, take some
@@ -6022,14 +6050,26 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
               <para>We register the master data management module in the
               existing frontend controller.</para>
             </callout>
-          </calloutlist>You might notice in the XML fragment above that there
-        are actually very few directives needed to get a fully functionning
-        C.R.U.D. module on an entity. Most of the code deals with names,
-        descriptions and icons to obtain a nice looking GUI. Of course, there
-        are plenty of customizations you can achieve to meet the actual
-        end-user requirements (customize the view on the bean collection, the
-        filter, the offered services, ...), but none of them is required until
-        you actually want to change the default sensible values.</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">workspace('masterdata.workspace',
+  icon:'masterdata-48x48.png') {
+  filterModule('masterdata.cities.module',
+    component:'City')
+}
+
+controller 'hrsample.name',
+  ...
+  workspaces:['masterdata.workspace']</programlisting></para>
+
+        <para>You might notice in the fragment above that there are actually
+        very few directives needed to get a fully functionning C.R.U.D. module
+        on an entity. Most of the code deals with names, descriptions and
+        icons to obtain a nice looking GUI. Of course, there are plenty of
+        customizations you can achieve to meet the actual end-user
+        requirements (customize the view on the bean collection, the filter,
+        the offered services, ...), but none of them is required until you
+        actually want to change the default sensible values.</para>
 
         <para>We are now ready to see the first workspace in action by
         launching the application. The master data workspace will be made
@@ -6114,7 +6154,7 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
       </section>
 
       <section>
-        <title>Structuring modules hierarchy</title>
+        <title>Structuring the modules hierarchy</title>
 
         <para>There might be situations when you would like to structure a
         little bit more how your application modules are organized. This
@@ -6167,9 +6207,19 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
               <para>We transfer the existing cities management module as a
               child (sub-module) of the above geography module.</para>
             </callout>
-          </calloutlist>This type of taxonomy can be arbitrarily deep since
-        you can in turn put categories modules as sub-modules of
-        others.</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">workspace('masterdata.workspace',
+  icon:'masterdata-48x48.png') {
+  nodeModule('masterdata.geography.module',
+    icon:'geography-48x48.png') {
+    filterModule('masterdata.cities.module',
+      component:'City'
+  }
+}</programlisting></para>
+
+        <para>This type of taxonomy can be arbitrarily deep since you can in
+        turn put categories modules as sub-modules of others.</para>
 
         <para>Re-launching the master data management workspace, we wil see
         our new intermediate geography simple module :</para>
@@ -6190,17 +6240,17 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
       <section>
         <title>Introduction to bean modules</title>
 
-        <para>As of now, we have used a simple module and a bean collection
-        module. As introduced at the beginning of the section, the third type
-        of module is the bean module. This type of module, as explained
-        before, gives a view (and services) on a single business
+        <para>As of now, we have used a simple module and a filtered bean
+        collection module. As introduced at the beginning of the section, the
+        third type of module is the bean module. This type of module, as
+        explained before, gives a view (and services) on a single business
         object.</para>
 
         <para>If you look back to the screenshots of the master data
         management workspace, you may notice that we haved used such a module
         (screenshot 5) even without knowing it ! This is because one of the
         standard bean collection module actions creates a bean module behind
-        the scene and dynamically install it in the module hierarchy as a
+        the scene and dynamically installs it in the module hierarchy as a
         sub-module. Of course, in this case, it is pretty useless since it
         doesn't offer any extra functionality beyond the ones offered by its
         parent. But don't forget that you may change a lot of things to meet
@@ -6267,8 +6317,22 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
             <callout arearefs="reloadModuleObjectFrontAction">
               <para>We register the standard built-in reload action.</para>
             </callout>
-          </calloutlist>Once the customized view is declared, we need to
-        register it in the bean collection module as follows :</para>
+          </calloutlist></para>
+
+        <para>And the SJS way, in <filename>view.groovy</filename>
+        :<programlisting language="java">form('City.module.view',
+  parent:'decoratedView'
+  columnCount:1) {
+  actionMap {
+    actionList('FILE'){
+      action(ref:'saveModuleObjectFrontAction')
+      action(ref:'reloadModuleObjectFrontAction')
+    }
+  }
+}</programlisting></para>
+
+        <para>Once the customized view is declared, we need to register it in
+        the bean collection module as follows :</para>
 
         <para><programlisting language="xml">&lt;bean
   id="Masterdata.workspace"
@@ -6297,8 +6361,20 @@ INFO  org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programl
               <para>We register the new city view as being the view to use
               when displaying a single city.</para>
             </callout>
-          </calloutlist>We are now ready to re-open the workspace, create a
-        new city and display it individually :</para>
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">workspace('masterdata.workspace',
+  icon:'masterdata-48x48.png') {
+  nodeModule('masterdata.geography.module',
+    icon:'geography-48x48.png') {
+    filterModule('masterdata.cities.module',
+      component:'City',
+      <emphasis role="bold">detailView:'City.module.view'</emphasis>)
+  }
+}</programlisting></para>
+
+        <para>We are now ready to re-open the workspace, create a new city and
+        display it individually :</para>
 
         <para><figure>
             <title>The customized city bean module view</title>
@@ -6622,7 +6698,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
         screenshots of the resulting GUI; but feel free to have a look to the
         spring definition files and to modify them to get a deeper
         understanding of how the workspace is built (don't be afraid, it's
-        only a matter of ~50 XML lines).</para>
+        only a matter of ~100 XML lines and even less in SJS).</para>
 
         <para>So let's navigate through the employees workspace :</para>
 
@@ -6899,6 +6975,18 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
               </callout>
             </calloutlist></para>
 
+          <para>And the SJS way, in <filename>model.groovy</filename>
+          :<programlisting language="java">Entity('OrganizationalUnit',
+    ...
+    processor :'OrganizationalUnitPropertyProcessors',
+    <emphasis role="bold">extension :'OrganizationalUnitExtension'</emphasis>) {
+  ...
+  reference 'manager', id:'OrganizationalUnit-manager', ref:'Employee', mandatory:true,
+            <emphasis role="bold">processors:['ManagerProcessor']</emphasis>, <emphasis
+                role="bold">initializationMapping:['company':'company']</emphasis>
+  reference 'company', ref:'Company', <emphasis role="bold">computed:true</emphasis>
+}</programlisting></para>
+
           <para>Since we added a property to the
           <code>OrganizationalUnit</code> entity, we need to re-generate it so
           that the accessors are available in the entity interface (<code>mvn
@@ -7073,8 +7161,6 @@ public class OrganizationalUnitPropertyProcessors {
               </tbody>
             </tgroup>
           </table>
-
-          <para></para>
         </section>
 
         <section>
@@ -7119,9 +7205,9 @@ public class OrganizationalUnitPropertyProcessors {
           :</para>
 
           <para><programlisting language="xml">&lt;bean
-  id="Team-teamMembers.table" <co id="Team-teamMembers.table" />
+  id="Team-teamMembers.list" <co id="Team-teamMembers.table" />
   parent="decoratedView"
-  class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor"&gt;
   &lt;property
     name="modelDescriptor"
     ref="Team-teamMembers" /&gt; <co id="Team-teamMembers" />
@@ -7203,7 +7289,7 @@ public class OrganizationalUnitPropertyProcessors {
     value="true" /&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
               <callout arearefs="Team-teamMembers.table">
-                <para>We declare a new table view to present the team members
+                <para>We declare a new list view to present the team members
                 of a team.</para>
               </callout>
 
@@ -7286,8 +7372,39 @@ public class OrganizationalUnitPropertyProcessors {
                 backing the team members view is retrieved from the selection
                 in the department teams view.</para>
               </callout>
-            </calloutlist>With approximately 50 new lines of spring
-          configuration in a single file, you achieve things that would
+            </calloutlist></para>
+
+          <para>And the SJS way, in <filename>model.groovy</filename>
+          :<programlisting language="java">listView('Team-teamMembers.list') {
+  actionMap {
+    actionList('EDIT'){
+      action(parent:'lovAction',
+        custom:[
+          autoquery:false,
+          entityDescriptor_ref:'Employee',
+          initializationMapping:['company':'company'],
+          okAction_ref:'addAnyToMasterFrontAction'
+        ]
+      )
+      action(ref:'removeAnyCollectionFromMasterFrontAction')
+    }
+  }
+}
+
+split_vertical('Departments.and.teams.view',
+  cascadingModels:true,
+  top:'Company-departments.table') {
+  bottom {
+    split_horizontal (
+      left:'Department-teams.table',
+      right:'Team-teamMembers.list',
+      cascadingModels:true
+    )
+  }
+}</programlisting></para>
+
+          <para>With approximately 50 new lines of spring configuration in a
+          single file and even less using SJS, you achieve things that would
           normally require hundreds !</para>
 
           <para>The following screenshots shows the result :</para>
@@ -7489,11 +7606,25 @@ public class OrganizationalUnitPropertyProcessors {
               and "staff-manager" roles. Same applies for the organization
               workspace below.</para>
             </callout>
-          </calloutlist>Believe it or not, you don't have to write anything
-        else ! The exact same kind of declarations apply to all the securable
-        components. It would have been even shorter if we had used a smarter
-        login module that had handled groups (or roles) nesting. In that case,
-        we would have nest all profiles in the administrator one, making the
+          </calloutlist></para>
+
+        <para>And the SJS way :<programlisting language="java">workspace('employees.workspace',
+  ...
+  grantedRoles:['administrator','staff-manager']) {
+  ...
+}
+
+workspace('organization.workspace',
+  ...
+  grantedRoles:['administrator','organization-manager']) {
+  ...
+}</programlisting></para>
+
+        <para>Believe it or not, you don't have to write anything else! The
+        exact same kind of declarations apply to all the securable components.
+        It would have been even shorter if we had used a smarter login module
+        that had handled groups (or roles) nesting. In that case, we would
+        have nest all profiles in the administrator one, making the
         administrator inherit all the authorizations of its nested groups.
         Then we could simply have omitted the administrator declaration in the
         workspaces granted roles.</para>
@@ -7558,8 +7689,9 @@ hrsample {
 
     <para>Last but not least, we need to package and deploy the final
     application. Choosing the target environment highly depends on the
-    requirements. Jspresso supports as of now 4 different deployment scenarios
-    : Swing, AJAX (<ulink url="???">Wings</ulink>), Flash (<ulink
+    requirements. Jspresso supports as of now 5 different deployment scenarios
+    : Swing, AJAX (<ulink url="http://wingsframework.org">Wings</ulink>,
+    <ulink url="http://qooxdoo.org">Qooxdoo</ulink>), Flash (<ulink
     url="http://flex.org/">Flex</ulink>) and <ulink
     url="http://www.canoo.com/ulc/">ULC</ulink>.</para>
 
@@ -7634,11 +7766,11 @@ hrsample {
       that, Wings is certainly one of the best available library to seamlessly
       bridge the AJAX world and the java world.</para>
 
-      <para>Last but not least, Jspresso introduced with the 3.0 release a
-      native support for Adobe's Flex. As for the other deployment options,
-      there is absolutely nothing to code against the Flex API (no MXML, no
-      ActionScript). Jspresso takes care at runtime of the frontend display
-      and client/server communication through :</para>
+      <para>Jspresso introduced with the 3.0 release a native support for
+      Adobe's Flex. As for the other deployment options, there is absolutely
+      nothing to code against the Flex API (no MXML, no ActionScript).
+      Jspresso takes care at runtime of the frontend display and client/server
+      communication through :</para>
 
       <itemizedlist>
         <listitem>
@@ -7657,7 +7789,15 @@ hrsample {
       <para>Your Jspresso application will then be able to run in any Flash
       enabled browser.</para>
 
-      <para>What ever option you take to deploy your Jspresso application (you
+      <para>Starting from the 3.5 release, Jspresso supports <ulink
+      url="http://qooxdoo.org">Qooxdoo</ulink>, a very high quality Javascript
+      UI library (Qooxdoo is actually more than that, so feel free to dig into
+      their web site). The Jspresso Qooxdoo UI channel shares the same
+      architecture than the Flex UI channel. Beyond the custom Qooxdoo java
+      RPC servlet, the same codebase is used to adapt the client server
+      communication.</para>
+
+      <para>Whatever option you take to deploy your Jspresso application (you
       may choose all of them), everything is already prepared in the project
       and the Maven build will take care of every complicated packaging
       steps.</para>
@@ -7875,10 +8015,51 @@ hrsample {
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
-          </figure>Congratulations! we have now closed the circle and in tenth
-        of the effort usually required to achieve the equivalent, we
-        developped and deployed a multi-channel, distributed desktop-like
-        business application.</para>
+          </figure></para>
+      </section>
+
+      <section>
+        <title>The first Qooxdoo launch</title>
+
+        <para>Point your browser to the <code>qooxdoo</code> context :</para>
+
+        <blockquote>
+          <para><code>http://[machine]:[port]/hrsample-webapp/qooxdoo/</code></para>
+        </blockquote>
+
+        <para>The browser shows you the Qooxdoo login dialog.</para>
+
+        <para><figure>
+            <title>The browser displays the Qooxdoo login dialog</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../screenshots/Qooxdoo_login.jpg"
+                           scalefit="1" width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure>And you can play with the same application but in
+        Javascript using the Qooxdoo library !</para>
+
+        <para><figure>
+            <title>You query the companies in Qooxdoo !</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../screenshots/Qooxdoo_application.jpg"
+                           scalefit="1" width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+
+        <para></para>
+
+        <para>Congratulations! we have now closed the circle and in tenth of
+        the effort usually required to achieve the equivalent, we developped
+        and deployed a multi-channel, distributed desktop-like business
+        application.</para>
       </section>
     </section>
   </section>
