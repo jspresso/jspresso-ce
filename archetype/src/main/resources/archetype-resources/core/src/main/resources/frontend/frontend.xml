@@ -12,8 +12,11 @@
   <!-- Describe your workspaces and modules here. -->
 
   <!--
-    The controller
+    The controller. Let the following section commented out if you develop
+    exclusively using SJS. In that case, you should let this file empty and
+    code the frontend layer in frontend.groovy.
   -->
+  <!--
   <bean
     id="applicationFrontController"
     parent="frontController"
@@ -36,8 +39,9 @@
     <property
       name="workspaces">
       <list>
-        <!-- Reference your workspaces here. -->
+        <!- Reference your workspaces here. ->
       </list>
     </property>
   </bean>
+  -->
 </beans>

@@ -9,6 +9,7 @@
       <title>Domain</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>mandatory</emphasis> : <code>projectName</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>Entity, Interface, Component, external, paramSet</code></listitem>
       </itemizedlist>
       <para>This root descriptor is used in the file application.groovy generated during the initialization of the project by Jspresso. There is generally no need to change it.</para>
       <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
@@ -40,7 +41,7 @@
                 <entry>
                   <para><emphasis role='bold'>includeDirectory</emphasis><para><code> String</code></para></para>
                 </entry>
-                <entry><para></para></entry>
+                <entry><para>indicates in which directory are the include files</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -52,6 +53,8 @@
     <section>
       <title>Entity</title>
       <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Domain</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>string, text, password, integer, date, bool, decimal, time, duration, percent, enumeration, typeEnumeration, range, refId, color, binary, java, sourcecode, html, reference, list, set, paramSet</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicEntityDescriptor</code></listitem>
       </itemizedlist>
       <para>This descriptor key to the description of the application model. It is used to describe a model entity.
@@ -79,6 +82,19 @@ The description of an entity can be very simple : <programlisting>Entite('person
               </row>
             </thead>
             <tbody>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>extend</emphasis><para><code> ListOfString</code></para></para><para><code>ancestorDescriptors</code></para>
+                </entry>
+                <entry><para>Registers this Entity with a collection of ancestors. It directly translates the components inheritance hierarchy since the component property descriptors are the union of the declared property descriptors of the component and of its ancestors one. A component may have multiple ancestors which means that complex multiple-inheritance hierarchy can be mapped <programlisting>Interface('Nameable') { string_64 'name', mandatory: true }
+Entity('City', <emphasis role='bold'>extend</emphasis>: 'Nameable'){...}</programlisting></para></entry>
+              </row>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>description</emphasis><para><code> String</code></para></para>
+                </entry>
+                <entry><para>Sets the description of this descriptor. Most of the descriptor descriptions are used in conjunction with the Jspresso i18n layer so that the description property set here is actually an i18n key used for translation. Description is mainly used for UI (in tooltips for instance) but may also be used for project technical documentation, contextual help, ...</para></entry>
+              </row>
               <row>
                 <entry>
                   <para><emphasis role='bold'>icon</emphasis><para><code> String</code></para></para><para><code>iconImageURL</code></para>
@@ -119,42 +135,34 @@ The description of an entity can be very simple : <programlisting>Entite('person
               </row>
               <row>
                 <entry>
-                  <para><emphasis role='bold'>grantedRoles</emphasis><para><code> ListOfString</code></para></para>
-                </entry>
-                <entry><para>Assigns the roles that are authorized to manipulate components backed by this descriptor. This will directly influence the UI behaviour and even composition. Note that this authorization enforcement does not prevent programatic access that is of the developer responsbility. <programlisting>Entity('Employee',<emphasis role='bold'>grantedRoles</emphasis>: ['administrator', 'manager']){...}</programlisting></para></entry>
-              </row>
-              <row>
-                <entry>
-                  <para><emphasis role='bold'>writability</emphasis><para><code> MapOfBoolean</code></para></para><para><code>writabilityGates</code></para>
-                </entry>
-                <entry><para>Assigns a collection of gates to determine component writability. A component will be considered writable if and only if all gates are open. This mecanism is mainly used for dynamic UI authorization based on model state, e.g. a validated invoice should not be editable anymore. Descriptor assigned gates will be cloned for each component instance created and backed by this descriptor. So basically, each component instance will have its own, unshared collection of writability gates.
-
-By default, component descriptors are not assigned any gates collection, i.e. there is no writability restriction. Note that gates do not enforce programatic writability of a component; only UI is impacted. <programlisting>Entity('invoice', <emphasis role='bold'>writability</emphasis>: [editable: true]){...}</programlisting></para></entry>
-              </row>
-              <row>
-                <entry>
                   <para><emphasis role='bold'>sqlName</emphasis><para><code> String</code></para></para>
                 </entry>
                 <entry><para>Instructs Jspresso to use this name when translating this component type name to the data store namespace. This includes , but is not limited to, database table names. By default Jspresso uses its default naming policy <programlisting>Entity('Employee', <emphasis role='bold'>sqlName</emphasis>: "T_EMPLOYEE"){...}</programlisting></para></entry>
               </row>
               <row>
                 <entry>
-                  <para><emphasis role='bold'>description</emphasis><para><code> String</code></para></para>
+                  <para><emphasis role='bold'>grantedRoles</emphasis><para><code> ListOfString</code></para></para>
                 </entry>
-                <entry><para>Sets the description of this descriptor. Most of the descriptor descriptions are used in conjunction with the Jspresso i18n layer so that the description property set here is actually an i18n key used for translation. Description is mainly used for UI (in tooltips for instance) but may also be used for project technical documentation, contextual help, ...</para></entry>
+                <entry><para>Assigns the roles that are authorized to manipulate components backed by this descriptor. This will directly influence the UI behaviour and even composition. Note that this authorization enforcement does not prevent programatic access that is of the developer responsbility. <programlisting>Entity('Employee',<emphasis role='bold'>grantedRoles</emphasis>: ['administrator', 'manager']){...}</programlisting></para></entry>
               </row>
               <row>
                 <entry>
-                  <para><emphasis role='bold'>extend</emphasis><para><code> ListOfString</code></para></para><para><code>ancestorDescriptors</code></para>
+                  <para><emphasis role='bold'>booleanWritabilityGates</emphasis><para><code> ListOfString</code></para></para>
                 </entry>
-                <entry><para>Registers this Entity with a collection of ancestors. It directly translates the components inheritance hierarchy since the component property descriptors are the union of the declared property descriptors of the component and of its ancestors one. A component may have multiple ancestors which means that complex multiple-inheritance hierarchy can be mapped <programlisting>Interface('Nameable') { string_64 'name', mandatory: true }
-Entity('City', <emphasis role='bold'>extend</emphasis>: 'Nameable'){...}</programlisting></para></entry>
+                <entry><para>Assigns a collection of gates to determine component writability. A component will be considered writable (updatable) if and only if all booleanGates gates are open. <programlisting> entity 'invoice', booleanWritabilityGates: ['val1', '!val2']
+  </programlisting> <itemizedlist> <listitem>The first 'val1' gate is open if the val1 property is true on the underlying model</listitem> <listitem>The second '!val2' gate is open if val2 is false on the underlying model</listitem> </itemizedlist> <para></para> This mecanism is mainly used for dynamic UI authorization based on model state, e.g. a validated invoice should not be editable anymore. component assigned gates will be cloned for each component instance created and backed by this descriptor. So basically, each component instance will have its own, unshared collection of writability gates. <para></para> By default, component descriptors are not assigned any gates collection, i.e. there is no writability restriction. Note that gates do not enforce programatic writability of a component; only UI is impacted.</para></entry>
+              </row>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>rolesWritabilityGates</emphasis><para><code> ListOfString</code></para></para>
+                </entry>
+                <entry><para>Assigns a collection of gates to determine component writability. A component will be considered writable (updatable) if and only if all RolesGates gates are open. <programlisting> entity 'invoice', rolesWritabilityGates: ['role1', '!role2'] </programlisting> <itemizedlist> <listitem>The first gate 'role1' is open if the connected user has the role1</listitem> <listitem>The second gate '!role2' is open if the connected user does not have the role2</listitem> </itemizedlist> Same mecanism has booleanWritabilityGates</para></entry>
               </row>
               <row>
                 <entry>
                   <para><emphasis role='bold'>extension</emphasis><para><code> String</code></para></para>
                 </entry>
-                <entry><para>Instructs the framework that a delegate class is attached to this component to implements getters for his computes properties. Properties defined with a useExtension = true are computed whith a setter defined in that delegate class.
+                <entry><para>Instructs the framework that a delegate class is attached to this component to implements getters for his computes properties. Properties defined with a computed = true are computed whith a setter defined in that delegate class.
 
 Delegate instances are stateful. This allows for some caching of computing intensive properties. Delegate instances are lazily created when needed,  i.e. when the computed property is accessed either programmatically or by the binding layer. The delegate class must implement the IComponentExtension &lt;T&gt; interface (where &lt;T&gt; is assignable from the owning component class) and provide a public constructor taking exactly 1 parameter : the component instance. Jspresso provides an adapter class to inherit from : AbstractComponentExtension&lt;T&gt; . This helper class provides the methods to access the enclosing component from the delegate implementation as well as the Spring context it comes from, when needed.  <programlisting>Entity('Employee', <emphasis role='bold'>extension</emphasis>: 'EmployeeExtension'){
  integer 'age', <emphasis role='bold'>useExtension</emphasis>: true
@@ -178,8 +186,13 @@ Delegate instances are stateful. This allows for some caching of computing inten
                 <entry>
                   <para><emphasis role='bold'>services</emphasis><para><code> Map</code></para></para><para><code>serviceDelegateClassNames</code></para>
                 </entry>
-                <entry><para>Registers the collection of service delegate instances attached to this component. These delegate instances will automatically be triggered whenever a method of the service interface it implements get executed.For instance : <itemizedlist> <listitem>the component interface is MyBeanClass. It implements the service interface MyService.</listitem> <listitem>the service interface MyService contains method int foo(String).</listitem> <listitem>the service delegate class, e.g. MyServiceImpl must implement the method int foo(MyBeanClass,String). Note that the parameter list is augmented with the owing component type as 1st parameter. This allows to have stateless implementation for delegates, thus sharing instances of delegates among instances of components.</listitem> <listitem>when foo(String) is executed on an instance of MyBeanClass, the framework will trigger the delegate implementation, passing the instance of the component itself as parameter.</listitem> </itemizedlist> <programlisting>Entity('Employee',
-<emphasis role='bold'>services</emphasis>: [EmployeeService: 'EmployeeServiceDelegate']){...}</programlisting></para></entry>
+                <entry><para>Much the same as serviceDelegateBeanNames except that instead of providing a map valued with Spring bean names, you provide a map valued with fully qualified class names. These class must : <itemizedlist> <listitem>provide a default constructor</listitem> <listitem>implement the IComponentService marker interface.</listitem> </itemizedlist> When needed, Jspresso will create service delegate instances.</para></entry>
+              </row>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>serviceBeans</emphasis><para><code> Map</code></para></para><para><code>serviceDelegateBeanNames</code></para>
+                </entry>
+                <entry><para>Registers the collection of service delegate instances attached to this component. These delegate instances will automatically be triggered whenever a method of the service interface it implements get executed.For instance : <itemizedlist> <listitem>the component interface is MyBeanClass. It implements the service interface MyService.</listitem> <listitem>the service interface MyService contains method int foo(String).</listitem> <listitem>the service delegate class, e.g. MyServiceImpl must implement the method int foo(MyBeanClass,String). Note that the parameter list is augmented with the owing component type as 1st parameter. This allows to have stateless implementation for delegates, thus sharing instances of delegates among instances of components.</listitem> <listitem>when foo(String) is executed on an instance of MyBeanClass, the framework will trigger the delegate implementation, passing the instance of the component itself as parameter.</listitem> </itemizedlist> This property must be set with a map keyed by service interfaces and valued by Spring bean names (i.e. Spring ids). Each bean name corresponds to an instance of service delegate. When needed, Jspresso will query the Spring application context to retrieve the delegate instances. This property is equivalent to setting serviceDelegateClassNames except that it allows to register delegate instances that are configured externally in the Spring context. lifecycle interceptor instances must implement the IComponentService marker interface.</para></entry>
               </row>
               <row>
                 <entry>
@@ -209,7 +222,9 @@ Entity('Department', extend: 'OrganizationalUnit'){...} </programlisting></para>
       <title>Interface</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>Entity</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>icon, rendered, queryable, uncloned, ordering, pageSize, grantedRoles, writability, sqlName, description, extend, extension, processor, interceptors, services, parent, toString, purelyAbstract</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>extend, description, icon, rendered, queryable, uncloned, ordering, pageSize, sqlName, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, extension, processor, interceptors, services, serviceBeans, parent, toString, purelyAbstract</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Domain</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>string, text, password, integer, date, bool, decimal, time, duration, percent, enumeration, typeEnumeration, range, refId, color, binary, java, sourcecode, html, reference, list, set, paramSet</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicInterfaceDescriptor</code></listitem>
       </itemizedlist>
       <para>This descriptor is a mean of factorizing state/behaviour among components, entities or even sub-interfaces. This is a much less coupling mecanism than actual entity inheritance and can be used across entities that don't belong the the same inheritance hierarchy, or even accross types (entities, components, interfaces). <programlisting><emphasis role='bold'>Interface</emphasis>('Nameable') { string_64 'name', mandatory: true }
@@ -239,7 +254,7 @@ Entity('Employee', <emphasis role='bold'>extend</emphasis>: ['Nameable', 'Tracea
             </thead>
             <tbody>
               <row>
-                <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -249,7 +264,9 @@ Entity('Employee', <emphasis role='bold'>extend</emphasis>: ['Nameable', 'Tracea
       <title>Component</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>Entity</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>icon, rendered, queryable, uncloned, ordering, pageSize, grantedRoles, writability, sqlName, description, extend, extension, processor, interceptors, services, parent, toString, purelyAbstract</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>extend, description, icon, rendered, queryable, uncloned, ordering, pageSize, sqlName, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, extension, processor, interceptors, services, serviceBeans, parent, toString, purelyAbstract</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Domain</code></listitem>
+        <listitem><emphasis role='bold'>allowed next element</emphasis> : <code>string, text, password, integer, date, bool, decimal, time, duration, percent, enumeration, typeEnumeration, range, refId, color, binary, java, sourcecode, html, reference, list, set, paramSet</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicComponentDescriptor</code></listitem>
       </itemizedlist>
       <para>structures that are to be reused but don't have enough focus for being considered as entities. For instance MoneyAmount component could be composed of a decimal and a reference to a Money entity. This structure could then be reused in other elements of the domain like an Invoice or an Article. Jspresso terminology for these type of structures is "Inlined Component". Another example could be reused of contact informations <programlisting>Component('ContactInfo') {
@@ -278,37 +295,7 @@ Entity('Employee') {
             </thead>
             <tbody>
               <row>
-                <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
-              </row>
-            </tbody>
-          </tgroup>
-      </table>
-    </section>
-  </section>
-  <section>
-    <title>Support</title>
-    <section>
-      <title>external</title>
-      <para>This descriptor allowed declaring references which are not described in the SJS description of the application. since all references are controlled by SJS, it is necessary to declare the external references.</para>
-      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
-        <?dbfo keep-together='auto'?>
-          <title>external properties</title>
-          <tgroup cols='2'>
-            <colspec colname='property' colwidth='1*' />
-            <colspec colname='description' colwidth='2*' />
-            <thead>
-              <row>
-                <entry align='left'>Property</entry>
-                <entry align='left'>Description</entry>
-              </row>
-            </thead>
-            <tbody>
-              <row>
-                <entry>
-                  <para><emphasis role='bold'>id</emphasis><para><code> ListOfString</code></para></para>
-                </entry>
-                <entry><para>list identifiers of descriptors <programlisting><emphasis role='bold'>external</emphasis>(id: ['com.appli.model.content.aCatalog',
-              'com.appli.model.content.aMenu'])</programlisting></para></entry>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -343,7 +330,7 @@ Entity('Employee') {
                 <entry>
                   <para><emphasis role='bold'>i18nNameKey</emphasis><para><code> String</code></para></para>
                 </entry>
-                <entry><para></para></entry>
+                <entry><para>Sets i18n key used for translation if it is different from the description</para></entry>
               </row>
               <row>
                 <entry>
@@ -359,23 +346,52 @@ Entity('Employee') {
               </row>
               <row>
                 <entry>
+                  <para><emphasis role='bold'>preferredWidth</emphasis><para><code> Integer</code></para></para>
+                </entry>
+                <entry><para>This property allows for setting an indication of width for representing this property in a view.<para></para> Default value is null, so that the view factory will make its decision based on the type and/or other characteristics of the property (e.g. max length).</para></entry>
+              </row>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>computed</emphasis><para><code> Boolean</code></para></para>
+                </entry>
+                <entry><para>Properties defined with a useExtension = true are computed with a getter. This getter is defined in the delegate class attached  by the <emphasis role='bold'>extension</emphasis> property to the Entity, Component or Interface.</para></entry>
+              </row>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>sqlName</emphasis><para><code> String</code></para></para>
+                </entry>
+                <entry><para>Instructs Jspresso to use this name when translating this component type name to the data store namespace. This includes , but is not limited to, database table names. By default Jspresso uses its default naming policy</para></entry>
+              </row>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>parent</emphasis><para><code> Ref</code></para></para>
+                </entry>
+                <entry><para>parent property allows to used an other descriptor as a model and to override certain properties.</para></entry>
+              </row>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>id</emphasis><para><code> String</code></para></para>
+                </entry>
+                <entry><para>id created an identifier for the property. This identifier can then be referenced by other descriptors using refId</para></entry>
+              </row>
+              <row>
+                <entry>
                   <para><emphasis role='bold'>grantedRoles</emphasis><para><code> ListOfString</code></para></para>
                 </entry>
                 <entry><para>Assigns the roles that are authorized to manipulate the property backed by this descriptor. This will directly influence the UI behaviour and even composition (e.g. show/hide columns or fields). Setting the collection of granted roles to null (default value) disables role based authorization on this property level. Note that this authorization enforcement does not prevent programmatic access that is of the developer responsbility.</para></entry>
               </row>
               <row>
                 <entry>
-                  <para><emphasis role='bold'>writability</emphasis><para><code> MapOfBoolean</code></para></para><para><code>writabilityGates</code></para>
+                  <para><emphasis role='bold'>booleanWritabilityGates</emphasis><para><code> ListOfString</code></para></para>
                 </entry>
-                <entry><para>Assigns a collection of gates to determine component writability. A component will be considered writable if and only if all gates are open. This mecanism is mainly used for dynamic UI authorization based on model state, e.g. a validated invoice should not be editable anymore. Descriptor assigned gates will be cloned for each component instance created and backed by this descriptor. So basically, each component instance will have its own, unshared collection of writability gates.
-
-By default, component descriptors are not assigned any gates collection, i.e. there is no writability restriction. Note that gates do not enforce programatic writability of a component; only UI is impacted.</para></entry>
+                <entry><para>Assigns a collection of gates to determine component writability. A component will be considered writable (updatable) if and only if all booleanGates gates are open. <programlisting> entity 'invoice', booleanWritabilityGates: ['val1', '!val2']
+  </programlisting> <itemizedlist> <listitem>The first 'val1' gate is open if the val1 property is true on the underlying model</listitem> <listitem>The second '!val2' gate is open if val2 is false on the underlying model</listitem> </itemizedlist> This mecanism is mainly used for dynamic UI authorization based on model state, e.g. a validated invoice should not be editable anymore. component assigned gates will be cloned for each component instance created and backed by this descriptor. So basically, each component instance will have its own, unshared collection of writability gates. <para></para> By default, component descriptors are not assigned any gates collection, i.e. there is no writability restriction. Note that gates do not enforce programatic writability of a component; only UI is impacted.</para></entry>
               </row>
               <row>
                 <entry>
-                  <para><emphasis role='bold'>paramSets</emphasis><para><code> ListOfString</code></para></para>
+                  <para><emphasis role='bold'>rolesWritabilityGates</emphasis><para><code> ListOfString</code></para></para>
                 </entry>
-                <entry><para>paramSets makes it possible to use a list of paramSet.  The properties declared in the paramSet come to be added to the properties of the current descriptor.  The properties brought by the paramSet can be overridden  by the current descriptor. If a property is overridden with the null value the property is ignored.</para></entry>
+                <entry><para>Assigns a collection of gates to determine component writability. A component will be considered writable (updatable) if and only if all RolesGates gates are open. <programlisting> entity 'invoice', rolesWritabilityGates: ['role1', '!role2'] </programlisting> <itemizedlist> <listitem>The first gate 'role1' is open if the connected user has the role1</listitem> <listitem>The second gate '!role2' is open if the connected user does not have the role2</listitem> </itemizedlist> Same mecanism has booleanWritabilityGates</para></entry>
               </row>
               <row>
                 <entry>
@@ -403,47 +419,23 @@ By default, component descriptors are not assigned any gates collection, i.e. th
               </row>
               <row>
                 <entry>
-                  <para><emphasis role='bold'>parent</emphasis><para><code> Ref</code></para></para>
+                  <para><emphasis role='bold'>paramSets</emphasis><para><code> ListOfString</code></para></para>
                 </entry>
-                <entry><para>parent property allows to used an other descriptor as a model and to override certain properties.</para></entry>
-              </row>
-              <row>
-                <entry>
-                  <para><emphasis role='bold'>id</emphasis><para><code> String</code></para></para>
-                </entry>
-                <entry><para>id created an identifier for the property. This identifier can then be referenced by other descriptors using refId</para></entry>
-              </row>
-              <row>
-                <entry>
-                  <para><emphasis role='bold'>computed</emphasis><para><code> Boolean</code></para></para>
-                </entry>
-                <entry><para>Forces a property to be considered as a computed property by the framework. A computed property will be completely ignored by the persistence layer and its management is left to the developer.
-
-Properties declared with <emphasis role='bold'>useExtension = true</emphasis> are considered computed by default so there is no need to explicitely set them computed=true. However, there is sometimes a need to declare a property at some level (e.g. in an interface descriptor) and let lower level implementation decide how to handle this common property concretely (either computing it or handling it as a real persistent property). In that case, you can declare this property computed=true in the super type and refine the actual implementation (computed or not) in the sub-types. Default value is false</para></entry>
-              </row>
-              <row>
-                <entry>
-                  <para><emphasis role='bold'>computedFurther</emphasis><para><code> Boolean</code></para></para>
-                </entry>
-                <entry><para></para></entry>
-              </row>
-              <row>
-                <entry>
-                  <para><emphasis role='bold'>sqlName</emphasis><para><code> String</code></para></para>
-                </entry>
-                <entry><para>Instructs Jspresso to use this name when translating this component type name to the data store namespace. This includes , but is not limited to, database table names. By default Jspresso uses its default naming policy</para></entry>
+                <entry><para>paramSets makes it possible to use a list of paramSet.  The properties declared in the paramSet come to be added to the properties of the current descriptor.  The properties brought by the paramSet can be overridden  by the current descriptor. If a property is overridden with the null value the property is ignored.</para></entry>
               </row>
               <row>
                 <entry>
                   <para><emphasis role='bold'>versionControl</emphasis><para><code> Boolean</code></para></para>
                 </entry>
-                <entry><para></para></entry>
+                <entry><para>This property allows to fine tune wether this component property participates in optimistic versioning. It mainly allows to declare some properties that should be ignored regarding optimistic versioning thus lowering the risk of version conflicts between concurrent users. Of course, this feature has to be used with care since it may generate phantom updates to the data store.<para></para> Default value is true so that any change in the described property increases the owning component version.</para></entry>
               </row>
               <row>
                 <entry>
-                  <para><emphasis role='bold'>preferredWidth</emphasis><para><code> Integer</code></para></para>
+                  <para><emphasis role='bold'>computedFurther</emphasis><para><code> Boolean</code></para></para>
                 </entry>
-                <entry><para></para></entry>
+                <entry><para>Forces a property to be considered as a computed property by the framework. A computed property will be completely ignored by the persistence layer and its management is left to the developer.
+
+Properties declared with <emphasis role='bold'>computed = true</emphasis> are considered computed. However, there is sometimes a need to declare a property at some level (e.g. in an interface descriptor) and let lower level implementation decide how to handle this common property. In that case, you can declare this property computedFurther=true Default value is false</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -456,7 +448,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>string</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicStringPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Field Declaration of type String. To be used with _n where the value n determine the maximum string length  <programlisting><emphasis role='bold'>string_32</emphasis> 'name'
@@ -507,7 +500,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>text</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>string</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>maxLength, regex, regexSample, defaultValue, description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>maxLength, regex, regexSample, defaultValue, description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicTextPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Field declaration of type text. To be used with _n where the value n determine the maximum text length</para>
@@ -538,9 +532,11 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>password</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>string</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>maxLength, regex, regexSample, defaultValue, description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>maxLength, regex, regexSample, defaultValue, description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicPasswordPropertyDescriptor</code></listitem>
       </itemizedlist>
+      <para>Describes a property used for password values. For obvious security reasons, this type of properties will hardly be part of a persistent entity. However it is useful for defining transient view models, e.g. for implementing a change password action. Jspresso will automatically adapt view fields accordingly, using password fields, to interact with password properties.</para>
       <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
         <?dbfo keep-together='auto'?>
           <title>password properties</title>
@@ -555,7 +551,7 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
             </thead>
             <tbody>
               <row>
-                <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -565,7 +561,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>integer</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicIntegerPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes an integer property</para>
@@ -608,7 +605,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>date</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicDatePropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a date based property. Wether the date property should include time information or not, can be configured using <emphasis role='bold'>date</emphasis> or <emphasis role='bold'>date_time</emphasis> declaration</para>
@@ -645,7 +643,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>bool</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicBooleanPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a boolean property</para>
@@ -676,7 +675,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>decimal</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicDecimalPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a decimal property. Property value is either stored as a Double or as a BigDecimal depending on the usingBigDecimal property</para>
@@ -731,7 +731,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>time</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicTimePropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a property used to hold time only values. These properties use a Date to store their value but only the time part of the value is relevant</para>
@@ -762,7 +763,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>duration</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicDurationPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a property used to store a duration value. Duration is stored in the form of a number of milliseconds. duration properties are cleanly handled by Jspresso UI layer for both displaying / editing duration properties in a convenient human format.</para>
@@ -799,7 +801,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>percent</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>decimal</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>minValue, maxValue, usingBigDecimal, maxFractionDigit, defaultValue, description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>minValue, maxValue, usingBigDecimal, maxFractionDigit, defaultValue, description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicPercentPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>This is a specialization of decimal descriptor to handle percentage values. The impact of using this descriptor is only on the UI level that will be configured accordingly, i.e. displaying/editing properties as percentage instead of their raw decimal values.</para>
@@ -817,7 +820,7 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
             </thead>
             <tbody>
               <row>
-                <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -827,7 +830,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>enumeration</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicEnumerationPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>descriptor for properties whose values are enumerated strings. An example of such a property is gender whose value can be M (for "Male") or F (for "Female"). Actual property values can be codes that are translated for inclusion in the UI. Such properties are usually rendered as combo-boxes.</para>
@@ -882,7 +886,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>typeEnumeration</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>TypeEnumerationPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>This is a special enumeration descriptor that allows to build the enumeration out of a list of component descriptors. Enumeration values and icons are the names and icons of the registered component descriptors. For instance, this can be useful in the UI if you want to visually indicate the actual type of a element contained in a polymorphic collection</para>
@@ -925,7 +930,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>range</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>RangeEnumerationPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>This is a special enumeration descriptor that allows to build the enumeration values out of a list of integer values. Obviously, no icon is provided for a given value</para>
@@ -974,6 +980,7 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>refId</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>mandatory</emphasis> : <code>id</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
       </itemizedlist>
       <para>allows to point on a reference</para>
       <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
@@ -1003,7 +1010,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>color</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicColorPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a property used for storing a color. Color values are stored in the property as their string hexadecimal representation (0xrgba encoded). Jspresso cleanly handles color properties in views for both visually displaying and editing them without any extra effort. Moreover the ColorHelper helper class eases colors manipulation and helps converting to/from their hexadecimal representation.</para>
@@ -1034,7 +1042,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>binary</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicBinaryPropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a property used to store a binary value in the form of a byte array</para>
@@ -1055,7 +1064,7 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
                 <entry>
                   <para><emphasis role='bold'>maxLength</emphasis><para><code> Integer</code></para></para>
                 </entry>
-                <entry><para></para></entry>
+                <entry><para>Sets the max size of the byte array.</para></entry>
               </row>
               <row>
                 <entry>
@@ -1071,7 +1080,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>java</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>binary</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>fileFilter, description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>fileFilter, description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicJavaSerializablePropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a property used to store any java Serializable object. The property value is serialized/deserialized to/from the datastore. The operation is completely transparent to the developer, i.e. the developer never plays with the serialized form.</para>
@@ -1092,7 +1102,7 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
                 <entry>
                   <para><emphasis role='bold'>maxLength</emphasis><para><code> Integer</code></para></para>
                 </entry>
-                <entry><para></para></entry>
+                <entry><para>Sets the max size of the object in Byte.</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -1102,7 +1112,8 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>sourcecode</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>text</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>fileFilter, maxLength, regex, regexSample, defaultValue, description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>fileFilter, maxLength, regex, regexSample, defaultValue, description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicSourceCodePropertyDescriptor</code></listitem>
       </itemizedlist>
       <para>Describes a property as handing sourcecode content. This instructs Jspresso to display the property value as sourcecode, using syntax coloring for instance, instead of displaying unformatted raw content. The language used to format the property text content may be defined explicitely using the language property.</para>
@@ -1133,9 +1144,11 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>html</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>text</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>fileFilter, maxLength, regex, regexSample, defaultValue, description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>fileFilter, maxLength, regex, regexSample, defaultValue, description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicHtmlPropertyDescriptor</code></listitem>
       </itemizedlist>
+      <para>Describes a property as handing HTML content. This instructs Jspresso to display the property value as HTML instead of raw text content.</para>
       <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
         <?dbfo keep-together='auto'?>
           <title>html properties</title>
@@ -1150,7 +1163,7 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
             </thead>
             <tbody>
               <row>
-                <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -1163,11 +1176,12 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>reference</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>common</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
         <listitem><emphasis role='bold'>mandatory</emphasis> : <code>ref</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
         <listitem><emphasis role='bold'>Jspresso</emphasis> : <code>BasicReferencePropertyDescriptor</code></listitem>
       </itemizedlist>
-      <para></para>
+      <para>This descriptor is used to describe a reference to an other component (entities, interfaces or components)</para>
       <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
         <?dbfo keep-together='auto'?>
           <title>reference properties</title>
@@ -1203,13 +1217,13 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
                 <entry>
                   <para><emphasis role='bold'>fetch</emphasis><para><code> String</code></para></para><para><code>fetchType</code></para>
                 </entry>
-                <entry><para></para></entry>
+                <entry><para>By default Jspresso apply a lazy loading stategy, by setting fetch=true Jspresso will ask hibernate to load the child entity when parent is loaded. This option has to be used carfully, if you define too many non-lazy associations in your object model, Hibernate will fetch the entire database into memory in every transaction.</para></entry>
               </row>
               <row>
                 <entry>
                   <para><emphasis role='bold'>fkName</emphasis><para><code> String</code></para></para>
                 </entry>
-                <entry><para></para></entry>
+                <entry><para>Allows to customize the geneated foreign key (if any) name.</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -1219,8 +1233,9 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>list</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>reference</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>ref, reverse, composition, fetch, fkName, description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>ref, reverse, composition, fetch, fkName, description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
         <listitem><emphasis role='bold'>mandatory</emphasis> : <code>ref, ref</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
       </itemizedlist>
       <para>This descriptor is used to describe a collection of components (entities, interfaces or components). A list allows for duplicates and preserves the order of the elements in the datastore through an implicit index column.</para>
       <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
@@ -1250,8 +1265,9 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
       <title>set</title>
       <itemizedlist>
         <listitem><emphasis role='bold'>extend</emphasis> : <code>list</code></listitem>
-        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>ordering, ref, reverse, composition, fetch, fkName, description, i18nNameKey, mandatory, readOnly, grantedRoles, writability, paramSets, unicityScope, delegateWritable, processors, initializationMapping, parent, id, computed, computedFurther, sqlName, versionControl, preferredWidth</code></listitem>
+        <listitem><emphasis role='bold'>Inherited properties </emphasis> : <code>ordering, ref, reverse, composition, fetch, fkName, description, i18nNameKey, mandatory, readOnly, preferredWidth, computed, sqlName, parent, id, grantedRoles, booleanWritabilityGates, rolesWritabilityGates, unicityScope, delegateWritable, processors, initializationMapping, paramSets, versionControl, computedFurther</code></listitem>
         <listitem><emphasis role='bold'>mandatory</emphasis> : <code>ref, ref</code></listitem>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Entity, Interface, Component</code></listitem>
       </itemizedlist>
       <para>This descriptor is used to describe a collection of components (entities, interfaces or components).. A set do not allow for duplicates and do not preserve the order of the elements in the datastore.</para>
       <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
@@ -1268,7 +1284,119 @@ Properties declared with <emphasis role='bold'>useExtension = true</emphasis> ar
             </thead>
             <tbody>
               <row>
-                <entry namest='property' nameend='description'>This class does not have any specific property.</entry>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+  </section>
+  <section>
+    <title>Support</title>
+    <section>
+      <title>external</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Domain</code></listitem>
+      </itemizedlist>
+      <para>This descriptor allowed declaring references which are not described in the SJS description of the application. since all references are controlled by SJS, it is necessary to declare the external references.</para>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>external properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>
+                  <para><emphasis role='bold'>id</emphasis><para><code> ListOfString</code></para></para>
+                </entry>
+                <entry><para>list identifiers of descriptors <programlisting><emphasis role='bold'>external</emphasis>(id: ['com.appli.model.content.aCatalog',
+              'com.appli.model.content.aMenu'])</programlisting></para></entry>
+              </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>paramSet</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Domain, Entity, Interface, Component</code></listitem>
+      </itemizedlist>
+      <para>paramSet allows to create a reusable groups of properties in SJS declarations. <programlisting> paramSet 'myCommon', readOnly:true, mandatory:true  </programlisting> paramSet can be used by declaration SJS using the attribute paramSets</para>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>paramSet properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>namespace</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Domain, Entity, Interface, Component</code></listitem>
+      </itemizedlist>
+      <para>namespace allows to declare and open a namespace scope. The use of namespaces allows simplifying the declarations SJS referring to resources with a complex path. <programlisting> namespace('org.jspresso.hrsample'){...} </programlisting> This declaration allows, for example, to replace the following statement <programlisting> Entity('City', 
+          icon: 'classpath:org/jspresso/hrsample/images/city-48x48.png'){...} </programlisting> by <programlisting> ('City',icon:'city-48x48.png') {...} </programlisting> With namespaces, conventions on the organization of the Jspresso's directories are used. In this exemple, images are in the subdirectory /images of the project</para>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>namespace properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+      </table>
+    </section>
+    <section>
+      <title>include</title>
+      <itemizedlist>
+        <listitem><emphasis role='bold'>allowed previous element</emphasis> : <code>Domain, Entity, Interface, Component</code></listitem>
+      </itemizedlist>
+      <para>include allows to use multi SJS sources files and to include them into each other. <programlisting> include('fileName') </programlisting></para>
+      <table colsep='0' rowsep='1' tabstyle='splitable' frame='topbot'>
+        <?dbfo keep-together='auto'?>
+          <title>include properties</title>
+          <tgroup cols='2'>
+            <colspec colname='property' colwidth='1*' />
+            <colspec colname='description' colwidth='2*' />
+            <thead>
+              <row>
+                <entry align='left'>Property</entry>
+                <entry align='left'>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry namest='property' nameend='description'>This class does not have any specific named property.</entry>
               </row>
             </tbody>
           </tgroup>
