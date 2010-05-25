@@ -173,8 +173,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }
       var preferredSize = remoteComponent.getPreferredSize();
       if(preferredSize) {
-      	component.setWidth(preferredSize.getWidth());
-      	component.setHeight(preferredSize.getHeight());
+        if(preferredSize.getWidth() > 0) {
+          component.setWidth(preferredSize.getWidth());
+        }
+        if(preferredSize.getHeight() > 0) {
+          component.setHeight(preferredSize.getHeight());
+        }
       }
       if(registerState) {
         this.__remotePeerRegistry.register(remoteComponent.getState());

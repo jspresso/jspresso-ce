@@ -230,9 +230,12 @@ public class DefaultWingsController extends
         IView<SComponent> workspaceNavigator = createWorkspaceNavigator(
             workspaceName, workspaceNavigatorViewDescriptor);
         IView<SComponent> moduleAreaView = createModuleAreaView(workspaceName);
+        moduleAreaView.getPeer().setPreferredSize(SDimension.FULLAREA);
 
         // Split pane definition !!!
         SPanel workspaceView = new SPanel(new SGridBagLayout());
+        workspaceView.setPreferredSize(SDimension.FULLAREA);
+
         Insets insets = new Insets(0, 0, 0, 0);
 
         workspaceNavigator.getPeer().setHorizontalAlignment(
