@@ -16,7 +16,7 @@
   <bean id="commonsMessageSource" class="org.jspresso.framework.util.i18n.EnhancedResourceBundleMessageSource">
     <property name="parentMessageSource" ref="mockMessageSource" />
     <property name="basename" value="org.jspresso.framework.application.i18n.Commons" />
-    <property name="resolveNested" value="false"/>
+    <property name="resolveNested" value="false" />
   </bean>
 
   <bean id="abstractApplicationMessageSource" abstract="true"
@@ -129,7 +129,7 @@
 
   <bean id="createQueryComponentAction" class="org.jspresso.framework.application.backend.action.CreateQueryComponentAction" />
 
-  <bean id="initModuleFilterAction" class="org.jspresso.framework.application.backend.action.module.InitModuleFilterAction"/>
+  <bean id="initModuleFilterAction" class="org.jspresso.framework.application.backend.action.module.InitModuleFilterAction" />
 
   <!--
     The implementation used as view factory. View factory is not defined as singleton since it can implement some cache
@@ -150,10 +150,14 @@
     <property name="binaryPropertyInfoAction" ref="binaryPropertyInfoAction" />
   </bean>
 
+  <bean id="viewFactoryBase" parent="abstractViewFactory" abstract="true" />
+
   <bean id="abstractActionFactory" abstract="true">
     <property name="translationProvider" ref="translationProvider" />
     <property name="iconFactory" ref="iconFactory" />
   </bean>
+
+  <bean id="actionFactoryBase" parent="abstractActionFactory" abstract="true" />
 
   <!--
     The scriptHandler.
@@ -178,9 +182,9 @@
     <property name="viewFactory" ref="viewFactory" />
     <property name="workspacesMenuIconImageUrl" value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
     <property name="loginViewDescriptor" ref="loginViewDescriptor" />
-    <property name="actionMap" ref="moduleHistoryNavigationActionMap"/>
-    <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction"/>
-    <property name="exitAction" ref="exitFrontAction"/>
+    <property name="actionMap" ref="moduleHistoryNavigationActionMap" />
+    <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction" />
+    <property name="exitAction" ref="exitFrontAction" />
   </bean>
 
   <bean abstract="true" id="abstractIconFactory" class="org.jspresso.framework.view.AbstractIconFactory">
@@ -198,6 +202,10 @@
     <property name="downIconImageURL" value="classpath:org/jspresso/framework/application/images/1downarrow-48x48.png" />
   </bean>
 
+  <bean id="iconFactoryBase" parent="abstractIconFactory" abstract="true" />
+
+
+
   <bean abstract="true" id="abstractBackController" class="org.jspresso.framework.application.backend.AbstractBackendController">
     <property name="entityFactory" ref="sessionAwareEntityFactory" />
     <property name="modelConnectorFactory" ref="modelConnectorFactory" />
@@ -213,9 +221,7 @@
     <property name="carbonEntityCloneFactory">
       <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" />
     </property>
-    <property
-      name="transactionTemplate"
-      ref="transactionTemplate" />
+    <property name="transactionTemplate" ref="transactionTemplate" />
   </bean>
 
   <!--

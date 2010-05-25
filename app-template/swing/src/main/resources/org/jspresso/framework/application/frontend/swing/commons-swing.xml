@@ -31,10 +31,9 @@
   <!--
     The implementation used as view factory.
   -->
-  <bean id="iconFactory" parent="abstractIconFactory" class="org.jspresso.framework.view.swing.SwingIconFactory"
-    scope="prototype" />
+  <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.swing.SwingIconFactory" scope="prototype" />
 
-  <bean id="actionFactory" parent="abstractActionFactory" class="org.jspresso.framework.view.swing.SwingActionFactory"
+  <bean id="actionFactory" parent="actionFactoryBase" class="org.jspresso.framework.view.swing.SwingActionFactory"
     scope="prototype" />
 
   <bean id="openFileAction" parent="abstractOpenFileAction" class="org.jspresso.framework.application.frontend.action.swing.file.OpenFileAction" />
@@ -49,7 +48,7 @@
 
   <bean id="displayReportAction" class="org.jspresso.framework.application.printing.frontend.action.swing.DisplayJasperReportAction" />
 
-  <bean id="viewFactory" class="org.jspresso.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory"
+  <bean id="viewFactory" class="org.jspresso.framework.view.swing.DefaultSwingViewFactory" parent="viewFactoryBase"
     scope="prototype">
     <property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
     <property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />

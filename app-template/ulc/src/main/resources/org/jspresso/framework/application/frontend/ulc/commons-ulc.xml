@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true">
 
@@ -12,23 +10,17 @@
   <!--
     The implementation used as ConnectorFactory.
   -->
-  <bean
-    id="connectorFactory"
-    class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
+  <bean id="connectorFactory" class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
 
   <!--
     The implementation used as ListSelectionModelBinder.
   -->
-  <bean
-    id="listSelectionModelBinder"
-    class="org.jspresso.framework.binding.ulc.DefaultListSelectionModelBinder" />
+  <bean id="listSelectionModelBinder" class="org.jspresso.framework.binding.ulc.DefaultListSelectionModelBinder" />
 
   <!--
     The implementation used as TreeSelectionModelBinder.
   -->
-  <bean
-    id="treeSelectionModelBinder"
-    class="org.jspresso.framework.binding.ulc.DefaultTreeSelectionModelBinder" />
+  <bean id="treeSelectionModelBinder" class="org.jspresso.framework.binding.ulc.DefaultTreeSelectionModelBinder" />
 
   <!--
     Action beans
@@ -43,64 +35,34 @@
   <!--
     This icon factory is defined as non-singleton since it implements a per ulc session cache.
   -->
-  <bean
-    id="iconFactory"
-    parent="abstractIconFactory"
-    class="org.jspresso.framework.view.ulc.UlcIconFactory"
+  <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.ulc.UlcIconFactory" scope="prototype" />
+
+  <bean id="actionFactory" parent="actionFactoryBase" class="org.jspresso.framework.view.ulc.UlcActionFactory"
     scope="prototype" />
 
-  <bean
-    id="actionFactory"
-    parent="abstractActionFactory"
-    class="org.jspresso.framework.view.ulc.UlcActionFactory"
-    scope="prototype" />
+  <bean id="openFileAction" parent="abstractOpenFileAction" class="org.jspresso.framework.application.frontend.action.ulc.file.OpenFileAction" />
 
-  <bean
-    id="openFileAction"
-    parent="abstractOpenFileAction"
-    class="org.jspresso.framework.application.frontend.action.ulc.file.OpenFileAction" />
-
-  <bean
-    id="openFileAsBinaryPropertyAction"
-    parent="abstractOpenFileAction"
+  <bean id="openFileAsBinaryPropertyAction" parent="abstractOpenFileAction"
     class="org.jspresso.framework.application.frontend.action.ulc.file.OpenFileAsBinaryPropertyAction" />
 
-  <bean
-    id="saveFileAction"
-    parent="abstractSaveFileAction"
-    class="org.jspresso.framework.application.frontend.action.ulc.file.SaveFileAction" />
+  <bean id="saveFileAction" parent="abstractSaveFileAction" class="org.jspresso.framework.application.frontend.action.ulc.file.SaveFileAction" />
 
-  <bean
-    id="saveBinaryPropertyAsFileAction"
-    parent="saveFileAction"
+  <bean id="saveBinaryPropertyAsFileAction" parent="saveFileAction"
     class="org.jspresso.framework.application.frontend.action.ulc.file.SaveBinaryPropertyAsFileAction" />
 
-  <bean
-    id="displayReportAction"
-    class="org.jspresso.framework.application.printing.frontend.action.ulc.DisplayJasperReportAction" />
+  <bean id="displayReportAction" class="org.jspresso.framework.application.printing.frontend.action.ulc.DisplayJasperReportAction" />
 
-  <bean
-    id="viewFactory"
-    parent="abstractViewFactory"
-    class="org.jspresso.framework.view.ulc.DefaultUlcViewFactory"
+  <bean id="viewFactory" parent="viewFactoryBase" class="org.jspresso.framework.view.ulc.DefaultUlcViewFactory"
     scope="prototype">
-    <property
-      name="listSelectionModelBinder"
-      ref="listSelectionModelBinder" />
-    <property
-      name="treeSelectionModelBinder"
-      ref="treeSelectionModelBinder" />
+    <property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
+    <property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
   </bean>
 
   <!--
     The controllers.
   -->
-  <bean
-    id="frontController"
-    abstract="true"
-    parent="abstractFrontController"
-    class="org.jspresso.framework.application.frontend.controller.ulc.DefaultUlcController"
-    scope="prototype">
+  <bean id="frontController" abstract="true" parent="abstractFrontController"
+    class="org.jspresso.framework.application.frontend.controller.ulc.DefaultUlcController" scope="prototype">
   </bean>
 
 </beans>
