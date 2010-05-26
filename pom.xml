@@ -42,6 +42,10 @@
       <organization>Jspresso</organization>
     </developer>
   </developers>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sjs.version>1.0-SNAPSHOT</sjs.version>
+  </properties>
   <pluginRepositories>
     <pluginRepository>
     	<id>sonatype-repository</id>
@@ -118,12 +122,25 @@
         <classifier>archive</classifier>
         <type>zip</type>
       </dependency>
+      <dependency>
+        <groupId>org.jspresso.contrib</groupId>
+        <artifactId>jspresso-sjs-documentation</artifactId>
+        <version>${sjs.version}</version>
+        <classifier>archive</classifier>
+        <type>zip</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>
       <artifactId>jspresso-documentation</artifactId>
+      <classifier>archive</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.contrib</groupId>
+      <artifactId>jspresso-sjs-documentation</artifactId>
       <classifier>archive</classifier>
       <type>zip</type>
     </dependency>
@@ -252,6 +269,19 @@
               <excludeTransitive>true</excludeTransitive>
             </configuration>
           </execution>
+          <execution>
+            <id>unpack-sjs-documentation</id>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <phase>pre-site</phase>
+            <configuration>
+              <outputDirectory>${project.reporting.outputDirectory}/docs/sjs-reference</outputDirectory>
+              <includeArtifactIds>jspresso-sjs-documentation</includeArtifactIds>
+              <includeClassifiers>archive</includeClassifiers>
+              <excludeTransitive>true</excludeTransitive>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -319,7 +349,4 @@
       </plugin>
     </plugins>
   </reporting>
-  <properties>
-  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 </project>

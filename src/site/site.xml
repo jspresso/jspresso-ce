@@ -27,6 +27,11 @@
         name="Reference Documentation"
         href="docs/reference/html-chunked/en/reference-guide.html" />
     </menu>
+    <menu name="SJS Reference Doc">
+      <item
+        name="SJS Reference Documentation"
+        href="docs/sjs-reference/html-chunked/en/reference-guide.html" />
+    </menu>
     <menu ref="parent" />
     <menu ref="modules"/>
     <menu ref="reports" />
