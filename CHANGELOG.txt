@@ -1,4 +1,4 @@
-3.0.1
+3.5.0
 =====
 Bugs fixed
 ----------
@@ -156,7 +156,7 @@ New features
 =====
 Bugs fixed
 ----------
-2157885    Entities registered for update are not correctly processsed
+2157885    Entities registered for update are not correctly processed
 2181095    Build fails on linux for generated projects
 2201522    abstractFilterableBeanCollectionModule is broken
 
