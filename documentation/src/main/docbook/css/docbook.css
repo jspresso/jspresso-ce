@@ -150,8 +150,11 @@ BODY P B.APPLICATION {
 } 
 
 .PROGRAMLISTING, .SCREEN {
-	background-color: #DEE3E7;
-	padding: 4px;
+  background-color: #DEE3E7;
+  padding: 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #575757;
 }
 
 @media screen {  /* hide from IE3 */

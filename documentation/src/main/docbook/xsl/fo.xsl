@@ -60,6 +60,11 @@
     </xsl:attribute>
   </xsl:attribute-set>
 
+  <xsl:attribute-set name="shade.verbatim.style">
+    <xsl:attribute name="border">thin black solid</xsl:attribute>
+    <xsl:attribute name="padding">4pt</xsl:attribute>
+  </xsl:attribute-set>
+
   <xsl:attribute-set
     name="formal.title.properties">
     <xsl:attribute name="text-align">center</xsl:attribute>
