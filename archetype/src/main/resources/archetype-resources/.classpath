@@ -32,6 +32,11 @@
     output="core/target/classes"
     path="core/target/generated-resources/dsl" />
   <classpathentry
+    excluding="application.groovy"
+    kind="src"
+    output="core/target/classes"
+    path="core/src/main/dsl" />
+  <classpathentry
     kind="src"
     output="startup/swing/target/classes"
     path="startup/swing/src/main/java" />
