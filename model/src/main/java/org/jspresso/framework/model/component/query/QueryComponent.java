@@ -103,7 +103,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       if (IEntity.class.isAssignableFrom(referencedDescriptor
           .getComponentContract())) {
         if (!(value instanceof IQueryComponent)) {
-          Object actualValue = super.get(key);
+          Object actualValue = /* super. */get(key);
           String tsProp = referencedDescriptor.getToStringProperty();
           String reProp = null;
           if (referencedDescriptor.getRenderedProperties() != null
