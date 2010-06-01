@@ -1,0 +1,147 @@
+/**
+ * Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * This file is part of the Jspresso framework. Jspresso is free software: you
+ * can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version. Jspresso is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details. You should have received a copy of the GNU Lesser General Public
+ * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.jspresso.framework.view.flex {
+  import flash.events.Event;
+  import flash.events.KeyboardEvent;
+  import flash.events.MouseEvent;
+  
+  import mx.controls.CheckBox;
+  import mx.controls.DataGrid;
+  import mx.controls.listClasses.IDropInListItemRenderer;
+  import mx.controls.listClasses.IListItemRenderer;
+  import mx.core.mx_internal;
+  import mx.events.DataGridEvent;
+  
+  use namespace mx_internal;
+  
+  /** 
+   *  DataGrid that only allows editing if you double click
+   */
+  public class EnhancedDataGrid extends DataGrid {
+    
+    private var preventEditing:Boolean;
+    
+    private var lastClickedRow:int;
+    private var lastClickedColumn:int;
+    private var _savedSortIndex:int;
+    private var _savedSortDirection:String;
+    private var _customSort:Boolean;
+    private var _cbMultiSelection:Boolean;
+    
+    public function EnhancedDataGrid()	{
+      super();
+      doubleClickEnabled = true;
+      preventEditing = false;
+      lastClickedRow = -1;
+      lastClickedColumn = -1;
+      _savedSortIndex = -1;
+      _customSort = false;
+      _cbMultiSelection = false;
+      addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, itemEditBeginning);
+    }
+    
+    override protected function mouseDoubleClickHandler(event:MouseEvent):void {
+      preventEditing = false;
+      super.mouseDoubleClickHandler(event);
+    }
+    
+    override protected function mouseUpHandler(event:MouseEvent):void	{
+      var r:IListItemRenderer;
+      
+      r = mouseEventToItemRenderer(event);
+      
+      if (r && r is IDropInListItemRenderer) {
+        var dilr:IDropInListItemRenderer = r as IDropInListItemRenderer;
+        if(   dilr.listData.rowIndex != lastClickedRow
+          || dilr.listData.columnIndex != lastClickedColumn) {
+          preventEditing = true; 
+        } else {
+          preventEditing = false;
+        }
+        lastClickedRow = dilr.listData.rowIndex;
+        lastClickedColumn = dilr.listData.columnIndex;
+      } else {
+        preventEditing = false;
+      }
+      super.mouseUpHandler(event);
+    }
+    
+    public function itemEditBeginning(event:DataGridEvent):void {
+      if(preventEditing) {
+        event.preventDefault();
+      }
+    }
+    
+    public function set customSort(value:Boolean):void {
+      _customSort = value;
+    }
+    public function get customSort():Boolean {
+      return _customSort;
+    }
+    
+    public function displaySort(sortInd:int, descending:Boolean):void {
+      sortDirection = descending ? "DESC" : "ASC";
+      
+      // set the grid's sortIndex
+      lastSortIndex = sortIndex;
+      sortIndex = sortInd;
+      
+      // save sort information to be applied when dataProvider changes
+      _savedSortIndex = sortIndex;
+      _savedSortDirection = sortDirection;
+      
+      invalidateDisplayList();
+    }
+    
+    override protected function collectionChangeHandler(event:Event):void {
+      super.collectionChangeHandler(event);
+      if(_customSort) {
+        sortIndex = _savedSortIndex;
+        sortDirection = _savedSortDirection;
+      }
+    }
+    
+    public function set cbMultiSelection(value:Boolean):void {
+      _cbMultiSelection = value;
+    }
+    
+    public function get cbMultiSelection():Boolean {
+      return _cbMultiSelection;
+    }
+
+    override protected function selectItem(item:IListItemRenderer,
+                                           shiftKey:Boolean, ctrlKey:Boolean,
+                                           transition:Boolean = true):Boolean {
+      // only run selection code if a checkbox was hit and always
+      // pretend we're using ctrl selection
+      if (_cbMultiSelection && item is SelectionCheckBoxRenderer) {
+        return super.selectItem(item, false, true, transition);
+      }
+      return super.selectItem(item, shiftKey, ctrlKey, transition);
+    }
+    
+    // whenever we draw the renderer, make sure we re-eval the checked state
+    override protected function drawItem(item:IListItemRenderer,
+                                         selected:Boolean = false,
+                                         highlighted:Boolean = false,
+                                         caret:Boolean = false,
+                                         transition:Boolean = false):void { 
+      if(_cbMultiSelection && item is SelectionCheckBoxRenderer) {
+        (item as SelectionCheckBoxRenderer).invalidateProperties();
+      }
+      super.drawItem(item, selected, highlighted, caret, transition);
+    }
+  }
+}
