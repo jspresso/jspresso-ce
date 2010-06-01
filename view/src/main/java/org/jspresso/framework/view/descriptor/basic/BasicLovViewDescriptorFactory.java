@@ -25,6 +25,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDesc
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -173,6 +174,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
+    resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
     return resultViewDescriptor;
   }
 }
