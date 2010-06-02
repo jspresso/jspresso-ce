@@ -43,17 +43,21 @@ public class BasicQueryViewDescriptorFactory implements
       IComponentDescriptor<Object> queryComponentDescriptor) {
     BasicQueryComponentDescriptor actualModelDescriptor = new BasicQueryComponentDescriptor(
         queryComponentDescriptor);
-    BasicComponentViewDescriptor queryViewDescriptor = new BasicComponentViewDescriptor();
-    queryViewDescriptor.setModelDescriptor(actualModelDescriptor);
-    queryViewDescriptor.setBorderType(EBorderType.TITLED);
+    BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     Map<String, Object> propertyWidths = new HashMap<String, Object>();
     for (String queriableProperty : queryComponentDescriptor
         .getQueryableProperties()) {
       // To preserve col spans for query structures.
       propertyWidths.put(queriableProperty, new Integer(3));
     }
-    queryViewDescriptor.setPropertyWidths(propertyWidths);
-    queryViewDescriptor.setColumnCount(6);
+    queryComponentViewDescriptor.setPropertyWidths(propertyWidths);
+    queryComponentViewDescriptor.setColumnCount(6);
+
+    BasicBorderViewDescriptor queryViewDescriptor = new BasicBorderViewDescriptor();
+    queryViewDescriptor.setWestViewDescriptor(queryComponentViewDescriptor);
+
+    queryViewDescriptor.setModelDescriptor(actualModelDescriptor);
+    queryViewDescriptor.setBorderType(EBorderType.TITLED);
     return queryViewDescriptor;
   }
 }

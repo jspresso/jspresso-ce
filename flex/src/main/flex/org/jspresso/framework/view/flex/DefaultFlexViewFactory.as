@@ -506,6 +506,10 @@ package org.jspresso.framework.view.flex {
     
     protected function createActionField(remoteActionField:RActionField):UIComponent {
       var actionField:HBox = new HBox();
+      actionField.setStyle("verticalAlign","middle");
+      var maxWidth:int = 0;
+      actionField.regenerateStyleCache(false);
+      var hGap:int = actionField.getStyle("horizontalGap");
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
       actionField.verticalScrollPolicy = ScrollPolicy.OFF;
       var textField:TextInput;
@@ -516,6 +520,7 @@ package org.jspresso.framework.view.flex {
         textField.name = "tf";
         actionField.addChild(textField);
         sizeMaxComponentWidth(textField);
+        maxWidth += textField.maxWidth;
       }
       var actionComponents:Array = new Array();
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
@@ -523,9 +528,12 @@ package org.jspresso.framework.view.flex {
         for(var j:int = 0; j < actionList.actions.length; j++) {
           var actionComponent:UIComponent = createAction(actionList.actions[j])
           actionField.addChild(actionComponent);
-          actionComponents.push(actionComponent)
+          actionComponents.push(actionComponent);
+          maxWidth += actionComponent.width;
+          maxWidth += hGap;
         }
       }
+      actionField.maxWidth = maxWidth;
       bindActionField(actionField, textField, remoteActionField.state, (remoteActionField.actionLists[0] as RActionList).actions[0], actionComponents);
       return actionField;
     }
@@ -622,7 +630,7 @@ package org.jspresso.framework.view.flex {
           width = tr.length;
         }
       }
-      width += 4;
+      width += 8;
       sizeMaxComponentWidth(comboBox, width);
       return comboBox;
     }
@@ -651,48 +659,50 @@ package org.jspresso.framework.view.flex {
       }
 
       // NORTH
-      row = new GridRow();
-      row.percentWidth = 100.0;
-      borderContainer.addChild(row);
-      
-      cell = new GridItem();
-      cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
-      cell.verticalScrollPolicy  = ScrollPolicy.OFF;
-      cell.colSpan = nbCols;
-      cell.percentWidth = 100.0;
       if(remoteBorderContainer.north != null) {
-        cellComponent = createComponent(remoteBorderContainer.north);
-        cell.minHeight = cellComponent.minHeight;
-        if(cellComponent.minHeight > 0) {
-          cell.maxHeight = cellComponent.minHeight;
-        } else if(cellComponent.height > 0) {
-          cell.maxHeight = cellComponent.height;
-        } else if(cellComponent.maxHeight > 0) {
-          cell.maxHeight = cellComponent.maxHeight;
+        row = new GridRow();
+        row.percentWidth = 100.0;
+        borderContainer.addChild(row);
+        
+        cell = new GridItem();
+        cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        cell.verticalScrollPolicy  = ScrollPolicy.OFF;
+        cell.colSpan = nbCols;
+        cell.percentWidth = 100.0;
+        if(remoteBorderContainer.north != null) {
+          cellComponent = createComponent(remoteBorderContainer.north);
+          cell.minHeight = cellComponent.minHeight;
+          if(cellComponent.minHeight > 0) {
+            cell.maxHeight = cellComponent.minHeight;
+          } else if(cellComponent.height > 0) {
+            cell.maxHeight = cellComponent.height;
+          } else if(cellComponent.maxHeight > 0) {
+            cell.maxHeight = cellComponent.maxHeight;
+          }
+          cellComponent.percentWidth = 100.0;
+          cellComponent.percentHeight = 100.0;
+          cell.addChild(cellComponent);
         }
-        cellComponent.percentWidth = 100.0;
-        cellComponent.percentHeight = 100.0;
-        cell.addChild(cellComponent);
+        if(cell.maxHeight > 0) {
+          cell.setStyle("paddingLeft",2);
+          cell.setStyle("paddingRight",2);
+          cell.maxHeight += 4;
+        }
+        row.addChild(cell);
       }
-      if(cell.maxHeight > 0) {
-        cell.setStyle("paddingLeft",2);
-        cell.setStyle("paddingRight",2);
-        cell.maxHeight += 4;
-      }
-      row.addChild(cell);
-
+      
       // WEST, CENTER, EAST
       row = new GridRow();
       row.percentWidth = 100.0;
       row.percentHeight = 100.0;
       borderContainer.addChild(row);
-
+  
       if(remoteBorderContainer.west != null) {
         cellComponent = createComponent(remoteBorderContainer.west);
         cell = new GridItem();
         cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         cell.verticalScrollPolicy  = ScrollPolicy.OFF;
-        //cell.setStyle("horizontalAlign", "left");
+        cell.setStyle("horizontalAlign", "left");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
         if(cellComponent.minWidth > 0) {
@@ -711,7 +721,7 @@ package org.jspresso.framework.view.flex {
         }
         row.addChild(cell);
       }
-
+  
       cell = new GridItem();
       cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
       cell.verticalScrollPolicy  = ScrollPolicy.OFF;
@@ -724,13 +734,13 @@ package org.jspresso.framework.view.flex {
         cell.addChild(cellComponent);
       }
       row.addChild(cell);
-
+  
       if(remoteBorderContainer.east != null) {
         cellComponent = createComponent(remoteBorderContainer.east);
         cell = new GridItem();
         cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         cell.verticalScrollPolicy  = ScrollPolicy.OFF;
-        //cell.setStyle("horizontalAlign", "right");
+        cell.setStyle("horizontalAlign", "right");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
         if(cellComponent.minWidth > 0) {
@@ -750,35 +760,37 @@ package org.jspresso.framework.view.flex {
         row.addChild(cell);
       }
       
-      // SOUTH
-      row = new GridRow();
-      row.percentWidth = 100.0;
-      borderContainer.addChild(row);
-      cell = new GridItem();
-      cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
-      cell.verticalScrollPolicy  = ScrollPolicy.OFF;
-      cell.colSpan = nbCols;
-      cell.percentWidth = 100.0;
       if(remoteBorderContainer.south != null) {
-        cellComponent = createComponent(remoteBorderContainer.south);
-        cell.minHeight = cellComponent.minHeight;
-        if(cellComponent.minHeight > 0) {
-          cell.maxHeight = cellComponent.minHeight;
-        } else if(cellComponent.height > 0) {
-          cell.maxHeight = cellComponent.height;
-        } else if(cellComponent.maxHeight > 0) {
-          cell.maxHeight = cellComponent.maxHeight;
+        // SOUTH
+        row = new GridRow();
+        row.percentWidth = 100.0;
+        borderContainer.addChild(row);
+        cell = new GridItem();
+        cell.horizontalScrollPolicy  = ScrollPolicy.OFF;
+        cell.verticalScrollPolicy  = ScrollPolicy.OFF;
+        cell.colSpan = nbCols;
+        cell.percentWidth = 100.0;
+        if(remoteBorderContainer.south != null) {
+          cellComponent = createComponent(remoteBorderContainer.south);
+          cell.minHeight = cellComponent.minHeight;
+          if(cellComponent.minHeight > 0) {
+            cell.maxHeight = cellComponent.minHeight;
+          } else if(cellComponent.height > 0) {
+            cell.maxHeight = cellComponent.height;
+          } else if(cellComponent.maxHeight > 0) {
+            cell.maxHeight = cellComponent.maxHeight;
+          }
+          cellComponent.percentWidth = 100.0;
+          cellComponent.percentHeight = 100.0;
+          cell.addChild(cellComponent);
         }
-        cellComponent.percentWidth = 100.0;
-        cellComponent.percentHeight = 100.0;
-        cell.addChild(cellComponent);
+        if(cell.maxHeight > 0) {
+          cell.setStyle("paddingLeft",2);
+          cell.setStyle("paddingRight",2);
+          cell.maxHeight += 4;
+        }
+        row.addChild(cell);
       }
-      if(cell.maxHeight > 0) {
-        cell.setStyle("paddingLeft",2);
-        cell.setStyle("paddingRight",2);
-        cell.maxHeight += 4;
-      }
-      row.addChild(cell);
 
       return borderContainer;
     }
@@ -1035,6 +1047,7 @@ package org.jspresso.framework.view.flex {
           componentCell.colSpan = elementWidth;
         } else if(remoteForm.labelsPosition == "ASIDE") {
           labelCell.setStyle("verticalAlign","middle");
+          labelCell.setStyle("horizontalAlign","right");
           componentCell.colSpan = (elementWidth * 2) - 1;
         } else if(remoteForm.labelsPosition == "NONE") {
           componentCell.colSpan = elementWidth;
@@ -1048,12 +1061,23 @@ package org.jspresso.framework.view.flex {
         }   
 
         if(remoteForm.labelsPosition != "NONE") {
+//          labelCell.setStyle("borderStyle","solid");
           labelsRow.addChild(labelCell);
-          labelCell.addChild(componentLabel);
+          if((componentLabel as Label).text.length > 0) {
+            labelCell.addChild(componentLabel);
+            labelCell.maxWidth = componentLabel.maxWidth;
+          } else {
+            labelCell.maxWidth = 0;
+          }
         }
 
         componentCell.percentWidth=100.0;
         componentCell.percentHeight=100.0;
+        if(component.maxWidth > 0 && component.maxWidth < 1000) {
+          componentCell.maxWidth = component.maxWidth;
+          componentCell.width = component.maxWidth;
+        }
+//        componentCell.setStyle("borderStyle","solid");
         componentsRow.addChild(componentCell);
         
         component.percentWidth = 100.0;
@@ -1685,11 +1709,6 @@ package org.jspresso.framework.view.flex {
 
     protected function createLabel(remoteLabel:RLabel):UIComponent {
       var label:Label = new Label();
-//      if(remoteLabel.maxLength > 0) {
-//        sizeMaxComponentWidth(label, remoteLabel.maxLength);
-//      } else {
-//        sizeMaxComponentWidth(label);
-//      }
       if(!remoteLabel.state && remoteLabel.label) {
         if(HtmlUtil.isHtml(remoteLabel.label)) {
           label.text = null;
@@ -1697,6 +1716,9 @@ package org.jspresso.framework.view.flex {
         } else {
           label.htmlText = null;
           label.text = remoteLabel.label;
+          if(label.text != null) {
+            sizeMaxComponentWidth(label, label.text.length + 5);
+          }
         }
       }
       if(remoteLabel.state) {
@@ -1759,8 +1781,10 @@ package org.jspresso.framework.view.flex {
 	    } else if(icon) {
 	      button.regenerateStyleCache(false);
 	      var cornerRadius:Number = button.getStyle("cornerRadius") as Number;
-	      button.width = icon.dimension.width + cornerRadius;
+        button.width = icon.dimension.width + cornerRadius;
+        //button.maxWidth = button.width;
 	      button.height = icon.dimension.height + cornerRadius;
+        //button.maxHeight = button.height;
 	    }
 	    if(tooltip) {
 		    button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
