@@ -1053,13 +1053,6 @@ package org.jspresso.framework.view.flex {
           componentCell.colSpan = elementWidth;
         }
 
-        if(   rComponent is RTable
-           || rComponent is RTextArea
-           || rComponent is RList
-           || rComponent is RHtmlArea) {
-          componentsRow.percentHeight = 100.0;         
-        }   
-
         if(remoteForm.labelsPosition != "NONE") {
 //          labelCell.setStyle("borderStyle","solid");
           labelsRow.addChild(labelCell);
@@ -1073,11 +1066,17 @@ package org.jspresso.framework.view.flex {
 
         componentCell.percentWidth=100.0;
         componentCell.percentHeight=100.0;
-        if(component.maxWidth > 0 && component.maxWidth < 1000) {
+        if(  rComponent is RTable
+          || rComponent is RTextArea
+          || rComponent is RList
+          || rComponent is RHtmlArea) {
+          componentsRow.percentHeight = 100.0;
+        } else if(component.maxWidth > 0 && component.maxWidth < 1000) {
           componentCell.maxWidth = component.maxWidth;
           componentCell.width = component.maxWidth;
         }
 //        componentCell.setStyle("borderStyle","solid");
+//        componentsRow.setStyle("borderStyle","solid");
         componentsRow.addChild(componentCell);
         
         component.percentWidth = 100.0;
@@ -1386,7 +1385,7 @@ package org.jspresso.framework.view.flex {
         table.allowMultipleSelection = false;
       } else {
         table.allowMultipleSelection = true;
-        table.cbMultiSelection = true;
+//        table.cbMultiSelection = true;
         if(table.cbMultiSelection) {
           var selectionColumn:DataGridColumn = new DataGridColumn();
           selectionColumn.itemRenderer = new ClassFactory(SelectionCheckBoxRenderer);
