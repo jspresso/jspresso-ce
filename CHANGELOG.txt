@@ -114,7 +114,9 @@ New features
 2909947    Allow to specify preferredSize on view descriptors
 2977933    Further refinement for actionability gates
 2979892    Not static defaultFileName for SaveFileAction
-2978837    FilterModule form 
+2978837    FilterModule form
+2984702    FilterModule and date query fields
+2990866    Multi selection by check boxes
 
 3.0.0
 =====
