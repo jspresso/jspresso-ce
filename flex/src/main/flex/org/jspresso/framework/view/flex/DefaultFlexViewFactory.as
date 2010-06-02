@@ -1058,9 +1058,13 @@ package org.jspresso.framework.view.flex {
           labelsRow.addChild(labelCell);
           if((componentLabel as Label).text.length > 0) {
             labelCell.addChild(componentLabel);
-            labelCell.maxWidth = componentLabel.maxWidth;
+            if(remoteForm.labelsPosition == "ASIDE") {
+              labelCell.maxWidth = componentLabel.maxWidth;
+            }
           } else {
-            labelCell.maxWidth = 0;
+            if(remoteForm.labelsPosition == "ASIDE") {
+              labelCell.maxWidth = 0;
+            }
           }
         }
 
