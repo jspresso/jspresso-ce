@@ -36,6 +36,7 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
 
   private Map<String, IView<E>> childrenMap;
+  private IView<E>              currentView;
 
   /**
    * Constructs a new <code>BasicMapView</code> instance.
@@ -93,5 +94,19 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   @Override
   public ICardViewDescriptor getDescriptor() {
     return (ICardViewDescriptor) super.getDescriptor();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IView<E> getCurrentView() {
+    return currentView;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setCurrentView(IView<E> currentView) {
+    this.currentView = currentView;
   }
 }

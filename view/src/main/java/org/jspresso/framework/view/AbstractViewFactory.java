@@ -862,6 +862,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       public void valueChange(ValueChangeEvent evt) {
         Object cardModel = evt.getNewValue();
         E cardsPeer = cardView.getPeer();
+        IView<E> currentChildCardView = cardView.getCurrentView();
         String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
             .getCardNameForModel(cardModel, actionHandler.getSubject());
         if (cardName != null) {
@@ -877,6 +878,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
             }
           }
           if (childCardView != null) {
+            cardView.setCurrentView(childCardView);
             boolean accessGranted = true;
             accessGranted = accessGranted
                 && actionHandler.isAccessGranted(childCardView.getDescriptor());
@@ -887,6 +889,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
             if (accessGranted) {
               showCardInPanel(cardsPeer, cardName);
             } else {
+              if (currentChildCardView != null
+                  && currentChildCardView.getConnector() != null) {
+                getMvcBinder().bind(currentChildCardView.getConnector(), null);
+              }
               showCardInPanel(cardsPeer, ICardViewDescriptor.SECURITY_CARD);
             }
             IValueConnector childCardConnector = childCardView.getConnector();
@@ -904,9 +910,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
                   cardView.getConnector().getModelConnector());
             }
           } else {
+            if (currentChildCardView != null
+                && currentChildCardView.getConnector() != null) {
+              getMvcBinder().bind(currentChildCardView.getConnector(), null);
+            }
             showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
           }
         } else {
+          if (currentChildCardView != null
+              && currentChildCardView.getConnector() != null) {
+            getMvcBinder().bind(currentChildCardView.getConnector(), null);
+          }
           showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
         }
       }

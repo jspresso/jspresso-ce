@@ -55,4 +55,19 @@ public interface IMapView<E> extends ICompositeView<E> {
    * @return the children view map.
    */
   Map<String, IView<E>> getChildrenMap();
+
+  /**
+   * Gets the currently displayed view.
+   * 
+   * @return the currently displayed view.
+   */
+  IView<E> getCurrentView();
+
+  /**
+   * Sets the currently displayed view.
+   * 
+   * @param currentView
+   *          the currently displayed view.
+   */
+  void setCurrentView(IView<E> currentView);
 }
