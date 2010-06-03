@@ -1070,21 +1070,29 @@ package org.jspresso.framework.view.flex {
 
         componentCell.percentWidth=100.0;
         componentCell.percentHeight=100.0;
+        component.percentHeight = 100.0;
         if(  rComponent is RTable
           || rComponent is RTextArea
           || rComponent is RList
           || rComponent is RHtmlArea) {
           componentsRow.percentHeight = 100.0;
+          component.percentWidth = 100.0;
         } else if(component.maxWidth > 0 && component.maxWidth < 1000) {
-          componentCell.maxWidth = component.maxWidth;
+          if(col + elementWidth < remoteForm.columnCount) {
+            //Allow last cell to grow
+            componentCell.maxWidth = component.maxWidth;
+          } else {
+            component.percentWidth = 100.0;
+          }
           componentCell.width = component.maxWidth;
+        }
+        if(component.minWidth > 0) {
+          componentCell.minWidth = component.minWidth;
         }
 //        componentCell.setStyle("borderStyle","solid");
 //        componentsRow.setStyle("borderStyle","solid");
         componentsRow.addChild(componentCell);
         
-        component.percentWidth = 100.0;
-        component.percentHeight = 100.0;
         componentCell.addChild(component);
         
         col += elementWidth;
