@@ -341,6 +341,8 @@ package org.jspresso.framework.view.flex {
       if(remoteNumericComponent.maxValue) {
         sizeMaxComponentWidth(numericComponent,
           createFormatter(remoteNumericComponent).format(remoteNumericComponent.maxValue).length);
+      } else {
+        sizeMaxComponentWidth(numericComponent, FIELD_MAX_CHAR_COUNT);
       }
       return numericComponent;
     }
@@ -1070,6 +1072,7 @@ package org.jspresso.framework.view.flex {
 
         componentCell.percentWidth=100.0;
         componentCell.percentHeight=100.0;
+        componentCell.minWidth = 0;
         component.percentHeight = 100.0;
         if(  rComponent is RTable
           || rComponent is RTextArea
@@ -1079,15 +1082,17 @@ package org.jspresso.framework.view.flex {
           component.percentWidth = 100.0;
         } else if(component.maxWidth > 0 && component.maxWidth < 1000) {
           if(col + elementWidth < remoteForm.columnCount) {
-            //Allow last cell to grow
             componentCell.maxWidth = component.maxWidth;
+            component.percentWidth = 100.0;
           } else {
+            //Allow last cell to grow
             component.percentWidth = 100.0;
           }
-          componentCell.width = component.maxWidth;
         }
         if(component.minWidth > 0) {
           componentCell.minWidth = component.minWidth;
+        } else {
+          component.minWidth = 0;
         }
 //        componentCell.setStyle("borderStyle","solid");
 //        componentsRow.setStyle("borderStyle","solid");
