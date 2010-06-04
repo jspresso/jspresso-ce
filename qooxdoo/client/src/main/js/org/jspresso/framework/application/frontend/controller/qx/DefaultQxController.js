@@ -36,6 +36,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     this.__changeNotificationsEnabled = true;
     this.__remoteController = remoteController;
     this.__commandsQueue = new Array();
+    this.__commandsBacklog = new Array();
     this.__dialogStack = new Array();
     this.__dialogStack.push([null, null, null]);
     this.__userLanguage = userLanguage;
@@ -59,6 +60,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __changeNotificationsEnabled : null,
     /**@type org.jspresso.framework.application.frontend.command.remote.RemoteCommand[]*/
     __commandsQueue : null,
+    /**@type Boolean*/
+    __roundTrip : false,
+    /**@type Array*/
+    __commandsBacklog : null,
     /**@type qx.ui.form.RadioGroup*/
     __workspaceAccordionGroup : null,
     /**@type qx.ui.container.Stack*/
@@ -112,10 +117,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     _dispatchCommands : function () {
       this.__application.getRoot().setGlobalCursor("wait");
-      this.__remoteController.callAsyncListeners(true,
-                                                 org.jspresso.framework.application.frontend.controller.qx.DefaultQxController.__HANDLE_COMMANDS_METHOD,
-                                                 org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(new qx.data.Array(this.__commandsQueue)));
-      this.__commandsQueue.length = 0;
+      if(!this.__roundTrip) {
+        this.__roundTrip = true;
+        this.__remoteController.callAsyncListeners(true,
+                                                   org.jspresso.framework.application.frontend.controller.qx.DefaultQxController.__HANDLE_COMMANDS_METHOD,
+                                                   org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(new qx.data.Array(this.__commandsQueue)));
+        this.__commandsQueue.length = 0;
+      } else {
+      	for(var i = 0; i < this.__commandsQueue.length; i++) {
+      	  this.__commandsBacklog[length] = this.__commandsQueue[i];
+      	}
+      }
     },
     
     /**
@@ -658,6 +670,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
       this.__changeNotificationsEnabled = true;
       this.__commandsQueue = new Array();
+      this.__commandsBacklog = new Array();
       this.__dialogStack = new Array();
       this.__dialogStack.push([null, null, null]);
       this.start();
@@ -820,9 +833,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 //          this.error(err);
         } finally {
           this.__application.getRoot().setGlobalCursor("default");
+          this.__roundTrip = false;
           this.__checkPostponedCommandsCompletion();
           this.__postponedCommands = null;
           this.__unregistered = null;
+          if(this.__commandsBacklog.length > 0) {
+          	for(var i = 0; i < this.__commandsBacklog.length; i++) {
+          		this.__commandsQueue.push(this.__commandsBacklog[i]);
+          	}
+          	this.__commandsBacklog.length = 0;
+          	this._dispatchCommands();
+          }
         }
       };
       
@@ -831,7 +852,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
        */
       var errorHandler = function(ex) {
         this.__application.getRoot().setGlobalCursor("default");
+        this.__roundTrip = false;
         this._handleError(ex.getData().toString());
+        if(this.__commandsBacklog.length > 0) {
+          for(var i = 0; i < this.__commandsBacklog.length; i++) {
+            this.__commandsQueue.push(this.__commandsBacklog[i]);
+          }
+          this.__commandsBacklog.length = 0;
+          this._dispatchCommands();
+        }
       };
       
       this.__remoteController.addListener("completed", commandsHandler, this);
