@@ -224,8 +224,6 @@ public class DefaultRemoteController extends
           handleCommand(command);
         }
       }
-    } catch (Throwable ex) {
-      ex.printStackTrace();
     } finally {
       commandRegistrationEnabled = false;
     }

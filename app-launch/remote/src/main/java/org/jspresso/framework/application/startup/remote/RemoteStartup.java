@@ -44,6 +44,7 @@ public abstract class RemoteStartup extends
     IRemoteCommandHandler {
 
   private boolean started;
+  private boolean restarting;
   private Locale  startupLocale;
 
   /**
@@ -52,6 +53,7 @@ public abstract class RemoteStartup extends
   public RemoteStartup() {
     // This is a brand new session instance.
     started = false;
+    restarting = false;
   }
 
   /**
@@ -60,13 +62,21 @@ public abstract class RemoteStartup extends
    * {@inheritDoc}
    */
   public List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
-    if (!started) {
+    if (!restarting && !started) {
+      restarting = true;
       // we are on a brand new session instance.
       return Collections
           .singletonList((RemoteCommand) new RemoteRestartCommand());
     }
-    return ((IRemoteCommandHandler) getFrontendController())
-        .handleCommands(commands);
+    try {
+      return ((IRemoteCommandHandler) getFrontendController())
+          .handleCommands(commands);
+    } catch (Throwable ex) {
+      if (!restarting) {
+        ex.printStackTrace();
+      }
+      return Collections.emptyList();
+    }
   }
 
   /**
@@ -101,8 +111,16 @@ public abstract class RemoteStartup extends
     setStartupLocale(new Locale(startupLanguage));
     start();
     started = true;
-    return handleCommands(Collections
-        .singletonList((RemoteCommand) new RemoteStartCommand()));
+    restarting = false;
+    try {
+      return handleCommands(Collections
+          .singletonList((RemoteCommand) new RemoteStartCommand()));
+    } catch (Throwable ex) {
+      if (!restarting) {
+        ex.printStackTrace();
+      }
+      return Collections.emptyList();
+    }
   }
 
   /**

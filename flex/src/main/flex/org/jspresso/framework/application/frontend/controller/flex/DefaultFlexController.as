@@ -739,6 +739,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       controlBar.addChild(createApplicationMenuBar(workspaceActions, actions, helpActions));
       
       _workspaceAccordion = new Accordion();
+      _workspaceAccordion.historyManagementEnabled = false;
       for(var i:int = 0; i < (workspaceActions[0] as RActionList).actions.length; i++) {
         var workspaceAction:RAction = (workspaceActions[0] as RActionList).actions[i];
         var cardCanvas:Canvas = new Canvas();

@@ -1147,6 +1147,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createTabContainer(remoteTabContainer:RTabContainer):Container {
       var tabContainer:TabNavigator = new TabNavigator();
+      tabContainer.historyManagementEnabled = false;
       for(var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
         var rTab:RComponent = remoteTabContainer.tabs[i] as RComponent;
         
