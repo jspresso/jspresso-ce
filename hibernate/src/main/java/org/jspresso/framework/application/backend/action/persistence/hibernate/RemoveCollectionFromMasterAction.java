@@ -27,7 +27,6 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 /**
@@ -89,10 +88,11 @@ public class RemoveCollectionFromMasterAction extends
           if (existingCollection.contains(nextDetailToRemove)) {
             collectionAccessor.removeFromValue(master, nextDetailToRemove);
           }
-          if (nextDetailToRemove instanceof IEntity) {
-            getController(context).registerForDeletion(
-                (IEntity) nextDetailToRemove);
-          }
+          // Now handled in cleanRelationshipsOnDeletion when dryRun=false
+          // if (nextDetailToRemove instanceof IEntity) {
+          // getController(context).registerForDeletion(
+          // (IEntity) nextDetailToRemove);
+          // }
         }
       } catch (IllegalAccessException ex) {
         throw new ActionException(ex);

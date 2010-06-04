@@ -146,6 +146,7 @@ public class RemoveFromModuleObjectsAction extends
       NoSuchMethodException {
     cleanRelationshipsOnDeletion(entity, context, true);
     cleanRelationshipsOnDeletion(entity, context, false);
-    getController(context).registerForDeletion(entity);
+    // Now handled in cleanRelationshipsOnDeletion when dryRun=false.
+    // getController(context).registerForDeletion(entity);
   }
 }

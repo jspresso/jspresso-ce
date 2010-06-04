@@ -130,6 +130,11 @@ public abstract class AbstractHibernateAction extends BackendAction {
       return;
     }
     clearedEntities.add(component);
+    if (!dryRun) {
+      if (component instanceof IEntity) {
+        getController(context).registerForDeletion((IEntity) component);
+      }
+    }
     try {
       component.setPropertyProcessorsEnabled(false);
       IComponentDescriptor<?> componentDescriptor = getEntityFactory(context)
