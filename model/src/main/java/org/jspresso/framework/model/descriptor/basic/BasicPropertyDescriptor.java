@@ -44,6 +44,11 @@ import org.springframework.beans.factory.BeanFactoryAware;
  * <p>
  * You will never use <code>BasicPropertyDescriptor</code> as such but rather
  * use its concrete descendants.
+ * <p>
+ * Please note that <code>BasicPropertyDescriptor</code> enforces its name to
+ * start with a lower case letter, following the JavaBean convention. So even if
+ * you name it &quot;MyProperty&quot;, it will actually end up to
+ * &quot;myProperty&quot;.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -674,6 +679,22 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
             .getBean(integrityProcessorBeanName, IPropertyProcessor.class));
       }
       integrityProcessorClassNames = null;
+    }
+  }
+
+  /**
+   * Enforces its name to start with a lower case letter, following the JavaBean
+   * convention. So even if you name it &quot;MyProperty&quot;, it will actually
+   * end up to &quot;myProperty&quot;.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setName(String name) {
+    if (name != null && name.length() > 0) {
+      super.setName(name.substring(0, 1).toLowerCase() + name.substring(1));
+    } else {
+      super.setName(name);
     }
   }
 }
