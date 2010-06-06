@@ -53,16 +53,15 @@ public class BasicQueryViewDescriptorFactory implements
     queryComponentViewDescriptor.setPropertyWidths(propertyWidths);
     queryComponentViewDescriptor.setColumnCount(6);
 
-    // BasicBorderViewDescriptor queryViewDescriptor = new
-    // BasicBorderViewDescriptor();
-    // queryViewDescriptor.setWestViewDescriptor(queryComponentViewDescriptor);
+    BasicBorderViewDescriptor queryViewDescriptor = new BasicBorderViewDescriptor();
+    queryViewDescriptor.setWestViewDescriptor(queryComponentViewDescriptor);
 
-    // queryViewDescriptor.setModelDescriptor(actualModelDescriptor);
-    // queryViewDescriptor.setBorderType(EBorderType.TITLED);
-    // return queryViewDescriptor;
+    queryViewDescriptor.setModelDescriptor(actualModelDescriptor);
+    queryViewDescriptor.setBorderType(EBorderType.TITLED);
+    return queryViewDescriptor;
 
-    queryComponentViewDescriptor.setModelDescriptor(actualModelDescriptor);
-    queryComponentViewDescriptor.setBorderType(EBorderType.TITLED);
-    return queryComponentViewDescriptor;
+    // queryComponentViewDescriptor.setModelDescriptor(actualModelDescriptor);
+    // queryComponentViewDescriptor.setBorderType(EBorderType.TITLED);
+    // return queryComponentViewDescriptor;
   }
 }
