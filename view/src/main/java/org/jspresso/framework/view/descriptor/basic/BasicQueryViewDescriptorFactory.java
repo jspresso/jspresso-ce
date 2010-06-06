@@ -36,6 +36,15 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class BasicQueryViewDescriptorFactory implements
     IQueryViewDescriptorFactory {
 
+  private boolean horizontallyResizable;
+
+  /**
+   * Constructs a new <code>BasicQueryViewDescriptorFactory</code> instance.
+   */
+  public BasicQueryViewDescriptorFactory() {
+    horizontallyResizable = false;
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -53,15 +62,20 @@ public class BasicQueryViewDescriptorFactory implements
     queryComponentViewDescriptor.setPropertyWidths(propertyWidths);
     queryComponentViewDescriptor.setColumnCount(6);
 
-    BasicBorderViewDescriptor queryViewDescriptor = new BasicBorderViewDescriptor();
-    queryViewDescriptor.setWestViewDescriptor(queryComponentViewDescriptor);
+    IViewDescriptor queryViewDescriptor;
+    if (horizontallyResizable) {
+      queryComponentViewDescriptor.setModelDescriptor(actualModelDescriptor);
+      queryComponentViewDescriptor.setBorderType(EBorderType.TITLED);
+      queryViewDescriptor = queryComponentViewDescriptor;
+    } else {
+      BasicBorderViewDescriptor borderViewDescriptor = new BasicBorderViewDescriptor();
+      borderViewDescriptor.setWestViewDescriptor(queryComponentViewDescriptor);
 
-    queryViewDescriptor.setModelDescriptor(actualModelDescriptor);
-    queryViewDescriptor.setBorderType(EBorderType.TITLED);
+      borderViewDescriptor.setModelDescriptor(actualModelDescriptor);
+      borderViewDescriptor.setBorderType(EBorderType.TITLED);
+      queryViewDescriptor = borderViewDescriptor;
+    }
+
     return queryViewDescriptor;
-
-    // queryComponentViewDescriptor.setModelDescriptor(actualModelDescriptor);
-    // queryComponentViewDescriptor.setBorderType(EBorderType.TITLED);
-    // return queryComponentViewDescriptor;
   }
 }
