@@ -29,11 +29,11 @@ import org.jspresso.framework.binding.IConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.IModelProvider;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
-import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
@@ -124,23 +124,22 @@ public class CreateQueryComponentAction extends BackendAction {
     Map<String, Object> initializationMapping = erqDescriptor
         .getInitializationMapping();
     if (initializationMapping != null) {
-      IEntity masterEntity = null;
+      Object masterComponent = null;
       // The following relies on a workaround used to determine the bean
       // model whenever the lov component is used inside a jtable.
       IConnector parentModelConnector = ((IValueConnector) context
           .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
           .getModelConnector();
       if (parentModelConnector instanceof IModelProvider) {
-        masterEntity = (IEntity) ((IModelProvider) parentModelConnector)
-            .getModel();
+        masterComponent = ((IModelProvider) parentModelConnector).getModel();
       } else if (parentModelConnector instanceof ICollectionConnector) {
         int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
             .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
             .getSelectedIndices()[0];
-        masterEntity = (IEntity) ((ICollectionConnector) parentModelConnector)
+        masterComponent = ((ICollectionConnector) parentModelConnector)
             .getChildConnector(collectionIndex).getConnectorValue();
       }
-      if (masterEntity != null) {
+      if (masterComponent != null) {
         IAccessorFactory accessorFactory = getAccessorFactory(context);
         for (Map.Entry<String, Object> initializedAttribute : initializationMapping
             .entrySet()) {
@@ -149,11 +148,21 @@ public class CreateQueryComponentAction extends BackendAction {
           try {
             Object initValue;
             if (initializedAttribute.getValue() instanceof String) {
+              Class<?> masterComponentContract;
+              if (masterComponent instanceof IComponent) {
+                masterComponentContract = ((IComponent) masterComponent)
+                    .getComponentContract();
+              } else if (masterComponent instanceof IQueryComponent) {
+                masterComponentContract = ((IQueryComponent) masterComponent)
+                    .getQueryContract();
+              } else {
+                masterComponentContract = masterComponent.getClass();
+              }
               try {
                 IAccessor masterAccessor = accessorFactory
                     .createPropertyAccessor((String) initializedAttribute
-                        .getValue(), masterEntity.getComponentContract());
-                initValue = masterAccessor.getValue(masterEntity);
+                        .getValue(), masterComponentContract);
+                initValue = masterAccessor.getValue(masterComponent);
               } catch (MissingPropertyException ex) {
                 // the value in the initialization mapping is not a property.
                 // Handle it as a constant value.
