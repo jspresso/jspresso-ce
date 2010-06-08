@@ -678,11 +678,12 @@ public abstract class AbstractComponentInvocationHandler implements
     Object currentPropertyValue = straightGetProperty(propertyName);
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor
-        && !ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
-      storeReferenceProperty(
-          (IReferencePropertyDescriptor<?>) propertyDescriptor,
-          currentPropertyValue, newPropertyValue);
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      if (!ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
+        storeReferenceProperty(
+            (IReferencePropertyDescriptor<?>) propertyDescriptor,
+            currentPropertyValue, newPropertyValue);
+      }
     } else {
       storeProperty(propertyName, newPropertyValue);
     }
