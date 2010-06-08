@@ -78,4 +78,14 @@ public class BasicQueryViewDescriptorFactory implements
 
     return queryViewDescriptor;
   }
+
+  /**
+   * Sets the horizontallyResizable.
+   * 
+   * @param horizontallyResizable
+   *          the horizontallyResizable to set.
+   */
+  public void setHorizontallyResizable(boolean horizontallyResizable) {
+    this.horizontallyResizable = horizontallyResizable;
+  }
 }
