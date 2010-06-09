@@ -121,6 +121,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.gui.remote.RTimeField;
   import org.jspresso.framework.gui.remote.RTree;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+  import org.jspresso.framework.state.remote.RemoteFormattedValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.array.ArrayUtil;
   import org.jspresso.framework.util.gui.CellConstraints;
@@ -1042,6 +1043,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.util.gui.Font", Font);
 
       registerClassAlias("org.jspresso.framework.state.remote.RemoteCompositeValueState",RemoteCompositeValueState);
+      registerClassAlias("org.jspresso.framework.state.remote.RemoteFormattedValueState", RemoteFormattedValueState);
       registerClassAlias("org.jspresso.framework.state.remote.RemoteValueState", RemoteValueState);
   
       registerClassAlias("org.jspresso.framework.util.remote.IRemotePeer",IRemotePeer);

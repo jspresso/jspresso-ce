@@ -34,8 +34,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
   {
     _defaultSortComparatorAscending : function(row1, row2)
     {
-      var obj1 = row1.getChildren().getItem(arguments.callee.columnIndex + 1).getValue();
-      var obj2 = row2.getChildren().getItem(arguments.callee.columnIndex + 1).getValue();
+      var obj1 = org.jspresso.framework.view.qx.RTableModel._extractCompareValueFromState(
+        row1.getChildren().getItem(arguments.callee.columnIndex + 1));
+      var obj2 = org.jspresso.framework.view.qx.RTableModel._extractCompareValueFromState(
+        row2.getChildren().getItem(arguments.callee.columnIndex + 1));
       if(obj1 instanceof String) {
         obj1 = obj1.toLowerCase();
       }
@@ -47,8 +49,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
 
     _defaultSortComparatorDescending : function(row1, row2)
     {
-      var obj1 = row1.getChildren().getItem(arguments.callee.columnIndex + 1).getValue();
-      var obj2 = row2.getChildren().getItem(arguments.callee.columnIndex + 1).getValue();
+      var obj1 = org.jspresso.framework.view.qx.RTableModel._extractCompareValueFromState(
+        row1.getChildren().getItem(arguments.callee.columnIndex + 1));
+      var obj2 = org.jspresso.framework.view.qx.RTableModel._extractCompareValueFromState(
+        row2.getChildren().getItem(arguments.callee.columnIndex + 1));
       if(obj1 instanceof String) {
         obj1 = obj1.toLowerCase();
       }
@@ -56,6 +60,15 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel",
         obj2 = obj2.toLowerCase();
       }
       return (obj1 < obj2) ? 1 : ((obj1 == obj2) ? 0 : -1);
+    },
+    
+    _extractCompareValueFromState : function(cell)
+    {
+      if(cell instanceof org.jspresso.framework.state.remote.RemoteFormattedValueState) {
+        return cell.getValueAsObject();
+      } else {
+        return cell.getValue();
+      }
     }
 
   },

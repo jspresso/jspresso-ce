@@ -20,7 +20,8 @@ package org.jspresso.framework.binding.remote;
 
 import org.jspresso.framework.binding.basic.BasicFormattedValueConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
-import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
+import org.jspresso.framework.state.remote.RemoteFormattedValueState;
 import org.jspresso.framework.util.automation.IAutomationSource;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
@@ -35,10 +36,11 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     implements IRemotePeer, IRemoteStateOwner, IAutomationSource {
 
-  private String                 automationSeed;
-  private RemoteConnectorFactory connectorFactory;
-  private String                 guid;
-  private RemoteValueState       state;
+  private String                    automationSeed;
+  private RemoteConnectorFactory    connectorFactory;
+  private String                    guid;
+  private IRemoteStateValueMapper   remoteStateValueMapper;
+  private RemoteFormattedValueState state;
 
   /**
    * Constructs a new <code>RemoteFormattedValueConnector</code> instance.
@@ -113,7 +115,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   /**
    * {@inheritDoc}
    */
-  public RemoteValueState getState() {
+  public RemoteFormattedValueState getState() {
     if (state == null) {
       state = createState();
       synchRemoteState();
@@ -143,10 +145,48 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * {@inheritDoc}
    */
   public void synchRemoteState() {
-    RemoteValueState currentState = getState();
+    RemoteFormattedValueState currentState = getState();
     currentState.setValue(getConnectorValueAsString());
+    currentState.setValueAsObject(getValueForState());
     currentState.setReadable(isReadable());
     currentState.setWritable(isWritable());
+  }
+
+  /**
+   * Sets the remoteStateValueMapper.
+   * 
+   * @param remoteStateValueMapper
+   *          the remoteStateValueMapper to set.
+   */
+  public void setRemoteStateValueMapper(
+      IRemoteStateValueMapper remoteStateValueMapper) {
+    this.remoteStateValueMapper = remoteStateValueMapper;
+  }
+
+  /**
+   * Gets the remoteStateValueMapper.
+   * 
+   * @return the remoteStateValueMapper.
+   */
+  protected IRemoteStateValueMapper getRemoteStateValueMapper() {
+    return remoteStateValueMapper;
+  }
+
+  /**
+   * Gets the value that has to be set to the remote state when updating it. It
+   * defaults to the connector value but the developper is given a chance here
+   * to mutate the actual object returned. This allows for changing the type of
+   * objects actually exchanged with the remote frontend peer.
+   * 
+   * @return the value that has to be set to the remote state when updating it.
+   */
+  protected Object getValueForState() {
+    Object valueForState = getConnectorValue();
+    if (getRemoteStateValueMapper() != null) {
+      valueForState = getRemoteStateValueMapper().getValueForState(
+          valueForState);
+    }
+    return valueForState;
   }
 
   /**
@@ -154,9 +194,9 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
    * 
    * @return the newly created state.
    */
-  protected RemoteValueState createState() {
-    RemoteValueState createdState = connectorFactory.createRemoteValueState(
-        getGuid(), getAutomationSeed());
+  protected RemoteFormattedValueState createState() {
+    RemoteFormattedValueState createdState = connectorFactory
+        .createRemoteFormattedValueState(getGuid(), getAutomationSeed());
     return createdState;
   }
 }

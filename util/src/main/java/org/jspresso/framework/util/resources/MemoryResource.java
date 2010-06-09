@@ -44,6 +44,7 @@ public class MemoryResource extends AbstractResource {
    */
   public MemoryResource(String name, String mimeType, byte[] resourceBytes) {
     super(mimeType);
+    this.name = name;
     this.resourceBytes = resourceBytes;
   }
 

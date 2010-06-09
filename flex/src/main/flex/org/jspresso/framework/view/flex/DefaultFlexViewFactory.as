@@ -106,6 +106,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RTimeField;
   import org.jspresso.framework.gui.remote.RTree;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+  import org.jspresso.framework.state.remote.RemoteFormattedValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.array.ArrayUtil;
   import org.jspresso.framework.util.format.NumberParser;
@@ -1478,6 +1479,8 @@ package org.jspresso.framework.view.flex {
             column.sortCompareFunction = _remoteValueSorter.compareNumbers;
           } else if(rColumn is RDateField) {
             column.sortCompareFunction = _remoteValueSorter.compareDates;
+          } else if(rColumn.state is RemoteFormattedValueState) {
+            column.sortCompareFunction = _remoteValueSorter.compareFormatted;
           } else {
             column.sortCompareFunction = _remoteValueSorter.compareStrings;
           }

@@ -49,4 +49,16 @@ public interface IRemoteValueStateFactory {
    */
   RemoteValueState createRemoteValueState(String guid, String automationSeed);
 
+  /**
+   * Creates a new <code>RemoteFormttedValueState</code> instance.
+   * 
+   * @param guid
+   *          the state guid.
+   * @param automationSeed
+   *          the seed to generate automation ids.
+   * @return the created <code>RemoteFormattedValueState</code>.
+   */
+  RemoteFormattedValueState createRemoteFormattedValueState(String guid,
+      String automationSeed);
+
 }

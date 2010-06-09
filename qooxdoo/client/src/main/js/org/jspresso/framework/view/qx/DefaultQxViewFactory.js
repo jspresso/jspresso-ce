@@ -450,7 +450,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
             columnWidth = Math.max(columnWidth, headerWidth + 16);
           }
         }
-        columnModel.setColumnWidth(i, columnWidth);
+        if(remoteTable.isHorizontallyScrollable()) {
+          columnModel.setColumnWidth(i, columnWidth);
+        } else {
+        	columnModel.getBehavior().setWidth(i, columnWidth, columnWidth < 50 ? 0 : columnWidth);
+        }
       }
       
       table.setHeight(5*table.getRowHeight() + table.getHeaderCellHeight());
@@ -1186,7 +1190,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                                     rowSpan : 1,
                                     colSpan : labelColSpan});
         }
-
+        component.setAllowStretchX(true);
         form.add(component, {row : compRow,
                              column : compCol,
                              rowSpan : 1,

@@ -44,6 +44,7 @@ import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.state.remote.RemoteFormattedValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
@@ -360,6 +361,18 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   public RemoteValueState createRemoteValueState(String guid,
       String automationSeed) {
     RemoteValueState state = new RemoteValueState(guid);
+    state.setAutomationId(registerAutomationId(automationSeed, guid));
+    // connectors are registered with the same guid as their state.
+    // remotePeerRegistry.register(state);
+    return state;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public RemoteFormattedValueState createRemoteFormattedValueState(String guid,
+      String automationSeed) {
+    RemoteFormattedValueState state = new RemoteFormattedValueState(guid);
     state.setAutomationId(registerAutomationId(automationSeed, guid));
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);

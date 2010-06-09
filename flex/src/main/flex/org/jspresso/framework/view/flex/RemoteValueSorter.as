@@ -16,6 +16,7 @@ package org.jspresso.framework.view.flex {
   import mx.utils.ObjectUtil;
   
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+  import org.jspresso.framework.state.remote.RemoteFormattedValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   
   public class RemoteValueSorter {
@@ -92,6 +93,33 @@ package org.jspresso.framework.view.flex {
                             .value as Number;
       }
       return ObjectUtil.numericCompare(cell1, cell2);
+    }
+
+    public function compareFormatted(obj1:Object, obj2:Object):int {
+      var cell1:Object;
+      var cell2:Object;
+      if(obj1 != null) {
+        cell1 = ((obj1 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteFormattedValueState)
+          .valueAsObject;
+      }
+      if(obj2 != null) {
+        cell2 = ((obj2 as RemoteCompositeValueState).children[sortColumnIndex] as RemoteFormattedValueState)
+          .valueAsObject;
+      }
+      if(cell1 is Date || cell2 is Date) {
+        return ObjectUtil.dateCompare(cell1 as Date, cell2 as Date);
+      } else if(cell1 is Number || cell2 is Number) {
+        return ObjectUtil.numericCompare(cell1 as Number, cell2 as Number);
+      } else if(cell1 is Boolean || cell2 is Boolean) {
+        if(cell1 && !cell2) {
+          return 1;
+        } else if(cell2 && !cell1) {
+          return -1;
+        }
+        return 0;
+      } else {
+        return ObjectUtil.stringCompare(cell1 as String, cell2 as String, true);
+      }
     }
   }
 }
