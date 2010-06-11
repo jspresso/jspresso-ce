@@ -114,8 +114,12 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * <ul>
    * <li><code>MULTIPLE_INTERVAL_SELECTION</code> for allowing any type of
    * selection</li>
+   * <li><code>MULTIPLE_INTERVAL_CUMULATIVE_SELECTION</code> for allowing any
+   * type of selection with toggle behaviour</li>
    * <li><code>SINGLE_INTERVAL_SELECTION</code> for allowing only contiguous
    * interval selection</li>
+   * <li><code>SINGLE_INTERVAL_CUMULATIVE_SELECTION</code> for allowing only
+   * contiguous interval selection with toggle behaviour</li>
    * <li><code>SINGLE_SELECTION</code> for allowing only a single item selection
    * </li>
    * </ul>

@@ -2322,8 +2322,11 @@ public class DefaultSwingViewFactory extends
         selectionMode = ListSelectionModel.SINGLE_SELECTION;
         break;
       case SINGLE_INTERVAL_SELECTION:
+      case SINGLE_INTERVAL_CUMULATIVE_SELECTION:
         selectionMode = ListSelectionModel.SINGLE_INTERVAL_SELECTION;
         break;
+      case MULTIPLE_INTERVAL_SELECTION:
+      case MULTIPLE_INTERVAL_CUMULATIVE_SELECTION:
       default:
         selectionMode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
         break;

@@ -1333,7 +1333,10 @@ package org.jspresso.framework.view.flex {
         list.allowMultipleSelection = false;
       } else {
         list.allowMultipleSelection = true;
-//      list.cumulativeSelection = true;
+        if(   remoteList.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
+           || remoteList.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
+          list.cumulativeSelection = true;
+        }
       }
       
       var itemRenderer:ClassFactory = new ClassFactory(RemoteValueListItemRenderer);
@@ -1404,7 +1407,10 @@ package org.jspresso.framework.view.flex {
         table.allowMultipleSelection = false;
       } else {
         table.allowMultipleSelection = true;
-//        table.cbMultiSelection = true;
+        if(   remoteTable.selectionMode == "SINGLE_INTERVAL_CUMULATIVE_SELECTION"
+           || remoteTable.selectionMode == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
+          table.cbMultiSelection = true;
+        }
         if(table.cbMultiSelection) {
           var selectionColumn:DataGridColumn = new DataGridColumn();
           selectionColumn.itemRenderer = new ClassFactory(SelectionCheckBoxRenderer);

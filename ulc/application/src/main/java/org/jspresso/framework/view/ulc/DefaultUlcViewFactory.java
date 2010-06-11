@@ -2410,8 +2410,11 @@ public class DefaultUlcViewFactory extends
         selectionMode = ULCListSelectionModel.SINGLE_SELECTION;
         break;
       case SINGLE_INTERVAL_SELECTION:
+      case SINGLE_INTERVAL_CUMULATIVE_SELECTION:
         selectionMode = ULCListSelectionModel.SINGLE_INTERVAL_SELECTION;
         break;
+      case MULTIPLE_INTERVAL_SELECTION:
+      case MULTIPLE_INTERVAL_CUMULATIVE_SELECTION:
       default:
         selectionMode = ULCListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
         break;

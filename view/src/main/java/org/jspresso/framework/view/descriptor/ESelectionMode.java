@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor;
 
-
 /**
  * Selection mode constants.
  * 
@@ -26,16 +25,27 @@ package org.jspresso.framework.view.descriptor;
  * @author Vincent Vandenschrick
  */
 public enum ESelectionMode {
+
   /**
    * <code>MULTIPLE_INTERVAL_SELECTION</code>.
    */
   MULTIPLE_INTERVAL_SELECTION,
-  
+
   /**
    * <code>SINGLE_INTERVAL_SELECTION</code>.
    */
   SINGLE_INTERVAL_SELECTION,
-  
+
+  /**
+   * <code>MULTIPLE_INTERVAL_CUMULATIVE_SELECTION</code>.
+   */
+  MULTIPLE_INTERVAL_CUMULATIVE_SELECTION,
+
+  /**
+   * <code>SINGLE_INTERVAL_CUMULATIVE_SELECTION</code>.
+   */
+  SINGLE_INTERVAL_CUMULATIVE_SELECTION,
+
   /**
    * <code>SINGLE_SELECTION</code>.
    */

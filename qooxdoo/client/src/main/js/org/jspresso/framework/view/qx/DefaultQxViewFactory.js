@@ -461,6 +461,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var selectionModel = table.getSelectionModel();
       if(remoteTable.getSelectionMode() == "SINGLE_SELECTION") {
         selectionModel.setSelectionMode(qx.ui.table.selection.Model.SINGLE_SELECTION);
+      } else if(remoteTable.getSelectionMode() == "SINGLE_INTERVAL_SELECTION"){
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.SINGLE_INTERVAL_SELECTION);
+      } else if(remoteTable.getSelectionMode() == "MULTIPLE_INTERVAL_SELECTION"){
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
+      } else if(remoteTable.getSelectionMode() == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION"){
+        selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE);
       } else {
         selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
       }
