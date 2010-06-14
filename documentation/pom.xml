@@ -103,7 +103,7 @@
           <docletArtifact>
             <groupId>org.jspresso.tools</groupId>
             <artifactId>jspresso-beandocbook</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>3.5-SNAPSHOT</version>
           </docletArtifact>
           <useStandardDocletOptions>false</useStandardDocletOptions>
           <debug>false</debug>
