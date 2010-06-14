@@ -239,7 +239,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RSecurityComponent} remoteSecurityComponent
      * @return {qx.ui.core.Widget}
      */
-    _createSecurityComponent : function(remoteSecurityComponent){
+    __createSecurityComponent : function(remoteSecurityComponent){
       var securityComponent = new qx.ui.core.Widget();
       return securityComponent;
     },
@@ -249,7 +249,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RList} remoteList
      * @return {qx.ui.core.Widget}
      */
-    _createList : function(remoteList) {
+    __createList : function(remoteList) {
       var list = new qx.ui.form.List();
       if(remoteList.getSelectionMode() == "SINGLE_SELECTION") {
         list.setSelectionMode("single");
@@ -337,7 +337,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RImageComponent} remoteImageComponent
      * @return {qx.ui.core.Widget}
      */
-    _createImageComponent : function(remoteImageComponent) {
+    __createImageComponent : function(remoteImageComponent) {
       var imageComponent = new qx.ui.basic.Image();
     	imageComponent.setScale(false);
     	imageComponent.setAlignX("center");
@@ -365,7 +365,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RTable} remoteTable
      * @return {qx.ui.core.Widget}
      */
-    _createTable : function(remoteTable) {
+    __createTable : function(remoteTable) {
       /**@type org.jspresso.framework.state.remote.RemoteCompositeValueState*/
       var state = remoteTable.getState();
       var tableModel = new org.jspresso.framework.view.qx.RTableModel(state,
@@ -567,7 +567,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RNumericComponent} remoteNumericComponent
      * @return {qx.ui.core.Widget}
      */
-    _createNumericComponent : function(remoteNumericComponent) {
+    __createNumericComponent : function(remoteNumericComponent) {
       var numericComponent;
       if(remoteNumericComponent instanceof org.jspresso.framework.gui.remote.RDecimalComponent) {
         numericComponent = this.__createDecimalComponent(remoteNumericComponent);
@@ -587,7 +587,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RDecimalComponent} remoteDecimalComponent
      * @return {qx.ui.core.Widget}
      */
-    _createDecimalComponent : function(remoteDecimalComponent) {
+    __createDecimalComponent : function(remoteDecimalComponent) {
       var decimalComponent;
       if(remoteDecimalComponent instanceof org.jspresso.framework.gui.remote.RDecimalField) {
         decimalComponent = this.__createDecimalField(remoteDecimalComponent);
@@ -601,7 +601,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RIntegerField} remoteIntegerField
      * @return {qx.ui.core.Widget}
      */
-    _createIntegerField : function(remoteIntegerField) {
+    __createIntegerField : function(remoteIntegerField) {
       var integerField = this.__createFormattedField(remoteIntegerField);
       return integerField;
     },
@@ -610,7 +610,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RDecimalField} remoteDecimalField
      * @return {qx.ui.core.Widget}
      */
-    _createDecimalField : function(remoteDecimalField) {
+    __createDecimalField : function(remoteDecimalField) {
       var decimalField = this.__createFormattedField(remoteDecimalField);
       return decimalField;
     },
@@ -619,7 +619,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RPercentField} remotePercentField
      * @return {qx.ui.core.Widget}
      */
-    _createPercentField : function(remotePercentField) {
+    __createPercentField : function(remotePercentField) {
       var percentField = this.__createFormattedField(remotePercentField);
       return percentField;
     },
@@ -628,7 +628,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RTimeField} remoteTimeField
      * @return {qx.ui.core.Widget}
      */
-    _createTimeField : function(remoteTimeField) {
+    __createTimeField : function(remoteTimeField) {
       var timeField = this.__createFormattedField(remoteTimeField);
       this.__sizeMaxComponentWidth(timeField, org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT);
       return timeField;
@@ -638,7 +638,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RDurationField} remoteDurationField
      * @return {qx.ui.core.Widget}
      */
-    _createDurationField : function(remoteDurationField) {
+    __createDurationField : function(remoteDurationField) {
       var durationField = this.__createFormattedField(remoteDurationField);
       return durationField;
     },
@@ -648,7 +648,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
      * @return {qx.ui.core.Widget}
      */
-    _createFormattedField : function(rComponent) {
+    __createFormattedField : function(rComponent) {
       var format = this.__createFormat(rComponent);
       var formattedField = new qx.ui.form.TextField();
       
@@ -699,7 +699,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RColorField} remoteColorField
      * @return {qx.ui.core.Widget}
      */
-    _createColorField : function(remoteColorField) {
+    __createColorField : function(remoteColorField) {
       var colorField = new qx.ui.container.Composite();
       colorField.setFocusable(true);
       colorField.setAllowStretchY(false, false);
@@ -775,7 +775,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RCheckBox} remoteCheckBox
      * @return {qx.ui.core.Widget}
      */
-    _createCheckBox : function(remoteCheckBox) {
+    __createCheckBox : function(remoteCheckBox) {
       var checkBox = new qx.ui.form.CheckBox();
       var state = remoteCheckBox.getState();
       var modelController = new qx.data.controller.Object(state);
@@ -797,7 +797,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RComboBox} remoteComboBox
      * @return {qx.ui.core.Widget}
      */
-    _createComboBox : function(remoteComboBox) {
+    __createComboBox : function(remoteComboBox) {
       var comboBox = new qx.ui.form.SelectBox();
       comboBox.setAllowStretchY(false, false);
       var iconDim;
@@ -844,7 +844,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RDateField} remoteDateField
      * @return {qx.ui.core.Widget}
      */
-    _createDateField : function(remoteDateField) {
+    __createDateField : function(remoteDateField) {
       var dateField = new qx.ui.form.DateField();
       dateField.setAllowStretchY(false, false);
       var dateFormat = this.__createFormat(remoteDateField);
@@ -866,7 +866,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RActionComponent} remoteActionComponent
      * @return {qx.ui.core.Widget}
      */
-    _createActionComponent : function(remoteActionComponent) {
+    __createActionComponent : function(remoteActionComponent) {
     	var actionComponent = this.createAction(remoteActionComponent.getAction());
     	return actionComponent;
     },
@@ -875,7 +875,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RActionField} remoteActionField
      * @return {qx.ui.core.Widget}
      */
-    _createActionField : function(remoteActionField) {
+    __createActionField : function(remoteActionField) {
       var actionField = new qx.ui.container.Composite();
       actionField.setFocusable(true);
       actionField.setAllowStretchY(false, false);
@@ -952,7 +952,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RContainer} remoteContainer
      * @return {qx.ui.core.Widget}
      */
-    _createContainer : function(remoteContainer) {
+    __createContainer : function(remoteContainer) {
       var container;
       if(remoteContainer instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
         container = this.__createBorderContainer(remoteContainer);
@@ -976,7 +976,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RBorderContainer} remoteBorderContainer
      * @return {qx.ui.core.Widget}
      */
-    _createBorderContainer : function(remoteBorderContainer) {
+    __createBorderContainer : function(remoteBorderContainer) {
       var borderContainer = new qx.ui.container.Composite();
       var borderLayout = new qx.ui.layout.Dock();
       borderLayout.setSort("y");
@@ -1008,7 +1008,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RCardContainer} remoteCardContainer
      * @return {qx.ui.core.Widget}
      */
-    _createCardContainer : function(remoteCardContainer) {
+    __createCardContainer : function(remoteCardContainer) {
       var cardContainer = new org.jspresso.framework.view.qx.RStack();
       cardContainer.setGuid(remoteCardContainer.getGuid());
       // view stack may have to be retrieved for late update of cards.
@@ -1044,7 +1044,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RConstrainedGridContainer} remoteConstrainedGridContainer
      * @return {qx.ui.core.Widget}
      */
-    _createConstrainedGridContainer : function(remoteConstrainedGridContainer) {
+    __createConstrainedGridContainer : function(remoteConstrainedGridContainer) {
       var constrainedGridContainer = new qx.ui.container.Composite();
       var gridLayout = new qx.ui.layout.Grid();
       constrainedGridContainer.setLayout(gridLayout);
@@ -1081,7 +1081,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.REvenGridContainer} remoteEvenGridContainer
      * @return {qx.ui.core.Widget}
      */
-    _createEvenGridContainer : function(remoteEvenGridContainer) {
+    __createEvenGridContainer : function(remoteEvenGridContainer) {
       var evenGridContainer = new qx.ui.container.Composite();
       var gridLayout = new qx.ui.layout.Grid();
       evenGridContainer.setLayout(gridLayout);
@@ -1139,7 +1139,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RFrom} remoteForm
      * @return {qx.ui.core.Widget}
      */
-    _createForm : function(remoteForm) {
+    __createForm : function(remoteForm) {
       var form = new qx.ui.container.Composite();
       var formLayout = new qx.ui.layout.Grid(5,5);
       form.setLayout(formLayout);
@@ -1222,7 +1222,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RSplitContainer} remoteSplitContainer
      * @return {qx.ui.core.Widget}
      */
-    _createSplitContainer : function(remoteSplitContainer) {
+    __createSplitContainer : function(remoteSplitContainer) {
       var splitContainer = new qx.ui.splitpane.Pane();
 
       if(remoteSplitContainer.getOrientation() == "VERTICAL") {
@@ -1247,7 +1247,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RTabContainer} remoteTabContainer
      * @return {qx.ui.core.Widget}
      */
-    _createTabContainer : function(remoteTabContainer) {
+    __createTabContainer : function(remoteTabContainer) {
       var tabContainer = new qx.ui.tabview.TabView();
       for(var i = 0; i < remoteTabContainer.getTabs().length; i++) {
         /**@type org.jspresso.framework.gui.remote.RComponent*/
@@ -1268,7 +1268,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RTextComponent} remoteTextComponent
      * @return {qx.ui.core.Widget}
      */
-    _createTextComponent : function(remoteTextComponent) {
+    __createTextComponent : function(remoteTextComponent) {
       var textComponent;
       if(remoteTextComponent instanceof org.jspresso.framework.gui.remote.RTextArea) {
         textComponent = this.__createTextArea(remoteTextComponent);
@@ -1288,7 +1288,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RTextArea} remoteTextArea
      * @return {qx.ui.core.Widget}
      */
-    _createTextArea : function(remoteTextArea) {
+    __createTextArea : function(remoteTextArea) {
       var textArea = new qx.ui.form.TextArea();
       var state = remoteTextArea.getState();
       var modelController = new qx.data.controller.Object(state);
@@ -1312,7 +1312,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RHtmlArea} remoteHtmlArea
      * @return {qx.ui.core.Widget}
      */
-    _createHtmlArea : function(remoteHtmlArea) {
+    __createHtmlArea : function(remoteHtmlArea) {
     	var htmlComponent;
     	if(remoteHtmlArea.isReadOnly()) {
     	  htmlComponent = this.__createHtmlText(remoteHtmlArea);
@@ -1326,7 +1326,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RHtmlArea} remoteHtmlArea
      * @return {qx.ui.core.Widget}
      */
-    _createHtmlEditor : function(remoteHtmlArea) {
+    __createHtmlEditor : function(remoteHtmlArea) {
       var htmlEditor = new qx.ui.embed.HtmlArea(null, null, "blank.html");
       htmlEditor.setDecorator("main");
       var state = remoteHtmlArea.getState();
@@ -1357,7 +1357,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * 
      * @return {qx.ui.form.SelectBox} select box button
      */  
-    _fontFamilyToolbarEntry : function(htmlEditor)
+    __fontFamilyToolbarEntry : function(htmlEditor)
     {
       var button = new qx.ui.form.SelectBox;
       button.set({ toolTipText: htmlEditor.tr("change_font_family"),
@@ -1400,7 +1400,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * 
      * @return {qx.ui.form.SelectBox} select box button
      */  
-    _fontSizeToolbarEntry : function(htmlEditor)
+    __fontSizeToolbarEntry : function(htmlEditor)
     {
       var button = new qx.ui.form.SelectBox;
       button.set({ toolTipText: htmlEditor.tr("change_font_size"),
@@ -1432,7 +1432,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       return button;
     },
 
-    _createHtmlEditorToolBar : function(htmlEditor) {
+    __createHtmlEditorToolBar : function(htmlEditor) {
     	var toolbarEntries = [
         {
           bold:                { text: htmlEditor.tr("format_bold"), image: "qx/icon/Oxygen/16/actions/format-text-bold.png", action: htmlEditor.setBold },
@@ -1514,7 +1514,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RHtmlArea} remoteHtmlArea
      * @return {qx.ui.core.Widget}
      */
-    _createHtmlText : function(remoteHtmlArea) {
+    __createHtmlText : function(remoteHtmlArea) {
       var htmlText = new qx.ui.basic.Label();
       htmlText.setRich(true);
       var state = remoteHtmlArea.getState();
@@ -1531,7 +1531,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RTextField} remoteTextField
      * @return {qx.ui.core.Widget}
      */
-    _createTextField : function(remoteTextField) {
+    __createTextField : function(remoteTextField) {
       var textField = new qx.ui.form.TextField();
       
       if(remoteTextField.getMaxLength() > 0) {
@@ -1562,7 +1562,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RLabel} remoteLabel
      * @return {qx.ui.core.Widget}
      */
-    _createLabel : function(remoteLabel) {
+    __createLabel : function(remoteLabel) {
       var label = new qx.ui.basic.Label();
       var state = remoteLabel.getState();
       if(state) {
@@ -1590,7 +1590,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RPasswordField} remotePasswordField
      * @return {qx.ui.core.Widget}
      */
-    _createPasswordField : function(remotePasswordField) {
+    __createPasswordField : function(remotePasswordField) {
       var passwordField = new qx.ui.form.PasswordField();
       
       if(remotePasswordField.getMaxLength() > 0) {
@@ -1620,7 +1620,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RTree} remoteTree
      * @return {qx.ui.core.Widget}
      */
-    _createTree : function(remoteTree) {
+    __createTree : function(remoteTree) {
       //TODO notify qooxdoo that tree controller doesn't support null children.
       var tree = new qx.ui.tree.Tree();
       var state = remoteTree.getState();
@@ -1710,7 +1710,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {qx.ui.tree.Tree} tree
      * @param {qx.ui.tree.AbstractTreeItem} selectedItems
      */
-    _expandAllChildren : function(tree, treeItem) {
+    __expandAllChildren : function(tree, treeItem) {
       treeItem.setOpen(true);
       if(treeItem.getChildren() != null) {
         for (var i = 0; i < treeItem.getChildren().length; i++) {
@@ -1724,7 +1724,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.state.remote.RemoteCompositeValueState} state
      * @param {qx.data.Array} selectedItems
      */
-    _synchTreeViewSelection : function(state, selectedItems, deselectedStates, selectedStates) {
+    __synchTreeViewSelection : function(state, selectedItems, deselectedStates, selectedStates) {
       var selectedIndices = new Array();
       var stateChildren = state.getChildren();
       var stateSelectedIndices = state.getSelectedIndices();
@@ -1852,7 +1852,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RIcon} icon
      * @return void
      */
-    _completeButton : function(button, label, tooltip, icon) {
+    __completeButton : function(button, label, tooltip, icon) {
       this.setIcon(button, icon);
       if(label) {
         button.setLabel(label);
@@ -1913,21 +1913,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }
     },
     
-    _modelToViewFieldConverter : function(modelValue, model) {
+    __modelToViewFieldConverter : function(modelValue, model) {
       if(modelValue == null) {
         return "";
       }
       return modelValue;
     },
     
-    _viewToModelFieldConverter : function(viewValue, model) {
+    __viewToModelFieldConverter : function(viewValue, model) {
       if(viewValue == "") {
         return null;
       }
       return viewValue;
     },
     
-    _readOnlyFieldConverter : function(writable, model) {
+    __readOnlyFieldConverter : function(writable, model) {
       return !writable;
     },
 
@@ -1936,7 +1936,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {org.jspresso.framework.gui.remote.RComponent} remoteComponent
      * @return {qx.util.format.IFormat}
      */
-    _createFormat : function(remoteComponent) {
+    __createFormat : function(remoteComponent) {
       var format;
       if(remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
         if(remoteComponent.getType() == "DATE_TIME") {
@@ -1972,7 +1972,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       return format;
     },
     
-    _sizeMaxComponentWidth : function(component, expectedCharCount, maxCharCount) {
+    __sizeMaxComponentWidth : function(component, expectedCharCount, maxCharCount) {
       if(expectedCharCount == null) {
         expectedCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
       }
