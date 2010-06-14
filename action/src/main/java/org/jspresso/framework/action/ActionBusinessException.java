@@ -34,7 +34,7 @@ public class ActionBusinessException extends BusinessException {
    * Constructs a new <code>ActionException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    */
   public ActionBusinessException(String message) {
     super(message);
@@ -44,12 +44,29 @@ public class ActionBusinessException extends BusinessException {
    * Constructs a new <code>ActionBusinessException</code> instance.
    * 
    * @param message
-   *            the exception message.
+   *          the exception message.
    * @param staticI18nKey
-   *            the static i18n key if any. It will be used by default to get
-   *            the internationalized message.
+   *          the static i18n key if any. It will be used by default to get the
+   *          internationalized message.
    */
   public ActionBusinessException(String message, String staticI18nKey) {
     super(message, staticI18nKey);
   }
+
+  /**
+   * Constructs a new <code>ActionBusinessException</code> instance.
+   * 
+   * @param message
+   *          the exception message.
+   * @param staticI18nKey
+   *          the static i18n key if any. It will be used by default to get the
+   *          internationalized message.
+   * @param i18nParams
+   *          the parameters of the translated message or null.
+   */
+  public ActionBusinessException(String message, String staticI18nKey,
+      Object[] i18nParams) {
+    super(message, staticI18nKey, i18nParams);
+  }
+
 }
