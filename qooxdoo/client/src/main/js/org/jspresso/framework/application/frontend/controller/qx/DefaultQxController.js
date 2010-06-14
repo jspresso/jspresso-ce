@@ -41,7 +41,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     this.__dialogStack.push([null, null, null]);
     this.__userLanguage = userLanguage;
     qx.locale.Manager.getInstance().setLocale(this.__userLanguage);
-    this.__initRemoteController();
+    this._initRemoteController();
   },
   
   members :
@@ -93,7 +93,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if(!this.isRegistered(remotePeer.getGuid())) {
         this.__remotePeerRegistry.register(remotePeer);
         if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteValueState) {
-          this.__bindRemoteValueState(remotePeer);
+          this._bindRemoteValueState(remotePeer);
           if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
             if(remotePeer.getChildren()) {
               var children = remotePeer.getChildren().toArray();
@@ -134,13 +134,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {org.jspresso.framework.state.remote.RemoteValueState} remoteValueState
      * @return void
      */
-    __bindRemoteValueState : function(remoteValueState) {
+    _bindRemoteValueState : function(remoteValueState) {
       var wasEnabled = this.__changeNotificationsEnabled;
       try {
         this.__changeNotificationsEnabled = false;
-        remoteValueState.addListener("changeValue", this.__valueUpdated, this);
+        remoteValueState.addListener("changeValue", this._valueUpdated, this);
         if(remoteValueState instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-          remoteValueState.addListener("changeSelectedIndices", this.__selectedIndicesUpdated, this);
+          remoteValueState.addListener("changeSelectedIndices", this._selectedIndicesUpdated, this);
         }
 //      } catch(err) {
 //        this.error(err);
@@ -153,7 +153,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {qx.event.type.Data} event
      * @return void
      */
-    __selectedIndicesUpdated : function(event) {
+    _selectedIndicesUpdated : function(event) {
       var remoteCompositeValueState = event.getTarget();
       if(this.__changeNotificationsEnabled) {
         //this.debug(">>> Selected indices update <<< " + remoteCompositeValueState.getSelectedIndices() + " on " + remoteCompositeValueState.getValue());
@@ -171,7 +171,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {qx.event.type.Data} event
      * @return void
      */
-    __valueUpdated : function(event) {
+    _valueUpdated : function(event) {
       var remoteValueState = event.getTarget();
       if(this.__changeNotificationsEnabled) {
         //this.debug(">>> Value update <<< " + remoteValueState.getValue());
@@ -245,24 +245,24 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     _handleCommand : function(command) {
       if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand) {
-        this.__handleMessageCommand(command);
+        this._handleMessageCommand(command);
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand) {
-        this.__restart();
+        this._restart();
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand) {
-        this.__handleFileUpload(command);
+        this._handleFileUpload(command);
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand) {
-        this.__handleFileDownload(command);
+        this._handleFileDownload(command);
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand) {
         qx.locale.Manager.getInstance().setLocale(command.getLanguage());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand) {
         var loginButton = this.__viewFactory.createButton(command.getOkLabel(), null, command.getOkIcon());
         loginButton.addListener("execute", function(event) {
-          this.__performLogin();
+          this._performLogin();
         }, this);
         var loginButtons = new Array();
         loginButtons.push(loginButton);
         var dialogView = this.createComponent(command.getLoginView());
-        this.__popupDialog(command.getTitle(), command.getMessage(), dialogView, command.getLoginView().getIcon(), loginButtons);
+        this._popupDialog(command.getTitle(), command.getMessage(), dialogView, command.getLoginView().getIcon(), loginButtons);
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand) {
         var dialogButtons = new Array();
         for(var i = 0; i < command.getActions().length; i++) {
@@ -281,7 +281,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           }
           dialogView.setVariables(flashVars);
         }
-        this.__popupDialog(command.getTitle(), null, dialogView, icon, dialogButtons, command.isUseCurrent(), command.getDimension());
+        this._popupDialog(command.getTitle(), null, dialogView, icon, dialogButtons, command.isUseCurrent(), command.getDimension());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand) {
         if(this.__dialogStack && this.__dialogStack.length > 1) {
           /**@type qx.ui.window.Window*/
@@ -291,12 +291,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           topDialog.destroy();
         }
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand) {
-        this.__initApplicationFrame(command.getWorkspaceNames(),
+        this._initApplicationFrame(command.getWorkspaceNames(),
                              command.getWorkspaceActions(),
                              command.getActions(),
                              command.getHelpActions());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand) {
-        this.__displayWorkspace(command.getWorkspaceName(),
+        this._displayWorkspace(command.getWorkspaceName(),
                          command.getWorkspaceView());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand) {
         window.open(command.getUrlSpec(), "_blank"); 
@@ -382,7 +382,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * 
      * @param {org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand} uploadCommand
      */
-    __handleFileUpload : function(uploadCommand) {
+    _handleFileUpload : function(uploadCommand) {
       var uploadDialog = new qx.ui.window.Window("Upload file");
       uploadDialog.set({
         modal : true,
@@ -445,7 +445,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * 
      * @param {org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand} downloadCommand
      */
-    __handleFileDownload : function(downloadCommand) {
+    _handleFileDownload : function(downloadCommand) {
       if(!this.__dlFrame) {
         this.__dlFrame = new qx.ui.embed.Iframe("");
         this.__dlFrame.set({
@@ -467,7 +467,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {org.jspresso.framework.gui.remote.RComponent} workspaceView
      * @return void
      */
-    __displayWorkspace : function(workspaceName, workspaceView) {
+    _displayWorkspace : function(workspaceName, workspaceView) {
       if(workspaceView) {
         var workspaceNavigator = null;
         if(workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
@@ -528,7 +528,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      * 
      */
-    __initApplicationFrame : function(workspaceNames,
+    _initApplicationFrame : function(workspaceNames,
                                       workspaceActions,
                                       actions,
                                       helpActions) {
@@ -536,7 +536,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var applicationContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox(10));
       
-      var menuBar = this.__createApplicationMenuBar(workspaceActions, actions, helpActions);
+      var menuBar = this._createApplicationMenuBar(workspaceActions, actions, helpActions);
       applicationContainer.add(menuBar);
       
       var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
@@ -579,7 +579,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return qx.ui.menubar.MenuBar
      * 
      */
-    __createApplicationMenuBar : function(workspaceActions,
+    _createApplicationMenuBar : function(workspaceActions,
                                               actions,
                                               helpActions) {
       var menuBar = new qx.ui.menubar.MenuBar();
@@ -593,10 +593,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         actualWorkspaceActions = workspaceActions;
       }
 
-      this.__completeMenuBar(menuBar, actualWorkspaceActions, true);
-      this.__completeMenuBar(menuBar, actions, false);
+      this._completeMenuBar(menuBar, actualWorkspaceActions, true);
+      this._completeMenuBar(menuBar, actions, false);
       menuBar.addSpacer();
-      this.__completeMenuBar(menuBar, helpActions, true);
+      this._completeMenuBar(menuBar, helpActions, true);
 
       return menuBar;                                            
     },
@@ -608,7 +608,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {Boolean} useSeparator
      * @return {qx.ui.menu.Button}
      */
-    __completeMenuBar : function(menuBar, actionLists, useSeparator) {
+    _completeMenuBar : function(menuBar, actionLists, useSeparator) {
       if(actionLists) {
         for(var i = 0; i < actionLists.length; i++) {
           var actionList = actionLists[i];
@@ -624,7 +624,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             menubarButton.getMenu().addSeparator();
           }
           var menu = menubarButton.getMenu();
-          var menuItems = this.__createMenuItems(actionList.getActions());
+          var menuItems = this._createMenuItems(actionList.getActions());
           if(menuItems) {
             for(var j = 0; j < menuItems.length; j++) {
               menu.add(menuItems[j]);
@@ -640,7 +640,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {org.jspresso.framework.gui.remote.RAction[]} actions
      * @return {Array}
      */
-     __createMenuItems : function(actions) {
+     _createMenuItems : function(actions) {
       var menuItems = new Array();
       for(var i = 0; i < actions.length; i++) {
         var menuButton = this.__viewFactory.createMenuButton(actions[i].getName(),
@@ -656,7 +656,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**
      * @return void
      */
-    __performLogin : function() {
+    _performLogin : function() {
       var loginCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand();
       this.registerCommand(loginCommand);
     },
@@ -664,7 +664,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**
      * @return void
      */
-    __restart : function() {
+    _restart : function() {
       this.__application.getRoot().removeAll();
       this.__dlFrame = null;
       this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
@@ -690,7 +690,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**
      * @param {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand} messageCommand
      */
-    __handleMessageCommand : function(messageCommand) {
+    _handleMessageCommand : function(messageCommand) {
       var messageDialog = new qx.ui.window.Window(messageCommand.getTitle());
       messageDialog.set({
         modal : true,
@@ -819,7 +819,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.warn("Recieved error : " + message);
     },
 
-    __initRemoteController : function() {
+    _initRemoteController : function() {
       /**
        * @param {qx.event.type.Data} result
        */
@@ -834,7 +834,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         } finally {
           this.__application.getRoot().setGlobalCursor("default");
           this.__roundTrip = false;
-          this.__checkPostponedCommandsCompletion();
+          this._checkPostponedCommandsCompletion();
           this.__postponedCommands = null;
           this.__unregistered = null;
           if(this.__commandsBacklog.length > 0) {
@@ -870,7 +870,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**
      * @return void
      */
-    __checkPostponedCommandsCompletion: function() {
+    _checkPostponedCommandsCompletion: function() {
       for(var guid in this.__postponedCommands) {
         /**@type org.jspresso.framework.application.frontend.command.remote.RemoteCommand[]*/
         var commands = this.__postponedCommands[guid];
@@ -907,7 +907,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param {org.jspresso.framework.util.gui.Dimension} Dimension
      * @return void
      */
-    __popupDialog : function(title, message, dialogView, icon, buttons, useCurrent, dimension) {
+    _popupDialog : function(title, message, dialogView, icon, buttons, useCurrent, dimension) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var buttonBox = new qx.ui.container.Composite();
