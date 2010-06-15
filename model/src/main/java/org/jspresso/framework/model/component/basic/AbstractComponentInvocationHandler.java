@@ -812,7 +812,7 @@ public abstract class AbstractComponentInvocationHandler implements
         || (oldValue == newValue)) {
       return;
     }
-    if (!isInitialized(oldValue)) {
+    if (!isInitialized(oldValue) || !isInitialized(newValue)) {
       changeSupport.firePropertyChange(propertyName, null, newValue);
     } else {
       changeSupport.firePropertyChange(propertyName, oldValue, newValue);

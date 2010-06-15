@@ -47,8 +47,8 @@ public class ReloadAction extends AbstractHibernateAction {
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
       public Object doInTransaction(TransactionStatus status) {
-        List<IEntity> objectsToSave = getEntitiesToReload(context);
-        for (IEntity entity : objectsToSave) {
+        List<IEntity> entitiesToReload = getEntitiesToReload(context);
+        for (IEntity entity : entitiesToReload) {
           reloadEntity(entity, context);
         }
         status.setRollbackOnly();
