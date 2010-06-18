@@ -7691,7 +7691,7 @@ hrsample {
     application. Choosing the target environment highly depends on the
     requirements. Jspresso supports as of now 5 different deployment scenarios
     : Swing, AJAX (<ulink url="http://wingsframework.org">Wings</ulink>,
-    <ulink url="http://qooxdoo.org">Qooxdoo</ulink>), Flash (<ulink
+    <ulink url="http://qooxdoo.org">qooxdoo</ulink>), Flash (<ulink
     url="http://flex.org/">Flex</ulink>) and <ulink
     url="http://www.canoo.com/ulc/">ULC</ulink>.</para>
 
@@ -7790,10 +7790,10 @@ hrsample {
       enabled browser.</para>
 
       <para>Starting from the 3.5 release, Jspresso supports <ulink
-      url="http://qooxdoo.org">Qooxdoo</ulink>, a very high quality Javascript
-      UI library (Qooxdoo is actually more than that, so feel free to dig into
-      their web site). The Jspresso Qooxdoo UI channel shares the same
-      architecture than the Flex UI channel. Beyond the custom Qooxdoo java
+      url="http://qooxdoo.org">qooxdoo</ulink>, a very high quality Javascript
+      UI library (qooxdoo is actually more than that, so feel free to dig into
+      their web site). The Jspresso qooxdoo UI channel shares the same
+      architecture than the Flex UI channel. Beyond the custom qooxdoo java
       RPC servlet, the same codebase is used to adapt the client server
       communication.</para>
 
@@ -8019,7 +8019,7 @@ hrsample {
       </section>
 
       <section>
-        <title>The first Qooxdoo launch</title>
+        <title>The first qooxdoo launch</title>
 
         <para>Point your browser to the <code>qooxdoo</code> context :</para>
 
@@ -8027,10 +8027,10 @@ hrsample {
           <para><code>http://[machine]:[port]/hrsample-webapp/qooxdoo/</code></para>
         </blockquote>
 
-        <para>The browser shows you the Qooxdoo login dialog.</para>
+        <para>The browser shows you the qooxdoo login dialog.</para>
 
         <para><figure>
-            <title>The browser displays the Qooxdoo login dialog</title>
+            <title>The browser displays the qooxdoo login dialog</title>
 
             <mediaobject>
               <imageobject>
@@ -8040,10 +8040,10 @@ hrsample {
               </imageobject>
             </mediaobject>
           </figure>And you can play with the same application but in
-        Javascript using the Qooxdoo library !</para>
+        Javascript using the qooxdoo library !</para>
 
         <para><figure>
-            <title>You query the companies in Qooxdoo !</title>
+            <title>You query the companies in qooxdoo !</title>
 
             <mediaobject>
               <imageobject>
