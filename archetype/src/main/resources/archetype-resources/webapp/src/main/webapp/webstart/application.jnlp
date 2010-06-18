@@ -23,9 +23,14 @@
     <jar href="../lib/ulc-jnlp-client.jar"/>
     <jar href="../lib/nachocalendar.jar"/>
     <jar href="../lib/substance.jar"/>
+    <jar href="../lib/jspresso-ulc-components-client.jar"/>
+    <jar href="../lib/jspresso-ulc-components-shared.jar"/>
+    <jar href="../lib/jspresso-util.jar"/>
+    <jar href="../lib/ulc-servlet-client.jar"/>
+    <jar href="../lib/jedit-syntax.jar"/>
+    <jar href="../lib/joda-time.jar"/>
     <property name="swing.defaultlaf" value="org.jvnet.substance.SubstanceLookAndFeel"/>
     <property name="sun.awt.noerasebackground" value="true"/>
-    <extension name="untrusted jars" href="$$context/webstart/application-untrusted.jnlp"/>
   </resources>
 
   <security>
