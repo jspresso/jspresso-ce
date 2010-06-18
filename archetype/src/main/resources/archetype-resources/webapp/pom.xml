@@ -270,15 +270,7 @@
                   <tasks>
                     <signjar alias="key-alias" keystore="conf/keystore.jks" storepass="keystore-password" keypass="key-password">
                       <fileset dir="${project.build.directory}/${project.artifactId}">
-                        <include name="lib/jspresso-app-launch-core.jar" />
-                        <include name="lib/jspresso-app-launch-ulc.jar" />
-                        <include name="lib/jspresso-swing-components.jar" />
-                        <include name="lib/ulc-base-trusted.jar" />
-                        <include name="lib/ulc-base-client.jar" />
-                        <include name="lib/ulc-jnlp-client.jar" />
-                        <include name="lib/nachocalendar.jar" />
-                        <include name="lib/jedit-syntax.jar" />
-                        <include name="lib/substance.jar" />
+                        <include name="lib/*.jar" />
                       </fileset>
                     </signjar>
                   </tasks>
