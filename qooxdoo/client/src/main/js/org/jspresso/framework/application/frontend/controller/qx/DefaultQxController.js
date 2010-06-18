@@ -643,9 +643,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      _createMenuItems : function(actions) {
       var menuItems = new Array();
       for(var i = 0; i < actions.length; i++) {
-        var menuButton = this.__viewFactory.createMenuButton(actions[i].getName(),
-                                                             actions[i].getDescription(),
-                                                             actions[i].getIcon());
+        var menuButton = this.__viewFactory.createMenuButton(action[i]);
         var command = this.__viewFactory.createCommand(actions[i]);
         menuButton.setCommand(command);
         menuItems.push(menuButton);

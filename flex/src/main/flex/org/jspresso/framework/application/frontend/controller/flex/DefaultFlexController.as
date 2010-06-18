@@ -873,6 +873,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
         menuItem["icon"] = _viewFactory.iconTemplate;
         menuItem["rIcon"] = action.icon;
       }
+      var updateMenuItemState:Function = function (enabled:Boolean):void {
+        menuItem["enabled"] = enabled;
+      };
+      BindingUtils.bindSetter(updateMenuItemState, action, "enabled", true);
+      _remotePeerRegistry.register(action);
       return menuItem;
     }
 

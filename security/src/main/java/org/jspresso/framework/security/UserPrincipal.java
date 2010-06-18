@@ -23,6 +23,8 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
+
 /**
  * A principal to represent a application user. This principal is able to store
  * some extra properties.
@@ -30,7 +32,8 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class UserPrincipal implements Principal, Serializable {
+public class UserPrincipal extends AbstractPropertyChangeCapable implements
+    Principal, Serializable {
 
   /**
    * <code>LANGUAGE_PROPERTY</code>.
@@ -56,7 +59,7 @@ public class UserPrincipal implements Principal, Serializable {
    * Constructs a new <code>UserPrincipal</code> instance.
    * 
    * @param name
-   *            the distinguished name.
+   *          the distinguished name.
    */
   public UserPrincipal(String name) {
     this.name = name;
@@ -94,7 +97,7 @@ public class UserPrincipal implements Principal, Serializable {
    * Retrieves a custom property for this user.
    * 
    * @param propertyName
-   *            the name of the custom property.
+   *          the name of the custom property.
    * @return the value of the custom property or null if none exists.
    */
   public Object getCustomProperty(String propertyName) {
@@ -123,12 +126,13 @@ public class UserPrincipal implements Principal, Serializable {
    * Registers a custom property for this user.
    * 
    * @param propertyName
-   *            the name of the custom property.
+   *          the name of the custom property.
    * @param propertyValue
-   *            the value of the custom property.
+   *          the value of the custom property.
    */
   public void putCustomProperty(String propertyName, Object propertyValue) {
-    customProperties.put(propertyName, propertyValue);
+    Object oldValue = customProperties.put(propertyName, propertyValue);
+    firePropertyChange(propertyName, oldValue, propertyValue);
   }
 
   /**

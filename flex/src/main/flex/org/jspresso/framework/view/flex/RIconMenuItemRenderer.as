@@ -35,6 +35,11 @@ package org.jspresso.framework.view.flex {
   	    if(rIcon) {
   	      _image.source = rIcon.imageUrlSpec;
   	    }
+        if(value["enabled"]) {
+          _image.alpha = 1.0;
+        } else {
+          _image.alpha = 0.4;
+        }
   	  }
   	  super.data = value;
   	}

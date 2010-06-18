@@ -1832,14 +1832,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     
     /**
      * 
-     * @param {String} label
-     * @param {String} tooltip
-     * @param {org.jspresso.framework.gui.remote.RIcon} icon
+     * @param {org.jspresso.framework.gui.remote.RAction} remoteAction
      * @return {qx.ui.menu.Button}
      */
-    createMenuButton : function(label, tooltip, icon) {
+    createMenuButton : function(remoteAction) {
       var button = new qx.ui.menu.Button();
-      this._completeButton(button, label, tooltip, icon);
+      remoteAction.bind("enabled", button, "enabled");
+      this.__remotePeerRegistry.register(remoteAction);
+      this._completeButton(button, remoteAction.getName()
+                                 , remoteAction.getDescription()
+                                 , remoteAction.getIcon());
       return button;
     },
 

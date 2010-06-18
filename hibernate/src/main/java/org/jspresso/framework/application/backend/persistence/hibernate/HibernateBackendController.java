@@ -505,22 +505,19 @@ public class HibernateBackendController extends AbstractBackendController {
       Session hibernateSession, Set<IEntity> alreadyLocked) {
     boolean isEntity = component instanceof IEntity;
     if (!isEntity || alreadyLocked.add((IEntity) component)) {
-      if (!isEntity || ((IEntity) component).isPersistent()) {
-        if (isEntity) {
-          lockInHibernate((IEntity) component, hibernateSession);
-        }
-        Map<String, Object> entityProperties = component
-            .straightGetProperties();
-        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
-          if (Hibernate.isInitialized(property.getValue())) {
-            if (property.getValue() instanceof IEntity) {
-              lockInHibernateInDepth((IEntity) property.getValue(),
-                  hibernateSession, alreadyLocked);
-            } else if (property.getValue() instanceof Collection) {
-              for (IComponent element : ((Collection<IComponent>) property
-                  .getValue())) {
-                lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
-              }
+      if (isEntity && ((IEntity) component).isPersistent()) {
+        lockInHibernate((IEntity) component, hibernateSession);
+      }
+      Map<String, Object> entityProperties = component.straightGetProperties();
+      for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+        if (Hibernate.isInitialized(property.getValue())) {
+          if (property.getValue() instanceof IEntity) {
+            lockInHibernateInDepth((IEntity) property.getValue(),
+                hibernateSession, alreadyLocked);
+          } else if (property.getValue() instanceof Collection) {
+            for (IComponent element : ((Collection<IComponent>) property
+                .getValue())) {
+              lockInHibernateInDepth(element, hibernateSession, alreadyLocked);
             }
           }
         }

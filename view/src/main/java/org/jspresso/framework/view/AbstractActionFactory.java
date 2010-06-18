@@ -165,15 +165,14 @@ public abstract class AbstractActionFactory<E, F, G> implements
    */
   protected void attachActionGates(IDisplayableAction action,
       IActionHandler actionHandler, IView<F> view, E uiAction) {
-    if (view == null) {
-      return;
-    }
     IModelDescriptor modelDescriptor = null;
     IValueConnector viewConnector = null;
-    if (view.getDescriptor() != null) {
-      modelDescriptor = view.getDescriptor().getModelDescriptor();
+    if (view != null) {
+      if (view.getDescriptor() != null) {
+        modelDescriptor = view.getDescriptor().getModelDescriptor();
+      }
+      viewConnector = view.getConnector();
     }
-    viewConnector = view.getConnector();
     if (action.getActionabilityGates() != null) {
       Collection<IGate> clonedGates = new HashSet<IGate>();
       for (IGate gate : action.getActionabilityGates()) {
@@ -186,7 +185,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
           if (clonedGate instanceof IActionHandlerAware) {
             ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
           }
-          if (clonedGate instanceof IModelGate) {
+          if (clonedGate instanceof IModelGate && viewConnector != null) {
             if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
               if (((IModelGate) clonedGate).isCollectionBased()) {
                 ((IModelGate) clonedGate).setModel(null);
