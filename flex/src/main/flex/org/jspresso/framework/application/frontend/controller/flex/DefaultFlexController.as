@@ -155,6 +155,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _userLanguage:String;
     private var _fileReference:FileReference;
     private var _initialLocaleChain:Array;
+    private var _fakeDialog:Panel;
     
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -166,6 +167,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _dialogStack.push([null, null, null]);
       _userLanguage = userLanguage;
       _initialLocaleChain = ResourceManager.getInstance().localeChain;
+      _fakeDialog = new Panel();
       if (ExternalInterface.available) {
         ExternalInterface.addCallback("stop", stop);
       }
@@ -433,6 +435,18 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
+    protected function pushFakeDialog():void {
+      var viewStateGuid:String = (_dialogStack[_dialogStack.length -1] as Array)[1];
+      var viewStateAutomationId:String = (_dialogStack[_dialogStack.length -1] as Array)[2];
+      _dialogStack.push([_fakeDialog,viewStateGuid,viewStateAutomationId]);
+    }
+    
+    protected function popFakeDialog():void {
+      if((_dialogStack[_dialogStack.length -1] as Array)[0] == _fakeDialog) {
+        _dialogStack.pop();
+      }
+    }
+
     protected function handleFileUpload(uploadCommand:RemoteFileUploadCommand):void {
       _fileReference = new  FileReference();
       _fileReference.addEventListener(Event.SELECT, function(event:Event):void {
@@ -443,9 +457,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var xml:XML = new XML(event.data);
         var resourceId:String = xml.@id;
         execute(uploadCommand.successCallbackAction, resourceId);
+        popFakeDialog();
       });
       _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
         execute(uploadCommand.cancelCallbackAction);
+        popFakeDialog();
       });
       try {
         _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
@@ -458,9 +474,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
               _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
               break;
             default:
+              popFakeDialog();
               break;
           }
         };
+        pushFakeDialog();
         Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
                    ResourceManager.getInstance().getString("Common_messages", "file.upload"),
                    Alert.YES|Alert.NO,
@@ -475,6 +493,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _fileReference = new  FileReference();
       _fileReference.addEventListener(Event.CANCEL, function(event:Event):void {
         execute(downloadCommand.cancelCallbackAction, downloadCommand.resourceId);
+        popFakeDialog();
       });
       try {
         _fileReference.download(new URLRequest(downloadCommand.fileUrl), downloadCommand.defaultFileName);
@@ -489,7 +508,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
             default:
               break;
           }
+          popFakeDialog();
         };
+        pushFakeDialog();
         Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
                    ResourceManager.getInstance().getString("Common_messages", "file.download"),
                    Alert.YES|Alert.NO,

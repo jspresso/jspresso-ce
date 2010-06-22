@@ -2,6 +2,18 @@
 =====
 Bugs fixed
 ----------
+3019234    icon in table row doesn't load
+
+
+New features
+------------
+
+
+
+3.5.0
+=====
+Bugs fixed
+----------
 2769168  	 1-1 relationships with composition=true cloning
 2770973  	 NullPointer on actionability gates
 2772086  	 Nested accessors fail when accessing beans in maps
