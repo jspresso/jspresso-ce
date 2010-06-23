@@ -1608,7 +1608,12 @@ package org.jspresso.framework.view.flex {
           var selectedItems:Array = new Array(selectedIndices.length);
           for(var i:int = 0; i < selectedIndices.length; i++) {
             if(selectedIndices[i] > -1) {
-              selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
+              if(state.children.length > selectedIndices[i]) {
+                selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
+              } else {
+                // there is a desynch that will be fixed by another selection command.
+                return;
+              }
             }
           }
           if(!ArrayUtil.areUnorderedArraysEqual(table.selectedItems, selectedItems)) {

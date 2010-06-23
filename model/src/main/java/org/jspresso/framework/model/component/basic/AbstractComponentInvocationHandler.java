@@ -726,30 +726,44 @@ public abstract class AbstractComponentInvocationHandler implements
 
   @SuppressWarnings("unchecked")
   private void addToProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor, int index, Object value) {
+      ICollectionPropertyDescriptor<?> propertyDescriptor, int index,
+      Object value) {
     String propertyName = propertyDescriptor.getName();
+    Collection<?> collectionProperty = null;
     try {
-      Collection collectionProperty = (Collection) accessorFactory
+      collectionProperty = (Collection<?>) accessorFactory
           .createPropertyAccessor(propertyName,
               componentDescriptor.getComponentContract()).getValue(proxy);
+    } catch (IllegalAccessException ex) {
+      throw new ComponentException(ex);
+    } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new ComponentException(ex.getCause());
+    } catch (NoSuchMethodException ex) {
+      throw new ComponentException(ex);
+    }
+    try {
       if (propertyProcessorsEnabled) {
         propertyDescriptor.preprocessAdder(proxy, collectionProperty, value);
       }
       IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
           .getReverseRelationEnd();
       if (reversePropertyDescriptor != null) {
-        if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+        if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
           accessorFactory.createPropertyAccessor(
               reversePropertyDescriptor.getName(),
               propertyDescriptor.getReferencedDescriptor()
                   .getElementDescriptor().getComponentContract()).setValue(
               value, proxy);
-        } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
+        } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
           ICollectionAccessor collectionAccessor = accessorFactory
-              .createCollectionPropertyAccessor(reversePropertyDescriptor
-                  .getName(), propertyDescriptor.getReferencedDescriptor()
-                  .getElementDescriptor().getComponentContract(),
-                  ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+              .createCollectionPropertyAccessor(
+                  reversePropertyDescriptor.getName(),
+                  propertyDescriptor.getReferencedDescriptor()
+                      .getElementDescriptor().getComponentContract(),
+                  ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
                       .getCollectionDescriptor().getElementDescriptor()
                       .getComponentContract());
           if (collectionAccessor instanceof IModelDescriptorAware) {
@@ -759,15 +773,15 @@ public abstract class AbstractComponentInvocationHandler implements
           collectionAccessor.addToValue(value, proxy);
         }
       }
-      Collection oldCollectionSnapshot = CollectionHelper
+      Collection<?> oldCollectionSnapshot = CollectionHelper
           .cloneCollection((Collection<?>) collectionProperty);
       boolean inserted = false;
-      if (collectionProperty instanceof List && index >= 0
+      if (collectionProperty instanceof List<?> && index >= 0
           && index < collectionProperty.size()) {
-        ((List) collectionProperty).add(index, value);
+        ((List<Object>) collectionProperty).add(index, value);
         inserted = true;
       } else {
-        inserted = collectionProperty.add(value);
+        inserted = ((Collection<Object>) collectionProperty).add(value);
       }
       if (inserted) {
         inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
@@ -778,7 +792,11 @@ public abstract class AbstractComponentInvocationHandler implements
           propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
         }
       }
+    } catch (RuntimeException ex) {
+      rollbackProperty(proxy, propertyDescriptor, collectionProperty);
+      throw ex;
     } catch (InvocationTargetException ex) {
+      rollbackProperty(proxy, propertyDescriptor, collectionProperty);
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
@@ -919,10 +937,22 @@ public abstract class AbstractComponentInvocationHandler implements
     if (!isInitialized(straightGetProperty(propertyName))) {
       return;
     }
+    Collection<?> collectionProperty = null;
     try {
-      Collection<?> collectionProperty = (Collection<?>) accessorFactory
+      collectionProperty = (Collection<?>) accessorFactory
           .createPropertyAccessor(propertyName,
               componentDescriptor.getComponentContract()).getValue(proxy);
+    } catch (IllegalAccessException ex) {
+      throw new ComponentException(ex);
+    } catch (InvocationTargetException ex) {
+      if (ex.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getCause();
+      }
+      throw new ComponentException(ex.getCause());
+    } catch (NoSuchMethodException ex) {
+      throw new ComponentException(ex);
+    }
+    try {
       if (propertyProcessorsEnabled) {
         propertyDescriptor.preprocessRemover(proxy, collectionProperty, value);
       }
@@ -966,17 +996,18 @@ public abstract class AbstractComponentInvocationHandler implements
           }
         }
       }
-    } catch (IllegalAccessException ex) {
-      // This cannot happen but throw anyway.
-      throw new ComponentException(ex);
+    } catch (RuntimeException ex) {
+      rollbackProperty(proxy, propertyDescriptor, collectionProperty);
+      throw ex;
     } catch (InvocationTargetException ex) {
+      rollbackProperty(proxy, propertyDescriptor, collectionProperty);
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
-      // This cannot happen but throw anyway.
       throw new ComponentException(ex.getCause());
+    } catch (IllegalAccessException ex) {
+      throw new ComponentException(ex);
     } catch (NoSuchMethodException ex) {
-      // This cannot happen but throw anyway.
       throw new ComponentException(ex);
     }
   }
@@ -997,15 +1028,16 @@ public abstract class AbstractComponentInvocationHandler implements
     changeSupport.removePropertyChangeListener(propertyName, listener);
   }
 
-  private void rollbackProperty(Object proxy,
+  private void rollbackProperty(@SuppressWarnings("unused") Object proxy,
       IPropertyDescriptor propertyDescriptor, Object oldProperty) {
-    boolean wasPropertyProcessorsEnabled = propertyProcessorsEnabled;
-    try {
-      propertyProcessorsEnabled = false;
-      setProperty(proxy, propertyDescriptor, oldProperty);
-    } finally {
-      propertyProcessorsEnabled = wasPropertyProcessorsEnabled;
-    }
+    // boolean wasPropertyProcessorsEnabled = propertyProcessorsEnabled;
+    // try {
+    // propertyProcessorsEnabled = false;
+    // setProperty(proxy, propertyDescriptor, oldProperty);
+    // } finally {
+    // propertyProcessorsEnabled = wasPropertyProcessorsEnabled;
+    // }
+    straightSetProperty(propertyDescriptor.getName(), oldProperty);
   }
 
   @SuppressWarnings("unchecked")
