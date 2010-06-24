@@ -1995,8 +1995,6 @@ package org.jspresso.framework.view.flex {
         if (event.item["data"] is RAction) {
           var action:RAction = event.item["data"] as RAction;
           getActionHandler().execute(action, null);
-          configureButton(popupButton, action.name, action.description, action.icon);
-          popupButton.data = action;
         }        
       };
       var defaultAction:RAction = actionList.actions[0];

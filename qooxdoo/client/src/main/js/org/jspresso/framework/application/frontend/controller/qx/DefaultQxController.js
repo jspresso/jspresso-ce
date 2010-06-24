@@ -589,9 +589,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       //applicationFrame.add(menuBar);
       var toolBar = new qx.ui.toolbar.ToolBar();
       this.__viewFactory.installActionLists(toolBar, navigationActions);
-      this.__viewFactory.installActionLists(toolBar, actions);
+      if(actions) {
+        for(var i = 0; i < actions.length; i++) {
+          toolBar.add(this.__viewFactory.createSplitButton(actions[i]));
+        }
+      }
+      //this.__viewFactory.installActionLists(toolBar, actions);
       toolBar.addSpacer();
-      this.__viewFactory.installActionLists(helpActions, actions);
+      if(helpActions) {
+        for(var i = 0; i < helpActions.length; i++) {
+          toolBar.add(this.__viewFactory.createSplitButton(helpActions[i]));
+        }
+      }
+      //this.__viewFactory.installActionLists(toolBar, helpActions);
       toolBar.add(this.__viewFactory.createAction(exitAction));
       applicationFrame.add(toolBar);
     },
@@ -636,7 +646,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             menubarButton.getMenu().addSeparator();
           }
           var menu = menubarButton.getMenu();
-          var menuItems = this._createMenuItems(actionList.getActions());
+          var menuItems = this.__viewFactory.createMenuItems(actionList.getActions());
           if(menuItems) {
             for(var j = 0; j < menuItems.length; j++) {
               menu.add(menuItems[j]);
@@ -645,22 +655,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         }
       }
       return menubarButton;
-    },
-    
-    /**
-     * 
-     * @param {org.jspresso.framework.gui.remote.RAction[]} actions
-     * @return {Array}
-     */
-     _createMenuItems : function(actions) {
-      var menuItems = new Array();
-      for(var i = 0; i < actions.length; i++) {
-        var menuButton = this.__viewFactory.createMenuButton(actions[i]);
-        var command = this.__viewFactory.createCommand(actions[i]);
-        menuButton.setCommand(command);
-        menuItems.push(menuButton);
-      }
-      return menuItems;
     },
     
     /**

@@ -1838,6 +1838,41 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     
     /**
      * 
+     * @param {org.jspresso.framework.gui.remote.RActionList} actionList
+     * @return {qx.ui.form.SplitButton}
+     */
+    createSplitButton : function(actionList) {
+      var actions = actionList.getActions();
+      if(actions.length == 1) {
+        return this.createAction(actions[0], true);
+      }
+      var menuItems = this.createMenuItems(actions);
+      var menu = new qx.ui.menu.Menu();
+      for(var i = 0; i < menuItems.length; i++) {
+        menu.add(menuItems[i]);
+      }
+      var button = new qx.ui.form.SplitButton(menuItems[0].getLabel(), menuItems[0].getIcon(), menu, menuItems[0].getCommand());
+      return button;
+    },
+    
+    /**
+     * 
+     * @param {org.jspresso.framework.gui.remote.RAction[]} actions
+     * @return {Array}
+     */
+    createMenuItems : function(actions) {
+      var menuItems = new Array();
+      for(var i = 0; i < actions.length; i++) {
+        var menuButton = this.createMenuButton(actions[i]);
+        var command = this.createCommand(actions[i]);
+        menuButton.setCommand(command);
+        menuItems.push(menuButton);
+      }
+      return menuItems;
+    },
+
+    /**
+     * 
      * @param {org.jspresso.framework.gui.remote.RAction} remoteAction
      * @return {qx.ui.menu.Button}
      */
