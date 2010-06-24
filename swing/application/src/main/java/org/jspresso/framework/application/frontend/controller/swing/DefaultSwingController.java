@@ -556,26 +556,28 @@ public class DefaultSwingController extends
     return false;
   }
 
-  private List<JMenu> createActionMenus() {
-    return createMenus(getActionMap(), false);
-  }
-
   private JMenuBar createApplicationMenuBar() {
     JMenuBar applicationMenuBar = new JMenuBar();
-    List<JMenu> workspaceMenus = createWorkspacesMenus();
+    List<JMenu> workspaceMenus = createMenus(createWorkspaceActionMap(), true);
     if (workspaceMenus != null) {
       for (JMenu workspaceMenu : workspaceMenus) {
         applicationMenuBar.add(workspaceMenu);
       }
     }
-    List<JMenu> actionMenus = createActionMenus();
+    List<JMenu> navigationMenus = createMenus(getNavigationActions(), true);
+    if (navigationMenus != null) {
+      for (JMenu navigationMenu : navigationMenus) {
+        applicationMenuBar.add(navigationMenu);
+      }
+    }
+    List<JMenu> actionMenus = createMenus(getActionMap(), false);
     if (actionMenus != null) {
       for (JMenu actionMenu : actionMenus) {
         applicationMenuBar.add(actionMenu);
       }
     }
     applicationMenuBar.add(Box.createHorizontalGlue());
-    List<JMenu> helpActionMenus = createHelpActionMenus();
+    List<JMenu> helpActionMenus = createMenus(getHelpActions(), true);
     if (helpActionMenus != null) {
       for (JMenu helpActionMenu : helpActionMenus) {
         applicationMenuBar.add(helpActionMenu);
@@ -620,10 +622,6 @@ public class DefaultSwingController extends
     SwingUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
     controllerFrame.setVisible(true);
-  }
-
-  private List<JMenu> createHelpActionMenus() {
-    return createMenus(getHelpActions(), true);
   }
 
   private JComponent createHermeticGlassPane() {
@@ -718,10 +716,6 @@ public class DefaultSwingController extends
       }
     }
     return menus;
-  }
-
-  private List<JMenu> createWorkspacesMenus() {
-    return createMenus(createWorkspaceActionMap(), true);
   }
 
   private void initLoginProcess() {

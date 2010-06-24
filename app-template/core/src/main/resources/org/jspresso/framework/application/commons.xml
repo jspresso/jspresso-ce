@@ -182,7 +182,7 @@
     <property name="viewFactory" ref="viewFactory" />
     <property name="workspacesMenuIconImageUrl" value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
     <property name="loginViewDescriptor" ref="loginViewDescriptor" />
-    <property name="actionMap" ref="moduleHistoryNavigationActionMap" />
+    <property name="navigationActionMap" ref="moduleHistoryNavigationActionMap" />
     <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction" />
     <property name="exitAction" ref="exitFrontAction" />
   </bean>

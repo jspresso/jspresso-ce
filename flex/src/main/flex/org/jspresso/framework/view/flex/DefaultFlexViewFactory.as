@@ -279,23 +279,31 @@ package org.jspresso.framework.view.flex {
       toolBar.setStyle("fillAlphas",[0.5,0.5]);
       toolBar.setStyle("fillColors",[0xBBBBBB,0x666666]);
       toolBar.setStyle("horizontalGap",2);
-      if(remoteComponent.actionLists != null) {
-        for(var i:int = 0; i < remoteComponent.actionLists.length; i++) {
-          var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
+      installActionLists(toolBar, remoteComponent.actionLists);
+      return toolBar;
+    }
+    
+    public function installActionLists(toolBar:ApplicationControlBar, actionLists:Array):void {
+      if(actionLists != null) {
+        for(var i:int = 0; i < actionLists.length; i++) {
+          var actionList:RActionList = actionLists[i] as RActionList;
           if(actionList.actions != null) {
             for(var j:int = 0; j < actionList.actions.length; j++) {
               toolBar.addChild(createAction(actionList.actions[j]));
             }
-            if(i < remoteComponent.actionLists.length - 1) {
-              var separator:VRule = new VRule();
-              separator.height = 20;
-              separator.maxHeight = 20;
-              toolBar.addChild(separator);
+            if(i < actionLists.length - 1) {
+              addSeparator(toolBar);
             }
           }
         }
       }
-      return toolBar;
+    }
+
+    public function addSeparator(toolBar:ApplicationControlBar, size:int=20):void {
+      var separator:VRule = new VRule();
+      separator.height = size;
+      separator.maxHeight = size;
+      toolBar.addChild(separator);
     }
 
     protected function getRemotePeerRegistry():IRemotePeerRegistry {

@@ -33,6 +33,7 @@ import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IActionable;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * General contract of frontend (view) application controllers.
@@ -316,4 +317,18 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale clientLocale);
+
+  /**
+   * Gets the application navigation action map.
+   * 
+   * @return the application navigation action map or null if none.
+   */
+  ActionMap getNavigationActions();
+
+  /**
+   * Gets the action used to exit the application.
+   * 
+   * @return the action used to exit the application.
+   */
+  IDisplayableAction getExitAction();
 }

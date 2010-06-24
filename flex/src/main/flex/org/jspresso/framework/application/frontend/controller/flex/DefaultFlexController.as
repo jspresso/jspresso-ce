@@ -356,6 +356,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var initCommand:RemoteInitCommand = command as RemoteInitCommand;
         initApplicationFrame(initCommand.workspaceNames,
                              initCommand.workspaceActions,
+                             initCommand.exitAction,
+                             initCommand.navigationActions,
                              initCommand.actions,
                              initCommand.helpActions);
       } else if(command is RemoteWorkspaceDisplayCommand) {
@@ -746,24 +748,18 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     protected function initApplicationFrame(workspaceNames:Array,
-                                            workspaceActions:Array,
+                                            workspaceActions:RActionList,
+                                            exitAction:RAction,
+                                            navigationActions:Array,
                                             actions:Array,
                                             helpActions:Array):void {
-      var applicationFrame:Application = Application.application as Application; 
-      var controlBar:ApplicationControlBar = applicationFrame.controlBar as ApplicationControlBar;
-      if(controlBar) {
-        controlBar.removeAllChildren();
-      } else {
-        controlBar = new ApplicationControlBar();
-        controlBar.dock = true;
-        applicationFrame.addChild(controlBar);
-      }
-      controlBar.addChild(createApplicationMenuBar(workspaceActions, actions, helpActions));
+      var applicationFrame:Application = Application.application as Application;
+      decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
       
       _workspaceAccordion = new Accordion();
       _workspaceAccordion.historyManagementEnabled = false;
-      for(var i:int = 0; i < (workspaceActions[0] as RActionList).actions.length; i++) {
-        var workspaceAction:RAction = (workspaceActions[0] as RActionList).actions[i];
+      for(var i:int = 0; i < workspaceActions.actions.length; i++) {
+        var workspaceAction:RAction = workspaceActions.actions[i];
         var cardCanvas:Canvas = new Canvas();
         cardCanvas.percentWidth = 100.0;
         cardCanvas.percentHeight = 100.0;
@@ -778,7 +774,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _workspaceAccordion.percentHeight = 100.0;
       var accordionHandler:Function = function(event:IndexChangedEvent):void {
         var workspaceIndex:int = event.newIndex;
-        execute((workspaceActions[0] as RActionList).actions[workspaceIndex]);
+        execute(workspaceActions.actions[workspaceIndex]);
       };
       _workspaceAccordion.addEventListener(IndexChangedEvent.CHANGE, accordionHandler);
       
@@ -795,21 +791,35 @@ package org.jspresso.framework.application.frontend.controller.flex {
       applicationFrame.addChild(split);
     }
     
-    protected function createApplicationMenuBar(workspaceActions:Array,
-                                              actions:Array,
-                                              helpActions:Array):MenuBar {
+    protected function decorateApplicationFrame(applicationFrame:Application,
+                                                exitAction:RAction,
+                                                navigationActions:Array,
+                                                actions:Array,
+                                                helpActions:Array):void {
+      var controlBar:ApplicationControlBar = applicationFrame.controlBar as ApplicationControlBar;
+      if(controlBar) {
+        controlBar.removeAllChildren();
+      } else {
+        controlBar = new ApplicationControlBar();
+        controlBar.dock = true;
+        applicationFrame.addChild(controlBar);
+      }
+      _viewFactory.installActionLists(controlBar, navigationActions);
+      _viewFactory.addSeparator(controlBar);
+      _viewFactory.installActionLists(controlBar, actions);
+      _viewFactory.addSeparator(controlBar);
+      var glue:HBox = new HBox();
+      glue.percentWidth = 100.0;
+      controlBar.addChild(glue);
+      _viewFactory.installActionLists(controlBar, helpActions);
+      _viewFactory.addSeparator(controlBar);
+      controlBar.addChild(_viewFactory.createAction(exitAction));
+    }
+
+    protected function createApplicationMenuBar(actions:Array,
+                                                helpActions:Array):MenuBar {
       var menuBarModel:Object = new Object();
       var menus:Array = new Array();
-      var actualWorkspaceActions:Array;
-      if(workspaceActions.length > 1) {
-        actualWorkspaceActions = new Array();
-        for(var waIndex:int = 1; waIndex < workspaceActions.length; waIndex++) {
-          actualWorkspaceActions[waIndex-1] = workspaceActions[waIndex];
-        }
-      } else {
-        actualWorkspaceActions = workspaceActions;
-      }
-      menus = menus.concat(createMenus(actualWorkspaceActions, true));
       menus = menus.concat(createMenus(actions, false));
       menus = menus.concat(createMenus(helpActions, true));
       menuBarModel["children"] = menus;

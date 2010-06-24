@@ -14,6 +14,8 @@
 
 
 package org.jspresso.framework.application.frontend.command.remote {
+  import org.jspresso.framework.gui.remote.RAction;
+  import org.jspresso.framework.gui.remote.RActionList;
 
 		
     [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand")]
@@ -21,8 +23,10 @@ package org.jspresso.framework.application.frontend.command.remote {
 
         private var _actions:Array;
         private var _helpActions:Array;
-        private var _workspaceActions:Array;
+        private var _navigationActions:Array;
+        private var _workspaceActions:RActionList;
         private var _workspaceNames:Array;
+        private var _exitAction:RAction;
 
         public function RemoteInitCommand() {
           //default constructor.
@@ -42,10 +46,10 @@ package org.jspresso.framework.application.frontend.command.remote {
             return _helpActions;
         }
 
-        public function set workspaceActions(value:Array):void {
+        public function set workspaceActions(value:RActionList):void {
             _workspaceActions = value;
         }
-        public function get workspaceActions():Array {
+        public function get workspaceActions():RActionList {
             return _workspaceActions;
         }
 
@@ -55,5 +59,21 @@ package org.jspresso.framework.application.frontend.command.remote {
         public function get workspaceNames():Array {
           return _workspaceNames;
         }
+
+        public function get navigationActions():Array {
+          return _navigationActions;
+        }
+        public function set navigationActions(value:Array):void {
+          _navigationActions = value;
+        }
+
+        public function get exitAction():RAction {
+          return _exitAction;
+        }
+        public function set exitAction(value:RAction):void {
+          _exitAction = value;
+        }
+
+
     }
 }

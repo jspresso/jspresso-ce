@@ -124,9 +124,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                                                    org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(new qx.data.Array(this.__commandsQueue)));
         this.__commandsQueue.length = 0;
       } else {
-      	for(var i = 0; i < this.__commandsQueue.length; i++) {
-      	  this.__commandsBacklog[i] = this.__commandsQueue[i];
-      	}
+        for(var i = 0; i < this.__commandsQueue.length; i++) {
+          this.__commandsBacklog[i] = this.__commandsQueue[i];
+        }
       }
     },
     
@@ -293,6 +293,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand) {
         this._initApplicationFrame(command.getWorkspaceNames(),
                              command.getWorkspaceActions(),
+                             command.getExitAction(),
+                             command.getNavigationActions(),
                              command.getActions(),
                              command.getHelpActions());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand) {
@@ -305,10 +307,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         var targetPeer = this.getRegistered(targetPeerGuid);
         if(targetPeer == null) {
           if(!this.__unregistered[targetPeerGuid] && !(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand)) {
-	          if(!this.__postponedCommands[targetPeerGuid]) {
-	            this.__postponedCommands[targetPeerGuid] = new Array();
-	          } 
-	          this.__postponedCommands[targetPeerGuid].push(command);
+            if(!this.__postponedCommands[targetPeerGuid]) {
+              this.__postponedCommands[targetPeerGuid] = new Array();
+            } 
+            this.__postponedCommands[targetPeerGuid].push(command);
           }
           return;
         }
@@ -530,20 +532,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     _initApplicationFrame : function(workspaceNames,
                                       workspaceActions,
+                                      exitAction,
+                                      navigationActions,
                                       actions,
                                       helpActions) {
       //this.__application.getRoot().removeAll();
 
-      var applicationContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox(10));
+      var applicationFrame = new qx.ui.container.Composite(new qx.ui.layout.VBox());
       
-      var menuBar = this._createApplicationMenuBar(workspaceActions, actions, helpActions);
-      applicationContainer.add(menuBar);
+      this._decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
       
       var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
       this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
-      for(var i = 0; i < workspaceActions[0].getActions().length; i++) {
-        var workspacePanel = new collapsablepanel.Panel(workspaceActions[0].getActions()[i].getName());
+      for(var i = 0; i < workspaceActions.getActions().length; i++) {
+        var workspacePanel = new collapsablepanel.Panel(workspaceActions.getActions()[i].getName());
         if(i == 0) {
           workspacePanel.setValue(true);
         } else {
@@ -551,12 +554,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         }
         workspacePanel.setUserData("workspaceName", workspaceNames[i]);
         workspacePanel.setGroup(this.__workspaceAccordionGroup);
-        workspacePanel.setUserData("rAction", workspaceActions[0].getActions()[i]);
+        workspacePanel.setUserData("rAction", workspaceActions.getActions()[i]);
         workspacePanel.addListener("changeValue", function(event) {
           this.execute(event.getTarget().getUserData("rAction"));
         }, this);
         this.__viewFactory.setIcon(workspacePanel.getChildControl("bar"),
-                             workspaceActions[0].getActions()[i].getIcon());
+                             workspaceActions.getActions()[i].getIcon());
         workspaceAccordion.add(workspacePanel, {flex:1});
       }
 
@@ -566,9 +569,31 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       splitContainer.add(workspaceAccordion, 0.15);
       splitContainer.add(this.__workspaceStack, 0.85);
       
-      applicationContainer.add(splitContainer, {flex:1});
+      applicationFrame.add(splitContainer, {flex:1});
 
-      this.__application.getRoot().add(applicationContainer, {edge:0})
+      this.__application.getRoot().add(applicationFrame, {edge:0})
+    },
+    
+    /**
+     * 
+     * @param {qx.ui.container.Composite} applicationFrame
+     * @param {org.jspresso.framework.gui.remote.RAction} exitAction
+     * @param {org.jspresso.framework.gui.remote.RActionList[]} navigationActions
+     * @param {org.jspresso.framework.gui.remote.RActionList[]} actions
+     * @param {org.jspresso.framework.gui.remote.RActionList[]} helpActions
+     * @return void
+     * 
+     */
+    _decorateApplicationFrame : function(applicationFrame, exitAction, navigationActions, actions, helpActions) {
+      //var menuBar = this._createApplicationMenuBar(workspaceActions, actions, helpActions);
+      //applicationFrame.add(menuBar);
+      var toolBar = new qx.ui.toolbar.ToolBar();
+      this.__viewFactory.installActionLists(toolBar, navigationActions);
+      this.__viewFactory.installActionLists(toolBar, actions);
+      toolBar.addSpacer();
+      this.__viewFactory.installActionLists(helpActions, actions);
+      toolBar.add(this.__viewFactory.createAction(exitAction));
+      applicationFrame.add(toolBar);
     },
     
     /**
@@ -579,25 +604,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return qx.ui.menubar.MenuBar
      * 
      */
-    _createApplicationMenuBar : function(workspaceActions,
-                                              actions,
-                                              helpActions) {
+    _createApplicationMenuBar : function(actions,
+                                         helpActions) {
       var menuBar = new qx.ui.menubar.MenuBar();
-      var actualWorkspaceActions;
-      if(workspaceActions.length > 1) {
-        actualWorkspaceActions = new Array();
-        for(var waIndex = 1; waIndex < workspaceActions.length; waIndex++) {
-          actualWorkspaceActions[waIndex-1] = workspaceActions[waIndex];
-        }
-      } else {
-        actualWorkspaceActions = workspaceActions;
-      }
-
-      this._completeMenuBar(menuBar, actualWorkspaceActions, true);
       this._completeMenuBar(menuBar, actions, false);
       menuBar.addSpacer();
       this._completeMenuBar(menuBar, helpActions, true);
-
       return menuBar;                                            
     },
     
@@ -836,11 +848,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           this.__postponedCommands = null;
           this.__unregistered = null;
           if(this.__commandsBacklog.length > 0) {
-          	for(var i = 0; i < this.__commandsBacklog.length; i++) {
-          		this.__commandsQueue.push(this.__commandsBacklog[i]);
-          	}
-          	this.__commandsBacklog.length = 0;
-          	this._dispatchCommands();
+            for(var i = 0; i < this.__commandsBacklog.length; i++) {
+              this.__commandsQueue.push(this.__commandsBacklog[i]);
+            }
+            this.__commandsBacklog.length = 0;
+            this._dispatchCommands();
           }
         }
       };

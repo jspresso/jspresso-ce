@@ -509,9 +509,13 @@ public class DefaultRemoteController extends
     RemoteInitCommand initCommand = new RemoteInitCommand();
     initCommand.setWorkspaceNames(getWorkspaceNames().toArray(new String[0]));
     initCommand
-        .setWorkspaceActions(createRActionLists(createWorkspaceActionMap()));
+        .setWorkspaceActions(createRActionList(createWorkspaceActionList()));
     initCommand.setActions(createRActionLists(getActionMap()));
     initCommand.setHelpActions(createRActionLists(getHelpActions()));
+    initCommand
+        .setNavigationActions(createRActionLists(getNavigationActions()));
+    initCommand.setExitAction(getViewFactory().getActionFactory().createAction(
+        getExitAction(), this, null, getLocale()));
     initCommands.add(initCommand);
     return initCommands;
   }

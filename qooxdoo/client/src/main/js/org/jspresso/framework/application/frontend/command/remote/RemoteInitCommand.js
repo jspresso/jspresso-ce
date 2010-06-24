@@ -22,6 +22,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
 
   properties :
   {
+    navigationActions :
+    {
+      check : "Array"
+    },
     actions :
     {
       check : "Array"
@@ -32,11 +36,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     },
     workspaceActions :
     {
-      check : "Array"
+      check : "org.jspresso.framework.gui.remote.RActionList"
     },
     workspaceNames :
     {
       check : "Array"
+    },
+    exitAction :
+    {
+      check : "org.jspresso.framework.gui.remote.RAction"
     }
   }
 });

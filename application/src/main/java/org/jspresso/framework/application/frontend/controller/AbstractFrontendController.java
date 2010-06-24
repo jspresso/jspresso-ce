@@ -112,6 +112,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private List<ModuleHistoryEntry>              forwardHistoryEntries;
 
   private ActionMap                             helpActionMap;
+  private ActionMap                             navigationActionMap;
 
   private CallbackHandler                       loginCallbackHandler;
 
@@ -198,6 +199,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
         execute(module.getStartupAction(), createEmptyContext());
       }
       module.setStarted(true);
+      pinModule(getSelectedWorkspaceName(), module);
       execute(module.getEntryAction(), createEmptyContext());
       execute(getOnModuleEnterAction(), createEmptyContext());
     }
@@ -379,6 +381,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public ActionMap getHelpActions() {
     return helpActionMap;
+  }
+
+  /**
+   * Gets the navigation actions.
+   * 
+   * @return the navigation actions.
+   */
+  public ActionMap getNavigationActions() {
+    return navigationActionMap;
   }
 
   /**
@@ -578,6 +589,18 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setHelpActionMap(ActionMap helpActionMap) {
     this.helpActionMap = helpActionMap;
+  }
+
+  /**
+   * Configures the navigation action map. The navigation action map should
+   * contain actions that are related to navigating the modules and workspace
+   * history, e.g. previous, next, home, and so on.
+   * 
+   * @param navigationActionMap
+   *          the navigationActionMap to set.
+   */
+  public void setNavigationActionMap(ActionMap navigationActionMap) {
+    this.navigationActionMap = navigationActionMap;
   }
 
   /**
@@ -794,13 +817,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Creates the workspace action map.
+   * Creates the workspace action list.
    * 
-   * @return the workspace action map.
+   * @return the workspace action list.
    */
-  protected ActionMap createWorkspaceActionMap() {
-    ActionMap workspaceActionMap = new ActionMap();
-    List<ActionList> workspaceActionLists = new ArrayList<ActionList>();
+  protected ActionList createWorkspaceActionList() {
     ActionList workspaceSelectionActionList = new ActionList();
     workspaceSelectionActionList.setName("workspaces");
     workspaceSelectionActionList
@@ -822,6 +843,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     workspaceSelectionActionList.setActions(workspaceSelectionActions);
+    return workspaceSelectionActionList;
+  }
+
+  /**
+   * Creates the workspace action map.
+   * 
+   * @return the workspace action map.
+   */
+  protected ActionMap createWorkspaceActionMap() {
+    ActionMap workspaceActionMap = new ActionMap();
+    List<ActionList> workspaceActionLists = new ArrayList<ActionList>();
 
     ActionList exitActionList = new ActionList();
     exitActionList.setName("file");
@@ -830,7 +862,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     exitActions.add(getExitAction());
     exitActionList.setActions(exitActions);
 
-    workspaceActionLists.add(workspaceSelectionActionList);
+    workspaceActionLists.add(createWorkspaceActionList());
     workspaceActionLists.add(exitActionList);
     workspaceActionMap.setActionLists(workspaceActionLists);
 
@@ -926,7 +958,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the exit action.
    */
-  protected IDisplayableAction getExitAction() {
+  public IDisplayableAction getExitAction() {
     if (exitAction == null) {
       ExitAction<E, F, G> action = new ExitAction<E, F, G>();
       action.setName("quit.name");

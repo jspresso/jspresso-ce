@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionList;
 
 /**
@@ -31,8 +32,10 @@ public class RemoteInitCommand extends RemoteCommand {
   private static final long serialVersionUID = -5984969345298629961L;
 
   private RActionList[]     actions;
+  private RActionList[]     navigationActions;
   private RActionList[]     helpActions;
-  private RActionList[]     workspaceActions;
+  private RActionList       workspaceActions;
+  private RAction           exitAction;
   private String[]          workspaceNames;
 
   /**
@@ -58,7 +61,7 @@ public class RemoteInitCommand extends RemoteCommand {
    * 
    * @return the workspaceActions.
    */
-  public RActionList[] getWorkspaceActions() {
+  public RActionList getWorkspaceActions() {
     return workspaceActions;
   }
 
@@ -97,7 +100,7 @@ public class RemoteInitCommand extends RemoteCommand {
    * @param workspaceActions
    *          the workspaceActions to set.
    */
-  public void setWorkspaceActions(RActionList[] workspaceActions) {
+  public void setWorkspaceActions(RActionList workspaceActions) {
     this.workspaceActions = workspaceActions;
   }
 
@@ -109,5 +112,43 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public void setWorkspaceNames(String[] workspaceNames) {
     this.workspaceNames = workspaceNames;
+  }
+
+  /**
+   * Gets the navigationActions.
+   * 
+   * @return the navigationActions.
+   */
+  public RActionList[] getNavigationActions() {
+    return navigationActions;
+  }
+
+  /**
+   * Sets the navigationActions.
+   * 
+   * @param navigationActions
+   *          the navigationActions to set.
+   */
+  public void setNavigationActions(RActionList[] navigationActions) {
+    this.navigationActions = navigationActions;
+  }
+
+  /**
+   * Gets the exitAction.
+   * 
+   * @return the exitAction.
+   */
+  public RAction getExitAction() {
+    return exitAction;
+  }
+
+  /**
+   * Sets the exitAction.
+   * 
+   * @param exitAction
+   *          the exitAction to set.
+   */
+  public void setExitAction(RAction exitAction) {
+    this.exitAction = exitAction;
   }
 }

@@ -453,26 +453,28 @@ public class DefaultWingsController extends
     return false;
   }
 
-  private List<SMenu> createActionMenus() {
-    return createMenus(getActionMap(), false);
-  }
-
   private SMenuBar createApplicationMenuBar() {
     SMenuBar applicationMenuBar = new SMenuBar();
     applicationMenuBar.setBorder(new SLineBorder(Color.LIGHT_GRAY));
-    List<SMenu> workspaceMenus = createWorkspacesMenus();
+    List<SMenu> workspaceMenus = createMenus(createWorkspaceActionMap(), true);
     if (workspaceMenus != null) {
       for (SMenu workspaceMenu : workspaceMenus) {
         applicationMenuBar.add(workspaceMenu);
       }
     }
-    List<SMenu> actionMenus = createActionMenus();
+    List<SMenu> navigationMenus = createMenus(getNavigationActions(), false);
+    if (navigationMenus != null) {
+      for (SMenu navigationMenu : navigationMenus) {
+        applicationMenuBar.add(navigationMenu);
+      }
+    }
+    List<SMenu> actionMenus = createMenus(getActionMap(), false);
     if (actionMenus != null) {
       for (SMenu actionMenu : actionMenus) {
         applicationMenuBar.add(actionMenu);
       }
     }
-    List<SMenu> helpActionMenus = createHelpActionMenus();
+    List<SMenu> helpActionMenus = createMenus(getHelpActions(), true);
     if (helpActionMenus != null) {
       for (SMenu helpActionMenu : helpActionMenus) {
         helpActionMenu.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
@@ -499,10 +501,6 @@ public class DefaultWingsController extends
     controllerFrame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
     updateFrameTitle();
     controllerFrame.setVisible(true);
-  }
-
-  private List<SMenu> createHelpActionMenus() {
-    return createMenus(getHelpActions(), true);
   }
 
   private SMenu createMenu(ActionList actionList) {
@@ -558,10 +556,6 @@ public class DefaultWingsController extends
       }
     }
     return menus;
-  }
-
-  private List<SMenu> createWorkspacesMenus() {
-    return createMenus(createWorkspaceActionMap(), true);
   }
 
   private void initLoginProcess() {

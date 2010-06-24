@@ -430,26 +430,28 @@ public class DefaultUlcController extends
     return true;
   }
 
-  private List<ULCMenu> createActionMenus() {
-    return createMenus(getActionMap(), false);
-  }
-
   private ULCMenuBar createApplicationMenuBar() {
     ULCMenuBar applicationMenuBar = new ULCMenuBar();
-    List<ULCMenu> workspaceMenus = createWorkspacesMenus();
+    List<ULCMenu> workspaceMenus = createMenus(createWorkspaceActionMap(), true);
     if (workspaceMenus != null) {
       for (ULCMenu workspaceMenu : workspaceMenus) {
         applicationMenuBar.add(workspaceMenu);
       }
     }
-    List<ULCMenu> actionMenus = createActionMenus();
+    List<ULCMenu> navigationMenus = createMenus(getNavigationActions(), false);
+    if (navigationMenus != null) {
+      for (ULCMenu navigationMenu : navigationMenus) {
+        applicationMenuBar.add(navigationMenu);
+      }
+    }
+    List<ULCMenu> actionMenus = createMenus(getActionMap(), false);
     if (actionMenus != null) {
       for (ULCMenu actionMenu : actionMenus) {
         applicationMenuBar.add(actionMenu);
       }
     }
     applicationMenuBar.add(ULCFiller.createHorizontalGlue());
-    List<ULCMenu> helpActionMenus = createHelpActionMenus();
+    List<ULCMenu> helpActionMenus = createMenus(getHelpActions(), true);
     if (helpActionMenus != null) {
       for (ULCMenu helpActionMenu : helpActionMenus) {
         applicationMenuBar.add(helpActionMenu);
@@ -487,10 +489,6 @@ public class DefaultUlcController extends
     UlcUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
     controllerFrame.setVisible(true);
-  }
-
-  private List<ULCMenu> createHelpActionMenus() {
-    return createMenus(getHelpActions(), true);
   }
 
   private ULCMenu createMenu(ActionList actionList) {
@@ -562,10 +560,6 @@ public class DefaultUlcController extends
     internalFrame.getContentPane().add(view);
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;
-  }
-
-  private List<ULCMenu> createWorkspacesMenus() {
-    return createMenus(createWorkspaceActionMap(), true);
   }
 
   private void displayPopup(ULCComponent sourceComponent, String title,
