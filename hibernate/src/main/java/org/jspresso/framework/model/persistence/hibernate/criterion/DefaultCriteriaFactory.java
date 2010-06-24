@@ -177,55 +177,62 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
         }
       }
     } else {
+      IComponentDescriptor<?> componentDescriptor = aQueryComponent
+          .getComponentDescriptor();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        if (!PropertyDescriptorHelper.isComputed(aQueryComponent
-            .getComponentDescriptor(), property.getKey())) {
-          String prefixedProperty;
-          if (path != null) {
-            prefixedProperty = path + "." + property.getKey();
-          } else {
-            prefixedProperty = property.getKey();
-          }
-          if (property.getValue() instanceof IEntity) {
-            if (!((IEntity) property.getValue()).isPersistent()) {
-              abort = true;
+        if (componentDescriptor.getPropertyDescriptor(property.getKey()) != null) {
+          if (!PropertyDescriptorHelper.isComputed(componentDescriptor,
+              property.getKey())) {
+            String prefixedProperty;
+            if (path != null) {
+              prefixedProperty = path + "." + property.getKey();
             } else {
+              prefixedProperty = property.getKey();
+            }
+            if (property.getValue() instanceof IEntity) {
+              if (!((IEntity) property.getValue()).isPersistent()) {
+                abort = true;
+              } else {
+                currentCriteria.add(Restrictions.eq(prefixedProperty, property
+                    .getValue()));
+              }
+            } else if (property.getValue() instanceof Boolean
+                && ((Boolean) property.getValue()).booleanValue()) {
               currentCriteria.add(Restrictions.eq(prefixedProperty, property
                   .getValue()));
-            }
-          } else if (property.getValue() instanceof Boolean
-              && ((Boolean) property.getValue()).booleanValue()) {
-            currentCriteria.add(Restrictions.eq(prefixedProperty, property
-                .getValue()));
-          } else if (property.getValue() instanceof String) {
-            if (((String) property.getValue()).length() > 0) {
-              currentCriteria.add(Restrictions.like(prefixedProperty,
-                  (String) property.getValue(), MatchMode.START).ignoreCase());
-            }
-          } else if (property.getValue() instanceof Number
-              || property.getValue() instanceof Date) {
-            currentCriteria.add(Restrictions.eq(prefixedProperty, property
-                .getValue()));
-          } else if (property.getValue() instanceof IQueryComponent) {
-            IQueryComponent joinedComponent = ((IQueryComponent) property
-                .getValue());
-            if (!isQueryComponentEmpty(joinedComponent)) {
-              if (joinedComponent.isInlineComponent() || path != null) {
-                // the joined component is an inlined component so we must use
-                // dot nested properties. Same applies if we are in a nested
-                // path i.e. already on an inline component.
-                abort = abort
-                    || completeCriteria(rootCriteria, currentCriteria,
-                        prefixedProperty, (IQueryComponent) property.getValue());
-              } else {
-                // the joined component is an entity so we must use
-                // nested criteria.
-                DetachedCriteria joinCriteria = rootCriteria.getSubCriteriaFor(
-                    currentCriteria, property.getKey(),
-                    CriteriaSpecification.INNER_JOIN);
-                abort = abort
-                    || completeCriteria(rootCriteria, joinCriteria, null,
-                        joinedComponent);
+            } else if (property.getValue() instanceof String) {
+              if (((String) property.getValue()).length() > 0) {
+                currentCriteria
+                    .add(Restrictions.like(prefixedProperty,
+                        (String) property.getValue(), MatchMode.START)
+                        .ignoreCase());
+              }
+            } else if (property.getValue() instanceof Number
+                || property.getValue() instanceof Date) {
+              currentCriteria.add(Restrictions.eq(prefixedProperty, property
+                  .getValue()));
+            } else if (property.getValue() instanceof IQueryComponent) {
+              IQueryComponent joinedComponent = ((IQueryComponent) property
+                  .getValue());
+              if (!isQueryComponentEmpty(joinedComponent)) {
+                if (joinedComponent.isInlineComponent() || path != null) {
+                  // the joined component is an inlined component so we must use
+                  // dot nested properties. Same applies if we are in a nested
+                  // path i.e. already on an inline component.
+                  abort = abort
+                      || completeCriteria(rootCriteria, currentCriteria,
+                          prefixedProperty, (IQueryComponent) property
+                              .getValue());
+                } else {
+                  // the joined component is an entity so we must use
+                  // nested criteria.
+                  DetachedCriteria joinCriteria = rootCriteria
+                      .getSubCriteriaFor(currentCriteria, property.getKey(),
+                          CriteriaSpecification.INNER_JOIN);
+                  abort = abort
+                      || completeCriteria(rootCriteria, joinCriteria, null,
+                          joinedComponent);
+                }
               }
             }
           }
@@ -239,14 +246,18 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
     if (queryComponent == null || queryComponent.isEmpty()) {
       return true;
     }
+    IComponentDescriptor<?> componentDescriptor = queryComponent
+        .getComponentDescriptor();
     for (Map.Entry<String, Object> property : queryComponent.entrySet()) {
-      if (property.getValue() != null) {
-        if (property.getValue() instanceof IQueryComponent) {
-          if (!isQueryComponentEmpty((IQueryComponent) property.getValue())) {
+      if (componentDescriptor.getPropertyDescriptor(property.getKey()) != null) {
+        if (property.getValue() != null) {
+          if (property.getValue() instanceof IQueryComponent) {
+            if (!isQueryComponentEmpty((IQueryComponent) property.getValue())) {
+              return false;
+            }
+          } else {
             return false;
           }
-        } else {
-          return false;
         }
       }
     }

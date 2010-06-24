@@ -73,6 +73,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   private ICriteriaRefiner       criteriaRefiner;
   private IQueryComponentRefiner queryComponentRefiner;
 
+  private static final String    CRITERIA_FACTORY  = "CRITERIA_FACTORY";
+  private static final String    CRITERIA_REFINER  = "CRITERIA_REFINER";
+  private static final String    COMPONENT_REFINER = "COMPONENT_REFINER";
+
   /**
    * {@inheritDoc}
    */
@@ -81,23 +85,43 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
     final IQueryComponent queryComponent = getQueryComponent(context);
-    if (queryComponentRefiner != null) {
-      queryComponentRefiner.refineQueryComponent(queryComponent, context);
+
+    IQueryComponentRefiner compRefiner = (IQueryComponentRefiner) queryComponent
+        .get(COMPONENT_REFINER);
+
+    if (compRefiner == null && queryComponentRefiner != null) {
+      queryComponent.put(COMPONENT_REFINER, queryComponentRefiner);
+      compRefiner = queryComponentRefiner;
+    }
+    if (compRefiner != null) {
+      compRefiner.refineQueryComponent(queryComponent, context);
     }
 
     List<IEntity> queriedEntities = (List<IEntity>) getTransactionTemplate(
         context).execute(new TransactionCallback() {
 
       public Object doInTransaction(TransactionStatus status) {
-        EnhancedDetachedCriteria criteria = getCriteriaFactory()
+        ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent
+            .get(CRITERIA_FACTORY);
+        if (critFactory == null) {
+          queryComponent.put(CRITERIA_FACTORY, getCriteriaFactory());
+          critFactory = getCriteriaFactory();
+        }
+        EnhancedDetachedCriteria criteria = critFactory
             .createCriteria(queryComponent);
         List entities;
         if (criteria == null) {
           entities = new ArrayList<IEntity>();
           queryComponent.setRecordCount(new Integer(0));
         } else {
-          if (criteriaRefiner != null) {
-            criteriaRefiner.refineCriteria(criteria, queryComponent, context);
+          ICriteriaRefiner critRefiner = (ICriteriaRefiner) queryComponent
+              .get(CRITERIA_REFINER);
+          if (critRefiner == null && criteriaRefiner != null) {
+            queryComponent.put(CRITERIA_REFINER, criteriaRefiner);
+            critRefiner = criteriaRefiner;
+          }
+          if (critRefiner != null) {
+            critRefiner.refineCriteria(criteria, queryComponent, context);
           }
           Integer totalCount = null;
           Integer pageSize = queryComponent.getPageSize();
@@ -112,13 +136,11 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               totalCount = (Integer) getHibernateTemplate(context)
                   .findByCriteria(criteria).get(0);
             }
-            getCriteriaFactory().completeCriteriaWithOrdering(criteria,
-                queryComponent);
+            critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
             entities = getHibernateTemplate(context).findByCriteria(criteria,
                 page.intValue() * pageSize.intValue(), pageSize.intValue());
           } else {
-            getCriteriaFactory().completeCriteriaWithOrdering(criteria,
-                queryComponent);
+            critFactory.completeCriteriaWithOrdering(criteria, queryComponent);
             entities = getHibernateTemplate(context).findByCriteria(criteria);
             totalCount = new Integer(entities.size());
           }
