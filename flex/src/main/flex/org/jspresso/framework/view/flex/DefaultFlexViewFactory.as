@@ -43,6 +43,8 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Image;
   import mx.controls.Label;
   import mx.controls.List;
+  import mx.controls.Menu;
+  import mx.controls.PopUpButton;
   import mx.controls.TextArea;
   import mx.controls.TextInput;
   import mx.controls.Tree;
@@ -59,6 +61,7 @@ package org.jspresso.framework.view.flex {
   import mx.events.DataGridEventReason;
   import mx.events.FlexEvent;
   import mx.events.ListEvent;
+  import mx.events.MenuEvent;
   import mx.events.PropertyChangeEvent;
   import mx.formatters.DateFormatter;
   import mx.formatters.Formatter;
@@ -1812,23 +1815,28 @@ package org.jspresso.framework.view.flex {
     
     public function createButton(label:String, tooltip:String, icon:RIcon):Button {
       var button:Button = new EnhancedButton();
+      configureButton(button, label, tooltip, icon);
+      return button;
+    }
+    
+    protected function configureButton(button:Button, label:String, tooltip:String, icon:RIcon):void {
+      button.setStyle("icon", null);
       if(icon) {
-	      button.setStyle("icon", getIconForComponent(button, icon));
-	    }
-	    if(label) {
-		    button.label = label;
-	    } else if(icon) {
-	      button.regenerateStyleCache(false);
-	      var cornerRadius:Number = button.getStyle("cornerRadius") as Number;
+        button.setStyle("icon", getIconForComponent(button, icon));
+      }
+      if(label) {
+        button.label = label;
+      } else if(icon) {
+        button.regenerateStyleCache(false);
+        var cornerRadius:Number = button.getStyle("cornerRadius") as Number;
         button.width = icon.dimension.width + cornerRadius;
         //button.maxWidth = button.width;
-	      button.height = icon.dimension.height + cornerRadius;
+        button.height = icon.dimension.height + cornerRadius;
         //button.maxHeight = button.height;
-	    }
-	    if(tooltip) {
-		    button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
-		  }
-      return button;
+      }
+      if(tooltip) {
+        button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
+      }
     }
 
     protected function bindTextInput(textInput:TextInput, remoteState:RemoteValueState,
@@ -1950,6 +1958,98 @@ package org.jspresso.framework.view.flex {
     
     public function get iconTemplate():Class  {
       return _iconTemplate;
+    }
+
+    public function createMenus(actionLists:Array, useSeparator:Boolean):Array {
+      var menus:Array = new Array();
+      if(actionLists != null) {
+        var menu:Object;
+        for each (var actionList:RActionList in actionLists) {
+          if (!useSeparator || menus.length == 0) {
+            menu = createMenu(actionList);
+            menus.push(menu);
+          } else {
+            var separator:Object = new Object();
+            separator["type"] = "separator";
+            menu["children"].push(separator);
+            for each (var menuItem:Object in createMenuItems(actionList)) {
+              menu["children"].push(menuItem);
+            }
+          }
+        }
+      }
+      return menus;
+    }
+
+    public function createPopupButton(actionList:RActionList):Button {
+      if(actionList.actions.length == 1) {
+        return createAction(actionList.actions[0]);
+      }
+      var dp:Object = createMenuItems(actionList);
+      var menu:Menu = new Menu();
+      menu.dataProvider = dp;
+      menu.itemRenderer = new ClassFactory(RIconMenuItemRenderer);
+      var popupButton:PopUpButton = new PopUpButton();
+      popupButton.popUp = menu;
+      var menuHandler:Function = function(event:MenuEvent):void  {
+        if (event.item["data"] is RAction) {
+          var action:RAction = event.item["data"] as RAction;
+          getActionHandler().execute(action, null);
+          configureButton(popupButton, action.name, action.description, action.icon);
+          popupButton.data = action;
+        }        
+      };
+      var defaultAction:RAction = actionList.actions[0];
+      configureButton(popupButton, defaultAction.name, defaultAction.description, defaultAction.icon);
+      popupButton.data = defaultAction;
+      popupButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
+        getActionHandler().execute((event.currentTarget as PopUpButton).data as RAction);
+      });
+      menu.addEventListener(MenuEvent.ITEM_CLICK, menuHandler);
+      return popupButton;
+    }
+    
+    public function createMenu(actionList:RActionList):Object {
+      var menu:Object = new Object();
+      menu["label"] = actionList.name;
+      menu["description"] = actionList.description;
+      menu["data"] = actionList;
+      if(actionList.icon) {
+        menu["icon"] = iconTemplate;
+        menu["rIcon"] = actionList.icon;
+      }
+      
+      var menuItems:Array = new Array();
+      for each (var menuItem:Object in createMenuItems(actionList)) {
+        menuItems.push(menuItem);
+      }
+      menu["children"] = menuItems;
+      return menu;
+    }
+    
+    protected function createMenuItems(actionList:RActionList):Array {
+      var menuItems:Array = new Array();
+      for each(var action:RAction in actionList.actions) {
+        menuItems.push(createMenuItem(action));
+      }
+      return menuItems;
+    }
+    
+    protected function createMenuItem(action:RAction):Object {
+      var menuItem:Object = new Object();
+      menuItem["label"] = action.name;
+      menuItem["description"] = action.description;
+      menuItem["data"] = action;
+      if(action.icon) {
+        menuItem["icon"] = iconTemplate;
+        menuItem["rIcon"] = action.icon;
+      }
+      var updateMenuItemState:Function = function (enabled:Boolean):void {
+        menuItem["enabled"] = enabled;
+      };
+      BindingUtils.bindSetter(updateMenuItemState, action, "enabled", true);
+      _remotePeerRegistry.register(action);
+      return menuItem;
     }
   }
 }

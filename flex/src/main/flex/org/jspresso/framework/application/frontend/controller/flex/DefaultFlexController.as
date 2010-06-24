@@ -41,6 +41,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.controls.Label;
   import mx.controls.Menu;
   import mx.controls.MenuBar;
+  import mx.controls.PopUpButton;
   import mx.controls.SWFLoader;
   import mx.controls.Tree;
   import mx.core.Application;
@@ -806,12 +807,21 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       _viewFactory.installActionLists(controlBar, navigationActions);
       _viewFactory.addSeparator(controlBar);
-      _viewFactory.installActionLists(controlBar, actions);
+      var i:int;
+      if(actions != null) {
+        for(i = 0; i < actions.length; i++) {
+          controlBar.addChild(_viewFactory.createPopupButton(actions[i] as RActionList));
+        }
+      }
       _viewFactory.addSeparator(controlBar);
       var glue:HBox = new HBox();
       glue.percentWidth = 100.0;
       controlBar.addChild(glue);
-      _viewFactory.installActionLists(controlBar, helpActions);
+      if(helpActions != null) {
+        for(i = 0; i < helpActions.length; i++) {
+          controlBar.addChild(_viewFactory.createPopupButton(helpActions[i] as RActionList));
+        }
+      }
       _viewFactory.addSeparator(controlBar);
       controlBar.addChild(_viewFactory.createAction(exitAction));
     }
@@ -820,8 +830,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                                 helpActions:Array):MenuBar {
       var menuBarModel:Object = new Object();
       var menus:Array = new Array();
-      menus = menus.concat(createMenus(actions, false));
-      menus = menus.concat(createMenus(helpActions, true));
+      menus = menus.concat(_viewFactory.createMenus(actions, false));
+      menus = menus.concat(_viewFactory.createMenus(helpActions, true));
       menuBarModel["children"] = menus;
       
       var menuBar:MenuBar = new MenuBar();
@@ -848,70 +858,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return menuBar;                                            
     }
     
-    protected function createMenus(actionLists:Array, useSeparator:Boolean):Array {
-      var menus:Array = new Array();
-      if(actionLists != null) {
-        var menu:Object;
-        for each (var actionList:RActionList in actionLists) {
-          if (!useSeparator || menus.length == 0) {
-            menu = createMenu(actionList);
-            menus.push(menu);
-          } else {
-            var separator:Object = new Object();
-            separator["type"] = "separator";
-            menu["children"].push(separator);
-            for each (var menuItem:Object in createMenuItems(actionList)) {
-              menu["children"].push(menuItem);
-            }
-          }
-        }
-      }
-      return menus;
-    }
-    
-    protected function createMenu(actionList:RActionList):Object {
-      var menu:Object = new Object();
-      menu["label"] = actionList.name;
-      menu["description"] = actionList.description;
-      menu["data"] = actionList;
-      if(actionList.icon) {
-        menu["icon"] = _viewFactory.iconTemplate;
-        menu["rIcon"] = actionList.icon;
-      }
-      
-      var menuItems:Array = new Array();
-      for each (var menuItem:Object in createMenuItems(actionList)) {
-        menuItems.push(menuItem);
-      }
-      menu["children"] = menuItems;
-      return menu;
-    }
-  
-    protected function createMenuItems(actionList:RActionList):Array {
-      var menuItems:Array = new Array();
-      for each(var action:RAction in actionList.actions) {
-        menuItems.push(createMenuItem(action));
-      }
-      return menuItems;
-    }
-  
-    protected function createMenuItem(action:RAction):Object {
-      var menuItem:Object = new Object();
-      menuItem["label"] = action.name;
-      menuItem["description"] = action.description;
-      menuItem["data"] = action;
-      if(action.icon) {
-        menuItem["icon"] = _viewFactory.iconTemplate;
-        menuItem["rIcon"] = action.icon;
-      }
-      var updateMenuItemState:Function = function (enabled:Boolean):void {
-        menuItem["enabled"] = enabled;
-      };
-      BindingUtils.bindSetter(updateMenuItemState, action, "enabled", true);
-      _remotePeerRegistry.register(action);
-      return menuItem;
-    }
-
     public function start():void {
       var operation:Operation = _remoteController.operations[START_METHOD] as Operation;
       operation.send(_userLanguage);
