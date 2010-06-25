@@ -1098,13 +1098,13 @@ package org.jspresso.framework.view.flex {
           componentsRow.percentHeight = 100.0;
           component.percentWidth = 100.0;
         } else if(component.maxWidth > 0 && component.maxWidth < 1000) {
-          if(col + elementWidth < remoteForm.columnCount) {
+//          if(col + elementWidth < remoteForm.columnCount) {
             componentCell.maxWidth = component.maxWidth;
             component.percentWidth = 100.0;
-          } else {
-            //Allow last cell to grow
-            component.percentWidth = 100.0;
-          }
+//          } else {
+//            //Allow last cell to grow
+//            component.percentWidth = 100.0;
+//          }
           componentCell.width = component.maxWidth;
         }
         if(component.minWidth > 0) {
