@@ -797,6 +797,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           }
         }
       );
+      this._sizeMaxComponentWidth(checkBox, 2, 2);
       modelController.addTarget(checkBox, "enabled", "writable", false);
       return checkBox;
     },
@@ -1155,6 +1156,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var col = 0;
       var row = 0;
       var lastRow = 0;
+      var lastCol = 0;
       
       for(var i = 0; i < remoteForm.getElements().length; i++) {
         var elementWidth = remoteForm.getElementWidths()[i];
@@ -1162,6 +1164,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         var component = this.createComponent(rComponent);
         /**@type qx.ui.basic.Label*/
         var componentLabel;
+        var labelRow;
+        var labelCol;
+        var labelColSpan;
+        var compRow;
+        var compCol;
+        var compColSpan;
+
         if(remoteForm.getLabelsPosition() != "NONE") {
           componentLabel = this.createComponent(remoteForm.getElementLabels()[i], false);
         }
@@ -1174,12 +1183,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           row += 1;
         }
 
-        var labelRow;
-        var labelCol;
-        var labelColSpan;
-        var compRow;
-        var compCol;
-        var compColSpan;
         if(remoteForm.getLabelsPosition() == "ABOVE") {
           labelRow = row * 2;
           labelCol = col;
@@ -1208,13 +1211,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                                     rowSpan : 1,
                                     colSpan : labelColSpan});
         }
-        component.setAllowStretchX(true);
+        component.setAllowShrinkX(true);
+        component.setAllowGrowX(false);
         form.add(component, {row : compRow,
                              column : compCol,
                              rowSpan : 1,
                              colSpan : compColSpan});
         if(compColSpan > 1) {
-          component.setMaxWidth(null);
+        	if(!(   rComponent instanceof org.jspresso.framework.gui.remote.RComboBox
+        	     || rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox)) {
+            component.setMaxWidth(null);
+        	}
+          component.setAllowGrowX(true);
         }
 
         col += elementWidth;
@@ -1226,10 +1234,25 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
         formLayout.setColumnFlex(compCol, 1);
         lastRow = compRow;
+        if(compCol + compColSpan > lastCol) {
+        	lastCol = compCol + compColSpan;
+        }
       }
       for(var i = 0; i <= lastRow; i++) {
         formLayout.setRowAlign(i, "left", "middle");
       }
+      var filler = new qx.ui.core.Widget();
+      filler.setMinWidth(0);
+      filler.setWidth(0);
+      filler.setMinHeight(0);
+      filler.setHeight(0);
+      filler.setAllowStretchX(true);
+      filler.setAllowStretchY(false);
+      form.add(filler, {row : 0,
+                        column : lastCol,
+                        rowSpan : lastRow + 1,
+                        colSpan : 1});
+      formLayout.setColumnFlex(lastCol, 10);
       return form;
     },
 
