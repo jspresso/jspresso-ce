@@ -425,16 +425,16 @@ public class DefaultSwingViewFactory extends
     return view;
   }
 
-  // private void fillLastRow(JPanel viewComponent) {
-  // GridBagConstraints constraints = new GridBagConstraints();
-  // constraints.gridx = GridBagConstraints.RELATIVE;
-  // constraints.weightx = 1.0;
-  // constraints.fill = GridBagConstraints.HORIZONTAL;
-  // constraints.gridwidth = GridBagConstraints.REMAINDER;
-  // JPanel filler = createJPanel();
-  // // filler.setBorder(new SLineBorder(Color.BLUE));
-  // viewComponent.add(filler, constraints);
-  // }
+  private void fillLastRow(JPanel viewComponent) {
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.weightx = 2000.0;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    JPanel filler = createJPanel();
+    // filler.setBorder(new LineBorder(Color.BLUE));
+    viewComponent.add(filler, constraints);
+  }
 
   /**
    * {@inheritDoc}
@@ -479,7 +479,7 @@ public class DefaultSwingViewFactory extends
     int currentY = 0;
 
     boolean isSpaceFilled = false;
-    // boolean lastRowNeedsFilling = true;
+    boolean lastRowNeedsFilling = true;
 
     for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
@@ -526,14 +526,10 @@ public class DefaultSwingViewFactory extends
         propertyWidth = viewDescriptor.getColumnCount();
       }
       if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
+        fillLastRow(viewComponent);
         currentX = 0;
         currentY++;
       }
-      // if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
-      // fillLastRow(viewComponent);
-      // currentX = 0;
-      // currentY++;
-      // }
 
       // label positionning
       GridBagConstraints constraints = new GridBagConstraints();
@@ -598,10 +594,10 @@ public class DefaultSwingViewFactory extends
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
         isSpaceFilled = true;
-        // if (!ite.hasNext()) {
-        // constraints.gridwidth = GridBagConstraints.REMAINDER;
-        // lastRowNeedsFilling = false;
-        // }
+        if (!ite.hasNext()) {
+          constraints.gridwidth = GridBagConstraints.REMAINDER;
+          lastRowNeedsFilling = false;
+        }
       } else {
         constraints.fill = GridBagConstraints.NONE;
       }
@@ -609,9 +605,9 @@ public class DefaultSwingViewFactory extends
 
       currentX += propertyWidth;
     }
-    // if (lastRowNeedsFilling) {
-    // fillLastRow(viewComponent);
-    // }
+    if (lastRowNeedsFilling) {
+      fillLastRow(viewComponent);
+    }
     if (!isSpaceFilled) {
       JPanel filler = createJPanel();
       GridBagConstraints constraints = new GridBagConstraints();

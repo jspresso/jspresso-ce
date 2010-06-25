@@ -447,16 +447,16 @@ public class DefaultUlcViewFactory extends
     return view;
   }
 
-  // private void fillLastRow(ULCGridBagLayoutPane viewComponent) {
-  // GridBagConstraints constraints = new GridBagConstraints();
-  // constraints.setGridX(GridBagConstraints.RELATIVE);
-  // constraints.setWeightX(1.0);
-  // constraints.setFill(GridBagConstraints.HORIZONTAL);
-  // constraints.setGridWidth(GridBagConstraints.REMAINDER);
-  // ULCBorderLayoutPane filler = createBorderLayoutPane();
-  // // filler.setBorder(new SLineBorder(Color.BLUE));
-  // viewComponent.add(filler, constraints);
-  // }
+  private void fillLastRow(ULCGridBagLayoutPane viewComponent) {
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.setGridX(GridBagConstraints.RELATIVE);
+    constraints.setWeightX(2000.0);
+    constraints.setFill(GridBagConstraints.HORIZONTAL);
+    constraints.setGridWidth(GridBagConstraints.REMAINDER);
+    ULCBorderLayoutPane filler = createBorderLayoutPane();
+    // filler.setBorder(new ULCLineBorder(Color.blue));
+    viewComponent.add(filler, constraints);
+  }
 
   /**
    * {@inheritDoc}
@@ -498,10 +498,11 @@ public class DefaultUlcViewFactory extends
     int currentY = 0;
 
     boolean isSpaceFilled = false;
-    // boolean lastRowNeedsFilling = true;
+    boolean lastRowNeedsFilling = true;
 
-    for (IPropertyViewDescriptor propertyViewDescriptor : viewDescriptor
-        .getPropertyViewDescriptors()) {
+    for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
+        .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
+      IPropertyViewDescriptor propertyViewDescriptor = ite.next();
       String propertyName = propertyViewDescriptor.getModelDescriptor()
           .getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
@@ -544,14 +545,10 @@ public class DefaultUlcViewFactory extends
         propertyWidth = viewDescriptor.getColumnCount();
       }
       if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
+        fillLastRow(viewComponent);
         currentX = 0;
         currentY++;
       }
-      // if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
-      // fillLastRow(viewComponent);
-      // currentX = 0;
-      // currentY++;
-      // }
 
       // label positionning
       GridBagConstraints constraints = new GridBagConstraints();
@@ -618,10 +615,10 @@ public class DefaultUlcViewFactory extends
         constraints.setWeightY(1.0);
         constraints.setFill(GridBagConstraints.BOTH);
         isSpaceFilled = true;
-        // if (!ite.hasNext()) {
-        // constraints.gridwidth = GridBagConstraints.REMAINDER;
-        // lastRowNeedsFilling = false;
-        // }
+        if (!ite.hasNext()) {
+          constraints.setGridWidth(GridBagConstraints.REMAINDER);
+          lastRowNeedsFilling = false;
+        }
       } else {
         constraints.setFill(GridBagConstraints.NONE);
       }
@@ -629,9 +626,9 @@ public class DefaultUlcViewFactory extends
 
       currentX += propertyWidth;
     }
-    // if (lastRowNeedsFilling) {
-    // fillLastRow(viewComponent);
-    // }
+    if (lastRowNeedsFilling) {
+      fillLastRow(viewComponent);
+    }
     if (!isSpaceFilled) {
       ULCBorderLayoutPane filler = createBorderLayoutPane();
       GridBagConstraints constraints = new GridBagConstraints();
