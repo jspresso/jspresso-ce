@@ -42,7 +42,7 @@ public class BasicQueryViewDescriptorFactory implements
    * Constructs a new <code>BasicQueryViewDescriptorFactory</code> instance.
    */
   public BasicQueryViewDescriptorFactory() {
-    horizontallyResizable = false;
+    horizontallyResizable = true;
   }
 
   /**

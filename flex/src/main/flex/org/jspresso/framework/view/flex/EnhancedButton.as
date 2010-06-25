@@ -9,8 +9,10 @@ package org.jspresso.framework.view.flex
      
     override mx_internal function viewIconForPhase(tempIconName:String):IFlexDisplayObject {
       var icon:IFlexDisplayObject = super.viewIconForPhase(tempIconName);
-      if (tempIconName == disabledIconName) {
-        icon.alpha = 0.4;
+      if(icon) {
+        if (tempIconName == disabledIconName) {
+          icon.alpha = 0.4;
+        }
       }
       return icon;
     }

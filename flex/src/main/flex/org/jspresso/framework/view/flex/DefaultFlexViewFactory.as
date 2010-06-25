@@ -1091,6 +1091,8 @@ package org.jspresso.framework.view.flex {
         componentCell.percentHeight=100.0;
         componentCell.minWidth = 0;
         component.percentHeight = 100.0;
+//        componentsRow.setStyle("borderStyle","solid");
+//        componentsRow.setStyle("borderColor","0xAA0099");
         if(  rComponent is RTable
           || rComponent is RTextArea
           || rComponent is RList
@@ -1098,25 +1100,24 @@ package org.jspresso.framework.view.flex {
           componentsRow.percentHeight = 100.0;
           component.percentWidth = 100.0;
         } else if(component.maxWidth > 0 && component.maxWidth < 1000) {
-//          if(col + elementWidth < remoteForm.columnCount) {
+          component.percentWidth = 100.0;
+          if((col + elementWidth < remoteForm.columnCount)
+            || !(rComponent is RComboBox)) {
             componentCell.maxWidth = component.maxWidth;
+            componentCell.width = component.maxWidth;
+          } else {
+            //Allow last cell to grow if it's a ComboBox
             component.percentWidth = 100.0;
-//          } else {
-//            //Allow last cell to grow
-//            component.percentWidth = 100.0;
-//          }
-          componentCell.width = component.maxWidth;
+          }
         }
         if(component.minWidth > 0) {
           componentCell.minWidth = component.minWidth;
         } else {
           component.minWidth = 0;
         }
-//        componentCell.setStyle("borderStyle","solid");
-//        componentsRow.setStyle("borderStyle","solid");
         componentsRow.addChild(componentCell);
         
-        if(componentCell.colSpan > 1 && !(component is ComboBox)) {
+        if(componentCell.colSpan > 1 && !(rComponent is RComboBox)) {
           componentCell.maxWidth = NaN;
           component.maxWidth = NaN;
         }
@@ -1124,6 +1125,24 @@ package org.jspresso.framework.view.flex {
         
         col += elementWidth;
       }
+      
+      // to deal with resizing problems
+      var resizerRow:GridRow = new GridRow();
+      resizerRow.percentWidth = 100.0;
+      for(i = 0; i < remoteForm.columnCount; i++){
+        var gi:GridItem = new GridItem();
+        resizerRow.addChild(gi);
+        if(remoteForm.labelsPosition == "ASIDE") {
+          gi = new GridItem();
+          gi.percentWidth = 100.0;
+          resizerRow.addChild(gi);
+        } else {
+          gi.percentWidth = 100.0;
+        }
+      }
+      form.addChild(resizerRow);
+      
+        
       form.setStyle("paddingLeft", 2);
       form.setStyle("paddingRight", 2);
       form.setStyle("paddingTop", 2);
