@@ -1105,6 +1105,7 @@ package org.jspresso.framework.view.flex {
             //Allow last cell to grow
             component.percentWidth = 100.0;
           }
+          componentCell.width = component.maxWidth;
         }
         if(component.minWidth > 0) {
           componentCell.minWidth = component.minWidth;
