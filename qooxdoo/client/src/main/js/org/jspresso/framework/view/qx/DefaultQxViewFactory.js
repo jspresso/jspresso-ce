@@ -37,6 +37,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     __TOOLTIP_ELLIPSIS : "...",
     __TEMPLATE_CHAR : "O",
     __FIELD_MAX_CHAR_COUNT : 32,
+    __NUMERIC_FIELD_MAX_CHAR_COUNT : 16,
     __COLUMN_MAX_CHAR_COUNT : 12,
     __DATE_CHAR_COUNT : 12,
     __TIME_CHAR_COUNT : 6,
@@ -580,9 +581,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }
       if(remoteNumericComponent.getMaxValue()) {
         this._sizeMaxComponentWidth(numericComponent,
-          this._createFormat(remoteNumericComponent).format(remoteNumericComponent.getMaxValue()).length);
+          this._createFormat(remoteNumericComponent).format(remoteNumericComponent.getMaxValue()).length,
+          org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT);
       } else {
-        this._sizeMaxComponentWidth(numericComponent);
+        this._sizeMaxComponentWidth(numericComponent,
+          org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT,
+          org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT);
       }
       return numericComponent;
     },
@@ -1156,6 +1160,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         var elementWidth = remoteForm.getElementWidths()[i];
         var rComponent = remoteForm.getElements()[i];
         var component = this.createComponent(rComponent);
+        /**@type qx.ui.basic.Label*/
         var componentLabel;
         if(remoteForm.getLabelsPosition() != "NONE") {
           componentLabel = this.createComponent(remoteForm.getElementLabels()[i], false);
@@ -1195,6 +1200,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           compColSpan = elementWidth;
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
+          if(remoteForm.getLabelsPosition() == "ASIDE") {
+            componentLabel.setAlignX("right")
+          }
           form.add(componentLabel, {row : labelRow,
                                     column : labelCol,
                                     rowSpan : 1,
@@ -1205,6 +1213,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                              column : compCol,
                              rowSpan : 1,
                              colSpan : compColSpan});
+        if(compColSpan > 1) {
+          component.setMaxWidth(null);
+        }
 
         col += elementWidth;
         if(   rComponent instanceof org.jspresso.framework.gui.remote.RTable
@@ -2013,6 +2024,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       return format;
     },
     
+    /**
+     * 
+     * @param {qx.ui.core.Widget} component
+     * @param {int} expectedCharCount
+     * @param {int} maxCharCount
+     * @return void
+     */
     _sizeMaxComponentWidth : function(component, expectedCharCount, maxCharCount) {
       if(expectedCharCount == null) {
         expectedCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
@@ -2033,8 +2051,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var charWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.DefaultQxViewFactory.__TEMPLATE_CHAR,
                                                compFont.getStyles()).width;
       var w = charWidth * charCount;
-      component.setWidth(w);
       component.setMaxWidth(w);
+      component.setWidth(w)
     }
 
   }

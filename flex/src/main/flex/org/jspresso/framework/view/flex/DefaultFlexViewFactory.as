@@ -38,6 +38,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Button;
   import mx.controls.CheckBox;
   import mx.controls.ColorPicker;
+  import mx.controls.ComboBox;
   import mx.controls.DataGrid;
   import mx.controls.DateField;
   import mx.controls.Image;
@@ -132,6 +133,7 @@ package org.jspresso.framework.view.flex {
     private static const TOOLTIP_ELLIPSIS:String = "...";
     private static const TEMPLATE_CHAR:String = "O";
     private static const FIELD_MAX_CHAR_COUNT:int = 32;
+    private static const NUMERIC_FIELD_MAX_CHAR_COUNT:int = 16;
     private static const COLUMN_MAX_CHAR_COUNT:int = 20;
     private static const DATE_CHAR_COUNT:int = 10;
     private static const TIME_CHAR_COUNT:int = 6;
@@ -352,9 +354,12 @@ package org.jspresso.framework.view.flex {
       }
       if(remoteNumericComponent.maxValue) {
         sizeMaxComponentWidth(numericComponent,
-          createFormatter(remoteNumericComponent).format(remoteNumericComponent.maxValue).length);
+          createFormatter(remoteNumericComponent).format(remoteNumericComponent.maxValue).length,
+          NUMERIC_FIELD_MAX_CHAR_COUNT);
       } else {
-        sizeMaxComponentWidth(numericComponent, FIELD_MAX_CHAR_COUNT);
+        sizeMaxComponentWidth(numericComponent,
+          NUMERIC_FIELD_MAX_CHAR_COUNT,
+          NUMERIC_FIELD_MAX_CHAR_COUNT);
       }
       return numericComponent;
     }
@@ -1110,6 +1115,10 @@ package org.jspresso.framework.view.flex {
 //        componentsRow.setStyle("borderStyle","solid");
         componentsRow.addChild(componentCell);
         
+        if(componentCell.colSpan > 1 && !(component is ComboBox)) {
+          componentCell.maxWidth = NaN;
+          component.maxWidth = NaN;
+        }
         componentCell.addChild(component);
         
         col += elementWidth;
@@ -1953,7 +1962,12 @@ package org.jspresso.framework.view.flex {
       if(expectedCharCount < charCount) {
         charCount = expectedCharCount;
       }
-      component.maxWidth = component.measureText(TEMPLATE_CHAR).width * charCount;
+      var w:int = component.measureText(TEMPLATE_CHAR).width * charCount;
+      component.maxWidth = w;
+//      if(!(component is Label)) {
+//        component.width = w;
+//        component.measuredWidth = w;
+//      }
     }
     
     public function get iconTemplate():Class  {
