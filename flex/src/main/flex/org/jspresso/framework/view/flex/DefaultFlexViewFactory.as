@@ -1717,6 +1717,7 @@ package org.jspresso.framework.view.flex {
         textArea.maxChars = remoteTextArea.maxLength;
       }
       bindTextArea(textArea, remoteTextArea.state);
+      sizeMaxComponentWidth(textArea);
       return textArea;
     }
 

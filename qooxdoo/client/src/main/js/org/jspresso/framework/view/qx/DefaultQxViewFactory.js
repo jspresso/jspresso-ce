@@ -1343,7 +1343,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : this._readOnlyFieldConverter
         }
       );
-      return textArea;
+			this._sizeMaxComponentWidth(textArea);
+			return textArea;
     },
 
     /**
