@@ -27,6 +27,12 @@
       <artifactId>datetimelibrary</artifactId>
       <type>swc</type>
     </dependency>
+    <dependency>
+      <groupId>flexlib</groupId>
+      <artifactId>flexlib</artifactId>
+      <type>swc</type>
+      <classifier>flex3</classifier>
+    </dependency>
   </dependencies>
 
   <build>

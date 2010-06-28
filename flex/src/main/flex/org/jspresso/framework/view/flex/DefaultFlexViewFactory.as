@@ -21,6 +21,8 @@ package org.jspresso.framework.view.flex {
   import flash.events.FocusEvent;
   import flash.events.MouseEvent;
   
+  import flexlib.containers.ButtonScrollingCanvas;
+  
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.containers.ApplicationControlBar;
@@ -265,7 +267,21 @@ package org.jspresso.framework.view.flex {
         var surroundingBox:VBox = new VBox();
         component.percentWidth = 100.0;
         component.percentHeight = 100.0;
-        surroundingBox.addChild(toolBar);
+        
+        var slideBar:ButtonScrollingCanvas = new ButtonScrollingCanvas();
+        slideBar.addChild(toolBar);
+        slideBar.percentWidth = 100.0;
+        slideBar.buttonWidth = 10;
+        slideBar.startScrollingEvent= MouseEvent.MOUSE_OVER;
+        slideBar.stopScrollingEvent= MouseEvent.MOUSE_OUT;
+        toolBar.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+          slideBar.height = (event.currentTarget as ApplicationControlBar).measuredHeight;
+          slideBar.minHeight = slideBar.height;
+          slideBar.maxHeight = slideBar.height;
+        });
+        slideBar.height = 100;
+        
+        surroundingBox.addChild(slideBar);
         surroundingBox.addChild(component);
         surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
         surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;

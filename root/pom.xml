@@ -25,6 +25,7 @@
 
     <blazeds.version>3.2.0.3978</blazeds.version>
     <datetimelibrary.version>1.0.2</datetimelibrary.version>
+    <flexlib.version>2.5</flexlib.version>
     <spring.version>2.5.6</spring.version>
     <spring-ldap.version>1.3.0.RELEASE</spring-ldap.version>
     <ldapbp.version>1.0</ldapbp.version>
@@ -56,6 +57,7 @@
     <foxtrot.version>2.0</foxtrot.version>
     <swt.version>3.5.1</swt.version>
     <dj-nativeswing.version>0.9.8</dj-nativeswing.version>
+    <dj-swingsuite.version>0.9.1</dj-swingsuite.version>
     <nachocalendar.version>0.23</nachocalendar.version>
     <jedit-syntax.version>2.2.2</jedit-syntax.version>
     <substance.version>4.3</substance.version>
@@ -560,6 +562,11 @@
         <version>${dj-nativeswing.version}</version>
       </dependency>
       <dependency>
+        <groupId>chrriis</groupId>
+        <artifactId>dj-swingsuite</artifactId>
+        <version>${dj-swingsuite.version}</version>
+      </dependency>
+      <dependency>
         <groupId>net.sf.nachocalendar</groupId>
         <artifactId>nachocalendar</artifactId>
         <version>${nachocalendar.version}</version>
@@ -720,6 +727,13 @@
         <artifactId>datetimelibrary</artifactId>
         <version>${datetimelibrary.version}</version>
         <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>flexlib</groupId>
+        <artifactId>flexlib</artifactId>
+        <version>${flexlib.version}</version>
+        <type>swc</type>
+        <classifier>flex3</classifier>
       </dependency>
       <dependency>
         <groupId>com.adobe.flex.framework</groupId>

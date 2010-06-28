@@ -33,5 +33,9 @@
       <groupId>chrriis</groupId>
       <artifactId>dj-nativeswing</artifactId>
     </dependency>
+    <dependency>
+      <groupId>chrriis</groupId>
+      <artifactId>dj-swingsuite</artifactId>
+    </dependency>
 	</dependencies>
 </project>

@@ -212,6 +212,15 @@
     </attributes>
   </classpathentry>
   <classpathentry
+    kind="var"
+    path="M2_REPO/chrriis/dj-swingsuite/0.9.1/dj-swingsuite-0.9.1.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
     kind="output"
     path="core/target/classes" />
 </classpath>

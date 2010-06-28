@@ -8,9 +8,11 @@
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
       <libraryPathEntry kind="3" linkType="1" path="C:/Documents and Settings/Vincent/.m2/repository/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="C:/Users/vincent/.m2/repository/flexlib/flexlib/2.5/flexlib-2.5-flex3.swc" sourcepath="C:/envdev/flex3libs/flexlib/src/flexlib" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath>
       <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/Documents and Settings/Vincent/.m2/repository/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/Users/vincent/.m2/repository/flexlib/flexlib/2.5/flexlib-2.5-flex3.swc" sourcepath="C:/envdev/flex3libs/flexlib/src/flexlib" useDefaultLinkType="false"/>
     </sourceAttachmentPath>
   </compiler>
   <applications>

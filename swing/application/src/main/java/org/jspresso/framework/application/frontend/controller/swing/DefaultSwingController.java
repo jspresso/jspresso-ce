@@ -55,7 +55,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
@@ -92,6 +94,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
 import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
+import chrriis.dj.swingsuite.JComboButton;
 
 /**
  * This is is the default implementation of the <b>Swing</b> frontend
@@ -106,6 +109,7 @@ public class DefaultSwingController extends
     AbstractFrontendController<JComponent, Icon, Action> {
 
   private JFrame                      controllerFrame;
+  private JDesktopPane                desktopPane;
   private WaitCursorTimer             waitTimer;
 
   private Map<String, JInternalFrame> workspaceInternalFrames;
@@ -233,7 +237,7 @@ public class DefaultSwingController extends
               .addInternalFrameListener(new WorkspaceInternalFrameListener(
                   workspaceName));
           workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
-          controllerFrame.getContentPane().add(workspaceInternalFrame);
+          desktopPane.add(workspaceInternalFrame);
           getMvcBinder().bind(workspaceNavigator.getConnector(),
               workspaceConnector);
           workspaceInternalFrame.pack();
@@ -556,6 +560,45 @@ public class DefaultSwingController extends
     return false;
   }
 
+  private JToolBar createApplicationToolBar() {
+    JToolBar applicationToolBar = new JToolBar();
+    applicationToolBar.setRollover(true);
+    applicationToolBar.setFloatable(false);
+
+    applicationToolBar.add(createComboButton(createWorkspaceActionList()));
+    applicationToolBar.addSeparator();
+    if (getNavigationActions() != null) {
+      for (ActionList al : getNavigationActions().getActionLists()) {
+        for (IDisplayableAction da : al.getActions()) {
+          JButton b = new JButton();
+          b.setAction(getViewFactory().getActionFactory().createAction(da,
+              this, null, getLocale()));
+          applicationToolBar.add(b);
+        }
+        applicationToolBar.addSeparator();
+      }
+    }
+    if (getActionMap() != null) {
+      for (ActionList al : getActionMap().getActionLists()) {
+        applicationToolBar.add(createComboButton(al));
+      }
+    }
+    applicationToolBar.add(Box.createHorizontalGlue());
+    applicationToolBar.addSeparator();
+    if (getHelpActions() != null) {
+      for (ActionList al : getHelpActions().getActionLists()) {
+        applicationToolBar.add(createComboButton(al));
+      }
+      applicationToolBar.addSeparator();
+    }
+    JButton exitButton = new JButton();
+    exitButton.setAction(getViewFactory().getActionFactory().createAction(
+        getExitAction(), this, null, getLocale()));
+    applicationToolBar.add(exitButton);
+    return applicationToolBar;
+  }
+
+  @SuppressWarnings("unused")
   private JMenuBar createApplicationMenuBar() {
     JMenuBar applicationMenuBar = new JMenuBar();
     List<JMenu> workspaceMenus = createMenus(createWorkspaceActionMap(), true);
@@ -588,7 +631,8 @@ public class DefaultSwingController extends
 
   private void createControllerFrame() {
     controllerFrame = new JFrame();
-    controllerFrame.setContentPane(new JDesktopPane());
+    desktopPane = new JDesktopPane();
+    controllerFrame.getContentPane().add(desktopPane, BorderLayout.CENTER);
     controllerFrame
         .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     controllerFrame.setGlassPane(createHermeticGlassPane());
@@ -688,6 +732,26 @@ public class DefaultSwingController extends
         action, this, null, getLocale()));
   }
 
+  private JButton createComboButton(ActionList actionList) {
+    JButton button;
+    if (actionList.getActions().size() == 1) {
+      button = new JButton();
+    } else {
+      button = new JComboButton(true);
+    }
+    Action action = getViewFactory().getActionFactory().createAction(
+        actionList.getActions().get(0), this, null, getLocale());
+    button.setAction(action);
+    if (actionList.getActions().size() > 1) {
+      JPopupMenu popupMenu = new JPopupMenu();
+      for (IDisplayableAction menuAction : actionList.getActions()) {
+        popupMenu.add(createMenuItem(menuAction));
+      }
+      ((JComboButton) button).setArrowPopupMenu(popupMenu);
+    }
+    return button;
+  }
+
   private List<JMenuItem> createMenuItems(ActionList actionList) {
     List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
     for (IDisplayableAction action : actionList.getActions()) {
@@ -777,7 +841,9 @@ public class DefaultSwingController extends
   }
 
   private void updateControllerFrame() {
-    controllerFrame.setJMenuBar(createApplicationMenuBar());
+    // controllerFrame.setJMenuBar(createApplicationMenuBar());
+    controllerFrame.getContentPane().add(createApplicationToolBar(),
+        BorderLayout.NORTH);
     controllerFrame.invalidate();
     controllerFrame.validate();
     updateFrameTitle();
