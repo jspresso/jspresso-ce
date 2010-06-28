@@ -195,7 +195,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       if(toolBar) {
         var surroundingBox = new qx.ui.container.Composite();
         surroundingBox.setLayout(new qx.ui.layout.VBox(2));
-        surroundingBox.add(toolBar);
+        var slideBar = new qx.ui.container.SlideBar();
+        slideBar.add(toolBar);
+        surroundingBox.add(slideBar);
         surroundingBox.add(component, {flex:1});
         return surroundingBox;
       }
