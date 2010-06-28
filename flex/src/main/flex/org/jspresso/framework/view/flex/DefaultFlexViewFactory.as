@@ -1152,7 +1152,8 @@ package org.jspresso.framework.view.flex {
 
     protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
       var splitContainer:DividedBox = new DividedBox();
-      //splitContainer.resizeToContent = true;
+      splitContainer.resizeToContent = true;
+      splitContainer.liveDragging = true;
 
       var component:UIComponent;
       if(remoteSplitContainer.orientation == "VERTICAL") {
@@ -1164,9 +1165,9 @@ package org.jspresso.framework.view.flex {
         component = createComponent(remoteSplitContainer.leftTop);
         if(remoteSplitContainer.orientation == "VERTICAL") {
           component.percentWidth = 100.0;
-          component.percentHeight = 50.0;
+          //component.percentHeight = 50.0;
         } else {
-          component.percentWidth = 50.0;
+          //component.percentWidth = 50.0;
           component.percentHeight = 100.0;
         }
         splitContainer.addChild(component);
@@ -1175,9 +1176,9 @@ package org.jspresso.framework.view.flex {
         component = createComponent(remoteSplitContainer.rightBottom);
         if(remoteSplitContainer.orientation == "VERTICAL") {
           component.percentWidth = 100.0;
-          component.percentHeight = 50.0;
+          //component.percentHeight = 50.0;
         } else {
-          component.percentWidth = 50.0;
+          //component.percentWidth = 50.0;
           component.percentHeight = 100.0;
         }
 
