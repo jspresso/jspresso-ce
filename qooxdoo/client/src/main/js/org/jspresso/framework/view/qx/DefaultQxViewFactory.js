@@ -1611,18 +1611,36 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var state = remoteLabel.getState();
       if(state) {
         var modelController = new qx.data.controller.Object(state);
-        modelController.addTarget(label, "value", "value", false,
-          {
-            converter : function(modelValue, model) {
-              if(org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
-                label.setRich(true);
-              } else {
-                label.setRich(false);
+        if(   remoteLabel instanceof org.jspresso.framework.gui.remote.RLink
+           && remoteLabel.getAction()) {
+          label.setRich(true);
+          modelController.addTarget(label, "value", "value", false,
+            {
+              converter : function(modelValue, model) {
+              	if(modelValue) {
+                  return "<u><a href='javascript:'>" + modelValue + "</a></u>";
+              	}
+              	return modelValue;
               }
-              return modelValue;
             }
-          }
-        );
+          );
+          label.addListener("click", function(event) {
+            this.__actionHandler.execute(remoteLabel.getAction());
+          }, this);
+        } else {
+          modelController.addTarget(label, "value", "value", false,
+            {
+              converter : function(modelValue, model) {
+                if(org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
+                  label.setRich(true);
+                } else {
+                  label.setRich(false);
+                }
+                return modelValue;
+              }
+            }
+          );
+        }
       } else {
         label.setValue(remoteLabel.getLabel());
         label.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(remoteLabel.getLabel()));

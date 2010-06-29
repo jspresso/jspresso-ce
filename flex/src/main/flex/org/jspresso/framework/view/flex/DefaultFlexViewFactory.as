@@ -1823,7 +1823,7 @@ package org.jspresso.framework.view.flex {
     protected function bindLabel(label:Label, remoteLabel:RLabel):void {
       var remoteState:RemoteValueState = remoteLabel.state;
       var updateLabel:Function;
-      if(remoteLabel is RLink) {
+      if(remoteLabel is RLink && (remoteLabel as RLink).action != null) {
         updateLabel = function (value:Object):void {
           if(value == null) {
             label.htmlText = null;
