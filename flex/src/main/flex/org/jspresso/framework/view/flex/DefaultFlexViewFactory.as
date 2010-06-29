@@ -1506,9 +1506,15 @@ package org.jspresso.framework.view.flex {
                                      remoteComponent:rColumn,
                                      index:i+1};
         } else {
+          var columnAction:RAction = null;
+          if(rColumn is RLink) {
+            columnAction = (rColumn as RLink).action;
+          }
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
           itemRenderer.properties = {formatter:createFormatter(rColumn),
-                                     index:i+1};
+                                     index:i+1,
+                                     action:columnAction,
+                                     actionHandler:getActionHandler()};
         }
         column.itemRenderer = itemRenderer
         

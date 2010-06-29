@@ -14,14 +14,19 @@
 
 package org.jspresso.framework.view.flex {
 
+  import flash.events.TextEvent;
+  
   import mx.binding.utils.BindingUtils;
   import mx.binding.utils.ChangeWatcher;
   import mx.controls.DataGrid;
   import mx.controls.listClasses.BaseListData;
   import mx.controls.listClasses.ListData;
   import mx.controls.listClasses.ListItemRenderer;
+  import mx.events.FlexEvent;
   import mx.formatters.Formatter;
   
+  import org.jspresso.framework.action.IActionHandler;
+  import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.state.remote.RemoteCompositeValueState;
   import org.jspresso.framework.state.remote.RemoteValueState;
   import org.jspresso.framework.util.html.HtmlUtil;
@@ -32,6 +37,8 @@ package org.jspresso.framework.view.flex {
     private var _listData:BaseListData;
     private var _formatter:Formatter;
     private var _index:int;
+    private var _action:RAction;
+    private var _actionHandler:IActionHandler;
     
     public function RemoteValueDgItemRenderer() {
       _index = -1;
@@ -135,9 +142,32 @@ package org.jspresso.framework.view.flex {
   	protected override function commitProperties():void {
   	  super.commitProperties();
   	  var cellText:String = label.text;
-  	  if(HtmlUtil.isHtml(cellText)) {
-  	    label.htmlText = cellText;
-  	  }
+      if(_action != null) {
+        label.htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
+      } else {
+        if(HtmlUtil.isHtml(cellText)) {
+          label.htmlText = cellText;
+        }
+      }
   	}
+
+    public function set action(value:RAction):void {
+      _action = value;
+      if(_action != null) {
+        addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+          label.selectable = true;
+          label.addEventListener("link", function(evt:TextEvent):void {
+            _actionHandler.execute(_action);
+          });
+        });
+      }
+    }
+
+    public function set actionHandler(value:IActionHandler):void
+    {
+      _actionHandler = value;
+    }
+
+
   }
 }

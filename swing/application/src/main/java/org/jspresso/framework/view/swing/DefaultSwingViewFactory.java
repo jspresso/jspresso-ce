@@ -708,7 +708,7 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
           .createAction(
               ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
                   .getAction(), actionHandler, view, locale));
@@ -753,7 +753,7 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
           .createAction(
               ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
                   .getAction(), actionHandler, view, locale));
@@ -794,7 +794,7 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
           .createAction(
               ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
                   .getAction(), actionHandler, view, locale));
@@ -970,7 +970,7 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
           .createAction(
               ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
                   .getAction(), actionHandler, view, locale));
@@ -1427,7 +1427,7 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
           .createAction(
               ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
                   .getAction(), actionHandler, view, locale));
@@ -1478,15 +1478,15 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createReferencePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
         .getModelDescriptor();
-    JActionField viewComponent = createJActionField(true);
-    JReferenceFieldConnector connector = new JReferenceFieldConnector(
-        propertyDescriptor.getName(), viewComponent);
+    JComponent viewComponent;
+    IValueConnector connector;
     List<String> renderedProperties = propertyViewDescriptor
         .getRenderedChildProperties();
     String renderedProperty;
@@ -1497,29 +1497,52 @@ public class DefaultSwingViewFactory extends
       renderedProperty = propertyDescriptor.getComponentDescriptor()
           .getToStringProperty();
     }
-    connector.setRenderingConnector(new BasicValueConnector(renderedProperty));
-    connector.setExceptionHandler(actionHandler);
-    IView<JComponent> propertyView = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    Action lovAction = createLovAction(propertyView, actionHandler, locale);
-    // lovAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
-    // "lov.element.name",
-    // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-    // getTranslationProvider(), locale)}, locale));
-    lovAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
-        .getTranslation(
-            "lov.element.description",
-            new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(getTranslationProvider(), locale)}, locale)
-        + TOOLTIP_ELLIPSIS);
-    if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      lovAction.putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
-          getIconFactory().getTinyIconSize()));
+    if (propertyViewDescriptor.isReadOnly()) {
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
+      connector = new JLabelConnector(propertyDescriptor.getName() + "."
+          + renderedProperty, (JLabel) viewComponent);
+    } else {
+      viewComponent = createJActionField(true);
+      connector = new JReferenceFieldConnector(propertyDescriptor.getName(),
+          (JActionField) viewComponent);
+      ((JReferenceFieldConnector) connector)
+          .setRenderingConnector(new BasicValueConnector(renderedProperty));
     }
-    viewComponent.setActions(Collections.singletonList(lovAction));
-    adjustSizes(propertyViewDescriptor, viewComponent, null, null);
-    return propertyView;
+    connector.setExceptionHandler(actionHandler);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
+          .createAction(
+              ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+                  .getAction(), actionHandler, view, locale));
+    } else if (viewComponent instanceof JActionField) {
+      Action lovAction = createLovAction(view, actionHandler, locale);
+      // lovAction.putValue(Action.NAME,
+      // getTranslationProvider().getTranslation(
+      // "lov.element.name",
+      // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
+      // getTranslationProvider(), locale)}, locale));
+      lovAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
+          .getTranslation(
+              "lov.element.description",
+              new Object[] {propertyDescriptor.getReferencedDescriptor()
+                  .getI18nName(getTranslationProvider(), locale)}, locale)
+          + TOOLTIP_ELLIPSIS);
+      if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
+        lovAction.putValue(Action.SMALL_ICON, getIconFactory().getIcon(
+            propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+            getIconFactory().getTinyIconSize()));
+      }
+      ((JActionField) viewComponent).setActions(Collections
+          .singletonList(lovAction));
+      adjustSizes(propertyViewDescriptor, viewComponent, null, null);
+    }
+    return view;
   }
 
   /**
@@ -1627,7 +1650,7 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
           .createAction(
               ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
                   .getAction(), actionHandler, view, locale));
@@ -1978,7 +2001,7 @@ public class DefaultSwingViewFactory extends
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
           .createAction(
               ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
                   .getAction(), actionHandler, view, locale));

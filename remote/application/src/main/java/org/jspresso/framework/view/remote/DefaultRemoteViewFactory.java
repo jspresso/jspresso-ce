@@ -628,7 +628,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((RLink) view.getPeer()).setAction(getActionFactory().createAction(
+      ((RLink) viewComponent).setAction(getActionFactory().createAction(
           ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
               .getAction(), actionHandler, view, locale));
     }
@@ -682,7 +682,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((RLink) view.getPeer()).setAction(getActionFactory().createAction(
+      ((RLink) viewComponent).setAction(getActionFactory().createAction(
           ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
               .getAction(), actionHandler, view, locale));
     }
@@ -730,7 +730,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((RLink) view.getPeer()).setAction(getActionFactory().createAction(
+      ((RLink) viewComponent).setAction(getActionFactory().createAction(
           ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
               .getAction(), actionHandler, view, locale));
     }
@@ -921,7 +921,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((RLink) view.getPeer()).setAction(getActionFactory().createAction(
+      ((RLink) viewComponent).setAction(getActionFactory().createAction(
           ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
               .getAction(), actionHandler, view, locale));
     }
@@ -1064,7 +1064,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((RLink) view.getPeer()).setAction(getActionFactory().createAction(
+      ((RLink) viewComponent).setAction(getActionFactory().createAction(
           ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
               .getAction(), actionHandler, view, locale));
     }
@@ -1290,27 +1290,43 @@ public class DefaultRemoteViewFactory extends
         .createCompositeValueConnector(propertyDescriptor.getName(),
             renderedProperty);
     connector.setExceptionHandler(actionHandler);
-    RActionField viewComponent = createRActionField(true, connector);
-    IView<RComponent> propertyView = constructView(viewComponent,
-        propertyViewDescriptor, connector);
-    RAction lovAction = createLovAction(propertyView, actionHandler, locale);
-    // lovAction.setName(getTranslationProvider().getTranslation(
-    // "lov.element.name",
-    // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-    // getTranslationProvider(), locale)}, locale));
-    lovAction.setDescription(getTranslationProvider().getTranslation(
-        "lov.element.description",
-        new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-            getTranslationProvider(), locale)}, locale));
-    if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      lovAction.setIcon(getIconFactory().getIcon(
-          propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
-          getIconFactory().getTinyIconSize()));
+    RComponent viewComponent;
+    if (propertyViewDescriptor.isReadOnly()) {
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createRLink(connector);
+      } else {
+        viewComponent = createRLabel(connector, true);
+      }
+    } else {
+      viewComponent = createRActionField(true, connector);
     }
-    RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
-    actionList.setActions(new RAction[] {lovAction});
-    viewComponent.setActionLists(new RActionList[] {actionList});
-    return propertyView;
+    IView<RComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((RLink) viewComponent).setAction(getActionFactory().createAction(
+          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+              .getAction(), actionHandler, view, locale));
+    } else if (viewComponent instanceof RActionField) {
+      RAction lovAction = createLovAction(view, actionHandler, locale);
+      // lovAction.setName(getTranslationProvider().getTranslation(
+      // "lov.element.name",
+      // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
+      // getTranslationProvider(), locale)}, locale));
+      lovAction.setDescription(getTranslationProvider().getTranslation(
+          "lov.element.description",
+          new Object[] {propertyDescriptor.getReferencedDescriptor()
+              .getI18nName(getTranslationProvider(), locale)}, locale));
+      if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
+        lovAction.setIcon(getIconFactory().getIcon(
+            propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+            getIconFactory().getTinyIconSize()));
+      }
+      RActionList actionList = new RActionList(getGuidGenerator()
+          .generateGUID());
+      actionList.setActions(new RAction[] {lovAction});
+      viewComponent.setActionLists(new RActionList[] {actionList});
+    }
+    return view;
   }
 
   /**
@@ -1592,7 +1608,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((RLink) view.getPeer()).setAction(getActionFactory().createAction(
+      ((RLink) viewComponent).setAction(getActionFactory().createAction(
           ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
               .getAction(), actionHandler, view, locale));
     }
@@ -1778,7 +1794,7 @@ public class DefaultRemoteViewFactory extends
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
-      ((RLink) view.getPeer()).setAction(getActionFactory().createAction(
+      ((RLink) viewComponent).setAction(getActionFactory().createAction(
           ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
               .getAction(), actionHandler, view, locale));
     }
