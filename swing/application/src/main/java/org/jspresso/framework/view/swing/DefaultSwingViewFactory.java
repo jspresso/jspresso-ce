@@ -181,6 +181,8 @@ import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.TokenMarker;
 
+import chrriis.dj.swingsuite.JComboButton;
+
 /**
  * Factory for swing views.
  * 
@@ -937,6 +939,17 @@ public class DefaultSwingViewFactory extends
    */
   protected JButton createJButton() {
     JButton button = new JButton();
+    SwingUtil.configureButton(button);
+    return button;
+  }
+
+  /**
+   * Creates a button.
+   * 
+   * @return the created button.
+   */
+  protected JComboButton createJComboButton() {
+    JComboButton button = new JComboButton(true);
     SwingUtil.configureButton(button);
     return button;
   }
@@ -1927,39 +1940,108 @@ public class DefaultSwingViewFactory extends
         } else if (actionMap.getRenderingOptions() != null) {
           renderingOptions = actionMap.getRenderingOptions();
         }
-        for (IDisplayableAction action : nextActionList.getActions()) {
-          if (actionHandler.isAccessGranted(action)) {
-            Action swingAction = getActionFactory().createAction(action,
-                actionHandler, view, locale);
-            JButton actionButton = createJButton();
-            actionButton.setAction(swingAction);
-            if (action.getAcceleratorAsString() != null) {
-              KeyStroke ks = KeyStroke.getKeyStroke(action
-                  .getAcceleratorAsString());
-              view.getPeer().getActionMap().put(
-                  swingAction.getValue(Action.NAME), swingAction);
-              view.getPeer().getInputMap(
-                  JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                  swingAction.getValue(Action.NAME));
-              String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                  .getModifiers())
-                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-              actionButton.setToolTipText("<HTML>"
-                  + actionButton.getToolTipText()
-                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                  + "</FONT></HTML>");
+        if (nextActionList.isCollapsable()) {
+          JButton actionButton = null;
+          for (Iterator<IDisplayableAction> ite = nextActionList.getActions()
+              .iterator(); ite.hasNext();) {
+            IDisplayableAction action = ite.next();
+            if (actionHandler.isAccessGranted(action)) {
+              boolean firstAction = false;
+              if (actionButton == null) {
+                firstAction = true;
+                if (ite.hasNext()) {
+                  actionButton = createJComboButton();
+                  ((JComboButton) actionButton)
+                      .setArrowPopupMenu(new JPopupMenu());
+                } else {
+                  actionButton = createJButton();
+                }
+              }
+              Action swingAction = getActionFactory().createAction(action,
+                  actionHandler, view, locale);
+              if (firstAction) {
+                actionButton.setAction(swingAction);
+              }
+              JMenuItem actionItem = createMenuItem(action, view,
+                  actionHandler, locale);
+              ((JComboButton) actionButton).getArrowPopupMenu().add(actionItem);
+
+              if (action.getAcceleratorAsString() != null) {
+                KeyStroke ks = KeyStroke.getKeyStroke(action
+                    .getAcceleratorAsString());
+                view.getPeer().getActionMap().put(
+                    swingAction.getValue(Action.NAME), swingAction);
+                view.getPeer().getInputMap(
+                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                    swingAction.getValue(Action.NAME));
+                String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                    .getModifiers())
+                    + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+                if (firstAction) {
+                  actionButton.setToolTipText("<HTML>"
+                      + actionButton.getToolTipText()
+                      + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                      + acceleratorString + "</FONT></HTML>");
+                }
+                actionItem.setToolTipText("<HTML>"
+                    + actionItem.getToolTipText()
+                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                    + acceleratorString + "</FONT></HTML>");
+              }
+              switch (renderingOptions) {
+                case ICON:
+                  if (firstAction) {
+                    actionButton.setText("");
+                  }
+                  actionItem.setText("");
+                  break;
+                case LABEL:
+                  if (firstAction) {
+                    actionButton.setIcon(null);
+                  }
+                  actionItem.setIcon(null);
+                  break;
+                default:
+                  break;
+              }
+              toolBar.add(actionButton);
             }
-            switch (renderingOptions) {
-              case ICON:
-                actionButton.setText("");
-                break;
-              case LABEL:
-                actionButton.setIcon(null);
-                break;
-              default:
-                break;
+          }
+        } else {
+          for (IDisplayableAction action : nextActionList.getActions()) {
+            if (actionHandler.isAccessGranted(action)) {
+              Action swingAction = getActionFactory().createAction(action,
+                  actionHandler, view, locale);
+              JButton actionButton = createJButton();
+              actionButton.setAction(swingAction);
+              if (action.getAcceleratorAsString() != null) {
+                KeyStroke ks = KeyStroke.getKeyStroke(action
+                    .getAcceleratorAsString());
+                view.getPeer().getActionMap().put(
+                    swingAction.getValue(Action.NAME), swingAction);
+                view.getPeer().getInputMap(
+                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                    swingAction.getValue(Action.NAME));
+                String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                    .getModifiers())
+                    + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+                actionButton.setToolTipText("<HTML>"
+                    + actionButton.getToolTipText()
+                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                    + acceleratorString + "</FONT></HTML>");
+              }
+              switch (renderingOptions) {
+                case ICON:
+                  actionButton.setText("");
+                  break;
+                case LABEL:
+                  actionButton.setIcon(null);
+                  break;
+                default:
+                  break;
+              }
+              toolBar.add(actionButton);
             }
-            toolBar.add(actionButton);
           }
         }
         if (iter.hasNext()) {
@@ -2165,10 +2247,8 @@ public class DefaultSwingViewFactory extends
       ActionList nextActionSet = iter.next();
       for (IDisplayableAction action : nextActionSet.getActions()) {
         if (actionHandler.isAccessGranted(action)) {
-          Action swingAction = getActionFactory().createAction(action,
-              actionHandler, view, locale);
-          JMenuItem actionItem = createJMenuItem();
-          actionItem.setAction(swingAction);
+          JMenuItem actionItem = createMenuItem(action, view, actionHandler,
+              locale);
           popupMenu.add(actionItem);
         }
       }
@@ -2177,6 +2257,24 @@ public class DefaultSwingViewFactory extends
       }
     }
     return popupMenu;
+  }
+
+  /**
+   * TODO Comment needed.
+   * 
+   * @param action
+   * @param view
+   * @param actionHandler
+   * @param locale
+   * @return
+   */
+  private JMenuItem createMenuItem(IDisplayableAction action,
+      IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
+    Action swingAction = getActionFactory().createAction(action, actionHandler,
+        view, locale);
+    JMenuItem actionItem = createJMenuItem();
+    actionItem.setAction(swingAction);
+    return actionItem;
   }
 
   private TableCellRenderer createNumberTableCellRenderer(

@@ -746,6 +746,7 @@ public class DefaultRemoteController extends
       }
     }
     rActionList.setActions(actions.toArray(new RAction[0]));
+    rActionList.setCollapsable(actionList.isCollapsable());
     return rActionList;
   }
 

@@ -24,6 +24,7 @@ package org.jspresso.framework.gui.remote {
         private var _description:String;
         private var _icon:RIcon;
         private var _name:String;
+        private var _collapsable:Boolean;
 
         public function RActionList() {
           //default constructor.
@@ -56,5 +57,16 @@ package org.jspresso.framework.gui.remote {
         public function get name():String {
             return _name;
         }
+
+        public function get collapsable():Boolean
+        {
+          return _collapsable;
+        }
+
+        public function set collapsable(value:Boolean):void
+        {
+          _collapsable = value;
+        }
+
     }
 }

@@ -4,10 +4,16 @@ Bugs fixed
 ----------
 3019234    Icon in table row doesn't load
            Query refiners are lost when sorting a table
+           Property rollback can produce stack-overflow on 1-1 relationships
 
 
 New features
 ------------
+           Toolbars are made scrollable when too big to be displayed
+           Various layouting improvements in Flex and qooxdoo
+           Removed menu bars in favor of an application toolbar
+           Made action lists collapsable (rendering as a popup button)
+           Made fw action lists top-level beans
 
 
 

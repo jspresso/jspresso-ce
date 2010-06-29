@@ -25,6 +25,14 @@ public class ActionList extends DefaultIconDescriptor {
 
   private List<IDisplayableAction> actions;
   private ERenderingOptions        renderingOptions;
+  private boolean                  collapsable;
+
+  /**
+   * Constructs a new <code>ActionList</code> instance.
+   */
+  public ActionList() {
+    collapsable = false;
+  }
 
   /**
    * {@inheritDoc}
@@ -83,6 +91,29 @@ public class ActionList extends DefaultIconDescriptor {
    */
   public void setRenderingOptions(ERenderingOptions renderingOptions) {
     this.renderingOptions = renderingOptions;
+  }
+
+  /**
+   * Gets the collapsable.
+   * 
+   * @return the collapsable.
+   */
+  public boolean isCollapsable() {
+    return collapsable;
+  }
+
+  /**
+   * Configures the actionlist so that it can be collapsed by view factories.
+   * Collapsable action lists can typically be rendered as combo buttons in UI
+   * channels that support it.
+   * <p>
+   * Default value is <code>false</code>.
+   * 
+   * @param collapsable
+   *          the collapsable to set.
+   */
+  public void setCollapsable(boolean collapsable) {
+    this.collapsable = collapsable;
   }
 
 }

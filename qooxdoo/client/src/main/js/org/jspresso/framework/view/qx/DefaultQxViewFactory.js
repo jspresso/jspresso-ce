@@ -220,8 +220,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           var actionList = actionLists[i];
           if(actionList.getActions() != null) {
             var part = new qx.ui.toolbar.Part();
-            for(var j = 0; j < actionList.getActions().length; j++) {
-              part.add(this.createAction(actionList.getActions()[j]));
+            if(actionList.isCollapsable()) {
+              part.add(this.createSplitButton(actionList));
+            } else {
+              for(var j = 0; j < actionList.getActions().length; j++) {
+                part.add(this.createAction(actionList.getActions()[j]));
+              }
             }
             toolBar.add(part);
           }
@@ -1800,7 +1804,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return {qx.ui.core.Command}
      */
     createCommand : function(remoteAction) {
-      var command = new qx.ui.core.Command(remoteAction.getAcceleratorAsString());
+    	var accel = remoteAction.getAcceleratorAsString();
+    	if(accel) {
+    		accel = accel.replace(" ", "+", "g");
+    	}
+      var command = new qx.ui.core.Command(accel);
+      this.setIcon(command, remoteAction.getIcon());
+      if(remoteAction.getName()) {
+        command.setLabel(remoteAction.getName());
+      }
+      if(remoteAction.getDescription()) {
+        command.setToolTipText(remoteAction.getDescription() + this.self(arguments).__TOOLTIP_ELLIPSIS);
+      }
       command.addListener("execute", function(e) {
         this.__actionHandler.execute(remoteAction);
       }, this);
@@ -1888,7 +1903,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       for(var i = 0; i < menuItems.length; i++) {
         menu.add(menuItems[i]);
       }
-      var button = new qx.ui.form.SplitButton(menuItems[0].getLabel(), menuItems[0].getIcon(), menu, menuItems[0].getCommand());
+      var button = new qx.ui.form.SplitButton(menuItems[0].getLabel(),
+                                              menuItems[0].getIcon(),
+                                              menu,
+                                              menuItems[0].getCommand());
       return button;
     },
     

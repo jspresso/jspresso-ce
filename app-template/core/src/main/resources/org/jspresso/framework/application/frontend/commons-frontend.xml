@@ -506,19 +506,21 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
   </bean>
 
+  <bean id="moduleHistoryNavigationActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="navigation.menu" />
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/home-48x48.png" />
+    <property name="actions">
+      <list>
+        <ref local="previousPinnedModuleAction" />
+        <ref local="nextPinnedModuleAction" />
+      </list>
+    </property>
+  </bean>
+
   <bean id="moduleHistoryNavigationActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="navigation.menu" />
-          <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/home-48x48.png" />
-          <property name="actions">
-            <list>
-              <ref local="previousPinnedModuleAction" />
-              <ref local="nextPinnedModuleAction" />
-            </list>
-          </property>
-        </bean>
+        <ref bean="moduleHistoryNavigationActionList"/>
       </list>
     </property>
   </bean>
@@ -581,29 +583,54 @@
   <!--
     Action maps.
   -->
+  <bean id="masterDetailActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="ACTION" />
+    <property name="actions">
+      <list>
+        <ref local="addToMasterFrontAction" />
+        <ref local="cloneEntityCollectionFrontAction" />
+        <ref bean="removeEntityCollectionFromMasterFrontAction" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="clipboardActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="EDIT" />
+    <property name="collapsable" value="true"/>
+    <property name="actions">
+      <list>
+        <ref local="copyCollectionFrontAction" />
+        <ref bean="cutCollectionFrontAction" />
+        <ref local="pasteCollectionFrontAction" />
+      </list>
+    </property>
+  </bean>
+
   <bean id="masterDetailActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="ACTION" />
-          <property name="actions">
-            <list>
-              <ref local="addToMasterFrontAction" />
-              <ref bean="removeEntityCollectionFromMasterFrontAction" />
-              <ref local="cloneEntityCollectionFrontAction" />
-            </list>
-          </property>
-        </bean>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="EDIT" />
-          <property name="actions">
-            <list>
-              <ref local="copyCollectionFrontAction" />
-              <ref bean="cutCollectionFrontAction" />
-              <ref local="pasteCollectionFrontAction" />
-            </list>
-          </property>
-        </bean>
+        <ref bean="masterDetailActionList"/>
+        <ref bean="clipboardActionList"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="persistenceBeanCollectionModuleActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="FILE" />
+    <property name="actions">
+      <list>
+        <ref local="restartModuleFrontAction" />
+        <ref local="saveModuleObjectFrontAction" />
+        <ref local="reloadModuleObjectFrontAction" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="detailBeanCollectionModuleActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="SERVICE" />
+    <property name="actions">
+      <list>
+        <ref local="addAsChildModuleFrontAction" />
       </list>
     </property>
   </bean>
@@ -611,24 +638,17 @@
   <bean id="readonlyBeanCollectionModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="FILE" />
-          <property name="actions">
-            <list>
-              <ref local="restartModuleFrontAction" />
-              <ref local="saveModuleObjectFrontAction" />
-              <ref local="reloadModuleObjectFrontAction" />
-            </list>
-          </property>
-        </bean>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="SERVICE" />
-          <property name="actions">
-            <list>
-              <ref local="addAsChildModuleFrontAction" />
-            </list>
-          </property>
-        </bean>
+        <ref bean="persistenceBeanCollectionModuleActionList"/>
+        <ref bean="detailBeanCollectionModuleActionList"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="queryBeanCollectionModuleActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="FILE" />
+    <property name="actions">
+      <list>
+        <ref local="queryModuleFilterAction" />
       </list>
     </property>
   </bean>
@@ -641,14 +661,18 @@
     </property>
     <property name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="FILE" />
-          <property name="actions">
-            <list>
-              <ref local="queryModuleFilterAction" />
-            </list>
-          </property>
-        </bean>
+        <ref bean="queryBeanCollectionModuleActionList"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="moduleMasterDetailActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="ACTION" />
+    <property name="actions">
+      <list>
+        <ref bean="addToMasterFrontAction" />
+        <ref bean="cloneEntityCollectionFrontAction" />
+        <ref local="removeFromModuleObjectFrontAction" />
       </list>
     </property>
   </bean>
@@ -661,16 +685,7 @@
     </property>
     <property name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="ACTION" />
-          <property name="actions">
-            <list>
-              <ref bean="addToMasterFrontAction" />
-              <ref bean="cloneEntityCollectionFrontAction" />
-              <ref local="removeFromModuleObjectFrontAction" />
-            </list>
-          </property>
-        </bean>
+        <ref bean="moduleMasterDetailActionList"/>
       </list>
     </property>
   </bean>
@@ -682,15 +697,17 @@
       </list>
     </property>
     <property name="actionLists">
+      <ref bean="queryBeanCollectionModuleActionList"/>
+    </property>
+  </bean>
+
+  <bean id="persistenceBeanModuleActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="FILE" />
+    <property name="actions">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="FILE" />
-          <property name="actions">
-            <list>
-              <ref local="queryModuleFilterAction" />
-            </list>
-          </property>
-        </bean>
+        <ref local="saveModuleObjectFrontAction" />
+        <ref local="reloadModuleObjectFrontAction" />
+        <ref local="parentModuleConnectorSelectionFrontAction" />
       </list>
     </property>
   </bean>
@@ -698,16 +715,20 @@
   <bean id="beanModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="FILE" />
-          <property name="actions">
-            <list>
-              <ref local="saveModuleObjectFrontAction" />
-              <ref local="reloadModuleObjectFrontAction" />
-              <ref local="parentModuleConnectorSelectionFrontAction" />
-            </list>
-          </property>
-        </bean>
+        <ref bean="persistenceBeanModuleActionList"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="binaryPropertyActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="FILE" />
+    <property name="collapsable" value="true"/>
+    <property name="actions">
+      <list>
+        <ref bean="openFileAsBinaryPropertyAction" />
+        <ref bean="saveBinaryPropertyAsFileAction" />
+        <ref bean="resetPropertyFrontAction" />
+        <ref bean="binaryPropertyInfoAction" />
       </list>
     </property>
   </bean>
@@ -715,17 +736,18 @@
   <bean id="binaryPropertyActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="FILE" />
-          <property name="actions">
-            <list>
-              <ref bean="openFileAsBinaryPropertyAction" />
-              <ref bean="saveBinaryPropertyAsFileAction" />
-              <ref bean="resetPropertyFrontAction" />
-              <ref bean="binaryPropertyInfoAction" />
-            </list>
-          </property>
-        </bean>
+        <ref bean="binaryPropertyActionList"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="mapMasterDetailActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="ACTION" />
+    <property name="actions">
+      <list>
+        <ref local="addMapToMasterFrontAction" />
+        <ref bean="removeAnyCollectionFromMasterFrontAction" />
+        <ref local="cloneMapCollectionFrontAction" />
       </list>
     </property>
   </bean>
@@ -733,16 +755,7 @@
   <bean id="mapMasterDetailActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="org.jspresso.framework.view.action.ActionList">
-          <property name="name" value="ACTION" />
-          <property name="actions">
-            <list>
-              <ref local="addMapToMasterFrontAction" />
-              <ref bean="removeAnyCollectionFromMasterFrontAction" />
-              <ref local="cloneMapCollectionFrontAction" />
-            </list>
-          </property>
-        </bean>
+        <ref bean="mapMasterDetailActionList"/>
       </list>
     </property>
   </bean>

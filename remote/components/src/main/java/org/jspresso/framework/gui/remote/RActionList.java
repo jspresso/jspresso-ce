@@ -34,6 +34,7 @@ public class RActionList extends RemotePeer {
   private String            description;
   private RIcon             icon;
   private String            name;
+  private boolean           collapsable;
 
   /**
    * Constructs a new <code>RActionList</code> instance.
@@ -127,5 +128,24 @@ public class RActionList extends RemotePeer {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Gets the collapsable.
+   * 
+   * @return the collapsable.
+   */
+  public boolean isCollapsable() {
+    return collapsable;
+  }
+
+  /**
+   * Sets the collapsable.
+   * 
+   * @param collapsable
+   *          the collapsable to set.
+   */
+  public void setCollapsable(boolean collapsable) {
+    this.collapsable = collapsable;
   }
 }

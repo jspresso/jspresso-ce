@@ -308,13 +308,17 @@ package org.jspresso.framework.view.flex {
       if(actionLists != null) {
         for(var i:int = 0; i < actionLists.length; i++) {
           var actionList:RActionList = actionLists[i] as RActionList;
-          if(actionList.actions != null) {
-            for(var j:int = 0; j < actionList.actions.length; j++) {
-              toolBar.addChild(createAction(actionList.actions[j]));
+          if(actionList.collapsable) {
+            toolBar.addChild(createPopupButton(actionList));
+          } else {
+            if(actionList.actions != null) {
+              for(var j:int = 0; j < actionList.actions.length; j++) {
+                toolBar.addChild(createAction(actionList.actions[j]));
+              }
             }
-            if(i < actionLists.length - 1) {
-              addSeparator(toolBar);
-            }
+          }
+          if(i < actionLists.length - 1) {
+            addSeparator(toolBar);
           }
         }
       }

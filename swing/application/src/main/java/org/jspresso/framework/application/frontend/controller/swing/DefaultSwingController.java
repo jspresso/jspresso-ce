@@ -568,34 +568,41 @@ public class DefaultSwingController extends
     applicationToolBar.add(createComboButton(createWorkspaceActionList()));
     applicationToolBar.addSeparator();
     if (getNavigationActions() != null) {
-      for (ActionList al : getNavigationActions().getActionLists()) {
-        for (IDisplayableAction da : al.getActions()) {
-          JButton b = new JButton();
-          b.setAction(getViewFactory().getActionFactory().createAction(da,
-              this, null, getLocale()));
-          applicationToolBar.add(b);
-        }
-        applicationToolBar.addSeparator();
+      for (ActionList actionList : getNavigationActions().getActionLists()) {
+        completeApplicationToolBar(applicationToolBar, actionList);
       }
     }
     if (getActionMap() != null) {
-      for (ActionList al : getActionMap().getActionLists()) {
-        applicationToolBar.add(createComboButton(al));
+      for (ActionList actionList : getActionMap().getActionLists()) {
+        completeApplicationToolBar(applicationToolBar, actionList);
       }
     }
     applicationToolBar.add(Box.createHorizontalGlue());
-    applicationToolBar.addSeparator();
     if (getHelpActions() != null) {
-      for (ActionList al : getHelpActions().getActionLists()) {
-        applicationToolBar.add(createComboButton(al));
+      for (ActionList actionList : getHelpActions().getActionLists()) {
+        completeApplicationToolBar(applicationToolBar, actionList);
       }
-      applicationToolBar.addSeparator();
     }
     JButton exitButton = new JButton();
     exitButton.setAction(getViewFactory().getActionFactory().createAction(
         getExitAction(), this, null, getLocale()));
     applicationToolBar.add(exitButton);
     return applicationToolBar;
+  }
+
+  private void completeApplicationToolBar(JToolBar applicationToolBar,
+      ActionList actionList) {
+    if (actionList.isCollapsable()) {
+      applicationToolBar.add(createComboButton(actionList));
+    } else {
+      for (IDisplayableAction da : actionList.getActions()) {
+        JButton b = new JButton();
+        b.setAction(getViewFactory().getActionFactory().createAction(da, this,
+            null, getLocale()));
+        applicationToolBar.add(b);
+      }
+    }
+    applicationToolBar.addSeparator();
   }
 
   @SuppressWarnings("unused")

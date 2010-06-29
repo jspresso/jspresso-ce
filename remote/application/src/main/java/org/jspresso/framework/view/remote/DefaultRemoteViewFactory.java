@@ -1751,6 +1751,7 @@ public class DefaultRemoteViewFactory extends
         }
         RActionList actionList = new RActionList(getGuidGenerator()
             .generateGUID());
+        actionList.setCollapsable(nextActionList.isCollapsable());
         actionList.setName(nextActionList.getName());
         actionList.setDescription(nextActionList.getDescription());
         actionList.setIcon(getIconFactory().getIcon(

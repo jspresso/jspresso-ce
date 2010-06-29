@@ -843,6 +843,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     workspaceSelectionActionList.setActions(workspaceSelectionActions);
+    workspaceSelectionActionList.setCollapsable(true);
     return workspaceSelectionActionList;
   }
 

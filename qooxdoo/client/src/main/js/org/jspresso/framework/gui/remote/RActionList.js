@@ -40,6 +40,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RActionList",
     {
       check : "String",
       nullable : true
+    },
+    collapsable :
+    {
+      check : "Boolean"
     }
   }
 });
