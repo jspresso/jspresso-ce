@@ -69,6 +69,8 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
             selectedEntity, EMergeMode.MERGE_KEEP);
       }
       setActionParameter(selectedEntity, context);
+    } else {
+      setActionParameter(null, context);
     }
     return super.execute(actionHandler, context);
   }

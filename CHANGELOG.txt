@@ -5,6 +5,7 @@ Bugs fixed
 3019234    Icon in table row doesn't load
            Query refiners are lost when sorting a table
            Property rollback can produce stack-overflow on 1-1 relationships
+           selecting OK on an empty LOV dialog produces an exception
 
 
 New features
