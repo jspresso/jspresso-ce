@@ -33,6 +33,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1253,6 +1255,7 @@ public class DefaultSwingViewFactory extends
     table.setSurrendersFocusOnKeystroke(true);
     // There is a bug regarding editing table when drag is enabled.
     // table.setDragEnabled(true);
+    table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     return table;
   }
 
@@ -1777,7 +1780,7 @@ public class DefaultSwingViewFactory extends
       String propertyName = columnViewDescriptor.getModelDescriptor().getName();
       if (!forbiddenColumns.contains(propertyName)) {
         TableColumn column = viewComponent.getColumnModel().getColumn(
-            columnIndex++);
+            columnIndex);
         column.setIdentifier(computeColumnIdentifier(rowDescriptor,
             rowConnectorPrototype.getChildConnector(propertyName)));
         IPropertyDescriptor propertyDescriptor = rowDescriptor
@@ -1797,11 +1800,22 @@ public class DefaultSwingViewFactory extends
         column.setCellEditor(createTableCellEditor(editorView, actionHandler));
         TableCellRenderer cellRenderer = createTableCellRenderer(
             propertyDescriptor, locale);
-        if (cellRenderer != null) {
-          column.setCellRenderer(cellRenderer);
-        } else {
-          column.setCellRenderer(new EvenOddTableCellRenderer());
+        if (cellRenderer == null) {
+          cellRenderer = new EvenOddTableCellRenderer();
         }
+        if (columnViewDescriptor instanceof IActionablePropertyViewDescriptor
+            && ((IActionablePropertyViewDescriptor) columnViewDescriptor)
+                .getAction() != null) {
+          Action colAction = getActionFactory().createAction(
+              ((IActionablePropertyViewDescriptor) columnViewDescriptor)
+                  .getAction(), actionHandler, view, locale);
+          cellRenderer = new HyperlinkTableCellRenderer(cellRenderer,
+              colAction, columnIndex);
+          viewComponent.addMouseListener((MouseListener) cellRenderer);
+          viewComponent
+              .addMouseMotionListener((MouseMotionListener) cellRenderer);
+        }
+        column.setCellRenderer(cellRenderer);
         if (columnViewDescriptor.getPreferredSize() != null
             && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
           column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
@@ -1827,6 +1841,7 @@ public class DefaultSwingViewFactory extends
                 minHeaderWidth));
           }
         }
+        columnIndex++;
       }
     }
     viewComponent.addMouseListener(new PopupListener(viewComponent, view,
