@@ -1223,21 +1223,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                              column : compCol,
                              rowSpan : 1,
                              colSpan : compColSpan});
-        if(compColSpan > 1) {
-        	if(!(   rComponent instanceof org.jspresso.framework.gui.remote.RComboBox
-        	     || rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox)) {
-            component.setMaxWidth(null);
-        	}
-          component.setAllowGrowX(true);
-        }
 
-        col += elementWidth;
         if(   rComponent instanceof org.jspresso.framework.gui.remote.RTable
            || rComponent instanceof org.jspresso.framework.gui.remote.RTextArea
            || rComponent instanceof org.jspresso.framework.gui.remote.RList
            || rComponent instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
           formLayout.setRowFlex(compRow, 1);
+          if(compColSpan > 1) {
+            component.setMaxWidth(null);
+          }
         }
+        if(compColSpan > 1) {
+          component.setAllowGrowX(true);
+        }
+        col += elementWidth;
         formLayout.setColumnFlex(compCol, 1);
         lastRow = compRow;
         if(compCol + compColSpan > lastCol) {
@@ -1516,12 +1515,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         {
           ol:                  { text: htmlEditor.tr("insert_ordered_list"), image: "org/jspresso/framework/htmleditor/list-ordered.png", action: htmlEditor.insertOrderedList },
           ul:                  { text: htmlEditor.tr("insert_unordered_list"), image: "org/jspresso/framework/htmleditor/list-unordered.png", action: htmlEditor.insertUnorderedList }
-        },
-        
-        {
-          undo:                { text: htmlEditor.tr("undo"), image: "qx/icon/Oxygen/16/actions/edit-undo.png", action: htmlEditor.undo },
-          redo:                { text: htmlEditor.tr("redo"), image: "qx/icon/Oxygen/16/actions/edit-redo.png", action: htmlEditor.redo }
         }
+//        ,
+//        {
+//          undo:                { text: htmlEditor.tr("undo"), image: "qx/icon/Oxygen/16/actions/edit-undo.png", action: htmlEditor.undo },
+//          redo:                { text: htmlEditor.tr("redo"), image: "qx/icon/Oxygen/16/actions/edit-redo.png", action: htmlEditor.redo }
+//        }
       ];
       var toolbar = new qx.ui.toolbar.ToolBar();
       toolbar.setDecorator("main");

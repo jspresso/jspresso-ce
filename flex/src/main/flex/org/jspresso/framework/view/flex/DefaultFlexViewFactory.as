@@ -279,7 +279,6 @@ package org.jspresso.framework.view.flex {
           slideBar.minHeight = slideBar.height;
           slideBar.maxHeight = slideBar.height;
         });
-        slideBar.height = 100;
         
         surroundingBox.addChild(slideBar);
         surroundingBox.addChild(component);
@@ -1119,6 +1118,10 @@ package org.jspresso.framework.view.flex {
           || rComponent is RHtmlArea) {
           componentsRow.percentHeight = 100.0;
           component.percentWidth = 100.0;
+          if(componentCell.colSpan > 1) {
+            componentCell.maxWidth = NaN;
+            component.maxWidth = NaN;
+          }
         } else if(component.maxWidth > 0 && component.maxWidth < 1000) {
           component.percentWidth = 100.0;
           if((col + elementWidth < remoteForm.columnCount)
@@ -1136,11 +1139,6 @@ package org.jspresso.framework.view.flex {
           component.minWidth = 0;
         }
         componentsRow.addChild(componentCell);
-        
-        if(componentCell.colSpan > 1 && !(rComponent is RComboBox)) {
-          componentCell.maxWidth = NaN;
-          component.maxWidth = NaN;
-        }
         componentCell.addChild(component);
         
         col += elementWidth;
