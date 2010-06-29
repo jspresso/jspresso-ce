@@ -20,6 +20,7 @@ package org.jspresso.framework.view.flex {
   import flash.events.Event;
   import flash.events.FocusEvent;
   import flash.events.MouseEvent;
+  import flash.events.TextEvent;
   
   import flexlib.containers.ButtonScrollingCanvas;
   
@@ -98,6 +99,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.gui.remote.RImageComponent;
   import org.jspresso.framework.gui.remote.RIntegerField;
   import org.jspresso.framework.gui.remote.RLabel;
+  import org.jspresso.framework.gui.remote.RLink;
   import org.jspresso.framework.gui.remote.RList;
   import org.jspresso.framework.gui.remote.RNumericComponent;
   import org.jspresso.framework.gui.remote.RPasswordField;
@@ -1813,26 +1815,42 @@ package org.jspresso.framework.view.flex {
         }
       }
       if(remoteLabel.state) {
-        bindLabel(label, remoteLabel.state);
+        bindLabel(label, remoteLabel);
       }
       return label;
     }
 
-    protected function bindLabel(label:Label, remoteState:RemoteValueState):void {
-      var updateLabel:Function = function (value:Object):void {
-        if(value == null) {
-          label.text = null;
-          label.htmlText = null;
-        } else {
-          if(HtmlUtil.isHtml(value.toString())) {
-            label.text = null;
-            label.htmlText = value.toString();
-          } else {
+    protected function bindLabel(label:Label, remoteLabel:RLabel):void {
+      var remoteState:RemoteValueState = remoteLabel.state;
+      var updateLabel:Function;
+      if(remoteLabel is RLink) {
+        updateLabel = function (value:Object):void {
+          if(value == null) {
             label.htmlText = null;
-            label.text = value.toString();
+          } else {
+            label.htmlText = "<u><a href='event:action'>" + value.toString() + "</a></u>";
           }
-        }
-      };
+        };
+        label.selectable = true;
+        label.addEventListener("link", function(evt:TextEvent):void {
+          getActionHandler().execute((remoteLabel as RLink).action);
+        });
+      } else {
+         updateLabel = function (value:Object):void {
+          if(value == null) {
+            label.text = null;
+            label.htmlText = null;
+          } else {
+            if(HtmlUtil.isHtml(value.toString())) {
+              label.text = null;
+              label.htmlText = value.toString();
+            } else {
+              label.htmlText = null;
+              label.text = value.toString();
+            }
+          }
+        };
+      }
       BindingUtils.bindSetter(updateLabel, remoteState, "value", true);
     }
     

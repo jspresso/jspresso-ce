@@ -163,6 +163,7 @@ import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
+import org.jspresso.framework.view.descriptor.IActionablePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
@@ -182,6 +183,8 @@ import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.TokenMarker;
 
 import chrriis.dj.swingsuite.JComboButton;
+import chrriis.dj.swingsuite.JLink;
+import chrriis.dj.swingsuite.LinkListener;
 
 /**
  * Factory for swing views.
@@ -669,6 +672,7 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createDatePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -680,7 +684,11 @@ public class DefaultSwingViewFactory extends
     DateFormat format = createDateFormat(propertyDescriptor, locale);
     IFormatter formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel(true);
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
@@ -695,12 +703,21 @@ public class DefaultSwingViewFactory extends
               .getScreenResolution() / 3);
     }
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+          .createAction(
+              ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+                  .getAction(), actionHandler, view, locale));
+    }
+    return view;
   }
 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createDecimalPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -715,7 +732,11 @@ public class DefaultSwingViewFactory extends
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel(true);
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
@@ -727,12 +748,21 @@ public class DefaultSwingViewFactory extends
           getDecimalTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+          .createAction(
+              ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+                  .getAction(), actionHandler, view, locale));
+    }
+    return view;
   }
 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createDurationPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -743,7 +773,11 @@ public class DefaultSwingViewFactory extends
     IValueConnector connector;
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel(true);
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
@@ -755,7 +789,15 @@ public class DefaultSwingViewFactory extends
           getDurationTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+          .createAction(
+              ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+                  .getAction(), actionHandler, view, locale));
+    }
+    return view;
   }
 
   /**
@@ -896,6 +938,7 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createIntegerPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -906,7 +949,11 @@ public class DefaultSwingViewFactory extends
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel(true);
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
@@ -918,7 +965,15 @@ public class DefaultSwingViewFactory extends
           getIntegerTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+          .createAction(
+              ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+                  .getAction(), actionHandler, view, locale));
+    }
+    return view;
   }
 
   /**
@@ -1042,6 +1097,28 @@ public class DefaultSwingViewFactory extends
       label.setFont(createFont(BOLD_FONT, label.getFont()));
     }
     return label;
+  }
+
+  /**
+   * Created an action link.
+   * 
+   * @return the created action link.
+   */
+  protected JLink<Action> createJLink() {
+    // To have preferred height computed.
+    JLink<Action> actionLink = new JLink<Action>(" ", null, "");
+    actionLink.addLinkListener(new LinkListener<Action>() {
+
+      public boolean linkActivated(JLink<Action> link, Action target) {
+        if (target != null) {
+          ActionEvent ae = new ActionEvent(link, ActionEvent.ACTION_PERFORMED,
+              null);
+          target.actionPerformed(ae);
+        }
+        return false;
+      }
+    });
+    return actionLink;
   }
 
   /**
@@ -1317,6 +1394,7 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createPercentPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -1327,7 +1405,11 @@ public class DefaultSwingViewFactory extends
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel(true);
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
@@ -1339,7 +1421,15 @@ public class DefaultSwingViewFactory extends
           getPercentTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+          .createAction(
+              ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+                  .getAction(), actionHandler, view, locale));
+    }
+    return view;
   }
 
   /**
@@ -1506,16 +1596,21 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createStringPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, Locale locale) {
     IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel(true);
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
     } else {
@@ -1526,7 +1621,15 @@ public class DefaultSwingViewFactory extends
           getStringTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+          .createAction(
+              ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+                  .getAction(), actionHandler, view, locale));
+    }
+    return view;
   }
 
   /**
@@ -1829,6 +1932,7 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createTimePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -1840,7 +1944,11 @@ public class DefaultSwingViewFactory extends
     JComponent viewComponent;
     IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
     if (propertyViewDescriptor.isReadOnly()) {
-      viewComponent = createJLabel(true);
+      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
       connector = new JLabelConnector(propertyDescriptor.getName(),
           (JLabel) viewComponent);
       ((JLabelConnector) connector).setFormatter(formatter);
@@ -1852,7 +1960,15 @@ public class DefaultSwingViewFactory extends
           getTimeTemplateValue(propertyDescriptor));
     }
     connector.setExceptionHandler(actionHandler);
-    return constructView(viewComponent, propertyViewDescriptor, connector);
+    IView<JComponent> view = constructView(viewComponent,
+        propertyViewDescriptor, connector);
+    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      ((JLink<Action>) view.getPeer()).setTarget(getActionFactory()
+          .createAction(
+              ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
+                  .getAction(), actionHandler, view, locale));
+    }
+    return view;
   }
 
   /**
