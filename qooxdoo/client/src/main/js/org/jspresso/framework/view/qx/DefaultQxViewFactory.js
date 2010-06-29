@@ -406,7 +406,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         };
         table = new qx.ui.table.Table(tableModel, custom);
       }
-
       var columnModel = table.getTableColumnModel();
       for(var i=0; i < remoteTable.getColumnIds().length; i++) {
         var rComponent = remoteTable.getColumns()[i];
@@ -434,8 +433,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           cellRenderer = new org.jspresso.framework.view.qx.BinaryTableCellRenderer();
         } else {
           var format = this._createFormat(rComponent);
-          if(format) {
-            cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(format);
+          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(format);
+          if(rComponent instanceof org.jspresso.framework.gui.remote.RLink) {
+            this.__remotePeerRegistry.register(rComponent.getAction());
+            cellRenderer.setAction(rComponent.getAction());
           }
         }
         if(cellRenderer) {
@@ -467,6 +468,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           columnModel.getBehavior().setWidth(i, columnWidth, columnWidth < 50 ? 0 : columnWidth);
         }
       }
+      table.addListener("cellClick", function(e) {
+        var col = e.getColumn();
+        var renderer = table.getTableColumnModel().getDataCellRenderer(col);
+        if(   renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer
+           && renderer.getAction()) {
+          this.__actionHandler.execute(renderer.getAction());
+        }
+      }, this);
       
       table.setHeight(5*table.getRowHeight() + table.getHeaderCellHeight());
       var selectionModel = table.getSelectionModel();
@@ -1613,6 +1622,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         var modelController = new qx.data.controller.Object(state);
         if(   remoteLabel instanceof org.jspresso.framework.gui.remote.RLink
            && remoteLabel.getAction()) {
+          this.__remotePeerRegistry.register(remoteLabel.getAction());
           label.setRich(true);
           modelController.addTarget(label, "value", "value", false,
             {

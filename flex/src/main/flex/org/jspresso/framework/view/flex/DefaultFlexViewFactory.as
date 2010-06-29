@@ -1509,6 +1509,7 @@ package org.jspresso.framework.view.flex {
           var columnAction:RAction = null;
           if(rColumn is RLink) {
             columnAction = (rColumn as RLink).action;
+            getRemotePeerRegistry().register(columnAction);
           }
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
           itemRenderer.properties = {formatter:createFormatter(rColumn),
@@ -1830,6 +1831,7 @@ package org.jspresso.framework.view.flex {
       var remoteState:RemoteValueState = remoteLabel.state;
       var updateLabel:Function;
       if(remoteLabel is RLink && (remoteLabel as RLink).action != null) {
+        getRemotePeerRegistry().register((remoteLabel as RLink).action);
         updateLabel = function (value:Object):void {
           if(value == null) {
             label.htmlText = null;

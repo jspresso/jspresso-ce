@@ -30,6 +30,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer",
   members :
   {
     __format : null,
+    __action : null,
     
     _formatValue : function(cellInfo) {
       if(this.__format && cellInfo.value) {
@@ -39,10 +40,24 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer",
     },
     
     _getContentHtml : function(cellInfo) {
-    	if(org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
-    		return cellInfo.value;
-    	}
-      return this.base(arguments, cellInfo);
+      if(this.__action) {
+        //return "<a href='javascript:qx.event.Registration.fireEvent(qx.core.Init.getApplication().getRoot(),\"tableLinkClicked\",\"qx.event.type.Data\",\""+this.__action.getGuid()+"\");'>"+this._formatValue(cellInfo)+"</a>";
+        //return "<a href='javascript:>"+this._formatValue(cellInfo)+"</a>";
+        return "<u>"+this.base(arguments, cellInfo)+"</u>";
+      } else {
+	    	if(org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
+	    		return cellInfo.value;
+	    	}
+	      return this.base(arguments, cellInfo);
+      }
+    },
+    
+    setAction : function(action) {
+      this.__action = action;
+    },
+
+    getAction : function() {
+      return this.__action;
     }
 
   }
