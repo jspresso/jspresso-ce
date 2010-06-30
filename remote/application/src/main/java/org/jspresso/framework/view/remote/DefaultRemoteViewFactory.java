@@ -124,7 +124,6 @@ import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
-import org.jspresso.framework.view.descriptor.IActionablePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
@@ -606,7 +605,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createRLink(connector);
       } else {
         viewComponent = createRLabel(connector, true);
@@ -627,10 +626,9 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+    if (propertyViewDescriptor.getAction() != null) {
       ((RLink) viewComponent).setAction(getActionFactory().createAction(
-          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
-              .getAction(), actionHandler, view, locale));
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -654,7 +652,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createRLink(connector);
       } else {
         viewComponent = createRLabel(connector, true);
@@ -681,10 +679,9 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+    if (propertyViewDescriptor.getAction() != null) {
       ((RLink) viewComponent).setAction(getActionFactory().createAction(
-          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
-              .getAction(), actionHandler, view, locale));
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -704,7 +701,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createRLink(connector);
       } else {
         viewComponent = createRLabel(connector, true);
@@ -729,10 +726,9 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+    if (propertyViewDescriptor.getAction() != null) {
       ((RLink) viewComponent).setAction(getActionFactory().createAction(
-          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
-              .getAction(), actionHandler, view, locale));
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -902,7 +898,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createRLink(connector);
       } else {
         viewComponent = createRLabel(connector, true);
@@ -920,10 +916,9 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+    if (propertyViewDescriptor.getAction() != null) {
       ((RLink) viewComponent).setAction(getActionFactory().createAction(
-          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
-              .getAction(), actionHandler, view, locale));
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -1037,7 +1032,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createRLink(connector);
       } else {
         viewComponent = createRLabel(connector, true);
@@ -1063,10 +1058,9 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+    if (propertyViewDescriptor.getAction() != null) {
       ((RLink) viewComponent).setAction(getActionFactory().createAction(
-          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
-              .getAction(), actionHandler, view, locale));
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -1292,7 +1286,7 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createRLink(connector);
       } else {
         viewComponent = createRLabel(connector, true);
@@ -1302,10 +1296,9 @@ public class DefaultRemoteViewFactory extends
     }
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+    if (propertyViewDescriptor.getAction() != null) {
       ((RLink) viewComponent).setAction(getActionFactory().createAction(
-          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
-              .getAction(), actionHandler, view, locale));
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     } else if (viewComponent instanceof RActionField) {
       RAction lovAction = createLovAction(view, actionHandler, locale);
       // lovAction.setName(getTranslationProvider().getTranslation(
@@ -1597,7 +1590,7 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createRLink(connector);
       } else {
         viewComponent = createRLabel(connector, true);
@@ -1607,10 +1600,9 @@ public class DefaultRemoteViewFactory extends
     }
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+    if (propertyViewDescriptor.getAction() != null) {
       ((RLink) viewComponent).setAction(getActionFactory().createAction(
-          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
-              .getAction(), actionHandler, view, locale));
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -1775,7 +1767,7 @@ public class DefaultRemoteViewFactory extends
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+      if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createRLink(connector);
       } else {
         viewComponent = createRLabel(connector, true);
@@ -1793,10 +1785,9 @@ public class DefaultRemoteViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor instanceof IActionablePropertyViewDescriptor) {
+    if (propertyViewDescriptor.getAction() != null) {
       ((RLink) viewComponent).setAction(getActionFactory().createAction(
-          ((IActionablePropertyViewDescriptor) propertyViewDescriptor)
-              .getAction(), actionHandler, view, locale));
+          propertyViewDescriptor.getAction(), actionHandler, view, locale));
     }
     return view;
   }

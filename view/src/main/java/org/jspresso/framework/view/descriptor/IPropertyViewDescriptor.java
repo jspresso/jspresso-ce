@@ -20,6 +20,8 @@ package org.jspresso.framework.view.descriptor;
 
 import java.util.List;
 
+import org.jspresso.framework.action.IAction;
+
 /**
  * This public interface is implemented by view descriptors which are just
  * presenting a property.
@@ -64,4 +66,13 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
    * @return the spanned column count.
    */
   Integer getWidth();
+
+  /**
+   * Returns the action to trigger whenever the property is actioned, e.g.
+   * clicked.
+   * 
+   * @return the action to trigger whenever the property is actioned, e.g.
+   *         clicked.
+   */
+  IAction getAction();
 }

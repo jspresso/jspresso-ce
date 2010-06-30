@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.List;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -53,6 +54,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   private String       labelForeground;
   private List<String> renderedChildProperties;
   private Integer      width;
+  private IAction      action;
 
   /**
    * Gets the labelBackground.
@@ -210,6 +212,27 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
+   * Gets the action.
+   * 
+   * @return the action.
+   */
+  public IAction getAction() {
+    return action;
+  }
+
+  /**
+   * Configures the action to be triggered when the user activates (clicks) this
+   * property view. Setting a not-null action typically turns the property view
+   * into a read-only link.
+   * 
+   * @param action
+   *          the action to set.
+   */
+  public void setAction(IAction action) {
+    this.action = action;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -219,5 +242,13 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
       w = ((IPropertyDescriptor) getModelDescriptor()).getPreferredWidth();
     }
     return w;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isReadOnly() {
+    return getAction() != null || super.isReadOnly();
   }
 }

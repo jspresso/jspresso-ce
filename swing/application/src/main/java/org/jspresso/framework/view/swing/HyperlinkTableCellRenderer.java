@@ -76,14 +76,9 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
             column);
     if (delegateRendererComponent instanceof JLabel) {
       JLabel cellLabel = (JLabel) delegateRendererComponent;
-      if (!table.isEditing() && this.currentRow == row
-          && this.currentCol == column) {
-        cellLabel.setText("<html> <u> <font color='blue'>"
-            + cellLabel.getText());
-        // } else if (hasFocus) {
-        // cellLabel.setText("<html> <font color='blue'>" +
-        // cellLabel.getText());
-      }
+      // if (currentRow == row && currentCol == column) {
+      cellLabel.setText("<html><u>" + cellLabel.getText() + "</u></html>");
+      // }
     }
     return delegateRendererComponent;
   }
