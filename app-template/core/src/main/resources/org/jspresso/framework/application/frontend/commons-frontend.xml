@@ -9,9 +9,7 @@
   <bean id="lovViewDescriptorFactory" class="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="sortingAction" ref="lovFindFrontAction" />
-    <property name="pagingStatusViewDescriptor" ref="pageableStatusView" />
-    <property name="previousPageAction" ref="previousLovPageFrontAction" />
-    <property name="nextPageAction" ref="nextLovPageFrontAction" />
+    <property name="pageNavigationViewDescriptor" ref="lovNavigationView" />
   </bean>
 
   <!--
@@ -60,6 +58,34 @@
       </list>
     </property>
   </bean>
+  
+  <bean id="lovNavigationView" class="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor">
+    <property name="borderType" value="SIMPLE"/>
+    <property name="centerViewDescriptor" ref="pageableStatusView"/>
+    <property name="westViewDescriptor">
+      <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
+        <property name="action" ref="previousLovPageFrontAction"/>
+      </bean>
+    </property>
+    <property name="eastViewDescriptor">
+      <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
+        <property name="action" ref="nextLovPageFrontAction"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="filterModuleNavigationView" parent="lovNavigationView">
+    <property name="westViewDescriptor">
+      <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
+        <property name="action" ref="previousModuleFilterPageAction"/>
+      </bean>
+    </property>
+    <property name="eastViewDescriptor">
+      <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
+        <property name="action" ref="nextModuleFilterPageAction"/>
+      </bean>
+    </property>
+  </bean>
 
   <!--
     Report descriptors
@@ -89,6 +115,7 @@
   <bean id="lovOkFrontAction" parent="okDialogFrontAction">
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.frontend.action.lov.OkLovAction" />
+      
     </property>
     <property name="nextAction" ref="viewConnectorSetAction" />
   </bean>
@@ -291,22 +318,10 @@
 
   <bean id="nextModuleFilterPageAction" parent="nextLovPageFrontAction">
     <property name="nextAction" ref="queryModuleFilterAction" />
-    <property name="actionabilityGates">
-      <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
-        <property name="accessorFactory" ref="accessorFactory" />
-        <property name="propertyName" value="filter.nextPageEnabled" />
-      </bean>
-    </property>
   </bean>
 
   <bean id="previousModuleFilterPageAction" parent="previousLovPageFrontAction">
     <property name="nextAction" ref="queryModuleFilterAction" />
-    <property name="actionabilityGates">
-      <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
-        <property name="accessorFactory" ref="accessorFactory" />
-        <property name="propertyName" value="filter.previousPageEnabled" />
-      </bean>
-    </property>
   </bean>
 
   <bean id="scriptedBackAction" class="org.jspresso.framework.application.backend.action.ScriptedBackendAction">
@@ -822,9 +837,7 @@
 
   <bean abstract="true" id="abstractFilterableBeanCollectionModule" class="org.jspresso.framework.application.model.FilterableBeanCollectionModule">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
-    <property name="pagingStatusViewDescriptor" ref="pageableStatusView" />
-    <property name="previousPageAction" ref="previousModuleFilterPageAction" />
-    <property name="nextPageAction" ref="nextModuleFilterPageAction" />
+    <property name="pageNavigationViewDescriptor" ref="filterModuleNavigationView" />
     <property name="projectedViewDescriptor" ref="filterableBeanCollectionModuleView" />
     <property name="startupAction" ref="initModuleFilterAction" />
   </bean>

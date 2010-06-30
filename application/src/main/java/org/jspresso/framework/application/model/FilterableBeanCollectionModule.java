@@ -22,7 +22,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 
-import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -30,10 +29,8 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.lang.ObjectUtils;
-import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
@@ -53,12 +50,10 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   private PropertyChangeListener       filterComponentTracker;
   private IViewDescriptor              filterViewDescriptor;
 
-  private FrontendAction<?, ?, ?>      nextPageAction;
   private Map<String, ESort>           orderingProperties;
   private Integer                      pageSize;
-  private IViewDescriptor              pagingStatusViewDescriptor;
-  private FrontendAction<?, ?, ?>      previousPageAction;
   private IQueryViewDescriptorFactory  queryViewDescriptorFactory;
+  private BasicViewDescriptor          pageNavigationViewDescriptor;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -144,37 +139,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
     decorator.setNorthViewDescriptor(filterViewDesc);
     decorator.setCenterViewDescriptor(superViewDescriptor);
     if (getPageSize() != null && getPageSize().intValue() >= 0) {
-      if (pagingStatusViewDescriptor != null) {
+      if (pageNavigationViewDescriptor != null) {
+        pageNavigationViewDescriptor.setModelDescriptor(null);
         BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
         nestingViewDescriptor
             .setModelDescriptor(moduleDescriptor
                 .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
         nestingViewDescriptor
-            .setCenterViewDescriptor(pagingStatusViewDescriptor);
-        nestingViewDescriptor.setBorderType(EBorderType.SIMPLE);
-
-        if (previousPageAction != null || nextPageAction != null) {
-          BasicBorderViewDescriptor pageNavigationViewDescriptor = new BasicBorderViewDescriptor();
-          pageNavigationViewDescriptor
-              .setCenterViewDescriptor(nestingViewDescriptor);
-
-          if (previousPageAction != null) {
-            BasicActionViewDescriptor previousActionViewDescriptor = new BasicActionViewDescriptor();
-            previousActionViewDescriptor.setAction(previousPageAction);
-            pageNavigationViewDescriptor
-                .setWestViewDescriptor(previousActionViewDescriptor);
-          }
-
-          if (nextPageAction != null) {
-            BasicActionViewDescriptor nextActionViewDescriptor = new BasicActionViewDescriptor();
-            nextActionViewDescriptor.setAction(nextPageAction);
-            pageNavigationViewDescriptor
-                .setEastViewDescriptor(nextActionViewDescriptor);
-          }
-          decorator.setSouthViewDescriptor(pageNavigationViewDescriptor);
-        } else {
-          decorator.setSouthViewDescriptor(nestingViewDescriptor);
-        }
+            .setCenterViewDescriptor(pageNavigationViewDescriptor);
+        decorator.setSouthViewDescriptor(nestingViewDescriptor);
       }
     }
     decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());
@@ -241,17 +214,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Assigns the action triggered for next page navigation on a pageable result
-   * set. This should hardly be changed from default built-in.
-   * 
-   * @param nextPageAction
-   *          the nextPageAction to set.
-   */
-  public void setNextPageAction(FrontendAction<?, ?, ?> nextPageAction) {
-    this.nextPageAction = nextPageAction;
-  }
-
-  /**
    * Configures a custom map of ordering properties for the result set. If not
    * set, which is the default, the elements ordering properties is used.
    * <p>
@@ -285,32 +247,6 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Allows to change the default view for the paging status. If not set
-   * (default), a default paging status view is created containing the curent
-   * pageas well as the total number of pages available and the total number of
-   * records in the result set. This paging status view is the bordered with the
-   * bage navigation actions.
-   * 
-   * @param pagingStatusViewDescriptor
-   *          the pagingStatusViewDescriptor to set.
-   */
-  public void setPagingStatusViewDescriptor(
-      IViewDescriptor pagingStatusViewDescriptor) {
-    this.pagingStatusViewDescriptor = pagingStatusViewDescriptor;
-  }
-
-  /**
-   * Assigns the action triggered for previous page navigation on a pageable
-   * result set. This should hardly be changed from default built-in.
-   * 
-   * @param previousPageAction
-   *          the previousPageAction to set.
-   */
-  public void setPreviousPageAction(FrontendAction<?, ?, ?> previousPageAction) {
-    this.previousPageAction = previousPageAction;
-  }
-
-  /**
    * Sets the queryViewDescriptorFactory.
    * 
    * @param queryViewDescriptorFactory
@@ -341,5 +277,16 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
       firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
           + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
     }
+  }
+
+  /**
+   * Configures the sub view used to navigate beetween the pages.
+   * 
+   * @param pageNavigationViewDescriptor
+   *          the pageNavigationViewDescriptor to set.
+   */
+  public void setPageNavigationViewDescriptor(
+      BasicViewDescriptor pageNavigationViewDescriptor) {
+    this.pageNavigationViewDescriptor = pageNavigationViewDescriptor;
   }
 }
