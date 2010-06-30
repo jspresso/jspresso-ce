@@ -109,6 +109,7 @@
     <classEntry path="org.jspresso.framework.view.flex.SelectionCheckBoxRenderer"/>
     <classEntry path="org.jspresso.framework.view.flex.SelectionTrackingTree"/>
     <classEntry path="org.jspresso.framework.view.flex.UIComponentDgItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.RCVSDataDescriptor"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

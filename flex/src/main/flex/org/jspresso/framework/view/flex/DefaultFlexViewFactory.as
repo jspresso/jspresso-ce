@@ -54,6 +54,7 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Tree;
   import mx.controls.VRule;
   import mx.controls.dataGridClasses.DataGridColumn;
+  import mx.controls.treeClasses.DefaultDataDescriptor;
   import mx.core.ClassFactory;
   import mx.core.Container;
   import mx.core.ScrollPolicy;
@@ -435,6 +436,7 @@ package org.jspresso.framework.view.flex {
       var tree:SelectionTrackingTree = new SelectionTrackingTree();
       tree.labelField = "value";
       tree.dataTipField = "description";
+      tree.dataDescriptor = new RCVSDataDescriptor();
       tree.itemRenderer = new ClassFactory(RemoteValueTreeItemRenderer);
       tree.dataProvider = remoteTree.state;
       tree.minWidth = 200;
@@ -445,9 +447,9 @@ package org.jspresso.framework.view.flex {
         tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
             expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
           });
-        tree.addEventListener(FlexEvent.UPDATE_COMPLETE, function(event:FlexEvent):void {
-            expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
-          });
+        //        tree.addEventListener(FlexEvent.UPDATE_COMPLETE, function(event:FlexEvent):void {
+        //            expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
+        //          });
       } else {
         tree.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
             expandItem(tree, remoteTree.state as RemoteCompositeValueState, false);
