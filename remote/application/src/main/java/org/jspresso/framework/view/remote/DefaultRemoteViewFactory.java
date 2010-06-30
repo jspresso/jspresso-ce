@@ -1834,50 +1834,77 @@ public class DefaultRemoteViewFactory extends
   protected void decorateWithActions(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale, IView<RComponent> view) {
     ActionMap actionMap = viewDescriptor.getActionMap();
+    ActionMap secondaryActionMap = viewDescriptor.getSecondaryActionMap();
     if (actionMap != null) {
-      List<RActionList> viewActionLists = new ArrayList<RActionList>();
-      for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
-          .hasNext();) {
-        ActionList nextActionList = iter.next();
-        ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
-        if (nextActionList.getRenderingOptions() != null) {
-          renderingOptions = nextActionList.getRenderingOptions();
-        } else if (actionMap.getRenderingOptions() != null) {
-          renderingOptions = actionMap.getRenderingOptions();
-        }
-        RActionList actionList = new RActionList(getGuidGenerator()
-            .generateGUID());
-        actionList.setCollapsable(nextActionList.isCollapsable());
-        actionList.setName(nextActionList.getName());
-        actionList.setDescription(nextActionList.getDescription());
-        actionList.setIcon(getIconFactory().getIcon(
-            nextActionList.getIconImageURL(),
-            getIconFactory().getTinyIconSize()));
-        viewActionLists.add(actionList);
-        List<RAction> actions = new ArrayList<RAction>();
-        for (IDisplayableAction action : nextActionList.getActions()) {
-          if (actionHandler.isAccessGranted(action)) {
-            RAction rAction = getActionFactory().createAction(action,
-                actionHandler, view, locale);
-            rAction.setAcceleratorAsString(action.getAcceleratorAsString());
-            actions.add(rAction);
-            switch (renderingOptions) {
-              case ICON:
-                rAction.setName(null);
-                break;
-              case LABEL:
-                rAction.setIcon(null);
-                break;
-              default:
-                break;
-            }
-          }
-        }
-        actionList.setActions(actions.toArray(new RAction[0]));
-      }
+      List<RActionList> viewActionLists = createViewToolBar(actionMap, view,
+          actionHandler, locale);
       view.getPeer()
           .setActionLists(viewActionLists.toArray(new RActionList[0]));
     }
+    if (secondaryActionMap != null) {
+      List<RActionList> viewActionLists = createViewToolBar(secondaryActionMap,
+          view, actionHandler, locale);
+      view.getPeer().setSecondaryActionLists(
+          viewActionLists.toArray(new RActionList[0]));
+    }
+  }
+
+  /**
+   * Creates a view toolbar based on an action map.
+   * 
+   * @param actionMap
+   *          the action map to create the toolbar for.
+   * @param view
+   *          the view to create the toolbar for.
+   * @param actionHandler
+   *          the action handler used.
+   * @param locale
+   *          the locale used.
+   * @return the created tool bar.
+   */
+  protected List<RActionList> createViewToolBar(ActionMap actionMap,
+      IView<RComponent> view, IActionHandler actionHandler, Locale locale) {
+    List<RActionList> viewActionLists = new ArrayList<RActionList>();
+    for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
+        .hasNext();) {
+      ActionList nextActionList = iter.next();
+      ERenderingOptions renderingOptions = getDefaultActionMapRenderingOptions();
+      if (nextActionList.getRenderingOptions() != null) {
+        renderingOptions = nextActionList.getRenderingOptions();
+      } else if (actionMap.getRenderingOptions() != null) {
+        renderingOptions = actionMap.getRenderingOptions();
+      }
+      RActionList actionList = new RActionList(getGuidGenerator()
+          .generateGUID());
+      actionList.setCollapsable(nextActionList.isCollapsable());
+      actionList.setName(nextActionList.getName());
+      actionList.setDescription(nextActionList.getDescription());
+      actionList
+          .setIcon(getIconFactory().getIcon(nextActionList.getIconImageURL(),
+              getIconFactory().getTinyIconSize()));
+      viewActionLists.add(actionList);
+      List<RAction> actions = new ArrayList<RAction>();
+      for (IDisplayableAction action : nextActionList.getActions()) {
+        if (actionHandler.isAccessGranted(action)) {
+          RAction rAction = getActionFactory().createAction(action,
+              actionHandler, view, locale);
+          rAction.setAcceleratorAsString(action.getAcceleratorAsString());
+          actions.add(rAction);
+          switch (renderingOptions) {
+            case ICON:
+              rAction.setName(null);
+              break;
+            case LABEL:
+              rAction.setIcon(null);
+              break;
+            default:
+              break;
+          }
+        }
+      }
+      actionList.setActions(actions.toArray(new RAction[0]));
+    }
+    return viewActionLists;
   }
 
   /**

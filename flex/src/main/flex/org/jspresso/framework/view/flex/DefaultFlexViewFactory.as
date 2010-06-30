@@ -260,35 +260,47 @@ package org.jspresso.framework.view.flex {
     
     protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
       var toolBar:ApplicationControlBar;
+      var secondaryToolBar:ApplicationControlBar;
       if(!(remoteComponent is RActionField) && remoteComponent.actionLists != null) {
         toolBar = createToolBar(remoteComponent, component);
       } else {
         toolBar = createDefaultToolBar(remoteComponent, component);
       }
-      if(toolBar) {
+      if(!(remoteComponent is RActionField) && remoteComponent.secondaryActionLists != null) {
+        secondaryToolBar = createSecondaryToolBar(remoteComponent, component);
+      }
+      if(toolBar || secondaryToolBar) {
         var surroundingBox:VBox = new VBox();
         component.percentWidth = 100.0;
         component.percentHeight = 100.0;
         
-        var slideBar:ButtonScrollingCanvas = new ButtonScrollingCanvas();
-        slideBar.addChild(toolBar);
-        slideBar.percentWidth = 100.0;
-        slideBar.buttonWidth = 10;
-        slideBar.startScrollingEvent= MouseEvent.MOUSE_OVER;
-        slideBar.stopScrollingEvent= MouseEvent.MOUSE_OUT;
-        toolBar.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-          slideBar.height = (event.currentTarget as ApplicationControlBar).measuredHeight;
-          slideBar.minHeight = slideBar.height;
-          slideBar.maxHeight = slideBar.height;
-        });
-        
-        surroundingBox.addChild(slideBar);
+        if(toolBar) {
+          surroundingBox.addChild(decorateWithSlideBar(toolBar));
+        }
         surroundingBox.addChild(component);
+        if(secondaryToolBar) {
+          surroundingBox.addChild(decorateWithSlideBar(secondaryToolBar));
+        }
         surroundingBox.horizontalScrollPolicy = ScrollPolicy.OFF;
         surroundingBox.verticalScrollPolicy = ScrollPolicy.OFF;
         return surroundingBox;
       }
       return component;
+    }
+    
+    protected function decorateWithSlideBar(component:UIComponent):ButtonScrollingCanvas {
+      var slideBar:ButtonScrollingCanvas = new ButtonScrollingCanvas();
+      slideBar.addChild(component);
+      slideBar.percentWidth = 100.0;
+      slideBar.buttonWidth = 10;
+      slideBar.startScrollingEvent= MouseEvent.MOUSE_OVER;
+      slideBar.stopScrollingEvent= MouseEvent.MOUSE_OUT;
+      component.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+        slideBar.height = (event.currentTarget as ApplicationControlBar).measuredHeight;
+        slideBar.minHeight = slideBar.height;
+        slideBar.maxHeight = slideBar.height;
+      });
+      return slideBar;
     }
 
     protected function createDefaultToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
@@ -296,12 +308,20 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
+      return createToolBarFromActionLists(remoteComponent.actionLists, component);
+    }
+    
+    protected function createSecondaryToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
+      return createToolBarFromActionLists(remoteComponent.secondaryActionLists, component);
+    }
+    
+    protected function createToolBarFromActionLists(actionLists:Array, component:UIComponent):ApplicationControlBar {
       var toolBar:ApplicationControlBar = new ApplicationControlBar();
       toolBar.percentWidth = 100.0;
       toolBar.setStyle("fillAlphas",[0.5,0.5]);
       toolBar.setStyle("fillColors",[0xBBBBBB,0x666666]);
       toolBar.setStyle("horizontalGap",2);
-      installActionLists(toolBar, remoteComponent.actionLists);
+      installActionLists(toolBar, actionLists);
       return toolBar;
     }
     

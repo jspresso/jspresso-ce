@@ -99,6 +99,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected static final int                    MAX_LOGIN_RETRIES = 3;
 
   private ActionMap                             actionMap;
+  private ActionMap                             secondaryActionMap;
   private IBackendController                    backendController;
 
   private List<ModuleHistoryEntry>              backwardHistoryEntries;
@@ -1273,5 +1274,26 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setFrameHeight(Integer frameHeight) {
     this.frameHeight = frameHeight;
+  }
+
+  /**
+   * Gets the secondaryActionMap.
+   * 
+   * @return the secondaryActionMap.
+   */
+  public ActionMap getSecondaryActionMap() {
+    return secondaryActionMap;
+  }
+
+  /**
+   * Assigns the view secondary action map. Same rules as the primary action map
+   * apply except that actions in this map should be visually distinguished from
+   * the main action map, e.g. placed in another toolbar.
+   * 
+   * @param secondaryActionMap
+   *          the secondaryActionMap to set.
+   */
+  public void setSecondaryActionMap(ActionMap secondaryActionMap) {
+    this.secondaryActionMap = secondaryActionMap;
   }
 }

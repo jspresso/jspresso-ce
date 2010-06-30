@@ -36,6 +36,7 @@ public abstract class RComponent extends RemotePeer implements
   private static final long serialVersionUID = 4728316436476683941L;
 
   private RActionList[]     actionLists;
+  private RActionList[]     secondaryActionLists;
   private String            background;
   private String            borderType;
   private Font              font;
@@ -266,5 +267,24 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void synchRemoteState() {
     // Empty implementation
+  }
+
+  /**
+   * Gets the secondaryActionLists.
+   * 
+   * @return the secondaryActionLists.
+   */
+  public RActionList[] getSecondaryActionLists() {
+    return secondaryActionLists;
+  }
+
+  /**
+   * Sets the secondaryActionLists.
+   * 
+   * @param secondaryActionLists
+   *          the secondaryActionLists to set.
+   */
+  public void setSecondaryActionLists(RActionList[] secondaryActionLists) {
+    this.secondaryActionLists = secondaryActionLists;
   }
 }

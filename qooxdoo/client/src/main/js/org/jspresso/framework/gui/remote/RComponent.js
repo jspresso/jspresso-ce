@@ -29,6 +29,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent",
       check : "Array",
       nullable : true
     },
+    secondaryActionLists :
+    {
+      check : "Array",
+      nullable : true
+    },
     background :
     {
       check : "String",

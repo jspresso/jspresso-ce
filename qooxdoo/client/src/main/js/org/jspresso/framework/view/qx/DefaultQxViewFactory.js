@@ -187,18 +187,27 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     
     _decorateWithActions:function(remoteComponent, component) {
       var toolBar;
+      var secondaryToolBar;
       if(!(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField) && remoteComponent.getActionLists() != null) {
         toolBar = this._createToolBar(remoteComponent, component);
       } else {
         toolBar = this._createDefaultToolBar(remoteComponent, component);
       }
-      if(toolBar) {
+      secondaryToolBar = this._createSecondaryToolBar(remoteComponent, component);
+      if(toolBar || secondaryToolBar) {
         var surroundingBox = new qx.ui.container.Composite();
         surroundingBox.setLayout(new qx.ui.layout.VBox(2));
-        var slideBar = new qx.ui.container.SlideBar();
-        slideBar.add(toolBar);
-        surroundingBox.add(slideBar);
+        if(toolBar) {
+          var slideBar = new qx.ui.container.SlideBar();
+          slideBar.add(toolBar);
+          surroundingBox.add(slideBar);
+        }
         surroundingBox.add(component, {flex:1});
+        if(secondaryToolBar) {
+          var slideBar = new qx.ui.container.SlideBar();
+          slideBar.add(secondaryToolBar);
+          surroundingBox.add(slideBar);
+        }
         return surroundingBox;
       }
       return component;
@@ -209,8 +218,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     },
     
     _createToolBar:function(remoteComponent, component) {
+      return this._createToolBarFromActionLists(remoteComponent.getActionLists(), component);
+    },
+
+    _createSecondaryToolBar:function(remoteComponent, component) {
+      return this._createToolBarFromActionLists(remoteComponent.getSecondaryActionLists(), component);
+    },
+
+    _createToolBarFromActionLists:function(actionLists, component) {
       var toolBar = new qx.ui.toolbar.ToolBar();
-      this.installActionLists(toolBar, remoteComponent.getActionLists());
+      this.installActionLists(toolBar, actionLists);
       return toolBar;
     },
     

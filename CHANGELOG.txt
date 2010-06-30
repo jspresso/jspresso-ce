@@ -16,6 +16,7 @@ New features
            Made action lists collapsable (rendering as a popup button)
            Made fw action lists top-level beans
            Made property views actionable to turn them into hyperlinks
+           Introduced secondary action map for views and controller
 
 
 

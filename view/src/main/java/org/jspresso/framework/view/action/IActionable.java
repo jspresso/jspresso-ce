@@ -22,4 +22,12 @@ public interface IActionable {
    */
   ActionMap getActionMap();
 
+  /**
+   * Retrieves a secondary map of action lists to be presented on this view.
+   * Actions in this map should be visually distinguished from the main action
+   * map, e.g. placed in another toolbar.
+   * 
+   * @return the secondary map of action lists handled by this view.
+   */
+  ActionMap getSecondaryActionMap();
 }

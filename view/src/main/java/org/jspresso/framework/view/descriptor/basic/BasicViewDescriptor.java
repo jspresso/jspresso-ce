@@ -45,6 +45,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     implements IViewDescriptor {
 
   private ActionMap          actionMap;
+  private ActionMap          secondaryActionMap;
   private String             automationSeed;
   private String             background;
   private EBorderType        borderType = EBorderType.NONE;
@@ -482,5 +483,26 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   protected Integer getPreferredWidth() {
     return preferredWidth;
+  }
+
+  /**
+   * Gets the secondaryActionMap.
+   * 
+   * @return the secondaryActionMap.
+   */
+  public ActionMap getSecondaryActionMap() {
+    return secondaryActionMap;
+  }
+
+  /**
+   * Assigns the view secondary action map. Same rules as the primary action map
+   * apply except that actions in this map should be visually distinguished from
+   * the main action map, e.g. placed in another toolbar.
+   * 
+   * @param secondaryActionMap
+   *          the secondaryActionMap to set.
+   */
+  public void setSecondaryActionMap(ActionMap secondaryActionMap) {
+    this.secondaryActionMap = secondaryActionMap;
   }
 }

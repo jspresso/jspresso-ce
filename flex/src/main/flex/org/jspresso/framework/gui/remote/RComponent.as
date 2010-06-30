@@ -25,6 +25,7 @@ package org.jspresso.framework.gui.remote {
     public class RComponent extends RemotePeer implements IRemoteStateOwner {
 
         private var _actionLists:Array;
+        private var _secondaryActionLists:Array;
         private var _background:String;
         private var _borderType:String;
         private var _font:Font;
@@ -108,5 +109,16 @@ package org.jspresso.framework.gui.remote {
         public function get preferredSize():Dimension {
             return _preferredSize;
         }
+
+        public function get secondaryActionLists():Array
+        {
+          return _secondaryActionLists;
+        }
+
+        public function set secondaryActionLists(value:Array):void
+        {
+          _secondaryActionLists = value;
+        }
+
     }
 }
