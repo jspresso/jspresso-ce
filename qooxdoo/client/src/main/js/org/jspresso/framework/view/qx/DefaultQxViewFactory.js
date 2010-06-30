@@ -218,14 +218,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     },
     
     _createToolBar:function(remoteComponent, component) {
-      return this._createToolBarFromActionLists(remoteComponent.getActionLists(), component);
+      return this.createToolBarFromActionLists(remoteComponent.getActionLists());
     },
 
     _createSecondaryToolBar:function(remoteComponent, component) {
-      return this._createToolBarFromActionLists(remoteComponent.getSecondaryActionLists(), component);
+      return this.createToolBarFromActionLists(remoteComponent.getSecondaryActionLists());
     },
 
-    _createToolBarFromActionLists:function(actionLists, component) {
+    createToolBarFromActionLists:function(actionLists) {
       var toolBar = new qx.ui.toolbar.ToolBar();
       this.installActionLists(toolBar, actionLists);
       return toolBar;
@@ -1860,6 +1860,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       if(remoteAction.getDescription()) {
         command.setToolTipText(remoteAction.getDescription() + this.self(arguments).__TOOLTIP_ELLIPSIS);
       }
+      remoteAction.bind("enabled", command, "enabled");
       command.addListener("execute", function(e) {
         this.__actionHandler.execute(remoteAction);
       }, this);

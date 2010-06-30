@@ -361,6 +361,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                              initCommand.exitAction,
                              initCommand.navigationActions,
                              initCommand.actions,
+                             initCommand.secondaryActions,
                              initCommand.helpActions);
       } else if(command is RemoteWorkspaceDisplayCommand) {
         var workspaceDisplayCommand:RemoteWorkspaceDisplayCommand = command as RemoteWorkspaceDisplayCommand;
@@ -754,6 +755,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                             exitAction:RAction,
                                             navigationActions:Array,
                                             actions:Array,
+                                            secondaryActions:Array,
                                             helpActions:Array):void {
       var applicationFrame:Application = Application.application as Application;
       decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
@@ -790,7 +792,17 @@ package org.jspresso.framework.application.frontend.controller.flex {
       split.percentWidth = 100.0;
       split.percentHeight = 100.0;
       
-      applicationFrame.addChild(split);
+      if(secondaryActions) {
+        var secondaryToolBar:UIComponent = _viewFactory.decorateWithSlideBar(_viewFactory.createToolBarFromActionLists(secondaryActions));
+        var surroundingBox:VBox = new VBox();
+        surroundingBox.percentWidth = 100.0;
+        surroundingBox.percentHeight = 100.0;
+        surroundingBox.addChild(split);
+        surroundingBox.addChild(secondaryToolBar);
+        applicationFrame.addChild(surroundingBox);
+      } else {
+        applicationFrame.addChild(split);
+      }
     }
     
     protected function decorateApplicationFrame(applicationFrame:Application,

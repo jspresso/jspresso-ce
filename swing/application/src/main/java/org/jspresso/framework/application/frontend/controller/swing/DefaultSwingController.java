@@ -590,6 +590,19 @@ public class DefaultSwingController extends
     return applicationToolBar;
   }
 
+  private JToolBar createSecondaryApplicationToolBar() {
+    JToolBar applicationToolBar = new JToolBar();
+    applicationToolBar.setRollover(true);
+    applicationToolBar.setFloatable(false);
+
+    if (getSecondaryActionMap() != null) {
+      for (ActionList actionList : getSecondaryActionMap().getActionLists()) {
+        completeApplicationToolBar(applicationToolBar, actionList);
+      }
+    }
+    return applicationToolBar;
+  }
+
   private void completeApplicationToolBar(JToolBar applicationToolBar,
       ActionList actionList) {
     if (actionList.isCollapsable()) {
@@ -851,6 +864,10 @@ public class DefaultSwingController extends
     // controllerFrame.setJMenuBar(createApplicationMenuBar());
     controllerFrame.getContentPane().add(createApplicationToolBar(),
         BorderLayout.NORTH);
+    if (getSecondaryActionMap() != null) {
+      controllerFrame.getContentPane().add(createSecondaryApplicationToolBar(),
+          BorderLayout.SOUTH);
+    }
     controllerFrame.invalidate();
     controllerFrame.validate();
     updateFrameTitle();

@@ -22,6 +22,7 @@ package org.jspresso.framework.application.frontend.command.remote {
     public class RemoteInitCommand extends RemoteCommand {
 
         private var _actions:Array;
+        private var _secondaryActions:Array;
         private var _helpActions:Array;
         private var _navigationActions:Array;
         private var _workspaceActions:RActionList;
@@ -72,6 +73,16 @@ package org.jspresso.framework.application.frontend.command.remote {
         }
         public function set exitAction(value:RAction):void {
           _exitAction = value;
+        }
+
+        public function get secondaryActions():Array
+        {
+          return _secondaryActions;
+        }
+
+        public function set secondaryActions(value:Array):void
+        {
+          _secondaryActions = value;
         }
 
 

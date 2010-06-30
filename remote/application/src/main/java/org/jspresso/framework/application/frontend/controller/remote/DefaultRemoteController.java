@@ -511,6 +511,8 @@ public class DefaultRemoteController extends
     initCommand
         .setWorkspaceActions(createRActionList(createWorkspaceActionList()));
     initCommand.setActions(createRActionLists(getActionMap()));
+    initCommand
+        .setSecondaryActions(createRActionLists(getSecondaryActionMap()));
     initCommand.setHelpActions(createRActionLists(getHelpActions()));
     initCommand
         .setNavigationActions(createRActionLists(getNavigationActions()));

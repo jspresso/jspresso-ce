@@ -30,6 +30,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     {
       check : "Array"
     },
+    secondaryActions :
+    {
+      check : "Array"
+    },
     helpActions :
     {
       check : "Array"

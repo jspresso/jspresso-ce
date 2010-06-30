@@ -296,6 +296,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                              command.getExitAction(),
                              command.getNavigationActions(),
                              command.getActions(),
+                             command.getSecondaryActions(),
                              command.getHelpActions());
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand) {
         this._displayWorkspace(command.getWorkspaceName(),
@@ -535,6 +536,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                                       exitAction,
                                       navigationActions,
                                       actions,
+                                      secondaryActions,
                                       helpActions) {
       //this.__application.getRoot().removeAll();
 
@@ -570,7 +572,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       splitContainer.add(this.__workspaceStack, 0.85);
       
       applicationFrame.add(splitContainer, {flex:1});
-
+      if(secondaryActions) {
+        var secondaryToolBar = new qx.ui.container.SlideBar();
+        secondaryToolBar.add(this.__viewFactory.createToolBarFromActionLists(secondaryActions));
+        applicationFrame.add(secondaryToolBar);
+      }
       this.__application.getRoot().add(applicationFrame, {edge:0})
     },
     

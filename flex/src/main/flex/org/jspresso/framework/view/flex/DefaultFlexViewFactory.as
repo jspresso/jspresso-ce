@@ -288,7 +288,7 @@ package org.jspresso.framework.view.flex {
       return component;
     }
     
-    protected function decorateWithSlideBar(component:UIComponent):ButtonScrollingCanvas {
+    public function decorateWithSlideBar(component:UIComponent):ButtonScrollingCanvas {
       var slideBar:ButtonScrollingCanvas = new ButtonScrollingCanvas();
       slideBar.addChild(component);
       slideBar.percentWidth = 100.0;
@@ -308,14 +308,14 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
-      return createToolBarFromActionLists(remoteComponent.actionLists, component);
+      return createToolBarFromActionLists(remoteComponent.actionLists);
     }
     
     protected function createSecondaryToolBar(remoteComponent:RComponent, component:UIComponent):ApplicationControlBar {
-      return createToolBarFromActionLists(remoteComponent.secondaryActionLists, component);
+      return createToolBarFromActionLists(remoteComponent.secondaryActionLists);
     }
     
-    protected function createToolBarFromActionLists(actionLists:Array, component:UIComponent):ApplicationControlBar {
+    public function createToolBarFromActionLists(actionLists:Array):ApplicationControlBar {
       var toolBar:ApplicationControlBar = new ApplicationControlBar();
       toolBar.percentWidth = 100.0;
       toolBar.setStyle("fillAlphas",[0.5,0.5]);

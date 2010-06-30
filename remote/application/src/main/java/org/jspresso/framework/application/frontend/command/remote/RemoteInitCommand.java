@@ -32,6 +32,7 @@ public class RemoteInitCommand extends RemoteCommand {
   private static final long serialVersionUID = -5984969345298629961L;
 
   private RActionList[]     actions;
+  private RActionList[]     secondaryActions;
   private RActionList[]     navigationActions;
   private RActionList[]     helpActions;
   private RActionList       workspaceActions;
@@ -150,5 +151,24 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public void setExitAction(RAction exitAction) {
     this.exitAction = exitAction;
+  }
+
+  /**
+   * Gets the secondaryActions.
+   * 
+   * @return the secondaryActions.
+   */
+  public RActionList[] getSecondaryActions() {
+    return secondaryActions;
+  }
+
+  /**
+   * Sets the secondaryActions.
+   * 
+   * @param secondaryActions
+   *          the secondaryActions to set.
+   */
+  public void setSecondaryActions(RActionList[] secondaryActions) {
+    this.secondaryActions = secondaryActions;
   }
 }
