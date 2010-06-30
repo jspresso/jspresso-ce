@@ -1,4 +1,4 @@
-3.5.0
+3.5.1
 =====
 Bugs fixed
 ----------
@@ -15,6 +15,7 @@ New features
            Removed menu bars in favor of an application toolbar
            Made action lists collapsable (rendering as a popup button)
            Made fw action lists top-level beans
+           Made property views actionable to turn them into hyperlinks
 
 
 

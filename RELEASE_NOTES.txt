@@ -1,5 +1,17 @@
 3.5.1
 =====
+- The new hyperlink management requires some extra library (dj-swingsuite + dependencies).
+They are included in the new archetype but you have to update your existing applications
+eclipse projects, i.e. in .classpath, add :
+  <classpathentry
+    kind="var"
+    path="M2_REPO/chrriis/dj-swingsuite/0.9.1/dj-swingsuite-0.9.1.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
 
 
 3.5.0
