@@ -38,6 +38,7 @@ package org.jspresso.framework.view.flex {
   import mx.containers.TabNavigator;
   import mx.containers.VBox;
   import mx.containers.ViewStack;
+  import mx.containers.dividedBoxClasses.BoxDivider;
   import mx.controls.Button;
   import mx.controls.CheckBox;
   import mx.controls.ColorPicker;
@@ -1226,6 +1227,26 @@ package org.jspresso.framework.view.flex {
 
         splitContainer.addChild(component);
       }
+      splitContainer.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+        var divider:BoxDivider = splitContainer.getDividerAt(0); 
+        if(remoteSplitContainer.orientation == "VERTICAL") {
+          var height:Number = splitContainer.height;
+          var minY:Number = height * 4 / 10;
+          if(divider.y < minY) {
+            divider.y = minY;
+          } else if (divider.y > (height - minY)) {
+            divider.y = height - minY;
+          }
+        } else {
+          var width:Number = splitContainer.width;
+          var minX:Number = width * 4 / 10;
+          if(divider.x < minX) {
+            divider.x = minX;
+          } else if (divider.x > (width - minX)) {
+            divider.x = width - minX;
+          }
+        }
+      });
       return splitContainer;
     }
 
