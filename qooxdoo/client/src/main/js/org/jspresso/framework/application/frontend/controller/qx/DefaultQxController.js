@@ -191,7 +191,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     execute : function(action, param) {
       param = (typeof param == 'undefined') ? null : param;
-      if(action) {
+      if(action && action.isEnabled()) {
         //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();
         command.setTargetPeerGuid(action.getGuid());

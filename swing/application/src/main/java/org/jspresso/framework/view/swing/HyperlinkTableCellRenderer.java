@@ -106,7 +106,7 @@ class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements
     JTable table = (JTable) e.getSource();
     Point pt = e.getPoint();
     int col = table.convertColumnIndexToModel(table.columnAtPoint(pt));
-    if (col == actionColIndex && action != null) {
+    if (col == actionColIndex && action != null && action.isEnabled()) {
       ActionEvent ae = new ActionEvent(e.getSource(),
           ActionEvent.ACTION_PERFORMED, null, e.getWhen(), e.getModifiers());
       action.actionPerformed(ae);

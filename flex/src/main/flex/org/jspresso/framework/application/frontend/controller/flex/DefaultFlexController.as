@@ -52,6 +52,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.core.UIComponent;
   import mx.core.mx_internal;
   import mx.events.CloseEvent;
+  import mx.events.FlexEvent;
   import mx.events.IndexChangedEvent;
   import mx.events.MenuEvent;
   import mx.managers.PopUpManager;
@@ -134,6 +135,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.util.remote.RemotePeer;
   import org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+  import org.jspresso.framework.view.flex.CollapsibleAccordion;
   import org.jspresso.framework.view.flex.DefaultFlexViewFactory;
   import org.jspresso.framework.view.flex.RIconMenuBarItem;
   import org.jspresso.framework.view.flex.RIconMenuItemRenderer;
@@ -149,7 +151,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _remotePeerRegistry:IRemotePeerRegistry;
     private var _changeNotificationsEnabled:Boolean;
     private var _commandsQueue:IList;
-    private var _workspaceAccordion:Accordion;
+    private var _workspaceAccordion:CollapsibleAccordion;
     private var _workspaceViewStack:ViewStack;
     private var _unregistered:Object;
     private var _postponedCommands:Object;
@@ -251,7 +253,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
 
     public function execute(action:RAction, param:String=null):void {
       //trace(">>> Execute <<< " + action.name + " param = " + param);
-      if(action) {
+      if(action && action.enabled) {
         var command:RemoteActionCommand = new RemoteActionCommand();
         command.targetPeerGuid = action.guid;
         command.automationId = action.automationId;
@@ -760,7 +762,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       var applicationFrame:Application = Application.application as Application;
       decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
       
-      _workspaceAccordion = new Accordion();
+      _workspaceAccordion = new CollapsibleAccordion();
       _workspaceAccordion.historyManagementEnabled = false;
       for(var i:int = 0; i < workspaceActions.actions.length; i++) {
         var workspaceAction:RAction = workspaceActions.actions[i];
@@ -770,11 +772,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
         cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
         cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
         cardCanvas.label = workspaceAction.name;
-        _workspaceAccordion.addChild(cardCanvas);
+        _workspaceAccordion.addAcccordionSection(cardCanvas);
         cardCanvas.name = workspaceNames[i];
-        cardCanvas.icon = _viewFactory.getIconForComponent(_workspaceAccordion.getHeaderAt(i), workspaceAction.icon);
       }
-      _workspaceAccordion.percentWidth = 20.0;
       _workspaceAccordion.percentHeight = 100.0;
       var accordionHandler:Function = function(event:IndexChangedEvent):void {
         var workspaceIndex:int = event.newIndex;
@@ -786,11 +786,22 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _workspaceViewStack.percentWidth = 100.0;
       _workspaceViewStack.percentHeight = 100.0;
       
-      var split:HDividedBox = new HDividedBox();
+      var split:HBox = new HBox();
       split.addChild(_workspaceAccordion);
       split.addChild(_workspaceViewStack);
       split.percentWidth = 100.0;
       split.percentHeight = 100.0;
+      
+      _workspaceAccordion.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+        for(i = 0; i < workspaceActions.actions.length; i++) {
+          workspaceAction = workspaceActions.actions[i];
+          var section:Canvas = _workspaceAccordion.content[i] as Canvas;
+          section.icon = _viewFactory.getIconForComponent(_workspaceAccordion.getHeaderAt(i),
+                                                          workspaceAction.icon);
+          var button:Button = _workspaceAccordion.getButtonAt(i);
+          button.setStyle("icon", _viewFactory.getIconForComponent(button, workspaceAction.icon));
+        }
+      });
       
       if(secondaryActions) {
         var secondaryToolBar:UIComponent = _viewFactory.decorateWithSlideBar(_viewFactory.createToolBarFromActionLists(secondaryActions));
@@ -919,11 +930,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
               }
             }, state, "selectedIndices", true);
           }
-          (_workspaceAccordion.getChildByName(workspaceName) as Container).addChild(workspaceNavigatorUI);
+          (_workspaceAccordion.getAcccordionSectionByName(workspaceName) as Container).addChild(workspaceNavigatorUI);
         }
       }
       _workspaceViewStack.selectedChild = _workspaceViewStack.getChildByName(workspaceName) as Container;
-      _workspaceAccordion.selectedChild = _workspaceAccordion.getChildByName(workspaceName) as Container;
+      _workspaceAccordion.selectedChild = _workspaceAccordion.getAcccordionSectionByName(workspaceName) as Container;
     }
     
     protected function performLogin():void {

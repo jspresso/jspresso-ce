@@ -466,6 +466,7 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
@@ -609,6 +610,12 @@ public class DefaultSwingViewFactory extends
       viewComponent.add(propertyView.getPeer(), constraints);
 
       currentX += propertyWidth;
+
+      if (propertyView.getPeer() instanceof JLink<?>) {
+        ((JLink<Action>) propertyView.getPeer()).setTarget(getActionFactory()
+            .createAction(propertyViewDescriptor.getAction(), actionHandler,
+                view, locale));
+      }
     }
     if (lastRowNeedsFilling) {
       fillLastRow(viewComponent);
@@ -672,7 +679,6 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createDatePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -705,18 +711,12 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor.getAction() != null) {
-      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
-          .createAction(propertyViewDescriptor.getAction(), actionHandler,
-              view, locale));
-    }
     return view;
   }
 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createDecimalPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -749,18 +749,12 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor.getAction() != null) {
-      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
-          .createAction(propertyViewDescriptor.getAction(), actionHandler,
-              view, locale));
-    }
     return view;
   }
 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createDurationPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -789,11 +783,6 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor.getAction() != null) {
-      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
-          .createAction(propertyViewDescriptor.getAction(), actionHandler,
-              view, locale));
-    }
     return view;
   }
 
@@ -935,7 +924,6 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createIntegerPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -964,11 +952,6 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor.getAction() != null) {
-      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
-          .createAction(propertyViewDescriptor.getAction(), actionHandler,
-              view, locale));
-    }
     return view;
   }
 
@@ -1107,9 +1090,11 @@ public class DefaultSwingViewFactory extends
 
       public boolean linkActivated(JLink<Action> link, Action target) {
         if (target != null) {
-          ActionEvent ae = new ActionEvent(link, ActionEvent.ACTION_PERFORMED,
-              null);
-          target.actionPerformed(ae);
+          if (target.isEnabled()) {
+            ActionEvent ae = new ActionEvent(link,
+                ActionEvent.ACTION_PERFORMED, null);
+            target.actionPerformed(ae);
+          }
         }
         return false;
       }
@@ -1391,7 +1376,6 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createPercentPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -1420,11 +1404,6 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor.getAction() != null) {
-      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
-          .createAction(propertyViewDescriptor.getAction(), actionHandler,
-              view, locale));
-    }
     return view;
   }
 
@@ -1471,7 +1450,6 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createReferencePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -1508,11 +1486,7 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor.getAction() != null) {
-      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
-          .createAction(propertyViewDescriptor.getAction(), actionHandler,
-              view, locale));
-    } else if (viewComponent instanceof JActionField) {
+    if (viewComponent instanceof JActionField) {
       Action lovAction = createLovAction(view, actionHandler, locale);
       // lovAction.putValue(Action.NAME,
       // getTranslationProvider().getTranslation(
@@ -1614,11 +1588,10 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createStringPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JComponent viewComponent;
@@ -1641,11 +1614,6 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor.getAction() != null) {
-      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
-          .createAction(propertyViewDescriptor.getAction(), actionHandler,
-              view, locale));
-    }
     return view;
   }
 
@@ -1958,7 +1926,6 @@ public class DefaultSwingViewFactory extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected IView<JComponent> createTimePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
@@ -1988,11 +1955,6 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    if (propertyViewDescriptor.getAction() != null) {
-      ((JLink<Action>) viewComponent).setTarget(getActionFactory()
-          .createAction(propertyViewDescriptor.getAction(), actionHandler,
-              view, locale));
-    }
     return view;
   }
 
