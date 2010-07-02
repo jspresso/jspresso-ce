@@ -9,5 +9,5 @@
 controller '${parentArtifactId}.name',
   icon:'icon.png',
   context:'${parentArtifactId}',
-  language:'en'
+  language:'en',
   workspaces:[/*Reference your workspaces here.*/]
