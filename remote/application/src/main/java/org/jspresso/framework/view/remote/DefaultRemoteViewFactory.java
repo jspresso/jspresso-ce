@@ -165,31 +165,6 @@ public class DefaultRemoteViewFactory extends
   }
 
   /**
-   * Computes the component state based on its bound connectorr.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public IView<RComponent> createView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<RComponent> view = super.createView(viewDescriptor, actionHandler,
-        locale);
-    if (view.getConnector() instanceof IAutomationSource) {
-      String automationSeed = viewDescriptor.getAutomationSeed();
-      if (automationSeed == null) {
-        automationSeed = viewDescriptor.getName();
-      }
-      ((IAutomationSource) view.getConnector())
-          .setAutomationSeed(automationSeed);
-    }
-    if (view.getPeer().getState() == null) {
-      view.getPeer().setState(
-          ((IRemoteStateOwner) view.getConnector()).getState());
-    }
-    return view;
-  }
-
-  /**
    * Sets the dateServerParse.
    * 
    * @param dateServerParse
@@ -1589,6 +1564,19 @@ public class DefaultRemoteViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected RComponent decorateWithPaginationView(RComponent viewPeer,
+      RComponent paginationViewPeer) {
+    RBorderContainer decorator = new RBorderContainer(getGuidGenerator()
+        .generateGUID());
+    decorator.setCenter(viewPeer);
+    decorator.setSouth(paginationViewPeer);
+    return decorator;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<RComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
@@ -1999,5 +1987,26 @@ public class DefaultRemoteViewFactory extends
   private Font createFont(String fontString) {
     Font font = FontHelper.fromString(fontString);
     return font;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> constructView(RComponent viewComponent,
+      IViewDescriptor descriptor, IValueConnector connector) {
+    IView<RComponent> view = super.constructView(viewComponent, descriptor,
+        connector);
+    if (connector instanceof IAutomationSource) {
+      String automationSeed = descriptor.getAutomationSeed();
+      if (automationSeed == null) {
+        automationSeed = descriptor.getName();
+      }
+      ((IAutomationSource) connector).setAutomationSeed(automationSeed);
+    }
+    if (viewComponent.getState() == null) {
+      viewComponent.setState(((IRemoteStateOwner) connector).getState());
+    }
+    return view;
   }
 }

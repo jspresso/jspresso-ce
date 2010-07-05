@@ -188,6 +188,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
     
     public function register(remotePeer:IRemotePeer):void {
+      if(!remotePeer) {
+        return;
+      }
       if(!isRegistered(remotePeer.guid)) {
         _remotePeerRegistry.register(remotePeer);
         if(remotePeer is RemoteValueState) {

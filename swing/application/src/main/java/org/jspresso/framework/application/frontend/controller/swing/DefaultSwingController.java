@@ -226,6 +226,7 @@ public class DefaultSwingController extends
               workspaceName, workspaceNavigatorViewDescriptor);
           IView<JComponent> moduleAreaView = createModuleAreaView(workspaceName);
           JSplitPane workspaceView = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+          workspaceView.setOneTouchExpandable(true);
           workspaceView.add(workspaceNavigator.getPeer());
           workspaceView.add(moduleAreaView.getPeer());
           workspaceInternalFrame = createJInternalFrame(workspaceView,

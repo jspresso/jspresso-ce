@@ -17,6 +17,8 @@ New features
            Made fw action lists top-level beans
            Made property views actionable to turn them into hyperlinks
            Introduced secondary action map for views and controller
+           Introduced a paginationViewDescriptor on collection views
+           Default pagination view is automatically sized to the collection view
 
 
 

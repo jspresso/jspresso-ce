@@ -23,6 +23,7 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This is the abstract base descriptor of all views used to display a
@@ -37,9 +38,10 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     implements ICollectionViewDescriptor {
 
-  private IAction        itemSelectionAction;
-  private IAction        rowAction;
-  private ESelectionMode selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+  private IAction         itemSelectionAction;
+  private IAction         rowAction;
+  private ESelectionMode  selectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+  private IViewDescriptor paginationViewDescriptor;
 
   /**
    * {@inheritDoc}
@@ -132,6 +134,29 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    */
   public void setSelectionMode(ESelectionMode selectionMode) {
     this.selectionMode = selectionMode;
+  }
+
+  /**
+   * Gets the paginationViewDescriptor.
+   * 
+   * @return the paginationViewDescriptor.
+   */
+  public IViewDescriptor getPaginationViewDescriptor() {
+    return paginationViewDescriptor;
+  }
+
+  /**
+   * Configures a view that will control the pagination (if any) on this
+   * collection view. When contructed, the collection view will be decorated
+   * with the pagination view. The pagination view will be bound to the same
+   * model as the one providing the collection of the collection view.
+   * 
+   * @param paginationViewDescriptor
+   *          the paginationViewDescriptor to set.
+   */
+  public void setPaginationViewDescriptor(
+      IViewDescriptor paginationViewDescriptor) {
+    this.paginationViewDescriptor = paginationViewDescriptor;
   }
 
 }

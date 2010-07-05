@@ -51,4 +51,13 @@ public interface ICollectionViewDescriptor extends IViewDescriptor {
    * @return the type of selection allowed on the collection view.
    */
   ESelectionMode getSelectionMode();
+
+  /**
+   * Gets the decriptor that describes the view used to display and control
+   * pagination.
+   * 
+   * @return the decriptor that describes the view used to display and control
+   *         pagination.
+   */
+  IViewDescriptor getPaginationViewDescriptor();
 }

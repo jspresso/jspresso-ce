@@ -28,10 +28,13 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
+import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
@@ -43,7 +46,8 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class FilterableBeanCollectionModule extends BeanCollectionModule {
+public class FilterableBeanCollectionModule extends BeanCollectionModule
+    implements IPageable {
 
   private IQueryComponent              filter;
   private IComponentDescriptor<Object> filterComponentDescriptor;
@@ -53,7 +57,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   private Map<String, ESort>           orderingProperties;
   private Integer                      pageSize;
   private IQueryViewDescriptorFactory  queryViewDescriptorFactory;
-  private BasicViewDescriptor          pageNavigationViewDescriptor;
+  private IViewDescriptor              paginationViewDescriptor;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -138,16 +142,25 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
     BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
     decorator.setNorthViewDescriptor(filterViewDesc);
     decorator.setCenterViewDescriptor(superViewDescriptor);
+
+    IViewDescriptor moduleObjectsView = getProjectedViewDescriptor();
     if (getPageSize() != null && getPageSize().intValue() >= 0) {
-      if (pageNavigationViewDescriptor != null) {
-        pageNavigationViewDescriptor.setModelDescriptor(null);
-        BasicBorderViewDescriptor nestingViewDescriptor = new BasicBorderViewDescriptor();
-        nestingViewDescriptor
-            .setModelDescriptor(moduleDescriptor
-                .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
-        nestingViewDescriptor
-            .setCenterViewDescriptor(pageNavigationViewDescriptor);
-        decorator.setSouthViewDescriptor(nestingViewDescriptor);
+      BasicCollectionViewDescriptor pageableView = null;
+      if (moduleObjectsView instanceof BasicCollectionViewDescriptor) {
+        pageableView = (BasicCollectionViewDescriptor) moduleObjectsView;
+      } else if (moduleObjectsView instanceof ICompositeViewDescriptor
+          && ((ICompositeViewDescriptor) moduleObjectsView)
+              .getChildViewDescriptors() != null
+          && ((ICompositeViewDescriptor) moduleObjectsView)
+              .getChildViewDescriptors().size() > 0
+          && ((ICompositeViewDescriptor) moduleObjectsView)
+              .getChildViewDescriptors().get(0) instanceof BasicCollectionViewDescriptor) {
+        pageableView = (BasicCollectionViewDescriptor) ((ICompositeViewDescriptor) moduleObjectsView)
+            .getChildViewDescriptors().get(0);
+      }
+      if (pageableView != null
+          && pageableView.getPaginationViewDescriptor() == null) {
+        pageableView.setPaginationViewDescriptor(paginationViewDescriptor);
       }
     }
     decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());
@@ -276,17 +289,105 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
     public void propertyChange(PropertyChangeEvent evt) {
       firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER + "."
           + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+      if (IPageable.DISPLAY_PAGE_INDEX.equals(evt.getPropertyName())
+          || IPageable.NEXT_PAGE_ENABLED.equals(evt.getPropertyName())
+          || IPageable.PAGE.equals(evt.getPropertyName())
+          || IPageable.PAGE_COUNT.equals(evt.getPropertyName())
+          || IPageable.PAGE_SIZE.equals(evt.getPropertyName())
+          || IPageable.PREVIOUS_PAGE_ENABLED.equals(evt.getPropertyName())
+          || IPageable.RECORD_COUNT.equals(evt.getPropertyName())) {
+        firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt
+            .getNewValue());
+      }
     }
   }
 
   /**
    * Configures the sub view used to navigate beetween the pages.
    * 
-   * @param pageNavigationViewDescriptor
-   *          the pageNavigationViewDescriptor to set.
+   * @param paginationViewDescriptor
+   *          the paginationViewDescriptor to set.
    */
-  public void setPageNavigationViewDescriptor(
-      BasicViewDescriptor pageNavigationViewDescriptor) {
-    this.pageNavigationViewDescriptor = pageNavigationViewDescriptor;
+  public void setPaginationViewDescriptor(
+      BasicViewDescriptor paginationViewDescriptor) {
+    this.paginationViewDescriptor = paginationViewDescriptor;
+  }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  public Integer getDisplayPageIndex() {
+    if (filter != null) {
+      return filter.getDisplayPageIndex();
+    }
+    return null;
+  }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  public Integer getPage() {
+    if (filter != null) {
+      return filter.getPage();
+    }
+    return null;
+  }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  public Integer getPageCount() {
+    if (filter != null) {
+      return filter.getPageCount();
+    }
+    return null;
+  }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  public Integer getRecordCount() {
+    if (filter != null) {
+      return filter.getRecordCount();
+    }
+    return null;
+  }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  public boolean isNextPageEnabled() {
+    if (filter != null) {
+      return filter.isNextPageEnabled();
+    }
+    return false;
+  }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  public boolean isPreviousPageEnabled() {
+    if (filter != null) {
+      return filter.isPreviousPageEnabled();
+    }
+    return false;
+  }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  public void setPage(Integer page) {
+    if (filter != null) {
+      filter.setPage(page);
+    }
+  }
+
+  /**
+   * Delegates to filter. {@inheritDoc}
+   */
+  public void setRecordCount(Integer recordCount) {
+    if (filter != null) {
+      filter.setRecordCount(recordCount);
+    }
   }
 }

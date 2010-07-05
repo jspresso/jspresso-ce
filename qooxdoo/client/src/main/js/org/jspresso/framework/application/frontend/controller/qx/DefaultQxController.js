@@ -90,6 +90,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      */
     register : function(remotePeer) {
+    	if(!remotePeer) {
+    		return;
+    	}
       if(!this.isRegistered(remotePeer.getGuid())) {
         this.__remotePeerRegistry.register(remotePeer);
         if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteValueState) {

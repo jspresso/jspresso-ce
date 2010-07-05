@@ -1277,6 +1277,18 @@ public class DefaultUlcViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected ULCComponent decorateWithPaginationView(ULCComponent viewPeer,
+      ULCComponent paginationViewPeer) {
+    ULCBorderLayoutPane decorator = createBorderLayoutPane();
+    decorator.add(viewPeer, ULCBorderLayoutPane.CENTER);
+    decorator.add(paginationViewPeer, ULCBorderLayoutPane.SOUTH);
+    return decorator;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<ULCComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {

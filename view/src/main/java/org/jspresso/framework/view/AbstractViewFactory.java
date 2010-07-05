@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -235,13 +237,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
         view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
             actionHandler, locale);
-        if (((ICollectionViewDescriptor) viewDescriptor)
-            .getItemSelectionAction() != null) {
-          ((IItemSelectable) view.getConnector())
-              .addItemSelectionListener(new ItemSelectionAdapter(
-                  ((ICollectionViewDescriptor) viewDescriptor)
-                      .getItemSelectionAction(), actionHandler, view));
-        }
       } else if (viewDescriptor instanceof ICardViewDescriptor) {
         view = createCardView((ICardViewDescriptor) viewDescriptor,
             actionHandler, locale);
@@ -301,6 +296,39 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createEmptyView(viewDescriptor, actionHandler, locale);
     }
     return view;
+  }
+
+  /**
+   * Createsa and binds a collection pagination view.
+   * 
+   * @param paginationViewDescriptor
+   *          the pagination view descriptor.
+   * @param view
+   *          the view to complete.
+   * @param actionHandler
+   *          the action handler.
+   * @param locale
+   *          the locale.
+   * @return the ready to assemble pagination view.
+   */
+  protected IView<E> createPaginationView(
+      IViewDescriptor paginationViewDescriptor, IView<E> view,
+      IActionHandler actionHandler, Locale locale) {
+    final IView<E> paginationView = createView(paginationViewDescriptor,
+        actionHandler, locale);
+    (view.getConnector()).addPropertyChangeListener("modelConnector",
+        new PropertyChangeListener() {
+
+          public void propertyChange(PropertyChangeEvent evt) {
+            if (evt.getNewValue() != null) {
+              getMvcBinder().bind(paginationView.getConnector(),
+                  ((IValueConnector) evt.getNewValue()).getParentConnector());
+            } else {
+              getMvcBinder().bind(paginationView.getConnector(), null);
+            }
+          }
+        });
+    return paginationView;
   }
 
   /**
@@ -2389,10 +2417,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the created collection view.
    */
-  private IView<E> createCollectionView(
+  protected IView<E> createCollectionView(
       ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     IView<E> view = null;
+
     if (viewDescriptor instanceof IListViewDescriptor) {
       view = createListView((IListViewDescriptor) viewDescriptor,
           actionHandler, locale);
@@ -2400,8 +2429,33 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createTableView((ITableViewDescriptor) viewDescriptor,
           actionHandler, locale);
     }
+    if (view != null) {
+      if (viewDescriptor.getItemSelectionAction() != null) {
+        ((IItemSelectable) view.getConnector())
+            .addItemSelectionListener(new ItemSelectionAdapter(viewDescriptor
+                .getItemSelectionAction(), actionHandler, view));
+      }
+      if (viewDescriptor.getPaginationViewDescriptor() != null) {
+        IView<E> paginationView = createPaginationView(viewDescriptor
+            .getPaginationViewDescriptor(), view, actionHandler, locale);
+        view.setPeer(decorateWithPaginationView(view.getPeer(), paginationView
+            .getPeer()));
+      }
+    }
     return view;
   }
+
+  /**
+   * Decorates a view with a pagination view.
+   * 
+   * @param viewPeer
+   *          the collection view to decorate.
+   * @param paginationViewPeer
+   *          the pagination view to use.
+   * @return the assembled view decorated with pagination view.
+   */
+  protected abstract E decorateWithPaginationView(E viewPeer,
+      E paginationViewPeer);
 
   private ICollectionConnectorProvider createCompositeNodeGroupConnector(
       ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,

@@ -41,7 +41,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   private IQueryViewDescriptorFactory queryViewDescriptorFactory;
   private ActionMap                   resultViewActionMap;
   private IDisplayableAction          sortingAction;
-  private BasicViewDescriptor         pageNavigationViewDescriptor;
+  private IViewDescriptor             paginationViewDescriptor;
 
   /**
    * {@inheritDoc}
@@ -56,15 +56,17 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
     lovViewDescriptor.setModelDescriptor(filterViewDescriptor
         .getModelDescriptor());
-    lovViewDescriptor.setCenterViewDescriptor(createResultViewDescriptor(
-        entityRefDescriptor.getComponentDescriptor(), okAction));
+    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(
+        entityRefDescriptor.getComponentDescriptor(), okAction);
     if (entityRefDescriptor.getReferencedDescriptor().getPageSize() != null
         && entityRefDescriptor.getReferencedDescriptor().getPageSize()
             .intValue() >= 0) {
-      if (pageNavigationViewDescriptor != null) {
-        lovViewDescriptor.setSouthViewDescriptor(pageNavigationViewDescriptor);
+      if (paginationViewDescriptor != null) {
+        resultViewDescriptor
+            .setPaginationViewDescriptor(paginationViewDescriptor);
       }
     }
+    lovViewDescriptor.setCenterViewDescriptor(resultViewDescriptor);
     return lovViewDescriptor;
 
   }
@@ -100,7 +102,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     this.sortingAction = sortingAction;
   }
 
-  private IViewDescriptor createResultViewDescriptor(
+  private BasicCollectionViewDescriptor createResultViewDescriptor(
       IComponentDescriptor<Object> entityDescriptor, IDisplayableAction okAction) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
@@ -124,13 +126,13 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   }
 
   /**
-   * Sets the pageNavigationViewDescriptor.
+   * Sets the paginationViewDescriptor.
    * 
-   * @param pageNavigationViewDescriptor
-   *          the pageNavigationViewDescriptor to set.
+   * @param paginationViewDescriptor
+   *          the paginationViewDescriptor to set.
    */
-  public void setPageNavigationViewDescriptor(
-      BasicViewDescriptor pageNavigationViewDescriptor) {
-    this.pageNavigationViewDescriptor = pageNavigationViewDescriptor;
+  public void setPaginationViewDescriptor(
+      BasicViewDescriptor paginationViewDescriptor) {
+    this.paginationViewDescriptor = paginationViewDescriptor;
   }
 }

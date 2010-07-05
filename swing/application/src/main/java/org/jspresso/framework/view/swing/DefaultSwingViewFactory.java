@@ -1664,6 +1664,18 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected JComponent decorateWithPaginationView(JComponent viewPeer,
+      JComponent paginationViewPeer) {
+    JPanel decorator = new JPanel(new BorderLayout());
+    decorator.add(viewPeer, BorderLayout.CENTER);
+    decorator.add(paginationViewPeer, BorderLayout.SOUTH);
+    return decorator;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<JComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {

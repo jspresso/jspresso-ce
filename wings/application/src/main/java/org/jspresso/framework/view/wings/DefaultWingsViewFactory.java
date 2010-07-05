@@ -1510,6 +1510,18 @@ public class DefaultWingsViewFactory extends
    * {@inheritDoc}
    */
   @Override
+  protected SComponent decorateWithPaginationView(SComponent viewPeer,
+      SComponent paginationViewPeer) {
+    SPanel decorator = createSPanel(new SBorderLayout());
+    decorator.add(viewPeer, SBorderLayout.CENTER);
+    decorator.add(paginationViewPeer, SBorderLayout.SOUTH);
+    return decorator;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<SComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {

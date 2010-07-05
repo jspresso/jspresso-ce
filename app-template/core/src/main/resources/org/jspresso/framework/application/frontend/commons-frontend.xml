@@ -9,7 +9,7 @@
   <bean id="lovViewDescriptorFactory" class="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
     <property name="sortingAction" ref="lovFindFrontAction" />
-    <property name="pageNavigationViewDescriptor" ref="lovNavigationView" />
+    <property name="paginationViewDescriptor" ref="lovNavigationView" />
   </bean>
 
   <!--
@@ -61,6 +61,7 @@
   
   <bean id="lovNavigationView" class="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor">
     <property name="borderType" value="SIMPLE"/>
+    <property name="modelDescriptor" ref="pageableStatusModel" />
     <property name="centerViewDescriptor" ref="pageableStatusView"/>
     <property name="westViewDescriptor">
       <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
@@ -837,7 +838,7 @@
 
   <bean abstract="true" id="abstractFilterableBeanCollectionModule" class="org.jspresso.framework.application.model.FilterableBeanCollectionModule">
     <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
-    <property name="pageNavigationViewDescriptor" ref="filterModuleNavigationView" />
+    <property name="paginationViewDescriptor" ref="filterModuleNavigationView" />
     <property name="projectedViewDescriptor" ref="filterableBeanCollectionModuleView" />
     <property name="startupAction" ref="initModuleFilterAction" />
   </bean>
