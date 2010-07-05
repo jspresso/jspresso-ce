@@ -693,8 +693,9 @@ package org.jspresso.framework.view.flex {
           width = tr.length;
         }
       }
-      width += 8;
+      //width += 8;
       sizeMaxComponentWidth(comboBox, width);
+      comboBox.maxWidth += 45;
       return comboBox;
     }
 
@@ -1909,7 +1910,7 @@ package org.jspresso.framework.view.flex {
       var textField:TextInput = new TextInput();
       if(remoteTextField.maxLength > 0) {
         textField.maxChars = remoteTextField.maxLength;
-        sizeMaxComponentWidth(textField, remoteTextField.maxLength);
+        sizeMaxComponentWidth(textField, remoteTextField.maxLength +2);
       } else {
         sizeMaxComponentWidth(textField);
       }

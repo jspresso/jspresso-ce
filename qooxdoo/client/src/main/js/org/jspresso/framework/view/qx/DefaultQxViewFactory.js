@@ -858,7 +858,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           width = tr.length;
         }
       }
-      width += 7;
+      //width += 7;
+      this._sizeMaxComponentWidth(comboBox, width);
+      var extraWidth = 25;
+      if(iconDim) {
+      	extraWidth += iconDim.getWidth() + 20;
+      }
+      comboBox.setMaxWidth(comboBox.getMaxWidth() + extraWidth);
+      comboBox.setWidth(comboBox.getWidth() + extraWidth);
+      
       var state = remoteComboBox.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(comboBox, "modelSelection", "value", false,
@@ -877,7 +885,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
       });
       modelController.addTarget(comboBox, "enabled", "writable", false);
-      this._sizeMaxComponentWidth(comboBox, width);
       return comboBox;
     },
 
@@ -1606,7 +1613,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       
       if(remoteTextField.getMaxLength() > 0) {
         textField.setMaxLength(remoteTextField.getMaxLength());
-        this._sizeMaxComponentWidth(textField, remoteTextField.getMaxLength());
+        this._sizeMaxComponentWidth(textField, remoteTextField.getMaxLength() +2);
       } else {
         this._sizeMaxComponentWidth(textField);
       }
