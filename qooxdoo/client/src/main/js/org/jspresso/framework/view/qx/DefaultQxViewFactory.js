@@ -1310,7 +1310,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var component;
       if(remoteSplitContainer.getLeftTop() != null) {
         component = this.createComponent(remoteSplitContainer.getLeftTop());
-        splitContainer.add(component, 0);
+        splitContainer.add(component, 1);
       }
       if(remoteSplitContainer.getRightBottom() != null) {
         component = this.createComponent(remoteSplitContainer.getRightBottom());
