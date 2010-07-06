@@ -858,15 +858,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           width = tr.length;
         }
       }
-      //width += 7;
       this._sizeMaxComponentWidth(comboBox, width);
       var extraWidth = 25;
       if(iconDim) {
-      	extraWidth += iconDim.getWidth() + 20;
+      	extraWidth += iconDim.getWidth();
       }
       comboBox.setMaxWidth(comboBox.getMaxWidth() + extraWidth);
-      comboBox.setWidth(comboBox.getWidth() + extraWidth);
-      
+      comboBox.setWidth(comboBox.getMaxWidth());
+      comboBox.setMinWidth(comboBox.getMaxWidth());
+
       var state = remoteComboBox.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(comboBox, "modelSelection", "value", false,
