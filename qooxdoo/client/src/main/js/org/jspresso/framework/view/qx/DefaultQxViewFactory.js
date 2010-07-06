@@ -1310,11 +1310,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var component;
       if(remoteSplitContainer.getLeftTop() != null) {
         component = this.createComponent(remoteSplitContainer.getLeftTop());
-        splitContainer.add(component, 1);
+        var lflex;
+        if(remoteSplitContainer.getOrientation() == "VERTICAL") {
+          lflex = component.getSizeHint().height;
+        } else {
+          lflex = component.getSizeHint().width;
+        }
+        splitContainer.add(component, lflex);
       }
       if(remoteSplitContainer.getRightBottom() != null) {
         component = this.createComponent(remoteSplitContainer.getRightBottom());
-        splitContainer.add(component, 1);
+        var rflex;
+        if(remoteSplitContainer.getOrientation() == "VERTICAL") {
+          rflex = component.getSizeHint().height;
+        } else {
+          rflex = component.getSizeHint().width;
+        }
+        splitContainer.add(component, rflex);
       }
       return splitContainer;
     },
