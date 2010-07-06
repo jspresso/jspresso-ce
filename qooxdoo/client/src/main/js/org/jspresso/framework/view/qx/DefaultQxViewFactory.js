@@ -139,6 +139,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         decorator.add(component);
         component = decorator;
       }
+      this._applyComponentStyle(component, remoteComponent);
+      var preferredSize = remoteComponent.getPreferredSize();
+      if(preferredSize) {
+        if(preferredSize.getWidth() > 0) {
+          component.setWidth(preferredSize.getWidth());
+        }
+        if(preferredSize.getHeight() > 0) {
+          component.setHeight(preferredSize.getHeight());
+        }
+      }
+      if(registerState) {
+        this.__remotePeerRegistry.register(remoteComponent.getState());
+      }
+      return component;
+    },
+    
+    _applyComponentStyle:function(component, remoteComponent) {
       if(remoteComponent.getForeground()) {
         component.setTextColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteComponent.getForeground()));
       }
@@ -170,19 +187,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
         component.setFont(font);
       }
-      var preferredSize = remoteComponent.getPreferredSize();
-      if(preferredSize) {
-        if(preferredSize.getWidth() > 0) {
-          component.setWidth(preferredSize.getWidth());
-        }
-        if(preferredSize.getHeight() > 0) {
-          component.setHeight(preferredSize.getHeight());
-        }
-      }
-      if(registerState) {
-        this.__remotePeerRegistry.register(remoteComponent.getState());
-      }
-      return component;
     },
     
     _decorateWithActions:function(remoteComponent, component) {
@@ -612,11 +616,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         numericComponent = this._createIntegerField(remoteNumericComponent);
       }
       if(remoteNumericComponent.getMaxValue()) {
-        this._sizeMaxComponentWidth(numericComponent,
+        this._sizeMaxComponentWidth(numericComponent, remoteNumericComponent,
           this._createFormat(remoteNumericComponent).format(remoteNumericComponent.getMaxValue()).length,
           org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT);
       } else {
-        this._sizeMaxComponentWidth(numericComponent,
+        this._sizeMaxComponentWidth(numericComponent, remoteNumericComponent,
           org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT,
           org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT);
       }
@@ -670,7 +674,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      */
     _createTimeField : function(remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
-      this._sizeMaxComponentWidth(timeField, org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT);
+      this._sizeMaxComponentWidth(timeField, remoteTimeField,
+                                  org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT);
       return timeField;
     },
 
@@ -780,7 +785,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
 //      });
 
       //colorWidget.setWidth(resetButton.getWidth());
-      this._sizeMaxComponentWidth(colorWidget);
+      this._sizeMaxComponentWidth(colorWidget, remoteColorField);
       colorWidget.setHeight(22/*resetButton.getHeight()*/);
       colorWidget.setAllowStretchX(true, true);
 
@@ -829,7 +834,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           }
         }
       );
-      this._sizeMaxComponentWidth(checkBox, 2, 2);
+      this._sizeMaxComponentWidth(checkBox, remoteCheckBox, 2, 2);
       modelController.addTarget(checkBox, "enabled", "writable", false);
       return checkBox;
     },
@@ -858,7 +863,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           width = tr.length;
         }
       }
-      this._sizeMaxComponentWidth(comboBox, width);
+      this._sizeMaxComponentWidth(comboBox, remoteComboBox, width);
       var extraWidth = 25;
       if(iconDim) {
       	extraWidth += iconDim.getWidth();
@@ -902,10 +907,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       modelController.addTarget(dateField, "value", "value", true);
       modelController.addTarget(dateField, "enabled", "writable", false);
       if(remoteDateField.getType() == "DATE_TIME") {
-        this._sizeMaxComponentWidth(dateField,  org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
-                                               + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT);
+        this._sizeMaxComponentWidth(dateField, remoteDateField,
+                                      org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
+                                    + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT);
       } else {
-        this._sizeMaxComponentWidth(dateField, org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT);
+        this._sizeMaxComponentWidth(dateField,  remoteDateField,
+                                    org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT);
       }
       return dateField;
     },
@@ -945,7 +952,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           textField.activate();
         });
         
-        this._sizeMaxComponentWidth(textField);
+        this._sizeMaxComponentWidth(textField, remoteActionField);
       }
 
       var state = remoteActionField.getState();
@@ -1243,15 +1250,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
           if(remoteForm.getLabelsPosition() == "ASIDE") {
-            componentLabel.setAlignX("right")
+            componentLabel.setAlignX("right");
+          } else {
+            componentLabel.setAlignX("left");
           }
+          componentLabel.setAlignY("baseline");
           form.add(componentLabel, {row : labelRow,
                                     column : labelCol,
                                     rowSpan : 1,
                                     colSpan : labelColSpan});
         }
         component.setAllowShrinkX(true);
-        component.setAllowGrowX(false);
+        if(rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
+          component.setAllowGrowX(true);
+        } else {
+          component.setAllowGrowX(false);
+        }
         form.add(component, {row : compRow,
                              column : compCol,
                              rowSpan : 1,
@@ -1393,7 +1407,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : this._readOnlyFieldConverter
         }
       );
-			this._sizeMaxComponentWidth(textArea);
+			this._sizeMaxComponentWidth(textArea, remoteTextArea);
 			return textArea;
     },
 
@@ -1625,9 +1639,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       
       if(remoteTextField.getMaxLength() > 0) {
         textField.setMaxLength(remoteTextField.getMaxLength());
-        this._sizeMaxComponentWidth(textField, remoteTextField.getMaxLength() +2);
+        this._sizeMaxComponentWidth(textField, remoteTextField,
+                                    remoteTextField.getMaxLength() +2);
       } else {
-        this._sizeMaxComponentWidth(textField);
+        this._sizeMaxComponentWidth(textField, remoteTextField);
       }
       var state = remoteTextField.getState();
       var modelController = new qx.data.controller.Object(state);
@@ -1719,7 +1734,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : this._readOnlyFieldConverter
         }
       );
-      this._sizeMaxComponentWidth(passwordField);
+      this._sizeMaxComponentWidth(passwordField, remotePasswordField);
       return passwordField;
     },
     
@@ -2139,7 +2154,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @param {int} maxCharCount
      * @return void
      */
-    _sizeMaxComponentWidth : function(component, expectedCharCount, maxCharCount) {
+    _sizeMaxComponentWidth : function(component, remoteComponent, expectedCharCount, maxCharCount) {
+    	this._applyComponentStyle(component, remoteComponent);
       if(expectedCharCount == null) {
         expectedCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
       }

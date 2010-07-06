@@ -230,6 +230,18 @@ package org.jspresso.framework.view.flex {
       } else if(remoteComponent.borderType == "SIMPLE") {
         component.setStyle("borderStyle","solid");
       }
+      applyComponentStyle(component, remoteComponent);
+      if(remoteComponent.preferredSize) {
+        component.minWidth= remoteComponent.preferredSize.width;
+        component.minHeight = remoteComponent.preferredSize.height;
+      }
+      if(registerState) {
+        getRemotePeerRegistry().register(remoteComponent.state);
+      }
+      return component;
+    }
+    
+    protected function applyComponentStyle(component:UIComponent, remoteComponent:RComponent):void {
       if(remoteComponent.foreground) {
         component.setStyle("color", remoteComponent.foreground);
       }
@@ -250,14 +262,6 @@ package org.jspresso.framework.view.flex {
           component.setStyle("fontWeight", "bold");
         }
       }
-      if(remoteComponent.preferredSize) {
-        component.minWidth= remoteComponent.preferredSize.width;
-        component.minHeight = remoteComponent.preferredSize.height;
-      }
-      if(registerState) {
-        getRemotePeerRegistry().register(remoteComponent.state);
-      }
-      return component;
     }
     
     protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
@@ -396,11 +400,11 @@ package org.jspresso.framework.view.flex {
         numericComponent = createIntegerField(remoteNumericComponent as RIntegerField);
       }
       if(remoteNumericComponent.maxValue) {
-        sizeMaxComponentWidth(numericComponent,
+        sizeMaxComponentWidth(numericComponent,remoteNumericComponent,
           createFormatter(remoteNumericComponent).format(remoteNumericComponent.maxValue).length,
           NUMERIC_FIELD_MAX_CHAR_COUNT);
       } else {
-        sizeMaxComponentWidth(numericComponent,
+        sizeMaxComponentWidth(numericComponent,remoteNumericComponent,
           NUMERIC_FIELD_MAX_CHAR_COUNT,
           NUMERIC_FIELD_MAX_CHAR_COUNT);
       }
@@ -582,7 +586,7 @@ package org.jspresso.framework.view.flex {
         textField.percentWidth = 100.0;
         textField.name = "tf";
         actionField.addChild(textField);
-        sizeMaxComponentWidth(textField);
+        sizeMaxComponentWidth(textField, remoteActionField);
         maxWidth += textField.maxWidth;
       }
       var actionComponents:Array = new Array();
@@ -694,7 +698,7 @@ package org.jspresso.framework.view.flex {
         }
       }
       //width += 8;
-      sizeMaxComponentWidth(comboBox, width);
+      sizeMaxComponentWidth(comboBox, remoteComboBox, width);
       comboBox.maxWidth += 45;
       return comboBox;
     }
@@ -1301,7 +1305,7 @@ package org.jspresso.framework.view.flex {
     protected function createDateField(remoteDateField:RDateField):UIComponent {
       var dateField:DateField = new DateField();
       dateField.editable = true;
-      sizeMaxComponentWidth(dateField, DATE_CHAR_COUNT);
+      sizeMaxComponentWidth(dateField, remoteDateField, DATE_CHAR_COUNT);
       bindDateField(dateField, remoteDateField.state);
       return dateField;
     }
@@ -1338,7 +1342,7 @@ package org.jspresso.framework.view.flex {
       var dateTimeField:DateTimeField = new DateTimeField();
       dateTimeField.editable = true;
       dateTimeField.showTime = true;
-      sizeMaxComponentWidth(dateTimeField, DATE_CHAR_COUNT + TIME_CHAR_COUNT +1);
+      sizeMaxComponentWidth(dateTimeField, remoteDateField, DATE_CHAR_COUNT + TIME_CHAR_COUNT +1);
       bindDateTimeField(dateTimeField, remoteDateField.state);
       return dateTimeField;
     }
@@ -1373,6 +1377,7 @@ package org.jspresso.framework.view.flex {
 
     protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
       var timeStepper:TimeStepper = new TimeStepper();
+      sizeMaxComponentWidth(timeStepper, remoteTimeField, TIME_CHAR_COUNT);
       bindTimeStepper(timeStepper, remoteTimeField.state);
       return timeStepper;
     }
@@ -1380,7 +1385,6 @@ package org.jspresso.framework.view.flex {
     protected function bindTimeStepper(timeStepper:TimeStepper, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(timeStepper, "timeValue", remoteState, "value", true);
       BindingUtils.bindProperty(timeStepper, "enabled", remoteState, "writable");
-      sizeMaxComponentWidth(timeStepper, TIME_CHAR_COUNT);
       var updateModel:Function = function(event:Event):void {
         if(event is FocusEvent) {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
@@ -1493,7 +1497,7 @@ package org.jspresso.framework.view.flex {
       var passwordField:TextInput = new TextInput();
       bindTextInput(passwordField, remotePasswordField.state);
       passwordField.displayAsPassword = true;
-      sizeMaxComponentWidth(passwordField);
+      sizeMaxComponentWidth(passwordField, remotePasswordField);
       return passwordField;
     }
 
@@ -1789,7 +1793,7 @@ package org.jspresso.framework.view.flex {
         textArea.maxChars = remoteTextArea.maxLength;
       }
       bindTextArea(textArea, remoteTextArea.state);
-      sizeMaxComponentWidth(textArea);
+      sizeMaxComponentWidth(textArea, remoteTextArea);
       return textArea;
     }
 
@@ -1861,7 +1865,7 @@ package org.jspresso.framework.view.flex {
           label.htmlText = null;
           label.text = remoteLabel.label;
           if(label.text != null) {
-            sizeMaxComponentWidth(label, label.text.length + 5);
+            sizeMaxComponentWidth(label, remoteLabel, label.text.length + 5);
           }
         }
       }
@@ -1910,9 +1914,9 @@ package org.jspresso.framework.view.flex {
       var textField:TextInput = new TextInput();
       if(remoteTextField.maxLength > 0) {
         textField.maxChars = remoteTextField.maxLength;
-        sizeMaxComponentWidth(textField, remoteTextField.maxLength +2);
+        sizeMaxComponentWidth(textField, remoteTextField, remoteTextField.maxLength +2);
       } else {
-        sizeMaxComponentWidth(textField);
+        sizeMaxComponentWidth(textField, remoteTextField);
       }
       bindTextInput(textField, remoteTextField.state);
       return textField;
@@ -2066,7 +2070,8 @@ package org.jspresso.framework.view.flex {
       return null;
     }
     
-    protected function sizeMaxComponentWidth(component:UIComponent, expectedCharCount:int=FIELD_MAX_CHAR_COUNT, maxCharCount:int=FIELD_MAX_CHAR_COUNT):void {
+    protected function sizeMaxComponentWidth(component:UIComponent, remoteComponent:RComponent, expectedCharCount:int=FIELD_MAX_CHAR_COUNT, maxCharCount:int=FIELD_MAX_CHAR_COUNT):void {
+      applyComponentStyle(component, remoteComponent);
       component.regenerateStyleCache(false);
       var charCount:int = maxCharCount;
       if(expectedCharCount < charCount) {
@@ -2074,10 +2079,6 @@ package org.jspresso.framework.view.flex {
       }
       var w:int = component.measureText(TEMPLATE_CHAR).width * charCount;
       component.maxWidth = w;
-//      if(!(component is Label)) {
-//        component.width = w;
-//        component.measuredWidth = w;
-//      }
     }
     
     public function get iconTemplate():Class  {
