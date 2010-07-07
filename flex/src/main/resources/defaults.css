@@ -24,34 +24,29 @@ THE SOFTWARE.
 
 @font-face {
    src: local("Arial");
-   fontFamily: ArialBold;
+   fontFamily: Arial;
    fontWeight: bold;
 }
 
 .drawerButton {
-   fontFamily: ArialBold;
-   fontSize: 12;
-   textAlign: left;
-   fillAlphas: 1.0, 1.0, 0.82, 0.82;
-   /*fillColors: #111111, #999999,  #333333, #AAAAAA;*/
-   /*color: #FFFFFF;*/
-   /*textRollOverColor: #FFFFFF;*/
+  fontFamily: Arial;
+  fontSize: 12;
+  textAlign: left;
+  fillAlphas: 1.0, 1.0, 0.82, 0.82;
+  cornerRadius: 4;
+  paddingLeft: 10;
 }
 
 .drawerAccordion {
-   borderColor: #CCCCCC;
-   borderThickness: 2;
-   headerStyleName: drawerAccordionHeader;
+  headerStyleName: drawerAccordionHeader;
 }
 
 .drawerAccordionHeader {
-   fillAlphas: 1.0, 1.0, 0.82, 0.82;
-   /*fillColors: #111111, #999999, #333333, #AAAAAA;*/
-   /*color: #FFFFFF;*/
-   cornerRadius: 4;
-   paddingLeft: 10;
-   fontFamily: ArialBold;
-   fontSize: 12;
+  fontFamily: Arial;
+  fontSize: 12;
+  fillAlphas: 1.0, 1.0, 0.82, 0.82;
+  cornerRadius: 4;
+  paddingLeft: 10;
 }
 
 .drawerCloseRight {
