@@ -105,10 +105,9 @@ public class ControllerAwareComponentInvocationHandler extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected Object getCollectionProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor) {
+      ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
     getBackendController().initializePropertyIfNeeded((IComponent) proxy,
         propertyDescriptor.getName());
     return super.getCollectionProperty(proxy, propertyDescriptor);

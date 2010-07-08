@@ -34,6 +34,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.MissingPropertyException;
@@ -70,15 +71,16 @@ public class CreateQueryComponentAction extends BackendAction {
   @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IReferencePropertyDescriptor erqDescriptor = (IReferencePropertyDescriptor) context
+    IReferencePropertyDescriptor<IEntity> erqDescriptor = (IReferencePropertyDescriptor<IEntity>) context
         .get(COMPONENT_REF_DESCRIPTOR);
     if (erqDescriptor == null) {
       IModelDescriptor modelDescriptor = getModelDescriptor(context);
-      erqDescriptor = (IReferencePropertyDescriptor) modelDescriptor;
+      erqDescriptor = (IReferencePropertyDescriptor<IEntity>) modelDescriptor;
     }
     IQueryComponent queryComponent = getEntityFactory(context)
         .createQueryComponentInstance(
-            erqDescriptor.getReferencedDescriptor().getQueryComponentContract());
+            (Class<? extends IComponent>) erqDescriptor
+                .getReferencedDescriptor().getQueryComponentContract());
     queryComponent.setPageSize(erqDescriptor.getPageSize());
 
     completeQueryComponent(queryComponent, erqDescriptor, context);
@@ -160,8 +162,9 @@ public class CreateQueryComponentAction extends BackendAction {
               }
               try {
                 IAccessor masterAccessor = accessorFactory
-                    .createPropertyAccessor((String) initializedAttribute
-                        .getValue(), masterComponentContract);
+                    .createPropertyAccessor(
+                        (String) initializedAttribute.getValue(),
+                        masterComponentContract);
                 initValue = masterAccessor.getValue(masterComponent);
               } catch (MissingPropertyException ex) {
                 // the value in the initialization mapping is not a property.

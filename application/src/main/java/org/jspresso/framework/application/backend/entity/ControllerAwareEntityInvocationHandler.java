@@ -129,10 +129,9 @@ public class ControllerAwareEntityInvocationHandler extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected Object getCollectionProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor) {
+      ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
     getBackendController().initializePropertyIfNeeded((IEntity) proxy,
         propertyDescriptor.getName());
     return super.getCollectionProperty(proxy, propertyDescriptor);

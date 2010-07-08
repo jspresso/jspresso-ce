@@ -812,7 +812,7 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   private void addToProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor, Object value) {
+      ICollectionPropertyDescriptor<?> propertyDescriptor, Object value) {
     addToProperty(proxy, propertyDescriptor, -1, value);
   }
 
@@ -1142,7 +1142,7 @@ public abstract class AbstractComponentInvocationHandler implements
           ICollectionAccessor propertyAccessor = accessorFactory
               .createCollectionPropertyAccessor(propertyDescriptor.getName(),
                   componentDescriptor.getComponentContract(),
-                  ((ICollectionPropertyDescriptor) propertyDescriptor)
+                  ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                       .getCollectionDescriptor().getElementDescriptor()
                       .getComponentContract());
           for (Object element : oldPropertyElementsToRemove) {
@@ -1154,7 +1154,7 @@ public abstract class AbstractComponentInvocationHandler implements
           // if the property is a list we may restore the element order and be
           // careful not to miss one...
           if (actualNewProperty instanceof List) {
-            Collection currentProperty = (Collection) oldProperty;
+            Collection<Object> currentProperty = (Collection<Object>) oldProperty;
             List<Object> snapshot = new ArrayList<Object>(currentProperty);
             if (currentProperty instanceof List) {
               // Just check that only order differs

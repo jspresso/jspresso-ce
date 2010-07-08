@@ -24,7 +24,6 @@ import java.util.Collection;
 
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
-
 /**
  * This class is the default implementation of collection property accessors.
  * 
@@ -38,7 +37,7 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
    * Constructs a new default java bean collection property accessor.
    * 
    * @param property
-   *            the property to be accessed.
+   *          the property to be accessed.
    */
   public MapCollectionAccessor(String property) {
     super(property);
@@ -51,11 +50,11 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
   public void addToValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    Collection mapValue = getValue(target);
+    Collection<?> mapValue = getValue(target);
     if (mapValue == null) {
       mapValue = new ArrayList<Object>();
     }
-    mapValue.add(value);
+    ((Collection<Object>) mapValue).add(value);
     // to trigger a propertyChange.
     setValue(target, mapValue);
   }

@@ -869,7 +869,7 @@ public abstract class AbstractBackendController extends AbstractController
         }
       } else if (property.getValue() instanceof Collection<?>) {
         if (isInitialized(property.getValue())) {
-          Collection<IComponent> uowCollection = createTransientEntityCollection((Collection) property
+          Collection<IComponent> uowCollection = createTransientEntityCollection((Collection<IComponent>) property
               .getValue());
           for (IComponent collectionElement : (Collection<IComponent>) property
               .getValue()) {
@@ -885,7 +885,7 @@ public abstract class AbstractBackendController extends AbstractController
             Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
                 .get(property.getKey());
             if (snapshotCollection != null) {
-              Collection clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
+              Collection<IComponent> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
               for (IComponent snapshotCollectionElement : snapshotCollection) {
                 if (snapshotCollectionElement instanceof IEntity) {
                   clonedSnapshotCollection.add(cloneInUnitOfWork(

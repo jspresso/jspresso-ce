@@ -81,6 +81,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * 
    * @return the filterComponentDescriptor.
    */
+  @SuppressWarnings("unchecked")
   public IComponentDescriptor<IEntity> getFilterComponentDescriptor() {
     if (filterComponentDescriptor == null) {
       return (IComponentDescriptor<IEntity>) getElementComponentDescriptor();

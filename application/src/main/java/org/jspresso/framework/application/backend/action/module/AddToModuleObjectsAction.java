@@ -77,11 +77,10 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
   @SuppressWarnings("unchecked")
   protected Object createNewModuleObject(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor(context))
+    IComponentDescriptor<IEntity> projectedCompDesc = ((ICollectionDescriptorProvider<IEntity>) getModelDescriptor(context))
         .getCollectionDescriptor().getElementDescriptor();
 
     return getEntityFactory(context).createEntityInstance(
-        (Class<? extends IEntity>) projectedComponentDescriptor
-            .getComponentContract());
+        projectedCompDesc.getComponentContract());
   }
 }

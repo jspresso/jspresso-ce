@@ -220,7 +220,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
             return ((String) getConnectorValue())
                 .compareToIgnoreCase((String) another.getConnectorValue());
           }
-          return ((Comparable) getConnectorValue()).compareTo(another
+          return ((Comparable<Object>) getConnectorValue()).compareTo(another
               .getConnectorValue());
         }
         return getConnectorValue().toString().compareToIgnoreCase(

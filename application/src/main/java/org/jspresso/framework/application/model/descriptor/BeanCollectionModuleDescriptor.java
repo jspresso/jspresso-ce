@@ -54,6 +54,7 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
    * @param moduleObjectReferencedDescriptor
    *          the component descriptor of the module objects.
    */
+  @SuppressWarnings("unchecked")
   protected BeanCollectionModuleDescriptor(String name,
       IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor) {
     super(name);

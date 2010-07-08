@@ -10,7 +10,6 @@ import java.util.Collection;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
-
 /**
  * A map collection property accessor that receives a model descriptor to handle
  * the model integrity.
@@ -26,7 +25,7 @@ public class DescriptorAwareMapCollectionAccessor extends
    * instance.
    * 
    * @param property
-   *            the property to create the accessor for.
+   *          the property to create the accessor for.
    */
   public DescriptorAwareMapCollectionAccessor(String property) {
     super(property);
@@ -39,14 +38,14 @@ public class DescriptorAwareMapCollectionAccessor extends
   public void addToValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    Collection mapValue = getValue(target);
+    Collection<?> mapValue = getValue(target);
     if (mapValue == null) {
       mapValue = new ArrayList<Object>();
     }
     if (getModelDescriptor() != null) {
       getModelDescriptor().preprocessAdder(this, mapValue, value);
     }
-    mapValue.add(value);
+    ((Collection<Object>) mapValue).add(value);
     // to trigger a propertyChange.
     setValue(target, mapValue);
     if (getModelDescriptor() != null) {

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.datatransfer.ETransferMode;
 
@@ -42,13 +43,13 @@ public class TransferCollectionAction extends BackendAction {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     List<?> transferedComponents = getSelectedModels(context);
     getController(context).storeComponents(
-        new ComponentTransferStructure(transferedComponents, transferMode));
+        new ComponentTransferStructure<IComponent>(transferedComponents,
+            transferMode));
     return super.execute(actionHandler, context);
   }
 

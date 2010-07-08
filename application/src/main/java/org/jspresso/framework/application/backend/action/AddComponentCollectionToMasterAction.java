@@ -62,10 +62,10 @@ public class AddComponentCollectionToMasterAction extends
   @Override
   @SuppressWarnings("unchecked")
   protected List<?> getAddedComponents(Map<String, Object> context) {
-    IComponentDescriptor elementDescriptor = (IComponentDescriptor) context
+    IComponentDescriptor<?> elementDescriptor = (IComponentDescriptor<?>) context
         .get(ELEMENT_DESCRIPTOR);
     if (elementDescriptor == null) {
-      elementDescriptor = ((ICollectionPropertyDescriptor) getModelDescriptor(context))
+      elementDescriptor = ((ICollectionPropertyDescriptor<?>) getModelDescriptor(context))
           .getReferencedDescriptor().getElementDescriptor();
     }
     IComponent newElement;

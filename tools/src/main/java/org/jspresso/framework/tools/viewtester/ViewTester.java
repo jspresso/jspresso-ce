@@ -38,6 +38,7 @@ import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IView;
@@ -46,7 +47,6 @@ import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 import org.springframework.context.ApplicationContext;
-
 
 /**
  * Generates Jspresso powered component java code based on its descriptor.
@@ -68,7 +68,7 @@ public class ViewTester {
    * Starts Code generation for an component.
    * 
    * @param args
-   *            the command line arguments.
+   *          the command line arguments.
    */
   @SuppressWarnings("static-access")
   public static void main(String[] args) {
@@ -81,14 +81,19 @@ public class ViewTester {
             .withDescription(
                 "use given applicationContextKey as registered in the spring BeanFactoryLocator.")
             .create(APPLICATION_CONTEXT_KEY));
-    options.addOption(OptionBuilder.withArgName(VIEW_ID).isRequired().hasArg()
+    options.addOption(OptionBuilder
+        .withArgName(VIEW_ID)
+        .isRequired()
+        .hasArg()
         .withDescription(
             "use given view identifier to instanciate and display the view.")
         .create(VIEW_ID));
-    options.addOption(OptionBuilder.withArgName(LANGUAGE).hasArg()
+    options.addOption(OptionBuilder
+        .withArgName(LANGUAGE)
+        .hasArg()
         .withDescription(
-            "use given locale to instanciate and display the view.").create(
-            LANGUAGE));
+            "use given locale to instanciate and display the view.")
+        .create(LANGUAGE));
     CommandLineParser parser = new BasicParser();
     CommandLine cmd = null;
     try {
@@ -140,7 +145,7 @@ public class ViewTester {
     IEntityFactory entityFactory = mockBackController.getEntityFactory();
 
     modelConnector.setConnectorValue(entityFactory
-        .createEntityInstance(((IComponentDescriptor) viewDescriptor
+        .createEntityInstance(((IComponentDescriptor<IEntity>) viewDescriptor
             .getModelDescriptor()).getComponentContract()));
 
     mockFrontController.getMvcBinder()
@@ -163,7 +168,7 @@ public class ViewTester {
    * Sets the applicationContextKey.
    * 
    * @param applicationContextKey
-   *            the applicationContextKey to set.
+   *          the applicationContextKey to set.
    */
   public void setApplicationContextKey(String applicationContextKey) {
     this.applicationContextKey = applicationContextKey;
@@ -173,7 +178,7 @@ public class ViewTester {
    * Sets the language.
    * 
    * @param language
-   *            the language to set.
+   *          the language to set.
    */
   public void setLanguage(String language) {
     this.language = language;
@@ -183,7 +188,7 @@ public class ViewTester {
    * Sets the viewId.
    * 
    * @param viewId
-   *            the viewId to set.
+   *          the viewId to set.
    */
   public void setViewId(String viewId) {
     this.viewId = viewId;
@@ -207,7 +212,7 @@ public class ViewTester {
      * Handles a uncaught exception.
      * 
      * @param t
-     *            the uncaught exception.
+     *          the uncaught exception.
      */
     public void handle(Throwable t) {
       t.printStackTrace();
