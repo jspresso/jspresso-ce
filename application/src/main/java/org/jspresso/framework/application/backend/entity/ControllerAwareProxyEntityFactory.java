@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationHandler;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.component.ControllerAwareProxyComponentFactory;
-import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -71,7 +70,7 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
    */
   @Override
   protected InvocationHandler createEntityInvocationHandler(
-      IComponentDescriptor<IComponent> entityDescriptor) {
+      IComponentDescriptor<IEntity> entityDescriptor) {
     return new ControllerAwareEntityInvocationHandler(entityDescriptor,
         getInlineComponentFactory(), getEntityCollectionFactory(),
         getAccessorFactory(), getEntityExtensionFactory(),

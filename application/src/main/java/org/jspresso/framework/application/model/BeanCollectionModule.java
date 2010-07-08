@@ -105,12 +105,11 @@ public class BeanCollectionModule extends Module {
    * 
    * @return the elementComponentDescriptor.
    */
-  @SuppressWarnings("unchecked")
   public IComponentDescriptor<? extends Object> getElementComponentDescriptor() {
     if (elementComponentDescriptor == null) {
       if (getProjectedViewDescriptor() instanceof ICollectionViewDescriptor
           && getProjectedViewDescriptor().getModelDescriptor() != null) {
-        return (IComponentDescriptor<Object>) ((ICollectionDescriptorProvider<?>) getProjectedViewDescriptor()
+        return ((ICollectionDescriptorProvider<?>) getProjectedViewDescriptor()
             .getModelDescriptor()).getCollectionDescriptor()
             .getElementDescriptor();
       }

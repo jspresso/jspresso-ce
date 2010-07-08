@@ -65,7 +65,7 @@ public class BasicEntityInvocationHandler extends
    *          classes.
    */
   protected BasicEntityInvocationHandler(
-      IComponentDescriptor<IComponent> entityDescriptor,
+      IComponentDescriptor<IEntity> entityDescriptor,
       IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,

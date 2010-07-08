@@ -74,7 +74,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
         && !((PersistentCollection) propertyValue).isDirty()) {
       wasClean = true;
     }
-    ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) getComponentDescriptor(
+    ICollectionPropertyDescriptor<?> propertyDescriptor = (ICollectionPropertyDescriptor<?>) getComponentDescriptor(
         component.getComponentContract()).getPropertyDescriptor(propertyName);
     if (propertyValue != null
         && !propertyValue.isEmpty()
@@ -85,7 +85,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
       if (orderingProperties != null && !orderingProperties.isEmpty()) {
         List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
         List<ESort> orderingDirections = new ArrayList<ESort>();
-        Class collectionElementContract = propertyDescriptor
+        Class<?> collectionElementContract = propertyDescriptor
             .getCollectionDescriptor().getElementDescriptor()
             .getComponentContract();
         for (Map.Entry<String, ESort> orderingProperty : orderingProperties

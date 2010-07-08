@@ -47,7 +47,6 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   public IViewDescriptor createLovViewDescriptor(
       IReferencePropertyDescriptor<IEntity> entityRefDescriptor,
       IDisplayableAction okAction) {

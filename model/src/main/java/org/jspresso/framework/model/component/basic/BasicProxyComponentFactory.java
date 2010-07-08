@@ -187,8 +187,8 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
 
   @SuppressWarnings("unchecked")
   private <T extends IComponent> T createComponentInstance(
-      Class<T> componentContract, Object delegate, Class[] extraInterfaces) {
-    IComponentDescriptor componentDescriptor = componentDescriptorRegistry
+      Class<T> componentContract, Object delegate, Class<?>[] extraInterfaces) {
+    IComponentDescriptor<IComponent> componentDescriptor = (IComponentDescriptor<IComponent>) componentDescriptorRegistry
         .getComponentDescriptor(componentContract);
     InvocationHandler componentHandler;
     if (delegate != null) {
@@ -197,7 +197,7 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
     } else {
       componentHandler = createComponentInvocationHandler(componentDescriptor);
     }
-    Class[] implementedClasses;
+    Class<?>[] implementedClasses;
     if (extraInterfaces != null) {
       implementedClasses = new Class[extraInterfaces.length + 1];
       implementedClasses[0] = componentDescriptor.getComponentContract();

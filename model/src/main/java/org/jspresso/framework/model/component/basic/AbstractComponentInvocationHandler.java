@@ -107,7 +107,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *          classes.
    */
   protected AbstractComponentInvocationHandler(
-      IComponentDescriptor<IComponent> componentDescriptor,
+      IComponentDescriptor<? extends IComponent> componentDescriptor,
       IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
@@ -203,9 +203,10 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
       if (propertyDescriptor != null) {
-        Class extensionClass = propertyDescriptor.getDelegateClass();
+        Class<IComponentExtension<IComponent>> extensionClass = (Class<IComponentExtension<IComponent>>) propertyDescriptor
+            .getDelegateClass();
         if (extensionClass != null) {
-          IComponentExtension extensionDelegate = getExtensionInstance(
+          IComponentExtension<? extends IComponent> extensionDelegate = getExtensionInstance(
               extensionClass, (IComponent) proxy);
           return invokeExtensionMethod(extensionDelegate, method, args);
         }
@@ -228,16 +229,18 @@ public abstract class AbstractComponentInvocationHandler implements
             case ADDER:
               if (args.length == 2) {
                 addToProperty(proxy,
-                    (ICollectionPropertyDescriptor) propertyDescriptor,
+                    (ICollectionPropertyDescriptor<?>) propertyDescriptor,
                     ((Integer) args[0]).intValue(), args[1]);
               } else {
                 addToProperty(proxy,
-                    (ICollectionPropertyDescriptor) propertyDescriptor, args[0]);
+                    (ICollectionPropertyDescriptor<?>) propertyDescriptor,
+                    args[0]);
               }
               return null;
             case REMOVER:
               removeFromProperty(proxy,
-                  (ICollectionPropertyDescriptor) propertyDescriptor, args[0]);
+                  (ICollectionPropertyDescriptor<?>) propertyDescriptor,
+                  args[0]);
               return null;
             default:
               break;
@@ -690,12 +693,13 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentPropertyValue != null
           && currentPropertyValue == newPropertyValue
           && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy.newProxyInstance(
-            Thread.currentThread().getContextClassLoader(),
-            new Class[] {((ICollectionPropertyDescriptor) propertyDescriptor)
-                .getReferencedDescriptor().getCollectionInterface()},
-            new NeverEqualsInvocationHandler(CollectionHelper
-                .cloneCollection((Collection<?>) currentPropertyValue)));
+        currentPropertyValue = Proxy
+            .newProxyInstance(
+                Thread.currentThread().getContextClassLoader(),
+                new Class[] {((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .getReferencedDescriptor().getCollectionInterface()},
+                new NeverEqualsInvocationHandler(CollectionHelper
+                    .cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);

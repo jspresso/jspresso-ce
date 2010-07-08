@@ -78,8 +78,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * {@inheritDoc}
    */
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
-    T createdEntity = createEntityInstance(entityContract, entityGUIDGenerator
-        .generateGUID());
+    T createdEntity = createEntityInstance(entityContract,
+        entityGUIDGenerator.generateGUID());
     for (IPropertyDescriptor propertyDescriptor : inlineComponentFactory
         .getComponentDescriptor(entityContract).getPropertyDescriptors()) {
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
@@ -196,7 +196,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * @return the entity proxy invocation handler.
    */
   protected InvocationHandler createEntityInvocationHandler(
-      IComponentDescriptor<IComponent> entityDescriptor) {
+      IComponentDescriptor<IEntity> entityDescriptor) {
     return new BasicEntityInvocationHandler(entityDescriptor,
         inlineComponentFactory, entityCollectionFactory, getAccessorFactory(),
         entityExtensionFactory);
@@ -249,8 +249,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
-      Serializable id, Class[] extraInterfaces) {
-    IComponentDescriptor entityDescriptor = inlineComponentFactory
+      Serializable id, Class<?>[] extraInterfaces) {
+    IComponentDescriptor<IEntity> entityDescriptor = (IComponentDescriptor<IEntity>) inlineComponentFactory
         .getComponentDescriptor(entityContract);
     if (entityDescriptor.isPurelyAbstract()) {
       throw new EntityException(entityDescriptor.getName()

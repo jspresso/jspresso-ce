@@ -27,7 +27,6 @@ import org.jspresso.framework.model.entity.EntityRegistryException;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 
-
 /**
  * Basic implementation of an entity registry backed by an HashMap of weak
  * reference values.
@@ -49,8 +48,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
-  public IEntity get(Class entityContract, Object id) {
+  public IEntity get(Class<? extends IEntity> entityContract, Object id) {
     IEntity registeredEntity = null;
     Map<Object, IEntity> contractStore = backingStore.get(entityContract);
     if (contractStore != null) {
@@ -84,7 +82,8 @@ public class BasicEntityRegistry implements IEntityRegistry {
    */
   @SuppressWarnings("unchecked")
   public void register(IEntity entity) {
-    IEntity existingRegisteredEntity = get(entity.getComponentContract(), entity.getId());
+    IEntity existingRegisteredEntity = get(entity.getComponentContract(),
+        entity.getId());
     if (existingRegisteredEntity != null) {
       if (entity != existingRegisteredEntity) {
         throw new EntityRegistryException(

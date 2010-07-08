@@ -65,7 +65,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
 
     List<?> newComponents = getAddedComponents(context);
     if (newComponents != null && newComponents.size() > 0) {
-      Class newComponentContract = getModelDescriptor(context)
+      Class<?> newComponentContract = getModelDescriptor(context)
           .getCollectionDescriptor().getElementDescriptor()
           .getComponentContract();
       Object master = collectionConnector.getParentConnector()

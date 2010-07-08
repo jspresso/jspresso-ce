@@ -81,7 +81,7 @@ public class ControllerAwareEntityInvocationHandler extends
    *          the current backend controller.
    */
   protected ControllerAwareEntityInvocationHandler(
-      IComponentDescriptor<IComponent> entityDescriptor,
+      IComponentDescriptor<IEntity> entityDescriptor,
       IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
