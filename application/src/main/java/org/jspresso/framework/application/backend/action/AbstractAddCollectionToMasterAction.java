@@ -56,7 +56,6 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);

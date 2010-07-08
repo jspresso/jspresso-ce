@@ -458,8 +458,8 @@ public abstract class AbstractComponentInvocationHandler implements
               .getComponentContract());
       storeReferenceProperty(propertyDescriptor, null, property);
     }
-    return decorateReferent(property, propertyDescriptor
-        .getReferencedDescriptor());
+    return decorateReferent(property,
+        propertyDescriptor.getReferencedDescriptor());
   }
 
   /**
@@ -672,7 +672,6 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param newPropertyValue
    *          the property value or null.
    */
-  @SuppressWarnings("unchecked")
   protected void straightSetProperty(String propertyName,
       Object newPropertyValue) {
     Object currentPropertyValue = straightGetProperty(propertyName);
@@ -691,8 +690,8 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentPropertyValue != null
           && currentPropertyValue == newPropertyValue
           && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
-            .getContextClassLoader(),
+        currentPropertyValue = Proxy.newProxyInstance(
+            Thread.currentThread().getContextClassLoader(),
             new Class[] {((ICollectionPropertyDescriptor) propertyDescriptor)
                 .getReferencedDescriptor().getCollectionInterface()},
             new NeverEqualsInvocationHandler(CollectionHelper
@@ -808,7 +807,6 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  @SuppressWarnings("unchecked")
   private void addToProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor, Object value) {
     addToProperty(proxy, propertyDescriptor, -1, value);
@@ -1253,8 +1251,8 @@ public abstract class AbstractComponentInvocationHandler implements
           // for ui notification
           if (changeSupport != null
               && changeSupport.hasListeners(nestedPropertyName)) {
-            firePropertyChange(nestedPropertyName, evt.getOldValue(), evt
-                .getNewValue());
+            firePropertyChange(nestedPropertyName, evt.getOldValue(),
+                evt.getNewValue());
           }
         } finally {
           enabled = wasEnabled;

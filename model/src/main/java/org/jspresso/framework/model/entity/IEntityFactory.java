@@ -21,8 +21,6 @@ package org.jspresso.framework.model.entity;
 import java.io.Serializable;
 
 import org.jspresso.framework.model.component.IComponentFactory;
-import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
-
 
 /**
  * This interface defines the contract of an entities factory.
@@ -30,17 +28,16 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntityFactory extends IComponentFactory,
-    IComponentDescriptorRegistry {
+public interface IEntityFactory extends IComponentFactory {
 
   /**
    * Creates a new entity instance based on the entity descriptor. The entity
    * will be initialized with any necessary starting state.
    * 
    * @param <T>
-   *            the concrete class of the created entity.
+   *          the concrete class of the created entity.
    * @param entityContract
-   *            the class of the entity to create.
+   *          the class of the entity to create.
    * @return the entity instance.
    */
   <T extends IEntity> T createEntityInstance(Class<T> entityContract);
@@ -49,11 +46,11 @@ public interface IEntityFactory extends IComponentFactory,
    * Creates a new entity instance based on the entity descriptor.
    * 
    * @param <T>
-   *            the concrete class of the created entity.
+   *          the concrete class of the created entity.
    * @param entityContract
-   *            the class of the entity to create.
+   *          the class of the entity to create.
    * @param id
-   *            the identifier to set on the entity.
+   *          the identifier to set on the entity.
    * @return the entity instance.
    */
   <T extends IEntity> T createEntityInstance(Class<T> entityContract,

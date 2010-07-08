@@ -130,7 +130,6 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected Class resolveClassHint(String requestedTypeName, Class targetType)
       throws Exception {

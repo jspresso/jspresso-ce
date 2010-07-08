@@ -26,13 +26,13 @@ package org.jspresso.framework.binding;
  * @author Vincent Vandenschrick
  */
 public interface IConfigurableCollectionConnectorProvider extends
-    ICompositeValueConnector, ICollectionConnectorProvider {
+    ICollectionConnectorProvider {
 
   /**
    * Sets the collectionConnector.
    * 
    * @param collectionConnectorProvider
-   *            the collectionConnectorProvider to set.
+   *          the collectionConnectorProvider to set.
    */
   void setCollectionConnectorProvider(
       ICollectionConnectorProvider collectionConnectorProvider);

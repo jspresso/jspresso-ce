@@ -101,8 +101,7 @@ public class TableSorter extends AbstractTableSorter {
                                                                       return o1
                                                                           .toString()
                                                                           .compareTo(
-                                                                              o2
-                                                                                  .toString());
+                                                                              o2.toString());
                                                                     }
                                                                   };
 
@@ -256,7 +255,6 @@ public class TableSorter extends AbstractTableSorter {
      * @param o
      * @return comparison.
      */
-    @SuppressWarnings("unchecked")
     public int compareTo(Object o) {
       int row1 = modelIndex;
       int row2 = ((Row) o).modelIndex;
@@ -313,7 +311,7 @@ public class TableSorter extends AbstractTableSorter {
 
       // We can map a cell event through to the view without widening
       // when the following conditions apply:
-      // 
+      //
       // a) all the changes are on one row (e.getFirstRow() == e.getLastRow())
       // and,
       // b) all the changes are in one column (column !=
@@ -324,7 +322,7 @@ public class TableSorter extends AbstractTableSorter {
       //
       // Note: INSERT and DELETE events fail this test as they have column ==
       // ALL_COLUMNS.
-      // 
+      //
       // The last check, for (modelToView != null) is to see if modelToView
       // is already allocated. If we don't do this check; sorting can become
       // a performance bottleneck for applications where cells

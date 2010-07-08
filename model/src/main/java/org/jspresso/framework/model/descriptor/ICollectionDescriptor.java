@@ -30,7 +30,7 @@ import org.jspresso.framework.util.collection.ESort;
  * @param <E>
  *          the concrete component element type.
  */
-public interface ICollectionDescriptor<E> extends IModelDescriptor,
+public interface ICollectionDescriptor<E> extends
     ICollectionDescriptorProvider<E> {
 
   /**

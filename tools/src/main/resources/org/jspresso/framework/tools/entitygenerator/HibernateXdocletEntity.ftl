@@ -2,6 +2,7 @@
   <#local package=componentDescriptor.name[0..componentDescriptor.name?last_index_of(".")-1]/>
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#local superInterfaceList=[]/>
+  <#global isEntity=componentDescriptor.entity/>
   <#if componentDescriptor.ancestorDescriptors?exists>
     <#list componentDescriptor.ancestorDescriptors as ancestorDescriptor>
       <#if "org.jspresso.framework.model.entity.IEntity" != ancestorDescriptor.name>
@@ -17,7 +18,7 @@
 	      </#if>
 	    </#if>
     </#list>
-    <#if !(superEntity?exists)>
+    <#if isEntity && !(superEntity?exists)>
       <#local superInterfaceList = ["org.jspresso.framework.model.entity.IEntity"] + superInterfaceList/>
     </#if>
   </#if>
@@ -26,7 +27,6 @@
       <#local superInterfaceList=superInterfaceList + [serviceContractClassName]/>
     </#list>
   </#if>
-  <#global isEntity=componentDescriptor.entity/>
   <#if componentDescriptor.sqlName?exists>
     <#global tableName=componentDescriptor.sqlName/>
   <#else>  

@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
-import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGateAccessible;
@@ -40,9 +39,8 @@ import org.jspresso.framework.util.gate.IGateAccessible;
  * @param <E>
  *          the concrete type of component.
  */
-public interface IComponentDescriptor<E> extends IModelDescriptor,
-    IIconDescriptor, IComponentDescriptorProvider<E>, ISecurable,
-    IGateAccessible {
+public interface IComponentDescriptor<E> extends IIconDescriptor,
+    IComponentDescriptorProvider<E>, IGateAccessible {
 
   /**
    * Creates a new component descriptor to allow for querying.

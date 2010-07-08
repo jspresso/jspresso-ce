@@ -28,13 +28,13 @@ import java.util.List;
  * @author Vincent Vandenschrick
  */
 public interface IConfigurableCollectionConnectorListProvider extends
-    ICompositeValueConnector, ICollectionConnectorListProvider {
+    ICollectionConnectorListProvider {
 
   /**
    * Sets the collectionConnectorProviders.
    * 
    * @param collectionConnectorProviders
-   *            the collectionConnectorProviders to set.
+   *          the collectionConnectorProviders to set.
    */
   void setCollectionConnectorProviders(
       List<ICollectionConnectorProvider> collectionConnectorProviders);

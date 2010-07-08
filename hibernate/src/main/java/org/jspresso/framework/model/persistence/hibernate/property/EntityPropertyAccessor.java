@@ -29,7 +29,6 @@ import org.hibernate.property.Setter;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.util.bean.PropertyHelper;
 
-
 /**
  * This class the contract defined by hibernate to enable entity properties to
  * be accessed. Since entities are generically implemented by a proxy, the
@@ -51,7 +50,6 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   public Getter getGetter(Class theClass, String propertyName) {
     return new EntityPropertyGetter(theClass, propertyName);
   }
@@ -59,7 +57,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({ "unused", "unchecked" })
+  @SuppressWarnings({"unused"})
   public Setter getSetter(Class theClass, String propertyName) {
     return new EntityPropertySetter(propertyName);
   }
@@ -81,9 +79,9 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * Constructs a new <code>EntityPropertyGetter</code> instance.
      * 
      * @param theClass
-     *            The class of the property.
+     *          The class of the property.
      * @param propertyName
-     *            the name of the property to access.
+     *          the name of the property to access.
      */
     public EntityPropertyGetter(Class<?> theClass, String propertyName) {
       this.propertyName = propertyName;
@@ -101,7 +99,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings({ "unused", "unchecked" })
+    @SuppressWarnings({"unused"})
     public Object getForInsert(Object target, Map mergeMap,
         SessionImplementor session) {
       return get(target);
@@ -150,7 +148,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * Constructs a new <code>EntityPropertySetter</code> instance.
      * 
      * @param propertyName
-     *            the name of the property to access.
+     *          the name of the property to access.
      */
     public EntityPropertySetter(String propertyName) {
       this.propertyName = propertyName;

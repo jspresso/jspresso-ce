@@ -42,7 +42,7 @@ public class InstanceOf implements TemplateMethodModelEx {
    * Constructs a new <code>InstanceOf</code> instance.
    * 
    * @param wrapper
-   *            the beans wrapper.
+   *          the beans wrapper.
    */
   public InstanceOf(BeansWrapper wrapper) {
     this.wrapper = wrapper;
@@ -53,7 +53,6 @@ public class InstanceOf implements TemplateMethodModelEx {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   public TemplateModel exec(List arguments) throws TemplateModelException {
     try {
       Object target = ((AdapterTemplateModel) arguments.get(0))

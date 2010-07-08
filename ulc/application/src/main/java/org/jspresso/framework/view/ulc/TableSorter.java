@@ -100,8 +100,7 @@ public class TableSorter extends AbstractTableSorter {
                                                                       return o1
                                                                           .toString()
                                                                           .compareTo(
-                                                                              o2
-                                                                                  .toString());
+                                                                              o2.toString());
                                                                     }
                                                                   };
 
@@ -256,7 +255,6 @@ public class TableSorter extends AbstractTableSorter {
      * @param o
      * @return comparison.
      */
-    @SuppressWarnings("unchecked")
     public int compareTo(Object o) {
       int row1 = modelIndex;
       int row2 = ((Row) o).modelIndex;

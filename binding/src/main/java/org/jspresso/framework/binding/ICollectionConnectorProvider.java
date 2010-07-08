@@ -24,7 +24,7 @@ package org.jspresso.framework.binding;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICollectionConnectorProvider extends ICompositeValueConnector,
+public interface ICollectionConnectorProvider extends
     ICollectionConnectorListProvider {
 
   /**
@@ -38,7 +38,7 @@ public interface ICollectionConnectorProvider extends ICompositeValueConnector,
    * Clones this connector.
    * 
    * @param newConnectorId
-   *            the identifier of the clone connector
+   *          the identifier of the clone connector
    * @return the connector's clone.
    */
   ICollectionConnectorProvider clone(String newConnectorId);

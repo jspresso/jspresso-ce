@@ -152,8 +152,8 @@ public class ControllerAwareEntityProxyInterceptor extends
       String[] propertyNames, Type[] types) {
     if (!backendController.isUnitOfWorkActive()) {
       if (entity instanceof IEntity
-          && backendController.getRegisteredEntity(((IEntity) entity)
-              .getComponentContract(), id) == null) {
+          && backendController.getRegisteredEntity(
+              ((IEntity) entity).getComponentContract(), id) == null) {
         Map<String, Object> properties = new HashMap<String, Object>();
         for (int i = 0; i < propertyNames.length; i++) {
           if (state[i] != null) {
@@ -175,7 +175,6 @@ public class ControllerAwareEntityProxyInterceptor extends
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void postFlush(Iterator entities) {
     while (entities.hasNext()) {
@@ -194,7 +193,6 @@ public class ControllerAwareEntityProxyInterceptor extends
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void preFlush(Iterator entities) {
     // To avoid concurrent access modifications
