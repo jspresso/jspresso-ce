@@ -31,6 +31,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.IPageable;
 
 /**
@@ -43,7 +44,7 @@ import org.jspresso.framework.util.collection.IPageable;
 public class BasicQueryComponentDescriptor extends
     AbstractComponentDescriptor<IQueryComponent> {
 
-  private IComponentDescriptor<Object> componentDescriptor;
+  private IComponentDescriptor<IEntity> componentDescriptor;
 
   /**
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
@@ -52,7 +53,7 @@ public class BasicQueryComponentDescriptor extends
    *          the delegate entity descriptor.
    */
   public BasicQueryComponentDescriptor(
-      IComponentDescriptor<Object> componentDescriptor) {
+      IComponentDescriptor<IEntity> componentDescriptor) {
     super(componentDescriptor.getComponentContract().getName());
     this.componentDescriptor = componentDescriptor;
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
@@ -67,14 +68,14 @@ public class BasicQueryComponentDescriptor extends
         propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
       }
     }
-    BasicListDescriptor<Object> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<Object>();
+    BasicListDescriptor<IEntity> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<IEntity>();
     queriedEntitiesCollectionDescriptor
         .setElementDescriptor(componentDescriptor);
     queriedEntitiesCollectionDescriptor
         .setName(IQueryComponent.QUERIED_COMPONENTS);
     queriedEntitiesCollectionDescriptor
         .setDescription("queriedEntities.description");
-    BasicCollectionPropertyDescriptor<Object> qCPDescriptor = new BasicCollectionPropertyDescriptor<Object>();
+    BasicCollectionPropertyDescriptor<IEntity> qCPDescriptor = new BasicCollectionPropertyDescriptor<IEntity>();
     qCPDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
     qCPDescriptor.setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
 

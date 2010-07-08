@@ -109,7 +109,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         }
         EnhancedDetachedCriteria criteria = critFactory
             .createCriteria(queryComponent);
-        List entities;
+        List<IEntity> entities;
         if (criteria == null) {
           entities = new ArrayList<IEntity>();
           queryComponent.setRecordCount(new Integer(0));

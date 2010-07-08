@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -39,6 +40,6 @@ public interface ILovViewDescriptorFactory {
    * @return the created view descriptor.
    */
   IViewDescriptor createLovViewDescriptor(
-      IReferencePropertyDescriptor<?> entityRefDescriptor,
+      IReferencePropertyDescriptor<IEntity> entityRefDescriptor,
       IDisplayableAction okAction);
 }

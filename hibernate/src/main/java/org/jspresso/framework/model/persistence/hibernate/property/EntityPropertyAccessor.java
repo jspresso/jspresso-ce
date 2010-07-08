@@ -99,9 +99,9 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings({"unused"})
-    public Object getForInsert(Object target, Map mergeMap,
-        SessionImplementor session) {
+    @SuppressWarnings("unused")
+    public Object getForInsert(Object target,
+        @SuppressWarnings("rawtypes") Map mergeMap, SessionImplementor session) {
       return get(target);
     }
 

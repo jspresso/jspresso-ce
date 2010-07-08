@@ -26,6 +26,7 @@ import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleD
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
@@ -49,15 +50,15 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 public class FilterableBeanCollectionModule extends BeanCollectionModule
     implements IPageable {
 
-  private IQueryComponent              filter;
-  private IComponentDescriptor<Object> filterComponentDescriptor;
-  private PropertyChangeListener       filterComponentTracker;
-  private IViewDescriptor              filterViewDescriptor;
+  private IQueryComponent               filter;
+  private IComponentDescriptor<IEntity> filterComponentDescriptor;
+  private PropertyChangeListener        filterComponentTracker;
+  private IViewDescriptor               filterViewDescriptor;
 
-  private Map<String, ESort>           orderingProperties;
-  private Integer                      pageSize;
-  private IQueryViewDescriptorFactory  queryViewDescriptorFactory;
-  private IViewDescriptor              paginationViewDescriptor;
+  private Map<String, ESort>            orderingProperties;
+  private Integer                       pageSize;
+  private IQueryViewDescriptorFactory   queryViewDescriptorFactory;
+  private IViewDescriptor               paginationViewDescriptor;
 
   /**
    * Constructs a new <code>FilterableBeanCollectionModule</code> instance.
@@ -80,9 +81,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * 
    * @return the filterComponentDescriptor.
    */
-  public IComponentDescriptor<Object> getFilterComponentDescriptor() {
+  public IComponentDescriptor<IEntity> getFilterComponentDescriptor() {
     if (filterComponentDescriptor == null) {
-      return getElementComponentDescriptor();
+      return (IComponentDescriptor<IEntity>) getElementComponentDescriptor();
     }
     return filterComponentDescriptor;
   }
@@ -130,7 +131,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor
         .getModelDescriptor();
 
-    IComponentDescriptor<Object> filterComponentDesc = getFilterComponentDescriptor();
+    IComponentDescriptor<IEntity> filterComponentDesc = getFilterComponentDescriptor();
     IViewDescriptor filterViewDesc = getFilterViewDescriptor();
     if (filterViewDesc == null) {
       filterViewDesc = queryViewDescriptorFactory
@@ -208,7 +209,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    *          the filterComponentDescriptor to set.
    */
   public void setFilterComponentDescriptor(
-      IComponentDescriptor<Object> filterComponentDescriptor) {
+      IComponentDescriptor<IEntity> filterComponentDescriptor) {
     this.filterComponentDescriptor = filterComponentDescriptor;
   }
 
@@ -296,8 +297,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
           || IPageable.PAGE_SIZE.equals(evt.getPropertyName())
           || IPageable.PREVIOUS_PAGE_ENABLED.equals(evt.getPropertyName())
           || IPageable.RECORD_COUNT.equals(evt.getPropertyName())) {
-        firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt
-            .getNewValue());
+        firePropertyChange(evt.getPropertyName(), evt.getOldValue(),
+            evt.getNewValue());
       }
     }
   }

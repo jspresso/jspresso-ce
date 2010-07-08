@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * Factory for query component view descriptor.
@@ -32,9 +33,9 @@ public interface IQueryViewDescriptorFactory {
    * Creates a new query component view descriptor.
    * 
    * @param queryComponentDescriptor
-   *            the query component descriptor.
+   *          the query component descriptor.
    * @return the created view descriptor.
    */
   IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptor<Object> queryComponentDescriptor);
+      IComponentDescriptor<IEntity> queryComponentDescriptor);
 }

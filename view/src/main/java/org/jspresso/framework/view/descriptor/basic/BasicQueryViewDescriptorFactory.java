@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -49,7 +50,7 @@ public class BasicQueryViewDescriptorFactory implements
    * {@inheritDoc}
    */
   public IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptor<Object> queryComponentDescriptor) {
+      IComponentDescriptor<IEntity> queryComponentDescriptor) {
     BasicQueryComponentDescriptor actualModelDescriptor = new BasicQueryComponentDescriptor(
         queryComponentDescriptor);
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();

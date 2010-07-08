@@ -176,7 +176,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public void postFlush(Iterator entities) {
+  public void postFlush(@SuppressWarnings("rawtypes") Iterator entities) {
     while (entities.hasNext()) {
       Object entity = entities.next();
       if (entity instanceof IEntity) {
@@ -194,7 +194,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public void preFlush(Iterator entities) {
+  public void preFlush(@SuppressWarnings("rawtypes") Iterator entities) {
     // To avoid concurrent access modifications
     Set<Object> cloneSet = new LinkedHashSet<Object>();
     while (entities.hasNext()) {

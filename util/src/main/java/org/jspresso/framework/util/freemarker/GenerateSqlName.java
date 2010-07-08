@@ -81,7 +81,8 @@ public class GenerateSqlName implements TemplateMethodModel {
    * parser to separate words with "_" - check for sql reserved key words
    * {@inheritDoc}
    */
-  public TemplateModel exec(List arguments) throws TemplateModelException {
+  public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
+      throws TemplateModelException {
 
     String sqlColumnName = formatter.run(arguments.get(0).toString());
     if (isReserved(sqlColumnName)) {

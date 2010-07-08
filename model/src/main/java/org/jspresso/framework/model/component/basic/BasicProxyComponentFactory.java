@@ -33,6 +33,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.security.UserPrincipal;
 
 /**
@@ -90,7 +91,7 @@ public class BasicProxyComponentFactory extends AbstractComponentFactory {
       Class<? extends IComponent> componentContract) {
     return new QueryComponent(
         new BasicQueryComponentDescriptor(
-            (IComponentDescriptor<Object>) getComponentDescriptor(componentContract)));
+            (IComponentDescriptor<IEntity>) getComponentDescriptor(componentContract)));
   }
 
   /**

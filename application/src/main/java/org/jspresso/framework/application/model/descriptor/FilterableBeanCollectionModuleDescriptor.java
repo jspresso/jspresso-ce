@@ -27,6 +27,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * The model descriptor for filterable bean collection modules.
@@ -52,8 +53,8 @@ public class FilterableBeanCollectionModuleDescriptor extends
    *          the component descriptor for the filter object.
    */
   public FilterableBeanCollectionModuleDescriptor(
-      IComponentDescriptor<Object> moduleObjectReferencedDescriptor,
-      IComponentDescriptor<Object> moduleFilterReferencedDescriptor) {
+      IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor,
+      IComponentDescriptor<IEntity> moduleFilterReferencedDescriptor) {
     this(FilterableBeanCollectionModule.class.getName(),
         moduleObjectReferencedDescriptor, moduleFilterReferencedDescriptor);
   }
@@ -70,8 +71,8 @@ public class FilterableBeanCollectionModuleDescriptor extends
    *          the component descriptor for the filter object.
    */
   protected FilterableBeanCollectionModuleDescriptor(String name,
-      IComponentDescriptor<Object> moduleObjectReferencedDescriptor,
-      IComponentDescriptor<Object> moduleFilterReferencedDescriptor) {
+      IComponentDescriptor<? extends Object> moduleObjectReferencedDescriptor,
+      IComponentDescriptor<IEntity> moduleFilterReferencedDescriptor) {
     super(name, moduleObjectReferencedDescriptor);
 
     BasicReferencePropertyDescriptor<IQueryComponent> filterDescriptor = new BasicReferencePropertyDescriptor<IQueryComponent>();

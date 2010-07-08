@@ -48,7 +48,6 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
 
@@ -72,8 +71,8 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       return false;
     }
 
-    List originalList = (List) collectionConnector.getConnectorValue();
-    List targetList = new ArrayList<Object>(originalList);
+    List<?> originalList = (List<?>) collectionConnector.getConnectorValue();
+    List<Object> targetList = new ArrayList<Object>(originalList);
 
     int[] targetIndices = new int[indicesToMove.length];
     for (int i = indicesToMove.length - 1; i >= 0; i--) {

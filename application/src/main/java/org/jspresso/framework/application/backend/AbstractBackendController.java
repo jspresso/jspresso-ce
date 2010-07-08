@@ -775,9 +775,9 @@ public abstract class AbstractBackendController extends AbstractController
     Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
     if (entityDirtyProperties != null
         && entityDirtyProperties.containsKey(propertyName)) {
-      return !getEntityFactory().getComponentDescriptor(
-          entity.getComponentContract()).getPropertyDescriptor(propertyName)
-          .isComputed();
+      return !getEntityFactory()
+          .getComponentDescriptor(entity.getComponentContract())
+          .getPropertyDescriptor(propertyName).isComputed();
     }
     return false;
   }
@@ -819,11 +819,12 @@ public abstract class AbstractBackendController extends AbstractController
           uowComponent.straightSetProperty(property.getKey(),
               cloneInUnitOfWork((IEntity) property.getValue(), alreadyCloned));
         } else {
-          uowComponent.straightSetProperty(property.getKey(), property
-              .getValue());
+          uowComponent.straightSetProperty(property.getKey(),
+              property.getValue());
         }
       } else if (property.getValue() instanceof IComponent) {
-        uowComponent.straightSetProperty(property.getKey(),
+        uowComponent.straightSetProperty(
+            property.getKey(),
             cloneComponentInUnitOfWork((IComponent) property.getValue(),
                 alreadyCloned));
       }
@@ -861,8 +862,8 @@ public abstract class AbstractBackendController extends AbstractController
           .getPropertyDescriptor(property.getKey());
       if (property.getValue() instanceof IEntity) {
         if (isInitialized(property.getValue())) {
-          uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
-              (IEntity) property.getValue(), alreadyCloned));
+          uowEntity.straightSetProperty(property.getKey(),
+              cloneInUnitOfWork((IEntity) property.getValue(), alreadyCloned));
         } else {
           uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
@@ -914,12 +915,13 @@ public abstract class AbstractBackendController extends AbstractController
         IComponent[] uowArray = new IComponent[((IComponent[]) property
             .getValue()).length];
         for (int i = 0; i < uowArray.length; i++) {
-          uowArray[i] = cloneComponentInUnitOfWork(((IComponent[]) property
-              .getValue())[i], alreadyCloned);
+          uowArray[i] = cloneComponentInUnitOfWork(
+              ((IComponent[]) property.getValue())[i], alreadyCloned);
         }
         uowEntity.straightSetProperty(property.getKey(), uowArray);
       } else if (property.getValue() instanceof IComponent) {
-        uowEntity.straightSetProperty(property.getKey(),
+        uowEntity.straightSetProperty(
+            property.getKey(),
             cloneComponentInUnitOfWork((IComponent) property.getValue(),
                 alreadyCloned));
       }
@@ -973,8 +975,8 @@ public abstract class AbstractBackendController extends AbstractController
       if (mergeMode != EMergeMode.MERGE_EAGER) {
         dirtRecorder.setEnabled(false);
       }
-      IEntity registeredEntity = getRegisteredEntity(entity
-          .getComponentContract(), entity.getId());
+      IEntity registeredEntity = getRegisteredEntity(
+          entity.getComponentContract(), entity.getId());
       boolean newlyRegistered = false;
       if (registeredEntity == null) {
         registeredEntity = carbonEntityCloneFactory.cloneEntity(entity,
@@ -987,7 +989,7 @@ public abstract class AbstractBackendController extends AbstractController
         return registeredEntity;
       }
       alreadyMerged.put(entity, registeredEntity);
-      Map sessionDirtyProperties = dirtRecorder
+      Map<String, Object> sessionDirtyProperties = dirtRecorder
           .getChangedProperties(registeredEntity);
       boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
           .isEmpty()));
@@ -1018,8 +1020,10 @@ public abstract class AbstractBackendController extends AbstractController
                 initializePropertyIfNeeded(registeredEntity, property.getKey());
               }
               if (isInitialized(registeredProperty)) {
-                mergedProperties.put(property.getKey(), merge(
-                    (IEntity) property.getValue(), mergeMode, alreadyMerged));
+                mergedProperties.put(
+                    property.getKey(),
+                    merge((IEntity) property.getValue(), mergeMode,
+                        alreadyMerged));
               }
             }
           } else if (property.getValue() instanceof Collection) {
@@ -1061,10 +1065,11 @@ public abstract class AbstractBackendController extends AbstractController
                     snapshotCollection = (Collection<IComponent>) dirtyProperties
                         .get(property.getKey());
                   }
-                  mergedProperties.put(property.getKey(),
+                  mergedProperties.put(
+                      property.getKey(),
                       wrapDetachedCollection(registeredEntity,
-                          registeredCollection, snapshotCollection, property
-                              .getKey()));
+                          registeredCollection, snapshotCollection,
+                          property.getKey()));
                 } else {
                   mergedProperties.put(property.getKey(), registeredCollection);
                 }
@@ -1073,9 +1078,10 @@ public abstract class AbstractBackendController extends AbstractController
           } else if (property.getValue() instanceof IComponent) {
             IComponent registeredComponent = (IComponent) registeredEntityProperties
                 .get(property.getKey());
-            mergedProperties.put(property.getKey(), mergeComponent(
-                (IComponent) property.getValue(), registeredComponent,
-                mergeMode, alreadyMerged));
+            mergedProperties.put(
+                property.getKey(),
+                mergeComponent((IComponent) property.getValue(),
+                    registeredComponent, mergeMode, alreadyMerged));
           } else {
             mergedProperties.put(property.getKey(), property.getValue());
           }
@@ -1125,16 +1131,20 @@ public abstract class AbstractBackendController extends AbstractController
               initializePropertyIfNeeded(registeredComponent, property.getKey());
             }
             if (isInitialized(registeredProperty)) {
-              mergedProperties.put(property.getKey(), merge((IEntity) property
-                  .getValue(), mergeMode, alreadyMerged));
+              mergedProperties
+                  .put(
+                      property.getKey(),
+                      merge((IEntity) property.getValue(), mergeMode,
+                          alreadyMerged));
             }
           }
         } else if (property.getValue() instanceof IComponent) {
           IComponent registeredSubComponent = (IComponent) registeredComponentProperties
               .get(property.getKey());
-          mergedProperties.put(property.getKey(), mergeComponent(
-              (IComponent) property.getValue(), registeredSubComponent,
-              mergeMode, alreadyMerged));
+          mergedProperties.put(
+              property.getKey(),
+              mergeComponent((IComponent) property.getValue(),
+                  registeredSubComponent, mergeMode, alreadyMerged));
         } else {
           mergedProperties.put(property.getKey(), property.getValue());
         }

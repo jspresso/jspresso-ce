@@ -23,6 +23,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
@@ -48,7 +49,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    */
   @SuppressWarnings("unchecked")
   public IViewDescriptor createLovViewDescriptor(
-      IReferencePropertyDescriptor entityRefDescriptor,
+      IReferencePropertyDescriptor<IEntity> entityRefDescriptor,
       IDisplayableAction okAction) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     IViewDescriptor filterViewDescriptor = queryViewDescriptorFactory
@@ -103,13 +104,14 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   }
 
   private BasicCollectionViewDescriptor createResultViewDescriptor(
-      IComponentDescriptor<Object> entityDescriptor, IDisplayableAction okAction) {
+      IComponentDescriptor<IEntity> entityDescriptor,
+      IDisplayableAction okAction) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
-    BasicListDescriptor<Object> queriedEntitiesListDescriptor = new BasicListDescriptor<Object>();
+    BasicListDescriptor<IEntity> queriedEntitiesListDescriptor = new BasicListDescriptor<IEntity>();
     queriedEntitiesListDescriptor.setElementDescriptor(entityDescriptor);
 
-    BasicCollectionPropertyDescriptor<Object> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<Object>();
+    BasicCollectionPropertyDescriptor<IEntity> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<IEntity>();
     queriedEntitiesDescriptor
         .setReferencedDescriptor(queriedEntitiesListDescriptor);
     queriedEntitiesDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);

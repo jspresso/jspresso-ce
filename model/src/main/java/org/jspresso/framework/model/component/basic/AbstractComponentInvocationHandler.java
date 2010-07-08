@@ -1078,8 +1078,8 @@ public abstract class AbstractComponentInvocationHandler implements
         if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
           // It's a 'one' relation end
           storeReferenceProperty(
-              (IReferencePropertyDescriptor) propertyDescriptor, oldProperty,
-              actualNewProperty);
+              (IReferencePropertyDescriptor<?>) propertyDescriptor,
+              oldProperty, actualNewProperty);
           if (reversePropertyDescriptor != null) {
             // It is bidirectionnal, so we are going to update the other end.
             if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
@@ -1089,7 +1089,7 @@ public abstract class AbstractComponentInvocationHandler implements
               }
               IAccessor reversePropertyAccessor = accessorFactory
                   .createPropertyAccessor(reversePropertyDescriptor.getName(),
-                      ((IReferencePropertyDescriptor) propertyDescriptor)
+                      ((IReferencePropertyDescriptor<?>) propertyDescriptor)
                           .getReferencedDescriptor().getComponentContract());
               if (oldProperty != null) {
                 reversePropertyAccessor.setValue(oldProperty, null);
@@ -1102,9 +1102,9 @@ public abstract class AbstractComponentInvocationHandler implements
               ICollectionAccessor reversePropertyAccessor = accessorFactory
                   .createCollectionPropertyAccessor(
                       reversePropertyDescriptor.getName(),
-                      ((IReferencePropertyDescriptor) propertyDescriptor)
+                      ((IReferencePropertyDescriptor<?>) propertyDescriptor)
                           .getReferencedDescriptor().getComponentContract(),
-                      ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                      ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
                           .getCollectionDescriptor().getElementDescriptor()
                           .getComponentContract());
               if (reversePropertyAccessor instanceof IModelDescriptorAware) {

@@ -53,7 +53,8 @@ public class InstanceOf implements TemplateMethodModelEx {
    * <p>
    * {@inheritDoc}
    */
-  public TemplateModel exec(List arguments) throws TemplateModelException {
+  public TemplateModel exec(@SuppressWarnings("rawtypes") List arguments)
+      throws TemplateModelException {
     try {
       Object target = ((AdapterTemplateModel) arguments.get(0))
           .getAdaptedObject(Object.class);

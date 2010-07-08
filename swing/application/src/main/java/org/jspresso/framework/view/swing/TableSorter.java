@@ -261,8 +261,9 @@ public class TableSorter extends AbstractTableSorter {
       int row1 = modelIndex;
       int row2 = ((Row) o).modelIndex;
 
-      for (Iterator it = getSortingColumns().iterator(); it.hasNext();) {
-        Directive directive = (Directive) it.next();
+      for (Iterator<Directive> it = getSortingColumns().iterator(); it
+          .hasNext();) {
+        Directive directive = it.next();
         int column = directive.getColumn();
         Object o1 = getTableModel().getValueAt(row1, column);
         Object o2 = getTableModel().getValueAt(row2, column);

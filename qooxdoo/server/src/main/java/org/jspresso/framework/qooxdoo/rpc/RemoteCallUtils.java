@@ -119,7 +119,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   protected Map filter(Object obj, Map map) {
     Map filteredMap = super.filter(obj, map);
