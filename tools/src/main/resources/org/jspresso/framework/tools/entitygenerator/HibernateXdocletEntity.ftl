@@ -4,17 +4,22 @@
   <#local superInterfaceList=[]/>
   <#if componentDescriptor.ancestorDescriptors?exists>
     <#list componentDescriptor.ancestorDescriptors as ancestorDescriptor>
-      <#local superInterfaceList=superInterfaceList + [ancestorDescriptor.name]/>
-      <#if ancestorDescriptor.entity>
-        <#local superEntity=ancestorDescriptor/>
-        <#if superEntity.sqlName?exists>
-          <#local superEntityTableName=superEntity.sqlName/>
-        <#else>  
-          <#local superEntityName=superEntity.name[superEntity.name?last_index_of(".")+1..]/>
-          <#local superEntityTableName=generateSQLName(superEntityName)/>
-        </#if>
-      </#if>
+      <#if "org.jspresso.framework.model.entity.IEntity" != ancestorDescriptor.name>
+	      <#local superInterfaceList=superInterfaceList + [ancestorDescriptor.name]/>
+	      <#if ancestorDescriptor.entity>
+	        <#local superEntity=ancestorDescriptor/>
+	        <#if superEntity.sqlName?exists>
+	          <#local superEntityTableName=superEntity.sqlName/>
+	        <#else>  
+	          <#local superEntityName=superEntity.name[superEntity.name?last_index_of(".")+1..]/>
+	          <#local superEntityTableName=generateSQLName(superEntityName)/>
+	        </#if>
+	      </#if>
+	    </#if>
     </#list>
+    <#if !(superEntity?exists)>
+      <#local superInterfaceList = ["org.jspresso.framework.model.entity.IEntity"] + superInterfaceList/>
+    </#if>
   </#if>
   <#if componentDescriptor.serviceContractClassNames?exists>
     <#list componentDescriptor.serviceContractClassNames as serviceContractClassName>
@@ -50,7 +55,8 @@ package ${package};
  *           table = "${tableName}"
  *           dynamic-insert = "true"
  *           dynamic-update = "true"
- *           persister = "org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
+ *           persister =
+ *            "org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
     <#if componentDescriptor.purelyAbstract>
  *           abstract = "true"
     </#if>
