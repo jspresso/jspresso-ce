@@ -25,5 +25,13 @@ package org.jspresso.framework.model.descriptor;
  * @author Vincent Vandenschrick
  */
 public interface IIntegerPropertyDescriptor extends INumberPropertyDescriptor {
-  // Just a marker interface.
+
+  /**
+   * Returns true if this property is based on java.lang.Long instead of
+   * java.lang.Integer.
+   * 
+   * @return true if this property is based on java.lang.Long instead of
+   *         java.lang.Integer.
+   */
+  boolean isUsingLong();
 }

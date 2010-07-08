@@ -19,6 +19,7 @@ New features
            Introduced secondary action map for views and controller
            Introduced a paginationViewDescriptor on collection views
            Default pagination view is automatically sized to the collection view
+           Introduced the usingLong property for java.lang.Long mapped integers
 
 
 

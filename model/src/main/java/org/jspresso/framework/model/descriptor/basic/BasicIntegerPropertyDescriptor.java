@@ -21,13 +21,17 @@ package org.jspresso.framework.model.descriptor.basic;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 
 /**
- * Describes an integer property.
+ * Describes an integer property. The property is either represented as an
+ * <code>Integer</code> or a <code>Long</code> depending on the
+ * <code>usingLong</code> property.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicIntegerPropertyDescriptor extends
     BasicNumberPropertyDescriptor implements IIntegerPropertyDescriptor {
+
+  private Boolean usingLong;
 
   /**
    * {@inheritDoc}
@@ -41,9 +45,36 @@ public class BasicIntegerPropertyDescriptor extends
   }
 
   /**
+   * Returns false by default.
+   * <p>
+   * {@inheritDoc}
+   */
+  public boolean isUsingLong() {
+    if (usingLong != null) {
+      return usingLong.booleanValue();
+    }
+    return false;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public Class<?> getModelType() {
+    if (isUsingLong()) {
+      return Long.class;
+    }
     return Integer.class;
+  }
+
+  /**
+   * Configures the property to be managed using <code>java.lang.Long</code>.
+   * Default value is <code>false</code> which means
+   * <code>java.lang.Integer</code> will be used.
+   * 
+   * @param usingLong
+   *          the usingLong to set.
+   */
+  public void setUsingLong(boolean usingLong) {
+    this.usingLong = new Boolean(usingLong);
   }
 }

@@ -88,7 +88,7 @@ public class BasicDecimalPropertyDescriptor extends
   }
 
   /**
-   * Configures the property to be managed usin
+   * Configures the property to be managed using
    * <code>java.math.BigDecimal</code>. Default value is <code>false</code>
    * which means <code>java.lang.Double</code> will be used.
    * 

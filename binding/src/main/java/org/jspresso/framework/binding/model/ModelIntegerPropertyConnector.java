@@ -21,7 +21,6 @@ package org.jspresso.framework.binding.model;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-
 /**
  * This connector is a simple integer model property connector. It handles
  * setting java.lang.Long and java.lang.Integer values based on the connector
@@ -48,10 +47,22 @@ public class ModelIntegerPropertyConnector extends ModelScalarPropertyConnector 
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
-    if (aValue instanceof Long) {
-      super.setConnecteeValue(new Integer(((Long) aValue).intValue()));
+    if (((IIntegerPropertyDescriptor) getModelDescriptor()).isUsingLong()) {
+      if (aValue instanceof Long) {
+        super.setConnecteeValue(aValue);
+      } else if (aValue instanceof Number) {
+        super.setConnecteeValue(new Long(((Number) aValue).longValue()));
+      } else {
+        super.setConnecteeValue(aValue);
+      }
     } else {
-      super.setConnecteeValue(aValue);
+      if (aValue instanceof Integer) {
+        super.setConnecteeValue(aValue);
+      } else if (aValue instanceof Number) {
+        super.setConnecteeValue(new Integer(((Number) aValue).intValue()));
+      } else {
+        super.setConnecteeValue(aValue);
+      }
     }
   }
 }
