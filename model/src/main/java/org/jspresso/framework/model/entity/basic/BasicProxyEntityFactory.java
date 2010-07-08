@@ -257,7 +257,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
           + " is purely abstract. It cannot be instanciated.");
     }
     InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
-    Class[] implementedClasses;
+    Class<?>[] implementedClasses;
     if (extraInterfaces != null) {
       implementedClasses = new Class[extraInterfaces.length + 1];
       implementedClasses[0] = entityDescriptor.getComponentContract();

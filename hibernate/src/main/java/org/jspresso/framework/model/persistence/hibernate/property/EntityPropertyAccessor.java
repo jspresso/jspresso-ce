@@ -50,15 +50,17 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   /**
    * {@inheritDoc}
    */
-  public Getter getGetter(Class theClass, String propertyName) {
+  public Getter getGetter(@SuppressWarnings("rawtypes") Class theClass,
+      String propertyName) {
     return new EntityPropertyGetter(theClass, propertyName);
   }
 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({"unused"})
-  public Setter getSetter(Class theClass, String propertyName) {
+  @SuppressWarnings("unused")
+  public Setter getSetter(@SuppressWarnings("rawtypes") Class theClass,
+      String propertyName) {
     return new EntityPropertySetter(propertyName);
   }
 

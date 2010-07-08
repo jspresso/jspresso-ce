@@ -83,7 +83,8 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public Object toJava(Object obj, Class targetType) {
+  public Object toJava(Object obj,
+      @SuppressWarnings("rawtypes") Class targetType) {
     if (obj instanceof JSONObject) {
       JSONObject jsonObject = (JSONObject) obj;
       String requestedTypeName = jsonObject.optString("class", null);
@@ -101,7 +102,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
             }
           }
         } else {
-          Class clazz = null;
+          Class<?> clazz = null;
           try {
             clazz = resolveClassHint(requestedTypeName, targetType);
           } catch (Throwable t) {
@@ -131,9 +132,9 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    * {@inheritDoc}
    */
   @Override
-  protected Class resolveClassHint(String requestedTypeName, Class targetType)
-      throws Exception {
-    Class clazz = super.resolveClassHint(requestedTypeName, targetType);
+  protected Class<?> resolveClassHint(String requestedTypeName,
+      @SuppressWarnings("rawtypes") Class targetType) throws Exception {
+    Class<?> clazz = super.resolveClassHint(requestedTypeName, targetType);
     if (clazz == null) {
       return Class.forName(requestedTypeName);
     }
