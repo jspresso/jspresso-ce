@@ -56,8 +56,11 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getCenterViewDescriptor() {
-    completeChildDescriptor(centerViewDescriptor,
-        (eastViewDescriptor == null && northViewDescriptor == null));
+    IViewDescriptor previousViewDescriptor = getWestViewDescriptor();
+    if (previousViewDescriptor == null) {
+      previousViewDescriptor = getWestViewDescriptor();
+    }
+    completeChildDescriptor(centerViewDescriptor, previousViewDescriptor);
     return centerViewDescriptor;
   }
 
@@ -88,7 +91,14 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getEastViewDescriptor() {
-    completeChildDescriptor(eastViewDescriptor, true);
+    IViewDescriptor previousViewDescriptor = getCenterViewDescriptor();
+    if (previousViewDescriptor == null) {
+      previousViewDescriptor = getWestViewDescriptor();
+    }
+    if (previousViewDescriptor == null) {
+      previousViewDescriptor = getNorthViewDescriptor();
+    }
+    completeChildDescriptor(eastViewDescriptor, previousViewDescriptor);
     return eastViewDescriptor;
   }
 
@@ -96,7 +106,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getNorthViewDescriptor() {
-    completeChildDescriptor(northViewDescriptor, (eastViewDescriptor == null));
+    completeChildDescriptor(northViewDescriptor, null);
     return northViewDescriptor;
   }
 
@@ -104,9 +114,17 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getSouthViewDescriptor() {
-    completeChildDescriptor(southViewDescriptor,
-        (eastViewDescriptor == null && northViewDescriptor == null
-            && centerViewDescriptor == null && westViewDescriptor == null));
+    IViewDescriptor previousViewDescriptor = getEastViewDescriptor();
+    if (previousViewDescriptor == null) {
+      previousViewDescriptor = getCenterViewDescriptor();
+    }
+    if (previousViewDescriptor == null) {
+      previousViewDescriptor = getWestViewDescriptor();
+    }
+    if (previousViewDescriptor == null) {
+      previousViewDescriptor = getNorthViewDescriptor();
+    }
+    completeChildDescriptor(southViewDescriptor, previousViewDescriptor);
     return southViewDescriptor;
   }
 
@@ -114,8 +132,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * {@inheritDoc}
    */
   public IViewDescriptor getWestViewDescriptor() {
-    completeChildDescriptor(westViewDescriptor, (eastViewDescriptor == null
-        && northViewDescriptor == null && centerViewDescriptor == null));
+    IViewDescriptor previousViewDescriptor = getNorthViewDescriptor();
+    completeChildDescriptor(westViewDescriptor, previousViewDescriptor);
     return westViewDescriptor;
   }
 

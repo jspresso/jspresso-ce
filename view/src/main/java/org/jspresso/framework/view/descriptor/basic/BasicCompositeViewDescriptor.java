@@ -20,8 +20,10 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.List;
 
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -99,19 +101,31 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
    * 
    * @param childViewDescriptor
    *          the child view descriptor to initialize.
-   * @param isLeading
-   *          is it the leading child descriptor (e.g. the 1st one not null) ?
+   * @param previousChildDescriptor
+   *          null if it is the leading child descriptor or the previous one ?
    */
   protected void completeChildDescriptor(IViewDescriptor childViewDescriptor,
-      boolean isLeading) {
+      IViewDescriptor previousChildDescriptor) {
     IModelDescriptor modelDescriptor = super.getModelDescriptor();
     if (modelDescriptor != null
         && childViewDescriptor instanceof BasicViewDescriptor
         && childViewDescriptor.getModelDescriptor() == null) {
       if (isCascadingModels()) {
-        if (isLeading) {
+        if (previousChildDescriptor == null) {
           ((BasicViewDescriptor) childViewDescriptor)
               .setModelDescriptor(modelDescriptor);
+        } else {
+          IModelDescriptor previousModelDescriptor = previousChildDescriptor
+              .getModelDescriptor();
+          if (previousModelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+            ((BasicViewDescriptor) childViewDescriptor)
+                .setModelDescriptor(((ICollectionPropertyDescriptor<?>) previousModelDescriptor)
+                    .getReferencedDescriptor().getElementDescriptor());
+          } else if (previousModelDescriptor instanceof IReferencePropertyDescriptor<?>) {
+            ((BasicViewDescriptor) childViewDescriptor)
+                .setModelDescriptor(((IReferencePropertyDescriptor<?>) previousModelDescriptor)
+                    .getReferencedDescriptor());
+          }
         }
       } else {
         if (childViewDescriptor instanceof IPropertyViewDescriptor
