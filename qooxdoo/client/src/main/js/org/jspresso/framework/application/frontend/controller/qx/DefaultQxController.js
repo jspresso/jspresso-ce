@@ -575,7 +575,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       splitContainer.add(this.__workspaceStack, 0.85);
       
       applicationFrame.add(splitContainer, {flex:1});
-      if(secondaryActions) {
+      if(secondaryActions && secondaryActions.length > 0) {
         var secondaryToolBar = new qx.ui.container.SlideBar();
         secondaryToolBar.add(this.__viewFactory.createToolBarFromActionLists(secondaryActions));
         applicationFrame.add(secondaryToolBar);

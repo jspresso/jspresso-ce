@@ -272,7 +272,7 @@ package org.jspresso.framework.view.flex {
       } else {
         toolBar = createDefaultToolBar(remoteComponent, component);
       }
-      if(!(remoteComponent is RActionField) && remoteComponent.secondaryActionLists != null) {
+      if(remoteComponent.secondaryActionLists != null) {
         secondaryToolBar = createSecondaryToolBar(remoteComponent, component);
       }
       if(toolBar || secondaryToolBar) {

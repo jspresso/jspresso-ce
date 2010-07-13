@@ -197,7 +197,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       } else {
         toolBar = this._createDefaultToolBar(remoteComponent, component);
       }
-      secondaryToolBar = this._createSecondaryToolBar(remoteComponent, component);
+      if(remoteComponent.getSecondaryActionLists()) {
+        secondaryToolBar = this._createSecondaryToolBar(remoteComponent, component);
+      }
       if(toolBar || secondaryToolBar) {
         var surroundingBox = new qx.ui.container.Composite();
         surroundingBox.setLayout(new qx.ui.layout.VBox(2));
@@ -230,9 +232,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
     },
 
     createToolBarFromActionLists:function(actionLists) {
-      var toolBar = new qx.ui.toolbar.ToolBar();
-      this.installActionLists(toolBar, actionLists);
-      return toolBar;
+      if(actionLists && actionLists.length > 0) {
+        var toolBar = new qx.ui.toolbar.ToolBar();
+        this.installActionLists(toolBar, actionLists);
+        return toolBar;
+      }
+      return null;
     },
     
     installActionLists:function(toolBar, actionLists) {
@@ -1250,11 +1255,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
           if(remoteForm.getLabelsPosition() == "ASIDE") {
+            //componentLabel.setTextAlign("right");
             componentLabel.setAlignX("right");
           } else {
+            //componentLabel.setTextAlign("left");
             componentLabel.setAlignX("left");
           }
-          componentLabel.setAlignY("baseline");
+          componentLabel.setAlignY("middle");
+          componentLabel.setAllowShrinkX(false);
           form.add(componentLabel, {row : labelRow,
                                     column : labelCol,
                                     rowSpan : 1,
