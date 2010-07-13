@@ -2,17 +2,17 @@ package ${package}.startup.qooxdoo;
 
 import java.util.List;
 
-import net.sf.qooxdoo.rpc.RemoteService;
-import net.sf.qooxdoo.rpc.RemoteServiceException;
-
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
+import org.jspresso.framework.qooxdoo.rpc.Remote;
+import org.jspresso.framework.qooxdoo.rpc.RemoteException;
+
 import ${package}.startup.remote.RemoteApplicationStartup;
 
 /**
  * Qooxdoo application startup class.
  */
 public class QooxdooApplicationStartup extends RemoteApplicationStartup
-    implements RemoteService {
+    implements Remote {
 
   /**
    * Delegates to start.
@@ -20,11 +20,11 @@ public class QooxdooApplicationStartup extends RemoteApplicationStartup
    * @param startupLanguage
    *          the client language.
    * @return the commands to be executed by the client peer on startup.
-   * @throws RemoteServiceException
+   * @throws RemoteException
    *           whenever an exception occurs.
    */
   public List<RemoteCommand> startQx(String startupLanguage)
-      throws RemoteServiceException {
+      throws RemoteException {
     return super.start(startupLanguage);
   }
 
@@ -34,11 +34,11 @@ public class QooxdooApplicationStartup extends RemoteApplicationStartup
    * @param commands
    *          the command list.
    * @return the resulting commands.
-   * @throws RemoteServiceException
+   * @throws RemoteException
    *           whenever an exception occurs.
    */
   public List<RemoteCommand> handleCommandsQx(List<RemoteCommand> commands)
-      throws RemoteServiceException {
+      throws RemoteException {
     return handleCommands(commands);
   }
 }
