@@ -232,8 +232,12 @@ package org.jspresso.framework.view.flex {
       }
       applyComponentStyle(component, remoteComponent);
       if(remoteComponent.preferredSize) {
-        component.minWidth= remoteComponent.preferredSize.width;
-        component.minHeight = remoteComponent.preferredSize.height;
+        if(remoteComponent.preferredSize.width > 0) {
+          component.maxWidth = remoteComponent.preferredSize.width;
+        }
+        if(remoteComponent.preferredSize.height > 0) {
+         component.maxHeight = remoteComponent.preferredSize.height;
+        }
       }
       if(registerState) {
         getRemotePeerRegistry().register(remoteComponent.state);

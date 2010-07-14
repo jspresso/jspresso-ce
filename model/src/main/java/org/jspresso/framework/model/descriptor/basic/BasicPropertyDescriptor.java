@@ -108,6 +108,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     queryPropertyDescriptor.setIntegrityProcessorClassNames(null);
     queryPropertyDescriptor.writabilityGates = null;
     queryPropertyDescriptor.readabilityGates = null;
+    queryPropertyDescriptor.preferredWidth = null;
     return queryPropertyDescriptor;
   }
 
@@ -333,8 +334,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          return translationProvider.getTranslation(
-              "integrity.property.mandatory", new Object[] {
+          return translationProvider
+              .getTranslation("integrity.property.mandatory", new Object[] {
                   getI18nName(translationProvider, locale), component}, locale);
         }
 
