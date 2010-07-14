@@ -141,7 +141,7 @@
   </classpathentry>
   <classpathentry
     kind="var"
-    path="M2_REPO/commons-cli/commons-cli/1.0/commons-cli-1.0.jar">
+    path="M2_REPO/commons-cli/commons-cli/1.2/commons-cli-1.2.jar">
     <attributes>
       <attribute
         name="org.eclipse.jst.component.nondependency"
