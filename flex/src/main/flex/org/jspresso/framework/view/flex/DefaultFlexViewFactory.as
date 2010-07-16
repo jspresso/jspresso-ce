@@ -233,11 +233,13 @@ package org.jspresso.framework.view.flex {
       applyComponentStyle(component, remoteComponent);
       if(remoteComponent.preferredSize) {
         if(remoteComponent.preferredSize.width > 0) {
-          component.minWidth = remoteComponent.preferredSize.width;
+          //component.minWidth = remoteComponent.preferredSize.width;
+          component.width = remoteComponent.preferredSize.width;
           //component.maxWidth = remoteComponent.preferredSize.width;
         }
         if(remoteComponent.preferredSize.height > 0) {
-          component.minHeight = remoteComponent.preferredSize.height;
+          //component.minHeight = remoteComponent.preferredSize.height;
+          component.height = remoteComponent.preferredSize.height;
           //component.maxHeight = remoteComponent.preferredSize.height;
         }
       }
@@ -746,9 +748,7 @@ package org.jspresso.framework.view.flex {
         if(remoteBorderContainer.north != null) {
           cellComponent = createComponent(remoteBorderContainer.north);
           cell.minHeight = cellComponent.minHeight;
-          if(cellComponent.minHeight > 0) {
-            cell.maxHeight = cellComponent.minHeight;
-          } else if(cellComponent.height > 0) {
+          if(cellComponent.height > 0) {
             cell.maxHeight = cellComponent.height;
           } else if(cellComponent.maxHeight > 0) {
             cell.maxHeight = cellComponent.maxHeight;
@@ -779,9 +779,7 @@ package org.jspresso.framework.view.flex {
         cell.setStyle("horizontalAlign", "left");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
-        if(cellComponent.minWidth > 0) {
-          cell.maxWidth = cellComponent.minWidth;
-        } else if(cellComponent.width > 0) {
+        if(cellComponent.width > 0) {
           cell.maxWidth = cellComponent.width;
         } else if(cellComponent.maxWidth > 0) {
           cell.maxWidth = cellComponent.maxWidth;
@@ -817,9 +815,7 @@ package org.jspresso.framework.view.flex {
         cell.setStyle("horizontalAlign", "right");
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
-        if(cellComponent.minWidth > 0) {
-          cell.maxWidth = cellComponent.minWidth;
-        } else if(cellComponent.width > 0) {
+        if(cellComponent.width > 0) {
           cell.maxWidth = cellComponent.width;
         } else if(cellComponent.maxWidth > 0) {
           cell.maxWidth = cellComponent.maxWidth;
@@ -847,9 +843,7 @@ package org.jspresso.framework.view.flex {
         if(remoteBorderContainer.south != null) {
           cellComponent = createComponent(remoteBorderContainer.south);
           cell.minHeight = cellComponent.minHeight;
-          if(cellComponent.minHeight > 0) {
-            cell.maxHeight = cellComponent.minHeight;
-          } else if(cellComponent.height > 0) {
+          if(cellComponent.height > 0) {
             cell.maxHeight = cellComponent.height;
           } else if(cellComponent.maxHeight > 0) {
             cell.maxHeight = cellComponent.maxHeight;
@@ -1239,9 +1233,13 @@ package org.jspresso.framework.view.flex {
         splitContainer.addChild(component);
       }
       splitContainer.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-        var divider:BoxDivider = splitContainer.getDividerAt(0); 
+        var splitC:DividedBox = event.currentTarget as DividedBox;
+        var divider:BoxDivider = splitC.getDividerAt(0); 
         if(remoteSplitContainer.orientation == "VERTICAL") {
-          var height:Number = splitContainer.height;
+          var height:Number = splitC.height;
+          if(height <= 0) {
+            height = splitC.measuredHeight;
+          }
           var minY:Number = height * 4 / 10;
           if(divider.y < minY) {
             divider.y = minY;
@@ -1249,7 +1247,10 @@ package org.jspresso.framework.view.flex {
             divider.y = height - minY;
           }
         } else {
-          var width:Number = splitContainer.width;
+          var width:Number = splitC.measuredWidth;
+          if(width <= 0) {
+            width = splitC.measuredWidth;
+          }
           var minX:Number = width * 4 / 10;
           if(divider.x < minX) {
             divider.x = minX;
