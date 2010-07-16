@@ -1635,7 +1635,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : this._modelToViewFieldConverter
         }
       );
-      return htmlText;
+      var scrollPane = new qx.ui.container.Scroll();
+      scrollPane.setWidth(10000);
+      scrollPane.add(htmlText);
+      return scrollPane;
     },
 
     /**
