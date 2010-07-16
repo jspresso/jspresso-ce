@@ -806,7 +806,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       });
       
-      if(secondaryActions) {
+      if(secondaryActions && secondaryActions.length > 0) {
         var secondaryToolBar:UIComponent = _viewFactory.decorateWithSlideBar(_viewFactory.createToolBarFromActionLists(secondaryActions));
         var surroundingBox:VBox = new VBox();
         surroundingBox.percentWidth = 100.0;

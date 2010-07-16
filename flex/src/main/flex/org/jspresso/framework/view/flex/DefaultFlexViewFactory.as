@@ -233,10 +233,12 @@ package org.jspresso.framework.view.flex {
       applyComponentStyle(component, remoteComponent);
       if(remoteComponent.preferredSize) {
         if(remoteComponent.preferredSize.width > 0) {
-          component.maxWidth = remoteComponent.preferredSize.width;
+          component.minWidth = remoteComponent.preferredSize.width;
+          //component.maxWidth = remoteComponent.preferredSize.width;
         }
         if(remoteComponent.preferredSize.height > 0) {
-         component.maxHeight = remoteComponent.preferredSize.height;
+          component.minHeight = remoteComponent.preferredSize.height;
+          //component.maxHeight = remoteComponent.preferredSize.height;
         }
       }
       if(registerState) {
@@ -276,7 +278,7 @@ package org.jspresso.framework.view.flex {
       } else {
         toolBar = createDefaultToolBar(remoteComponent, component);
       }
-      if(remoteComponent.secondaryActionLists != null) {
+      if(remoteComponent.secondaryActionLists != null && remoteComponent.secondaryActionLists.length > 0) {
         secondaryToolBar = createSecondaryToolBar(remoteComponent, component);
       }
       if(toolBar || secondaryToolBar) {
