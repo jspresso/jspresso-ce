@@ -16,8 +16,8 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.qooxdoo</groupId>
-      <artifactId>qooxdoo-java-rpc</artifactId>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-qooxdoo-server</artifactId>
     </dependency>
   </dependencies>
 </project>
