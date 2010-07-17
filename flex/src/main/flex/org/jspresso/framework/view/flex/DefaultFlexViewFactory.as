@@ -749,18 +749,20 @@ package org.jspresso.framework.view.flex {
           cellComponent = createComponent(remoteBorderContainer.north);
           cell.minHeight = cellComponent.minHeight;
           if(cellComponent.height > 0) {
-            cell.maxHeight = cellComponent.height;
-          } else if(cellComponent.maxHeight > 0) {
+            cell.height = cellComponent.height;
+            cell.setStyle("paddingLeft",2);
+            cell.setStyle("paddingRight",2);
+            cell.height += 4;
+          }
+          if(cellComponent.maxHeight > 0) {
             cell.maxHeight = cellComponent.maxHeight;
+            cell.setStyle("paddingLeft",2);
+            cell.setStyle("paddingRight",2);
+            cell.maxHeight += 4;
           }
           cellComponent.percentWidth = 100.0;
           cellComponent.percentHeight = 100.0;
           cell.addChild(cellComponent);
-        }
-        if(cell.maxHeight > 0) {
-          cell.setStyle("paddingLeft",2);
-          cell.setStyle("paddingRight",2);
-          cell.maxHeight += 4;
         }
         row.addChild(cell);
       }
@@ -780,17 +782,18 @@ package org.jspresso.framework.view.flex {
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
         if(cellComponent.width > 0) {
-          cell.maxWidth = cellComponent.width;
-        } else if(cellComponent.maxWidth > 0) {
+          cell.width = cellComponent.width;
+          cell.setStyle("paddingLeft",2);
+          cell.width += 2;
+        }
+        if(cellComponent.maxWidth > 0) {
           cell.maxWidth = cellComponent.maxWidth;
+          cell.setStyle("paddingLeft",2);
+          cell.maxWidth += 2;
         }
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
-        if(cell.maxWidth > 0) {
-          cell.setStyle("paddingLeft",2);
-          cell.maxWidth += 2;
-        }
         row.addChild(cell);
       }
   
@@ -816,17 +819,18 @@ package org.jspresso.framework.view.flex {
         cell.percentHeight = 100.0;
         cell.minWidth = cellComponent.minWidth;
         if(cellComponent.width > 0) {
-          cell.maxWidth = cellComponent.width;
-        } else if(cellComponent.maxWidth > 0) {
+          cell.width = cellComponent.width;
+          cell.setStyle("paddingRight",2);
+          cell.width += 2;
+        }
+        if(cellComponent.maxWidth > 0) {
           cell.maxWidth = cellComponent.maxWidth;
+          cell.setStyle("paddingRight",2);
+          cell.maxWidth += 2;
         }
         cellComponent.percentWidth = 100.0;
         cellComponent.percentHeight = 100.0;
         cell.addChild(cellComponent);
-        if(cell.maxWidth > 0) {
-          cell.setStyle("paddingRight",2);
-          cell.maxWidth += 2;
-        }
         row.addChild(cell);
       }
       
@@ -844,18 +848,20 @@ package org.jspresso.framework.view.flex {
           cellComponent = createComponent(remoteBorderContainer.south);
           cell.minHeight = cellComponent.minHeight;
           if(cellComponent.height > 0) {
-            cell.maxHeight = cellComponent.height;
-          } else if(cellComponent.maxHeight > 0) {
+            cell.height = cellComponent.height;
+            cell.setStyle("paddingLeft",2);
+            cell.setStyle("paddingRight",2);
+            cell.height += 4;
+          }
+          if(cellComponent.maxHeight > 0) {
             cell.maxHeight = cellComponent.maxHeight;
+            cell.setStyle("paddingLeft",2);
+            cell.setStyle("paddingRight",2);
+            cell.maxHeight += 4;
           }
           cellComponent.percentWidth = 100.0;
           cellComponent.percentHeight = 100.0;
           cell.addChild(cellComponent);
-        }
-        if(cell.maxHeight > 0) {
-          cell.setStyle("paddingLeft",2);
-          cell.setStyle("paddingRight",2);
-          cell.maxHeight += 4;
         }
         row.addChild(cell);
       }
