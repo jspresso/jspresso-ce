@@ -43,6 +43,7 @@ package org.jspresso.framework.view.flex {
     }
 
     override protected function collectionChangeHandler(event:Event):void {
+      super.collectionChangeHandler(event);
       if(selectionTrackingEnabled) {
         if(event is CollectionEvent) {
           var collEvent:CollectionEvent = event as CollectionEvent;
@@ -61,12 +62,10 @@ package org.jspresso.framework.view.flex {
                       }
                     }
                     if(!ArrayUtil.areUnorderedArraysEqual(selectedItems, newlySelectedItems)) {
-                      selectedItems = newlySelectedItems;
                       if(newlySelectedItems.length > 0 && !isItemOpen(changedState)) {
-                        var newOpenItems:Array = new Array().concat(openItems);
-                        newOpenItems.push(changedState);
-                        openItems = newOpenItems;
+                        expandItem(changedState, true);
                       }
+                      selectedItems = newlySelectedItems;
                     }
                   }
                 }
@@ -75,7 +74,6 @@ package org.jspresso.framework.view.flex {
           }
         }
       }
-      super.collectionChangeHandler(event);
     }
     
     public function fixListeners(nestedCollection:ICollectionView):void {
