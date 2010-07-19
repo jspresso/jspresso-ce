@@ -1219,9 +1219,7 @@ package org.jspresso.framework.view.flex {
         component = createComponent(remoteSplitContainer.leftTop);
         if(remoteSplitContainer.orientation == "VERTICAL") {
           component.percentWidth = 100.0;
-          //component.percentHeight = 50.0;
         } else {
-          //component.percentWidth = 50.0;
           component.percentHeight = 100.0;
         }
         splitContainer.addChild(component);
@@ -1230,9 +1228,7 @@ package org.jspresso.framework.view.flex {
         component = createComponent(remoteSplitContainer.rightBottom);
         if(remoteSplitContainer.orientation == "VERTICAL") {
           component.percentWidth = 100.0;
-          //component.percentHeight = 50.0;
         } else {
-          //component.percentWidth = 50.0;
           component.percentHeight = 100.0;
         }
 
@@ -1240,28 +1236,31 @@ package org.jspresso.framework.view.flex {
       }
       splitContainer.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
         var splitC:DividedBox = event.currentTarget as DividedBox;
-        var divider:BoxDivider = splitC.getDividerAt(0); 
-        if(remoteSplitContainer.orientation == "VERTICAL") {
-          var height:Number = splitC.height;
-          if(height <= 0) {
-            height = splitC.measuredHeight;
-          }
-          var minY:Number = height * 4 / 10;
-          if(divider.y < minY) {
-            divider.y = minY;
-          } else if (divider.y > (height - minY)) {
-            divider.y = height - minY;
-          }
-        } else {
-          var width:Number = splitC.measuredWidth;
-          if(width <= 0) {
-            width = splitC.measuredWidth;
-          }
-          var minX:Number = width * 4 / 10;
-          if(divider.x < minX) {
-            divider.x = minX;
-          } else if (divider.x > (width - minX)) {
-            divider.x = width - minX;
+        var leftTop:UIComponent = (splitC.getChildAt(0) as UIComponent);
+        var rightBottom:UIComponent = (splitC.getChildAt(1) as UIComponent);
+        if(leftTop && rightBottom) {
+          if(remoteSplitContainer.orientation == "VERTICAL") {
+            if(leftTop.height > 0) {
+              leftTop.percentHeight = leftTop.height;
+            } else {
+              leftTop.percentHeight = leftTop.measuredHeight;
+            }
+            if(rightBottom.height > 0) {
+              rightBottom.percentHeight = rightBottom.height;
+            } else {
+              rightBottom.percentHeight = rightBottom.measuredHeight;
+            }
+          } else {
+            if(leftTop.width > 0) {
+              leftTop.percentWidth = leftTop.width;
+            } else {
+              leftTop.percentWidth = leftTop.measuredWidth;
+            }
+            if(rightBottom.width > 0) {
+              rightBottom.percentWidth = rightBottom.width;
+            } else {
+              rightBottom.percentWidth = rightBottom.measuredWidth;
+            }
           }
         }
       });
