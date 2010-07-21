@@ -30,6 +30,10 @@
 			<artifactId>foxtrot</artifactId>
 		</dependency>
     <dependency>
+      <groupId>org.jvnet.substance</groupId>
+      <artifactId>substance</artifactId>
+    </dependency>
+    <dependency>
       <groupId>chrriis</groupId>
       <artifactId>dj-nativeswing</artifactId>
     </dependency>
