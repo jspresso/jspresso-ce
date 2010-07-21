@@ -16,6 +16,10 @@
     </dependency>
     <dependency>
       <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-app-template-ulc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
       <artifactId>jspresso-app-launch-ulc</artifactId>
     </dependency>
   </dependencies>
