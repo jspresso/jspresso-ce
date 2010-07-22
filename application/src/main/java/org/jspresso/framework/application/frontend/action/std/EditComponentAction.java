@@ -18,19 +18,11 @@
  */
 package org.jspresso.framework.application.frontend.action.std;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.action.FrontendAction;
-import org.jspresso.framework.application.frontend.action.ModalDialogAction;
-import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
-import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This action pulls a model out of the context (action parameter), creates a
@@ -50,49 +42,11 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @param <G>
  *          the actual action type used.
  */
-public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
+public class EditComponentAction<E, F, G> extends
+    AbstractEditComponentAction<E, F, G> {
 
   private IDisplayableAction cancelAction;
   private IDisplayableAction okAction;
-  private IViewDescriptor    viewDescriptor;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
-
-    Object component = getComponentToEdit(context);
-
-    if (okAction != null) {
-      actions.add(okAction);
-    }
-    if (cancelAction != null) {
-      actions.add(cancelAction);
-    }
-    context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
-
-    IView<E> componentView = getViewFactory(context).createView(
-        getViewDescriptor(context), actionHandler, getLocale(context));
-    String dialogTitle = getI18nName(getTranslationProvider(context),
-        getLocale(context));
-    if (dialogTitle != null && dialogTitle.length() > 0) {
-      context.put(ModalDialogAction.DIALOG_TITLE, dialogTitle);
-    }
-    context.put(ModalDialogAction.DIALOG_VIEW, componentView);
-
-    IValueConnector componentConnector = getBackendController(context)
-        .createModelConnector(ACTION_MODEL_NAME,
-            getViewDescriptor(context).getModelDescriptor());
-    componentConnector.setConnectorValue(component);
-
-    getMvcBinder(context)
-        .bind(componentView.getConnector(), componentConnector);
-
-    return super.execute(actionHandler, context);
-  }
 
   /**
    * Configures the action to be installed in the dialog when the user cancels
@@ -103,6 +57,16 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setCancelAction(IDisplayableAction cancelAction) {
     this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Gets the cancelAction.
+   * 
+   * @return the cancelAction.
+   */
+  @Override
+  protected IDisplayableAction getCancelAction() {
+    return cancelAction;
   }
 
   /**
@@ -130,14 +94,13 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
-   * Configures the view descriptor to be used to create the component editing
-   * view that will be installed in the dialog.
+   * Gets the okAction.
    * 
-   * @param viewDescriptor
-   *          the viewDescriptor to set.
+   * @return the okAction.
    */
-  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
-    this.viewDescriptor = viewDescriptor;
+  @Override
+  protected IDisplayableAction getOkAction() {
+    return okAction;
   }
 
   /**
@@ -147,6 +110,7 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the action context.
    * @return the model.
    */
+  @Override
   protected Object getComponentToEdit(Map<String, Object> context) {
     Object model = getActionParameter(context);
     if (model instanceof Collection<?>) {
@@ -156,16 +120,5 @@ public class EditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
       return ((Collection<?>) model).iterator().next();
     }
     return model;
-  }
-
-  /**
-   * Gets the viewDescriptor.
-   * 
-   * @param context
-   *          the action context.
-   * @return the viewDescriptor.
-   */
-  protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {
-    return viewDescriptor;
   }
 }

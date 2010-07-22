@@ -259,6 +259,11 @@
     </property>
   </bean>
 
+  <bean id="editSelectedComponentAction" class="org.jspresso.framework.application.frontend.action.std.EditSelectedComponentAction">
+    <property name="nextAction" ref="modalDialogAction" />
+    <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/view-48x48.png"/>
+  </bean>
+
   <bean id="editComponentAction" class="org.jspresso.framework.application.frontend.action.std.EditComponentAction">
     <property name="cancelAction" ref="cancelDialogFrontAction" />
     <property name="nextAction" ref="modalDialogAction" />

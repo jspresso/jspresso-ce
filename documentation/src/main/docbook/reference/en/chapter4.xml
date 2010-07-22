@@ -360,6 +360,15 @@
           </row>
 
           <row>
+            <entry>editSelectedComponentAction</entry>
+
+            <entry>front.selected.edit</entry>
+
+            <entry>Opens a dialog box to edit the selected entity/component in an
+            arbitrary view.</entry>
+          </row>
+
+          <row>
             <entry>editComponentAction</entry>
 
             <entry>front.component.edit</entry>
