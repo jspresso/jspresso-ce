@@ -229,11 +229,13 @@ public class DefaultSwingController extends
           workspaceView.setOneTouchExpandable(true);
           workspaceView.add(workspaceNavigator.getPeer());
           workspaceView.add(moduleAreaView.getPeer());
-          workspaceInternalFrame = createJInternalFrame(workspaceView,
+          workspaceInternalFrame = createJInternalFrame(
+              workspaceView,
               workspaceNavigatorViewDescriptor.getI18nName(
-                  getTranslationProvider(), getLocale()), getIconFactory()
-                  .getIcon(workspaceNavigatorViewDescriptor.getIconImageURL(),
-                      getIconFactory().getSmallIconSize()));
+                  getTranslationProvider(), getLocale()),
+              getIconFactory().getIcon(
+                  workspaceNavigatorViewDescriptor.getIconImageURL(),
+                  getIconFactory().getSmallIconSize()));
           workspaceInternalFrame
               .addInternalFrameListener(new WorkspaceInternalFrameListener(
                   workspaceName));
@@ -325,42 +327,41 @@ public class DefaultSwingController extends
     }
     Component sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper
-              .emphasis(HtmlHelper.escapeForHTML(ex.getMessage()))),
+      JOptionPane.showMessageDialog(sourceComponent,
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
+              .getMessage()))),
           getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+          JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
               .escapeForHTML(((BusinessException) ex).getI18nMessage(
                   getTranslationProvider(), getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+          JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof DataIntegrityViolationException) {
       JOptionPane
           .showMessageDialog(
               sourceComponent,
-              HtmlHelper
-                  .toHtml(HtmlHelper
-                      .emphasis(HtmlHelper
-                          .escapeForHTML(getTranslationProvider()
-                              .getTranslation(
-                                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                                  getLocale())))), getTranslationProvider()
+              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+                  .escapeForHTML(getTranslationProvider()
+                      .getTranslation(
+                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                          getLocale())))), getTranslationProvider()
                   .getTranslation("error", getLocale()),
-              JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-                  getIconFactory().getLargeIconSize()));
+              JOptionPane.ERROR_MESSAGE,
+              getIconFactory()
+                  .getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
               .escapeForHTML(getTranslationProvider().getTranslation(
                   "concurrency.error.description", getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+          JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else {
       ex.printStackTrace();
       JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,
@@ -390,10 +391,13 @@ public class DefaultSwingController extends
     SwingUtilities.invokeLater(new Runnable() {
 
       public void run() {
-        JOptionPane.showMessageDialog(SwingUtil
-            .getWindowOrInternalFrame(sourceComponent), message, title,
-            JOptionPane.INFORMATION_MESSAGE, getIconFactory().getIcon(
-                iconImageUrl, getIconFactory().getLargeIconSize()));
+        JOptionPane.showMessageDialog(
+            SwingUtil.getWindowOrInternalFrame(sourceComponent),
+            message,
+            title,
+            JOptionPane.INFORMATION_MESSAGE,
+            getIconFactory().getIcon(iconImageUrl,
+                getIconFactory().getLargeIconSize()));
       }
     });
   }
@@ -447,9 +451,12 @@ public class DefaultSwingController extends
     SwingUtilities.invokeLater(new Runnable() {
 
       public void run() {
-        int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-            .getWindowOrInternalFrame(sourceComponent), message, title,
-            JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+        int selectedOption = JOptionPane.showConfirmDialog(
+            SwingUtil.getWindowOrInternalFrame(sourceComponent),
+            message,
+            title,
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.WARNING_MESSAGE,
             getIconFactory().getIcon(iconImageUrl,
                 getIconFactory().getLargeIconSize()));
         IAction nextAction = null;
@@ -475,9 +482,12 @@ public class DefaultSwingController extends
     SwingUtilities.invokeLater(new Runnable() {
 
       public void run() {
-        int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-            .getWindowOrInternalFrame(sourceComponent), message, title,
-            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+        int selectedOption = JOptionPane.showConfirmDialog(
+            SwingUtil.getWindowOrInternalFrame(sourceComponent),
+            message,
+            title,
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
             getIconFactory().getIcon(iconImageUrl,
                 getIconFactory().getLargeIconSize()));
         IAction nextAction = null;
@@ -504,9 +514,12 @@ public class DefaultSwingController extends
     SwingUtilities.invokeLater(new Runnable() {
 
       public void run() {
-        int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-            .getWindowOrInternalFrame(sourceComponent), message, title,
-            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+        int selectedOption = JOptionPane.showConfirmDialog(
+            SwingUtil.getWindowOrInternalFrame(sourceComponent),
+            message,
+            title,
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
             getIconFactory().getIcon(iconImageUrl,
                 getIconFactory().getLargeIconSize()));
         IAction nextAction = null;
@@ -536,8 +549,8 @@ public class DefaultSwingController extends
       waitTimer = new WaitCursorTimer(500);
       waitTimer.setDaemon(true);
       waitTimer.start();
-      Toolkit.getDefaultToolkit().getSystemEventQueue().push(
-          new WaitCursorEventQueue(500));
+      Toolkit.getDefaultToolkit().getSystemEventQueue()
+          .push(new WaitCursorEventQueue(500));
       initLoginProcess();
       NativeInterface.open();
       NativeInterface.runEventPump();
@@ -846,12 +859,20 @@ public class DefaultSwingController extends
     buttonBox.add(loginButton);
     dialog.getRootPane().setDefaultButton(loginButton);
 
+    JButton exitButton = new JButton();
+    exitButton.setAction(getViewFactory().getActionFactory().createAction(
+        getExitAction(), this, null, getLocale()));
+    exitButton.setIcon(getIconFactory().getCancelIcon(
+        getIconFactory().getSmallIconSize()));
+    buttonBox.add(exitButton);
+
     JPanel actionPanel = new JPanel(new BorderLayout());
     actionPanel.add(buttonBox, BorderLayout.EAST);
 
     JPanel mainPanel = new JPanel(new BorderLayout());
-    mainPanel.add(new JLabel(getTranslationProvider().getTranslation(
-        LoginUtils.CRED_MESSAGE, getLocale())), BorderLayout.NORTH);
+    mainPanel.add(
+        new JLabel(getTranslationProvider().getTranslation(
+            LoginUtils.CRED_MESSAGE, getLocale())), BorderLayout.NORTH);
     mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
     mainPanel.add(actionPanel, BorderLayout.SOUTH);
     dialog.add(mainPanel);

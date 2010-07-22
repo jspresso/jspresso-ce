@@ -116,8 +116,8 @@ public class DefaultUlcController extends
       Dimension dimension, @SuppressWarnings("unused") boolean reuseCurrent) {
     StringBuffer flashVars = new StringBuffer();
     for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
-      flashVars.append("&").append(flashVar.getKey()).append("=").append(
-          flashVar.getValue());
+      flashVars.append("&").append(flashVar.getKey()).append("=")
+          .append(flashVar.getValue());
     }
     int width = 600;
     int height = 600;
@@ -150,8 +150,8 @@ public class DefaultUlcController extends
         + "\" name=\"Column3D\" type=\"application/x-shockwave-flash\" "
         + "pluginspage=\"http://www.macromedia.com/go/getflashplayer\" />"
         + "</object>" + "</body>" + "</html>";
-    IResource resource = new MemoryResource(null, "text/html", htmlText
-        .getBytes());
+    IResource resource = new MemoryResource(null, "text/html",
+        htmlText.getBytes());
     String resourceId = ResourceManager.getInstance().register(resource);
     try {
       DocumentHelper.showDocument(resourceId);
@@ -247,10 +247,12 @@ public class DefaultUlcController extends
           workspaceView.add(workspaceNavigator.getPeer());
           workspaceView.add(moduleAreaView.getPeer());
           workspaceInternalFrame = createULCExtendedInternalFrame(
-              workspaceView, workspaceNavigatorViewDescriptor.getI18nName(
-                  getTranslationProvider(), getLocale()), getIconFactory()
-                  .getIcon(workspaceNavigatorViewDescriptor.getIconImageURL(),
-                      getIconFactory().getSmallIconSize()));
+              workspaceView,
+              workspaceNavigatorViewDescriptor.getI18nName(
+                  getTranslationProvider(), getLocale()),
+              getIconFactory().getIcon(
+                  workspaceNavigatorViewDescriptor.getIconImageURL(),
+                  getIconFactory().getSmallIconSize()));
           workspaceInternalFrame
               .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
                   workspaceName));
@@ -317,15 +319,13 @@ public class DefaultUlcController extends
       ULCAlert alert = new ULCAlert(
           UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
-          HtmlHelper
-              .toHtml(HtmlHelper
-                  .emphasis(HtmlHelper
-                      .escapeForHTML(getTranslationProvider()
-                          .getTranslation(
-                              refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                              getLocale())))), getTranslationProvider()
-              .getTranslation("ok", getLocale()), null, null, getIconFactory()
-              .getErrorIcon(getIconFactory().getLargeIconSize()));
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+              .escapeForHTML(getTranslationProvider()
+                  .getTranslation(
+                      refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                      getLocale())))), getTranslationProvider().getTranslation(
+              "ok", getLocale()), null, null, getIconFactory().getErrorIcon(
+              getIconFactory().getLargeIconSize()));
       alert.show();
     } else if (ex instanceof ConcurrencyFailureException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
@@ -590,8 +590,8 @@ public class DefaultUlcController extends
           locale);
       optionReverseDictionary.put(translatedThirdOption, thirdAction);
     }
-    final ULCAlert alert = new ULCAlert(UlcUtil
-        .getVisibleWindow(sourceComponent), title, message,
+    final ULCAlert alert = new ULCAlert(
+        UlcUtil.getVisibleWindow(sourceComponent), title, message,
         translatedFirstOption, translatedSecondOption, translatedThirdOption,
         getIconFactory().getIcon(iconImageUrl,
             getIconFactory().getLargeIconSize()));
@@ -658,19 +658,27 @@ public class DefaultUlcController extends
     buttonBox.add(loginButton);
     dialog.getRootPane().setDefaultButton(loginButton);
 
+    ULCButton exitButton = new ULCButton();
+    exitButton.setAction(getViewFactory().getActionFactory().createAction(
+        getExitAction(), this, null, getLocale()));
+    exitButton.setIcon(getIconFactory().getCancelIcon(
+        getIconFactory().getSmallIconSize()));
+    buttonBox.add(exitButton);
+
     ULCBorderLayoutPane actionPanel = new ULCBorderLayoutPane();
     actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
 
     ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
-    mainPanel.add(new ULCLabel(getTranslationProvider().getTranslation(
-        LoginUtils.CRED_MESSAGE, getLocale())), ULCBorderLayoutPane.NORTH);
+    mainPanel.add(
+        new ULCLabel(getTranslationProvider().getTranslation(
+            LoginUtils.CRED_MESSAGE, getLocale())), ULCBorderLayoutPane.NORTH);
     mainPanel.add(loginView.getPeer(), ULCBorderLayoutPane.CENTER);
     mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
     dialog.add(mainPanel);
 
     int screenRes = ClientContext.getScreenResolution();
     dialog.setSize(new com.ulcjava.base.application.util.Dimension(
-        3 * screenRes, screenRes * 3 / 2));
+        screenRes * 7 / 2, screenRes * 3 / 2));
     dialog.pack();
     UlcUtil.centerInParent(dialog);
     dialog.setVisible(true);
