@@ -93,6 +93,7 @@
     <gmaven-plugin.version>1.0</gmaven-plugin.version>
     <jetty-plugin.version>6.1.10</jetty-plugin.version>
     <info-reports-plugin.version>2.1.1</info-reports-plugin.version>
+    <appassembler-plugin.version>1.0</appassembler-plugin.version>
   </properties>
   <distributionManagement>
     <repository>
@@ -983,6 +984,11 @@
           <groupId>org.mortbay.jetty</groupId>
           <artifactId>maven-jetty-plugin</artifactId>
           <version>${jetty-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>appassembler-maven-plugin</artifactId>
+          <version>${appassembler-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

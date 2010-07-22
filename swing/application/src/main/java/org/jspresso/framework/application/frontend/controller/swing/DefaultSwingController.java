@@ -579,7 +579,9 @@ public class DefaultSwingController extends
     applicationToolBar.setRollover(true);
     applicationToolBar.setFloatable(false);
 
-    applicationToolBar.add(createComboButton(createWorkspaceActionList()));
+    if (getWorkspaceNames() != null && !getWorkspaceNames().isEmpty()) {
+      applicationToolBar.add(createComboButton(createWorkspaceActionList()));
+    }
     applicationToolBar.addSeparator();
     if (getNavigationActions() != null) {
       for (ActionList actionList : getNavigationActions().getActionLists()) {
