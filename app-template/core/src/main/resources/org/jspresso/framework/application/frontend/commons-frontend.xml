@@ -129,11 +129,15 @@
     <property name="findAction" ref="lovFindFrontAction" />
     <property name="nextAction" ref="modalDialogAction" />
   </bean>
+  
+  <bean id="lovFindBackAction" parent="queryEntitiesBackAction">
+    <property name="mergeMode"><null/></property>
+  </bean>
 
   <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.std.FindAction">
     <property name="name" value="find.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/find-48x48.png" />
-    <property name="wrappedAction" ref="queryEntitiesBackAction" />
+    <property name="wrappedAction" ref="lovFindBackAction"/>
   </bean>
 
   <bean id="nextLovPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction">

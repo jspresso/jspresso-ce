@@ -72,10 +72,20 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   private ICriteriaFactory       criteriaFactory;
   private ICriteriaRefiner       criteriaRefiner;
   private IQueryComponentRefiner queryComponentRefiner;
+  private EMergeMode             mergeMode;
 
   private static final String    CRITERIA_FACTORY  = "CRITERIA_FACTORY";
   private static final String    CRITERIA_REFINER  = "CRITERIA_REFINER";
   private static final String    COMPONENT_REFINER = "COMPONENT_REFINER";
+
+  
+  /**
+   * Constructs a new <code>QueryEntitiesAction</code> instance.
+   * 
+   */
+  public QueryEntitiesAction() {
+    mergeMode = EMergeMode.MERGE_CLEAN_LAZY;
+  }
 
   /**
    * {@inheritDoc}
@@ -159,8 +169,12 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         ite.remove();
       }
     }
-    queryComponent.setQueriedComponents(controller.merge(queriedEntities,
-        EMergeMode.MERGE_KEEP));
+    if (mergeMode != null) {
+      queryComponent.setQueriedComponents(controller.merge(queriedEntities,
+          getMergeMode()));
+    } else {
+      queryComponent.setQueriedComponents(queriedEntities);
+    }
     return super.execute(actionHandler, context);
   }
 
@@ -220,5 +234,29 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     IQueryComponent queryComponent = (IQueryComponent) context
         .get(IQueryComponent.QUERY_COMPONENT);
     return queryComponent;
+  }
+
+  /**
+   * Gets the mergeMode.
+   * 
+   * @return the mergeMode.
+   */
+  protected EMergeMode getMergeMode() {
+    return mergeMode;
+  }
+
+  /**
+   * Sets the mergeMode to use when assigning the queried components to the
+   * filter query component. A <code>null</code> value means that the queried
+   * components will assigned without being merged at all. In that case, the
+   * merging has to be performed later on in the action chain. Forgetting to do
+   * so will lead to unexpected results. Default value is
+   * <code>EMergeMode.CLEAN_LAZY</code>.
+   * 
+   * @param mergeMode
+   *          the mergeMode to set.
+   */
+  public void setMergeMode(EMergeMode mergeMode) {
+    this.mergeMode = mergeMode;
   }
 }

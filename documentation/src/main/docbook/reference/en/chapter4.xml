@@ -205,6 +205,14 @@
           </row>
 
           <row>
+            <entry>lovFindBackAction</entry>
+
+            <entry>back.lov.find</entry>
+
+            <entry>Standard QBE find action for "list of values".</entry>
+          </row>
+
+          <row>
             <entry>abstractChooseActionAction</entry>
 
             <entry>front.action.choose</entry>

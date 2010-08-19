@@ -215,8 +215,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
             module);
         if (result != null) {
           int moduleModelIndex = ((Integer) result[1]).intValue();
-          ((ICollectionConnector) result[0]).setSelectedIndices(
-              new int[] {moduleModelIndex}, moduleModelIndex);
+          ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
+            moduleModelIndex
+          }, moduleModelIndex);
         }
       }
     } finally {
@@ -289,8 +290,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void displayWorkspace(String workspaceName) {
     if (workspaceName != null) {
-      getBackendController().checkWorkspaceAccess(workspaceName);
       Workspace workspace = getWorkspace(workspaceName);
+      checkAccess(workspace);
       if (!workspace.isStarted()) {
         if (workspace.getStartupAction() != null) {
           Map<String, Object> actionContext = getInitialActionContext();
@@ -429,8 +430,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
-    initialActionContext.put(ActionContextConstants.MODULE, selectedModules
-        .get(getSelectedWorkspaceName()));
+    initialActionContext.put(ActionContextConstants.MODULE,
+        selectedModules.get(getSelectedWorkspaceName()));
     return initialActionContext;
   }
 
@@ -510,7 +511,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public List<String> getWorkspaceNames() {
     if (workspaces != null) {
-      return new ArrayList<String>(workspaces.keySet());
+      List<String> workspaceNames = new ArrayList<String>();
+      for (Map.Entry<String, Workspace> wsEntry : workspaces.entrySet()) {
+        if (isAccessGranted(wsEntry.getValue())) {
+          workspaceNames.add(wsEntry.getKey());
+        }
+      }
+      return workspaceNames;
     }
     return Collections.<String> emptyList();
   }
@@ -1070,8 +1077,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     getBackendController().getApplicationSession().setSubject(subject);
     String userPreferredLanguageCode = (String) getBackendController()
-        .getApplicationSession().getPrincipal().getCustomProperty(
-            UserPrincipal.LANGUAGE_PROPERTY);
+        .getApplicationSession().getPrincipal()
+        .getCustomProperty(UserPrincipal.LANGUAGE_PROPERTY);
     if (userPreferredLanguageCode != null) {
       getBackendController().getApplicationSession().setLocale(
           new Locale(userPreferredLanguageCode));
@@ -1203,8 +1210,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       if (moduleModelIndex >= 0) {
-        result = new Object[] {childCollectionConnector,
-            new Integer(moduleModelIndex)};
+        result = new Object[] {
+            childCollectionConnector, new Integer(moduleModelIndex)
+        };
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
       }

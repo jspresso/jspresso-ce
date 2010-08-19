@@ -53,7 +53,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
-import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
@@ -119,14 +118,6 @@ public abstract class AbstractBackendController extends AbstractController
           "Cannot begin a new unit of work. Another one is already active.");
     }
     unitOfWork.begin();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void checkWorkspaceAccess(String workspaceName) {
-    checkAccess((ISecurable) getWorkspaceConnector(workspaceName)
-        .getConnectorValue());
   }
 
   /**
@@ -989,13 +980,15 @@ public abstract class AbstractBackendController extends AbstractController
         return registeredEntity;
       }
       alreadyMerged.put(entity, registeredEntity);
-      Map<String, Object> sessionDirtyProperties = dirtRecorder
-          .getChangedProperties(registeredEntity);
-      boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
-          .isEmpty()));
-      if (mergeMode != EMergeMode.MERGE_CLEAN_LAZY
-          || (dirtyInSession || (!registeredEntity.getVersion().equals(
-              entity.getVersion()))) || newlyRegistered) {
+      // Map<String, Object> sessionDirtyProperties = dirtRecorder
+      // .getChangedProperties(registeredEntity);
+      // boolean dirtyInSession = (sessionDirtyProperties != null &&
+      // (!sessionDirtyProperties
+      // .isEmpty()));
+      if (newlyRegistered
+          || mergeMode != EMergeMode.MERGE_CLEAN_LAZY
+          || /* (dirtyInSession || ( */!registeredEntity.getVersion().equals(
+              entity.getVersion())/* )) */) {
         if (mergeMode == EMergeMode.MERGE_CLEAN_EAGER
             || mergeMode == EMergeMode.MERGE_CLEAN_LAZY) {
           cleanDirtyProperties(registeredEntity);

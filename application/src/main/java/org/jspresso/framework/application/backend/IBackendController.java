@@ -55,15 +55,6 @@ public interface IBackendController extends IController,
   void beginUnitOfWork();
 
   /**
-   * Checks authorization for workspace access. It shoud throw a
-   * SecurityException whenever access should not be granted.
-   * 
-   * @param workspaceName
-   *          the id of the workspace access to check.
-   */
-  void checkWorkspaceAccess(String workspaceName);
-
-  /**
    * Registers an entity (actually a clone of it) and all its graph as taking
    * part in the unit of work.
    * 

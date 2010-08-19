@@ -614,8 +614,8 @@ public class DefaultRemoteController extends
         registerCommand(errorMessageCommand);
       }
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
-      displayWorkspace(((RemoteWorkspaceDisplayCommand) command)
-          .getWorkspaceName(), false);
+      displayWorkspace(
+          ((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
     } else {
       IRemotePeer targetPeer = null;
       if (command.getAutomationId() != null) {
@@ -645,9 +645,9 @@ public class DefaultRemoteController extends
           selectable = (ISelectable) targetPeer;
         }
         if (selectable != null) {
-          selectable.setSelectedIndices(((RemoteSelectionCommand) command)
-              .getSelectedIndices(), ((RemoteSelectionCommand) command)
-              .getLeadingIndex());
+          selectable.setSelectedIndices(
+              ((RemoteSelectionCommand) command).getSelectedIndices(),
+              ((RemoteSelectionCommand) command).getLeadingIndex());
         }
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
@@ -673,8 +673,8 @@ public class DefaultRemoteController extends
         if (orderingProperties != null) {
           for (Map.Entry<String, String> orderingProperty : orderingProperties
               .entrySet()) {
-            typedOrderingProperties.put(orderingProperty.getKey(), ESort
-                .valueOf(orderingProperty.getValue()));
+            typedOrderingProperties.put(orderingProperty.getKey(),
+                ESort.valueOf(orderingProperty.getValue()));
           }
         }
         Map<String, Object> context = new HashMap<String, Object>();
