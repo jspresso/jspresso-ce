@@ -33,6 +33,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -105,7 +106,27 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   public boolean areChildrenWritable() {
     // if not set to true, computed reference properties cannot have their
     // nested properties editable unless they are made delegateWritable= true.
-    return true /* isWritable() */;
+    // return true /* isWritable() */;
+    if (getModelDescriptor() instanceof IReferencePropertyDescriptor<?>
+        && isInlineComponentReference((IReferencePropertyDescriptor<?>) getModelDescriptor())) {
+      return isWritable();
+    }
+    return true;
+  }
+
+  /**
+   * Gets wether this reference descriptor points to an inline component.
+   * 
+   * @param propertyDescriptor
+   *          the reference descriptor to test.
+   * @return true if this reference descriptor points to an inline component.
+   */
+  protected boolean isInlineComponentReference(
+      IReferencePropertyDescriptor<?> propertyDescriptor) {
+    return !IEntity.class.isAssignableFrom(propertyDescriptor
+        .getReferencedDescriptor().getComponentContract())
+        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract()
+        && !propertyDescriptor.isComputed();
   }
 
   /**
@@ -251,7 +272,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public void readabilityChange() {
-    super.writabilityChange();
+    super.readabilityChange();
     for (String key : getChildConnectorKeys()) {
       getChildConnector(key).readabilityChange();
     }
