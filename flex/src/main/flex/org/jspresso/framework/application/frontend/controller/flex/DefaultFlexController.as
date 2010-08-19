@@ -24,6 +24,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import flash.net.navigateToURL;
   import flash.net.registerClassAlias;
   
+  import flex.utils.ui.resize.ResizablePanel;
+  
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
   import mx.collections.IList;
@@ -986,9 +988,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       dialogBox.addChild(buttonBox);
 
-      var dialog:Panel;
+      var dialog:ResizablePanel;
       if(useCurrent && _dialogStack && _dialogStack.length > 1) {
-        dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as Panel;
+        dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as ResizablePanel;
         dialog.removeAllChildren();
       } else {
         var dialogParent:DisplayObject;
@@ -997,7 +999,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
         } else {
           dialogParent = Application.application as DisplayObject;
         }
-        dialog = PopUpManager.createPopUp(dialogParent,Panel,true) as Panel;
+        dialog = PopUpManager.createPopUp(dialogParent,ResizablePanel,true) as ResizablePanel;
+        dialog.resizable = true;
         dialog.setStyle("borderAlpha", 1);
         dialog.setStyle("borderThicknessLeft", 5);
         dialog.setStyle("borderThicknessRight", 5);

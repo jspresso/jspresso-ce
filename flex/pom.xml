@@ -33,6 +33,11 @@
       <type>swc</type>
       <classifier>flex3</classifier>
     </dependency>
+    <dependency>
+      <groupId>resizecontainers</groupId>
+      <artifactId>resizecontainers</artifactId>
+      <type>swc</type>
+    </dependency>
   </dependencies>
 
   <build>
