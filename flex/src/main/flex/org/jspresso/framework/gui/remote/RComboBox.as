@@ -22,6 +22,7 @@ package org.jspresso.framework.gui.remote {
         private var _icons:Array;
         private var _translations:Array;
         private var _values:Array;
+        private var _readOnly:Boolean;
 
         public function RComboBox() {
           //default constructor.
@@ -47,5 +48,13 @@ package org.jspresso.framework.gui.remote {
         public function get values():Array {
             return _values;
         }
+
+        public function get readOnly():Boolean {
+          return _readOnly;
+        }
+        public function set readOnly(value:Boolean):void {
+          _readOnly = value;
+        }
+
     }
 }
