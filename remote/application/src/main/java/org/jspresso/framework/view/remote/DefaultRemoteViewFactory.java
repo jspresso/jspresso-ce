@@ -351,7 +351,9 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {actionList});
+    viewComponent.setActionLists(new RActionList[] {
+      actionList
+    });
     return propertyView;
   }
 
@@ -386,32 +388,32 @@ public class DefaultRemoteViewFactory extends
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
 
     if (viewDescriptor.getNorthViewDescriptor() != null) {
-      IView<RComponent> northView = createView(viewDescriptor
-          .getNorthViewDescriptor(), actionHandler, locale);
+      IView<RComponent> northView = createView(
+          viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.setNorth(northView.getPeer());
       childrenViews.add(northView);
     }
     if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<RComponent> westView = createView(viewDescriptor
-          .getWestViewDescriptor(), actionHandler, locale);
+      IView<RComponent> westView = createView(
+          viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
       viewComponent.setWest(westView.getPeer());
       childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<RComponent> centerView = createView(viewDescriptor
-          .getCenterViewDescriptor(), actionHandler, locale);
+      IView<RComponent> centerView = createView(
+          viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
       viewComponent.setCenter(centerView.getPeer());
       childrenViews.add(centerView);
     }
     if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<RComponent> eastView = createView(viewDescriptor
-          .getEastViewDescriptor(), actionHandler, locale);
+      IView<RComponent> eastView = createView(
+          viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
       viewComponent.setEast(eastView.getPeer());
       childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
-      IView<RComponent> southView = createView(viewDescriptor
-          .getSouthViewDescriptor(), actionHandler, locale);
+      IView<RComponent> southView = createView(
+          viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
       viewComponent.setSouth(southView.getPeer());
       childrenViews.add(southView);
     }
@@ -725,13 +727,14 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RComboBox viewComponent = createRComboBox(connector);
+    viewComponent.setReadOnly(propertyViewDescriptor.isReadOnly());
     List<String> values = new ArrayList<String>();
     List<String> translations = new ArrayList<String>();
     List<RIcon> icons = new ArrayList<RIcon>();
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
-    List<String> enumerationValues = new ArrayList<String>(propertyDescriptor
-        .getEnumerationValues());
+    List<String> enumerationValues = new ArrayList<String>(
+        propertyDescriptor.getEnumerationValues());
     if (!propertyDescriptor.isMandatory()) {
       enumerationValues.add(0, "");
     }
@@ -913,9 +916,9 @@ public class DefaultRemoteViewFactory extends
         connector);
 
     if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createListConnector(viewDescriptor
-          .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
-          .getElementDescriptor());
+      IValueConnector cellConnector = createListConnector(
+          viewDescriptor.getRenderedProperty(), modelDescriptor
+              .getCollectionDescriptor().getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
     }
     viewComponent
@@ -1042,8 +1045,8 @@ public class DefaultRemoteViewFactory extends
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     RLabel propertyLabel = createRLabel(null, false);
-    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
-        .getI18nName(getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(
+        propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground("0x00FF0000");
@@ -1264,8 +1267,10 @@ public class DefaultRemoteViewFactory extends
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(getTranslationProvider().getTranslation(
           "lov.element.description",
-          new Object[] {propertyDescriptor.getReferencedDescriptor()
-              .getI18nName(getTranslationProvider(), locale)}, locale));
+          new Object[] {
+            propertyDescriptor.getReferencedDescriptor().getI18nName(
+                getTranslationProvider(), locale)
+          }, locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1273,8 +1278,12 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {lovAction});
-      viewComponent.setActionLists(new RActionList[] {actionList});
+      actionList.setActions(new RAction[] {
+        lovAction
+      });
+      viewComponent.setActionLists(new RActionList[] {
+        actionList
+      });
     }
     return view;
   }
@@ -1518,14 +1527,14 @@ public class DefaultRemoteViewFactory extends
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
 
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
-      IView<RComponent> leftTopView = createView(viewDescriptor
-          .getLeftTopViewDescriptor(), actionHandler, locale);
+      IView<RComponent> leftTopView = createView(
+          viewDescriptor.getLeftTopViewDescriptor(), actionHandler, locale);
       viewComponent.setLeftTop(leftTopView.getPeer());
       childrenViews.add(leftTopView);
     }
     if (viewDescriptor.getRightBottomViewDescriptor() != null) {
-      IView<RComponent> rightBottomView = createView(viewDescriptor
-          .getRightBottomViewDescriptor(), actionHandler, locale);
+      IView<RComponent> rightBottomView = createView(
+          viewDescriptor.getRightBottomViewDescriptor(), actionHandler, locale);
       viewComponent.setRightBottom(rightBottomView.getPeer());
       childrenViews.add(rightBottomView);
     }

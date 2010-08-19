@@ -31,6 +31,7 @@ public class RComboBox extends RComponent {
   private RIcon[]           icons;
   private String[]          translations;
   private String[]          values;
+  private boolean           readOnly;
 
   /**
    * Constructs a new <code>RComboBox</code> instance.
@@ -107,4 +108,22 @@ public class RComboBox extends RComponent {
     this.values = values;
   }
 
+  /**
+   * Gets the readOnly.
+   * 
+   * @return the readOnly.
+   */
+  public boolean isReadOnly() {
+    return readOnly;
+  }
+
+  /**
+   * Sets the readOnly.
+   * 
+   * @param readOnly
+   *          the readOnly to set.
+   */
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = readOnly;
+  }
 }

@@ -33,6 +33,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComboBox",
     values :
     {
       check : "Array"
+    },
+    readOnly :
+    {
+      check : "Boolean"
     }
   }
 });

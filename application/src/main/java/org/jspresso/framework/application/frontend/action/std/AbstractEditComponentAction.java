@@ -26,8 +26,10 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -75,9 +77,19 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
     }
     context.put(ModalDialogAction.DIALOG_VIEW, componentView);
 
+    IModelDescriptor modelDescriptor = getViewDescriptor(context)
+        .getModelDescriptor();
+    if (modelDescriptor == null
+        && getViewDescriptor(context) instanceof ICardViewDescriptor) {
+      ICardViewDescriptor cvd = (ICardViewDescriptor) getViewDescriptor(context);
+      String cardName = cvd.getCardNameForModel(component,
+          getBackendController(context).getSubject());
+      IViewDescriptor vd = cvd.getCardViewDescriptors().get(cardName);
+      modelDescriptor = vd.getModelDescriptor();
+    }
+
     IValueConnector componentConnector = getBackendController(context)
-        .createModelConnector(ACTION_MODEL_NAME,
-            getViewDescriptor(context).getModelDescriptor());
+        .createModelConnector(ACTION_MODEL_NAME, modelDescriptor);
     componentConnector.setConnectorValue(component);
 
     getMvcBinder(context)
