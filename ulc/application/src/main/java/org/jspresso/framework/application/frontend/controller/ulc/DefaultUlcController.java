@@ -174,9 +174,11 @@ public class DefaultUlcController extends
     } else {
       window = controllerFrame;
     }
+    boolean newDialog = true;
     if (reuseCurrent && window instanceof ULCDialog) {
       dialog = (ULCDialog) window;
       dialog.getContentPane().removeAll();
+      newDialog = false;
     } else {
       dialog = new ULCDialog(window, title, true);
     }
@@ -210,7 +212,9 @@ public class DefaultUlcController extends
     if (dimension != null) {
       dialog.setSize(dimension.getWidth(), dimension.getHeight());
     }
-    UlcUtil.centerInParent(dialog);
+    if (newDialog) {
+      UlcUtil.centerInParent(dialog);
+    }
     dialog.setVisible(true);
   }
 

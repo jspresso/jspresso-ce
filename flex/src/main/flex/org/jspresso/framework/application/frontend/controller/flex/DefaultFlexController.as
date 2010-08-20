@@ -989,9 +989,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialogBox.addChild(buttonBox);
 
       var dialog:ResizablePanel;
+      var newDialog:Boolean = true;
       if(useCurrent && _dialogStack && _dialogStack.length > 1) {
         dialog = (_dialogStack[_dialogStack.length -1] as Array)[0] as ResizablePanel;
         dialog.removeAllChildren();
+        newDialog = false;
       } else {
         var dialogParent:DisplayObject;
         if(_dialogStack && _dialogStack.length > 1) {
@@ -1019,7 +1021,9 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialogBox.maxHeight = applicationFrame.height * 95 / 100;
       dialogBox.maxWidth = applicationFrame.width * 95 / 100;
       dialog.addChild(dialogBox);
-      PopUpManager.centerPopUp(dialog);
+      if(newDialog) {
+        PopUpManager.centerPopUp(dialog);
+      }
     }
     
     public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStateAutomationId:String):void {

@@ -68,8 +68,10 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
     }
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
 
+    IViewDescriptor editViewDescriptor = getViewDescriptor(context);
+
     IView<E> componentView = getViewFactory(context).createView(
-        getViewDescriptor(context), actionHandler, getLocale(context));
+        editViewDescriptor, actionHandler, getLocale(context));
     String dialogTitle = getI18nName(getTranslationProvider(context),
         getLocale(context));
     if (dialogTitle != null && dialogTitle.length() > 0) {
@@ -77,11 +79,10 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
     }
     context.put(ModalDialogAction.DIALOG_VIEW, componentView);
 
-    IModelDescriptor modelDescriptor = getViewDescriptor(context)
-        .getModelDescriptor();
+    IModelDescriptor modelDescriptor = getEditModelDescriptor(context);
     if (modelDescriptor == null
-        && getViewDescriptor(context) instanceof ICardViewDescriptor) {
-      ICardViewDescriptor cvd = (ICardViewDescriptor) getViewDescriptor(context);
+        && editViewDescriptor instanceof ICardViewDescriptor) {
+      ICardViewDescriptor cvd = (ICardViewDescriptor) editViewDescriptor;
       String cardName = cvd.getCardNameForModel(component,
           getBackendController(context).getSubject());
       IViewDescriptor vd = cvd.getCardViewDescriptors().get(cardName);
@@ -141,5 +142,16 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
    */
   protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {
     return viewDescriptor;
+  }
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @param context
+   *          the action context.
+   * @return the modelDescriptor.
+   */
+  protected IModelDescriptor getEditModelDescriptor(Map<String, Object> context) {
+    return getViewDescriptor(context).getModelDescriptor();
   }
 }

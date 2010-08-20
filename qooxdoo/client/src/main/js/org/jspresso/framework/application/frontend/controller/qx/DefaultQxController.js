@@ -948,9 +948,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
        * @type qx.ui.window.Window
        */
       var dialog;
+      var newDialog = true;
       if(useCurrent && this.__dialogStack && this.__dialogStack.length > 1) {
         dialog = this.__dialogStack[this.__dialogStack.length -1][0];
         dialog.removeAll();
+        newDialog = false;
       } else {
         var dialogParent;
         //        if(this.__dialogStack && this.__dialogStack.length > 1) {
@@ -988,7 +990,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
       dialog.add(dialogBox);
       dialog.open();
-      dialog.center();
+      if(newDialog) {
+        dialog.center();
+      }
     }
   }
 });

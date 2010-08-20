@@ -6,7 +6,7 @@ Bugs fixed
            Query refiners are lost when sorting a table
            Property rollback can produce stack-overflow on 1-1 relationships
            selecting OK on an empty LOV dialog produces an exception
-
+3041251    writability gate on component has no effect
 
 New features
 ------------

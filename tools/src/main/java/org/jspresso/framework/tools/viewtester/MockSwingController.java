@@ -91,10 +91,12 @@ public class MockSwingController extends
     super.displayModalDialog(context, reuseCurrent);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
+    boolean newDialog = true;
     if (window instanceof JDialog) {
       if (reuseCurrent) {
         dialog = (JDialog) window;
         dialog.getContentPane().removeAll();
+        newDialog = false;
       } else {
         dialog = new JDialog((JDialog) window, title, true);
       }
@@ -134,7 +136,9 @@ public class MockSwingController extends
       dialog.getRootPane().setDefaultButton(defaultButton);
     }
     dialog.pack();
-    SwingUtil.centerInParent(dialog);
+    if (newDialog) {
+      SwingUtil.centerInParent(dialog);
+    }
     dialog.setVisible(true);
   }
 
@@ -180,42 +184,41 @@ public class MockSwingController extends
     }
     Component sourceComponent = null;
     if (ex instanceof SecurityException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper
-              .emphasis(HtmlHelper.escapeForHTML(ex.getMessage()))),
+      JOptionPane.showMessageDialog(sourceComponent,
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
+              .getMessage()))),
           getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+          JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof BusinessException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
               .escapeForHTML(((BusinessException) ex).getI18nMessage(
                   getTranslationProvider(), getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+          JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof DataIntegrityViolationException) {
       JOptionPane
           .showMessageDialog(
               sourceComponent,
-              HtmlHelper
-                  .toHtml(HtmlHelper
-                      .emphasis(HtmlHelper
-                          .escapeForHTML(getTranslationProvider()
-                              .getTranslation(
-                                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                                  getLocale())))), getTranslationProvider()
+              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+                  .escapeForHTML(getTranslationProvider()
+                      .getTranslation(
+                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                          getLocale())))), getTranslationProvider()
                   .getTranslation("error", getLocale()),
-              JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-                  getIconFactory().getLargeIconSize()));
+              JOptionPane.ERROR_MESSAGE,
+              getIconFactory()
+                  .getErrorIcon(getIconFactory().getLargeIconSize()));
     } else if (ex instanceof ConcurrencyFailureException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
               .escapeForHTML(getTranslationProvider().getTranslation(
                   "concurrency.error.description", getLocale())))),
           getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              getIconFactory().getLargeIconSize()));
+          JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else {
       ex.printStackTrace();
     }
@@ -227,9 +230,12 @@ public class MockSwingController extends
    */
   public void popupInfo(JComponent sourceComponent, String title,
       String iconImageUrl, String message) {
-    JOptionPane.showMessageDialog(SwingUtil
-        .getWindowOrInternalFrame(sourceComponent), message, title,
-        JOptionPane.INFORMATION_MESSAGE, getIconFactory().getIcon(iconImageUrl,
+    JOptionPane.showMessageDialog(
+        SwingUtil.getWindowOrInternalFrame(sourceComponent),
+        message,
+        title,
+        JOptionPane.INFORMATION_MESSAGE,
+        getIconFactory().getIcon(iconImageUrl,
             getIconFactory().getLargeIconSize()));
   }
 
@@ -239,9 +245,12 @@ public class MockSwingController extends
   public void popupOkCancel(JComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction okAction,
       IAction cancelAction, Map<String, Object> context) {
-    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(sourceComponent), message, title,
-        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+    int selectedOption = JOptionPane.showConfirmDialog(
+        SwingUtil.getWindowOrInternalFrame(sourceComponent),
+        message,
+        title,
+        JOptionPane.OK_CANCEL_OPTION,
+        JOptionPane.WARNING_MESSAGE,
         getIconFactory().getIcon(iconImageUrl,
             getIconFactory().getLargeIconSize()));
     IAction nextAction = null;
@@ -261,9 +270,12 @@ public class MockSwingController extends
   public void popupYesNo(JComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       Map<String, Object> context) {
-    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(sourceComponent), message, title,
-        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+    int selectedOption = JOptionPane.showConfirmDialog(
+        SwingUtil.getWindowOrInternalFrame(sourceComponent),
+        message,
+        title,
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
         getIconFactory().getIcon(iconImageUrl,
             getIconFactory().getLargeIconSize()));
     IAction nextAction = null;
@@ -283,9 +295,12 @@ public class MockSwingController extends
   public void popupYesNoCancel(JComponent sourceComponent, String title,
       String iconImageUrl, String message, IAction yesAction, IAction noAction,
       IAction cancelAction, Map<String, Object> context) {
-    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(sourceComponent), message, title,
-        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+    int selectedOption = JOptionPane.showConfirmDialog(
+        SwingUtil.getWindowOrInternalFrame(sourceComponent),
+        message,
+        title,
+        JOptionPane.YES_NO_CANCEL_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
         getIconFactory().getIcon(iconImageUrl,
             getIconFactory().getLargeIconSize()));
     IAction nextAction = null;

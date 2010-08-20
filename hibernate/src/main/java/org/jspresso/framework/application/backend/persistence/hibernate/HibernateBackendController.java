@@ -34,7 +34,9 @@ import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.collection.PersistentCollection;
 import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
+import org.hibernate.criterion.DetachedCriteria;
 import org.jspresso.framework.application.backend.AbstractBackendController;
+import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -44,6 +46,8 @@ import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.HibernateTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
@@ -414,8 +418,8 @@ public class HibernateBackendController extends AbstractBackendController {
       Collection<IComponent> snapshotCollection, String role) {
     Collection<IComponent> varSnapshotCollection = snapshotCollection;
     if (!(transientCollection instanceof PersistentCollection)) {
-      String collectionRoleName = getHibernateRoleName(owner
-          .getComponentContract(), role);
+      String collectionRoleName = getHibernateRoleName(
+          owner.getComponentContract(), role);
       if (collectionRoleName == null) {
         // it is not an hibernate managed collection (e.g. "detachedEntities")
         return super.wrapDetachedCollection(owner, transientCollection,
@@ -491,8 +495,8 @@ public class HibernateBackendController extends AbstractBackendController {
     try {
       hibernateSession.lock(entity, LockMode.NONE);
     } catch (Exception ex) {
-      IComponent sessionEntity = (IComponent) hibernateSession.get(entity
-          .getComponentContract(), entity.getId());
+      IComponent sessionEntity = (IComponent) hibernateSession.get(
+          entity.getComponentContract(), entity.getId());
       // hibernateSession.evict(sessionEntity);
       evictFromHibernateInDepth(sessionEntity, hibernateSession,
           new HashSet<IEntity>());
@@ -552,5 +556,67 @@ public class HibernateBackendController extends AbstractBackendController {
         }
       }
     }
+  }
+
+  /**
+   * Search Hibernate using criteria. The result is then merged into session.
+   * 
+   * @param <T>
+   *          the entity type to return
+   * @param criteria
+   *          the detached criteria.
+   * @param mergeMode
+   *          the merge mode to use when merging back retrieved entities or null
+   *          if no merge is requested.
+   * @param clazz
+   *          the type of the entity.
+   * @return the first found entity or null;
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria,
+      EMergeMode mergeMode, Class<? extends T> clazz) {
+    List<T> ret = findByCriteria(criteria, null, clazz);
+    if (ret != null) {
+      if (mergeMode != null) {
+        return ret.get(0);
+      }
+      return (T) merge(ret.get(0), mergeMode);
+    }
+    return null;
+  }
+
+  /**
+   * Search hibernate using criteria. The result is then merged into session.
+   * 
+   * @param <T>
+   *          the entity type to return
+   * @param criteria
+   *          the detached criteria.
+   * @param mergeMode
+   *          the merge mode to use when merging back retrieved entities or null
+   *          if no merge is requested.
+   * @param clazz
+   *          the type of the entity.
+   * @return the first found entity or null;
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends IEntity> List<T> findByCriteria(
+      final DetachedCriteria criteria, EMergeMode mergeMode,
+      Class<? extends T> clazz) {
+    List<IEntity> res = (List<IEntity>) getTransactionTemplate().execute(
+        new TransactionCallback() {
+
+          public Object doInTransaction(
+              @SuppressWarnings("unused") TransactionStatus status) {
+            return getHibernateTemplate().findByCriteria(criteria);
+          }
+        });
+    if (res != null) {
+      if (mergeMode != null) {
+        return (List<T>) merge(res, mergeMode);
+      }
+      return (List<T>) res;
+    }
+    return null;
   }
 }

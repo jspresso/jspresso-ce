@@ -146,10 +146,12 @@ public class DefaultSwingController extends
     } else {
       window = controllerFrame;
     }
+    boolean newDialog = true;
     if (window instanceof JDialog) {
       if (reuseCurrent) {
         dialog = (JDialog) window;
         dialog.getContentPane().removeAll();
+        newDialog = false;
       } else {
         dialog = new JDialog((JDialog) window, title, true);
       }
@@ -189,7 +191,9 @@ public class DefaultSwingController extends
       dialog.getRootPane().setDefaultButton(defaultButton);
     }
     dialog.pack();
-    SwingUtil.centerInParent(dialog);
+    if (newDialog) {
+      SwingUtil.centerInParent(dialog);
+    }
     dialog.setVisible(true);
   }
 
