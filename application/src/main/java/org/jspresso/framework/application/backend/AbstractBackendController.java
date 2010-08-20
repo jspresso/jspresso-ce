@@ -1101,49 +1101,44 @@ public abstract class AbstractBackendController extends AbstractController
     } else if (mergeMode == EMergeMode.MERGE_KEEP) {
       return varRegisteredComponent;
     }
-    if (mergeMode != EMergeMode.MERGE_CLEAN_LAZY) {
-      Map<String, Object> componentPropertiesToMerge = componentToMerge
-          .straightGetProperties();
-      Map<String, Object> registeredComponentProperties = varRegisteredComponent
-          .straightGetProperties();
-      Map<String, Object> mergedProperties = new HashMap<String, Object>();
-      for (Map.Entry<String, Object> property : componentPropertiesToMerge
-          .entrySet()) {
-        if (property.getValue() instanceof IEntity) {
-          if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
-              && mergeMode != EMergeMode.MERGE_EAGER
-              && !isInitialized(property.getValue())) {
-            if (registeredComponentProperties.get(property.getKey()) == null) {
-              mergedProperties.put(property.getKey(), property.getValue());
-            }
-          } else {
-            Object registeredProperty = registeredComponentProperties
-                .get(property.getKey());
-            if (mergeMode == EMergeMode.MERGE_EAGER
-                && isInitialized(property.getValue())) {
-              initializePropertyIfNeeded(registeredComponent, property.getKey());
-            }
-            if (isInitialized(registeredProperty)) {
-              mergedProperties
-                  .put(
-                      property.getKey(),
-                      merge((IEntity) property.getValue(), mergeMode,
-                          alreadyMerged));
-            }
+    Map<String, Object> componentPropertiesToMerge = componentToMerge
+        .straightGetProperties();
+    Map<String, Object> registeredComponentProperties = varRegisteredComponent
+        .straightGetProperties();
+    Map<String, Object> mergedProperties = new HashMap<String, Object>();
+    for (Map.Entry<String, Object> property : componentPropertiesToMerge
+        .entrySet()) {
+      if (property.getValue() instanceof IEntity) {
+        if (mergeMode != EMergeMode.MERGE_CLEAN_EAGER
+            && mergeMode != EMergeMode.MERGE_EAGER
+            && !isInitialized(property.getValue())) {
+          if (registeredComponentProperties.get(property.getKey()) == null) {
+            mergedProperties.put(property.getKey(), property.getValue());
           }
-        } else if (property.getValue() instanceof IComponent) {
-          IComponent registeredSubComponent = (IComponent) registeredComponentProperties
-              .get(property.getKey());
-          mergedProperties.put(
-              property.getKey(),
-              mergeComponent((IComponent) property.getValue(),
-                  registeredSubComponent, mergeMode, alreadyMerged));
         } else {
-          mergedProperties.put(property.getKey(), property.getValue());
+          Object registeredProperty = registeredComponentProperties
+              .get(property.getKey());
+          if (mergeMode == EMergeMode.MERGE_EAGER
+              && isInitialized(property.getValue())) {
+            initializePropertyIfNeeded(registeredComponent, property.getKey());
+          }
+          if (isInitialized(registeredProperty)) {
+            mergedProperties.put(property.getKey(),
+                merge((IEntity) property.getValue(), mergeMode, alreadyMerged));
+          }
         }
+      } else if (property.getValue() instanceof IComponent) {
+        IComponent registeredSubComponent = (IComponent) registeredComponentProperties
+            .get(property.getKey());
+        mergedProperties.put(
+            property.getKey(),
+            mergeComponent((IComponent) property.getValue(),
+                registeredSubComponent, mergeMode, alreadyMerged));
+      } else {
+        mergedProperties.put(property.getKey(), property.getValue());
       }
-      varRegisteredComponent.straightSetProperties(mergedProperties);
     }
+    varRegisteredComponent.straightSetProperties(mergedProperties);
     return varRegisteredComponent;
   }
 }
