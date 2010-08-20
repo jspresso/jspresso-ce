@@ -152,4 +152,12 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
    *          the property new value.
    */
   void preprocessSetter(Object component, Object newValue);
+
+  /**
+   * Gets the formula used to represent this property in the persistent store.
+   * This can be used to order / group by computed properties.
+   * 
+   * @return the persistence formula.
+   */
+  String getPersistenceFormula();
 }

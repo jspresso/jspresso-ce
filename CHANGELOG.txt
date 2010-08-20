@@ -22,7 +22,7 @@ New features
            Introduced the usingLong property for java.lang.Long mapped integers
            Nested component views width management improved
            Model auto-determination improved for cascading model views
-
+           Computed columns can now be sorted using a SQL formula
 
 
 3.5.0

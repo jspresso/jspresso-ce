@@ -106,7 +106,9 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
           isComputed = queryComponent.getComponentDescriptor()
               .getPropertyDescriptor(propertyName).isComputed();
         }
-        if (!isComputed) {
+        if (!isComputed
+            || queryComponent.getComponentDescriptor()
+                .getPropertyDescriptor(propertyName).getPersistenceFormula() != null) {
           // computed properties must be ignored
           // since they can't be sorted
           // by the DB.

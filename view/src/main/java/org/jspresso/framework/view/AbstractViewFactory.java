@@ -209,7 +209,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {0});
+              .setSelectedIndices(new int[] {
+                0
+              });
         }
       }
     };
@@ -677,8 +679,17 @@ public abstract class AbstractViewFactory<E, F, G> implements
         identifier = identifier + "." + renderingProperty;
       }
     }
+    boolean sortable = true;
     if (PropertyDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
-      // to prevent column sorting
+      if (propertyName.indexOf('.') < 0) {
+        // not a nested property.
+        sortable = rowDescriptor.getPropertyDescriptor(propertyName)
+            .getPersistenceFormula() != null;
+      } else {
+        sortable = false;
+      }
+    }
+    if (!sortable) {
       return "";
     }
     return identifier;
@@ -927,12 +938,19 @@ public abstract class AbstractViewFactory<E, F, G> implements
             if (childCardConnector != null) {
               // To handle polymorphism, especially for modules, we refine
               // the model descriptor.
-              if (cardView.getConnector().getModelConnector()
-                  .getModelDescriptor().getModelType().isAssignableFrom(
+              if (cardView
+                  .getConnector()
+                  .getModelConnector()
+                  .getModelDescriptor()
+                  .getModelType()
+                  .isAssignableFrom(
                       childCardView.getDescriptor().getModelDescriptor()
                           .getModelType())) {
-                cardView.getConnector().getModelConnector().setModelDescriptor(
-                    childCardView.getDescriptor().getModelDescriptor());
+                cardView
+                    .getConnector()
+                    .getModelConnector()
+                    .setModelDescriptor(
+                        childCardView.getDescriptor().getModelDescriptor());
               }
               getMvcBinder().bind(childCardConnector,
                   cardView.getConnector().getModelConnector());
@@ -1134,12 +1152,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     SimpleDateFormat format;
     if (propertyDescriptor.getType() == EDateType.DATE) {
-      format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
-          .getDateInstance(DateFormat.SHORT, locale)).toPattern(), locale);
+      format = new NullableSimpleDateFormat(
+          ((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT,
+              locale)).toPattern(), locale);
     } else {
-      format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
-          .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale))
-          .toPattern(), locale);
+      format = new NullableSimpleDateFormat(
+          ((SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.SHORT,
+              DateFormat.SHORT, locale)).toPattern(), locale);
     }
     return format;
   }
@@ -2436,10 +2455,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
                 .getItemSelectionAction(), actionHandler, view));
       }
       if (viewDescriptor.getPaginationViewDescriptor() != null) {
-        IView<E> paginationView = createPaginationView(viewDescriptor
-            .getPaginationViewDescriptor(), view, actionHandler, locale);
-        view.setPeer(decorateWithPaginationView(view.getPeer(), paginationView
-            .getPeer()));
+        IView<E> paginationView = createPaginationView(
+            viewDescriptor.getPaginationViewDescriptor(), view, actionHandler,
+            locale);
+        view.setPeer(decorateWithPaginationView(view.getPeer(),
+            paginationView.getPeer()));
       }
     }
     return view;
@@ -2559,10 +2579,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
     ICollectionPropertyDescriptor<?> nodeGroupModelDescriptor = (ICollectionPropertyDescriptor<?>) subtreeViewDescriptor
         .getNodeGroupDescriptor().getModelDescriptor();
     IConfigurableCollectionConnectorProvider nodeGroupPrototypeConnector = connectorFactory
-        .createConfigurableCollectionConnectorProvider(nodeGroupModelDescriptor
-            .getName()
-            + "Element", subtreeViewDescriptor.getNodeGroupDescriptor()
-            .getRenderedProperty());
+        .createConfigurableCollectionConnectorProvider(
+            nodeGroupModelDescriptor.getName() + "Element",
+            subtreeViewDescriptor.getNodeGroupDescriptor()
+                .getRenderedProperty());
     ITreeLevelDescriptor childDescriptor = subtreeViewDescriptor
         .getChildDescriptor();
     if (childDescriptor != null && depth < viewDescriptor.getMaxDepth()

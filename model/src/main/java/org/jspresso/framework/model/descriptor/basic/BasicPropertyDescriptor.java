@@ -334,9 +334,10 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          return translationProvider
-              .getTranslation("integrity.property.mandatory", new Object[] {
-                  getI18nName(translationProvider, locale), component}, locale);
+          return translationProvider.getTranslation(
+              "integrity.property.mandatory", new Object[] {
+                  getI18nName(translationProvider, locale), component
+              }, locale);
         }
 
       };
@@ -697,5 +698,14 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     } else {
       super.setName(name);
     }
+  }
+
+  /**
+   * Returns sqlName.
+   * <p>
+   * {@inheritDoc}
+   */
+  public String getPersistenceFormula() {
+    return getSqlName();
   }
 }

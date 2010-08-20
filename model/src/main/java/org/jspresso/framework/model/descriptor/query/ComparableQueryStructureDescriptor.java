@@ -143,6 +143,7 @@ public class ComparableQueryStructureDescriptor extends
 
     setReferencedDescriptor(refDescriptor);
     setComputed(propertyDescriptor.isComputed());
+    setSqlName(propertyDescriptor.getSqlName());
   }
 
   /**

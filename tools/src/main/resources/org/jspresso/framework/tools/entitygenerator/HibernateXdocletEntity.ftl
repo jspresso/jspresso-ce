@@ -187,6 +187,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         </#if>
       </#if>
     </#if>
+  <#elseif propertyDescriptor.sqlName?exists>
+   * @hibernate.property
+   *           formula = "${propertyDescriptor.sqlName}"
   </#if>
    * @return the ${propertyName}.
    */
