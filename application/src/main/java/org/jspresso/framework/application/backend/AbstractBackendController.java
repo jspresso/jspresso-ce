@@ -980,15 +980,9 @@ public abstract class AbstractBackendController extends AbstractController
         return registeredEntity;
       }
       alreadyMerged.put(entity, registeredEntity);
-      // Map<String, Object> sessionDirtyProperties = dirtRecorder
-      // .getChangedProperties(registeredEntity);
-      // boolean dirtyInSession = (sessionDirtyProperties != null &&
-      // (!sessionDirtyProperties
-      // .isEmpty()));
-      if (newlyRegistered
-          || mergeMode != EMergeMode.MERGE_CLEAN_LAZY
-          || /* (dirtyInSession || ( */!registeredEntity.getVersion().equals(
-              entity.getVersion())/* )) */) {
+      if (newlyRegistered || mergeMode != EMergeMode.MERGE_CLEAN_LAZY
+          || registeredEntity.getVersion() == null
+          || !registeredEntity.getVersion().equals(entity.getVersion())) {
         if (mergeMode == EMergeMode.MERGE_CLEAN_EAGER
             || mergeMode == EMergeMode.MERGE_CLEAN_LAZY) {
           cleanDirtyProperties(registeredEntity);
