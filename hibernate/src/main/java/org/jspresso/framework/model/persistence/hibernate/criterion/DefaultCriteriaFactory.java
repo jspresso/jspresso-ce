@@ -73,8 +73,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
             IComponentDescriptor<?> referencedDesc = refPropDescriptor
                 .getReferencedDescriptor();
             if (!IEntity.class.isAssignableFrom(referencedDesc
-                .getComponentContract())
-                && !referencedDesc.isPurelyAbstract()) {
+                .getComponentContract()) && !referencedDesc.isPurelyAbstract()) {
               break;
             }
             currentCompDesc = referencedDesc;
@@ -193,13 +192,13 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
               if (!((IEntity) property.getValue()).isPersistent()) {
                 abort = true;
               } else {
-                currentCriteria.add(Restrictions.eq(prefixedProperty, property
-                    .getValue()));
+                currentCriteria.add(Restrictions.eq(prefixedProperty,
+                    property.getValue()));
               }
             } else if (property.getValue() instanceof Boolean
                 && ((Boolean) property.getValue()).booleanValue()) {
-              currentCriteria.add(Restrictions.eq(prefixedProperty, property
-                  .getValue()));
+              currentCriteria.add(Restrictions.eq(prefixedProperty,
+                  property.getValue()));
             } else if (property.getValue() instanceof String) {
               if (((String) property.getValue()).length() > 0) {
                 currentCriteria
@@ -209,25 +208,25 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
               }
             } else if (property.getValue() instanceof Number
                 || property.getValue() instanceof Date) {
-              currentCriteria.add(Restrictions.eq(prefixedProperty, property
-                  .getValue()));
+              currentCriteria.add(Restrictions.eq(prefixedProperty,
+                  property.getValue()));
             } else if (property.getValue() instanceof IQueryComponent) {
               IQueryComponent joinedComponent = ((IQueryComponent) property
                   .getValue());
               if (!isQueryComponentEmpty(joinedComponent)) {
-                if (joinedComponent.isInlineComponent() || path != null) {
+                if (joinedComponent.isInlineComponent()/* || path != null */) {
                   // the joined component is an inlined component so we must use
                   // dot nested properties. Same applies if we are in a nested
                   // path i.e. already on an inline component.
                   abort = abort
                       || completeCriteria(rootCriteria, currentCriteria,
-                          prefixedProperty, (IQueryComponent) property
-                              .getValue());
+                          prefixedProperty,
+                          (IQueryComponent) property.getValue());
                 } else {
                   // the joined component is an entity so we must use
                   // nested criteria.
                   DetachedCriteria joinCriteria = rootCriteria
-                      .getSubCriteriaFor(currentCriteria, property.getKey(),
+                      .getSubCriteriaFor(currentCriteria, prefixedProperty,
                           CriteriaSpecification.INNER_JOIN);
                   abort = abort
                       || completeCriteria(rootCriteria, joinCriteria, null,
