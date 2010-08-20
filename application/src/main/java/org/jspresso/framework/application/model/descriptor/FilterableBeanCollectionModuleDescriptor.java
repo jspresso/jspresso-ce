@@ -83,7 +83,12 @@ public class FilterableBeanCollectionModuleDescriptor extends
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
         getPropertyDescriptors());
     propertyDescriptors.add(filterDescriptor);
+
     setPropertyDescriptors(propertyDescriptors);
+
+    List<IComponentDescriptor<?>> ancestorDescriptors = new ArrayList<IComponentDescriptor<?>>();
+    ancestorDescriptors.add(PageableDescriptor.INSTANCE);
+    setAncestorDescriptors(ancestorDescriptors);
   }
 
 }

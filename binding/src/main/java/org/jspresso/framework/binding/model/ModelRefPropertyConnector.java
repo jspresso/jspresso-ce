@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.jspresso.framework.binding.IComponentValueConnector;
+import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelChangeListener;
 import org.jspresso.framework.model.IModelProvider;
@@ -32,7 +32,6 @@ import org.jspresso.framework.model.ModelChangeSupport;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
@@ -45,7 +44,7 @@ import org.jspresso.framework.model.entity.IEntity;
  */
 
 public class ModelRefPropertyConnector extends ModelPropertyConnector implements
-    IComponentValueConnector, IModelProvider {
+    ICompositeValueConnector, IModelProvider {
 
   /**
    * <code>THIS_PROPERTY</code> is a fake property name returning the model
@@ -156,6 +155,14 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     if (THIS_PROPERTY.equals(connectorKey)) {
       return this;
     }
+    int dotIndex = connectorKey.indexOf('.');
+    if (dotIndex > 0) {
+      String root = connectorKey.substring(0, dotIndex);
+      String nested = connectorKey.substring(dotIndex + 1);
+
+      ICompositeValueConnector rootC = (ICompositeValueConnector) getChildConnector(root);
+      return rootC.getChildConnector(nested);
+    }
     IValueConnector connector = childConnectors.get(connectorKey);
     if (connector == null) {
       IComponentDescriptor<?> componentDescriptor = getModelDescriptor()
@@ -167,27 +174,6 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
         connector.setParentConnector(this);
         childConnectors.put(connectorKey, connector);
       }
-    }
-    return connector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IValueConnector getChildConnector(String connectorKey,
-      IModelDescriptor childModelDescriptor) {
-    if (childModelDescriptor == null) {
-      return getChildConnector(connectorKey);
-    }
-    if (THIS_PROPERTY.equals(connectorKey)) {
-      return this;
-    }
-    IValueConnector connector = childConnectors.get(connectorKey);
-    if (connector == null) {
-      connector = modelConnectorFactory.createModelConnector(connectorKey,
-          childModelDescriptor, getSubject());
-      connector.setParentConnector(this);
-      childConnectors.put(connectorKey, connector);
     }
     return connector;
   }
