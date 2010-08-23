@@ -681,13 +681,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     boolean sortable = true;
     if (PropertyDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
-      if (propertyName.indexOf('.') < 0) {
-        // not a nested property.
-        sortable = rowDescriptor.getPropertyDescriptor(propertyName)
-            .getPersistenceFormula() != null;
-      } else {
-        sortable = false;
-      }
+      // if (propertyName.indexOf('.') < 0) {
+      // // not a nested property.
+      sortable = rowDescriptor.getPropertyDescriptor(propertyName)
+          .getPersistenceFormula() != null;
+      // } else {
+      // sortable = false;
+      // }
     }
     if (!sortable) {
       return "";

@@ -60,16 +60,16 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
         String propertyName = orderingProperty.getKey();
         String[] propElts = propertyName.split("\\.");
         DetachedCriteria orderingCriteria = criteria;
-        boolean isComputed = false;
+        boolean sortable = true;
         if (propElts.length > 1) {
           IComponentDescriptor<?> currentCompDesc = queryComponent
               .getComponentDescriptor();
           int i = 0;
           List<String> path = new ArrayList<String>();
-          for (; !isComputed && i < propElts.length - 1; i++) {
+          for (; sortable && i < propElts.length - 1; i++) {
             IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
                 .getPropertyDescriptor(propElts[i]));
-            isComputed = isComputed || refPropDescriptor.isComputed();
+            sortable = sortable && isSortable(refPropDescriptor);
             IComponentDescriptor<?> referencedDesc = refPropDescriptor
                 .getReferencedDescriptor();
             if (!IEntity.class.isAssignableFrom(referencedDesc
@@ -79,12 +79,12 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
             currentCompDesc = referencedDesc;
             path.add(propElts[i]);
           }
-          if (!isComputed) {
+          if (sortable) {
             StringBuffer name = new StringBuffer();
-            for (int j = i; !isComputed && j < propElts.length; j++) {
+            for (int j = i; sortable && j < propElts.length; j++) {
               IPropertyDescriptor propDescriptor = currentCompDesc
                   .getPropertyDescriptor(propElts[j]);
-              isComputed = isComputed || propDescriptor.isComputed();
+              sortable = sortable && isSortable(propDescriptor);
               if (j < propElts.length - 1) {
                 currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor)
                     .getReferencedDescriptor();
@@ -94,7 +94,7 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
               }
               name.append(propElts[j]);
             }
-            if (!isComputed) {
+            if (sortable) {
               for (String pathElt : path) {
                 orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria,
                     pathElt, CriteriaSpecification.LEFT_JOIN);
@@ -103,15 +103,10 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
             }
           }
         } else {
-          isComputed = queryComponent.getComponentDescriptor()
-              .getPropertyDescriptor(propertyName).isComputed();
+          sortable = isSortable(queryComponent.getComponentDescriptor()
+              .getPropertyDescriptor(propertyName));
         }
-        if (!isComputed
-            || queryComponent.getComponentDescriptor()
-                .getPropertyDescriptor(propertyName).getPersistenceFormula() != null) {
-          // computed properties must be ignored
-          // since they can't be sorted
-          // by the DB.
+        if (sortable) {
           Order order;
           switch (orderingProperty.getValue()) {
             case DESCENDING:
@@ -125,6 +120,11 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
         }
       }
     }
+  }
+
+  private boolean isSortable(IPropertyDescriptor propertyDescriptor) {
+    return !propertyDescriptor.isComputed()
+        || propertyDescriptor.getPersistenceFormula() != null;
   }
 
   /**
