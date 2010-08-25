@@ -476,8 +476,10 @@ public class HibernateBackendController extends AbstractBackendController {
       entityInterceptor.setBackendController(this);
       entityInterceptor.setEntityFactory(getEntityFactory());
       getHibernateTemplate().setEntityInterceptor(entityInterceptor);
-      ((HibernateTransactionManager) getTransactionTemplate()
-          .getTransactionManager()).setEntityInterceptor(entityInterceptor);
+      if (getTransactionTemplate().getTransactionManager() instanceof HibernateTransactionManager) {
+        ((HibernateTransactionManager) getTransactionTemplate()
+            .getTransactionManager()).setEntityInterceptor(entityInterceptor);
+      }
     }
   }
 

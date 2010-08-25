@@ -185,10 +185,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
       return new DefaultFlexViewFactory(this, this, this);
     }
     
-    public function createComponent(remoteComponent:RComponent):UIComponent {
-      return _viewFactory.createComponent(remoteComponent);
-    }
-    
     public function register(remotePeer:IRemotePeer):void {
       if(!remotePeer) {
         return;
@@ -316,24 +312,24 @@ package org.jspresso.framework.application.frontend.controller.flex {
         }
       } else if(command is RemoteInitLoginCommand) {
         var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
-        var loginButton:Button = _viewFactory.createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
+        var loginButton:Button = getViewFactory().createButton(initLoginCommand.okLabel, null, initLoginCommand.okIcon);
         loginButton.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
           performLogin();
         });
         var loginButtons:Array = new Array();
         loginButtons.push(loginButton);
-        var loginView:UIComponent = _viewFactory.createComponent(initLoginCommand.loginView);
+        var loginView:UIComponent = getViewFactory().createComponent(initLoginCommand.loginView);
         popupDialog(initLoginCommand.title, initLoginCommand.message, loginView, initLoginCommand.loginView.icon, loginButtons);
       } else if(command is RemoteAbstractDialogCommand) {
         var dialogCommand:RemoteAbstractDialogCommand = command as RemoteAbstractDialogCommand;
         var dialogButtons:Array = new Array();
         for each(var action:RAction in dialogCommand.actions) {
-          dialogButtons.push(_viewFactory.createAction(action));
+          dialogButtons.push(getViewFactory().createAction(action));
         }
         var dialogView:UIComponent = null;
         var icon:RIcon = null;
         if(dialogCommand is RemoteDialogCommand) {
-          dialogView = _viewFactory.createComponent((dialogCommand as RemoteDialogCommand).view);
+          dialogView = getViewFactory().createComponent((dialogCommand as RemoteDialogCommand).view);
           icon = (dialogCommand as RemoteDialogCommand).view.icon;
         } else if(dialogCommand is RemoteFlashDisplayCommand) {
           var url:String = new String((dialogCommand as RemoteFlashDisplayCommand).swfUrl);
@@ -439,7 +435,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
             unregister(removedChild);
           }
         } else if(command is RemoteAddCardCommand) {
-          _viewFactory.addCard(
+          getViewFactory().addCard(
             targetPeer as ViewStack,
             (command as RemoteAddCardCommand).card,
             (command as RemoteAddCardCommand).cardName);
@@ -561,7 +557,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   
       if(messageCommand.messageIcon) {
         var alertForm:UIComponent =  alert.mx_internal::alertForm;
-        var messageIcon:Class = _viewFactory.getIconForComponent(alertForm, messageCommand.messageIcon);
+        var messageIcon:Class = getViewFactory().getIconForComponent(alertForm, messageCommand.messageIcon);
         alert.iconClass = messageIcon;
         alert.removeChild(alertForm);
         for(var childIndex:int = alertForm.numChildren - 1; childIndex>=0; childIndex--) {
@@ -574,7 +570,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
   
       if(messageCommand.titleIcon) {
-        var titleIcon:Class = _viewFactory.getIconForComponent(alert, messageCommand.titleIcon);
+        var titleIcon:Class = getViewFactory().getIconForComponent(alert, messageCommand.titleIcon);
         alert.titleIcon = titleIcon;
       }
     }
@@ -757,6 +753,38 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
     }
     
+    protected function createWorkspaceAccordion(workspaceNames:Array,
+                                                workspaceActions:RActionList):CollapsibleAccordion {
+      var wsAccordion:CollapsibleAccordion = new CollapsibleAccordion();
+      wsAccordion.historyManagementEnabled = false;
+      wsAccordion.percentHeight = 100.0;
+      for(var i:int = 0; i < workspaceActions.actions.length; i++) {
+        var workspaceAction:RAction = workspaceActions.actions[i];
+        var cardCanvas:Canvas = createWorkspaceAccordionSection(workspaceAction.name, workspaceNames[i]);
+        wsAccordion.addAcccordionSection(cardCanvas);
+      }
+      return wsAccordion;
+    }
+    
+    protected function createWorkspaceAccordionSection(wsLabel:String, wsName:String):Canvas {
+      var cardCanvas:Canvas = new Canvas();
+      cardCanvas.percentWidth = 100.0;
+      cardCanvas.percentHeight = 100.0;
+      cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
+      cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
+      cardCanvas.label = wsLabel;
+      cardCanvas.name = wsName;
+      return cardCanvas;
+    }
+    
+    protected function createWorkspaceViewStack():ViewStack {
+      var wsViewStack:ViewStack = new ViewStack();
+      wsViewStack.percentWidth = 100.0;
+      wsViewStack.percentHeight = 100.0;
+      return wsViewStack;
+    }
+    
+    
     protected function initApplicationFrame(workspaceNames:Array,
                                             workspaceActions:RActionList,
                                             exitAction:RAction,
@@ -764,68 +792,52 @@ package org.jspresso.framework.application.frontend.controller.flex {
                                             actions:Array,
                                             secondaryActions:Array,
                                             helpActions:Array):void {
-      var applicationFrame:Application = Application.application as Application;
-      decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
-      
-      _workspaceAccordion = new CollapsibleAccordion();
-      _workspaceAccordion.historyManagementEnabled = false;
-      for(var i:int = 0; i < workspaceActions.actions.length; i++) {
-        var workspaceAction:RAction = workspaceActions.actions[i];
-        var cardCanvas:Canvas = new Canvas();
-        cardCanvas.percentWidth = 100.0;
-        cardCanvas.percentHeight = 100.0;
-        cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
-        cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
-        cardCanvas.label = workspaceAction.name;
-        _workspaceAccordion.addAcccordionSection(cardCanvas);
-        cardCanvas.name = workspaceNames[i];
-      }
-      _workspaceAccordion.percentHeight = 100.0;
+      _workspaceAccordion = createWorkspaceAccordion(workspaceNames, workspaceActions);
+      _workspaceAccordion.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+        for(var i:int = 0; i < workspaceActions.actions.length; i++) {
+          var workspaceAction:RAction = workspaceActions.actions[i];
+          var section:Canvas = _workspaceAccordion.content[i] as Canvas;
+          section.icon = getViewFactory().getIconForComponent(_workspaceAccordion.getHeaderAt(i),
+            workspaceAction.icon);
+          var button:Button = _workspaceAccordion.getButtonAt(i);
+          button.setStyle("icon", getViewFactory().getIconForComponent(button, workspaceAction.icon));
+        }
+      });
       var accordionHandler:Function = function(event:IndexChangedEvent):void {
         var workspaceIndex:int = event.newIndex;
         execute(workspaceActions.actions[workspaceIndex]);
       };
       _workspaceAccordion.addEventListener(IndexChangedEvent.CHANGE, accordionHandler);
       
-      _workspaceViewStack = new ViewStack();
-      _workspaceViewStack.percentWidth = 100.0;
-      _workspaceViewStack.percentHeight = 100.0;
+      _workspaceViewStack = createWorkspaceViewStack();
       
-      var split:HBox = new HBox();
-      split.addChild(_workspaceAccordion);
-      split.addChild(_workspaceViewStack);
-      split.percentWidth = 100.0;
-      split.percentHeight = 100.0;
-      
-      _workspaceAccordion.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-        for(i = 0; i < workspaceActions.actions.length; i++) {
-          workspaceAction = workspaceActions.actions[i];
-          var section:Canvas = _workspaceAccordion.content[i] as Canvas;
-          section.icon = _viewFactory.getIconForComponent(_workspaceAccordion.getHeaderAt(i),
-                                                          workspaceAction.icon);
-          var button:Button = _workspaceAccordion.getButtonAt(i);
-          button.setStyle("icon", _viewFactory.getIconForComponent(button, workspaceAction.icon));
-        }
-      });
-      
-      if(secondaryActions && secondaryActions.length > 0) {
-        var secondaryToolBar:UIComponent = _viewFactory.decorateWithSlideBar(_viewFactory.createToolBarFromActionLists(secondaryActions));
-        var surroundingBox:VBox = new VBox();
-        surroundingBox.percentWidth = 100.0;
-        surroundingBox.percentHeight = 100.0;
-        surroundingBox.addChild(split);
-        surroundingBox.addChild(secondaryToolBar);
-        applicationFrame.addChild(surroundingBox);
-      } else {
-        applicationFrame.addChild(split);
-      }
+      var appContent:UIComponent = assembleApplicationContent(_workspaceAccordion, _workspaceViewStack,
+        exitAction,
+        navigationActions,
+        actions,
+        secondaryActions,
+        helpActions);
+
+      var applicationFrame:Application = Application.application as Application;
+      applicationFrame.addChild(appContent);
     }
     
-    protected function decorateApplicationFrame(applicationFrame:Application,
-                                                exitAction:RAction,
-                                                navigationActions:Array,
-                                                actions:Array,
-                                                helpActions:Array):void {
+    protected function assembleApplicationContent(navigationAccordion:CollapsibleAccordion,
+                                                  mainViewStack:ViewStack,
+                                                  exitAction:RAction,
+                                                  navigationActions:Array,
+                                                  actions:Array,
+                                                  secondaryActions:Array,
+                                                  helpActions:Array):UIComponent {
+
+      var split:HBox = new HBox();
+      split.addChild(navigationAccordion);
+      split.addChild(mainViewStack);
+      split.percentWidth = 100.0;
+      split.percentHeight = 100.0;
+
+
+      var applicationFrame:Application = Application.application as Application;
       var controlBar:ApplicationControlBar = applicationFrame.controlBar as ApplicationControlBar;
       if(controlBar) {
         controlBar.removeAllChildren();
@@ -834,33 +846,45 @@ package org.jspresso.framework.application.frontend.controller.flex {
         controlBar.dock = true;
         applicationFrame.addChild(controlBar);
       }
-      _viewFactory.installActionLists(controlBar, navigationActions);
-      _viewFactory.addSeparator(controlBar);
+      getViewFactory().installActionLists(controlBar, navigationActions);
+      getViewFactory().addSeparator(controlBar);
       var i:int;
       if(actions != null) {
         for(i = 0; i < actions.length; i++) {
-          controlBar.addChild(_viewFactory.createPopupButton(actions[i] as RActionList));
+          controlBar.addChild(getViewFactory().createPopupButton(actions[i] as RActionList));
         }
       }
-      _viewFactory.addSeparator(controlBar);
+      getViewFactory().addSeparator(controlBar);
       var glue:HBox = new HBox();
       glue.percentWidth = 100.0;
       controlBar.addChild(glue);
       if(helpActions != null) {
         for(i = 0; i < helpActions.length; i++) {
-          controlBar.addChild(_viewFactory.createPopupButton(helpActions[i] as RActionList));
+          controlBar.addChild(getViewFactory().createPopupButton(helpActions[i] as RActionList));
         }
       }
-      _viewFactory.addSeparator(controlBar);
-      controlBar.addChild(_viewFactory.createAction(exitAction));
+      getViewFactory().addSeparator(controlBar);
+      controlBar.addChild(getViewFactory().createAction(exitAction));
+
+      if(secondaryActions && secondaryActions.length > 0) {
+        var secondaryToolBar:UIComponent = getViewFactory().decorateWithSlideBar(getViewFactory().createToolBarFromActionLists(secondaryActions));
+        var surroundingBox:VBox = new VBox();
+        surroundingBox.percentWidth = 100.0;
+        surroundingBox.percentHeight = 100.0;
+        surroundingBox.addChild(split);
+        surroundingBox.addChild(secondaryToolBar);
+        return surroundingBox;
+      } else {
+        return split;
+      }
     }
 
     protected function createApplicationMenuBar(actions:Array,
                                                 helpActions:Array):MenuBar {
       var menuBarModel:Object = new Object();
       var menus:Array = new Array();
-      menus = menus.concat(_viewFactory.createMenus(actions, false));
-      menus = menus.concat(_viewFactory.createMenus(helpActions, true));
+      menus = menus.concat(getViewFactory().createMenus(actions, false));
+      menus = menus.concat(getViewFactory().createMenus(helpActions, true));
       menuBarModel["children"] = menus;
       
       var menuBar:MenuBar = new MenuBar();
@@ -905,13 +929,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
         cardCanvas.name = workspaceName;
         _workspaceViewStack.addChild(cardCanvas);
 
-        var workspaceViewUI:UIComponent = _viewFactory.createComponent(workspaceView);
+        var workspaceViewUI:UIComponent = getViewFactory().createComponent(workspaceView);
         workspaceViewUI.percentWidth = 100.0;
         workspaceViewUI.percentHeight = 100.0;
         cardCanvas.addChild(workspaceViewUI);
         
         if(workspaceNavigator) {
-          var workspaceNavigatorUI:UIComponent = _viewFactory.createComponent(workspaceNavigator);
+          var workspaceNavigatorUI:UIComponent = getViewFactory().createComponent(workspaceNavigator);
           workspaceNavigatorUI.percentWidth = 100.0;
           workspaceNavigatorUI.percentHeight = 100.0;
           if(workspaceNavigatorUI is Tree) {
@@ -1013,7 +1037,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       dialog.title = title;
       if(icon) {
-        dialog.titleIcon = _viewFactory.getIconForComponent(dialog, icon);
+        dialog.titleIcon = getViewFactory().getIconForComponent(dialog, icon);
       }
       dialogBox.percentWidth = 100.0;
       dialogBox.percentHeight = 100.0;
@@ -1041,6 +1065,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       }
       (_dialogStack[0] as Array)[1] = viewStateGuid;
       (_dialogStack[0] as Array)[2] = viewStateAutomationId;
+    }
+    
+    protected function getViewFactory():DefaultFlexViewFactory {
+      return _viewFactory;
     }
     
     protected function registerRemoteClasses():void {
