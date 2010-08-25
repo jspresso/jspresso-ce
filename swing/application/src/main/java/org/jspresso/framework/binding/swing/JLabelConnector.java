@@ -18,11 +18,8 @@
  */
 package org.jspresso.framework.binding.swing;
 
-import java.text.ParseException;
-
 import javax.swing.JLabel;
 
-import org.apache.commons.lang.StringUtils;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.html.HtmlHelper;
 
@@ -36,6 +33,8 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
 
   private boolean    forceHtml;
   private IFormatter formatter;
+
+  private Object     connecteeValue;
 
   /**
    * Constructs a new <code>JLabelConnector</code> instance.
@@ -82,21 +81,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
    */
   @Override
   protected Object getConnecteeValue() {
-    String text = getConnectedJComponent().getText();
-    if (StringUtils.isEmpty(text)) {
-      return null;
-    }
-    if (formatter != null) {
-      try {
-        Object value = formatter.parse(getConnectedJComponent().getText());
-        getConnectedJComponent().setText(formatter.format(value));
-        return value;
-      } catch (ParseException ex) {
-        setConnecteeValue(null);
-        return null;
-      }
-    }
-    return text;
+    return connecteeValue;
   }
 
   /**
@@ -104,6 +89,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
    */
   @Override
   protected void protectedSetConnecteeValue(Object aValue) {
+    connecteeValue = aValue;
     if (aValue == null) {
       getConnectedJComponent().setText(null);
     } else {

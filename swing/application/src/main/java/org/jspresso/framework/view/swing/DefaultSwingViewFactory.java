@@ -37,6 +37,7 @@ import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -144,6 +145,9 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
+import org.jspresso.framework.util.format.EnumerationFormatter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.PasswordFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
@@ -242,11 +246,11 @@ public class DefaultSwingViewFactory extends
       int extraWidth) {
     if (viewDescriptor.getFont() != null) {
       // must set font before computing size.
-      component.setFont(createFont(viewDescriptor.getFont(), component
-          .getFont()));
+      component.setFont(createFont(viewDescriptor.getFont(),
+          component.getFont()));
     }
-    int preferredWidth = computePixelWidth(component, getFormatLength(
-        formatter, templateValue))
+    int preferredWidth = computePixelWidth(component,
+        getFormatLength(formatter, templateValue))
         + extraWidth;
     Dimension size = new Dimension(preferredWidth,
         component.getPreferredSize().height);
@@ -369,32 +373,32 @@ public class DefaultSwingViewFactory extends
     viewComponent.setLayout(layout);
 
     if (viewDescriptor.getNorthViewDescriptor() != null) {
-      IView<JComponent> northView = createView(viewDescriptor
-          .getNorthViewDescriptor(), actionHandler, locale);
+      IView<JComponent> northView = createView(
+          viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.add(northView.getPeer(), BorderLayout.NORTH);
       childrenViews.add(northView);
     }
     if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<JComponent> westView = createView(viewDescriptor
-          .getWestViewDescriptor(), actionHandler, locale);
+      IView<JComponent> westView = createView(
+          viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
       viewComponent.add(westView.getPeer(), BorderLayout.WEST);
       childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<JComponent> centerView = createView(viewDescriptor
-          .getCenterViewDescriptor(), actionHandler, locale);
+      IView<JComponent> centerView = createView(
+          viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
       viewComponent.add(centerView.getPeer(), BorderLayout.CENTER);
       childrenViews.add(centerView);
     }
     if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<JComponent> eastView = createView(viewDescriptor
-          .getEastViewDescriptor(), actionHandler, locale);
+      IView<JComponent> eastView = createView(
+          viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
       viewComponent.add(eastView.getPeer(), BorderLayout.EAST);
       childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
-      IView<JComponent> southView = createView(viewDescriptor
-          .getSouthViewDescriptor(), actionHandler, locale);
+      IView<JComponent> southView = createView(
+          viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
       viewComponent.add(southView.getPeer(), BorderLayout.SOUTH);
       childrenViews.add(southView);
     }
@@ -801,22 +805,56 @@ public class DefaultSwingViewFactory extends
   protected IView<JComponent> createEnumerationPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
+    final IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JComboBox viewComponent = createJComboBox();
-    if (!propertyDescriptor.isMandatory()) {
-      viewComponent.addItem(null);
+    IValueConnector connector;
+    final JComponent viewComponent;
+    if (propertyViewDescriptor.isReadOnly()) {
+      Map<Object, String> translations = null;
+      if (propertyDescriptor.isTranslated()) {
+        translations = new HashMap<Object, String>();
+        for (String value : propertyDescriptor.getEnumerationValues()) {
+          translations.put(
+              value,
+              getTranslationProvider().getTranslation(
+                  computeEnumerationKey(
+                      propertyDescriptor.getEnumerationName(), value), locale));
+        }
+      }
+      IFormatter formatter = new EnumerationFormatter(translations);
+      if (propertyViewDescriptor.getAction() != null) {
+        viewComponent = createJLink();
+      } else {
+        viewComponent = createJLabel(true);
+      }
+      connector = new JLabelConnector(propertyDescriptor.getName(),
+          (JLabel) viewComponent);
+      connector.addValueChangeListener(new IValueChangeListener() {
+
+        public void valueChange(ValueChangeEvent evt) {
+          ((JLabel) viewComponent).setIcon(getIconFactory().getIcon(
+              propertyDescriptor.getIconImageURL(String.valueOf(evt
+                  .getNewValue())), getIconFactory().getTinyIconSize()));
+        }
+      });
+      ((JLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createJComboBox();
+      if (!propertyDescriptor.isMandatory()) {
+        ((JComboBox) viewComponent).addItem(null);
+      }
+      for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
+        ((JComboBox) viewComponent).addItem(enumElement);
+      }
+      ((JComboBox) viewComponent)
+          .setRenderer(new TranslatedEnumerationListCellRenderer(
+              propertyDescriptor, locale));
+      adjustSizes(propertyViewDescriptor, viewComponent, null,
+          getEnumerationTemplateValue(propertyDescriptor, locale), Toolkit
+              .getDefaultToolkit().getScreenResolution() * 2 / 6);
+      connector = new JComboBoxConnector(propertyDescriptor.getName(),
+          ((JComboBox) viewComponent));
     }
-    for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
-      viewComponent.addItem(enumElement);
-    }
-    viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
-        propertyDescriptor, locale));
-    adjustSizes(propertyViewDescriptor, viewComponent, null,
-        getEnumerationTemplateValue(propertyDescriptor, locale), Toolkit
-            .getDefaultToolkit().getScreenResolution() * 2 / 6);
-    JComboBoxConnector connector = new JComboBoxConnector(propertyDescriptor
-        .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -1325,16 +1363,16 @@ public class DefaultSwingViewFactory extends
         connector);
 
     if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createListConnector(viewDescriptor
-          .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
-          .getElementDescriptor());
+      IValueConnector cellConnector = createListConnector(
+          viewDescriptor.getRenderedProperty(), modelDescriptor
+              .getCollectionDescriptor().getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
     }
     viewComponent.setCellRenderer(new EvenOddListCellRenderer());
     viewComponent.setModel(new CollectionConnectorListModel(connector));
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel(), null);
+    listSelectionModelBinder.bindSelectionModel(connector,
+        viewComponent.getSelectionModel(), null);
     if (viewDescriptor.getRowAction() != null) {
       final Action rowAction = getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale);
@@ -1424,8 +1462,8 @@ public class DefaultSwingViewFactory extends
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     JLabel propertyLabel = createJLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
-        .getI18nName(getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(
+        propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground(Color.RED);
@@ -1493,16 +1531,19 @@ public class DefaultSwingViewFactory extends
       // "lov.element.name",
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
       // getTranslationProvider(), locale)}, locale));
-      lovAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
-          .getTranslation(
+      lovAction.putValue(
+          Action.SHORT_DESCRIPTION,
+          getTranslationProvider().getTranslation(
               "lov.element.description",
               new Object[] {propertyDescriptor.getReferencedDescriptor()
                   .getI18nName(getTranslationProvider(), locale)}, locale)
-          + TOOLTIP_ELLIPSIS);
+              + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-        lovAction.putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-            propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
-            getIconFactory().getTinyIconSize()));
+        lovAction.putValue(
+            Action.SMALL_ICON,
+            getIconFactory().getIcon(
+                propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+                getIconFactory().getTinyIconSize()));
       }
       ((JActionField) viewComponent).setActions(Collections
           .singletonList(lovAction));
@@ -1569,14 +1610,14 @@ public class DefaultSwingViewFactory extends
     }
 
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
-      IView<JComponent> leftTopView = createView(viewDescriptor
-          .getLeftTopViewDescriptor(), actionHandler, locale);
+      IView<JComponent> leftTopView = createView(
+          viewDescriptor.getLeftTopViewDescriptor(), actionHandler, locale);
       viewComponent.setLeftComponent(leftTopView.getPeer());
       childrenViews.add(leftTopView);
     }
     if (viewDescriptor.getRightBottomViewDescriptor() != null) {
-      IView<JComponent> rightBottomView = createView(viewDescriptor
-          .getRightBottomViewDescriptor(), actionHandler, locale);
+      IView<JComponent> rightBottomView = createView(
+          viewDescriptor.getRightBottomViewDescriptor(), actionHandler, locale);
       viewComponent.setRightComponent(rightBottomView.getPeer());
       rightBottomView.getPeer().setMinimumSize(new Dimension(0, 0));
       childrenViews.add(rightBottomView);
@@ -1744,11 +1785,12 @@ public class DefaultSwingViewFactory extends
     if (viewDescriptor.isSortable()) {
       AbstractTableSorter sorterDecorator;
       if (viewDescriptor.getSortingAction() != null) {
-        sorterDecorator = new ActionTableSorter(tableModel, viewComponent
-            .getTableHeader(), actionHandler, viewDescriptor.getSortingAction());
+        sorterDecorator = new ActionTableSorter(tableModel,
+            viewComponent.getTableHeader(), actionHandler,
+            viewDescriptor.getSortingAction());
       } else {
-        sorterDecorator = new TableSorter(tableModel, viewComponent
-            .getTableHeader());
+        sorterDecorator = new TableSorter(tableModel,
+            viewComponent.getTableHeader());
         ((TableSorter) sorterDecorator).setColumnComparator(String.class,
             String.CASE_INSENSITIVE_ORDER);
       }
@@ -1758,12 +1800,12 @@ public class DefaultSwingViewFactory extends
       sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
       sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
       viewComponent.setModel(sorterDecorator);
-      listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-          .getSelectionModel(), sorterDecorator);
+      listSelectionModelBinder.bindSelectionModel(connector,
+          viewComponent.getSelectionModel(), sorterDecorator);
     } else {
       viewComponent.setModel(tableModel);
-      listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-          .getSelectionModel(), null);
+      listSelectionModelBinder.bindSelectionModel(connector,
+          viewComponent.getSelectionModel(), null);
     }
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     int maxColumnSize = computePixelWidth(viewComponent,
@@ -1779,8 +1821,8 @@ public class DefaultSwingViewFactory extends
             rowConnectorPrototype.getChildConnector(propertyName)));
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
-        StringBuffer columnName = new StringBuffer(columnViewDescriptor
-            .getI18nName(getTranslationProvider(), locale));
+        StringBuffer columnName = new StringBuffer(
+            columnViewDescriptor.getI18nName(getTranslationProvider(), locale));
         if (propertyDescriptor.isMandatory()) {
           columnName.append("*");
         }
@@ -1812,23 +1854,26 @@ public class DefaultSwingViewFactory extends
           column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
               .getWidth());
         } else {
-          int minHeaderWidth = computePixelWidth(viewComponent, columnName
-              .length());
+          int minHeaderWidth = computePixelWidth(viewComponent,
+              columnName.length());
           if (propertyDescriptor instanceof IBooleanPropertyDescriptor
               || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-            column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
-                2), minHeaderWidth));
+            column.setPreferredWidth(Math.max(
+                computePixelWidth(viewComponent, 2), minHeaderWidth));
           } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
             column.setPreferredWidth(Math.max(
-                computePixelWidth(viewComponent,
+                computePixelWidth(
+                    viewComponent,
                     getEnumerationTemplateValue(
                         (IEnumerationPropertyDescriptor) propertyDescriptor,
                         locale).length() + 4), minHeaderWidth));
           } else {
-            column.setPreferredWidth(Math.max(Math.min(computePixelWidth(
-                viewComponent, getFormatLength(createFormatter(
-                    propertyDescriptor, locale),
-                    getTemplateValue(propertyDescriptor))), maxColumnSize),
+            column.setPreferredWidth(Math.max(Math.min(
+                computePixelWidth(
+                    viewComponent,
+                    getFormatLength(
+                        createFormatter(propertyDescriptor, locale),
+                        getTemplateValue(propertyDescriptor))), maxColumnSize),
                 minHeaderWidth));
           }
         }
@@ -1845,7 +1890,8 @@ public class DefaultSwingViewFactory extends
     }
     scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
         .getRowHeight()
-        * 6 + viewComponent.getTableHeader().getPreferredSize().height));
+        * 6
+        + viewComponent.getTableHeader().getPreferredSize().height));
     if (viewDescriptor.getRowAction() != null) {
       final Action rowAction = getActionFactory().createAction(
           viewDescriptor.getRowAction(), actionHandler, view, locale);
@@ -1899,10 +1945,12 @@ public class DefaultSwingViewFactory extends
             break;
         }
         if (childViewDescriptor.getDescription() != null) {
-          viewComponent.addTab(tabText, childIcon, childView.getPeer(),
+          viewComponent.addTab(
+              tabText,
+              childIcon,
+              childView.getPeer(),
               childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                  locale)
-                  + TOOLTIP_ELLIPSIS);
+                  locale) + TOOLTIP_ELLIPSIS);
         } else {
           viewComponent.addTab(tabText, childIcon, childView.getPeer());
         }
@@ -2119,14 +2167,13 @@ public class DefaultSwingViewFactory extends
             if (action.getAcceleratorAsString() != null) {
               KeyStroke ks = KeyStroke.getKeyStroke(action
                   .getAcceleratorAsString());
-              view.getPeer().getActionMap().put(
-                  swingAction.getValue(Action.NAME), swingAction);
-              view.getPeer().getInputMap(
-                  JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                  swingAction.getValue(Action.NAME));
+              view.getPeer().getActionMap()
+                  .put(swingAction.getValue(Action.NAME), swingAction);
+              view.getPeer()
+                  .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                  .put(ks, swingAction.getValue(Action.NAME));
               String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                  .getModifiers())
-                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+                  .getModifiers()) + "-" + KeyEvent.getKeyText(ks.getKeyCode());
               if (firstAction) {
                 actionButton.setToolTipText("<HTML>"
                     + actionButton.getToolTipText()
@@ -2166,14 +2213,13 @@ public class DefaultSwingViewFactory extends
             if (action.getAcceleratorAsString() != null) {
               KeyStroke ks = KeyStroke.getKeyStroke(action
                   .getAcceleratorAsString());
-              view.getPeer().getActionMap().put(
-                  swingAction.getValue(Action.NAME), swingAction);
-              view.getPeer().getInputMap(
-                  JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                  swingAction.getValue(Action.NAME));
+              view.getPeer().getActionMap()
+                  .put(swingAction.getValue(Action.NAME), swingAction);
+              view.getPeer()
+                  .getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                  .put(ks, swingAction.getValue(Action.NAME));
               String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                  .getModifiers())
-                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+                  .getModifiers()) + "-" + KeyEvent.getKeyText(ks.getKeyCode());
               actionButton.setToolTipText("<HTML>"
                   + actionButton.getToolTipText()
                   + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
@@ -2232,8 +2278,7 @@ public class DefaultSwingViewFactory extends
     if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
           propertyDescriptor.getI18nDescription(getTranslationProvider(),
-              locale)
-              + TOOLTIP_ELLIPSIS);
+              locale) + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2474,8 +2519,8 @@ public class DefaultSwingViewFactory extends
     SwingViewCellEditorAdapter editor;
     if (editorView.getPeer() instanceof JActionField) {
       editor = new SwingViewCellEditorAdapter(editorView,
-          getModelConnectorFactory(), getMvcBinder(), actionHandler
-              .getSubject()) {
+          getModelConnectorFactory(), getMvcBinder(),
+          actionHandler.getSubject()) {
 
         private static final long serialVersionUID = -1551909997448473681L;
 
@@ -2492,8 +2537,8 @@ public class DefaultSwingViewFactory extends
       };
     } else {
       editor = new SwingViewCellEditorAdapter(editorView,
-          getModelConnectorFactory(), getMvcBinder(), actionHandler
-              .getSubject());
+          getModelConnectorFactory(), getMvcBinder(),
+          actionHandler.getSubject());
     }
     return editor;
   }
@@ -2622,10 +2667,11 @@ public class DefaultSwingViewFactory extends
     if (viewConnector == tree.getModel().getRoot()) {
       viewDescriptor = treeView.getDescriptor();
     } else {
-      viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
-          ((ITreeViewDescriptor) treeView.getDescriptor())
-              .getRootSubtreeDescriptor(),
-          getDescriptorPathFromConnectorTreePath(path))
+      viewDescriptor = TreeDescriptorHelper
+          .getSubtreeDescriptorFromPath(
+              ((ITreeViewDescriptor) treeView.getDescriptor())
+                  .getRootSubtreeDescriptor(),
+              getDescriptorPathFromConnectorTreePath(path))
           .getNodeGroupDescriptor();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
@@ -2704,8 +2750,7 @@ public class DefaultSwingViewFactory extends
             ToolTipManager.sharedInstance().registerComponent(tree);
             renderer
                 .setToolTipText(((IRenderableCompositeValueConnector) value)
-                    .getDisplayDescription()
-                    + TOOLTIP_ELLIPSIS);
+                    .getDisplayDescription() + TOOLTIP_ELLIPSIS);
           }
         } else {
           renderer.setText(value.toString());
@@ -2740,8 +2785,7 @@ public class DefaultSwingViewFactory extends
             ToolTipManager.sharedInstance().registerComponent(list);
             renderer
                 .setToolTipText(((IRenderableCompositeValueConnector) value)
-                    .getDisplayDescription()
-                    + TOOLTIP_ELLIPSIS);
+                    .getDisplayDescription() + TOOLTIP_ELLIPSIS);
           }
         } else {
           renderer.setText(value.toString());

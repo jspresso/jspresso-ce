@@ -18,9 +18,6 @@
  */
 package org.jspresso.framework.binding.ulc;
 
-import java.text.ParseException;
-
-import org.apache.commons.lang.StringUtils;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.html.HtmlHelper;
 
@@ -36,6 +33,7 @@ public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
 
   private IFormatter formatter;
   private boolean    multiLine;
+  private Object     connecteeValue;
 
   /**
    * Constructs a new <code>ULCLabelConnector</code> instance.
@@ -82,21 +80,7 @@ public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
    */
   @Override
   protected Object getConnecteeValue() {
-    String text = getConnectedULCComponent().getText();
-    if (StringUtils.isEmpty(text)) {
-      return null;
-    }
-    if (formatter != null) {
-      try {
-        Object value = formatter.parse(getConnectedULCComponent().getText());
-        getConnectedULCComponent().setText(formatter.format(value));
-        return value;
-      } catch (ParseException ex) {
-        setConnecteeValue(null);
-        return null;
-      }
-    }
-    return text;
+    return connecteeValue;
   }
 
   /**
@@ -104,6 +88,7 @@ public class ULCLabelConnector extends ULCComponentConnector<ULCLabel> {
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
+    connecteeValue = aValue;
     if (aValue == null) {
       getConnectedULCComponent().setText(null);
     } else {
