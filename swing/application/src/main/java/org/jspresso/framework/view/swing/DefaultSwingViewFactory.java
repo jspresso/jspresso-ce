@@ -37,7 +37,6 @@ import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -147,7 +146,6 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
-import org.jspresso.framework.util.format.EnumerationFormatter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.PasswordFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
@@ -810,18 +808,8 @@ public class DefaultSwingViewFactory extends
     IValueConnector connector;
     final JComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      Map<Object, String> translations = null;
-      if (propertyDescriptor.isTranslated()) {
-        translations = new HashMap<Object, String>();
-        for (String value : propertyDescriptor.getEnumerationValues()) {
-          translations.put(
-              value,
-              getTranslationProvider().getTranslation(
-                  computeEnumerationKey(
-                      propertyDescriptor.getEnumerationName(), value), locale));
-        }
-      }
-      IFormatter formatter = new EnumerationFormatter(translations);
+      IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
+          locale);
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink();
       } else {

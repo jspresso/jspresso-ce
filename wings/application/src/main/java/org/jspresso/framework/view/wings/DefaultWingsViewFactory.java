@@ -94,6 +94,8 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.PasswordFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
@@ -227,11 +229,11 @@ public class DefaultWingsViewFactory extends
       int extraWidth) {
     if (viewDescriptor.getFont() != null) {
       // must set font before computing size.
-      component.setFont(createFont(viewDescriptor.getFont(), component
-          .getFont()));
+      component.setFont(createFont(viewDescriptor.getFont(),
+          component.getFont()));
     }
-    int preferredWidth = computePixelWidth(component, getFormatLength(
-        formatter, templateValue))
+    int preferredWidth = computePixelWidth(component,
+        getFormatLength(formatter, templateValue))
         + extraWidth;
     SDimension size = new SDimension(preferredWidth + "px", null);
     component.setPreferredSize(size);
@@ -337,8 +339,8 @@ public class DefaultWingsViewFactory extends
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     SCheckBox viewComponent = createSCheckBox();
-    SCheckBoxConnector connector = new SCheckBoxConnector(propertyDescriptor
-        .getName(), viewComponent);
+    SCheckBoxConnector connector = new SCheckBoxConnector(
+        propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -356,32 +358,32 @@ public class DefaultWingsViewFactory extends
     List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
 
     if (viewDescriptor.getNorthViewDescriptor() != null) {
-      IView<SComponent> northView = createView(viewDescriptor
-          .getNorthViewDescriptor(), actionHandler, locale);
+      IView<SComponent> northView = createView(
+          viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.add(northView.getPeer(), SBorderLayout.NORTH);
       childrenViews.add(northView);
     }
     if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<SComponent> westView = createView(viewDescriptor
-          .getWestViewDescriptor(), actionHandler, locale);
+      IView<SComponent> westView = createView(
+          viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
       viewComponent.add(westView.getPeer(), SBorderLayout.WEST);
       childrenViews.add(westView);
     }
     if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<SComponent> centerView = createView(viewDescriptor
-          .getCenterViewDescriptor(), actionHandler, locale);
+      IView<SComponent> centerView = createView(
+          viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
       viewComponent.add(centerView.getPeer(), SBorderLayout.CENTER);
       childrenViews.add(centerView);
     }
     if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<SComponent> eastView = createView(viewDescriptor
-          .getEastViewDescriptor(), actionHandler, locale);
+      IView<SComponent> eastView = createView(
+          viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
       viewComponent.add(eastView.getPeer(), SBorderLayout.EAST);
       childrenViews.add(eastView);
     }
     if (viewDescriptor.getSouthViewDescriptor() != null) {
-      IView<SComponent> southView = createView(viewDescriptor
-          .getSouthViewDescriptor(), actionHandler, locale);
+      IView<SComponent> southView = createView(
+          viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
       viewComponent.add(southView.getPeer(), SBorderLayout.SOUTH);
       childrenViews.add(southView);
     }
@@ -752,21 +754,41 @@ public class DefaultWingsViewFactory extends
   protected IView<SComponent> createEnumerationPropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
+    final IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    SComboBox viewComponent = createSComboBox();
-    if (!propertyDescriptor.isMandatory()) {
-      viewComponent.addItem(null);
+    IValueConnector connector;
+    final SComponent viewComponent;
+    if (propertyViewDescriptor.isReadOnly()) {
+      IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
+          locale);
+      viewComponent = createSLabel(true);
+      connector = new SLabelConnector(propertyDescriptor.getName(),
+          (SLabel) viewComponent);
+      connector.addValueChangeListener(new IValueChangeListener() {
+
+        public void valueChange(ValueChangeEvent evt) {
+          ((SLabel) viewComponent).setIcon(getIconFactory().getIcon(
+              propertyDescriptor.getIconImageURL(String.valueOf(evt
+                  .getNewValue())), getIconFactory().getTinyIconSize()));
+        }
+      });
+      ((SLabelConnector) connector).setFormatter(formatter);
+    } else {
+      viewComponent = createSComboBox();
+      if (!propertyDescriptor.isMandatory()) {
+        ((SComboBox) viewComponent).addItem(null);
+      }
+      for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
+        ((SComboBox) viewComponent).addItem(enumElement);
+      }
+      ((SComboBox) viewComponent)
+          .setRenderer(new TranslatedEnumerationListCellRenderer(
+              propertyDescriptor, locale));
+      adjustSizes(propertyViewDescriptor, viewComponent, null,
+          getEnumerationTemplateValue(propertyDescriptor, locale), 48);
+      connector = new SComboBoxConnector(propertyDescriptor.getName(),
+          ((SComboBox) viewComponent));
     }
-    for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
-      viewComponent.addItem(enumElement);
-    }
-    viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
-        propertyDescriptor, locale));
-    adjustSizes(propertyViewDescriptor, viewComponent, null,
-        getEnumerationTemplateValue(propertyDescriptor, locale), 48);
-    SComboBoxConnector connector = new SComboBoxConnector(propertyDescriptor
-        .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -922,16 +944,16 @@ public class DefaultWingsViewFactory extends
         connector);
 
     if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createListConnector(viewDescriptor
-          .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
-          .getElementDescriptor());
+      IValueConnector cellConnector = createListConnector(
+          viewDescriptor.getRenderedProperty(), modelDescriptor
+              .getCollectionDescriptor().getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
     }
     viewComponent.setCellRenderer(new EvenOddListCellRenderer());
     viewComponent.setModel(new CollectionConnectorListModel(connector));
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
-    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel(), null);
+    listSelectionModelBinder.bindSelectionModel(connector,
+        viewComponent.getSelectionModel(), null);
     // TODO check how we could react on cell double clicks
     // if (viewDescriptor.getRowAction() != null) {
     // final Action rowAction = getActionFactory().createAction(
@@ -1016,8 +1038,8 @@ public class DefaultWingsViewFactory extends
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     SLabel propertyLabel = createSLabel(false);
-    StringBuffer labelText = new StringBuffer(propertyViewDescriptor
-        .getI18nName(getTranslationProvider(), locale));
+    StringBuffer labelText = new StringBuffer(
+        propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
       propertyLabel.setForeground(Color.RED);
@@ -1069,16 +1091,19 @@ public class DefaultWingsViewFactory extends
     // "lov.element.name",
     // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
     // getTranslationProvider(), locale)}, locale));
-    lovAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
-        .getTranslation(
+    lovAction.putValue(
+        Action.SHORT_DESCRIPTION,
+        getTranslationProvider().getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
                 .getI18nName(getTranslationProvider(), locale)}, locale)
-        + TOOLTIP_ELLIPSIS);
+            + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
-      lovAction.putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
-          getIconFactory().getTinyIconSize()));
+      lovAction.putValue(
+          Action.SMALL_ICON,
+          getIconFactory().getIcon(
+              propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+              getIconFactory().getTinyIconSize()));
     }
     viewComponent.setActions(Collections.singletonList(lovAction));
     adjustSizes(propertyViewDescriptor, viewComponent, null, null);
@@ -1255,8 +1280,8 @@ public class DefaultWingsViewFactory extends
 
     Insets insets = new Insets(0, 0, 0, 0);
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
-      IView<SComponent> leftTopView = createView(viewDescriptor
-          .getLeftTopViewDescriptor(), actionHandler, locale);
+      IView<SComponent> leftTopView = createView(
+          viewDescriptor.getLeftTopViewDescriptor(), actionHandler, locale);
       leftTopView.getPeer().setHorizontalAlignment(SConstants.LEFT_ALIGN);
       leftTopView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
       switch (viewDescriptor.getOrientation()) {
@@ -1285,8 +1310,8 @@ public class DefaultWingsViewFactory extends
       childrenViews.add(leftTopView);
     }
     if (viewDescriptor.getRightBottomViewDescriptor() != null) {
-      IView<SComponent> rightBottomView = createView(viewDescriptor
-          .getRightBottomViewDescriptor(), actionHandler, locale);
+      IView<SComponent> rightBottomView = createView(
+          viewDescriptor.getRightBottomViewDescriptor(), actionHandler, locale);
       rightBottomView.getPeer().setHorizontalAlignment(SConstants.LEFT_ALIGN);
       rightBottomView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
       int gridx = 0;
@@ -1581,12 +1606,12 @@ public class DefaultWingsViewFactory extends
       sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
       sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
       viewComponent.setModel(sorterDecorator);
-      listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-          .getSelectionModel(), sorterDecorator);
+      listSelectionModelBinder.bindSelectionModel(connector,
+          viewComponent.getSelectionModel(), sorterDecorator);
     } else {
       viewComponent.setModel(tableModel);
-      listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-          .getSelectionModel(), null);
+      listSelectionModelBinder.bindSelectionModel(connector,
+          viewComponent.getSelectionModel(), null);
     }
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
 
@@ -1603,8 +1628,8 @@ public class DefaultWingsViewFactory extends
             rowConnectorPrototype.getChildConnector(propertyName)));
         IPropertyDescriptor propertyDescriptor = rowDescriptor
             .getPropertyDescriptor(propertyName);
-        StringBuffer columnName = new StringBuffer(columnViewDescriptor
-            .getI18nName(getTranslationProvider(), locale));
+        StringBuffer columnName = new StringBuffer(
+            columnViewDescriptor.getI18nName(getTranslationProvider(), locale));
         if (propertyDescriptor.isMandatory()) {
           columnName.append("*");
         }
@@ -1631,22 +1656,26 @@ public class DefaultWingsViewFactory extends
             && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
           columnWidth = columnViewDescriptor.getPreferredSize().getWidth();
         } else {
-          int minHeaderWidth = computePixelWidth(viewComponent, columnName
-              .length());
+          int minHeaderWidth = computePixelWidth(viewComponent,
+              columnName.length());
           if (propertyDescriptor instanceof IBooleanPropertyDescriptor
               || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
             columnWidth = Math.max(computePixelWidth(viewComponent, 2),
                 minHeaderWidth);
           } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
             columnWidth = Math.max(
-                computePixelWidth(viewComponent,
+                computePixelWidth(
+                    viewComponent,
                     getEnumerationTemplateValue(
                         (IEnumerationPropertyDescriptor) propertyDescriptor,
                         locale).length() + 4), minHeaderWidth);
           } else {
-            columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
-                getFormatLength(createFormatter(propertyDescriptor, locale),
-                    getTemplateValue(propertyDescriptor))), maxColumnSize),
+            columnWidth = Math.max(Math.min(
+                computePixelWidth(
+                    viewComponent,
+                    getFormatLength(
+                        createFormatter(propertyDescriptor, locale),
+                        getTemplateValue(propertyDescriptor))), maxColumnSize),
                 minHeaderWidth);
           }
         }
@@ -1672,7 +1701,7 @@ public class DefaultWingsViewFactory extends
     // final Action rowAction = getActionFactory().createAction(
     // viewDescriptor.getRowAction(), actionHandler, view, locale);
     // viewComponent.addMouseListener(new SMouseAdapter() {
-    //        
+    //
     // @Override
     // public void mouseClicked(SMouseEvent e) {
     // if (e.getClickCount() == 2) {
@@ -1722,9 +1751,12 @@ public class DefaultWingsViewFactory extends
         }
         SComponent tabView = childView.getPeer();
         if (childViewDescriptor.getDescription() != null) {
-          viewComponent.addTab(tabText, childIcon, tabView, childViewDescriptor
-              .getI18nDescription(getTranslationProvider(), locale)
-              + TOOLTIP_ELLIPSIS);
+          viewComponent.addTab(
+              tabText,
+              childIcon,
+              tabView,
+              childViewDescriptor.getI18nDescription(getTranslationProvider(),
+                  locale) + TOOLTIP_ELLIPSIS);
         } else {
           viewComponent.addTab(tabText, childIcon, tabView);
         }
@@ -1864,14 +1896,14 @@ public class DefaultWingsViewFactory extends
             if (action.getAcceleratorAsString() != null) {
               KeyStroke ks = KeyStroke.getKeyStroke(action
                   .getAcceleratorAsString());
-              view.getPeer().getActionMap().put(
-                  wingsAction.getValue(Action.NAME), wingsAction);
-              view.getPeer().getInputMap(
-                  SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
+              view.getPeer().getActionMap()
+                  .put(wingsAction.getValue(Action.NAME), wingsAction);
+              view.getPeer()
+                  .getInputMap(
+                      SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
                   .put(ks, wingsAction.getValue(Action.NAME));
               String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                  .getModifiers())
-                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+                  .getModifiers()) + "-" + KeyEvent.getKeyText(ks.getKeyCode());
               actionButton.setToolTipText("<HTML>"
                   + actionButton.getToolTipText()
                   + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
@@ -1928,8 +1960,7 @@ public class DefaultWingsViewFactory extends
     if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
           propertyDescriptor.getI18nDescription(getTranslationProvider(),
-              locale)
-              + TOOLTIP_ELLIPSIS);
+              locale) + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2301,8 +2332,7 @@ public class DefaultWingsViewFactory extends
             // SToolTipManager.sharedInstance().registerComponent(tree);
             renderer
                 .setToolTipText(((IRenderableCompositeValueConnector) value)
-                    .getDisplayDescription()
-                    + TOOLTIP_ELLIPSIS);
+                    .getDisplayDescription() + TOOLTIP_ELLIPSIS);
           }
         } else {
           renderer.setText(value.toString());
@@ -2337,8 +2367,7 @@ public class DefaultWingsViewFactory extends
             // SToolTipManager.sharedInstance().registerComponent(tree);
             renderer
                 .setToolTipText(((IRenderableCompositeValueConnector) value)
-                    .getDisplayDescription()
-                    + TOOLTIP_ELLIPSIS);
+                    .getDisplayDescription() + TOOLTIP_ELLIPSIS);
           }
         } else {
           renderer.setText(value.toString());

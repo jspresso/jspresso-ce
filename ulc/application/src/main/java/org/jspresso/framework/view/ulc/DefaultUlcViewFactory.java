@@ -95,7 +95,6 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
-import org.jspresso.framework.util.format.EnumerationFormatter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
@@ -797,18 +796,8 @@ public class DefaultUlcViewFactory extends
     IValueConnector connector;
     final ULCComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      Map<Object, String> translations = null;
-      if (propertyDescriptor.isTranslated()) {
-        translations = new HashMap<Object, String>();
-        for (String value : propertyDescriptor.getEnumerationValues()) {
-          translations.put(
-              value,
-              getTranslationProvider().getTranslation(
-                  computeEnumerationKey(
-                      propertyDescriptor.getEnumerationName(), value), locale));
-        }
-      }
-      IFormatter formatter = new EnumerationFormatter(translations);
+      IFormatter formatter = createEnumerationFormatter(propertyDescriptor,
+          locale);
       viewComponent = createULCLabel(true);
       connector = new ULCLabelConnector(propertyDescriptor.getName(),
           (ULCLabel) viewComponent);

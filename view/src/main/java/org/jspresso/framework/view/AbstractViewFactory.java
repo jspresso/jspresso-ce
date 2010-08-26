@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -82,6 +83,7 @@ import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.DurationFormatter;
+import org.jspresso.framework.util.format.EnumerationFormatter;
 import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
@@ -209,9 +211,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {
-                0
-              });
+              .setSelectedIndices(new int[] {0});
         }
       }
     };
@@ -1175,6 +1175,32 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected IFormatter createDateFormatter(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createDateFormat(propertyDescriptor, locale));
+  }
+
+  /**
+   * Creates an enumeration formatter.
+   * 
+   * @param propertyDescriptor
+   *          the enumeration property descriptor
+   * @param locale
+   *          the locale to create the formatter for.
+   * @return the fomrmatter.
+   */
+  protected IFormatter createEnumerationFormatter(
+      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+    Map<Object, String> translations = null;
+    if (propertyDescriptor.isTranslated()) {
+      translations = new HashMap<Object, String>();
+      for (String value : propertyDescriptor.getEnumerationValues()) {
+        translations.put(
+            value,
+            getTranslationProvider().getTranslation(
+                computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                    value), locale));
+      }
+    }
+    IFormatter formatter = new EnumerationFormatter(translations);
+    return formatter;
   }
 
   /**
