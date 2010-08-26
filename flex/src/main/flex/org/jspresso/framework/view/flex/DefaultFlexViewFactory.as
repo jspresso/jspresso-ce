@@ -689,26 +689,43 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createComboBox(remoteComboBox:RComboBox):UIComponent {
-      var comboBox:RIconComboBox = new RIconComboBox();
-      comboBox.dataProvider = remoteComboBox.values;
-      comboBox.labels = remoteComboBox.translations;
-      comboBox.icons = remoteComboBox.icons;
-      bindComboBox(comboBox, remoteComboBox);
-
-      var itemRenderer:ClassFactory = new ClassFactory(RIconListItemRenderer);
-      itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate};
-      comboBox.itemRenderer = itemRenderer;
-      
-      var width:int = 0;
-      for each(var tr:String in remoteComboBox.translations) {
-        if(tr.length > width) {
-          width = tr.length;
+      if(remoteComboBox.readOnly) {
+        var label:RIconLabel = new RIconLabel();
+        var labels:Object = new Object();
+        var icons:Object = new Object();
+        
+        for(var i:int = 0; i < remoteComboBox.values.length; i++) {
+          labels[remoteComboBox.values[i] as String] = remoteComboBox.translations[i];
+          icons[remoteComboBox.values[i] as String] = remoteComboBox.icons[i];
         }
+        
+        label.labels = labels;
+        label.icons = icons;
+        
+        BindingUtils.bindProperty(label, "value", remoteComboBox.state, "value", true);
+        return label;
+      } else {
+        var comboBox:RIconComboBox = new RIconComboBox();
+        comboBox.dataProvider = remoteComboBox.values;
+        comboBox.labels = remoteComboBox.translations;
+        comboBox.icons = remoteComboBox.icons;
+        bindComboBox(comboBox, remoteComboBox);
+  
+        var itemRenderer:ClassFactory = new ClassFactory(RIconListItemRenderer);
+        itemRenderer.properties = {labels:remoteComboBox.translations, icons:remoteComboBox.icons, iconTemplate:_iconTemplate};
+        comboBox.itemRenderer = itemRenderer;
+        
+        var width:int = 0;
+        for each(var tr:String in remoteComboBox.translations) {
+          if(tr.length > width) {
+            width = tr.length;
+          }
+        }
+        //width += 8;
+        sizeMaxComponentWidth(comboBox, remoteComboBox, width);
+        comboBox.maxWidth += 45;
+        return comboBox;
       }
-      //width += 8;
-      sizeMaxComponentWidth(comboBox, remoteComboBox, width);
-      comboBox.maxWidth += 45;
-      return comboBox;
     }
 
     protected function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
