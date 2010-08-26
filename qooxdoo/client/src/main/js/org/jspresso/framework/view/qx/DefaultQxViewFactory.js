@@ -849,53 +849,92 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return {qx.ui.core.Widget}
      */
     _createComboBox : function(remoteComboBox) {
-      var comboBox = new qx.ui.form.SelectBox();
-      comboBox.setAllowStretchY(false, false);
-      var iconDim;
-      var width = 0;
-      for(var i = 0; i < remoteComboBox.getValues().length; i++) {
-        var tr = remoteComboBox.getTranslations()[i];
-        var li = new qx.ui.form.ListItem(tr/*,
-                                         null*/);
-        li.setModel(remoteComboBox.getValues()[i]);
-        var rIcon = remoteComboBox.getIcons()[i];
-        this.setIcon(li, rIcon);
-        comboBox.add(li);
-        if(!iconDim && rIcon && rIcon.getDimension()) {
-          iconDim = rIcon.getDimension();
+      if(remoteComboBox.isReadOnly()) {
+        var atom = new qx.ui.basic.Atom();
+        var state = remoteComboBox.getState();
+        
+        var labels = new Object();
+        var icons = new Object();
+        for(var i = 0; i < remoteComboBox.getValues().length; i++) {
+          labels[remoteComboBox.getValues()[i]] = remoteComboBox.getTranslations()[i];
+          icons[remoteComboBox.getValues()[i]] = remoteComboBox.getIcons()[i];
         }
-        if(tr.length > width) {
-          width = tr.length;
-        }
-      }
-      this._sizeMaxComponentWidth(comboBox, remoteComboBox, width);
-      var extraWidth = 25;
-      if(iconDim) {
-      	extraWidth += iconDim.getWidth();
-      }
-      comboBox.setMaxWidth(comboBox.getMaxWidth() + extraWidth);
-      comboBox.setWidth(comboBox.getMaxWidth());
-      comboBox.setMinWidth(comboBox.getMaxWidth());
-
-      var state = remoteComboBox.getState();
-      var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(comboBox, "modelSelection", "value", false,
-        {
-          converter : function(modelValue, model) {
-            return [modelValue];
+        
+        var synchAtomValue = function(value) {
+          if(value) {
+            /**@type String*/
+            var label = labels[value]; 
+            var icon = icons[value]; 
+            if(label) {
+              atom.setLabel(label);
+            } else {
+              atom.setLabel("");
+            }
+            if(icon) {
+              atom.setIcon(icon.getImageUrlSpec());
+            } else {
+              atom.setIcon("");
+            }
+          } else {
+            atom.setLabel("");
+            atom.setIcon("");
+          }
+        };
+        synchAtomValue(state.getValue());
+        
+        state.addListener("changeValue", function(e) {
+          synchAtomValue(e.getData());
+        }, this);
+        return atom;
+      } else {
+        var comboBox = new qx.ui.form.SelectBox();
+        comboBox.setAllowStretchY(false, false);
+        var iconDim;
+        var width = 0;
+        for(var i = 0; i < remoteComboBox.getValues().length; i++) {
+          var tr = remoteComboBox.getTranslations()[i];
+          var li = new qx.ui.form.ListItem(tr/*,
+                                           null*/);
+          li.setModel(remoteComboBox.getValues()[i]);
+          var rIcon = remoteComboBox.getIcons()[i];
+          this.setIcon(li, rIcon);
+          comboBox.add(li);
+          if(!iconDim && rIcon && rIcon.getDimension()) {
+            iconDim = rIcon.getDimension();
+          }
+          if(tr.length > width) {
+            width = tr.length;
           }
         }
-      );
-      comboBox.getModelSelection().addListener("change", function(e) {
-        var modelSelection = e.getTarget();
-        if(modelSelection.length > 0) {
-          state.setValue(modelSelection.getItem(0));
-        } else {
-          state.setValue(null);
+        this._sizeMaxComponentWidth(comboBox, remoteComboBox, width);
+        var extraWidth = 25;
+        if(iconDim) {
+          extraWidth += iconDim.getWidth();
         }
-      });
-      modelController.addTarget(comboBox, "enabled", "writable", false);
-      return comboBox;
+        comboBox.setMaxWidth(comboBox.getMaxWidth() + extraWidth);
+        comboBox.setWidth(comboBox.getMaxWidth());
+        comboBox.setMinWidth(comboBox.getMaxWidth());
+  
+        var state = remoteComboBox.getState();
+        var modelController = new qx.data.controller.Object(state);
+        modelController.addTarget(comboBox, "modelSelection", "value", false,
+          {
+            converter : function(modelValue, model) {
+              return [modelValue];
+            }
+          }
+        );
+        comboBox.getModelSelection().addListener("change", function(e) {
+          var modelSelection = e.getTarget();
+          if(modelSelection.length > 0) {
+            state.setValue(modelSelection.getItem(0));
+          } else {
+            state.setValue(null);
+          }
+        });
+        modelController.addTarget(comboBox, "enabled", "writable", false);
+        return comboBox;
+      }
     },
 
     /**
@@ -1295,7 +1334,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         formLayout.setColumnFlex(compCol, 1);
         lastRow = compRow;
         if(compCol + compColSpan > lastCol) {
-        	lastCol = compCol + compColSpan;
+          lastCol = compCol + compColSpan;
         }
       }
       for(var i = 0; i <= lastRow; i++) {
@@ -1415,8 +1454,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : this._readOnlyFieldConverter
         }
       );
-			this._sizeMaxComponentWidth(textArea, remoteTextArea);
-			return textArea;
+      this._sizeMaxComponentWidth(textArea, remoteTextArea);
+      return textArea;
     },
 
     /**
@@ -1689,10 +1728,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           modelController.addTarget(label, "value", "value", false,
             {
               converter : function(modelValue, model) {
-              	if(modelValue) {
+                if(modelValue) {
                   return "<u><a href='javascript:'>" + modelValue + "</a></u>";
-              	}
-              	return modelValue;
+                }
+                return modelValue;
               }
             }
           );
@@ -1893,10 +1932,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return {qx.ui.core.Command}
      */
     createCommand : function(remoteAction) {
-    	var accel = remoteAction.getAcceleratorAsString();
-    	if(accel) {
-    		accel = accel.replace(" ", "+", "g");
-    	}
+      var accel = remoteAction.getAcceleratorAsString();
+      if(accel) {
+        accel = accel.replace(" ", "+", "g");
+      }
       var command = new qx.ui.core.Command(accel);
       this.setIcon(command, remoteAction.getIcon());
       if(remoteAction.getName()) {
@@ -2166,7 +2205,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return void
      */
     _sizeMaxComponentWidth : function(component, remoteComponent, expectedCharCount, maxCharCount) {
-    	this._applyComponentStyle(component, remoteComponent);
+      this._applyComponentStyle(component, remoteComponent);
       if(expectedCharCount == null) {
         expectedCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
       }

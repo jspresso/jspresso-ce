@@ -50,25 +50,30 @@ package org.jspresso.framework.view.flex {
 
     public function set value(value:String):void {
       _value = value;
-      if(_icons) {
-        var icon:RIcon = _icons[value] as RIcon;
-        if(icon) {
-          if(icon.dimension) {
-            _iconImage.width = icon.dimension.width;
-            _iconImage.height = icon.dimension.height;
+      if(value) {
+        if(_icons) {
+          var icon:RIcon = _icons[value] as RIcon;
+          if(icon) {
+            if(icon.dimension) {
+              _iconImage.width = icon.dimension.width;
+              _iconImage.height = icon.dimension.height;
+            }
+            _iconImage.source = icon.imageUrlSpec;
+          } else {
+            _iconImage.source = null;
           }
-          _iconImage.source = icon.imageUrlSpec;
-        } else {
-          _iconImage.source = null;
         }
-      }
-      if(_labels) {
-        var text:String = _labels[value] as String;
-        if(text) {
-          _label.text = text;
-        } else {
-          _label.text = "";
+        if(_labels) {
+          var text:String = _labels[value] as String;
+          if(text) {
+            _label.text = text;
+          } else {
+            _label.text = "";
+          }
         }
+      } else {
+        _iconImage.source = null;
+        _label.text = "";
       }
     }
   }
