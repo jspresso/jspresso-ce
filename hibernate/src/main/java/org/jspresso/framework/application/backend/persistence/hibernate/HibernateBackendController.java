@@ -578,11 +578,11 @@ public class HibernateBackendController extends AbstractBackendController {
   public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria,
       EMergeMode mergeMode, Class<? extends T> clazz) {
     List<T> ret = findByCriteria(criteria, null, clazz);
-    if (ret != null) {
-      if (mergeMode != null) {
-        return ret.get(0);
+    if (ret != null && !ret.isEmpty()) {
+      if (mergeMode != null && !isUnitOfWorkActive()) {
+        return (T) merge(ret.get(0), mergeMode);
       }
-      return (T) merge(ret.get(0), mergeMode);
+      return ret.get(0);
     }
     return null;
   }
@@ -614,7 +614,7 @@ public class HibernateBackendController extends AbstractBackendController {
           }
         });
     if (res != null) {
-      if (mergeMode != null) {
+      if (mergeMode != null && !isUnitOfWorkActive()) {
         return (List<T>) merge(res, mergeMode);
       }
       return (List<T>) res;
