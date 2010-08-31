@@ -189,6 +189,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
             if (modelDescriptor instanceof ICollectionPropertyDescriptor<?>) {
               if (((IModelGate) clonedGate).isCollectionBased()) {
                 ((IModelGate) clonedGate).setModel(null);
+                // tracks children connectors selection
                 ((ICollectionConnectorProvider) viewConnector)
                     .getCollectionConnector().addSelectionChangeListener(
                         new ISelectionChangeListener() {
@@ -197,6 +198,28 @@ public abstract class AbstractActionFactory<E, F, G> implements
                             ICollectionConnector collConnector = (ICollectionConnector) evt
                                 .getSource();
                             int[] newSelection = evt.getNewSelection();
+                            Set<Object> selectedModels = null;
+                            if (newSelection != null && newSelection.length > 0) {
+                              selectedModels = new HashSet<Object>();
+                              for (int i = 0; i < newSelection.length; i++) {
+                                selectedModels.add(collConnector
+                                    .getChildConnector(newSelection[i])
+                                    .getConnectorValue());
+                              }
+                            }
+                            ((IModelGate) clonedGate).setModel(selectedModels);
+                          }
+                        });
+                // tracks selected children model change
+                ((ICollectionConnectorProvider) viewConnector)
+                    .getCollectionConnector().addValueChangeListener(
+                        new IValueChangeListener() {
+
+                          public void valueChange(ValueChangeEvent evt) {
+                            ICollectionConnector collConnector = (ICollectionConnector) evt
+                                .getSource();
+                            int[] newSelection = collConnector
+                                .getSelectedIndices();
                             Set<Object> selectedModels = null;
                             if (newSelection != null && newSelection.length > 0) {
                               selectedModels = new HashSet<Object>();
