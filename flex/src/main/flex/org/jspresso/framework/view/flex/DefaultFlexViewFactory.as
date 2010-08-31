@@ -1647,7 +1647,6 @@ package org.jspresso.framework.view.flex {
       }
 
       table.columns = columns;
-      table.editable = remoteTable.state.writable;
       if(remoteTable.horizontallyScrollable) {
         table.horizontalScrollPolicy = ScrollPolicy.AUTO;
       } else {
@@ -1696,6 +1695,7 @@ package org.jspresso.framework.view.flex {
     
     protected function bindTable(table:EnhancedDataGrid, remoteTable:RTable):void {
       var state:RemoteCompositeValueState = remoteTable.state as RemoteCompositeValueState;
+      BindingUtils.bindProperty(table, "editable", state, "writable");
       if(remoteTable.sortable) {
         if(remoteTable.sortingAction) {
           table.addEventListener(DataGridEvent.HEADER_RELEASE, function(event:DataGridEvent):void {

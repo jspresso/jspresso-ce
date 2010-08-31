@@ -115,12 +115,14 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           // don't listen to rendering connectors.
           connector.removePropertyChangeListener(
               IValueConnector.WRITABLE_PROPERTY, this);
-        } else if (connector.getParentConnector() instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) connector.getParentConnector())
-                .getCollectionConnector() == connector) {
-          // don't listen to provided collection connector.
-          connector.removePropertyChangeListener(
-              IValueConnector.WRITABLE_PROPERTY, this);
+          // The following breaks notification on detail tables !!!
+          // } else if (connector.getParentConnector() instanceof
+          // ICollectionConnectorProvider
+          // && ((ICollectionConnectorProvider) connector.getParentConnector())
+          // .getCollectionConnector() == connector) {
+          // // don't listen to provided collection connector.
+          // connector.removePropertyChangeListener(
+          // IValueConnector.WRITABLE_PROPERTY, this);
         } else if (connector.getParentConnector() == null
             && connector.getId() == null) {
           // don't listen to root connectors.

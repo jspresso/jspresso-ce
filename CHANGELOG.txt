@@ -7,6 +7,9 @@ Bugs fixed
            Property rollback can produce stack-overflow on 1-1 relationships
            selecting OK on an empty LOV dialog produces an exception
 3041251    writability gate on component has no effect
+           Collection model gates used as actionability gates
+             are not correctly notified of collection selection changes
+           Writability gates do not work correctly on collection views
 
 New features
 ------------

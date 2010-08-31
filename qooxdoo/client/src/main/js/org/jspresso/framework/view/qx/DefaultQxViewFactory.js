@@ -409,7 +409,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
                                                                       remoteTable.isSortable(),
                                                                       remoteTable.getSortingAction(),
                                                                       this.__commandHandler);
-      tableModel.setEditable(state.isWritable());
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(tableModel, "editable", "writable", false);
       var columnIds = remoteTable.getColumnIds();
       var columnNames = new Array();
       for(var i=0; i < remoteTable.getColumnIds().length; i++) {
