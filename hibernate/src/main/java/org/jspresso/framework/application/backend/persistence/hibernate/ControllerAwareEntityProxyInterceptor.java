@@ -222,7 +222,9 @@ public class ControllerAwareEntityProxyInterceptor extends
         } else {
           isClean = false;
         }
-        if (!isClean) {
+        if (!isClean
+            && !backendController
+                .isEntityRegisteredForDeletion((IEntity) entity)) {
           // the entity is dirty and is going to be flushed.
           ((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal(),
               getEntityLifecycleHandler());
