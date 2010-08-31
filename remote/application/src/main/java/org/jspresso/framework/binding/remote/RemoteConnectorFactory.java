@@ -79,71 +79,48 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * Constructs a new <code>RemoteConnectorFactory</code> instance.
    */
   public RemoteConnectorFactory() {
-    readabilityListener = new PropertyChangeListener() {
+    initAccessibilityListeners();
+    initValueChangeListeners();
+    initSelectionChangeListener();
+  }
 
-      public void propertyChange(PropertyChangeEvent evt) {
+  private void initSelectionChangeListener() {
+    selectionChangeListener = new ISelectionChangeListener() {
+
+      public void selectionChange(SelectionChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
-        if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
-            && ((IRenderableCompositeValueConnector) connector
-                .getParentConnector()).getRenderingConnector() == connector) {
-          // don't listen to rendering connectors.
-          connector.removePropertyChangeListener(
-              IValueConnector.READABLE_PROPERTY, this);
-        } else if (connector.getParentConnector() instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) connector.getParentConnector())
-                .getCollectionConnector() == connector) {
-          // don't listen to provided collection connector.
-          connector.removePropertyChangeListener(
-              IValueConnector.READABLE_PROPERTY, this);
+        IValueConnector parentConnector = connector.getParentConnector();
+        if (parentConnector instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) parentConnector)
+                .getCollectionConnector() == connector
+            // The next condition is to prevent commands on master-detail
+            // connector wrappers.
+            && !isCascadingModelWrapperConnector((ICollectionConnectorProvider) parentConnector)) {
+          RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
+              .getState());
+          parentState.setSelectedIndices(evt.getNewSelection());
+          parentState.setLeadingIndex(evt.getLeadingIndex());
+          RemoteSelectionCommand parentCommand = new RemoteSelectionCommand();
+          parentCommand.setTargetPeerGuid(parentState.getGuid());
+          parentCommand.setLeadingIndex(parentState.getLeadingIndex());
+          parentCommand.setSelectedIndices(parentState.getSelectedIndices());
+          remoteCommandHandler.registerCommand(parentCommand);
         } else {
-          ((IRemoteStateOwner) connector).synchRemoteState();
-          RemoteValueState state = ((IRemoteStateOwner) connector).getState();
-          RemoteReadabilityCommand command = new RemoteReadabilityCommand();
-          command.setTargetPeerGuid(state.getGuid());
-          command.setReadable(state.isReadable());
+          RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)
+              .getState());
+          compositeValueState.setSelectedIndices(evt.getNewSelection());
+          compositeValueState.setLeadingIndex(evt.getLeadingIndex());
+          RemoteSelectionCommand command = new RemoteSelectionCommand();
+          command.setTargetPeerGuid(compositeValueState.getGuid());
+          command.setLeadingIndex(compositeValueState.getLeadingIndex());
+          command.setSelectedIndices(compositeValueState.getSelectedIndices());
           remoteCommandHandler.registerCommand(command);
         }
       }
     };
-    writabilityListener = new PropertyChangeListener() {
+  }
 
-      public void propertyChange(PropertyChangeEvent evt) {
-        IValueConnector connector = (IValueConnector) evt.getSource();
-        if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
-            && ((IRenderableCompositeValueConnector) connector
-                .getParentConnector()).getRenderingConnector() == connector) {
-          // don't listen to rendering connectors.
-          connector.removePropertyChangeListener(
-              IValueConnector.WRITABLE_PROPERTY, this);
-          // The following breaks notification on detail tables !!!
-          // } else if (connector.getParentConnector() instanceof
-          // ICollectionConnectorProvider
-          // && ((ICollectionConnectorProvider) connector.getParentConnector())
-          // .getCollectionConnector() == connector) {
-          // // don't listen to provided collection connector.
-          // connector.removePropertyChangeListener(
-          // IValueConnector.WRITABLE_PROPERTY, this);
-        } else if (connector.getParentConnector() == null
-            && connector.getId() == null) {
-          // don't listen to root connectors.
-          connector.removePropertyChangeListener(
-              IValueConnector.WRITABLE_PROPERTY, this);
-        } else if (connector instanceof ICollectionConnectorProvider
-            && isCascadingModelWrapperConnector((ICollectionConnectorProvider) connector)) {
-          // don't listen to maser-detail wrappers.
-          connector.removePropertyChangeListener(
-              IValueConnector.WRITABLE_PROPERTY, this);
-        } else {
-          ((IRemoteStateOwner) connector).synchRemoteState();
-          RemoteValueState state = ((IRemoteStateOwner) connector).getState();
-          // state.setWritable(((Boolean) evt.getNewValue()).booleanValue());
-          RemoteWritabilityCommand command = new RemoteWritabilityCommand();
-          command.setTargetPeerGuid(state.getGuid());
-          command.setWritable(state.isWritable());
-          remoteCommandHandler.registerCommand(command);
-        }
-      }
-    };
+  private void initValueChangeListeners() {
     valueChangeListener = new IValueChangeListener() {
 
       public void valueChange(ValueChangeEvent evt) {
@@ -246,35 +223,70 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         }
       }
     };
-    selectionChangeListener = new ISelectionChangeListener() {
+  }
 
-      public void selectionChange(SelectionChangeEvent evt) {
+  private void initAccessibilityListeners() {
+    writabilityListener = new PropertyChangeListener() {
+
+      public void propertyChange(PropertyChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
-        IValueConnector parentConnector = connector.getParentConnector();
-        if (parentConnector instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) parentConnector)
-                .getCollectionConnector() == connector
-            // The next condition is to prevent commands on master-detail
-            // connector wrappers.
-            && !isCascadingModelWrapperConnector((ICollectionConnectorProvider) parentConnector)) {
-          RemoteCompositeValueState parentState = ((RemoteCompositeValueState) ((IRemoteStateOwner) parentConnector)
-              .getState());
-          parentState.setSelectedIndices(evt.getNewSelection());
-          parentState.setLeadingIndex(evt.getLeadingIndex());
-          RemoteSelectionCommand parentCommand = new RemoteSelectionCommand();
-          parentCommand.setTargetPeerGuid(parentState.getGuid());
-          parentCommand.setLeadingIndex(parentState.getLeadingIndex());
-          parentCommand.setSelectedIndices(parentState.getSelectedIndices());
-          remoteCommandHandler.registerCommand(parentCommand);
+        if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
+            && ((IRenderableCompositeValueConnector) connector
+                .getParentConnector()).getRenderingConnector() == connector) {
+          // don't listen to rendering connectors.
+          connector.removePropertyChangeListener(
+              IValueConnector.WRITABLE_PROPERTY, this);
+          // The following breaks notification on detail tables !!!
+          // } else if (connector.getParentConnector() instanceof
+          // ICollectionConnectorProvider
+          // && ((ICollectionConnectorProvider) connector.getParentConnector())
+          // .getCollectionConnector() == connector) {
+          // // don't listen to provided collection connector.
+          // connector.removePropertyChangeListener(
+          // IValueConnector.WRITABLE_PROPERTY, this);
+        } else if (connector.getParentConnector() == null
+            && connector.getId() == null) {
+          // don't listen to root connectors.
+          connector.removePropertyChangeListener(
+              IValueConnector.WRITABLE_PROPERTY, this);
+        } else if (connector instanceof ICollectionConnectorProvider
+            && isCascadingModelWrapperConnector((ICollectionConnectorProvider) connector)) {
+          // don't listen to maser-detail wrappers.
+          connector.removePropertyChangeListener(
+              IValueConnector.WRITABLE_PROPERTY, this);
         } else {
-          RemoteCompositeValueState compositeValueState = ((RemoteCompositeValueState) ((IRemoteStateOwner) connector)
-              .getState());
-          compositeValueState.setSelectedIndices(evt.getNewSelection());
-          compositeValueState.setLeadingIndex(evt.getLeadingIndex());
-          RemoteSelectionCommand command = new RemoteSelectionCommand();
-          command.setTargetPeerGuid(compositeValueState.getGuid());
-          command.setLeadingIndex(compositeValueState.getLeadingIndex());
-          command.setSelectedIndices(compositeValueState.getSelectedIndices());
+          ((IRemoteStateOwner) connector).synchRemoteState();
+          RemoteValueState state = ((IRemoteStateOwner) connector).getState();
+          // state.setWritable(((Boolean) evt.getNewValue()).booleanValue());
+          RemoteWritabilityCommand command = new RemoteWritabilityCommand();
+          command.setTargetPeerGuid(state.getGuid());
+          command.setWritable(state.isWritable());
+          remoteCommandHandler.registerCommand(command);
+        }
+      }
+    };
+    readabilityListener = new PropertyChangeListener() {
+
+      public void propertyChange(PropertyChangeEvent evt) {
+        IValueConnector connector = (IValueConnector) evt.getSource();
+        if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
+            && ((IRenderableCompositeValueConnector) connector
+                .getParentConnector()).getRenderingConnector() == connector) {
+          // don't listen to rendering connectors.
+          connector.removePropertyChangeListener(
+              IValueConnector.READABLE_PROPERTY, this);
+        } else if (connector.getParentConnector() instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) connector.getParentConnector())
+                .getCollectionConnector() == connector) {
+          // don't listen to provided collection connector.
+          connector.removePropertyChangeListener(
+              IValueConnector.READABLE_PROPERTY, this);
+        } else {
+          ((IRemoteStateOwner) connector).synchRemoteState();
+          RemoteValueState state = ((IRemoteStateOwner) connector).getState();
+          RemoteReadabilityCommand command = new RemoteReadabilityCommand();
+          command.setTargetPeerGuid(state.getGuid());
+          command.setReadable(state.isReadable());
           remoteCommandHandler.registerCommand(command);
         }
       }
