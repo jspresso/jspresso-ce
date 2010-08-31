@@ -369,7 +369,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           }
           childrenContent.length = newLength;
           children.length = newLength;
-          children.fireEvent("changeLength", qx.event.type.Event);
+          children.fireDataEvent("changeLength", oldLength, newLength);
           children.fireDataEvent("change",
             {
               start: 0,
