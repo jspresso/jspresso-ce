@@ -555,8 +555,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     protected function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
       var alert:Alert = createAlert(messageCommand);
   
+      var alertForm:UIComponent =  alert.mx_internal::alertForm;
       if(messageCommand.messageIcon) {
-        var alertForm:UIComponent =  alert.mx_internal::alertForm;
         var messageIcon:Class = getViewFactory().getIconForComponent(alertForm, messageCommand.messageIcon);
         alert.iconClass = messageIcon;
         alert.removeChild(alertForm);
@@ -573,6 +573,15 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var titleIcon:Class = getViewFactory().getIconForComponent(alert, messageCommand.titleIcon);
         alert.titleIcon = titleIcon;
       }
+      var h:Number = alert.getExplicitOrMeasuredHeight();
+      
+      if(alert.getStyle("paddingTop") > 0) {
+        h += alert.getStyle("paddingTop");
+      }
+      if(alert.getStyle("paddingBottom") > 0) {
+        h += alert.getStyle("paddingBottom");
+      }
+      alert.height = h;
     }
     
     protected function createAlert(messageCommand:RemoteMessageCommand):Alert {
