@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.backend;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,9 +47,12 @@ import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
@@ -1135,4 +1139,161 @@ public abstract class AbstractBackendController extends AbstractController
     varRegisteredComponent.straightSetProperties(mergedProperties);
     return varRegisteredComponent;
   }
+
+  /**
+   * Performs necessary cleanings when an entity or component is deleted.
+   * 
+   * @param component
+   *          the deleted entity or component.
+   * @param dryRun
+   *          set to true to simulate before actually doing it.
+   * @throws IllegalAccessException
+   *           whenever this kind of exception occurs.
+   * @throws InvocationTargetException
+   *           whenever this kind of exception occurs.
+   * @throws NoSuchMethodException
+   *           whenever this kind of exception occurs.
+   */
+  public void cleanRelationshipsOnDeletion(IComponent component, boolean dryRun)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    cleanRelationshipsOnDeletion(component, dryRun, new HashSet<IComponent>());
+  }
+
+  @SuppressWarnings("unchecked")
+  private void cleanRelationshipsOnDeletion(IComponent componentOrProxy,
+      boolean dryRun, Set<IComponent> clearedEntities)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    IComponent component;
+    component = unwrapProxy(componentOrProxy);
+    if (clearedEntities.contains(component)) {
+      return;
+    }
+    clearedEntities.add(component);
+    if (!dryRun) {
+      if (component instanceof IEntity) {
+        registerForDeletion((IEntity) component);
+      }
+    }
+    try {
+      component.setPropertyProcessorsEnabled(false);
+      IComponentDescriptor<?> componentDescriptor = getEntityFactory()
+          .getComponentDescriptor(component.getComponentContract());
+      for (Map.Entry<String, Object> property : component
+          .straightGetProperties().entrySet()) {
+        if (property.getValue() != null) {
+          IPropertyDescriptor propertyDescriptor = componentDescriptor
+              .getPropertyDescriptor(property.getKey());
+          if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+            // force initialization of relationship property.
+            getAccessorFactory().createPropertyAccessor(property.getKey(),
+                component.getComponentContract()).getValue(component);
+            if (propertyDescriptor instanceof IReferencePropertyDescriptor
+                && property.getValue() instanceof IEntity) {
+              if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                  .isComposition()) {
+                cleanRelationshipsOnDeletion((IEntity) property.getValue(),
+                    dryRun, clearedEntities);
+              } else {
+                if (dryRun) {
+                  // manually trigger reverse relations preprocessors.
+                  if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                      .getReverseRelationEnd() != null
+                      && !((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                          .isComposition()) {
+                    IPropertyDescriptor reversePropertyDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+                        .getReverseRelationEnd();
+                    if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+                      reversePropertyDescriptor.preprocessSetter(
+                          property.getValue(), null);
+                    } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+                      Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
+                          .createPropertyAccessor(
+                              reversePropertyDescriptor.getName(),
+                              ((IComponent) property.getValue())
+                                  .getComponentContract()).getValue(
+                              property.getValue());
+                      ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
+                          .preprocessRemover(property.getValue(),
+                              reverseCollection, component);
+                    }
+                  }
+                } else {
+                  // test to see if we already traversed the reverse
+                  // relationship that is a composition.
+                  if (((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                      .getReverseRelationEnd() == null
+                      || !(((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                          .getReverseRelationEnd().isComposition() && clearedEntities
+                          .contains(property.getValue()))) {
+                    // set to null to clean reverse relation ends
+                    getAccessorFactory().createPropertyAccessor(
+                        property.getKey(), component.getComponentContract())
+                        .setValue(component, null);
+                    // but technically reset to original value to avoid
+                    // Hibernate
+                    // not-null checks
+                    component.straightSetProperty(property.getKey(),
+                        property.getValue());
+                  }
+                }
+              }
+            } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+              if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                  .isComposition()) {
+                for (IComponent composedEntity : new ArrayList<IComponent>(
+                    (Collection<IComponent>) property.getValue())) {
+                  cleanRelationshipsOnDeletion(composedEntity, dryRun,
+                      clearedEntities);
+                }
+              } else if (propertyDescriptor.isModifiable()) {
+                if (dryRun) {
+                  // manually trigger reverse relations preprocessors.
+                  if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                      .getReverseRelationEnd() != null) {
+                    IPropertyDescriptor reversePropertyDescriptor = ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                        .getReverseRelationEnd();
+                    if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+                      reversePropertyDescriptor.preprocessSetter(
+                          property.getValue(), null);
+                    } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+                      for (Object collectionElement : (Collection<?>) property
+                          .getValue()) {
+                        Collection<?> reverseCollection = (Collection<?>) getAccessorFactory()
+                            .createPropertyAccessor(
+                                reversePropertyDescriptor.getName(),
+                                ((IComponent) collectionElement)
+                                    .getComponentContract()).getValue(
+                                collectionElement);
+                        ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
+                            .preprocessRemover(collectionElement,
+                                reverseCollection, component);
+                      }
+                    }
+                  }
+                } else {
+                  getAccessorFactory().createPropertyAccessor(
+                      property.getKey(), component.getComponentContract())
+                      .setValue(component, null);
+                }
+              }
+            }
+          }
+        }
+      }
+    } finally {
+      component.setPropertyProcessorsEnabled(true);
+    }
+  }
+
+  /**
+   * Unwrap ORM proxy if needed.
+   * 
+   * @param componentOrProxy
+   *          the component or proxy.
+   * @return the proxy implementation if it's an ORM proxy.
+   */
+  protected abstract IComponent unwrapProxy(IComponent componentOrProxy);
+
 }

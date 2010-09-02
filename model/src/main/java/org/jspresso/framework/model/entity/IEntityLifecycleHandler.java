@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.model.entity;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.jspresso.framework.model.component.IComponent;
+
 /**
  * Defaines the contract of any component able to handle entities lifecycle.
  * 
@@ -64,4 +68,31 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
    *          the entity to register.
    */
   void registerForUpdate(IEntity entity);
+
+  /**
+   * Performs necessary cleanings when an entity or component is deleted.
+   * 
+   * @param component
+   *          the deleted entity or component.
+   * @param dryRun
+   *          set to true to simulate before actually doing it.
+   * @throws IllegalAccessException
+   *           whenever this kind of exception occurs.
+   * @throws InvocationTargetException
+   *           whenever this kind of exception occurs.
+   * @throws NoSuchMethodException
+   *           whenever this kind of exception occurs.
+   */
+  void cleanRelationshipsOnDeletion(IComponent component, boolean dryRun)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException;
+
+  /**
+   * Reloads an entity from persistent store.
+   * 
+   * @param entity
+   *          the entity to reload.
+   */
+  void reload(IEntity entity);
+
 }

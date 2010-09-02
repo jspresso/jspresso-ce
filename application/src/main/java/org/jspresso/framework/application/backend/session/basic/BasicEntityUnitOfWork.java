@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
@@ -213,5 +214,28 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   private void cleanup() {
     dirtRecorder = null;
     updatedEntities = null;
+  }
+
+  /**
+   * UnsupportedOperationException.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void cleanRelationshipsOnDeletion(
+      @SuppressWarnings("unused") IComponent component,
+      @SuppressWarnings("unused") boolean dryRun) {
+    throw new UnsupportedOperationException(
+        "entity unit of work does not support cleanRelationshipsOnDeletion.");
+  }
+
+  /**
+   * UnsupportedOperationException.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void reload(@SuppressWarnings("unused") IEntity entity) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException(
+        "entity unit of work does not support reload of an entity.");
   }
 }

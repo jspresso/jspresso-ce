@@ -35,6 +35,7 @@ import org.hibernate.collection.PersistentCollection;
 import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.proxy.HibernateProxy;
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
@@ -620,5 +621,42 @@ public class HibernateBackendController extends AbstractBackendController {
       return (List<T>) res;
     }
     return null;
+  }
+
+  /**
+   * Unwrap hibernate proxy if needed.
+   * 
+   * @param componentOrProxy
+   *          the component or proxy.
+   * @return the proxy implementation if it's an hibernate proxy.
+   */
+  @Override
+  protected IComponent unwrapProxy(IComponent componentOrProxy) {
+    IComponent component;
+    if (componentOrProxy instanceof HibernateProxy) {
+      // we must unwrap the proxy to avoid class cast exceptions.
+      // see
+      // http://forum.hibernate.org/viewtopic.php?p=2323464&sid=cb4ba3a4418276e5d2fbdd6c906ba734
+      component = (IComponent) ((HibernateProxy) componentOrProxy)
+          .getHibernateLazyInitializer().getImplementation();
+    } else {
+      component = componentOrProxy;
+    }
+    return component;
+  }
+
+  /**
+   * Reloads an entity in hibernate.
+   * 
+   * @param entity
+   *          the entity to reload.
+   */
+  public void reload(IEntity entity) {
+    if (entity.isPersistent()) {
+      HibernateTemplate ht = getHibernateTemplate();
+      merge(
+          (IEntity) ht.load(entity.getComponentContract().getName(),
+              entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
+    }
   }
 }
