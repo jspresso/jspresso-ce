@@ -70,7 +70,7 @@
     <qx-java-rpc.version>0.6</qx-java-rpc.version>
     <hsql.version>1.8.0.1</hsql.version>
     <jnlp-servlet.version>1.1</jnlp-servlet.version>
-    <servlet.version>2.4</servlet.version>
+    <servlet.version>2.5</servlet.version>
     <docbook.version>4.4</docbook.version>
     <ant-contrib.version>1.0b3</ant-contrib.version>
     <spring-beandoc.version>0.8.1</spring-beandoc.version>
