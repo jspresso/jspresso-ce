@@ -123,7 +123,7 @@
   <repositories>
     <repository>
       <id>jboss-repository</id>
-      <url>http://repository.jboss.org/maven2</url>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
