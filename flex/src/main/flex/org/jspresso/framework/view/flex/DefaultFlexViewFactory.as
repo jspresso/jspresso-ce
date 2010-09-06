@@ -1162,15 +1162,16 @@ package org.jspresso.framework.view.flex {
         componentCell.percentWidth=100.0;
         componentCell.percentHeight=100.0;
         componentCell.minWidth = 0;
-        component.percentHeight = 100.0;
+//        component.percentHeight = 100.0;
 //        componentsRow.setStyle("borderStyle","solid");
 //        componentsRow.setStyle("borderColor","0xAA0099");
         if(  rComponent is RTable
           || rComponent is RTextArea
           || rComponent is RList
           || rComponent is RHtmlArea) {
-          componentsRow.percentHeight = 100.0;
           component.percentWidth = 100.0;
+          component.percentHeight = 100.0;
+          componentsRow.percentHeight = 100.0;
           if(componentCell.colSpan > 1) {
             componentCell.maxWidth = NaN;
             component.maxWidth = NaN;
