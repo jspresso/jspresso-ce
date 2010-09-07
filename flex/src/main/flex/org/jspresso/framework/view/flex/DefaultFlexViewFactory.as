@@ -1172,7 +1172,8 @@ package org.jspresso.framework.view.flex {
           component.percentWidth = 100.0;
           component.percentHeight = 100.0;
           componentsRow.percentHeight = 100.0;
-          if(componentCell.colSpan > 1) {
+          if(   componentCell.colSpan > 1
+             || componentCell.colSpan == remoteForm.columnCount) {
             componentCell.maxWidth = NaN;
             component.maxWidth = NaN;
           }

@@ -59,6 +59,7 @@ import freemarker.template.TemplateException;
  */
 public class EntityGenerator {
 
+  private static final String BEAN_FACTORY_SELECTOR   = "beanFactorySelector";
   private static final String APPLICATION_CONTEXT_KEY = "applicationContextKey";
   private static final String COMPONENT_IDS           = "componentIds";
   private static final String EXCLUDE_PATTERN         = "excludePatterns";
@@ -68,6 +69,7 @@ public class EntityGenerator {
   private static final String TEMPLATE_NAME           = "templateName";
   private static final String TEMPLATE_RESOURCE_PATH  = "templateResourcePath";
 
+  private String              beanFactorySelector;
   private String              applicationContextKey;
   private String[]            componentIds;
   private String[]            excludePatterns;
@@ -86,6 +88,13 @@ public class EntityGenerator {
   @SuppressWarnings("static-access")
   public static void main(String[] args) {
     Options options = new Options();
+    options.addOption(OptionBuilder
+        .withArgName(BEAN_FACTORY_SELECTOR)
+        .hasArg()
+        .withDescription(
+            "use given selector too lookup the bean ref factory context file."
+                + " If not set, defaults to classpath*:beanRefFactory.xml .")
+        .create(BEAN_FACTORY_SELECTOR));
     options
         .addOption(OptionBuilder
             .withArgName(APPLICATION_CONTEXT_KEY)
@@ -94,8 +103,11 @@ public class EntityGenerator {
             .withDescription(
                 "use given applicationContextKey as registered in the spring BeanFactoryLocator.")
             .create(APPLICATION_CONTEXT_KEY));
-    options.addOption(OptionBuilder.withArgName(TEMPLATE_RESOURCE_PATH)
-        .isRequired().hasArg().withDescription(
+    options.addOption(OptionBuilder
+        .withArgName(TEMPLATE_RESOURCE_PATH)
+        .isRequired()
+        .hasArg()
+        .withDescription(
             "sets the resource path of the directory containg the templates.")
         .create(TEMPLATE_RESOURCE_PATH));
     options.addOption(OptionBuilder.withArgName(TEMPLATE_NAME).isRequired()
@@ -112,8 +124,11 @@ public class EntityGenerator {
             .withDescription(
                 "generate code for the component descriptors declared in the listed packages.")
             .create(INCLUDE_PACKAGES));
-    options.addOption(OptionBuilder.withArgName(EXCLUDE_PATTERN).hasArgs()
-        .withValueSeparator(',').withDescription(
+    options.addOption(OptionBuilder
+        .withArgName(EXCLUDE_PATTERN)
+        .hasArgs()
+        .withValueSeparator(',')
+        .withDescription(
             "exclude classes whose names match the regular expression.")
         .create(EXCLUDE_PATTERN));
     options
@@ -142,6 +157,7 @@ public class EntityGenerator {
     }
 
     EntityGenerator generator = new EntityGenerator();
+    generator.setBeanFactorySelector(cmd.getOptionValue(BEAN_FACTORY_SELECTOR));
     generator.setApplicationContextKey(cmd
         .getOptionValue(APPLICATION_CONTEXT_KEY));
     generator.setTemplateResourcePath(cmd
@@ -256,6 +272,16 @@ public class EntityGenerator {
   }
 
   /**
+   * Sets the beanFactorySelector.
+   * 
+   * @param beanFactorySelector
+   *          the beanFactorySelector to set.
+   */
+  public void setBeanFactorySelector(String beanFactorySelector) {
+    this.beanFactorySelector = beanFactorySelector;
+  }
+
+  /**
    * Sets the applicationContextKey.
    * 
    * @param applicationContextKey
@@ -336,7 +362,8 @@ public class EntityGenerator {
   }
 
   private ListableBeanFactory getListableBeanFactory() {
-    BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
+    BeanFactoryLocator bfl = SingletonBeanFactoryLocator
+        .getInstance(beanFactorySelector);
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     return (ListableBeanFactory) bf.getFactory();
   }

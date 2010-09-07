@@ -56,7 +56,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    */
   @Override
   public void afterTransactionBegin(Transaction tx) {
-    backendController.beginUnitOfWork();
+    backendController.joinTransaction();
     super.afterTransactionBegin(tx);
   }
 

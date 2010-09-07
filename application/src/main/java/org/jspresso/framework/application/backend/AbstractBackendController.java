@@ -116,6 +116,15 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
+  public void joinTransaction() {
+    if (!unitOfWork.isActive()) {
+      beginUnitOfWork();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void beginUnitOfWork() {
     if (unitOfWork.isActive()) {
       throw new BackendException(

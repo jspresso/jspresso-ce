@@ -28,8 +28,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.service.IComponentService;
@@ -442,14 +442,21 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public String getToStringProperty() {
     if (toStringProperty == null) {
-      for (String renderedProperty : getRenderedProperties()) {
-        if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
-          toStringProperty = renderedProperty;
-          break;
+      List<String> rp = getRenderedProperties();
+      if (rp != null && !rp.isEmpty()) {
+        for (String renderedProperty : getRenderedProperties()) {
+          if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
+            toStringProperty = renderedProperty;
+            break;
+          }
         }
-      }
-      if (toStringProperty == null) {
-        toStringProperty = getRenderedProperties().get(0);
+        if (toStringProperty == null) {
+          toStringProperty = getRenderedProperties().get(0);
+        }
+      } else if (getPropertyDescriptor("id") != null) {
+        return "id";
+      } else {
+        toStringProperty = getPropertyDescriptors().iterator().next().getName();
       }
     }
     return toStringProperty;
@@ -616,8 +623,8 @@ public abstract class AbstractComponentDescriptor<E> extends
           orderingProperties.put(untypedOrderingProperty.getKey(),
               (ESort) untypedOrderingProperty.getValue());
         } else if (untypedOrderingProperty.getValue() instanceof String) {
-          orderingProperties.put(untypedOrderingProperty.getKey(), ESort
-              .valueOf((String) untypedOrderingProperty.getValue()));
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              ESort.valueOf((String) untypedOrderingProperty.getValue()));
         } else {
           orderingProperties.put(untypedOrderingProperty.getKey(),
               ESort.ASCENDING);
@@ -915,8 +922,9 @@ public abstract class AbstractComponentDescriptor<E> extends
             delegate = (IComponentService) Class.forName(nextPair.getValue())
                 .newInstance();
           }
-          registerService(Class.forName(ObjectUtils
-              .extractRawClassName(nextPair.getKey())), delegate);
+          registerService(
+              Class.forName(ObjectUtils.extractRawClassName(nextPair.getKey())),
+              delegate);
         } catch (ClassNotFoundException ex) {
           throw new DescriptorException(ex);
         } catch (InstantiationException ex) {

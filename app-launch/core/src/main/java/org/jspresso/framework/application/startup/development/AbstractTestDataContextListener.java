@@ -32,13 +32,14 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractTestDataContextListener implements ServletContextListener {
+public abstract class AbstractTestDataContextListener implements
+    ServletContextListener {
 
   /**
    * {@inheritDoc}
    */
-  public void contextDestroyed(@SuppressWarnings("unused")
-  ServletContextEvent event) {
+  public void contextDestroyed(
+      @SuppressWarnings("unused") ServletContextEvent event) {
     // No-op
   }
 
@@ -46,8 +47,10 @@ public abstract class AbstractTestDataContextListener implements ServletContextL
    * {@inheritDoc}
    */
   public void contextInitialized(ServletContextEvent event) {
+    String beanFactorySelector = getBeanFactorySelector(event);
     String applicationContextKey = getApplicationContextKey(event);
-    BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
+    BeanFactoryLocator bfl = SingletonBeanFactoryLocator
+        .getInstance(beanFactorySelector);
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     BeanFactory beanFactory = bf.getFactory();
     if (beanFactory != null) {
@@ -56,14 +59,26 @@ public abstract class AbstractTestDataContextListener implements ServletContextL
   }
 
   /**
+   * Retrieves the spring bean factory selector to use.
+   * 
+   * @param event
+   *          the servlet context event from which the servlet context can be
+   *          retrieved and used.
+   * @return the spring bean factory selector to use.
+   */
+  protected String getBeanFactorySelector(ServletContextEvent event) {
+    return event.getServletContext().getInitParameter("beanFactorySelector");
+  }
+
+  /**
    * Retrieves the spring application context key to use.
    * 
    * @param event
-   *            the servlet context event from which the servlet context can be
-   *            retrieved and used.
+   *          the servlet context event from which the servlet context can be
+   *          retrieved and used.
    * @return the spring application context key to use.
    */
-  public String getApplicationContextKey(ServletContextEvent event) {
+  protected String getApplicationContextKey(ServletContextEvent event) {
     return event.getServletContext().getInitParameter("appContextKey");
   }
 
@@ -71,7 +86,7 @@ public abstract class AbstractTestDataContextListener implements ServletContextL
    * Triggers the test data creation.
    * 
    * @param beanFactory
-   *            the bean factory to use.
+   *          the bean factory to use.
    */
   public abstract void persistTestData(BeanFactory beanFactory);
 

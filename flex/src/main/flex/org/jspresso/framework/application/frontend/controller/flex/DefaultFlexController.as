@@ -487,13 +487,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
         };
         pushFakeDialog();
-        Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
-                   ResourceManager.getInstance().getString("Common_messages", "file.upload"),
-                   Alert.YES|Alert.NO,
-                   null,
-                   alertCloseHandler,
-                   null,
-                   Alert.NO);
+        var alert:Alert = Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
+               ResourceManager.getInstance().getString("Common_messages", "file.upload"),
+               Alert.YES|Alert.NO,
+               null,
+               alertCloseHandler,
+               null,
+               Alert.NO);
+        fixAlertSize(alert);
       }
     }
     
@@ -519,13 +520,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
           popFakeDialog();
         };
         pushFakeDialog();
-        Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
-                   ResourceManager.getInstance().getString("Common_messages", "file.download"),
-                   Alert.YES|Alert.NO,
-                   null,
-                   alertCloseHandler,
-                   null,
-                   Alert.NO);
+        var alert:Alert = Alert.show(ResourceManager.getInstance().getString("Common_messages", "FS.browse.continue"),
+             ResourceManager.getInstance().getString("Common_messages", "file.download"),
+             Alert.YES|Alert.NO,
+             null,
+             alertCloseHandler,
+             null,
+             Alert.NO);
+        fixAlertSize(alert);
       }
     }
     
@@ -573,8 +575,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
         var titleIcon:Class = getViewFactory().getIconForComponent(alert, messageCommand.titleIcon);
         alert.titleIcon = titleIcon;
       }
+      fixAlertSize(alert);
+    }
+    
+    protected function fixAlertSize(alert:Alert):void {
       var h:Number = alert.getExplicitOrMeasuredHeight();
-      
       if(alert.getStyle("paddingTop") > 0) {
         h += alert.getStyle("paddingTop");
       }

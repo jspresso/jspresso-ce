@@ -209,6 +209,7 @@
                     <include name="**/src/main/resources" />
                     <include name="**/target/generated-resources/dsl" />
                   </dirset>
+                  <path refid="maven.compile.classpath"/>
                   <path refid="maven.plugin.classpath"/>
                 </path>
                 <property name="generator.dest" value="${project.build.directory}/generated-sources/entitygenerator"/>

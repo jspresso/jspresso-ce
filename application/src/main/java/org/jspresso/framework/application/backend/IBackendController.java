@@ -55,6 +55,13 @@ public interface IBackendController extends IController,
   void beginUnitOfWork();
 
   /**
+   * Joins the transaction, beginning unit of work if not already begun.
+   * 
+   * @see org.jspresso.framework.application.backend.session.IEntityUnitOfWork#begin()
+   */
+  void joinTransaction();
+
+  /**
    * Registers an entity (actually a clone of it) and all its graph as taking
    * part in the unit of work.
    * 

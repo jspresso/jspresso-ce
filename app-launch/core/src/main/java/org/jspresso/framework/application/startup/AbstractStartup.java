@@ -50,7 +50,8 @@ public abstract class AbstractStartup implements IStartup {
   protected BeanFactory getApplicationContext() {
     try {
       if (applicationContext == null) {
-        BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
+        BeanFactoryLocator bfl = SingletonBeanFactoryLocator
+            .getInstance(getBeanFactorySelector());
         BeanFactoryReference bf = bfl
             .useBeanFactory(getApplicationContextKey());
         applicationContext = bf.getFactory();
@@ -64,6 +65,16 @@ public abstract class AbstractStartup implements IStartup {
       }
       throw ex;
     }
+  }
+
+  /**
+   * Allows to change the default bean factory selector.
+   * 
+   * @return null by default, which means that
+   *         <code>classpath*:beanRefFactory.xml</code> is used.
+   */
+  protected String getBeanFactorySelector() {
+    return null;
   }
 
   /**
