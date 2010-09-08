@@ -49,16 +49,17 @@ public class ControllerAwareEntityProxyInterceptor extends
 
   private IBackendController backendController;
 
-  /**
-   * Begins the backend controller current unit of work.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void afterTransactionBegin(Transaction tx) {
-    backendController.joinTransaction();
-    super.afterTransactionBegin(tx);
-  }
+  // Not usefull anymore since the new transaction template takes care of that in every situation including JTA, when this interceptor is not called.
+  // /**
+  // * Begins the backend controller current unit of work.
+  // * <p>
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public void afterTransactionBegin(Transaction tx) {
+  // backendController.joinTransaction();
+  // super.afterTransactionBegin(tx);
+  // }
 
   /**
    * Either commits or rollbacks the backend controller current unit of work.
