@@ -99,11 +99,11 @@
   <distributionManagement>
     <repository>
       <id>jspresso-repository</id>
-      <url>scp://repository.jspresso.org/var/maven/repositories/maven2</url>
+      <url>http://repository.jspresso.org/maven2</url>
     </repository>
     <snapshotRepository>
       <id>jspresso-snapshots-repository</id>
-      <url>scp://repository.jspresso.org/var/maven/repositories/maven2-snapshots</url>
+      <url>http://repository.jspresso.org/maven2-snapshots</url>
       <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
     <site>
