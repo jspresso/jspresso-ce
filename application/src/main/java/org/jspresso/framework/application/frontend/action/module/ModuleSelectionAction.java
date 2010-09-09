@@ -45,7 +45,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   private String workspaceName;
 
   /**
-   * Displays the workspace.and module
+   * Displays the workspace and module.
    * <p>
    * {@inheritDoc}
    */
@@ -53,10 +53,13 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
 
-    Workspace ws = getController(context).getWorkspace(workspaceName);
+    String wsName = getWorkspaceName(context);
+    String moName = getModuleName(context);
+
+    Workspace ws = getController(context).getWorkspace(wsName);
     for (Module m : ws.getModules()) {
-      if (moduleName.equals(m.getName())) {
-        getController(context).displayModule(workspaceName, m);
+      if (moName.equals(m.getName())) {
+        getController(context).displayModule(wsName, m);
         break;
       }
     }
@@ -82,6 +85,28 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setWorkspaceName(String workspaceName) {
     this.workspaceName = workspaceName;
+  }
+
+  /**
+   * Gets the moduleName.
+   * 
+   * @param context
+   *          the action context.
+   * @return the moduleName.
+   */
+  protected String getModuleName(Map<String, Object> context) {
+    return moduleName;
+  }
+
+  /**
+   * Gets the workspaceName.
+   * 
+   * @param context
+   *          the action context.
+   * @return the workspaceName.
+   */
+  protected String getWorkspaceName(Map<String, Object> context) {
+    return workspaceName;
   }
 
 }
