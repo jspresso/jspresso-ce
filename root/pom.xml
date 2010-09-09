@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
-  <version>3.5-SNAPSHOT</version>
+  <version>3.5.1-RC2</version>
   <name>Jspresso Root POM</name>
   <url>http://www.jspresso.org</url>
   <properties>
@@ -12,8 +12,8 @@
     <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
     
     <!-- Dependencies versions -->
-    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
-    <sjs.version>1.0-SNAPSHOT</sjs.version>
+    <jspresso.version>3.5.1-RC2</jspresso.version>
+    <sjs.version>1.0.1-RC2</sjs.version>
     <junit.version>3.8.1</junit.version>
 
     <flex.version>3.4.0.9271</flex.version>
@@ -99,16 +99,16 @@
   <distributionManagement>
     <repository>
       <id>jspresso-repository</id>
-      <url>http://repository.jspresso.org/maven2</url>
+      <url>dav:http://repository.jspresso.org/maven2</url>
     </repository>
     <snapshotRepository>
       <id>jspresso-snapshots-repository</id>
-      <url>http://repository.jspresso.org/maven2-snapshots</url>
+      <url>dav:http://repository.jspresso.org/maven2-snapshots</url>
       <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
     <site>
       <id>jspresso-maven-site</id>
-      <url>scp://www.jspresso.org/var/www/jspresso/external/maven-site</url>
+      <url>dav:http://www.jspresso.org/external/maven-site</url>
     </site>
   </distributionManagement>
   <pluginRepositories>
