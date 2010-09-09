@@ -44,7 +44,7 @@
   </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sjs.version>1.0-SNAPSHOT</sjs.version>
+    <sjs.version>1.0.1-RC2</sjs.version>
   </properties>
   <pluginRepositories>
     <pluginRepository>
