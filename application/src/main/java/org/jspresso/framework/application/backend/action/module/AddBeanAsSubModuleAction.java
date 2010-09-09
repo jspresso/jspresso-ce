@@ -130,7 +130,7 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
       IComponentDescriptor<?> childComponentDescriptor,
       Object childModuleObject, Map<String, Object> context) {
     BeanModule childModule = new BeanModule();
-    IViewDescriptor projectedViewDescriptor = getChildModuleProjectedViewDescriptor();
+    IViewDescriptor projectedViewDescriptor = getChildModuleProjectedViewDescriptor(context);
     if (projectedViewDescriptor != null) {
       childModule.setProjectedViewDescriptor(projectedViewDescriptor);
     } else if (parentModule instanceof BeanCollectionModule) {
@@ -148,9 +148,12 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
   /**
    * Gets the childModuleProjectedViewDescriptor.
    * 
+   * @param context
+   *          the action context.
    * @return the childModuleProjectedViewDescriptor.
    */
-  protected IViewDescriptor getChildModuleProjectedViewDescriptor() {
+  protected IViewDescriptor getChildModuleProjectedViewDescriptor(
+      Map<String, Object> context) {
     return childModuleProjectedViewDescriptor;
   }
 
