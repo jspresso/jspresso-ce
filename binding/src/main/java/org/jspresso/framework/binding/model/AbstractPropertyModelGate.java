@@ -53,7 +53,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
    */
   public AbstractPropertyModelGate() {
     openOnTrue = true;
-    open = !openOnTrue;
+    open = false;
   }
 
   /**
@@ -64,7 +64,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   public AbstractPropertyModelGate<E> clone() {
     AbstractPropertyModelGate<E> clonedGate = (AbstractPropertyModelGate<E>) super
         .clone();
-    clonedGate.open = !openOnTrue;
+    clonedGate.open = /* !openOnTrue */false;
     return clonedGate;
   }
 
