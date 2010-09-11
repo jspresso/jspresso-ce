@@ -580,7 +580,9 @@ public class HibernateBackendController extends AbstractBackendController {
       EMergeMode mergeMode, Class<? extends T> clazz) {
     List<T> ret = findByCriteria(criteria, null, clazz);
     if (ret != null && !ret.isEmpty()) {
-      if (mergeMode != null && !isUnitOfWorkActive()) {
+      if (isUnitOfWorkActive()) {
+        return (T) cloneInUnitOfWork(ret.get(0));
+      } else if (mergeMode != null) {
         return (T) merge(ret.get(0), mergeMode);
       }
       return ret.get(0);
@@ -615,7 +617,9 @@ public class HibernateBackendController extends AbstractBackendController {
           }
         });
     if (res != null) {
-      if (mergeMode != null && !isUnitOfWorkActive()) {
+      if (isUnitOfWorkActive()) {
+        return (List<T>) cloneInUnitOfWork(res);
+      } else if (mergeMode != null) {
         return (List<T>) merge(res, mergeMode);
       }
       return (List<T>) res;

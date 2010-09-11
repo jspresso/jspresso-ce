@@ -49,7 +49,8 @@ public class ControllerAwareEntityProxyInterceptor extends
 
   private IBackendController backendController;
 
-  // Not usefull anymore since the new transaction template takes care of that in every situation including JTA, when this interceptor is not called.
+  // Not usefull anymore since the new transaction template takes care of that
+  // in every situation including JTA, when this interceptor is not called.
   // /**
   // * Begins the backend controller current unit of work.
   // * <p>

@@ -39,6 +39,7 @@ package org.jspresso.framework.view.flex {
     private var _savedSortDirection:String;
     private var _customSort:Boolean;
     private var _cbMultiSelection:Boolean;
+    private var _preventCumulativeSelection:Boolean;
     
     public function EnhancedDataGrid()	{
       super();
@@ -132,13 +133,24 @@ package org.jspresso.framework.view.flex {
       return super.selectItem(item, shiftKey, ctrlKey, transition);
     }
     
+    override protected function moveSelectionVertically(code:uint, shiftKey:Boolean, ctrlKey:Boolean):void {
+      var cbms:Boolean = _cbMultiSelection;
+      try {
+        // disable Checkbox multi selection until the end of the vertical selection move
+        _cbMultiSelection = false;
+        super.moveSelectionVertically(code, shiftKey, ctrlKey);
+      } finally {
+        _cbMultiSelection = cbms;
+      }
+    }
+    
     // whenever we draw the renderer, make sure we re-eval the checked state
     override protected function drawItem(item:IListItemRenderer,
                                          selected:Boolean = false,
                                          highlighted:Boolean = false,
                                          caret:Boolean = false,
                                          transition:Boolean = false):void { 
-      if(_cbMultiSelection && item is SelectionCheckBoxRenderer) {
+      if(item is SelectionCheckBoxRenderer) {
         (item as SelectionCheckBoxRenderer).invalidateProperties();
       }
       super.drawItem(item, selected, highlighted, caret, transition);
