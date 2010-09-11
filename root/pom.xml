@@ -93,7 +93,7 @@
     <exec-plugin.version>1.1.1</exec-plugin.version>
     <gmaven-plugin.version>1.0</gmaven-plugin.version>
     <jetty-plugin.version>6.1.10</jetty-plugin.version>
-    <info-reports-plugin.version>2.1.1</info-reports-plugin.version>
+    <info-reports-plugin.version>2.1.2</info-reports-plugin.version>
     <appassembler-plugin.version>1.0</appassembler-plugin.version>
   </properties>
   <distributionManagement>
