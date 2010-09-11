@@ -192,7 +192,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
           throw new NestedRuntimeException(ex);
         }
       } else {
-        this.open = !openOnTrue;
+        this.open = /* !openOnTrue */false;
       }
       firePropertyChange(OPEN_PROPERTY, oldOpen, isOpen());
     }
@@ -237,7 +237,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
     if (model.isEmpty()) {
-      return !openOnTrue;
+      return /* !openOnTrue */false;
     }
     for (Object elt : (Collection<?>) model) {
       IAccessor accessor = accessorFactory.createPropertyAccessor(propertyName,
