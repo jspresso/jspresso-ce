@@ -300,7 +300,6 @@
         <artifactId>jspresso-qooxdoo-client</artifactId>
         <version>${jspresso.version}</version>
         <type>zip</type>
-        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
@@ -414,7 +413,6 @@
         <artifactId>qooxdoo-sdk</artifactId>
         <version>${qooxdoo.version}</version>
         <type>zip</type>
-        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.qooxdoo</groupId>
@@ -672,7 +670,6 @@
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
         <version>${servlet.version}</version>
-        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.wings</groupId>
