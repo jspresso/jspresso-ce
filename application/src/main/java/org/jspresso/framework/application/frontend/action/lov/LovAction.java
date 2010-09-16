@@ -76,6 +76,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private Map<String, Object>                   initializationMapping;
   private ILovViewDescriptorFactory             lovViewDescriptorFactory;
   private IDisplayableAction                    okAction;
+  private String                                nonLovTriggeringChars = "%;";
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -101,11 +102,17 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         && ((IRenderableCompositeValueConnector) viewConnector)
             .getRenderingConnector() != null) {
       if (getModel(context) instanceof IQueryComponent) {
-        if (queryPropertyValue != null && queryPropertyValue.contains("%")) {
-          viewConnector.setConnectorValue(null);
-          ((IRenderableCompositeValueConnector) viewConnector)
-              .getRenderingConnector().setConnectorValue(queryPropertyValue);
-          return true;
+        if (nonLovTriggeringChars != null) {
+          for (int i = 0; i < nonLovTriggeringChars.length(); i++) {
+            if (queryPropertyValue != null
+                && queryPropertyValue.indexOf(nonLovTriggeringChars.charAt(i)) >= 0) {
+              viewConnector.setConnectorValue(null);
+              ((IRenderableCompositeValueConnector) viewConnector)
+                  .getRenderingConnector()
+                  .setConnectorValue(queryPropertyValue);
+              return true;
+            }
+          }
         }
       }
       setActionParameter(((IRenderableCompositeValueConnector) viewConnector)

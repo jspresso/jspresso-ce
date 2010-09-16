@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -202,11 +203,18 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
               currentCriteria.add(Restrictions.eq(prefixedProperty,
                   property.getValue()));
             } else if (property.getValue() instanceof String) {
-              if (((String) property.getValue()).length() > 0) {
-                currentCriteria
-                    .add(Restrictions.like(prefixedProperty,
-                        (String) property.getValue(), MatchMode.START)
-                        .ignoreCase());
+              String propValue = (String) property.getValue();
+              if (propValue.length() > 0) {
+                String[] propValues = propValue.split(";");
+                Junction disjunction = Restrictions.disjunction();
+                currentCriteria.add(disjunction);
+                for (int i = 0; i < propValues.length; i++) {
+                  String val = propValues[i];
+                  if (val.length() > 0) {
+                    disjunction.add(Restrictions.like(prefixedProperty, val,
+                        MatchMode.START).ignoreCase());
+                  }
+                }
               }
             } else if (property.getValue() instanceof Number
                 || property.getValue() instanceof Date) {
