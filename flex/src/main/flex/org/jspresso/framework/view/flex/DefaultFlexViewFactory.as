@@ -1113,6 +1113,7 @@ package org.jspresso.framework.view.flex {
         var componentCell:GridItem = new GridItem();
         componentCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
         componentCell.verticalScrollPolicy  = ScrollPolicy.OFF;
+        componentCell.setStyle("verticalAlign","middle");
         
         if(elementWidth > remoteForm.columnCount) {
           elementWidth = remoteForm.columnCount;
@@ -1139,22 +1140,23 @@ package org.jspresso.framework.view.flex {
         } else if(remoteForm.labelsPosition == "ASIDE") {
           labelCell.setStyle("verticalAlign","middle");
           labelCell.setStyle("horizontalAlign","right");
+          // labelCell.setStyle("borderStyle","solid");
           componentCell.colSpan = (elementWidth * 2) - 1;
         } else if(remoteForm.labelsPosition == "NONE") {
           componentCell.colSpan = elementWidth;
         }
 
         if(remoteForm.labelsPosition != "NONE") {
-//          labelCell.setStyle("borderStyle","solid");
           labelsRow.addChild(labelCell);
           if((componentLabel as Label).text.length > 0) {
             labelCell.addChild(componentLabel);
-            if(remoteForm.labelsPosition == "ASIDE") {
-              labelCell.maxWidth = componentLabel.maxWidth;
-            }
+            // makes alignment wrong
+            //if(remoteForm.labelsPosition == "ASIDE") {
+            //  labelCell.maxWidth = componentLabel.maxWidth;
+            //}
           } else {
             if(remoteForm.labelsPosition == "ASIDE") {
-              labelCell.maxWidth = 0;
+              labelCell.maxWidth = NaN;
             }
           }
         }
