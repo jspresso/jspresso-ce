@@ -59,8 +59,10 @@ public class GenerateSqlName implements TemplateMethodModel {
     DEFAULT_KEY_WORD_PROVIDER = new KeyWordProvider() {
 
       public List<String> run() {
-        return Arrays.asList(new String[] {"BEGIN", "END", "GROUP", "FUNCTION",
-      "ACTION", "ARRAY", "DATE", "DATA", "DAY", "MONTH", "YEAR"});
+        return Arrays.asList(new String[] {
+      "BEGIN", "END", "GROUP", "FUNCTION", "ACTION", "ARRAY", "DATE", "DATA",
+      "DAY", "MONTH", "YEAR", "FROM", "TO"
+        });
       }
     };
   }
