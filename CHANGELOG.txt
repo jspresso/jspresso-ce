@@ -10,6 +10,8 @@ Bugs fixed
            Collection model gates used as actionability gates
              are not correctly notified of collection selection changes
            Writability gates do not work correctly on collection views
+3071381    clash with property names and SQL
+
 
 New features
 ------------
