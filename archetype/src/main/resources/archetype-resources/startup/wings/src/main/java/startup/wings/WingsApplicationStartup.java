@@ -16,4 +16,14 @@ public class WingsApplicationStartup extends WingsStartup {
   protected String getApplicationContextKey() {
     return "${rootArtifactId}-wings-context";
   }
+
+  /**
+   * Overrides default bean ref locator.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getBeanFactorySelector() {
+    return "${packageInPathFormat}/beanRefFactory.xml";
+  }
 }

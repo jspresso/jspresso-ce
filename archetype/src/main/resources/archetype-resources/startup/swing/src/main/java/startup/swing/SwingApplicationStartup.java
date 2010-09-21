@@ -16,4 +16,14 @@ public class SwingApplicationStartup extends SwingStartup {
   protected String getApplicationContextKey() {
     return "${rootArtifactId}-swing-context";
   }
+
+  /**
+   * Overrides default bean ref locator.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getBeanFactorySelector() {
+    return "${packageInPathFormat}/beanRefFactory.xml";
+  }
 }

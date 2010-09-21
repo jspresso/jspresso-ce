@@ -16,4 +16,14 @@ public class RemoteApplicationStartup extends RemoteStartup {
   protected String getApplicationContextKey() {
     return "${rootArtifactId}-remote-context";
   }
+
+  /**
+   * Overrides default bean ref locator.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getBeanFactorySelector() {
+    return "${packageInPathFormat}/beanRefFactory.xml";
+  }
 }

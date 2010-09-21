@@ -80,14 +80,12 @@
             <include>**/*.properties</include>
           </includes>
           <excludes>
-            <exclude>beanRefFactory.xml</exclude>
             <exclude>log4j.properties</exclude>
           </excludes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
           <directory>src/main/resources</directory>
           <includes>
-            <include>beanRefFactory.xml</include>
             <include>log4j.properties</include>
           </includes>
         </fileSet>

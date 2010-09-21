@@ -217,6 +217,8 @@
                 <java classname="org.jspresso.framework.tools.entitygenerator.EntityGenerator"
                       classpathref="spring.beans.classpath"
                       failonerror="true">
+                  <arg value="-beanFactorySelector" />
+                  <arg value="${packageInPathFormat}/beanRefFactory.xml" />
                   <arg value="-applicationContextKey" />
                   <arg value="${rootArtifactId}-model-context" />
                   <arg value="-templateResourcePath" />
