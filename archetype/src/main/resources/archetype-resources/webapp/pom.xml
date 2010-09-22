@@ -148,6 +148,7 @@
               <goal>wrapper</goal>
               <goal>copy-flex-resources</goal>
             </goals>
+            <phase>prepare-package</phase>
             <configuration>
               <wrapperArtifact>
                 <groupId>${project.groupId}</groupId>
