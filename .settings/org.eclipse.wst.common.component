@@ -123,16 +123,12 @@
         <wb-resource deploy-path="/" source-path="/app-launch/ulc/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/app-template/core/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/app-template/core/src/main/resources"/>
-        <wb-resource deploy-path="/" source-path="/app-template/core/src/test/java"/>
-        <wb-resource deploy-path="/" source-path="/app-template/core/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/app-template/swing/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/app-template/swing/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/app-template/swing/src/test/java"/>
         <wb-resource deploy-path="/" source-path="/app-template/swing/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/app-template/wings/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/app-template/wings/src/main/resources"/>
-        <wb-resource deploy-path="/" source-path="/app-template/wings/src/test/java"/>
-        <wb-resource deploy-path="/" source-path="/app-template/wings/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/app-template/remote/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/app-template/remote/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/app-template/remote/src/test/java"/>
