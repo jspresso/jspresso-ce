@@ -56,7 +56,12 @@ public class CreateQueryComponentAction extends BackendAction {
   public static final String COMPONENT_REF_DESCRIPTOR = "COMPONENT_REF_DESCRIPTOR";
 
   /**
-   * the connector of the query model.
+   * The master component key from wich the LOV has been trigerred.
+   */
+  public static final String MASTER_COMPONENT         = "MASTER_COMPONENT";
+
+  /**
+   * The connector of the query model.
    */
   public static final String QUERY_MODEL_CONNECTOR    = "QUERY_MODEL_CONNECTOR";
 
@@ -123,25 +128,26 @@ public class CreateQueryComponentAction extends BackendAction {
    */
   protected void completeQueryComponent(IQueryComponent queryComponent,
       IReferencePropertyDescriptor<?> erqDescriptor, Map<String, Object> context) {
+    Object masterComponent = null;
+    // The following relies on a workaround used to determine the bean
+    // model whenever the lov component is used inside a jtable.
+    IConnector parentModelConnector = ((IValueConnector) context
+        .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
+        .getModelConnector();
+    if (parentModelConnector instanceof IModelProvider) {
+      masterComponent = ((IModelProvider) parentModelConnector).getModel();
+    } else if (parentModelConnector instanceof ICollectionConnector) {
+      int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
+          .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
+          .getSelectedIndices()[0];
+      masterComponent = ((ICollectionConnector) parentModelConnector)
+          .getChildConnector(collectionIndex).getConnectorValue();
+    }
     Map<String, Object> initializationMapping = erqDescriptor
         .getInitializationMapping();
-    if (initializationMapping != null) {
-      Object masterComponent = null;
-      // The following relies on a workaround used to determine the bean
-      // model whenever the lov component is used inside a jtable.
-      IConnector parentModelConnector = ((IValueConnector) context
-          .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
-          .getModelConnector();
-      if (parentModelConnector instanceof IModelProvider) {
-        masterComponent = ((IModelProvider) parentModelConnector).getModel();
-      } else if (parentModelConnector instanceof ICollectionConnector) {
-        int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
-            .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
-            .getSelectedIndices()[0];
-        masterComponent = ((ICollectionConnector) parentModelConnector)
-            .getChildConnector(collectionIndex).getConnectorValue();
-      }
-      if (masterComponent != null) {
+    if (masterComponent != null) {
+      context.put(MASTER_COMPONENT, masterComponent);
+      if (initializationMapping != null) {
         IAccessorFactory accessorFactory = getAccessorFactory(context);
         for (Map.Entry<String, Object> initializedAttribute : initializationMapping
             .entrySet()) {
