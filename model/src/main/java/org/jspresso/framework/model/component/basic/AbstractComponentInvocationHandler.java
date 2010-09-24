@@ -169,15 +169,15 @@ public abstract class AbstractComponentInvocationHandler implements
       firePropertyChange((String) args[0], args[1], args[2]);
       return null;
     } else if ("straightSetProperty".equals(methodName)) {
-      straightSetProperty((String) args[0], args[1]);
+      straightSetProperty(proxy, (String) args[0], args[1]);
       return null;
     } else if ("straightGetProperty".equals(methodName)) {
-      return straightGetProperty((String) args[0]);
+      return straightGetProperty(proxy, (String) args[0]);
     } else if ("straightSetProperties".equals(methodName)) {
-      straightSetProperties((Map<String, Object>) args[0]);
+      straightSetProperties(proxy, (Map<String, Object>) args[0]);
       return null;
     } else if ("straightGetProperties".equals(methodName)) {
-      return straightGetProperties();
+      return straightGetProperties(proxy);
     } else if ("setPropertyProcessorsEnabled".equals(methodName)) {
       propertyProcessorsEnabled = ((Boolean) args[0]).booleanValue();
       return null;
@@ -349,7 +349,7 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
-    Object property = straightGetProperty(propertyDescriptor.getName());
+    Object property = straightGetProperty(proxy, propertyDescriptor.getName());
     if (property == null) {
       property = collectionFactory.createComponentCollection(propertyDescriptor
           .getReferencedDescriptor().getCollectionInterface());
@@ -438,7 +438,8 @@ public abstract class AbstractComponentInvocationHandler implements
       return getReferenceProperty(proxy,
           (IReferencePropertyDescriptor<IComponent>) propertyDescriptor);
     }
-    Object propertyValue = straightGetProperty(propertyDescriptor.getName());
+    Object propertyValue = straightGetProperty(proxy,
+        propertyDescriptor.getName());
     return propertyValue;
   }
 
@@ -453,8 +454,8 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   protected Object getReferenceProperty(Object proxy,
       final IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
-    IComponent property = (IComponent) straightGetProperty(propertyDescriptor
-        .getName());
+    IComponent property = (IComponent) straightGetProperty(proxy,
+        propertyDescriptor.getName());
     if (property == null && isInlineComponentReference(propertyDescriptor)) {
       property = inlineComponentFactory
           .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
@@ -635,15 +636,18 @@ public abstract class AbstractComponentInvocationHandler implements
    * Directly gets all property values out of the property store without any
    * other operation.
    * 
+   * @param proxy
+   *          the proxy to straight get the properties from.
    * @return The map of properties.
    */
-  protected Map<String, Object> straightGetProperties() {
+  protected Map<String, Object> straightGetProperties(Object proxy) {
     Map<String, Object> allProperties = new HashMap<String, Object>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
-      if (!propertyDescriptor.isComputed()) {
-        allProperties.put(propertyDescriptor.getName(),
-            retrievePropertyValue(propertyDescriptor.getName()));
+      String propertyName = propertyDescriptor.getName();
+      if (propertyDescriptor.isModifiable()) {
+        allProperties.put(propertyName,
+            straightGetProperty(proxy, propertyName));
       }
     }
     return allProperties;
@@ -653,14 +657,35 @@ public abstract class AbstractComponentInvocationHandler implements
    * Directly get a property value out of the property store without any other
    * operation.
    * 
+   * @param proxy
+   *          the proxy to straight get the property from.
    * @param propertyName
    *          the name of the property.
    * @return the property value or null.
    */
-  protected Object straightGetProperty(String propertyName) {
-    Object propertyValue = retrievePropertyValue(propertyName);
+  protected Object straightGetProperty(Object proxy, String propertyName) {
+    IPropertyDescriptor propertyDescriptor = componentDescriptor
+        .getPropertyDescriptor(propertyName);
+    Object propertyValue;
+    if (propertyDescriptor.isComputed()) {
+      try {
+        propertyValue = getAccessorFactory().createPropertyAccessor(
+            propertyName, getComponentContract()).getValue(proxy);
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ComponentException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ComponentException(ex);
+      }
+    } else {
+      propertyValue = retrievePropertyValue(propertyName);
+    }
     if (propertyValue == null
-        && componentDescriptor.getPropertyDescriptor(propertyName) instanceof IBooleanPropertyDescriptor) {
+        && propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       return Boolean.FALSE;
     }
     return propertyValue;
@@ -670,39 +695,58 @@ public abstract class AbstractComponentInvocationHandler implements
    * Directly get a property value out of the property store without any other
    * operation.
    * 
+   * @param proxy
+   *          the proxy to straight set the property to.
    * @param propertyName
    *          the name of the property.
    * @param newPropertyValue
    *          the property value or null.
    */
-  protected void straightSetProperty(String propertyName,
+  protected void straightSetProperty(Object proxy, String propertyName,
       Object newPropertyValue) {
-    Object currentPropertyValue = straightGetProperty(propertyName);
+    Object currentPropertyValue = straightGetProperty(proxy, propertyName);
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      if (!ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
-        storeReferenceProperty(
-            (IReferencePropertyDescriptor<?>) propertyDescriptor,
-            currentPropertyValue, newPropertyValue);
+    if (propertyDescriptor.isComputed() && propertyDescriptor.isModifiable()) {
+      try {
+        getAccessorFactory().createPropertyAccessor(propertyName,
+            getComponentContract()).setValue(proxy, newPropertyValue);
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ComponentException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ComponentException(ex);
       }
     } else {
-      storeProperty(propertyName, newPropertyValue);
-    }
-    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      if (currentPropertyValue != null
-          && currentPropertyValue == newPropertyValue
-          && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy
-            .newProxyInstance(
-                Thread.currentThread().getContextClassLoader(),
-                new Class[] {((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                    .getReferencedDescriptor().getCollectionInterface()},
-                new NeverEqualsInvocationHandler(CollectionHelper
-                    .cloneCollection((Collection<?>) currentPropertyValue)));
+      if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+        if (!ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
+          storeReferenceProperty(
+              (IReferencePropertyDescriptor<?>) propertyDescriptor,
+              currentPropertyValue, newPropertyValue);
+        }
+      } else {
+        storeProperty(propertyName, newPropertyValue);
       }
+      if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+        if (currentPropertyValue != null
+            && currentPropertyValue == newPropertyValue
+            && isInitialized(currentPropertyValue)) {
+          currentPropertyValue = Proxy.newProxyInstance(
+              Thread.currentThread().getContextClassLoader(),
+              new Class[] {
+                ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                    .getReferencedDescriptor().getCollectionInterface()
+              },
+              new NeverEqualsInvocationHandler(CollectionHelper
+                  .cloneCollection((Collection<?>) currentPropertyValue)));
+        }
+      }
+      firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
     }
-    firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
   }
 
   private synchronized void addPropertyChangeListener(Object proxy,
@@ -821,7 +865,7 @@ public abstract class AbstractComponentInvocationHandler implements
       for (IPropertyDescriptor propertyDescriptor : componentDescriptor
           .getPropertyDescriptors()) {
         propertyDescriptor.preprocessSetter(proxy,
-            straightGetProperty(propertyDescriptor.getName()));
+            straightGetProperty(proxy, propertyDescriptor.getName()));
       }
     }
   }
@@ -936,7 +980,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private void removeFromProperty(Object proxy,
       ICollectionPropertyDescriptor<?> propertyDescriptor, Object value) {
     String propertyName = propertyDescriptor.getName();
-    if (!isInitialized(straightGetProperty(propertyName))) {
+    if (!isInitialized(straightGetProperty(proxy, propertyName))) {
       return;
     }
     Collection<?> collectionProperty = null;
@@ -1030,7 +1074,7 @@ public abstract class AbstractComponentInvocationHandler implements
     changeSupport.removePropertyChangeListener(propertyName, listener);
   }
 
-  private void rollbackProperty(@SuppressWarnings("unused") Object proxy,
+  private void rollbackProperty(Object proxy,
       IPropertyDescriptor propertyDescriptor, Object oldProperty) {
     // boolean wasPropertyProcessorsEnabled = propertyProcessorsEnabled;
     // try {
@@ -1039,7 +1083,7 @@ public abstract class AbstractComponentInvocationHandler implements
     // } finally {
     // propertyProcessorsEnabled = wasPropertyProcessorsEnabled;
     // }
-    straightSetProperty(propertyDescriptor.getName(), oldProperty);
+    straightSetProperty(proxy, propertyDescriptor.getName(), oldProperty);
   }
 
   @SuppressWarnings("unchecked")
@@ -1191,9 +1235,11 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private void straightSetProperties(Map<String, Object> backendProperties) {
+  private void straightSetProperties(Object proxy,
+      Map<String, Object> backendProperties) {
     for (Map.Entry<String, Object> propertyEntry : backendProperties.entrySet()) {
-      straightSetProperty(propertyEntry.getKey(), propertyEntry.getValue());
+      straightSetProperty(proxy, propertyEntry.getKey(),
+          propertyEntry.getValue());
     }
   }
 

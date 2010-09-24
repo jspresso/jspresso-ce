@@ -214,8 +214,8 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Map<String, Object> straightGetProperties() {
-    Map<String, Object> superMap = super.straightGetProperties();
+  protected Map<String, Object> straightGetProperties(Object proxy) {
+    Map<String, Object> superMap = super.straightGetProperties(proxy);
     superMap.put(DETACHED_ENTITIES_PROPERTY_NAME, detachedEntities);
     return superMap;
   }
@@ -224,11 +224,11 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Object straightGetProperty(String propertyName) {
+  protected Object straightGetProperty(Object proxy, String propertyName) {
     if (DETACHED_ENTITIES_PROPERTY_NAME.equals(propertyName)) {
       return detachedEntities;
     }
-    return super.straightGetProperty(propertyName);
+    return super.straightGetProperty(proxy, propertyName);
   }
 
   /**
@@ -236,12 +236,12 @@ public class ControllerAwareEntityInvocationHandler extends
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected void straightSetProperty(String propertyName,
+  protected void straightSetProperty(Object proxy, String propertyName,
       Object newPropertyValue) {
     if (DETACHED_ENTITIES_PROPERTY_NAME.equals(propertyName)) {
       detachedEntities = (Set<IEntity>) newPropertyValue;
     } else {
-      super.straightSetProperty(propertyName, newPropertyValue);
+      super.straightSetProperty(proxy, propertyName, newPropertyValue);
     }
   }
 }

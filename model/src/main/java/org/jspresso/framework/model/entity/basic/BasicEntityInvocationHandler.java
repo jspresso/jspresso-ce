@@ -100,7 +100,7 @@ public class BasicEntityInvocationHandler extends
     if (proxy == another) {
       return true;
     }
-    Object id = straightGetProperty(IEntity.ID);
+    Object id = straightGetProperty(proxy, IEntity.ID);
     if (id == null) {
       return false;
     }
@@ -113,7 +113,7 @@ public class BasicEntityInvocationHandler extends
         BasicEntityInvocationHandler otherInvocationHandler = (BasicEntityInvocationHandler) Proxy
             .getInvocationHandler(another);
         otherContract = otherInvocationHandler.getComponentContract();
-        otherId = otherInvocationHandler.straightGetProperty(IEntity.ID);
+        otherId = otherInvocationHandler.straightGetProperty(proxy, IEntity.ID);
       } else {
         otherContract = ((IEntity) another).getComponentContract();
         otherId = ((IEntity) another).getId();
@@ -128,8 +128,8 @@ public class BasicEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected int computeHashCode(@SuppressWarnings("unused") IComponent proxy) {
-    Object id = straightGetProperty(IEntity.ID);
+  protected int computeHashCode(IComponent proxy) {
+    Object id = straightGetProperty(proxy, IEntity.ID);
     if (id == null) {
       throw new NullPointerException(
           "Id must be assigned on the entity before its hashcode can be used.");
