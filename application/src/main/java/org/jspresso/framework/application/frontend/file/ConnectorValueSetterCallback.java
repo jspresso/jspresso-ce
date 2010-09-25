@@ -27,7 +27,6 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 
-
 /**
  * Default handler implementation to deal with setting binary properties using
  * files.
@@ -41,8 +40,9 @@ public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
    * {@inheritDoc}
    */
   @Override
-  public void fileChosen(InputStream in, IActionHandler actionHandler, Map<String, Object> context) {
-    super.fileChosen(in, actionHandler, context);
+  public void fileChosen(String name, InputStream in,
+      IActionHandler actionHandler, Map<String, Object> context) {
+    super.fileChosen(name, in, actionHandler, context);
     if (context.containsKey(ActionContextConstants.ACTION_PARAM)) {
       Object valueToSet = context.get(ActionContextConstants.ACTION_PARAM);
       IModelDescriptor modelDescriptor = (IModelDescriptor) context

@@ -47,7 +47,8 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
   /**
    * {@inheritDoc}
    */
-  public void fileChosen(OutputStream out,
+  public void fileChosen(@SuppressWarnings("unused") String name,
+      OutputStream out,
       @SuppressWarnings("unused") IActionHandler actionHandler,
       Map<String, Object> context) throws IOException {
     OutputStream os = new BufferedOutputStream(out);

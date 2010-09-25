@@ -47,7 +47,8 @@ public class SaveFileAction extends ChooseFileAction {
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
     try {
-      ClientContext.storeFile(new IFileStoreHandler() {
+      final FileChooserConfig fcc = createFileChooser(context);
+      IFileStoreHandler fsh = new IFileStoreHandler() {
 
         private static final long serialVersionUID = -1025629868916915262L;
 
@@ -59,13 +60,14 @@ public class SaveFileAction extends ChooseFileAction {
         }
 
         public void onSuccess(String filePath) {
-          createFileChooser(context).setCurrentDirectory(filePath);
+          fcc.setCurrentDirectory(filePath);
         }
 
         public void prepareFile(OutputStream out) {
           if (fileSaveCallback != null) {
             try {
-              fileSaveCallback.fileChosen(out, actionHandler, context);
+              fileSaveCallback.fileChosen(fcc.getSelectedFile(), out,
+                  actionHandler, context);
               out.flush();
             } catch (IOException ex) {
               throw new ActionException(ex);
@@ -78,7 +80,8 @@ public class SaveFileAction extends ChooseFileAction {
             }
           }
         }
-      }, createFileChooser(context));
+      };
+      ClientContext.storeFile(fsh, fcc);
     } catch (Exception ex) {
       throw new ActionException(ex);
     }

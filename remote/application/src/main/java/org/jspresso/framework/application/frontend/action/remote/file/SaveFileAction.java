@@ -185,7 +185,7 @@ public class SaveFileAction extends ChooseFileAction {
      * {@inheritDoc}
      */
     public void writeToContent(OutputStream out) throws IOException {
-      source.fileChosen(out, actionHandler, context);
+      source.fileChosen(getName(), out, actionHandler, context);
     }
   }
 }

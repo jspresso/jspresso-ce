@@ -38,9 +38,9 @@ public class ActionExecutorCallback extends FileToByteArrayCallback {
    * {@inheritDoc}
    */
   @Override
-  public void fileChosen(InputStream in, IActionHandler actionHandler,
-      Map<String, Object> context) {
-    super.fileChosen(in, actionHandler, context);
+  public void fileChosen(String name, InputStream in,
+      IActionHandler actionHandler, Map<String, Object> context) {
+    super.fileChosen(name, in, actionHandler, context);
     actionHandler.execute(action, context);
   }
 

@@ -12,6 +12,9 @@ eclipse projects, i.e. in .classpath, add :
         value="" />
     </attributes>
   </classpathentry>
+  
+- The file save/open callback API has been improved by adding the file name in the method
+signature.
 
 
 3.5.0

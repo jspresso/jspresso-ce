@@ -29,11 +29,13 @@ import org.jspresso.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IFileOpenCallback  extends IFileCallback {
+public interface IFileOpenCallback extends IFileCallback {
 
   /**
    * Called whenever a file is opened.
    * 
+   * @param name
+   *          the file name.
    * @param in
    *          the input stream to read the file bytes.
    * @param actionHandler
@@ -41,6 +43,6 @@ public interface IFileOpenCallback  extends IFileCallback {
    * @param context
    *          the action context.
    */
-  void fileChosen(InputStream in, IActionHandler actionHandler,
+  void fileChosen(String name, InputStream in, IActionHandler actionHandler,
       Map<String, Object> context);
 }

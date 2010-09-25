@@ -58,12 +58,12 @@ public class FileOpenCallbackAction extends AbstractRemoteAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     String resourceId = getActionCommand(context);
-    IResource uploadedResource = (IResource) ResourceManager
-        .getInstance().getRegistered(resourceId);
+    IResource uploadedResource = (IResource) ResourceManager.getInstance()
+        .getRegistered(resourceId);
     if (uploadedResource != null) {
       try {
-        fileOpenCallback.fileChosen(uploadedResource.getContent(),
-            actionHandler, context);
+        fileOpenCallback.fileChosen(uploadedResource.getName(),
+            uploadedResource.getContent(), actionHandler, context);
       } catch (IOException ex) {
         throw new ActionException(ex);
       }

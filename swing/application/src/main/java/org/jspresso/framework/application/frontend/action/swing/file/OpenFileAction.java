@@ -29,7 +29,6 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 import org.jspresso.framework.util.swing.SwingUtil;
 
-
 /**
  * Initiates a file open action.
  * 
@@ -55,7 +54,8 @@ public class OpenFileAction extends ChooseFileAction {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
         try {
-          fileOpenCallback.fileChosen(new FileInputStream(file), actionHandler, context);
+          fileOpenCallback.fileChosen(file.getName(),
+              new FileInputStream(file), actionHandler, context);
         } catch (FileNotFoundException ex) {
           fileOpenCallback.cancel(actionHandler, context);
         }
@@ -72,7 +72,7 @@ public class OpenFileAction extends ChooseFileAction {
    * Sets the fileOpenCallback.
    * 
    * @param fileOpenCallback
-   *            the fileOpenCallback to set.
+   *          the fileOpenCallback to set.
    */
   public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
     this.fileOpenCallback = fileOpenCallback;

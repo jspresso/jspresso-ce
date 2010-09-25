@@ -58,7 +58,7 @@ public class OpenFileAction extends ChooseFileAction {
       public void onSuccess(InputStream in, String filePath) {
         if (fileOpenCallback != null) {
           createFileChooser(context).setCurrentDirectory(filePath);
-          fileOpenCallback.fileChosen(in, actionHandler, context);
+          fileOpenCallback.fileChosen(filePath, in, actionHandler, context);
         }
       }
     }, createFileChooser(context));
@@ -69,7 +69,7 @@ public class OpenFileAction extends ChooseFileAction {
    * Sets the fileOpenCallback.
    * 
    * @param fileOpenCallback
-   *            the fileOpenCallback to set.
+   *          the fileOpenCallback to set.
    */
   public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
     this.fileOpenCallback = fileOpenCallback;

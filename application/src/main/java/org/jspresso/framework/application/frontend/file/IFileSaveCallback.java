@@ -35,6 +35,8 @@ public interface IFileSaveCallback extends IFileCallback {
   /**
    * Called whenever a file is chosen as save destination.
    * 
+   * @param name
+   *          the actual file name.
    * @param out
    *          the output stream to write to the file.
    * @param actionHandler
@@ -44,7 +46,7 @@ public interface IFileSaveCallback extends IFileCallback {
    * @throws IOException
    *           whenever an IOException occurs.
    */
-  void fileChosen(OutputStream out, IActionHandler actionHandler,
+  void fileChosen(String name, OutputStream out, IActionHandler actionHandler,
       Map<String, Object> context) throws IOException;
 
   /**

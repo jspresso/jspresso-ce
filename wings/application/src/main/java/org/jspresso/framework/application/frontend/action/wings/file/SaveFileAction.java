@@ -58,7 +58,7 @@ public class SaveFileAction extends ChooseFileAction {
         public void write(Device device) {
           DeviceOutputStream out = new DeviceOutputStream(device);
           try {
-            fileSaveCallback.fileChosen(out, actionHandler, context);
+            fileSaveCallback.fileChosen(getName(), out, actionHandler, context);
             out.flush();
           } catch (IOException ex) {
             throw new ActionException(ex);
@@ -75,7 +75,9 @@ public class SaveFileAction extends ChooseFileAction {
       Map<String, String> headers = new HashMap<String, String>();
       headers.put("Content-Disposition", "attachment; filename="
           + getFileName(context));
-      String url = SessionManager.getSession().getExternalizeManager()
+      String url = SessionManager
+          .getSession()
+          .getExternalizeManager()
           .externalize(resource, headers.entrySet(),
               AbstractExternalizeManager.REQUEST);
       ScriptListener listener = new JavaScriptListener(null, null,

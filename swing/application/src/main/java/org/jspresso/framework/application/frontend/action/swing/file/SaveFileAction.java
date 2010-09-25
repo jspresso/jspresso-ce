@@ -68,8 +68,8 @@ public class SaveFileAction extends ChooseFileAction {
           }
         }
         if (file.exists()) {
-          if (JOptionPane.showConfirmDialog(null, Messages
-              .getString("confirm.override.description"), //$NON-NLS-1$
+          if (JOptionPane.showConfirmDialog(null,
+              Messages.getString("confirm.override.description"), //$NON-NLS-1$
               Messages.getString("confirm.override.name"), //$NON-NLS-1$
               JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
             file = null;
@@ -79,7 +79,8 @@ public class SaveFileAction extends ChooseFileAction {
           try {
             FileOutputStream fos = new FileOutputStream(file);
             try {
-              fileSaveCallback.fileChosen(fos, actionHandler, context);
+              fileSaveCallback.fileChosen(file.getName(), fos, actionHandler,
+                  context);
               fos.flush();
             } catch (IOException ex) {
               throw new ActionException(ex);

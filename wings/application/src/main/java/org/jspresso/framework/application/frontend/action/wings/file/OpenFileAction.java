@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.action.wings.file;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -29,7 +30,6 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 import org.wings.SFileChooser;
 import org.wings.SOptionPane;
-
 
 /**
  * Initiates a file open action.
@@ -49,9 +49,10 @@ public class OpenFileAction extends ChooseFileAction {
       final Map<String, Object> context) {
     SFileChooser fileChooser = new SFileChooser();
     SOptionPane
-        .showInputDialog(getSourceComponent(context), getTranslationProvider(
-            context)
-            .getTranslation("open.file.description", getLocale(context)),
+        .showInputDialog(
+            getSourceComponent(context),
+            getTranslationProvider(context).getTranslation(
+                "open.file.description", getLocale(context)),
             getTranslationProvider(context).getTranslation("open.file.name",
                 getLocale(context)), fileChooser, new OpenFileActionListener(
                 fileChooser, getController(context), context));
@@ -62,7 +63,7 @@ public class OpenFileAction extends ChooseFileAction {
    * Sets the fileOpenCallback.
    * 
    * @param fileOpenCallback
-   *            the fileOpenCallback to set.
+   *          the fileOpenCallback to set.
    */
   public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
     this.fileOpenCallback = fileOpenCallback;
@@ -89,9 +90,9 @@ public class OpenFileAction extends ChooseFileAction {
         if (fileOpenCallback != null) {
           if (fileChooser.getFileName() != null
               && SOptionPane.OK_ACTION.equals(e.getActionCommand())) {
-            fileOpenCallback.fileChosen(new FileInputStream(fileChooser
-                .getSelectedFile()), actionHandler,
-                context);
+            File selectedFile = fileChooser.getSelectedFile();
+            fileOpenCallback.fileChosen(selectedFile.getName(),
+                new FileInputStream(selectedFile), actionHandler, context);
           } else {
             fileOpenCallback.cancel(actionHandler, context);
           }

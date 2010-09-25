@@ -28,7 +28,6 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 
-
 /**
  * Default handler implementation to fully read the file inputstream into a byte
  * array and setting it in the context.
@@ -41,16 +40,17 @@ public class FileToByteArrayCallback implements IFileOpenCallback {
   /**
    * {@inheritDoc}
    */
-  public void cancel(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public void cancel(@SuppressWarnings("unused") IActionHandler actionHandler,
+      Map<String, Object> context) {
     context.remove(ActionContextConstants.ACTION_PARAM);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void fileChosen(InputStream in, @SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public void fileChosen(@SuppressWarnings("unused") String name,
+      InputStream in, @SuppressWarnings("unused") IActionHandler actionHandler,
+      Map<String, Object> context) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       InputStream is = new BufferedInputStream(in);
