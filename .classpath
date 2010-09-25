@@ -155,7 +155,7 @@
 	<classpathentry kind="src" output="ulc/components/shared/target/test-classes" path="ulc/components/shared/src/test/java"/>
 	<classpathentry excluding="**" kind="src" output="ulc/components/shared/target/test-classes" path="ulc/components/shared/src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry exported="true" kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER">
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
