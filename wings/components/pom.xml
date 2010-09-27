@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>3.5.1-RC3</version>
+    <version>3.5-SNAPSHOT</version>
   </parent>
   <artifactId>jspresso-wings-components</artifactId>
   <packaging>jar</packaging>
