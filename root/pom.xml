@@ -12,8 +12,8 @@
     <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
     
     <!-- Dependencies versions -->
-    <jspresso.version>3.5.1-RC3</jspresso.version>
-    <sjs.version>1.0.1-RC3</sjs.version>
+    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
+    <sjs.version>1.0-SNAPSHOT</sjs.version>
     <junit.version>3.8.1</junit.version>
 
     <flex.version>3.4.0.9271</flex.version>
