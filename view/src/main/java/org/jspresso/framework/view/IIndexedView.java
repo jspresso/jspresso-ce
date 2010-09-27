@@ -18,48 +18,37 @@
  */
 package org.jspresso.framework.view;
 
-
 /**
- * This interface establishes the general contract of a composite view which has
- * child views which are keyed by a string.
+ * This interface establishes the general contract of a composite view which
+ * owns indexed child views.
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 2808 $
  * @author Vincent Vandenschrick
  * @param <E>
  */
-public interface IMapView<E> extends ICompositeView<E> {
+public interface IIndexedView<E> extends ICompositeView<E> {
 
   /**
-   * Adds a child view to the map.
+   * Gets the indexed child view.
    * 
-   * @param key
-   *          the child view key.
-   * @param childView
-   *          the child view to be added.
-   */
-  void addToChildrenMap(String key, IView<E> childView);
-
-  /**
-   * Gets the child view indexed by the key or null if the key does not exist.
-   * 
-   * @param key
-   *          the key to look up the child view.
+   * @param index
+   *          the index to look up the child view.
    * @return the child view or null if none.
    */
-  IView<E> getChild(String key);
+  IView<E> getChildView(int index);
 
   /**
-   * Gets the currently displayed view.
+   * Gets the currently displayed view index.
    * 
    * @return the currently displayed view.
    */
-  IView<E> getCurrentView();
+  int getCurrentViewIndex();
 
   /**
-   * Sets the currently displayed view.
+   * Sets the currently displayed view index.
    * 
-   * @param currentView
+   * @param index
    *          the currently displayed view.
    */
-  void setCurrentView(IView<E> currentView);
+  void setCurrentViewIndex(int index);
 }

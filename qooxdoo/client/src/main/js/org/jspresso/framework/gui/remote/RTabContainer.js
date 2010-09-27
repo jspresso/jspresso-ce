@@ -25,6 +25,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTabContainer",
     tabs :
     {
       check : "Array"
+    },
+    selectedIndex :
+    {
+      check : "Integer",
+      event : "changeSelectedIndex"
     }
   }
 });

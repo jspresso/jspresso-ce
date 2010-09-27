@@ -18,9 +18,12 @@
  */
 package org.jspresso.framework.view.remote;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +34,7 @@ import java.util.zip.Checksum;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -111,10 +115,12 @@ import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
+import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
+import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
@@ -154,6 +160,7 @@ public class DefaultRemoteViewFactory extends
   private boolean               numberServerParse;
 
   private IRemoteCommandHandler remoteCommandHandler;
+  private IRemotePeerRegistry   remotePeerRegistry;
 
   /**
    * Constructs a new <code>DefaultRemoteViewFactory</code> instance.
@@ -351,9 +358,7 @@ public class DefaultRemoteViewFactory extends
     List<RAction> binaryActions = createBinaryActions(propertyView,
         actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[0]));
-    viewComponent.setActionLists(new RActionList[] {
-      actionList
-    });
+    viewComponent.setActionLists(new RActionList[] {actionList});
     return propertyView;
   }
 
@@ -1267,10 +1272,8 @@ public class DefaultRemoteViewFactory extends
       // getTranslationProvider(), locale)}, locale));
       lovAction.setDescription(getTranslationProvider().getTranslation(
           "lov.element.description",
-          new Object[] {
-            propertyDescriptor.getReferencedDescriptor().getI18nName(
-                getTranslationProvider(), locale)
-          }, locale));
+          new Object[] {propertyDescriptor.getReferencedDescriptor()
+              .getI18nName(getTranslationProvider(), locale)}, locale));
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.setIcon(getIconFactory().getIcon(
             propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
@@ -1278,12 +1281,8 @@ public class DefaultRemoteViewFactory extends
       }
       RActionList actionList = new RActionList(getGuidGenerator()
           .generateGUID());
-      actionList.setActions(new RAction[] {
-        lovAction
-      });
-      viewComponent.setActionLists(new RActionList[] {
-        actionList
-      });
+      actionList.setActions(new RAction[] {lovAction});
+      viewComponent.setActionLists(new RActionList[] {actionList});
     }
     return view;
   }
@@ -1662,9 +1661,57 @@ public class DefaultRemoteViewFactory extends
   protected ICompositeView<RComponent> createTabView(
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    RTabContainer viewComponent = createRTabContainer();
-    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent,
-        viewDescriptor);
+    final RTabContainer viewComponent = createRTabContainer();
+    getRemotePeerRegistry().register(viewComponent);
+
+    final BasicIndexedView<RComponent> view = new BasicIndexedView<RComponent>(
+        viewComponent) {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void setCurrentViewIndex(int index) {
+        int oldIndex = getCurrentViewIndex();
+        if (index == oldIndex) {
+          return;
+        }
+        super.setCurrentViewIndex(index);
+
+        RemoteSelectionCommand selectionCommand = new RemoteSelectionCommand();
+        selectionCommand.setTargetPeerGuid(viewComponent.getGuid());
+        selectionCommand.setLeadingIndex(index);
+        getRemoteCommandHandler().registerCommand(selectionCommand);
+
+        IView<RComponent> oldSelectedView = getChildView(oldIndex);
+        IView<RComponent> newSelectedView = getChildView(index);
+
+        if (newSelectedView != null && oldSelectedView != null) {
+          getMvcBinder().bind(newSelectedView.getConnector(),
+              oldSelectedView.getConnector().getModelConnector());
+          getMvcBinder().bind(oldSelectedView.getConnector(), null);
+        }
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public List<IView<RComponent>> getChildren() {
+        return Collections.singletonList(getChildView(getCurrentViewIndex()));
+      }
+    };
+    view.setDescriptor(viewDescriptor);
+
+    viewComponent.addPropertyChangeListener("selectedIndex",
+        new PropertyChangeListener() {
+
+          public void propertyChange(PropertyChangeEvent evt) {
+            RTabContainer source = (RTabContainer) evt.getSource();
+            view.setCurrentViewIndex(source.getSelectedIndex());
+          }
+        });
+
     List<RComponent> tabs = new ArrayList<RComponent>();
     List<IView<RComponent>> childrenViews = new ArrayList<IView<RComponent>>();
 
@@ -2017,5 +2064,24 @@ public class DefaultRemoteViewFactory extends
       viewComponent.setState(((IRemoteStateOwner) connector).getState());
     }
     return view;
+  }
+
+  /**
+   * Gets the remotePeerRegistry.
+   * 
+   * @return the remotePeerRegistry.
+   */
+  public IRemotePeerRegistry getRemotePeerRegistry() {
+    return remotePeerRegistry;
+  }
+
+  /**
+   * Sets the remotePeerRegistry.
+   * 
+   * @param remotePeerRegistry
+   *          the remotePeerRegistry to set.
+   */
+  public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
+    this.remotePeerRegistry = remotePeerRegistry;
   }
 }

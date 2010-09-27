@@ -35,6 +35,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.containers.HBox;
   import mx.containers.HDividedBox;
   import mx.containers.Panel;
+  import mx.containers.TabNavigator;
   import mx.containers.VBox;
   import mx.containers.ViewStack;
   import mx.controls.Alert;
@@ -400,10 +401,15 @@ package org.jspresso.framework.application.frontend.controller.flex {
           (targetPeer as RemoteValueState).writable =
             (command as RemoteWritabilityCommand).writable;
         } else if(command is RemoteSelectionCommand) {
-          (targetPeer as RemoteCompositeValueState).leadingIndex =
-            (command as RemoteSelectionCommand).leadingIndex;
-          (targetPeer as RemoteCompositeValueState).selectedIndices =
-            (command as RemoteSelectionCommand).selectedIndices;
+          if(targetPeer is RTabContainer) {
+            (targetPeer as RTabContainer).selectedIndex =
+              (command as RemoteSelectionCommand).leadingIndex;
+          } else {
+            (targetPeer as RemoteCompositeValueState).leadingIndex =
+              (command as RemoteSelectionCommand).leadingIndex;
+            (targetPeer as RemoteCompositeValueState).selectedIndices =
+              (command as RemoteSelectionCommand).selectedIndices;
+          }
         } else if(command is RemoteEnablementCommand) {
           (targetPeer as RAction).enabled =
             (command as RemoteEnablementCommand).enabled;

@@ -77,6 +77,7 @@ package org.jspresso.framework.view.flex {
   
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
   import org.jspresso.framework.gui.remote.RAction;
   import org.jspresso.framework.gui.remote.RActionComponent;
@@ -1289,6 +1290,7 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function createTabContainer(remoteTabContainer:RTabContainer):Container {
+      getRemotePeerRegistry().register(remoteTabContainer);
       var tabContainer:TabNavigator = new TabNavigator();
       tabContainer.historyManagementEnabled = false;
       for(var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
@@ -1322,6 +1324,14 @@ package org.jspresso.framework.view.flex {
         }
       };
       tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, creationComplete);
+      BindingUtils.bindProperty(tabContainer, "selectedIndex", remoteTabContainer, "selectedIndex", true);
+      BindingUtils.bindSetter(function(index:int):void {
+        remoteTabContainer.selectedIndex = index;
+        var command:RemoteSelectionCommand = new RemoteSelectionCommand();
+        command.targetPeerGuid = remoteTabContainer.guid;
+        command.leadingIndex = index;
+        _commandHandler.registerCommand(command);
+      }, tabContainer, "selectedIndex",true);
       return tabContainer;
     }
     

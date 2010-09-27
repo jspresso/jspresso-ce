@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
     public class RTabContainer extends RContainer {
 
         private var _tabs:Array;
+        private var _selectedIndex:int;
 
         public function RTabContainer() {
           //default constructor.
@@ -31,5 +32,15 @@ package org.jspresso.framework.gui.remote {
         public function get tabs():Array {
             return _tabs;
         }
+  
+        [Bindable]
+        public function get selectedIndex():int {
+          return _selectedIndex;
+        }
+
+        public function set selectedIndex(value:int):void {
+          _selectedIndex = value;
+        }
+
     }
 }

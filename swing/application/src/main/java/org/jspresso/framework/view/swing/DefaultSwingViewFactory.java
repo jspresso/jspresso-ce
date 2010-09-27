@@ -73,6 +73,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -155,6 +157,7 @@ import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
+import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.ICompositeView;
@@ -1907,9 +1910,49 @@ public class DefaultSwingViewFactory extends
   protected ICompositeView<JComponent> createTabView(
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    JTabbedPane viewComponent = createJTabbedPane();
-    BasicCompositeView<JComponent> view = constructCompositeView(viewComponent,
-        viewDescriptor);
+    final JTabbedPane viewComponent = createJTabbedPane();
+    final BasicIndexedView<JComponent> view = new BasicIndexedView<JComponent>(
+        viewComponent) {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void setCurrentViewIndex(int index) {
+        int oldIndex = getCurrentViewIndex();
+        if (index == oldIndex) {
+          return;
+        }
+        super.setCurrentViewIndex(index);
+        viewComponent.setSelectedIndex(index);
+        IView<JComponent> oldSelectedView = getChildView(oldIndex);
+        IView<JComponent> newSelectedView = getChildView(index);
+
+        if (newSelectedView != null && oldSelectedView != null) {
+          getMvcBinder().bind(newSelectedView.getConnector(),
+              oldSelectedView.getConnector().getModelConnector());
+          getMvcBinder().bind(oldSelectedView.getConnector(), null);
+        }
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public List<IView<JComponent>> getChildren() {
+        return Collections.singletonList(getChildView(getCurrentViewIndex()));
+      }
+    };
+    view.setDescriptor(viewDescriptor);
+
+    viewComponent.addChangeListener(new ChangeListener() {
+
+      public void stateChanged(ChangeEvent e) {
+        JTabbedPane source = (JTabbedPane) e.getSource();
+        view.setCurrentViewIndex(source.getSelectedIndex());
+      }
+    });
+
     List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor

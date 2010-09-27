@@ -79,9 +79,11 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the children view map.
+   * 
+   * @return the children view map.
    */
-  public Map<String, IView<E>> getChildrenMap() {
+  protected Map<String, IView<E>> getChildrenMap() {
     if (childrenMap == null) {
       childrenMap = new HashMap<String, IView<E>>();
     }

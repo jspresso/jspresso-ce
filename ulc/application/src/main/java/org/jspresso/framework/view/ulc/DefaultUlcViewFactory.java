@@ -103,6 +103,7 @@ import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.BasicCompositeView;
+import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.ICompositeView;
@@ -166,7 +167,9 @@ import com.ulcjava.base.application.ULCTree;
 import com.ulcjava.base.application.datatype.ULCDateDataType;
 import com.ulcjava.base.application.datatype.ULCNumberDataType;
 import com.ulcjava.base.application.datatype.ULCPercentDataType;
+import com.ulcjava.base.application.event.SelectionChangedEvent;
 import com.ulcjava.base.application.event.TreeModelEvent;
+import com.ulcjava.base.application.event.serializable.ISelectionChangedListener;
 import com.ulcjava.base.application.event.serializable.ITreeModelListener;
 import com.ulcjava.base.application.table.DefaultTableCellRenderer;
 import com.ulcjava.base.application.table.ITableCellRenderer;
@@ -1518,9 +1521,51 @@ public class DefaultUlcViewFactory extends
   protected ICompositeView<ULCComponent> createTabView(
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ULCTabbedPane viewComponent = createULCTabbedPane();
-    BasicCompositeView<ULCComponent> view = constructCompositeView(
-        viewComponent, viewDescriptor);
+    final ULCTabbedPane viewComponent = createULCTabbedPane();
+    final BasicIndexedView<ULCComponent> view = new BasicIndexedView<ULCComponent>(
+        viewComponent) {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void setCurrentViewIndex(int index) {
+        int oldIndex = getCurrentViewIndex();
+        if (index == oldIndex) {
+          return;
+        }
+        super.setCurrentViewIndex(index);
+        viewComponent.setSelectedIndex(index);
+        IView<ULCComponent> oldSelectedView = getChildView(oldIndex);
+        IView<ULCComponent> newSelectedView = getChildView(index);
+
+        if (newSelectedView != null && oldSelectedView != null) {
+          getMvcBinder().bind(newSelectedView.getConnector(),
+              oldSelectedView.getConnector().getModelConnector());
+          getMvcBinder().bind(oldSelectedView.getConnector(), null);
+        }
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public List<IView<ULCComponent>> getChildren() {
+        return Collections.singletonList(getChildView(getCurrentViewIndex()));
+      }
+    };
+    view.setDescriptor(viewDescriptor);
+
+    viewComponent.addSelectionChangedListener(new ISelectionChangedListener() {
+
+      private static final long serialVersionUID = -3815467617634975685L;
+
+      public void selectionChanged(SelectionChangedEvent event) {
+        ULCTabbedPane source = (ULCTabbedPane) event.getSource();
+        view.setCurrentViewIndex(source.getSelectedIndex());
+      }
+    });
+
     List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor

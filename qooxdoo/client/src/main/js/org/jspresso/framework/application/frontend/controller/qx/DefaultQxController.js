@@ -329,8 +329,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand) {
           targetPeer.setWritable(command.isWritable());
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand) {
-          targetPeer.setLeadingIndex(command.getLeadingIndex());
-          targetPeer.setSelectedIndices(command.getSelectedIndices());
+          if(targetPeer instanceof org.jspresso.framework.gui.remote.RTabContainer) {
+            targetPeer.setSelectedIndex(command.getLeadingIndex());
+          } else {
+	          targetPeer.setLeadingIndex(command.getLeadingIndex());
+	          targetPeer.setSelectedIndices(command.getSelectedIndices());
+          }
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand) {
           targetPeer.setEnabled(command.isEnabled());
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand) {

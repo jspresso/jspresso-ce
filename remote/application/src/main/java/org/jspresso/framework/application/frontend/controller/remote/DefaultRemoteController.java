@@ -65,6 +65,7 @@ import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RSplitContainer;
+import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
@@ -450,6 +451,7 @@ public class DefaultRemoteController extends
       IViewFactory<RComponent, RIcon, RAction> viewFactory) {
     if (viewFactory instanceof DefaultRemoteViewFactory) {
       ((DefaultRemoteViewFactory) viewFactory).setRemoteCommandHandler(this);
+      ((DefaultRemoteViewFactory) viewFactory).setRemotePeerRegistry(this);
     }
     IActionFactory<RAction, RComponent> actionFactory = viewFactory
         .getActionFactory();
@@ -637,17 +639,23 @@ public class DefaultRemoteController extends
               .setConnectorValue(((RemoteValueCommand) command).getValue());
         }
       } else if (command instanceof RemoteSelectionCommand) {
-        ISelectable selectable = null;
-        if (targetPeer instanceof ICollectionConnectorProvider) {
-          selectable = ((ICollectionConnectorProvider) targetPeer)
-              .getCollectionConnector();
-        } else if (targetPeer instanceof ISelectable) {
-          selectable = (ISelectable) targetPeer;
-        }
-        if (selectable != null) {
-          selectable.setSelectedIndices(
-              ((RemoteSelectionCommand) command).getSelectedIndices(),
-              ((RemoteSelectionCommand) command).getLeadingIndex());
+        if (targetPeer instanceof RTabContainer) {
+          ((RTabContainer) targetPeer)
+              .setSelectedIndex(((RemoteSelectionCommand) command)
+                  .getLeadingIndex());
+        } else {
+          ISelectable selectable = null;
+          if (targetPeer instanceof ICollectionConnectorProvider) {
+            selectable = ((ICollectionConnectorProvider) targetPeer)
+                .getCollectionConnector();
+          } else if (targetPeer instanceof ISelectable) {
+            selectable = (ISelectable) targetPeer;
+          }
+          if (selectable != null) {
+            selectable.setSelectedIndices(
+                ((RemoteSelectionCommand) command).getSelectedIndices(),
+                ((RemoteSelectionCommand) command).getLeadingIndex());
+          }
         }
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;

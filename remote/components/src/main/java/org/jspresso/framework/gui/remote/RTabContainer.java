@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 /**
  * A container with tabbed children views.
  * 
@@ -26,9 +29,11 @@ package org.jspresso.framework.gui.remote;
  */
 public class RTabContainer extends RContainer {
 
-  private static final long serialVersionUID = 8976562094649779477L;
+  private static final long     serialVersionUID = 8976562094649779477L;
 
-  private RComponent[]      tabs;
+  private RComponent[]          tabs;
+  private int                   selectedIndex;
+  private PropertyChangeSupport propertyChangeSupport;
 
   /**
    * Constructs a new <code>RTabContainer</code> instance.
@@ -38,6 +43,7 @@ public class RTabContainer extends RContainer {
    */
   public RTabContainer(String guid) {
     super(guid);
+    propertyChangeSupport = new PropertyChangeSupport(this);
   }
 
   /**
@@ -66,4 +72,65 @@ public class RTabContainer extends RContainer {
   public void setTabs(RComponent[] tabs) {
     this.tabs = tabs;
   }
+
+  /**
+   * Gets the selectedIndex.
+   * 
+   * @return the selectedIndex.
+   */
+  public int getSelectedIndex() {
+    return selectedIndex;
+  }
+
+  /**
+   * Sets the selectedIndex.
+   * 
+   * @param selectedIndex
+   *          the selectedIndex to set.
+   */
+  public void setSelectedIndex(int selectedIndex) {
+    int oldSelectedIndex = this.selectedIndex;
+    this.selectedIndex = selectedIndex;
+    propertyChangeSupport.firePropertyChange("selectedIndex", oldSelectedIndex,
+        selectedIndex);
+  }
+
+  /**
+   * @param listener
+   * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.beans.PropertyChangeListener)
+   */
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    propertyChangeSupport.addPropertyChangeListener(listener);
+  }
+
+  /**
+   * @param listener
+   * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.beans.PropertyChangeListener)
+   */
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    propertyChangeSupport.removePropertyChangeListener(listener);
+  }
+
+  /**
+   * @param propertyName
+   * @param listener
+   * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.lang.String,
+   *      java.beans.PropertyChangeListener)
+   */
+  public void addPropertyChangeListener(String propertyName,
+      PropertyChangeListener listener) {
+    propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+  }
+
+  /**
+   * @param propertyName
+   * @param listener
+   * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.lang.String,
+   *      java.beans.PropertyChangeListener)
+   */
+  public void removePropertyChangeListener(String propertyName,
+      PropertyChangeListener listener) {
+    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+  }
+
 }

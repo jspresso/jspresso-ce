@@ -1398,6 +1398,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return {qx.ui.core.Widget}
      */
     _createTabContainer : function(remoteTabContainer) {
+      // view remoteTabContainer may have to be retrieved for late update of cards.
+      this.__remotePeerRegistry.register(remoteTabContainer);
+      
       var tabContainer = new qx.ui.tabview.TabView();
       for(var i = 0; i < remoteTabContainer.getTabs().length; i++) {
         /**@type org.jspresso.framework.gui.remote.RComponent*/
@@ -1411,6 +1414,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         
         tabContainer.add(tab);
       }
+      remoteTabContainer.addListener("changeSelectedIndex", function(event) {
+        tabContainer.setSelection([tabContainer.getChildren()[event.getData()]]);
+      });
+      tabContainer.addListener("changeSelection", function(event) {
+        var index = tabContainer.indexOf(enevt.getData()[0]);
+        remoteTabContainer.setSelectedIndex(index);
+        var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
+        command.setTargetPeerGuid(remoteTabContainer.getGuid());
+        command.leadingIndex = index;
+        this.__commandHandler.registerCommand(command);
+      });
+
+
       return tabContainer;
     },
 
