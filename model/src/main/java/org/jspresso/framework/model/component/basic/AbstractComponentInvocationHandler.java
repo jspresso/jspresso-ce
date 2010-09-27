@@ -645,7 +645,7 @@ public abstract class AbstractComponentInvocationHandler implements
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       String propertyName = propertyDescriptor.getName();
-      if (propertyDescriptor.isModifiable()) {
+      if (!propertyDescriptor.isComputed()) {
         allProperties.put(propertyName,
             straightGetProperty(proxy, propertyName));
       }
