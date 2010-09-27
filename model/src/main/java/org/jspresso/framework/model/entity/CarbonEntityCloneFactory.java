@@ -19,13 +19,11 @@
 package org.jspresso.framework.model.entity;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-
 
 /**
  * Does a "carbon" copy of the entity including its id and version. This factory
@@ -54,9 +52,9 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
   @SuppressWarnings("unchecked")
   public <E extends IEntity> E cloneEntity(E entityToClone,
       IEntityFactory entityFactory) {
-    E clonedEntity = (E) entityFactory.createEntityInstance(entityToClone
-        .getComponentContract(), (Serializable) entityToClone
-        .straightGetProperty(IEntity.ID));
+    E clonedEntity = (E) entityFactory.createEntityInstance(
+        entityToClone.getComponentContract(),
+        (Serializable) entityToClone.straightGetProperty(IEntity.ID));
 
     carbonCopyComponent(entityToClone, clonedEntity, entityFactory);
     return clonedEntity;
@@ -67,15 +65,14 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
     IComponentDescriptor<?> componentDescriptor = entityFactory
         .getComponentDescriptor(componentToClone.getComponentContract());
 
-    for (Map.Entry<String, Object> propertyEntry : componentToClone
-        .straightGetProperties().entrySet()) {
-      if (propertyEntry.getValue() != null) {
-        IPropertyDescriptor propertyDescriptor = componentDescriptor
-            .getPropertyDescriptor(propertyEntry.getKey());
-        if (!(propertyDescriptor instanceof IRelationshipEndPropertyDescriptor)) {
-          clonedComponent.straightSetProperty(propertyEntry.getKey(),
-              propertyEntry.getValue());
-        }
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+        .getPropertyDescriptors()) {
+      if (!(propertyDescriptor instanceof IRelationshipEndPropertyDescriptor)
+          && /* propertyDescriptor.isModifiable() */!propertyDescriptor
+              .isComputed()) {
+        String propertyName = propertyDescriptor.getName();
+        clonedComponent.straightSetProperty(propertyName,
+            componentToClone.straightGetProperty(propertyName));
       }
     }
   }
