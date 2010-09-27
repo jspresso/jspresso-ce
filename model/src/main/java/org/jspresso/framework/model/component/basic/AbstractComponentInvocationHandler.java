@@ -666,27 +666,10 @@ public abstract class AbstractComponentInvocationHandler implements
   protected Object straightGetProperty(Object proxy, String propertyName) {
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(propertyName);
-    Object propertyValue;
-    if (propertyDescriptor.isComputed()) {
-      // Breaks Hibernate usae of straightGet/SetProperty
-
-      // try {
-      // propertyValue = getAccessorFactory().createPropertyAccessor(
-      // propertyName, getComponentContract()).getValue(proxy);
-      // } catch (IllegalAccessException ex) {
-      // throw new ComponentException(ex);
-      // } catch (InvocationTargetException ex) {
-      // if (ex.getCause() instanceof RuntimeException) {
-      // throw (RuntimeException) ex.getCause();
-      // }
-      // throw new ComponentException(ex.getCause());
-      // } catch (NoSuchMethodException ex) {
-      // throw new ComponentException(ex);
-      // }
-      propertyValue = null;
-    } else {
-      propertyValue = retrievePropertyValue(propertyName);
+    if (propertyDescriptor == null || propertyDescriptor.isComputed()) {
+      return null;
     }
+    Object propertyValue = retrievePropertyValue(propertyName);
     if (propertyValue == null
         && propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       return Boolean.FALSE;
@@ -709,27 +692,10 @@ public abstract class AbstractComponentInvocationHandler implements
       Object newPropertyValue) {
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor.isComputed()) {
+    if (propertyDescriptor == null || propertyDescriptor.isComputed()) {
       return;
     }
     Object currentPropertyValue = straightGetProperty(proxy, propertyName);
-    // Breaks Hibernate usae of straightGet/SetProperty
-
-    // if (propertyDescriptor.isComputed()) {
-    // try {
-    // getAccessorFactory().createPropertyAccessor(propertyName,
-    // getComponentContract()).setValue(proxy, newPropertyValue);
-    // } catch (IllegalAccessException ex) {
-    // throw new ComponentException(ex);
-    // } catch (InvocationTargetException ex) {
-    // if (ex.getCause() instanceof RuntimeException) {
-    // throw (RuntimeException) ex.getCause();
-    // }
-    // throw new ComponentException(ex.getCause());
-    // } catch (NoSuchMethodException ex) {
-    // throw new ComponentException(ex);
-    // }
-    // } else {
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       if (!ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
         storeReferenceProperty(
