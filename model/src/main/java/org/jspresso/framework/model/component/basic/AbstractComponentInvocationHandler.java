@@ -668,19 +668,22 @@ public abstract class AbstractComponentInvocationHandler implements
         .getPropertyDescriptor(propertyName);
     Object propertyValue;
     if (propertyDescriptor.isComputed()) {
-      try {
-        propertyValue = getAccessorFactory().createPropertyAccessor(
-            propertyName, getComponentContract()).getValue(proxy);
-      } catch (IllegalAccessException ex) {
-        throw new ComponentException(ex);
-      } catch (InvocationTargetException ex) {
-        if (ex.getCause() instanceof RuntimeException) {
-          throw (RuntimeException) ex.getCause();
-        }
-        throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
-      }
+      // Breaks Hibernate usae of straightGet/SetProperty
+
+      // try {
+      // propertyValue = getAccessorFactory().createPropertyAccessor(
+      // propertyName, getComponentContract()).getValue(proxy);
+      // } catch (IllegalAccessException ex) {
+      // throw new ComponentException(ex);
+      // } catch (InvocationTargetException ex) {
+      // if (ex.getCause() instanceof RuntimeException) {
+      // throw (RuntimeException) ex.getCause();
+      // }
+      // throw new ComponentException(ex.getCause());
+      // } catch (NoSuchMethodException ex) {
+      // throw new ComponentException(ex);
+      // }
+      propertyValue = null;
     } else {
       propertyValue = retrievePropertyValue(propertyName);
     }
@@ -704,49 +707,54 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   protected void straightSetProperty(Object proxy, String propertyName,
       Object newPropertyValue) {
-    Object currentPropertyValue = straightGetProperty(proxy, propertyName);
     IPropertyDescriptor propertyDescriptor = componentDescriptor
         .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor.isComputed() && propertyDescriptor.isModifiable()) {
-      try {
-        getAccessorFactory().createPropertyAccessor(propertyName,
-            getComponentContract()).setValue(proxy, newPropertyValue);
-      } catch (IllegalAccessException ex) {
-        throw new ComponentException(ex);
-      } catch (InvocationTargetException ex) {
-        if (ex.getCause() instanceof RuntimeException) {
-          throw (RuntimeException) ex.getCause();
-        }
-        throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
+    if (propertyDescriptor.isComputed()) {
+      return;
+    }
+    Object currentPropertyValue = straightGetProperty(proxy, propertyName);
+    // Breaks Hibernate usae of straightGet/SetProperty
+
+    // if (propertyDescriptor.isComputed()) {
+    // try {
+    // getAccessorFactory().createPropertyAccessor(propertyName,
+    // getComponentContract()).setValue(proxy, newPropertyValue);
+    // } catch (IllegalAccessException ex) {
+    // throw new ComponentException(ex);
+    // } catch (InvocationTargetException ex) {
+    // if (ex.getCause() instanceof RuntimeException) {
+    // throw (RuntimeException) ex.getCause();
+    // }
+    // throw new ComponentException(ex.getCause());
+    // } catch (NoSuchMethodException ex) {
+    // throw new ComponentException(ex);
+    // }
+    // } else {
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      if (!ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
+        storeReferenceProperty(
+            (IReferencePropertyDescriptor<?>) propertyDescriptor,
+            currentPropertyValue, newPropertyValue);
       }
     } else {
-      if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-        if (!ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
-          storeReferenceProperty(
-              (IReferencePropertyDescriptor<?>) propertyDescriptor,
-              currentPropertyValue, newPropertyValue);
-        }
-      } else {
-        storeProperty(propertyName, newPropertyValue);
-      }
-      if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        if (currentPropertyValue != null
-            && currentPropertyValue == newPropertyValue
-            && isInitialized(currentPropertyValue)) {
-          currentPropertyValue = Proxy.newProxyInstance(
-              Thread.currentThread().getContextClassLoader(),
-              new Class[] {
-                ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                    .getReferencedDescriptor().getCollectionInterface()
-              },
-              new NeverEqualsInvocationHandler(CollectionHelper
-                  .cloneCollection((Collection<?>) currentPropertyValue)));
-        }
-      }
-      firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
+      storeProperty(propertyName, newPropertyValue);
     }
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      if (currentPropertyValue != null
+          && currentPropertyValue == newPropertyValue
+          && isInitialized(currentPropertyValue)) {
+        currentPropertyValue = Proxy.newProxyInstance(
+            Thread.currentThread().getContextClassLoader(),
+            new Class[] {
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                  .getReferencedDescriptor().getCollectionInterface()
+            },
+            new NeverEqualsInvocationHandler(CollectionHelper
+                .cloneCollection((Collection<?>) currentPropertyValue)));
+      }
+    }
+    firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
+    // }
   }
 
   private synchronized void addPropertyChangeListener(Object proxy,
