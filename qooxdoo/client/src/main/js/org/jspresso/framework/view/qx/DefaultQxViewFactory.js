@@ -1418,13 +1418,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         tabContainer.setSelection([tabContainer.getChildren()[event.getData()]]);
       });
       tabContainer.addListener("changeSelection", function(event) {
-        var index = tabContainer.indexOf(enevt.getData()[0]);
+        var index = tabContainer.indexOf(event.getData()[0]);
         remoteTabContainer.setSelectedIndex(index);
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
         command.setTargetPeerGuid(remoteTabContainer.getGuid());
-        command.leadingIndex = index;
+        command.setLeadingIndex(index);
         this.__commandHandler.registerCommand(command);
-      });
+      }, this);
 
 
       return tabContainer;
