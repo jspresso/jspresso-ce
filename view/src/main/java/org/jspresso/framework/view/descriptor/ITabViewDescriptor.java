@@ -35,4 +35,11 @@ public interface ITabViewDescriptor extends ICompositeViewDescriptor {
    * @return the renderingOptions.
    */
   ERenderingOptions getRenderingOptions();
+
+  /**
+   * Returns true if this tab view supports lazy tab binding.
+   * 
+   * @return true if this tab view supports lazy tab binding, false otherwise.
+   */
+  boolean isLazy();
 }

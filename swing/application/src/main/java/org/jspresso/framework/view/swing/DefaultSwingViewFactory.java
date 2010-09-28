@@ -1526,8 +1526,10 @@ public class DefaultSwingViewFactory extends
           Action.SHORT_DESCRIPTION,
           getTranslationProvider().getTranslation(
               "lov.element.description",
-              new Object[] {propertyDescriptor.getReferencedDescriptor()
-                  .getI18nName(getTranslationProvider(), locale)}, locale)
+              new Object[] {
+                propertyDescriptor.getReferencedDescriptor().getI18nName(
+                    getTranslationProvider(), locale)
+              }, locale)
               + TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
         lovAction.putValue(
@@ -1911,40 +1913,8 @@ public class DefaultSwingViewFactory extends
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     final JTabbedPane viewComponent = createJTabbedPane();
-    final BasicIndexedView<JComponent> view = new BasicIndexedView<JComponent>(
-        viewComponent) {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void setCurrentViewIndex(int index) {
-        int oldIndex = getCurrentViewIndex();
-        if (index == oldIndex) {
-          return;
-        }
-        super.setCurrentViewIndex(index);
-        viewComponent.setSelectedIndex(index);
-        IView<JComponent> oldSelectedView = getChildView(oldIndex);
-        IView<JComponent> newSelectedView = getChildView(index);
-
-        if (newSelectedView != null && oldSelectedView != null) {
-          getMvcBinder().bind(newSelectedView.getConnector(),
-              oldSelectedView.getConnector().getModelConnector());
-          getMvcBinder().bind(oldSelectedView.getConnector(), null);
-        }
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public List<IView<JComponent>> getChildren() {
-        return Collections.singletonList(getChildView(getCurrentViewIndex()));
-      }
-    };
-    view.setDescriptor(viewDescriptor);
-
+    final BasicIndexedView<JComponent> view = constructIndexedView(
+        viewComponent, viewDescriptor);
     viewComponent.addChangeListener(new ChangeListener() {
 
       public void stateChanged(ChangeEvent e) {
@@ -1952,7 +1922,6 @@ public class DefaultSwingViewFactory extends
         view.setCurrentViewIndex(source.getSelectedIndex());
       }
     });
-
     List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
@@ -1990,6 +1959,16 @@ public class DefaultSwingViewFactory extends
     }
     view.setChildren(childrenViews);
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void selectChildViewIndex(JComponent viewComponent, int index) {
+    if (viewComponent instanceof JTabbedPane) {
+      ((JTabbedPane) viewComponent).setSelectedIndex(index);
+    }
   }
 
   /**

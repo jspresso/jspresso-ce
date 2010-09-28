@@ -1144,8 +1144,10 @@ public class DefaultUlcViewFactory extends
         IAction.SHORT_DESCRIPTION,
         getTranslationProvider().getTranslation(
             "lov.element.description",
-            new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(getTranslationProvider(), locale)}, locale)
+            new Object[] {
+              propertyDescriptor.getReferencedDescriptor().getI18nName(
+                  getTranslationProvider(), locale)
+            }, locale)
             + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.putValue(
@@ -1522,39 +1524,8 @@ public class DefaultUlcViewFactory extends
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     final ULCTabbedPane viewComponent = createULCTabbedPane();
-    final BasicIndexedView<ULCComponent> view = new BasicIndexedView<ULCComponent>(
-        viewComponent) {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void setCurrentViewIndex(int index) {
-        int oldIndex = getCurrentViewIndex();
-        if (index == oldIndex) {
-          return;
-        }
-        super.setCurrentViewIndex(index);
-        viewComponent.setSelectedIndex(index);
-        IView<ULCComponent> oldSelectedView = getChildView(oldIndex);
-        IView<ULCComponent> newSelectedView = getChildView(index);
-
-        if (newSelectedView != null && oldSelectedView != null) {
-          getMvcBinder().bind(newSelectedView.getConnector(),
-              oldSelectedView.getConnector().getModelConnector());
-          getMvcBinder().bind(oldSelectedView.getConnector(), null);
-        }
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public List<IView<ULCComponent>> getChildren() {
-        return Collections.singletonList(getChildView(getCurrentViewIndex()));
-      }
-    };
-    view.setDescriptor(viewDescriptor);
+    final BasicIndexedView<ULCComponent> view = constructIndexedView(
+        viewComponent, viewDescriptor);
 
     viewComponent.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -1603,6 +1574,16 @@ public class DefaultUlcViewFactory extends
     }
     view.setChildren(childrenViews);
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void selectChildViewIndex(ULCComponent viewComponent, int index) {
+    if (viewComponent instanceof ULCTabbedPane) {
+      ((ULCTabbedPane) viewComponent).setSelectedIndex(index);
+    }
   }
 
   /**

@@ -41,6 +41,14 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
 
   private ERenderingOptions     renderingOptions = ERenderingOptions.LABEL_ICON;
   private List<IViewDescriptor> tabs;
+  private boolean               lazy;
+
+  /**
+   * Constructs a new <code>BasicTabViewDescriptor</code> instance.
+   */
+  public BasicTabViewDescriptor() {
+    this.lazy = true;
+  }
 
   /**
    * {@inheritDoc}
@@ -106,5 +114,27 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   @Deprecated
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     setTabs(viewDescriptors);
+  }
+
+  /**
+   * Gets the lazy.
+   * 
+   * @return the lazy.
+   */
+  public boolean isLazy() {
+    return lazy && !isCascadingModels();
+  }
+
+  /**
+   * When set to true, this parmeter configures the tabs to be lazy bound
+   * (binding occurs only for the selected tab). This feature is only supported
+   * for tab views with <code>cascadingModel</code> set to true. default value
+   * is <code>true</code>.
+   * 
+   * @param lazy
+   *          the lazy to set.
+   */
+  public void setLazy(boolean lazy) {
+    this.lazy = lazy;
   }
 }

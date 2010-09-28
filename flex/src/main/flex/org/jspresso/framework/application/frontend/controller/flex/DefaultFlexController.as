@@ -1065,6 +1065,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       dialogBox.maxHeight = applicationFrame.height * 95 / 100;
       dialogBox.maxWidth = applicationFrame.width * 95 / 100;
       dialog.addChild(dialogBox);
+      dialogView.addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:FlexEvent):void {
+        dialog.minWidth = dialogBox.minWidth * 1.2;
+        dialog.minHeight = dialogBox.minHeight * 1.2;
+        });
       if(newDialog) {
         PopUpManager.centerPopUp(dialog);
       }

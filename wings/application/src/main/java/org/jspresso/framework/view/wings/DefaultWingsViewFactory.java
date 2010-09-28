@@ -1098,8 +1098,10 @@ public class DefaultWingsViewFactory extends
         Action.SHORT_DESCRIPTION,
         getTranslationProvider().getTranslation(
             "lov.element.description",
-            new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(getTranslationProvider(), locale)}, locale)
+            new Object[] {
+              propertyDescriptor.getReferencedDescriptor().getI18nName(
+                  getTranslationProvider(), locale)
+            }, locale)
             + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       lovAction.putValue(
@@ -1728,39 +1730,8 @@ public class DefaultWingsViewFactory extends
       ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     final STabbedPane viewComponent = createSTabbedPane();
-    final BasicIndexedView<SComponent> view = new BasicIndexedView<SComponent>(
-        viewComponent) {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void setCurrentViewIndex(int index) {
-        int oldIndex = getCurrentViewIndex();
-        if (index == oldIndex) {
-          return;
-        }
-        super.setCurrentViewIndex(index);
-        viewComponent.setSelectedIndex(index);
-        IView<SComponent> oldSelectedView = getChildView(oldIndex);
-        IView<SComponent> newSelectedView = getChildView(index);
-
-        if (newSelectedView != null && oldSelectedView != null) {
-          getMvcBinder().bind(newSelectedView.getConnector(),
-              oldSelectedView.getConnector().getModelConnector());
-          getMvcBinder().bind(oldSelectedView.getConnector(), null);
-        }
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public List<IView<SComponent>> getChildren() {
-        return Collections.singletonList(getChildView(getCurrentViewIndex()));
-      }
-    };
-    view.setDescriptor(viewDescriptor);
+    final BasicIndexedView<SComponent> view = constructIndexedView(
+        viewComponent, viewDescriptor);
 
     viewComponent.addChangeListener(new ChangeListener() {
 
@@ -1808,6 +1779,16 @@ public class DefaultWingsViewFactory extends
     }
     view.setChildren(childrenViews);
     return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void selectChildViewIndex(SComponent viewComponent, int index) {
+    if (viewComponent instanceof STabbedPane) {
+      ((STabbedPane) viewComponent).setSelectedIndex(index);
+    }
   }
 
   /**

@@ -27,6 +27,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -211,7 +212,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (evt.getNewValue() != null
             && !((Collection<?>) evt.getNewValue()).isEmpty()) {
           ((ICollectionConnector) evt.getSource())
-              .setSelectedIndices(new int[] {0});
+              .setSelectedIndices(new int[] {
+                0
+              });
         }
       }
     };
@@ -529,6 +532,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
       String cardName);
 
   /**
+   * Selects a child view in an indexed view, e.g. a tab view.
+   * 
+   * @param viewComponent
+   *          the indexed view.
+   * @param index
+   *          the child view index to select.
+   */
+  protected abstract void selectChildViewIndex(E viewComponent, int index);
+
+  /**
    * Adjusts a component various sizes (e.g. min, max, preferred) based on a
    * formatter and a template value.
    * 
@@ -734,6 +747,57 @@ public abstract class AbstractViewFactory<E, F, G> implements
     BasicCompositeView<E> view = new BasicCompositeView<E>(viewComponent);
     view.setDescriptor(descriptor);
     return view;
+  }
+
+  /**
+   * Creates an indexed view, e.g. for tab container.
+   * 
+   * @param viewComponent
+   *          the view component peer.
+   * @param descriptor
+   *          the view descriptor.
+   * @return the created indexed view.
+   */
+  protected BasicIndexedView<E> constructIndexedView(final E viewComponent,
+      final ITabViewDescriptor descriptor) {
+    BasicIndexedView<E> indexedView = new BasicIndexedView<E>(viewComponent) {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void setCurrentViewIndex(int index) {
+        int oldIndex = getCurrentViewIndex();
+        if (index == oldIndex) {
+          return;
+        }
+        super.setCurrentViewIndex(index);
+        selectChildViewIndex(viewComponent, index);
+        if (descriptor.isLazy()) {
+          IView<E> oldSelectedView = getChildView(oldIndex);
+          IView<E> newSelectedView = getChildView(index);
+
+          if (newSelectedView != null && oldSelectedView != null) {
+            getMvcBinder().bind(newSelectedView.getConnector(),
+                oldSelectedView.getConnector().getModelConnector());
+            getMvcBinder().bind(oldSelectedView.getConnector(), null);
+          }
+        }
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public List<IView<E>> getChildren() {
+        if (descriptor.isLazy()) {
+          return Collections.singletonList(getChildView(getCurrentViewIndex()));
+        }
+        return super.getChildren();
+      }
+    };
+    indexedView.setDescriptor(descriptor);
+    return indexedView;
   }
 
   /**
