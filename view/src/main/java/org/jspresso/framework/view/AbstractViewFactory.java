@@ -778,9 +778,25 @@ public abstract class AbstractViewFactory<E, F, G> implements
           IView<E> newSelectedView = getChildView(index);
 
           if (newSelectedView != null && oldSelectedView != null) {
-            getMvcBinder().bind(newSelectedView.getConnector(),
-                oldSelectedView.getConnector().getModelConnector());
-            getMvcBinder().bind(oldSelectedView.getConnector(), null);
+            IValueConnector oldChildConnector = oldSelectedView.getConnector();
+            IValueConnector childConnector = newSelectedView.getConnector();
+            ICompositeValueConnector parentConnector = (AbstractCompositeValueConnector) getConnector();
+            if (parentConnector != null && oldChildConnector != null) {
+              getMvcBinder().bind(oldChildConnector, null);
+              parentConnector.removeChildConnector(oldChildConnector);
+            }
+            if (parentConnector != null && childConnector != null) {
+              parentConnector.addChildConnector(childConnector);
+              if (parentConnector.getModelConnector() != null) {
+                getMvcBinder().bind(
+                    childConnector,
+                    ((ICompositeValueConnector) parentConnector
+                        .getModelConnector()).getChildConnector(childConnector
+                        .getId()));
+              } else {
+                getMvcBinder().bind(childConnector, null);
+              }
+            }
           }
         }
       }

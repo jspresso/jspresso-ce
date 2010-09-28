@@ -36,7 +36,7 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 public class SReferenceFieldConnector extends SActionFieldConnector implements
     IRenderableCompositeValueConnector {
 
-  private IValueConnector               renderingConnector;
+  private IValueConnector      renderingConnector;
   private IValueChangeListener renderingListener;
 
   /**
@@ -59,6 +59,15 @@ public class SReferenceFieldConnector extends SActionFieldConnector implements
       @SuppressWarnings("unused") IValueConnector childConnector) {
     throw new UnsupportedOperationException(
         "Child connectors cannot be added to action field connector");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeChildConnector(
+      @SuppressWarnings("unused") IValueConnector childConnector) {
+    throw new UnsupportedOperationException(
+        "Child connectors cannot be removed to action field connector");
   }
 
   /**
@@ -165,13 +174,11 @@ public class SReferenceFieldConnector extends SActionFieldConnector implements
    */
   public void setRenderingConnector(IValueConnector renderingConnector) {
     if (this.renderingConnector != null) {
-      this.renderingConnector
-          .removeValueChangeListener(renderingListener);
+      this.renderingConnector.removeValueChangeListener(renderingListener);
     }
     this.renderingConnector = renderingConnector;
     if (this.renderingConnector != null) {
-      this.renderingConnector
-          .addValueChangeListener(renderingListener);
+      this.renderingConnector.addValueChangeListener(renderingListener);
     }
   }
 
@@ -195,8 +202,7 @@ public class SReferenceFieldConnector extends SActionFieldConnector implements
     /**
      * {@inheritDoc}
      */
-    public void valueChange(
-        @SuppressWarnings("unused") ValueChangeEvent evt) {
+    public void valueChange(@SuppressWarnings("unused") ValueChangeEvent evt) {
       setConnecteeValue(getConnecteeValue());
     }
   }

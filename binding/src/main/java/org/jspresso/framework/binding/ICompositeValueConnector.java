@@ -30,12 +30,20 @@ import java.util.Collection;
 public interface ICompositeValueConnector extends IValueConnector {
 
   /**
-   * Adds a new child connector to thois composite.
+   * Adds a new child connector to this composite.
    * 
    * @param childConnector
    *          the added connector.
    */
   void addChildConnector(IValueConnector childConnector);
+
+  /**
+   * Removes a child connector from this composite.
+   * 
+   * @param childConnector
+   *          the connector to remove.
+   */
+  void removeChildConnector(IValueConnector childConnector);
 
   /**
    * Are the children connectors readable ?

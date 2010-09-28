@@ -81,6 +81,14 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void removeChildConnector(
+      @SuppressWarnings("unused") IValueConnector childConnector) {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
    * The child connectors will use this method to keep track of the referenced
    * model. They will then be notified of the model reference changes.
    * <p>

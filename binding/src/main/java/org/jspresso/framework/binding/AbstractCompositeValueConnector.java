@@ -374,7 +374,7 @@ public abstract class AbstractCompositeValueConnector extends
    * @param connector
    *          the connector to be removed.
    */
-  protected void removeChildConnector(IValueConnector connector) {
+  public void removeChildConnector(IValueConnector connector) {
     IValueConnector removedConnector = childConnectors
         .remove(connector.getId());
     if (removedConnector != null) {

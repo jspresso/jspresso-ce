@@ -64,6 +64,15 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  public void removeChildConnector(
+      @SuppressWarnings("unused") IValueConnector childConnector) {
+    throw new UnsupportedOperationException(
+        "Child connectors cannot be removed to action field connector");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean areChildrenReadable() {
     return isReadable();
   }
