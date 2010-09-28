@@ -115,6 +115,9 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   private Collection<IGate>                               writabilityGates;
 
+  private Map<String, IPropertyDescriptor>                propertyDescriptorsCache;
+  private Collection<IPropertyDescriptor>                 allPropertpropertyDescriptorsCache;
+
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
    * 
@@ -264,7 +267,11 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
+  public synchronized IPropertyDescriptor getPropertyDescriptor(
+      String propertyName) {
+    if (propertyDescriptorsCache.containsKey(propertyName)) {
+      return propertyDescriptorsCache.get(propertyName);
+    }
     IPropertyDescriptor descriptor = null;
     int nestedDotIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
@@ -292,31 +299,37 @@ public abstract class AbstractComponentDescriptor<E> extends
         }
       }
     }
+    propertyDescriptorsCache.put(propertyName, descriptor);
     return descriptor;
   }
 
   /**
    * {@inheritDoc}
    */
-  public Collection<IPropertyDescriptor> getPropertyDescriptors() {
-    // A map is used instead of a set since a set does not replace an element it
-    // already contains.
-    Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
-    if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
-        for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor
-            .getPropertyDescriptors()) {
+  public synchronized Collection<IPropertyDescriptor> getPropertyDescriptors() {
+    if (allPropertpropertyDescriptorsCache == null) {
+      // A map is used instead of a set since a set does not replace an element
+      // it
+      // already contains.
+      Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
+      if (getAncestorDescriptors() != null) {
+        for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
+          for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor
+              .getPropertyDescriptors()) {
+            allDescriptors
+                .put(propertyDescriptor.getName(), propertyDescriptor);
+          }
+        }
+      }
+      Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
+      if (declaredPropertyDescriptors != null) {
+        for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
           allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
         }
       }
+      allPropertpropertyDescriptorsCache = allDescriptors.values();
     }
-    Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
-    if (declaredPropertyDescriptors != null) {
-      for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
-        allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
-      }
-    }
-    return allDescriptors.values();
+    return allPropertpropertyDescriptorsCache;
   }
 
   /**
@@ -674,6 +687,8 @@ public abstract class AbstractComponentDescriptor<E> extends
       propertyDescriptorsMap = null;
       nestedPropertyDescriptors = null;
     }
+    propertyDescriptorsCache = new HashMap<String, IPropertyDescriptor>();
+    allPropertpropertyDescriptorsCache = null;
   }
 
   /**

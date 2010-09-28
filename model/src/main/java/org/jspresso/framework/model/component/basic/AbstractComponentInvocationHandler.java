@@ -720,7 +720,6 @@ public abstract class AbstractComponentInvocationHandler implements
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
-    // }
   }
 
   private synchronized void addPropertyChangeListener(Object proxy,
