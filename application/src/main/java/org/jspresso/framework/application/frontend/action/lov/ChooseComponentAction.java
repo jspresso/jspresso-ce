@@ -19,16 +19,27 @@
 package org.jspresso.framework.application.frontend.action.lov;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * This action takes an arbitrary model collection connector from the action
@@ -49,12 +60,16 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
  */
 public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private IDisplayableAction cancelAction;
-  private IDisplayableAction okAction;
+  private IDisplayableAction        cancelAction;
+  private IDisplayableAction        okAction;
+
+  private ICollectionViewDescriptor collectionViewDescriptor;
+  private IComponentDescriptor<?>   componentDescriptor;
 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -64,13 +79,57 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
     actions.add(cancelAction);
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
 
-    IValueConnector componentsModelConnector = (IValueConnector) getActionParameter(context);
-    BasicTableViewDescriptor tableViewDescriptor = new BasicTableViewDescriptor();
-    tableViewDescriptor.setModelDescriptor(componentsModelConnector
-        .getModelDescriptor());
+    Object actionParam = getActionParameter(context);
+    ICollectionViewDescriptor viewDescriptor = getCollectionViewDescriptor(context);
+    IValueConnector componentsModelConnector;
+    if (actionParam instanceof IValueConnector) {
+      componentsModelConnector = (IValueConnector) actionParam;
+      if (viewDescriptor == null) {
+        viewDescriptor = new BasicTableViewDescriptor();
+        ((BasicViewDescriptor) viewDescriptor)
+            .setModelDescriptor(componentsModelConnector.getModelDescriptor());
+      }
+    } else if (actionParam instanceof Collection<?>) {
+      ICollectionDescriptorProvider<?> collectionDescriptorProvider;
+      IComponentDescriptor<?> elementDescriptor = getComponentDescriptor(context);
+      if (viewDescriptor != null
+          && viewDescriptor.getModelDescriptor() instanceof ICollectionDescriptorProvider<?>) {
+        collectionDescriptorProvider = (ICollectionDescriptorProvider<?>) viewDescriptor
+            .getModelDescriptor();
+      } else {
+        if (viewDescriptor == null) {
+          viewDescriptor = new BasicTableViewDescriptor();
+        }
+        if (elementDescriptor != null) {
+          if (actionParam instanceof List<?>) {
+            collectionDescriptorProvider = new BasicListDescriptor<Object>();
+          } else if (actionParam instanceof Set<?>) {
+            collectionDescriptorProvider = new BasicSetDescriptor<Object>();
+          } else {
+            throw new ActionException("Unsupported collection type : "
+                + actionParam.getClass().getName());
+          }
+          ((BasicCollectionDescriptor<Object>) collectionDescriptorProvider)
+              .setElementDescriptor((IComponentDescriptor<Object>) elementDescriptor);
+          ((BasicCollectionViewDescriptor) viewDescriptor)
+              .setModelDescriptor(collectionDescriptorProvider
+                  .getCollectionDescriptor());
+        } else {
+          throw new ActionException(
+              "Could not determine component descriptor of the collection element.");
+        }
+      }
+      componentsModelConnector = getBackendController(context)
+          .createModelConnector(ACTION_MODEL_NAME,
+              collectionDescriptorProvider.getCollectionDescriptor());
+      componentsModelConnector.setConnectorValue(actionParam);
+    } else {
+      throw new ActionException(
+          "Could not determine component collection to use for choosing among.");
+    }
 
     IView<E> collectionView = getViewFactory(context).createView(
-        tableViewDescriptor, actionHandler, getLocale(context));
+        viewDescriptor, actionHandler, getLocale(context));
     String dialogTitle = getI18nName(getTranslationProvider(context),
         getLocale(context));
     if (dialogTitle != null && dialogTitle.length() > 0) {
@@ -105,5 +164,50 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setOkAction(IDisplayableAction okAction) {
     this.okAction = okAction;
+  }
+
+  /**
+   * Gets the collectionViewDescriptor.
+   * 
+   * @param context
+   *          the action context.
+   * @return the collectionViewDescriptor.
+   */
+  protected ICollectionViewDescriptor getCollectionViewDescriptor(
+      Map<String, Object> context) {
+    return collectionViewDescriptor;
+  }
+
+  /**
+   * Sets the collectionViewDescriptor.
+   * 
+   * @param collectionViewDescriptor
+   *          the collectionViewDescriptor to set.
+   */
+  public void setCollectionViewDescriptor(
+      ICollectionViewDescriptor collectionViewDescriptor) {
+    this.collectionViewDescriptor = collectionViewDescriptor;
+  }
+
+  /**
+   * Gets the componentDescriptor.
+   * 
+   * @param context
+   *          the action context.
+   * @return the componentDescriptor.
+   */
+  protected IComponentDescriptor<?> getComponentDescriptor(
+      Map<String, Object> context) {
+    return componentDescriptor;
+  }
+
+  /**
+   * Sets the componentDescriptor.
+   * 
+   * @param componentDescriptor
+   *          the componentDescriptor to set.
+   */
+  public void setComponentDescriptor(IComponentDescriptor<?> componentDescriptor) {
+    this.componentDescriptor = componentDescriptor;
   }
 }

@@ -27,6 +27,7 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 
 /**
  * Helper class for property descriptors.
@@ -60,9 +61,25 @@ public final class PropertyDescriptorHelper {
         .getComponentDescriptor();
     IPropertyDescriptor propertyDescriptor = rootComponentDescriptor
         .getPropertyDescriptor(propertyViewDescriptor.getName());
-    if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-        .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getComponentContract()))) {
+    /*
+     * Exlude explicitely configured reference property view...
+     */
+    boolean toExplode = !(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor);
+    /*
+     * ...filled with a custom LOV action
+     */
+    toExplode = toExplode
+        && ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
+            .getLovAction() == null;
+    /*
+     * Include inlined component reference
+     */
+    toExplode = toExplode
+        && ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
+            .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+                .getReferencedDescriptor().getComponentContract())));
+
+    if (toExplode) {
       IComponentDescriptor<?> referencedComponentDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
       for (String nestedRenderedProperty : referencedComponentDescriptor
