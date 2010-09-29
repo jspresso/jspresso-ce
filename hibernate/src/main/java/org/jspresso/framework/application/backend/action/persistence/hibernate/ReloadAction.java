@@ -18,9 +18,11 @@
  */
 package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.ObjectNotFoundException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
@@ -48,8 +50,13 @@ public class ReloadAction extends AbstractHibernateAction {
 
       public Object doInTransaction(TransactionStatus status) {
         List<IEntity> entitiesToReload = getEntitiesToReload(context);
-        for (IEntity entity : entitiesToReload) {
-          reloadEntity(entity, context);
+        for (Iterator<IEntity> ite = entitiesToReload.iterator(); ite.hasNext();) {
+          IEntity entity = ite.next();
+          try {
+            reloadEntity(entity, context);
+          } catch (ObjectNotFoundException ex) {
+            ite.remove();
+          }
         }
         status.setRollbackOnly();
         return null;
