@@ -34,12 +34,13 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicSetDescriptor;
+import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * This action takes an arbitrary model collection connector from the action
@@ -86,7 +87,10 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
       componentsModelConnector = (IValueConnector) actionParam;
       if (viewDescriptor == null) {
         viewDescriptor = new BasicTableViewDescriptor();
-        ((BasicViewDescriptor) viewDescriptor)
+        ((BasicTableViewDescriptor) viewDescriptor).setReadOnly(true);
+        ((BasicTableViewDescriptor) viewDescriptor)
+            .setSelectionMode(ESelectionMode.SINGLE_SELECTION);
+        ((BasicTableViewDescriptor) viewDescriptor)
             .setModelDescriptor(componentsModelConnector.getModelDescriptor());
       }
     } else if (actionParam instanceof Collection<?>) {
@@ -99,6 +103,9 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
       } else {
         if (viewDescriptor == null) {
           viewDescriptor = new BasicTableViewDescriptor();
+          ((BasicTableViewDescriptor) viewDescriptor).setReadOnly(true);
+          ((BasicTableViewDescriptor) viewDescriptor)
+              .setSelectionMode(ESelectionMode.SINGLE_SELECTION);
         }
         if (elementDescriptor != null) {
           if (actionParam instanceof List<?>) {
@@ -128,6 +135,8 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
           "Could not determine component collection to use for choosing among.");
     }
 
+    ((DefaultDescriptor) viewDescriptor.getModelDescriptor())
+        .setName(ACTION_MODEL_NAME);
     IView<E> collectionView = getViewFactory(context).createView(
         viewDescriptor, actionHandler, getLocale(context));
     String dialogTitle = getI18nName(getTranslationProvider(context),

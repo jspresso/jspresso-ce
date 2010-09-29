@@ -62,15 +62,13 @@ public final class PropertyDescriptorHelper {
     IPropertyDescriptor propertyDescriptor = rootComponentDescriptor
         .getPropertyDescriptor(propertyViewDescriptor.getName());
     /*
-     * Exlude explicitely configured reference property view...
+     * Exlude explicitely configured reference property view filled with a
+     * custom LOV action
      */
-    boolean toExplode = !(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor);
-    /*
-     * ...filled with a custom LOV action
-     */
-    toExplode = toExplode
-        && ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
+    boolean toExplode = !(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
+        || ((IReferencePropertyViewDescriptor) propertyViewDescriptor)
             .getLovAction() == null;
+
     /*
      * Include inlined component reference
      */

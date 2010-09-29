@@ -25,6 +25,7 @@ import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
 
@@ -50,25 +51,25 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     ICollectionConnector resultConnector;
+    IValueConnector viewConnector = getViewConnector(context);
     // to support double click on the table
-    if (IQueryComponent.QUERIED_COMPONENTS.equals(getViewConnector(context)
-        .getId())) {
+    if (viewConnector instanceof ICollectionConnector) {
       // this is from the table itself
-      resultConnector = (ICollectionConnector) getViewConnector(context);
+      resultConnector = (ICollectionConnector) viewConnector;
     } else {
       // this is from the dialog.
-      resultConnector = (ICollectionConnector) ((ICompositeValueConnector) getViewConnector(context))
+      resultConnector = (ICollectionConnector) ((ICompositeValueConnector) viewConnector)
           .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
     }
     int[] resultSelectedIndices = resultConnector.getSelectedIndices();
     if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
-      IEntity selectedEntity = (IEntity) resultConnector.getChildConnector(
+      Object selectedElement = resultConnector.getChildConnector(
           resultSelectedIndices[0]).getConnectorValue();
-      if (selectedEntity != null) {
-        selectedEntity = getController(context).getBackendController().merge(
-            selectedEntity, EMergeMode.MERGE_CLEAN_LAZY);
+      if (selectedElement != null && selectedElement instanceof IEntity) {
+        selectedElement = getController(context).getBackendController().merge(
+            (IEntity) selectedElement, EMergeMode.MERGE_CLEAN_LAZY);
       }
-      setActionParameter(selectedEntity, context);
+      setActionParameter(selectedElement, context);
     } else {
       setActionParameter(null, context);
     }
