@@ -121,6 +121,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
         }
       }
     }
+    // Query should always be ordered to preserve pagination.
+    criteria.addOrder(Order.desc("id"));
   }
 
   private boolean isSortable(IPropertyDescriptor propertyDescriptor) {
