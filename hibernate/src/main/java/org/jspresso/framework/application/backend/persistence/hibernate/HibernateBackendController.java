@@ -159,11 +159,12 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void commitUnitOfWork() {
-    try {
-      super.commitUnitOfWork();
-    } finally {
-      traversedPendingOperations = false;
+    if (traversedPendingOperations) {
+      // We must get rid of the pending operations only in the case of a
+      // successful commit.
+      clearPendingOperations();
     }
+    super.commitUnitOfWork();
   }
 
   /**

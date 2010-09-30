@@ -87,9 +87,6 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   public void commit() {
-    // We must get rid of the pending operations only in the case of a
-    // successful commit.
-    clearPendingOperations();
     cleanup();
   }
 
