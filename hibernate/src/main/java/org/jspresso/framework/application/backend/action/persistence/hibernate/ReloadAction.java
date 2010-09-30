@@ -25,6 +25,7 @@ import java.util.Map;
 import org.hibernate.ObjectNotFoundException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
+import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
@@ -50,15 +51,21 @@ public class ReloadAction extends AbstractHibernateAction {
 
       public Object doInTransaction(TransactionStatus status) {
         List<IEntity> entitiesToReload = getEntitiesToReload(context);
+        Exception deletedObjectEx = null;
         for (Iterator<IEntity> ite = entitiesToReload.iterator(); ite.hasNext();) {
           IEntity entity = ite.next();
           try {
             reloadEntity(entity, context);
           } catch (ObjectNotFoundException ex) {
             ite.remove();
+            deletedObjectEx = ex;
           }
         }
         status.setRollbackOnly();
+        if (deletedObjectEx != null) {
+          throw new ConcurrencyFailureException(deletedObjectEx.getMessage(),
+              deletedObjectEx);
+        }
         return null;
       }
     });
