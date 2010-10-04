@@ -18,8 +18,10 @@
  */
 package org.jspresso.framework.view.remote;
 
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -48,6 +50,8 @@ public class RemoteActionFactory extends
   private IGUIDGenerator        guidGenerator;
   private IRemoteCommandHandler remoteCommandHandler;
   private IRemotePeerRegistry   remotePeerRegistry;
+
+  private Set<RAction>          hardReferences;
 
   /**
    * {@inheritDoc}
@@ -113,6 +117,7 @@ public class RemoteActionFactory extends
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
     this.remotePeerRegistry = remotePeerRegistry;
+    this.hardReferences = new HashSet<RAction>();
   }
 
   private RAction createRAction(IAction action, Dimension dimension,
@@ -142,6 +147,7 @@ public class RemoteActionFactory extends
     String automationId = remotePeerRegistry.registerAutomationId(
         automationSeed, remoteAction.getGuid());
     remoteAction.setAutomationId(automationId);
+    hardReferences.add(remoteActionAdapter);
     remotePeerRegistry.register(remoteActionAdapter);
     return remoteAction;
   }

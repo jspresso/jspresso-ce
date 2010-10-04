@@ -44,9 +44,10 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    */
   @SuppressWarnings("unchecked")
   public BasicRemotePeerRegistry() {
-    backingStore = new ReferenceMap(AbstractReferenceMap.HARD,
-        AbstractReferenceMap.HARD, true);
-    automationBackingStore = new HashMap<String, String>();
+    backingStore = new ReferenceMap(AbstractReferenceMap.WEAK,
+        AbstractReferenceMap.WEAK, true);
+    automationBackingStore = new ReferenceMap(AbstractReferenceMap.WEAK,
+        AbstractReferenceMap.WEAK, true);
     automationIndices = new HashMap<String, Integer>();
   }
 
