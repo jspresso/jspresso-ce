@@ -1192,7 +1192,9 @@ public abstract class AbstractBackendController extends AbstractController
           .getComponentDescriptor(component.getComponentContract());
       for (Map.Entry<String, Object> property : component
           .straightGetProperties().entrySet()) {
-        if (property.getValue() != null) {
+        if (property.getValue() != null
+            && !(property.getValue() instanceof Collection<?> && ((Collection<?>) property
+                .getValue()).isEmpty())) {
           IPropertyDescriptor propertyDescriptor = componentDescriptor
               .getPropertyDescriptor(property.getKey());
           if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
