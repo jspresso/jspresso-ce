@@ -112,6 +112,10 @@ public class DefaultRemoteController extends
   private IRemotePeerRegistry remotePeerRegistry;
   private Set<String>         workspaceViews;
 
+  // Keep a hard reference on the login view, so that it is not garbage
+  // collected.
+  private IView<RComponent>   loginView;
+
   /**
    * Constructs a new <code>DefaultRemoteController</code> instance.
    */
@@ -576,7 +580,7 @@ public class DefaultRemoteController extends
     if (command instanceof RemoteStartCommand) {
       if (getLoginContextName() != null) {
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
-        IView<RComponent> loginView = createLoginView();
+        loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
         initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(
             getTranslationProvider(), getLocale()));
