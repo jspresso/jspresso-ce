@@ -602,7 +602,11 @@ package org.jspresso.framework.view.flex {
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
         var actionList:RActionList = remoteActionField.actionLists[i] as RActionList;
         for(var j:int = 0; j < actionList.actions.length; j++) {
-          var actionComponent:UIComponent = createAction(actionList.actions[j])
+          var actionComponent:Button = createAction(actionList.actions[j]);
+          actionComponent.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
+            actionComponent.width = actionComponent.height;
+          });
+
           actionField.addChild(actionComponent);
           actionComponents.push(actionComponent);
           maxWidth += actionComponent.width;
