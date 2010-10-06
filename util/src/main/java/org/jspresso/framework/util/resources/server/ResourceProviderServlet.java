@@ -45,6 +45,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.resources.AbstractResource;
@@ -247,7 +248,7 @@ public class ResourceProviderServlet extends HttpServlet {
           String resourceId = ResourceManager.getInstance().register(
               uploadResource);
           out.print(" id=\"" + resourceId);
-          out.print("\" name=\"" + item.getName());
+          out.print("\" name=\"" + HtmlHelper.escapeForHTML(item.getName()));
           out.println("\" />");
         }
       }
@@ -300,8 +301,8 @@ public class ResourceProviderServlet extends HttpServlet {
         }
 
         if (resource instanceof IResource) {
-          inputStream = new BufferedInputStream(((IResource) resource)
-              .getContent());
+          inputStream = new BufferedInputStream(
+              ((IResource) resource).getContent());
         } else if (resource instanceof IActiveResource) {
           OutputStream outputStream = response.getOutputStream();
           ((IActiveResource) resource).writeToContent(outputStream);
@@ -313,9 +314,9 @@ public class ResourceProviderServlet extends HttpServlet {
           // we must append parameters that are passed AFTER the localUrl
           // parameter as they must be considered as part of the localUrl.
           String queryString = request.getQueryString();
-          localUrlSpec = queryString.substring(queryString
-              .indexOf(LOCAL_URL_PARAMETER)
-              + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
+          localUrlSpec = queryString.substring(
+              queryString.indexOf(LOCAL_URL_PARAMETER)
+                  + LOCAL_URL_PARAMETER.length() + 1, queryString.length());
         }
         URL localUrl = UrlHelper.createURL(localUrlSpec);
         if (localUrl == null) {
@@ -330,15 +331,15 @@ public class ResourceProviderServlet extends HttpServlet {
         String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
         String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
         if (width != null && height != null) {
-          inputStream = scaleImage(imageUrl, Integer.parseInt(width), Integer
-              .parseInt(height));
+          inputStream = scaleImage(imageUrl, Integer.parseInt(width),
+              Integer.parseInt(height));
         } else {
           inputStream = new BufferedInputStream(imageUrl.openStream());
         }
       }
       if (inputStream != null) {
-        BufferedOutputStream outputStream = new BufferedOutputStream(response
-            .getOutputStream());
+        BufferedOutputStream outputStream = new BufferedOutputStream(
+            response.getOutputStream());
 
         IoHelper.copyStream(inputStream, outputStream);
 

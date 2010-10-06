@@ -672,7 +672,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
                    Alert.OK);
       }
       if(isHtml) {
-        alert.mx_internal::alertForm.mx_internal::textField.htmlText = messageCommand.message;
+        alert.mx_internal::alertForm.mx_internal::textField.htmlText = HtmlUtil.convertHtmlEntities(messageCommand.message);
       }
       return alert;
     }

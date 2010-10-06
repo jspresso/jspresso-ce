@@ -15,6 +15,104 @@
 package org.jspresso.framework.util.html {
   public class HtmlUtil {
     
+    private static const HTML_ENTITIES:Object = new Object();
+    {
+      HTML_ENTITIES["&nbsp;"]   = "\u00A0"; // non-breaking space
+      HTML_ENTITIES["&iexcl;"]  = "\u00A1"; // inverted exclamation mark
+      HTML_ENTITIES["&cent;"]   = "\u00A2"; // cent sign
+      HTML_ENTITIES["&pound;"]  = "\u00A3"; // pound sign
+      HTML_ENTITIES["&curren;"] = "\u00A4"; // currency sign
+      HTML_ENTITIES["&yen;"]    = "\u00A5"; // yen sign
+      HTML_ENTITIES["&brvbar;"] = "\u00A6"; // broken vertical bar (|)
+      HTML_ENTITIES["&sect;"]   = "\u00A7"; // section sign
+      HTML_ENTITIES["&uml;"]    = "\u00A8"; // diaeresis
+      HTML_ENTITIES["&copy;"]   = "\u00A9"; // copyright sign
+      HTML_ENTITIES["&reg;"]    = "\u00AE"; // registered sign
+      HTML_ENTITIES["&deg;"]    = "\u00B0"; // degree sign
+      HTML_ENTITIES["&plusmn;"] = "\u00B1"; // plus-minus sign
+      HTML_ENTITIES["&sup1;"]   = "\u00B9"; // superscript one
+      HTML_ENTITIES["&sup2;"]   = "\u00B2"; // superscript two
+      HTML_ENTITIES["&sup3;"]   = "\u00B3"; // superscript three
+      HTML_ENTITIES["&acute;"]  = "\u00B4"; // acute accent
+      HTML_ENTITIES["&micro;"]  = "\u00B5"; // micro sign
+      HTML_ENTITIES["&frac14;"] = "\u00BC"; // vulgar fraction one quarter
+      HTML_ENTITIES["&frac12;"] = "\u00BD"; // vulgar fraction one half
+      HTML_ENTITIES["&frac34;"] = "\u00BE"; // vulgar fraction three quarters
+      HTML_ENTITIES["&iquest;"] = "\u00BF"; // inverted question mark
+      HTML_ENTITIES["&Agrave;"] = "\u00C0"; // Latin capital letter A with grave
+      HTML_ENTITIES["&Aacute;"] = "\u00C1"; // Latin capital letter A with acute
+      HTML_ENTITIES["&Acirc;"]  = "\u00C2"; // Latin capital letter A with circumflex
+      HTML_ENTITIES["&Atilde;"] = "\u00C3"; // Latin capital letter A with tilde
+      HTML_ENTITIES["&Auml;"]   = "\u00C4"; // Latin capital letter A with diaeresis
+      HTML_ENTITIES["&Aring;"]  = "\u00C5"; // Latin capital letter A with ring above
+      HTML_ENTITIES["&AElig;"]  = "\u00C6"; // Latin capital letter AE
+      HTML_ENTITIES["&Ccedil;"] = "\u00C7"; // Latin capital letter C with cedilla
+      HTML_ENTITIES["&Egrave;"] = "\u00C8"; // Latin capital letter E with grave
+      HTML_ENTITIES["&Eacute;"] = "\u00C9"; // Latin capital letter E with acute
+      HTML_ENTITIES["&Ecirc;"]  = "\u00CA"; // Latin capital letter E with circumflex
+      HTML_ENTITIES["&Euml;"]   = "\u00CB"; // Latin capital letter E with diaeresis
+      HTML_ENTITIES["&Igrave;"] = "\u00CC"; // Latin capital letter I with grave
+      HTML_ENTITIES["&Iacute;"] = "\u00CD"; // Latin capital letter I with acute
+      HTML_ENTITIES["&Icirc;"]  = "\u00CE"; // Latin capital letter I with circumflex
+      HTML_ENTITIES["&Iuml;"]   = "\u00CF"; // Latin capital letter I with diaeresis
+      HTML_ENTITIES["&ETH;"]    = "\u00D0"; // Latin capital letter ETH
+      HTML_ENTITIES["&Ntilde;"] = "\u00D1"; // Latin capital letter N with tilde
+      HTML_ENTITIES["&Ograve;"] = "\u00D2"; // Latin capital letter O with grave
+      HTML_ENTITIES["&Oacute;"] = "\u00D3"; // Latin capital letter O with acute
+      HTML_ENTITIES["&Ocirc;"]  = "\u00D4"; // Latin capital letter O with circumflex
+      HTML_ENTITIES["&Otilde;"] = "\u00D5"; // Latin capital letter O with tilde
+      HTML_ENTITIES["&Ouml;"]   = "\u00D6"; // Latin capital letter O with diaeresis
+      HTML_ENTITIES["&Oslash;"] = "\u00D8"; // Latin capital letter O with stroke
+      HTML_ENTITIES["&Ugrave;"] = "\u00D9"; // Latin capital letter U with grave
+      HTML_ENTITIES["&Uacute;"] = "\u00DA"; // Latin capital letter U with acute
+      HTML_ENTITIES["&Ucirc;"]  = "\u00DB"; // Latin capital letter U with circumflex
+      HTML_ENTITIES["&Uuml;"]   = "\u00DC"; // Latin capital letter U with diaeresis
+      HTML_ENTITIES["&Yacute;"] = "\u00DD"; // Latin capital letter Y with acute
+      HTML_ENTITIES["&THORN;"]  = "\u00DE"; // Latin capital letter THORN
+      HTML_ENTITIES["&szlig;"]  = "\u00DF"; // Latin small letter sharp s = ess-zed
+      HTML_ENTITIES["&agrave;"] = "\u00E0"; // Latin small letter a with grave
+      HTML_ENTITIES["&aacute;"] = "\u00E1"; // Latin small letter a with acute
+      HTML_ENTITIES["&acirc;"]  = "\u00E2"; // Latin small letter a with circumflex
+      HTML_ENTITIES["&atilde;"] = "\u00E3"; // Latin small letter a with tilde
+      HTML_ENTITIES["&auml;"]   = "\u00E4"; // Latin small letter a with diaeresis
+      HTML_ENTITIES["&aring;"]  = "\u00E5"; // Latin small letter a with ring above
+      HTML_ENTITIES["&aelig;"]  = "\u00E6"; // Latin small letter ae
+      HTML_ENTITIES["&ccedil;"] = "\u00E7"; // Latin small letter c with cedilla
+      HTML_ENTITIES["&egrave;"] = "\u00E8"; // Latin small letter e with grave
+      HTML_ENTITIES["&eacute;"] = "\u00E9"; // Latin small letter e with acute
+      HTML_ENTITIES["&ecirc;"]  = "\u00EA"; // Latin small letter e with circumflex
+      HTML_ENTITIES["&euml;"]   = "\u00EB"; // Latin small letter e with diaeresis
+      HTML_ENTITIES["&igrave;"] = "\u00EC"; // Latin small letter i with grave
+      HTML_ENTITIES["&iacute;"] = "\u00ED"; // Latin small letter i with acute
+      HTML_ENTITIES["&icirc;"]  = "\u00EE"; // Latin small letter i with circumflex
+      HTML_ENTITIES["&iuml;"]   = "\u00EF"; // Latin small letter i with diaeresis
+      HTML_ENTITIES["&eth;"]    = "\u00F0"; // Latin small letter eth
+      HTML_ENTITIES["&ntilde;"] = "\u00F1"; // Latin small letter n with tilde
+      HTML_ENTITIES["&ograve;"] = "\u00F2"; // Latin small letter o with grave
+      HTML_ENTITIES["&oacute;"] = "\u00F3"; // Latin small letter o with acute
+      HTML_ENTITIES["&ocirc;"]  = "\u00F4"; // Latin small letter o with circumflex
+      HTML_ENTITIES["&otilde;"] = "\u00F5"; // Latin small letter o with tilde
+      HTML_ENTITIES["&ouml;"]   = "\u00F6"; // Latin small letter o with diaeresis
+      HTML_ENTITIES["&oslash;"] = "\u00F8"; // Latin small letter o with stroke
+      HTML_ENTITIES["&ugrave;"] = "\u00F9"; // Latin small letter u with grave
+      HTML_ENTITIES["&uacute;"] = "\u00FA"; // Latin small letter u with acute
+      HTML_ENTITIES["&ucirc;"]  = "\u00FB"; // Latin small letter u with circumflex
+      HTML_ENTITIES["&uuml;"]   = "\u00FC"; // Latin small letter u with diaeresis
+      HTML_ENTITIES["&yacute;"] = "\u00FD"; // Latin small letter y with acute
+      HTML_ENTITIES["&thorn;"]  = "\u00FE"; // Latin small letter thorn
+      HTML_ENTITIES["&yuml;"]   = "\u00FF"; // Latin small letter y with diaeresis
+    }
+    
+    public static function convertHtmlEntities(source:String):String {
+      var buf:String = source;
+      while(buf.indexOf('&') != -1 ){     // if it finds other occurences of the & symbol
+        for(var entity:String in HTML_ENTITIES){
+          buf =  buf.replace(entity, HTML_ENTITIES[entity]);
+        }
+      }
+      return buf;
+    }
+    
     public static function isHtml(content:String):Boolean {
       if(content) {
         return content.toLowerCase().indexOf("<html>") > -1 || content.toLowerCase().indexOf("<textformat") > -1;

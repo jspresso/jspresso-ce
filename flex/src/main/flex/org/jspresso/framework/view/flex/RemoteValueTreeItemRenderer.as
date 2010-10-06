@@ -56,7 +56,7 @@ package org.jspresso.framework.view.flex {
 		  if(listData) {
 		    if(HtmlUtil.isHtml(listData.label)) {
 		      label.text = null;
-		      label.htmlText = listData.label;
+		      label.htmlText = HtmlUtil.convertHtmlEntities(listData.label);
 		    } else {
           label.htmlText = null;
           label.text = listData.label;

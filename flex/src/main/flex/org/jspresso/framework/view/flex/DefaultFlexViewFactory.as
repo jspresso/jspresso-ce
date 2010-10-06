@@ -1903,7 +1903,7 @@ package org.jspresso.framework.view.flex {
       if(!remoteLabel.state && remoteLabel.label) {
         if(HtmlUtil.isHtml(remoteLabel.label)) {
           label.text = null;
-          label.htmlText = remoteLabel.label;
+          label.htmlText = HtmlUtil.convertHtmlEntities(remoteLabel.label);
         } else {
           label.htmlText = null;
           label.text = remoteLabel.label;
@@ -1942,7 +1942,7 @@ package org.jspresso.framework.view.flex {
           } else {
             if(HtmlUtil.isHtml(value.toString())) {
               label.text = null;
-              label.htmlText = value.toString();
+              label.htmlText = HtmlUtil.convertHtmlEntities(value.toString());
             } else {
               label.htmlText = null;
               label.text = value.toString();

@@ -146,7 +146,7 @@ package org.jspresso.framework.view.flex {
         label.htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
       } else {
         if(HtmlUtil.isHtml(cellText)) {
-          label.htmlText = cellText;
+          label.htmlText = HtmlUtil.convertHtmlEntities(cellText);
         }
       }
   	}
