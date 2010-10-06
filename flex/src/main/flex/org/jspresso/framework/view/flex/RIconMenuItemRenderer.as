@@ -41,6 +41,9 @@ package org.jspresso.framework.view.flex {
           _image.alpha = 0.4;
         }
   	  }
+      if(!value["label"]) {
+        value["label"] = "";
+      }
   	  super.data = value;
   	}
 
