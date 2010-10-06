@@ -19,9 +19,12 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
+import org.jspresso.framework.util.bean.integrity.IntegrityException;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * Describes a property used to store a binary value in the form of a byte
@@ -112,5 +115,39 @@ public class BasicBinaryPropertyDescriptor extends
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void preprocessSetter(final Object component, Object newValue) {
+    super.preprocessSetter(component, newValue);
+    final byte[] propertyValueAsByteArray = (byte[]) newValue;
+    if (propertyValueAsByteArray != null && getMaxLength() != null
+        && propertyValueAsByteArray.length > getMaxLength().intValue()) {
+      IntegrityException ie = new IntegrityException("[" + getName()
+          + "] value (" + propertyValueAsByteArray + ") is too long on ["
+          + component + "].") {
+
+        private static final long serialVersionUID = 7459823123892198831L;
+
+        @Override
+        public String getI18nMessage(ITranslationProvider translationProvider,
+            Locale locale) {
+          StringBuffer boundsSpec = new StringBuffer("l");
+          if (getMaxLength() != null) {
+            boundsSpec.append(" <= ").append(getMaxLength());
+          }
+          return translationProvider.getTranslation(
+              "integrity.property.toolong", new Object[] {
+                  getI18nName(translationProvider, locale), boundsSpec,
+                  component
+              }, locale);
+        }
+
+      };
+      throw ie;
+    }
   }
 }
