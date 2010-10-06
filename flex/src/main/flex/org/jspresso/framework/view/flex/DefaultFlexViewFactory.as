@@ -1992,13 +1992,6 @@ package org.jspresso.framework.view.flex {
       }
       if(label) {
         button.label = label;
-      } else if(icon) {
-        button.regenerateStyleCache(false);
-        var cornerRadius:Number = button.getStyle("cornerRadius") as Number;
-        button.width = icon.dimension.width + cornerRadius;
-        //button.maxWidth = button.width;
-        button.height = icon.dimension.height + cornerRadius;
-        //button.maxHeight = button.height;
       }
       if(tooltip) {
         button.toolTip = tooltip + TOOLTIP_ELLIPSIS;
