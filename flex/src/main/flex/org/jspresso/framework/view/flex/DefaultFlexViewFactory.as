@@ -1106,6 +1106,7 @@ package org.jspresso.framework.view.flex {
         
         if(remoteForm.labelsPosition != "NONE") {
           componentLabel = createComponent(rComponentLabel, false);
+          componentLabel.maxWidth = NaN;
           labelCell = new GridItem();
           labelCell.horizontalScrollPolicy  = ScrollPolicy.OFF;
           labelCell.verticalScrollPolicy  = ScrollPolicy.OFF;
