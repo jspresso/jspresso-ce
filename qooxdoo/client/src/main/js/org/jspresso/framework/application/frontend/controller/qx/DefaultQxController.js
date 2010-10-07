@@ -69,8 +69,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**@type qx.ui.container.Stack*/
     __workspaceStack : null,
     /**@type Object*/
-    __unregistered : null,
-    /**@type Object*/
     __postponedCommands : null,
     /**@type Array*/
     __dialogStack : null,
@@ -318,7 +316,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         var targetPeerGuid = command.getTargetPeerGuid();
         var targetPeer = this.getRegistered(targetPeerGuid);
         if(targetPeer == null) {
-          if(!this.__unregistered[targetPeerGuid] && !(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand)) {
+          if(!(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand)) {
             if(!this.__postponedCommands[targetPeerGuid]) {
               this.__postponedCommands[targetPeerGuid] = new Array();
             } 
@@ -369,14 +367,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
               existingChild = childrenContent[i];
             }
             if(existingChild != child) {
-              this.unregister(existingChild);
               childrenContent[i] = child;
-            }
-          }
-          if(newLength < childrenContent.length) {
-            for(var i = newLength; i < childrenContent.length; i++) {
-              var removedChild = childrenContent[i];
-              this.unregister(removedChild);
             }
           }
           childrenContent.length = newLength;
@@ -805,20 +796,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return void
      */
     unregister : function(remotePeer) {
-      if(this.__unregistered && remotePeer) {
-        this.__unregistered[remotePeer.getGuid()] = remotePeer;
-      }
       this.__remotePeerRegistry.unregister(remotePeer);
-      if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteValueState) {
-        //this.__unbindRemoteValueState(remotePeer);
-        if(remotePeer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-          if(remotePeer.getChildren()) {
-            var children = remotePeer.getChildren().toArray();
-            for (var i = 0; i < children.length; i++) {
-              this.unregister(children[i]);
-            }
-          }
-        }
+      if(remotePeer instanceof qx.core.Object) {
+      	remotePeer.dispose();
       }
     },
 
@@ -850,7 +830,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
        */
       var commandsHandler = function(result) {
         this.__postponedCommands = new Object();
-        this.__unregistered = new Object();
         try {
           var data = result.getData();
           this._handleCommands(org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]).toArray());
@@ -861,7 +840,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           this.__roundTrip = false;
           this._checkPostponedCommandsCompletion();
           this.__postponedCommands = null;
-          this.__unregistered = null;
           if(this.__commandsBacklog.length > 0) {
             for(var i = 0; i < this.__commandsBacklog.length; i++) {
               this.__commandsQueue.push(this.__commandsBacklog[i]);

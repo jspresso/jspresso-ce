@@ -238,6 +238,7 @@ public class DefaultRemoteController extends
         cleanupCommand.setRemovedPeerGuids(removedPeersGuids
             .toArray(new String[removedPeersGuids.size()]));
         registerCommand(cleanupCommand);
+        removedPeersGuids.clear();
       }
     } finally {
       commandRegistrationEnabled = false;

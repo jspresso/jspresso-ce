@@ -157,7 +157,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _commandsQueue:IList;
     private var _workspaceAccordion:CollapsibleAccordion;
     private var _workspaceViewStack:ViewStack;
-    private var _unregistered:Object;
     private var _postponedCommands:Object;
     private var _dialogStack:Array;
     private var _userLanguage:String;
@@ -386,7 +385,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
-          if(_unregistered[command.targetPeerGuid] == null && !(command is RemoteEnablementCommand)) {
+          if(!(command is RemoteEnablementCommand)) {
             if(!_postponedCommands[command.targetPeerGuid]) {
               _postponedCommands[command.targetPeerGuid] = new ArrayCollection(new Array());
             } 
@@ -436,7 +435,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
               if(childIndex < children.length) {
                 var existingChild:RemoteValueState = children.getItemAt(childIndex) as RemoteValueState;
                 if(existingChild != child) {
-                  unregister(existingChild);
                   children.setItemAt(child, childIndex);
                 }
               } else {
@@ -447,7 +445,6 @@ package org.jspresso.framework.application.frontend.controller.flex {
           }
           while(childIndex < children.length) {
             var removedChild:RemoteValueState = children.removeItemAt(childIndex) as RemoteValueState;
-            unregister(removedChild);
           }
         } else if(command is RemoteAddCardCommand) {
           getViewFactory().addCard(
@@ -713,18 +710,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
     }
 
     public function unregister(remotePeer:IRemotePeer):void {
-      if(_unregistered && remotePeer) {
-        _unregistered[remotePeer.guid] = remotePeer;
-      }
       _remotePeerRegistry.unregister(remotePeer);
-      if(remotePeer is RemoteValueState) {
-        //unbindRemoteValueState(remotePeer as RemoteValueState);
-        if(remotePeer is RemoteCompositeValueState) {
-          for each(var childState:RemoteValueState in (remotePeer as RemoteCompositeValueState).children) {
-            unregister(childState);
-          }
-        }
-      }
     }
 
     public function isRegistered(guid:String):Boolean {
@@ -741,13 +727,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remoteController.showBusyCursor = true;
       var commandsHandler:Function = function(resultEvent:ResultEvent):void {
         _postponedCommands = new Object();
-        _unregistered = new Object();
         try {
           handleCommands(resultEvent.result as IList);
         } finally {
           checkPostponedCommandsCompletion();
           _postponedCommands = null;
-          _unregistered = null;
         }
       };
       var errorHandler:Function = function(faultEvent:FaultEvent):void {
