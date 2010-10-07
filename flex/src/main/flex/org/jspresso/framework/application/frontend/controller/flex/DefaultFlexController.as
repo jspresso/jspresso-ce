@@ -72,6 +72,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
+  import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
   import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
@@ -321,6 +322,14 @@ package org.jspresso.framework.application.frontend.controller.flex {
         loginButtons.push(loginButton);
         var loginView:UIComponent = getViewFactory().createComponent(initLoginCommand.loginView);
         popupDialog(initLoginCommand.title, initLoginCommand.message, loginView, initLoginCommand.loginView.icon, loginButtons);
+      } else if(command is RemoteCleanupCommand) {
+        var removedPeerGuids:Array = (command as RemoteCleanupCommand).removedPeerGuids;
+        for(var rpeerIndex:int = 0; rpeerIndex < removedPeerGuids.length; rpeerIndex++) {
+          var removedPeer:IRemotePeer = getRegistered(removedPeerGuids[rpeerIndex]);
+          if(removedPeer) {
+            unregister(removedPeer);
+          }
+        }
       } else if(command is RemoteAbstractDialogCommand) {
         var dialogCommand:RemoteAbstractDialogCommand = command as RemoteAbstractDialogCommand;
         var dialogButtons:Array = new Array();
@@ -1105,6 +1114,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand",RemoteSelectionCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",RemoteValueCommand);
       registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",RemoteAddCardCommand);
+      registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand",RemoteCleanupCommand);
   
       registerClassAlias("org.jspresso.framework.util.gui.CellConstraints",CellConstraints);
       registerClassAlias("org.jspresso.framework.util.gui.Dimension",Dimension);

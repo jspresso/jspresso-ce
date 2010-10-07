@@ -34,6 +34,7 @@ import org.jspresso.framework.application.frontend.command.remote.CommandExcepti
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
@@ -74,6 +75,7 @@ import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+import org.jspresso.framework.util.remote.registry.IRemotePeerRegistryListener;
 import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.IActionFactory;
@@ -103,10 +105,11 @@ import org.springframework.dao.DataIntegrityViolationException;
  */
 public class DefaultRemoteController extends
     AbstractFrontendController<RComponent, RIcon, RAction> implements
-    IRemoteCommandHandler, IRemotePeerRegistry {
+    IRemoteCommandHandler, IRemotePeerRegistry, IRemotePeerRegistryListener {
 
   private int                 commandLowPriorityOffset;
   private List<RemoteCommand> commandQueue;
+  private List<String>        removedPeersGuids;
   private boolean             commandRegistrationEnabled;
   private IGUIDGenerator      guidGenerator;
   private IRemotePeerRegistry remotePeerRegistry;
@@ -129,6 +132,7 @@ public class DefaultRemoteController extends
    */
   public void clear() {
     remotePeerRegistry.clear();
+    removedPeersGuids.clear();
   }
 
   /**
@@ -228,6 +232,12 @@ public class DefaultRemoteController extends
         for (RemoteCommand command : commands) {
           handleCommand(command);
         }
+      }
+      if (removedPeersGuids != null && removedPeersGuids.size() > 0) {
+        RemoteCleanupCommand cleanupCommand = new RemoteCleanupCommand();
+        cleanupCommand.setRemovedPeerGuids(removedPeersGuids
+            .toArray(new String[removedPeersGuids.size()]));
+        registerCommand(cleanupCommand);
       }
     } finally {
       commandRegistrationEnabled = false;
@@ -401,6 +411,21 @@ public class DefaultRemoteController extends
   /**
    * {@inheritDoc}
    */
+  public void addRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
+    remotePeerRegistry.addRemotePeerRegistryListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeRemotePeerRegistryListener(
+      IRemotePeerRegistryListener listener) {
+    remotePeerRegistry.removeRemotePeerRegistryListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public String registerAutomationId(String automationsSeed, String guid) {
     return remotePeerRegistry.registerAutomationId(automationsSeed, guid);
   }
@@ -440,7 +465,14 @@ public class DefaultRemoteController extends
    * @internal
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
+    if (this.remotePeerRegistry != null) {
+      this.remotePeerRegistry.removeRemotePeerRegistryListener(this);
+    }
     this.remotePeerRegistry = remotePeerRegistry;
+    if (this.remotePeerRegistry != null) {
+      this.remotePeerRegistry.addRemotePeerRegistryListener(this);
+      this.removedPeersGuids = new ArrayList<String>();
+    }
   }
 
   /**
@@ -809,5 +841,19 @@ public class DefaultRemoteController extends
       wrapper.setWrappedAction(action);
     }
     return wrapper;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void remotePeerAdded(@SuppressWarnings("unused") IRemotePeer peer) {
+    // No-op
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void remotePeerRemoved(String peerGuid) {
+    removedPeersGuids.add(peerGuid);
   }
 }

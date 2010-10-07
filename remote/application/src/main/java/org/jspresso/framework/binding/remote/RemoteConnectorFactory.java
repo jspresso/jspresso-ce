@@ -53,6 +53,7 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+import org.jspresso.framework.util.remote.registry.IRemotePeerRegistryListener;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
@@ -435,6 +436,21 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    */
   public String registerAutomationId(String automationSeed, String guid) {
     return remotePeerRegistry.registerAutomationId(automationSeed, guid);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void addRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
+    remotePeerRegistry.addRemotePeerRegistryListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeRemotePeerRegistryListener(
+      IRemotePeerRegistryListener listener) {
+    remotePeerRegistry.removeRemotePeerRegistryListener(listener);
   }
 
   /**

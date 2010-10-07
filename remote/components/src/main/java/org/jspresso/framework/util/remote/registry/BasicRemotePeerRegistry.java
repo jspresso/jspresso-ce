@@ -18,8 +18,11 @@
  */
 package org.jspresso.framework.util.remote.registry;
 
+import java.lang.ref.Reference;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.ReferenceMap;
@@ -35,16 +38,18 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  */
 public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
-  private Map<String, String>      automationBackingStore;
-  private Map<String, Integer>     automationIndices;
-  private Map<String, IRemotePeer> backingStore;
+  private Map<String, String>              automationBackingStore;
+  private Map<String, Integer>             automationIndices;
+  private Map<String, IRemotePeer>         backingStore;
+
+  private Set<IRemotePeerRegistryListener> rprListeners;
 
   /**
    * Constructs a new <code>BasicRemotePeerRegistry</code> instance.
    */
   @SuppressWarnings("unchecked")
   public BasicRemotePeerRegistry() {
-    backingStore = new ReferenceMap(AbstractReferenceMap.WEAK,
+    backingStore = new RemotePeerReferenceMap(AbstractReferenceMap.WEAK,
         AbstractReferenceMap.WEAK, true);
     automationBackingStore = new ReferenceMap(AbstractReferenceMap.WEAK,
         AbstractReferenceMap.WEAK, true);
@@ -95,6 +100,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
         automationBackingStore.put(automationId, remotePeer.getGuid());
       }
     }
+    fireRemotePeerAdded(remotePeer);
   }
 
   /**
@@ -121,6 +127,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
         automationBackingStore.remove(automationId);
       }
     }
+    fireRemotePeerRemoved(guid);
   }
 
   private synchronized String computeNextAutomationId(String seed) {
@@ -136,4 +143,103 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     return new StringBuffer(seed).append("#").append(idIndex).toString();
   }
 
+  class RemotePeerReferenceMap extends ReferenceMap {
+
+    private static final long serialVersionUID = 1494465151770293403L;
+
+    public RemotePeerReferenceMap(int keyType, int valueType,
+        boolean purgeValues) {
+      super(keyType, valueType, purgeValues);
+    }
+
+    @Override
+    protected HashEntry createEntry(HashEntry next, int hashCode, Object key,
+        Object value) {
+      if (value instanceof IRemotePeer) {
+        return new RemotePeerReferenceEntry(((IRemotePeer) value).getGuid(),
+            this, next, hashCode, key, value);
+      }
+      return super.createEntry(next, hashCode, key, value);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    protected void purge(Reference ref) {
+      int hash = ref.hashCode();
+      int index = hashIndex(hash, data.length);
+      HashEntry entry = data[index];
+      if (entry instanceof IRemotePeer) {
+        fireRemotePeerRemoved(((IRemotePeer) entry).getGuid());
+      }
+      super.purge(ref);
+    }
+
+    class RemotePeerReferenceEntry extends ReferenceEntry implements
+        IRemotePeer {
+
+      private String guid;
+
+      public RemotePeerReferenceEntry(String guid, AbstractReferenceMap parent,
+          HashEntry next, int hashCode, Object key, Object value) {
+        super(parent, next, hashCode, key, value);
+        this.guid = guid;
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      public String getGuid() {
+        return guid;
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void addRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
+    if (rprListeners == null && listener != null) {
+      rprListeners = new LinkedHashSet<IRemotePeerRegistryListener>();
+    }
+    rprListeners.add(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeRemotePeerRegistryListener(
+      IRemotePeerRegistryListener listener) {
+    if (rprListeners == null || listener == null) {
+      return;
+    }
+    rprListeners.remove(listener);
+  }
+
+  /**
+   * Notifies the listeners that a remote peer has been added.
+   * 
+   * @param peer
+   *          the added remote peer.
+   */
+  protected void fireRemotePeerAdded(IRemotePeer peer) {
+    if (rprListeners != null) {
+      for (IRemotePeerRegistryListener listener : rprListeners) {
+        listener.remotePeerAdded(peer);
+      }
+    }
+  }
+
+  /**
+   * Notifies the listeners that a remote peer has been removed.
+   * 
+   * @param guid
+   *          the removed remote peer guid.
+   */
+  protected void fireRemotePeerRemoved(String guid) {
+    if (rprListeners != null) {
+      for (IRemotePeerRegistryListener listener : rprListeners) {
+        listener.remotePeerRemoved(guid);
+      }
+    }
+  }
 }

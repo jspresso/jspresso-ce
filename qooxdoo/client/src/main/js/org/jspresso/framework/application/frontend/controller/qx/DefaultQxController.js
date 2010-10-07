@@ -266,6 +266,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         loginButtons.push(loginButton);
         var dialogView = this.createComponent(command.getLoginView());
         this._popupDialog(command.getTitle(), command.getMessage(), dialogView, command.getLoginView().getIcon(), loginButtons);
+      } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand) {
+        var removedPeerGuids = command.getRemovedPeerGuids();
+        for(var i = 0; i < removedPeerGuids.length; i++) {
+          var removedPeer = this.getRegistered(removedPeerGuids[i]);
+          if(removedPeer) {
+            this.unregister(removedPeer);
+          }
+        }
       } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand) {
         var dialogButtons = new Array();
         for(var i = 0; i < command.getActions().length; i++) {

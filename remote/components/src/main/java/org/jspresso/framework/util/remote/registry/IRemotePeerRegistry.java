@@ -89,4 +89,19 @@ public interface IRemotePeerRegistry {
    */
   void unregister(String guid);
 
+  /**
+   * Adds a remote peer registry listener.
+   * 
+   * @param listener
+   *          the listener to add.
+   */
+  void addRemotePeerRegistryListener(IRemotePeerRegistryListener listener);
+
+  /**
+   * Removes a remote peer registry listener.
+   * 
+   * @param listener
+   *          the listener to remove.
+   */
+  void removeRemotePeerRegistryListener(IRemotePeerRegistryListener listener);
 }
