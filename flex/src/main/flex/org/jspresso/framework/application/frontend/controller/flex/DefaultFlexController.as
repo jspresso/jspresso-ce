@@ -164,6 +164,8 @@ package org.jspresso.framework.application.frontend.controller.flex {
     private var _initialLocaleChain:Array;
     private var _fakeDialog:Panel;
     
+    private var _postponedNotificationBuffer:Object;
+    
     public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
       _remotePeerRegistry = new BasicRemotePeerRegistry();
       _viewFactory = createViewFactory();
@@ -423,6 +425,7 @@ package org.jspresso.framework.application.frontend.controller.flex {
             (command as RemoteEnablementCommand).enabled;
         } else if(command is RemoteChildrenCommand) {
           var children:IList = (targetPeer as RemoteCompositeValueState).children;
+          _postponedNotificationBuffer[targetPeer.guid] = null;
           //children.removeAll();
           var childIndex:int = 0;
           if((command as RemoteChildrenCommand).children != null) {
@@ -727,11 +730,13 @@ package org.jspresso.framework.application.frontend.controller.flex {
       _remoteController.showBusyCursor = true;
       var commandsHandler:Function = function(resultEvent:ResultEvent):void {
         _postponedCommands = new Object();
+        _postponedNotificationBuffer = new Object();
         try {
           handleCommands(resultEvent.result as IList);
         } finally {
           checkPostponedCommandsCompletion();
           _postponedCommands = null;
+          _postponedNotificationBuffer = null;
         }
       };
       var errorHandler:Function = function(faultEvent:FaultEvent):void {
@@ -762,6 +767,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
               handleError("    value = " + childState.value);
             }
           }
+        }
+      }
+      for(guid in _postponedNotificationBuffer) {
+        var peer:IRemotePeer = getRegistered(guid);
+        if(peer is RemoteCompositeValueState) {
+          (peer as RemoteCompositeValueState).notifyChildrenChanged();
         }
       }
     }

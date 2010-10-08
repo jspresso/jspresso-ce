@@ -16,6 +16,8 @@
 package org.jspresso.framework.state.remote {
 
     import mx.collections.ListCollectionView;
+    import mx.events.PropertyChangeEvent;
+    import mx.events.PropertyChangeEventKind;
 		
 		[Bindable]
     [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteCompositeValueState")]
@@ -64,6 +66,13 @@ package org.jspresso.framework.state.remote {
         }
         public function get selectedIndices():Array {
             return _selectedIndices;
+        }
+        
+        public function notifyChildrenChanged():void {
+          this.dispatchEvent(new PropertyChangeEvent(
+            "propertyChange", true, true, 
+            PropertyChangeEventKind.UPDATE,
+            "children", null, _children, this));
         }
     }
 }

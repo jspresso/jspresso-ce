@@ -70,6 +70,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __workspaceStack : null,
     /**@type Object*/
     __postponedCommands : null,
+    /**@type Object*/
+    __postponedNotificationBuffer : null,
     /**@type Array*/
     __dialogStack : null,
     /**@type String*/
@@ -344,6 +346,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand) {
           targetPeer.setEnabled(command.isEnabled());
         } else if(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand) {
+          this.__postponedNotificationBuffer[targetPeer.getGuid()] = null;
+
           /**@type qx.data.Array */
           var children = targetPeer.getChildren();
           /**@type Array*/
@@ -830,6 +834,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
        */
       var commandsHandler = function(result) {
         this.__postponedCommands = new Object();
+        this.__postponedNotificationBuffer = new Object();
         try {
           var data = result.getData();
           this._handleCommands(org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]).toArray());
@@ -840,6 +845,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           this.__roundTrip = false;
           this._checkPostponedCommandsCompletion();
           this.__postponedCommands = null;
+          this.__postponedNotificationBuffer = null;
           if(this.__commandsBacklog.length > 0) {
             for(var i = 0; i < this.__commandsBacklog.length; i++) {
               this.__commandsQueue.push(this.__commandsBacklog[i]);
@@ -894,6 +900,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
               this._handleError("    value = " + childState.getValue());
             }
           }
+        }
+      }
+      for(var guid in this.__postponedNotificationBuffer) {
+        var peer = this.getRegistered(guid);
+        if(peer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+          peer.notifyChildrenChanged();
         }
       }
     },

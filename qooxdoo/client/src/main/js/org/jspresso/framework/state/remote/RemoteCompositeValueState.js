@@ -62,6 +62,15 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
       if(value == null) {
         this.setChildren(new qx.data.Array());
       }
+    },
+    
+    notifyChildrenChanged : function() {
+      this.fireDataEvent(
+          "changeChildren",
+          this.getChildren(),
+          this.getChildren(),
+          false
+      );
     }
   }
 });
