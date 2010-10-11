@@ -1192,9 +1192,7 @@ public abstract class AbstractBackendController extends AbstractController
           .getComponentDescriptor(component.getComponentContract());
       for (Map.Entry<String, Object> property : component
           .straightGetProperties().entrySet()) {
-        if (property.getValue() != null
-            && !(property.getValue() instanceof Collection<?> && ((Collection<?>) property
-                .getValue()).isEmpty())) {
+        if (property.getValue() != null) {
           IPropertyDescriptor propertyDescriptor = componentDescriptor
               .getPropertyDescriptor(property.getKey());
           if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
@@ -1259,7 +1257,8 @@ public abstract class AbstractBackendController extends AbstractController
                   cleanRelationshipsOnDeletion(composedEntity, dryRun,
                       clearedEntities);
                 }
-              } else if (propertyDescriptor.isModifiable()) {
+              } else if (propertyDescriptor.isModifiable()
+                  && !((Collection<?>) property.getValue()).isEmpty()) {
                 if (dryRun) {
                   // manually trigger reverse relations preprocessors.
                   if (((ICollectionPropertyDescriptor<?>) propertyDescriptor)
