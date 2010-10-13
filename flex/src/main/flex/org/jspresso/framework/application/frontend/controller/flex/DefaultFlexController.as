@@ -387,12 +387,10 @@ package org.jspresso.framework.application.frontend.controller.flex {
       } else {
         var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
         if(targetPeer == null) {
-          if(!(command is RemoteEnablementCommand)) {
-            if(!_postponedCommands[command.targetPeerGuid]) {
-              _postponedCommands[command.targetPeerGuid] = new ArrayCollection(new Array());
-            } 
-            (_postponedCommands[command.targetPeerGuid] as IList).addItem(command);
-          }
+          if(!_postponedCommands[command.targetPeerGuid]) {
+            _postponedCommands[command.targetPeerGuid] = new ArrayCollection(new Array());
+          } 
+          (_postponedCommands[command.targetPeerGuid] as IList).addItem(command);
           return;
         }
         if(command is RemoteValueCommand) {

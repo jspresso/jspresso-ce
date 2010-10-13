@@ -1514,31 +1514,48 @@ package org.jspresso.framework.view.flex {
     }
 
     protected function bindList(list:List, state:RemoteCompositeValueState):void {
-      BindingUtils.bindSetter(function(selectedIndices:Array):void {
-        if(selectedIndices != null && selectedIndices.length > 0) {
-          if(!ArrayUtil.areUnorderedArraysEqual(selectedIndices, list.selectedIndices)) {
-            list.selectedIndices = selectedIndices.concat(); // to get a copy.
+      BindingUtils.bindSetter(function(selectedItems:Array):void {
+        if(selectedItems != null && selectedItems.length > 0) {
+          // work on items to translate indices independently of list sorting state.
+          var translatedSelectedIndices:Array = new Array(selectedItems.length);
+          for(var i:int = 0; i < selectedItems.length; i++) {
+            translatedSelectedIndices[i] = state.children.getItemIndex(selectedItems[i]);
+          }
+          if(translatedSelectedIndices.length > 0) {
+            state.leadingIndex = translatedSelectedIndices[0];
+          } else {
+            state.leadingIndex = -1;
+          }
+          if(!ArrayUtil.areUnorderedArraysEqual(translatedSelectedIndices, state.selectedIndices)) {
+            translatedSelectedIndices.sort(Array.NUMERIC);
+            state.selectedIndices = translatedSelectedIndices;
           }
         } else {
-          if(list.selectedIndices.length > 0) {
-            list.selectedIndices = [];
+          state.leadingIndex = -1;
+          state.selectedIndices = null;
+        }
+      }, list, "selectedItems", false);
+      BindingUtils.bindSetter(function(selectedIndices:Array):void {
+        if(selectedIndices != null && selectedIndices.length > 0) {
+          // work on items to translate indices independently of list sorting state.
+          var selectedItems:Array = new Array(selectedIndices.length);
+          for(var i:int = 0; i < selectedIndices.length; i++) {
+            if(selectedIndices[i] > -1) {
+              if(state.children.length > selectedIndices[i]) {
+                selectedItems[i] = state.children.getItemAt(selectedIndices[i]);
+              } else {
+                // there is a desynch that will be fixed by another selection command.
+                return;
+              }
+            }
           }
+          if(!ArrayUtil.areUnorderedArraysEqual(list.selectedItems, selectedItems)) {
+            list.selectedItems = selectedItems;
+          }
+        } else {
+          list.selectedItem = null;
         }
       }, state, "selectedIndices", true);
-
-      BindingUtils.bindSetter(function(selectedIndices:Array):void {
-        if(selectedIndices != null && selectedIndices.length > 0) {
-          if(!ArrayUtil.areUnorderedArraysEqual(selectedIndices, state.selectedIndices)) {
-            state.leadingIndex = selectedIndices[0];
-            state.selectedIndices = selectedIndices.concat(); // to get a copy.
-          }
-        } else {
-          if(state.selectedIndices != null && state.selectedIndices.length > 0) {
-            state.leadingIndex = -1;
-            state.selectedIndices = null;
-          }
-        }
-      }, list, "selectedIndices", true);
     }
 
     protected function createPasswordField(remotePasswordField:RPasswordField):UIComponent {
@@ -1784,8 +1801,7 @@ package org.jspresso.framework.view.flex {
             table.selectedItems = selectedItems;
           }
         } else {
-          table.selectedIndex = -1;
-          table.selectedIndices = [];
+          table.selectedItem = null;
         }
       }, state, "selectedIndices", true);
       
