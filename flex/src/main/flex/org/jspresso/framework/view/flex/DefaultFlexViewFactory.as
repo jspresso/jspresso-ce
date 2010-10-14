@@ -151,6 +151,8 @@ package org.jspresso.framework.view.flex {
     private var _remoteValueSorter:RemoteValueSorter;
     private var _timeFormatter:DateFormatter;
     private var _passwordFormatter:PasswordFormatter;
+    
+    private var _lastActionTimestamp:Date = new Date();
 
     public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry,
                                            actionHandler:IActionHandler,
@@ -1995,7 +1997,11 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(updateButtonState, remoteAction, "enabled", true);
 		  getRemotePeerRegistry().register(remoteAction);
 		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-		    _actionHandler.execute(remoteAction);
+        if ((new Date()).time - _lastActionTimestamp.time < 400) {
+          return;
+        }
+        _lastActionTimestamp = new Date();
+        _actionHandler.execute(remoteAction);
 		  });
       return button;
     }
