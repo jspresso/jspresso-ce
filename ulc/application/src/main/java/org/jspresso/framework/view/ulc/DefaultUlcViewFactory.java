@@ -1444,6 +1444,8 @@ public class DefaultUlcViewFactory extends
         column.setHeaderValue(columnName.toString());
         IView<ULCComponent> editorView = createView(columnViewDescriptor,
             actionHandler, locale);
+        editorView.getConnector().resetReadabilityGates();
+        editorView.getConnector().resetWritabilityGates();
         if (editorView.getConnector().getParentConnector() == null) {
           editorView.getConnector().setParentConnector(connector);
         }
