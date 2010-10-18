@@ -2127,6 +2127,7 @@ package org.jspresso.framework.view.flex {
       if(expectedCharCount < charCount) {
         charCount = expectedCharCount;
       }
+      charCount += 2;
       var w:int = component.measureText(TEMPLATE_CHAR).width * charCount;
       component.maxWidth = w;
     }

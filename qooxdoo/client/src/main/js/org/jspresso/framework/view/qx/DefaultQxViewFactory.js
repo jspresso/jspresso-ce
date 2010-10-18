@@ -2228,13 +2228,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }
       if(maxCharCount == null) {
         maxCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
-      } else {
-        maxCharCount += 2;
       }
       var charCount = maxCharCount;
       if(expectedCharCount < charCount) {
         charCount = expectedCharCount;
       }
+      charCount += 2;
       var compFont = component.getFont();
       if(!compFont) {
         compFont = qx.theme.manager.Font.getInstance().resolve("default");
