@@ -19,6 +19,9 @@
 package org.jspresso.framework.util.remote.registry;
 
 import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -93,7 +96,9 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    * {@inheritDoc}
    */
   public void register(IRemotePeer remotePeer) {
-    backingStore.put(remotePeer.getGuid(), remotePeer);
+    if (!backingStore.containsKey(remotePeer.getGuid())) {
+      backingStore.put(remotePeer.getGuid(), remotePeer);
+    }
     if (remotePeer instanceof IAutomatable) {
       String automationId = ((IAutomatable) remotePeer).getAutomationId();
       if (automationId != null) {
@@ -143,9 +148,11 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     return new StringBuffer(seed).append("#").append(idIndex).toString();
   }
 
-  class RemotePeerReferenceMap extends ReferenceMap {
+  private class RemotePeerReferenceMap extends ReferenceMap {
 
-    private static final long serialVersionUID = 1494465151770293403L;
+    private static final long                     serialVersionUID = 1494465151770293403L;
+
+    private transient ReferenceQueue<IRemotePeer> remotePeerQueue;
 
     public RemotePeerReferenceMap(int keyType, int valueType,
         boolean purgeValues) {
@@ -153,44 +160,119 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     }
 
     @Override
+    protected void init() {
+      remotePeerQueue = new ReferenceQueue<IRemotePeer>();
+      super.init();
+    }
+
+    @Override
+    public void clear() {
+      while (remotePeerQueue.poll() != null) {
+        // drain the queue.
+      }
+      super.clear();
+    }
+
+    @Override
+    protected void purge() {
+      Reference<? extends IRemotePeer> ref = remotePeerQueue.poll();
+      while (ref != null) {
+        purge(ref);
+        ref = remotePeerQueue.poll();
+      }
+      super.purge();
+    }
+
+    @Override
     protected HashEntry createEntry(HashEntry next, int hashCode, Object key,
         Object value) {
       if (value instanceof IRemotePeer) {
-        return new RemotePeerReferenceEntry(((IRemotePeer) value).getGuid(),
-            this, next, hashCode, key, value);
+        return new RemotePeerReferenceEntry(this, next, hashCode, key, value);
       }
       return super.createEntry(next, hashCode, key, value);
     }
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    protected void purge(Reference ref) {
-      int hash = ref.hashCode();
-      int index = hashIndex(hash, data.length);
-      HashEntry entry = data[index];
-      if (entry instanceof IRemotePeer) {
-        fireRemotePeerRemoved(((IRemotePeer) entry).getGuid());
-      }
-      super.purge(ref);
-    }
+    private class RemotePeerReferenceEntry extends ReferenceEntry {
 
-    class RemotePeerReferenceEntry extends ReferenceEntry implements
-        IRemotePeer {
-
-      private String guid;
-
-      public RemotePeerReferenceEntry(String guid, AbstractReferenceMap parent,
+      public RemotePeerReferenceEntry(RemotePeerReferenceMap parent,
           HashEntry next, int hashCode, Object key, Object value) {
         super(parent, next, hashCode, key, value);
-        this.guid = guid;
       }
 
-      /**
-       * {@inheritDoc}
-       */
-      public String getGuid() {
-        return guid;
+      @Override
+      protected Object toReference(int type, Object referent, int hash) {
+        if (referent instanceof IRemotePeer) {
+          switch (type) {
+            case SOFT:
+              return new RemotePeerSoftRef(hash, (IRemotePeer) referent,
+                  ((RemotePeerReferenceMap) parent).remotePeerQueue);
+            case WEAK:
+              return new RemotePeerWeakRef(hash, (IRemotePeer) referent,
+                  ((RemotePeerReferenceMap) parent).remotePeerQueue);
+            default:
+              break;
+          }
+        }
+        return super.toReference(type, referent, hash);
       }
+    }
+  }
+
+  private class RemotePeerSoftRef extends SoftReference<IRemotePeer> implements
+      IRemotePeer {
+
+    private int    hash;
+    private String guid;
+
+    public RemotePeerSoftRef(int hash, IRemotePeer r,
+        ReferenceQueue<IRemotePeer> q) {
+      super(r, q);
+      this.hash = hash;
+      this.guid = r.getGuid();
+    }
+
+    @Override
+    public int hashCode() {
+      return hash;
+    }
+
+    public String getGuid() {
+      return guid;
+    }
+
+    @Override
+    public void clear() {
+      fireRemotePeerRemoved(guid);
+      super.clear();
+    }
+  }
+
+  private class RemotePeerWeakRef extends WeakReference<IRemotePeer> implements
+      IRemotePeer {
+
+    private int    hash;
+    private String guid;
+
+    public RemotePeerWeakRef(int hash, IRemotePeer r,
+        ReferenceQueue<IRemotePeer> q) {
+      super(r, q);
+      this.hash = hash;
+      this.guid = r.getGuid();
+    }
+
+    @Override
+    public int hashCode() {
+      return hash;
+    }
+
+    public String getGuid() {
+      return guid;
+    }
+
+    @Override
+    public void clear() {
+      fireRemotePeerRemoved(guid);
+      super.clear();
     }
   }
 

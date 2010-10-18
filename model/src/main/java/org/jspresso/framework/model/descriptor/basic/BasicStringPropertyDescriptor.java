@@ -57,7 +57,7 @@ public class BasicStringPropertyDescriptor extends
   public BasicStringPropertyDescriptor createQueryDescriptor() {
     BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super
         .createQueryDescriptor();
-    // queryDescriptor.setMaxLength(null);
+    queryDescriptor.setMaxLength(null);
     queryDescriptor.setRegexpPattern(null);
     return queryDescriptor;
   }
@@ -141,7 +141,8 @@ public class BasicStringPropertyDescriptor extends
           return translationProvider.getTranslation(
               "integrity.property.toolong", new Object[] {
                   getI18nName(translationProvider, locale), boundsSpec,
-                  component}, locale);
+                  component
+              }, locale);
         }
 
       };
@@ -161,7 +162,8 @@ public class BasicStringPropertyDescriptor extends
           return translationProvider.getTranslation(
               "integrity.property.pattern", new Object[] {
                   getI18nName(translationProvider, locale),
-                  getRegexpPatternSample(), component}, locale);
+                  getRegexpPatternSample(), component
+              }, locale);
         }
 
       };

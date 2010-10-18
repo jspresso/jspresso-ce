@@ -1088,6 +1088,10 @@ public abstract class AbstractBackendController extends AbstractController
           }
         }
         registeredEntity.straightSetProperties(mergedProperties);
+      } else if (mergeMode == EMergeMode.MERGE_CLEAN_LAZY) {
+        // version has not evolved but we must still reset dirty properties in
+        // case only versionControl false properties have changed.
+        cleanDirtyProperties(registeredEntity);
       }
       registeredEntity.onLoad();
       return registeredEntity;

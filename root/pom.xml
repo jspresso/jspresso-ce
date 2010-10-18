@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
-  <version>3.5-SNAPSHOT</version>
+  <version>3.5.1-RC5</version>
   <name>Jspresso Root POM</name>
   <url>http://www.jspresso.org</url>
   <properties>
@@ -12,8 +12,8 @@
     <generator.templateName>HibernateXdocletEntity.ftl</generator.templateName>
     
     <!-- Dependencies versions -->
-    <jspresso.version>3.5-SNAPSHOT</jspresso.version>
-    <sjs.version>1.0-SNAPSHOT</sjs.version>
+    <jspresso.version>3.5.1-RC5</jspresso.version>
+    <sjs.version>1.0.1-RC5</sjs.version>
     <junit.version>3.8.1</junit.version>
 
     <flex.version>3.4.0.9271</flex.version>
@@ -33,7 +33,7 @@
     <hibernate.version>3.3.2.GA</hibernate.version>
     <ulc.version>6.0.5</ulc.version>
     <jboss.version>4.2.2.GA</jboss.version>
-    <qooxdoo.version>1.2</qooxdoo.version>
+    <qooxdoo.version>1.2.1</qooxdoo.version>
     <jasper.version>3.7.1</jasper.version>
     <jfree.version>1.0.13</jfree.version>
     <itext.version>2.1.5</itext.version>
@@ -67,6 +67,7 @@
     <wings.version>3.2.1</wings.version>
     <qx-collapsable-panel.version>0.5</qx-collapsable-panel.version>
     <qx-upload-widget.version>0.5</qx-upload-widget.version>
+    <qx-dark-theme.version>0.5</qx-dark-theme.version>
     <qx-java-rpc.version>0.6</qx-java-rpc.version>
     <hsql.version>1.8.0.1</hsql.version>
     <jnlp-servlet.version>1.1</jnlp-servlet.version>
@@ -424,6 +425,12 @@
         <groupId>org.qooxdoo</groupId>
         <artifactId>qooxdoo-upload-widget</artifactId>
         <version>${qx-upload-widget.version}</version>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.qooxdoo</groupId>
+        <artifactId>qooxdoo-dark-theme</artifactId>
+        <version>${qx-dark-theme.version}</version>
         <type>zip</type>
       </dependency>
       <dependency>

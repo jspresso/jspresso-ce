@@ -11,6 +11,7 @@ Bugs fixed
              are not correctly notified of collection selection changes
            Writability gates do not work correctly on collection views
 3071381    clash with property names and SQL
+3088599    integer field too small
 
 
 New features

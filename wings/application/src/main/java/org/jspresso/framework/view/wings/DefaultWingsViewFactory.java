@@ -1643,6 +1643,8 @@ public class DefaultWingsViewFactory extends
         if (!viewDescriptor.isReadOnly()) {
           IView<SComponent> editorView = createView(columnViewDescriptor,
               actionHandler, locale);
+          editorView.getConnector().resetReadabilityGates();
+          editorView.getConnector().resetWritabilityGates();
           if (editorView.getConnector().getParentConnector() == null) {
             editorView.getConnector().setParentConnector(connector);
           }

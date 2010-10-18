@@ -32,6 +32,7 @@ import javax.security.auth.Subject;
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
@@ -118,6 +119,14 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  public void resetReadabilityGates() {
+    readabilityGates = null;
+    readabilityChange();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
       valueChangeSupport.addValueChangeListener(listener);
@@ -137,6 +146,14 @@ public abstract class AbstractValueConnector extends AbstractConnector
     writabilityGates.add(gate);
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
         getWritabilityGatesListener());
+    writabilityChange();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void resetWritabilityGates() {
+    writabilityGates = null;
     writabilityChange();
   }
 
@@ -430,9 +447,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
           setConnecteeValue(aValue);
         } else {
           try {
-            Object adaptedValue = expectedType.getConstructor(
-                new Class<?>[] {String.class}).newInstance(
-                new Object[] {aValue.toString()});
+            Object adaptedValue = expectedType.getConstructor(new Class<?>[] {
+              String.class
+            }).newInstance(new Object[] {
+              aValue.toString()
+            });
             setConnecteeValue(adaptedValue);
           } catch (IllegalArgumentException ex) {
             throw new ConnectorBindingException(ex);
@@ -756,7 +775,13 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   private void bindModelGates(Collection<IGate> gates) {
     if (gates != null) {
-      IValueConnector connectorToListenTo = getComponentConnector(this);
+      IValueConnector connectorToListenTo;
+      if (getModelDescriptor() instanceof IPropertyDescriptor) {
+        // to avoid misbinding on reference property connectors
+        connectorToListenTo = getComponentConnector(getParentConnector());
+      } else {
+        connectorToListenTo = getComponentConnector(this);
+      }
       if (connectorToListenTo != null) {
         for (IGate gate : gates) {
           if (gate instanceof IModelAware) {

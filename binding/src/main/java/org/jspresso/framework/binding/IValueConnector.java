@@ -58,6 +58,11 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   void addReadabilityGate(IGate gate);
 
   /**
+   * Removes all readability gates.
+   */
+  void resetReadabilityGates();
+
+  /**
    * Adds a new Connector listener to this connector.
    * 
    * @param listener
@@ -73,6 +78,11 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    *          the new gate to add.
    */
   void addWritabilityGate(IGate gate);
+
+  /**
+   * Removes all readability gates.
+   */
+  void resetWritabilityGates();
 
   /**
    * This method is called whenever this model connector has been bound to a

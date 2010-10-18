@@ -151,6 +151,8 @@ package org.jspresso.framework.view.flex {
     private var _remoteValueSorter:RemoteValueSorter;
     private var _timeFormatter:DateFormatter;
     private var _passwordFormatter:PasswordFormatter;
+    
+    private var _lastActionTimestamp:Date = new Date();
 
     public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry,
                                            actionHandler:IActionHandler,
@@ -234,14 +236,10 @@ package org.jspresso.framework.view.flex {
       applyComponentStyle(component, remoteComponent);
       if(remoteComponent.preferredSize) {
         if(remoteComponent.preferredSize.width > 0) {
-          //component.minWidth = remoteComponent.preferredSize.width;
           component.width = remoteComponent.preferredSize.width;
-          //component.maxWidth = remoteComponent.preferredSize.width;
         }
         if(remoteComponent.preferredSize.height > 0) {
-          //component.minHeight = remoteComponent.preferredSize.height;
           component.height = remoteComponent.preferredSize.height;
-          //component.maxHeight = remoteComponent.preferredSize.height;
         }
       }
       if(registerState) {
@@ -583,7 +581,6 @@ package org.jspresso.framework.view.flex {
     protected function createActionField(remoteActionField:RActionField):UIComponent {
       var actionField:HBox = new HBox();
       actionField.setStyle("verticalAlign","middle");
-      var maxWidth:int = 0;
       actionField.regenerateStyleCache(false);
       var hGap:int = actionField.getStyle("horizontalGap");
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
@@ -596,7 +593,6 @@ package org.jspresso.framework.view.flex {
         textField.name = "tf";
         actionField.addChild(textField);
         sizeMaxComponentWidth(textField, remoteActionField);
-        maxWidth += textField.maxWidth;
       }
       var actionComponents:Array = new Array();
       for(var i:int = 0; i < remoteActionField.actionLists.length; i++) {
@@ -609,11 +605,8 @@ package org.jspresso.framework.view.flex {
 
           actionField.addChild(actionComponent);
           actionComponents.push(actionComponent);
-          maxWidth += actionComponent.width;
-          maxWidth += hGap;
         }
       }
-      actionField.maxWidth = maxWidth;
       bindActionField(actionField, textField, remoteActionField.state, (remoteActionField.actionLists[0] as RActionList).actions[0], actionComponents);
       return actionField;
     }
@@ -726,7 +719,6 @@ package org.jspresso.framework.view.flex {
             width = tr.length;
           }
         }
-        //width += 8;
         sizeMaxComponentWidth(comboBox, remoteComboBox, width);
         comboBox.maxWidth += 45;
         return comboBox;
@@ -1170,9 +1162,6 @@ package org.jspresso.framework.view.flex {
         componentCell.percentWidth=100.0;
         componentCell.percentHeight=100.0;
         componentCell.minWidth = 0;
-//        component.percentHeight = 100.0;
-//        componentsRow.setStyle("borderStyle","solid");
-//        componentsRow.setStyle("borderColor","0xAA0099");
         if(  rComponent is RTable
           || rComponent is RTextArea
           || rComponent is RList
@@ -1995,7 +1984,11 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(updateButtonState, remoteAction, "enabled", true);
 		  getRemotePeerRegistry().register(remoteAction);
 		  button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):void {
-		    _actionHandler.execute(remoteAction);
+        if ((new Date()).time - _lastActionTimestamp.time < 400) {
+          return;
+        }
+        _lastActionTimestamp = new Date();
+        _actionHandler.execute(remoteAction);
 		  });
       return button;
     }
@@ -2134,6 +2127,7 @@ package org.jspresso.framework.view.flex {
       if(expectedCharCount < charCount) {
         charCount = expectedCharCount;
       }
+      charCount += 2;
       var w:int = component.measureText(TEMPLATE_CHAR).width * charCount;
       component.maxWidth = w;
     }

@@ -1823,6 +1823,8 @@ public class DefaultSwingViewFactory extends
 
         IView<JComponent> editorView = createView(columnViewDescriptor,
             actionHandler, locale);
+        editorView.getConnector().resetReadabilityGates();
+        editorView.getConnector().resetWritabilityGates();
         if (editorView.getConnector().getParentConnector() == null) {
           editorView.getConnector().setParentConnector(connector);
         }
