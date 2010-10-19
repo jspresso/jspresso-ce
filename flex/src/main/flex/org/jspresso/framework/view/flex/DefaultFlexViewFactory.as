@@ -309,7 +309,7 @@ package org.jspresso.framework.view.flex {
       slideBar.startScrollingEvent= MouseEvent.MOUSE_OVER;
       slideBar.stopScrollingEvent= MouseEvent.MOUSE_OUT;
       component.addEventListener(FlexEvent.CREATION_COMPLETE, function(event:FlexEvent):void {
-        slideBar.height = (event.currentTarget as ApplicationControlBar).measuredHeight;
+        slideBar.height = (event.currentTarget as UIComponent).measuredHeight;
         slideBar.minHeight = slideBar.height;
         slideBar.maxHeight = slideBar.height;
       });

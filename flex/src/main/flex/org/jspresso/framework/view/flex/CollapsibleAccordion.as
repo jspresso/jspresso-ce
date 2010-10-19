@@ -103,6 +103,7 @@ package org.jspresso.framework.view.flex
     private var leftCloseIcon : Class;
     
     private var _historyManagementEnabled:Boolean = false;
+    private var _drawerOpAllowed:Boolean;
     
     public function CollapsibleAccordion()
     {
@@ -111,6 +112,7 @@ package org.jspresso.framework.view.flex
       buttonDict = new ArrayCollection();
       verticalScrollPolicy = ScrollPolicy.OFF;
       horizontalScrollPolicy = ScrollPolicy.OFF;
+      _drawerOpAllowed = true;
     }
     
     private function onCreateComplete( event : FlexEvent ) : void
@@ -268,9 +270,12 @@ package org.jspresso.framework.view.flex
     
     private function closeDrawer( event : MouseEvent ) : void
     {
-      close = true;
-      //let everyone know we are about to close the drawer
-      dispatchEvent(new Event("closeDrawerBegin"));
+      if(this._drawerOpAllowed) {
+        this._drawerOpAllowed = false;
+        close = true;
+        //let everyone know we are about to close the drawer
+        dispatchEvent(new Event("closeDrawerBegin"));
+      }
     }
     
     private function onAccordionChange( event : IndexChangedEvent ) : void
@@ -401,7 +406,7 @@ package org.jspresso.framework.view.flex
           Button(buttonDict[i]).setStyle("textAlign", "right");
         }
       }
-      
+      this._drawerOpAllowed = true;
     }
     
     private function onOpenEffectEnd( event : EffectEvent ) : void
@@ -418,6 +423,7 @@ package org.jspresso.framework.view.flex
       showButtons( false );
       //let everyone know we are completely open
       dispatchEvent(new Event("openDrawerComplete"));
+      this._drawerOpAllowed = true;
     }
     
     private function showButtons( show : Boolean ) : void
@@ -440,17 +446,20 @@ package org.jspresso.framework.view.flex
     
     private function onButtonClick( event : MouseEvent ) : void
     {
-      var oldSelectedIndex:int = accordion.selectedIndex;
-      accordion.selectedChild =  (( event.currentTarget as Button ).data as Container );
-      close = !close;
-      
-      var indexEvent:IndexChangedEvent = new IndexChangedEvent(IndexChangedEvent.CHANGE);
-      indexEvent.relatedObject = accordion.selectedChild;
-      indexEvent.oldIndex = oldSelectedIndex;
-      indexEvent.newIndex = accordion.selectedIndex;
-      dispatchEvent(indexEvent);
-
-      dispatchEvent(new Event("openDrawerBegin"));
+      if(this._drawerOpAllowed) {
+        this._drawerOpAllowed = false;
+        var oldSelectedIndex:int = accordion.selectedIndex;
+        accordion.selectedChild =  (( event.currentTarget as Button ).data as Container );
+        close = !close;
+        
+        var indexEvent:IndexChangedEvent = new IndexChangedEvent(IndexChangedEvent.CHANGE);
+        indexEvent.relatedObject = accordion.selectedChild;
+        indexEvent.oldIndex = oldSelectedIndex;
+        indexEvent.newIndex = accordion.selectedIndex;
+        dispatchEvent(indexEvent);
+  
+        dispatchEvent(new Event("openDrawerBegin"));
+      }
     }
     
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
