@@ -1179,6 +1179,9 @@ public abstract class AbstractBackendController extends AbstractController
       boolean dryRun, Set<IComponent> clearedEntities)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
+    if (componentOrProxy == null) {
+      return;
+    }
     IComponent component;
     component = unwrapProxy(componentOrProxy);
     if (clearedEntities.contains(component)) {
