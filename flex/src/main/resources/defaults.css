@@ -22,14 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ***********************************************************************/
 
-@font-face {
-   src: local("Arial");
-   fontFamily: Arial;
-   fontWeight: bold;
-}
-
 .drawerButton {
   fontFamily: Arial;
+  fontWeight: bold;
   fontSize: 12;
   textAlign: left;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
@@ -43,6 +38,7 @@ THE SOFTWARE.
 
 .drawerAccordionHeader {
   fontFamily: Arial;
+  fontWeight: bold;
   fontSize: 12;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
   cornerRadius: 4;
