@@ -257,8 +257,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    super.propertyChange(evt);
     fireModelChange(evt.getOldValue(), evt.getNewValue());
+    super.propertyChange(evt);
   }
 
   /**
