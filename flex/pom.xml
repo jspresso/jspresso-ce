@@ -47,6 +47,15 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-compile-swc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>compile-swc</goal>
+            </goals>
+          </execution>
+        </executions>
         <!--
         <executions>
           <execution>
