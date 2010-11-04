@@ -3,34 +3,22 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true">
 
-  <!--
-    Swing root application context for the Jspresso framework.
-  -->
+  <!-- Swing root application context for the Jspresso framework. -->
 
-  <!--
-    The implementation used as ConnectorFactory.
-  -->
+  <!-- The implementation used as ConnectorFactory. -->
   <bean id="connectorFactory" class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
 
-  <!--
-    The implementation used as ListSelectionModelBinder.
-  -->
+  <!-- The implementation used as ListSelectionModelBinder. -->
   <bean id="listSelectionModelBinder" class="org.jspresso.framework.binding.swing.DefaultListSelectionModelBinder" />
 
-  <!--
-    The implementation used as TreeSelectionModelBinder.
-  -->
+  <!-- The implementation used as TreeSelectionModelBinder. -->
   <bean id="treeSelectionModelBinder" class="org.jspresso.framework.binding.swing.DefaultTreeSelectionModelBinder" />
 
-  <!--
-    Action beans
-  -->
+  <!-- Action beans -->
   <bean id="chartAction" abstract="true" parent="abstractChartAction"
     class="org.jspresso.framework.application.charting.frontend.action.standalone.DisplayChartAction" />
 
-  <!--
-    The implementation used as view factory.
-  -->
+  <!-- The implementation used as view factory. -->
   <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.swing.SwingIconFactory" scope="prototype" />
 
   <bean id="actionFactory" parent="actionFactoryBase" class="org.jspresso.framework.view.swing.SwingActionFactory"
@@ -48,17 +36,18 @@
 
   <bean id="displayReportAction" class="org.jspresso.framework.application.printing.frontend.action.swing.DisplayJasperReportAction" />
 
-  <bean id="viewFactory" class="org.jspresso.framework.view.swing.DefaultSwingViewFactory" parent="viewFactoryBase"
-    scope="prototype">
+  <bean id="swingViewFactory" abstract="true" class="org.jspresso.framework.view.swing.DefaultSwingViewFactory" parent="viewFactoryBase" />
+
+  <bean id="viewFactory" parent="swingViewFactory" scope="prototype">
     <property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
     <property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
   </bean>
 
-  <!--
-    The controllers.
-  -->
-  <bean id="frontController" abstract="true" parent="abstractFrontController"
-    class="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController">
-  </bean>
+  <!-- The controllers. -->
+  <bean id="swingFrontController" abstract="true" parent="abstractFrontController"
+    class="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController" />
+
+  <bean id="frontController" abstract="true" parent="swingFrontController" scope="prototype" />
+
 </beans>
 

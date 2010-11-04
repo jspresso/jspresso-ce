@@ -3,31 +3,21 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true">
 
-  <!--
-    Remote root application context for the Jspresso framework.
-  -->
+  <!-- Remote root application context for the Jspresso framework. -->
 
-  <!--
-    The implementation used as ConnectorFactory.
-  -->
+  <!-- The implementation used as ConnectorFactory. -->
   <bean id="connectorFactory" class="org.jspresso.framework.binding.remote.RemoteConnectorFactory" scope="prototype">
     <property name="guidGenerator" ref="guidGenerator" />
   </bean>
 
-  <!--
-    Remote peer registry
-  -->
+  <!-- Remote peer registry -->
   <bean id="remotePeerRegistry" class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry" scope="prototype" />
 
-  <!--
-    Action beans
-  -->
+  <!-- Action beans -->
   <bean id="chartAction" abstract="true" parent="abstractChartAction"
     class="org.jspresso.framework.application.charting.frontend.action.server.DisplayChartAction" />
 
-  <!--
-    The implementation used as view factory.
-  -->
+  <!-- The implementation used as view factory. -->
   <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.remote.RemoteIconFactory"
     scope="prototype">
     <property name="guidGenerator" ref="guidGenerator" />
@@ -50,16 +40,18 @@
 
   <bean id="displayReportAction" class="org.jspresso.framework.application.printing.frontend.action.remote.DisplayJasperReportAction" />
 
-  <bean id="viewFactory" class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory" parent="viewFactoryBase"
-    scope="prototype">
+  <bean id="remoteviewFactory" abstract="true" class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
+    parent="viewFactoryBase" />
+
+  <bean id="viewFactory" parent="remoteViewFactory" scope="prototype">
     <property name="guidGenerator" ref="guidGenerator" />
   </bean>
 
-  <!--
-    The controllers.
-  -->
-  <bean id="frontController" abstract="true" parent="abstractFrontController"
-    class="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController">
+  <!-- The controllers. -->
+  <bean id="remoteFrontController" abstract="true" parent="abstractFrontController"
+    class="org.jspresso.framework.application.frontend.controller.remote.DefaultRemoteController" />
+
+  <bean id="frontController" abstract="true" parent="remoteFrontController" scope="prototype">
     <property name="remotePeerRegistry" ref="remotePeerRegistry" />
     <property name="guidGenerator" ref="guidGenerator" />
   </bean>
