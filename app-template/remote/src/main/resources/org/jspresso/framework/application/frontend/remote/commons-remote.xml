@@ -40,7 +40,7 @@
 
   <bean id="displayReportAction" class="org.jspresso.framework.application.printing.frontend.action.remote.DisplayJasperReportAction" />
 
-  <bean id="remoteviewFactory" abstract="true" class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
+  <bean id="remoteViewFactory" abstract="true" class="org.jspresso.framework.view.remote.DefaultRemoteViewFactory"
     parent="viewFactoryBase" />
 
   <bean id="viewFactory" parent="remoteViewFactory" scope="prototype">
