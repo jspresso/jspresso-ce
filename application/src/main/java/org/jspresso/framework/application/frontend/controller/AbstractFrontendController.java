@@ -795,10 +795,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected CallbackHandler createLoginCallbackHandler() {
     UsernamePasswordHandler uph = new UsernamePasswordHandler();
     String[] savedUserPass = decodeUserPass(readPref(UP_KEY));
-    if (savedUserPass != null && savedUserPass.length == 2) {
+    if (savedUserPass != null && savedUserPass.length == 2
+        && savedUserPass[0] != null) {
       uph.setUsername(savedUserPass[0]);
       uph.setPassword(savedUserPass[1]);
       uph.setRememberMe(true);
+    } else {
+      uph.setUsername(null);
+      uph.setPassword(null);
+      uph.setRememberMe(false);
     }
     return uph;
   }
@@ -821,6 +826,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the value of the preference to be stored.
    */
   protected abstract void storePref(String prefKey, String prefValue);
+
+  /**
+   * Deletes a user preference.
+   * 
+   * @param prefKey
+   *          the key under which the preference is stored.
+   */
+  protected abstract void deletePref(String prefKey);
 
   /**
    * Creates and binds the login view.
@@ -1104,6 +1117,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       UsernamePasswordHandler uph = (UsernamePasswordHandler) getLoginCallbackHandler();
       if (uph.isRememberMe()) {
         storePref(UP_KEY, encodeUserPass(uph.getUsername(), uph.getPassword()));
+      } else {
+        deletePref(UP_KEY);
       }
       uph.clear();
     }

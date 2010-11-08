@@ -810,4 +810,18 @@ public class DefaultUlcController extends
       HttpRequestHolder.getServletResponse().addCookie(cookie);
     }
   }
+
+  /**
+   * Deletes the cookie storing the preference.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void deletePref(String prefKey) {
+    if (HttpRequestHolder.getServletResponse() != null) {
+      Cookie cookie = new Cookie(prefKey, "");
+      cookie.setMaxAge(0);
+      HttpRequestHolder.getServletResponse().addCookie(cookie);
+    }
+  }
 }

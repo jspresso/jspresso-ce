@@ -341,4 +341,13 @@ public class MockSwingController extends
   protected void storePref(String prefKey, String prefValue) {
     // NO-OP
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @SuppressWarnings("unused")
+  protected void deletePref(String prefKey) {
+    // NO-OP
+  }
 }

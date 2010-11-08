@@ -663,4 +663,16 @@ public class DefaultWingsController extends
     cookie.setMaxAge(Integer.MAX_VALUE);
     HttpRequestHolder.getServletResponse().addCookie(cookie);
   }
+
+  /**
+   * Deletes the cookie storing the preference.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void deletePref(String prefKey) {
+    Cookie cookie = new Cookie(prefKey, "");
+    cookie.setMaxAge(0);
+    HttpRequestHolder.getServletResponse().addCookie(cookie);
+  }
 }

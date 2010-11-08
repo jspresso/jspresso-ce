@@ -1017,4 +1017,14 @@ public class DefaultSwingController extends
     prefs = prefs.node(getName());
     prefs.put(prefKey, prefValue);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void deletePref(String prefKey) {
+    Preferences prefs = Preferences.userNodeForPackage(getClass());
+    prefs = prefs.node(getName());
+    prefs.remove(prefKey);
+  }
 }
