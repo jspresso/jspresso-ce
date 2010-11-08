@@ -59,11 +59,11 @@ import com.ulcjava.environment.jnlp.client.AbstractJnlpLauncher;
  */
 public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
 
-  private static final String   USAGE_TEXT      = "JNLP file paramters: \n"
-                                                    + "\t<urlString> the ULC application URL string\n"
-                                                    + "\t<keepAliveInterval> the keep alive interval\n"
-                                                    + "\t[ <logLevel> ] the log level (optional)\n"
-                                                    + "\t{ -<key> <value> } the user parameters (optional, multiple allowed)\n";
+  private static final String   USAGE_TEXT = "JNLP file paramters: \n"
+                                               + "\t<urlString> the ULC application URL string\n"
+                                               + "\t<keepAliveInterval> the keep alive interval\n"
+                                               + "\t[ <logLevel> ] the log level (optional)\n"
+                                               + "\t{ -<key> <value> } the user parameters (optional, multiple allowed)\n";
   private ResourceBundle        bundle;
   private int                   keepAliveInterval;
   private List<IMessageService> messageHandlers;
@@ -208,10 +208,10 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
       @Override
       public void sessionError(UISession session, Throwable reason) {
         if (reason instanceof ConnectorException) {
-          int answer = JOptionPane.showConfirmDialog(null, bundle
-              .getString("error.connection.description"), bundle
-              .getString("error.connection"), JOptionPane.OK_CANCEL_OPTION,
-              JOptionPane.WARNING_MESSAGE);
+          int answer = JOptionPane.showConfirmDialog(null,
+              bundle.getString("error.connection.description"),
+              bundle.getString("error.connection"),
+              JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
           if (answer == JOptionPane.OK_OPTION) {
             start();
           }
@@ -242,7 +242,79 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
     if (splashUrl != null) {
       SplashWindow.splash(UrlHelper.createURL(splashUrl));
     }
-    return start(new ServletConnector(new CookieRequestPropertyStore(url), url,
-        keepAliveInterval), userParameters);
+    return start(new ServletConnector(
+    // new AppletRequestPropertyStore() {
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public void handleHeaderFields(KeyValuePair[] kvps) {
+    // CookieHandler handler = CookieHandler.getDefault();
+    // if (handler != null) {
+    // for (int i = 0; i < kvps.length; i++) {
+    // KeyValuePair kvp = kvps[i];
+    // Map<String, List<String>> headers = new HashMap<String, List<String>>();
+    // List<String> values = new ArrayList<String>();
+    // if ("Set-Cookie".equals(kvp.getKey())
+    // && kvp.getValue().toUpperCase().indexOf("JSESSIONID") < 0) {
+    // values.add(kvp.getValue());
+    // headers.put("Cookie", values);
+    // try {
+    // System.out.println("ADDING COOKIE URL    : "
+    // + url.toURI().toString());
+    // System.out.println("ADDING COOKIE values : " + values);
+    // handler.put(url.toURI(), headers);
+    // } catch (IOException ex) {
+    // ex.printStackTrace();
+    // } catch (URISyntaxException ex) {
+    // ex.printStackTrace();
+    // }
+    // }
+    // }
+    // }
+    // super.handleHeaderFields(kvps);
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public void handleConnection(URLConnection conn) {
+    // super.handleConnection(conn);
+    // CookieHandler handler = CookieHandler.getDefault();
+    // if (handler != null) {
+    // String cookieValue = null;
+    // Map<String, List<String>> headers = null;
+    // try {
+    // headers = handler.get(url.toURI(),
+    // new HashMap<String, List<String>>());
+    // } catch (IOException ex) {
+    // ex.printStackTrace();
+    // } catch (URISyntaxException ex) {
+    // ex.printStackTrace();
+    // }
+    // if (headers != null) {
+    // List<String> values = headers.get("Cookie");
+    // for (Iterator<String> iter = values.iterator(); iter.hasNext();) {
+    // String v = iter.next();
+    // if (v.toUpperCase().indexOf("JSESSIONID") < 0) {
+    // if (cookieValue == null) {
+    // cookieValue = v;
+    // } else {
+    // cookieValue = cookieValue + ";" + v;
+    // }
+    // }
+    // }
+    // }
+    // if (cookieValue != null) {
+    // System.out.println("COOKIE VALUE : " + cookieValue);
+    // }
+    // setRequestProperty(new KeyValuePair("Cookie", cookieValue));
+    // }
+    // }
+    // },
+        new CookieRequestPropertyStore(url), url, keepAliveInterval),
+        userParameters);
   }
 }
