@@ -27,6 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This filter needs to be installed on any broker servlet so that iot keeps
@@ -37,7 +38,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class HttpRequestHolder implements Filter {
 
-  private static final ThreadLocal<HttpServletRequest> CURRENT_HTTP_REQUEST = new ThreadLocal<HttpServletRequest>();
+  private static final ThreadLocal<HttpServletRequest>  CURRENT_HTTP_REQUEST  = new ThreadLocal<HttpServletRequest>();
+  private static final ThreadLocal<HttpServletResponse> CURRENT_HTTP_RESPONSE = new ThreadLocal<HttpServletResponse>();
 
   /**
    * Gets the current servlet request.
@@ -59,6 +61,25 @@ public class HttpRequestHolder implements Filter {
   }
 
   /**
+   * Gets the current servlet response.
+   * 
+   * @return the current servlet response.
+   */
+  public static HttpServletResponse getServletResponse() {
+    return CURRENT_HTTP_RESPONSE.get();
+  }
+
+  /**
+   * Assigns the servlet response for this current thread.
+   * 
+   * @param response
+   *          the servlet response.
+   */
+  public static void setServletResponse(HttpServletResponse response) {
+    CURRENT_HTTP_RESPONSE.set(response);
+  }
+
+  /**
    * {@inheritDoc}
    */
   public void destroy() {
@@ -72,6 +93,7 @@ public class HttpRequestHolder implements Filter {
       FilterChain chain) throws IOException, ServletException {
     if (request instanceof HttpServletRequest) {
       setServletRequest((HttpServletRequest) request);
+      setServletResponse((HttpServletResponse) response);
     }
     chain.doFilter(request, response);
     setServletRequest(null);

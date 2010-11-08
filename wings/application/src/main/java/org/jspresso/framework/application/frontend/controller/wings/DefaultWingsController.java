@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
@@ -41,6 +42,7 @@ import org.jspresso.framework.gui.wings.components.SErrorDialog;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.security.LoginUtils;
 import org.jspresso.framework.util.wings.WingsUtil;
@@ -106,8 +108,8 @@ public class DefaultWingsController extends
 
     StringBuffer flashVars = new StringBuffer();
     for (Map.Entry<String, String> flashVar : flashContext.entrySet()) {
-      flashVars.append("&").append(flashVar.getKey()).append("=").append(
-          flashVar.getValue());
+      flashVars.append("&").append(flashVar.getKey()).append("=")
+          .append(flashVar.getValue());
     }
     int width = 600;
     int height = 600;
@@ -290,9 +292,9 @@ public class DefaultWingsController extends
     }
     SComponent sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
-      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .toHtml(HtmlHelper
-              .emphasis(HtmlHelper.escapeForHTML(ex.getMessage()))),
+      SOptionPane.showMessageDialog(sourceComponent,
+          HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper.escapeForHTML(ex
+              .getMessage()))),
           getTranslationProvider().getTranslation("error", getLocale()),
           SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof BusinessException) {
@@ -306,13 +308,11 @@ public class DefaultWingsController extends
       SOptionPane
           .showMessageDialog(
               sourceComponent,
-              HtmlHelper
-                  .toHtml(HtmlHelper
-                      .emphasis(HtmlHelper
-                          .escapeForHTML(getTranslationProvider()
-                              .getTranslation(
-                                  refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
-                                  getLocale())))), getTranslationProvider()
+              HtmlHelper.toHtml(HtmlHelper.emphasis(HtmlHelper
+                  .escapeForHTML(getTranslationProvider()
+                      .getTranslation(
+                          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) ex),
+                          getLocale())))), getTranslationProvider()
                   .getTranslation("error", getLocale()),
               SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof ConcurrencyFailureException) {
@@ -325,8 +325,9 @@ public class DefaultWingsController extends
     } else {
       ex.printStackTrace();
       SOptionPane.showMessageDialog(sourceComponent, String.valueOf(ex
-          .getMessage()), getTranslationProvider().getTranslation("error",
-          getLocale()), SOptionPane.ERROR_MESSAGE);
+          .getMessage()),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          SOptionPane.ERROR_MESSAGE);
       SErrorDialog dialog = SErrorDialog.createInstance(sourceComponent,
           getTranslationProvider(), getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
@@ -604,8 +605,9 @@ public class DefaultWingsController extends
     actionPanel.add(buttonBox, SBorderLayout.EAST);
 
     SPanel mainPanel = new SPanel(new SBorderLayout());
-    mainPanel.add(new SLabel(getTranslationProvider().getTranslation(
-        LoginUtils.CRED_MESSAGE, getLocale())), SBorderLayout.NORTH);
+    mainPanel.add(
+        new SLabel(getTranslationProvider().getTranslation(
+            LoginUtils.CRED_MESSAGE, getLocale())), SBorderLayout.NORTH);
     mainPanel.add(loginView.getPeer(), SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
     dialog.add(mainPanel);
@@ -630,5 +632,34 @@ public class DefaultWingsController extends
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
           getLocale()));
     }
+  }
+
+  /**
+   * Reads the preference from a cookie.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String readPref(String prefKey) {
+    Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
+    if (cookies != null) {
+      for (int i = 0; i < cookies.length; i++) {
+        if (prefKey.equals(cookies[i].getName())) {
+          return cookies[i].getValue();
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Stores the preference in a cookie.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void storePref(String prefKey, String prefValue) {
+    Cookie cookie = new Cookie(prefKey, prefValue);
+    HttpRequestHolder.getServletResponse().addCookie(cookie);
   }
 }

@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -72,6 +74,7 @@ import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
@@ -857,4 +860,34 @@ public class DefaultRemoteController extends
   public void remotePeerRemoved(String peerGuid) {
     removedPeersGuids.add(peerGuid);
   }
+
+  /**
+   * Reads the preference from a cookie.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String readPref(String prefKey) {
+    Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
+    if (cookies != null) {
+      for (int i = 0; i < cookies.length; i++) {
+        if (prefKey.equals(cookies[i].getName())) {
+          return cookies[i].getValue();
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Stores the preference in a cookie.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void storePref(String prefKey, String prefValue) {
+    Cookie cookie = new Cookie(prefKey, prefValue);
+    HttpRequestHolder.getServletResponse().addCookie(cookie);
+  }
+
 }

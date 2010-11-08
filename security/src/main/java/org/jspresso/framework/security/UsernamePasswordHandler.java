@@ -32,8 +32,9 @@ import javax.security.auth.callback.PasswordCallback;
  */
 public class UsernamePasswordHandler implements CallbackHandler {
 
-  private String password;
-  private String username;
+  private String  password;
+  private String  username;
+  private boolean rememberMe;
 
   /**
    * Resets all data.
@@ -101,5 +102,23 @@ public class UsernamePasswordHandler implements CallbackHandler {
    */
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  /**
+   * Sets the rememberMe.
+   * 
+   * @param rememberMe the rememberMe to set.
+   */
+  public void setRememberMe(boolean rememberMe) {
+    this.rememberMe = rememberMe;
+  }
+
+  /**
+   * Gets the rememberMe.
+   * 
+   * @return the rememberMe.
+   */
+  public boolean isRememberMe() {
+    return rememberMe;
   }
 }

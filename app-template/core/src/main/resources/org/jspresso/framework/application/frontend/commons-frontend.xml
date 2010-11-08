@@ -775,16 +775,7 @@
   <bean id="loginViewDescriptor" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
     <property name="name" value="login.name" />
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/password-48x48.png" />
-    <property name="propertyViewDescriptors">
-      <list>
-        <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
-          <property name="name" value="username" />
-        </bean>
-        <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
-          <property name="name" value="password" />
-        </bean>
-      </list>
-    </property>
+    <property name="columnCount" value="1"/>
     <property name="modelDescriptor">
       <bean class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor">
         <constructor-arg value="org.jspresso.framework.security.UsernamePasswordHandler" />
@@ -797,6 +788,9 @@
             <bean class="org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor">
               <property name="name" value="password" />
               <property name="maxLength" value="64" />
+            </bean>
+            <bean class="org.jspresso.framework.model.descriptor.basic.BasicBooleanPropertyDescriptor">
+              <property name="name" value="rememberMe" />
             </bean>
           </list>
         </property>

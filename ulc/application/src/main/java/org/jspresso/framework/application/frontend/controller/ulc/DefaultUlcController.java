@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
@@ -37,6 +39,7 @@ import org.jspresso.framework.util.exception.BusinessException;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.resources.IResource;
@@ -682,7 +685,7 @@ public class DefaultUlcController extends
 
     int screenRes = ClientContext.getScreenResolution();
     dialog.setSize(new com.ulcjava.base.application.util.Dimension(
-        screenRes * 7 / 2, screenRes * 3 / 2));
+        screenRes * 7 / 2, screenRes * 9 / 5));
     dialog.pack();
     UlcUtil.centerInParent(dialog);
     dialog.setVisible(true);
@@ -775,6 +778,35 @@ public class DefaultUlcController extends
     public void internalFrameOpened(
         @SuppressWarnings("unused") ExtendedInternalFrameEvent event) {
       displayWorkspace(workspaceName);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String readPref(String prefKey) {
+    if (HttpRequestHolder.getServletRequest() != null) {
+      Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
+      if (cookies != null) {
+        for (int i = 0; i < cookies.length; i++) {
+          if (prefKey.equals(cookies[i].getName())) {
+            return cookies[i].getValue();
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void storePref(String prefKey, String prefValue) {
+    if (HttpRequestHolder.getServletResponse() != null) {
+      Cookie cookie = new Cookie(prefKey, prefValue);
+      HttpRequestHolder.getServletResponse().addCookie(cookie);
     }
   }
 }

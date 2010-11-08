@@ -323,4 +323,22 @@ public class MockSwingController extends
   protected CallbackHandler createLoginCallbackHandler() {
     return null;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @SuppressWarnings("unused")
+  protected String readPref(String prefKey) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @SuppressWarnings("unused")
+  protected void storePref(String prefKey, String prefValue) {
+    // NO-OP
+  }
 }

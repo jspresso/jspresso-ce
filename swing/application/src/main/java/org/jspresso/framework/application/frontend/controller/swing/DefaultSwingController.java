@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.prefs.Preferences;
 
 import javax.swing.Action;
 import javax.swing.Box;
@@ -991,5 +992,29 @@ public class DefaultSwingController extends
         @SuppressWarnings("unused") InternalFrameEvent e) {
       displayWorkspace(workspaceName);
     }
+  }
+
+  /**
+   * Uses the java preferences to read the preference.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String readPref(String prefKey) {
+    Preferences prefs = Preferences.userNodeForPackage(getClass());
+    prefs = prefs.node(getName());
+    return prefs.get(prefKey, null);
+  }
+
+  /**
+   * Uses the java preferences to store the preference.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void storePref(String prefKey, String prefValue) {
+    Preferences prefs = Preferences.userNodeForPackage(getClass());
+    prefs = prefs.node(getName());
+    prefs.put(prefKey, prefValue);
   }
 }

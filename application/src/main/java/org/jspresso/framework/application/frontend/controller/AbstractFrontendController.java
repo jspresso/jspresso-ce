@@ -141,6 +141,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private Integer                               frameWidth;
   private Integer                               frameHeight;
 
+  private static final String                   UP_KEY            = "UP_KEY";
+
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
    */
@@ -791,8 +793,33 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return a new login callback handler
    */
   protected CallbackHandler createLoginCallbackHandler() {
-    return new UsernamePasswordHandler();
+    UsernamePasswordHandler uph = new UsernamePasswordHandler();
+    String[] savedUserPass = decodeUserPass(readPref(UP_KEY));
+    if (savedUserPass != null && savedUserPass.length == 2) {
+      uph.setUsername(savedUserPass[0]);
+      uph.setPassword(savedUserPass[1]);
+    }
+    return uph;
   }
+
+  /**
+   * Reads a user preference.
+   * 
+   * @param prefKey
+   *          the key under which the preference as been stored.
+   * @return the stored preference or null.
+   */
+  protected abstract String readPref(String prefKey);
+
+  /**
+   * Stores a user preference.
+   * 
+   * @param prefKey
+   *          the key under which the preference as to be stored.
+   * @param prefValue
+   *          the value of the preference to be stored.
+   */
+  protected abstract void storePref(String prefKey, String prefValue);
 
   /**
    * Creates and binds the login view.
@@ -1073,7 +1100,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected void loginSuccess(Subject subject) {
     if (getLoginCallbackHandler() instanceof UsernamePasswordHandler) {
-      ((UsernamePasswordHandler) getLoginCallbackHandler()).clear();
+      UsernamePasswordHandler uph = (UsernamePasswordHandler) getLoginCallbackHandler();
+      if (uph.isRememberMe()) {
+        storePref(UP_KEY, encodeUserPass(uph.getUsername(), uph.getPassword()));
+      }
+      uph.clear();
     }
     getBackendController().getApplicationSession().setSubject(subject);
     String userPreferredLanguageCode = (String) getBackendController()
@@ -1303,5 +1334,53 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setSecondaryActionMap(ActionMap secondaryActionMap) {
     this.secondaryActionMap = secondaryActionMap;
+  }
+
+  /**
+   * Encodes username / password into a string for storing. The stored string is
+   * used later for "remember me" function.
+   * 
+   * @param username
+   *          the user name.
+   * @param password
+   *          the user password;
+   * @return the encoded username/password string.
+   */
+  protected String encodeUserPass(String username, String password) {
+    StringBuffer buff = new StringBuffer();
+    if (username != null) {
+      buff.append(username);
+    }
+    buff.append("§");
+    if (password != null) {
+      buff.append(password);
+    }
+    return buff.toString();
+  }
+
+  /**
+   * Decodes username / password from a string for restoring into original
+   * values. This is used in "remember me" function.
+   * 
+   * @param encodedUserPass
+   *          the encoded username/password string.
+   * @return an string array of username/password strings
+   */
+  protected String[] decodeUserPass(String encodedUserPass) {
+    String[] userPass = new String[2];
+    if (encodedUserPass != null) {
+      String[] temp = encodedUserPass.split("§");
+      if (temp.length == 2) {
+        userPass[0] = temp[0];
+        userPass[1] = temp[1];
+      } else if (temp.length == 1) {
+        if (encodedUserPass.indexOf("§") == 0) {
+          userPass[1] = temp[0];
+        } else {
+          userPass[0] = temp[0];
+        }
+      }
+    }
+    return userPass;
   }
 }
