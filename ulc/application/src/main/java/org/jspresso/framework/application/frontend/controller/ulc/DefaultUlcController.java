@@ -806,6 +806,7 @@ public class DefaultUlcController extends
   protected void storePref(String prefKey, String prefValue) {
     if (HttpRequestHolder.getServletResponse() != null) {
       Cookie cookie = new Cookie(prefKey, prefValue);
+      cookie.setMaxAge(Integer.MAX_VALUE);
       HttpRequestHolder.getServletResponse().addCookie(cookie);
     }
   }

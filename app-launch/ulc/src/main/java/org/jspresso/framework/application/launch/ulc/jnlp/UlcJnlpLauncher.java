@@ -47,7 +47,7 @@ import com.ulcjava.base.shared.internal.IllegalArgumentException;
 import com.ulcjava.base.shared.logging.Level;
 import com.ulcjava.base.shared.logging.LogManager;
 import com.ulcjava.base.shared.logging.SimpleLogManager;
-import com.ulcjava.container.servlet.client.CookieRequestPropertyStore;
+import com.ulcjava.container.servlet.client.AppletRequestPropertyStore;
 import com.ulcjava.container.servlet.client.ServletConnector;
 import com.ulcjava.environment.jnlp.client.AbstractJnlpLauncher;
 
@@ -298,6 +298,7 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
     // List<String> values = headers.get("Cookie");
     // for (Iterator<String> iter = values.iterator(); iter.hasNext();) {
     // String v = iter.next();
+    // System.out.println("COOKIE VALUE : " + v);
     // if (v.toUpperCase().indexOf("JSESSIONID") < 0) {
     // if (cookieValue == null) {
     // cookieValue = v;
@@ -308,13 +309,15 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
     // }
     // }
     // if (cookieValue != null) {
-    // System.out.println("COOKIE VALUE : " + cookieValue);
+    // System.out.println("COOKIE VALUE SENT: " + cookieValue);
     // }
     // setRequestProperty(new KeyValuePair("Cookie", cookieValue));
+    // // setRequestProperty(new KeyValuePair("Cookie", "UP_KEY=demo§demo"));
     // }
     // }
     // },
-        new CookieRequestPropertyStore(url), url, keepAliveInterval),
+        /* new CookieRequestPropertyStore(url), */
+        new AppletRequestPropertyStore(), url, keepAliveInterval),
         userParameters);
   }
 }

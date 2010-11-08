@@ -887,6 +887,7 @@ public class DefaultRemoteController extends
   @Override
   protected void storePref(String prefKey, String prefValue) {
     Cookie cookie = new Cookie(prefKey, prefValue);
+    cookie.setMaxAge(Integer.MAX_VALUE);
     HttpRequestHolder.getServletResponse().addCookie(cookie);
   }
 
