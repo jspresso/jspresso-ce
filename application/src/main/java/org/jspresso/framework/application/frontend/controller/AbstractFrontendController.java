@@ -798,6 +798,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (savedUserPass != null && savedUserPass.length == 2) {
       uph.setUsername(savedUserPass[0]);
       uph.setPassword(savedUserPass[1]);
+      uph.setRememberMe(true);
     }
     return uph;
   }
@@ -1353,7 +1354,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     buff.append("§");
     if (password != null) {
-      buff.append(password);
+      // buff.append(password);
     }
     return buff.toString();
   }
@@ -1372,10 +1373,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
       String[] temp = encodedUserPass.split("§");
       if (temp.length == 2) {
         userPass[0] = temp[0];
-        userPass[1] = temp[1];
+        // userPass[1] = temp[1];
       } else if (temp.length == 1) {
         if (encodedUserPass.indexOf("§") == 0) {
-          userPass[1] = temp[0];
+          // userPass[1] = temp[0];
         } else {
           userPass[0] = temp[0];
         }
