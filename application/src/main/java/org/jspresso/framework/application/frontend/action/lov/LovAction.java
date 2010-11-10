@@ -120,12 +120,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     actionHandler.execute(createQueryComponentAction, context);
 
-    if (autoquery && queryPropertyValue != null
-        && !queryPropertyValue.equals("*")) {
+    if (autoquery) {
       actionHandler.execute(findAction, context);
       IQueryComponent queryComponent = (IQueryComponent) context
           .get(IQueryComponent.QUERY_COMPONENT);
-      if (queryComponent.getQueriedComponents() != null
+      if (queryPropertyValue != null && !queryPropertyValue.equals("*")
+          && queryComponent.getQueriedComponents() != null
           && queryComponent.getQueriedComponents().size() == 1) {
         IEntity selectedEntity = getController(context).getBackendController()
             .merge((IEntity) queryComponent.getQueriedComponents().get(0),
