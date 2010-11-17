@@ -142,6 +142,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private Integer                               frameHeight;
 
   private static final String                   UP_KEY            = "UP_KEY";
+  private static final String                   UP_SEP            = "!";
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -1367,7 +1368,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (username != null) {
       buff.append(username);
     }
-    buff.append("§");
+    buff.append(UP_SEP);
     if (password != null) {
       // buff.append(password);
     }
@@ -1385,12 +1386,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected String[] decodeUserPass(String encodedUserPass) {
     String[] userPass = new String[2];
     if (encodedUserPass != null) {
-      String[] temp = encodedUserPass.split("§");
+      String[] temp = encodedUserPass.split(UP_SEP);
       if (temp.length == 2) {
         userPass[0] = temp[0];
         // userPass[1] = temp[1];
       } else if (temp.length == 1) {
-        if (encodedUserPass.indexOf("§") == 0) {
+        if (encodedUserPass.indexOf(UP_SEP) == 0) {
           // userPass[1] = temp[0];
         } else {
           userPass[0] = temp[0];
