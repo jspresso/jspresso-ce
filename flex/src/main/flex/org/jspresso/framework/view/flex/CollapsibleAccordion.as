@@ -453,7 +453,7 @@ package org.jspresso.framework.view.flex
         close = !close;
         
         var indexEvent:IndexChangedEvent = new IndexChangedEvent(IndexChangedEvent.CHANGE);
-        indexEvent.relatedObject = accordion.selectedChild;
+        indexEvent.relatedObject = accordion.selectedChild as DisplayObject;
         indexEvent.oldIndex = oldSelectedIndex;
         indexEvent.newIndex = accordion.selectedIndex;
         dispatchEvent(indexEvent);

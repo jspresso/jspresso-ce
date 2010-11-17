@@ -25,6 +25,10 @@
     </dependency>
     <dependency>
       <groupId>ulc</groupId>
+      <artifactId>ulc-jnlp-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ulc</groupId>
       <artifactId>ulc-base-development</artifactId>
       <optional>true</optional>
     </dependency>

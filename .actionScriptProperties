@@ -7,14 +7,14 @@
     </compilerSourcePath>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
-      <libraryPathEntry kind="3" linkType="1" path="C:/Documents and Settings/Vincent/.m2/repository/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="C:/Users/vincent/.m2/repository/flexlib/flexlib/2.5/flexlib-2.5-flex3.swc" sourcepath="C:/envdev/flex3libs/flexlib/src/flexlib" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="C:/Users/vincent/.m2/repository/resizecontainers/resizecontainers/1.0/resizecontainers-1.0.swc" sourcepath="C:/envdev/flex3libs/ResizeContainers/src" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/flexlib/flexlib/2.5/flexlib-2.5-flex3.swc" sourcepath="C:/envdev/flex3libs/flexlib/src/flexlib" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/resizecontainers/resizecontainers/1.0/resizecontainers-1.0.swc" sourcepath="C:/envdev/flex3libs/ResizeContainers/src" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath>
-      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/Documents and Settings/Vincent/.m2/repository/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
-      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/Users/vincent/.m2/repository/flexlib/flexlib/2.5/flexlib-2.5-flex3.swc" sourcepath="C:/envdev/flex3libs/flexlib/src/flexlib" useDefaultLinkType="false"/>
-      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/Users/vincent/.m2/repository/resizecontainers/resizecontainers/1.0/resizecontainers-1.0.swc" sourcepath="C:/envdev/flex3libs/ResizeContainers/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${M2_REPO}/datetimelibrary/datetimelibrary/1.0.2/datetimelibrary-1.0.2.swc" sourcepath="C:/envdev/flex3libs/datetimelibrary/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${M2_REPO}/flexlib/flexlib/2.5/flexlib-2.5-flex3.swc" sourcepath="C:/envdev/flex3libs/flexlib/src/flexlib" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${M2_REPO}/resizecontainers/resizecontainers/1.0/resizecontainers-1.0.swc" sourcepath="C:/envdev/flex3libs/ResizeContainers/src" useDefaultLinkType="false"/>
     </sourceAttachmentPath>
   </compiler>
   <applications>
