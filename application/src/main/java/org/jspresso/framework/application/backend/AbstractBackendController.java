@@ -462,8 +462,11 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void recordAsSynchronized(IEntity flushedEntity) {
     if (unitOfWork.isActive()) {
+      boolean isDirty = isDirty(flushedEntity);
       unitOfWork.clearDirtyState(flushedEntity);
-      unitOfWork.addUpdatedEntity(flushedEntity);
+      if (isDirty) {
+        unitOfWork.addUpdatedEntity(flushedEntity);
+      }
     }
   }
 
