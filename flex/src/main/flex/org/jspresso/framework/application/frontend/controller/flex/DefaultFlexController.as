@@ -1042,11 +1042,12 @@ package org.jspresso.framework.application.frontend.controller.flex {
         newDialog = false;
       } else {
         var dialogParent:DisplayObject;
-        if(_dialogStack && _dialogStack.length > 1) {
-          dialogParent = _dialogStack[_dialogStack.length -1][0];
-        } else {
-          dialogParent = Application.application as DisplayObject;
-        }
+        //fails to center in parent if the second dialog is bigger than the first one. 
+        //        if(_dialogStack && _dialogStack.length > 1) {
+        //          dialogParent = _dialogStack[_dialogStack.length -1][0];
+        //        } else {
+        dialogParent = Application.application as DisplayObject;
+        //        }
         dialog = PopUpManager.createPopUp(dialogParent,ResizablePanel,true) as ResizablePanel;
         dialog.resizable = true;
         dialog.setStyle("borderAlpha", 1);
