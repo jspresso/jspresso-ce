@@ -97,11 +97,7 @@
     <property name="iconImageURL" value="classpath:org/jspresso/framework/application/images/cancel-48x48.png" />
   </bean>
 
-  <bean id="lovOkFrontAction" parent="okDialogFrontAction">
-    <property name="wrappedAction">
-      <bean class="org.jspresso.framework.application.frontend.action.lov.OkLovAction" />
-      
-    </property>
+  <bean id="lovOkFrontAction" parent="okDialogFrontAction" class="org.jspresso.framework.application.frontend.action.lov.OkLovAction">
     <property name="nextAction" ref="viewConnectorSetAction" />
   </bean>
 

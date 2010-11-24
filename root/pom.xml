@@ -57,7 +57,7 @@
     <bsh.version>2.0b4</bsh.version>
     <foxtrot.version>2.0</foxtrot.version>
     <swt.version>3.5.1</swt.version>
-    <dj-nativeswing.version>0.9.8</dj-nativeswing.version>
+    <dj-nativeswing.version>0.9.9.20101112</dj-nativeswing.version>
     <dj-swingsuite.version>0.9.1</dj-swingsuite.version>
     <nachocalendar.version>0.23</nachocalendar.version>
     <jedit-syntax.version>2.2.2</jedit-syntax.version>

@@ -136,66 +136,71 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void displayModalDialog(JComponent mainView, List<Action> actions,
-      String title, JComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+  public void displayModalDialog(final JComponent mainView, final List<Action> actions,
+      final String title, final JComponent sourceComponent, final Map<String, Object> context,
+      final Dimension dimension, final boolean reuseCurrent) {
     super.displayModalDialog(context, reuseCurrent);
-    final JDialog dialog;
-    Window window;
-    if (sourceComponent != null) {
-      window = SwingUtil.getVisibleWindow(sourceComponent);
-    } else {
-      window = controllerFrame;
-    }
-    boolean newDialog = true;
-    if (window instanceof JDialog) {
-      if (reuseCurrent) {
-        dialog = (JDialog) window;
-        dialog.getContentPane().removeAll();
-        newDialog = false;
-      } else {
-        dialog = new JDialog((JDialog) window, title, true);
+    SwingUtilities.invokeLater(new Runnable() {
+
+      public void run() {
+        JDialog dialog;
+        Window window;
+        if (sourceComponent != null) {
+          window = SwingUtil.getVisibleWindow(sourceComponent);
+        } else {
+          window = controllerFrame;
+        }
+        boolean newDialog = true;
+        if (window instanceof JDialog) {
+          if (reuseCurrent) {
+            dialog = (JDialog) window;
+            dialog.getContentPane().removeAll();
+            newDialog = false;
+          } else {
+            dialog = new JDialog((JDialog) window, title, true);
+          }
+        } else {
+          dialog = new JDialog((Frame) window, title, true);
+        }
+
+        Box buttonBox = new Box(BoxLayout.LINE_AXIS);
+        buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+
+        JButton defaultButton = null;
+        for (Action action : actions) {
+          JButton actionButton = new JButton();
+          SwingUtil.configureButton(actionButton);
+          actionButton.setAction(action);
+          buttonBox.add(actionButton);
+          buttonBox.add(Box.createHorizontalStrut(10));
+          if (defaultButton == null) {
+            defaultButton = actionButton;
+          }
+        }
+        JPanel actionPanel = new JPanel();
+        actionPanel.setLayout(new BorderLayout());
+        actionPanel.add(buttonBox, BorderLayout.EAST);
+
+        if (dimension != null) {
+          mainView.setPreferredSize(new java.awt.Dimension(dimension.getWidth(),
+              dimension.getHeight()));
+        }
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(mainView, BorderLayout.CENTER);
+        mainPanel.add(actionPanel, BorderLayout.SOUTH);
+        dialog.getContentPane().add(mainPanel);
+        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        if (defaultButton != null) {
+          dialog.getRootPane().setDefaultButton(defaultButton);
+        }
+        dialog.pack();
+        if (newDialog) {
+          SwingUtil.centerInParent(dialog);
+        }
+        dialog.setVisible(true);
       }
-    } else {
-      dialog = new JDialog((Frame) window, title, true);
-    }
-
-    Box buttonBox = new Box(BoxLayout.LINE_AXIS);
-    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
-
-    JButton defaultButton = null;
-    for (Action action : actions) {
-      JButton actionButton = new JButton();
-      SwingUtil.configureButton(actionButton);
-      actionButton.setAction(action);
-      buttonBox.add(actionButton);
-      buttonBox.add(Box.createHorizontalStrut(10));
-      if (defaultButton == null) {
-        defaultButton = actionButton;
-      }
-    }
-    JPanel actionPanel = new JPanel();
-    actionPanel.setLayout(new BorderLayout());
-    actionPanel.add(buttonBox, BorderLayout.EAST);
-
-    if (dimension != null) {
-      mainView.setPreferredSize(new java.awt.Dimension(dimension.getWidth(),
-          dimension.getHeight()));
-    }
-    JPanel mainPanel = new JPanel();
-    mainPanel.setLayout(new BorderLayout());
-    mainPanel.add(mainView, BorderLayout.CENTER);
-    mainPanel.add(actionPanel, BorderLayout.SOUTH);
-    dialog.getContentPane().add(mainPanel);
-    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    if (defaultButton != null) {
-      dialog.getRootPane().setDefaultButton(defaultButton);
-    }
-    dialog.pack();
-    if (newDialog) {
-      SwingUtil.centerInParent(dialog);
-    }
-    dialog.setVisible(true);
+    });
   }
 
   /**
@@ -556,8 +561,14 @@ public class DefaultSwingController extends
       waitTimer.start();
       Toolkit.getDefaultToolkit().getSystemEventQueue()
           .push(new WaitCursorEventQueue(500));
-      initLoginProcess();
+      Toolkit.getDefaultToolkit().setDynamicLayout(true);
       NativeInterface.open();
+      SwingUtilities.invokeLater(new Runnable() {
+
+        public void run() {
+          initLoginProcess();
+        }
+      });
       NativeInterface.runEventPump();
       return true;
     }

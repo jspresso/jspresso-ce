@@ -30,6 +30,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -67,6 +68,10 @@ import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
  */
 public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
+  /**
+   * <code>LOV_PRESELECTED_ITEM</code>.
+   */
+  public static final String                    LOV_PRESELECTED_ITEM  = "LOV_PRESELECTED_ITEM";
   private boolean                               autoquery;
   private IDisplayableAction                    cancelAction;
   private CreateQueryComponentAction            createQueryComponentAction;
@@ -127,10 +132,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       if (queryPropertyValue != null && !queryPropertyValue.equals("*")
           && queryComponent.getQueriedComponents() != null
           && queryComponent.getQueriedComponents().size() == 1) {
-        IEntity selectedEntity = getController(context).getBackendController()
-            .merge((IEntity) queryComponent.getQueriedComponents().get(0),
-                EMergeMode.MERGE_CLEAN_LAZY);
-        viewConnector.setConnectorValue(selectedEntity);
+        IComponent selectedItem = queryComponent.getQueriedComponents().get(0);
+        if (selectedItem instanceof IEntity) {
+          selectedItem = getController(context).getBackendController().merge(
+              (IEntity) selectedItem, EMergeMode.MERGE_CLEAN_LAZY);
+        }
+        // viewConnector.setConnectorValue(selectedItem);
+        context.put(LOV_PRESELECTED_ITEM, selectedItem);
+        actionHandler.execute(okAction, context);
         return true;
       }
     }
