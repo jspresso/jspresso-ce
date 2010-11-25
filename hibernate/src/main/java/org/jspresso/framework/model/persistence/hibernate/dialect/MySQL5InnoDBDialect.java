@@ -33,7 +33,7 @@ public class MySQL5InnoDBDialect extends MySQL5Dialect {
    */
   @Override
   public String getTableTypeString() {
-    return " engine=InnoDB";
+    return " ENGINE=InnoDB";
   }
 
   /**

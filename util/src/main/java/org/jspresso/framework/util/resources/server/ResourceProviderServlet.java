@@ -290,11 +290,7 @@ public class ResourceProviderServlet extends HttpServlet {
         }
 
         response.setContentType(resource.getMimeType());
-        String resourceName = resource.getName();
-        if (resourceName != null && resourceName.length() > 0) {
-          response.setHeader("Content-Disposition", "attachment; filename="
-              + resourceName);
-        }
+        completeFileName(response, resource.getName());
         long resourceLength = resource.getSize();
         if (resourceLength > 0) {
           response.setContentLength((int) resourceLength);
@@ -322,12 +318,14 @@ public class ResourceProviderServlet extends HttpServlet {
         if (localUrl == null) {
           throw new ServletException("Bad local URL : " + localUrlSpec);
         }
+        completeFileName(response, localUrl.getFile());
         inputStream = new BufferedInputStream(localUrl.openStream());
       } else if (imageUrlSpec != null) {
         URL imageUrl = UrlHelper.createURL(imageUrlSpec);
         if (imageUrl == null) {
           throw new ServletException("Bad image URL : " + imageUrlSpec);
         }
+        completeFileName(response, imageUrl.getFile());
         String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
         String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
         if (width != null && height != null) {
@@ -348,6 +346,18 @@ public class ResourceProviderServlet extends HttpServlet {
       }
     } finally {
       HttpRequestHolder.setServletRequest(null);
+    }
+  }
+
+  private void completeFileName(HttpServletResponse response, String fileName) {
+    String actualFileName = fileName;
+    if (fileName.length() > 0) {
+      int pathIndex = fileName.lastIndexOf("/");
+      if (pathIndex > 0) {
+        actualFileName = fileName.substring(pathIndex + 1);
+      }
+      response.setHeader("Content-Disposition", "attachment; filename="
+          + actualFileName);
     }
   }
 
