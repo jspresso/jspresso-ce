@@ -98,6 +98,7 @@
     <jetty-plugin.version>6.1.10</jetty-plugin.version>
     <info-reports-plugin.version>2.1.2</info-reports-plugin.version>
     <appassembler-plugin.version>1.0</appassembler-plugin.version>
+    <war-plugin.version>2.1</war-plugin.version>
   </properties>
   <distributionManagement>
     <repository>
@@ -815,6 +816,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${surefire-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>${war-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
