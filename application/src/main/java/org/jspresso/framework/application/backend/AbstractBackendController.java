@@ -757,8 +757,9 @@ public abstract class AbstractBackendController extends AbstractController
       entityDirtyProperties.remove(IEntity.VERSION);
       for (Map.Entry<String, Object> dirtyProperty : entityDirtyProperties
           .entrySet()) {
-        if (!entityDescriptor.getPropertyDescriptor(dirtyProperty.getKey())
-            .isComputed()) {
+        IPropertyDescriptor propertyDescriptor = entityDescriptor
+            .getPropertyDescriptor(dirtyProperty.getKey());
+        if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
           return true;
         }
       }
@@ -783,9 +784,10 @@ public abstract class AbstractBackendController extends AbstractController
     Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
     if (entityDirtyProperties != null
         && entityDirtyProperties.containsKey(propertyName)) {
-      return !getEntityFactory()
+      IPropertyDescriptor propertyDescriptor = getEntityFactory()
           .getComponentDescriptor(entity.getComponentContract())
-          .getPropertyDescriptor(propertyName).isComputed();
+          .getPropertyDescriptor(propertyName);
+      return propertyDescriptor != null && !propertyDescriptor.isComputed();
     }
     return false;
   }
