@@ -56,13 +56,13 @@
     <jython.version>2.5.0</jython.version>
     <bsh.version>2.0b4</bsh.version>
     <foxtrot.version>2.0</foxtrot.version>
-    <swt.version>3.5.1</swt.version>
+    <swt.version>3.6.1</swt.version>
     <dj-nativeswing.version>0.9.9.20101112</dj-nativeswing.version>
     <dj-swingsuite.version>0.9.1</dj-swingsuite.version>
     <nachocalendar.version>0.23</nachocalendar.version>
     <jedit-syntax.version>2.2.2</jedit-syntax.version>
     <substance.version>4.3</substance.version>
-    <freemarker.version>2.3.3</freemarker.version>
+    <freemarker.version>2.3.9</freemarker.version>
     <fusioncharts.version>2.2</fusioncharts.version>
     <wings.version>3.2.1</wings.version>
     <qx-collapsable-panel.version>0.5</qx-collapsable-panel.version>
@@ -78,13 +78,15 @@
     <ant-nodeps.version>1.7.1</ant-nodeps.version>
 
     <!-- Plugins versions -->
+    <compiler-plugin.version>2.0.2</compiler-plugin.version>
+    <surefire-plugin.version>2.4.3</surefire-plugin.version>
     <assembly-plugin.version>2.2-beta-3</assembly-plugin.version>
-    <javadoc-plugin.version>2.5</javadoc-plugin.version>
+    <javadoc-plugin.version>2.7</javadoc-plugin.version>
     <site-plugin.version>2.0</site-plugin.version>
     <archetype-plugin.version>2.0-alpha-4</archetype-plugin.version>
     <source-plugin.version>2.1.1</source-plugin.version>
     <docbkx-plugin.version>2.0.8</docbkx-plugin.version>
-    <xdoclet2-plugin.version>2.0.6</xdoclet2-plugin.version>
+    <xdoclet2-plugin.version>2.0.7.1</xdoclet2-plugin.version>
     <xdoclet2-hibernate-plugin.version>1.0.5</xdoclet2-hibernate-plugin.version>
     <build-helper-plugin.version>1.4</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
@@ -119,6 +121,10 @@
     	<snapshots>
     		<enabled>false</enabled>
     	</snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jspresso-repository</id>
+      <url>http://repository.jspresso.org/maven2</url>
     </pluginRepository>
   </pluginRepositories>
   <repositories>
@@ -594,7 +600,7 @@
         <version>${commons-collections.version}</version>
       </dependency>
       <dependency>
-        <groupId>freemarker</groupId>
+        <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>${freemarker.version}</version>
       </dependency>
@@ -654,7 +660,7 @@
         <version>${junit.version}</version>
       </dependency>
       <dependency>
-        <groupId>jasperreports</groupId>
+        <groupId>net.sf.jasperreports</groupId>
         <artifactId>jasperreports</artifactId>
         <version>${jasper.version}</version>
       </dependency>
@@ -802,6 +808,16 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${compiler-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${surefire-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>${assembly-plugin.version}</version>
         </plugin>
@@ -872,7 +888,7 @@
           <version>${jasperreports-plugin.version}</version>
           <dependencies>
             <dependency>
-              <groupId>jasperreports</groupId>
+              <groupId>net.sf.jasperreports</groupId>
               <artifactId>jasperreports</artifactId>
               <version>${jasper.version}</version>
             </dependency>

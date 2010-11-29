@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" version="1">
+  <includeClasses>
+    <classEntry path="org.jspresso.framework.action.IActionHandler"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand"/>
+    <classEntry path="org.jspresso.framework.application.frontend.controller.flex.DefaultFlexController"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RAction"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RActionComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RActionField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RActionList"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RBorderContainer"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RCardContainer"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RCheckBox"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RCollectionComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RColorField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RComboBox"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RConstrainedGridContainer"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RContainer"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RDateField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RDecimalComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RDecimalField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RDurationField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.REvenGridContainer"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RForm"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RHtmlArea"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RIcon"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RImageComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RIntegerField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RLabel"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RLink"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RList"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RNumericComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RPasswordField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RPercentField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RSecurityComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RSplitContainer"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RTabContainer"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RTable"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RTextArea"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RTextComponent"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RTextField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RTimeField"/>
+    <classEntry path="org.jspresso.framework.gui.remote.RTree"/>
+    <classEntry path="org.jspresso.framework.state.remote.IRemoteStateOwner"/>
+    <classEntry path="org.jspresso.framework.state.remote.RemoteCompositeValueState"/>
+    <classEntry path="org.jspresso.framework.state.remote.RemoteFormattedValueState"/>
+    <classEntry path="org.jspresso.framework.state.remote.RemoteValueState"/>
+    <classEntry path="org.jspresso.framework.util.array.ArrayUtil"/>
+    <classEntry path="org.jspresso.framework.util.format.NumberParser"/>
+    <classEntry path="org.jspresso.framework.util.format.Parser"/>
+    <classEntry path="org.jspresso.framework.util.format.PasswordFormatter"/>
+    <classEntry path="org.jspresso.framework.util.format.PercentFormatter"/>
+    <classEntry path="org.jspresso.framework.util.format.PercentParser"/>
+    <classEntry path="org.jspresso.framework.util.gui.CellConstraints"/>
+    <classEntry path="org.jspresso.framework.util.gui.Dimension"/>
+    <classEntry path="org.jspresso.framework.util.gui.Font"/>
+    <classEntry path="org.jspresso.framework.util.html.HtmlUtil"/>
+    <classEntry path="org.jspresso.framework.util.remote.IRemotePeer"/>
+    <classEntry path="org.jspresso.framework.util.remote.RemotePeer"/>
+    <classEntry path="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry"/>
+    <classEntry path="org.jspresso.framework.util.remote.registry.IRemotePeerRegistry"/>
+    <classEntry path="org.jspresso.framework.view.flex.CollapsibleAccordion"/>
+    <classEntry path="org.jspresso.framework.view.flex.DefaultFlexViewFactory"/>
+    <classEntry path="org.jspresso.framework.view.flex.DgHeaderItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.EnhancedButton"/>
+    <classEntry path="org.jspresso.framework.view.flex.EnhancedDataGrid"/>
+    <classEntry path="org.jspresso.framework.view.flex.EnhancedList"/>
+    <classEntry path="org.jspresso.framework.view.flex.EnhancedRichTextEditor"/>
+    <classEntry path="org.jspresso.framework.view.flex.EnumerationDgItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.IColumnIndexProvider"/>
+    <classEntry path="org.jspresso.framework.view.flex.IconFactory"/>
+    <classEntry path="org.jspresso.framework.view.flex.RCVSDataDescriptor"/>
+    <classEntry path="org.jspresso.framework.view.flex.RIconComboBox"/>
+    <classEntry path="org.jspresso.framework.view.flex.RIconLabel"/>
+    <classEntry path="org.jspresso.framework.view.flex.RIconListItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.RIconMenuBarItem"/>
+    <classEntry path="org.jspresso.framework.view.flex.RIconMenuItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.RViewStack"/>
+    <classEntry path="org.jspresso.framework.view.flex.RemoteValueDgItemEditor"/>
+    <classEntry path="org.jspresso.framework.view.flex.RemoteValueDgItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.RemoteValueListItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.RemoteValueSorter"/>
+    <classEntry path="org.jspresso.framework.view.flex.RemoteValueTreeItemRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.SelectionCheckBoxRenderer"/>
+    <classEntry path="org.jspresso.framework.view.flex.SelectionTrackingTree"/>
+    <classEntry path="org.jspresso.framework.view.flex.UIComponentDgItemRenderer"/>
+  </includeClasses>
+  <includeResources>
+    <resourceEntry destPath="assets/images/closeaccordion2.png" sourcePath="assets/images/closeaccordion2.png"/>
+    <resourceEntry destPath="assets/images/closeleft.png" sourcePath="assets/images/closeleft.png"/>
+    <resourceEntry destPath="defaults.css" sourcePath="defaults.css"/>
+    <resourceEntry destPath="assets/images/close.png" sourcePath="assets/images/close.png"/>
+    <resourceEntry destPath="assets/images/reset-16x16.png" sourcePath="assets/images/reset-16x16.png"/>
+  </includeResources>
+  <namespaceManifests/>
+</flexLibProperties>

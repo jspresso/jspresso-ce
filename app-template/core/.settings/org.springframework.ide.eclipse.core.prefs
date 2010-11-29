@@ -1,0 +1,4 @@
+#Thu Nov 25 15:29:24 CET 2010
+eclipse.preferences.version=1
+org.springframework.ide.eclipse.core.builders.enable.beanmetadatabuilder=true
+org.springframework.ide.eclipse.core.enable.project.preferences=false
