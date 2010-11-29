@@ -44,6 +44,11 @@ public interface IEntity extends IComponent {
   String VERSION = "version";
 
   /**
+   * constant for version property <code>PERSISTENT</code>.
+   */
+  String PERSISTENT = "persistent";
+
+  /**
    * It is important to declare here so that ORM (hibernate for instance)
    * detects it has to delegate to the underlying instance when proxiing.
    * 
