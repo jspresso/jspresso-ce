@@ -113,6 +113,7 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
     if (superRenderedProperties != null) {
       superRenderedProperties.remove(IEntity.ID);
       superRenderedProperties.remove(IEntity.VERSION);
+      superRenderedProperties.remove(IEntity.PERSISTENT);
     }
     return superRenderedProperties;
   }

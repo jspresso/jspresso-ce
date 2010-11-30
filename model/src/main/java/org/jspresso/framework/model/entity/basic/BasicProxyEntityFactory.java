@@ -110,10 +110,10 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
           public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getOldValue() == null && evt.getNewValue() != null) {
-              createdEntity.firePropertyChange("persistent",
+              createdEntity.firePropertyChange(IEntity.PERSISTENT,
                   new Boolean(false), new Boolean(true));
             } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-              createdEntity.firePropertyChange("persistent", new Boolean(true),
+              createdEntity.firePropertyChange(IEntity.PERSISTENT, new Boolean(true),
                   new Boolean(false));
             }
           }
