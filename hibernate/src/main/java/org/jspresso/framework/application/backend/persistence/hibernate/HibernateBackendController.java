@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend.persistence.hibernate;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -179,6 +180,7 @@ public class HibernateBackendController extends AbstractBackendController {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void initializePropertyIfNeeded(final IComponent componentOrEntity,
       final String propertyName) {
@@ -194,6 +196,11 @@ public class HibernateBackendController extends AbstractBackendController {
                   .getSession().isOpen()) {
             try {
               Hibernate.initialize(initializedProperty);
+              if (initializedProperty instanceof Collection<?>) {
+                relinkAfterInitialization(
+                    (Collection<IEntity>) initializedProperty,
+                    componentOrEntity);
+              }
               return;
             } catch (Exception ex) {
               // ignore the exception since we are going to re-associate the
@@ -225,6 +232,15 @@ public class HibernateBackendController extends AbstractBackendController {
               }
 
               Hibernate.initialize(initializedProperty);
+              if (initializedProperty instanceof Collection<?>) {
+                relinkAfterInitialization(
+                    (Collection<IEntity>) initializedProperty,
+                    componentOrEntity);
+              } else {
+                relinkAfterInitialization(
+                    Collections.singleton((IEntity) initializedProperty),
+                    componentOrEntity);
+              }
               return null;
             }
           });
@@ -238,6 +254,20 @@ public class HibernateBackendController extends AbstractBackendController {
       }
     } finally {
       getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
+    }
+  }
+
+  private void relinkAfterInitialization(Collection<IEntity> entities,
+      Object owner) {
+    for (IEntity entity : entities) {
+      for (Map.Entry<String, Object> property : entity.straightGetProperties()
+          .entrySet()) {
+        if (property.getValue() instanceof IEntity) {
+          if (owner.equals(property.getValue()) && owner != property.getValue()) {
+            entity.straightSetProperty(property.getKey(), owner);
+          }
+        }
+      }
     }
   }
 
@@ -431,7 +461,7 @@ public class HibernateBackendController extends AbstractBackendController {
         if (transientCollection instanceof Set) {
           PersistentSet persistentSet = new PersistentSet(null,
               (Set<?>) transientCollection);
-          persistentSet.setOwner(owner);
+          changeCollectionOwner(persistentSet, owner);
           HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
           if (varSnapshotCollection == null) {
             persistentSet.clearDirty();
@@ -446,7 +476,7 @@ public class HibernateBackendController extends AbstractBackendController {
         } else if (transientCollection instanceof List) {
           PersistentList persistentList = new PersistentList(null,
               (List<?>) transientCollection);
-          persistentList.setOwner(owner);
+          changeCollectionOwner(persistentList, owner);
           ArrayList<Object> snapshot = new ArrayList<Object>();
           if (varSnapshotCollection == null) {
             persistentList.clearDirty();
@@ -469,6 +499,18 @@ public class HibernateBackendController extends AbstractBackendController {
     }
     return super.wrapDetachedCollection(owner, transientCollection,
         varSnapshotCollection, role);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void changeCollectionOwner(
+      Collection<IComponent> persistentCollection, Object newOwner) {
+    if (persistentCollection instanceof PersistentCollection) {
+      ((PersistentCollection) persistentCollection).setOwner(newOwner);
+    }
+    super.changeCollectionOwner(persistentCollection, newOwner);
   }
 
   private void linkHibernateArtifacts() {

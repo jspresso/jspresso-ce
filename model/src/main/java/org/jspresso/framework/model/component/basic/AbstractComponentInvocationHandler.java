@@ -697,7 +697,8 @@ public abstract class AbstractComponentInvocationHandler implements
     }
     Object currentPropertyValue = straightGetProperty(proxy, propertyName);
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      if (!ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
+      // reference must change sometimes even if entities are equal.
+      if (/* !ObjectUtils.equals(currentPropertyValue, newPropertyValue) */currentPropertyValue != newPropertyValue) {
         storeReferenceProperty(
             (IReferencePropertyDescriptor<?>) propertyDescriptor,
             currentPropertyValue, newPropertyValue);

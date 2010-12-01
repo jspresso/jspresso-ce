@@ -814,6 +814,20 @@ public abstract class AbstractBackendController extends AbstractController
     return transientCollection;
   }
 
+  /**
+   * Changes the owner of an uninitialized persistent collection.
+   * 
+   * @param persistentCollection
+   *          the persistent collection to change the owner for.
+   * @param newOwner
+   *          the new collecton owner that will be used when the collection gets
+   *          initialized.
+   */
+  protected void changeCollectionOwner(
+      Collection<IComponent> persistentCollection, Object newOwner) {
+    // NO-OP
+  }
+
   private void cleanDirtyProperties(IEntity entity) {
     dirtRecorder.resetChangedProperties(entity, null);
   }
@@ -912,6 +926,7 @@ public abstract class AbstractBackendController extends AbstractController
           }
           uowEntity.straightSetProperty(property.getKey(), uowCollection);
         } else {
+          changeCollectionOwner((Collection<IComponent>) property.getValue(), uowEntity);
           uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
       } else if (property.getValue() instanceof IEntity[]) {
