@@ -56,7 +56,6 @@
     <jython.version>2.5.0</jython.version>
     <bsh.version>2.0b4</bsh.version>
     <foxtrot.version>2.0</foxtrot.version>
-    <swt.version>3.5.1</swt.version>
     <dj-nativeswing.version>0.9.9.20101112</dj-nativeswing.version>
     <dj-swingsuite.version>0.9.1</dj-swingsuite.version>
     <nachocalendar.version>0.23</nachocalendar.version>
@@ -557,11 +556,6 @@
         <groupId>foxtrot</groupId>
         <artifactId>foxtrot</artifactId>
         <version>${foxtrot.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse</groupId>
-        <artifactId>swt</artifactId>
-        <version>${swt.version}</version>
       </dependency>
       <dependency>
         <groupId>chrriis</groupId>
