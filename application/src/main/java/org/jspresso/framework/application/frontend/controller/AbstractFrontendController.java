@@ -185,11 +185,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
         .get(workspaceName);
     if (moduleAreaViewConnector != null) {
 
-      IValueConnector oldModuleModelConnector = moduleAreaViewConnector
-          .getModelConnector();
-      if (oldModuleModelConnector != null) {
-        oldModuleModelConnector.setConnectorValue(null);
-      }
+      // The following does not seem necessary anymore.
+      // This was done to cope with connectors mis-refreshing.
+      
+      // IValueConnector oldModuleModelConnector = moduleAreaViewConnector
+      // .getModelConnector();
+      // if (oldModuleModelConnector != null) {
+      // oldModuleModelConnector.setConnectorValue(null);
+      // }
 
       IValueConnector moduleModelConnector = getBackendController()
           .createModelConnector(workspaceName,
