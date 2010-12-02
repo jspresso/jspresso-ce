@@ -29,7 +29,7 @@ New features
            Nested component views width management improved
            Model auto-determination improved for cascading model views
            Computed columns can now be sorted using a SQL formula
-
+3032663    horizontal alignment
 
 3.5.0
 =====
