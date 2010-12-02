@@ -19,7 +19,7 @@ package org.jspresso.framework.state.remote {
 		
 		[Bindable]
     [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteValueState")]
-    public class RemoteValueState extends RemotePeer {
+    public dynamic class RemoteValueState extends RemotePeer {
 
         private var _readable:Boolean;
         private var _value:Object;
