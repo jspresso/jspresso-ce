@@ -18,6 +18,15 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTextField",
 
   construct : function() {
     this.base(arguments);
+  },
+
+  properties :
+  {
+    horizontalAlignment :
+    {
+      check : "String",
+      nullable : true
+    }
   }
 
 });

@@ -24,8 +24,10 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
 /**
@@ -49,12 +51,13 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
     IPropertyViewDescriptor {
 
-  private String       labelBackground;
-  private String       labelFont;
-  private String       labelForeground;
-  private List<String> renderedChildProperties;
-  private Integer      width;
-  private IAction      action;
+  private String               labelBackground;
+  private String               labelFont;
+  private String               labelForeground;
+  private List<String>         renderedChildProperties;
+  private Integer              width;
+  private IAction              action;
+  private EHorizontalAlignment horizontalAlignment;
 
   /**
    * Gets the labelBackground.
@@ -251,4 +254,37 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   public boolean isReadOnly() {
     return getAction() != null || super.isReadOnly();
   }
+
+  /**
+   * This property allows to control the property alignment in views that
+   * support it. This is either a value of the <code>EHorizontalAlignment</code>
+   * enum or its equivalent string representation :
+   * <ul>
+   * <li><code>LEFT</code> for left alignment</li>
+   * <li><code>CENTER</code> for center alignment</li>
+   * <li><code>RIGHT</code> for right alignment</li>
+   * </ul>
+   * <p>
+   * Default value is <code>null</code>, meaning use property type default.
+   * 
+   * @param horizontalAlignment
+   *          the horizontalAlignment to set.
+   */
+  public void setHorizontalAlignment(EHorizontalAlignment horizontalAlignment) {
+    this.horizontalAlignment = horizontalAlignment;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public EHorizontalAlignment getHorizontalAlignment() {
+    if (horizontalAlignment != null) {
+      return horizontalAlignment;
+    }
+    if (getModelDescriptor() instanceof INumberPropertyDescriptor) {
+      return EHorizontalAlignment.RIGHT;
+    }
+    return EHorizontalAlignment.LEFT;
+  }
+
 }

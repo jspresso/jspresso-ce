@@ -31,6 +31,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer",
   {
     __format : null,
     __action : null,
+    __textAlign : null,
     
     _formatValue : function(cellInfo) {
       if(this.__format && cellInfo.value) {
@@ -52,12 +53,27 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer",
       }
     },
     
+    _getStyleFlags : function(cellInfo) {
+      if(this.__textAlign) {
+        if(this.__textAlign == "left") {
+        } else if(this.__textAlign == "center") {
+        } else if(this.__textAlign == "right") {
+          return qx.ui.table.cellrenderer.Default.STYLEFLAG_ALIGN_RIGHT;
+        }
+      }
+      return this.base(arguments, cellInfo);
+    },
+
     setAction : function(action) {
       this.__action = action;
     },
 
     getAction : function() {
       return this.__action;
+    },
+
+    setTextAlign : function(textAlign) {
+      this.__textAlign = textAlign;
     }
 
   }

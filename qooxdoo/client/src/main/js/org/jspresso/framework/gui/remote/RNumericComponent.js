@@ -31,6 +31,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RNumericComponent",
     {
       check : "Number",
       nullable : true
+    },
+    horizontalAlignment :
+    {
+      check : "String",
+      nullable : true
     }
   }
 });

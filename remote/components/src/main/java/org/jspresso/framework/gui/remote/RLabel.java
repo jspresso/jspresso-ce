@@ -27,6 +27,7 @@ package org.jspresso.framework.gui.remote;
 public class RLabel extends RTextComponent {
 
   private static final long serialVersionUID = -7684946402506329656L;
+  private String            horizontalAlignment;
 
   /**
    * Constructs a new <code>RLabel</code> instance.
@@ -44,5 +45,23 @@ public class RLabel extends RTextComponent {
    */
   protected RLabel() {
     // For GWT support
+  }
+
+  /**
+   * Sets the horizontalAlignment.
+   * 
+   * @param horizontalAlignment the horizontalAlignment to set.
+   */
+  public void setHorizontalAlignment(String horizontalAlignment) {
+    this.horizontalAlignment = horizontalAlignment;
+  }
+
+  /**
+   * Gets the horizontalAlignment.
+   * 
+   * @return the horizontalAlignment.
+   */
+  public String getHorizontalAlignment() {
+    return horizontalAlignment;
   }
 }

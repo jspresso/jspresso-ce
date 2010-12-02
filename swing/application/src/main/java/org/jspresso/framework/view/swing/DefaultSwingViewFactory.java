@@ -167,6 +167,7 @@ import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
@@ -1834,6 +1835,10 @@ public class DefaultSwingViewFactory extends
         if (cellRenderer == null) {
           cellRenderer = new EvenOddTableCellRenderer();
         }
+        if (cellRenderer instanceof JLabel) {
+          configureHorizontalAlignment((JLabel) cellRenderer,
+              columnViewDescriptor.getHorizontalAlignment());
+        }
         if (columnViewDescriptor.getAction() != null) {
           Action colAction = getActionFactory().createAction(
               columnViewDescriptor.getAction(), actionHandler, view, locale);
@@ -2973,5 +2978,60 @@ public class DefaultSwingViewFactory extends
         }
       }
     }
+  }
+
+  private void configureHorizontalAlignment(JTextField textField,
+      EHorizontalAlignment horizontalAlignment) {
+    switch (horizontalAlignment) {
+      case LEFT:
+        textField.setHorizontalAlignment(SwingConstants.LEFT);
+        break;
+      case CENTER:
+        textField.setHorizontalAlignment(SwingConstants.CENTER);
+        break;
+      case RIGHT:
+        textField.setHorizontalAlignment(SwingConstants.RIGHT);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private void configureHorizontalAlignment(JLabel label,
+      EHorizontalAlignment horizontalAlignment) {
+    switch (horizontalAlignment) {
+      case LEFT:
+        label.setHorizontalAlignment(SwingConstants.LEFT);
+        break;
+      case CENTER:
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        break;
+      case RIGHT:
+        label.setHorizontalAlignment(SwingConstants.RIGHT);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<JComponent> propertyView = super.createPropertyView(
+        propertyViewDescriptor, actionHandler, locale);
+    if (propertyView.getPeer() instanceof JLabel) {
+      configureHorizontalAlignment((JLabel) propertyView.getPeer(),
+          propertyViewDescriptor.getHorizontalAlignment());
+    } else if (propertyView.getPeer() instanceof JTextField) {
+      configureHorizontalAlignment((JTextField) propertyView.getPeer(),
+          propertyViewDescriptor.getHorizontalAlignment());
+    }
+    return propertyView;
   }
 }

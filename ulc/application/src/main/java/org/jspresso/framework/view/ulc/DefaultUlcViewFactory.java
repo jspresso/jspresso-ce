@@ -113,6 +113,7 @@ import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
@@ -1462,6 +1463,10 @@ public class DefaultUlcViewFactory extends
           column.setCellRenderer(new EvenOddTableCellRenderer(column
               .getModelIndex()));
         }
+        if (cellRenderer instanceof ULCLabel) {
+          configureHorizontalAlignment(((ULCLabel) cellRenderer),
+              columnViewDescriptor.getHorizontalAlignment());
+        }
         if (columnViewDescriptor.getPreferredSize() != null
             && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
           column.setPreferredWidth(columnViewDescriptor.getPreferredSize()
@@ -2688,5 +2693,60 @@ public class DefaultUlcViewFactory extends
     public ULCPopupMenu createPopupForTreepath(TreePath path) {
       return createULCTreePopupMenu(tree, view, path, actionHandler, locale);
     }
+  }
+
+  private void configureHorizontalAlignment(ULCTextField textField,
+      EHorizontalAlignment horizontalAlignment) {
+    switch (horizontalAlignment) {
+      case LEFT:
+        textField.setHorizontalAlignment(IDefaults.LEFT);
+        break;
+      case CENTER:
+        textField.setHorizontalAlignment(IDefaults.CENTER);
+        break;
+      case RIGHT:
+        textField.setHorizontalAlignment(IDefaults.RIGHT);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private void configureHorizontalAlignment(ULCLabel label,
+      EHorizontalAlignment horizontalAlignment) {
+    switch (horizontalAlignment) {
+      case LEFT:
+        label.setHorizontalAlignment(IDefaults.LEFT);
+        break;
+      case CENTER:
+        label.setHorizontalAlignment(IDefaults.CENTER);
+        break;
+      case RIGHT:
+        label.setHorizontalAlignment(IDefaults.RIGHT);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<ULCComponent> createPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<ULCComponent> propertyView = super.createPropertyView(
+        propertyViewDescriptor, actionHandler, locale);
+    if (propertyView.getPeer() instanceof ULCLabel) {
+      configureHorizontalAlignment((ULCLabel) propertyView.getPeer(),
+          propertyViewDescriptor.getHorizontalAlignment());
+    } else if (propertyView.getPeer() instanceof ULCTextField) {
+      configureHorizontalAlignment((ULCTextField) propertyView.getPeer(),
+          propertyViewDescriptor.getHorizontalAlignment());
+    }
+    return propertyView;
   }
 }

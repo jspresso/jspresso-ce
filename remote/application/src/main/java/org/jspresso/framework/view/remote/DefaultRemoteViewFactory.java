@@ -127,6 +127,7 @@ import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
@@ -1080,15 +1081,25 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IView<RComponent> view = super.createPropertyView(propertyViewDescriptor,
+    IView<RComponent> propertyView = super.createPropertyView(propertyViewDescriptor,
         actionHandler, locale);
-    if (view != null) {
+    if (propertyView != null) {
       if (propertyDescriptor.getName() != null) {
-        view.getPeer().setLabel(
+        propertyView.getPeer().setLabel(
             propertyDescriptor.getI18nName(getTranslationProvider(), locale));
       }
+      if (propertyView.getPeer() instanceof RLabel) {
+        configureAlignment((RLabel) propertyView.getPeer(),
+            propertyViewDescriptor.getHorizontalAlignment());
+      } else if (propertyView.getPeer() instanceof RTextField) {
+        configureAlignment((RTextField) propertyView.getPeer(),
+            propertyViewDescriptor.getHorizontalAlignment());
+      } else if (propertyView.getPeer() instanceof RNumericComponent) {
+        configureAlignment((RNumericComponent) propertyView.getPeer(),
+            propertyViewDescriptor.getHorizontalAlignment());
+      }
     }
-    return view;
+    return propertyView;
   }
 
   /**
@@ -2062,5 +2073,26 @@ public class DefaultRemoteViewFactory extends
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
     this.remotePeerRegistry = remotePeerRegistry;
+  }
+
+  private void configureAlignment(RTextField textField,
+      EHorizontalAlignment horizontalAlignment) {
+    if (horizontalAlignment != null) {
+      textField.setHorizontalAlignment(horizontalAlignment.toString());
+    }
+  }
+
+  private void configureAlignment(RLabel label,
+      EHorizontalAlignment horizontalAlignment) {
+    if (horizontalAlignment != null) {
+      label.setHorizontalAlignment(horizontalAlignment.toString());
+    }
+  }
+
+  private void configureAlignment(RNumericComponent numericField,
+      EHorizontalAlignment horizontalAlignment) {
+    if (horizontalAlignment != null) {
+      numericField.setHorizontalAlignment(horizontalAlignment.toString());
+    }
   }
 }

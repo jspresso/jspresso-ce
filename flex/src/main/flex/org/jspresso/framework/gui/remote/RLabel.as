@@ -19,8 +19,19 @@ package org.jspresso.framework.gui.remote {
     [RemoteClass(alias="org.jspresso.framework.gui.remote.RLabel")]
     public class RLabel extends RTextComponent {
 
-        public function RLabel() {
+      private var _horizontalAlignment:String;
+
+      public function RLabel() {
           //default constructor.
-        }
+      }
+
+      public function get horizontalAlignment():String {
+        return _horizontalAlignment;
+      }
+
+      public function set horizontalAlignment(value:String):void {
+        _horizontalAlignment = value;
+      }
+
     }
 }

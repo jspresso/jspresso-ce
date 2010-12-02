@@ -27,6 +27,7 @@ package org.jspresso.framework.gui.remote;
 public class RTextField extends RTextComponent {
 
   private static final long serialVersionUID = -7482939529748984634L;
+  private String            horizontalAlignment;
 
   /**
    * Constructs a new <code>RTextField</code> instance.
@@ -44,5 +45,23 @@ public class RTextField extends RTextComponent {
    */
   protected RTextField() {
     // For GWT support
+  }
+
+  /**
+   * Sets the horizontalAlignment.
+   * 
+   * @param horizontalAlignment the horizontalAlignment to set.
+   */
+  public void setHorizontalAlignment(String horizontalAlignment) {
+    this.horizontalAlignment = horizontalAlignment;
+  }
+
+  /**
+   * Gets the horizontalAlignment.
+   * 
+   * @return the horizontalAlignment.
+   */
+  public String getHorizontalAlignment() {
+    return horizontalAlignment;
   }
 }

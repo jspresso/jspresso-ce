@@ -21,6 +21,7 @@ package org.jspresso.framework.gui.remote {
 
         private var _maxValue:Number;
         private var _minValue:Number;
+        private var _horizontalAlignment:String;
 
         public function RNumericComponent() {
           //default constructor.
@@ -38,6 +39,14 @@ package org.jspresso.framework.gui.remote {
         }
         public function get minValue():Number {
             return _minValue;
+        }
+
+        public function get horizontalAlignment():String {
+          return _horizontalAlignment;
+        }
+        
+        public function set horizontalAlignment(value:String):void {
+          _horizontalAlignment = value;
         }
     }
 }

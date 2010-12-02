@@ -461,6 +461,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         } else {
           var format = this._createFormat(rComponent);
           cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(format);
+          cellRenderer.setUseAutoAlign(false);
+
+          var alignment = "left";
+          if (   rComponent instanceof org.jspresso.framework.gui.remote.RLabel
+              || rComponent instanceof org.jspresso.framework.gui.remote.RTextField
+              || rComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
+            alignment = rComponent.getHorizontalAlignment();
+          }
+          if(alignment == "LEFT") {
+            alignment = "left";
+          } else if(alignment == "CENTER") {
+            alignment = "center";
+          } else if(alignment == "RIGHT") {
+            alignment = "right";
+          }
+          cellRenderer.setTextAlign(alignment);
           if(rComponent instanceof org.jspresso.framework.gui.remote.RLink) {
             this.__remotePeerRegistry.register(rComponent.getAction());
             cellRenderer.setAction(rComponent.getAction());
@@ -630,6 +646,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT,
           org.jspresso.framework.view.qx.DefaultQxViewFactory.__NUMERIC_FIELD_MAX_CHAR_COUNT);
       }
+      this._configureHorizontalAlignment(numericComponent, remoteNumericComponent.getHorizontalAlignment());
       return numericComponent;
     },
 
@@ -1726,6 +1743,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           converter : this._readOnlyFieldConverter
         }
       );
+      this._configureHorizontalAlignment(textField, remoteTextField.getHorizontalAlignment());
       return textField;
     },
 
@@ -1773,6 +1791,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
         label.setValue(remoteLabel.getLabel());
         label.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(remoteLabel.getLabel()));
       }
+      this._configureHorizontalAlignment(label, remoteLabel.getHorizontalAlignment());
       return label;
     },
 
@@ -2243,6 +2262,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var w = charWidth * charCount;
       component.setMaxWidth(w);
       component.setWidth(w)
+    },
+    
+    /**
+     * 
+     * @param {qx.ui.core.Widget} component
+     * @param {String} alignment
+     * @return void
+     */
+    _configureHorizontalAlignment : function(component, alignment) {
+      if(alignment == "LEFT") {
+        component.setTextAlign("left");
+      } else if(alignment == "CENTER") {
+        component.setTextAlign("center");
+      } else if(alignment == "RIGHT") {
+        component.setTextAlign("right");
+      }
     }
 
   }

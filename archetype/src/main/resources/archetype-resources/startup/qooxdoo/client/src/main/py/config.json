@@ -75,6 +75,26 @@
       {
         "source" : "${ROOT}/html"
       }
+    },
+    "source-script" :
+    {
+      "compile-options" :
+      {
+        "uris" : 
+        {
+          "add-nocache-param" : false
+        }
+      }
+    },
+    "source-all-script" :
+    {
+      "compile-options" :
+      {
+        "uris" : 
+        {
+          "add-nocache-param" : false
+        }
+      }
     }
   }
 }

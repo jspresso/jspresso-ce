@@ -30,6 +30,7 @@ public abstract class RNumericComponent extends RComponent {
 
   private Number            maxValue;
   private Number            minValue;
+  private String            horizontalAlignment;
 
   /**
    * Constructs a new <code>RIntegerField</code> instance.
@@ -85,5 +86,23 @@ public abstract class RNumericComponent extends RComponent {
    */
   public void setMinValue(Number minValue) {
     this.minValue = minValue;
+  }
+
+  /**
+   * Sets the horizontalAlignment.
+   * 
+   * @param horizontalAlignment the horizontalAlignment to set.
+   */
+  public void setHorizontalAlignment(String horizontalAlignment) {
+    this.horizontalAlignment = horizontalAlignment;
+  }
+
+  /**
+   * Gets the horizontalAlignment.
+   * 
+   * @return the horizontalAlignment.
+   */
+  public String getHorizontalAlignment() {
+    return horizontalAlignment;
   }
 }

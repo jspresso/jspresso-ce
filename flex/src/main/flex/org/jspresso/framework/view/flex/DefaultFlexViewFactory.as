@@ -415,6 +415,7 @@ package org.jspresso.framework.view.flex {
           NUMERIC_FIELD_MAX_CHAR_COUNT,
           NUMERIC_FIELD_MAX_CHAR_COUNT);
       }
+      configureHorizontalAlignment(numericComponent, remoteNumericComponent.horizontalAlignment);
       return numericComponent;
     }
 
@@ -1613,6 +1614,22 @@ package org.jspresso.framework.view.flex {
             columnAction = (rColumn as RLink).action;
             getRemotePeerRegistry().register(columnAction);
           }
+          var alignment:String = "left";
+          if (rColumn is RLabel) {
+            alignment = (rColumn as RLabel).horizontalAlignment;
+          } else if (rColumn is RTextField) {
+            alignment = (rColumn as RTextField).horizontalAlignment;
+          } else if (rColumn is RNumericComponent) {
+            alignment = (rColumn as RNumericComponent).horizontalAlignment;
+          }
+          if(alignment == "LEFT") {
+            alignment = "left";
+          } else if(alignment == "CENTER") {
+            alignment = "center";
+          } else if(alignment == "RIGHT") {
+            alignment = "right";
+          }
+          column.setStyle("textAlign", alignment);
           itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
           itemRenderer.properties = {formatter:createFormatter(rColumn),
                                      index:i+1,
@@ -1922,6 +1939,7 @@ package org.jspresso.framework.view.flex {
           }
         }
       }
+      configureHorizontalAlignment(label, remoteLabel.horizontalAlignment);
       if(remoteLabel.state) {
         bindLabel(label, remoteLabel);
       }
@@ -1971,6 +1989,7 @@ package org.jspresso.framework.view.flex {
       } else {
         sizeMaxComponentWidth(textField, remoteTextField);
       }
+      configureHorizontalAlignment(textField, remoteTextField.horizontalAlignment);
       bindTextInput(textField, remoteTextField.state);
       return textField;
     }
@@ -2224,6 +2243,16 @@ package org.jspresso.framework.view.flex {
       BindingUtils.bindSetter(updateMenuItemState, action, "enabled", true);
       _remotePeerRegistry.register(action);
       return menuItem;
+    }
+    
+    protected function configureHorizontalAlignment(component:UIComponent, alignment:String):void {
+      if(alignment == "LEFT") {
+        component.setStyle("textAlign","left");
+      } else if(alignment == "CENTER") {
+        component.setStyle("textAlign","center");
+      } else if(alignment == "RIGHT") {
+        component.setStyle("textAlign","right");
+      }
     }
   }
 }

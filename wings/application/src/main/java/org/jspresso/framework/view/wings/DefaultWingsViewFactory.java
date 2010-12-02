@@ -116,6 +116,7 @@ import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
@@ -1658,6 +1659,10 @@ public class DefaultWingsViewFactory extends
         } else {
           column.setCellRenderer(new EvenOddTableCellRenderer());
         }
+        if (cellRenderer instanceof SLabel) {
+          configureHorizontalAlignment((SLabel) cellRenderer,
+              columnViewDescriptor.getHorizontalAlignment());
+        }
         int columnWidth;
         if (columnViewDescriptor.getPreferredSize() != null
             && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
@@ -2509,5 +2514,60 @@ public class DefaultWingsViewFactory extends
       }
       return renderer;
     }
+  }
+
+  private void configureHorizontalAlignment(STextField textField,
+      EHorizontalAlignment horizontalAlignment) {
+    switch (horizontalAlignment) {
+      case LEFT:
+        textField.setHorizontalAlignment(SConstants.LEFT);
+        break;
+      case CENTER:
+        textField.setHorizontalAlignment(SConstants.CENTER);
+        break;
+      case RIGHT:
+        textField.setHorizontalAlignment(SConstants.RIGHT);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private void configureHorizontalAlignment(SLabel label,
+      EHorizontalAlignment horizontalAlignment) {
+    switch (horizontalAlignment) {
+      case LEFT:
+        label.setHorizontalAlignment(SConstants.LEFT);
+        break;
+      case CENTER:
+        label.setHorizontalAlignment(SConstants.CENTER);
+        break;
+      case RIGHT:
+        label.setHorizontalAlignment(SConstants.RIGHT);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<SComponent> createPropertyView(
+      IPropertyViewDescriptor propertyViewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<SComponent> propertyView = super.createPropertyView(
+        propertyViewDescriptor, actionHandler, locale);
+    if (propertyView.getPeer() instanceof SLabel) {
+      configureHorizontalAlignment((SLabel) propertyView.getPeer(),
+          propertyViewDescriptor.getHorizontalAlignment());
+    } else if (propertyView.getPeer() instanceof STextField) {
+      configureHorizontalAlignment((STextField) propertyView.getPeer(),
+          propertyViewDescriptor.getHorizontalAlignment());
+    }
+    return propertyView;
   }
 }

@@ -75,4 +75,12 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
    *         clicked.
    */
   IAction getAction();
+  
+  
+  /**
+   * Returns the horizontal alignment used for displaying the property.
+   * 
+   * @return the horizontal alignment used for displaying the property.
+   */
+  EHorizontalAlignment getHorizontalAlignment();
 }
