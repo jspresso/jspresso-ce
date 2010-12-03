@@ -680,7 +680,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   protected void fireConnectorValueChange() {
     boolean propagatedCorrectly = true;
     try {
-      valueChangeSupport.fireConnectorValueChange(createChangeEvent(
+      valueChangeSupport.fireValueChange(createChangeEvent(
           oldConnectorValue, getConnecteeValue()));
     } catch (RuntimeException ex) {
       propagatedCorrectly = false;
@@ -688,7 +688,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
         Object badValue = getConnectorValue();
         setConnecteeValue(oldConnectorValue);
         // propagate the reverse change...
-        valueChangeSupport.fireConnectorValueChange(createChangeEvent(badValue,
+        valueChangeSupport.fireValueChange(createChangeEvent(badValue,
             getConnecteeValue()));
       } catch (Exception ex2) {
         // ignore. Nothing can be done about it.

@@ -93,9 +93,9 @@ public class ValueChangeSupport {
    * @param newValue
    *          The new connector's value
    */
-  public void fireConnectorValueChange(Object oldValue, Object newValue) {
+  public void fireValueChange(Object oldValue, Object newValue) {
     ValueChangeEvent evt = new ValueChangeEvent(source, oldValue, newValue);
-    fireConnectorValueChange(evt);
+    fireValueChange(evt);
   }
 
   /**
@@ -105,7 +105,7 @@ public class ValueChangeSupport {
    * @param evt
    *          the propagated <code>ValueChangeEvent</code>
    */
-  public void fireConnectorValueChange(ValueChangeEvent evt) {
+  public void fireValueChange(ValueChangeEvent evt) {
     if (listeners != null) {
       Object oldValue = evt.getOldValue();
       Object newValue = evt.getNewValue();
