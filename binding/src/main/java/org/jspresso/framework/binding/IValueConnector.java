@@ -22,6 +22,7 @@ import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.IValueChangeSource;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.IGate;
 
@@ -36,7 +37,7 @@ import org.jspresso.framework.util.gate.IGate;
  * @author Vincent Vandenschrick
  */
 public interface IValueConnector extends IConnector, IValueChangeListener,
-    Comparable<IValueConnector>, ISubjectAware {
+    Comparable<IValueConnector>, ISubjectAware, IValueChangeSource {
 
   /**
    * <code>READABLE_PROPERTY</code>.
@@ -61,14 +62,6 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    * Removes all readability gates.
    */
   void resetReadabilityGates();
-
-  /**
-   * Adds a new Connector listener to this connector.
-   * 
-   * @param listener
-   *          The added listener
-   */
-  void addValueChangeListener(IValueChangeListener listener);
 
   /**
    * Adds a writability gate. Whenever one of the gate is not open, the
@@ -185,14 +178,6 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    *          the new gate to remove.
    */
   void removeReadabilityGate(IGate gate);
-
-  /**
-   * Removes a Connector listener from this connector.
-   * 
-   * @param listener
-   *          The removed listener
-   */
-  void removeValueChangeListener(IValueChangeListener listener);
 
   /**
    * Removes a writability gate.

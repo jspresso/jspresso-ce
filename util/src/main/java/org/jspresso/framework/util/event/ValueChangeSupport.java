@@ -30,7 +30,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
-public class ValueChangeSupport {
+public class ValueChangeSupport implements IValueChangeSource {
 
   private Set<IValueChangeListener> inhibitedListeners;
 
@@ -68,10 +68,7 @@ public class ValueChangeSupport {
   }
 
   /**
-   * Adds a new listener to this connector.
-   * 
-   * @param listener
-   *          The added listener.
+   * {@inheritDoc}
    */
   public synchronized void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
@@ -160,10 +157,7 @@ public class ValueChangeSupport {
   }
 
   /**
-   * Removes a new <code>IValueChangeListener</code>.
-   * 
-   * @param listener
-   *          The removed listener.
+   * {@inheritDoc}
    */
   public synchronized void removeValueChangeListener(
       IValueChangeListener listener) {
