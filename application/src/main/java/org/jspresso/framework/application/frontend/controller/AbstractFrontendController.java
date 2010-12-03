@@ -43,7 +43,6 @@ import org.jspresso.framework.application.frontend.action.workspace.ExitAction;
 import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
-import org.jspresso.framework.application.model.descriptor.ModuleDescriptor;
 import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorListProvider;
@@ -195,9 +194,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       // }
 
       IValueConnector moduleModelConnector = getBackendController()
-          .createModelConnector(workspaceName,
-              ModuleDescriptor.MODULE_DESCRIPTOR);
-      moduleModelConnector.setConnectorValue(module);
+          .getModuleConnector(module);
       mvcBinder.bind(moduleAreaViewConnector, moduleModelConnector);
     }
     selectedModules.put(workspaceName, module);

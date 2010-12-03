@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.map.LRUMap;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
@@ -40,7 +41,9 @@ import org.jspresso.framework.application.backend.entity.ControllerAwareProxyEnt
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
+import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.application.model.descriptor.ModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.WorkspaceDescriptor;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
@@ -105,12 +108,16 @@ public abstract class AbstractBackendController extends AbstractController
   private IEntityUnitOfWork                                unitOfWork;
 
   private Map<String, IValueConnector>                     workspaceConnectors;
+  private Map<Module, IValueConnector>                     moduleConnectors;
 
   /**
    * Constructs a new <code>AbstractBackendController</code> instance.
    */
+  @SuppressWarnings("unchecked")
   protected AbstractBackendController() {
     dirtRecorder = new BeanPropertyChangeRecorder();
+    // moduleConnectors = new HashMap<Module, IValueConnector>();
+    moduleConnectors = new LRUMap(20);
   }
 
   /**
@@ -330,6 +337,23 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public IValueConnector getWorkspaceConnector(String workspaceName) {
     return workspaceConnectors.get(workspaceName);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IValueConnector getModuleConnector(Module module) {
+    if (module == null) {
+      return null;
+    }
+    IValueConnector moduleConnector = moduleConnectors.get(module);
+    if (moduleConnector == null) {
+      moduleConnector = createModelConnector(module.getName(),
+          ModuleDescriptor.MODULE_DESCRIPTOR);
+      moduleConnectors.put(module, moduleConnector);
+    }
+    moduleConnector.setConnectorValue(module);
+    return moduleConnector;
   }
 
   /**
@@ -926,7 +950,8 @@ public abstract class AbstractBackendController extends AbstractController
           }
           uowEntity.straightSetProperty(property.getKey(), uowCollection);
         } else {
-          changeCollectionOwner((Collection<IComponent>) property.getValue(), uowEntity);
+          changeCollectionOwner((Collection<IComponent>) property.getValue(),
+              uowEntity);
           uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
       } else if (property.getValue() instanceof IEntity[]) {

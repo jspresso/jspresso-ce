@@ -981,7 +981,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       public void valueChange(ValueChangeEvent evt) {
         Object cardModel = evt.getNewValue();
         E cardsPeer = cardView.getPeer();
-        IView<E> currentChildCardView = cardView.getCurrentView();
+        //IView<E> currentChildCardView = cardView.getCurrentView();
         String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
             .getCardNameForModel(cardModel, actionHandler.getSubject());
         if (cardName != null) {
@@ -1008,10 +1008,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
             if (accessGranted) {
               showCardInPanel(cardsPeer, cardName);
             } else {
-              if (currentChildCardView != null
-                  && currentChildCardView.getConnector() != null) {
-                getMvcBinder().bind(currentChildCardView.getConnector(), null);
-              }
+              // Do not unbind current connector for performance reason.
+
+              // if (currentChildCardView != null
+              // && currentChildCardView.getConnector() != null) {
+              // getMvcBinder().bind(currentChildCardView.getConnector(), null);
+              // }
               showCardInPanel(cardsPeer, ICardViewDescriptor.SECURITY_CARD);
             }
             IValueConnector childCardConnector = childCardView.getConnector();
@@ -1032,21 +1034,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
                     .setModelDescriptor(
                         childCardView.getDescriptor().getModelDescriptor());
               }
-              getMvcBinder().bind(childCardConnector,
-                  cardView.getConnector().getModelConnector());
+              IValueConnector modelConnector = cardView.getConnector()
+                  .getModelConnector();
+              getMvcBinder().bind(childCardConnector, modelConnector);
             }
           } else {
-            if (currentChildCardView != null
-                && currentChildCardView.getConnector() != null) {
-              getMvcBinder().bind(currentChildCardView.getConnector(), null);
-            }
+            // Do not unbind current connector for performance reason.
+
+            // if (currentChildCardView != null
+            // && currentChildCardView.getConnector() != null) {
+            // getMvcBinder().bind(currentChildCardView.getConnector(), null);
+            // }
             showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
           }
         } else {
-          if (currentChildCardView != null
-              && currentChildCardView.getConnector() != null) {
-            getMvcBinder().bind(currentChildCardView.getConnector(), null);
-          }
+          // Do not unbind current connector for performance reason.
+
+          // if (currentChildCardView != null
+          // && currentChildCardView.getConnector() != null) {
+          // getMvcBinder().bind(currentChildCardView.getConnector(), null);
+          // }
           showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
         }
       }

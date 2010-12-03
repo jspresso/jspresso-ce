@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
+import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IComponent;
@@ -147,6 +148,15 @@ public interface IBackendController extends IController,
    */
   IValueConnector getWorkspaceConnector(String workspaceName);
 
+  /**
+   * Lazily creates a module connector.
+   * 
+   * @param module the module to create (or get) the connector for.
+   * @return the module connector.
+   */
+  IValueConnector getModuleConnector(Module module);
+  
+  
   /**
    * Whenever a property might not be fully initialized, this method performs
    * all necessary complementary initializations..
