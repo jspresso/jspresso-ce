@@ -15,6 +15,7 @@
 qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer",
 {
   extend : qx.ui.table.cellrenderer.Default,
+  include : [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
   /**
    * 
@@ -57,6 +58,11 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer",
         return '<img src="' + rIcon.getImageUrlSpec() + '" style="' + css + '"/>';
       }
       return "";
+    },
+    
+    _getCellStyle : function(cellInfo) {
+      var superStyle = this.base(arguments, cellInfo);
+      return superStyle + this._getAdditionalCellStyle(cellInfo);
     }
   }
 });

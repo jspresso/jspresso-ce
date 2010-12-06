@@ -38,11 +38,9 @@ package org.jspresso.framework.view.flex {
   import mx.containers.TabNavigator;
   import mx.containers.VBox;
   import mx.containers.ViewStack;
-  import mx.containers.dividedBoxClasses.BoxDivider;
   import mx.controls.Button;
   import mx.controls.CheckBox;
   import mx.controls.ColorPicker;
-  import mx.controls.ComboBox;
   import mx.controls.DataGrid;
   import mx.controls.DateField;
   import mx.controls.Image;
@@ -55,7 +53,6 @@ package org.jspresso.framework.view.flex {
   import mx.controls.Tree;
   import mx.controls.VRule;
   import mx.controls.dataGridClasses.DataGridColumn;
-  import mx.controls.treeClasses.DefaultDataDescriptor;
   import mx.core.ClassFactory;
   import mx.core.Container;
   import mx.core.ScrollPolicy;
@@ -74,6 +71,7 @@ package org.jspresso.framework.view.flex {
   import mx.formatters.NumberBase;
   import mx.formatters.NumberBaseRoundType;
   import mx.formatters.NumberFormatter;
+  import mx.styles.CSSStyleDeclaration;
   
   import org.jspresso.framework.action.IActionHandler;
   import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
@@ -248,7 +246,7 @@ package org.jspresso.framework.view.flex {
       return component;
     }
     
-    protected function applyComponentStyle(component:UIComponent, remoteComponent:RComponent):void {
+    protected function applyComponentStyle(component:*, remoteComponent:RComponent):void {
       if(remoteComponent.foreground) {
         component.setStyle("color", remoteComponent.foreground);
       }
@@ -1594,6 +1592,7 @@ package org.jspresso.framework.view.flex {
         }
         var column:DataGridColumn = new DataGridColumn();
         column.headerText = rColumn.label;
+        applyComponentStyle(column, rColumn);
         var itemRenderer:ClassFactory;
         if(rColumn is RComboBox) {
           itemRenderer = new ClassFactory(EnumerationDgItemRenderer);

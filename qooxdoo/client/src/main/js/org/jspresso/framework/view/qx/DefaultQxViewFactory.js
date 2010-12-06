@@ -435,39 +435,45 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       }
       var columnModel = table.getTableColumnModel();
       for(var i=0; i < remoteTable.getColumnIds().length; i++) {
-        var rComponent = remoteTable.getColumns()[i];
+        var rColumn = remoteTable.getColumns()[i];
         var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(this,
-                                                                                  rComponent,
+                                                                                  rColumn,
                                                                                   this.__actionHandler);
         columnModel.setCellEditorFactory(i, editor);
         var cellRenderer = null;
-        if(rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+        if(rColumn instanceof org.jspresso.framework.gui.remote.RCheckBox) {
           cellRenderer = new org.jspresso.framework.view.qx.BooleanTableCellRenderer();
-        } else if(rComponent instanceof org.jspresso.framework.gui.remote.RColorField) {
+        } else if(rColumn instanceof org.jspresso.framework.gui.remote.RColorField) {
           cellRenderer = new org.jspresso.framework.view.qx.ColorTableCellRenderer();
-        } else if(rComponent instanceof org.jspresso.framework.gui.remote.RComboBox) {
+        } else if(rColumn instanceof org.jspresso.framework.gui.remote.RComboBox) {
           var labels = new Object();
           var icons = new Object();
-          for(var j = 0; j < rComponent.getValues().length; j++) {
-            var value = rComponent.getValues()[j];
-            labels[value] = rComponent.getTranslations()[j];
-            icons[value] = rComponent.getIcons()[j];
+          for(var j = 0; j < rColumn.getValues().length; j++) {
+            var value = rColumn.getValues()[j];
+            labels[value] = rColumn.getTranslations()[j];
+            icons[value] = rColumn.getIcons()[j];
           }
           cellRenderer = new org.jspresso.framework.view.qx.EnumerationTableCellRenderer(labels,
                                                                                          icons);
-        } else if(rComponent instanceof org.jspresso.framework.gui.remote.RActionField
-                  && !rComponent.isShowTextField()) {
+        } else if(rColumn instanceof org.jspresso.framework.gui.remote.RActionField
+                  && !rColumn.isShowTextField()) {
           cellRenderer = new org.jspresso.framework.view.qx.BinaryTableCellRenderer();
         } else {
-          var format = this._createFormat(rComponent);
+          var format = this._createFormat(rColumn);
           cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(format);
           cellRenderer.setUseAutoAlign(false);
 
-          var alignment = "left";
-          if (   rComponent instanceof org.jspresso.framework.gui.remote.RLabel
-              || rComponent instanceof org.jspresso.framework.gui.remote.RTextField
-              || rComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
-            alignment = rComponent.getHorizontalAlignment();
+          if(rColumn instanceof org.jspresso.framework.gui.remote.RLink) {
+            this.__remotePeerRegistry.register(rColumn.getAction());
+            cellRenderer.setAction(rColumn.getAction());
+          }
+        }
+        if(cellRenderer) {
+          var alignment = null;
+          if (   rColumn instanceof org.jspresso.framework.gui.remote.RLabel
+              || rColumn instanceof org.jspresso.framework.gui.remote.RTextField
+              || rColumn instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
+            alignment = rColumn.getHorizontalAlignment();
           }
           if(alignment == "LEFT") {
             alignment = "left";
@@ -476,28 +482,50 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           } else if(alignment == "RIGHT") {
             alignment = "right";
           }
-          cellRenderer.setTextAlign(alignment);
-          if(rComponent instanceof org.jspresso.framework.gui.remote.RLink) {
-            this.__remotePeerRegistry.register(rComponent.getAction());
-            cellRenderer.setAction(rComponent.getAction());
+          
+          var additionalAttributes = {};
+          if(alignment) {
+            additionalAttributes["text-align"] = alignment;
           }
-        }
-        if(cellRenderer) {
+          if(rColumn.getForeground()) {
+            additionalAttributes["color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(rColumn.getForeground());
+          }
+          if(rColumn.getBackground()) {
+            additionalAttributes["background-color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(rColumn.getBackground());
+          }
+          var rFont = rColumn.getFont(); 
+          if(rFont) {
+            if (rFont.isItalic()) {
+              additionalAttributes["font-style"] = "italic";
+            }
+            if (rFont.isBold()) {
+              additionalAttributes["font-weight"] = "bold";
+            }
+            if(rFont.getName()) {
+              additionalAttributes["font-family"] = rFont.getName();
+            }
+            if(rFont.getSize() > 0) {
+              additionalAttributes["font-size"] = rFont.getSize() + "px";
+            }
+          }
+
+          cellRenderer.setAdditionalAttributes(additionalAttributes);
+
           columnModel.setDataCellRenderer(i, cellRenderer);
         }
         var columnWidth;
-        if(rComponent.getPreferredSize() && rComponent.getPreferredSize().getWidth() > 0) {
-          columnWidth = rComponent.getPreferredSize().getWidth();
+        if(rColumn.getPreferredSize() && rColumn.getPreferredSize().getWidth() > 0) {
+          columnWidth = rColumn.getPreferredSize().getWidth();
         } else {
           var tableFont = qx.theme.manager.Font.getInstance().resolve("default");
           var headerWidth = qx.bom.Label.getTextSize(columnNames[i], tableFont.getStyles()).width;
-          if(rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+          if(rColumn instanceof org.jspresso.framework.gui.remote.RCheckBox) {
             columnWidth = headerWidth + 16;
           } else {
             var maxColumnWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.DefaultQxViewFactory.__TEMPLATE_CHAR,
                                                  tableFont.getStyles()).width
                                  * org.jspresso.framework.view.qx.DefaultQxViewFactory.__COLUMN_MAX_CHAR_COUNT;
-            var editorComponent = this.createComponent(rComponent, false);
+            var editorComponent = this.createComponent(rColumn, false);
             columnWidth = maxColumnWidth;
             if(editorComponent.getMaxWidth()) {
               columnWidth = Math.min(maxColumnWidth, editorComponent.getMaxWidth());
@@ -564,6 +592,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
           state.setLeadingIndex(leadingIndex);
           state.setSelectedIndices(selectedIndices);
         }
+        // workaround to update cell rendering
+        table.updateContent();
       }, this);
       
       state.addListener("changeSelectedIndices", function(e) {

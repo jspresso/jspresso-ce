@@ -12,31 +12,31 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.view.qx.ColorTableCellRenderer",
+qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle",
 {
-  extend : qx.ui.table.cellrenderer.Default,
-  include : [org.jspresso.framework.view.qx.MCellAdditionalStyle],
-
-  /**
-   * 
-   * @param {org.jspresso.framework.view.qx.DefaultQxViewFactory} viewFactory
-   * @param {org.jspresso.framework.gui.remote.RComponent} rComponent
-   * @param {org.jspresso.framework.action.IActionHandler} actionHandler
-   */
-  construct : function() {
-    this.base(arguments);
-  },
-
-
+  
   members :
   {
-    _getCellStyle : function(cellInfo) {
-      var superStyle = this.base(arguments, cellInfo);
-      if(cellInfo.value) {
-        var bgStyle = "color: #" + cellInfo.value.substring(4) + ";";
-        return superStyle = (superStyle || "") + bgStyle;
+    __attributes : null,
+    
+    setAdditionalAttributes : function(attrs) {
+      this.__attributes = attrs;
+    },
+    
+    _getAdditionalCellStyle : function(cellInfo) {
+      if(this.__attributes) {
+        var styleString = [];
+        for(var key in this.__attributes) {
+          if (this.__attributes[key]) {
+            if(!cellInfo.selected ||
+              ( cellInfo.selected && !("background-color" == key || "color" == key))) {
+              styleString.push(key, ":", this.__attributes[key], ";");
+            }
+          }
+        }
+        return styleString.join("");
       }
-      return superStyle + this._getAdditionalCellStyle(cellInfo);
+      return "";
     }
   }
 });
