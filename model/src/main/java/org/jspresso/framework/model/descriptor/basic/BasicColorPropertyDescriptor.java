@@ -22,7 +22,7 @@ import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
 
 /**
  * Describes a property used for storing a color. Color values are stored in the
- * property as their string hexadecimal representation (<i>0xrgba</i> encoded).
+ * property as their string hexadecimal representation (<i>0xargb</i> encoded).
  * Jspresso cleanly handles color properties in views for both visually
  * displaying and editing them without any extra effort. Moreover the
  * <code>ColorHelper</code> helper class eases colors manipulation and helps

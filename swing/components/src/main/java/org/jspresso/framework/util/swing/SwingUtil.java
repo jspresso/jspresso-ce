@@ -79,26 +79,26 @@ public final class SwingUtil {
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
    * 
-   * @param renderer
-   *          the renderer to work on.
-   * @param collectionComponent
-   *          the collection component (table, list, ...) on which this renderer
-   *          is used.
+   * @param background
+   *          the base background color of the collection component (table,
+   *          list, ...) on which this renderer is used.
    * @param isSelected
    *          is the row selected ?
    * @param row
    *          the row to render.
+   *          
+   *          @return the computed color 
    */
-  public static void alternateEvenOddBackground(Component renderer,
-      Component collectionComponent, boolean isSelected, int row) {
+  public static Color computeEvenOddBackground(
+      Color background, boolean isSelected, int row) {
     if (!isSelected) {
       if (row % 2 == 1) {
-        renderer.setBackground(SwingUtil.getScaledColor(collectionComponent
-            .getBackground(), DARKER_COLOR_FACTOR));
-      } else {
-        renderer.setBackground(collectionComponent.getBackground());
+        return SwingUtil.getScaledColor(
+            background, DARKER_COLOR_FACTOR);
       }
+        return background;
     }
+    return background.brighter();
   }
 
   /**
@@ -124,8 +124,8 @@ public final class SwingUtil {
    */
   public static void centerOnScreen(Window w) {
     Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-    w.setLocation((screenDim.width - w.getWidth()) / 2, (screenDim.height - w
-        .getHeight()) / 2);
+    w.setLocation((screenDim.width - w.getWidth()) / 2,
+        (screenDim.height - w.getHeight()) / 2);
   }
 
   /**
@@ -218,8 +218,8 @@ public final class SwingUtil {
     }
     if (factor <= 1) {
       return new Color(Math.max((int) (color.getRed() * factor), 0), Math.max(
-          (int) (color.getGreen() * factor), 0), Math.max((int) (color
-          .getBlue() * factor), 0), color.getAlpha());
+          (int) (color.getGreen() * factor), 0), Math.max(
+          (int) (color.getBlue() * factor), 0), color.getAlpha());
     }
     int r = color.getRed();
     int g = color.getGreen();
@@ -299,10 +299,10 @@ public final class SwingUtil {
     }
     JFrame.setDefaultLookAndFeelDecorated(true);
     JDialog.setDefaultLookAndFeelDecorated(true);
-    UIManager.put(FORMATTED_TEXTFIELD_FONT_KEY, UIManager
-        .get(TEXTFIELD_FONT_KEY));
-    UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY, UIManager
-        .get(TEXTFIELD_INACTIVE_BACKGROUND_KEY));
+    UIManager.put(FORMATTED_TEXTFIELD_FONT_KEY,
+        UIManager.get(TEXTFIELD_FONT_KEY));
+    UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY,
+        UIManager.get(TEXTFIELD_INACTIVE_BACKGROUND_KEY));
     UIManager.put(PASSWORDFIELD_FONT_KEY, UIManager.get(TEXTFIELD_FONT_KEY));
     try {
       UIManager.put(LafWidget.TABBED_PANE_PREVIEW_PAINTER,

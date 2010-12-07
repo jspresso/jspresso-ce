@@ -18,13 +18,13 @@
  */
 package org.jspresso.framework.view.swing;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.jspresso.framework.util.swing.SwingUtil;
-
 
 /**
  * A default table cell renderer rendering even and odd rows background slightly
@@ -37,20 +37,30 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
 
   private static final long serialVersionUID = -635326662239616998L;
 
+  private Color             backgroundBase;
+
   /**
    * {@inheritDoc}
    */
   @Override
   public Component getTableCellRendererComponent(JTable table, Object value,
       boolean isSelected, boolean hasFocus, int row, int column) {
-    Component renderer = super.getTableCellRendererComponent(table, value,
-        isSelected, hasFocus, row, column);
-    SwingUtil.alternateEvenOddBackground(renderer, table, isSelected, row);
-    if (isSelected && hasFocus && table.getModel().isCellEditable(row, column)) {
-      renderer.setBackground(renderer.getBackground().brighter());
-      renderer.setForeground(table.getForeground());
+    Color actualBackground = table.getBackground();
+    if (backgroundBase != null) {
+      actualBackground = backgroundBase;
     }
-    return renderer;
+    super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
+        isSelected, row));
+    return super.getTableCellRendererComponent(table, value, isSelected,
+        hasFocus, row, column);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBackground(Color c) {
+    backgroundBase = c;
+    super.setBackground(c);
+  }
 }

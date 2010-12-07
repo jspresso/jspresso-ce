@@ -2001,18 +2001,24 @@ public class DefaultWingsViewFactory extends
   @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
       Locale locale, IView<SComponent> view) {
+    SComponent viewPeer = view.getPeer();
+    configureComponent(viewDescriptor, locale, viewPeer);
+  }
+
+  private void configureComponent(IViewDescriptor viewDescriptor,
+      Locale locale, SComponent viewPeer) {
     if (viewDescriptor.getForeground() != null) {
-      view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
+      viewPeer.setForeground(createColor(viewDescriptor.getForeground()));
     }
     if (viewDescriptor.getBackground() != null) {
-      view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
+      viewPeer.setBackground(createColor(viewDescriptor.getBackground()));
     }
     if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(
-          createFont(viewDescriptor.getFont(), view.getPeer().getFont()));
+      viewPeer.setFont(
+          createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
     if (viewDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
+      viewPeer.setToolTipText(
           viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
               + TOOLTIP_ELLIPSIS);
     }

@@ -1839,14 +1839,16 @@ public class DefaultSwingViewFactory extends
           configureHorizontalAlignment((JLabel) cellRenderer,
               columnViewDescriptor.getHorizontalAlignment());
         }
+        if (cellRenderer instanceof JComponent) {
+          configureComponent(columnViewDescriptor, locale,
+              (JComponent) cellRenderer);
+        }
         if (columnViewDescriptor.getAction() != null) {
           Action colAction = getActionFactory().createAction(
               columnViewDescriptor.getAction(), actionHandler, view, locale);
           cellRenderer = new HyperlinkTableCellRenderer(cellRenderer,
               colAction, columnIndex);
           viewComponent.addMouseListener((MouseListener) cellRenderer);
-          // viewComponent
-          // .addMouseMotionListener((MouseMotionListener) cellRenderer);
         }
         column.setCellRenderer(cellRenderer);
         if (columnViewDescriptor.getPreferredSize() != null
@@ -2305,20 +2307,25 @@ public class DefaultSwingViewFactory extends
   @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
       Locale locale, IView<JComponent> view) {
+    JComponent viewPeer = view.getPeer();
+    configureComponent(viewDescriptor, locale, viewPeer);
+  }
+
+  private void configureComponent(IViewDescriptor viewDescriptor,
+      Locale locale, JComponent viewPeer) {
     if (viewDescriptor.getForeground() != null) {
-      view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
+      viewPeer.setForeground(createColor(viewDescriptor.getForeground()));
     }
     if (viewDescriptor.getBackground() != null) {
-      view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
+      viewPeer.setBackground(createColor(viewDescriptor.getBackground()));
     }
     if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(
-          createFont(viewDescriptor.getFont(), view.getPeer().getFont()));
+      viewPeer
+          .setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
     if (viewDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
-          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-              + TOOLTIP_ELLIPSIS);
+      viewPeer.setToolTipText(viewDescriptor.getI18nDescription(
+          getTranslationProvider(), locale) + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2808,7 +2815,7 @@ public class DefaultSwingViewFactory extends
           renderer.setText(value.toString());
         }
       }
-      SwingUtil.alternateEvenOddBackground(renderer, list, isSelected, index);
+      renderer.setBackground(SwingUtil.computeEvenOddBackground(list.getBackground(), isSelected, index));
       return renderer;
     }
   }

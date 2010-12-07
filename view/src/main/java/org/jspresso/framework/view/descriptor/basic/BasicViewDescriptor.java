@@ -278,7 +278,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the background color of the UI component. The color must be defined
-   * using its string hexadecimal representation (<i>0xrgba</i> encoded).
+   * using its string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
    * Default value is <code>null</code>, meaning use UI default.
    * 
@@ -332,7 +332,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the foreground color of the UI component. The color must be defined
-   * using its string hexadecimal representation (<i>0xrgba</i> encoded).
+   * using its string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
    * Default value is <code>null</code>, meaning use UI default.
    * 

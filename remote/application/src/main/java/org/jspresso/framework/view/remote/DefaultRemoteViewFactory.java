@@ -1949,23 +1949,29 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected void finishComponentConfiguration(IViewDescriptor viewDescriptor,
       Locale locale, IView<RComponent> view) {
-    view.getPeer().setLabel(
-        view.getDescriptor().getI18nName(getTranslationProvider(), locale));
+    RComponent viewPeer = view.getPeer();
+    configureComponent(viewDescriptor, locale, viewPeer);
+  }
+
+  private void configureComponent(IViewDescriptor viewDescriptor,
+      Locale locale, RComponent viewPeer) {
+    viewPeer.setLabel(
+        viewDescriptor.getI18nName(getTranslationProvider(), locale));
     if (viewDescriptor.getDescription() != null) {
-      view.getPeer().setTooltip(
+      viewPeer.setTooltip(
           viewDescriptor.getI18nDescription(getTranslationProvider(), locale));
     }
     if (viewDescriptor.getForeground() != null) {
-      view.getPeer().setForeground(viewDescriptor.getForeground());
+      viewPeer.setForeground(viewDescriptor.getForeground());
     }
     if (viewDescriptor.getBackground() != null) {
-      view.getPeer().setBackground(viewDescriptor.getBackground());
+      viewPeer.setBackground(viewDescriptor.getBackground());
     }
     if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+      viewPeer.setFont(createFont(viewDescriptor.getFont()));
     }
     if (viewDescriptor.getIconImageURL() != null) {
-      view.getPeer().setIcon(
+      viewPeer.setIcon(
           getIconFactory().getIcon(viewDescriptor.getIconImageURL(),
               getIconFactory().getSmallIconSize()));
     }

@@ -124,7 +124,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * When the property has to be labelled (e.g. in a component view), this
    * property defines the background color of the corresponding label. It might
    * differ from the field component one. The color must be defined using its
-   * string hexadecimal representation (<i>0xrgba</i> encoded).
+   * string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
    * Default value is <code>null</code>, meaning use UI default.
    * 
@@ -162,7 +162,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * When the property has to be labelled (e.g. in a component view), this
    * property defines the foregroud color of the corresponding label. It might
    * differ from the field component one. The color must be defined using its
-   * string hexadecimal representation (<i>0xrgba</i> encoded).
+   * string hexadecimal representation (<i>0xargb</i> encoded).
    * <p>
    * Default value is <code>null</code>, meaning use UI default.
    * 

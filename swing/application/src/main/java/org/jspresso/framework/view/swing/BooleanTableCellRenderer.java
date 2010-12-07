@@ -33,7 +33,6 @@ import javax.swing.table.TableCellRenderer;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.swing.SwingUtil;
 
-
 /**
  * Renders a table cell using a checkbox.
  * 
@@ -43,8 +42,11 @@ import org.jspresso.framework.util.swing.SwingUtil;
 public class BooleanTableCellRenderer extends JCheckBox implements
     TableCellRenderer {
 
-  private static final Border NO_FOCUS_BORDER  = new EmptyBorder(1, 1, 1, 1);
   private static final long   serialVersionUID = 5944792695339009139L;
+  private static final Border NO_FOCUS_BORDER  = new EmptyBorder(1, 1, 1, 1);
+
+  private Color               unselectedForeground;
+  private Color               unselectedBackground;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -61,10 +63,10 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  public void firePropertyChange(@SuppressWarnings("unused")
-  String propertyName, @SuppressWarnings("unused")
-  boolean oldValue, @SuppressWarnings("unused")
-  boolean newValue) {
+  public void firePropertyChange(
+      @SuppressWarnings("unused") String propertyName,
+      @SuppressWarnings("unused") boolean oldValue,
+      @SuppressWarnings("unused") boolean newValue) {
     // NO-OP
   }
 
@@ -77,8 +79,17 @@ public class BooleanTableCellRenderer extends JCheckBox implements
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());
     } else {
-      super.setForeground(table.getForeground());
-      SwingUtil.alternateEvenOddBackground(this, table, isSelected, row);
+      if (unselectedForeground != null) {
+        super.setForeground(unselectedForeground);
+      } else {
+        super.setForeground(table.getForeground());
+      }
+      Color actualBackground = table.getBackground();
+      if (unselectedBackground != null) {
+        actualBackground = unselectedBackground;
+      }
+      super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
+          isSelected, row));
     }
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
@@ -110,7 +121,6 @@ public class BooleanTableCellRenderer extends JCheckBox implements
     } else {
       setBorder(NO_FOCUS_BORDER);
     }
-    SwingUtil.alternateEvenOddBackground(this, table, isSelected, row);
     return this;
   }
 
@@ -163,12 +173,10 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  public void repaint(@SuppressWarnings("unused")
-  long tm, @SuppressWarnings("unused")
-  int x, @SuppressWarnings("unused")
-  int y, @SuppressWarnings("unused")
-  int width, @SuppressWarnings("unused")
-  int height) {
+  public void repaint(@SuppressWarnings("unused") long tm,
+      @SuppressWarnings("unused") int x, @SuppressWarnings("unused") int y,
+      @SuppressWarnings("unused") int width,
+      @SuppressWarnings("unused") int height) {
     // NO-OP
   }
 
@@ -178,8 +186,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  public void repaint(@SuppressWarnings("unused")
-  Rectangle r) {
+  public void repaint(@SuppressWarnings("unused") Rectangle r) {
     // NO-OP
   }
 
@@ -221,11 +228,28 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  protected void firePropertyChange(@SuppressWarnings("unused")
-  String propertyName, @SuppressWarnings("unused")
-  Object oldValue, @SuppressWarnings("unused")
-  Object newValue) {
+  protected void firePropertyChange(
+      @SuppressWarnings("unused") String propertyName,
+      @SuppressWarnings("unused") Object oldValue,
+      @SuppressWarnings("unused") Object newValue) {
     // NO-OP
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setForeground(Color fg) {
+    super.setForeground(fg);
+    unselectedForeground = fg;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBackground(Color bg) {
+    super.setBackground(bg);
+    unselectedBackground = bg;
+  }
 }
