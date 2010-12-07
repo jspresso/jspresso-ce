@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.view.wings;
 
+import java.awt.Color;
+
+import org.jspresso.framework.util.wings.WingsUtil;
 import org.wings.SComponent;
 import org.wings.STable;
 import org.wings.table.SDefaultTableCellRenderer;
@@ -33,21 +36,30 @@ public class EvenOddTableCellRenderer extends SDefaultTableCellRenderer {
 
   private static final long serialVersionUID = -635326662239616998L;
 
+  private Color             backgroundBase;
+
   /**
    * {@inheritDoc}
    */
   @Override
   public SComponent getTableCellRendererComponent(STable table, Object value,
       boolean isSelected, int row, int column) {
-    // SComponent renderer = super.getTableCellRendererComponent(table, value,
-    // isSelected, row, column);
-    // WingsUtil.alternateEvenOddBackground(renderer, table, isSelected, row);
-    // if (isSelected && table.getModel().isCellEditable(row, column)) {
-    // renderer.setBackground(renderer.getBackground().brighter());
-    // renderer.setForeground(table.getForeground());
-    // }
-    return super.getTableCellRendererComponent(table, value, isSelected, row,
-        column);
+    Color actualBackground = table.getBackground();
+    if (backgroundBase != null) {
+      actualBackground = backgroundBase;
+    }
+    super.setBackground(WingsUtil.computeEvenOddBackground(actualBackground,
+        isSelected, row));
+    return super.getTableCellRendererComponent(table, value, isSelected,
+         row, column);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBackground(Color c) {
+    backgroundBase = c;
+    super.setBackground(c);
+  }
 }

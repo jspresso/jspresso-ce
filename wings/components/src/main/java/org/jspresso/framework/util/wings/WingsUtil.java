@@ -54,26 +54,27 @@ public final class WingsUtil {
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
    * 
-   * @param renderer
-   *          the renderer to work on.
-   * @param collectionSComponent
-   *          the collection component (table, list, ...) on which this renderer
-   *          is used.
+   * @param background
+   *          the base background color of the collection component (table,
+   *          list, ...) on which this renderer is used.
    * @param isSelected
    *          is the row selected ?
    * @param row
    *          the row to render.
+   * @return the computed color
    */
-  public static void alternateEvenOddBackground(SComponent renderer,
-      SComponent collectionSComponent, boolean isSelected, int row) {
+  public static Color computeEvenOddBackground(Color background,
+      boolean isSelected, int row) {
+    if (background == null) {
+      return background;
+    }
     if (!isSelected) {
       if (row % 2 == 1) {
-        renderer.setBackground(WingsUtil.getScaledColor(collectionSComponent
-            .getBackground(), DARKER_COLOR_FACTOR));
-      } else {
-        renderer.setBackground(collectionSComponent.getBackground());
+        return WingsUtil.getScaledColor(background, DARKER_COLOR_FACTOR);
       }
+      return background;
     }
+    return background.brighter();
   }
 
   /**
@@ -118,8 +119,8 @@ public final class WingsUtil {
     }
     if (factor <= 1) {
       return new Color(Math.max((int) (color.getRed() * factor), 0), Math.max(
-          (int) (color.getGreen() * factor), 0), Math.max((int) (color
-          .getBlue() * factor), 0), color.getAlpha());
+          (int) (color.getGreen() * factor), 0), Math.max(
+          (int) (color.getBlue() * factor), 0), color.getAlpha());
     }
     int r = color.getRed();
     int g = color.getGreen();

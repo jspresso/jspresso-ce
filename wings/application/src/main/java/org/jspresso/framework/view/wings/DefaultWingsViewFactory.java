@@ -1643,6 +1643,10 @@ public class DefaultWingsViewFactory extends
           configureHorizontalAlignment((SLabel) cellRenderer,
               columnViewDescriptor.getHorizontalAlignment());
         }
+        if (cellRenderer instanceof SComponent) {
+          configureComponent(columnViewDescriptor, locale,
+              (SComponent) cellRenderer);
+        }
         int columnWidth;
         if (columnViewDescriptor.getPreferredSize() != null
             && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
@@ -1711,8 +1715,7 @@ public class DefaultWingsViewFactory extends
 
   private void setupTableModel(ITableViewDescriptor viewDescriptor,
       IActionHandler actionHandler, ICollectionConnector connector,
-      ClickableHeaderSTable viewComponent,
-      TableModel tableModel) {
+      ClickableHeaderSTable viewComponent, TableModel tableModel) {
     if (viewDescriptor.isSortable()) {
       AbstractTableSorter sorterDecorator;
       if (viewDescriptor.getSortingAction() != null) {
@@ -2023,13 +2026,12 @@ public class DefaultWingsViewFactory extends
       viewPeer.setBackground(createColor(viewDescriptor.getBackground()));
     }
     if (viewDescriptor.getFont() != null) {
-      viewPeer.setFont(
-          createFont(viewDescriptor.getFont(), viewPeer.getFont()));
+      viewPeer
+          .setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
     if (viewDescriptor.getDescription() != null) {
-      viewPeer.setToolTipText(
-          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-              + TOOLTIP_ELLIPSIS);
+      viewPeer.setToolTipText(viewDescriptor.getI18nDescription(
+          getTranslationProvider(), locale) + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2419,7 +2421,8 @@ public class DefaultWingsViewFactory extends
           renderer.setText(value.toString());
         }
       }
-      WingsUtil.alternateEvenOddBackground(renderer, list, isSelected, index);
+      renderer.setBackground(WingsUtil.computeEvenOddBackground(
+          list.getBackground(), isSelected, index));
       return renderer;
     }
   }

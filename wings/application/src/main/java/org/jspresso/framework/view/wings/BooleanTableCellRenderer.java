@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.wings;
 
+import java.awt.Color;
+
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.wings.WingsUtil;
 import org.wings.SCheckBox;
@@ -25,7 +27,6 @@ import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.STable;
 import org.wings.table.STableCellRenderer;
-
 
 /**
  * Renders a table cell using a checkbox.
@@ -37,6 +38,9 @@ public class BooleanTableCellRenderer extends SCheckBox implements
     STableCellRenderer {
 
   private static final long serialVersionUID = 5944792695339009139L;
+
+  private Color               unselectedForeground;
+  private Color               unselectedBackground;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -55,8 +59,17 @@ public class BooleanTableCellRenderer extends SCheckBox implements
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());
     } else {
-      super.setForeground(table.getForeground());
-      WingsUtil.alternateEvenOddBackground(this, table, isSelected, row);
+      if (unselectedForeground != null) {
+        super.setForeground(unselectedForeground);
+      } else {
+        super.setForeground(table.getForeground());
+      }
+      Color actualBackground = table.getBackground();
+      if (unselectedBackground != null) {
+        actualBackground = unselectedBackground;
+      }
+      super.setBackground(WingsUtil.computeEvenOddBackground(actualBackground,
+          isSelected, row));
     }
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
@@ -83,5 +96,23 @@ public class BooleanTableCellRenderer extends SCheckBox implements
     super.updateCG();
     setForeground(null);
     setBackground(null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setForeground(Color fg) {
+    super.setForeground(fg);
+    unselectedForeground = fg;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBackground(Color bg) {
+    super.setBackground(bg);
+    unselectedBackground = bg;
   }
 }
