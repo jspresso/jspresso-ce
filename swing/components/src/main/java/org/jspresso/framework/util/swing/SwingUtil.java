@@ -86,17 +86,15 @@ public final class SwingUtil {
    *          is the row selected ?
    * @param row
    *          the row to render.
-   *          
-   *          @return the computed color 
+   * @return the computed color
    */
-  public static Color computeEvenOddBackground(
-      Color background, boolean isSelected, int row) {
+  public static Color computeEvenOddBackground(Color background,
+      boolean isSelected, int row) {
     if (!isSelected) {
       if (row % 2 == 1) {
-        return SwingUtil.getScaledColor(
-            background, DARKER_COLOR_FACTOR);
+        return SwingUtil.getScaledColor(background, DARKER_COLOR_FACTOR);
       }
-        return background;
+      return background;
     }
     return background.brighter();
   }

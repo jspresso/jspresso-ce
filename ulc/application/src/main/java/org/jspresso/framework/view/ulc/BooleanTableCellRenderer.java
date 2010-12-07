@@ -40,9 +40,13 @@ import com.ulcjava.base.shared.IDefaults;
 public class BooleanTableCellRenderer extends ULCCheckBox implements
     ITableCellRenderer {
 
+  private static final long              serialVersionUID = 5944792695339009139L;
+
   private static final ULCAbstractBorder NO_FOCUS_BORDER  = new ULCEmptyBorder(
                                                               1, 1, 1, 1);
-  private static final long              serialVersionUID = 5944792695339009139L;
+  
+  private Color               unselectedForeground;
+  private Color               unselectedBackground;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -62,8 +66,17 @@ public class BooleanTableCellRenderer extends ULCCheckBox implements
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());
     } else {
-      super.setForeground(table.getForeground());
-      UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
+      if (unselectedForeground != null) {
+        super.setForeground(unselectedForeground);
+      } else {
+        super.setForeground(table.getForeground());
+      }
+      Color actualBackground = table.getBackground();
+      if (unselectedBackground != null) {
+        actualBackground = unselectedBackground;
+      }
+      super.setBackground(UlcUtil.computeEvenOddBackground(actualBackground,
+          isSelected, row));
     }
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
@@ -97,5 +110,23 @@ public class BooleanTableCellRenderer extends ULCCheckBox implements
       setBorder(NO_FOCUS_BORDER);
     }
     return this;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setForeground(Color fg) {
+    super.setForeground(fg);
+    unselectedForeground = fg;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBackground(Color bg) {
+    super.setBackground(bg);
+    unselectedBackground = bg;
   }
 }

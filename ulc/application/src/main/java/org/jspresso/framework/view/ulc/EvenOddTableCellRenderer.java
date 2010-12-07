@@ -21,9 +21,9 @@ package org.jspresso.framework.view.ulc;
 import org.jspresso.framework.util.ulc.UlcUtil;
 
 import com.ulcjava.base.application.IRendererComponent;
-import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCTable;
 import com.ulcjava.base.application.table.DefaultTableCellRenderer;
+import com.ulcjava.base.application.util.Color;
 
 /**
  * A default table cell renderer rendering even and odd rows background slightly
@@ -37,12 +37,13 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
   private static final long serialVersionUID = -932556734324432049L;
 
   private int               column;
+  private Color             backgroundBase;
 
   /**
    * Constructs a new <code>EvenOddTableCellRenderer</code> instance.
    * 
    * @param column
-   *            the column this renderer is attached to.
+   *          the column this renderer is attached to.
    */
   public EvenOddTableCellRenderer(int column) {
     this.column = column;
@@ -54,15 +55,30 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
   @Override
   public IRendererComponent getTableCellRendererComponent(ULCTable table,
       Object value, boolean isSelected, boolean hasFocus, int row) {
-    IRendererComponent renderer = super.getTableCellRendererComponent(table,
-        value, isSelected, hasFocus, row);
-    UlcUtil.alternateEvenOddBackground((ULCComponent) renderer, table,
-        isSelected, row);
-    if (isSelected && hasFocus && table.getModel().isCellEditable(row, column)) {
-      ((ULCComponent) renderer).setBackground(((ULCComponent) renderer)
-          .getBackground().brighter());
-      ((ULCComponent) renderer).setForeground(table.getForeground());
+    Color actualBackground = table.getBackground();
+    if (backgroundBase != null) {
+      actualBackground = backgroundBase;
     }
-    return renderer;
+    super.setBackground(UlcUtil.computeEvenOddBackground(actualBackground,
+        isSelected, row));
+    EvenOddTableCellRenderer comp = (EvenOddTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected,
+        hasFocus, row);
+    if (isSelected && hasFocus && table.getModel().isCellEditable(row, column)) {
+      comp.superSetBackground(comp.getBackground().brighter());
+    }
+    return comp;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setBackground(Color c) {
+    backgroundBase = c;
+    superSetBackground(c);
+  }
+
+  private void superSetBackground(Color c) {
+    super.setBackground(c);
   }
 }

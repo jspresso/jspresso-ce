@@ -81,6 +81,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.html.HTMLEditorKit;
@@ -1776,31 +1777,8 @@ public class DefaultSwingViewFactory extends
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys, columnClasses);
     tableModel.setExceptionHandler(actionHandler);
-    if (viewDescriptor.isSortable()) {
-      AbstractTableSorter sorterDecorator;
-      if (viewDescriptor.getSortingAction() != null) {
-        sorterDecorator = new ActionTableSorter(tableModel,
-            viewComponent.getTableHeader(), actionHandler,
-            viewDescriptor.getSortingAction());
-      } else {
-        sorterDecorator = new TableSorter(tableModel,
-            viewComponent.getTableHeader());
-        ((TableSorter) sorterDecorator).setColumnComparator(String.class,
-            String.CASE_INSENSITIVE_ORDER);
-      }
-      org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
-          viewComponent.getTableHeader().getFont().getSize(), viewComponent
-              .getTableHeader().getFont().getSize());
-      sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
-      sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
-      viewComponent.setModel(sorterDecorator);
-      listSelectionModelBinder.bindSelectionModel(connector,
-          viewComponent.getSelectionModel(), sorterDecorator);
-    } else {
-      viewComponent.setModel(tableModel);
-      listSelectionModelBinder.bindSelectionModel(connector,
-          viewComponent.getSelectionModel(), null);
-    }
+    setupTableModel(viewDescriptor, actionHandler, connector, viewComponent,
+        tableModel);
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());
@@ -1912,6 +1890,36 @@ public class DefaultSwingViewFactory extends
     }
     attachDefaultCollectionListener(connector);
     return view;
+  }
+
+  private void setupTableModel(ITableViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, ICollectionConnector connector,
+      JTable viewComponent, TableModel tableModel) {
+    if (viewDescriptor.isSortable()) {
+      AbstractTableSorter sorterDecorator;
+      if (viewDescriptor.getSortingAction() != null) {
+        sorterDecorator = new ActionTableSorter(tableModel,
+            viewComponent.getTableHeader(), actionHandler,
+            viewDescriptor.getSortingAction());
+      } else {
+        sorterDecorator = new TableSorter(tableModel,
+            viewComponent.getTableHeader());
+        ((TableSorter) sorterDecorator).setColumnComparator(String.class,
+            String.CASE_INSENSITIVE_ORDER);
+      }
+      org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
+          viewComponent.getTableHeader().getFont().getSize(), viewComponent
+              .getTableHeader().getFont().getSize());
+      sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
+      sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
+      viewComponent.setModel(sorterDecorator);
+      listSelectionModelBinder.bindSelectionModel(connector,
+          viewComponent.getSelectionModel(), sorterDecorator);
+    } else {
+      viewComponent.setModel(tableModel);
+      listSelectionModelBinder.bindSelectionModel(connector,
+          viewComponent.getSelectionModel(), null);
+    }
   }
 
   /**

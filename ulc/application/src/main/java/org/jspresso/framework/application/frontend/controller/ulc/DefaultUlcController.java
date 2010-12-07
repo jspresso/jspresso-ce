@@ -685,7 +685,7 @@ public class DefaultUlcController extends
 
     int screenRes = ClientContext.getScreenResolution();
     dialog.setSize(new com.ulcjava.base.application.util.Dimension(
-        screenRes * 7 / 2, screenRes * 9 / 5));
+        screenRes * 5, screenRes * 5 / 2));
     dialog.pack();
     UlcUtil.centerInParent(dialog);
     dialog.setVisible(true);

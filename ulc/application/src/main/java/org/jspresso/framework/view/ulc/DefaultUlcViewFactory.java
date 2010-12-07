@@ -174,6 +174,7 @@ import com.ulcjava.base.application.event.serializable.ISelectionChangedListener
 import com.ulcjava.base.application.event.serializable.ITreeModelListener;
 import com.ulcjava.base.application.table.DefaultTableCellRenderer;
 import com.ulcjava.base.application.table.ITableCellRenderer;
+import com.ulcjava.base.application.table.ITableModel;
 import com.ulcjava.base.application.table.ULCTableColumn;
 import com.ulcjava.base.application.tree.DefaultTreeCellRenderer;
 import com.ulcjava.base.application.tree.ITreeModel;
@@ -1393,35 +1394,8 @@ public class DefaultUlcViewFactory extends
         connector, columnConnectorKeys, columnClasses, columnFormatters);
     tableModel.setExceptionHandler(actionHandler);
 
-    if (viewDescriptor.isSortable()) {
-      AbstractTableSorter sorterDecorator;
-      if (viewDescriptor.getSortingAction() != null) {
-        sorterDecorator = new ActionTableSorter(tableModel,
-            viewComponent.getTableHeader(), actionHandler,
-            viewDescriptor.getSortingAction());
-      } else {
-        sorterDecorator = new TableSorter(tableModel,
-            viewComponent.getTableHeader());
-        ((TableSorter) sorterDecorator).setColumnComparator(String.class,
-            String.CASE_INSENSITIVE_ORDER);
-      }
-      org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
-          viewComponent.getTableHeader().getFont().getSize(), viewComponent
-              .getTableHeader().getFont().getSize());
-      sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
-      sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
-      ClientContext.setModelUpdateMode(sorterDecorator,
-          IUlcEventConstants.ASYNCHRONOUS_MODE);
-      viewComponent.setModel(sorterDecorator);
-      listSelectionModelBinder.bindSelectionModel(connector,
-          viewComponent.getSelectionModel(), sorterDecorator);
-    } else {
-      ClientContext.setModelUpdateMode(tableModel,
-          IUlcEventConstants.ASYNCHRONOUS_MODE);
-      viewComponent.setModel(tableModel);
-      listSelectionModelBinder.bindSelectionModel(connector,
-          viewComponent.getSelectionModel(), null);
-    }
+    setupTableModel(viewDescriptor, actionHandler, connector, viewComponent,
+        tableModel);
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     int maxColumnSize = computePixelWidth(viewComponent,
         getMaxColumnCharacterLength());
@@ -1466,6 +1440,10 @@ public class DefaultUlcViewFactory extends
         if (cellRenderer instanceof ULCLabel) {
           configureHorizontalAlignment(((ULCLabel) cellRenderer),
               columnViewDescriptor.getHorizontalAlignment());
+        }
+        if (cellRenderer instanceof ULCComponent) {
+          configureComponent(columnViewDescriptor, locale,
+              (ULCComponent) cellRenderer);
         }
         if (columnViewDescriptor.getPreferredSize() != null
             && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
@@ -1521,6 +1499,40 @@ public class DefaultUlcViewFactory extends
         .getRowHeight() * 7));
     attachDefaultCollectionListener(connector);
     return view;
+  }
+
+  private void setupTableModel(ITableViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, ICollectionConnector connector,
+      ULCExtendedTable viewComponent, ITableModel tableModel) {
+    if (viewDescriptor.isSortable()) {
+      AbstractTableSorter sorterDecorator;
+      if (viewDescriptor.getSortingAction() != null) {
+        sorterDecorator = new ActionTableSorter(tableModel,
+            viewComponent.getTableHeader(), actionHandler,
+            viewDescriptor.getSortingAction());
+      } else {
+        sorterDecorator = new TableSorter(tableModel,
+            viewComponent.getTableHeader());
+        ((TableSorter) sorterDecorator).setColumnComparator(String.class,
+            String.CASE_INSENSITIVE_ORDER);
+      }
+      org.jspresso.framework.util.gui.Dimension iconSize = new org.jspresso.framework.util.gui.Dimension(
+          viewComponent.getTableHeader().getFont().getSize(), viewComponent
+              .getTableHeader().getFont().getSize());
+      sorterDecorator.setUpIcon(getIconFactory().getUpIcon(iconSize));
+      sorterDecorator.setDownIcon(getIconFactory().getDownIcon(iconSize));
+      ClientContext.setModelUpdateMode(sorterDecorator,
+          IUlcEventConstants.ASYNCHRONOUS_MODE);
+      viewComponent.setModel(sorterDecorator);
+      listSelectionModelBinder.bindSelectionModel(connector,
+          viewComponent.getSelectionModel(), sorterDecorator);
+    } else {
+      ClientContext.setModelUpdateMode(tableModel,
+          IUlcEventConstants.ASYNCHRONOUS_MODE);
+      viewComponent.setModel(tableModel);
+      listSelectionModelBinder.bindSelectionModel(connector,
+          viewComponent.getSelectionModel(), null);
+    }
   }
 
   /**
@@ -2078,13 +2090,12 @@ public class DefaultUlcViewFactory extends
       viewPeer.setBackground(createColor(viewDescriptor.getBackground()));
     }
     if (viewDescriptor.getFont() != null) {
-      viewPeer.setFont(
-          createFont(viewDescriptor.getFont(), viewPeer.getFont()));
+      viewPeer
+          .setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
     if (viewDescriptor.getDescription() != null) {
-      viewPeer.setToolTipText(
-          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-              + TOOLTIP_ELLIPSIS);
+      viewPeer.setToolTipText(viewDescriptor.getI18nDescription(
+          getTranslationProvider(), locale) + TOOLTIP_ELLIPSIS);
     }
   }
 
@@ -2544,8 +2555,6 @@ public class DefaultUlcViewFactory extends
                   .getDisplayIconImageUrl(),
               getIconFactory().getSmallIconSize()));
         }
-        renderer.setOpaque(false);
-        renderer.setBackground(null);
       }
       return renderer;
     }
@@ -2576,7 +2585,8 @@ public class DefaultUlcViewFactory extends
       }
       renderer.setOpaque(false);
       renderer.setBackground(null);
-      UlcUtil.alternateEvenOddBackground(renderer, list, isSelected, row);
+      renderer.setBackground(UlcUtil.computeEvenOddBackground(
+          list.getBackground(), isSelected, row));
       return renderer;
     }
   }
@@ -2664,7 +2674,6 @@ public class DefaultUlcViewFactory extends
       setIcon(getIconFactory().getIcon(
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
           getIconFactory().getTinyIconSize()));
-      UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row);
     }
