@@ -102,7 +102,14 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     this.sortingAction = sortingAction;
   }
 
-  private BasicCollectionViewDescriptor createResultViewDescriptor(
+  /**
+   * Creates a result collection view.
+   * 
+   * @param entityDescriptor the entity descriptor to create the result view for.
+   * @param okAction the action used as row (double click selection) action.
+   * @return a result collection view.
+   */
+  protected BasicCollectionViewDescriptor createResultViewDescriptor(
       IComponentDescriptor<IEntity> entityDescriptor,
       IDisplayableAction okAction) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
