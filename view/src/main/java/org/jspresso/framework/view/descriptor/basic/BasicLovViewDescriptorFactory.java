@@ -56,8 +56,13 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
     lovViewDescriptor.setModelDescriptor(filterViewDescriptor
         .getModelDescriptor());
-    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(
-        entityRefDescriptor.getComponentDescriptor(), okAction);
+    BasicCollectionViewDescriptor resultViewDescriptor = createResultViewDescriptor(entityRefDescriptor
+        .getComponentDescriptor());
+    if (resultViewDescriptor instanceof BasicTableViewDescriptor) {
+      ((BasicTableViewDescriptor) resultViewDescriptor)
+          .setSortingAction(sortingAction);
+    }
+    resultViewDescriptor.setRowAction(okAction);
     if (entityRefDescriptor.getReferencedDescriptor().getPageSize() != null
         && entityRefDescriptor.getReferencedDescriptor().getPageSize()
             .intValue() >= 0) {
@@ -65,6 +70,9 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
         resultViewDescriptor
             .setPaginationViewDescriptor(paginationViewDescriptor);
       }
+    }
+    if (resultViewActionMap != null) {
+      resultViewDescriptor.setActionMap(resultViewActionMap);
     }
     lovViewDescriptor.setCenterViewDescriptor(resultViewDescriptor);
     return lovViewDescriptor;
@@ -105,13 +113,12 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   /**
    * Creates a result collection view.
    * 
-   * @param entityDescriptor the entity descriptor to create the result view for.
-   * @param okAction the action used as row (double click selection) action.
+   * @param entityDescriptor
+   *          the entity descriptor to create the result view for.
    * @return a result collection view.
    */
   protected BasicCollectionViewDescriptor createResultViewDescriptor(
-      IComponentDescriptor<IEntity> entityDescriptor,
-      IDisplayableAction okAction) {
+      IComponentDescriptor<IEntity> entityDescriptor) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
     BasicListDescriptor<IEntity> queriedEntitiesListDescriptor = new BasicListDescriptor<IEntity>();
@@ -121,11 +128,6 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     queriedEntitiesDescriptor
         .setReferencedDescriptor(queriedEntitiesListDescriptor);
     queriedEntitiesDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
-    if (resultViewActionMap != null) {
-      resultViewDescriptor.setActionMap(resultViewActionMap);
-    }
-    resultViewDescriptor.setSortingAction(sortingAction);
-    resultViewDescriptor.setRowAction(okAction);
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
