@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>3.5.1-RC7</version>
+    <version>3.5-SNAPSHOT</version>
   </parent>
   <artifactId>jspresso-app-template-core</artifactId>
   <packaging>jar</packaging>
