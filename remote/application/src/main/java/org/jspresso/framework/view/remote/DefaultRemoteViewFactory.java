@@ -1651,6 +1651,7 @@ public class DefaultRemoteViewFactory extends
             column.getPeer().setLabel("*");
           }
         }
+        configureComponent(columnViewDescriptor, locale, column.getPeer());
         columns.add(column.getPeer());
         columnIds.add(computeColumnIdentifier(rowDescriptor, columnConnector));
         if (column.getPeer() instanceof RLink) {
@@ -1960,20 +1961,22 @@ public class DefaultRemoteViewFactory extends
     if (viewDescriptor.getDescription() != null) {
       viewPeer.setTooltip(
           viewDescriptor.getI18nDescription(getTranslationProvider(), locale));
+    } else {
+      viewPeer.setTooltip(null);
     }
-    if (viewDescriptor.getForeground() != null) {
-      viewPeer.setForeground(viewDescriptor.getForeground());
-    }
-    if (viewDescriptor.getBackground() != null) {
-      viewPeer.setBackground(viewDescriptor.getBackground());
-    }
+    viewPeer.setForeground(viewDescriptor.getForeground());
+    viewPeer.setBackground(viewDescriptor.getBackground());
     if (viewDescriptor.getFont() != null) {
       viewPeer.setFont(createFont(viewDescriptor.getFont()));
+    } else {
+      viewPeer.setFont(null);
     }
     if (viewDescriptor.getIconImageURL() != null) {
       viewPeer.setIcon(
           getIconFactory().getIcon(viewDescriptor.getIconImageURL(),
               getIconFactory().getSmallIconSize()));
+    } else {
+      viewPeer.setIcon(null);
     }
   }
 
