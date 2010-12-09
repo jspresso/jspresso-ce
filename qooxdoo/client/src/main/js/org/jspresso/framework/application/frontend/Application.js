@@ -10,7 +10,6 @@
 
 /* ************************************************************************
 
-#asset(org.jspresso.framework.images.*)
 #use(org.jspresso.framework.gui.remote.RAction)
 #use(org.jspresso.framework.gui.remote.RActionField)
 #use(org.jspresso.framework.gui.remote.RActionList)
