@@ -19,7 +19,8 @@
 package org.jspresso.framework.gui.remote;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+
+import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 
 /**
  * A container with tabbed children views.
@@ -33,7 +34,7 @@ public class RTabContainer extends RContainer {
 
   private RComponent[]          tabs;
   private int                   selectedIndex;
-  private PropertyChangeSupport propertyChangeSupport;
+  private SinglePropertyChangeSupport propertyChangeSupport;
 
   /**
    * Constructs a new <code>RTabContainer</code> instance.
@@ -43,7 +44,7 @@ public class RTabContainer extends RContainer {
    */
   public RTabContainer(String guid) {
     super(guid);
-    propertyChangeSupport = new PropertyChangeSupport(this);
+    propertyChangeSupport = new SinglePropertyChangeSupport(this);
   }
 
   /**

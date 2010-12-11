@@ -4,7 +4,6 @@
 package org.jspresso.framework.util.collection;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
 
   private static final long               serialVersionUID = 8981204989863563244L;
 
-  private transient PropertyChangeSupport propertyChangeSupport;
+  private transient SinglePropertyChangeSupport propertyChangeSupport;
 
   /**
    * Constructs a new <code>ObjectEqualityMap</code> instance.

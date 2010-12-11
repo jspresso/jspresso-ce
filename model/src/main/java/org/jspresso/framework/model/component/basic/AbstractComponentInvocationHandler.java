@@ -20,7 +20,6 @@ package org.jspresso.framework.model.component.basic;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -79,7 +78,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private static final long                                                            serialVersionUID = -8332414648339056836L;
 
   private IAccessorFactory                                                             accessorFactory;
-  private PropertyChangeSupport                                                        changeSupport;
+  private SinglePropertyChangeSupport                                                  changeSupport;
   private IComponentCollectionFactory<IComponent>                                      collectionFactory;
   private IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;

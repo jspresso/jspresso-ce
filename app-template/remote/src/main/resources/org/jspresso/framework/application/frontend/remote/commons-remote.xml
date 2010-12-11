@@ -7,11 +7,16 @@
 
   <!-- The implementation used as ConnectorFactory. -->
   <bean id="connectorFactory" class="org.jspresso.framework.binding.remote.RemoteConnectorFactory" scope="prototype">
-    <property name="guidGenerator" ref="guidGenerator" />
+    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
   </bean>
 
   <!-- Remote peer registry -->
   <bean id="remotePeerRegistry" class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry" scope="prototype" />
+
+  <!-- Automation enabled remote peer registry -->
+  <bean id="automatableRemotePeerRegistry" class="org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry" scope="prototype">
+    <property name="automationEnabled" value="true"/>
+  </bean>
 
   <!-- Action beans -->
   <bean id="chartAction" abstract="true" parent="abstractChartAction"
@@ -20,12 +25,12 @@
   <!-- The implementation used as view factory. -->
   <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.remote.RemoteIconFactory"
     scope="prototype">
-    <property name="guidGenerator" ref="guidGenerator" />
+    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
   </bean>
 
   <bean id="actionFactory" parent="actionFactoryBase" class="org.jspresso.framework.view.remote.RemoteActionFactory"
     scope="prototype">
-    <property name="guidGenerator" ref="guidGenerator" />
+    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
   </bean>
 
   <bean id="openFileAction" parent="abstractOpenFileAction" class="org.jspresso.framework.application.frontend.action.remote.file.OpenFileAction" />
@@ -44,7 +49,7 @@
     parent="viewFactoryBase" />
 
   <bean id="viewFactory" parent="remoteViewFactory" scope="prototype">
-    <property name="guidGenerator" ref="guidGenerator" />
+    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
   </bean>
 
   <!-- The controllers. -->
@@ -53,7 +58,7 @@
 
   <bean id="frontController" abstract="true" parent="remoteFrontController" scope="prototype">
     <property name="remotePeerRegistry" ref="remotePeerRegistry" />
-    <property name="guidGenerator" ref="guidGenerator" />
+    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
   </bean>
 
 </beans>

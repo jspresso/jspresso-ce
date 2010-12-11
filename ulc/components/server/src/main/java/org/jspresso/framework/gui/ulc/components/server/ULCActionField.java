@@ -19,7 +19,6 @@
 package org.jspresso.framework.gui.ulc.components.server;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -46,20 +45,20 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class ULCActionField extends ULCComponent implements IEditorComponent {
 
-  private static final long     serialVersionUID = 8107147713298807811L;
+  private static final long           serialVersionUID = 8107147713298807811L;
 
-  private List<IAction>         actions;
+  private List<IAction>               actions;
 
-  private String                actionText;
-  private boolean               decorated;
-  private boolean               editable;
-  private int                   editingColumn;
-  private int                   editingRow;
-  private PropertyChangeSupport propertyChangeSupport;
-  private boolean               showTextField;
-  private ULCActionField        sourceActionField;
+  private String                      actionText;
+  private boolean                     decorated;
+  private boolean                     editable;
+  private int                         editingColumn;
+  private int                         editingRow;
+  private SinglePropertyChangeSupport propertyChangeSupport;
+  private boolean                     showTextField;
+  private ULCActionField              sourceActionField;
 
-  private String                value;
+  private String                      value;
 
   /**
    * Constructs a new <code>ULCActionField</code> instance.
@@ -429,20 +428,20 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     } else {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
-    actionAnything.put(ActionFieldConstants.ACTION_COMMAND_KEY, (String) action
-        .getValue(IAction.ACTION_COMMAND_KEY));
-    actionAnything.put(ActionFieldConstants.LONG_DESCRIPTION, (String) action
-        .getValue(IAction.LONG_DESCRIPTION));
+    actionAnything.put(ActionFieldConstants.ACTION_COMMAND_KEY,
+        (String) action.getValue(IAction.ACTION_COMMAND_KEY));
+    actionAnything.put(ActionFieldConstants.LONG_DESCRIPTION,
+        (String) action.getValue(IAction.LONG_DESCRIPTION));
     if (action.getValue(IAction.MNEMONIC_KEY) != null) {
-      actionAnything.put(ActionFieldConstants.MNEMONIC_KEY, ((Integer) action
-          .getValue(IAction.MNEMONIC_KEY)).intValue());
+      actionAnything.put(ActionFieldConstants.MNEMONIC_KEY,
+          ((Integer) action.getValue(IAction.MNEMONIC_KEY)).intValue());
     } else {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
-    actionAnything.put(ActionFieldConstants.NAME, (String) action
-        .getValue(IAction.NAME));
-    actionAnything.put(ActionFieldConstants.SHORT_DESCRIPTION, (String) action
-        .getValue(IAction.SHORT_DESCRIPTION));
+    actionAnything.put(ActionFieldConstants.NAME,
+        (String) action.getValue(IAction.NAME));
+    actionAnything.put(ActionFieldConstants.SHORT_DESCRIPTION,
+        (String) action.getValue(IAction.SHORT_DESCRIPTION));
     return actionAnything;
   }
 
@@ -479,8 +478,8 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   }
 
   private void handleTriggerAction(Anything args) {
-    performAction(args.get(ActionFieldConstants.ACTION_INDEX_KEY, 0), args.get(
-        ActionFieldConstants.ACTION_TEXT_KEY, ""));
+    performAction(args.get(ActionFieldConstants.ACTION_INDEX_KEY, 0),
+        args.get(ActionFieldConstants.ACTION_TEXT_KEY, ""));
   }
 
   private void performAction(int index, String command) {

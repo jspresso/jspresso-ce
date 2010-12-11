@@ -47,6 +47,8 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
   private Set<IRemotePeerRegistryListener> rprListeners;
 
+  private boolean                          automationEnabled;
+
   /**
    * Constructs a new <code>BasicRemotePeerRegistry</code> instance.
    */
@@ -57,6 +59,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     automationBackingStore = new ReferenceMap(AbstractReferenceMap.WEAK,
         AbstractReferenceMap.WEAK, true);
     automationIndices = new HashMap<String, Integer>();
+    setAutomationEnabled(false);
   }
 
   /**
@@ -112,13 +115,16 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    * {@inheritDoc}
    */
   public String registerAutomationId(String automationsSeed, String guid) {
-    String seed = automationsSeed;
-    if (seed == null) {
-      seed = "generic";
+    if (automationEnabled) {
+      String seed = automationsSeed;
+      if (seed == null) {
+        seed = "generic";
+      }
+      String automationId = computeNextAutomationId(seed);
+      automationBackingStore.put(automationId, guid);
+      return automationId;
     }
-    String automationId = computeNextAutomationId(seed);
-    automationBackingStore.put(automationId, guid);
-    return automationId;
+    return null;
   }
 
   /**
@@ -323,5 +329,15 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
         listener.remotePeerRemoved(guid);
       }
     }
+  }
+
+  /**
+   * Sets the automationEnabled.
+   * 
+   * @param automationEnabled
+   *          the automationEnabled to set.
+   */
+  public void setAutomationEnabled(boolean automationEnabled) {
+    this.automationEnabled = automationEnabled;
   }
 }

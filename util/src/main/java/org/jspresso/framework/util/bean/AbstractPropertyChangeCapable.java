@@ -5,7 +5,6 @@ package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
@@ -19,7 +18,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 public abstract class AbstractPropertyChangeCapable implements
     IPropertyChangeCapable, Cloneable {
 
-  private PropertyChangeSupport propertyChangeSupport;
+  private SinglePropertyChangeSupport propertyChangeSupport;
 
   /**
    * Constructs a new <code>AbstractPropertyChangeCapable</code> instance.
