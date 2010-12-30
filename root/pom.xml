@@ -27,6 +27,7 @@
     <datetimelibrary.version>1.0.2</datetimelibrary.version>
     <flexlib.version>2.5</flexlib.version>
     <resizecontainers.version>1.0</resizecontainers.version>
+    <checkbox3state.version>1.0</checkbox3state.version>
     <spring.version>2.5.6</spring.version>
     <spring-ldap.version>1.3.0.RELEASE</spring-ldap.version>
     <ldapbp.version>1.0</ldapbp.version>
@@ -746,6 +747,12 @@
         <groupId>resizecontainers</groupId>
         <artifactId>resizecontainers</artifactId>
         <version>${resizecontainers.version}</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>sephiroth</groupId>
+        <artifactId>checkbox3state</artifactId>
+        <version>${checkbox3state.version}</version>
         <type>swc</type>
       </dependency>
       <dependency>

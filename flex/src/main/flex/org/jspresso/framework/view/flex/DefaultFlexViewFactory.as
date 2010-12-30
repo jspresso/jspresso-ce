@@ -23,6 +23,7 @@ package org.jspresso.framework.view.flex {
   import flash.events.TextEvent;
   
   import flexlib.containers.ButtonScrollingCanvas;
+  import flexlib.controls.sliderClasses.ExtendedSlider;
   
   import mx.binding.utils.BindingUtils;
   import mx.collections.ArrayCollection;
@@ -126,6 +127,7 @@ package org.jspresso.framework.view.flex {
   import org.jspresso.framework.util.gui.CellConstraints;
   import org.jspresso.framework.util.html.HtmlUtil;
   import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+  import org.sepy.ui.CheckBoxExtended;
   
   public class DefaultFlexViewFactory {
 
@@ -674,14 +676,45 @@ package org.jspresso.framework.view.flex {
     }
     
     protected function createCheckBox(remoteCheckBox:RCheckBox):UIComponent {
-      var checkBox:CheckBox = new CheckBox();
-      bindCheckBox(checkBox, remoteCheckBox.state);
+      var checkBox:UIComponent;
+      if(remoteCheckBox.triState) {
+        checkBox = new CheckBoxExtended();
+        (checkBox as CheckBoxExtended).allow3StateForUser = true;
+        bindCheckBoxExtended(checkBox as CheckBoxExtended, remoteCheckBox.state);
+      } else {
+        checkBox = new CheckBox();
+        bindCheckBox(checkBox as CheckBox, remoteCheckBox.state);
+      }
       return checkBox;
     }
 
     protected function bindCheckBox(checkBox:CheckBox, remoteState:RemoteValueState):void {
       BindingUtils.bindProperty(checkBox, "selected", remoteState, "value", true);
       BindingUtils.bindProperty(remoteState, "value", checkBox, "selected", true);
+      BindingUtils.bindProperty(checkBox, "enabled", remoteState, "writable");
+    }
+
+    protected function bindCheckBoxExtended(checkBox:CheckBoxExtended, remoteState:RemoteValueState):void {
+      var updateView:Function = function (value:Object):void {
+        if(value == null) {
+          checkBox.middle = true;
+          checkBox.selected = false;
+        } else {
+          checkBox.middle = false;
+          checkBox.selected = value as Boolean;
+        }
+      };
+      BindingUtils.bindSetter(updateView, remoteState, "value", true);
+
+      var updateModel:Function = function (event:Event):void {
+        if(checkBox.middle) {
+          remoteState.value = null;
+        } else {
+          remoteState.value = checkBox.selected;
+        }
+      };
+      checkBox.addEventListener(MouseEvent.CLICK, updateModel);
+
       BindingUtils.bindProperty(checkBox, "enabled", remoteState, "writable");
     }
 

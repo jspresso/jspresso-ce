@@ -837,8 +837,10 @@ public abstract class AbstractComponentInvocationHandler implements
     if (propertyProcessorsEnabled) {
       for (IPropertyDescriptor propertyDescriptor : componentDescriptor
           .getPropertyDescriptors()) {
-        propertyDescriptor.preprocessSetter(proxy,
-            straightGetProperty(proxy, propertyDescriptor.getName()));
+        if (!propertyDescriptor.isComputed()) {
+          propertyDescriptor.preprocessSetter(proxy,
+              straightGetProperty(proxy, propertyDescriptor.getName()));
+        }
       }
     }
   }

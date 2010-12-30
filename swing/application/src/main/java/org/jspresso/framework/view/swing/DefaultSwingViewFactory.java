@@ -120,6 +120,7 @@ import org.jspresso.framework.binding.swing.JTextAreaConnector;
 import org.jspresso.framework.binding.swing.JTextFieldConnector;
 import org.jspresso.framework.binding.swing.JTextPaneConnector;
 import org.jspresso.framework.binding.swing.JToggleButtonConnector;
+import org.jspresso.framework.binding.swing.JTriStateCheckBoxConnector;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JColorPicker;
 import org.jspresso.framework.gui.swing.components.JDateField;
@@ -191,6 +192,7 @@ import org.syntax.jedit.tokenmarker.TokenMarker;
 
 import chrriis.dj.swingsuite.JComboButton;
 import chrriis.dj.swingsuite.JLink;
+import chrriis.dj.swingsuite.JTriStateCheckBox;
 import chrriis.dj.swingsuite.LinkListener;
 
 /**
@@ -353,9 +355,17 @@ public class DefaultSwingViewFactory extends
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JCheckBox viewComponent = createJCheckBox();
-    JToggleButtonConnector connector = new JToggleButtonConnector(
-        propertyDescriptor.getName(), viewComponent);
+    JComponent viewComponent;
+    IValueConnector connector;
+    if (propertyDescriptor.isMandatory()) {
+      viewComponent = createJCheckBox();
+      connector = new JToggleButtonConnector(propertyDescriptor.getName(),
+          (JCheckBox) viewComponent);
+    } else {
+      viewComponent = createJTriStateCheckBox();
+      connector = new JTriStateCheckBoxConnector(propertyDescriptor.getName(),
+          (JTriStateCheckBox) viewComponent);
+    }
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, propertyViewDescriptor, connector);
   }
@@ -1029,6 +1039,15 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
+   * Creates a tri-state check box.
+   * 
+   * @return the created tri-state check box.
+   */
+  protected JCheckBox createJTriStateCheckBox() {
+    return new JTriStateCheckBox();
+  }
+
+  /**
    * Creates an color picker.
    * 
    * @return the created color picker.
@@ -1457,7 +1476,8 @@ public class DefaultSwingViewFactory extends
     JLabel propertyLabel = createJLabel(false);
     StringBuffer labelText = new StringBuffer(
         propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
+    if (propertyDescriptor.isMandatory()
+        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
       propertyLabel.setForeground(Color.RED);
     }
@@ -2823,7 +2843,8 @@ public class DefaultSwingViewFactory extends
           renderer.setText(value.toString());
         }
       }
-      renderer.setBackground(SwingUtil.computeEvenOddBackground(list.getBackground(), isSelected, index));
+      renderer.setBackground(SwingUtil.computeEvenOddBackground(
+          list.getBackground(), isSelected, index));
       return renderer;
     }
   }

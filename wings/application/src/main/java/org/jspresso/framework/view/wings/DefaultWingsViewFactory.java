@@ -1045,7 +1045,8 @@ public class DefaultWingsViewFactory extends
     SLabel propertyLabel = createSLabel(false);
     StringBuffer labelText = new StringBuffer(
         propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
+    if (propertyDescriptor.isMandatory()
+        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
       propertyLabel.setForeground(Color.RED);
     }

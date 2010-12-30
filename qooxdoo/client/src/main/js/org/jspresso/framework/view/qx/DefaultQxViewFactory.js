@@ -875,11 +875,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
       var checkBox = new qx.ui.form.CheckBox();
       var state = remoteCheckBox.getState();
       var modelController = new qx.data.controller.Object(state);
+      if(remoteCheckBox.isTriState()) {
+        checkBox.setTriState(true);
+      }
       modelController.addTarget(checkBox, "value", "value", true,
         {
           converter : function(modelValue, model) {
-            if(modelValue == null) {
-              return false;
+            if(!checkBox.isTriState()) {
+              if(modelValue == null) {
+                return false;
+              }
             }
             return modelValue;
           }

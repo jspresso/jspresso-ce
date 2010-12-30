@@ -18,6 +18,15 @@ qx.Class.define("org.jspresso.framework.gui.remote.RCheckBox",
   
   construct : function() {
     this.base(arguments);
+  },
+
+  properties :
+  {
+    triState :
+    {
+      check : "Boolean",
+      nullable : true
+    }
   }
 
 });

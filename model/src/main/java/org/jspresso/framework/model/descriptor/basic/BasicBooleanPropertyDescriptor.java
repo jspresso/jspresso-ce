@@ -28,6 +28,15 @@ import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
  */
 public class BasicBooleanPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IBooleanPropertyDescriptor {
+  
+  
+  /**
+   * Constructs a new <code>BasicBooleanPropertyDescriptor</code> instance.
+   */
+  public BasicBooleanPropertyDescriptor() {
+    setDefaultValue(Boolean.FALSE);
+    setMandatory(true);
+  }
 
   /**
    * {@inheritDoc}

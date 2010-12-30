@@ -7,7 +7,7 @@
 
   <!-- The implementation used as ConnectorFactory. -->
   <bean id="connectorFactory" class="org.jspresso.framework.binding.remote.RemoteConnectorFactory" scope="prototype">
-    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
+    <property name="guidGenerator" ref="guidGenerator" />
   </bean>
 
   <!-- Remote peer registry -->
@@ -25,12 +25,12 @@
   <!-- The implementation used as view factory. -->
   <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.remote.RemoteIconFactory"
     scope="prototype">
-    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
+    <property name="guidGenerator" ref="guidGenerator" />
   </bean>
 
   <bean id="actionFactory" parent="actionFactoryBase" class="org.jspresso.framework.view.remote.RemoteActionFactory"
     scope="prototype">
-    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
+    <property name="guidGenerator" ref="guidGenerator" />
   </bean>
 
   <bean id="openFileAction" parent="abstractOpenFileAction" class="org.jspresso.framework.application.frontend.action.remote.file.OpenFileAction" />
@@ -49,7 +49,14 @@
     parent="viewFactoryBase" />
 
   <bean id="viewFactory" parent="remoteViewFactory" scope="prototype">
-    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
+    <property name="guidGenerator" ref="guidGenerator" />
+  </bean>
+
+  <!-- QBE customization since swing view supports 3-state checkboxes -->
+  <bean
+    id="criteriaFactory"
+    class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
+    <property name="triStateBooleanSupported" value="true"/>
   </bean>
 
   <!-- The controllers. -->
@@ -58,7 +65,7 @@
 
   <bean id="frontController" abstract="true" parent="remoteFrontController" scope="prototype">
     <property name="remotePeerRegistry" ref="remotePeerRegistry" />
-    <property name="guidGenerator" ref="vmLocalGUIDGenerator" />
+    <property name="guidGenerator" ref="guidGenerator" />
   </bean>
 
 </beans>

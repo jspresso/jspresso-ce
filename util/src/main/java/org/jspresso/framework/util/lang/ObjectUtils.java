@@ -48,7 +48,9 @@ public final class ObjectUtils {
     if ((Boolean.FALSE.equals(object1) && object2 == null)
         || (Boolean.FALSE.equals(object2) && object1 == null)) {
       // Special handling for null == Boolean.FALSE on models.
-      return true;
+      // Cancelled to support 3-state booleans, i.e. null, TRUE and FALSE
+      //return true;
+      return false;
     }
     if ((object1 == null) || (object2 == null)) {
       return false;

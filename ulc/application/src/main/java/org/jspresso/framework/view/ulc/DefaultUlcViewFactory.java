@@ -1090,7 +1090,8 @@ public class DefaultUlcViewFactory extends
     ULCLabel propertyLabel = createULCLabel(false);
     StringBuffer labelText = new StringBuffer(
         propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
+    if (propertyDescriptor.isMandatory()
+        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
       propertyLabel.setForeground(Color.red);
     }

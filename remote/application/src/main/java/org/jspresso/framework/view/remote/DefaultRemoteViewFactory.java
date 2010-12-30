@@ -376,6 +376,9 @@ public class DefaultRemoteViewFactory extends
         propertyDescriptor.getName());
     connector.setExceptionHandler(actionHandler);
     RCheckBox viewComponent = createRCheckBox(connector);
+    if (!propertyDescriptor.isMandatory()) {
+      viewComponent.setTriState(true);
+    }
     IView<RComponent> view = constructView(viewComponent,
         propertyViewDescriptor, connector);
     return view;
@@ -1053,7 +1056,8 @@ public class DefaultRemoteViewFactory extends
     RLabel propertyLabel = createRLabel(null, false);
     StringBuffer labelText = new StringBuffer(
         propertyViewDescriptor.getI18nName(getTranslationProvider(), locale));
-    if (propertyDescriptor.isMandatory()) {
+    if (propertyDescriptor.isMandatory()
+        && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       labelText.append("*");
       propertyLabel.setForeground("0x00FF0000");
     }
@@ -1081,8 +1085,8 @@ public class DefaultRemoteViewFactory extends
       IActionHandler actionHandler, Locale locale) {
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IView<RComponent> propertyView = super.createPropertyView(propertyViewDescriptor,
-        actionHandler, locale);
+    IView<RComponent> propertyView = super.createPropertyView(
+        propertyViewDescriptor, actionHandler, locale);
     if (propertyView != null) {
       if (propertyDescriptor.getName() != null) {
         propertyView.getPeer().setLabel(
@@ -1956,11 +1960,11 @@ public class DefaultRemoteViewFactory extends
 
   private void configureComponent(IViewDescriptor viewDescriptor,
       Locale locale, RComponent viewPeer) {
-    viewPeer.setLabel(
-        viewDescriptor.getI18nName(getTranslationProvider(), locale));
+    viewPeer.setLabel(viewDescriptor.getI18nName(getTranslationProvider(),
+        locale));
     if (viewDescriptor.getDescription() != null) {
-      viewPeer.setTooltip(
-          viewDescriptor.getI18nDescription(getTranslationProvider(), locale));
+      viewPeer.setTooltip(viewDescriptor.getI18nDescription(
+          getTranslationProvider(), locale));
     } else {
       viewPeer.setTooltip(null);
     }
@@ -1972,8 +1976,8 @@ public class DefaultRemoteViewFactory extends
       viewPeer.setFont(null);
     }
     if (viewDescriptor.getIconImageURL() != null) {
-      viewPeer.setIcon(
-          getIconFactory().getIcon(viewDescriptor.getIconImageURL(),
+      viewPeer.setIcon(getIconFactory()
+          .getIcon(viewDescriptor.getIconImageURL(),
               getIconFactory().getSmallIconSize()));
     } else {
       viewPeer.setIcon(null);

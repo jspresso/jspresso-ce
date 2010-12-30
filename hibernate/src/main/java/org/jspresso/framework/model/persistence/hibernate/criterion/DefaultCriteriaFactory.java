@@ -47,6 +47,15 @@ import org.jspresso.framework.view.descriptor.basic.PropertyDescriptorHelper;
  */
 public class DefaultCriteriaFactory implements ICriteriaFactory {
 
+  private boolean triStateBooleanSupported;
+
+  /**
+   * Constructs a new <code>DefaultCriteriaFactory</code> instance.
+   */
+  public DefaultCriteriaFactory() {
+    triStateBooleanSupported = false;
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -201,7 +210,8 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
                     property.getValue()));
               }
             } else if (property.getValue() instanceof Boolean
-                && ((Boolean) property.getValue()).booleanValue()) {
+                && (isTriStateBooleanSupported() || ((Boolean) property
+                    .getValue()).booleanValue())) {
               currentCriteria.add(Restrictions.eq(prefixedProperty,
                   property.getValue()));
             } else if (property.getValue() instanceof String) {
@@ -273,6 +283,25 @@ public class DefaultCriteriaFactory implements ICriteriaFactory {
       }
     }
     return true;
+  }
+
+  /**
+   * Gets the triStateBooleanSupported.
+   * 
+   * @return the triStateBooleanSupported.
+   */
+  public boolean isTriStateBooleanSupported() {
+    return triStateBooleanSupported;
+  }
+
+  /**
+   * Sets the triStateBooleanSupported.
+   * 
+   * @param triStateBooleanSupported
+   *          the triStateBooleanSupported to set.
+   */
+  public void setTriStateBooleanSupported(boolean triStateBooleanSupported) {
+    this.triStateBooleanSupported = triStateBooleanSupported;
   }
 
 }

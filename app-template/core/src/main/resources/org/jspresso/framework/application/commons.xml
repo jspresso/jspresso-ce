@@ -68,7 +68,7 @@
   -->
   <bean id="entityGUIDGenerator" class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
 
-  <bean id="vmLocalGUIDGenerator" class="org.jspresso.framework.util.uid.JVMGUIDGenerator" scope="prototype"/>
+  <bean id="guidGenerator" class="org.jspresso.framework.util.uid.JVMGUIDGenerator" scope="prototype"/>
 
   <!--
     The root abstract implementation used as Application Session.

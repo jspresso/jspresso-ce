@@ -38,6 +38,11 @@
       <artifactId>resizecontainers</artifactId>
       <type>swc</type>
     </dependency>
+    <dependency>
+      <groupId>sephiroth</groupId>
+      <artifactId>checkbox3state</artifactId>
+      <type>swc</type>
+    </dependency>
   </dependencies>
 
   <build>

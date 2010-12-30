@@ -10,6 +10,7 @@
     </compilerSourcePath>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flex/framework/flex/3.4.0.9271/flex-3.4.0.9271.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/flex/src" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/sephiroth/checkbox3state/1.0/checkbox3state-1.0.swc" sourcepath="/Applications/envdev/flex3libs/checkbox3state/sources" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flex/framework/framework/3.4.0.9271/framework-3.4.0.9271.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/framework/src" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flex/framework/rpc/3.4.0.9271/rpc-3.4.0.9271.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/rpc/src" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flex/framework/utilities/3.4.0.9271/utilities-3.4.0.9271.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/utilities/src" useDefaultLinkType="false"/>
@@ -42,7 +43,13 @@
         </excludedEntries>
       </libraryPathEntry>
     </libraryPath>
-    <sourceAttachmentPath/>
+    <sourceAttachmentPath>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flex/framework/flex/3.4.0.9271/flex-3.4.0.9271.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/flex/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${M2_REPO}/sephiroth/checkbox3state/1.0/checkbox3state-1.0.swc" sourcepath="/Applications/envdev/flex3libs/checkbox3state/sources" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flex/framework/framework/3.4.0.9271/framework-3.4.0.9271.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/framework/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flex/framework/rpc/3.4.0.9271/rpc-3.4.0.9271.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/rpc/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${M2_REPO}/com/adobe/flex/framework/utilities/3.4.0.9271/utilities-3.4.0.9271.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/utilities/src" useDefaultLinkType="false"/>
+    </sourceAttachmentPath>
   </compiler>
   <applications/>
   <modules/>
