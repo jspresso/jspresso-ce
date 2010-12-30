@@ -22,6 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ***********************************************************************/
 
+RichTextEditor
+{
+  borderThicknessLeft: 0;
+  borderThicknessRight: 0;
+  borderThicknessTop: 0;
+  borderThicknessBottom: 0;
+  headerHeight: 0;
+  statusStyleName: richTextEditorStatus;
+  textAreaStyleName: richTextEditorTextArea;
+}
+
 .drawerButton {
   fontFamily: Arial;
   fontWeight: bold;
@@ -57,4 +68,11 @@ THE SOFTWARE.
   over-skin:Embed(source="assets/images/closeaccordion2.png");
   down-skin:Embed(source="assets/images/closeaccordion2.png");
   disabled-skin:Embed(source="assets/images/closeaccordion2.png");
+}
+
+.richTextEditorStatus
+{
+}
+.richTextEditorTextArea
+{
 } 

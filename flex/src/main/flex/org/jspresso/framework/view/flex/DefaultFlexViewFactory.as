@@ -1940,7 +1940,7 @@ package org.jspresso.framework.view.flex {
     protected function createHtmlText(remoteHtmlArea:RHtmlArea):UIComponent {
       var htmlText:TextArea = new TextArea();
       htmlText.editable = false;
-      htmlText.setStyle("borderSyle","none");
+      htmlText.setStyle("borderStyle","none");
       htmlText.setStyle("focusAlpha",0);
       bindHtmlText(htmlText, remoteHtmlArea.state);
       return htmlText;
