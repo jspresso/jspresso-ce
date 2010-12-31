@@ -12,6 +12,11 @@
 * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
 */
 
+@font-face {
+  src: local("Arial");
+  fontFamily: ArialBold;
+  fontWeight: bold;
+}
 
 RichTextEditor
 {
@@ -25,8 +30,7 @@ RichTextEditor
 }
 
 .drawerButton {
-  fontFamily: Arial;
-  fontWeight: bold;
+  fontFamily: ArialBold;
   fontSize: 12;
   textAlign: left;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
@@ -39,8 +43,7 @@ RichTextEditor
 }
 
 .drawerAccordionHeader {
-  fontFamily: Arial;
-  fontWeight: bold;
+  fontFamily: ArialBold;
   fontSize: 12;
   fillAlphas: 1.0, 1.0, 0.82, 0.82;
   cornerRadius: 4;
