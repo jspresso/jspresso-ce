@@ -77,6 +77,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory",
      * @return {qx.ui.core.Widget}
      */
     createComponent : function(remoteComponent, registerState) {
+      if(!remoteComponent) {
+        return new qx.ui.core.Widget();
+      }
       if(registerState == null) {
         registerState = true;
       }
