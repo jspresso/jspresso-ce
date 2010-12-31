@@ -33,6 +33,7 @@ import java.util.zip.Checksum;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -1731,7 +1732,15 @@ public class DefaultRemoteViewFactory extends
   @Override
   protected void selectChildViewIndex(RComponent viewComponent, int index) {
     if (viewComponent instanceof RTabContainer) {
-      ((RTabContainer) viewComponent).setSelectedIndex(index);
+      RTabContainer rTab = ((RTabContainer) viewComponent);
+      if (rTab.getSelectedIndex() != index) {
+        rTab.setSelectedIndex(index);
+
+        RemoteSelectionCommand selectionCommand = new RemoteSelectionCommand();
+        selectionCommand.setTargetPeerGuid(rTab.getGuid());
+        selectionCommand.setLeadingIndex(index);
+        getRemoteCommandHandler().registerCommand(selectionCommand);
+      }
     }
   }
 
