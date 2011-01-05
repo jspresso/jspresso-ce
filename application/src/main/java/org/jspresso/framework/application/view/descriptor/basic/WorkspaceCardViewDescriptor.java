@@ -20,8 +20,6 @@ package org.jspresso.framework.application.view.descriptor.basic;
 
 import javax.security.auth.Subject;
 
-import org.jspresso.framework.application.model.BeanCollectionModule;
-import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor;
 
@@ -35,18 +33,14 @@ import org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor;
  */
 public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
 
-  private static final String ELEMENT_SUFFIX = ".element";
-
   /**
    * {@inheritDoc}
    */
   public String getCardNameForModel(Object model,
       @SuppressWarnings("unused") Subject subject) {
-    if (model instanceof BeanModule
-        && (((BeanModule) model).getParent()) instanceof BeanCollectionModule) {
-      return (((BeanModule) model).getParent()).getName() + ELEMENT_SUFFIX;
-    } else if (model instanceof Module) {
-      return ((Module) model).getName();
+    if (model instanceof Module) {
+      return Integer.toString(((Module) model).getProjectedViewDescriptor()
+          .hashCode());
     }
     return null;
   }
