@@ -1380,7 +1380,7 @@ public class DefaultSwingViewFactory extends
               .getCollectionDescriptor().getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
     }
-    viewComponent.setCellRenderer(new EvenOddListCellRenderer());
+    viewComponent.setCellRenderer(new EvenOddListCellRenderer(getIconFactory()));
     viewComponent.setModel(new CollectionConnectorListModel(connector));
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(connector,
@@ -2808,43 +2808,6 @@ public class DefaultSwingViewFactory extends
           renderer.setText(value.toString());
         }
       }
-      return renderer;
-    }
-  }
-
-  private final class EvenOddListCellRenderer extends DefaultListCellRenderer {
-
-    private static final long serialVersionUID = 2051850807889065438L;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Component getListCellRendererComponent(JList list, Object value,
-        int index, boolean isSelected, boolean cellHasFocus) {
-      JLabel renderer = (JLabel) super.getListCellRendererComponent(list,
-          value, index, isSelected, cellHasFocus);
-      if (value instanceof IValueConnector) {
-        if (value instanceof IRenderableCompositeValueConnector) {
-          renderer.setText(((IRenderableCompositeValueConnector) value)
-              .getDisplayValue());
-          renderer.setIcon(getIconFactory().getIcon(
-              ((IRenderableCompositeValueConnector) value)
-                  .getDisplayIconImageUrl(),
-              getIconFactory().getSmallIconSize()));
-          if (((IRenderableCompositeValueConnector) value)
-              .getDisplayDescription() != null) {
-            ToolTipManager.sharedInstance().registerComponent(list);
-            renderer
-                .setToolTipText(((IRenderableCompositeValueConnector) value)
-                    .getDisplayDescription() + TOOLTIP_ELLIPSIS);
-          }
-        } else {
-          renderer.setText(value.toString());
-        }
-      }
-      renderer.setBackground(SwingUtil.computeEvenOddBackground(
-          list.getBackground(), isSelected, index));
       return renderer;
     }
   }
