@@ -612,6 +612,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
       ICompositeViewDescriptor viewDescriptor = view.getDescriptor();
       if (viewDescriptor.isCascadingModels()) {
         IView<E> masterView = view.getChildren().get(0);
+        while (masterView instanceof ICompositeView<?>) {
+          masterView = ((ICompositeView<E>) masterView).getChildren().get(0);
+        }
         IValueConnector viewConnector;
         if (masterView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
           IConfigurableCollectionConnectorProvider mainConnector = getConnectorFactory()
@@ -981,7 +984,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       public void valueChange(ValueChangeEvent evt) {
         Object cardModel = evt.getNewValue();
         E cardsPeer = cardView.getPeer();
-        //IView<E> currentChildCardView = cardView.getCurrentView();
+        // IView<E> currentChildCardView = cardView.getCurrentView();
         String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
             .getCardNameForModel(cardModel, actionHandler.getSubject());
         if (cardName != null) {
