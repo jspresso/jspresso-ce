@@ -354,7 +354,9 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   public void registerForDeletion(IEntity entity) {
     if (isUnitOfWorkActive()) {
-      getHibernateTemplate().delete(entity);
+      IEntity uowEntity = cloneInUnitOfWork(entity);
+      super.registerForDeletion(uowEntity);
+      getHibernateTemplate().delete(uowEntity);
     } else {
       super.registerForDeletion(entity);
     }
@@ -371,7 +373,9 @@ public class HibernateBackendController extends AbstractBackendController {
         getHibernateTemplate().saveOrUpdate(entity);
       }
     } else if (isUnitOfWorkActive()) {
-      getHibernateTemplate().saveOrUpdate(entity);
+      IEntity uowEntity = cloneInUnitOfWork(entity);
+      super.registerForUpdate(uowEntity);
+      getHibernateTemplate().saveOrUpdate(uowEntity);
     } else {
       super.registerForUpdate(entity);
     }
