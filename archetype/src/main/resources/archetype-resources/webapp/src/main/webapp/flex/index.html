@@ -43,7 +43,7 @@ var requiredRevision = ${version_revision};
 </script>
 </head>
 
-<body scroll="no" onunload="stop()">
+<body scroll="no" onunload="stop()" onLoad="window.document.${application}.focus()">
 <script language="JavaScript" type="text/javascript">
 <!--
 // Version check based upon the values entered above in "Globals"

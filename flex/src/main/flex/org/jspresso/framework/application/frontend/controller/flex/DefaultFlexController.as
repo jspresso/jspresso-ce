@@ -13,6 +13,9 @@
  */
 
 package org.jspresso.framework.application.frontend.controller.flex {
+  import actionscriptdatetimelibrary.DateTimeField;
+  import actionscriptdatetimelibrary.TimeStepper;
+  
   import flash.display.DisplayObject;
   import flash.events.DataEvent;
   import flash.events.Event;
@@ -40,12 +43,17 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.containers.ViewStack;
   import mx.controls.Alert;
   import mx.controls.Button;
+  import mx.controls.CheckBox;
+  import mx.controls.ComboBox;
+  import mx.controls.DateField;
   import mx.controls.HRule;
   import mx.controls.Label;
   import mx.controls.Menu;
   import mx.controls.MenuBar;
   import mx.controls.PopUpButton;
   import mx.controls.SWFLoader;
+  import mx.controls.TextArea;
+  import mx.controls.TextInput;
   import mx.controls.Tree;
   import mx.core.Application;
   import mx.core.ClassFactory;
@@ -56,8 +64,11 @@ package org.jspresso.framework.application.frontend.controller.flex {
   import mx.core.mx_internal;
   import mx.events.CloseEvent;
   import mx.events.FlexEvent;
+  import mx.events.FocusRequestDirection;
   import mx.events.IndexChangedEvent;
   import mx.events.MenuEvent;
+  import mx.managers.IFocusManagerComponent;
+  import mx.managers.IFocusManagerContainer;
   import mx.managers.PopUpManager;
   import mx.resources.Locale;
   import mx.resources.ResourceManager;
@@ -1072,9 +1083,45 @@ package org.jspresso.framework.application.frontend.controller.flex {
         dialog.minWidth = dialogBox.minWidth * 1.2;
         dialog.minHeight = dialogBox.minHeight * 1.2;
         });
+      var focusInit:Function = function():void {
+        //find first focusable component
+        var focusableChild:UIComponent = findFirstFocusableComponent(dialogView);
+        if(focusableChild) {
+          focusableChild.setFocus();
+        }
+      }
+      dialog.addEventListener(FlexEvent.CREATION_COMPLETE, function(evt:FlexEvent):void {
+        dialog.callLater(focusInit);
+      });
       if(newDialog) {
         PopUpManager.centerPopUp(dialog);
       }
+    }
+    
+    private function findFirstFocusableComponent(root:UIComponent):UIComponent {
+      if(  root is TextInput
+        || root is CheckBox
+        || root is ComboBox
+        || root is TextArea
+        || root is DateField
+        || root is DateTimeField
+        || root is TimeStepper) {
+        if(root.enabled) {
+          return root;
+        }
+      }
+      if(root is Container) {
+        for(var i:int = 0; i < (root as Container).getChildren().length; i++) {
+          var child:DisplayObject = root.getChildAt(i);
+          if(child is UIComponent) {
+            var focusableChild:UIComponent = findFirstFocusableComponent(child as UIComponent);
+            if(focusableChild != null) {
+              return focusableChild;
+            }
+          }
+        }
+      }
+      return null;
     }
     
     public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStateAutomationId:String):void {
