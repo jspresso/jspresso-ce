@@ -235,12 +235,14 @@ package org.jspresso.framework.view.flex {
       }
       applyComponentStyle(component, remoteComponent);
       if(remoteComponent.preferredSize) {
-        if(remoteComponent.preferredSize.width > 0) {
-          component.width = remoteComponent.preferredSize.width;
-        }
-        if(remoteComponent.preferredSize.height > 0) {
-          component.height = remoteComponent.preferredSize.height;
-        }
+        component.addEventListener(FlexEvent.CREATION_COMPLETE, function(e:FlexEvent):void {
+          if(remoteComponent.preferredSize.width > 0) {
+            component.width = remoteComponent.preferredSize.width;
+          }
+          if(remoteComponent.preferredSize.height > 0) {
+            component.height = remoteComponent.preferredSize.height;
+          }
+        });
       }
       if(registerState) {
         getRemotePeerRegistry().register(remoteComponent.state);
